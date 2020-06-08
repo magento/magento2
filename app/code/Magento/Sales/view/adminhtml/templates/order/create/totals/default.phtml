@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 ?>
-<tr class="<?= $block->escapeHtmlAttr($block->getTotal()->getCode()) ?> row-totals">
-    <td style="<?= $block->escapeHtmlAttr($block->getTotal()->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
+<tr class="<?= $escaper->escapeHtmlAttr($block->getTotal()->getCode()) ?> row-totals">
+    <td style="<?= $escaper->escapeHtmlAttr($block->getTotal()->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
         <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()) : ?><strong><?php endif; ?>
-            <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
+            <?= $escaper->escapeHtml($block->getTotal()->getTitle()) ?>
         <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()) : ?></strong><?php endif; ?>
     </td>
-    <td style="<?= $block->escapeHtmlAttr($block->getTotal()->getStyle()) ?>" class="admin__total-amount">
+    <td style="<?= $escaper->escapeHtmlAttr($block->getTotal()->getStyle()) ?>" class="admin__total-amount">
         <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()) : ?><strong><?php endif; ?>
             <?= /* @noEscape */ $block->formatPrice($block->getTotal()->getValue()) ?>
         <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()) : ?></strong><?php endif; ?>

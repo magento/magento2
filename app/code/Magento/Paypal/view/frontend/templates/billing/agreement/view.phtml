@@ -12,56 +12,56 @@ $relatedOrders = $block->getRelatedOrders();
 <div class="block block-billing-agreements-view">
     <div class="block-title">
         <strong>
-            <?= $block->escapeHtml(__('Billing Agreement # ')) ?>
-            <?= $block->escapeHtml($block->getReferenceId()) ?>
+            <?= $escaper->escapeHtml(__('Billing Agreement # ')) ?>
+            <?= $escaper->escapeHtml($block->getReferenceId()) ?>
         </strong>
         <?php if ($block->getCanCancel()) : ?>
             <button data-mage-init='{"Magento_Paypal/js/in-context/billing-agreement": {
-                        "cancelMessage" : "<?= $block->escapeHtml(__('Are you sure you want to do this?')) ?>",
-                        "cancelUrl" : "<?= $block->escapeUrl($block->getCancelUrl()) ?>"
+                        "cancelMessage" : "<?= $escaper->escapeHtml(__('Are you sure you want to do this?')) ?>",
+                        "cancelUrl" : "<?= $escaper->escapeUrl($block->getCancelUrl()) ?>"
                     }}'
-                    type="button" title="<?= $block->escapeHtml(__('Cancel')) ?>"
+                    type="button" title="<?= $escaper->escapeHtml(__('Cancel')) ?>"
                     class="secondary action cancel" />
-                <span><?= $block->escapeHtml(__('Cancel')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Cancel')) ?></span>
             </button>
         <?php endif; ?>
     </div>
     <div class="block-title">
-        <strong><?= $block->escapeHtml(__('Agreement Information')) ?></strong>
+        <strong><?= $escaper->escapeHtml(__('Agreement Information')) ?></strong>
     </div>
     <div class="block-content">
         <div class="table-wrapper billing-agreements-view">
             <table class="data table table-billing-agreements-view">
-                <caption class="table-caption"><?= $block->escapeHtml(__('Agreement Information')) ?></caption>
+                <caption class="table-caption"><?= $escaper->escapeHtml(__('Agreement Information')) ?></caption>
                 <thead>
                 <tr>
-                    <th scope="col" class="col id"><?= $block->escapeHtml(__('Reference ID:')) ?></th>
-                    <th scope="col" class="col status"><?= $block->escapeHtml(__('Status:')) ?></th>
-                    <th scope="col" class="col created"><?= $block->escapeHtml(__('Created:')) ?></th>
+                    <th scope="col" class="col id"><?= $escaper->escapeHtml(__('Reference ID:')) ?></th>
+                    <th scope="col" class="col status"><?= $escaper->escapeHtml(__('Status:')) ?></th>
+                    <th scope="col" class="col created"><?= $escaper->escapeHtml(__('Created:')) ?></th>
                     <?php if ($block->getAgreementUpdatedAt()) : ?>
-                        <th scope="col" class="col updated"><?= $block->escapeHtml(__('Updated:')) ?></th>
+                        <th scope="col" class="col updated"><?= $escaper->escapeHtml(__('Updated:')) ?></th>
                     <?php endif; ?>
-                    <th scope="col" class="col payment"><?= $block->escapeHtml(__('Payment Method:')) ?></th>
+                    <th scope="col" class="col payment"><?= $escaper->escapeHtml(__('Payment Method:')) ?></th>
                 </tr>
                 </thead>
                 <tbody>
                 <tr>
-                    <td data-th="<?= $block->escapeHtml(__('Reference ID:')) ?>" class="col id">
-                        <?= $block->escapeHtml($block->getReferenceId()) ?>
+                    <td data-th="<?= $escaper->escapeHtml(__('Reference ID:')) ?>" class="col id">
+                        <?= $escaper->escapeHtml($block->getReferenceId()) ?>
                     </td>
-                    <td data-th="<?= $block->escapeHtml(__('Status:')) ?>" class="col status">
-                        <?= $block->escapeHtml($block->getAgreementStatus()) ?>
+                    <td data-th="<?= $escaper->escapeHtml(__('Status:')) ?>" class="col status">
+                        <?= $escaper->escapeHtml($block->getAgreementStatus()) ?>
                     </td>
-                    <td data-th="<?= $block->escapeHtml(__('Created:')) ?>" class="col created">
-                        <?= $block->escapeHtml($block->getAgreementCreatedAt()) ?>
+                    <td data-th="<?= $escaper->escapeHtml(__('Created:')) ?>" class="col created">
+                        <?= $escaper->escapeHtml($block->getAgreementCreatedAt()) ?>
                     </td>
                     <?php if ($block->getAgreementUpdatedAt()) : ?>
-                        <td data-th="<?= $block->escapeHtml(__('Updated:')) ?>" class="col updated">
-                            <?= $block->escapeHtml($block->getAgreementUpdatedAt()) ?>
+                        <td data-th="<?= $escaper->escapeHtml(__('Updated:')) ?>" class="col updated">
+                            <?= $escaper->escapeHtml($block->getAgreementUpdatedAt()) ?>
                         </td>
                     <?php endif; ?>
-                    <td data-th="<?= $block->escapeHtml(__('Payment Method:')) ?>" class="col payment">
-                        <?= $block->escapeHtml($block->getPaymentMethodTitle()) ?>
+                    <td data-th="<?= $escaper->escapeHtml(__('Payment Method:')) ?>" class="col payment">
+                        <?= $escaper->escapeHtml($block->getPaymentMethodTitle()) ?>
                     </td>
                 </tr>
                 </tbody>
@@ -73,55 +73,55 @@ $relatedOrders = $block->getRelatedOrders();
     <div class="block block-billing-orders-view">
         <?= $block->getChildHtml('pager') ?>
         <div class="block-title">
-            <span><?= $block->escapeHtml(__('Related Orders')) ?></span>
+            <span><?= $escaper->escapeHtml(__('Related Orders')) ?></span>
         </div>
         <div class="block-content">
             <div class="table-wrapper billing-agreements-related">
                 <table class="data table table-billing-agreements-related" id="related-orders-table">
-                    <caption class="table-caption"><?= $block->escapeHtml(__('Related Orders')) ?></caption>
+                    <caption class="table-caption"><?= $escaper->escapeHtml(__('Related Orders')) ?></caption>
                     <thead>
                     <tr>
-                        <th scope="col" class="col id"><?= $block->escapeHtml(__('Order #')) ?></th>
-                        <th scope="col" class="col date"><?= $block->escapeHtml(__('Date')) ?></th>
-                        <th scope="col" class="col shipto"><?= $block->escapeHtml(__('Ship To')) ?></th>
-                        <th scope="col" class="col total"><?= $block->escapeHtml(__('Order Total')) ?></th>
-                        <th scope="col" class="col status"><?= $block->escapeHtml(__('Order Status')) ?></th>
+                        <th scope="col" class="col id"><?= $escaper->escapeHtml(__('Order #')) ?></th>
+                        <th scope="col" class="col date"><?= $escaper->escapeHtml(__('Date')) ?></th>
+                        <th scope="col" class="col shipto"><?= $escaper->escapeHtml(__('Ship To')) ?></th>
+                        <th scope="col" class="col total"><?= $escaper->escapeHtml(__('Order Total')) ?></th>
+                        <th scope="col" class="col status"><?= $escaper->escapeHtml(__('Order Status')) ?></th>
                         <th scope="col" class="col actions">&nbsp;</th>
                     </tr>
                     </thead>
                     <tbody>
                         <?php foreach ($relatedOrders as $order) : ?>
                             <tr>
-                                <td data-th="<?= $block->escapeHtml(__('Order #')) ?>" class="col id">
-                                    <?= $block->escapeHtml($block->getOrderItemValue(
+                                <td data-th="<?= $escaper->escapeHtml(__('Order #')) ?>" class="col id">
+                                    <?= $escaper->escapeHtml($block->getOrderItemValue(
                                         $order,
                                         'order_increment_id'
                                     )); ?>
                                 </td>
-                                <td data-th="<?= $block->escapeHtml(__('Date')) ?>" class="col date">
-                                    <?= $block->escapeHtml($block->getOrderItemValue($order, 'created_at')) ?>
+                                <td data-th="<?= $escaper->escapeHtml(__('Date')) ?>" class="col date">
+                                    <?= $escaper->escapeHtml($block->getOrderItemValue($order, 'created_at')) ?>
                                 </td>
-                                <td data-th="<?= $block->escapeHtml(__('Ship To')) ?>" class="col shipto">
-                                    <?= $block->escapeHtml($block->getOrderItemValue(
+                                <td data-th="<?= $escaper->escapeHtml(__('Ship To')) ?>" class="col shipto">
+                                    <?= $escaper->escapeHtml($block->getOrderItemValue(
                                         $order,
                                         'shipping_address'
                                     )); ?>
                                 </td>
-                                <td data-th="<?= $block->escapeHtml(__('Order Total')) ?>" class="col total">
+                                <td data-th="<?= $escaper->escapeHtml(__('Order Total')) ?>" class="col total">
                                     <?= /* @noEscape */ $block->getOrderItemValue($order, 'order_total') ?>
                                 </td>
-                                <td data-th="<?= $block->escapeHtml(__('Order Status')) ?>" class="col status">
-                                    <?= $block->escapeHtml($block->getOrderItemValue(
+                                <td data-th="<?= $escaper->escapeHtml(__('Order Status')) ?>" class="col status">
+                                    <?= $escaper->escapeHtml($block->getOrderItemValue(
                                         $order,
                                         'status_label'
                                     )); ?>
                                 </td>
                                 <td data-th="" class="col actions">
-                                    <a href="<?= $block->escapeUrl($block->getOrderItemValue(
+                                    <a href="<?= $escaper->escapeUrl($block->getOrderItemValue(
                                         $order,
                                         'view_url'
                                     )); ?>" class="action view">
-                                        <span><?= $block->escapeHtml(__('View Order')) ?></span>
+                                        <span><?= $escaper->escapeHtml(__('View Order')) ?></span>
                                     </a>
                                 </td>
                             </tr>
@@ -135,8 +135,8 @@ $relatedOrders = $block->getRelatedOrders();
 
 <div class="actions-toolbar">
     <div class="secondary">
-        <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
-            <?= $block->escapeHtml(__('Back to Billing Agreements')) ?>
+        <a href="<?= $escaper->escapeUrl($block->getBackUrl()) ?>" class="action back">
+            <?= $escaper->escapeHtml(__('Back to Billing Agreements')) ?>
         </a>
     </div>
 </div>

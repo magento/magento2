@@ -10,6 +10,6 @@
 ?>
 <?= $block->getBeforeHtml() ?>
 <button <?= /* @noEscape */ $block->getAttributesHtml(), /* @noEscape */ $block->getUiId() ?>>
-    <span><?= $block->escapeHtml($block->getLabel()) ?></span>
+    <span><?= $escaper->escapeHtml($block->getLabel()) ?></span>
 </button>
 <?= $block->getAfterHtml() ?>

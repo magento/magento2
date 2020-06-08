@@ -62,7 +62,7 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElem
     $data = [
         'origin'=> 'msrp',
         'popupId' => '#' . $popupId,
-        'productName' => $block->escapeJs($block->escapeHtml($product->getName())),
+        'productName' => $escaper->escapeJs($escaper->escapeHtml($product->getName())),
         'productId' => $productId,
         'productIdInput' => 'input[type="hidden"][name="product"]',
         'realPrice' => $block->getRealPriceHtml(),
@@ -86,18 +86,18 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElem
         );
     }
     ?>
-    <span id="<?= $block->escapeHtmlAttr($block->getPriceId() ? $block->getPriceId() : $priceElementId) ?>" style="display:none"></span>
+    <span id="<?= $escaper->escapeHtmlAttr($block->getPriceId() ? $block->getPriceId() : $priceElementId) ?>" style="display:none"></span>
     <a href="javascript:void(0);"
        id="<?= /* @noEscape */ ($popupId) ?>"
        class="action map-show-info"
        <?php //phpcs:disable ?>
        data-mage-init='{"addToCart":<?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode($data) ?>}'>
         <?php //phpcs:enable ?>
-        <?= $block->escapeHtml(__('Click for price')) ?>
+        <?= $escaper->escapeHtml(__('Click for price')) ?>
     </a>
 <?php else : ?>
     <span class="msrp-message">
-     <?= $block->escapeHtml($priceType->getMsrpPriceMessage()) ?>
+     <?= $escaper->escapeHtml($priceType->getMsrpPriceMessage()) ?>
     </span>
 <?php endif; ?>
 
@@ -108,7 +108,7 @@ $priceElementIdPrefix = $block->getPriceElementIdPrefix() ? $block->getPriceElem
        class="action map-show-info"
        data-mage-init='{"addToCart":{"origin": "info",
                                      "helpLinkId": "#<?= /* @noEscape */ $helpLinkId ?>",
-                                     "productName": "<?= $block->escapeJs($block->escapeHtml($product->getName())) ?>",
-                                     "closeButtonId": "#map-popup-close"}}'><span><?= $block->escapeHtml(__("What's this?")) ?></span>
+                                     "productName": "<?= $escaper->escapeJs($escaper->escapeHtml($product->getName())) ?>",
+                                     "closeButtonId": "#map-popup-close"}}'><span><?= $escaper->escapeHtml(__("What's this?")) ?></span>
     </a>
 <?php endif; ?>

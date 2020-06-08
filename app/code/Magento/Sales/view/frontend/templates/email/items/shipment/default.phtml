@@ -8,12 +8,12 @@
 $_item = $block->getItem() ?>
 <tr>
     <td class="item-info<?= ($block->getItemOptions() ? ' has-extra' : '') ?>">
-        <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
-        <p class="sku"><?= $block->escapeHtml(__('SKU')) ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
+        <p class="product-name"><?= $escaper->escapeHtml($_item->getName()) ?></p>
+        <p class="sku"><?= $escaper->escapeHtml(__('SKU')) ?>: <?= $escaper->escapeHtml($block->getSku($_item)) ?></p>
         <?php if ($block->getItemOptions()) : ?>
             <dl class="item-options">
                 <?php foreach ($block->getItemOptions() as $option) : ?>
-                    <dt><strong><em><?= $block->escapeHtml($option['label']) ?></em></strong></dt>
+                    <dt><strong><em><?= $escaper->escapeHtml($option['label']) ?></em></strong></dt>
                     <dd>
                         <?= /* @noEscape */  nl2br($option['value']) ?>
                     </dd>
@@ -24,7 +24,7 @@ $_item = $block->getItem() ?>
         <?php if ($addInfoBlock) : ?>
             <?= $addInfoBlock->setItem($_item->getOrderItem())->toHtml() ?>
         <?php endif; ?>
-        <?= $block->escapeHtml($_item->getDescription()) ?>
+        <?= $escaper->escapeHtml($_item->getDescription()) ?>
     </td>
     <td class="item-qty"><?= (float) $_item->getQty() ?></td>
 </tr>

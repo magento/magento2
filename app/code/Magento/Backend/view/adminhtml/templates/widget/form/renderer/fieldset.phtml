@@ -36,29 +36,29 @@ if ($isField) {
 
 <?php if ($isWrapped) : ?>
     <div class="fieldset-wrapper <?= ($isCollapsable) ? 'admin__collapsible-block-wrapper ' : '' ?>"
-        id="<?=  $block->escapeHtmlAttr($containerId ? $containerId : $id . '-wrapper') ?>"
-        data-role="<?=  $block->escapeHtmlAttr($id) ?>-wrapper">
+        id="<?=  $escaper->escapeHtmlAttr($containerId ? $containerId : $id . '-wrapper') ?>"
+        data-role="<?=  $escaper->escapeHtmlAttr($id) ?>-wrapper">
         <div class="fieldset-wrapper-title admin__fieldset-wrapper-title">
             <strong <?= /* @noEscape */ $isCollapsable ?
                 'class="admin__collapsible-title" data-toggle="collapse" data-target="#' . $id . '-content"' :
                 'class="title"'; ?>>
-                <span><?= $block->escapeHtml($element->getLegend()) ?></span>
+                <span><?= $escaper->escapeHtml($element->getLegend()) ?></span>
             </strong>
             <?= /* @noEscape */ $titleActions ?>
         </div>
         <div class="fieldset-wrapper-content admin__fieldset-wrapper-content<?= ($isCollapsable) ? ' collapse' : '' ?>"
-            id="<?=  $block->escapeHtmlAttr($id) ?>-content"
-            data-role="<?=  $block->escapeHtmlAttr($id) ?>-content">
+            id="<?=  $escaper->escapeHtmlAttr($id) ?>-content"
+            data-role="<?=  $escaper->escapeHtmlAttr($id) ?>-content">
 <?php endif; ?>
 
     <?php if (!$element->getNoContainer()) : ?>
-        <fieldset class="<?=  $block->escapeHtmlAttr($cssClass) ?>" id="<?=  $block->escapeHtmlAttr($id) ?>">
+        <fieldset class="<?=  $escaper->escapeHtmlAttr($cssClass) ?>" id="<?=  $escaper->escapeHtmlAttr($id) ?>">
         <?php if (strlen($element->getBeforeElementHtml())) : ?>
             <?= $element->getBeforeElementHtml() ?>
         <?php endif ?>
         <?php if ($element->getLegend() && !$isWrapped) : ?>
             <legend class="<?= /* @noEscape */ $isField ? 'label admin__field-label' : 'admin__legend legend' ?>">
-                <span><?= $block->escapeHtml($element->getLegend()) ?></span>
+                <span><?= $escaper->escapeHtml($element->getLegend()) ?></span>
             </legend><br />
         <?php endif; ?>
     <?php endif; ?>
@@ -66,7 +66,7 @@ if ($isField) {
 
     <div class="messages">
         <?php if ($element->getComment() && !$isField) : ?>
-            <div class="message message-notice"><?= $block->escapeHtml($element->getComment()) ?></div>
+            <div class="message message-notice"><?= $escaper->escapeHtml($element->getComment()) ?></div>
         <?php endif; ?>
     </div>
 
@@ -86,14 +86,14 @@ if ($isField) {
         <?= ($isField && $count > 1) ? '</div>' : '' ?>
 
         <?php if ($element->getComment() && $isField) : ?>
-            <div class="note"><?= $block->escapeHtml($element->getComment()) ?></div>
+            <div class="note"><?= $escaper->escapeHtml($element->getComment()) ?></div>
         <?php endif; ?>
 
         <?php if ($element->hasAdvanced() && !$isField) : ?>
             <?= (!$element->getNoContainer() && $advancedAfter)  ? '</fieldset>' : '' ?>
             <details data-mage-init='{"details": {}}' class="details admin__collapsible-block-wrapper" id="details<?= /* @noEscape */ $id ?>">
                 <summary class="details-summary admin__collapsible-title" id="details-summary<?= /* @noEscape */ $id ?>">
-                    <span><?= $block->escapeHtml($advancedLabel) ?></span>
+                    <span><?= $escaper->escapeHtml($advancedLabel) ?></span>
                 </summary>
                 <div class="details-content admin__fieldset" id="details-content<?= /* @noEscape */ $id ?>">
                     <?= $element->getAdvancedChildrenHtml() ?>

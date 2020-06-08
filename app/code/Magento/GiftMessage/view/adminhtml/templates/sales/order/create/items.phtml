@@ -13,7 +13,7 @@
 
         <?php if ($block->getMessageText()) : ?>
         <div class="gift-options-tooltip-content">
-            <div><strong><?= $block->escapeHtml(__('Gift Message')) ?></strong>:</div>
+            <div><strong><?= $escaper->escapeHtml(__('Gift Message')) ?></strong>:</div>
             <div><?= /* @noEscape */ $block->getMessageText() ?></div>
         </div>
         <?php endif; ?>

@@ -4,6 +4,7 @@
  * See COPYING.txt for license details.
  */
 
+/** @var \Magento\Framework\Escaper $escaper */
 /** @var \Magento\Framework\View\Element\Template $block */
 ?>
 <script>
@@ -19,13 +20,13 @@
                     if (!urlParams) {
                         urlParams = '';
                     }
-                    var url = <?= $block->escapeJs($block->escapeUrl($block->getJsObjectName())) ?>.url + '?ajax=true' + urlParams;
+                    var url = <?= $escaper->escapeJs($escaper->escapeUrl($block->getJsObjectName())) ?>.url + '?ajax=true' + urlParams;
                     new Ajax.Updater(
-                        <?= $block->escapeJs($block->escapeHtml($block->getJsObjectName())) ?>.containerId,
+                        <?= $escaper->escapeJs($escaper->escapeHtml($block->getJsObjectName())) ?>.containerId,
                         url,
                         {
                             parameters: {form_key: FORM_KEY},
-                            onComplete: <?= $block->escapeJs($block->escapeHtml($block->getJsObjectName())) ?>.initGrid.bind(<?= $block->escapeJs($block->escapeHtml($block->getJsObjectName())) ?>),
+                            onComplete: <?= $escaper->escapeJs($escaper->escapeHtml($block->getJsObjectName())) ?>.initGrid.bind(<?= $escaper->escapeJs($escaper->escapeHtml($block->getJsObjectName())) ?>),
                         evalScripts:true
                 }
             );
@@ -48,7 +49,7 @@
         var self = this;
 
         confirm({
-            content: '<?= $block->escapeJs($block->escapeHtml(__('Are you sure you want to remove this item?'))) ?>',
+            content: '<?= $escaper->escapeJs($escaper->escapeHtml(__('Are you sure you want to remove this item?'))) ?>',
             actions: {
                 confirm: function () {
                     self.reload('&delete=' + itemId);
@@ -61,8 +62,8 @@
     productConfigure.addListType(
         'wishlist',
         {
-            urlFetch: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('customer/wishlist_product_composite_wishlist/configure'))) ?>',
-            urlConfirm: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('customer/wishlist_product_composite_wishlist/update'))) ?>'
+            urlFetch: '<?= $escaper->escapeJs($escaper->escapeUrl($block->getUrl('customer/wishlist_product_composite_wishlist/configure'))) ?>',
+            urlConfirm: '<?= $escaper->escapeJs($escaper->escapeUrl($block->getUrl('customer/wishlist_product_composite_wishlist/update'))) ?>'
         }
     );
     //-->

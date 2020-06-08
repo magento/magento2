@@ -9,19 +9,19 @@
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?= $block->escapeHtml(__('Items to Ship')) ?></span>
+        <span class="title"><?= $escaper->escapeHtml(__('Items to Ship')) ?></span>
     </div>
     <div class="admin__table-wrapper">
         <table class="data-table admin__table-primary order-shipment-table">
             <thead>
                 <tr class="headings">
-                    <th class="col-product"><span><?= $block->escapeHtml(__('Product')) ?></span></th>
-                    <th class="col-ordered-qty"><span><?= $block->escapeHtml(__('Qty')) ?></span></th>
+                    <th class="col-product"><span><?= $escaper->escapeHtml(__('Product')) ?></span></th>
+                    <th class="col-ordered-qty"><span><?= $escaper->escapeHtml(__('Qty')) ?></span></th>
                     <th class="col-qty<?php if ($block->isShipmentRegular()) : ?> last<?php endif; ?>">
-                        <span><?= $block->escapeHtml(__('Qty to Ship')) ?></span>
+                        <span><?= $escaper->escapeHtml(__('Qty to Ship')) ?></span>
                     </th>
                     <?php if (!$block->canShipPartiallyItem()) : ?>
-                    <th class="col-ship last"><span><?= $block->escapeHtml(__('Ship')) ?></span></th>
+                    <th class="col-ship last"><span><?= $escaper->escapeHtml(__('Ship')) ?></span></th>
                     <?php endif; ?>
                 </tr>
             </thead>
@@ -42,24 +42,24 @@
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?= $block->escapeHtml(__('Shipment Total')) ?></span>
+        <span class="title"><?= $escaper->escapeHtml(__('Shipment Total')) ?></span>
     </div>
     <div class="admin__page-section-content order-comments-history">
         <div class="admin__page-section-item">
             <div class="admin__page-section-item-title">
-                <span class="title"><?= $block->escapeHtml(__('Shipment Comments')) ?></span>
+                <span class="title"><?= $escaper->escapeHtml(__('Shipment Comments')) ?></span>
             </div>
             <div class="admin__page-section-item-content">
                 <div id="order-history_form" class="admin__field">
                     <label class="admin__field-label"
                            for="shipment_comment_text">
-                        <span><?= $block->escapeHtml(__('Comment Text')) ?></span></label>
+                        <span><?= $escaper->escapeHtml(__('Comment Text')) ?></span></label>
                     <div class="admin__field-control">
                         <textarea id="shipment_comment_text"
                                   class="admin__control-textarea"
                                   name="shipment[comment_text]"
                                   rows="3"
-                                  cols="5"><?= $block->escapeHtml($block->getShipment()->getCommentText()) ?></textarea>
+                                  cols="5"><?= $escaper->escapeHtml($block->getShipment()->getCommentText()) ?></textarea>
                     </div>
                 </div>
             </div>
@@ -67,7 +67,7 @@
     </div>
     <div class="admin__page-section-item order-totals order-totals-actions">
         <div class="admin__page-section-item-title">
-            <span class="title"><?= $block->escapeHtml(__('Shipment Options')) ?></span>
+            <span class="title"><?= $escaper->escapeHtml(__('Shipment Options')) ?></span>
         </div>
         <div class="admin__page-section-item-content">
             <?php if ($block->canCreateShippingLabel()) : ?>
@@ -80,7 +80,7 @@
                            onclick="toggleCreateLabelCheckbox();"/>
                     <label class="admin__field-label"
                            for="create_shipping_label">
-                        <span><?= $block->escapeHtml(__('Create Shipping Label')) ?></span></label>
+                        <span><?= $escaper->escapeHtml(__('Create Shipping Label')) ?></span></label>
                 </div>
             <?php endif ?>
 
@@ -92,7 +92,7 @@
                        type="checkbox"/>
                 <label class="admin__field-label"
                        for="notify_customer">
-                    <span><?=$block->escapeHtml(__('Append Comments')) ?></span></label>
+                    <span><?=$escaper->escapeHtml(__('Append Comments')) ?></span></label>
             </div>
 
             <?php if ($block->canSendShipmentEmail()) : ?>
@@ -104,7 +104,7 @@
                            type="checkbox"/>
                     <label class="admin__field-label"
                            for="send_email">
-                        <span><?= $block->escapeHtml(__('Email Copy of Shipment')) ?></span></label>
+                        <span><?= $escaper->escapeHtml(__('Email Copy of Shipment')) ?></span></label>
                 </div>
             <?php endif; ?>
             <?= $block->getChildHtml('submit_before') ?>
@@ -150,7 +150,7 @@ window.toggleCreateLabelCheckbox = function() {
 window.submitShipment = function(btn) {
     if (!validQtyItems()) {
         alert({
-            content: '<?= $block->escapeJs($block->escapeHtml(__('Invalid value(s) for Qty to Ship'))) ?>'
+            content: '<?= $escaper->escapeJs($escaper->escapeHtml(__('Invalid value(s) for Qty to Ship'))) ?>'
         });
         return;
     }

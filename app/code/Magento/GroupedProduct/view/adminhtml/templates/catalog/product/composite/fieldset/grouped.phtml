@@ -9,26 +9,26 @@
 <?php /* @var $block \Magento\GroupedProduct\Block\Adminhtml\Product\Composite\Fieldset\Grouped */ ?>
 <?php $_skipSaleableCheck = $this->helper(Magento\Catalog\Helper\Product::class)->getSkipSaleableCheck(); ?>
 <div id="catalog_product_composite_configure_fields_grouped" class="<?= $block->getIsLastFieldset() ? 'last-fieldset' : '' ?>">
-    <h4><?= $block->escapeHtml(__('Associated Products')) ?></h4>
+    <h4><?= $escaper->escapeHtml(__('Associated Products')) ?></h4>
     <div class="product-options">
         <?php $_product = $block->getProduct(); ?>
         <?php $block->setPreconfiguredValue(); ?>
         <?php $_associatedProducts = $block->getAssociatedProducts(); ?>
         <?php $_hasAssociatedProducts = count($_associatedProducts) > 0; ?>
         <?php if ((!$_product->isAvailable() && !$_skipSaleableCheck) || !$_hasAssociatedProducts) : ?>
-            <p class="availability out-of-stock"><?= $block->escapeHtml(__('Availability:')) ?> <span><?= $block->escapeHtml(__('Out of stock')) ?></span></p>
+            <p class="availability out-of-stock"><?= $escaper->escapeHtml(__('Availability:')) ?> <span><?= $escaper->escapeHtml(__('Out of stock')) ?></span></p>
         <?php endif; ?>
         <table class="data-table admin__table-primary grouped-items-table" id="super-product-table">
             <thead>
                 <tr class="headings">
-                    <th class="col-id"><?= $block->escapeHtml(__('ID')) ?></th>
-                    <th class="col-sku"><?= $block->escapeHtml(__('SKU')) ?></th>
-                    <th class="col-name"><?= $block->escapeHtml(__('Product Name')) ?></th>
+                    <th class="col-id"><?= $escaper->escapeHtml(__('ID')) ?></th>
+                    <th class="col-sku"><?= $escaper->escapeHtml(__('SKU')) ?></th>
+                    <th class="col-name"><?= $escaper->escapeHtml(__('Product Name')) ?></th>
                     <?php if ($block->getCanShowProductPrice($_product)) : ?>
-                    <th class="col-price"><?= $block->escapeHtml(__('Price')) ?></th>
+                    <th class="col-price"><?= $escaper->escapeHtml(__('Price')) ?></th>
                     <?php endif; ?>
                     <?php if ($_product->isSaleable() || $_skipSaleableCheck) : ?>
-                    <th class="col-qty"><?= $block->escapeHtml(__('Qty')) ?></th>
+                    <th class="col-qty"><?= $escaper->escapeHtml(__('Qty')) ?></th>
                     <?php endif; ?>
                 </tr>
             </thead>
@@ -36,10 +36,10 @@
             <?php if ($_hasAssociatedProducts) : ?>
                 <?php $i = 0 ?>
                 <?php foreach ($_associatedProducts as $_item) : ?>
-                <tr class="<?= $block->escapeHtmlAttr((++$i % 2) ? 'even' : 'odd') ?>">
-                    <td class="col-id"><?= $block->escapeHtml($_item->getId()) ?></td>
-                    <td class="col-sku"><?= $block->escapeHtml($_item->getSku()) ?></td>
-                    <td class="col-name"><?= $block->escapeHtml($_item->getName()) ?></td>
+                <tr class="<?= $escaper->escapeHtmlAttr((++$i % 2) ? 'even' : 'odd') ?>">
+                    <td class="col-id"><?= $escaper->escapeHtml($_item->getId()) ?></td>
+                    <td class="col-sku"><?= $escaper->escapeHtml($_item->getSku()) ?></td>
+                    <td class="col-name"><?= $escaper->escapeHtml($_item->getName()) ?></td>
                     <?php if ($block->getCanShowProductPrice($_product)) : ?>
                     <td class="col-price">
                         <?php if ($block->getCanShowProductPrice($_item)) : ?>
@@ -51,15 +51,15 @@
                     <td class="col-qty">
                         <?php if ($_item->isSaleable() || $_skipSaleableCheck) : ?>
                         <input type="text"
-                               name="super_group[<?= $block->escapeHtmlAttr($_item->getId()) ?>]"
-                               id="super_group[<?= $block->escapeHtmlAttr($_item->getId()) ?>]"
+                               name="super_group[<?= $escaper->escapeHtmlAttr($_item->getId()) ?>]"
+                               id="super_group[<?= $escaper->escapeHtmlAttr($_item->getId()) ?>]"
                                maxlength="12"
-                               value="<?= $block->escapeHtmlAttr($_item->getQty()*1) ?>"
-                               title="<?= $block->escapeHtmlAttr(__('Qty')) ?>"
+                               value="<?= $escaper->escapeHtmlAttr($_item->getQty()*1) ?>"
+                               title="<?= $escaper->escapeHtmlAttr(__('Qty')) ?>"
                                class="input-text admin__control-text qty" />
-                        <input type="hidden" value="1" price="<?= $block->escapeHtmlAttr($block->getCurrencyPrice($_item->getPrice())) ?>" qtyId="super_group[<?= $block->escapeHtmlAttr($_item->getId()) ?>]" />
+                        <input type="hidden" value="1" price="<?= $escaper->escapeHtmlAttr($block->getCurrencyPrice($_item->getPrice())) ?>" qtyId="super_group[<?= $escaper->escapeHtmlAttr($_item->getId()) ?>]" />
                     <?php else : ?>
-                        <p class="availability out-of-stock"><span><?= $block->escapeHtml(__('Out of stock')) ?></span></p>
+                        <p class="availability out-of-stock"><span><?= $escaper->escapeHtml(__('Out of stock')) ?></span></p>
                     <?php endif; ?>
                     </td>
                     <?php endif; ?>
@@ -67,7 +67,7 @@
             <?php endforeach; ?>
             <?php else : ?>
                <tr>
-                   <td class="empty-text" colspan="<?php if ($_product->isSaleable() || $_skipSaleableCheck) : ?>4<?php else : ?>3<?php endif; ?>"><?= $block->escapeHtml(__('No options of this product are available.')) ?></td>
+                   <td class="empty-text" colspan="<?php if ($_product->isSaleable() || $_skipSaleableCheck) : ?>4<?php else : ?>3<?php endif; ?>"><?= $escaper->escapeHtml(__('No options of this product are available.')) ?></td>
                </tr>
             <?php endif; ?>
             </tbody>

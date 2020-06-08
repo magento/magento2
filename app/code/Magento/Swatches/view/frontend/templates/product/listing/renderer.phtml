@@ -10,22 +10,22 @@ $productId = $block->getProduct()->getId();
 /** @var \Magento\Swatches\ViewModel\Product\Renderer\Configurable $configurableViewModel */
 $configurableViewModel = $block->getConfigurableViewModel()
 ?>
-<div class="swatch-opt-<?= $block->escapeHtmlAttr($productId) ?>"
-     data-role="swatch-option-<?= $block->escapeHtmlAttr($productId) ?>"></div>
+<div class="swatch-opt-<?= $escaper->escapeHtmlAttr($productId) ?>"
+     data-role="swatch-option-<?= $escaper->escapeHtmlAttr($productId) ?>"></div>
 
 <script type="text/x-magento-init">
     {
-        "[data-role=swatch-option-<?= $block->escapeJs($productId) ?>]": {
+        "[data-role=swatch-option-<?= $escaper->escapeJs($productId) ?>]": {
             "Magento_Swatches/js/swatch-renderer": {
                 "selectorProduct": ".product-item-details",
                 "onlySwatches": true,
                 "enableControlLabel": false,
-                "numberToShow": <?=  $block->escapeJs($block->getNumberSwatchesPerProduct()) ?>,
+                "numberToShow": <?=  $escaper->escapeJs($block->getNumberSwatchesPerProduct()) ?>,
                 "jsonConfig": <?= /* @noEscape */ $block->getJsonConfig() ?>,
                 "jsonSwatchConfig": <?= /* @noEscape */ $block->getJsonSwatchConfig() ?>,
-                "mediaCallback": "<?= $block->escapeJs($block->escapeUrl($block->getMediaCallback())) ?>",
+                "mediaCallback": "<?= $escaper->escapeJs($escaper->escapeUrl($block->getMediaCallback())) ?>",
                 "jsonSwatchImageSizeConfig": <?= /* @noEscape */ $block->getJsonSwatchSizeConfig() ?>,
-                "showTooltip": <?= $block->escapeJs($configurableViewModel->getShowSwatchTooltip()) ?>
+                "showTooltip": <?= $escaper->escapeJs($configurableViewModel->getShowSwatchTooltip()) ?>
             }
         }
     }
@@ -33,7 +33,7 @@ $configurableViewModel = $block->getConfigurableViewModel()
 
 <script type="text/x-magento-init">
     {
-        "[data-role=priceBox][data-price-box=product-id-<?= $block->escapeJs($productId) ?>]": {
+        "[data-role=priceBox][data-price-box=product-id-<?= $escaper->escapeJs($productId) ?>]": {
             "priceBox": {
                 "priceConfig": {
                     "priceFormat": <?= /* @noEscape */ $block->getPriceFormatJson(); ?>,

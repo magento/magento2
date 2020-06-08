@@ -10,12 +10,12 @@
 <?php $options = $block->getOptionList(); ?>
 <?php if ($options) : ?>
 <div class="tooltip wrapper product-item-tooltip">
-    <span class="action details tooltip toggle"><?= $block->escapeHtml(__('See Details')) ?></span>
+    <span class="action details tooltip toggle"><?= $escaper->escapeHtml(__('See Details')) ?></span>
     <div class="tooltip content">
-        <strong class="subtitle"><?= $block->escapeHtml(__('Options Details')) ?></strong>
+        <strong class="subtitle"><?= $escaper->escapeHtml(__('Options Details')) ?></strong>
         <dl>
             <?php foreach ($options as $option) : ?>
-            <dt class="label"><?= $block->escapeHtml($option['label']) ?></dt>
+            <dt class="label"><?= $escaper->escapeHtml($option['label']) ?></dt>
             <dd class="values">
                 <?php if (is_array($option['value'])) : ?>
                     <?= /* @noEscape */ nl2br(implode("\n", $option['value'])) ?>

@@ -10,18 +10,18 @@
     <iframe name="preview_iframe"
             id="preview_iframe"
             frameborder="0"
-            title="<?= $block->escapeHtmlAttr(__('Preview')) ?>"
+            title="<?= $escaper->escapeHtmlAttr(__('Preview')) ?>"
             width="100%"
             sandbox="allow-same-origin allow-pointer-lock"
     ></iframe>
     <form id="preview_form"
-          action="<?= $block->escapeUrl($block->getUrl('*/*/popup')) ?>"
+          action="<?= $escaper->escapeUrl($block->getUrl('*/*/popup')) ?>"
           method="post"
           target="preview_iframe"
     >
     <input type="hidden" name="form_key" value="<?= /* @noEscape */ $block->getFormKey() ?>" />
     <?php foreach ($block->getPreviewFormViewModel()->getFormFields() as $name => $value) : ?>
-        <input type="hidden" name="<?= $block->escapeHtmlAttr($name) ?>" value="<?= $block->escapeHtmlAttr($value) ?>"/>
+        <input type="hidden" name="<?= $escaper->escapeHtmlAttr($name) ?>" value="<?= $escaper->escapeHtmlAttr($value) ?>"/>
     <?php endforeach; ?>
     </form>
 </div>

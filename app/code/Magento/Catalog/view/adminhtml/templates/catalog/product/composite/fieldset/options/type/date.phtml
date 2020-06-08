@@ -9,7 +9,7 @@
 <?php $_optionId = (int)$_option->getId(); ?>
 <div class="admin__field field<?= $_option->getIsRequire() ? ' required' : '' ?>">
     <label class="label admin__field-label">
-        <?= $block->escapeHtml($_option->getTitle()) ?>
+        <?= $escaper->escapeHtml($_option->getTitle()) ?>
         <?= /* @noEscape */ $block->getFormattedPrice() ?>
     </label>
     <div class="admin__field-control control">
@@ -58,7 +58,7 @@
                         if (dateTimeParts[i].value == "") return false;
                     }
                     return true;
-                }, '<?= $block->escapeJs(__('This is a required option.')) ?>');
+                }, '<?= $escaper->escapeJs(__('This is a required option.')) ?>');
                 <?php else :?>
                 jQuery.validator.addMethod('validate-datetime-<?= /* @noEscape */ $_optionId ?>', function(v) {
                     var dateTimeParts = jQuery('.datetime-picker[id^="options_<?= /* @noEscape */ $_optionId ?>"]');
@@ -74,7 +74,7 @@
                         }
                     }
                     return hasWithValue ^ hasWithNoValue;
-                }, '<?= $block->escapeJs(__('The field isn\'t complete.')) ?>');
+                }, '<?= $escaper->escapeJs(__('The field isn\'t complete.')) ?>');
                 <?php endif; ?>
                 //]]>
 

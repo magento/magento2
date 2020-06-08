@@ -9,14 +9,14 @@ $parentBlock = $block->getParentBlock();
 $track = $block->getData('track');
 ?>
 <div class="table-wrapper">
-    <table class="data table order tracking" id="track-history-table-<?= $block->escapeHtml($track->getTracking()) ?>">
-        <caption class="table-caption"><?= $block->escapeHtml(__('Track history')) ?></caption>
+    <table class="data table order tracking" id="track-history-table-<?= $escaper->escapeHtml($track->getTracking()) ?>">
+        <caption class="table-caption"><?= $escaper->escapeHtml(__('Track history')) ?></caption>
         <thead>
         <tr>
-            <th class="col location" scope="col"><?= $block->escapeHtml(__('Location')) ?></th>
-            <th class="col date" scope="col"><?= $block->escapeHtml(__('Date')) ?></th>
-            <th class="col time" scope="col"><?= $block->escapeHtml(__('Local Time')) ?></th>
-            <th class="col description" scope="col"><?= $block->escapeHtml(__('Description')) ?></th>
+            <th class="col location" scope="col"><?= $escaper->escapeHtml(__('Location')) ?></th>
+            <th class="col date" scope="col"><?= $escaper->escapeHtml(__('Date')) ?></th>
+            <th class="col time" scope="col"><?= $escaper->escapeHtml(__('Local Time')) ?></th>
+            <th class="col description" scope="col"><?= $escaper->escapeHtml(__('Description')) ?></th>
         </tr>
         </thead>
         <tbody>
@@ -28,16 +28,16 @@ $track = $block->getData('track');
                 $parentBlock->formatDeliveryTime($detail['deliverytime'], $detail['deliverydate']) :
                 ''); ?>
             <tr>
-                <td data-th="<?= $block->escapeHtml(__('Location')) ?>" class="col location">
-                    <?= (!empty($detail['deliverylocation']) ? $block->escapeHtml($detail['deliverylocation']) : '') ?>
+                <td data-th="<?= $escaper->escapeHtml(__('Location')) ?>" class="col location">
+                    <?= (!empty($detail['deliverylocation']) ? $escaper->escapeHtml($detail['deliverylocation']) : '') ?>
                 </td>
-                <td data-th="<?= $block->escapeHtml(__('Date')) ?>" class="col date">
+                <td data-th="<?= $escaper->escapeHtml(__('Date')) ?>" class="col date">
                     <?= /* @noEscape */ $detailDate ?>
                 </td>
-                <td data-th="<?= $block->escapeHtml(__('Local Time')) ?>" class="col time">
+                <td data-th="<?= $escaper->escapeHtml(__('Local Time')) ?>" class="col time">
                     <?= /* @noEscape */ $detailTime ?></td>
-                <td data-th="<?= $block->escapeHtml(__('Description')) ?>" class="col description">
-                    <?= (!empty($detail['activity']) ? $block->escapeHtml($detail['activity']) : '') ?>
+                <td data-th="<?= $escaper->escapeHtml(__('Description')) ?>" class="col description">
+                    <?= (!empty($detail['activity']) ? $escaper->escapeHtml($detail['activity']) : '') ?>
                 </td>
             </tr>
         <?php endforeach; ?>

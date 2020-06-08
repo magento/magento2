@@ -10,23 +10,23 @@
 /** @var $block \Magento\Swatches\Block\LayeredNavigation\RenderLayered */
 ?>
 <?php $swatchData = $block->getSwatchData(); ?>
-<div class="swatch-attribute swatch-layered <?= $block->escapeHtmlAttr($swatchData['attribute_code']) ?>"
-     data-attribute-code="<?= $block->escapeHtmlAttr($swatchData['attribute_code']) ?>"
-     data-attribute-id="<?= $block->escapeHtmlAttr($swatchData['attribute_id']) ?>">
+<div class="swatch-attribute swatch-layered <?= $escaper->escapeHtmlAttr($swatchData['attribute_code']) ?>"
+     data-attribute-code="<?= $escaper->escapeHtmlAttr($swatchData['attribute_code']) ?>"
+     data-attribute-id="<?= $escaper->escapeHtmlAttr($swatchData['attribute_id']) ?>">
     <div class="swatch-attribute-options clearfix">
         <?php foreach ($swatchData['options'] as $option => $label): ?>
-            <a href="<?= $block->escapeUrl($label['link']) ?>" rel="nofollow"
-               aria-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
+            <a href="<?= $escaper->escapeUrl($label['link']) ?>" rel="nofollow"
+               aria-label="<?= $escaper->escapeHtmlAttr($label['label']) ?>"
                class="swatch-option-link-layered">
                 <?php if (isset($swatchData['swatches'][$option]['type'])): ?>
                     <?php switch ($swatchData['swatches'][$option]['type']) {
                         case '3':
                             ?>
-                            <div class="swatch-option <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
+                            <div class="swatch-option <?= $escaper->escapeHtmlAttr($label['custom_style']) ?>"
                                  tabindex="-1"
                                  data-option-type="3"
-                                 data-option-id="<?= $block->escapeHtmlAttr($option) ?>"
-                                 data-option-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
+                                 data-option-id="<?= $escaper->escapeHtmlAttr($option) ?>"
+                                 data-option-label="<?= $escaper->escapeHtmlAttr($label['label']) ?>"
                                  data-option-tooltip-thumb=""
                                  data-option-tooltip-value=""
                                 ></div>
@@ -41,14 +41,14 @@
                                 'swatch_image',
                                 $swatchData['swatches'][$option]['value']
                             );
-                            $escapedUrl = $block->escapeUrl($swatchImagePath);
+                            $escapedUrl = $escaper->escapeUrl($swatchImagePath);
                             ?>
-                            <div class="swatch-option image <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
+                            <div class="swatch-option image <?= $escaper->escapeHtmlAttr($label['custom_style']) ?>"
                                  tabindex="-1"
                                  data-option-type="2"
-                                 data-option-id="<?= $block->escapeHtmlAttr($option) ?>"
-                                 data-option-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
-                                 data-option-tooltip-thumb="<?= $block->escapeUrl($swatchThumbPath) ?>"
+                                 data-option-id="<?= $escaper->escapeHtmlAttr($option) ?>"
+                                 data-option-label="<?= $escaper->escapeHtmlAttr($label['label']) ?>"
+                                 data-option-tooltip-thumb="<?= $escaper->escapeUrl($swatchThumbPath) ?>"
                                  data-option-tooltip-value=""
                                  style="background: url(<?=
                                  /*  @noEscape */ $escapedUrl
@@ -57,16 +57,16 @@
                             <?php break;
                         case '1':
                             ?>
-                            <div class="swatch-option color <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
+                            <div class="swatch-option color <?= $escaper->escapeHtmlAttr($label['custom_style']) ?>"
                                  tabindex="-1"
                                  data-option-type="1"
-                                 data-option-id="<?= $block->escapeHtmlAttr($option) ?>"
-                                 data-option-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
+                                 data-option-id="<?= $escaper->escapeHtmlAttr($option) ?>"
+                                 data-option-label="<?= $escaper->escapeHtmlAttr($label['label']) ?>"
                                  data-option-tooltip-thumb=""
-                                 data-option-tooltip-value="<?= $block->escapeHtmlAttr(
+                                 data-option-tooltip-value="<?= $escaper->escapeHtmlAttr(
                                      $swatchData['swatches'][$option]['value']
                                  ) ?>"
-                                 style="background: <?= $block->escapeHtmlAttr(
+                                 style="background: <?= $escaper->escapeHtmlAttr(
                                      $swatchData['swatches'][$option]['value']
                                  ) ?> no-repeat center; background-size: initial;">
                             </div>
@@ -74,14 +74,14 @@
                         case '0':
                         default:
                             ?>
-                            <div class="swatch-option text <?= $block->escapeHtmlAttr($label['custom_style']) ?>"
+                            <div class="swatch-option text <?= $escaper->escapeHtmlAttr($label['custom_style']) ?>"
                                  tabindex="-1"
                                  data-option-type="0"
-                                 data-option-id="<?= $block->escapeHtmlAttr($option) ?>"
-                                 data-option-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
+                                 data-option-id="<?= $escaper->escapeHtmlAttr($option) ?>"
+                                 data-option-label="<?= $escaper->escapeHtmlAttr($label['label']) ?>"
                                  data-option-tooltip-thumb=""
                                  data-option-tooltip-value=""
-                                ><?= $block->escapeHtml($swatchData['swatches'][$option]['value']) ?></div>
+                                ><?= $escaper->escapeHtml($swatchData['swatches'][$option]['value']) ?></div>
                         <?php break;
                     } ?>
                 <?php endif; ?>
@@ -92,7 +92,7 @@
 
 <script>
     require(["jquery", "Magento_Swatches/js/swatch-renderer"], function ($) {
-        $('.swatch-layered.<?= $block->escapeJs($swatchData['attribute_code']) ?>')
+        $('.swatch-layered.<?= $escaper->escapeJs($swatchData['attribute_code']) ?>')
             .find('[data-option-type="1"], [data-option-type="2"], [data-option-type="0"], [data-option-type="3"]')
             .SwatchRendererTooltip();
     });

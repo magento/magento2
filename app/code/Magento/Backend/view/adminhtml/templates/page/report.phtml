@@ -5,7 +5,7 @@
  */
 ?>
 <?php if ($block->getBugreportUrl()) : ?>
-    <a class="link-report" href="<?= $block->escapeUrl($block->getBugreportUrl()) ?>" id="footer_bug_tracking" target="_blank">
-        <?= $block->escapeHtml(__('Report an Issue')) ?>
+    <a class="link-report" href="<?= $escaper->escapeUrl($block->getBugreportUrl()) ?>" id="footer_bug_tracking" target="_blank">
+        <?= $escaper->escapeHtml(__('Report an Issue')) ?>
     </a>
 <?php endif; ?>

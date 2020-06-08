@@ -9,15 +9,15 @@
  */
 $paymentTitle = $block->getMethod()->getConfigData('title', $block->getInfo()->getOrder()->getStoreId());
 ?>
-<?= $block->escapeHtml($paymentTitle) ?>
+<?= $escaper->escapeHtml($paymentTitle) ?>
 <?php if ($block->getInfo()->getAdditionalInformation()) : ?>
     <?php if ($block->getPayableTo()) : ?>
-        <br /><?= $block->escapeHtml(__('Make Check payable to: %1', $block->getPayableTo())) ?>
+        <br /><?= $escaper->escapeHtml(__('Make Check payable to: %1', $block->getPayableTo())) ?>
     <?php endif; ?>
     <?php if ($block->getMailingAddress()) : ?>
-        <label><?= $block->escapeHtml(__('Send Check to:')) ?></label>
+        <label><?= $escaper->escapeHtml(__('Send Check to:')) ?></label>
         <div class="checkmo-mailing-address">
-            <?= /* @noEscape */ nl2br($block->escapeHtml($block->getMailingAddress())) ?>
+            <?= /* @noEscape */ nl2br($escaper->escapeHtml($block->getMailingAddress())) ?>
         </div>
     <?php endif; ?>
 <?php endif; ?>

@@ -18,9 +18,9 @@
             <?php //echo $block->getCollapseButtonHtml() ?>
             <?php //echo $block->getExpandButtonHtml() ?>
             <a href="#"
-               onclick="tree.collapseTree(); return false;"><?= $block->escapeHtml(__('Collapse All')) ?></a>
+               onclick="tree.collapseTree(); return false;"><?= $escaper->escapeHtml(__('Collapse All')) ?></a>
             <span class="separator">|</span> <a href="#"
-                                                onclick="tree.expandTree(); return false;"><?= $block->escapeHtml(__('Expand All')) ?></a>
+                                                onclick="tree.expandTree(); return false;"><?= $escaper->escapeHtml(__('Expand All')) ?></a>
         <?php endif; ?>
     </div>
     <?php if ($block->getRoot()) :?>
@@ -31,7 +31,7 @@
 
     <div data-id="information-dialog-tree" class="messages" style="display: none;">
         <div class="message message-notice">
-            <div><?= $block->escapeHtml(__('This operation can take a long time')) ?></div>
+            <div><?= $escaper->escapeHtml(__('This operation can take a long time')) ?></div>
         </div>
     </div>
     <script>
@@ -171,7 +171,7 @@
 
                     if (!this.collapsed) {
                         this.collapsed = true;
-                        this.loader.dataUrl = '<?= $block->escapeJs($block->escapeUrl($block->getLoadTreeUrl(false))) ?>';
+                        this.loader.dataUrl = '<?= $escaper->escapeJs($escaper->escapeUrl($block->getLoadTreeUrl(false))) ?>';
                         this.request(this.loader.dataUrl, false);
                     }
                 },
@@ -180,7 +180,7 @@
                     this.expandAll();
                     if (this.collapsed) {
                         this.collapsed = false;
-                        this.loader.dataUrl = '<?= $block->escapeJs($block->escapeUrl($block->getLoadTreeUrl(true))) ?>';
+                        this.loader.dataUrl = '<?= $escaper->escapeJs($escaper->escapeUrl($block->getLoadTreeUrl(true))) ?>';
                         this.request(this.loader.dataUrl, false);
                     }
                 },
@@ -215,7 +215,7 @@
                 if (tree && switcherParams) {
                     var url;
                     if (switcherParams.useConfirm) {
-                        if (!confirm("<?= $block->escapeJs(__('Please confirm site switching. All data that hasn\'t been saved will be lost.')) ?>")) {
+                        if (!confirm("<?= $escaper->escapeJs(__('Please confirm site switching. All data that hasn\'t been saved will be lost.')) ?>")) {
                             return false;
                         }
                     }
@@ -258,7 +258,7 @@
                             }
                         });
                     } else {
-                        var baseUrl = '<?= $block->escapeJs($block->escapeUrl($block->getEditUrl())) ?>';
+                        var baseUrl = '<?= $escaper->escapeJs($escaper->escapeUrl($block->getEditUrl())) ?>';
                         var urlExt = switcherParams.scopeParams + 'id/' + tree.currentNodeId + '/';
                         url = parseSidUrl(baseUrl, urlExt);
                         setLocation(url);
@@ -306,7 +306,7 @@
 
             jQuery(function () {
                 categoryLoader = new Ext.tree.TreeLoader({
-                    dataUrl: '<?= $block->escapeJs($block->escapeUrl($block->getLoadTreeUrl())) ?>'
+                    dataUrl: '<?= $escaper->escapeJs($escaper->escapeUrl($block->getLoadTreeUrl())) ?>'
                 });
 
                 categoryLoader.processResponse = function (response, parent, callback) {
@@ -389,11 +389,11 @@
                     containerScroll: true,
                     selModel: new Ext.tree.CheckNodeMultiSelectionModel(),
                     rootVisible: '<?= (bool)$block->getRoot()->getIsVisible() ?>',
-                    useAjax: <?= $block->escapeJs($block->getUseAjax()) ?>,
-                    switchTreeUrl: '<?= $block->escapeJs($block->escapeUrl($block->getSwitchTreeUrl())) ?>',
-                    editUrl: '<?= $block->escapeJs($block->escapeUrl($block->getEditUrl())) ?>',
+                    useAjax: <?= $escaper->escapeJs($block->getUseAjax()) ?>,
+                    switchTreeUrl: '<?= $escaper->escapeJs($escaper->escapeUrl($block->getSwitchTreeUrl())) ?>',
+                    editUrl: '<?= $escaper->escapeJs($escaper->escapeUrl($block->getEditUrl())) ?>',
                     currentNodeId: <?= (int)$block->getCategoryId() ?>,
-                    baseUrl: '<?= $block->escapeJs($block->escapeUrl($block->getEditUrl())) ?>'
+                    baseUrl: '<?= $escaper->escapeJs($escaper->escapeUrl($block->getEditUrl())) ?>'
                 };
 
                 defaultLoadTreeParams = {
@@ -485,7 +485,7 @@
                         click: function () {
                             (function ($) {
                                 $.ajax({
-                                    url: '<?= $block->escapeJs($block->escapeUrl($block->getMoveUrl())) ?>',
+                                    url: '<?= $escaper->escapeJs($escaper->escapeUrl($block->getMoveUrl())) ?>',
                                     method: 'POST',
                                     data: registry.get('pd'),
                                     showLoader: true

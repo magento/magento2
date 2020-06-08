@@ -6,7 +6,7 @@
 ?>
 <?php /* @var $block \Magento\Backend\Block\Template */ ?>
 <div class="field field-store-switcher">
-    <label class="label" for="store_switcher"><?= $block->escapeHtml(__('Current Configuration Scope:')) ?></label>
+    <label class="label" for="store_switcher"><?= $escaper->escapeHtml(__('Current Configuration Scope:')) ?></label>
     <div class="control">
         <select id="store_switcher" class="system-config-store-switcher"
                 onchange="location.href=this.options[this.selectedIndex].getAttribute('url')">
@@ -15,16 +15,16 @@
                 <?php if ($_option['is_close']) : ?>
                     </optgroup>
                 <?php else : ?>
-                    <optgroup label="<?= $block->escapeHtmlAttr($_option['label']) ?>"
-                              style="<?= $block->escapeHtmlAttr($_option['style']) ?>">
+                    <optgroup label="<?= $escaper->escapeHtmlAttr($_option['label']) ?>"
+                              style="<?= $escaper->escapeHtmlAttr($_option['style']) ?>">
                 <?php endif; ?>
                 <?php continue ?>
             <?php endif; ?>
-              <option value="<?= $block->escapeHtmlAttr($_value) ?>"
-                      url="<?= $block->escapeUrl($_option['url']) ?>"
+              <option value="<?= $escaper->escapeHtmlAttr($_value) ?>"
+                      url="<?= $escaper->escapeUrl($_option['url']) ?>"
                       <?= $_option['selected'] ? 'selected="selected"' : '' ?>
-                      style="<?= $block->escapeHtmlAttr($_option['style']) ?>">
-                  <?= $block->escapeHtml($_option['label']) ?>
+                      style="<?= $escaper->escapeHtmlAttr($_option['style']) ?>">
+                  <?= $escaper->escapeHtml($_option['label']) ?>
               </option>
         <?php endforeach ?>
         </select>
@@ -32,8 +32,8 @@
     <?= $block->getHintHtml() ?>
     <?php if ($block->getAuthorization()->isAllowed('Magento_Backend::store')) : ?>
         <div class="actions">
-            <a href="<?= $block->escapeUrl($block->getUrl('*/system_store')) ?>">
-                <?= $block->escapeHtml(__('Stores')) ?>
+            <a href="<?= $escaper->escapeUrl($block->getUrl('*/system_store')) ?>">
+                <?= $escaper->escapeHtml(__('Stores')) ?>
             </a>
         </div>
     <?php endif; ?>

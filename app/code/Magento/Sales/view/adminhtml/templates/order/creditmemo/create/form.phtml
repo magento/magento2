@@ -8,7 +8,7 @@
 
 /* @var \Magento\Sales\Block\Adminhtml\Order\Creditmemo\Create\Form $block */
 ?>
-<form id="edit_form" method="post" action="<?= $block->escapeUrl($block->getSaveUrl()) ?>">
+<form id="edit_form" method="post" action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>">
     <?= $block->getBlockHtml('formkey') ?>
     <?php  $_order = $block->getCreditmemo()->getOrder() ?>
 
@@ -16,7 +16,7 @@
 
     <section class="admin__page-section">
         <div class="admin__page-section-title">
-            <span class="title"><?= $block->escapeHtml(__('Payment &amp; Shipping Method')) ?></span>
+            <span class="title"><?= $escaper->escapeHtml(__('Payment &amp; Shipping Method')) ?></span>
         </div>
         <div class="admin__page-section-content">
         <?php if (!$_order->getIsVirtual()) : ?>
@@ -27,12 +27,12 @@
 
             <?php /* Billing Address */ ?>
             <div class="admin__page-section-item-title">
-                <span class="title"><?= $block->escapeHtml(__('Payment Information')) ?></span>
+                <span class="title"><?= $escaper->escapeHtml(__('Payment Information')) ?></span>
             </div>
             <div class="admin__page-section-item-content">
                 <div class="order-payment-method-title"><?= $block->getChildHtml('order_payment') ?></div>
                 <div class="order-payment-currency">
-                    <?= $block->escapeHtml(__('The order was placed using %1.', $_order->getOrderCurrencyCode())) ?>
+                    <?= $escaper->escapeHtml(__('The order was placed using %1.', $_order->getOrderCurrencyCode())) ?>
                 </div>
                 <div class="order-payment-additional">
                     <?= $block->getChildHtml('order_payment_additional') ?>
@@ -44,12 +44,12 @@
         <div class="admin__page-section-item order-shipping-address">
             <?php /* Shipping Address */ ?>
             <div class="admin__page-section-item-title">
-                <span class="title"><?= $block->escapeHtml(__('Shipping Information')) ?></span>
+                <span class="title"><?= $escaper->escapeHtml(__('Shipping Information')) ?></span>
             </div>
             <div class="admin__page-section-item-content shipping-description-wrapper">
-                <div class="shipping-description-title"><?= $block->escapeHtml($_order->getShippingDescription()) ?></div>
+                <div class="shipping-description-title"><?= $escaper->escapeHtml($_order->getShippingDescription()) ?></div>
                 <div class="shipping-description-content">
-                    <?= $block->escapeHtml(__('Total Shipping Charges')) ?>:
+                    <?= $escaper->escapeHtml(__('Total Shipping Charges')) ?>:
 
                     <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displaySalesPriceInclTax($block->getSource()->getStoreId())) : ?>
                         <?php $_excl = $block->displayShippingPriceInclTax($_order); ?>
@@ -60,7 +60,7 @@
 
                     <?= /* @noEscape */ $_excl ?>
                     <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displaySalesBothPrices($block->getSource()->getStoreId()) && $_incl != $_excl) : ?>
-                        (<?= $block->escapeHtml(__('Incl. Tax')) ?> <?= /* @noEscape */ $_incl ?>)
+                        (<?= $escaper->escapeHtml(__('Incl. Tax')) ?> <?= /* @noEscape */ $_incl ?>)
                     <?php endif; ?>
                 </div>
             </div>

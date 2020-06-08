@@ -8,7 +8,7 @@
 ?>
 
 <?php if ($block->getWishlist()->getItemsCount()) : ?>
-    <button type="submit" name="do" title="<?= $block->escapeHtmlAttr(__('Update Wish List')) ?>" class="action update">
-        <span><?= $block->escapeHtml(__('Update Wish List')) ?></span>
+    <button type="submit" name="do" title="<?= $escaper->escapeHtmlAttr(__('Update Wish List')) ?>" class="action update">
+        <span><?= $escaper->escapeHtml(__('Update Wish List')) ?></span>
     </button>
 <?php endif;?>

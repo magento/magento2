@@ -9,7 +9,7 @@
 
 <?php if ((float) $_source->getShippingAmount() || $_source->getShippingDescription()) : ?>
     <tr>
-        <td class="label"><?= $block->escapeHtml(__('Shipping &amp; Handling')) ?></td>
+        <td class="label"><?= $escaper->escapeHtml(__('Shipping &amp; Handling')) ?></td>
         <td><?= /* @noEscape */ $block->displayPriceAttribute('shipping_amount') ?></td>
     </tr>
 <?php endif; ?>

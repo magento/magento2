@@ -21,7 +21,7 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()) : 0;
 <?php if ($block->getCollection()) : ?>
 
     <?php if ($block->canDisplayContainer()) : ?>
-<div id="<?= $block->escapeHtml($block->getId()) ?>" data-grid-id="<?= $block->escapeHtml($block->getId()) ?>">
+<div id="<?= $escaper->escapeHtml($block->getId()) ?>" data-grid-id="<?= $escaper->escapeHtml($block->getId()) ?>">
     <?php else : ?>
         <?= $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
     <?php endif; ?>
@@ -47,17 +47,17 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()) : 0;
                 <?php endif; ?>
                     <?php $countRecords = $block->getCollection()->getSize(); ?>
                     <div class="admin__control-support-text">
-                        <span id="<?= $block->escapeHtml($block->getHtmlId()) ?>-total-count" <?= /* @noEscape */ $block->getUiId('total-count') ?>>
+                        <span id="<?= $escaper->escapeHtml($block->getHtmlId()) ?>-total-count" <?= /* @noEscape */ $block->getUiId('total-count') ?>>
                             <?= /* @noEscape */ $countRecords ?>
                         </span>
-                        <?= $block->escapeHtml(__('records found')) ?>
-                        <span id="<?= $block->escapeHtml($block->getHtmlId()) ?>_massaction-count"
-                              class="mass-select-info _empty"><strong data-role="counter">0</strong> <span><?= $block->escapeHtml(__('selected')) ?></span></span>
+                        <?= $escaper->escapeHtml(__('records found')) ?>
+                        <span id="<?= $escaper->escapeHtml($block->getHtmlId()) ?>_massaction-count"
+                              class="mass-select-info _empty"><strong data-role="counter">0</strong> <span><?= $escaper->escapeHtml(__('selected')) ?></span></span>
                     </div>
                 <?php if ($block->getPagerVisibility()) : ?>
                     <div class="admin__data-grid-pager-wrap">
-                        <select name="<?= $block->escapeHtmlAttr($block->getVarNameLimit()) ?>"
-                                id="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-limit"
+                        <select name="<?= $escaper->escapeHtmlAttr($block->getVarNameLimit()) ?>"
+                                id="<?= $escaper->escapeHtml($block->getHtmlId()) ?>_page-limit"
                                 onchange="<?= /* @noEscape */ $block->getJsObjectName() ?>.loadByElement(this)" <?= /* @noEscape */ $block->getUiId('per-page') ?>
                                 class="admin__control-select">
                             <option value="20"<?php if ($block->getCollection()->getPageSize() == 20) : ?>
@@ -76,8 +76,8 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()) : 0;
                                 selected="selected"<?php endif; ?>>200
                             </option>
                         </select>
-                        <label for="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-limit"
-                            class="admin__control-support-text"><?= $block->escapeHtml(__('per page')) ?></label>
+                        <label for="<?= $escaper->escapeHtml($block->getHtmlId()) ?>_page-limit"
+                            class="admin__control-support-text"><?= $escaper->escapeHtml(__('per page')) ?></label>
                         <div class="admin__data-grid-pager">
                             <?php $_curPage = $block->getCollection()->getCurPage() ?>
                             <?php $_lastPage = $block->getCollection()->getLastPageNumber() ?>
@@ -86,31 +86,31 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()) : 0;
                                 <button class="action-previous"
                                         type="button"
                                         onclick="<?= /* @noEscape */ $block->getJsObjectName() ?>.setPage('<?= /* @noEscape */ ($_curPage - 1) ?>');return false;">
-                                            <span><?= $block->escapeHtml(__('Previous page')) ?></span>
+                                            <span><?= $escaper->escapeHtml(__('Previous page')) ?></span>
                                 </button>
                             <?php else : ?>
-                                <button type="button" class="action-previous disabled"><span><?= $block->escapeHtml(__('Previous page')) ?></span></button>
+                                <button type="button" class="action-previous disabled"><span><?= $escaper->escapeHtml(__('Previous page')) ?></span></button>
                             <?php endif; ?>
 
                             <input type="text"
-                                   id="<?= $block->escapeHtml($block->getHtmlId()) ?>_page-current"
-                                   name="<?= $block->escapeHtmlAttr($block->getVarNamePage()) ?>"
-                                   value="<?= $block->escapeHtmlAttr($_curPage) ?>"
+                                   id="<?= $escaper->escapeHtml($block->getHtmlId()) ?>_page-current"
+                                   name="<?= $escaper->escapeHtmlAttr($block->getVarNamePage()) ?>"
+                                   value="<?= $escaper->escapeHtmlAttr($_curPage) ?>"
                                    class="admin__control-text"
                                    onkeypress="<?= /* @noEscape */ $block->getJsObjectName() ?>.inputPage(event, '<?= /* @noEscape */ $_lastPage ?>')" <?= /* @noEscape */ $block->getUiId('current-page') ?> />
 
-                            <label class="admin__control-support-text" for="<?= $block->escapeHtml($block->getHtmlId())
+                            <label class="admin__control-support-text" for="<?= $escaper->escapeHtml($block->getHtmlId())
                             ?>_page-current">
                                 <?= /* @noEscape */ __('of %1', '<span>' . $block->getCollection()->getLastPageNumber() . '</span>') ?>
                             </label>
                             <?php if ($_curPage < $_lastPage) : ?>
-                                <button type="button" title="<?= $block->escapeHtmlAttr(__('Next page')) ?>"
+                                <button type="button" title="<?= $escaper->escapeHtmlAttr(__('Next page')) ?>"
                                         class="action-next"
                                         onclick="<?= /* @noEscape */ $block->getJsObjectName() ?>.setPage('<?= /* @noEscape */ ($_curPage + 1) ?>');return false;">
-                                    <span><?= $block->escapeHtml(__('Next page')) ?></span>
+                                    <span><?= $escaper->escapeHtml(__('Next page')) ?></span>
                                 </button>
                             <?php else : ?>
-                                <button type="button" class="action-next disabled"><span><?= $block->escapeHtml(__('Next page')) ?></span></button>
+                                <button type="button" class="action-next disabled"><span><?= $escaper->escapeHtml(__('Next page')) ?></span></button>
                             <?php endif; ?>
                         </div>
                     </div>
@@ -119,13 +119,13 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()) : 0;
         </div>
         <div class="admin__data-grid-wrap admin__data-grid-wrap-static">
         <?php if ($block->getGridCssClass()) : ?>
-            <table class="<?= $block->escapeHtmlAttr($block->getGridCssClass()) ?> data-grid" id="<?= $block->escapeHtml($block->getId()) ?>_table">
+            <table class="<?= $escaper->escapeHtmlAttr($block->getGridCssClass()) ?> data-grid" id="<?= $escaper->escapeHtml($block->getId()) ?>_table">
                 <!-- Rendering column set -->
                 <?= $block->getChildHtml('grid.columnSet') ?>
             </table>
         <?php else : ?>
 
-            <table class="data-grid" id="<?= $block->escapeHtml($block->getId()) ?>_table">
+            <table class="data-grid" id="<?= $escaper->escapeHtml($block->getId()) ?>_table">
                 <!-- Rendering column set -->
                 <?= $block->getChildHtml('grid.columnSet') ?>
             </table>
@@ -156,27 +156,27 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()) : 0;
         <?php //TODO: getJsObjectName and getRowClickCallback has unexpected behavior. Should be removed ?>
 
         <?php if ($block->getDependencyJsObject()) : ?>
-            registry.get('<?= $block->escapeJs($block->getDependencyJsObject()) ?>', function (<?= $block->escapeJs($block->getDependencyJsObject()) ?>) {
+            registry.get('<?= $escaper->escapeJs($block->getDependencyJsObject()) ?>', function (<?= $escaper->escapeJs($block->getDependencyJsObject()) ?>) {
         <?php endif; ?>
 
-        <?= $block->escapeJs($block->getJsObjectName()) ?> = new varienGrid('<?= $block->escapeHtml($block->getId()) ?>', '<?= $block->escapeJs($block->getGridUrl()) ?>', '<?= $block->escapeJs($block->getVarNamePage()) ?>', '<?= $block->escapeJs($block->getVarNameSort()) ?>', '<?= $block->escapeJs($block->getVarNameDir()) ?>', '<?= $block->escapeJs($block->getVarNameFilter()) ?>');
-        <?= $block->escapeJs($block->getJsObjectName()) ?>.useAjax = <?= /* @noEscape */ $block->getUseAjax() ? 'true' : 'false' ?>;
+        <?= $escaper->escapeJs($block->getJsObjectName()) ?> = new varienGrid('<?= $escaper->escapeHtml($block->getId()) ?>', '<?= $escaper->escapeJs($block->getGridUrl()) ?>', '<?= $escaper->escapeJs($block->getVarNamePage()) ?>', '<?= $escaper->escapeJs($block->getVarNameSort()) ?>', '<?= $escaper->escapeJs($block->getVarNameDir()) ?>', '<?= $escaper->escapeJs($block->getVarNameFilter()) ?>');
+        <?= $escaper->escapeJs($block->getJsObjectName()) ?>.useAjax = <?= /* @noEscape */ $block->getUseAjax() ? 'true' : 'false' ?>;
         <?php if ($block->getRowClickCallback()) : ?>
-                <?= $block->escapeJs($block->getJsObjectName()) ?>.rowClickCallback = <?= /* @noEscape */ $block->getRowClickCallback() ?>;
+                <?= $escaper->escapeJs($block->getJsObjectName()) ?>.rowClickCallback = <?= /* @noEscape */ $block->getRowClickCallback() ?>;
         <?php endif; ?>
         <?php if ($block->getCheckboxCheckCallback()) : ?>
-                <?= $block->escapeJs($block->getJsObjectName()) ?>.checkboxCheckCallback = <?= /* @noEscape */ $block->getCheckboxCheckCallback() ?>;
+                <?= $escaper->escapeJs($block->getJsObjectName()) ?>.checkboxCheckCallback = <?= /* @noEscape */ $block->getCheckboxCheckCallback() ?>;
         <?php endif; ?>
         <?php if ($block->getSortableUpdateCallback()) : ?>
-                <?= $block->escapeJs($block->getJsObjectName()) ?>.sortableUpdateCallback = <?= /* @noEscape */ $block->getSortableUpdateCallback() ?>;
+                <?= $escaper->escapeJs($block->getJsObjectName()) ?>.sortableUpdateCallback = <?= /* @noEscape */ $block->getSortableUpdateCallback() ?>;
         <?php endif; ?>
         <?php if ($block->getFilterKeyPressCallback()) : ?>
-            <?= $block->escapeJs($block->getJsObjectName()) ?>.filterKeyPressCallback = <?= /* @noEscape */ $block->getFilterKeyPressCallback() ?>;
+            <?= $escaper->escapeJs($block->getJsObjectName()) ?>.filterKeyPressCallback = <?= /* @noEscape */ $block->getFilterKeyPressCallback() ?>;
         <?php endif; ?>
-        <?= $block->escapeJs($block->getJsObjectName()) ?>.bindSortable();
+        <?= $escaper->escapeJs($block->getJsObjectName()) ?>.bindSortable();
         <?php if ($block->getRowInitCallback()) : ?>
-                <?= $block->escapeJs($block->getJsObjectName()) ?>.initRowCallback = <?= /* @noEscape */ $block->getRowInitCallback() ?>;
-                <?= $block->escapeJs($block->getJsObjectName()) ?>.initGridRows();
+                <?= $escaper->escapeJs($block->getJsObjectName()) ?>.initRowCallback = <?= /* @noEscape */ $block->getRowInitCallback() ?>;
+                <?= $escaper->escapeJs($block->getJsObjectName()) ?>.initGridRows();
         <?php endif; ?>
         <?php if ($block->getChildBlock('grid.massaction') && $block->getChildBlock('grid.massaction')->isAvailable()) : ?>
                 <?= /* @noEscape */ $block->getChildBlock('grid.massaction')->getJavaScript() ?>

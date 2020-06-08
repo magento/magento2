@@ -8,6 +8,6 @@
 ?>
 
 <div class="store-view">
-    <span class="store-switcher-label"><?= $block->escapeHtml(__('Scope:')) ?></span>
-    <span class="store-switcher-value"><?= $block->escapeHtml($block->getScopeTitle()) ?></span>
+    <span class="store-switcher-label"><?= $escaper->escapeHtml(__('Scope:')) ?></span>
+    <span class="store-switcher-value"><?= $escaper->escapeHtml($block->getScopeTitle()) ?></span>
 </div>

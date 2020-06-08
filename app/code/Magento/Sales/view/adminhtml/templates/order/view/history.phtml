@@ -11,11 +11,11 @@
         <div class="order-history-block" id="history_form">
 
             <div class="admin__field">
-                <label for="history_status" class="admin__field-label"><?= $block->escapeHtml(__('Status')) ?></label>
+                <label for="history_status" class="admin__field-label"><?= $escaper->escapeHtml(__('Status')) ?></label>
                 <div class="admin__field-control">
                     <select name="history[status]" id="history_status" class="admin__control-select">
                         <?php foreach ($block->getStatuses() as $_code => $_label) : ?>
-                            <option value="<?= $block->escapeHtmlAttr($_code) ?>"<?php if ($_code == $block->getOrder()->getStatus()) : ?> selected="selected"<?php endif; ?>><?= $block->escapeHtml($_label) ?></option>
+                            <option value="<?= $escaper->escapeHtmlAttr($_code) ?>"<?php if ($_code == $block->getOrder()->getStatus()) : ?> selected="selected"<?php endif; ?>><?= $escaper->escapeHtml($_label) ?></option>
                         <?php endforeach; ?>
                     </select>
                 </div>
@@ -23,7 +23,7 @@
 
             <div class="admin__field">
                 <label for="history_comment" class="admin__field-label">
-                    <?= $block->escapeHtml(__('Comment')) ?>
+                    <?= $escaper->escapeHtml(__('Comment')) ?>
                 </label>
                 <div class="admin__field-control">
                     <textarea name="history[comment]"
@@ -44,7 +44,7 @@
                                    class="admin__control-checkbox"
                                    value="1" />
                             <label class="admin__field-label" for="history_notify">
-                                <?= $block->escapeHtml(__('Notify Customer by Email')) ?>
+                                <?= $escaper->escapeHtml(__('Notify Customer by Email')) ?>
                             </label>
                         <?php endif; ?>
                     </div>
@@ -56,7 +56,7 @@
                                class="admin__control-checkbox"
                                value="1" />
                         <label class="admin__field-label" for="history_visible">
-                            <?= $block->escapeHtml(__('Visible on Storefront')) ?>
+                            <?= $escaper->escapeHtml(__('Visible on Storefront')) ?>
                         </label>
                     </div>
                 </div>
@@ -73,26 +73,26 @@
         <li class="note-list-item">
             <span class="note-list-date"><?= /* @noEscape */ $block->formatDate($_item->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
             <span class="note-list-time"><?= /* @noEscape */ $block->formatTime($_item->getCreatedAt(), \IntlDateFormatter::MEDIUM) ?></span>
-            <span class="note-list-status"><?= $block->escapeHtml($_item->getStatusLabel()) ?></span>
+            <span class="note-list-status"><?= $escaper->escapeHtml($_item->getStatusLabel()) ?></span>
             <span class="note-list-customer">
-                <?= $block->escapeHtml(__('Customer')) ?>
+                <?= $escaper->escapeHtml(__('Customer')) ?>
                 <?php if ($block->isCustomerNotificationNotApplicable($_item)) : ?>
-                    <span class="note-list-customer-notapplicable"><?= $block->escapeHtml(__('Notification Not Applicable')) ?></span>
+                    <span class="note-list-customer-notapplicable"><?= $escaper->escapeHtml(__('Notification Not Applicable')) ?></span>
                 <?php elseif ($_item->getIsCustomerNotified()) : ?>
-                    <span class="note-list-customer-notified"><?= $block->escapeHtml(__('Notified')) ?></span>
+                    <span class="note-list-customer-notified"><?= $escaper->escapeHtml(__('Notified')) ?></span>
                 <?php else : ?>
-                    <span class="note-list-customer-not-notified"><?= $block->escapeHtml(__('Not Notified')) ?></span>
+                    <span class="note-list-customer-not-notified"><?= $escaper->escapeHtml(__('Not Notified')) ?></span>
                 <?php endif; ?>
             </span>
             <?php if ($_item->getComment()) : ?>
-                <div class="note-list-comment"><?= $block->escapeHtml($_item->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></div>
+                <div class="note-list-comment"><?= $escaper->escapeHtml($_item->getComment(), ['b', 'br', 'strong', 'i', 'u', 'a']) ?></div>
             <?php endif; ?>
         </li>
     <?php endforeach; ?>
     </ul>
     <script>
         require(['prototype'], function(){
-            if($('order_status'))$('order_status').update('<?= $block->escapeJs($block->escapeHtml($block->getOrder()->getStatusLabel())) ?>');
+            if($('order_status'))$('order_status').update('<?= $escaper->escapeJs($escaper->escapeHtml($block->getOrder()->getStatusLabel())) ?>');
         });
     </script>
 </div>

@@ -4,10 +4,11 @@
  * See COPYING.txt for license details.
  */
 
+/** @var \Magento\Framework\Escaper $escaper */
 /** @var \Magento\Wishlist\Block\Customer\Wishlist\Button $block */
 ?>
 <?php if ($block->getWishlist()->getItemsCount() && $block->getWishlist()->getShared() < $block->getConfig()->getSharingEmailLimit()) : ?>
-    <button type="submit" name="save_and_share" title="<?= $block->escapeHtmlAttr(__('Share Wish List')) ?>" class="action share">
-        <span><?= $block->escapeHtml(__('Share Wish List')) ?></span>
+    <button type="submit" name="save_and_share" title="<?= $escaper->escapeHtmlAttr(__('Share Wish List')) ?>" class="action share">
+        <span><?= $escaper->escapeHtml(__('Share Wish List')) ?></span>
     </button>
 <?php endif;?>

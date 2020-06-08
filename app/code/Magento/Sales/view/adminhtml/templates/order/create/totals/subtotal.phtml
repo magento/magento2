@@ -11,27 +11,27 @@
 ?>
 <?php if ($block->displayBoth()) : ?>
 <tr class="row-totals">
-    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
-        <?= $block->escapeHtml(__('Subtotal (Excl. Tax)')) ?>
+    <td style="<?= $escaper->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
+        <?= $escaper->escapeHtml(__('Subtotal (Excl. Tax)')) ?>
     </td>
-    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
+    <td style="<?= $escaper->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
         <?= /* @noEscape */ $block->formatPrice($block->getTotal()->getValueExclTax()) ?>
     </td>
 </tr>
 <tr class="row-totals">
-    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
-        <?= $block->escapeHtml(__('Subtotal (Incl. Tax)')) ?>
+    <td style="<?= $escaper->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
+        <?= $escaper->escapeHtml(__('Subtotal (Incl. Tax)')) ?>
     </td>
-    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
+    <td style="<?= $escaper->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
         <?= /* @noEscape */ $block->formatPrice($block->getTotal()->getValueInclTax()) ?>
     </td>
 </tr>
 <?php else : ?>
 <tr class="row-totals">
-    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
-        <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
+    <td style="<?= $escaper->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
+        <?= $escaper->escapeHtml($block->getTotal()->getTitle()) ?>
     </td>
-    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
+    <td style="<?= $escaper->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
         <?= /* @noEscape */ $block->formatPrice($block->getTotal()->getValue()) ?>
     </td>
 </tr>

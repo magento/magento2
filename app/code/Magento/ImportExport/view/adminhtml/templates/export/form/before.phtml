@@ -44,7 +44,7 @@ require([
          */
         getFilter: function() {
             if ($('entity') && $F('entity')) {
-                var url    = "<?= $block->escapeJs($block->escapeUrl($block->getUrl('*/*/getFilter'))) ?>";
+                var url    = "<?= $escaper->escapeJs($escaper->escapeUrl($block->getUrl('*/*/getFilter'))) ?>";
                 var entity = $F('entity');
                 if (entity != this.previousGridEntity) {
                     this.previousGridEntity = entity;
@@ -89,7 +89,7 @@ require([
             form.action   = oldAction;
         } else {
             alert({
-                content: '<?= $block->escapeHtml(__('Invalid data')); ?>'
+                content: '<?= $escaper->escapeHtml(__('Invalid data')); ?>'
             });
         }
     };

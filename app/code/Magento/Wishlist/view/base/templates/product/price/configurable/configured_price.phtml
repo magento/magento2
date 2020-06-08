@@ -3,9 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
-<?php
+
+/** @var \Magento\Framework\Escaper $escaper */
 /** @var \Magento\Wishlist\Pricing\Render\ConfiguredPriceBox $block */
+
 $schema = ($block->getZone() == 'item_view');
 $idSuffix = $block->getIdSuffix() ?: '';
 /** @var \Magento\Wishlist\Pricing\ConfiguredPrice\ConfigurableProduct $configuredPrice */
@@ -20,8 +21,8 @@ $configuredRegularAmountValue = $configuredPrice->getConfiguredRegularAmount()->
             <?= /* @noEscape */ $block->renderAmount(
                 $configuredPrice->getConfiguredAmount(),
                 [
-                    'display_label'     => $block->escapeHtml(__('Special Price')),
-                    'price_id'          => $block->escapeHtml($block->getPriceId('product-price-' . $idSuffix)),
+                    'display_label'     => $escaper->escapeHtml(__('Special Price')),
+                    'price_id'          => $escaper->escapeHtml($block->getPriceId('product-price-' . $idSuffix)),
                     'price_type'        => 'finalPrice',
                     'include_container' => true,
                     'schema' => $schema,
@@ -32,8 +33,8 @@ $configuredRegularAmountValue = $configuredPrice->getConfiguredRegularAmount()->
             <?= /* @noEscape */ $block->renderAmount(
                 $configuredPrice->getConfiguredRegularAmount(),
                 [
-                    'display_label'     => $block->escapeHtml(__('Regular Price')),
-                    'price_id'          => $block->escapeHtml($block->getPriceId('old-price-' . $idSuffix)),
+                    'display_label'     => $escaper->escapeHtml(__('Regular Price')),
+                    'price_id'          => $escaper->escapeHtml($block->getPriceId('old-price-' . $idSuffix)),
                     'price_type'        => 'oldPrice',
                     'include_container' => true,
                     'skip_adjustments'  => true,
@@ -51,8 +52,8 @@ $configuredRegularAmountValue = $configuredPrice->getConfiguredRegularAmount()->
         <?= /* @noEscape */ $block->renderAmount(
             $configuredPrice->getAmount(),
             [
-                'display_label'     => $block->escapeHtml($priceLabel),
-                'price_id'          => $block->escapeHtml($block->getPriceId('product-price-' . $idSuffix)),
+                'display_label'     => $escaper->escapeHtml($priceLabel),
+                'price_id'          => $escaper->escapeHtml($block->getPriceId('product-price-' . $idSuffix)),
                 'price_type'        => 'finalPrice',
                 'include_container' => true,
                 'schema' => $schema,

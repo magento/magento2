@@ -6,4 +6,4 @@
 
 /** @var \Magento\Framework\View\Element\Template $block */
 ?>
-<?= $block->escapeHtml(__($block->getData('message')), ['a']); ?>
+<?= $escaper->escapeHtml(__($block->getData('message')), ['a']); ?>

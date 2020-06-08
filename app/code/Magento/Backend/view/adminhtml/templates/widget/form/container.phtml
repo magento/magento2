@@ -34,7 +34,7 @@ require([
 
     $('#edit_form').form()
         .validation({
-            validationUrl: '<?= $block->escapeJs($block->getValidationUrl()) ?>',
+            validationUrl: '<?= $escaper->escapeJs($block->getValidationUrl()) ?>',
             highlight: function(element) {
                 var detailsElement = $(element).closest('details');
                 if (detailsElement.length && detailsElement.is('.details')) {

@@ -10,7 +10,7 @@
 ?>
 <div>
     <?= $block->getMethod()->getTitle()
-        ? $block->escapeHtml($block->getMethod()->getTitle())
-        : $block->escapeHtml(__('Payment method')); ?>
-    <?= $block->escapeHtml(__(' is not available. You still can process offline actions.')) ?>
+        ? $escaper->escapeHtml($block->getMethod()->getTitle())
+        : $escaper->escapeHtml(__('Payment method')); ?>
+    <?= $escaper->escapeHtml(__(' is not available. You still can process offline actions.')) ?>
 </div>

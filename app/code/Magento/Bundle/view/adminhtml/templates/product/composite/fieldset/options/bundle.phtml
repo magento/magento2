@@ -11,7 +11,7 @@
 <fieldset id="catalog_product_composite_configure_fields_bundle"
           class="fieldset admin__fieldset composite-bundle<?= $block->getIsLastFieldset() ? ' last-fieldset' : '' ?>">
     <legend class="legend admin__legend">
-        <span><?= $block->escapeHtml(__('Bundle Items')) ?></span>
+        <span><?= $escaper->escapeHtml(__('Bundle Items')) ?></span>
     </legend><br />
     <?php foreach ($options as $option) : ?>
         <?php if ($option->getSelections()) : ?>

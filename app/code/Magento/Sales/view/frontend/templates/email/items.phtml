@@ -15,13 +15,13 @@
         <thead>
             <tr>
                 <th class="item-info">
-                    <?= $block->escapeHtml(__('Items')) ?>
+                    <?= $escaper->escapeHtml(__('Items')) ?>
                 </th>
                 <th class="item-qty">
-                    <?= $block->escapeHtml(__('Qty')) ?>
+                    <?= $escaper->escapeHtml(__('Qty')) ?>
                 </th>
                 <th class="item-price">
-                    <?= $block->escapeHtml(__('Price')) ?>
+                    <?= $escaper->escapeHtml(__('Price')) ?>
                 </th>
             </tr>
         </thead>
@@ -47,11 +47,11 @@
             <table class="message-gift">
                 <tr>
                     <td>
-                        <h3><?= $block->escapeHtml(__('Gift Message for this Order')) ?></h3>
-                        <strong><?= $block->escapeHtml(__('From:')) ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
-                        <br /><strong><?= $block->escapeHtml(__('To:')) ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
-                        <br /><strong><?= $block->escapeHtml(__('Message:')) ?></strong>
-                        <br /><?= $block->escapeHtml($_giftMessage->getMessage()) ?>
+                        <h3><?= $escaper->escapeHtml(__('Gift Message for this Order')) ?></h3>
+                        <strong><?= $escaper->escapeHtml(__('From:')) ?></strong> <?= $escaper->escapeHtml($_giftMessage->getSender()) ?>
+                        <br /><strong><?= $escaper->escapeHtml(__('To:')) ?></strong> <?= $escaper->escapeHtml($_giftMessage->getRecipient()) ?>
+                        <br /><strong><?= $escaper->escapeHtml(__('Message:')) ?></strong>
+                        <br /><?= $escaper->escapeHtml($_giftMessage->getMessage()) ?>
                     </td>
                 </tr>
             </table>

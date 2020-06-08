@@ -12,10 +12,10 @@
             <thead>
             <tr class="headings">
                 <?php if ($block->getCanReadPrice() !== false) : ?>
-                <th><?= $block->escapeHtml(__('Price')) ?></th>
-                <th><?= $block->escapeHtml(__('Price Type')) ?></th>
+                <th><?= $escaper->escapeHtml(__('Price')) ?></th>
+                <th><?= $escaper->escapeHtml(__('Price Type')) ?></th>
                 <?php endif; ?>
-                <th><?= $block->escapeHtml(__('SKU')) ?></th>
+                <th><?= $escaper->escapeHtml(__('SKU')) ?></th>
             </tr>
             </thead>
             <tr>

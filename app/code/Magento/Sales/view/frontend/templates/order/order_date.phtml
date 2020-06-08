@@ -5,7 +5,7 @@
  */
 ?>
 <div class="order-date">
-    <?= $block->escapeHtml(
+    <?= $escaper->escapeHtml(
         __(
             '<span class="label">Order Date:</span> %1',
             '<span>' . $block->formatDate($block->getOrder()->getCreatedAt(), \IntlDateFormatter::LONG) . '</span>'

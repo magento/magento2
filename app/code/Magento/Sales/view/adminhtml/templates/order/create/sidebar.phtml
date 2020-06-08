@@ -7,13 +7,13 @@
 /** @var \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar $block */
 ?>
 <div class="customer-current-activity-inner">
-    <h4 class="customer-activity-title"><?= $block->escapeHtml(__('Customer\'s Activities')) ?></h4>
+    <h4 class="customer-activity-title"><?= $escaper->escapeHtml(__('Customer\'s Activities')) ?></h4>
     <div class="create-order-sidebar-container">
     <?= $block->getChildHtml('top_button') ?>
     <?php foreach ($block->getLayout()->getChildBlocks($block->getNameInLayout()) as $_alias => $_child) : ?>
         <?php if ($_alias != 'top_button' && $_alias != 'bottom_button') : ?>
             <?php if ($block->canDisplay($_child)) : ?>
-                <div class="order-sidebar-block" id="order-sidebar_<?= $block->escapeHtmlAttr($_alias) ?>">
+                <div class="order-sidebar-block" id="order-sidebar_<?= $escaper->escapeHtmlAttr($_alias) ?>">
                     <?= $block->getChildHtml($_alias) ?>
                 </div>
             <?php endif; ?>
@@ -30,12 +30,12 @@ require([
 
     function addSidebarCompositeListType() {
         productConfigure.addListType('sidebar', {
-            urlFetch: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('sales/order_create/configureProductToAdd'))) ?>',
-            urlConfirm: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('sales/order_create/addConfigured'))) ?>'
+            urlFetch: '<?= $escaper->escapeJs($escaper->escapeUrl($block->getUrl('sales/order_create/configureProductToAdd'))) ?>',
+            urlConfirm: '<?= $escaper->escapeJs($escaper->escapeUrl($block->getUrl('sales/order_create/addConfigured'))) ?>'
         });
         productConfigure.addListType('sidebar_wishlist', {
-            urlFetch: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('customer/wishlist_product_composite_wishlist/configure'))) ?>',
-            urlConfirm: '<?= $block->escapeJs($block->escapeUrl($block->getUrl('sales/order_create/addConfigured'))) ?>'
+            urlFetch: '<?= $escaper->escapeJs($escaper->escapeUrl($block->getUrl('customer/wishlist_product_composite_wishlist/configure'))) ?>',
+            urlConfirm: '<?= $escaper->escapeJs($escaper->escapeUrl($block->getUrl('sales/order_create/addConfigured'))) ?>'
         });
     }
 

@@ -18,7 +18,7 @@ $msrpShowOnGesture = $block->getPriceType('msrp_price')->isShowPriceOnGesture();
 $product = $block->getSaleableItem();
 ?>
 <?php if (count($tierPrices)): ?>
-    <ul class="<?= $block->escapeHtmlAttr(($block->hasListClass() ? $block->getListClass() : 'prices-tier items')) ?>">
+    <ul class="<?= $escaper->escapeHtmlAttr(($block->hasListClass() ? $block->getListClass() : 'prices-tier items')) ?>">
         <?php foreach ($tierPrices as $index => $price): ?>
             <li class="item">
                 <?php
@@ -55,11 +55,11 @@ $product = $block->getSaleableItem();
                         $tierPriceData['qty'] = $price['price_qty'];
                     }
                     ?>
-                    <?= $block->escapeHtml(__('Buy %1 for: ', $price['price_qty'])) ?>
+                    <?= $escaper->escapeHtml(__('Buy %1 for: ', $price['price_qty'])) ?>
                     <a href="javascript:void(0);"
-                       id="<?= $block->escapeHtmlAttr($popupId) ?>"
-                       data-tier-price="<?= $block->escapeHtml($block->jsonEncode($tierPriceData)) ?>">
-                        <?= $block->escapeHtml(__('Click for price')) ?></a>
+                       id="<?= $escaper->escapeHtmlAttr($popupId) ?>"
+                       data-tier-price="<?= $escaper->escapeHtml($block->jsonEncode($tierPriceData)) ?>">
+                        <?= $escaper->escapeHtml(__('Click for price')) ?></a>
                 <?php else:
                     $priceAmountBlock = $block->renderAmount(
                         $price['price'],

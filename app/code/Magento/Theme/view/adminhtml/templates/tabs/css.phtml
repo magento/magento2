@@ -19,7 +19,7 @@ require([
     $( '#css_file_uploader' ).fileupload({
         dataType: 'json',
         replaceFileInput: false,
-        url : '<?= $block->escapeJs($block->escapeUrl($block->getUrl('*/system_design_theme/uploadcss'))) ?>',
+        url : '<?= $escaper->escapeJs($escaper->escapeUrl($block->getUrl('*/system_design_theme/uploadcss'))) ?>',
         acceptFileTypes: /(.|\/)(css)$/i,
 
         /**

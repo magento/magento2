@@ -8,12 +8,12 @@
 <?php $_order = $block->getOrder() ?>
 <div class="block block-order-details-view">
     <div class="block-title">
-        <strong><?= $block->escapeHtml(__('Order Information')) ?></strong>
+        <strong><?= $escaper->escapeHtml(__('Order Information')) ?></strong>
     </div>
     <div class="block-content">
         <?php if (!$_order->getIsVirtual()) : ?>
             <div class="box box-order-shipping-address">
-                <strong class="box-title"><span><?= $block->escapeHtml(__('Shipping Address')) ?></span></strong>
+                <strong class="box-title"><span><?= $escaper->escapeHtml(__('Shipping Address')) ?></span></strong>
                 <div class="box-content">
                     <address><?= /* @noEscape */ $block->getFormattedAddress($_order->getShippingAddress()) ?></address>
                 </div>
@@ -21,13 +21,13 @@
 
             <div class="box box-order-shipping-method">
                 <strong class="box-title">
-                    <span><?= $block->escapeHtml(__('Shipping Method')) ?></span>
+                    <span><?= $escaper->escapeHtml(__('Shipping Method')) ?></span>
                 </strong>
                 <div class="box-content">
                 <?php if ($_order->getShippingDescription()) : ?>
-                    <?= $block->escapeHtml($_order->getShippingDescription()) ?>
+                    <?= $escaper->escapeHtml($_order->getShippingDescription()) ?>
                 <?php else : ?>
-                    <?= $block->escapeHtml(__('No shipping information available')) ?>
+                    <?= $escaper->escapeHtml(__('No shipping information available')) ?>
                 <?php endif; ?>
                 </div>
             </div>
@@ -35,7 +35,7 @@
 
         <div class="box box-order-billing-address">
             <strong class="box-title">
-                <span><?= $block->escapeHtml(__('Billing Address')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Billing Address')) ?></span>
             </strong>
             <div class="box-content">
                 <address><?= /* @noEscape */ $block->getFormattedAddress($_order->getBillingAddress()) ?></address>
@@ -43,7 +43,7 @@
         </div>
         <div class="box box-order-billing-method">
             <strong class="box-title">
-                <span><?= $block->escapeHtml(__('Payment Method')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Payment Method')) ?></span>
             </strong>
             <div class="box-content">
                 <?= $block->getPaymentInfoHtml() ?>

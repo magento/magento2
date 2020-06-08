@@ -7,10 +7,10 @@
 /** @var $block \Magento\Bundle\Block\Adminhtml\Catalog\Product\Edit\Tab\Bundle\Option */
 ?>
 <script id="bundle-option-template" type="text/x-magento-template">
-    <div id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>" class="option-box">
-        <div class="fieldset-wrapper admin__collapsible-block-wrapper opened" id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>-wrapper">
+    <div id="<?= $escaper->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>" class="option-box">
+        <div class="fieldset-wrapper admin__collapsible-block-wrapper opened" id="<?= $escaper->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>-wrapper">
             <div class="fieldset-wrapper-title">
-                <strong class="admin__collapsible-title" data-toggle="collapse" data-target="#<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>-content">
+                <strong class="admin__collapsible-title" data-toggle="collapse" data-target="#<?= $escaper->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>-content">
                     <span><%- data.default_title %></span>
                 </strong>
                 <div class="actions">
@@ -18,56 +18,56 @@
                 </div>
                 <div data-role="draggable-handle" class="draggable-handle"></div>
             </div>
-            <div class="fieldset-wrapper-content in collapse" id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>-content">
+            <div class="fieldset-wrapper-content in collapse" id="<?= $escaper->escapeHtmlAttr($block->getFieldId()) ?>_<%- data.index %>-content">
                 <fieldset class="fieldset">
                     <fieldset class="fieldset-alt">
                         <div class="field field-option-title required">
-                            <label class="label" for="id_<?= $block->escapeHtmlAttr($block->getFieldName()) ?>_<%- data.index %>_title">
-                                <?= $block->escapeHtml(__('Option Title')) ?>
+                            <label class="label" for="id_<?= $escaper->escapeHtmlAttr($block->getFieldName()) ?>_<%- data.index %>_title">
+                                <?= $escaper->escapeHtml(__('Option Title')) ?>
                             </label>
                             <div class="control">
                                 <?php if ($block->isDefaultStore()) : ?>
                                 <input class="input-text required-entry"
                                        type="text"
-                                       name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.index %>][title]"
-                                       id="id_<?= $block->escapeHtmlAttr($block->getFieldName()) ?>_<%- data.index %>_title"
+                                       name="<?= $escaper->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.index %>][title]"
+                                       id="id_<?= $escaper->escapeHtmlAttr($block->getFieldName()) ?>_<%- data.index %>_title"
                                        value="<%- data.title %>"
                                        data-original-value="<%- data.title %>" />
                                 <?php else : ?>
                                 <input class="input-text required-entry"
                                        type="text"
-                                       name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.index %>][default_title]"
-                                       id="id_<?= $block->escapeHtmlAttr($block->getFieldName()) ?>_<%- data.index %>_default_title"
+                                       name="<?= $escaper->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.index %>][default_title]"
+                                       id="id_<?= $escaper->escapeHtmlAttr($block->getFieldName()) ?>_<%- data.index %>_default_title"
                                        value="<%- data.default_title %>"
                                        data-original-value="<%- data.default_title %>" />
                                 <?php endif; ?>
                                 <input type="hidden"
-                                       id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_id_<%- data.index %>"
-                                       name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.index %>][option_id]"
+                                       id="<?= $escaper->escapeHtmlAttr($block->getFieldId()) ?>_id_<%- data.index %>"
+                                       name="<?= $escaper->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.index %>][option_id]"
                                        value="<%- data.option_id %>" />
                                 <input type="hidden"
-                                       name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.index %>][delete]"
+                                       name="<?= $escaper->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.index %>][delete]"
                                        value=""
                                        data-state="deleted" />
                             </div>
                         </div>
                         <?php if (!$block->isDefaultStore()) : ?>
                         <div class="field field-option-store-view required">
-                            <label class="label" for="id_<?= $block->escapeHtmlAttr($block->getFieldName()) ?>_<%- data.index %>_title_store">
-                                <?= $block->escapeHtml(__('Store View Title')) ?>
+                            <label class="label" for="id_<?= $escaper->escapeHtmlAttr($block->getFieldName()) ?>_<%- data.index %>_title_store">
+                                <?= $escaper->escapeHtml(__('Store View Title')) ?>
                             </label>
                             <div class="control">
                                 <input class="input-text required-entry"
                                        type="text"
-                                       name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.index %>][title]"
-                                       id="id_<?= $block->escapeHtmlAttr($block->getFieldName()) ?>_<%- data.index %>_title_store"
+                                       name="<?= $escaper->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.index %>][title]"
+                                       id="id_<?= $escaper->escapeHtmlAttr($block->getFieldName()) ?>_<%- data.index %>_title_store"
                                        value="<%- data.title %>" />
                             </div>
                         </div>
                         <?php endif; ?>
                         <div class="field field-option-input-type required">
-                            <label class="label" for="<?= $block->escapeHtmlAttr($block->getFieldId() . '_<%- data.index %>_type') ?>">
-                                <?= $block->escapeHtml(__('Input Type')) ?>
+                            <label class="label" for="<?= $escaper->escapeHtmlAttr($block->getFieldId() . '_<%- data.index %>_type') ?>">
+                                <?= $escaper->escapeHtml(__('Input Type')) ?>
                             </label>
                             <div class="control">
                                 <?= $block->getTypeSelectHtml() ?>
@@ -80,19 +80,19 @@
                                        checked="checked"
                                        id="field-option-req" />
                                 <label for="field-option-req">
-                                    <?= $block->escapeHtml(__('Required')) ?>
+                                    <?= $escaper->escapeHtml(__('Required')) ?>
                                 </label>
                                 <span style="display:none"><?= $block->getRequireSelectHtml() ?></span>
                             </div>
                         </div>
                         <div class="field field-option-position no-display">
                             <label class="label" for="field-option-position">
-                                <?= $block->escapeHtml(__('Position')) ?>
+                                <?= $escaper->escapeHtml(__('Position')) ?>
                             </label>
                             <div class="control">
                                 <input class="input-text validate-zero-or-greater"
                                        type="text"
-                                       name="<?= $block->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.index %>][position]"
+                                       name="<?= $escaper->escapeHtmlAttr($block->getFieldName()) ?>[<%- data.index %>][position]"
                                        value="<%- data.position %>"
                                        id="field-option-position" />
                             </div>
@@ -100,13 +100,13 @@
                     </fieldset>
 
                     <div class="no-products-message">
-                        <?= $block->escapeHtml(__('There are no products in this option.')) ?>
+                        <?= $escaper->escapeHtml(__('There are no products in this option.')) ?>
                     </div>
                     <?= $block->getAddSelectionButtonHtml() ?>
                 </fieldset>
             </div>
         </div>
-        <div id="<?= $block->escapeHtmlAttr($block->getFieldId()) ?>_search_<%- data.index %>" class="selection-search"></div>
+        <div id="<?= $escaper->escapeHtmlAttr($block->getFieldId()) ?>_search_<%- data.index %>" class="selection-search"></div>
     </div>
 </script>
 
@@ -140,7 +140,7 @@ function changeInputType(oldObject, oType) {
 
 Bundle.Option = Class.create();
 Bundle.Option.prototype = {
-    idLabel : '<?= $block->escapeJs($block->getFieldId()) ?>',
+    idLabel : '<?= $escaper->escapeJs($block->getFieldId()) ?>',
     templateText : '',
     itemsCount : 0,
     initialize : function(template) {
@@ -285,7 +285,7 @@ foreach ($block->getOptions() as $_option) {
     if ($_option->getSelections()) {
         foreach ($_option->getSelections() as $_selection) {
             /** @var $_selection \Magento\Catalog\Model\Product */
-            $_selection->setName($block->escapeHtml($_selection->getName()));
+            $_selection->setName($escaper->escapeHtml($_selection->getName()));
             /* @noEscape */ echo 'bSelection.addRow(optionIndex,', $_selection->toJson(), ');', PHP_EOL;
         }
     }

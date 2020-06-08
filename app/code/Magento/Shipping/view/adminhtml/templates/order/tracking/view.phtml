@@ -13,10 +13,10 @@
         <table class="data-table admin__control-table" id="shipment_tracking_info">
             <thead>
                 <tr class="headings">
-                    <th class="col-carrier"><?= $block->escapeHtml(__('Carrier')) ?></th>
-                    <th class="col-title"><?= $block->escapeHtml(__('Title')) ?></th>
-                    <th class="col-number"><?= $block->escapeHtml(__('Number')) ?></th>
-                    <th class="col-delete last"><?= $block->escapeHtml(__('Action')) ?></th>
+                    <th class="col-carrier"><?= $escaper->escapeHtml(__('Carrier')) ?></th>
+                    <th class="col-title"><?= $escaper->escapeHtml(__('Title')) ?></th>
+                    <th class="col-number"><?= $escaper->escapeHtml(__('Number')) ?></th>
+                    <th class="col-delete last"><?= $escaper->escapeHtml(__('Action')) ?></th>
                 </tr>
             </thead>
             <tfoot>
@@ -26,7 +26,7 @@
                                 class="select admin__control-select"
                                 onchange="selectCarrier(this)">
                             <?php foreach ($block->getCarriers() as $_code => $_name) : ?>
-                            <option value="<?= $block->escapeHtmlAttr($_code) ?>"><?= $block->escapeHtml($_name) ?></option>
+                            <option value="<?= $escaper->escapeHtmlAttr($_code) ?>"><?= $escaper->escapeHtml($_name) ?></option>
                             <?php endforeach; ?>
                         </select>
                     </td>
@@ -52,18 +52,18 @@
             <?php $i = 0; foreach ($_tracks as $_track) :$i++ ?>
                 <tr class="<?= /* @noEscape */ ($i%2 == 0) ? 'even' : 'odd' ?>">
                     <td class="col-carrier">
-                        <?= $block->escapeHtml($block->getCarrierTitle($_track->getCarrierCode())) ?>
+                        <?= $escaper->escapeHtml($block->getCarrierTitle($_track->getCarrierCode())) ?>
                     </td>
-                    <td class="col-title"><?= $block->escapeHtml($_track->getTitle()) ?></td>
+                    <td class="col-title"><?= $escaper->escapeHtml($_track->getTitle()) ?></td>
                     <td class="col-number">
                         <?php if ($_track->isCustom()) : ?>
-                            <?= $block->escapeHtml($_track->getNumber()) ?>
+                            <?= $escaper->escapeHtml($_track->getNumber()) ?>
                         <?php else : ?>
-                        <a href="#" onclick="popWin('<?= $block->escapeJs($block->escapeUrl($this->helper(Magento\Shipping\Helper\Data::class)->getTrackingPopupUrlBySalesModel($_track))) ?>','trackorder','width=800,height=600,resizable=yes,scrollbars=yes')"><?= $block->escapeHtml($_track->getNumber()) ?></a>
+                        <a href="#" onclick="popWin('<?= $escaper->escapeJs($escaper->escapeUrl($this->helper(Magento\Shipping\Helper\Data::class)->getTrackingPopupUrlBySalesModel($_track))) ?>','trackorder','width=800,height=600,resizable=yes,scrollbars=yes')"><?= $escaper->escapeHtml($_track->getNumber()) ?></a>
                         <div id="shipment_tracking_info_response_<?= (int) $_track->getId() ?>"></div>
                         <?php endif; ?>
                     </td>
-                    <td class="col-delete last"><button class="action-delete" type="button" onclick="deleteTrackingNumber('<?= $block->escapeJs($block->escapeUrl($block->getRemoveUrl($_track))) ?>'); return false;"><span><?= $block->escapeHtml(__('Delete')) ?></span></button></td>
+                    <td class="col-delete last"><button class="action-delete" type="button" onclick="deleteTrackingNumber('<?= $escaper->escapeJs($escaper->escapeUrl($block->getRemoveUrl($_track))) ?>'); return false;"><span><?= $escaper->escapeHtml(__('Delete')) ?></span></button></td>
                 </tr>
             <?php endforeach; ?>
             </tbody>
@@ -90,7 +90,7 @@ function saveTrackingInfo(node, url) {
 
 function deleteTrackingNumber(url) {
     confirm({
-        content: '<?= $block->escapeJs($block->escapeHtml(__('Are you sure?'))) ?>',
+        content: '<?= $escaper->escapeJs($escaper->escapeHtml(__('Are you sure?'))) ?>',
         actions: {
             /**
              * Confirm action.

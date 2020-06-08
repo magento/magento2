@@ -12,12 +12,12 @@
             <thead>
                 <tr>
                     <th class="col-draggable">&nbsp;</th>
-                    <th class="col-name required"><?= $block->escapeHtml(__('Title')) ?><span class="required">*</span></th>
+                    <th class="col-name required"><?= $escaper->escapeHtml(__('Title')) ?><span class="required">*</span></th>
                     <?php if ($block->getCanReadPrice() !== false) : ?>
-                    <th class="col-price"><?= $block->escapeHtml(__('Price')) ?></th>
-                    <th class="col-price-type"><?= $block->escapeHtml(__('Price Type')) ?></th>
+                    <th class="col-price"><?= $escaper->escapeHtml(__('Price')) ?></th>
+                    <th class="col-price-type"><?= $escaper->escapeHtml(__('Price Type')) ?></th>
                     <?php endif; ?>
-                    <th class="col-sku"><?= $block->escapeHtml(__('SKU')) ?></th>
+                    <th class="col-sku"><?= $escaper->escapeHtml(__('SKU')) ?></th>
                     <th class="col-actions">&nbsp;</th>
                 </tr>
             </thead>
@@ -36,7 +36,7 @@
     <tr id="product_option_<%- data.id %>_select_<%- data.select_id %>">
         <td class="col-draggable">
             <div data-role="draggable-handle" class="draggable-handle"
-                 title="<?= $block->escapeHtmlAttr(__('Sort Custom Option')) ?>"></div>
+                 title="<?= $escaper->escapeHtmlAttr(__('Sort Custom Option')) ?>"></div>
             <input name="product[options][<%- data.id %>][values][<%- data.select_id %>][sort_order]" type="hidden" value="<%- data.sort_order %>">
         </td>
         <td class="col-name select-opt-title">

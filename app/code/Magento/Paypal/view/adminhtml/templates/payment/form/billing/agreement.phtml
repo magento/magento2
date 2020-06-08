@@ -6,25 +6,25 @@
 
 /* @var $block \Magento\Paypal\Block\Payment\Form\Billing\Agreement */
 ?>
-<?php $code = $block->escapeHtml($block->getMethodCode()) ?>
+<?php $code = $escaper->escapeHtml($block->getMethodCode()) ?>
 <fieldset class="admin__fieldset payment-method form-list"
           id="payment_form_<?= /* @noEscape */ $code ?>" style="display:none;">
     <div class="admin__field _required">
         <label class="admin__field-label"
                for="<?= /* @noEscape */ $code ?>_ba_agreement_id">
-            <span><?= $block->escapeHtml(__('Billing Agreement')) ?></span>
+            <span><?= $escaper->escapeHtml(__('Billing Agreement')) ?></span>
         </label>
         <div class="admin__field-control">
             <select id="<?= /* @noEscape */ $code ?>_ba_agreement_id"
-                    name="payment[<?= $block->escapeHtml($block->getTransportName()) ?>]"
+                    name="payment[<?= $escaper->escapeHtml($block->getTransportName()) ?>]"
                     class="required-entry admin__control-select">
-                <option value=""><?= $block->escapeHtml(__('Please Select')) ?></option>
+                <option value=""><?= $escaper->escapeHtml(__('Please Select')) ?></option>
                 <?php foreach ($block->getBillingAgreements() as $id => $referenceId) : ?>
-                    <option value="<?= $block->escapeHtml($id) ?>"
+                    <option value="<?= $escaper->escapeHtml($id) ?>"
                         <?= ($id == $block->getInfoData($block->getTransportName())) ?
                             ' selected="selected"' : '';
                         ?>>
-                        <?= $block->escapeHtml($referenceId) ?>
+                        <?= $escaper->escapeHtml($referenceId) ?>
                     </option>
                 <?php endforeach; ?>
             </select>

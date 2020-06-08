@@ -7,11 +7,11 @@
 /** @var $block Magento\Framework\View\Element\Template */
 ?>
 
-<form action="<?= $block->escapeUrl($block->getUrl('productalert/unsubscribe/stock')) ?>"
+<form action="<?= $escaper->escapeUrl($block->getUrl('productalert/unsubscribe/stock')) ?>"
       method="post"
       data-form="unsubscription_form">
     <?= /* @noEscape */ $block->getBlockHtml('formkey') ?>
-    <input type="hidden" id="productId" name="product" value="<?= $block->escapeHtml($block->getProductId()) ?>" />
+    <input type="hidden" id="productId" name="product" value="<?= $escaper->escapeHtml($block->getProductId()) ?>" />
 </form>
 <script type="text/x-magento-init">
     {

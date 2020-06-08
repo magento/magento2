@@ -7,7 +7,7 @@
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\Summary */
 ?>
 <div data-bind="scope: '<?= /* @noEscape */  $block->getComponentName() ?>'">
-    <h2 class="steps-wizard-title"><?= $block->escapeHtml(
+    <h2 class="steps-wizard-title"><?= $escaper->escapeHtml(
         __('Step 4: Summary')
     ); ?></h2>
 

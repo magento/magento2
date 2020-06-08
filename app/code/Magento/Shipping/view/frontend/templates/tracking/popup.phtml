@@ -15,7 +15,7 @@ $results = $block->getTrackingInfo();
     <?php if (!empty($results)) : ?>
         <?php foreach ($results as $shipId => $result) : ?>
             <?php if ($shipId) : ?>
-                <div class="order subtitle caption"><?= /* @noEscape */ $block->escapeHtml(__('Shipment #')) . $shipId ?></div>
+                <div class="order subtitle caption"><?= /* @noEscape */ $escaper->escapeHtml(__('Shipment #')) . $shipId ?></div>
             <?php endif; ?>
             <?php if (!empty($result)) : ?>
                 <?php foreach ($result as $counter => $track) : ?>
@@ -42,21 +42,21 @@ $results = $block->getTrackingInfo();
                 <?php endforeach; ?>
             <?php else : ?>
                 <div class="message info empty">
-                    <div><?= $block->escapeHtml(__('There is no tracking available for this shipment.')) ?></div>
+                    <div><?= $escaper->escapeHtml(__('There is no tracking available for this shipment.')) ?></div>
                 </div>
             <?php endif; ?>
         <?php endforeach; ?>
     <?php else : ?>
         <div class="message info empty">
-            <div><?= $block->escapeHtml(__('There is no tracking available.')) ?></div>
+            <div><?= $escaper->escapeHtml(__('There is no tracking available.')) ?></div>
         </div>
     <?php endif; ?>
     <div class="actions">
         <button type="button"
-                title="<?= $block->escapeHtml(__('Close Window')) ?>"
+                title="<?= $escaper->escapeHtml(__('Close Window')) ?>"
                 class="action close"
                 onclick="window.close(); window.opener.focus();">
-            <span><?= $block->escapeHtml(__('Close Window')) ?></span>
+            <span><?= $escaper->escapeHtml(__('Close Window')) ?></span>
         </button>
     </div>
 </div>

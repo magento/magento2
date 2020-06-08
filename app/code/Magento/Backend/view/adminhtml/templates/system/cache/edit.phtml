@@ -14,7 +14,7 @@
  */
 ?>
 <div data-mage-init='{"floatingHeader": {}}' class="page-actions"><?= $block->getSaveButtonHtml() ?></div>
-<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
+<form action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>" method="post" id="config-edit-form" enctype="multipart/form-data">
     <?= $block->getBlockHtml('formkey') ?>
 
     <script>
@@ -31,7 +31,7 @@
     <?= $block->getChildHtml('form') ?>
     <div class="entry-edit">
         <div class="entry-edit-head">
-            <h4 class="icon-head head-edit-form fieldset-legend"><?= $block->escapeHtml(__('Catalog')) ?></h4>
+            <h4 class="icon-head head-edit-form fieldset-legend"><?= $escaper->escapeHtml(__('Catalog')) ?></h4>
         </div>
         <fieldset id="catalog">
             <table class="form-list">
@@ -44,7 +44,7 @@
                         }
                         ?>
                     <tr>
-                        <td class="label"><label><?= $block->escapeHtml($_item['label']) ?></label></td>
+                        <td class="label"><label><?= $escaper->escapeHtml($_item['label']) ?></label></td>
                         <td class="value">
                             <?php foreach ($_item['buttons'] as $_button) : ?>
                                 <?php $clickAction = "setCacheAction('catalog_action',this)"; ?>
@@ -53,8 +53,8 @@
                                     <?php $clickAction = "if (confirm('" . addslashes($_button['warning']) . "')) {{$clickAction}}"; ?>
                                     <?php //phpcs:enable ?>
                                 <?php endif; ?>
-                                <button <?php if (!isset($_button['disabled']) || !$_button['disabled']) :?>onclick="<?=  /* @noEscape */ $clickAction ?>"<?php endif; ?> id="<?= $block->escapeHtmlAttr($_button['name']) ?>" type="button" class="scalable <?php if (isset($_button['disabled']) && $_button['disabled']) :?>disabled<?php endif; ?>" style=""><span><span><span><?= $block->escapeHtml($_button['action']) ?></span></span></span></button>
-                                <?php if (isset($_button['comment'])) : ?> <br /> <small><?= $block->escapeHtml($_button['comment']) ?></small> <?php endif; ?>
+                                <button <?php if (!isset($_button['disabled']) || !$_button['disabled']) :?>onclick="<?=  /* @noEscape */ $clickAction ?>"<?php endif; ?> id="<?= $escaper->escapeHtmlAttr($_button['name']) ?>" type="button" class="scalable <?php if (isset($_button['disabled']) && $_button['disabled']) :?>disabled<?php endif; ?>" style=""><span><span><span><?= $escaper->escapeHtml($_button['action']) ?></span></span></span></button>
+                                <?php if (isset($_button['comment'])) : ?> <br /> <small><?= $escaper->escapeHtml($_button['comment']) ?></small> <?php endif; ?>
                             <?php endforeach; ?>
                         </td>
                         <td><small>&nbsp;</small></td>
@@ -67,16 +67,16 @@
 
     <div class="entry-edit">
         <div class="entry-edit-head">
-            <h4 class="icon-head head-edit-form fieldset-legend"><?= $block->escapeHtml(__('JavaScript/CSS')) ?></h4>
+            <h4 class="icon-head head-edit-form fieldset-legend"><?= $escaper->escapeHtml(__('JavaScript/CSS')) ?></h4>
         </div>
 
         <fieldset id="jscss">
             <table class="form-list">
                 <tbody>
                     <tr>
-                        <td class="label"><label><?= $block->escapeHtml(__('JavaScript/CSS Cache')) ?></label></td>
+                        <td class="label"><label><?= $escaper->escapeHtml(__('JavaScript/CSS Cache')) ?></label></td>
                         <td class="value">
-                            <button onclick="setCacheAction('jscss_action', this)" id='jscss_action' type="button" class="scalable"><span><span><span><?= $block->escapeHtml(__('Clear')) ?></span></span></span></button>
+                            <button onclick="setCacheAction('jscss_action', this)" id='jscss_action' type="button" class="scalable"><span><span><span><?= $escaper->escapeHtml(__('Clear')) ?></span></span></span></button>
                         </td>
                     </tr>
                 </tbody>

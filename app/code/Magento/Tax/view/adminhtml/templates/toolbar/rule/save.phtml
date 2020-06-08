@@ -16,7 +16,7 @@
     <script>
     require(['jquery', "mage/mage"], function(jQuery){
 
-        jQuery('#<?= $block->escapeJs($form->getForm()->getId()) ?>').mage('form').mage('validation');
+        jQuery('#<?= $escaper->escapeJs($form->getForm()->getId()) ?>').mage('form').mage('validation');
 
     });
     </script>

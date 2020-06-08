@@ -11,10 +11,10 @@ $redirectUrl = $block->getRedirectUrl();
 <html>
 <head></head>
 <body onload="document.forms['proxy_form'].submit()">
-<form id="proxy_form" action="<?= $block->escapeUrl($redirectUrl) ?>"
+<form id="proxy_form" action="<?= $escaper->escapeUrl($redirectUrl) ?>"
       method="POST" hidden enctype="application/x-www-form-urlencoded" class="no-display">
     <?php foreach ($params as $name => $value):?>
-        <input value="<?= $block->escapeHtmlAttr($value) ?>" name="<?= $block->escapeHtmlAttr($name) ?>" type="hidden"/>
+        <input value="<?= $escaper->escapeHtmlAttr($value) ?>" name="<?= $escaper->escapeHtmlAttr($name) ?>" type="hidden"/>
     <?php endforeach?>
 </form>
 </body>

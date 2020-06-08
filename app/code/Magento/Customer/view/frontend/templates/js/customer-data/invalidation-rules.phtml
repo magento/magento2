@@ -14,7 +14,7 @@
                     "website-rule": {
                         "Magento_Customer/js/invalidation-rules/website-rule": {
                             "scopeConfig": {
-                                "websiteId": "<?= $block->escapeJs($block->getWebsiteId()) ?>"
+                                "websiteId": "<?= $escaper->escapeJs($block->getWebsiteId()) ?>"
                             }
                         }
                     }

@@ -9,19 +9,19 @@
  */
 ?>
 <dl class="payment-method checkmemo">
-    <dt class="title"><?= $block->escapeHtml($block->getMethod()->getTitle()) ?></dt>
+    <dt class="title"><?= $escaper->escapeHtml($block->getMethod()->getTitle()) ?></dt>
     <?php if ($block->getInfo()->getAdditionalInformation()) : ?>
         <?php if ($block->getPayableTo()) : ?>
             <dd class="content">
-                <strong><?= $block->escapeHtml(__('Make Check payable to')) ?></strong>
-                <?= $block->escapeHtml($block->getPayableTo()) ?>
+                <strong><?= $escaper->escapeHtml(__('Make Check payable to')) ?></strong>
+                <?= $escaper->escapeHtml($block->getPayableTo()) ?>
             </dd>
         <?php endif; ?>
         <?php if ($block->getMailingAddress()) : ?>
             <dd class="content">
-                <strong><?= $block->escapeHtml(__('Send Check to')) ?></strong>
+                <strong><?= $escaper->escapeHtml(__('Send Check to')) ?></strong>
                 <address class="checkmo mailing address">
-                    <?= /* @noEscape */ nl2br($block->escapeHtml($block->getMailingAddress())) ?>
+                    <?= /* @noEscape */ nl2br($escaper->escapeHtml($block->getMailingAddress())) ?>
                 </address>
             </dd>
         <?php endif; ?>

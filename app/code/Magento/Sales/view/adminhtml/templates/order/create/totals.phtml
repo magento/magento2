@@ -6,7 +6,7 @@
 
 /** @var \Magento\Sales\Block\Adminhtml\Order\Create\Totals $block */
 ?>
-<legend class="admin__legend"><span><?= $block->escapeHtml(__('Order Totals')) ?></span></legend>
+<legend class="admin__legend"><span><?= $escaper->escapeHtml(__('Order Totals')) ?></span></legend>
 <br>
 
 <table class="admin__table-secondary data-table">
@@ -21,13 +21,13 @@
         <input type="checkbox" id="notify_customer" name="order[comment][customer_note_notify]"
                value="1"<?php if ($block->getNoteNotify()) : ?> checked="checked"<?php endif; ?>
                class="admin__control-checkbox"/>
-        <label for="notify_customer" class="admin__field-label"><?= $block->escapeHtml(__('Append Comments')) ?></label>
+        <label for="notify_customer" class="admin__field-label"><?= $escaper->escapeHtml(__('Append Comments')) ?></label>
     </div>
     <?php if ($block->canSendNewOrderConfirmationEmail()) : ?>
     <div class="admin__field admin__field-option field-email-order-confirmation">
         <input type="checkbox" id="send_confirmation" name="order[send_confirmation]" value="1" checked="checked"
                class="admin__control-checkbox"/>
-        <label for="send_confirmation" class="admin__field-label"><?= $block->escapeHtml(__('Email Order Confirmation')) ?></label>
+        <label for="send_confirmation" class="admin__field-label"><?= $escaper->escapeHtml(__('Email Order Confirmation')) ?></label>
     </div>
     <?php endif; ?>
     <div class="actions">

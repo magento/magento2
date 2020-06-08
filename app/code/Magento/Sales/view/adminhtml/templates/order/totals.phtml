@@ -15,9 +15,9 @@
                 <?php if ($_total->getBlockName()) : ?>
                     <?= $block->getChildHtml($_total->getBlockName(), false) ?>
                 <?php else : ?>
-                <tr class="col-<?= $block->escapeHtmlAttr($_code) ?>">
+                <tr class="col-<?= $escaper->escapeHtmlAttr($_code) ?>">
                     <td <?= /* @noEscape */ $block->getLabelProperties() ?> class="label">
-                        <strong><?= $block->escapeHtml($_total->getLabel()) ?></strong>
+                        <strong><?= $escaper->escapeHtml($_total->getLabel()) ?></strong>
                     </td>
                     <td <?= /* @noEscape */ $block->getValueProperties() ?>>
                         <strong><?= /* @noEscape */ $block->formatValue($_total) ?></strong>
@@ -35,12 +35,12 @@
                 <?php if ($_total->getBlockName()) : ?>
                     <?= $block->getChildHtml($_total->getBlockName(), false) ?>
                 <?php else : ?>
-                    <tr class="col-<?= $block->escapeHtmlAttr($_code) ?>">
+                    <tr class="col-<?= $escaper->escapeHtmlAttr($_code) ?>">
                         <td <?= /* @noEscape */ $block->getLabelProperties() ?> class="label">
                             <?php if ($_total->getStrong()) : ?>
-                            <strong><?= $block->escapeHtml($_total->getLabel()) ?></strong>
+                            <strong><?= $escaper->escapeHtml($_total->getLabel()) ?></strong>
                             <?php else : ?>
-                            <?= $block->escapeHtml($_total->getLabel()) ?>
+                            <?= $escaper->escapeHtml($_total->getLabel()) ?>
                             <?php endif?>
                         </td>
 

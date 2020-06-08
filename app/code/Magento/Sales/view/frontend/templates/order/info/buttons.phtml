@@ -13,14 +13,14 @@
         /* @noEscape */ $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
             ->getPostData($block->getReorderUrl($_order))
         ?>' class="action order">
-            <span><?= $block->escapeHtml(__('Reorder')) ?></span>
+            <span><?= $escaper->escapeHtml(__('Reorder')) ?></span>
         </a>
     <?php endif ?>
-    <a href="<?= $block->escapeUrl($block->getPrintUrl($_order)) ?>"
+    <a href="<?= $escaper->escapeUrl($block->getPrintUrl($_order)) ?>"
        class="action print"
        target="_blank"
        rel="noopener">
-        <span><?= $block->escapeHtml(__('Print Order')) ?></span>
+        <span><?= $escaper->escapeHtml(__('Print Order')) ?></span>
     </a>
     <?= $block->getChildHtml() ?>
 </div>

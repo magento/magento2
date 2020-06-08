@@ -7,5 +7,5 @@
 /** @var \Magento\Framework\View\Element\Template $block */
 
 ?>
-<p><?= $block->escapeHtml(__('Your current currency is: %1.', $currency->getCode())) ?></p>
-<p><a href="<?= $block->escapeUrl($block->getBaseUrl()) ?>" class="action continue"><span><?= $block->escapeHtml(__('Continue')) ?></span></a></p>
+<p><?= $escaper->escapeHtml(__('Your current currency is: %1.', $currency->getCode())) ?></p>
+<p><a href="<?= $escaper->escapeUrl($block->getBaseUrl()) ?>" class="action continue"><span><?= $escaper->escapeHtml(__('Continue')) ?></span></a></p>

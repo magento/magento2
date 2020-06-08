@@ -7,7 +7,7 @@
 /** @var \Magento\Sales\Block\Adminhtml\Order\Create\Items $block */
 ?>
 <div class="admin__page-section-title">
-    <strong class="title"><?= $block->escapeHtml($block->getHeaderText()) ?></strong>
+    <strong class="title"><?= $escaper->escapeHtml($block->getHeaderText()) ?></strong>
     <div class="actions">
         <?= $block->getButtonsHtml() ?>
     </div>

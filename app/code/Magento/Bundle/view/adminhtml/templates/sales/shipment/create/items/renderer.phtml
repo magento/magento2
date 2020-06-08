@@ -27,7 +27,7 @@
         <?php $attributes = $block->getSelectionAttributes($_item) ?>
         <?php if ($_prevOptionId != $attributes['option_id']) : ?>
         <tr>
-            <td class="col-product"><div class="option-label"><?= $block->escapeHtml($attributes['option_label']) ?></div></td>
+            <td class="col-product"><div class="option-label"><?= $escaper->escapeHtml($attributes['option_label']) ?></div></td>
             <td class="col-product">&nbsp;</td>
             <td class="col-qty last">&nbsp;</td>
         </tr>
@@ -37,9 +37,9 @@
     <tr class="<?= (++$_index == $_count && !$_showlastRow) ? 'border' : '' ?>">
         <?php if (!$_item->getOrderItem()->getParentItem()) : ?>
         <td class="col-product">
-            <div class="product-title"><?= $block->escapeHtml($_item->getName()) ?></div>
+            <div class="product-title"><?= $escaper->escapeHtml($_item->getName()) ?></div>
             <div class="product-sku-block">
-                <span><?= $block->escapeHtml(__('SKU')) ?>:</span>
+                <span><?= $escaper->escapeHtml(__('SKU')) ?>:</span>
                 <?= /* @noEscape */ implode('<br />', $this->helper(Magento\Catalog\Helper\Data::class)->splitSku($_item->getSku())) ?>
             </div>
         </td>
@@ -57,7 +57,7 @@
             <?php if ($block->isShipmentSeparately($_item)) : ?>
                 <input type="text"
                        class="input-text admin__control-text"
-                       name="shipment[items][<?= $block->escapeHtmlAttr($_item->getOrderItemId()) ?>]"
+                       name="shipment[items][<?= $escaper->escapeHtmlAttr($_item->getOrderItemId()) ?>]"
                        value="<?= (float)$_item->getQty() * 1 ?>" />
             <?php else : ?>
                 &nbsp;
@@ -71,17 +71,17 @@
             <?php if ($block->getOrderOptions($_item->getOrderItem())) : ?>
                 <dl class="item-options">
                 <?php foreach ($block->getOrderOptions($_item->getOrderItem()) as $option) : ?>
-                    <dt><?= $block->escapeHtml($option['label']) ?></dt>
+                    <dt><?= $escaper->escapeHtml($option['label']) ?></dt>
                     <dd>
                     <?php if (isset($option['custom_view']) && $option['custom_view']) : ?>
-                        <?= $block->escapeHtml($option['value']) ?>
+                        <?= $escaper->escapeHtml($option['value']) ?>
                     <?php else : ?>
-                        <?= $block->escapeHtml($block->truncateString($option['value'], 55, '', $_remainder)) ?>
+                        <?= $escaper->escapeHtml($block->truncateString($option['value'], 55, '', $_remainder)) ?>
                         <?php if ($_remainder) :?>
-                            ... <span id="<?= $block->escapeHtmlAttr($_id = 'id' . uniqid()) ?>"><?= $block->escapeHtml($_remainder) ?></span>
+                            ... <span id="<?= $escaper->escapeHtmlAttr($_id = 'id' . uniqid()) ?>"><?= $escaper->escapeHtml($_remainder) ?></span>
                             <script>
                                 require(['prototype'], function(){
-                                    <?php $escapedId = $block->escapeJs($_id) ?>
+                                    <?php $escapedId = $escaper->escapeJs($_id) ?>
                                     $('<?= /* @noEscape */ $escapedId ?>').hide();
                                     $('<?= /* @noEscape */ $escapedId ?>').up().observe('mouseover', function(){$('<?= /* @noEscape */ $escapedId ?>').show();});
                                     $('<?= /* @noEscape */ $escapedId ?>').up().observe('mouseout',  function(){$('<?= /* @noEscape */ $escapedId ?>').hide();});
@@ -95,7 +95,7 @@
                         <?php else : ?>
                 &nbsp;
                         <?php endif; ?>
-            <?= $block->escapeHtml($_item->getDescription()) ?>
+            <?= $escaper->escapeHtml($_item->getDescription()) ?>
         </td>
         <td class="col-ordered-qty">&nbsp;</td>
         <td class="col-qty last">&nbsp;</td>

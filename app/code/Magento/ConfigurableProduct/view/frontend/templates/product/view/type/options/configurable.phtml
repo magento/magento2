@@ -13,16 +13,16 @@ $_attributes = $block->decorateArray($block->getAllowAttributes());
 <?php if ($_product->isSaleable() && count($_attributes)) :?>
     <?php foreach ($_attributes as $_attribute) : ?>
         <div class="field configurable required">
-            <label class="label" for="attribute<?= $block->escapeHtmlAttr($_attribute->getAttributeId()) ?>">
-                <span><?= $block->escapeHtml($_attribute->getProductAttribute()->getStoreLabel()) ?></span>
+            <label class="label" for="attribute<?= $escaper->escapeHtmlAttr($_attribute->getAttributeId()) ?>">
+                <span><?= $escaper->escapeHtml($_attribute->getProductAttribute()->getStoreLabel()) ?></span>
             </label>
             <div class="control">
-                <select name="super_attribute[<?= $block->escapeHtmlAttr($_attribute->getAttributeId()) ?>]"
-                        data-selector="super_attribute[<?= $block->escapeHtmlAttr($_attribute->getAttributeId()) ?>]"
+                <select name="super_attribute[<?= $escaper->escapeHtmlAttr($_attribute->getAttributeId()) ?>]"
+                        data-selector="super_attribute[<?= $escaper->escapeHtmlAttr($_attribute->getAttributeId()) ?>]"
                         data-validate="{required:true}"
-                        id="attribute<?= $block->escapeHtmlAttr($_attribute->getAttributeId()) ?>"
+                        id="attribute<?= $escaper->escapeHtmlAttr($_attribute->getAttributeId()) ?>"
                         class="super-attribute-select">
-                    <option value=""><?= $block->escapeHtml(__('Choose an Option...')) ?></option>
+                    <option value=""><?= $escaper->escapeHtml(__('Choose an Option...')) ?></option>
                 </select>
             </div>
         </div>
@@ -32,7 +32,7 @@ $_attributes = $block->decorateArray($block->getAllowAttributes());
             "#product_addtocart_form": {
                 "configurable": {
                     "spConfig": <?= /* @noEscape */ $block->getJsonConfig() ?>,
-                    "gallerySwitchStrategy": "<?= $block->escapeJs($block->getVar(
+                    "gallerySwitchStrategy": "<?= $escaper->escapeJs($block->getVar(
                         'gallery_switch_strategy',
                         'Magento_ConfigurableProduct'
                     ) ?: 'replace'); ?>"

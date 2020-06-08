@@ -7,13 +7,13 @@
 /** @var \Magento\Customer\Block\Widget\Gender $block */
 ?>
 <div class="field gender<?= $block->isRequired() ? ' required' : ''?>">
-    <label class="label" for="<?= $block->escapeHtmlAttr($block->getFieldId('gender')) ?>"><span><?= $block->escapeHtml($block->getStoreLabel('gender')) ?></span></label>
+    <label class="label" for="<?= $escaper->escapeHtmlAttr($block->getFieldId('gender')) ?>"><span><?= $escaper->escapeHtml($block->getStoreLabel('gender')) ?></span></label>
     <div class="control">
-        <select id="<?= $block->escapeHtmlAttr($block->getFieldId('gender')) ?>" name="<?= $block->escapeHtmlAttr($block->getFieldName('gender')) ?>" title="<?= $block->escapeHtmlAttr($block->getStoreLabel('gender')) ?>"<?php if ($block->isRequired()) : ?> class="validate-select" data-validate="{required:true}"<?php endif; ?>>
+        <select id="<?= $escaper->escapeHtmlAttr($block->getFieldId('gender')) ?>" name="<?= $escaper->escapeHtmlAttr($block->getFieldName('gender')) ?>" title="<?= $escaper->escapeHtmlAttr($block->getStoreLabel('gender')) ?>"<?php if ($block->isRequired()) : ?> class="validate-select" data-validate="{required:true}"<?php endif; ?>>
             <?php $options = $block->getGenderOptions(); ?>
             <?php $value = $block->getGender(); ?>
             <?php foreach ($options as $option) : ?>
-                <option value="<?= $block->escapeHtmlAttr($option->getValue()) ?>"<?= ($option->getValue() == $value) ? ' selected="selected"' : '' ?>><?= $block->escapeHtml(__($option->getLabel())) ?></option>
+                <option value="<?= $escaper->escapeHtmlAttr($option->getValue()) ?>"<?= ($option->getValue() == $value) ? ' selected="selected"' : '' ?>><?= $escaper->escapeHtml(__($option->getLabel())) ?></option>
             <?php endforeach;?>
         </select>
     </div>

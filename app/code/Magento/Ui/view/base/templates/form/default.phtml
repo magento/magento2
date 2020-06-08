@@ -10,11 +10,11 @@
 ?>
 <?=/* @noEscape */ $block->renderChildComponent('before_form') ?>
 <div data-role="spinner"
-     data-component="<?= $block->escapeHtmlAttr($block->getName()) ?>.areas"
+     data-component="<?= $escaper->escapeHtmlAttr($block->getName()) ?>.areas"
      class="admin__data-grid-loading-mask">
     <div class="grid-loader"></div>
 </div>
-<div data-bind="scope: '<?= $block->escapeHtmlAttr($block->getName()) ?>.areas'"
+<div data-bind="scope: '<?= $escaper->escapeHtmlAttr($block->getName()) ?>.areas'"
      class="entry-edit form-inline">
     <!-- ko template: getTemplate() --><!-- /ko -->
 </div>

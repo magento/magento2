@@ -5,6 +5,6 @@
  */
 ?>
 <p class="magento-version">
-    <strong><?= $block->escapeHtml(__('Magento')) ?></strong>
-    <?= $block->escapeHtml(__('ver. %1', $block->getMagentoVersion())) ?>
+    <strong><?= $escaper->escapeHtml(__('Magento')) ?></strong>
+    <?= $escaper->escapeHtml(__('ver. %1', $block->getMagentoVersion())) ?>
 </p>

@@ -5,5 +5,5 @@
  */
 ?>
 <span class="widget block block-category-link-inline">
-    <a <?= /* @noEscape */ $block->getLinkAttributes() ?>><span><?= $block->escapeHtml($block->getLabel()) ?></span></a>
+    <a <?= /* @noEscape */ $block->getLinkAttributes() ?>><span><?= $escaper->escapeHtml($block->getLabel()) ?></span></a>
 </span>

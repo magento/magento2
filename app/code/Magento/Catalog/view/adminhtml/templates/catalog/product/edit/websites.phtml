@@ -7,12 +7,12 @@
 /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Websites */
 ?>
 <fieldset id="grop_fields" class="fieldset">
-    <legend class="legend"><span><?= $block->escapeHtml(__('Product In Websites')) ?></span></legend>
+    <legend class="legend"><span><?= $escaper->escapeHtml(__('Product In Websites')) ?></span></legend>
     <br>
     <?php if ($block->getProductId()) :?>
     <div class="messages">
         <div class="message message-notice">
-            <?= $block->escapeHtml(__('To hide an item in catalog or search results, set the status to "Disabled".')) ?>
+            <?= $escaper->escapeHtml(__('To hide an item in catalog or search results, set the status to "Disabled".')) ?>
         </div>
     </div>
     <?php endif; ?>
@@ -34,19 +34,19 @@
                         checked="checked"
                     <?php endif; ?>
                 />
-                <label for="product_website_<?= (int) $_website->getId() ?>"><?= $block->escapeHtml($_website->getName()) ?></label>
+                <label for="product_website_<?= (int) $_website->getId() ?>"><?= $escaper->escapeHtml($_website->getName()) ?></label>
             </div>
             <dl class="webiste-groups" id="product_website_<?= (int) $_website->getId() ?>_data">
                 <?php foreach ($block->getGroupCollection($_website) as $_group) :?>
-                <dt><?= $block->escapeHtml($_group->getName()) ?></dt>
+                <dt><?= $escaper->escapeHtml($_group->getName()) ?></dt>
                 <dd>
                     <ul>
                         <?php foreach ($block->getStoreCollection($_group) as $_store) :?>
                         <li>
-                            <?= $block->escapeHtml($_store->getName()) ?>
+                            <?= $escaper->escapeHtml($_store->getName()) ?>
                             <?php if ($block->getWebsites() && !$block->hasWebsite($_website->getId())) :?>
                                 <span class="website-<?= (int) $_website->getId() ?>-select" style="display:none">
-                                <?= $block->escapeHtml(
+                                <?= $escaper->escapeHtml(
                                     __('(Copy data from: %1)', $block->getChooseFromStoreHtml($_store)),
                                     ['select', 'option', 'optgroup']
                                 ) ?>

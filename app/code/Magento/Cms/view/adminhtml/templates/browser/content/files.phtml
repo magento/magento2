@@ -20,22 +20,22 @@ $_width  = $block->getImagesWidth();
     <div
         data-row="file"
         class="filecnt"
-        id="<?= $block->escapeHtmlAttr($block->getFileId($file)) ?>"
-        data-size="<?= $block->escapeHtmlAttr($file->getSize()) ?>"
-        data-mime-type="<?= $block->escapeHtmlAttr($file->getMimeType()) ?>"
+        id="<?= $escaper->escapeHtmlAttr($block->getFileId($file)) ?>"
+        data-size="<?= $escaper->escapeHtmlAttr($file->getSize()) ?>"
+        data-mime-type="<?= $escaper->escapeHtmlAttr($file->getMimeType()) ?>"
     >
         <p class="nm">
         <?php if ($block->getFileThumbUrl($file)): ?>
-            <img src="<?= $block->escapeHtmlAttr($src) ?>" alt="<?= $block->escapeHtmlAttr($filename) ?>"/>
+            <img src="<?= $escaper->escapeHtmlAttr($src) ?>" alt="<?= $escaper->escapeHtmlAttr($filename) ?>"/>
         <?php endif; ?>
         </p>
         <?php if ($block->getFileWidth($file)): ?>
-              <small><?= $block->escapeHtmlAttr($width) ?>x<?= $block->escapeHtmlAttr($height) ?>
-                                                                   <?= $block->escapeHtml(__('px.')) ?></small><br/>
+              <small><?= $escaper->escapeHtmlAttr($width) ?>x<?= $escaper->escapeHtmlAttr($height) ?>
+                                                                   <?= $escaper->escapeHtml(__('px.')) ?></small><br/>
         <?php endif; ?>
-        <small><?= $block->escapeHtml($block->getFileShortName($file)) ?></small>
+        <small><?= $escaper->escapeHtml($block->getFileShortName($file)) ?></small>
     </div>
     <?php endforeach; ?>
 <?php else: ?>
-    <div class="empty"><?= $block->escapeHtml(__('No files found')) ?></div>
+    <div class="empty"><?= $escaper->escapeHtml(__('No files found')) ?></div>
 <?php endif; ?>

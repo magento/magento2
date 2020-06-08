@@ -9,19 +9,19 @@
 <?php if ($websites = $block->getWebsites()) : ?>
 
 <div class="store-switcher store-view">
-    <span class="store-switcher-label"><?= $block->escapeHtml(__('Scope:')) ?></span>
+    <span class="store-switcher-label"><?= $escaper->escapeHtml(__('Scope:')) ?></span>
     <div class="actions dropdown closable">
         <input type="hidden" name="store_switcher" id="store_switcher"
-               data-role="store-view-id" data-param="<?= $block->escapeHtmlAttr($block->getStoreVarName()) ?>"
-               value="<?= $block->escapeHtml($block->getStoreId()) ?>"
+               data-role="store-view-id" data-param="<?= $escaper->escapeHtmlAttr($block->getStoreVarName()) ?>"
+               value="<?= $escaper->escapeHtml($block->getStoreId()) ?>"
                onchange="switchScope(this);"<?= /* @noEscape */ $block->getUiId() ?> />
         <input type="hidden" name="store_group_switcher" id="store_group_switcher"
-               data-role="store-group-id" data-param="<?= $block->escapeHtmlAttr($block->getStoreGroupVarName()) ?>"
-               value="<?= $block->escapeHtml($block->getStoreGroupId()) ?>"
+               data-role="store-group-id" data-param="<?= $escaper->escapeHtmlAttr($block->getStoreGroupVarName()) ?>"
+               value="<?= $escaper->escapeHtml($block->getStoreGroupId()) ?>"
                onchange="switchScope(this);"<?= /* @noEscape */ $block->getUiId() ?> />
         <input type="hidden" name="website_switcher" id="website_switcher"
-               data-role="website-id" data-param="<?= $block->escapeHtmlAttr($block->getWebsiteVarName()) ?>"
-               value="<?= $block->escapeHtml($block->getWebsiteId()) ?>"
+               data-role="website-id" data-param="<?= $escaper->escapeHtmlAttr($block->getWebsiteVarName()) ?>"
+               value="<?= $escaper->escapeHtml($block->getWebsiteId()) ?>"
                onchange="switchScope(this);"<?= /* @noEscape */ $block->getUiId() ?> />
         <button
             type="button"
@@ -30,17 +30,17 @@
             data-toggle="dropdown"
             aria-haspopup="true"
             id="store-change-button">
-            <?= $block->escapeHtml($block->getCurrentSelectionName()) ?>
+            <?= $escaper->escapeHtml($block->getCurrentSelectionName()) ?>
         </button>
         <ul class="dropdown-menu" data-role="stores-list">
             <?php if ($block->hasDefaultOption()) : ?>
                 <li class="store-switcher-all <?php if (!($block->getDefaultSelectionName() != $block->getCurrentSelectionName())) : ?>disabled<?php endif; ?> <?php if (!$block->hasScopeSelected()) : ?>current<?php endif; ?>">
                     <?php if ($block->getDefaultSelectionName() != $block->getCurrentSelectionName()) : ?>
                         <a data-role="store-view-id" data-value="" href="#">
-                            <?= $block->escapeHtml($block->getDefaultSelectionName()) ?>
+                            <?= $escaper->escapeHtml($block->getDefaultSelectionName()) ?>
                         </a>
                     <?php else : ?>
-                        <span><?= $block->escapeHtml($block->getDefaultSelectionName()) ?></span>
+                        <span><?= $escaper->escapeHtml($block->getDefaultSelectionName()) ?></span>
                     <?php endif; ?>
                 </li>
             <?php endif; ?>
@@ -53,11 +53,11 @@
                             <?php $showWebsite = true; ?>
                             <li class="store-switcher-website <?php if (!($block->isWebsiteSwitchEnabled() && ! $block->isWebsiteSelected($website))) : ?>disabled<?php endif; ?> <?php if ($block->isWebsiteSelected($website)) : ?>current<?php endif; ?>">
                                 <?php if ($block->isWebsiteSwitchEnabled() && ! $block->isWebsiteSelected($website)) : ?>
-                                    <a data-role="website-id" data-value="<?= $block->escapeHtml($website->getId()) ?>" href="#">
-                                        <?= $block->escapeHtml($website->getName()) ?>
+                                    <a data-role="website-id" data-value="<?= $escaper->escapeHtml($website->getId()) ?>" href="#">
+                                        <?= $escaper->escapeHtml($website->getName()) ?>
                                     </a>
                                 <?php else : ?>
-                                    <span><?= $block->escapeHtml($website->getName()) ?></span>
+                                    <span><?= $escaper->escapeHtml($website->getName()) ?></span>
                                 <?php endif; ?>
                             </li>
                         <?php endif; ?>
@@ -65,21 +65,21 @@
                             <?php $showGroup = true; ?>
                             <li class="store-switcher-store <?php if (!($block->isStoreGroupSwitchEnabled() && ! $block->isStoreGroupSelected($group))) : ?>disabled<?php endif; ?> <?php if ($block->isStoreGroupSelected($group)) : ?>current<?php endif; ?>">
                                 <?php if ($block->isStoreGroupSwitchEnabled() && ! $block->isStoreGroupSelected($group)) : ?>
-                                    <a data-role="store-group-id" data-value="<?= $block->escapeHtml($group->getId()) ?>" href="#">
-                                        <?= $block->escapeHtml($group->getName()) ?>
+                                    <a data-role="store-group-id" data-value="<?= $escaper->escapeHtml($group->getId()) ?>" href="#">
+                                        <?= $escaper->escapeHtml($group->getName()) ?>
                                     </a>
                                 <?php else : ?>
-                                    <span><?= $block->escapeHtml($group->getName()) ?></span>
+                                    <span><?= $escaper->escapeHtml($group->getName()) ?></span>
                                 <?php endif; ?>
                             </li>
                         <?php endif; ?>
                         <li class="store-switcher-store-view <?php if (!($block->isStoreSwitchEnabled() && !$block->isStoreSelected($store))) : ?>disabled<?php endif; ?> <?php if ($block->isStoreSelected($store)) :?>current<?php endif; ?>">
                             <?php if ($block->isStoreSwitchEnabled() && ! $block->isStoreSelected($store)) : ?>
-                                <a data-role="store-view-id" data-value="<?= $block->escapeHtml($store->getId()) ?>" href="#">
-                                    <?= $block->escapeHtml($store->getName()) ?>
+                                <a data-role="store-view-id" data-value="<?= $escaper->escapeHtml($store->getId()) ?>" href="#">
+                                    <?= $escaper->escapeHtml($store->getName()) ?>
                                 </a>
                             <?php else : ?>
-                                <span><?= $block->escapeHtml($store->getName()) ?></span>
+                                <span><?= $escaper->escapeHtml($store->getName()) ?></span>
                             <?php endif; ?>
                         </li>
                     <?php endforeach; ?>
@@ -87,7 +87,7 @@
             <?php endforeach; ?>
             <?php if ($block->getShowManageStoresLink() && $block->getAuthorization()->isAllowed('Magento_Backend::store')) : ?>
                 <li class="dropdown-toolbar">
-                    <a href="<?= /* @noEscape */ $block->getUrl('*/system_store') ?>"><?= $block->escapeHtml(__('Stores Configuration')) ?></a>
+                    <a href="<?= /* @noEscape */ $block->getUrl('*/system_store') ?>"><?= $escaper->escapeHtml(__('Stores Configuration')) ?></a>
                 </li>
             <?php endif; ?>
         </ul>
@@ -142,13 +142,13 @@ require([
             <?php if ($block->getUseConfirm()) : ?>
 
             confirm({
-                content:  "<?= $block->escapeJs(__('Please confirm scope switching. All data that hasn\'t been saved will be lost.')) ?>",
+                content:  "<?= $escaper->escapeJs(__('Please confirm scope switching. All data that hasn\'t been saved will be lost.')) ?>",
                 actions: {
                     confirm: function() {
                         reload();
                     },
                     cancel: function() {
-                        obj.value = '<?= $block->escapeHtml($block->getStoreId()) ?>';
+                        obj.value = '<?= $escaper->escapeHtml($block->getStoreId()) ?>';
                     }
                 }
             });
@@ -160,7 +160,7 @@ require([
 
         function reload() {
             <?php if (!$block->isUsingIframe()) : ?>
-            var url = '<?= $block->escapeJs($block->getSwitchUrl()) ?>' + scopeParams;
+            var url = '<?= $escaper->escapeJs($block->getSwitchUrl()) ?>' + scopeParams;
             setLocation(url);
             <?php else : ?>
             jQuery('#preview_selected_store').val(scopeId);

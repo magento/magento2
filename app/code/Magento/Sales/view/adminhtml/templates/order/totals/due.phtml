@@ -6,7 +6,7 @@
 ?>
 <?php if ($block->getCanDisplayTotalDue()) : ?>
 <tr>
-    <td class="label"><strong style="font-size: larger"><?= $block->escapeHtml(__('Total Due')) ?></strong></td>
+    <td class="label"><strong style="font-size: larger"><?= $escaper->escapeHtml(__('Total Due')) ?></strong></td>
     <td class="emph" style="font-size: larger"><?= /* @noEscape */ $block->displayPriceAttribute('total_due', true) ?></td>
 </tr>
 <?php endif; ?>

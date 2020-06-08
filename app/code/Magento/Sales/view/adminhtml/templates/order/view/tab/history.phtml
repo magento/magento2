@@ -15,13 +15,13 @@
             <span class="note-list-status"><?= /* @noEscape */ $block->getItemTitle($_item) ?></span>
             <?php if ($block->isItemNotified($_item, false)) : ?>
                 <span class="note-list-customer">
-                    <?= $block->escapeHtml(__('Customer')) ?>
+                    <?= $escaper->escapeHtml(__('Customer')) ?>
                     <?php if ($block->isCustomerNotificationNotApplicable($_item)) : ?>
-                        <span class="note-list-customer-notapplicable"><?= $block->escapeHtml(__('Notification Not Applicable')) ?></span>
+                        <span class="note-list-customer-notapplicable"><?= $escaper->escapeHtml(__('Notification Not Applicable')) ?></span>
                     <?php elseif ($block->isItemNotified($_item)) : ?>
-                        <span class="note-list-customer-notified"><?= $block->escapeHtml(__('Notified')) ?></span>
+                        <span class="note-list-customer-notified"><?= $escaper->escapeHtml(__('Notified')) ?></span>
                     <?php else : ?>
-                        <span class="note-list-customer-not-notified"><?= $block->escapeHtml(__('Not Notified')) ?></span>
+                        <span class="note-list-customer-not-notified"><?= $escaper->escapeHtml(__('Not Notified')) ?></span>
                     <?php endif; ?>
                 </span>
             <?php endif; ?>
@@ -30,7 +30,7 @@
     </ul>
     <div class="edit-order-comments-block">
         <div class="edit-order-comments-block-title">
-            <?= $block->escapeHtml(__('Notes for this Order')) ?>
+            <?= $escaper->escapeHtml(__('Notes for this Order')) ?>
         </div>
         <?php foreach ($block->getFullHistory() as $_item) : ?>
             <?php if ($_comment = $block->getItemComment($_item)) : ?>
@@ -39,7 +39,7 @@
                         <?= /* @noEscape */ $_comment ?>
                     </div>
                     <span class="comments-block-item-date-time">
-                        <?= $block->escapeHtml(__('Comment added')) ?>
+                        <?= $escaper->escapeHtml(__('Comment added')) ?>
                         <?= /* @noEscape */ $block->getItemCreatedAt($_item) ?>
                         <?= /* @noEscape */ $block->getItemCreatedAt($_item, 'time') ?>
                     </span>

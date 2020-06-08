@@ -4,11 +4,11 @@
  * See COPYING.txt for license details.
  */
 ?>
-<div class="block <?= $block->escapeHtmlAttr($block->getBlockCss()) ?>">
-    <div class="block-title <?= $block->escapeHtmlAttr($block->getBlockCss()) ?>-title">
-        <strong><?= $block->escapeHtml($block->getBlockTitle()) ?></strong>
+<div class="block <?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?>">
+    <div class="block-title <?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?>-title">
+        <strong><?= $escaper->escapeHtml($block->getBlockTitle()) ?></strong>
     </div>
-    <div class="block-content <?= $block->escapeHtmlAttr($block->getBlockCss()) ?>-content">
+    <div class="block-content <?= $escaper->escapeHtmlAttr($block->getBlockCss()) ?>-content">
         <?= $block->getChildHtml() ?>
     </div>
 </div>

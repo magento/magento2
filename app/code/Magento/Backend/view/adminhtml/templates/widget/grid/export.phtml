@@ -5,12 +5,12 @@
  */
 ?>
 <div class="admin__data-grid-export">
-    <label for="<?= $block->escapeHtmlAttr($block->getId()) ?>_export" class="admin__control-support-text">
-        <?= $block->escapeHtml(__('Export to:')) ?>
+    <label for="<?= $escaper->escapeHtmlAttr($block->getId()) ?>_export" class="admin__control-support-text">
+        <?= $escaper->escapeHtml(__('Export to:')) ?>
     </label>
-    <select name="<?= $block->escapeHtmlAttr($block->getId()) ?>_export" id="<?= $block->escapeHtmlAttr($block->getId()) ?>_export" class="admin__control-select">
+    <select name="<?= $escaper->escapeHtmlAttr($block->getId()) ?>_export" id="<?= $escaper->escapeHtmlAttr($block->getId()) ?>_export" class="admin__control-select">
         <?php foreach ($block->getExportTypes() as $_type) : ?>
-            <option value="<?= $block->escapeHtmlAttr($_type->getUrl()) ?>"><?= $block->escapeHtml($_type->getLabel()) ?></option>
+            <option value="<?= $escaper->escapeHtmlAttr($_type->getUrl()) ?>"><?= $escaper->escapeHtml($_type->getLabel()) ?></option>
         <?php endforeach; ?>
     </select>
     <?= $block->getExportButtonHtml() ?>

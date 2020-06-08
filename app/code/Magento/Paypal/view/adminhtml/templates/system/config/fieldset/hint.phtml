@@ -8,12 +8,12 @@
  * @see \Magento\Paypal\Block\System\Config\Fieldset\Hint
  * @var \Magento\Paypal\Block\Adminhtml\System\Config\Fieldset\Hint $block
  */
-$helpLink = $block->escapeUrl($block->getHelpLink());
+$helpLink = $escaper->escapeUrl($block->getHelpLink());
 ?>
 <?php if ($helpLink) : ?>
     <div class="paypal-payment-notice">
-        <?= $block->escapeHtml(__('Not sure what PayPal payment method to use? Click ')) ?>
-        <a href="<?= /* @noEscape */ $helpLink; ?>" target="_blank"><?= $block->escapeHtml(__('here')) ?></a>
-        <?= $block->escapeHtml(__(' to learn more.')) ?>
+        <?= $escaper->escapeHtml(__('Not sure what PayPal payment method to use? Click ')) ?>
+        <a href="<?= /* @noEscape */ $helpLink; ?>" target="_blank"><?= $escaper->escapeHtml(__('here')) ?></a>
+        <?= $escaper->escapeHtml(__(' to learn more.')) ?>
     </div>
 <?php endif; ?>

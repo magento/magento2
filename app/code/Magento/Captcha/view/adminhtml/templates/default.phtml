@@ -11,18 +11,18 @@ $captcha = $block->getCaptchaModel();
 ?>
 <div class="admin__field _required">
     <label for="captcha" class="admin__field-label">
-        <span><?= $block->escapeHtml(__('Please enter the letters and numbers from the image')) ?></span>
+        <span><?= $escaper->escapeHtml(__('Please enter the letters and numbers from the image')) ?></span>
     </label>
     <div class="admin__field-control">
         <input
             id="captcha"
             class="admin__control-text"
             type="text"
-            name="<?= $block->escapeHtmlAttr(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE) ?>[<?= $block->escapeHtml($block->getFormId()) ?>]"
+            name="<?= $escaper->escapeHtmlAttr(\Magento\Captcha\Helper\Data::INPUT_NAME_FIELD_VALUE) ?>[<?= $escaper->escapeHtml($block->getFormId()) ?>]"
             data-validate="{required:true}"/>
         <?php if ($captcha->isCaseSensitive()) :?>
             <div class="admin__field-note">
-                <span><?= $block->escapeHtml(__('<strong>Attention</strong>: Captcha is case sensitive.'), ['strong']) ?></span>
+                <span><?= $escaper->escapeHtml(__('<strong>Attention</strong>: Captcha is case sensitive.'), ['strong']) ?></span>
             </div>
         <?php endif; ?>
     </div>
@@ -31,19 +31,19 @@ $captcha = $block->getCaptchaModel();
     <img
         id="captcha-reload"
         class="captcha-reload"
-        src="<?= $block->escapeUrl($block->getViewFileUrl('Magento_Captcha::reload.png')) ?>"
-        alt="<?= $block->escapeHtmlAttr(__('Reload captcha')) ?>"/>
+        src="<?= $escaper->escapeUrl($block->getViewFileUrl('Magento_Captcha::reload.png')) ?>"
+        alt="<?= $escaper->escapeHtmlAttr(__('Reload captcha')) ?>"/>
     <img
-        id="<?= $block->escapeHtmlAttr($block->getFormId()) ?>"
+        id="<?= $escaper->escapeHtmlAttr($block->getFormId()) ?>"
         width="<?= /* @noEscape */ (float) $block->getImgWidth() ?>"
         height="<?= /* @noEscape */ (float) $block->getImgHeight() ?>"
-        src="<?= $block->escapeUrl($captcha->getImgSrc()) ?>" />
+        src="<?= $escaper->escapeUrl($captcha->getImgSrc()) ?>" />
 </div>
 <script>
     require(["prototype", "mage/captcha"], function(){
 
 //<![CDATA[
-        var captcha = new Captcha('<?= $block->escapeJs($block->escapeUrl($block->getRefreshUrl())) ?>', '<?= $block->escapeJs($block->escapeHtml($block->getFormId())) ?>');
+        var captcha = new Captcha('<?= $escaper->escapeJs($escaper->escapeUrl($block->getRefreshUrl())) ?>', '<?= $escaper->escapeJs($escaper->escapeHtml($block->getFormId())) ?>');
 
         $('captcha-reload').observe('click', function () {
             captcha.refresh(this);

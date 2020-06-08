@@ -37,20 +37,20 @@
         <a href="javascript:void(0);"
            id="<?= /* @noEscape */ ($popupId) ?>"
            data-mage-init='{"addToCart":{"popupId": "#<?= /* @noEscape */ ($popupId) ?>",
-                                         "productName": "<?= /* @noEscape */ $block->escapeJs($block->escapeHtml($_product->getName())) ?>",
+                                         "productName": "<?= /* @noEscape */ $escaper->escapeJs($escaper->escapeHtml($_product->getName())) ?>",
                                          "realPrice": <?= /* @noEscape */ $block->getRealPriceJs($_product) ?>,
                                          "msrpPrice": "<?= /* @noEscape */ $_msrpPrice ?>",
                                          "priceElementId":"<?= /* @noEscape */ $priceElementId ?>",
                                          "popupCartButtonId": "#map-popup-button",
-                                         "cartForm": "#wishlist-view-form"}}'><?= $block->escapeHtml(__('Click for price')) ?>
+                                         "cartForm": "#wishlist-view-form"}}'><?= $escaper->escapeHtml(__('Click for price')) ?>
         </a>
     <?php else : ?>
         <span class="msrp-message">
-            <?= $block->escapeHtml($_catalogHelper->getMsrpPriceMessage($_product)) ?>
+            <?= $escaper->escapeHtml($_catalogHelper->getMsrpPriceMessage($_product)) ?>
         </span>
     <?php endif; ?>
     <?php $helpLinkId = 'msrp-help-' . $_id . $block->getRandomString(20); ?>
-    <a href="javascript:void(0);" id="<?= /* @noEscape */ ($helpLinkId) ?>" data-mage-init='{"addToCart":{"helpLinkId": "#<?= /* @noEscape */ ($helpLinkId) ?>", "productName": "<?= /* @noEscape */$block->escapeJs($block->escapeHtml($_product->getName())) ?>"}}' class="link tip">
-        <?= $block->escapeHtml(__("What's this?")) ?>
+    <a href="javascript:void(0);" id="<?= /* @noEscape */ ($helpLinkId) ?>" data-mage-init='{"addToCart":{"helpLinkId": "#<?= /* @noEscape */ ($helpLinkId) ?>", "productName": "<?= /* @noEscape */$escaper->escapeJs($escaper->escapeHtml($_product->getName())) ?>"}}' class="link tip">
+        <?= $escaper->escapeHtml(__("What's this?")) ?>
     </a>
 </div>

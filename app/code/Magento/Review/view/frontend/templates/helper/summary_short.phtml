@@ -14,21 +14,21 @@ $urlForm = $block->getReviewsUrl() . '#review-form';
     <div class="product-reviews-summary short<?= !$rating ? ' no-rating' : '' ?>">
         <?php if ($rating) :?>
         <div class="rating-summary">
-            <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
-            <div class="rating-result" title="<?= $block->escapeHtmlAttr($rating) ?>%">
-                <span style="width:<?= $block->escapeHtmlAttr($rating) ?>%"><span><?= $block->escapeHtml($rating) ?>%</span></span>
+            <span class="label"><span><?= $escaper->escapeHtml(__('Rating')) ?>:</span></span>
+            <div class="rating-result" title="<?= $escaper->escapeHtmlAttr($rating) ?>%">
+                <span style="width:<?= $escaper->escapeHtmlAttr($rating) ?>%"><span><?= $escaper->escapeHtml($rating) ?>%</span></span>
             </div>
         </div>
         <?php endif;?>
         <div class="reviews-actions">
-            <a class="action view" href="<?= $block->escapeUrl($url) ?>"><?= $block->escapeHtml($block->getReviewsCount()) ?>&nbsp;<span><?= ($block->getReviewsCount() == 1) ? $block->escapeHtml(__('Review')) : $block->escapeHtml(__('Reviews')) ?></span></a>
+            <a class="action view" href="<?= $escaper->escapeUrl($url) ?>"><?= $escaper->escapeHtml($block->getReviewsCount()) ?>&nbsp;<span><?= ($block->getReviewsCount() == 1) ? $escaper->escapeHtml(__('Review')) : $escaper->escapeHtml(__('Reviews')) ?></span></a>
         </div>
     </div>
 <?php elseif ($block->isReviewEnabled() && $block->getDisplayIfEmpty()) : ?>
     <div class="product-reviews-summary short empty">
         <div class="reviews-actions">
-            <a class="action add" href="<?= $block->escapeUrl($urlForm) ?>">
-                <?= $block->escapeHtml(__('Be the first to review this product')) ?>
+            <a class="action add" href="<?= $escaper->escapeUrl($urlForm) ?>">
+                <?= $escaper->escapeHtml(__('Be the first to review this product')) ?>
             </a>
         </div>
     </div>

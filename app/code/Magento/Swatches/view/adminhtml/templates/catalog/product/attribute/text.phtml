@@ -10,18 +10,18 @@ $stores = $block->getStoresSortedBySortOrder();
 ?>
 <fieldset class="fieldset">
     <legend class="legend">
-        <span><?= $block->escapeHtml(__('Manage Swatch (Values of Your Attribute)')) ?></span>
+        <span><?= $escaper->escapeHtml(__('Manage Swatch (Values of Your Attribute)')) ?></span>
     </legend>
     <div id="swatch-text-options-panel">
         <table class="data-table clearfix" cellspacing="0">
             <thead>
             <tr id="swatch-text-options-table">
                 <th class="col-draggable"></th>
-                <th class="col-default"><span><?= $block->escapeHtml(__('Is Default')) ?></span></th>
+                <th class="col-default"><span><?= $escaper->escapeHtml(__('Is Default')) ?></span></th>
                 <?php foreach ($stores as $_store) : ?>
                     <th class="col-swatch col-swatch-min-width col-<%- data.id %><?= ($_store->getId() == \Magento\Store\Model\Store::DEFAULT_STORE_ID) ? ' _required' : '' ?>"
                         colspan="2">
-                        <span><?= $block->escapeHtml($_store->getName()) ?></span>
+                        <span><?= $escaper->escapeHtml($_store->getName()) ?></span>
                     </th>
                 <?php endforeach; ?>
                 <?php $colTotal = count($stores) * 2 + 3; ?>
@@ -40,9 +40,9 @@ $stores = $block->getStoresSortedBySortOrder();
                 <th colspan="<?= (int)$colTotal ?>" class="col-actions-add">
                     <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) : ?>
                         <button id="add_new_swatch_text_option_button"
-                                title="<?= $block->escapeHtml(__('Add Swatch')) ?>"
+                                title="<?= $escaper->escapeHtml(__('Add Swatch')) ?>"
                                 type="button" class="action- scalable add">
-                            <span><?= $block->escapeHtml(__('Add Swatch')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Add Swatch')) ?></span>
                         </button>
                     <?php endif; ?>
                 </th>
@@ -57,7 +57,7 @@ $stores = $block->getStoresSortedBySortOrder();
                 <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) : ?>
                     <div data-role="draggable-handle"
                          class="draggable-handle"
-                         title="<?= $block->escapeHtmlAttr(__('Sort Option')) ?>"></div>
+                         title="<?= $escaper->escapeHtmlAttr(__('Sort Option')) ?>"></div>
                 <?php endif; ?>
                 <input data-role="order" type="hidden" name="optiontext[order][<%- data.id %>]"
                        value="<%- data.sort_order %>"
@@ -78,22 +78,22 @@ $stores = $block->getStoresSortedBySortOrder();
                         <?= ($storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID) ? ' required-option required-unique' : '' ?>"
                            name="swatchtext[value][<%- data.id %>][<?= /* @noEscape */ $storeId ?>]"
                            type="text" value="<%- data.swatch<?= /* @noEscape */ $storeId ?> %>"
-                           placeholder="<?= $block->escapeHtmlAttr(__("Swatch")) ?>"/>
+                           placeholder="<?= $escaper->escapeHtmlAttr(__("Swatch")) ?>"/>
                 </td>
                 <td class="col-swatch-min-width swatch-col-<%- data.id %>">
                     <input name="optiontext[value][<%- data.id %>][<?= /* @noEscape */ $storeId ?>]"
                            value="<%- data.store<?= /* @noEscape */ $storeId ?> %>"
                            class="input-text<?= ($storeId == \Magento\Store\Model\Store::DEFAULT_STORE_ID) ? ' required-option' : '' ?>"
                            type="text" <?= ($block->getReadOnly() || $block->canManageOptionDefaultOnly()) ? ' disabled="disabled"' : ''?>
-                           placeholder="<?= $block->escapeHtmlAttr(__("Description")) ?>"/>
+                           placeholder="<?= $escaper->escapeHtmlAttr(__("Description")) ?>"/>
                 </td>
             <?php endforeach; ?>
             <td id="delete_button_swatch_container_<%- data.id %>" class="col-delete">
                 <input type="hidden" class="delete-flag" name="optiontext[delete][<%- data.id %>]" value="" />
                 <?php if (!$block->getReadOnly() && !$block->canManageOptionDefaultOnly()) : ?>
-                    <button title="<?= $block->escapeHtmlAttr(__('Delete')) ?>" type="button"
+                    <button title="<?= $escaper->escapeHtmlAttr(__('Delete')) ?>" type="button"
                             class="action- scalable delete delete-option">
-                        <span><?= $block->escapeHtml(__('Delete')) ?></span>
+                        <span><?= $escaper->escapeHtml(__('Delete')) ?></span>
                     </button>
                 <?php endif;?>
             </td>
@@ -105,7 +105,7 @@ $stores = $block->getStoresSortedBySortOrder();
                 "Magento_Swatches/js/text": <?= /* @noEscape */ $block->getJsonConfig() ?> ,
                 "Magento_Catalog/catalog/product/attribute/unique-validate": {
                     "element": "required-text-swatch-unique",
-                    "message": "<?= $block->escapeJs($block->escapeHtml(__("The value of Admin must be unique."))) ?>"
+                    "message": "<?= $escaper->escapeJs($escaper->escapeHtml(__("The value of Admin must be unique."))) ?>"
                 }
             }
         }

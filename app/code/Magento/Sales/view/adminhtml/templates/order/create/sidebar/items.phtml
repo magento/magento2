@@ -5,16 +5,16 @@
  */
 ?>
 <?php /* @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar */ ?>
-<div class="create-order-sidebar-block" id="sidebar_data_<?= $block->escapeHtmlAttr($block->getDataId()) ?>">
+<div class="create-order-sidebar-block" id="sidebar_data_<?= $escaper->escapeHtmlAttr($block->getDataId()) ?>">
     <div class="head sidebar-title-block">
         <a href="#" class="action-refresh"
-           title="<?= $block->escapeHtml(__('Refresh')) ?>"
-           onclick="order.loadArea('sidebar_<?= $block->escapeJs($block->getDataId()) ?>', 'sidebar_data_<?= $block->escapeJs($block->getDataId()) ?>');return false;">
-            <span><?= $block->escapeHtml(__('Refresh')) ?></span>
+           title="<?= $escaper->escapeHtml(__('Refresh')) ?>"
+           onclick="order.loadArea('sidebar_<?= $escaper->escapeJs($block->getDataId()) ?>', 'sidebar_data_<?= $escaper->escapeJs($block->getDataId()) ?>');return false;">
+            <span><?= $escaper->escapeHtml(__('Refresh')) ?></span>
         </a>
         <h5 class="create-order-sidebar-label">
-            <?= $block->escapeHtml($block->getHeaderText()) ?>
-            <span class="normal">(<?= $block->escapeHtml($block->getItemCount()) ?>)</span>
+            <?= $escaper->escapeHtml($block->getHeaderText()) ?>
+            <span class="normal">(<?= $escaper->escapeHtml($block->getItemCount()) ?>)</span>
         </h5>
     </div>
     <div class="content">
@@ -23,29 +23,29 @@
         <table class="admin__table-primary">
             <thead>
                 <tr>
-                    <th class="col-item"><?= $block->escapeHtml(__('Item')) ?></th>
+                    <th class="col-item"><?= $escaper->escapeHtml(__('Item')) ?></th>
 
                     <?php if ($block->canDisplayItemQty()) : ?>
-                        <th class="col-qty"><?= $block->escapeHtml(__('Qty')) ?></th>
+                        <th class="col-qty"><?= $escaper->escapeHtml(__('Qty')) ?></th>
                     <?php endif; ?>
 
                     <?php if ($block->canDisplayPrice()) : ?>
-                        <th class="col-price"><?= $block->escapeHtml(__('Price')) ?></th>
+                        <th class="col-price"><?= $escaper->escapeHtml(__('Price')) ?></th>
                     <?php endif; ?>
 
                     <?php if ($block->canRemoveItems()) : ?>
                         <th class="col-remove">
-                            <span title="<?= $block->escapeHtml(__('Remove')) ?>"
+                            <span title="<?= $escaper->escapeHtml(__('Remove')) ?>"
                                   class="icon icon-remove">
-                                <span><?= $block->escapeHtml(__('Remove')) ?></span>
+                                <span><?= $escaper->escapeHtml(__('Remove')) ?></span>
                             </span>
                         </th>
                     <?php endif; ?>
 
                     <th class="col-add">
-                        <span title="<?= $block->escapeHtml(__('Add To Order')) ?>"
+                        <span title="<?= $escaper->escapeHtml(__('Add To Order')) ?>"
                               class="icon icon-add">
-                            <span><?= $block->escapeHtml(__('Add To Order')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Add To Order')) ?></span>
                         </span>
                     </th>
                 </tr>
@@ -54,7 +54,7 @@
             <tbody>
                 <?php foreach ($block->getItems() as $_item) : ?>
                     <tr>
-                        <td class="col-item"><?= $block->escapeHtml($_item->getName()) ?></td>
+                        <td class="col-item"><?= $escaper->escapeHtml($_item->getName()) ?></td>
 
                         <?php if ($block->canDisplayItemQty()) : ?>
                             <td class="col-qty">
@@ -71,14 +71,14 @@
                         <?php if ($block->canRemoveItems()) : ?>
                             <td class="col-remove">
                                 <div class="admin__field-option">
-                                    <input id="sidebar-remove-<?= $block->escapeHtmlAttr($block->getSidebarStorageAction()) ?>-<?= (int) $block->getItemId($_item) ?>"
+                                    <input id="sidebar-remove-<?= $escaper->escapeHtmlAttr($block->getSidebarStorageAction()) ?>-<?= (int) $block->getItemId($_item) ?>"
                                            type="checkbox"
                                            class="admin__control-checkbox"
                                            name="sidebar[remove][<?= (int) $block->getItemId($_item) ?>]"
-                                           value="<?= $block->escapeHtmlAttr($block->getDataId()) ?>"
-                                           title="<?= $block->escapeHtml(__('Remove')) ?>" />
+                                           value="<?= $escaper->escapeHtmlAttr($block->getDataId()) ?>"
+                                           title="<?= $escaper->escapeHtml(__('Remove')) ?>" />
                                     <label class="admin__field-label"
-                                           for="sidebar-remove-<?= $block->escapeHtmlAttr($block->getSidebarStorageAction()) ?>-<?= (int) $block->getItemId($_item) ?>">
+                                           for="sidebar-remove-<?= $escaper->escapeHtmlAttr($block->getSidebarStorageAction()) ?>-<?= (int) $block->getItemId($_item) ?>">
                                     </label>
                                 </div>
                             </td>
@@ -89,26 +89,26 @@
                                 <?php if ($block->isConfigurationRequired($_item->getTypeId()) && $block->getDataId() == 'wishlist') : ?>
                                     <a href="#"
                                        class="icon icon-configure"
-                                       title="<?= $block->escapeHtml(__('Configure and Add to Order')) ?>"
+                                       title="<?= $escaper->escapeHtml(__('Configure and Add to Order')) ?>"
                                        onclick="order.sidebarConfigureProduct('sidebar_wishlist', <?= (int) $block->getProductId($_item) ?>, <?= (int) $block->getItemId($_item) ?>); return false;">
-                                        <span><?= $block->escapeHtml(__('Configure and Add to Order')) ?></span>
+                                        <span><?= $escaper->escapeHtml(__('Configure and Add to Order')) ?></span>
                                     </a>
                                 <?php elseif ($block->isConfigurationRequired($_item->getTypeId())) : ?>
                                     <a href="#"
                                        class="icon icon-configure"
-                                       title="<?= $block->escapeHtml(__('Configure and Add to Order')) ?>"
+                                       title="<?= $escaper->escapeHtml(__('Configure and Add to Order')) ?>"
                                        onclick="order.sidebarConfigureProduct('sidebar', <?= (int) $block->getProductId($_item) ?>); return false;">
-                                        <span><?= $block->escapeHtml(__('Configure and Add to Order')) ?></span>
+                                        <span><?= $escaper->escapeHtml(__('Configure and Add to Order')) ?></span>
                                     </a>
                                 <?php else : ?>
-                                    <input id="sidebar-<?= $block->escapeHtmlAttr($block->getSidebarStorageAction()) ?>-<?= (int) $block->getIdentifierId($_item) ?>"
+                                    <input id="sidebar-<?= $escaper->escapeHtmlAttr($block->getSidebarStorageAction()) ?>-<?= (int) $block->getIdentifierId($_item) ?>"
                                            type="checkbox"
                                            class="admin__control-checkbox"
-                                           name="sidebar[<?= $block->escapeHtmlAttr($block->getSidebarStorageAction()) ?>][<?= (int) $block->getIdentifierId($_item) ?>]"
+                                           name="sidebar[<?= $escaper->escapeHtmlAttr($block->getSidebarStorageAction()) ?>][<?= (int) $block->getIdentifierId($_item) ?>]"
                                            value="<?= $block->canDisplayItemQty() ? (float) $_item->getQty() : 1 ?>"
-                                           title="<?= $block->escapeHtml(__('Add To Order')) ?>"/>
+                                           title="<?= $escaper->escapeHtml(__('Add To Order')) ?>"/>
                                     <label class="admin__field-label"
-                                           for="sidebar-<?= $block->escapeHtmlAttr($block->getSidebarStorageAction()) ?>-<?= (int) $block->getIdentifierId($_item) ?>">
+                                           for="sidebar-<?= $escaper->escapeHtmlAttr($block->getSidebarStorageAction()) ?>-<?= (int) $block->getIdentifierId($_item) ?>">
                                     </label>
                                 <?php endif; ?>
                             </div>
@@ -118,7 +118,7 @@
             </tbody>
         </table>
         <?php else : ?>
-            <span class="no-items"><?= $block->escapeHtml(__('No items')) ?></span>
+            <span class="no-items"><?= $escaper->escapeHtml(__('No items')) ?></span>
         <?php endif ?>
         </div>
         <?php if ($block->getItemCount() && $block->canRemoveItems()) : ?>

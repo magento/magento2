@@ -12,15 +12,15 @@ $product = $block->getProductData();
 <div class="customer-review view">
     <div class="product-details">
         <div class="product-media">
-            <a class="product-photo" href="<?= $block->escapeUrl($product->getProductUrl()) ?>">
+            <a class="product-photo" href="<?= $escaper->escapeUrl($product->getProductUrl()) ?>">
                 <?php /* customer_account_product_review_page */ ?>
                 <?= $block->getImage($block->getProductData(), 'customer_account_product_review_page')->toHtml() ?>
             </a>
         </div>
         <div class="product-info">
-            <h2 class="product-name"><?= $block->escapeHtml($product->getName()) ?></h2>
+            <h2 class="product-name"><?= $escaper->escapeHtml($product->getName()) ?></h2>
             <?php if ($block->getRating() && $block->getRating()->getSize()) : ?>
-                <span class="rating-average-label"><?= $block->escapeHtml(__('Average Customer Rating:')) ?></span>
+                <span class="rating-average-label"><?= $escaper->escapeHtml(__('Average Customer Rating:')) ?></span>
                 <?= $block->getReviewsSummaryHtml($product) ?>
             <?php endif; ?>
         </div>
@@ -29,14 +29,14 @@ $product = $block->getProductData();
     <div class="review-details">
         <?php if ($block->getRating() && $block->getRating()->getSize()) : ?>
             <div class="title">
-                <strong><?= $block->escapeHtml(__('Your Review')) ?></strong>
+                <strong><?= $escaper->escapeHtml(__('Your Review')) ?></strong>
             </div>
             <div class="customer-review-rating">
                 <?php foreach ($block->getRating() as $_rating) : ?>
                     <?php if ($_rating->getPercent()) : ?>
                         <?php $rating = ceil($_rating->getPercent()) ?>
                         <div class="rating-summary item">
-                            <span class="rating-label"><span><?= $block->escapeHtml($_rating->getRatingCode()) ?></span></span>
+                            <span class="rating-label"><span><?= $escaper->escapeHtml($_rating->getRatingCode()) ?></span></span>
                             <div class="rating-result" title="<?= /* @noEscape */ $rating ?>%">
                                 <span style="width:<?= /* @noEscape */ $rating ?>%">
                                     <span><?= /* @noEscape */ $rating ?>%</span>
@@ -48,16 +48,16 @@ $product = $block->getProductData();
             </div>
         <?php endif; ?>
 
-        <div class="review-title"><?= $block->escapeHtml($block->getReviewData()->getTitle()) ?></div>
-        <div class="review-content"><?= /* @noEscape */ nl2br($block->escapeHtml($block->getReviewData()->getDetail())) ?></div>
+        <div class="review-title"><?= $escaper->escapeHtml($block->getReviewData()->getTitle()) ?></div>
+        <div class="review-content"><?= /* @noEscape */ nl2br($escaper->escapeHtml($block->getReviewData()->getDetail())) ?></div>
         <div class="review-date">
-            <?= $block->escapeHtml(__('Submitted on %1', '<time class="date">' . $block->dateFormat($block->getReviewData()->getCreatedAt()) . '</time>'), ['time']) ?>
+            <?= $escaper->escapeHtml(__('Submitted on %1', '<time class="date">' . $block->dateFormat($block->getReviewData()->getCreatedAt()) . '</time>'), ['time']) ?>
         </div>
     </div>
 </div>
 <div class="actions-toolbar">
     <div class="secondary">
-        <a class="action back" href="<?= $block->escapeUrl($block->getBackUrl()) ?>"><span><?= $block->escapeHtml(__('Back to My Reviews')) ?></span></a>
+        <a class="action back" href="<?= $escaper->escapeUrl($block->getBackUrl()) ?>"><span><?= $escaper->escapeHtml(__('Back to My Reviews')) ?></span></a>
     </div>
 </div>
 <?php endif; ?>

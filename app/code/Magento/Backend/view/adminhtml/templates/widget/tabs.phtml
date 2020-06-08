@@ -8,10 +8,10 @@
 ?>
 <?php if (!empty($tabs)) : ?>
 
-<div class="admin__page-nav" data-role="container" id="<?=  $block->escapeHtmlAttr($block->getId()) ?>">
+<div class="admin__page-nav" data-role="container" id="<?=  $escaper->escapeHtmlAttr($block->getId()) ?>">
     <?php if ($block->getTitle()) : ?>
         <div class="admin__page-nav-title" data-role="title" <?= /* @noEscape */ $block->getUiId('title') ?>>
-            <strong><?= $block->escapeHtml($block->getTitle()) ?></strong>
+            <strong><?= $escaper->escapeHtml($block->getTitle()) ?></strong>
             <span data-role="title-messages" class="admin__page-nav-title-messages"></span>
         </div>
     <?php endif ?>
@@ -27,24 +27,24 @@
             <?php $_tabHref = $block->getTabUrl($_tab) == '#' ? '#' . $block->getTabId($_tab) . '_content' : $block->getTabUrl($_tab) ?>
 
             <li class="admin__page-nav-item" <?php if ($block->getTabIsHidden($_tab)) : ?> style="display:none"<?php endif; ?><?= /* @noEscape */ $block->getUiId('tab', 'item', $_tab->getId()) ?>>
-                <a href="<?=  $block->escapeUrl($_tabHref) ?>" id="<?=  $block->escapeHtmlAttr($block->getTabId($_tab)) ?>" name="<?=  $block->escapeHtmlAttr($block->getTabId($_tab, false)) ?>" title="<?=  $block->escapeHtmlAttr($block->getTabTitle($_tab)) ?>"
-                   class="admin__page-nav-link <?= $block->escapeHtmlAttr($_tabClass) ?>"
-                   data-tab-type="<?=  $block->escapeHtmlAttr($_tabType) ?>"
+                <a href="<?=  $escaper->escapeUrl($_tabHref) ?>" id="<?=  $escaper->escapeHtmlAttr($block->getTabId($_tab)) ?>" name="<?=  $escaper->escapeHtmlAttr($block->getTabId($_tab, false)) ?>" title="<?=  $escaper->escapeHtmlAttr($block->getTabTitle($_tab)) ?>"
+                   class="admin__page-nav-link <?= $escaper->escapeHtmlAttr($_tabClass) ?>"
+                   data-tab-type="<?=  $escaper->escapeHtmlAttr($_tabType) ?>"
                    <?= /* @noEscape */ $block->getUiId('tab', 'link', $_tab->getId()) ?>>
 
-                   <span><?= $block->escapeHtml($block->getTabLabel($_tab)) ?></span>
+                   <span><?= $escaper->escapeHtml($block->getTabLabel($_tab)) ?></span>
 
                    <span class="admin__page-nav-item-messages" data-role="item-messages">
                        <span class="admin__page-nav-item-message _changed">
                            <span class="admin__page-nav-item-message-icon"></span>
                            <span class="admin__page-nav-item-message-tooltip">
-                               <?= $block->escapeHtml(__('Changes have been made to this section that have not been saved.')) ?>
+                               <?= $escaper->escapeHtml(__('Changes have been made to this section that have not been saved.')) ?>
                            </span>
                        </span>
                        <span class="admin__page-nav-item-message _error">
                            <span class="admin__page-nav-item-message-icon"></span>
                            <span class="admin__page-nav-item-message-tooltip">
-                               <?= $block->escapeHtml(__('This tab contains invalid data. Please resolve this before saving.')) ?>
+                               <?= $escaper->escapeHtml(__('This tab contains invalid data. Please resolve this before saving.')) ?>
                            </span>
                        </span>
                         <span class="admin__page-nav-item-message-loader">
@@ -55,7 +55,7 @@
                        </span>
                    </span>
                 </a>
-                <div id="<?=  $block->escapeHtmlAttr($block->getTabId($_tab)) ?>_content" style="display:none;"<?= /* @noEscape */ $block->getUiId('tab', 'content', $_tab->getId()) ?>><?= /* @noEscape */ $block->getTabContent($_tab) ?></div>
+                <div id="<?=  $escaper->escapeHtmlAttr($block->getTabId($_tab)) ?>_content" style="display:none;"<?= /* @noEscape */ $block->getUiId('tab', 'content', $_tab->getId()) ?>><?= /* @noEscape */ $block->getTabContent($_tab) ?></div>
             </li>
         <?php endforeach; ?>
     </ul>

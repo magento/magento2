@@ -4,18 +4,18 @@
  * See COPYING.txt for license details.
  */
 
-$attributes = $block->getCssClass() ? ' class="' . $block->escapeHtmlAttr($block->getCssClass()) . '"' : '';
+$attributes = $block->getCssClass() ? ' class="' . $escaper->escapeHtmlAttr($block->getCssClass()) . '"' : '';
 $attr = $block->getAttributes();
 if (!empty($attr)) {
     foreach ($block->getAttributes() as $attribute => $value) {
-        $attributes .= ' ' . $block->escapeHtml($attribute) . '="' . $block->escapeHtmlAttr($value) . '"';
+        $attributes .= ' ' . $escaper->escapeHtml($attribute) . '="' . $escaper->escapeHtmlAttr($value) . '"';
     }
 }
 /* @noEscape */ echo '<'
-    . $block->escapeHtml($block->getTag())
+    . $escaper->escapeHtml($block->getTag())
     . $attributes
     . '>'
-    . $block->escapeHtml($block->getText())
+    . $escaper->escapeHtml($block->getText())
     . '</'
-    . $block->escapeHtml($block->getTag())
+    . $escaper->escapeHtml($block->getTag())
     . '>';

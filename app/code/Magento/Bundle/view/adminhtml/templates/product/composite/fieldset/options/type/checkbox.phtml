@@ -12,7 +12,7 @@
 
 <div class="field admin__field options<?php if ($_option->getRequired()) { echo ' _required'; } ?>">
     <label class="label admin__field-label">
-        <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
+        <span><?= $escaper->escapeHtml($_option->getTitle()) ?></span>
     </label>
 
     <div class="control admin__field-control">
@@ -21,30 +21,30 @@
             <?php if (count($_selections) == 1 && $_option->getRequired()) : ?>
                 <?= /* @noEscape */ $block->getSelectionQtyTitlePrice($_selections[0]) ?>
                 <input type="hidden"
-                       name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
-                       value="<?= $block->escapeHtmlAttr($_selections[0]->getSelectionId()) ?>"
-                       price="<?= $block->escapeHtmlAttr($block->getSelectionPrice($_selections[0])) ?>" />
+                       name="bundle_option[<?= $escaper->escapeHtmlAttr($_option->getId()) ?>]"
+                       value="<?= $escaper->escapeHtmlAttr($_selections[0]->getSelectionId()) ?>"
+                       price="<?= $escaper->escapeHtmlAttr($block->getSelectionPrice($_selections[0])) ?>" />
             <?php else :?>
 
                 <?php foreach ($_selections as $_selection) : ?>
                     <div class="field choice admin__field admin__field-option">
                         <input
-                            class="change-container-classname admin__control-checkbox checkbox bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?> <?php if ($_option->getRequired()) { echo 'validate-one-required-by-name'; } ?>"
-                            id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
+                            class="change-container-classname admin__control-checkbox checkbox bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?> <?php if ($_option->getRequired()) { echo 'validate-one-required-by-name'; } ?>"
+                            id="bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>-<?= $escaper->escapeHtmlAttr($_selection->getSelectionId()) ?>"
                             type="checkbox"
-                            name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>][<?= $block->escapeHtmlAttr($_selection->getId()) ?>]"
+                            name="bundle_option[<?= $escaper->escapeHtmlAttr($_option->getId()) ?>][<?= $escaper->escapeHtmlAttr($_selection->getId()) ?>]"
                             <?php if ($block->isSelected($_selection)) :?>
                                 <?= ' checked="checked"' ?>
                             <?php endif;?>
                             <?php if (!$_selection->isSaleable() && !$_skipSaleableCheck) :?>
                                 <?= ' disabled="disabled"' ?>
                             <?php endif;?>
-                            value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
+                            value="<?= $escaper->escapeHtmlAttr($_selection->getSelectionId()) ?>"
                             onclick="ProductConfigure.bundleControl.changeSelection(this)"
-                            price="<?= $block->escapeHtmlAttr($block->getSelectionPrice($_selection)) ?>" />
+                            price="<?= $escaper->escapeHtmlAttr($block->getSelectionPrice($_selection)) ?>" />
 
                         <label class="admin__field-label"
-                               for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>">
+                               for="bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>-<?= $escaper->escapeHtmlAttr($_selection->getSelectionId()) ?>">
                             <span><?= /* @noEscape */ $block->getSelectionQtyTitlePrice($_selection) ?></span>
                         </label>
 
@@ -54,7 +54,7 @@
                     </div>
                 <?php endforeach; ?>
 
-                <div id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-container"></div>
+                <div id="bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>-container"></div>
             <?php endif; ?>
         </div>
     </div>

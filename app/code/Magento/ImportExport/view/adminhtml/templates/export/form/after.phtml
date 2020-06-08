@@ -6,15 +6,15 @@
 ?>
 <fieldset class="admin__fieldset" id="export_filter_container" style="display:none;">
     <legend class="admin__legend">
-        <span><?= $block->escapeHtml(__('Entity Attributes')) ?></span>
+        <span><?= $escaper->escapeHtml(__('Entity Attributes')) ?></span>
     </legend>
     <br />
-    <form id="export_filter_form" action="<?= $block->escapeUrl($block->getUrl('*/*/export')) ?>" method="post">
+    <form id="export_filter_form" action="<?= $escaper->escapeUrl($block->getUrl('*/*/export')) ?>" method="post">
         <input name="form_key" type="hidden" value="<?= /* @noEscape */ $block->getFormKey() ?>" />
         <div id="export_filter_grid_container"><!-- --></div>
     </form>
     <button class="action- scalable" type="button" onclick="getFile();"><span><?=
-        $block->escapeHtml(__('Continue'))
+        $escaper->escapeHtml(__('Continue'))
     ?></span></button>
 </fieldset>
 <script>

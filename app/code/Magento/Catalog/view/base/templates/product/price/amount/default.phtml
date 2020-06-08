@@ -7,22 +7,22 @@
 
 <?php /** @var $block \Magento\Framework\Pricing\Render\Amount */ ?>
 
-<span class="price-container <?= $block->escapeHtmlAttr($block->getAdjustmentCssClasses()) ?>"
+<span class="price-container <?= $escaper->escapeHtmlAttr($block->getAdjustmentCssClasses()) ?>"
         <?= $block->getSchema() ? ' itemprop="offers" itemscope itemtype="http://schema.org/Offer"' : '' ?>>
     <?php if ($block->getDisplayLabel()) :?>
-        <span class="price-label"><?= $block->escapeHtml($block->getDisplayLabel()) ?></span>
+        <span class="price-label"><?= $escaper->escapeHtml($block->getDisplayLabel()) ?></span>
     <?php endif; ?>
-    <span <?php if ($block->getPriceId()) :?> id="<?= $block->escapeHtmlAttr($block->getPriceId()) ?>"<?php endif;?>
-        <?= ($block->getPriceDisplayLabel()) ? 'data-label="' . $block->escapeHtmlAttr($block->getPriceDisplayLabel() . $block->getPriceDisplayInclExclTaxes()) . '"' : '' ?>
-        data-price-amount="<?= $block->escapeHtmlAttr($block->getDisplayValue()) ?>"
-        data-price-type="<?= $block->escapeHtmlAttr($block->getPriceType()) ?>"
-        class="price-wrapper <?= $block->escapeHtmlAttr($block->getPriceWrapperCss()) ?>"
-    ><?= $block->escapeHtml($block->formatCurrency($block->getDisplayValue(), (bool)$block->getIncludeContainer()), ['span']) ?></span>
+    <span <?php if ($block->getPriceId()) :?> id="<?= $escaper->escapeHtmlAttr($block->getPriceId()) ?>"<?php endif;?>
+        <?= ($block->getPriceDisplayLabel()) ? 'data-label="' . $escaper->escapeHtmlAttr($block->getPriceDisplayLabel() . $block->getPriceDisplayInclExclTaxes()) . '"' : '' ?>
+        data-price-amount="<?= $escaper->escapeHtmlAttr($block->getDisplayValue()) ?>"
+        data-price-type="<?= $escaper->escapeHtmlAttr($block->getPriceType()) ?>"
+        class="price-wrapper <?= $escaper->escapeHtmlAttr($block->getPriceWrapperCss()) ?>"
+    ><?= $escaper->escapeHtml($block->formatCurrency($block->getDisplayValue(), (bool)$block->getIncludeContainer()), ['span']) ?></span>
     <?php if ($block->hasAdjustmentsHtml()) :?>
         <?= $block->getAdjustmentsHtml() ?>
     <?php endif; ?>
     <?php if ($block->getSchema()) :?>
-        <meta itemprop="price" content="<?= $block->escapeHtmlAttr($block->getDisplayValue()) ?>" />
-        <meta itemprop="priceCurrency" content="<?= $block->escapeHtmlAttr($block->getDisplayCurrencyCode()) ?>" />
+        <meta itemprop="price" content="<?= $escaper->escapeHtmlAttr($block->getDisplayValue()) ?>" />
+        <meta itemprop="priceCurrency" content="<?= $escaper->escapeHtmlAttr($block->getDisplayCurrencyCode()) ?>" />
     <?php endif; ?>
 </span>

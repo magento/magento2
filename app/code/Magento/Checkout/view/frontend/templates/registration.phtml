@@ -18,8 +18,8 @@
                             "component": "Magento_Checkout/js/view/registration",
                             "config": {
                                 "registrationUrl":
-                                    "<?= $block->escapeJs($block->escapeUrl($block->getCreateAccountUrl())) ?>",
-                                "email": "<?= $block->escapeJs($block->getEmailAddress()) ?>"
+                                    "<?= $escaper->escapeJs($escaper->escapeUrl($block->getCreateAccountUrl())) ?>",
+                                "email": "<?= $escaper->escapeJs($block->getEmailAddress()) ?>"
                             },
                             "children": {
                                 "errors": {

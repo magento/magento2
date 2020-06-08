@@ -20,17 +20,17 @@
                                    id="select-items-<?= /* @noEscape */ $randomId ?>"
                                    onchange="packaging.checkAllItems(this);"
                                    class="checkbox admin__control-checkbox"
-                                   title="<?= $block->escapeHtmlAttr(__('Select All')) ?>">
+                                   title="<?= $escaper->escapeHtmlAttr(__('Select All')) ?>">
                             <label for="select-items-<?= /* @noEscape */ $randomId ?>"></label>
                         </label>
                     </th>
-                    <th class="data-grid-th"><?= $block->escapeHtml(__('Product Name')) ?></th>
-                    <th class="data-grid-th"><?= $block->escapeHtml(__('Weight')) ?></th>
+                    <th class="data-grid-th"><?= $escaper->escapeHtml(__('Product Name')) ?></th>
+                    <th class="data-grid-th"><?= $escaper->escapeHtml(__('Weight')) ?></th>
                     <th class="data-grid-th" <?= $block->displayCustomsValue() ? '' : 'style="display: none;"' ?>>
-                        <?= $block->escapeHtml(__('Customs Value')) ?>
+                        <?= $escaper->escapeHtml(__('Customs Value')) ?>
                     </th>
-                    <th class="data-grid-th"><?= $block->escapeHtml(__('Qty Ordered')) ?></th>
-                    <th class="data-grid-th"><?= $block->escapeHtml(__('Qty')) ?></th>
+                    <th class="data-grid-th"><?= $escaper->escapeHtml(__('Qty Ordered')) ?></th>
+                    <th class="data-grid-th"><?= $escaper->escapeHtml(__('Qty')) ?></th>
                 </tr>
             </thead>
             <tbody>
@@ -60,10 +60,10 @@
                         </label>
                     </td>
                     <td>
-                        <?= $block->escapeHtml($item->getName()) ?>
+                        <?= $escaper->escapeHtml($item->getName()) ?>
                     </td>
                     <td data-role="item-weight">
-                        <?= $block->escapeHtml($item->getWeight()) ?>
+                        <?= $escaper->escapeHtml($item->getWeight()) ?>
                     </td>
                     <?php
                     if ($block->displayCustomsValue()) {
@@ -79,7 +79,7 @@
                         <input type="text"
                                name="customs_value"
                                class="input-text admin__control-text <?= /* @noEscape */ $customsValueValidation ?>"
-                               value="<?= $block->escapeHtmlAttr($block->formatPrice($item->getPrice())) ?>"
+                               value="<?= $escaper->escapeHtmlAttr($block->formatPrice($item->getPrice())) ?>"
                                size="10"
                                onblur="packaging.recalcContainerWeightAndCustomsValue(this);">
                     </td>
@@ -87,7 +87,7 @@
                         <?= /* @noEscape */ $item->getOrderItem()->getQtyOrdered()*1 ?>
                     </td>
                     <td>
-                        <input type="hidden" name="price" value="<?= $block->escapeHtml($item->getPrice()) ?>">
+                        <input type="hidden" name="price" value="<?= $escaper->escapeHtml($item->getPrice()) ?>">
                         <input type="text"
                                name="qty"
                                value="<?= /* @noEscape */ $item->getQty()*1 ?>"
@@ -100,7 +100,7 @@
                                 data-action="package-delete-item"
                                 onclick="packaging.deleteItem(this);"
                                 style="display:none;">
-                            <span><?= $block->escapeHtml(__('Delete')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Delete')) ?></span>
                         </button>
                     </td>
                 </tr>

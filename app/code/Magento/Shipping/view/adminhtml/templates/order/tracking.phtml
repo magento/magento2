@@ -66,7 +66,7 @@ require(['prototype'], function(){
                     class="select admin__control-select carrier"
                     disabled="disabled">
                 <?php foreach ($block->getCarriers() as $_code => $_name) : ?>
-                    <option value="<?= $block->escapeHtmlAttr($_code) ?>"><?= $block->escapeHtml($_name) ?></option>
+                    <option value="<?= $escaper->escapeHtmlAttr($_code) ?>"><?= $escaper->escapeHtml($_name) ?></option>
                 <?php endforeach; ?>
             </select>
         </td>
@@ -91,7 +91,7 @@ require(['prototype'], function(){
                 type="button"
                 class="action-default action-delete"
                 onclick="trackingControl.deleteRow(event);return false">
-                <span><?= $block->escapeHtml(__('Delete')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Delete')) ?></span>
             </button>
         </td>
     </tr>
@@ -101,10 +101,10 @@ require(['prototype'], function(){
     <table class="data-table admin__control-table" id="tracking_numbers_table">
         <thead>
         <tr class="headings">
-            <th class="col-carrier"><?= $block->escapeHtml(__('Carrier')) ?></th>
-            <th class="col-title"><?= $block->escapeHtml(__('Title')) ?></th>
-            <th class="col-number"><?= $block->escapeHtml(__('Number')) ?></th>
-            <th class="col-delete"><?= $block->escapeHtml(__('Action')) ?></th>
+            <th class="col-carrier"><?= $escaper->escapeHtml(__('Carrier')) ?></th>
+            <th class="col-title"><?= $escaper->escapeHtml(__('Title')) ?></th>
+            <th class="col-number"><?= $escaper->escapeHtml(__('Number')) ?></th>
+            <th class="col-delete"><?= $escaper->escapeHtml(__('Action')) ?></th>
         </tr>
         </thead>
         <tfoot>

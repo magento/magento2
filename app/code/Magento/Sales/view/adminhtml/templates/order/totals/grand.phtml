@@ -11,9 +11,9 @@
     <td class="label">
         <strong style="font-size: larger">
         <?php if ($block->getGrandTotalTitle()) : ?>
-            <?= $block->escapeHtml($block->getGrandTotalTitle()) ?>
+            <?= $escaper->escapeHtml($block->getGrandTotalTitle()) ?>
         <?php else : ?>
-            <?= $block->escapeHtml(__('Grand Total')) ?>
+            <?= $escaper->escapeHtml(__('Grand Total')) ?>
         <?php endif; ?>
         </strong>
     </td>

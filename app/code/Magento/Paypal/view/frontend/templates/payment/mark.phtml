@@ -9,11 +9,11 @@
  * @var \Magento\Paypal\Block\Express\Form $block
  * @see \Magento\Paypal\Block\Express\Form
  */
-$url = $block->escapeUrl($block->getPaymentAcceptanceMarkHref());
+$url = $escaper->escapeUrl($block->getPaymentAcceptanceMarkHref());
 ?>
 <!-- PayPal Logo -->
-<img src="<?= $block->escapeUrl($block->getPaymentAcceptanceMarkSrc()) ?>"
-     alt="<?= $block->escapeHtml(__('Acceptance Mark')) ?>" class="paypal icon"/>
+<img src="<?= $escaper->escapeUrl($block->getPaymentAcceptanceMarkSrc()) ?>"
+     alt="<?= $escaper->escapeHtml(__('Acceptance Mark')) ?>" class="paypal icon"/>
 <a href="<?= /* @noEscape */ $url ?>"
    onclick="javascript:window.open(
            '<?= /* @noEscape */ $url ?>',
@@ -23,9 +23,9 @@ $url = $block->escapeUrl($block->getPaymentAcceptanceMarkHref());
        ); return false;"
    class="action paypal about">
     <?php if ($block->getPaymentWhatIs()) {
-        echo $block->escapeHtml(__($block->getPaymentWhatIs()));
+        echo $escaper->escapeHtml(__($block->getPaymentWhatIs()));
 } else {
-        echo $block->escapeHtml(__('What is PayPal?'));
+        echo $escaper->escapeHtml(__('What is PayPal?'));
 } ?>
 </a>
 <!-- PayPal Logo -->

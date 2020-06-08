@@ -12,7 +12,7 @@
 
 <div class="field option <?= ($_option->getRequired()) ? ' required': '' ?>">
     <label class="label">
-        <span><?= $block->escapeHtml($_option->getTitle()) ?></span>
+        <span><?= $escaper->escapeHtml($_option->getTitle()) ?></span>
     </label>
     <div class="control">
         <div class="nested options-list">
@@ -31,13 +31,13 @@
                     <div class="field choice">
                         <input type="radio"
                                class="radio product bundle option"
-                               id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>"
-                               name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
-                               data-selector="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                               id="bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>"
+                               name="bundle_option[<?= $escaper->escapeHtmlAttr($_option->getId()) ?>]"
+                               data-selector="bundle_option[<?= $escaper->escapeHtmlAttr($_option->getId()) ?>]"
                                <?= ($_default && $_default->isSalable())?'':' checked="checked" ' ?>
                                value=""/>
-                        <label class="label" for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>">
-                            <span><?= $block->escapeHtml(__('None')) ?></span>
+                        <label class="label" for="bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>">
+                            <span><?= $escaper->escapeHtml(__('None')) ?></span>
                         </label>
                     </div>
                 <?php endif; ?>
@@ -45,35 +45,35 @@
                     <div class="field choice">
                         <input type="radio"
                                class="radio product bundle option change-container-classname"
-                               id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"
+                               id="bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>-<?= $escaper->escapeHtmlAttr($_selection->getSelectionId()) ?>"
                                <?php if ($_option->getRequired()) { echo 'data-validate="{\'validate-one-required-by-name\':true}"'; }?>
-                               name="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
-                               data-selector="bundle_option[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
+                               name="bundle_option[<?= $escaper->escapeHtmlAttr($_option->getId()) ?>]"
+                               data-selector="bundle_option[<?= $escaper->escapeHtmlAttr($_option->getId()) ?>]"
                                <?php if ($block->isSelected($_selection)) { echo ' checked="checked"'; } ?>
                                <?php if (!$_selection->isSaleable()) { echo ' disabled="disabled"'; } ?>
-                               value="<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>"/>
+                               value="<?= $escaper->escapeHtmlAttr($_selection->getSelectionId()) ?>"/>
                         <label class="label"
-                               for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-<?= $block->escapeHtmlAttr($_selection->getSelectionId()) ?>">
+                               for="bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>-<?= $escaper->escapeHtmlAttr($_selection->getSelectionId()) ?>">
                             <span><?= /* @noEscape */ $block->getSelectionTitlePrice($_selection) ?></span>
                             <br/>
                             <?= /* @noEscape */ $block->getTierPriceRenderer()->renderTierPrice($_selection) ?>
                         </label>
                     </div>
                 <?php endforeach; ?>
-                <div id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-container"></div>
+                <div id="bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>-container"></div>
             <?php endif; ?>
             <div class="field qty qty-holder">
-                <label class="label" for="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-qty-input">
-                    <span><?= $block->escapeHtml(__('Quantity')) ?></span>
+                <label class="label" for="bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>-qty-input">
+                    <span><?= $escaper->escapeHtml(__('Quantity')) ?></span>
                 </label>
                 <div class="control">
                     <input <?php if (!$_canChangeQty) { echo ' disabled="disabled"'; } ?>
-                           id="bundle-option-<?= $block->escapeHtmlAttr($_option->getId()) ?>-qty-input"
+                           id="bundle-option-<?= $escaper->escapeHtmlAttr($_option->getId()) ?>-qty-input"
                            class="input-text qty<?php if (!$_canChangeQty) { echo ' qty-disabled'; } ?>"
                            type="number"
-                           name="bundle_option_qty[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
-                           data-selector="bundle_option_qty[<?= $block->escapeHtmlAttr($_option->getId()) ?>]"
-                           value="<?= $block->escapeHtmlAttr($_defaultQty) ?>"/>
+                           name="bundle_option_qty[<?= $escaper->escapeHtmlAttr($_option->getId()) ?>]"
+                           data-selector="bundle_option_qty[<?= $escaper->escapeHtmlAttr($_option->getId()) ?>]"
+                           value="<?= $escaper->escapeHtmlAttr($_defaultQty) ?>"/>
                 </div>
             </div>
         </div>

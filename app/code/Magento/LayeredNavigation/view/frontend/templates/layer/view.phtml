@@ -15,7 +15,7 @@
 <?php if ($block->canShowBlock()) : ?>
     <div class="block filter">
         <div class="block-title filter-title">
-            <strong><?= $block->escapeHtml(__('Shop By')) ?></strong>
+            <strong><?= $escaper->escapeHtml(__('Shop By')) ?></strong>
         </div>
 
         <div class="block-content filter-content">
@@ -23,18 +23,18 @@
 
             <?php if ($block->getLayer()->getState()->getFilters()) : ?>
                 <div class="block-actions filter-actions">
-                    <a href="<?= $block->escapeUrl($block->getClearUrl()) ?>" class="action clear filter-clear"><span><?= $block->escapeHtml(__('Clear All')) ?></span></a>
+                    <a href="<?= $escaper->escapeUrl($block->getClearUrl()) ?>" class="action clear filter-clear"><span><?= $escaper->escapeHtml(__('Clear All')) ?></span></a>
                 </div>
             <?php endif; ?>
             <?php $wrapOptions = false; ?>
             <?php foreach ($block->getFilters() as $filter) : ?>
                 <?php if (!$wrapOptions) : ?>
-                    <strong role="heading" aria-level="2" class="block-subtitle filter-subtitle"><?= $block->escapeHtml(__('Shopping Options')) ?></strong>
+                    <strong role="heading" aria-level="2" class="block-subtitle filter-subtitle"><?= $escaper->escapeHtml(__('Shopping Options')) ?></strong>
                     <dl class="filter-options" id="narrow-by-list">
                     <?php $wrapOptions = true;
                 endif; ?>
                     <?php if ($filter->getItemsCount()) : ?>
-                        <dt role="heading" aria-level="3" class="filter-options-title"><?= $block->escapeHtml(__($filter->getName())) ?></dt>
+                        <dt role="heading" aria-level="3" class="filter-options-title"><?= $escaper->escapeHtml(__($filter->getName())) ?></dt>
                         <dd class="filter-options-content"><?= /* @noEscape */ $block->getChildBlock('renderer')->render($filter) ?></dd>
                     <?php endif; ?>
             <?php endforeach; ?>

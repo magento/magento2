@@ -7,10 +7,10 @@
 /** @var $block \Magento\Checkout\Block\Cart\Item\Renderer\Actions\Remove */
 ?>
 <a href="#"
-   title="<?= $block->escapeHtml(__('Remove item')) ?>"
+   title="<?= $escaper->escapeHtml(__('Remove item')) ?>"
    class="action action-delete"
    data-post='<?= /* @noEscape */ $block->getDeletePostJson() ?>'>
     <span>
-        <?= $block->escapeHtml(__('Remove item')) ?>
+        <?= $escaper->escapeHtml(__('Remove item')) ?>
     </span>
 </a>

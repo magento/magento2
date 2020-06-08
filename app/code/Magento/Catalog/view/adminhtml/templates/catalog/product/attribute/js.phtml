@@ -210,7 +210,7 @@ function switchDefaultValueField()
 
         <?php // phpcs:ignore Magento2.Templates.ThisInTemplate ?>
         <?php foreach ($this->helper(Data::class)->getAttributeHiddenFields() as $type => $fields): ?>
-            case '<?= $block->escapeJs($type) ?>':
+            case '<?= $escaper->escapeJs($type) ?>':
                 var isFrontTabHidden = false;
                 <?php foreach ($fields as $one): ?>
                     <?php if ($one == '_front_fieldset'): ?>
@@ -224,7 +224,7 @@ function switchDefaultValueField()
                     <?php elseif ($one == '_scope'): ?>
                         scopeVisibility = false;
                     <?php else: ?>
-                        setRowVisibility('<?= $block->escapeJs($one) ?>', false);
+                        setRowVisibility('<?= $escaper->escapeJs($one) ?>', false);
                     <?php endif; ?>
                 <?php endforeach; ?>
 

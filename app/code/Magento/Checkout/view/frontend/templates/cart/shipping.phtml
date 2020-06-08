@@ -14,8 +14,8 @@
     <div class="title" data-role="title">
         <strong id="block-shipping-heading" role="heading" aria-level="2">
             <?= $block->getQuote()->isVirtual()
-                ? $block->escapeHtml(__('Estimate Tax'))
-                : $block->escapeHtml(__('Estimate Shipping and Tax'))
+                ? $escaper->escapeHtml(__('Estimate Tax'))
+                : $escaper->escapeHtml(__('Estimate Shipping and Tax'))
             ?>
         </strong>
     </div>
@@ -42,9 +42,9 @@
                 'Magento_Ui/js/block-loader'
             ], function(url, blockLoader) {
                 blockLoader(
-                    "<?= $block->escapeJs($block->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))) ?>"
+                    "<?= $escaper->escapeJs($escaper->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))) ?>"
                 );
-                return url.setBaseUrl('<?= $block->escapeJs($block->escapeUrl($block->getBaseUrl())) ?>');
+                return url.setBaseUrl('<?= $escaper->escapeJs($escaper->escapeUrl($block->getBaseUrl())) ?>');
             })
         </script>
     </div>

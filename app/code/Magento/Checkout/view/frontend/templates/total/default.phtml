@@ -10,28 +10,28 @@
 ?>
 <tr class="totals">
     <th
-            colspan="<?= $block->escapeHtmlAttr($block->getColspan()) ?>"
-            style="<?= $block->escapeHtmlAttr($block->getTotal()->getStyle()) ?>"
+            colspan="<?= $escaper->escapeHtmlAttr($block->getColspan()) ?>"
+            style="<?= $escaper->escapeHtmlAttr($block->getTotal()->getStyle()) ?>"
             class="mark" scope="row"
     >
         <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()) :?>
             <strong>
         <?php endif; ?>
-        <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
+        <?= $escaper->escapeHtml($block->getTotal()->getTitle()) ?>
         <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()) :?>
             </strong>
         <?php endif; ?>
     </th>
     <td
-            style="<?= $block->escapeHtmlAttr($block->getTotal()->getStyle()) ?>"
+            style="<?= $escaper->escapeHtmlAttr($block->getTotal()->getStyle()) ?>"
             class="amount"
-            data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>"
+            data-th="<?= $escaper->escapeHtmlAttr($block->getTotal()->getTitle()) ?>"
     >
         <?php if ($block->getRenderingArea() == $block->getTotal()->getArea()) :?>
             <strong>
         <?php endif; ?>
             <span>
-                <?= $block->escapeHtml(
+                <?= $escaper->escapeHtml(
                     $this->helper(Magento\Checkout\Helper\Data::class)->formatPrice($block->getTotal()->getValue()),
                     ['span']
                 ) ?>

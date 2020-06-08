@@ -8,30 +8,30 @@
     <div class="add-video-button-container">
         <button
             id="add_video_button"
-            title="<?= $block->escapeHtmlAttr($addVideoTitle) ?>"
+            title="<?= $escaper->escapeHtmlAttr($addVideoTitle) ?>"
             type="button"
             class="action-secondary"
             onclick="jQuery('#new-video').modal('openModal'); jQuery('#new_video_form')[0].reset();"
             data-ui-id="widget-button-1">
-            <span><?= $block->escapeHtml(__('Add Video')) ?></span>
+            <span><?= $escaper->escapeHtml(__('Add Video')) ?></span>
         </button>
     </div>
 </div>
-<div id="<?= $block->escapeHtmlAttr($htmlId) ?>-container"
+<div id="<?= $escaper->escapeHtmlAttr($htmlId) ?>-container"
      class="images"
      data-mage-init='{"baseImage":{}}'
-     data-max-file-size="<?= $block->escapeHtmlAttr($fileMaxSize) ?>"
+     data-max-file-size="<?= $escaper->escapeHtmlAttr($fileMaxSize) ?>"
     >
     <div class="image image-placeholder">
-        <input type="file" name="image" data-url="<?= $block->escapeUrl($uploadUrl) ?>" multiple="multiple" />
-        <img class="spacer" src="<?= $block->escapeUrl($spacerImage) ?>"/>
-        <p class="image-placeholder-text"><?= $block->escapeHtml($imagePlaceholderText) ?></p>
+        <input type="file" name="image" data-url="<?= $escaper->escapeUrl($uploadUrl) ?>" multiple="multiple" />
+        <img class="spacer" src="<?= $escaper->escapeUrl($spacerImage) ?>"/>
+        <p class="image-placeholder-text"><?= $escaper->escapeHtml($imagePlaceholderText) ?></p>
     </div>
-    <script id="<?= $block->escapeHtmlAttr($htmlId) ?>-template"
+    <script id="<?= $escaper->escapeHtmlAttr($htmlId) ?>-template"
             data-template="image"
             type="text/x-magento-template">
         <div class="image">
-            <img class="spacer" src="<?= $block->escapeUrl($spacerImage) ?>"/>
+            <img class="spacer" src="<?= $escaper->escapeUrl($spacerImage) ?>"/>
             <img
                 class="product-image"
                 src="<%- data.url %>"
@@ -42,25 +42,25 @@
                     type="button"
                     class="action-delete"
                     data-role="delete-button"
-                    title="<?= $block->escapeHtmlAttr($deleteImageText) ?>">
-                    <span><?= $block->escapeHtml($deleteImageText) ?></span>
+                    title="<?= $escaper->escapeHtmlAttr($deleteImageText) ?>">
+                    <span><?= $escaper->escapeHtml($deleteImageText) ?></span>
                 </button>
                 <button
                     type="button"
                     class="action-make-base"
                     data-role="make-base-button"
-                    title="<?= $block->escapeHtmlAttr($makeBaseText) ?>">
-                    <span><?= $block->escapeHtml($makeBaseText) ?></span>
+                    title="<?= $escaper->escapeHtmlAttr($makeBaseText) ?>">
+                    <span><?= $escaper->escapeHtml($makeBaseText) ?></span>
                 </button>
                 <div class="draggable-handle"></div>
             </div>
             <div class="image-label"></div>
-            <div class="image-fade"><span><?= $block->escapeHtml($hiddenText) ?></span></div>
+            <div class="image-fade"><span><?= $escaper->escapeHtml($hiddenText) ?></span></div>
         </div>
     </script>
 </div>
 <span class="action-manage-images" data-activate-tab="image-management">
-    <span><?= $block->escapeHtml($imageManagementText) ?></span>
+    <span><?= $escaper->escapeHtml($imageManagementText) ?></span>
 </span>
 <script>
     require([

@@ -22,9 +22,9 @@ $_fullInfo  = $block->getFullTaxInfo();
     <td class="label">
         <div class="summary-collapse" tabindex="0">
             <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayFullSummary()) : ?>
-                <?= $block->escapeHtml(__('Total Tax')) ?>
+                <?= $escaper->escapeHtml(__('Total Tax')) ?>
             <?php else : ?>
-                <?= $block->escapeHtml(__('Tax')) ?>
+                <?= $escaper->escapeHtml(__('Tax')) ?>
             <?php endif;?>
         </div>
     </td>
@@ -50,9 +50,9 @@ $_fullInfo  = $block->getFullTaxInfo();
             <?php foreach ($rates as $rate) : ?>
                 <tr class="summary-details<?= ($isTop ? ' summary-details-first' : '') ?>" style="display:none;">
                     <?php if ($rate['percent'] !== null) : ?>
-                        <td class="admin__total-mark"><?= $block->escapeHtml($rate['title']) ?> (<?= (float)$rate['percent'] ?>%)<br /></td>
+                        <td class="admin__total-mark"><?= $escaper->escapeHtml($rate['title']) ?> (<?= (float)$rate['percent'] ?>%)<br /></td>
                     <?php else : ?>
-                        <td class="admin__total-mark"><?= $block->escapeHtml($rate['title']) ?><br /></td>
+                        <td class="admin__total-mark"><?= $escaper->escapeHtml($rate['title']) ?><br /></td>
                     <?php endif; ?>
                     <?php if ($isFirst) : ?>
                         <td rowspan="<?= count($rates) ?>"><?= /* @noEscape */ $block->displayAmount($amount, $baseAmount) ?></td>
@@ -74,9 +74,9 @@ $_fullInfo  = $block->getFullTaxInfo();
             ?>
             <tr class="summary-details<?= ($isTop ? ' summary-details-first' : '') ?>" style="display:none;">
                 <?php if ($info['percent'] !== null) : ?>
-                    <td class="admin__total-mark"><?= $block->escapeHtml($info['title']) ?> (<?= (float)$info['percent'] ?>%)<br /></td>
+                    <td class="admin__total-mark"><?= $escaper->escapeHtml($info['title']) ?> (<?= (float)$info['percent'] ?>%)<br /></td>
                 <?php else : ?>
-                    <td class="admin__total-mark"><?= $block->escapeHtml($info['title']) ?><br /></td>
+                    <td class="admin__total-mark"><?= $escaper->escapeHtml($info['title']) ?><br /></td>
                 <?php endif; ?>
                     <td><?= /* @noEscape */ $block->displayAmount($amount, $baseAmount) ?></td>
             </tr>

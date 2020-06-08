@@ -12,16 +12,16 @@
 <?php if ($_item = $block->getItem()) : ?>
     <div id="order_item_<?= (int) $_item->getId() ?>_title"
          class="product-title">
-        <?= $block->escapeHtml($_item->getName()) ?>
+        <?= $escaper->escapeHtml($_item->getName()) ?>
     </div>
     <div class="product-sku-block">
-        <span><?= $block->escapeHtml(__('SKU'))?>:</span> <?= /* @noEscape */ implode('<br />', $this->helper(\Magento\Catalog\Helper\Data::class)->splitSku($block->escapeHtml($block->getSku()))) ?>
+        <span><?= $escaper->escapeHtml(__('SKU'))?>:</span> <?= /* @noEscape */ implode('<br />', $this->helper(\Magento\Catalog\Helper\Data::class)->splitSku($escaper->escapeHtml($block->getSku()))) ?>
     </div>
 
     <?php if ($block->getOrderOptions()) : ?>
         <dl class="item-options">
             <?php foreach ($block->getOrderOptions() as $_option) : ?>
-                <dt><?= $block->escapeHtml($_option['label']) ?>:</dt>
+                <dt><?= $escaper->escapeHtml($_option['label']) ?>:</dt>
                 <dd>
                     <?php if (isset($_option['custom_view']) && $_option['custom_view']) : ?>
                         <?= /* @noEscape */ $block->getCustomizedOptionValue($_option) ?>
@@ -29,7 +29,7 @@
                         <?php $_option = $block->getFormattedOption($_option['value']); ?>
                         <?php $dots = 'dots' . uniqid(); ?>
                         <?php $id = 'id' . uniqid(); ?>
-                        <?= $block->escapeHtml($_option['value'], ['a', 'br']) ?><?php if (isset($_option['remainder']) && $_option['remainder']) : ?><span id="<?= /* @noEscape */ $dots; ?>"> ...</span><span id="<?= /* @noEscape */ $id; ?>"><?= $block->escapeHtml($_option['remainder'], ['a']) ?></span>
+                        <?= $escaper->escapeHtml($_option['value'], ['a', 'br']) ?><?php if (isset($_option['remainder']) && $_option['remainder']) : ?><span id="<?= /* @noEscape */ $dots; ?>"> ...</span><span id="<?= /* @noEscape */ $id; ?>"><?= $escaper->escapeHtml($_option['remainder'], ['a']) ?></span>
                             <script>
                                 require(['prototype'], function() {
                                     $('<?= /* @noEscape */ $id; ?>').hide();
@@ -45,5 +45,5 @@
             <?php endforeach; ?>
         </dl>
     <?php endif; ?>
-    <?= $block->escapeHtml($_item->getDescription()) ?>
+    <?= $escaper->escapeHtml($_item->getDescription()) ?>
 <?php endif; ?>

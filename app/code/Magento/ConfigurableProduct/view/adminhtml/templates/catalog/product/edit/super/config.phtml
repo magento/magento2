@@ -6,11 +6,11 @@
 
 /** @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Edit\Tab\Variations\Config */
 ?>
-<div class="entry-edit form-inline" id="<?= $block->escapeHtmlAttr($block->getId()) ?>" data-panel="product-variations">
+<div class="entry-edit form-inline" id="<?= $escaper->escapeHtmlAttr($block->getId()) ?>" data-panel="product-variations">
     <div data-bind="scope: 'variation-steps-wizard'" class="product-create-configuration">
         <div class="product-create-configuration-info">
             <div class="note" data-role="product-create-configuration-info">
-                <?= $block->escapeHtml(__('Configurable products allow customers to choose options (Ex: shirt color).
+                <?= $escaper->escapeHtml(__('Configurable products allow customers to choose options (Ex: shirt color).
             You need to create a simple product for each configuration (Ex: a product for each color).'));?>
             </div>
         </div>
@@ -18,8 +18,8 @@
             <div class="product-create-configuration-action">
                 <button type="button" data-action="open-steps-wizard" title="Create Product Configurations"
                         class="action-secondary" data-bind="click: open">
-                <span data-role="button-label" data-edit-label="<?= $block->escapeHtmlAttr(__('Edit Configurations')) ?>">
-                    <?= $block->escapeHtml($block->isHasVariations()
+                <span data-role="button-label" data-edit-label="<?= $escaper->escapeHtmlAttr(__('Edit Configurations')) ?>">
+                    <?= $escaper->escapeHtml($block->isHasVariations()
                         ? __('Edit Configurations')
                         : __('Create Configurations'))
 ?>
@@ -29,7 +29,7 @@
             <div class="product-create-configuration-action" data-bind="scope: 'configurableProductGrid'">
                 <button class="action-tertiary action-menu-item" type="button" data-action="choose"
                         data-bind="click: showManuallyGrid, visible: button">
-                    <?= $block->escapeHtml(__('Add Products Manually')) ?>
+                    <?= $escaper->escapeHtml(__('Add Products Manually')) ?>
                 </button>
             </div>
         </div>

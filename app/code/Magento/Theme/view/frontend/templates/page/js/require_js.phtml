@@ -5,8 +5,8 @@
  */
 ?>
 <script>
-    var BASE_URL = '<?= $block->escapeUrl($block->getBaseUrl()) ?>';
+    var BASE_URL = '<?= $escaper->escapeUrl($block->getBaseUrl()) ?>';
     var require = {
-        "baseUrl": "<?= $block->escapeUrl($block->getViewFileUrl('/')) ?>"
+        "baseUrl": "<?= $escaper->escapeUrl($block->getViewFileUrl('/')) ?>"
     };
 </script>

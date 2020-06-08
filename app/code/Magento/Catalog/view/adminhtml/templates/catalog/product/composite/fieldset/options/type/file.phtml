@@ -61,40 +61,40 @@ require(['prototype'], function(){
 
 <div class="admin__field <?= $_option->getIsRequire() ? ' required _required' : '' ?>">
     <label class="admin__field-label label">
-        <?= $block->escapeHtml($_option->getTitle()) ?>
+        <?= $escaper->escapeHtml($_option->getTitle()) ?>
         <?= /* @noEscape */ $block->getFormattedPrice() ?>
     </label>
     <div class="admin__field-control control">
         <?php if ($_fileExists) :?>
-            <span class="<?= /* @noEscape */ $_fileNamed ?>"><?= $block->escapeHtml($_fileInfo->getTitle()) ?></span>
+            <span class="<?= /* @noEscape */ $_fileNamed ?>"><?= $escaper->escapeHtml($_fileInfo->getTitle()) ?></span>
             <a href="javascript:void(0)" class="label" onclick="opFile<?= /* @noEscape */ $_rand ?>.toggleFileChange($(this).next('.input-box'))">
-                <?= $block->escapeHtml(__('Change')) ?>
+                <?= $escaper->escapeHtml(__('Change')) ?>
             </a>&nbsp;
             <?php if (!$_option->getIsRequire()) :?>
-                <input type="checkbox" onclick="opFile<?= /* @noEscape */ $_rand ?>.toggleFileDelete($(this), $(this).next('.input-box'))" price="<?= $block->escapeHtmlAttr($block->getCurrencyPrice($_option->getPrice(true))) ?>"/>
-                <span class="label"><?= $block->escapeHtml(__('Delete')) ?></span>
+                <input type="checkbox" onclick="opFile<?= /* @noEscape */ $_rand ?>.toggleFileDelete($(this), $(this).next('.input-box'))" price="<?= $escaper->escapeHtmlAttr($block->getCurrencyPrice($_option->getPrice(true))) ?>"/>
+                <span class="label"><?= $escaper->escapeHtml(__('Delete')) ?></span>
             <?php endif; ?>
         <?php endif; ?>
         <div class="input-box" <?= $_fileExists ? 'style="display:none"' : '' ?>>
             <!-- ToDo UI: add appropriate file class when z-index issue in ui dialog will be resolved  -->
-            <input type="file" name="<?= /* @noEscape */ $_fileName ?>" class="product-custom-option<?= $_option->getIsRequire() ? ' required-entry' : '' ?>" price="<?= $block->escapeHtmlAttr($block->getCurrencyPrice($_option->getPrice(true))) ?>" <?= $_fileExists ? 'disabled="disabled"' : '' ?>/>
+            <input type="file" name="<?= /* @noEscape */ $_fileName ?>" class="product-custom-option<?= $_option->getIsRequire() ? ' required-entry' : '' ?>" price="<?= $escaper->escapeHtmlAttr($block->getCurrencyPrice($_option->getPrice(true))) ?>" <?= $_fileExists ? 'disabled="disabled"' : '' ?>/>
             <input type="hidden" name="<?= /* @noEscape */ $_fieldNameAction ?>" value="<?= /* @noEscape */ $_fieldValueAction ?>" />
 
             <?php if ($_option->getFileExtension()) :?>
                 <div class="admin__field-note">
-                    <span><?= $block->escapeHtml(__('Compatible file extensions to upload')) ?>: <strong><?= $block->escapeHtml($_option->getFileExtension()) ?></strong></span>
+                    <span><?= $escaper->escapeHtml(__('Compatible file extensions to upload')) ?>: <strong><?= $escaper->escapeHtml($_option->getFileExtension()) ?></strong></span>
                 </div>
             <?php endif; ?>
 
             <?php if ($_option->getImageSizeX() > 0) :?>
                 <div class="admin__field-note">
-                    <span><?= $block->escapeHtml(__('Maximum image width')) ?>: <strong><?= (int)$_option->getImageSizeX() ?> <?= $block->escapeHtml(__('px.')) ?></strong></span>
+                    <span><?= $escaper->escapeHtml(__('Maximum image width')) ?>: <strong><?= (int)$_option->getImageSizeX() ?> <?= $escaper->escapeHtml(__('px.')) ?></strong></span>
                 </div>
             <?php endif; ?>
 
             <?php if ($_option->getImageSizeY() > 0) :?>
                 <div class="admin__field-note">
-                    <span><?= $block->escapeHtml(__('Maximum image height')) ?>: <strong><?= (int)$_option->getImageSizeY() ?> <?= $block->escapeHtml(__('px.')) ?></strong></span>
+                    <span><?= $escaper->escapeHtml(__('Maximum image height')) ?>: <strong><?= (int)$_option->getImageSizeY() ?> <?= $escaper->escapeHtml(__('px.')) ?></strong></span>
                 </div>
             <?php endif; ?>
         </div>

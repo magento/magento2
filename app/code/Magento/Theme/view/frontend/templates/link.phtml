@@ -10,9 +10,9 @@
 ?>
 <?php if (!$block->getIsDisabled()) : ?>
 <li>
-    <a href="<?= $block->escapeUrl($block->getHref()) ?>"
-        <?php if ($title = $block->getTitle()) : ?> title="<?= $block->escapeHtmlAttr(__($title)) ?>"<?php endif;?>>
-        <?= $block->escapeHtml(__($block->getLabel())) ?>
+    <a href="<?= $escaper->escapeUrl($block->getHref()) ?>"
+        <?php if ($title = $block->getTitle()) : ?> title="<?= $escaper->escapeHtmlAttr(__($title)) ?>"<?php endif;?>>
+        <?= $escaper->escapeHtml(__($block->getLabel())) ?>
     </a>
 </li>
 <?php endif; ?>

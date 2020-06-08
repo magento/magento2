@@ -13,9 +13,9 @@ $formName = $block->getFormName();
 <div id="<?= $block->getHtmlId() ?>"
      class="gallery"
      data-mage-init='{"productGallery":{"template":"#<?= $block->getHtmlId() ?>-template"}}'
-     data-parent-component="<?= $block->escapeHtml($block->getData('config/parentComponent')) ?>"
-     data-images="<?= $block->escapeHtml($block->getImagesJson()) ?>"
-     data-types="<?= $block->escapeHtml(
+     data-parent-component="<?= $escaper->escapeHtml($block->getData('config/parentComponent')) ?>"
+     data-images="<?= $escaper->escapeHtml($block->getImagesJson()) ?>"
+     data-types="<?= $escaper->escapeHtml(
          $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getImageTypes())
      ) ?>"
 >
@@ -24,18 +24,18 @@ $formName = $block->getFormName();
             <?= $block->getUploaderHtml() ?>
             <div class="product-image-wrapper">
                 <p class="image-placeholder-text">
-                    <?= $block->escapeHtml(__('Browse to find or drag image here')) ?>
+                    <?= $escaper->escapeHtml(__('Browse to find or drag image here')) ?>
                 </p>
             </div>
         </div>
     <?php } ?>
     <?php foreach ($block->getImageTypes() as $typeData) {
         ?>
-        <input name="<?= $block->escapeHtmlAttr($typeData['name']) ?>"
-               data-form-part="<?= $block->escapeHtmlAttr($formName) ?>"
-               class="image-<?= $block->escapeHtmlAttr($typeData['code']) ?>"
+        <input name="<?= $escaper->escapeHtmlAttr($typeData['name']) ?>"
+               data-form-part="<?= $escaper->escapeHtmlAttr($formName) ?>"
+               class="image-<?= $escaper->escapeHtmlAttr($typeData['code']) ?>"
                type="hidden"
-               value="<?= $block->escapeHtmlAttr($typeData['value']) ?>"/>
+               value="<?= $escaper->escapeHtmlAttr($typeData['value']) ?>"/>
         <?php
     } ?>
 
@@ -43,33 +43,33 @@ $formName = $block->getFormName();
         <div class="image item<% if (data.disabled == 1) { %> hidden-for-front<% } %>"
              data-role="image">
             <input type="hidden"
-                   name="<?= $block->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][position]"
+                   name="<?= $escaper->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][position]"
                    value="<%- data.position %>"
-                   data-form-part="<?= $block->escapeHtmlAttr($formName) ?>"
+                   data-form-part="<?= $escaper->escapeHtmlAttr($formName) ?>"
                    class="position"/>
             <input type="hidden"
-                   name="<?= $block->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][file]"
-                   data-form-part="<?= $block->escapeHtmlAttr($formName) ?>"
+                   name="<?= $escaper->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][file]"
+                   data-form-part="<?= $escaper->escapeHtmlAttr($formName) ?>"
                    value="<%- data.file %>"/>
             <input type="hidden"
-                   name="<?= $block->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][value_id]"
-                   data-form-part="<?= $block->escapeHtmlAttr($formName) ?>"
+                   name="<?= $escaper->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][value_id]"
+                   data-form-part="<?= $escaper->escapeHtmlAttr($formName) ?>"
                    value="<%- data.value_id %>"/>
             <input type="hidden"
-                   name="<?= $block->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][label]"
-                   data-form-part="<?= $block->escapeHtmlAttr($formName) ?>"
+                   name="<?= $escaper->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][label]"
+                   data-form-part="<?= $escaper->escapeHtmlAttr($formName) ?>"
                    value="<%- data.label %>"/>
             <input type="hidden"
-                   name="<?= $block->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][disabled]"
-                   data-form-part="<?= $block->escapeHtmlAttr($formName) ?>"
+                   name="<?= $escaper->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][disabled]"
+                   data-form-part="<?= $escaper->escapeHtmlAttr($formName) ?>"
                    value="<%- data.disabled %>"/>
             <input type="hidden"
-                   name="<?= $block->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][media_type]"
-                   data-form-part="<?= $block->escapeHtmlAttr($formName) ?>"
+                   name="<?= $escaper->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][media_type]"
+                   data-form-part="<?= $escaper->escapeHtmlAttr($formName) ?>"
                    value="image"/>
             <input type="hidden"
-                   name="<?= $block->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][removed]"
-                   data-form-part="<?= $block->escapeHtmlAttr($formName) ?>"
+                   name="<?= $escaper->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][removed]"
+                   data-form-part="<?= $escaper->escapeHtmlAttr($formName) ?>"
                    value=""
                    class="is-removed"/>
 
@@ -83,14 +83,14 @@ $formName = $block->getFormName();
                     <button type="button"
                             class="action-remove"
                             data-role="delete-button"
-                            title="<?= $block->escapeHtmlAttr(__('Delete image')) ?>">
+                            title="<?= $escaper->escapeHtmlAttr(__('Delete image')) ?>">
                     <span>
-                        <?= $block->escapeHtml(__('Delete image')) ?>
+                        <?= $escaper->escapeHtml(__('Delete image')) ?>
                     </span>
                     </button>
                     <div class="draggable-handle"></div>
                 </div>
-                <div class="image-fade"><span><?= $block->escapeHtml(__('Hidden')) ?></span></div>
+                <div class="image-fade"><span><?= $escaper->escapeHtml(__('Hidden')) ?></span></div>
             </div>
 
 
@@ -105,9 +105,9 @@ $formName = $block->getFormName();
                 <?php
                 foreach ($block->getImageTypes() as $typeData) {
                     ?>
-                    <li data-role-code="<?= $block->escapeHtmlAttr($typeData['code']) ?>"
-                        class="item-role item-role-<?= $block->escapeHtmlAttr($typeData['code']) ?>">
-                        <?= $block->escapeHtml($typeData['label']) ?>
+                    <li data-role-code="<?= $escaper->escapeHtmlAttr($typeData['code']) ?>"
+                        class="item-role item-role-<?= $escaper->escapeHtmlAttr($typeData['code']) ?>">
+                        <?= $escaper->escapeHtml($typeData['label']) ?>
                     </li>
                     <?php
                 }
@@ -131,20 +131,20 @@ $formName = $block->getFormName();
             <fieldset class="admin__fieldset fieldset-image-panel">
                 <div class="admin__field field-image-description">
                     <label class="admin__field-label" for="image-description">
-                        <span><?= $block->escapeHtml(__('Alt Text')) ?></span>
+                        <span><?= $escaper->escapeHtml(__('Alt Text')) ?></span>
                     </label>
 
                     <div class="admin__field-control">
                             <textarea data-role="image-description"
                                       rows="3"
                                       class="admin__control-textarea"
-                                      name="<?= $block->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][label]"><%- data.label %></textarea>
+                                      name="<?= $escaper->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][label]"><%- data.label %></textarea>
                       </div>
                 </div>
 
                 <div class="admin__field field-image-role">
                     <label class="admin__field-label">
-                        <span><?= $block->escapeHtml(__('Role')) ?></span>
+                        <span><?= $escaper->escapeHtml(__('Role')) ?></span>
                     </label>
                     <div class="admin__field-control">
                         <ul class="multiselect-alt">
@@ -155,11 +155,11 @@ $formName = $block->getFormName();
                                     <label>
                                         <input class="image-type"
                                                data-role="type-selector"
-                                               data-form-part="<?= $block->escapeHtmlAttr($formName) ?>"
+                                               data-form-part="<?= $escaper->escapeHtmlAttr($formName) ?>"
                                                type="checkbox"
-                                               value="<?= $block->escapeHtmlAttr($attribute->getAttributeCode()) ?>"
+                                               value="<?= $escaper->escapeHtmlAttr($attribute->getAttributeCode()) ?>"
                                                />
-                                        <?= $block->escapeHtml(
+                                        <?= $escaper->escapeHtml(
                                             $attribute->getFrontendLabel()
                                         ) ?>
                                     </label>
@@ -173,16 +173,16 @@ $formName = $block->getFormName();
 
                 <div class="admin__field admin__field-inline field-image-size" data-role="size">
                     <label class="admin__field-label">
-                        <span><?= $block->escapeHtml(__('Image Size')) ?></span>
+                        <span><?= $escaper->escapeHtml(__('Image Size')) ?></span>
                     </label>
-                    <div class="admin__field-value" data-message="<?= $block->escapeHtmlAttr(__('{size}')) ?>"></div>
+                    <div class="admin__field-value" data-message="<?= $escaper->escapeHtmlAttr(__('{size}')) ?>"></div>
                 </div>
 
                 <div class="admin__field admin__field-inline field-image-resolution" data-role="resolution">
                     <label class="admin__field-label">
-                        <span><?= $block->escapeHtml(__('Image Resolution')) ?></span>
+                        <span><?= $escaper->escapeHtml(__('Image Resolution')) ?></span>
                     </label>
-                    <div class="admin__field-value" data-message="<?= $block->escapeHtmlAttr(__('{width}^{height} px')) ?>"></div>
+                    <div class="admin__field-value" data-message="<?= $escaper->escapeHtmlAttr(__('{width}^{height} px')) ?>"></div>
                 </div>
 
                 <div class="admin__field field-image-hide">
@@ -191,14 +191,14 @@ $formName = $block->getFormName();
                             <input type="checkbox"
                                    id="hide-from-product-page"
                                    data-role="visibility-trigger"
-                                   data-form-part="<?= $block->escapeHtmlAttr($formName) ?>"
+                                   data-form-part="<?= $escaper->escapeHtmlAttr($formName) ?>"
                                    value="1"
                                    class="admin__control-checkbox"
-                                   name="<?= $block->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][disabled]"
+                                   name="<?= $escaper->escapeHtmlAttr($elementName) ?>[<%- data.file_id %>][disabled]"
                             <% if (data.disabled == 1) { %>checked="checked"<% } %> />
 
                             <label for="hide-from-product-page" class="admin__field-label">
-                                <?= $block->escapeHtml(__('Hide from Product Page')) ?>
+                                <?= $escaper->escapeHtml(__('Hide from Product Page')) ?>
                             </label>
                         </div>
                     </div>

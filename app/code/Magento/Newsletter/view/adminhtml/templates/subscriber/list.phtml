@@ -12,10 +12,10 @@
 <div class="form-buttons">
     <select id="queueList" name="queue">
     <?php foreach ($block->getQueueAsOptions() as $_queue) : ?>
-        <option value="<?= $block->escapeHtmlAttr($_queue['value']) ?>"><?= $block->escapeHtml($_queue['label']) ?> #<?= $block->escapeHtml($_queue['value']) ?></option>
+        <option value="<?= $escaper->escapeHtmlAttr($_queue['value']) ?>"><?= $escaper->escapeHtml($_queue['label']) ?> #<?= $escaper->escapeHtml($_queue['value']) ?></option>
     <?php endforeach; ?>
     </select>
-    <button type="button" class="scalable" onclick="subscriberController.addToQueue();"><span><span><span><?= $block->escapeHtml(__('Add to Queue')) ?></span></span></span></button>
+    <button type="button" class="scalable" onclick="subscriberController.addToQueue();"><span><span><span><?= $escaper->escapeHtml(__('Add to Queue')) ?></span></span></span></button>
 </div>
 <?php endif ?>
 <script>

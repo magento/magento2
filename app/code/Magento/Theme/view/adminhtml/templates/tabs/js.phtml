@@ -22,7 +22,7 @@ require([
         dataType: 'json',
         replaceFileInput: false,
         sequentialUploads: true,
-        url: '<?= $block->escapeJs($block->escapeUrl($block->getJsUploadUrl())) ?>',
+        url: '<?= $escaper->escapeJs($escaper->escapeUrl($block->getJsUploadUrl())) ?>',
 
         /**
          * Add data

@@ -9,20 +9,20 @@
 <?php $_items = $block->getCreditmemo()->getAllItems() ?>
 <div class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?= $block->escapeHtml(__('Items Refunded')) ?></span>
+        <span class="title"><?= $escaper->escapeHtml(__('Items Refunded')) ?></span>
     </div>
     <div class="admin__page-section-content">
         <div class="admin__table-wrapper">
             <table class="data-table admin__table-primary order-creditmemo-tables">
                 <thead>
                     <tr class="headings">
-                        <th class="col-product"><span><?= $block->escapeHtml(__('Product')) ?></span></th>
-                        <th class="col-price"><span><?= $block->escapeHtml(__('Price')) ?></span></th>
-                        <th class="col-qty"><span><?= $block->escapeHtml(__('Qty')) ?></span></th>
-                        <th class="col-subtotal"><span><?= $block->escapeHtml(__('Subtotal')) ?></span></th>
-                        <th class="col-tax"><span><?= $block->escapeHtml(__('Tax Amount')) ?></span></th>
-                        <th class="col-discount"><span><?= $block->escapeHtml(__('Discount Amount')) ?></span></th>
-                        <th class="col-total last"><span><?= $block->escapeHtml(__('Row Total')) ?></span></th>
+                        <th class="col-product"><span><?= $escaper->escapeHtml(__('Product')) ?></span></th>
+                        <th class="col-price"><span><?= $escaper->escapeHtml(__('Price')) ?></span></th>
+                        <th class="col-qty"><span><?= $escaper->escapeHtml(__('Qty')) ?></span></th>
+                        <th class="col-subtotal"><span><?= $escaper->escapeHtml(__('Subtotal')) ?></span></th>
+                        <th class="col-tax"><span><?= $escaper->escapeHtml(__('Tax Amount')) ?></span></th>
+                        <th class="col-discount"><span><?= $escaper->escapeHtml(__('Discount Amount')) ?></span></th>
+                        <th class="col-total last"><span><?= $escaper->escapeHtml(__('Row Total')) ?></span></th>
                     </tr>
                 </thead>
                 <?php $i = 0; foreach ($_items as $_item) : ?>

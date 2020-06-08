@@ -8,16 +8,16 @@
 <div class="breadcrumbs">
     <ul class="items">
         <?php foreach ($crumbs as $crumbName => $crumbInfo) : ?>
-            <li class="item <?= $block->escapeHtmlAttr($crumbName) ?>">
+            <li class="item <?= $escaper->escapeHtmlAttr($crumbName) ?>">
             <?php if ($crumbInfo['link']) : ?>
-                <a href="<?= $block->escapeUrl($crumbInfo['link']) ?>"
-                   title="<?= $block->escapeHtml($crumbInfo['title']) ?>">
-                    <?= $block->escapeHtml($crumbInfo['label']) ?>
+                <a href="<?= $escaper->escapeUrl($crumbInfo['link']) ?>"
+                   title="<?= $escaper->escapeHtml($crumbInfo['title']) ?>">
+                    <?= $escaper->escapeHtml($crumbInfo['label']) ?>
                 </a>
             <?php elseif ($crumbInfo['last']) : ?>
-                <strong><?= $block->escapeHtml($crumbInfo['label']) ?></strong>
+                <strong><?= $escaper->escapeHtml($crumbInfo['label']) ?></strong>
             <?php else : ?>
-                <?= $block->escapeHtml($crumbInfo['label']) ?>
+                <?= $escaper->escapeHtml($crumbInfo['label']) ?>
             <?php endif; ?>
             </li>
         <?php endforeach; ?>

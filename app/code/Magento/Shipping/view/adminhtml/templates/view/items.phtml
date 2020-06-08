@@ -8,8 +8,8 @@
     <table class="data-table admin__table-primary order-shipment-table">
         <thead>
             <tr class="headings">
-                <th class="col-product"><span><?= $block->escapeHtml(__('Product')) ?></span></th>
-                <th class="col-qty last"><span><?= $block->escapeHtml(__('Qty Shipped')) ?></span></th>
+                <th class="col-product"><span><?= $escaper->escapeHtml(__('Product')) ?></span></th>
+                <th class="col-qty last"><span><?= $escaper->escapeHtml(__('Qty Shipped')) ?></span></th>
             </tr>
         </thead>
         <?php $_items = $block->getShipment()->getAllItems() ?>

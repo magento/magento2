@@ -8,25 +8,25 @@
 <?php if ($block->getQuote()->hasVirtualItems()) : ?>
 <div class="block block-other">
     <div class="block-title">
-        <strong><?= $block->escapeHtml(__('Other items in your order')) ?></strong>
-        <a href="<?= $block->escapeUrl($block->getVirtualProductEditUrl()) ?>" class="action edit"><span><?= $block->escapeHtml(__('Edit Items')) ?></span></a>
+        <strong><?= $escaper->escapeHtml(__('Other items in your order')) ?></strong>
+        <a href="<?= $escaper->escapeUrl($block->getVirtualProductEditUrl()) ?>" class="action edit"><span><?= $escaper->escapeHtml(__('Edit Items')) ?></span></a>
     </div>
     <div class="block-content">
-        <p><?= $block->escapeHtml(__('Shipping is not applicable.')) ?></p>
+        <p><?= $escaper->escapeHtml(__('Shipping is not applicable.')) ?></p>
         <div class="table-wrapper">
             <table class="items data table" id="unavailable-shipping-table">
-                <caption class="table-caption"><?= $block->escapeHtml(__('Other items in your order')) ?></caption>
+                <caption class="table-caption"><?= $escaper->escapeHtml(__('Other items in your order')) ?></caption>
                 <thead>
                     <tr>
-                        <th class="col item" scope="col"><?= $block->escapeHtml(__('Product Name')) ?></th>
-                        <th class="col qty" scope="col"><?= $block->escapeHtml(__('Qty')) ?></th>
+                        <th class="col item" scope="col"><?= $escaper->escapeHtml(__('Product Name')) ?></th>
+                        <th class="col qty" scope="col"><?= $escaper->escapeHtml(__('Qty')) ?></th>
                     </tr>
                 </thead>
                 <tbody>
                 <?php foreach ($block->getVirtualQuoteItems() as $_item) : ?>
                     <tr>
-                        <td class="col item" data-th="<?= $block->escapeHtml(__('Product Name')) ?>"><?= $block->getItemHtml($_item) ?></td>
-                        <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>"><?= $block->escapeHtml($_item->getQty()) ?></td>
+                        <td class="col item" data-th="<?= $escaper->escapeHtml(__('Product Name')) ?>"><?= $block->getItemHtml($_item) ?></td>
+                        <td class="col qty" data-th="<?= $escaper->escapeHtml(__('Qty')) ?>"><?= $escaper->escapeHtml($_item->getQty()) ?></td>
                     </tr>
                 <?php endforeach; ?>
                 </tbody>

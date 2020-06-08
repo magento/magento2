@@ -8,7 +8,7 @@
     <div class="message message-notice">
         <div class="message-inner">
             <div class="message-content">
-                <?= $block->escapeHtml(
+                <?= $escaper->escapeHtml(
                     __('Changing address information will not recalculate shipping, tax or other order amount.')
                 ) ?>
             </div>
@@ -18,7 +18,7 @@
 
 <div class="fieldset admin__fieldset-wrapper">
     <legend class="legend admin__legend">
-        <span><?= $block->escapeHtml($block->getHeaderText()) ?></span>
+        <span><?= $escaper->escapeHtml($block->getHeaderText()) ?></span>
     </legend>
     <br>
     <div class="form-inline" data-mage-init='{"Magento_Sales/order/edit/address/form":{}}'>

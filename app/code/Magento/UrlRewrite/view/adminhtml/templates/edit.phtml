@@ -12,7 +12,7 @@
     {
         "#edit_form": {
             "Magento_UrlRewrite/js/url-rewrite-validation" : {
-                "url": "<?= $block->escapeUrl($block->getValidationUrl()) ?>"
+                "url": "<?= $escaper->escapeUrl($block->getValidationUrl()) ?>"
             }
         }
     }

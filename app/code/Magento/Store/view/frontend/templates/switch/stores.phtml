@@ -8,7 +8,7 @@
 ?>
 <?php if (count($block->getGroups())>1) : ?>
 <div class="switcher store switcher-store" id="switcher-store">
-    <strong class="label switcher-label"><span><?= $block->escapeHtml(__('Select Store')) ?></span></strong>
+    <strong class="label switcher-label"><span><?= $escaper->escapeHtml(__('Select Store')) ?></span></strong>
     <div class="actions dropdown options switcher-options">
         <?php foreach ($block->getGroups() as $_group) : ?>
             <?php if ($_group->getId() == $block->getCurrentGroupId()) : ?>
@@ -20,7 +20,7 @@
                      data-trigger-keypress-button="true"
                      id="switcher-store-trigger">
                     <strong>
-                        <span><?= $block->escapeHtml($_group->getName()) ?></span>
+                        <span><?= $escaper->escapeHtml($_group->getName()) ?></span>
                     </strong>
                 </div>
             <?php endif; ?>
@@ -30,7 +30,7 @@
                 <?php if (!($_group->getId() == $block->getCurrentGroupId())) : ?>
                     <li class="switcher-option">
                         <a href="#" data-post='<?= /* @noEscape */ $block->getTargetStorePostData($_group->getDefaultStore()) ?>'>
-                            <?= $block->escapeHtml($_group->getName()) ?>
+                            <?= $escaper->escapeHtml($_group->getName()) ?>
                         </a>
                     </li>
                 <?php endif; ?>

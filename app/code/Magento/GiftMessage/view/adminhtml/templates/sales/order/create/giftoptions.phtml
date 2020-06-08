@@ -11,7 +11,7 @@
     <?php if ($_childHtml) : ?>
         <tr class="row-gift-options">
             <td colspan="7">
-                <a class="action-link" href="#" id="gift_options_link_<?= (int) $_item->getId() ?>"><?= $block->escapeHtml(__('Gift Options')) ?></a>
+                <a class="action-link" href="#" id="gift_options_link_<?= (int) $_item->getId() ?>"><?= $escaper->escapeHtml(__('Gift Options')) ?></a>
                 <script>
 require([
     "Magento_Sales/order/giftoptions_tooltip"

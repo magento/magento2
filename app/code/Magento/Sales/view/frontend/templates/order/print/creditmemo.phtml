@@ -14,20 +14,20 @@
 <?php foreach ($_creditmemos as $_creditmemo) : ?>
 <div class="order-details-items creditmemo">
     <div class="order-title">
-        <strong><?= $block->escapeHtml(__('Refund #%1', $_creditmemo->getIncrementId())) ?></strong>
+        <strong><?= $escaper->escapeHtml(__('Refund #%1', $_creditmemo->getIncrementId())) ?></strong>
     </div>
     <div class="table-wrapper order-items-creditmemo">
         <table class="data table table-order-items creditmemo" id="my-refund-table-<?= (int) $_creditmemo->getId() ?>">
-            <caption class="table-caption"><?= $block->escapeHtml(__('Items Refunded')) ?></caption>
+            <caption class="table-caption"><?= $escaper->escapeHtml(__('Items Refunded')) ?></caption>
             <thead>
                 <tr>
-                    <th class="col name"><?= $block->escapeHtml(__('Product Name')) ?></th>
-                    <th class="col sku"><?= $block->escapeHtml(__('SKU')) ?></th>
-                    <th class="col price"><?= $block->escapeHtml(__('Price')) ?></th>
-                    <th class="col qty"><?= $block->escapeHtml(__('Qty')) ?></th>
-                    <th class="col subtotal"><?= $block->escapeHtml(__('Subtotal')) ?></th>
-                    <th class="col discount"><?= $block->escapeHtml(__('Discount Amount')) ?></th>
-                    <th class="col rowtotal"><?= $block->escapeHtml(__('Row Total')) ?></th>
+                    <th class="col name"><?= $escaper->escapeHtml(__('Product Name')) ?></th>
+                    <th class="col sku"><?= $escaper->escapeHtml(__('SKU')) ?></th>
+                    <th class="col price"><?= $escaper->escapeHtml(__('Price')) ?></th>
+                    <th class="col qty"><?= $escaper->escapeHtml(__('Qty')) ?></th>
+                    <th class="col subtotal"><?= $escaper->escapeHtml(__('Subtotal')) ?></th>
+                    <th class="col discount"><?= $escaper->escapeHtml(__('Discount Amount')) ?></th>
+                    <th class="col rowtotal"><?= $escaper->escapeHtml(__('Row Total')) ?></th>
                 </tr>
             </thead>
             <?php $_items = $_creditmemo->getAllItems(); ?>
@@ -45,13 +45,13 @@
     </div>
     <div class="block block-order-details-view">
         <div class="block-title">
-            <strong><?= $block->escapeHtml(__('Order Information')) ?></strong>
+            <strong><?= $escaper->escapeHtml(__('Order Information')) ?></strong>
         </div>
         <div class="block-content">
         <?php if (!$_order->getIsVirtual()) : ?>
             <div class="box box-order-shipping-address">
                 <div class="box-title">
-                    <strong><?= $block->escapeHtml(__('Shipping Address')) ?></strong>
+                    <strong><?= $escaper->escapeHtml(__('Shipping Address')) ?></strong>
                 </div>
                 <div class="box-content">
                     <?php $_shipping = $_creditmemo->getShippingAddress() ?>
@@ -60,16 +60,16 @@
             </div>
             <div class="box box-order-shipping-method">
                 <div class="box-title">
-                    <strong><?= $block->escapeHtml(__('Shipping Method')) ?></strong>
+                    <strong><?= $escaper->escapeHtml(__('Shipping Method')) ?></strong>
                 </div>
                 <div class="box-content">
-                    <?= $block->escapeHtml($_order->getShippingDescription()) ?>
+                    <?= $escaper->escapeHtml($_order->getShippingDescription()) ?>
                 </div>
             </div>
         <?php endif; ?>
             <div class="box box-order-billing-address">
                 <div class="box-title">
-                    <strong><?= $block->escapeHtml(__('Billing Address')) ?></strong>
+                    <strong><?= $escaper->escapeHtml(__('Billing Address')) ?></strong>
                 </div>
                 <div class="box-content">
                     <?php $_billing = $_creditmemo->getbillingAddress() ?>
@@ -78,7 +78,7 @@
             </div>
             <div class="box box-order-billing-method">
                 <div class="box-title">
-                    <strong><?= $block->escapeHtml(__('Payment Method')) ?></strong>
+                    <strong><?= $escaper->escapeHtml(__('Payment Method')) ?></strong>
                 </div>
                 <div class="box-content">
                     <?= $block->getPaymentInfoHtml() ?>

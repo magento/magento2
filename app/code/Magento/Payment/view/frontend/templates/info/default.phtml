@@ -9,7 +9,7 @@
  * @see \Magento\Payment\Block\Info
  */
 $specificInfo = $block->getSpecificInformation();
-$title = $block->escapeHtml($block->getMethod()->getTitle());
+$title = $escaper->escapeHtml($block->getMethod()->getTitle());
 ?>
 <dl class="payment-method">
     <dt class="title"><?= /* @noEscape */ $title ?></dt>
@@ -19,9 +19,9 @@ $title = $block->escapeHtml($block->getMethod()->getTitle());
             <caption class="table-caption"><?= /* @noEscape */ $title ?></caption>
             <?php foreach ($specificInfo as $label => $value) : ?>
                 <tr>
-                    <th scope="row"><?= $block->escapeHtml($label) ?></th>
+                    <th scope="row"><?= $escaper->escapeHtml($label) ?></th>
                     <td>
-                        <?= /* @noEscape */ nl2br($block->escapeHtml(implode("\n", $block->getValueAsArray($value, true)))) ?>
+                        <?= /* @noEscape */ nl2br($escaper->escapeHtml(implode("\n", $block->getValueAsArray($value, true)))) ?>
                     </td>
                 </tr>
             <?php endforeach; ?>

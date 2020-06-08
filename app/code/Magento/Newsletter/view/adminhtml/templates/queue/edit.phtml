@@ -19,11 +19,11 @@
     <?php endif ?>
 </div>
 
-<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="queue_edit_form">
+<form action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>" method="post" id="queue_edit_form">
     <?= $block->getBlockHtml('formkey') ?>
     <?= $block->getChildHtml('form') ?>
 </form>
-<form action="<?= $block->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="newsletter_queue_preview_form" target="_blank">
+<form action="<?= $escaper->escapeUrl($block->getPreviewUrl()) ?>" method="post" id="newsletter_queue_preview_form" target="_blank">
     <?= $block->getBlockHtml('formkey') ?>
     <div class="no-display">
         <input type="hidden" id="preview_type" name="type" value="<?= /* @noEscape */ $block->getIsTextType() ? 1 : 2 ?>" />

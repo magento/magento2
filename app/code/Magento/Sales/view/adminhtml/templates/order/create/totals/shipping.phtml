@@ -11,36 +11,36 @@
 ?>
 <?php if ($block->displayBoth()) :?>
 <tr class="row-totals">
-    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
-        <?= $block->escapeHtml($block->getExcludeTaxLabel()) ?>
+    <td style="<?= $escaper->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
+        <?= $escaper->escapeHtml($block->getExcludeTaxLabel()) ?>
     </td>
-    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
+    <td style="<?= $escaper->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
         <?= /* @noEscape */ $block->formatPrice($block->getShippingExcludeTax()) ?>
     </td>
 </tr>
 <tr class="row-totals">
-    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
-        <?= $block->escapeHtml($block->getIncludeTaxLabel()) ?>
+    <td style="<?= $escaper->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
+        <?= $escaper->escapeHtml($block->getIncludeTaxLabel()) ?>
     </td>
-    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
+    <td style="<?= $escaper->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
         <?= /* @noEscape */ $block->formatPrice($block->getShippingIncludeTax()) ?>
     </td>
 </tr>
 <?php elseif ($block->displayIncludeTax()) : ?>
 <tr>
-    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
-        <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
+    <td style="<?= $escaper->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
+        <?= $escaper->escapeHtml($block->getTotal()->getTitle()) ?>
     </td>
-    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
+    <td style="<?= $escaper->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
         <?= /* @noEscape */ $block->formatPrice($block->getShippingIncludeTax()) ?>
     </td>
 </tr>
 <?php else : ?>
 <tr class="row-totals">
-    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
-        <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
+    <td style="<?= $escaper->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-mark" colspan="<?= (int) $block->getColspan() ?>">
+        <?= $escaper->escapeHtml($block->getTotal()->getTitle()) ?>
     </td>
-    <td style="<?= $block->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
+    <td style="<?= $escaper->escapeHtmlAttr($block->getStyle()) ?>" class="admin__total-amount">
         <?= /* @noEscape */ $block->formatPrice($block->getShippingExcludeTax()) ?>
     </td>
 </tr>

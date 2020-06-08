@@ -8,10 +8,10 @@
 $urls = $block->getData('urls');
 ?>
 <h4>
-<?=$block->escapeHtml(__('The value specified in the URL Key field would generate a URL that already exists.')); ?>
+<?=$escaper->escapeHtml(__('The value specified in the URL Key field would generate a URL that already exists.')); ?>
 </h4>
 <p>
-<?=$block->escapeHtml(
+<?=$escaper->escapeHtml(
     __(
         'To resolve this conflict, you can either change the value of the URL Key field '
         . '(located in the Search Engine Optimization section) to a unique value, or change the Request Path fields'
@@ -23,7 +23,7 @@ $urls = $block->getData('urls');
 if (!empty($urls)) {
     foreach ($urls as $url => $urlTitle) {
         ?>
-        <?='<p> - <a href="' . $block->escapeHtml($url) . '">' . $block->escapeHtml($urlTitle) . '</a></p>'; ?>
+        <?='<p> - <a href="' . $escaper->escapeHtml($url) . '">' . $escaper->escapeHtml($urlTitle) . '</a></p>'; ?>
         <?php
     }
 }

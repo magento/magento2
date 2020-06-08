@@ -19,7 +19,7 @@ $isElementReadonly = $block->getElement()
 ?>
 
 <?php if (!($attributeCode === 'price' && $block->getCanReadPrice() === false)) : ?>
-    <div class="<?= $block->escapeHtmlAttr($attributeCode) ?> "><?= /* @noEscape */ $elementHtml ?></div>
+    <div class="<?= $escaper->escapeHtmlAttr($attributeCode) ?> "><?= /* @noEscape */ $elementHtml ?></div>
 <?php endif; ?>
 
 <?= $block->getExtendedElement($switchAttributeCode)->toHtml() ?>
@@ -28,8 +28,8 @@ $isElementReadonly = $block->getElement()
     <script>
         require(['prototype'], function () {
             function <?= /* @noEscape */ $switchAttributeCode ?>_change() {
-                var $attribute = $('<?= $block->escapeJs($attributeCode) ?>');
-                if ($('<?= /* @noEscape */ $switchAttributeCode ?>').value == '<?= $block->escapeJs($block::DYNAMIC) ?>') {
+                var $attribute = $('<?= $escaper->escapeJs($attributeCode) ?>');
+                if ($('<?= /* @noEscape */ $switchAttributeCode ?>').value == '<?= $escaper->escapeJs($block::DYNAMIC) ?>') {
                     if ($attribute) {
                         $attribute.disabled = true;
                         $attribute.value = '';

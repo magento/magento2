@@ -8,5 +8,5 @@
 ?>
 <?php $_product = $block->getProduct(); ?>
 <div class="actions">
-    <a href="<?= $block->escapeUrl($_product->getProductUrl()) ?>" class="action back"><span><?= $block->escapeHtml(__('Back to Main Product Info')) ?></span></a>
+    <a href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>" class="action back"><span><?= $escaper->escapeHtml(__('Back to Main Product Info')) ?></span></a>
 </div>

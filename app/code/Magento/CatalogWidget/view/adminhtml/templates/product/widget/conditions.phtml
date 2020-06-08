@@ -7,12 +7,12 @@
 /** @var \Magento\CatalogWidget\Block\Product\Widget\Conditions $block */
 
 $element = $block->getElement();
-$fieldId = $element->getHtmlContainerId() ? ' id="' . $block->escapeHtmlAttr($element->getHtmlContainerId()) . '"' : '';
-$fieldClass = 'field admin__field field-' . $block->escapeHtmlAttr($element->getId()) . ' '
-    . $block->escapeHtmlAttr($element->getCssClass());
+$fieldId = $element->getHtmlContainerId() ? ' id="' . $escaper->escapeHtmlAttr($element->getHtmlContainerId()) . '"' : '';
+$fieldClass = 'field admin__field field-' . $escaper->escapeHtmlAttr($element->getId()) . ' '
+    . $escaper->escapeHtmlAttr($element->getCssClass());
 $fieldClass .= $element->getRequired() ? ' required' : '';
 $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
-    . $block->getUiId('form-field', $block->escapeHtmlAttr($element->getId()));
+    . $block->getUiId('form-field', $escaper->escapeHtmlAttr($element->getId()));
 ?>
 <div<?= /* @noEscape */ $fieldAttributes ?>>
     <?= $element->getLabelHtml() ?>
@@ -31,6 +31,6 @@ $fieldAttributes = $fieldId . ' class="' . $fieldClass . '" '
         "Magento_Rule/rules",
         "prototype"
     ], function(VarienRulesForm){
-        window.<?= $block->escapeJs($block->getHtmlId()) ?> = new VarienRulesForm('<?= $block->escapeJs($block->getHtmlId()) ?>', '<?= $block->escapeUrl($block->getNewChildUrl()) ?>');
+        window.<?= $escaper->escapeJs($block->getHtmlId()) ?> = new VarienRulesForm('<?= $escaper->escapeJs($block->getHtmlId()) ?>', '<?= $escaper->escapeUrl($block->getNewChildUrl()) ?>');
     });
 </script>

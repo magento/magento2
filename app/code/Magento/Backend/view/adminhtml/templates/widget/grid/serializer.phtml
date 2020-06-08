@@ -23,11 +23,11 @@ $_id = 'id_' . md5(microtime());
         Event.observe(window, "load", function(){
             var serializeInput  = document.createElement('input');
             serializeInput.type = 'hidden';
-            serializeInput.name = '<?= $block->escapeJs($block->getInputElementName()) ?>';
+            serializeInput.name = '<?= $escaper->escapeJs($block->getInputElementName()) ?>';
             serializeInput.id   = '<?= /* @noEscape */ $_id ?>';
             try {
-                document.getElementById('<?= $block->escapeJs($formId) ?>').appendChild(serializeInput);
-                new serializerController('<?= /* @noEscape */ $_id ?>', <?= /* @noEscape */ $block->getDataAsJSON() ?>, <?= /* @noEscape */ $block->getColumnInputNames(true) ?>, <?= $block->escapeJs($block->getGridBlock()->getJsObjectName()) ?>, '<?= $block->escapeJs($block->getReloadParamName()) ?>');
+                document.getElementById('<?= $escaper->escapeJs($formId) ?>').appendChild(serializeInput);
+                new serializerController('<?= /* @noEscape */ $_id ?>', <?= /* @noEscape */ $block->getDataAsJSON() ?>, <?= /* @noEscape */ $block->getColumnInputNames(true) ?>, <?= $escaper->escapeJs($block->getGridBlock()->getJsObjectName()) ?>, '<?= $escaper->escapeJs($block->getReloadParamName()) ?>');
             } catch(e) {
                 //Error add serializer
             }
@@ -35,12 +35,12 @@ $_id = 'id_' . md5(microtime());
     });
 </script>
 <?php else :?>
-<input type="hidden" name="<?= $block->escapeHtmlAttr($block->getInputElementName()) ?>"  value="" id="<?= /* @noEscape */ $_id ?>" />
+<input type="hidden" name="<?= $escaper->escapeHtmlAttr($block->getInputElementName()) ?>"  value="" id="<?= /* @noEscape */ $_id ?>" />
 <script>
     require([
         'mage/adminhtml/grid'
     ], function(){
-        new serializerController('<?= /* @noEscape */ $_id ?>', <?= /* @noEscape */ $block->getDataAsJSON() ?>, <?= /* @noEscape */ $block->getColumnInputNames(true) ?>, <?= $block->escapeJs($block->getGridBlock()->getJsObjectName()) ?>, '<?= $block->escapeJs($block->getReloadParamName()) ?>');
+        new serializerController('<?= /* @noEscape */ $_id ?>', <?= /* @noEscape */ $block->getDataAsJSON() ?>, <?= /* @noEscape */ $block->getColumnInputNames(true) ?>, <?= $escaper->escapeJs($block->getGridBlock()->getJsObjectName()) ?>, '<?= $escaper->escapeJs($block->getReloadParamName()) ?>');
     });
 </script>
 <?php endif;?>

@@ -6,36 +6,36 @@
 ?>
 <?php $_order = $block->getOrder() ?>
 <div class="actions-toolbar">
-    <a href="<?= $block->escapeUrl($block->getPrintAllCreditmemosUrl($_order)) ?>"
+    <a href="<?= $escaper->escapeUrl($block->getPrintAllCreditmemosUrl($_order)) ?>"
        class="action print"
        target="_blank"
        rel="noopener">
-        <span><?= $block->escapeHtml(__('Print All Refunds')) ?></span>
+        <span><?= $escaper->escapeHtml(__('Print All Refunds')) ?></span>
     </a>
 </div>
 <?php foreach ($_order->getCreditmemosCollection() as $_creditmemo) : ?>
     <div class="order-title">
-        <strong><?= $block->escapeHtml(__('Refund #')) ?><?= $block->escapeHtml($_creditmemo->getIncrementId()) ?> </strong>
-        <a href="<?= $block->escapeUrl($block->getPrintCreditmemoUrl($_creditmemo)) ?>"
+        <strong><?= $escaper->escapeHtml(__('Refund #')) ?><?= $escaper->escapeHtml($_creditmemo->getIncrementId()) ?> </strong>
+        <a href="<?= $escaper->escapeUrl($block->getPrintCreditmemoUrl($_creditmemo)) ?>"
            class="action print"
            target="_blank"
            rel="noopener">
-            <span><?= $block->escapeHtml(__('Print Refund')) ?></span>
+            <span><?= $escaper->escapeHtml(__('Print Refund')) ?></span>
         </a>
     </div>
 
     <div class="table-wrapper order-items-creditmemo">
         <table class="data table table-order-items creditmemo" id="my-refund-table-<?= (int) $_creditmemo->getId() ?>">
-            <caption class="table-caption"><?= $block->escapeHtml(__('Items Refunded')) ?></caption>
+            <caption class="table-caption"><?= $escaper->escapeHtml(__('Items Refunded')) ?></caption>
             <thead>
                 <tr>
-                    <th class="col name"><?= $block->escapeHtml(__('Product Name')) ?></th>
-                    <th class="col sku"><?= $block->escapeHtml(__('SKU')) ?></th>
-                    <th class="col price"><?= $block->escapeHtml(__('Price')) ?></th>
-                    <th class="col qty"><?= $block->escapeHtml(__('Qty')) ?></th>
-                    <th class="col subtotal"><?= $block->escapeHtml(__('Subtotal')) ?></th>
-                    <th class="col discount"><?= $block->escapeHtml(__('Discount Amount')) ?></th>
-                    <th class="col total"><?= $block->escapeHtml(__('Row Total')) ?></th>
+                    <th class="col name"><?= $escaper->escapeHtml(__('Product Name')) ?></th>
+                    <th class="col sku"><?= $escaper->escapeHtml(__('SKU')) ?></th>
+                    <th class="col price"><?= $escaper->escapeHtml(__('Price')) ?></th>
+                    <th class="col qty"><?= $escaper->escapeHtml(__('Qty')) ?></th>
+                    <th class="col subtotal"><?= $escaper->escapeHtml(__('Subtotal')) ?></th>
+                    <th class="col discount"><?= $escaper->escapeHtml(__('Discount Amount')) ?></th>
+                    <th class="col total"><?= $escaper->escapeHtml(__('Row Total')) ?></th>
                 </tr>
             </thead>
             <?php $_items = $_creditmemo->getAllItems(); ?>

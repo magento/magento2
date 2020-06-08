@@ -15,7 +15,7 @@ $currencySymbol = $block->getCurrencySymbol();
 <div id="product-variations-matrix" data-role="product-variations-matrix">
     <div data-bind="scope: 'configurableVariations'">
         <h3 class="hidden" data-bind="css: {hidden: !showVariations() }" class="title">
-            <?= $block->escapeHtml(__('Current Variations')) ?>
+            <?= $escaper->escapeHtml(__('Current Variations')) ?>
         </h3>
 
         <script data-template-for="variation-image" type="text/x-magento-template">
@@ -45,22 +45,22 @@ $currencySymbol = $block->getCurrencySymbol();
                         <thead>
                             <tr>
                                 <th class="data-grid-th data-grid-thumbnail-cell col-image" data-column="image">
-                                    <?= $block->escapeHtml(__('Image')) ?>
+                                    <?= $escaper->escapeHtml(__('Image')) ?>
                                 </th>
                                 <th class="data-grid-th col-name" data-column="name">
-                                    <?= $block->escapeHtml(__('Name')) ?>
+                                    <?= $escaper->escapeHtml(__('Name')) ?>
                                 </th>
                                 <th class="data-grid-th col-sku" data-column="sku">
-                                    <?= $block->escapeHtml(__('SKU')) ?>
+                                    <?= $escaper->escapeHtml(__('SKU')) ?>
                                 </th>
                                 <th class="data-grid-th col-price" data-column="price">
-                                    <?= $block->escapeHtml(__('Price')) ?>
+                                    <?= $escaper->escapeHtml(__('Price')) ?>
                                 </th>
                                 <th class="data-grid-th col-qty" data-column="qty">
-                                    <?= $block->escapeHtml(__('Quantity')) ?>
+                                    <?= $escaper->escapeHtml(__('Quantity')) ?>
                                 </th>
                                 <th class="data-grid-th col-weight" data-column="weight">
-                                    <?= $block->escapeHtml(__('Weight')) ?>
+                                    <?= $escaper->escapeHtml(__('Weight')) ?>
                                 </th>
                                 <!-- ko foreach: getAttributesOptions() -->
                                     <th data-bind="attr: {class:'data-grid-th col-' + $data.attribute_code},
@@ -68,7 +68,7 @@ $currencySymbol = $block->getCurrencySymbol();
                                     </th>
                                 <!-- /ko -->
                                 <th class="data-grid-th">
-                                    <?= $block->escapeHtml(__('Actions')) ?>
+                                    <?= $escaper->escapeHtml(__('Actions')) ?>
                                 </th>
                             </tr>
                         </thead>
@@ -86,10 +86,10 @@ $currencySymbol = $block->getCurrencySymbol();
                                                 <input type="hidden" data-bind="
                                                     attr: {id: $parent.getRowId(variation, 'image'),
                                                     name: $parent.getVariationRowName(variation, 'image')}"/>
-                                                <span><?= $block->escapeHtml(__('Upload Image')) ?></span>
+                                                <span><?= $escaper->escapeHtml(__('Upload Image')) ?></span>
                                                 <input name="image" type="file"
-                                                       data-url="<?= $block->escapeHtml($block->getImageUploadUrl()) ?>"
-                                                       title="<?= $block->escapeHtml(__('Upload image')) ?>"/>
+                                                       data-url="<?= $escaper->escapeHtml($block->getImageUploadUrl()) ?>"
+                                                       title="<?= $escaper->escapeHtml(__('Upload image')) ?>"/>
                                             <!-- /ko -->
                                         </div>
                                         <!-- ko if: variation.editable -->
@@ -100,11 +100,11 @@ $currencySymbol = $block->getCurrencySymbol();
                                         <!-- /ko -->
                                         <button type="button" class="action toggle no-display" data-toggle="dropdown"
                                                 data-mage-init='{"dropdown":{}}'>
-                                            <span><?= $block->escapeHtml(__('Select')) ?></span>
+                                            <span><?= $escaper->escapeHtml(__('Select')) ?></span>
                                         </button>
                                         <ul class="dropdown">
                                             <li>
-                                                <a class="item" data-action="no-image"><?= $block->escapeHtml(__('No Image')) ?></a>
+                                                <a class="item" data-action="no-image"><?= $escaper->escapeHtml(__('No Image')) ?></a>
                                             </li>
                                         </ul>
                                     </div>
@@ -206,7 +206,7 @@ $currencySymbol = $block->getCurrencySymbol();
                                                     "
                                                    data-action="choose"
                                                    href="#">
-                                                    <?= $block->escapeHtml(__('Choose a different Product')) ?>
+                                                    <?= $escaper->escapeHtml(__('Choose a different Product')) ?>
                                                 </a>
                                             </li>
                                             <li>
@@ -217,7 +217,7 @@ $currencySymbol = $block->getCurrencySymbol();
                                             </li>
                                             <li>
                                                 <a class="action-menu-item" data-bind="click: $parent.removeProduct.bind($parent, $index())">
-                                                    <?= $block->escapeHtml(__('Remove Product')) ?>
+                                                    <?= $escaper->escapeHtml(__('Remove Product')) ?>
                                                 </a>
                                             </li>
                                         </ul>
@@ -231,7 +231,7 @@ $currencySymbol = $block->getCurrencySymbol();
         <!-- /ko -->
     </div>
     <div data-role="step-wizard-dialog"
-         data-mage-init='{"Magento_Ui/js/modal/modal":{"type":"slide","title":"<?= $block->escapeJs(__('Create Product Configurations')) ?>",
+         data-mage-init='{"Magento_Ui/js/modal/modal":{"type":"slide","title":"<?= $escaper->escapeJs(__('Create Product Configurations')) ?>",
          "buttons":[]}}'
          class="no-display">
         <?= /* @noEscape */ $block->getVariationWizard([

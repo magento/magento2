@@ -15,14 +15,14 @@
           "addToCartUrl":<?= /* @noEscape */ $block->getItemAddToCartParams("%item%") ?>,
           "addAllToCartUrl":<?= /* @noEscape */ $block->getAddAllToCartParams() ?>,
           "commentString":""},
-          "validation": {}}' action="<?= $block->escapeUrl($block->getUrl('wishlist/index/update', ['wishlist_id' => $block->getWishlistInstance()->getId()])) ?>" method="post">
+          "validation": {}}' action="<?= $escaper->escapeUrl($block->getUrl('wishlist/index/update', ['wishlist_id' => $block->getWishlistInstance()->getId()])) ?>" method="post">
         <?= $block->getChildHtml('top') ?>
         <?php if ($block->hasWishlistItems()) : ?>
             <?= $block->getBlockHtml('formkey') ?>
             <?php $block->getChildBlock('items')->setItems($block->getWishlistItems()); ?>
             <?= $block->getChildHtml('items') ?>
         <?php else : ?>
-            <div class="message info empty"><span><?= $block->escapeHtml(__('You have no items in your wish list.')) ?></span></div>
+            <div class="message info empty"><span><?= $escaper->escapeHtml(__('You have no items in your wish list.')) ?></span></div>
         <?php endif ?>
         <?= $block->getChildHtml('bottom') ?>
         <div class="actions-toolbar">
@@ -30,8 +30,8 @@
                 <?= $block->getChildHtml('control_buttons') ?>
             </div>
             <div class="secondary">
-                <a href="<?= $block->escapeUrl($block->getBackUrl()) ?>" class="action back">
-                    <span><?= $block->escapeHtml(__('Back')) ?></span>
+                <a href="<?= $escaper->escapeUrl($block->getBackUrl()) ?>" class="action back">
+                    <span><?= $escaper->escapeHtml(__('Back')) ?></span>
                 </a>
             </div>
         </div>
@@ -41,11 +41,11 @@
           <% if (data.qty) { %>
           <input name="qty" value="<%- data.qty %>">
           <% } %>
-          
+
           <% if (data.item) { %>
           <input name="item" value="<%- data.item %>">
           <% } %>
-          
+
           <% if (data.entity) { %>
           <input name="entity" value="<%- data.entity %>">
           <% } %>

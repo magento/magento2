@@ -25,7 +25,7 @@ $productList = $block->getProductListHtml();
 
 <div class="message notice">
     <div>
-        <?= $block->escapeHtml($block->getNoResultText() ? $block->getNoResultText() : __('Your search returned no results.')) ?>
+        <?= $escaper->escapeHtml($block->getNoResultText() ? $block->getNoResultText() : __('Your search returned no results.')) ?>
         <?= /* @noEscape */ $block->getAdditionalHtml() ?>
         <?php if ($messages = $block->getNoteMessages()) : ?>
             <?php foreach ($messages as $message) : ?>

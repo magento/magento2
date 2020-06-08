@@ -19,7 +19,7 @@
         background-color: #DFF7FF!important;
     }
 </style>
-<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" id="config-edit-form"
+<form action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>" method="post" id="config-edit-form"
       enctype="multipart/form-data">
     <?= $block->getBlockHtml('formkey') ?>
     <div class="accordion">

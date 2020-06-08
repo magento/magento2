@@ -10,11 +10,11 @@
     <div class="select-attributes-actions" data-type="skipKO">
         <?= /* @noEscape */  $block->getAddNewAttributeButton() ?>
     </div>
-    <h2 class="steps-wizard-title"><?= $block->escapeHtml(
+    <h2 class="steps-wizard-title"><?= $escaper->escapeHtml(
         __('Step 1: Select Attributes')
     ); ?></h2>
     <div class="selected-attributes" data-bind="scope: '<?= /* @noEscape */  $block->getComponentName() ?>'">
-        <?= $block->escapeHtml(
+        <?= $escaper->escapeHtml(
             __('Selected Attributes:')
         ); ?>
         <span data-bind="text: selectedAttributes() || '--'"></span>

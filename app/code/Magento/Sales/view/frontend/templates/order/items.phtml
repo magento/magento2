@@ -9,8 +9,8 @@
 /** @var \Magento\Sales\Block\Order\Items $block */
 ?>
 <div class="table-wrapper order-items">
-    <table class="data table table-order-items" id="my-orders-table" summary="<?= $block->escapeHtml(__('Items Ordered')) ?>">
-        <caption class="table-caption"><?= $block->escapeHtml(__('Items Ordered')) ?></caption>
+    <table class="data table table-order-items" id="my-orders-table" summary="<?= $escaper->escapeHtml(__('Items Ordered')) ?>">
+        <caption class="table-caption"><?= $escaper->escapeHtml(__('Items Ordered')) ?></caption>
         <thead>
             <?php if ($block->isPagerDisplayed()) : ?>
                 <tr>
@@ -20,11 +20,11 @@
                 </tr>
             <?php endif ?>
             <tr>
-                <th class="col name"><?= $block->escapeHtml(__('Product Name')) ?></th>
-                <th class="col sku"><?= $block->escapeHtml(__('SKU')) ?></th>
-                <th class="col price"><?= $block->escapeHtml(__('Price')) ?></th>
-                <th class="col qty"><?= $block->escapeHtml(__('Qty')) ?></th>
-                <th class="col subtotal"><?= $block->escapeHtml(__('Subtotal')) ?></th>
+                <th class="col name"><?= $escaper->escapeHtml(__('Product Name')) ?></th>
+                <th class="col sku"><?= $escaper->escapeHtml(__('SKU')) ?></th>
+                <th class="col price"><?= $escaper->escapeHtml(__('Price')) ?></th>
+                <th class="col qty"><?= $escaper->escapeHtml(__('Qty')) ?></th>
+                <th class="col subtotal"><?= $escaper->escapeHtml(__('Subtotal')) ?></th>
             </tr>
         </thead>
         <?php $items = $block->getItems(); ?>
@@ -45,20 +45,20 @@
                                class="action show"
                                aria-controls="order-item-gift-message-<?= (int) $item->getId() ?>"
                                data-item-id="<?= (int) $item->getId() ?>">
-                                <?= $block->escapeHtml(__('Gift Message')) ?>
+                                <?= $escaper->escapeHtml(__('Gift Message')) ?>
                             </a>
                             <?php $giftMessage = $this->helper(\Magento\GiftMessage\Helper\Message::class)->getGiftMessageForEntity($item); ?>
                             <div class="order-gift-message" id="order-item-gift-message-<?= (int) $item->getId() ?>" role="region" aria-expanded="false" tabindex="-1">
                                 <a href="#"
-                                   title="<?= $block->escapeHtml(__('Close')) ?>"
+                                   title="<?= $escaper->escapeHtml(__('Close')) ?>"
                                    aria-controls="order-item-gift-message-<?= (int) $item->getId() ?>"
                                    data-item-id="<?= (int) $item->getId() ?>"
                                    class="action close">
-                                    <?= $block->escapeHtml(__('Close')) ?>
+                                    <?= $escaper->escapeHtml(__('Close')) ?>
                                 </a>
                                 <dl class="item-options">
-                                    <dt class="item-sender"><strong class="label"><?= $block->escapeHtml(__('From')) ?></strong><?= $block->escapeHtml($giftMessage->getSender()) ?></dt>
-                                    <dt class="item-recipient"><strong class="label"><?= $block->escapeHtml(__('To')) ?></strong><?= $block->escapeHtml($giftMessage->getRecipient()) ?></dt>
+                                    <dt class="item-sender"><strong class="label"><?= $escaper->escapeHtml(__('From')) ?></strong><?= $escaper->escapeHtml($giftMessage->getSender()) ?></dt>
+                                    <dt class="item-recipient"><strong class="label"><?= $escaper->escapeHtml(__('To')) ?></strong><?= $escaper->escapeHtml($giftMessage->getRecipient()) ?></dt>
                                     <dd class="item-message"><?= /* @noEscape */ $this->helper(\Magento\GiftMessage\Helper\Message::class)->getEscapedGiftMessage($item) ?></dd>
                                 </dl>
                             </div>

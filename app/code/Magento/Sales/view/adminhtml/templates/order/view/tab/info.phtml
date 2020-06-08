@@ -17,17 +17,17 @@
 
 <section class="admin__page-section order-view-billing-shipping">
     <div class="admin__page-section-title">
-        <span class="title"><?= $block->escapeHtml(__('Payment &amp; Shipping Method')) ?></span>
+        <span class="title"><?= $escaper->escapeHtml(__('Payment &amp; Shipping Method')) ?></span>
     </div>
     <div class="admin__page-section-content">
         <div class="admin__page-section-item order-payment-method<?= ($_order->getIsVirtual() ? ' order-payment-method-virtual' : '') ?>">
             <?php /* Payment Method */ ?>
             <div class="admin__page-section-item-title">
-                <span class="title"><?= $block->escapeHtml(__('Payment Information')) ?></span>
+                <span class="title"><?= $escaper->escapeHtml(__('Payment Information')) ?></span>
             </div>
             <div class="admin__page-section-item-content">
                 <div class="order-payment-method-title"><?= $block->getPaymentHtml() ?></div>
-                <div class="order-payment-currency"><?= $block->escapeHtml(__('The order was placed using %1.', $_order->getOrderCurrencyCode())) ?></div>
+                <div class="order-payment-currency"><?= $escaper->escapeHtml(__('The order was placed using %1.', $_order->getOrderCurrencyCode())) ?></div>
                 <div class="order-payment-additional">
                     <?= $block->getChildHtml('order_payment_additional') ?>
                     <?= $block->getChildHtml('payment_additional_info') ?>
@@ -44,26 +44,26 @@
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?= $block->escapeHtml(__('Items Ordered')) ?></span>
+        <span class="title"><?= $escaper->escapeHtml(__('Items Ordered')) ?></span>
     </div>
     <?= $block->getItemsHtml() ?>
 </section>
 
 <section class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?= $block->escapeHtml(__('Order Total')) ?></span>
+        <span class="title"><?= $escaper->escapeHtml(__('Order Total')) ?></span>
     </div>
     <div class="admin__page-section-content">
         <div class="admin__page-section-item order-comments-history">
             <div class="admin__page-section-item-title">
-                <span class="title"><?= $block->escapeHtml(__('Notes for this Order')) ?></span>
+                <span class="title"><?= $escaper->escapeHtml(__('Notes for this Order')) ?></span>
             </div>
             <?= $block->getChildHtml('order_history') ?>
         </div>
 
         <div class="admin__page-section-item order-totals">
             <div class="admin__page-section-item-title">
-                <span class="title"><?= $block->escapeHtml(__('Order Totals')) ?></span>
+                <span class="title"><?= $escaper->escapeHtml(__('Order Totals')) ?></span>
             </div>
             <?= $block->getChildHtml('order_totals') ?>
         </div>

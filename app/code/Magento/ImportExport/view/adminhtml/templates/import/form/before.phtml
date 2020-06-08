@@ -45,8 +45,8 @@ require([
          * Base url
          * @type {string}
          */
-        sampleFilesBaseUrl: '<?= $block->escapeJs(
-            $block->escapeUrl($block->getUrl('*/*/download/', ['filename' => 'entity-name']))
+        sampleFilesBaseUrl: '<?= $escaper->escapeJs(
+            $escaper->escapeUrl($block->getUrl('*/*/download/', ['filename' => 'entity-name']))
         ) ?>',
 
         /**
@@ -209,7 +209,7 @@ require([
         postToFrameProcessResponse: function(response) {
             if ('object' != typeof(response)) {
                 alert({
-                    content: '<?= $block->escapeHtml(__('Invalid response')); ?>'
+                    content: '<?= $escaper->escapeHtml(__('Invalid response')); ?>'
                 });
 
                 return false;

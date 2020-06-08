@@ -33,7 +33,7 @@
         <?php if ($_prevOptionId != $attributes['option_id']) : ?>
             <tr class="bundle-option-label">
                 <td colspan="3">
-                    <strong><?= $block->escapeHtml($attributes['option_label']) ?></strong>
+                    <strong><?= $escaper->escapeHtml($attributes['option_label']) ?></strong>
                 </td>
             </tr>
             <?php $_prevOptionId = $attributes['option_id'] ?>
@@ -42,8 +42,8 @@
     <?php if (!$_item->getOrderItem()->getParentItem()) : ?>
         <tr class="bundle-item bundle-parent">
             <td class="item-info">
-                <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
-                <p class="sku"><?= $block->escapeHtml(__('SKU')) ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
+                <p class="product-name"><?= $escaper->escapeHtml($_item->getName()) ?></p>
+                <p class="sku"><?= $escaper->escapeHtml(__('SKU')) ?>: <?= $escaper->escapeHtml($block->getSku($_item)) ?></p>
             </td>
     <?php else : ?>
         <tr class="bundle-item bundle-option-value">
@@ -75,12 +75,12 @@
             <?php if ($block->getItemOptions()) : ?>
                 <dl>
                     <?php foreach ($block->getItemOptions() as $option) : ?>
-                        <dt><strong><em><?= $block->escapeHtml($option['label']) ?></em></strong></dt>
-                                    <dd><?= $block->escapeHtml($option['value']) ?></dd>
+                        <dt><strong><em><?= $escaper->escapeHtml($option['label']) ?></em></strong></dt>
+                                    <dd><?= $escaper->escapeHtml($option['value']) ?></dd>
                     <?php endforeach; ?>
                 </dl>
             <?php endif; ?>
-            <?= $block->escapeHtml($_item->getDescription()) ?>
+            <?= $escaper->escapeHtml($_item->getDescription()) ?>
         </td>
     </tr>
 <?php endif; ?>

@@ -17,7 +17,7 @@
                 "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
             },
             "*": {
-                "Magento_Ui/js/block-loader": "<?= $block->escapeJs($block->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))) ?>"
+                "Magento_Ui/js/block-loader": "<?= $escaper->escapeJs($escaper->escapeUrl($block->getViewFileUrl('images/loader-1.gif'))) ?>"
             }
         }
     </script>

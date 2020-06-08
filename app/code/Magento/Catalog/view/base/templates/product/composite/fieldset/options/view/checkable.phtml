@@ -18,21 +18,21 @@ if ($option) : ?>
     $count = 1;
     ?>
 
-<div class="options-list nested" id="options-<?= $block->escapeHtmlAttr($option->getId()) ?>-list">
+<div class="options-list nested" id="options-<?= $escaper->escapeHtmlAttr($option->getId()) ?>-list">
     <?php if ($optionType === Option::OPTION_TYPE_RADIO && !$option->getIsRequire()) :?>
     <div class="field choice admin__field admin__field-option">
         <input type="radio"
-               id="options_<?= $block->escapeHtmlAttr($option->getId()) ?>"
+               id="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>"
                class="radio admin__control-radio product-custom-option"
-               name="options[<?= $block->escapeHtmlAttr($option->getId()) ?>]"
-               data-selector="options[<?= $block->escapeHtmlAttr($option->getId()) ?>]"
+               name="options[<?= $escaper->escapeHtmlAttr($option->getId()) ?>]"
+               data-selector="options[<?= $escaper->escapeHtmlAttr($option->getId()) ?>]"
                onclick="<?= $block->getSkipJsReloadPrice() ? '' : 'opConfig.reloadPrice()' ?>"
                value=""
                checked="checked"
         />
-        <label class="label admin__field-label" for="options_<?= $block->escapeHtmlAttr($option->getId()) ?>">
+        <label class="label admin__field-label" for="options_<?= $escaper->escapeHtmlAttr($option->getId()) ?>">
                         <span>
-                            <?= $block->escapeHtml(__('None'))  ?>
+                            <?= $escaper->escapeHtml(__('None'))  ?>
                         </span>
         </label>
     </div>
@@ -54,24 +54,24 @@ if ($option) : ?>
         ?>
 
         <div class="field choice admin__field admin__field-option">
-            <input type="<?= $block->escapeHtmlAttr($optionType) ?>"
+            <input type="<?= $escaper->escapeHtmlAttr($optionType) ?>"
                    class="<?= $optionType === Option::OPTION_TYPE_RADIO
                        ? 'radio admin__control-radio'
                        : 'checkbox admin__control-checkbox' ?> <?= $option->getIsRequire()
                        ? 'required': '' ?>
                        product-custom-option
                         <?= $block->getSkipJsReloadPrice() ? '' : 'opConfig.reloadPrice()' ?>"
-                   name="options[<?= $block->escapeHtmlAttr($option->getId()) ?>]<?= /* @noEscape */ $arraySign ?>"
-                   id="options_<?= $block->escapeHtmlAttr($option->getId() . '_' . $count) ?>"
-                   value="<?= $block->escapeHtmlAttr($value->getOptionTypeId()) ?>"
-                <?= $block->escapeHtml($checked) ?>
-                   data-selector="<?= $block->escapeHtmlAttr($dataSelector) ?>"
-                   price="<?= $block->escapeHtmlAttr($block->getCurrencyByStore($value)) ?>"
+                   name="options[<?= $escaper->escapeHtmlAttr($option->getId()) ?>]<?= /* @noEscape */ $arraySign ?>"
+                   id="options_<?= $escaper->escapeHtmlAttr($option->getId() . '_' . $count) ?>"
+                   value="<?= $escaper->escapeHtmlAttr($value->getOptionTypeId()) ?>"
+                <?= $escaper->escapeHtml($checked) ?>
+                   data-selector="<?= $escaper->escapeHtmlAttr($dataSelector) ?>"
+                   price="<?= $escaper->escapeHtmlAttr($block->getCurrencyByStore($value)) ?>"
             />
             <label class="label admin__field-label"
-                   for="options_<?= $block->escapeHtmlAttr($option->getId() . '_' . $count) ?>">
+                   for="options_<?= $escaper->escapeHtmlAttr($option->getId() . '_' . $count) ?>">
                 <span>
-                    <?= $block->escapeHtml($value->getTitle()) ?>
+                    <?= $escaper->escapeHtml($value->getTitle()) ?>
                 </span>
                 <?= /* @noEscape */ $block->formatPrice($value) ?>
             </label>

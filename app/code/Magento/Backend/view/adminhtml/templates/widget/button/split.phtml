@@ -10,7 +10,7 @@
 
 <div <?= $block->getAttributesHtml() ?>>
     <button <?= $block->getButtonAttributesHtml() ?>>
-        <span><?= $block->escapeHtml($block->getLabel()) ?></span>
+        <span><?= $escaper->escapeHtml($block->getLabel()) ?></span>
     </button>
     <?php if ($block->hasSplit()) : ?>
         <button <?= $block->getToggleAttributesHtml() ?>>
@@ -22,12 +22,12 @@
                 <?php foreach ($block->getOptions() as $key => $option) : ?>
                 <li>
                     <span <?= $block->getOptionAttributesHtml($key, $option) ?>>
-                        <?= $block->escapeHtml($option['label']) ?>
+                        <?= $escaper->escapeHtml($option['label']) ?>
                     </span>
                     <?php if (isset($option['hint'])) : ?>
                     <div class="tooltip" <?= /* @noEscape */ $block->getUiId('item', $key, 'tooltip') ?>>
-                        <a href="<?= $block->escapeHtml($option['hint']['href']) ?>" class="help">
-                            <?= $block->escapeHtml($option['hint']['label']) ?>
+                        <a href="<?= $escaper->escapeHtml($option['hint']['href']) ?>" class="help">
+                            <?= $escaper->escapeHtml($option['hint']['label']) ?>
                         </a>
                     </div>
                     <?php endif; ?>

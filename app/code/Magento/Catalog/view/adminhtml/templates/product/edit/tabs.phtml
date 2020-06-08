@@ -12,15 +12,15 @@
         \Magento\Catalog\Block\Adminhtml\Product\Edit\Tabs::ADVANCED_TAB_GROUP_CODE,
     ];?>
 
-    <div id="<?= $block->escapeHtmlAttr($block->getId()) ?>"
+    <div id="<?= $escaper->escapeHtmlAttr($block->getId()) ?>"
          data-mage-init='{"tabs":{
-        "active": "<?= $block->escapeHtmlAttr($block->getActiveTabId()) ?>",
-        "destination": "#<?= $block->escapeHtmlAttr($block->getDestElementId()) ?>",
+        "active": "<?= $escaper->escapeHtmlAttr($block->getActiveTabId()) ?>",
+        "destination": "#<?= $escaper->escapeHtmlAttr($block->getDestElementId()) ?>",
         "shadowTabs": "<?= /* @noEscape */ $block->getAllShadowTabs() ?>",
-        "tabsBlockPrefix": "<?= $block->escapeHtmlAttr($block->getId()) ?>_",
+        "tabsBlockPrefix": "<?= $escaper->escapeHtmlAttr($block->getId()) ?>_",
         "tabIdArgument": "active_tab",
-        "tabPanelClass": "<?= $block->escapeHtmlAttr($block->getPanelsClass()) ?>",
-        "excludedPanel": "<?= $block->escapeHtmlAttr($block->getExcludedPanel()) ?>",
+        "tabPanelClass": "<?= $escaper->escapeHtmlAttr($block->getPanelsClass()) ?>",
+        "excludedPanel": "<?= $escaper->escapeHtmlAttr($block->getExcludedPanel()) ?>",
         "groups": "ul.tabs"
     }}'>
         <?php foreach ($tabGroups as $tabGroupCode) :?>
@@ -32,7 +32,7 @@
 
             <div class="admin__page-nav <?php if (!$isBasic) :?> <?= '_collapsed' ?> <?php endif;?>"
                 data-role="container"
-                id="<?= $block->escapeHtmlAttr($tabGroupId) ?>"
+                id="<?= $escaper->escapeHtmlAttr($tabGroupId) ?>"
                 <?php if (!$isBasic) :?>
                     data-mage-init='{"collapsible":{
                     "active": "<?= /* @noEscape */ $activeCollapsible ?>",
@@ -47,7 +47,7 @@
                     <div class="admin__page-nav-title <?php if (!$isBasic) :?> <?= '_collapsible' ?><?php endif;?>"
                         data-role="trigger">
                         <strong>
-                            <?= $block->escapeHtml($isBasic ? __('Basic Settings') : __('Advanced Settings')) ?>
+                            <?= $escaper->escapeHtml($isBasic ? __('Basic Settings') : __('Advanced Settings')) ?>
                         </strong>
                         <span data-role="title-messages" class="admin__page-nav-title-messages"></span>
                     </div>
@@ -64,24 +64,24 @@
                         <?php $_tabType = (!preg_match('/\s?ajax\s?/', $_tabClass) && $block->getTabUrl($_tab) != '#') ? 'link' : '' ?>
                         <?php $_tabHref = $block->getTabUrl($_tab) == '#' ? '#' . $block->getTabId($_tab) . '_content' : $block->getTabUrl($_tab) ?>
                         <li class="admin__page-nav-item <?php if ($block->getTabIsHidden($_tab)) :?> <?= "no-display" ?> <?php endif; ?> " <?= /* @noEscape */ $block->getUiId('tab', 'item', $_tab->getId()) ?>>
-                            <a href="<?= $block->escapeUrl($_tabHref) ?>" id="<?= $block->escapeHtmlAttr($block->getTabId($_tab)) ?>"
-                               name="<?= $block->escapeHtmlAttr($block->getTabId($_tab, false)) ?>"
-                               title="<?= $block->escapeHtmlAttr($block->getTabTitle($_tab)) ?>"
-                               class="admin__page-nav-link <?= $block->escapeHtmlAttr($_tabClass) ?>"
+                            <a href="<?= $escaper->escapeUrl($_tabHref) ?>" id="<?= $escaper->escapeHtmlAttr($block->getTabId($_tab)) ?>"
+                               name="<?= $escaper->escapeHtmlAttr($block->getTabId($_tab, false)) ?>"
+                               title="<?= $escaper->escapeHtmlAttr($block->getTabTitle($_tab)) ?>"
+                               class="admin__page-nav-link <?= $escaper->escapeHtmlAttr($_tabClass) ?>"
                                data-tab-type="<?= /* @noEscape */ $_tabType ?>" <?= /* @noEscape */ $block->getUiId('tab', 'link', $_tab->getId()) ?>
                             >
-                                <span><?= $block->escapeHtml($block->getTabLabel($_tab)) ?></span>
+                                <span><?= $escaper->escapeHtml($block->getTabLabel($_tab)) ?></span>
                                 <span class="admin__page-nav-item-messages" data-role="item-messages">
                                    <span class="admin__page-nav-item-message _changed">
                                        <span class="admin__page-nav-item-message-icon"></span>
                                        <span class="admin__page-nav-item-message-tooltip">
-                                           <?= $block->escapeHtml(__('Changes have been made to this section that have not been saved.')) ?>
+                                           <?= $escaper->escapeHtml(__('Changes have been made to this section that have not been saved.')) ?>
                                        </span>
                                    </span>
                                    <span class="admin__page-nav-item-message _error">
                                        <span class="admin__page-nav-item-message-icon"></span>
                                        <span class="admin__page-nav-item-message-tooltip">
-                                           <?= $block->escapeHtml(__('This tab contains invalid data. Please resolve this before saving.')) ?>
+                                           <?= $escaper->escapeHtml(__('This tab contains invalid data. Please resolve this before saving.')) ?>
                                        </span>
                                    </span>
                                     <span class="admin__page-nav-item-message-loader">
@@ -92,8 +92,8 @@
                                    </span>
                                 </span>
                             </a>
-                            <div id="<?= $block->escapeHtmlAttr($block->getTabId($_tab)) ?>_content" class="no-display"
-                                 data-tab-panel="<?= $block->escapeHtmlAttr($_tab->getTabId()) ?>"
+                            <div id="<?= $escaper->escapeHtmlAttr($block->getTabId($_tab)) ?>_content" class="no-display"
+                                 data-tab-panel="<?= $escaper->escapeHtmlAttr($_tab->getTabId()) ?>"
                                 <?= /* @noEscape */ $block->getUiId('tab', 'content', $_tab->getId()) ?>
                             >
                                 <?= /* @noEscape */ $block->getTabContent($_tab) ?>

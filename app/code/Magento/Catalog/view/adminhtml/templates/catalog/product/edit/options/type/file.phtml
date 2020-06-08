@@ -12,12 +12,12 @@
             <thead>
             <tr>
                 <?php if ($block->getCanReadPrice() !== false) : ?>
-                    <th><?= $block->escapeHtml(__('Price')) ?></th>
-                    <th><?= $block->escapeHtml(__('Price Type')) ?></th>
+                    <th><?= $escaper->escapeHtml(__('Price')) ?></th>
+                    <th><?= $escaper->escapeHtml(__('Price Type')) ?></th>
                 <?php endif; ?>
-                <th><?= $block->escapeHtml(__('SKU')) ?></th>
-                <th><?= $block->escapeHtml(__('Compatible File Extensions')) ?></th>
-                <th><?= $block->escapeHtml(__('Maximum Image Size')) ?></th>
+                <th><?= $escaper->escapeHtml(__('SKU')) ?></th>
+                <th><?= $escaper->escapeHtml(__('Compatible File Extensions')) ?></th>
+                <th><?= $escaper->escapeHtml(__('Maximum Image Size')) ?></th>
             </tr>
             </thead>
             <tr>
@@ -40,7 +40,7 @@
                 <td>
                     <input name="product[options][<%- data.option_id %>][file_extension]" class="input-text" type="text" value="<%- data.file_extension %>">
                 </td>
-                <td class="col-file"><?= $block->escapeHtml(
+                <td class="col-file"><?= $escaper->escapeHtml(
                     __(
                         '%1 <span>x</span> %2 <span>px.</span>',
                         '<input class="input-text" type="text" name="product[options][<%- data.option_id %>][image_size_x]" value="<%- data.image_size_x %>">',
@@ -48,7 +48,7 @@
                     ),
                     ['span', 'input']
                 ) ?>
-                    <div class="note"><?= $block->escapeHtml(__('Please leave blank if it is not an image.')) ?></div>
+                    <div class="note"><?= $escaper->escapeHtml(__('Please leave blank if it is not an image.')) ?></div>
                 </td>
             </tr>
         </table>

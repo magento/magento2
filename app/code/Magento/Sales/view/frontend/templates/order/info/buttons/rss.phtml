@@ -7,7 +7,7 @@
 /** @var $block \Magento\Sales\Block\Order\Info\Buttons\Rss */
 ?>
 <?php if ($block->isRssAllowed() && $block->getLink()) : ?>
-    <a href="<?= $block->escapeHtmlAttr($block->getLink()) ?>" class="action rss">
-        <span><?= $block->escapeHtml($block->getLabel()) ?></span>
+    <a href="<?= $escaper->escapeHtmlAttr($block->getLink()) ?>" class="action rss">
+        <span><?= $escaper->escapeHtml($block->getLabel()) ?></span>
     </a>
 <?php endif; ?>

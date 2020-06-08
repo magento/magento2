@@ -7,11 +7,11 @@
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues */
 ?>
 <div data-bind="scope: '<?= /* @noEscape */  $block->getComponentName() ?>'">
-    <h2 class="steps-wizard-title"><?= $block->escapeHtml(
+    <h2 class="steps-wizard-title"><?= $escaper->escapeHtml(
         __('Step 2: Attribute Values')
     ); ?></h2>
     <div class="steps-wizard-info">
-        <span><?= $block->escapeHtml(
+        <span><?= $escaper->escapeHtml(
             __('Select values from each attribute to include in this product. Each unique combination of values creates a unique product SKU.')
         );?></span>
     </div>
@@ -22,12 +22,12 @@
                 <div class="attribute-entity-title-block">
                     <span class="draggable-handle"
                           data-role="draggable"
-                          title="<?= $block->escapeHtml(__('Sort Variations')) ?>">
+                          title="<?= $escaper->escapeHtml(__('Sort Variations')) ?>">
                     </span>
                     <div class="attribute-entity-title" data-bind="text: label"></div>
                     <div class="attribute-options-block">
                         (<span class="attribute-length" data-bind="text: $data.options().length"></span>
-                        <?= $block->escapeHtml(
+                        <?= $escaper->escapeHtml(
                             __('Options')
                         ); ?>)
                     </div>
@@ -37,24 +37,24 @@
                     <button type="button"
                             class="action-select-all action-tertiary"
                             data-bind="click: $parent.selectAllAttributes"
-                            title="<?= $block->escapeHtml(__('Select All')) ?>">
-                        <span><?= $block->escapeHtml(
+                            title="<?= $escaper->escapeHtml(__('Select All')) ?>">
+                        <span><?= $escaper->escapeHtml(
                             __('Select All')
                         ); ?></span>
                     </button>
                     <button type="button"
                             class="action-deselect-all action-tertiary"
                             data-bind="click: $parent.deSelectAllAttributes"
-                            title="<?= $block->escapeHtml(__('Deselect All')) ?>">
-                        <span><?= $block->escapeHtml(
+                            title="<?= $escaper->escapeHtml(__('Deselect All')) ?>">
+                        <span><?= $escaper->escapeHtml(
                             __('Deselect All')
                         ); ?></span>
                     </button>
                     <button type="button"
                             class="action-remove-all action-tertiary"
                             data-bind="click: $parent.removeAttribute.bind($parent)"
-                            title="<?= $block->escapeHtml(__('Remove Attribute')) ?>">
-                        <span><?= $block->escapeHtml(
+                            title="<?= $escaper->escapeHtml(__('Remove Attribute')) ?>">
+                        <span><?= $escaper->escapeHtml(
                             __('Remove Attribute')
                         ); ?></span>
                     </button>
@@ -81,19 +81,19 @@
                             </div>
                             <button type="button"
                                     class="action-save"
-                                    title="<?= $block->escapeHtml(__('Save Option')) ?>"
+                                    title="<?= $escaper->escapeHtml(__('Save Option')) ?>"
                                     data-action="save"
                                     data-bind="click: $parents[1].saveOption.bind($parent)">
-                                <span><?= $block->escapeHtml(
+                                <span><?= $escaper->escapeHtml(
                                     __('Save Option')
                                 ); ?></span>
                             </button>
                             <button type="button"
                                     class="action-remove"
-                                    title="<?= $block->escapeHtml(__('Remove Option')) ?>"
+                                    title="<?= $escaper->escapeHtml(__('Remove Option')) ?>"
                                     data-action="remove"
                                     data-bind="click: $parents[1].removeOption.bind($parent)">
-                                <span><?= $block->escapeHtml(
+                                <span><?= $escaper->escapeHtml(
                                     __('Remove Option')
                                 ); ?></span>
                             </button>
@@ -105,7 +105,7 @@
                     type="button"
                     data-action="addOption"
                     data-bind="click: $parent.createOption, visible: canCreateOption">
-                <span><?= $block->escapeHtml(
+                <span><?= $escaper->escapeHtml(
                     __('Create New Value')
                 ); ?></span>
             </button>

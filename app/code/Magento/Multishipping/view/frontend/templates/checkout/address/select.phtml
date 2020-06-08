@@ -14,19 +14,19 @@
                 <address>
                     <?= $block->getAddressAsHtml($address) ?>
                     <?php if ($block->isAddressDefaultBilling($address)) : ?>
-                        <br /><strong><?= $block->escapeHtml(__('Default Billing')); ?></strong>
+                        <br /><strong><?= $escaper->escapeHtml(__('Default Billing')); ?></strong>
                     <?php endif; ?>
                     <?php if ($block->isAddressDefaultShipping($address)) : ?>
-                        <br /><strong><?= $block->escapeHtml(__('Default Shipping')); ?></strong>
+                        <br /><strong><?= $escaper->escapeHtml(__('Default Shipping')); ?></strong>
                     <?php endif; ?>
                 </address>
             </div>
             <div class="box-actions">
-                <a href="<?= $block->escapeUrl($block->getEditAddressUrl($address)); ?>" class="action edit">
-                    <span><?= $block->escapeHtml(__('Edit Address')); ?></span>
+                <a href="<?= $escaper->escapeUrl($block->getEditAddressUrl($address)); ?>" class="action edit">
+                    <span><?= $escaper->escapeHtml(__('Edit Address')); ?></span>
                 </a>
-                <a href="<?= $block->escapeUrl($block->getSetAddressUrl($address)); ?>" class="action select">
-                    <span><?= $block->escapeHtml(__('Select Address')); ?></span>
+                <a href="<?= $escaper->escapeUrl($block->getSetAddressUrl($address)); ?>" class="action select">
+                    <span><?= $escaper->escapeHtml(__('Select Address')); ?></span>
                 </a>
             </div>
         </div>
@@ -34,13 +34,13 @@
     </div>
     <div class="actions-toolbar">
         <div class="primary">
-            <button type="button" class="action add primary" role="add-address" title="<?= $block->escapeHtml(__('Add New Address')); ?>">
-                <span><?= $block->escapeHtml(__('Add New Address')); ?></span>
+            <button type="button" class="action add primary" role="add-address" title="<?= $escaper->escapeHtml(__('Add New Address')); ?>">
+                <span><?= $escaper->escapeHtml(__('Add New Address')); ?></span>
             </button>
         </div>
         <div class="secondary">
-            <a href="<?= $block->escapeUrl($block->getBackUrl()); ?>" class="action back">
-                <span><?= $block->escapeHtml(__('Back to Billing Information')); ?></span>
+            <a href="<?= $escaper->escapeUrl($block->getBackUrl()); ?>" class="action back">
+                <span><?= $escaper->escapeHtml(__('Back to Billing Information')); ?></span>
             </a>
         </div>
     </div>
@@ -50,7 +50,7 @@
         ".action": {
             "address": {
                 "addAddress": "button[role='add-address']",
-                "addAddressLocation": "<?= $block->escapeUrl($block->getAddNewUrl()); ?>"
+                "addAddressLocation": "<?= $escaper->escapeUrl($block->getAddNewUrl()); ?>"
             }
         }
     }

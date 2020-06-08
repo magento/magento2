@@ -10,6 +10,6 @@
 // phpcs:disable Magento2.Security.InsecureFunction.DiscouragedWithAlternative
 <?php $_id = 'id_' . md5(microtime()) ?>
 <input type="hidden"
-       name="<?= $block->escapeHtmlAttr($block->getInputElementName()) ?>"
+       name="<?= $escaper->escapeHtmlAttr($block->getInputElementName()) ?>"
        value=""
        id="<?= /* @noEscape */ $_id ?>" />

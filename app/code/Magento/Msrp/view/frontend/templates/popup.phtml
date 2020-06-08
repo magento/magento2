@@ -17,22 +17,22 @@
             <div class="map-info-price" id="map-popup-content">
                 <div class="price-box">
                     <div class="map-msrp" id="map-popup-msrp-box">
-                        <span class="label"><?= $block->escapeHtml(__('Price')) ?></span>
+                        <span class="label"><?= $escaper->escapeHtml(__('Price')) ?></span>
                         <span class="old-price map-old-price" id="map-popup-msrp">
                             <span class="price"></span>
                         </span>
                     </div>
                     <div class="map-price" id="map-popup-price-box">
-                        <span class="label"><?= $block->escapeHtml(__('Actual Price')) ?></span>
+                        <span class="label"><?= $escaper->escapeHtml(__('Actual Price')) ?></span>
                         <span id="map-popup-price" class="actual-price"></span>
                     </div>
                 </div>
                 <form action="" method="POST" class="map-form-addtocart">
                     <input type="hidden" name="product" class="product_id" value="" />
                     <button type="button"
-                            title="<?= $block->escapeHtml(__('Add to Cart')) ?>"
+                            title="<?= $escaper->escapeHtml(__('Add to Cart')) ?>"
                             class="action tocart primary">
-                        <span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                        <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
                     </button>
                     <div class="additional-addtocart-box">
                         <?= $block->getChildHtml() ?>

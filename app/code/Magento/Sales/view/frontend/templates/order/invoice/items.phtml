@@ -6,33 +6,33 @@
 ?>
 <?php $_order = $block->getOrder() ?>
 <div class="actions-toolbar">
-    <a href="<?= $block->escapeUrl($block->getPrintAllInvoicesUrl($_order)) ?>"
+    <a href="<?= $escaper->escapeUrl($block->getPrintAllInvoicesUrl($_order)) ?>"
        class="action print"
        target="_blank"
        rel="noopener">
-        <span><?= $block->escapeHtml(__('Print All Invoices')) ?></span>
+        <span><?= $escaper->escapeHtml(__('Print All Invoices')) ?></span>
     </a>
 </div>
 <?php foreach ($_order->getInvoiceCollection() as $_invoice) : ?>
     <div class="order-title">
-        <strong><?= $block->escapeHtml(__('Invoice #')) ?><?= $block->escapeHtml($_invoice->getIncrementId()) ?></strong>
-        <a href="<?= $block->escapeUrl($block->getPrintInvoiceUrl($_invoice)) ?>"
+        <strong><?= $escaper->escapeHtml(__('Invoice #')) ?><?= $escaper->escapeHtml($_invoice->getIncrementId()) ?></strong>
+        <a href="<?= $escaper->escapeUrl($block->getPrintInvoiceUrl($_invoice)) ?>"
            class="action print"
            target="_blank"
            rel="noopener">
-            <span><?= $block->escapeHtml(__('Print Invoice')) ?></span>
+            <span><?= $escaper->escapeHtml(__('Print Invoice')) ?></span>
         </a>
     </div>
     <div class="table-wrapper table-order-items invoice">
         <table class="data table table-order-items invoice" id="my-invoice-table-<?= (int) $_invoice->getId() ?>">
-            <caption class="table-caption"><?= $block->escapeHtml(__('Items Invoiced')) ?></caption>
+            <caption class="table-caption"><?= $escaper->escapeHtml(__('Items Invoiced')) ?></caption>
             <thead>
                 <tr>
-                    <th class="col name"><?= $block->escapeHtml(__('Product Name')) ?></th>
-                    <th class="col sku"><?= $block->escapeHtml(__('SKU')) ?></th>
-                    <th class="col price"><?= $block->escapeHtml(__('Price')) ?></th>
-                    <th class="col qty"><?= $block->escapeHtml(__('Qty Invoiced')) ?></th>
-                    <th class="col subtotal"><?= $block->escapeHtml(__('Subtotal')) ?></th>
+                    <th class="col name"><?= $escaper->escapeHtml(__('Product Name')) ?></th>
+                    <th class="col sku"><?= $escaper->escapeHtml(__('SKU')) ?></th>
+                    <th class="col price"><?= $escaper->escapeHtml(__('Price')) ?></th>
+                    <th class="col qty"><?= $escaper->escapeHtml(__('Qty Invoiced')) ?></th>
+                    <th class="col subtotal"><?= $escaper->escapeHtml(__('Subtotal')) ?></th>
                 </tr>
             </thead>
             <?php $_items = $_invoice->getAllItems(); ?>

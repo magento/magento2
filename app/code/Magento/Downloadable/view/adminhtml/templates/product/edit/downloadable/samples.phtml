@@ -15,12 +15,12 @@ $_product = $block->getProduct();
 $block->getConfigJson();
 ?>
 <fieldset class="admin__fieldset downloadable-form" data-ui-id="downloadable-samples">
-    <legend class="admin__legend"><span><?= $block->escapeHtml(__('Samples')) ?></span></legend><br>
-    <p class="note"><?= $block->escapeHtml(__('Add product preview files here.')) ?></p>
-    <div class="admin__field"<?= $block->escapeHtml(!$block->isSingleStoreMode() ? ' data-config-scope="' . __('[STORE VIEW]') . '"' : '') ?>>
-        <label class="admin__field-label" for="downloadable_samples_title"><span><?= $block->escapeHtml(__('Title')) ?></span></label>
+    <legend class="admin__legend"><span><?= $escaper->escapeHtml(__('Samples')) ?></span></legend><br>
+    <p class="note"><?= $escaper->escapeHtml(__('Add product preview files here.')) ?></p>
+    <div class="admin__field"<?= $escaper->escapeHtml(!$block->isSingleStoreMode() ? ' data-config-scope="' . __('[STORE VIEW]') . '"' : '') ?>>
+        <label class="admin__field-label" for="downloadable_samples_title"><span><?= $escaper->escapeHtml(__('Title')) ?></span></label>
         <div class="admin__field-control">
-            <input type="text" class="admin__control-text" id="downloadable_samples_title" name="product[samples_title]" value="<?= $block->escapeHtml($block->getSamplesTitle()) ?>" <?= /* @noEscape */ ($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
+            <input type="text" class="admin__control-text" id="downloadable_samples_title" name="product[samples_title]" value="<?= $escaper->escapeHtml($block->getSamplesTitle()) ?>" <?= /* @noEscape */ ($_product->getStoreId() && $block->getUsedDefault()) ? 'disabled="disabled"' : '' ?>>
             <?php if ($_product->getStoreId()) : ?>
                 <div class="admin__field admin__field-option">
                     <input id="sample_title_default" class="admin__control-checkbox" type="checkbox" name="use_default[]" value="samples_title" onclick="toggleValueElements(this, this.parentNode.parentNode)" <?= /* @noEscape */ $block->getUsedDefault() ? 'checked="checked"' : '' ?> />
@@ -35,9 +35,9 @@ $block->getConfigJson();
                 <table class="admin__control-table">
                     <thead>
                         <tr>
-                            <th class="col-sort"><span><?= $block->escapeHtml(__('Sort Order')) ?></span></th>
-                            <th class="_required col-title"><span><?= $block->escapeHtml(__('Title')) ?></span></th>
-                            <th class="col-file"><span><?= $block->escapeHtml(__('Attach File or Enter Link')) ?></span></th>
+                            <th class="col-sort"><span><?= $escaper->escapeHtml(__('Sort Order')) ?></span></th>
+                            <th class="_required col-title"><span><?= $escaper->escapeHtml(__('Title')) ?></span></th>
+                            <th class="col-file"><span><?= $escaper->escapeHtml(__('Attach File or Enter Link')) ?></span></th>
                             <th class="col-actions">&nbsp;</th>
                         </tr>
                     </thead>
@@ -51,7 +51,7 @@ $block->getConfigJson();
                 </table>
             </div>
             <div class="admin__field-note">
-                <?= $block->escapeHtml(__('Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'.')) ?>
+                <?= $escaper->escapeHtml(__('Alphanumeric, dash and underscore characters are recommended for filenames. Improper characters are replaced with \'_\'.')) ?>
             </div>
         </div>
     </div>
@@ -69,7 +69,7 @@ require([
         var sampleTemplate = '<tr>'+
             '<td class="col-sort" data-role="draggable-handle">' +
                 '<input data-container="link-order" type="hidden" name="downloadable[sample][<%- data.id %>][sort_order]" value="<%- data.sort_order %>" class="sort" />' +
-                '<span class="draggable-handle" title="<?= $block->escapeJs($block->escapeHtmlAttr(__('Sort Variations'))) ?>"></span>' +
+                '<span class="draggable-handle" title="<?= $escaper->escapeJs($escaper->escapeHtmlAttr(__('Sort Variations'))) ?>"></span>' +
             '</td>'+
             '<td class="col-title">'+
                 '<input type="hidden" class="__delete__" name="downloadable[sample][<%- data.id %>][is_delete]" value="" />'+
@@ -78,20 +78,20 @@ require([
                 <?php if ($_product->getStoreId()) : ?>
                     '<div class="admin__field admin__field-option">'+
                         '<input type="checkbox" id="downloadable_sample_<%- data.id %>_title" name="downloadable[sample][<%- data.id %>][use_default_title]" value="1" class="admin__control-checkbox" />'+
-                        '<label for="downloadable_link_<%- data.id %>_price" class="admin__field-label"><span><?= $block->escapeJs($block->escapeHtml(__('Use Default Value'))) ?></span></label>'+
+                        '<label for="downloadable_link_<%- data.id %>_price" class="admin__field-label"><span><?= $escaper->escapeJs($escaper->escapeHtml(__('Use Default Value'))) ?></span></label>'+
                     '</div>' +
                 <?php endif; ?>
             '</td>'+
             '<td class="col-file">'+
                 '<div class="admin__field admin__field-option">'+
                     '<input type="radio" class="admin__control-radio validate-one-required-by-name" id="downloadable_sample_<%- data.id %>_file_type" name="downloadable[sample][<%- data.id %>][type]" value="file"<%- data.file_checked %> />' +
-                    '<label for="downloadable_sample_<%- data.id %>_file_type" class="admin__field-label"><span><?= $block->escapeJs($block->escapeHtml(__('File'))) ?>:</span></label>'+
+                    '<label for="downloadable_sample_<%- data.id %>_file_type" class="admin__field-label"><span><?= $escaper->escapeJs($escaper->escapeHtml(__('File'))) ?>:</span></label>'+
                     '<input type="hidden" class="validate-downloadable-file" id="downloadable_sample_<%- data.id %>_file_save" name="downloadable[sample][<%- data.id %>][file]" value="<%- data.file_save %>" />'+
                     '<div id="downloadable_sample_<%- data.id %>_file" class="admin__field-uploader">'+
                         '<div id="downloadable_sample_<%- data.id %>_file-old" class="file-row-info"></div>'+
                         '<div id="downloadable_sample_<%- data.id %>_file-new" class="file-row-info new-file"></div>'+
                         '<div class="fileinput-button">'+
-                            '<span><?= $block->escapeJs($block->escapeHtml(__('Browse Files...'))) ?></span>' +
+                            '<span><?= $escaper->escapeJs($escaper->escapeHtml(__('Browse Files...'))) ?></span>' +
                             '<input id="downloadable_sample_<%- data.id %>_file" type="file" name="<?= /* @noEscape */ $block->getConfig()->getFileField() ?>" data-url="<?= /* @noEscape */ $block->getConfig()->getUrl() ?>">' +
                             '<script>' +
                             '/*<![CDATA[*/' +
@@ -103,15 +103,15 @@ require([
                 '</div>'+
                 '<div class="admin__field admin__field-option admin__field-file-url">'+
                     '<input type="radio" class="admin__control-radio validate-one-required-by-name" id="downloadable_sample_<%- data.id %>_url_type" name="downloadable[sample][<%- data.id %>][type]" value="url"<%- data.url_checked %> />' +
-                    '<label for="downloadable_sample_<%- data.id %>_url_type" class="admin__field-label"><span><?= $block->escapeJs($block->escapeHtml(__('URL'))) ?></span></label>' +
-                    '<input type="text" class="validate-downloadable-url validate-url admin__control-text" name="downloadable[sample][<%- data.id %>][sample_url]" value="<%- data.sample_url %>" placeholder="<?= $block->escapeJs($block->escapeHtmlAttr(__('URL'))) ?>" />'+
+                    '<label for="downloadable_sample_<%- data.id %>_url_type" class="admin__field-label"><span><?= $escaper->escapeJs($escaper->escapeHtml(__('URL'))) ?></span></label>' +
+                    '<input type="text" class="validate-downloadable-url validate-url admin__control-text" name="downloadable[sample][<%- data.id %>][sample_url]" value="<%- data.sample_url %>" placeholder="<?= $escaper->escapeJs($escaper->escapeHtmlAttr(__('URL'))) ?>" />'+
                 '</div>'+
                 '<div>'+
                     '<span id="downloadable_sample_<%- data.id %>_container"></span>'+
                 '</div>'+
             '</td>'+
             '<td class="col-actions">'+
-                '<button type="button" class="action-delete" title="<?= $block->escapeJs($block->escapeHtmlAttr(__('Delete'))) ?>"><span><?= $block->escapeJs($block->escapeHtml(__('Delete'))) ?></span></button>'+
+                '<button type="button" class="action-delete" title="<?= $escaper->escapeJs($escaper->escapeHtmlAttr(__('Delete'))) ?>"><span><?= $escaper->escapeJs($escaper->escapeHtml(__('Delete'))) ?></span></button>'+
             '</td>'+
         '</tr>';
         sampleItems = {

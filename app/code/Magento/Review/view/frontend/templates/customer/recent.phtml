@@ -9,20 +9,20 @@
 <?php if ($block->getReviews() && count($block->getReviews())) : ?>
 <div class="block block-reviews-dashboard">
     <div class="block-title">
-        <strong><?= $block->escapeHtml(__('My Recent Reviews')) ?></strong>
-        <a class="action view" href="<?= $block->escapeUrl($block->getAllReviewsUrl()) ?>"><span><?= $block->escapeHtml(__('View All')) ?></span></a>
+        <strong><?= $escaper->escapeHtml(__('My Recent Reviews')) ?></strong>
+        <a class="action view" href="<?= $escaper->escapeUrl($block->getAllReviewsUrl()) ?>"><span><?= $escaper->escapeHtml(__('View All')) ?></span></a>
     </div>
     <div class="block-content">
         <ol class="items">
         <?php foreach ($block->getReviews() as $_review) : ?>
             <li class="item">
-                <strong class="product-name"><a href="<?= $block->escapeUrl($block->getReviewUrl($_review->getReviewId())) ?>"><?= $block->escapeHtml($_review->getName()) ?></a></strong>
+                <strong class="product-name"><a href="<?= $escaper->escapeUrl($block->getReviewUrl($_review->getReviewId())) ?>"><?= $escaper->escapeHtml($_review->getName()) ?></a></strong>
                 <?php if ($_review->getSum()) : ?>
                     <?php $rating = $_review->getSum() / $_review->getCount() ?>
                     <div class="rating-summary">
-                         <span class="label"><span><?= $block->escapeHtml(__('Rating')) ?>:</span></span>
-                         <div class="rating-result" title="<?= $block->escapeHtmlAttr($rating) ?>%">
-                             <span style="width:<?= $block->escapeHtmlAttr($rating) ?>%"><span><?= $block->escapeHtml($rating) ?>%</span></span>
+                         <span class="label"><span><?= $escaper->escapeHtml(__('Rating')) ?>:</span></span>
+                         <div class="rating-result" title="<?= $escaper->escapeHtmlAttr($rating) ?>%">
+                             <span style="width:<?= $escaper->escapeHtmlAttr($rating) ?>%"><span><?= $escaper->escapeHtml($rating) ?>%</span></span>
                          </div>
                      </div>
                 <?php endif; ?>

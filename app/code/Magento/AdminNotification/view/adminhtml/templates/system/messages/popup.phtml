@@ -4,15 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\AdminNotification\Block\System\Messages\UnreadMessagePopup */
+/** @var \Magento\Framework\Escaper $escaper */
+/** @var \Magento\AdminNotification\Block\System\Messages\UnreadMessagePopup $block */
 ?>
 
 <div style="display:none" id="system_messages_list" data-role="system_messages_list"
-     title="<?= $block->escapeHtmlAttr($block->getPopupTitle()) ?>">
+     title="<?= $escaper->escapeHtmlAttr($block->getPopupTitle()) ?>">
     <ul class="message-system-list messages">
         <?php foreach ($block->getUnreadMessages() as $message) : ?>
-            <li class="message message-warning <?= $block->escapeHtmlAttr($block->getItemClass($message)) ?>">
-                <?= $block->escapeHtml($message->getText()) ?>
+            <li class="message message-warning <?= $escaper->escapeHtmlAttr($block->getItemClass($message)) ?>">
+                <?= $escaper->escapeHtml($message->getText()) ?>
             </li>
         <?php endforeach;?>
     </ul>

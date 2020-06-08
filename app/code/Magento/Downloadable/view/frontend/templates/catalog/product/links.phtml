@@ -10,14 +10,14 @@
     <?php $_links = $block->getLinks(); ?>
     <?php $_linksLength = 0; ?>
     <?php $_isRequired = $block->getLinkSelectionRequired(); ?>
-    <legend class="legend links-title"><span><?= $block->escapeHtml($block->getLinksTitle()) ?></span></legend><br>
+    <legend class="legend links-title"><span><?= $escaper->escapeHtml($block->getLinksTitle()) ?></span></legend><br>
     <div class="field downloads<?php if ($_isRequired) { echo ' required'; } ?><?php if (!$_linksPurchasedSeparately) { echo ' downloads-no-separately'; } ?>">
-        <label class="label"><span><?= $block->escapeHtml($block->getLinksTitle()) ?></span></label>
+        <label class="label"><span><?= $escaper->escapeHtml($block->getLinksTitle()) ?></span></label>
         <div class="control" id="downloadable-links-list"
              data-mage-init='{"downloadable":{
                  "linkElement":"input:checkbox[value]",
                  "allElements":"#links_all",
-                 "config":<?= $block->escapeHtmlAttr($block->getJsonConfig()) ?>}
+                 "config":<?= $escaper->escapeHtmlAttr($block->getJsonConfig()) ?>}
              }'
              data-container-for="downloadable-links">
             <?php foreach ($_links as $_link) : ?>
@@ -27,15 +27,15 @@
                         <input type="checkbox"
                                <?php if ($_isRequired) : ?>data-validate="{'validate-one-checkbox-required-by-name':'downloadable-links-list'}" <?php endif; ?>
                                name="links[]"
-                               id="links_<?= $block->escapeHtmlAttr($_link->getId()) ?>"
-                               value="<?= $block->escapeHtmlAttr($_link->getId()) ?>" <?= $block->escapeHtml($block->getLinkCheckedValue($_link)) ?> />
+                               id="links_<?= $escaper->escapeHtmlAttr($_link->getId()) ?>"
+                               value="<?= $escaper->escapeHtmlAttr($_link->getId()) ?>" <?= $escaper->escapeHtml($block->getLinkCheckedValue($_link)) ?> />
                     <?php endif; ?>
-                    <label class="label" for="links_<?= $block->escapeHtmlAttr($_link->getId()) ?>">
-                        <span><?= $block->escapeHtml($_link->getTitle()) ?></span>
+                    <label class="label" for="links_<?= $escaper->escapeHtmlAttr($_link->getId()) ?>">
+                        <span><?= $escaper->escapeHtml($_link->getTitle()) ?></span>
                         <?php if ($_link->getSampleFile() || $_link->getSampleUrl()) : ?>
                             <a class="sample link"
-                               href="<?= $block->escapeUrl($block->getLinkSampleUrl($_link)) ?>" <?= $block->getIsOpenInNewWindow() ? 'target="_blank"' : '' ?>>
-                                <?= $block->escapeHtml(__('sample')) ?>
+                               href="<?= $escaper->escapeUrl($block->getLinkSampleUrl($_link)) ?>" <?= $block->getIsOpenInNewWindow() ? 'target="_blank"' : '' ?>>
+                                <?= $escaper->escapeHtml(__('sample')) ?>
                             </a>
                         <?php endif; ?>
                         <?php if ($_linksPurchasedSeparately) : ?>
@@ -47,10 +47,10 @@
             <?php if ($_linksPurchasedSeparately && $_linksLength > 1) : ?>
                 <div class="field choice downloads-all">
                     <input type="checkbox"
-                           data-notchecked="<?= $block->escapeHtmlAttr(__('Select all')) ?>"
-                           data-checked="<?= $block->escapeHtmlAttr(__('Unselect all')) ?>"
+                           data-notchecked="<?= $escaper->escapeHtmlAttr(__('Select all')) ?>"
+                           data-checked="<?= $escaper->escapeHtmlAttr(__('Unselect all')) ?>"
                            id="links_all" />
-                    <label class="label" for="links_all"><span><?= $block->escapeHtml(__('Select all')) ?></span></label>
+                    <label class="label" for="links_all"><span><?= $escaper->escapeHtml(__('Select all')) ?></span></label>
                 </div>
             <?php endif; ?>
         </div>

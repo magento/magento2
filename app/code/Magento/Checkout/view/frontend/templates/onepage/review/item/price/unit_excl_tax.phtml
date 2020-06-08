@@ -11,7 +11,7 @@
 $_item = $block->getItem();
 ?>
 <span class="cart-price">
-    <?= $block->escapeHtml(
+    <?= $escaper->escapeHtml(
         $this->helper(Magento\Checkout\Helper\Data::class)->formatPrice($_item->getCalculationPrice()),
         ['span']
     ) ?>

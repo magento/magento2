@@ -19,18 +19,18 @@
             <table class="data-table admin__table-primary order-tables">
                 <thead>
                     <tr class="headings">
-                        <th class="col-product"><span><?= $block->escapeHtml(__('Product')) ?></span></th>
-                        <th class="col-price"><span><?= $block->escapeHtml(__('Price')) ?></span></th>
-                        <th class="col-qty"><span><?= $block->escapeHtml(__('Qty')) ?></span></th>
-                        <th class="col-subtotal"><span><?= $block->escapeHtml(__('Subtotal')) ?></span></th>
-                        <th class="col-discount"><span><?= $block->escapeHtml(__('Discount')) ?></span></th>
-                        <th class="col-row-total"><span><?= $block->escapeHtml(__('Row Subtotal')) ?></span></th>
-                        <th class="col-action"><span><?= $block->escapeHtml(__('Action')) ?></span></th>
+                        <th class="col-product"><span><?= $escaper->escapeHtml(__('Product')) ?></span></th>
+                        <th class="col-price"><span><?= $escaper->escapeHtml(__('Price')) ?></span></th>
+                        <th class="col-qty"><span><?= $escaper->escapeHtml(__('Qty')) ?></span></th>
+                        <th class="col-subtotal"><span><?= $escaper->escapeHtml(__('Subtotal')) ?></span></th>
+                        <th class="col-discount"><span><?= $escaper->escapeHtml(__('Discount')) ?></span></th>
+                        <th class="col-row-total"><span><?= $escaper->escapeHtml(__('Row Subtotal')) ?></span></th>
+                        <th class="col-action"><span><?= $escaper->escapeHtml(__('Action')) ?></span></th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr class="even">
-                        <td class="empty-text" colspan="100"><?= $block->escapeHtml(__('No ordered items')) ?></td>
+                        <td class="empty-text" colspan="100"><?= $escaper->escapeHtml(__('No ordered items')) ?></td>
                     </tr>
                 </tbody>
             </table>
@@ -46,19 +46,19 @@
         <table class="data-table admin__table-primary order-tables">
             <thead>
                 <tr class="headings">
-                    <th class="col-product"><span><?= $block->escapeHtml(__('Product')) ?></span></th>
-                    <th class="col-price"><span><?= $block->escapeHtml(__('Price')) ?></span></th>
-                    <th class="col-qty"><span><?= $block->escapeHtml(__('Qty')) ?></span></th>
-                    <th class="col-subtotal"><span><?= $block->escapeHtml(__('Subtotal')) ?></span></th>
-                    <th class="col-discount"><span><?= $block->escapeHtml(__('Discount')) ?></span></th>
-                    <th class="col-row-total"><span><?= $block->escapeHtml(__('Row Subtotal')) ?></span></th>
-                    <th class="col-action"><span><?= $block->escapeHtml(__('Action')) ?></span></th>
+                    <th class="col-product"><span><?= $escaper->escapeHtml(__('Product')) ?></span></th>
+                    <th class="col-price"><span><?= $escaper->escapeHtml(__('Price')) ?></span></th>
+                    <th class="col-qty"><span><?= $escaper->escapeHtml(__('Qty')) ?></span></th>
+                    <th class="col-subtotal"><span><?= $escaper->escapeHtml(__('Subtotal')) ?></span></th>
+                    <th class="col-discount"><span><?= $escaper->escapeHtml(__('Discount')) ?></span></th>
+                    <th class="col-row-total"><span><?= $escaper->escapeHtml(__('Row Subtotal')) ?></span></th>
+                    <th class="col-action"><span><?= $escaper->escapeHtml(__('Action')) ?></span></th>
                 </tr>
             </thead>
             <tfoot>
                 <tr>
-                    <td class="col-total"><?= $block->escapeHtml(__('Total %1 product(s)', count($_items))) ?></td>
-                    <td colspan="2" class="col-subtotal"><?= $block->escapeHtml(__('Subtotal:')) ?></td>
+                    <td class="col-total"><?= $escaper->escapeHtml(__('Total %1 product(s)', count($_items))) ?></td>
+                    <td colspan="2" class="col-subtotal"><?= $escaper->escapeHtml(__('Subtotal:')) ?></td>
                     <td class="col-price"><strong><?= /* @noEscape */ $block->formatPrice($block->getSubtotal()) ?></strong></td>
                     <td class="col-price"><strong><?= /* @noEscape */ $block->formatPrice($block->getDiscountAmount()) ?></strong></td>
                     <td class="col-price"><strong><?= /* @noEscape */ $block->formatPrice($block->getSubtotalWithDiscount()); ?></strong></td>
@@ -70,10 +70,10 @@
                 <tbody class="<?= /* @noEscape */ ($i%2) ? 'even' : 'odd' ?>">
                     <tr>
                         <td class="col-product">
-                            <span id="order_item_<?= (int) $_item->getId() ?>_title"><?= $block->escapeHtml($_item->getName()) ?></span>
+                            <span id="order_item_<?= (int) $_item->getId() ?>_title"><?= $escaper->escapeHtml($_item->getName()) ?></span>
                             <div class="product-sku-block">
-                                <span><?= $block->escapeHtml(__('SKU')) ?>:</span>
-                                <?= /* @noEscape */ implode('<br />', $this->helper(\Magento\Catalog\Helper\Data::class)->splitSku($block->escapeHtml($_item->getSku()))) ?>
+                                <span><?= $escaper->escapeHtml(__('SKU')) ?>:</span>
+                                <?= /* @noEscape */ implode('<br />', $this->helper(\Magento\Catalog\Helper\Data::class)->splitSku($escaper->escapeHtml($_item->getSku()))) ?>
                             </div>
                             <div class="product-configure-block">
                                 <?= $block->getConfigureButtonHtml($_item) ?>
@@ -86,7 +86,7 @@
                             <?php $_isCustomPrice = $block->usedCustomPriceForItem($_item) ?>
                             <?php if ($_tier = $block->getTierHtml($_item)) : ?>
                             <div id="item_tier_block_<?= (int) $_item->getId() ?>"<?php if ($_isCustomPrice) : ?> style="display:none"<?php endif; ?>>
-                                <a href="#" onclick="$('item_tier_<?= (int) $_item->getId() ?>').toggle();return false;"><?= $block->escapeHtml(__('Tier Pricing')) ?></a>
+                                <a href="#" onclick="$('item_tier_<?= (int) $_item->getId() ?>').toggle();return false;"><?= $escaper->escapeHtml(__('Tier Pricing')) ?></a>
                                 <div style="display:none" id="item_tier_<?= (int) $_item->getId() ?>"><?= /* @noEscape */ $_tier ?></div>
                             </div>
                             <?php endif; ?>
@@ -100,7 +100,7 @@
                                     <label
                                         class="normal admin__field-label"
                                         for="item_use_custom_price_<?= (int) $_item->getId() ?>">
-                                        <span><?= $block->escapeHtml(__('Custom Price')) ?>*</span></label>
+                                        <span><?= $escaper->escapeHtml(__('Custom Price')) ?>*</span></label>
                                 </div>
                             <?php endif; ?>
                             <input id="item_custom_price_<?= (int) $_item->getId() ?>"
@@ -133,7 +133,7 @@
                                 <label
                                     for="item_use_discount_<?= (int) $_item->getId() ?>"
                                     class="normal admin__field-label">
-                                    <span><?= $block->escapeHtml(__('Apply')) ?></span></label>
+                                    <span><?= $escaper->escapeHtml(__('Apply')) ?></span></label>
                             </div>
 
                         </td>
@@ -142,18 +142,18 @@
                         </td>
                         <td class="col-actions last">
                             <select class="admin__control-select" name="item[<?= (int) $_item->getId() ?>][action]">
-                                <option value=""><?= $block->escapeHtml(__('Please select')) ?></option>
-                                <option value="remove"><?= $block->escapeHtml(__('Remove')) ?></option>
+                                <option value=""><?= $escaper->escapeHtml(__('Please select')) ?></option>
+                                <option value="remove"><?= $escaper->escapeHtml(__('Remove')) ?></option>
                                 <?php if ($block->getCustomerId() && $block->getMoveToCustomerStorage()) : ?>
-                                    <option value="cart"><?= $block->escapeHtml(__('Move to Shopping Cart')) ?></option>
+                                    <option value="cart"><?= $escaper->escapeHtml(__('Move to Shopping Cart')) ?></option>
                                     <?php if ($block->isMoveToWishlistAllowed($_item)) : ?>
                                         <?php $wishlists = $block->getCustomerWishlists();?>
                                         <?php if (count($wishlists) <= 1) : ?>
-                                            <option value="wishlist"><?= $block->escapeHtml(__('Move to Wish List')) ?></option>
+                                            <option value="wishlist"><?= $escaper->escapeHtml(__('Move to Wish List')) ?></option>
                                         <?php else : ?>
-                                            <optgroup label="<?= $block->escapeHtml(__('Move to Wish List')) ?>">
+                                            <optgroup label="<?= $escaper->escapeHtml(__('Move to Wish List')) ?>">
                                                 <?php foreach ($wishlists as $wishlist) :?>
-                                                    <option value="wishlist_<?= (int) $wishlist->getId() ?>"><?= $block->escapeHtml($wishlist->getName()) ?></option>
+                                                    <option value="wishlist_<?= (int) $wishlist->getId() ?>"><?= $escaper->escapeHtml($wishlist->getName()) ?></option>
                                                 <?php endforeach;?>
                                             </optgroup>
                                         <?php endif; ?>
@@ -179,7 +179,7 @@
                                     }
                                     ?>
                                     <div class="message <?php if ($_item->getHasError()) : ?>message-error<?php else : ?>message-notice<?php endif; ?>">
-                                        <?= $block->escapeHtml($message) ?>
+                                        <?= $escaper->escapeHtml($message) ?>
                                     </div>
                                 <?php endforeach; ?>
                             </td>
@@ -190,7 +190,7 @@
                 </tbody>
                 <?php endforeach; ?>
         </table>
-        <p><small><?= $block->escapeHtml($block->getInclExclTaxMessage()) ?></small></p>
+        <p><small><?= $escaper->escapeHtml($block->getInclExclTaxMessage()) ?></small></p>
     </div>
 
     <div class="order-discounts">

@@ -26,14 +26,14 @@ if ($exist = $block->getRecentlyComparedProducts()) {
 <?php if ($exist) : ?>
 <div class="block widget block-compared-products-images">
     <div class="block-title">
-        <strong><?= $block->escapeHtml($title) ?></strong>
+        <strong><?= $escaper->escapeHtml($title) ?></strong>
     </div>
     <div class="block-content">
-        <ol id="widget-compared-<?= $block->escapeHtmlAttr($block->getNameInLayout()) ?>" class="product-items product-items-images">
+        <ol id="widget-compared-<?= $escaper->escapeHtmlAttr($block->getNameInLayout()) ?>" class="product-items product-items-images">
         <?php $i = 0; foreach ($items as $_product) : ?>
             <li class="product-item">
-                <a class="product-item-photo" href="<?= $block->escapeUrl($_product->getProductUrl()) ?>"
-                    title="<?= $block->escapeHtmlAttr($block->stripTags($_product->getName(), null, true)) ?>">
+                <a class="product-item-photo" href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>"
+                    title="<?= $escaper->escapeHtmlAttr($block->stripTags($_product->getName(), null, true)) ?>">
                     <?= $block->getImage($_product, $image)->toHtml() ?>
                 </a>
             </li>

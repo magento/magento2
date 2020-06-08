@@ -8,27 +8,27 @@
 $_item = $block->getItem();
 ?>
 <tr id="order-item-row-<?= (int) $_item->getId() ?>">
-    <td class="col name" data-th="<?= $block->escapeHtml(__('Product Name')) ?>">
-        <strong class="product name product-item-name"><?= $block->escapeHtml($_item->getName()) ?></strong>
+    <td class="col name" data-th="<?= $escaper->escapeHtml(__('Product Name')) ?>">
+        <strong class="product name product-item-name"><?= $escaper->escapeHtml($_item->getName()) ?></strong>
         <?php if ($_options = $block->getItemOptions()) : ?>
             <dl class="item-options">
             <?php foreach ($_options as $_option) : ?>
-                <dt><?= $block->escapeHtml($_option['label']) ?></dt>
+                <dt><?= $escaper->escapeHtml($_option['label']) ?></dt>
                 <?php if (!$block->getPrintStatus()) : ?>
                     <?php $_formatedOptionValue = $block->getFormatedOptionValue($_option) ?>
                     <dd<?= (isset($_formatedOptionValue['full_view']) ? ' class="tooltip wrapper"' : '') ?>>
-                        <?= $block->escapeHtml($_formatedOptionValue['value'], ['a', 'img']) ?>
+                        <?= $escaper->escapeHtml($_formatedOptionValue['value'], ['a', 'img']) ?>
                         <?php if (isset($_formatedOptionValue['full_view'])) : ?>
                             <div class="tooltip content">
                                 <dl class="item options">
-                                    <dt><?= $block->escapeHtml($_option['label']) ?></dt>
-                                    <dd><?= $block->escapeHtml($_formatedOptionValue['full_view']) ?></dd>
+                                    <dt><?= $escaper->escapeHtml($_option['label']) ?></dt>
+                                    <dd><?= $escaper->escapeHtml($_formatedOptionValue['full_view']) ?></dd>
                                 </dl>
                             </div>
                         <?php endif; ?>
                     </dd>
                 <?php else : ?>
-                    <dd><?= $block->escapeHtml((isset($_option['print_value']) ? $_option['print_value'] : $_option['value'])) ?></dd>
+                    <dd><?= $escaper->escapeHtml((isset($_option['print_value']) ? $_option['print_value'] : $_option['value'])) ?></dd>
                 <?php endif; ?>
             <?php endforeach; ?>
             </dl>
@@ -37,41 +37,41 @@ $_item = $block->getItem();
         <?php if ($addtInfoBlock) : ?>
             <?= $addtInfoBlock->setItem($_item)->toHtml() ?>
         <?php endif; ?>
-        <?= $block->escapeHtml($_item->getDescription()) ?>
+        <?= $escaper->escapeHtml($_item->getDescription()) ?>
     </td>
-    <td class="col sku" data-th="<?= $block->escapeHtml(__('SKU')) ?>"><?= /* @noEscape */ $block->prepareSku($block->getSku()) ?></td>
-    <td class="col price" data-th="<?= $block->escapeHtml(__('Price')) ?>">
+    <td class="col sku" data-th="<?= $escaper->escapeHtml(__('SKU')) ?>"><?= /* @noEscape */ $block->prepareSku($block->getSku()) ?></td>
+    <td class="col price" data-th="<?= $escaper->escapeHtml(__('Price')) ?>">
         <?= $block->getItemPriceHtml() ?>
     </td>
-    <td class="col qty" data-th="<?= $block->escapeHtml(__('Qty')) ?>">
+    <td class="col qty" data-th="<?= $escaper->escapeHtml(__('Qty')) ?>">
         <ul class="items-qty">
         <?php if ($block->getItem()->getQtyOrdered() > 0) : ?>
             <li class="item">
-                <span class="title"><?= $block->escapeHtml(__('Ordered')) ?></span>
+                <span class="title"><?= $escaper->escapeHtml(__('Ordered')) ?></span>
                 <span class="content"><?= (float) $block->getItem()->getQtyOrdered() ?></span>
             </li>
         <?php endif; ?>
         <?php if ($block->getItem()->getQtyShipped() > 0) : ?>
             <li class="item">
-                <span class="title"><?= $block->escapeHtml(__('Shipped')) ?></span>
+                <span class="title"><?= $escaper->escapeHtml(__('Shipped')) ?></span>
                 <span class="content"><?= (float) $block->getItem()->getQtyShipped() ?></span>
             </li>
         <?php endif; ?>
         <?php if ($block->getItem()->getQtyCanceled() > 0) : ?>
             <li class="item">
-                <span class="title"><?= $block->escapeHtml(__('Canceled')) ?></span>
+                <span class="title"><?= $escaper->escapeHtml(__('Canceled')) ?></span>
                 <span class="content"><?= (float) $block->getItem()->getQtyCanceled() ?></span>
             </li>
         <?php endif; ?>
         <?php if ($block->getItem()->getQtyRefunded() > 0) : ?>
             <li class="item">
-                <span class="title"><?= $block->escapeHtml(__('Refunded')) ?></span>
+                <span class="title"><?= $escaper->escapeHtml(__('Refunded')) ?></span>
                 <span class="content"><?= (float) $block->getItem()->getQtyRefunded() ?></span>
             </li>
         <?php endif; ?>
         </ul>
     </td>
-    <td class="col subtotal" data-th="<?= $block->escapeHtml(__('Subtotal')) ?>">
+    <td class="col subtotal" data-th="<?= $escaper->escapeHtml(__('Subtotal')) ?>">
         <?= $block->getItemRowTotalHtml() ?>
     </td>
 </tr>

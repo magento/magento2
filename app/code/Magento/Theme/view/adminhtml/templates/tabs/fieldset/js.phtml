@@ -10,7 +10,7 @@
 
 <div id="js-file-uploader" class="uploader">
 </div>
-<script id="js-file-uploader-template" type="text/x-magento-template"> 
+<script id="js-file-uploader-template" type="text/x-magento-template">
     <div id="<%- data.id %>" class="file-row">
         <span class="file-info"><%- data.name %> (<%- data.size %>)</span>
         <div class="progressbar-container">
@@ -32,7 +32,7 @@
                 id="remove_js_files_<%- data.id %>"
                 name="js_removed_files[]"
                 value="<%- data.id %>" />
-            <label for="remove_js_files_<%- data.id %>"><?= $block->escapeHtml(__('Remove')) ?></label>
+            <label for="remove_js_files_<%- data.id %>"><?= $escaper->escapeHtml(__('Remove')) ?></label>
         </div>
     </div>
 

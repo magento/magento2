@@ -27,7 +27,7 @@ editSet.submit = editSet.submit.wrap(function(original) {
     if (editSet.currentNode){
         if (ConfigurableNodeExists(editSet.currentNode)) {
             alert({
-                content: '<?= $block->escapeJs(__('This group contains attributes used in configurable products. Please move these attributes to another group and try again.')) ?>'
+                content: '<?= $escaper->escapeJs(__('This group contains attributes used in configurable products. Please move these attributes to another group and try again.')) ?>'
             });
             return;
         }
@@ -38,7 +38,7 @@ editSet.submit = editSet.submit.wrap(function(original) {
 editSet.rightBeforeAppend = editSet.rightBeforeAppend.wrap(function(original, tree, nodeThis, node, newParent) {
     if (node.attributes.is_configurable == 1) {
         alert({
-            content: '<?= $block->escapeJs(__('This attribute is used in configurable products. You cannot remove it from the attribute set.')) ?>'
+            content: '<?= $escaper->escapeJs(__('This attribute is used in configurable products. You cannot remove it from the attribute set.')) ?>'
         });
         return false;
     }
@@ -48,7 +48,7 @@ editSet.rightBeforeAppend = editSet.rightBeforeAppend.wrap(function(original, tr
 editSet.rightBeforeInsert = editSet.rightBeforeInsert.wrap(function(original, tree, nodeThis, node, newParent) {
     if (node.attributes.is_configurable == 1) {
         alert({
-            content: '<?= $block->escapeJs(__('This attribute is used in configurable products. You cannot remove it from the attribute set.')) ?>'
+            content: '<?= $escaper->escapeJs(__('This attribute is used in configurable products. You cannot remove it from the attribute set.')) ?>'
         });
         return false;
     }

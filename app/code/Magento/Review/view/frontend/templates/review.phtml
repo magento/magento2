@@ -13,7 +13,7 @@
     {
         "*": {
             "Magento_Review/js/process-reviews": {
-                "productReviewUrl": "<?= $block->escapeJs($block->escapeUrl($block->getProductReviewUrl())) ?>",
+                "productReviewUrl": "<?= $escaper->escapeJs($escaper->escapeUrl($block->getProductReviewUrl())) ?>",
                 "reviewsTabSelector": "#tab-label-reviews"
             }
         }

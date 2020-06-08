@@ -17,7 +17,7 @@
                         <?php $showWebsite = true; ?>
                         <div class="admin__field field-website_label">
                             <label class="admin__field-label" for="">
-                                <span><?= $block->escapeHtml($_website->getName()) ?></span>
+                                <span><?= $escaper->escapeHtml($_website->getName()) ?></span>
                             </label>
                             <div class="admin__field-control">
                                 <div class="admin__field admin__field-option">
@@ -33,19 +33,19 @@
                     <?php if ($showGroup == false) : ?>
                         <?php $showGroup = true; ?>
                         <div class="admin__field field-group_label">
-                            <label class="admin__field-label" for=""><span><?= $block->escapeHtml($_group->getName()) ?></span></label>
+                            <label class="admin__field-label" for=""><span><?= $escaper->escapeHtml($_group->getName()) ?></span></label>
                             <div class="admin__field-control"></div>
                         </div>
                     <?php endif; ?>
 
                     <div class="admin__field field-store_label">
-                        <label class="admin__field-label" for=""><span><?= $block->escapeHtml($_group->getName()) ?></span></label>
+                        <label class="admin__field-label" for=""><span><?= $escaper->escapeHtml($_group->getName()) ?></span></label>
                         <div class="admin__field-control">
                             <div class="nested">
                                 <div class="admin__field admin__field-option">
                                     <input type="radio" id="store_<?= (int) $_store->getId() ?>" class="admin__control-radio" onclick="order.setStoreId('<?= (int) $_store->getId() ?>')"/>
                                     <label class="admin__field-label" for="store_<?= (int) $_store->getId() ?>">
-                                        <?= $block->escapeHtml($_store->getName()) ?>
+                                        <?= $escaper->escapeHtml($_store->getName()) ?>
                                     </label>
                                 </div>
                             </div>

@@ -9,38 +9,38 @@
  */
 ?>
 
-<form id="currency-symbols-form" action="<?= $block->escapeUrl($block->getFormActionUrl()) ?>" method="post">
-    <input name="form_key" type="hidden" value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>" />
+<form id="currency-symbols-form" action="<?= $escaper->escapeUrl($block->getFormActionUrl()) ?>" method="post">
+    <input name="form_key" type="hidden" value="<?= $escaper->escapeHtmlAttr($block->getFormKey()) ?>" />
     <fieldset class="admin__fieldset">
         <?php foreach ($block->getCurrencySymbolsData() as $code => $data): ?>
         <div class="admin__field _required">
-            <label class="admin__field-label" for="custom_currency_symbol<?= $block->escapeHtmlAttr($code) ?>">
-                <span><?= $block->escapeHtml($code) ?> (<?= $block->escapeHtml($data['displayName']) ?>)</span>
+            <label class="admin__field-label" for="custom_currency_symbol<?= $escaper->escapeHtmlAttr($code) ?>">
+                <span><?= $escaper->escapeHtml($code) ?> (<?= $escaper->escapeHtml($data['displayName']) ?>)</span>
             </label>
             <div class="admin__field-control">
-                <input id="custom_currency_symbol<?= $block->escapeHtmlAttr($code) ?>"
+                <input id="custom_currency_symbol<?= $escaper->escapeHtmlAttr($code) ?>"
                        class="required-entry admin__control-text"
                        type="text"
-                       value="<?= $block->escapeHtmlAttr($data['displaySymbol']) ?>"
-                       name="custom_currency_symbol[<?= $block->escapeHtmlAttr($code) ?>]"
+                       value="<?= $escaper->escapeHtmlAttr($data['displaySymbol']) ?>"
+                       name="custom_currency_symbol[<?= $escaper->escapeHtmlAttr($code) ?>]"
                         <?= $data['inherited'] ? 'disabled' : '' ?>>
                 <div class="admin__field admin__field-option">
                     <?php
-                        $escapedCode = $block->escapeHtmlAttr($block->escapeJs($code));
-                        $escapedSymbol = $block->escapeJs($data['parentSymbol']);
+                        $escapedCode = $escaper->escapeHtmlAttr($escaper->escapeJs($code));
+                        $escapedSymbol = $escaper->escapeJs($data['parentSymbol']);
                     ?>
-                    <input id="custom_currency_symbol_inherit<?= $block->escapeHtmlAttr($code) ?>"
+                    <input id="custom_currency_symbol_inherit<?= $escaper->escapeHtmlAttr($code) ?>"
                            class="admin__control-checkbox" type="checkbox"
                            <?php //@codingStandardsIgnoreStart ?>
                            onclick="toggleUseDefault(<?= '\'' . $escapedCode . '\',\'' . $escapedSymbol . '\'' ?>)"
                             <?php //@codingStandardsIgnoreEnd ?>
                             <?= $data['inherited'] ? ' checked="checked"' : '' ?>
                            value="1"
-                           name="inherit_custom_currency_symbol[<?= $block->escapeHtmlAttr($code) ?>]">
+                           name="inherit_custom_currency_symbol[<?= $escaper->escapeHtmlAttr($code) ?>]">
                     <label class="admin__field-label"
-                           for="custom_currency_symbol_inherit<?= $block->escapeHtmlAttr($code) ?>">
+                           for="custom_currency_symbol_inherit<?= $escaper->escapeHtmlAttr($code) ?>">
                         <span>
-                            <?= $block->escapeHtml($block->getInheritText()) ?>
+                            <?= $escaper->escapeHtml($block->getInheritText()) ?>
                         </span>
                     </label>
                 </div>

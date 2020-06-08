@@ -19,14 +19,14 @@
 
 <?php if ($block->isShow()) : ?>
 <div class="field field-store-switcher">
-    <label class="label" for="store_switcher"><?= $block->escapeHtml(__('Show Report For:')) ?></label>
+    <label class="label" for="store_switcher"><?= $escaper->escapeHtml(__('Show Report For:')) ?></label>
     <div class="control">
-        <select 
+        <select
             id="store_switcher"
             class="admin__control-select"
             name="store_switcher"
             onchange="return switchStore(this);">
-            <option value=""><?= $block->escapeHtml(__('All Websites')) ?></option>
+            <option value=""><?= $escaper->escapeHtml(__('All Websites')) ?></option>
             <?php foreach ($block->getWebsiteCollection() as $_website) : ?>
                 <?php $showWebsite = false; ?>
                 <?php foreach ($block->getGroupCollection($_website) as $_group) : ?>
@@ -34,13 +34,13 @@
                     <?php foreach ($block->getStoreCollection($_group) as $_store) : ?>
                         <?php if ($showWebsite == false) : ?>
                             <?php $showWebsite = true; ?>
-                            <option website="true" value="<?= $block->escapeHtmlAttr(implode(',', $_website->getStoreIds())) ?>"<?php if ($block->getRequest()->getParam('store_ids') == implode(',', $_website->getStoreIds())) : ?> selected<?php endif; ?>><?= $block->escapeHtml($_website->getName()) ?></option>
+                            <option website="true" value="<?= $escaper->escapeHtmlAttr(implode(',', $_website->getStoreIds())) ?>"<?php if ($block->getRequest()->getParam('store_ids') == implode(',', $_website->getStoreIds())) : ?> selected<?php endif; ?>><?= $escaper->escapeHtml($_website->getName()) ?></option>
                         <?php endif; ?>
                         <?php if ($showGroup == false) : ?>
                             <?php $showGroup = true; ?>
-                            <option group="true" value="<?= $block->escapeHtmlAttr(implode(',', $_group->getStoreIds())) ?>"<?php if ($block->getRequest()->getParam('store_ids') == implode(',', $_group->getStoreIds())) : ?> selected<?php endif; ?>>&nbsp;&nbsp;&nbsp;<?= $block->escapeHtml($_group->getName()) ?></option>
+                            <option group="true" value="<?= $escaper->escapeHtmlAttr(implode(',', $_group->getStoreIds())) ?>"<?php if ($block->getRequest()->getParam('store_ids') == implode(',', $_group->getStoreIds())) : ?> selected<?php endif; ?>>&nbsp;&nbsp;&nbsp;<?= $escaper->escapeHtml($_group->getName()) ?></option>
                         <?php endif; ?>
-                        <option value="<?= $block->escapeHtmlAttr($_store->getId()) ?>"<?php if ($block->getStoreId() == $_store->getId()) : ?> selected<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?= $block->escapeHtml($_store->getName()) ?></option>
+                        <option value="<?= $escaper->escapeHtmlAttr($_store->getId()) ?>"<?php if ($block->getStoreId() == $_store->getId()) : ?> selected<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<?= $escaper->escapeHtml($_store->getName()) ?></option>
                     <?php endforeach; ?>
                     <?php if ($showGroup) : ?>
                         </optgroup>
@@ -59,7 +59,7 @@ require(['prototype'], function(){
         if(obj.switchParams){
             storeParam+= obj.switchParams;
         }
-        setLocation('<?= $block->escapeUrl($block->getSwitchUrl()) ?>'+storeParam);
+        setLocation('<?= $escaper->escapeUrl($block->getSwitchUrl()) ?>'+storeParam);
     }
 
 });

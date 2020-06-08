@@ -7,10 +7,10 @@
 <div class="footer-container">
     <div class="footer">
         <?= $block->getChildHtml() ?>
-        <p class="bugs"><?= $block->escapeHtml(__('Help Us Keep Magento Healthy')) ?> - <a
+        <p class="bugs"><?= $escaper->escapeHtml(__('Help Us Keep Magento Healthy')) ?> - <a
             href="http://www.magentocommerce.com/bug-tracking"
-            target="_blank"><strong><?= $block->escapeHtml(__('Report All Bugs')) ?></strong></a>
+            target="_blank"><strong><?= $escaper->escapeHtml(__('Report All Bugs')) ?></strong></a>
         </p>
-        <address><?= $block->escapeHtml($block->getCopyright()) ?></address>
+        <address><?= $escaper->escapeHtml($block->getCopyright()) ?></address>
     </div>
 </div>

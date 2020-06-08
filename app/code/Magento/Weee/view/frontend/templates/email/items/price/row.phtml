@@ -19,7 +19,7 @@ $_order = $_item->getOrder();
 
 <?php if ($block->displayPriceExclTax() || $block->displayBothPrices()) : ?>
     <?php if ($block->displayBothPrices()) : ?>
-        <span class="label"><?=  $block->escapeHtml(__('Excl. Tax')) ?>:</span>
+        <span class="label"><?=  $escaper->escapeHtml(__('Excl. Tax')) ?>:</span>
     <?php endif; ?>
     <?= /* @noEscape */  $_order->formatPrice($block->getRowDisplayPriceExclTax()) ?>
 
@@ -28,14 +28,14 @@ $_order = $_item->getOrder();
         <?php if ($block->displayPriceWithWeeeDetails()) : ?>
             <small>
                 <?php foreach ($this->helper(\Magento\Weee\Helper\Data::class)->getApplied($_item) as $tax) : ?>
-                    <span class="nobr"><?=  $block->escapeHtml($tax['title']) ?>: <?= /* @noEscape */  $_order->formatPrice($tax['row_amount'], true, true) ?></span><br />
+                    <span class="nobr"><?=  $escaper->escapeHtml($tax['title']) ?>: <?= /* @noEscape */  $_order->formatPrice($tax['row_amount'], true, true) ?></span><br />
                 <?php endforeach; ?>
             </small>
         <?php endif; ?>
 
         <?php if ($block->displayFinalPrice()) : ?>
             <br />
-            <span class="nobr"><?=  $block->escapeHtml(__('Total')) ?>:<br /> <?= /* @noEscape */  $_order->formatPrice($block->getFinalRowDisplayPriceExclTax()) ?></span>
+            <span class="nobr"><?=  $escaper->escapeHtml(__('Total')) ?>:<br /> <?= /* @noEscape */  $_order->formatPrice($block->getFinalRowDisplayPriceExclTax()) ?></span>
         <?php endif; ?>
     <?php endif; ?>
 <?php endif; ?>
@@ -43,7 +43,7 @@ $_order = $_item->getOrder();
 
 <?php if ($block->displayPriceInclTax() || $block->displayBothPrices()) : ?>
     <?php if ($block->displayBothPrices()) : ?>
-        <br /><span class="label"><?=  $block->escapeHtml(__('Incl. Tax')) ?>:</span>
+        <br /><span class="label"><?=  $escaper->escapeHtml(__('Incl. Tax')) ?>:</span>
     <?php endif; ?>
     <?= /* @noEscape */  $_order->formatPrice($block->getRowDisplayPriceInclTax()) ?>
     <?php if ($this->helper(\Magento\Weee\Helper\Data::class)->getApplied($_item)) : ?>
@@ -51,13 +51,13 @@ $_order = $_item->getOrder();
         <?php if ($block->displayPriceWithWeeeDetails()) : ?>
             <small>
                 <?php foreach ($this->helper(\Magento\Weee\Helper\Data::class)->getApplied($_item) as $tax) : ?>
-                    <span class="nobr"><?=  $block->escapeHtml($tax['title']) ?>: <?= /* @noEscape */  $_order->formatPrice($tax['row_amount_incl_tax'], true, true) ?></span><br />
+                    <span class="nobr"><?=  $escaper->escapeHtml($tax['title']) ?>: <?= /* @noEscape */  $_order->formatPrice($tax['row_amount_incl_tax'], true, true) ?></span><br />
                 <?php endforeach; ?>
             </small>
         <?php endif; ?>
 
         <?php if ($block->displayFinalPrice()) : ?>
-            <span class="nobr"><?=  $block->escapeHtml(__('Total Incl. Tax')) ?>:<br /> <?= /* @noEscape */  $_order->formatPrice($block->getFinalRowDisplayPriceInclTax()) ?></span>
+            <span class="nobr"><?=  $escaper->escapeHtml(__('Total Incl. Tax')) ?>:<br /> <?= /* @noEscape */  $_order->formatPrice($block->getFinalRowDisplayPriceInclTax()) ?></span>
         <?php endif; ?>
     <?php endif; ?>
 <?php endif; ?>

@@ -6,7 +6,7 @@
 ?>
 <?php if ($block->getCanDisplayTotalPaid()) : ?>
 <tr>
-    <td class="label"><strong><?= $block->escapeHtml(__('Total Paid')) ?></strong></td>
+    <td class="label"><strong><?= $escaper->escapeHtml(__('Total Paid')) ?></strong></td>
     <td class="emph"><?= /* @noEscape */ $block->displayPriceAttribute('total_paid', true) ?>
     </td>
 </tr>

@@ -9,7 +9,7 @@
 <script>
 (function(){
     'use strict';
-    
+
     var $form;
 
     require([
@@ -46,12 +46,12 @@
 
         $form
             .modal({
-                title: '<?= $block->escapeJs(__('Choose Affected Attribute Set')) ?>',
+                title: '<?= $escaper->escapeJs(__('Choose Affected Attribute Set')) ?>',
                 closed: function () {
                     resetValidation();
                 },
                 buttons: [{
-                    text: '<?= $block->escapeJs(__('Confirm')) ?>',
+                    text: '<?= $escaper->escapeJs(__('Confirm')) ?>',
                     attr: {
                         'data-action': 'confirm'
                     },
@@ -75,12 +75,12 @@
 
                         $.ajax({
                             type: 'POST',
-                            url: '<?= $block->escapeUrl($block->getAttributeSetCreationUrl()) ?>',
+                            url: '<?= $escaper->escapeUrl($block->getAttributeSetCreationUrl()) ?>',
                             data: {
                                 gotoEdit: 1,
                                 attribute_set_name: $form.find('input[name=new-attribute-set-name]').val(),
                                 skeleton_set: $('#attribute_set_id').val(),
-                                form_key: '<?= $block->escapeJs($block->getFormKey()) ?>',
+                                form_key: '<?= $escaper->escapeJs($block->getFormKey()) ?>',
                                 return_session_messages_only: 1
                             },
                             dataType: 'json',
@@ -99,8 +99,8 @@
                         return false;
                     }
                 },{
-                    text: '<?= $block->escapeJs(__('Cancel')) ?>',
-                    id: '<?= $block->escapeJs($block->getJsId('close-button')) ?>',
+                    text: '<?= $escaper->escapeJs(__('Cancel')) ?>',
+                    id: '<?= $escaper->escapeJs($block->getJsId('close-button')) ?>',
                     'class': 'action-close',
                     click: function() {
                         $form.modal('closeModal');
@@ -117,7 +117,7 @@
                 }
             });
     });
-    
+
     require([
         'jquery'
     ], function ($) {

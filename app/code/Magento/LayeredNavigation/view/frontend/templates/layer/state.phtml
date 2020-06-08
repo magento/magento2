@@ -17,30 +17,30 @@
     <strong class="block-subtitle filter-current-subtitle"
             role="heading"
             aria-level="2"
-            data-count="<?= /* @noEscape */ count($_filters) ?>"><?= $block->escapeHtml(__('Now Shopping by')) ?></strong>
+            data-count="<?= /* @noEscape */ count($_filters) ?>"><?= $escaper->escapeHtml(__('Now Shopping by')) ?></strong>
     <ol class="items">
         <?php foreach ($_filters as $_filter) : ?>
             <li class="item">
-                <span class="filter-label"><?= $block->escapeHtml(__($_filter->getName())) ?></span>
-                <span class="filter-value"><?= $block->escapeHtml($block->stripTags($_filter->getLabel())) ?></span>
+                <span class="filter-label"><?= $escaper->escapeHtml(__($_filter->getName())) ?></span>
+                <span class="filter-value"><?= $escaper->escapeHtml($block->stripTags($_filter->getLabel())) ?></span>
                 <?php
                 $clearLinkUrl = $_filter->getClearLinkUrl();
-                $currentFilterName = $block->escapeHtmlAttr(__($_filter->getName()) . " " . $block->stripTags($_filter->getLabel()));
+                $currentFilterName = $escaper->escapeHtmlAttr(__($_filter->getName()) . " " . $block->stripTags($_filter->getLabel()));
                 if ($clearLinkUrl) :
                     ?>
-                    <a class="action previous" href="<?= $block->escapeUrl($_filter->getRemoveUrl()) ?>"
-                       title="<?= $block->escapeHtmlAttr(__('Previous')) ?>">
-                        <span><?= $block->escapeHtml(__('Previous')) ?></span>
+                    <a class="action previous" href="<?= $escaper->escapeUrl($_filter->getRemoveUrl()) ?>"
+                       title="<?= $escaper->escapeHtmlAttr(__('Previous')) ?>">
+                        <span><?= $escaper->escapeHtml(__('Previous')) ?></span>
                     </a>
                     <a class="action remove"
-                       title="<?= $block->escapeHtmlAttr($_filter->getFilter()->getClearLinkText()) ?>"
-                       href="<?= $block->escapeUrl($clearLinkUrl) ?>">
-                        <span><?= $block->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></span>
+                       title="<?= $escaper->escapeHtmlAttr($_filter->getFilter()->getClearLinkText()) ?>"
+                       href="<?= $escaper->escapeUrl($clearLinkUrl) ?>">
+                        <span><?= $escaper->escapeHtml($_filter->getFilter()->getClearLinkText()) ?></span>
                     </a>
                 <?php else : ?>
-                    <a class="action remove" href="<?= $block->escapeUrl($_filter->getRemoveUrl()) ?>"
-                       title="<?= /* @noEscape */ $block->escapeHtmlAttr(__('Remove')) . " " . $currentFilterName ?>">
-                        <span><?= $block->escapeHtml(__('Remove This Item')) ?></span>
+                    <a class="action remove" href="<?= $escaper->escapeUrl($_filter->getRemoveUrl()) ?>"
+                       title="<?= /* @noEscape */ $escaper->escapeHtmlAttr(__('Remove')) . " " . $currentFilterName ?>">
+                        <span><?= $escaper->escapeHtml(__('Remove This Item')) ?></span>
                     </a>
                 <?php endif; ?>
             </li>

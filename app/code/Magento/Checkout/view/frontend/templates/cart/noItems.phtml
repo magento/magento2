@@ -8,11 +8,11 @@
 ?>
 <div class="cart-empty">
     <?= $block->getChildHtml('checkout_cart_empty_widget') ?>
-    <p><?= $block->escapeHtml(__('You have no items in your shopping cart.')) ?></p>
-    <p><?= $block->escapeHtml(
+    <p><?= $escaper->escapeHtml(__('You have no items in your shopping cart.')) ?></p>
+    <p><?= $escaper->escapeHtml(
         __(
             'Click <a href="%1">here</a> to continue shopping.',
-            $block->escapeUrl($block->getContinueShoppingUrl())
+            $escaper->escapeUrl($block->getContinueShoppingUrl())
         ),
         ['a']
     ) ?>

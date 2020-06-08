@@ -10,16 +10,16 @@
 <div class="field telephone <?= $block->isRequired() ? 'required' : '' ?>">
     <label for="telephone" class="label">
         <span>
-            <?= $block->escapeHtml(__('Phone Number')) ?>
+            <?= $escaper->escapeHtml(__('Phone Number')) ?>
         </span>
     </label>
     <div class="control">
         <input type="tel"
                name="telephone"
                id="telephone"
-               value="<?= $block->escapeHtmlAttr($block->getTelephone()) ?>"
-               title="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
-               class="input-text <?= $block->escapeHtmlAttr(
+               value="<?= $escaper->escapeHtmlAttr($block->getTelephone()) ?>"
+               title="<?= $escaper->escapeHtmlAttr(__('Phone Number')) ?>"
+               class="input-text <?= $escaper->escapeHtmlAttr(
                    $block->getAttributeValidationClass('telephone')
                ) ?>"
         >

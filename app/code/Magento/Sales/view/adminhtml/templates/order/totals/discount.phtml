@@ -12,9 +12,9 @@
     <tr>
         <td class="label">
             <?php if ($_order->getCouponCode()) : ?>
-                <?= $block->escapeHtml(__('Discount (%1)', $_order->getCouponCode())) ?>
+                <?= $escaper->escapeHtml(__('Discount (%1)', $_order->getCouponCode())) ?>
             <?php else : ?>
-                <?= $block->escapeHtml(__('Discount')) ?>
+                <?= $escaper->escapeHtml(__('Discount')) ?>
             <?php endif; ?>
         </td>
         <td><?= /* @noEscape */ $block->displayPriceAttribute('discount_amount') ?></td>

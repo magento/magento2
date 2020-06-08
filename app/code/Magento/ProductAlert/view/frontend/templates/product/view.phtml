@@ -6,8 +6,8 @@
 ?>
 <?php /* @var $block \Magento\ProductAlert\Block\Product\View */?>
 <div class="product alert <?= $block->getHtmlClass() ?>">
-    <a href="<?= $block->escapeUrl($block->getSignupUrl()) ?>"
-       title="<?= $block->escapeHtml(__($block->getSignupLabel())) ?>" class="action alert">
-        <?= $block->escapeHtml(__($block->getSignupLabel())) ?>
+    <a href="<?= $escaper->escapeUrl($block->getSignupUrl()) ?>"
+       title="<?= $escaper->escapeHtml(__($block->getSignupLabel())) ?>" class="action alert">
+        <?= $escaper->escapeHtml(__($block->getSignupLabel())) ?>
     </a>
 </div>

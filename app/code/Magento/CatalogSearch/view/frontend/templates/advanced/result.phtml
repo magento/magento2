@@ -22,7 +22,7 @@ $productList = $block->getProductListHtml();
 <?php else : ?>
     <div role="alert" class="message error">
         <div>
-            <?= $block->escapeHtml(__('We can\'t find any items matching these search criteria.')) ?> <a href="<?= $block->escapeUrl($block->getFormUrl()) ?>"><?= $block->escapeHtml(__('Modify your search.')) ?></a>
+            <?= $escaper->escapeHtml(__('We can\'t find any items matching these search criteria.')) ?> <a href="<?= $escaper->escapeUrl($block->getFormUrl()) ?>"><?= $escaper->escapeHtml(__('Modify your search.')) ?></a>
         </div>
     </div>
 <?php endif; ?>
@@ -33,7 +33,7 @@ $productList = $block->getProductListHtml();
         <?php if (!empty($searchCriterias[$side])) : ?>
             <ul class="items">
                 <?php foreach ($searchCriterias[$side] as $criteria) : ?>
-                    <li class="item"><strong><?= $block->escapeHtml(__($criteria['name'])) ?>:</strong> <?= $block->escapeHtml($criteria['value']) ?></li>
+                    <li class="item"><strong><?= $escaper->escapeHtml(__($criteria['name'])) ?>:</strong> <?= $escaper->escapeHtml($criteria['value']) ?></li>
                 <?php endforeach; ?>
             </ul>
         <?php endif; ?>
@@ -42,8 +42,8 @@ $productList = $block->getProductListHtml();
 <?php if ($block->getResultCount()) : ?>
     <div class="message notice">
         <div>
-            <?= $block->escapeHtml(__("Don't see what you're looking for?")) ?>
-            <a href="<?= $block->escapeUrl($block->getFormUrl()) ?>"><?= $block->escapeHtml(__('Modify your search.')) ?></a>
+            <?= $escaper->escapeHtml(__("Don't see what you're looking for?")) ?>
+            <a href="<?= $escaper->escapeUrl($block->getFormUrl()) ?>"><?= $escaper->escapeHtml(__('Modify your search.')) ?></a>
         </div>
     </div>
 <?php endif; ?>

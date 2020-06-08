@@ -12,7 +12,7 @@
 <?php
 /* @var $block \Magento\Backend\Block\Widget\Form\Renderer\Fieldset\Element */
 $element = $block->getElement();
-$note = $element->getNote() ? '<div class="note admin__field-note">' . $block->escapeHtml($element->getNote()) . '</div>' : '';
+$note = $element->getNote() ? '<div class="note admin__field-note">' . $escaper->escapeHtml($element->getNote()) . '</div>' : '';
 $elementBeforeLabel = $element->getExtType() == 'checkbox' || $element->getExtType() == 'radio';
 $addOn = $element->getBeforeElementHtml() || $element->getAfterElementHtml();
 $fieldId = ($element->getHtmlId()) ? ' id="attribute-' . $element->getHtmlId() . '-container"' : '';
@@ -24,8 +24,8 @@ $fieldClass .= ($element->getRequired()) ? ' required' : '';
 $fieldClass .= ($note) ? ' with-note' : '';
 $fieldClass .= ($entity && $entity->getIsUserDefined()) ? ' user-defined type-' . $entity->getFrontendInput() : '';
 
-$fieldAttributes = $fieldId . ' class="' . $block->escapeHtmlAttr($fieldClass) . '" '
-    . $block->getUiId('form-field', $block->escapeHtmlAttr($element->getId()));
+$fieldAttributes = $fieldId . ' class="' . $escaper->escapeHtmlAttr($fieldClass) . '" '
+    . $block->getUiId('form-field', $escaper->escapeHtmlAttr($element->getId()));
 ?>
 
 <?php $block->checkFieldDisable() ?>
@@ -38,7 +38,7 @@ $fieldAttributes = $fieldId . ' class="' . $block->escapeHtmlAttr($fieldClass) .
         <?= $element->getElementHtml() ?>
     <?php else :?>
     <div<?= /* @noEscape */ $fieldAttributes ?> data-attribute-code="<?= $element->getHtmlId() ?>"
-        data-apply-to="<?= $block->escapeHtmlAttr($this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode(
+        data-apply-to="<?= $escaper->escapeHtmlAttr($this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode(
             $element->hasEntityAttribute() ? $element->getEntityAttribute()->getApplyTo() : []
         ))?>"
         >
@@ -62,9 +62,9 @@ $fieldAttributes = $fieldId . ' class="' . $block->escapeHtmlAttr($fieldClass) .
                             class="use-default-control"
                             id="<?= $element->getHtmlId() ?>_default"
                             <?php if ($block->usedDefault()) :?> checked="checked"<?php endif; ?>
-                            onclick="<?= $block->escapeHtmlAttr($elementToggleCode) ?>"
-                            value="<?= $block->escapeHtmlAttr($block->getAttributeCode()) ?>"/>
-                    <span class="use-default-label"><?= $block->escapeHtml(__('Use Default Value')) ?></span>
+                            onclick="<?= $escaper->escapeHtmlAttr($elementToggleCode) ?>"
+                            value="<?= $escaper->escapeHtmlAttr($block->getAttributeCode()) ?>"/>
+                    <span class="use-default-label"><?= $escaper->escapeHtml(__('Use Default Value')) ?></span>
                 </label>
             <?php endif; ?>
         </div>

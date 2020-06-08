@@ -10,7 +10,7 @@
  */
 ?>
 
-<form action="<?= $block->escapeUrl($block->getImportFormAction()) ?>" method="post" class="import-service">
+<form action="<?= $escaper->escapeUrl($block->getImportFormAction()) ?>" method="post" class="import-service">
     <?= $block->getBlockHtml('formkey') ?>
     <fieldset class="admin__fieldset admin__fieldset-import-service">
         <?= $block->getServicesHtml() ?>

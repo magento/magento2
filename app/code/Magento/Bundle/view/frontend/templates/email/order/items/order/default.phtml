@@ -27,7 +27,7 @@
         <?php if ($_prevOptionId != $attributes['option_id']) : ?>
             <tr class="bundle-option-label">
                 <td colspan="3">
-                    <strong><em><?= $block->escapeHtml($attributes['option_label']) ?></em></strong>
+                    <strong><em><?= $escaper->escapeHtml($attributes['option_label']) ?></em></strong>
                 </td>
             </tr>
             <?php $_prevOptionId = $attributes['option_id'] ?>
@@ -36,8 +36,8 @@
     <?php if (!$_item->getParentItem()) : ?>
         <tr class="bundle-item bundle-parent">
             <td class="item-info">
-                <p class="product-name"><?= $block->escapeHtml($_item->getName()) ?></p>
-                <p class="sku"><?= $block->escapeHtml(__('SKU')) ?>: <?= $block->escapeHtml($block->getSku($_item)) ?></p>
+                <p class="product-name"><?= $escaper->escapeHtml($_item->getName()) ?></p>
+                <p class="sku"><?= $escaper->escapeHtml(__('SKU')) ?>: <?= $escaper->escapeHtml($block->getSku($_item)) ?></p>
             </td>
             <td class="item-qty">
                 <?= (float)$_item->getQtyOrdered() * 1 ?>
@@ -62,8 +62,8 @@
             <?php if ($block->getItemOptions()) : ?>
             <dl>
                 <?php foreach ($block->getItemOptions() as $option) : ?>
-                <dt><strong><em><?= $block->escapeHtml($option['label']) ?></em></strong></dt>
-                            <dd><?= $block->escapeHtml($option['value']) ?></dd>
+                <dt><strong><em><?= $escaper->escapeHtml($option['label']) ?></em></strong></dt>
+                            <dd><?= $escaper->escapeHtml($option['value']) ?></dd>
                 <?php endforeach; ?>
             </dl>
             <?php endif; ?>
@@ -71,11 +71,11 @@
                 <table class="message-gift">
                     <tr>
                         <td>
-                            <h3><?= $block->escapeHtml(__('Gift Message')) ?></h3>
-                            <strong><?= $block->escapeHtml(__('From:')) ?></strong> <?= $block->escapeHtml($_giftMessage->getSender()) ?>
-                            <br /><strong><?= $block->escapeHtml(__('To:')) ?></strong> <?= $block->escapeHtml($_giftMessage->getRecipient()) ?>
-                            <br /><strong><?= $block->escapeHtml(__('Message:')) ?></strong>
-                            <br /><?= $block->escapeHtml($_giftMessage->getMessage()) ?>
+                            <h3><?= $escaper->escapeHtml(__('Gift Message')) ?></h3>
+                            <strong><?= $escaper->escapeHtml(__('From:')) ?></strong> <?= $escaper->escapeHtml($_giftMessage->getSender()) ?>
+                            <br /><strong><?= $escaper->escapeHtml(__('To:')) ?></strong> <?= $escaper->escapeHtml($_giftMessage->getRecipient()) ?>
+                            <br /><strong><?= $escaper->escapeHtml(__('Message:')) ?></strong>
+                            <br /><?= $escaper->escapeHtml($_giftMessage->getMessage()) ?>
                         </td>
                     </tr>
                 </table>

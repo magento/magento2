@@ -5,23 +5,23 @@
  */
 /* @var Magento\ProductVideo\Block\Adminhtml\Product\Edit\NewVideo $block */
 ?>
-<div id="<?= $block->escapeHtmlAttr($block->getNameInLayout()) ?>" style="display:none"
+<div id="<?= $escaper->escapeHtmlAttr($block->getNameInLayout()) ?>" style="display:none"
     data-modal-info='<?= /* @noEscape */ $block->getWidgetOptions() ?>'
 >
     <?= $block->getFormHtml() ?>
     <div id="video-player-preview-location" class="video-player-sidebar">
         <div class="video-player-container"></div>
         <div class="video-information title">
-            <label><?= $block->escapeHtml(__('Title:')) ?> </label><span></span>
+            <label><?= $escaper->escapeHtml(__('Title:')) ?> </label><span></span>
         </div>
         <div class="video-information uploaded">
-            <label><?= $block->escapeHtml(__('Uploaded:')) ?> </label><span></span>
+            <label><?= $escaper->escapeHtml(__('Uploaded:')) ?> </label><span></span>
         </div>
         <div class="video-information uploader">
-            <label><?= $block->escapeHtml(__('Uploader:')) ?> </label><span></span>
+            <label><?= $escaper->escapeHtml(__('Uploader:')) ?> </label><span></span>
         </div>
         <div class="video-information duration">
-            <label><?= $block->escapeHtml(__('Duration:')) ?> </label><span></span>
+            <label><?= $escaper->escapeHtml(__('Duration:')) ?> </label><span></span>
         </div>
     </div>
 </div>

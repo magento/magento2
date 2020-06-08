@@ -10,17 +10,17 @@
             <?= $block->getChildHtml() ?>
 
             <form class="action-element"
-                  action="<?= $block->escapeUrl($block->getUrl('*/*/refreshStatistics')) ?>"
+                  action="<?= $escaper->escapeUrl($block->getUrl('*/*/refreshStatistics')) ?>"
                   method="post">
                 <input
                     name="form_key"
                     type="hidden"
-                    value="<?= $block->escapeHtmlAttr($block->getFormKey()) ?>"/>
+                    value="<?= $escaper->escapeHtmlAttr($block->getFormKey()) ?>"/>
                 <button
                     class="action-primary"
                     type="submit"
-                    title="<?= $block->escapeHtmlAttr(__('Reload Data')) ?>">
-                    <?= $block->escapeHtml(__('Reload Data')) ?>
+                    title="<?= $escaper->escapeHtmlAttr(__('Reload Data')) ?>">
+                    <?= $escaper->escapeHtml(__('Reload Data')) ?>
                 </button>
             </form>
         </div>

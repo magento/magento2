@@ -6,4 +6,4 @@
 
 /** @var \Magento\Framework\View\Element\Template $block */
 ?>
-<?= $block->escapeHtml(__('If you are a registered VAT customer, please <a href="%1">click here</a> to enter your billing address for proper VAT calculation.', $block->getData('url')), ['a']);
+<?= $escaper->escapeHtml(__('If you are a registered VAT customer, please <a href="%1">click here</a> to enter your billing address for proper VAT calculation.', $block->getData('url')), ['a']);

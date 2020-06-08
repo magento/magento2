@@ -16,11 +16,11 @@
         <div id="product-template-suggest-container" class="suggest-expandable">
             <div class="action-dropdown">
                 <button type="button" class="action-toggle" data-mage-init='{"dropdown":{}}' data-toggle="dropdown">
-                    <span><?= $block->escapeHtml($block->getAttributeSetName()) ?></span>
+                    <span><?= $escaper->escapeHtml($block->getAttributeSetName()) ?></span>
                 </button>
                 <ul class="dropdown-menu">
                     <li><input type="text" id="product-template-suggest" class="search"
-                           placeholder="<?= $block->escapeHtmlAttr(__('start typing to search template')) ?>"/></li>
+                           placeholder="<?= $escaper->escapeHtmlAttr(__('start typing to search template')) ?>"/></li>
                 </ul>
             </div>
         </div>
@@ -29,9 +29,9 @@
             <input type="checkbox" id="product-online-switcher" name="product-online-switcher" />
             <label class="switcher-label"
                    for="product-online-switcher"
-                   data-text-on="<?= $block->escapeHtmlAttr(__('Product online')) ?>"
-                   data-text-off="<?= $block->escapeHtmlAttr(__('Product offline')) ?>"
-                   title="<?= $block->escapeHtmlAttr(__('Product online status')) ?>"></label>
+                   data-text-on="<?= $escaper->escapeHtmlAttr(__('Product online')) ?>"
+                   data-text-off="<?= $escaper->escapeHtmlAttr(__('Product offline')) ?>"
+                   title="<?= $escaper->escapeHtmlAttr(__('Product online status')) ?>"></label>
         </div>
 
         <?php if ($block->getProductId()) :?>
@@ -45,14 +45,14 @@
     </div>
 </div>
 <?php if ($block->getUseContainer()) :?>
-<form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" enctype="multipart/form-data"
-      data-form="edit-product" data-product-id="<?= $block->escapeHtmlAttr($block->getProduct()->getId()) ?>">
+<form action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>" method="post" enctype="multipart/form-data"
+      data-form="edit-product" data-product-id="<?= $escaper->escapeHtmlAttr($block->getProduct()->getId()) ?>">
 <?php endif; ?>
     <?= $block->getBlockHtml('formkey') ?>
     <div data-role="tabs" id="product-edit-form-tabs"></div> <?php /* @TODO: remove id after elimination of setDestElementId('product-edit-form-tabs') */?>
     <?= $block->getChildHtml('product-type-tabs') ?>
-    <input type="hidden" id="product_type_id" value="<?= $block->escapeHtmlAttr($block->getProduct()->getTypeId()) ?>"/>
-    <input type="hidden" id="attribute_set_id" value="<?= $block->escapeHtmlAttr($block->getProduct()->getAttributeSetId()) ?>"/>
+    <input type="hidden" id="product_type_id" value="<?= $escaper->escapeHtmlAttr($block->getProduct()->getTypeId()) ?>"/>
+    <input type="hidden" id="attribute_set_id" value="<?= $escaper->escapeHtmlAttr($block->getProduct()->getAttributeSetId()) ?>"/>
     <button type="submit" class="hidden"></button>
 <?php if ($block->getUseContainer()) :?>
 </form>
@@ -129,7 +129,7 @@ require([
             }
         }
     });
-    $form.mage('validation', {validationUrl: '<?= $block->escapeJs($block->escapeUrl($block->getValidationUrl())) ?>'});
+    $form.mage('validation', {validationUrl: '<?= $escaper->escapeJs($escaper->escapeUrl($block->getValidationUrl())) ?>'});
 
     var masks = <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getFieldsAutogenerationMasks()) ?>;
     var availablePlaceholders = <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getAttributesAllowedForAutogeneration()) ?>;

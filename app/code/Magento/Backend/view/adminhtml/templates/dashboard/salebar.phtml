@@ -7,7 +7,7 @@
 <?php if (count($block->getTotals()) > 0) : ?>
     <?php foreach ($block->getTotals() as $_total) : ?>
     <div class="dashboard-item dashboard-item-primary">
-        <div class="dashboard-item-title"><?= $block->escapeHtml($_total['label']) ?></div>
+        <div class="dashboard-item-title"><?= $escaper->escapeHtml($_total['label']) ?></div>
         <div class="dashboard-item-content">
             <strong class="dashboard-sales-value">
                 <?= /* @noEscape */ $_total['value'] ?>

@@ -39,14 +39,14 @@ if (!is_numeric($defaultMinSaleQty)) {
 <div class="fieldset-wrapper form-inline advanced-inventory-edit">
     <div class="fieldset-wrapper-title">
         <strong class="title">
-            <span><?= $block->escapeHtml(__('Advanced Inventory')) ?></span>
+            <span><?= $escaper->escapeHtml(__('Advanced Inventory')) ?></span>
         </strong>
     </div>
     <div class="fieldset-wrapper-content">
         <fieldset class="fieldset" id="table_cataloginventory">
         <div class="field">
             <label class="label" for="inventory_manage_stock">
-                <span><?= $block->escapeHtml(__('Manage Stock')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Manage Stock')) ?></span>
             </label>
 
             <div class="control">
@@ -55,11 +55,11 @@ if (!is_numeric($defaultMinSaleQty)) {
                         <select id="inventory_manage_stock"
                                 name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[manage_stock]"
                                 class="select" disabled="disabled">
-                            <option value="1"><?= $block->escapeHtml(__('Yes')) ?></option>
+                            <option value="1"><?= $escaper->escapeHtml(__('Yes')) ?></option>
                             <option value="0"
                                 <?php if ($block->getFieldValue('manage_stock') == 0):?>
                                     selected="selected"
-                                <?php endif; ?>><?= $block->escapeHtml(__('No')) ?></option>
+                                <?php endif; ?>><?= $escaper->escapeHtml(__('No')) ?></option>
                         </select>
                     </div>
                     <div class="field choice">
@@ -68,21 +68,21 @@ if (!is_numeric($defaultMinSaleQty)) {
                                id="inventory_use_config_manage_stock" data-role="toggle-editability" value="1"
                                checked="checked" disabled="disabled"/>
                         <label for="inventory_use_config_manage_stock"
-                               class="label"><span><?= $block->escapeHtml(__('Use Config Settings')) ?></span></label>
+                               class="label"><span><?= $escaper->escapeHtml(__('Use Config Settings')) ?></span></label>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_manage_stock_checkbox" data-role="toggle-editability-all"/>
                         <label for="inventory_manage_stock_checkbox"
-                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
+                               class="label"><span><?= $escaper->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
             </div>
-            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
+            <div class="field-service" value-scope="<?= $escaper->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
 
         <div class="field required">
             <label class="label" for="inventory_qty">
-                <span><?= $block->escapeHtml(__('Qty')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Qty')) ?></span>
             </label>
 
             <div class="control">
@@ -95,16 +95,16 @@ if (!is_numeric($defaultMinSaleQty)) {
                     <div class="field choice">
                         <input type="checkbox" id="inventory_qty_checkbox" data-role="toggle-editability-all"/>
                         <label for="inventory_qty_checkbox"
-                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
+                               class="label"><span><?= $escaper->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
             </div>
-            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
+            <div class="field-service" value-scope="<?= $escaper->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
 
         <div class="field with-addon">
             <label class="label" for="inventory_min_qty">
-                <span><?= $block->escapeHtml(__('Out-of-Stock Threshold')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Out-of-Stock Threshold')) ?></span>
             </label>
 
             <div class="control">
@@ -119,22 +119,22 @@ if (!is_numeric($defaultMinSaleQty)) {
                                name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[use_config_min_qty]" value="1"
                                data-role="toggle-editability" checked="checked" disabled="disabled"/>
                         <label for="inventory_use_config_min_qty" class="label">
-                            <span><?= $block->escapeHtml(__('Use Config Settings')) ?></span>
+                            <span><?= $escaper->escapeHtml(__('Use Config Settings')) ?></span>
                         </label>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_min_qty_checkbox" data-role="toggle-editability-all"/>
                         <label for="inventory_min_qty_checkbox"
-                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
+                               class="label"><span><?= $escaper->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
             </div>
-            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
+            <div class="field-service" value-scope="<?= $escaper->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
 
         <div class="field">
             <label class="label" for="inventory_min_sale_qty">
-                <span><?= $block->escapeHtml(__('Minimum Qty Allowed in Shopping Cart')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Minimum Qty Allowed in Shopping Cart')) ?></span>
             </label>
 
             <div class="control">
@@ -153,21 +153,21 @@ if (!is_numeric($defaultMinSaleQty)) {
                                checked="checked"
                                disabled="disabled"/>
                         <label for="inventory_use_config_min_sale_qty"
-                               class="label"><span><?= $block->escapeHtml(__('Use Config Settings')) ?></span></label>
+                               class="label"><span><?= $escaper->escapeHtml(__('Use Config Settings')) ?></span></label>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_min_sale_qty_checkbox" data-role="toggle-editability-all"/>
                         <label for="inventory_min_sale_qty_checkbox"
-                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
+                               class="label"><span><?= $escaper->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
             </div>
-            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
+            <div class="field-service" value-scope="<?= $escaper->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
 
         <div class="field">
             <label class="label" for="inventory_max_sale_qty">
-                <span><?= $block->escapeHtml(__('Maximum Qty Allowed in Shopping Cart')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Maximum Qty Allowed in Shopping Cart')) ?></span>
             </label>
 
             <div class="control">
@@ -187,21 +187,21 @@ if (!is_numeric($defaultMinSaleQty)) {
                                checked="checked"
                                disabled="disabled"/>
                         <label for="inventory_use_config_max_sale_qty"
-                               class="label"><span><?= $block->escapeHtml(__('Use Config Settings')) ?></span></label>
+                               class="label"><span><?= $escaper->escapeHtml(__('Use Config Settings')) ?></span></label>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_max_sale_checkbox" data-role="toggle-editability-all"/>
                         <label for="inventory_max_sale_checkbox"
-                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
+                               class="label"><span><?= $escaper->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
             </div>
-            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
+            <div class="field-service" value-scope="<?= $escaper->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
 
         <div class="field">
             <label class="label" for="inventory_is_qty_decimal">
-                <span><?= $block->escapeHtml(__('Qty Uses Decimals')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Qty Uses Decimals')) ?></span>
             </label>
 
             <div class="control">
@@ -211,11 +211,11 @@ if (!is_numeric($defaultMinSaleQty)) {
                                 name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[is_qty_decimal]"
                                 class="select"
                                 disabled="disabled">
-                            <option value="0"><?= $block->escapeHtml(__('No')) ?></option>
+                            <option value="0"><?= $escaper->escapeHtml(__('No')) ?></option>
                             <option value="1"
                                 <?php if ($block->getDefaultConfigValue('is_qty_decimal') == 1):?>
                                     selected="selected"
-                                <?php endif; ?>><?= $block->escapeHtml(__('Yes')) ?></option>
+                                <?php endif; ?>><?= $escaper->escapeHtml(__('Yes')) ?></option>
                         </select>
                     </div>
                     <div class="field choice">
@@ -223,16 +223,16 @@ if (!is_numeric($defaultMinSaleQty)) {
                                id="inventory_is_qty_decimal_checkbox"
                                data-role="toggle-editability-all"/>
                         <label for="inventory_is_qty_decimal_checkbox"
-                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
+                               class="label"><span><?= $escaper->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
             </div>
-            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
+            <div class="field-service" value-scope="<?= $escaper->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
 
         <div class="field">
             <label class="label" for="inventory_backorders">
-                <span><?= $block->escapeHtml(__('Backorders')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Backorders')) ?></span>
             </label>
 
             <div class="control">
@@ -245,8 +245,8 @@ if (!is_numeric($defaultMinSaleQty)) {
                             <?php foreach ($block->getBackordersOption() as $option):?>
                                 <?php $_selected = ($option['value'] == $block->getDefaultConfigValue('backorders'))
                                     ? ' selected="selected"' : '' ?>
-                                <option value="<?= $block->escapeHtmlAttr($option['value']) ?>"
-                                    <?= /* @noEscape */ $_selected ?>><?= $block->escapeHtml($option['label']) ?>
+                                <option value="<?= $escaper->escapeHtmlAttr($option['value']) ?>"
+                                    <?= /* @noEscape */ $_selected ?>><?= $escaper->escapeHtml($option['label']) ?>
                                 </option>
                             <?php endforeach; ?>
                         </select>
@@ -259,22 +259,22 @@ if (!is_numeric($defaultMinSaleQty)) {
                                checked="checked"
                                disabled="disabled"/>
                         <label for="inventory_use_config_backorders"
-                               class="label"><span><?= $block->escapeHtml(__('Use Config Settings')) ?></span></label>
+                               class="label"><span><?= $escaper->escapeHtml(__('Use Config Settings')) ?></span></label>
                     </div>
                     <div class="field choice">
                         <input type="checkbox" id="inventory_backorders_checkbox" data-role="toggle-editability-all"/>
                         <label for="inventory_backorders_checkbox"
-                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
+                               class="label"><span><?= $escaper->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
 
             </div>
-            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
+            <div class="field-service" value-scope="<?= $escaper->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
 
         <div class="field">
             <label class="label" for="inventory_notify_stock_qty">
-                <span><?= $block->escapeHtml(__('Notify for Quantity Below')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Notify for Quantity Below')) ?></span>
             </label>
 
             <div class="control">
@@ -294,23 +294,23 @@ if (!is_numeric($defaultMinSaleQty)) {
                                checked="checked"
                                disabled="disabled"/>
                         <label for="inventory_use_config_notify_stock_qty"
-                               class="label"><span><?= $block->escapeHtml(__('Use Config Settings')) ?></span></label>
+                               class="label"><span><?= $escaper->escapeHtml(__('Use Config Settings')) ?></span></label>
                     </div>
                     <div class="field choice">
                         <input type="checkbox"
                                id="inventory_notify_stock_qty_checkbox"
                                data-role="toggle-editability-all"/>
                         <label for="inventory_notify_stock_qty_checkbox"
-                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
+                               class="label"><span><?= $escaper->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
             </div>
-            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
+            <div class="field-service" value-scope="<?= $escaper->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
 
         <div class="field">
             <label class="label" for="inventory_enable_qty_increments">
-                <span><?= $block->escapeHtml(__('Enable Qty Increments')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Enable Qty Increments')) ?></span>
             </label>
 
             <div class="control">
@@ -320,11 +320,11 @@ if (!is_numeric($defaultMinSaleQty)) {
                                 name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[enable_qty_increments]"
                                 class="select"
                                 disabled="disabled">
-                            <option value="1"><?= $block->escapeHtml(__('Yes')) ?></option>
+                            <option value="1"><?= $escaper->escapeHtml(__('Yes')) ?></option>
                             <option value="0"
                                 <?php if ($block->getDefaultConfigValue('enable_qty_increments') == 0):?>
                                     selected="selected"
-                                <?php endif; ?>><?= $block->escapeHtml(__('No')) ?></option>
+                                <?php endif; ?>><?= $escaper->escapeHtml(__('No')) ?></option>
                         </select>
                     </div>
                     <div class="field choice">
@@ -335,23 +335,23 @@ if (!is_numeric($defaultMinSaleQty)) {
                                checked="checked"
                                disabled="disabled"/>
                         <label for="inventory_use_config_enable_qty_increments"
-                               class="label"><span><?= $block->escapeHtml(__('Use Config Settings')) ?></span></label>
+                               class="label"><span><?= $escaper->escapeHtml(__('Use Config Settings')) ?></span></label>
                     </div>
                     <div class="field choice">
                         <input type="checkbox"
                                id="inventory_enable_qty_increments_checkbox"
                                data-role="toggle-editability-all"/>
                         <label for="inventory_enable_qty_increments_checkbox"
-                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
+                               class="label"><span><?= $escaper->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
             </div>
-            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
+            <div class="field-service" value-scope="<?= $escaper->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
 
         <div class="field">
             <label class="label" for="inventory_qty_increments">
-                <span><?= $block->escapeHtml(__('Qty Increments')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Qty Increments')) ?></span>
             </label>
 
             <div class="control">
@@ -371,23 +371,23 @@ if (!is_numeric($defaultMinSaleQty)) {
                                checked="checked"
                                disabled="disabled"/>
                         <label for="inventory_use_config_qty_increments"
-                               class="label"><span><?= $block->escapeHtml(__('Use Config Settings')) ?></span></label>
+                               class="label"><span><?= $escaper->escapeHtml(__('Use Config Settings')) ?></span></label>
                     </div>
                     <div class="field choice">
                         <input type="checkbox"
                                id="inventory_qty_increments_checkbox"
                                data-role="toggle-editability-all"/>
                         <label for="inventory_qty_increments_checkbox"
-                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
+                               class="label"><span><?= $escaper->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
             </div>
-            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
+            <div class="field-service" value-scope="<?= $escaper->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
 
         <div class="field">
             <label class="label" for="inventory_stock_availability">
-                <span><?= $block->escapeHtml(__('Stock Availability')) ?></span>
+                <span><?= $escaper->escapeHtml(__('Stock Availability')) ?></span>
             </label>
 
             <div class="control">
@@ -396,9 +396,9 @@ if (!is_numeric($defaultMinSaleQty)) {
                         <select id="inventory_stock_availability"
                                 name="<?= /* @noEscape */ $block->getFieldSuffix() ?>[is_in_stock]" class="select"
                                 disabled="disabled">
-                            <option value="1"><?= $block->escapeHtml(__('In Stock')) ?></option>
+                            <option value="1"><?= $escaper->escapeHtml(__('In Stock')) ?></option>
                             <option value="0"<?php if ($block->getDefaultConfigValue('is_in_stock') == 0):?>
-                                selected<?php endif; ?>><?= $block->escapeHtml(__('Out of Stock')) ?>
+                                selected<?php endif; ?>><?= $escaper->escapeHtml(__('Out of Stock')) ?>
                             </option>
                         </select>
                     </div>
@@ -407,11 +407,11 @@ if (!is_numeric($defaultMinSaleQty)) {
                                id="inventory_stock_availability_checkbox"
                                data-role="toggle-editability-all"/>
                         <label for="inventory_stock_availability_checkbox"
-                               class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
+                               class="label"><span><?= $escaper->escapeHtml(__('Change')) ?></span></label>
                     </div>
                 </div>
             </div>
-            <div class="field-service" value-scope="<?= $block->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
+            <div class="field-service" value-scope="<?= $escaper->escapeHtmlAttr(__('[GLOBAL]')) ?>"></div>
         </div>
         </fieldset>
     </div>

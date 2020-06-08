@@ -11,34 +11,34 @@ $orderIds = $block->getOrderIds();
 <div class="multicheckout results">
     <p class="block-content">
         <?php if (!empty($orderIds)) : ?>
-            <?= $block->escapeHtml(__('Not all items were included.')); ?>
+            <?= $escaper->escapeHtml(__('Not all items were included.')); ?>
         <?php endif; ?>
-        <?= $block->escapeHtml(__('For details, see')); ?>
-        <a href="#failed"><?= $block->escapeHtml(__('Failed to Order')); ?></a>
-        <?= $block->escapeHtml(__('section below')); ?>
+        <?= $escaper->escapeHtml(__('For details, see')); ?>
+        <a href="#failed"><?= $escaper->escapeHtml(__('Failed to Order')); ?></a>
+        <?= $escaper->escapeHtml(__('section below')); ?>
     </p>
     <?php if (!empty($orderIds)) : ?>
     <p class="block-content">
-        <?= $block->escapeHtml(__('For successfully ordered items, you\'ll receive a confirmation email '.
+        <?= $escaper->escapeHtml(__('For successfully ordered items, you\'ll receive a confirmation email '.
             'including order numbers, tracking information, and more details.')); ?>
     </p>
     <div class="orders-succeed">
-        <h3 class="subtitle"><?= $block->escapeHtml(__('Successfully Ordered')); ?></h3>
+        <h3 class="subtitle"><?= $escaper->escapeHtml(__('Successfully Ordered')); ?></h3>
         <ul class="orders-list">
             <?php foreach ($orderIds as $orderId => $incrementId) : ?>
                 <li class="shipping-list">
-                    <div class="order-id"><a href="<?= $block->escapeUrl($block->getViewOrderUrl($orderId)); ?>">
-                    <?= $block->escapeHtml($incrementId); ?></a></div>
+                    <div class="order-id"><a href="<?= $escaper->escapeUrl($block->getViewOrderUrl($orderId)); ?>">
+                    <?= $escaper->escapeHtml($incrementId); ?></a></div>
                     <?php $shippingAddress = $block->getOrderShippingAddress($orderId); ?>
                     <div class="shipping-item">
                         <?php if ($shippingAddress) : ?>
-                        <span class="shipping-label"><?= $block->escapeHtml(__('Ship to:')); ?></span>
+                        <span class="shipping-label"><?= $escaper->escapeHtml(__('Ship to:')); ?></span>
                         <span class="shipping-address">
-                            <?= $block->escapeHtml($block->formatOrderShippingAddress($shippingAddress)); ?>
+                            <?= $escaper->escapeHtml($block->formatOrderShippingAddress($shippingAddress)); ?>
                         </span>
                         <?php else : ?>
                             <span class="shipping-address">
-                                <?= $block->escapeHtml(__('No shipping required.')); ?>
+                                <?= $escaper->escapeHtml(__('No shipping required.')); ?>
                             </span>
                         <?php endif; ?>
                     </div>
@@ -48,13 +48,13 @@ $orderIds = $block->getOrderIds();
     </div>
     <?php endif; ?>
     <div class="orders-failed">
-        <h3 class="subtitle"><a name="failed"><?= $block->escapeHtml(__('Failed to Order')); ?></a></h3>
+        <h3 class="subtitle"><a name="failed"><?= $escaper->escapeHtml(__('Failed to Order')); ?></a></h3>
         <div class="message message-error error">
             <div>
-                <?= $block->escapeHtml(__('To purchase these items: Return to the')); ?>
-                <a href="<?= $block->escapeUrl($block->getUrl('*/*/overview')) ?>">
-                    <?= $block->escapeHtml(__('Review page in Checkout')); ?></a>,
-                <?= $block->escapeHtml(__('resolve any errors, and place a new order.'))?>
+                <?= $escaper->escapeHtml(__('To purchase these items: Return to the')); ?>
+                <a href="<?= $escaper->escapeUrl($block->getUrl('*/*/overview')) ?>">
+                    <?= $escaper->escapeHtml(__('Review page in Checkout')); ?></a>,
+                <?= $escaper->escapeHtml(__('resolve any errors, and place a new order.'))?>
             </div>
         </div>
         <?php $failedAddresses = $block->getFailedAddresses() ?>
@@ -65,18 +65,18 @@ $orderIds = $block->getOrderIds();
                     <dl class="shipping-item">
                         <dt class="shipping-block">
                             <?php if ($block->isShippingAddress($address)) : ?>
-                            <span class="shipping-label"><?= $block->escapeHtml(__('Ship to:')); ?></span>
+                            <span class="shipping-label"><?= $escaper->escapeHtml(__('Ship to:')); ?></span>
                             <span class="shipping-address">
-                                <?= $block->escapeHtml($block->formatQuoteShippingAddress($address)); ?>
+                                <?= $escaper->escapeHtml($block->formatQuoteShippingAddress($address)); ?>
                             </span>
                             <?php else : ?>
                             <span class="shipping-address">
-                                <?= $block->escapeHtml(__('No shipping required.')); ?>
+                                <?= $escaper->escapeHtml(__('No shipping required.')); ?>
                             </span>
                             <?php endif; ?>
                         </dt>
                         <dd class="error-block">
-                            <span class="error-label"><?= $block->escapeHtml(__('Error:')); ?></span>
+                            <span class="error-label"><?= $escaper->escapeHtml(__('Error:')); ?></span>
                             <span class="error-description">
                                 <?= /* @noEscape */ $block->getAddressError($address); ?>
                             </span>

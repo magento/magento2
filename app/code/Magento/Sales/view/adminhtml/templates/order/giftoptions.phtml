@@ -6,7 +6,7 @@
 ?>
 <?php if ($block->getChildHtml()) : ?>
 <section class="admin__page-section order-gift-options">
-    <div class="admin__page-section-title"><strong class="title"><?= $block->escapeHtml(__('Gift Options')) ?></strong></div>
+    <div class="admin__page-section-title"><strong class="title"><?= $escaper->escapeHtml(__('Gift Options')) ?></strong></div>
     <?= $block->getChildHtml() ?>
 </section>
 <?php endif; ?>

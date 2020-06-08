@@ -8,23 +8,23 @@
 
 /* @var \Magento\Sales\Block\Adminhtml\Order\Invoice\Create\Form $block */
 ?>
-<form id="edit_form" class="order-invoice-edit" method="post" action="<?= $block->escapeUrl($block->getSaveUrl()) ?>">
+<form id="edit_form" class="order-invoice-edit" method="post" action="<?= $escaper->escapeUrl($block->getSaveUrl()) ?>">
     <?= $block->getBlockHtml('formkey') ?>
     <?php $_order = $block->getInvoice()->getOrder() ?>
     <?= $block->getChildHtml('order_info') ?>
 
     <section class="admin__page-section">
         <div class="admin__page-section-title">
-            <span class="title"><?= $block->escapeHtml(__('Payment &amp; Shipping Method')) ?></span>
+            <span class="title"><?= $escaper->escapeHtml(__('Payment &amp; Shipping Method')) ?></span>
         </div>
         <div class="admin__page-section-content">
             <div class="admin__page-section-item order-payment-method<?php if ($_order->getIsVirtual()) : ?> order-payment-method-virtual<?php endif; ?>">
                 <div class="admin__page-section-item-title">
-                    <span class="title"><?= $block->escapeHtml(__('Payment Information')) ?></span>
+                    <span class="title"><?= $escaper->escapeHtml(__('Payment Information')) ?></span>
                 </div>
                 <div class="admin__page-section-item-content">
                     <div class="order-payment-method-title"><?= $block->getChildHtml('order_payment') ?></div>
-                    <div class="order-payment-currency"><?= $block->escapeHtml(__('The order was placed using %1.', $_order->getOrderCurrencyCode())) ?></div>
+                    <div class="order-payment-currency"><?= $escaper->escapeHtml(__('The order was placed using %1.', $_order->getOrderCurrencyCode())) ?></div>
                     <div class="order-payment-additional"><?= $block->getChildHtml('order_payment_additional') ?></div>
                 </div>
             </div>
@@ -32,13 +32,13 @@
                 <div class="admin__page-section-item order-shipping-address">
                     <?php /*Shipping Address */ ?>
                     <div class="admin__page-section-item-title">
-                        <span class="title"><?= $block->escapeHtml(__('Shipping Information')) ?></span>
+                        <span class="title"><?= $escaper->escapeHtml(__('Shipping Information')) ?></span>
                     </div>
                     <div class="admin__page-section-item-content">
                         <div class="shipping-description-wrapper">
-                            <div class="shipping-description-title"><?= $block->escapeHtml($_order->getShippingDescription()) ?></div>
+                            <div class="shipping-description-title"><?= $escaper->escapeHtml($_order->getShippingDescription()) ?></div>
                             <div class="shipping-description-content">
-                                <?= $block->escapeHtml(__('Total Shipping Charges')) ?>:
+                                <?= $escaper->escapeHtml(__('Total Shipping Charges')) ?>:
 
                                 <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayShippingPriceIncludingTax()) : ?>
                                     <?php $_excl = $block->displayShippingPriceInclTax($_order); ?>
@@ -49,7 +49,7 @@
 
                                 <?= /* @noEscape */ $_excl ?>
                                 <?php if ($this->helper(\Magento\Tax\Helper\Data::class)->displayShippingBothPrices() && $_incl != $_excl) : ?>
-                                    (<?= $block->escapeHtml(__('Incl. Tax')) ?> <?= /* @noEscape */ $_incl ?>)
+                                    (<?= $escaper->escapeHtml(__('Incl. Tax')) ?> <?= /* @noEscape */ $_incl ?>)
                                 <?php endif; ?>
                             </div>
                         </div>
@@ -58,10 +58,10 @@
                                 <input type="checkbox" name="invoice[do_shipment]" id="invoice_do_shipment" value="1"
                                        class="admin__control-checkbox" <?= $block->hasInvoiceShipmentTypeMismatch() ? ' disabled="disabled"' : '' ?> />
                                 <label for="invoice_do_shipment"
-                                       class="admin__field-label"><span><?= $block->escapeHtml(__('Create Shipment')) ?></span></label>
+                                       class="admin__field-label"><span><?= $escaper->escapeHtml(__('Create Shipment')) ?></span></label>
                             </div>
                             <?php if ($block->hasInvoiceShipmentTypeMismatch()) : ?>
-                                <small><?= $block->escapeHtml(__('Invoice and shipment types do not match for some items on this order. You can create a shipment only after creating the invoice.')) ?></small>
+                                <small><?= $escaper->escapeHtml(__('Invoice and shipment types do not match for some items on this order. You can create a shipment only after creating the invoice.')) ?></small>
                             <?php endif; ?>
                         <?php endif; ?>
                         <div id="tracking" style="display:none;"><?= $block->getChildHtml('tracking', false) ?></div>

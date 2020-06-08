@@ -16,11 +16,11 @@ $hasCouponCode = (bool) strlen($block->getCouponCode());
      data-mage-init='{"collapsible":{"active": <?= $hasCouponCode ? 'true' : 'false' ?>, "openedState": "active", "saveState": false}}'
 >
     <div class="title" data-role="title">
-        <strong id="block-discount-heading" role="heading" aria-level="2"><?= $block->escapeHtml(__('Apply Discount Code')) ?></strong>
+        <strong id="block-discount-heading" role="heading" aria-level="2"><?= $escaper->escapeHtml(__('Apply Discount Code')) ?></strong>
     </div>
     <div class="content" data-role="content" aria-labelledby="block-discount-heading">
         <form id="discount-coupon-form"
-              action="<?= $block->escapeUrl($block->getUrl('checkout/cart/couponPost')) ?>"
+              action="<?= $escaper->escapeUrl($block->getUrl('checkout/cart/couponPost')) ?>"
               method="post"
               data-mage-init='{"discountCode":{"couponCodeSelector": "#coupon_code",
                                                "removeCouponSelector": "#remove-coupon",
@@ -29,14 +29,14 @@ $hasCouponCode = (bool) strlen($block->getCouponCode());
             <div class="fieldset coupon<?= $hasCouponCode ? ' applied' : '' ?>">
                 <input type="hidden" name="remove" id="remove-coupon" value="0" />
                 <div class="field">
-                    <label for="coupon_code" class="label"><span><?= $block->escapeHtml(__('Enter discount code')) ?></span></label>
+                    <label for="coupon_code" class="label"><span><?= $escaper->escapeHtml(__('Enter discount code')) ?></span></label>
                     <div class="control">
                         <input type="text"
                                class="input-text"
                                id="coupon_code"
                                name="coupon_code"
-                               value="<?= $block->escapeHtmlAttr($block->getCouponCode()) ?>"
-                               placeholder="<?= $block->escapeHtmlAttr(__('Enter discount code')) ?>"
+                               value="<?= $escaper->escapeHtmlAttr($block->getCouponCode()) ?>"
+                               placeholder="<?= $escaper->escapeHtmlAttr(__('Enter discount code')) ?>"
                                 <?php if ($hasCouponCode) :?>
                                    disabled="disabled"
                                 <?php endif; ?>
@@ -46,13 +46,13 @@ $hasCouponCode = (bool) strlen($block->getCouponCode());
                 <div class="actions-toolbar">
                     <?php if (!$hasCouponCode) :?>
                     <div class="primary">
-                        <button class="action apply primary" type="button" value="<?= $block->escapeHtmlAttr(__('Apply Discount')) ?>">
-                            <span><?= $block->escapeHtml(__('Apply Discount')) ?></span>
+                        <button class="action apply primary" type="button" value="<?= $escaper->escapeHtmlAttr(__('Apply Discount')) ?>">
+                            <span><?= $escaper->escapeHtml(__('Apply Discount')) ?></span>
                         </button>
                     </div>
                     <?php else :?>
                         <div class="primary">
-                            <button  type="button" class="action cancel primary" value="<?= $block->escapeHtmlAttr(__('Cancel Coupon')) ?>"><span><?= $block->escapeHtml(__('Cancel Coupon')) ?></span></button>
+                            <button  type="button" class="action cancel primary" value="<?= $escaper->escapeHtmlAttr(__('Cancel Coupon')) ?>"><span><?= $escaper->escapeHtml(__('Cancel Coupon')) ?></span></button>
                         </div>
                     <?php endif; ?>
                 </div>

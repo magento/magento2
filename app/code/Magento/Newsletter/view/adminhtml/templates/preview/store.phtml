@@ -7,7 +7,7 @@
 
 <?php if ($websites = $block->getWebsites()) : ?>
 <div class="field field-store-switcher">
-    <label class="label" for="store_switcher"><?= $block->escapeHtml(__('Choose Store View:')) ?></label>
+    <label class="label" for="store_switcher"><?= $escaper->escapeHtml(__('Choose Store View:')) ?></label>
     <div class="control">
         <select
             id="store_switcher"
@@ -20,13 +20,13 @@
                     <?php foreach ($block->getStores($group) as $store) : ?>
                         <?php if ($showWebsite == false) : ?>
                             <?php $showWebsite = true; ?>
-                            <optgroup label="<?= $block->escapeHtmlAttr($website->getName()) ?>"></optgroup>
+                            <optgroup label="<?= $escaper->escapeHtmlAttr($website->getName()) ?>"></optgroup>
                         <?php endif; ?>
                         <?php if ($showGroup == false) : ?>
                             <?php $showGroup = true; ?>
-                            <optgroup label="&nbsp;&nbsp;&nbsp;<?= $block->escapeHtmlAttr($group->getName()) ?>">
+                            <optgroup label="&nbsp;&nbsp;&nbsp;<?= $escaper->escapeHtmlAttr($group->getName()) ?>">
                         <?php endif; ?>
-                        <option value="<?= $block->escapeHtmlAttr($store->getId()) ?>"<?php if ($block->getStoreId() == $store->getId()) : ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?= $block->escapeHtml($store->getName()) ?></option>
+                        <option value="<?= $escaper->escapeHtmlAttr($store->getId()) ?>"<?php if ($block->getStoreId() == $store->getId()) : ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?= $escaper->escapeHtml($store->getName()) ?></option>
                     <?php endforeach; ?>
                     <?php if ($showGroup) : ?>
                         </optgroup>

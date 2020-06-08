@@ -10,9 +10,9 @@
 
 $_item = $block->getItem();
 ?>
-<span class="price-excluding-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">
+<span class="price-excluding-tax" data-label="<?= $escaper->escapeHtml(__('Excl. Tax')) ?>">
     <span class="cart-price">
-        <?= $block->escapeHtml(
+        <?= $escaper->escapeHtml(
             $this->helper(Magento\Checkout\Helper\Data::class)->formatPrice($_item->getRowTotal()),
             ['span']
         ) ?>

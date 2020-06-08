@@ -13,27 +13,27 @@
      class="block-bundle-summary"
      data-mage-init='{"sticky":{"container": ".product-add-form"}}'>
     <div class="title">
-        <strong><?= $block->escapeHtml(__('Your Customization')) ?></strong>
+        <strong><?= $escaper->escapeHtml(__('Your Customization')) ?></strong>
     </div>
     <div class="content">
         <div class="bundle-info">
             <?= $block->getImage($_product, 'bundled_product_customization_page')->toHtml() ?>
             <div class="product-details">
-                <strong class="product name"><?= $block->escapeHtml($_product->getName()) ?></strong>
+                <strong class="product name"><?= $escaper->escapeHtml($_product->getName()) ?></strong>
                 <?php if ($_product->getIsSalable()) : ?>
-                    <p class="available stock" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
-                        <span><?= $block->escapeHtml(__('In stock')) ?></span>
+                    <p class="available stock" title="<?= $escaper->escapeHtmlAttr(__('Availability')) ?>">
+                        <span><?= $escaper->escapeHtml(__('In stock')) ?></span>
                     </p>
                 <?php else : ?>
-                    <p class="unavailable stock" title="<?= $block->escapeHtmlAttr(__('Availability')) ?>">
-                        <span><?= $block->escapeHtml(__('Out of stock')) ?></span>
+                    <p class="unavailable stock" title="<?= $escaper->escapeHtmlAttr(__('Availability')) ?>">
+                        <span><?= $escaper->escapeHtml(__('Out of stock')) ?></span>
                     </p>
                 <?php endif; ?>
                 <?= $block->getChildHtml('', true) ?>
             </div>
         </div>
         <div class="bundle-summary">
-            <strong class="subtitle"><?= $block->escapeHtml(__('Summary')) ?></strong>
+            <strong class="subtitle"><?= $escaper->escapeHtml(__('Summary')) ?></strong>
             <div id="bundle-summary" data-container="product-summary">
                 <ul data-mage-init='{"productSummary": []}' class="bundle items"></ul>
                 <script data-template="bundle-summary" type="text/x-magento-template">
