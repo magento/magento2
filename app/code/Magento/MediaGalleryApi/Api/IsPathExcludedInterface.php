@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryApi\Api;
 
 /**
- * Check if the path is blacklisted for media gallery.
+ * Check if the path is excluded for media gallery.
  *
- * Directory path may be blacklisted if it's reserved by the system.
+ * Directory path may be excluded if it's reserved by the system.
  * @api
  */
-interface IsPathBlacklistedInterface
+interface IsPathExcludedInterface
 {
     /**
      * Check if the path is excluded from displaying and processing in the media gallery
