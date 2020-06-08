@@ -286,14 +286,15 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      * If passed name will be null whole state array will be returned.
      *
      * @param string $name
-     * @return mixed|null
+     * @return array|string|null
      */
     public function getBeforeForwardInfo($name = null)
     {
-        if ($name !== null && isset($this->beforeForwardInfo[$name])) {
-            return $this->beforeForwardInfo[$name];
+        if ($name === null) {
+            return $this->beforeForwardInfo;
         }
-        return null;
+
+        return $this->beforeForwardInfo[$name] ?? null;
     }
 
     /**
