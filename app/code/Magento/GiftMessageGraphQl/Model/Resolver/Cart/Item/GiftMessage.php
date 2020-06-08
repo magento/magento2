@@ -65,7 +65,7 @@ class GiftMessage implements ResolverInterface
         array $args = null
     ) {
         if (!isset($value['model'])) {
-            throw new GraphQlInputException(__('"model" value should be specified'));
+            throw new GraphQlInputException(__('"model" value must be specified'));
         }
 
         $quoteItem = $value['model'];

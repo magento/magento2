@@ -113,7 +113,7 @@ class UpdateCartItems
                         continue;
                     }
                 } catch (LocalizedException $exception) {
-                    throw new GraphQlInputException(__('Gift Message can not be updated.'));
+                    throw new GraphQlInputException(__('Gift Message cannot be updated.'));
                 }
 
                 $this->updateGiftMessageForItem($cart, $giftItemMessage, $item, $itemId);
@@ -139,7 +139,7 @@ class UpdateCartItems
             $giftItemMessage->setMessage($item['gift_message']['message']);
             $this->itemRepository->save($cart->getEntityId(), $giftItemMessage, $itemId);
         } catch (LocalizedException $exception) {
-            throw new GraphQlInputException(__('Gift Message can not be updated'));
+            throw new GraphQlInputException(__('Gift Message cannot be updated'));
         }
     }
 }
