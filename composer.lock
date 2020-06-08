@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "e25a6a8d64ffec2bd0b839679158f286",
+    "content-hash": "2ddc5369636a860cfa82ef023c958bd6",
     "packages": [
         {
             "name": "colinmollenhour/cache-backend-file",
@@ -7083,16 +7083,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "dev-3.0.0-RC4",
+            "version": "3.0.0-RC4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "e36fc50f8a73a9d22239895fb819cc16767a5179"
+                "reference": "34781ccc7385993b1e5bc9182e6ddddde7f2769f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/e36fc50f8a73a9d22239895fb819cc16767a5179",
-                "reference": "e36fc50f8a73a9d22239895fb819cc16767a5179",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/34781ccc7385993b1e5bc9182e6ddddde7f2769f",
+                "reference": "34781ccc7385993b1e5bc9182e6ddddde7f2769f",
                 "shasum": ""
             },
             "require": {
@@ -7168,7 +7168,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2020-06-05T22:31:19+00:00"
+            "time": "2020-06-08T18:17:54+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -10514,7 +10514,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "magento/composer": 20,
-        "magento/magento2-functional-testing-framework": 20
+        "magento/magento2-functional-testing-framework": 5
     },
     "prefer-stable": true,
     "prefer-lowest": false,
