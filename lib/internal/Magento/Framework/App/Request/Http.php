@@ -223,7 +223,8 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     public function setRouteName($route)
     {
         $this->route = $route;
-        if ($module = $this->routeConfig->getRouteFrontName($route)) {
+        $module = $this->routeConfig->getRouteFrontName($route);
+        if ($module) {
             $this->setModuleName($module);
         }
         return $this;
@@ -414,7 +415,11 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     public function isSafeMethod()
     {
         if ($this->isSafeMethod === null) {
-            $this->isSafeMethod = in_array($_SERVER['REQUEST_METHOD'] ?? null, $this->safeRequestTypes, true);
+            if (isset($_SERVER['REQUEST_METHOD']) && (in_array($_SERVER['REQUEST_METHOD'], $this->safeRequestTypes))) {
+                $this->isSafeMethod = true;
+            } else {
+                $this->isSafeMethod = false;
+            }
         }
         return $this->isSafeMethod;
     }
