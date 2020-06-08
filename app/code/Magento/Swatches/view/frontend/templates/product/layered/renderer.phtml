@@ -58,11 +58,11 @@
                             $script = 'let ' .$element
                                 .' = document.querySelector(\'div[data-option-id="' .$escaper->escapeJs($option)
                                 .'"]\');' .PHP_EOL;
-                            $script .= $element .'.style.background = "background: url(\''
+                            $script .= $element .'.style.background = "url(\''
                                 .$escapedUrl .'\') no-repeat center";' .PHP_EOL;
                             $script .= $element .'.style.backgroundSize = "initial";';
-                            echo /* @noEscape*/ $secureRenderer->renderTag('script', [], $script, false);
                             ?>
+                            <?= /* @noEscape*/ $secureRenderer->renderTag('script', [], $script, false); ?>
                             <?php break;
                         case '1':
                             ?>
@@ -84,11 +84,11 @@
                             $script = 'let ' .$element
                                 .' = document.querySelector(\'div[data-option-id="' .$escaper->escapeJs($option)
                                 .'"]\');' .PHP_EOL;
-                            $script .= $element .'.style.background = "background: ' .$backgroundValue
+                            $script .= $element .'.style.background = "' .$backgroundValue
                                 .' no-repeat center";' .PHP_EOL;
                             $script .= $element .'.style.backgroundSize = "initial";';
-                            echo /* @noEscape*/ $secureRenderer->renderTag('script', [], $script, false);
                             ?>
+                            <?= /* @noEscape*/ $secureRenderer->renderTag('script', [], $script, false); ?>
                             <?php break;
                         case '0':
                         default:
