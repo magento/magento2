@@ -130,48 +130,25 @@ class DataProvider
             $associatedOrder = $orderList[$orderItem->getOrderId()];
             $itemOptions = $this->optionsProcessor->getItemOptions($orderItem);
 
-            if (!$orderItem->getParentItem()) {
-                $this->orderItemList[$orderItem->getItemId()] = [
-                    'id' => base64_encode($orderItem->getItemId()),
-                    'product_name' => $orderItem->getName(),
-                    'product_sku' => $orderItem->getSku(),
-                    'product_url_key' => $associatedProduct ? $associatedProduct->getUrlKey() : null,
-                    'product_type' => $orderItem->getProductType(),
-                    'product_sale_price' => [
-                        'value' => $orderItem->getPrice(),
-                        'currency' => $associatedOrder->getOrderCurrencyCode()
-                    ],
-                    'selected_options' => $itemOptions['selected_options'],
-                    'entered_options' => $itemOptions['entered_options'],
-                    'quantity_ordered' => $orderItem->getQtyOrdered(),
-                    'quantity_shipped' => $orderItem->getQtyShipped(),
-                    'quantity_refunded' => $orderItem->getQtyRefunded(),
-                    'quantity_invoiced' => $orderItem->getQtyInvoiced(),
-                    'quantity_canceled' => $orderItem->getQtyCanceled(),
-                    'quantity_returned' => $orderItem->getQtyReturned(),
-                ];
-            } else {
-                // case where
-                $this->orderItemList[$orderItem->getParentItemId()]['child_items'][$orderItem->getItemId()] = [
-                    'id' => base64_encode($orderItem->getItemId()),
-                    'product_name' => $orderItem->getName(),
-                    'product_sku' => $orderItem->getSku(),
-                    'product_url_key' => $associatedProduct ? $associatedProduct->getUrlKey() : null,
-                    'product_type' => $orderItem->getProductType(),
-                    'product_sale_price' => [
-                        'value' => $orderItem->getPrice(),
-                        'currency' => $associatedOrder->getOrderCurrencyCode()
-                    ],
-                    'selected_options' => $itemOptions['selected_options'],
-                    'entered_options' => $itemOptions['entered_options'],
-                    'quantity_ordered' => $orderItem->getQtyOrdered(),
-                    'quantity_shipped' => $orderItem->getQtyShipped(),
-                    'quantity_refunded' => $orderItem->getQtyRefunded(),
-                    'quantity_invoiced' => $orderItem->getQtyInvoiced(),
-                    'quantity_canceled' => $orderItem->getQtyCanceled(),
-                    'quantity_returned' => $orderItem->getQtyReturned(),
-                ];
-            }
+            $this->orderItemList[$orderItem->getItemId()] = [
+                'id' => base64_encode($orderItem->getItemId()),
+                'associatedProduct' => $associatedProduct,
+                'model' => $orderItem,
+                'product_url_key' => $associatedProduct ? $associatedProduct->getUrlKey() : null,
+                'product_type' => $orderItem->getProductType(),
+                'product_sale_price' => [
+                    'value' => $orderItem->getPrice(),
+                    'currency' => $associatedOrder->getOrderCurrencyCode()
+                ],
+                'selected_options' => $itemOptions['selected_options'],
+                'entered_options' => $itemOptions['entered_options'],
+                'quantity_ordered' => $orderItem->getQtyOrdered(),
+                'quantity_shipped' => $orderItem->getQtyShipped(),
+                'quantity_refunded' => $orderItem->getQtyRefunded(),
+                'quantity_invoiced' => $orderItem->getQtyInvoiced(),
+                'quantity_canceled' => $orderItem->getQtyCanceled(),
+                'quantity_returned' => $orderItem->getQtyReturned(),
+            ];
 
         }
 
