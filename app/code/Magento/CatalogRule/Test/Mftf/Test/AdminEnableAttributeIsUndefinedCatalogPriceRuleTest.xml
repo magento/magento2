@@ -50,7 +50,7 @@
 
             <!--Delete created data-->
             <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToCatalogPriceRulePage"/>
-            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
+            <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deletePriceRule">
                 <argument name="name" value="{{CatalogRuleWithAllCustomerGroups.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
@@ -105,7 +105,7 @@
         <!--Delete previous attribute and Catalog Price Rule-->
         <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
         <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToCatalogPriceRulePage"/>
-        <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
+        <actionGroup ref="DeleteEntitySecondaryGridActionGroup" stepKey="deletePriceRule">
             <argument name="name" value="{{CatalogRuleWithAllCustomerGroups.name}}"/>
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
         </actionGroup>

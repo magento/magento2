@@ -79,7 +79,7 @@
         <after>
             <!-- Delete the catalog price rule -->
             <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="openCatalogPriceRulePage"/>
-            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
+            <actionGroup stepKey="deletePriceRule" ref="DeleteEntitySecondaryGridActionGroup">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
