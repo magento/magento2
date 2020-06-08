@@ -31,12 +31,9 @@ class GetDiscounts
      */
     private function getDiscountDetails(Order $order)
     {
-        if (empty($order->getDiscountDescription())) {
-            return null;
-        }
 
         $discounts [] = [
-            'label' =>  $order->getDiscountDescription(),
+            'label' =>  $order->getDiscountDescription() ?? "null",
             'amount' => ['value' => $order->getDiscountAmount(), 'currency' => $order->getOrderCurrencyCode()]
         ];
         return $discounts;

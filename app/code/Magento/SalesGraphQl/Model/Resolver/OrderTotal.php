@@ -49,6 +49,7 @@ class OrderTotal implements ResolverInterface
         $this->getTaxes = $getTaxes;
         $this->taxItem = $taxItem;
     }
+
     /**
      * @inheritdoc
      */
@@ -72,30 +73,53 @@ class OrderTotal implements ResolverInterface
         $orderModel = $value['model'];
 
         $currency = $orderModel->getOrderCurrencyCode();
-        /** @var TaxItem $taxItemModel */
-        $taxItemModel = $value['model'];
-        if (!empty($taxItemModel->getExtensionAttributes()->getAppliedTaxes())) {
-            $appliedTaxes = $taxItemModel->getExtensionAttributes()->getAppliedTaxes()[0];
-            $appliedTaxesArray = $appliedTaxes->getData();
+        /** @var TaxItem $taxModel */
+
+        $taxModel = $value['model'];
+        if (!empty($taxModel->getExtensionAttributes()->getAppliedTaxes())) {
+            if (isset($taxModel->getExtensionAttributes()->getAppliedTaxes()[0])) {
+                $appliedTaxes = $taxModel->getExtensionAttributes()->getAppliedTaxes()[0];
+                $appliedTaxesArray = $appliedTaxes->getData();
+            }
         } else {
             $appliedTaxesArray = [];
         }
 
-        $totals = [
+        $total = [
                 'base_grand_total' => ['value' => $orderModel->getBaseGrandTotal(), 'currency' => $currency],
-                'grand_total' => ['value' =>  $orderModel->getGrandTotal(), 'currency' => $currency],
-                'subtotal' => ['value' =>  $orderModel->getSubtotal(), 'currency' => $currency],
-                'total_tax' => ['value' =>  $orderModel->getTaxAmount(), 'currency' => $currency],
+                'grand_total' => ['value' => $orderModel->getGrandTotal(), 'currency' => $currency],
+                'subtotal' => ['value' => $orderModel->getSubtotal(), 'currency' => $currency],
+                'total_tax' => ['value' => $orderModel->getTaxAmount(), 'currency' => $currency],
                 'taxes' => $this->getTaxes->execute($orderModel, $appliedTaxesArray),
                 'discounts' => $this->getDiscounts->execute($orderModel),
                 'total_shipping' => ['value' => $orderModel->getShippingAmount(), 'currency' => $currency],
                 'shipping_handling' => [
-                    'amount_exc_tax' => ['value' =>($orderModel->getShippingInclTax() - $orderModel->getBaseShippingTaxAmount()), 'currency' => $currency],
-                    'amount_inc_tax' => ['value' => $orderModel->getShippingInclTax(), 'currency' => $currency],
+                    'amount_excluding_tax' => ['value' => ($orderModel->getShippingInclTax() - $orderModel->getBaseShippingTaxAmount()), 'currency' => $currency],
+                    'amount_including_tax' => ['value' => $orderModel->getShippingInclTax(), 'currency' => $currency],
                     'total_amount' => ['value' => $orderModel->getBaseShippingAmount(), 'currency' => $currency],
                     'taxes' => $this->getTaxes->execute($orderModel, $appliedTaxesArray),
+                    'discounts' => $this->getShippingDiscountDetails($orderModel),
+                ]
+            ];
+        return $total;
+    }
+
+    /**
+     * Returns information about an applied discount
+     *
+     * @param Order $order
+     * @return array|null
+     */
+    private function getShippingDiscountDetails(Order $order)
+    {
+        $discounts [] =
+                [
+                    'label' => $order->getDiscountDescription() ?? "null",
+                    'amount' => [
+                        'value' => $order->getShippingDiscountAmount(),
+                        'currency' => $order->getOrderCurrencyCode()
                     ]
-        ];
-        return $totals;
+                ];
+        return $discounts;
     }
 }
