@@ -37,3 +37,11 @@ input GiftMessageInput @doc(description: "Contains the text of a gift message, i
     from: String! @doc(description: "Sender name")
     message: String! @doc(description: "Gift message text")
 }
+
+type SalesItemInterface {
+    gift_message: GiftMessage @doc(description: "The entered gift message for the order item")
+}
+
+type CustomerOrder {
+    gift_message: GiftMessage @resolver (class: "\\Magento\\GiftMessageGraphQl\\Model\\Resolver\\Order\\GiftMessage")  @doc(description: "The entered gift message for the order")
+}

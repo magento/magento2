@@ -86,6 +86,7 @@ class MatchTest extends TestCase
      * @param array $expected
      * @param string|null $minimumShouldMatch
      * @dataProvider buildDataProvider
+     * @dataProvider buildDataProviderForMatchPhrasePrefix
      */
     public function testBuild(
         string $searchQuery,
@@ -201,8 +202,58 @@ class MatchTest extends TestCase
                     ],
                 ],
                 '2<75%'
-            ]
+            ],
+
         ];
+    }
+
+    /**
+     * @return array
+     */
+    public function buildDataProviderForMatchPhrasePrefix()
+    {
+        return [
+        'match_phrase_prefix query with minimum_should_match' => [
+            '"fitness bottle"',
+            [
+                [
+                    'field' => 'name',
+                    'boost' => 5,
+                    'matchCondition' => 'match_phrase_prefix'
+                ]
+            ],
+            [
+                [
+                    'match_phrase_prefix' => [
+                        'name' => [
+                            'query' => 'fitness bottle',
+                            'boost' => 6
+                        ],
+                    ],
+                ],
+            ],
+            '2<75%'
+        ],
+        'match_phrase_prefix query with no minimum_should_match' => [
+            '"fitness bottle"',
+            [
+                [
+                    'field' => 'name',
+                    'boost' => 5,
+                    'matchCondition' => 'match_phrase_prefix'
+                ]
+            ],
+            [
+                [
+                    'match_phrase_prefix' => [
+                        'name' => [
+                            'query' => 'fitness bottle',
+                            'boost' => 6
+                        ],
+                    ],
+                ],
+            ]
+        ]];
     }
 
     /**
