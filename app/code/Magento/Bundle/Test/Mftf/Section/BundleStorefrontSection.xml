@@ -15,7 +15,7 @@
         <!--Description-->
         <!--CE exclusively-->
         <element name="longDescriptionText" type="text" selector="#description>div>div" timeout="30"/>
-        <element name="shortDescriptionText" type="text" selector="div.product attribute overview" timeout="30"/>
+        <element name="shortDescriptionText" type="text" selector="div.product.attribute.overview" timeout="30"/>
         <!--NameOfProductOnProductPage-->
         <element name="bundleProductName" type="text" selector="//*[@id='maincontent']//span[@itemprop='name']"/>
         <!--PageNotFoundErrorMessage-->
