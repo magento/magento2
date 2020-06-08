@@ -10,7 +10,7 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminEncryptionKeyChangeFormSection">
         <element name="autoGenerate" type="select" selector="#generate_random"/>
-        <element name="cryptKey" type="input" selector="#crypt_key"/>
+        <element name="cryptKey" type="input" selector="input#crypt_key"/>
         <element name="changeEncryptionKey" type="button" selector=".page-actions-buttons #save" timeout="10"/>
     </section>
 </sections>
