@@ -27,7 +27,6 @@ require.config({
         'jquery/validate': 'jquery/jquery.validate',
         'jquery/hover-intent': 'jquery/jquery.hoverIntent',
         'jquery/file-uploader': 'jquery/fileUploader/jquery.fileupload-process',
-        'jquery/fileupload.js': 'jquery/fileUploader/jquery.fileupload',
         'prototype': 'prototype/prototype-amd',
         'text': 'requirejs/text',
         'domReady': 'requirejs/domReady',

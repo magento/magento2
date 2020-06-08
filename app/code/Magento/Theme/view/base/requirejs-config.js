@@ -32,8 +32,6 @@ var config = {
         'jquery/validate': 'jquery/jquery.validate',
         'jquery/hover-intent': 'jquery/jquery.hoverIntent',
         'jquery/file-uploader': 'jquery/fileUploader/jquery.fileupload-process',
-        'jquery/file-upload': 'jquery/fileUploader/jquery.fileupload',
-        'jquery-ui/ui/widget': 'jquery/fileUploader/vendor/jquery.ui.widget',
         'prototype': 'legacy-build.min',
         'jquery/jquery-storageapi': 'jquery/jquery.storageapi.min',
         'text': 'mage/requirejs/text',
