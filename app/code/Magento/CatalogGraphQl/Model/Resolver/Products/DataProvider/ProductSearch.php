@@ -18,6 +18,7 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultAp
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResultsInterface;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Customer\ContextProcessor;
 
 /**
  * Product field data provider for product search, used for GraphQL resolver processing.
@@ -55,12 +56,19 @@ class ProductSearch
     private $searchCriteriaBuilder;
 
     /**
+     * @var ContextProcessor
+     */
+    private $contextProcessor;
+
+    /**
+     * ProductSearch constructor.
      * @param CollectionFactory $collectionFactory
      * @param ProductSearchResultsInterfaceFactory $searchResultsFactory
      * @param CollectionProcessorInterface $collectionPreProcessor
      * @param CollectionPostProcessor $collectionPostProcessor
      * @param SearchResultApplierFactory $searchResultsApplierFactory
      * @param ProductCollectionSearchCriteriaBuilder $searchCriteriaBuilder
+     * @param ContextProcessor $contextProcessor
      */
     public function __construct(
         CollectionFactory $collectionFactory,
@@ -68,7 +76,8 @@ class ProductSearch
         CollectionProcessorInterface $collectionPreProcessor,
         CollectionPostProcessor $collectionPostProcessor,
         SearchResultApplierFactory $searchResultsApplierFactory,
-        ProductCollectionSearchCriteriaBuilder $searchCriteriaBuilder
+        ProductCollectionSearchCriteriaBuilder $searchCriteriaBuilder,
+        ContextProcessor $contextProcessor
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->searchResultsFactory = $searchResultsFactory;
@@ -76,6 +85,7 @@ class ProductSearch
         $this->collectionPostProcessor = $collectionPostProcessor;
         $this->searchResultApplierFactory = $searchResultsApplierFactory;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->contextProcessor = $contextProcessor;
     }
 
     /**
@@ -104,13 +114,14 @@ class ProductSearch
         )->apply();
 
         $this->collectionPreProcessor->process($collection, $searchCriteriaForCollection, $attributes);
+        $this->contextProcessor->process();
         $collection->load();
         $this->collectionPostProcessor->process($collection, $attributes);
 
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteriaForCollection);
         $searchResults->setItems($collection->getItems());
-        $searchResults->setTotalCount($searchResult->getTotalCount());
+        $searchResults->setTotalCount($collection->count());
         return $searchResults;
     }
 

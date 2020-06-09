@@ -26,6 +26,14 @@ class CollectionPostProcessor
         if (!$collection->isLoaded()) {
             $collection->load();
         }
+
+        // Filter out items that are hidden
+        foreach ($collection as $key => $product) {
+            if ($product->getIsHidden()) {
+                $collection->removeItemByKey($key);
+            }
+        }
+
         // Methods that perform extra fetches post-load
         if (in_array('media_gallery_entries', $attributeNames)) {
             $collection->addMediaGalleryData();
