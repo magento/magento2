@@ -7,13 +7,14 @@
  */
 declare(strict_types=1);
 
-require_once __DIR__ . '/second_store.php';
-
 use Magento\Config\Model\ResourceModel\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_store.php');
 
 $objectManager = Bootstrap::getObjectManager();
 $store = $objectManager->create(Store::class);
