@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service\Response;
 
 use Magento\Framework\DataObject;
@@ -12,12 +14,13 @@ use Magento\Paypal\Model\Payflow\Service\Response\Transaction;
 use Magento\Paypal\Model\Payflow\Transparent;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @see Transaction
  */
-class TransactionTest extends \PHPUnit\Framework\TestCase
+class TransactionTest extends TestCase
 {
     /**
      * @covers \Magento\Paypal\Model\Payflow\Service\Response\Transaction::getResponseObject
@@ -44,11 +47,10 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @covers \Magento\Paypal\Model\Payflow\Service\Response\Transaction::savePaymentInQuote
-     *
-     * @expectedException \InvalidArgumentException
      */
     public function testSavePaymentInQuote()
     {
+        $this->expectException('InvalidArgumentException');
         $cartId = 12;
         /** @var Transaction $transactionService */
         $transactionService = (new ObjectManager($this))->getObject(
@@ -58,7 +60,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
             ]
         );
 
-        $transactionService->savePaymentInQuote(new DataObject, $cartId);
+        $transactionService->savePaymentInQuote(new DataObject(), $cartId);
     }
 
     /**
@@ -68,7 +70,7 @@ class TransactionTest extends \PHPUnit\Framework\TestCase
     {
         return [
             "Input data is a string" => ['testInput'],
-            "Input data is an object" => [new \stdClass],
+            "Input data is an object" => [new \stdClass()],
             "Input data is an array" => [['test' => 'input']]
         ];
     }

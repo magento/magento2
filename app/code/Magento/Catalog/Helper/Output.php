@@ -15,6 +15,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filter\Template;
+use Magento\Framework\Phrase;
 use function is_object;
 use function method_exists;
 use function preg_match;
@@ -157,7 +158,7 @@ class Output extends AbstractHelper
      * Prepare product attribute html output
      *
      * @param ModelProduct $product
-     * @param string $attributeHtml
+     * @param string|Phrase $attributeHtml
      * @param string $attributeName
      * @return string
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -182,7 +183,7 @@ class Output extends AbstractHelper
         if ($attributeHtml !== null
             && $attribute->getIsHtmlAllowedOnFront()
             && $attribute->getIsWysiwygEnabled()
-            && $this->isDirectivesExists($attributeHtml)
+            && $this->isDirectivesExists((string)$attributeHtml)
         ) {
             $attributeHtml = $this->_getTemplateProcessor()->filter($attributeHtml);
         }
@@ -219,7 +220,7 @@ class Output extends AbstractHelper
         if ($attributeHtml !== null
             && $attribute->getIsHtmlAllowedOnFront()
             && $attribute->getIsWysiwygEnabled()
-            && $this->isDirectivesExists($attributeHtml)
+            && $this->isDirectivesExists((string)$attributeHtml)
 
         ) {
             $attributeHtml = $this->_getTemplateProcessor()->filter($attributeHtml);
@@ -235,14 +236,14 @@ class Output extends AbstractHelper
     /**
      * Check if string has directives
      *
-     * @param string $attributeHtml
+     * @param string|Phrase $attributeHtml
      * @return bool
      */
-    public function isDirectivesExists($attributeHtml)
+    public function isDirectivesExists(string $attributeHtml): bool
     {
         $matches = false;
         foreach ($this->directivePatterns as $pattern) {
-            if (preg_match($pattern, $attributeHtml)) {
+            if (preg_match($pattern, (string)$attributeHtml)) {
                 $matches = true;
                 break;
             }

@@ -28,7 +28,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->layout = $this->objectManager->get(LayoutInterface::class);
@@ -69,12 +69,12 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $request->setParam(QueryFactory::QUERY_VAR_NAME, $searchValue);
         $searchHtml = $searchBlock->toHtml();
 
-        $this->assertContains('value=' . '"' . $expectedOutput . '"', $searchHtml);
-        $this->assertNotContains($unexpectedOutput, $searchHtml);
+        $this->assertStringContainsString('value=' . '"' . $expectedOutput . '"', $searchHtml);
+        $this->assertStringNotContainsString($unexpectedOutput, $searchHtml);
 
         $resultTitle = $searchResultBlock->getSearchQueryText()->render();
-        $this->assertContains("Search results for: '{$expectedOutput}'", $resultTitle);
-        $this->assertNotContains($unexpectedOutput, $resultTitle);
+        $this->assertStringContainsString("Search results for: '{$expectedOutput}'", $resultTitle);
+        $this->assertStringNotContainsString($unexpectedOutput, $resultTitle);
     }
 
     /**

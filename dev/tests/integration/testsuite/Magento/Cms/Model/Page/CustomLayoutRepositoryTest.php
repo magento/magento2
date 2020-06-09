@@ -47,7 +47,7 @@ class CustomLayoutRepositoryTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->fakeManager = $objectManager->get(CustomLayoutManager::class);

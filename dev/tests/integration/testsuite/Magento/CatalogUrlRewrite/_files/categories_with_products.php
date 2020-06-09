@@ -4,11 +4,14 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/CatalogUrlRewrite/_files/categories.php');
+
 /** @var \Magento\Catalog\Setup\CategorySetup $installer */
 $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\Catalog\Setup\CategorySetup::class
 );
-require __DIR__ . '/categories.php';
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);

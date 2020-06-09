@@ -71,7 +71,7 @@
         </actionGroup>
         <closeTab stepKey="closeTab"/>
         <!-- Go to cart page-->
-        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="openCartPage"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCartPage"/>
         <!-- Assert checkout button exists on the page-->
         <seeElement selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="seeCheckoutButton"/>
         <!-- Assert no error message is not shown on the page-->

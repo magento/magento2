@@ -17,7 +17,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\DataObject;
 
 /**
- * Class for shipment email notification sender
+ * Sends order shipment email to the customer.
  *
  * @deprecated since this class works only with the concrete model and no data interface
  * @see \Magento\Sales\Model\Order\Shipment\Sender\EmailSender
@@ -110,7 +110,9 @@ class ShipmentSender extends Sender
 
             $transport = [
                 'order' => $order,
+                'order_id' => $order->getId(),
                 'shipment' => $shipment,
+                'shipment_id' => $shipment->getId(),
                 'comment' => $shipment->getCustomerNoteNotify() ? $shipment->getCustomerNote() : '',
                 'billing' => $order->getBillingAddress(),
                 'payment_html' => $this->getPaymentHtml($order),

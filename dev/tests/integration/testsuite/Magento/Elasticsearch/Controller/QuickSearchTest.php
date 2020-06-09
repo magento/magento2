@@ -25,7 +25,7 @@ class QuickSearchTest extends AbstractController
     {
         $this->dispatch('/catalogsearch/result/?q=24+MB04');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertContains('search product 2', $responseBody);
-        $this->assertNotContains('search product 1', $responseBody);
+        $this->assertStringContainsString('search product 2', $responseBody);
+        $this->assertStringNotContainsString('search product 1', $responseBody);
     }
 }

@@ -39,7 +39,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
      */
     private $indexBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

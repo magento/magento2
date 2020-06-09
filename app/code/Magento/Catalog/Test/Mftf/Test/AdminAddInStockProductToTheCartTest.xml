@@ -83,7 +83,7 @@
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <seeElement selector="{{StorefrontProductPageSection.successMsg}}" stepKey="seeSuccessSaveMessage"/>
         <seeElement selector="{{StorefrontMinicartSection.quantity(1)}}" stepKey="seeAddedProductQuantityInCart"/>
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCart"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
         <see selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="{{SimpleProduct.name}}"  stepKey="seeProductNameInMiniCart"/>
         <see selector="{{StorefrontMinicartSection.miniCartItemsText}}" userInput="{{SimpleProduct.price}}" stepKey="seeProductPriceInMiniCart"/>
         <seeElement selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="seeCheckOutButtonInMiniCart"/>

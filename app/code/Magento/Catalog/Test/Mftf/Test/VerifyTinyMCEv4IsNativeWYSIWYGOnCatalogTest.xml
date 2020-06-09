@@ -23,8 +23,7 @@
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToNewCatalog"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToNewCatalog"/>
         <waitForLoadingMaskToDisappear stepKey="wait2" />
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="enterCategoryName"/>

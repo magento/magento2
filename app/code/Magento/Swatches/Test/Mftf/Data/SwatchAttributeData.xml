@@ -49,4 +49,9 @@
         <data key="used_in_product_listing">1</data>
         <data key="used_for_sort_by">0</data>
     </entity>
+    <entity name="TextSwatchProductAttributeForm" extends="VisualSwatchProductAttributeForm">
+        <data key="frontend_label[0]" unique="suffix">TextSwatchAttribute-</data>
+        <data key="frontend_input">swatch_text</data>
+        <data key="attribute_code" unique="suffix">text_swatch_attribute_</data>
+    </entity>
 </entities>

@@ -29,7 +29,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('contact/index/post');
         $this->assertRedirect($this->stringContains('contact/index'));
         $this->assertSessionMessages(
-            $this->contains(
+            $this->containsEqual(
                 "Thanks for contacting us with your comments and questions. We&#039;ll respond to you very soon."
             ),
             \Magento\Framework\Message\MessageInterface::TYPE_SUCCESS
@@ -51,7 +51,7 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('contact/index/post');
         $this->assertRedirect($this->stringContains('contact/index'));
         $this->assertSessionMessages(
-            $this->contains($expectedMessage),
+            $this->containsEqual($expectedMessage),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }
