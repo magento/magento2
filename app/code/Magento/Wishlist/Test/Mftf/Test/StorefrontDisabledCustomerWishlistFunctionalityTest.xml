@@ -8,12 +8,12 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminDisableCustomerWishlistTest">
+    <test name="StorefrontDisabledCustomerWishlistFunctionalityTest">
         <annotations>
             <features value="Wishlist"/>
-            <stories value="Wishlist Disabling"/>
-            <title value="Admin Disabling Wishlist in configurations"/>
-            <description value="Admin should be able disable Wishlist functionality in system configurations. Wishlist elements should be not visible for customers"/>
+            <stories value="Disabled Wishlist Functionality"/>
+            <title value="Wishlist Functionality is disabled in system configurations and not visible on FE"/>
+            <description value="Customer should not see wishlist functionality if it's disabled"/>
             <group value="wishlist"/>
             <group value="configuration"/>
         </annotations>
