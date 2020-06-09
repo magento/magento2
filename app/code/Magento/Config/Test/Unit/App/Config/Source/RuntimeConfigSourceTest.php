@@ -262,6 +262,7 @@ class RuntimeConfigSourceTest extends TestCase
         return [
             'config value 0' => ['default/test/option', ['test' => ['option' => 0]], '0'],
             'config value blank' => ['default/test/option', ['test' => ['option' => '']], ''],
+            'config value null' => ['default/test/option', ['test' => ['option' => null]], ''],
         ];
     }
 }
