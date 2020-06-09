@@ -6,7 +6,11 @@
 namespace Magento\Sales\Cron;
 
 use Exception;
-use Magento\Quote\Model\QuoteRepository;
+use Magento\Framework\DB\Query\Generator as QueryGenerator;
+use Magento\Framework\DB\Select;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Api\Data\CartInterfaceFactory;
+use Magento\Quote\Model\ResourceModel\Quote as ResourceQuote;
 use Magento\Quote\Model\ResourceModel\Quote\Collection as QuoteCollection;
 use Magento\Sales\Model\ResourceModel\Collection\ExpiredQuotesCollection;
 use Magento\Store\Model\StoreManagerInterface;
@@ -28,9 +32,24 @@ class CleanExpiredQuotes
     private $storeManager;
 
     /**
-     * @var QuoteRepository
+     * @var CartRepositoryInterface
      */
     private $quoteRepository;
+
+    /**
+     * @var CartInterfaceFactory
+     */
+    private $quoteFactory;
+
+    /**
+     * @var ResourceQuote
+     */
+    private $quoteResource;
+
+    /**
+     * @var QueryGenerator
+     */
+    private $queryGenerator;
 
     /**
      * @var LoggerInterface
@@ -38,21 +57,38 @@ class CleanExpiredQuotes
     private $logger;
 
     /**
+     * @var int
+     */
+    private $batchSize;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param ExpiredQuotesCollection $expiredQuotesCollection
-     * @param QuoteRepository $quoteRepository
+     * @param CartRepositoryInterface $quoteRepository
+     * @param CartInterfaceFactory $quoteFactory
+     * @param ResourceQuote $quoteResource
+     * @param QueryGenerator $queryGenerator
      * @param LoggerInterface $logger
+     * @param int $batchSize
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         ExpiredQuotesCollection $expiredQuotesCollection,
-        QuoteRepository $quoteRepository,
-        LoggerInterface $logger
+        CartRepositoryInterface $quoteRepository,
+        CartInterfaceFactory $quoteFactory,
+        ResourceQuote $quoteResource,
+        QueryGenerator $queryGenerator,
+        LoggerInterface $logger,
+        int $batchSize = 1000
     ) {
         $this->storeManager = $storeManager;
         $this->expiredQuotesCollection = $expiredQuotesCollection;
         $this->quoteRepository = $quoteRepository;
+        $this->quoteFactory = $quoteFactory;
+        $this->quoteResource = $quoteResource;
+        $this->queryGenerator = $queryGenerator;
         $this->logger = $logger;
+        $this->batchSize = $batchSize;
     }
 
     /**
@@ -64,17 +100,19 @@ class CleanExpiredQuotes
     {
         $stores = $this->storeManager->getStores(true);
         foreach ($stores as $store) {
-            /** @var $quoteCollection QuoteCollection */
+            /** @var QuoteCollection $quoteCollection */
             $quoteCollection = $this->expiredQuotesCollection->getExpiredQuotes($store);
-            $quoteCollection->setPageSize(50);
 
-            // Last page returns 1 even when we don't have any results
-            $lastPage = $quoteCollection->getSize() ? $quoteCollection->getLastPageNumber() : 0;
-
-            for ($currentPage = $lastPage; $currentPage >= 1; $currentPage--) {
-                $quoteCollection->setCurPage($currentPage);
-
-                $this->deleteQuotes($quoteCollection);
+            $select = $quoteCollection->getSelect()
+                ->reset(Select::COLUMNS)
+                ->columns(['main_table.' . $this->quoteResource->getIdFieldName()]);
+            $queries = $this->queryGenerator->generate(
+                $this->quoteResource->getIdFieldName(),
+                $select,
+                $this->batchSize
+            );
+            foreach ($queries as $query) {
+                $this->deleteQuotes($query);
             }
         }
     }
@@ -82,23 +120,21 @@ class CleanExpiredQuotes
     /**
      * Deletes all quotes in collection
      *
-     * @param QuoteCollection $quoteCollection
+     * @param Select $query
      */
-    private function deleteQuotes(QuoteCollection $quoteCollection): void
+    private function deleteQuotes(Select $query): void
     {
-        foreach ($quoteCollection as $quote) {
+        $quoteIds = $this->quoteResource->getConnection()->fetchCol($query);
+        foreach ($quoteIds as $quoteId) {
+            $quote = $this->quoteFactory->create();
+            $quote->setId((int) $quoteId);
+
             try {
                 $this->quoteRepository->delete($quote);
             } catch (Exception $e) {
-                $message = sprintf(
-                    'Unable to delete expired quote (ID: %s): %s',
-                    $quote->getId(),
-                    (string)$e
-                );
-                $this->logger->error($message);
+                $message = sprintf('Unable to delete expired quote (ID: %s)', $quote->getId());
+                $this->logger->error($message, ['exception' => $e]);
             }
         }
-
-        $quoteCollection->clear();
     }
 }
