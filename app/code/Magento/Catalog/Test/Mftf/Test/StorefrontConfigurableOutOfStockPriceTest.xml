@@ -1,0 +1,116 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableOutOfStockPriceTest">
+        <annotations>
+            <stories value="Configurable Product"/>
+            <title value="Check Price for Configurable Product when OUT OF STOCK status"/>
+            <description value="Configurable product with Price on Product page when all the associated simple products are out of stock."/>
+            <group value="catalog"/>
+            <severity value="MAJOR"/>
+        </annotations>
+
+        <before>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+
+            <!-- Create Default Category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+            <!-- Create an attribute with two options to be used in the first child product -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <!-- Add the attribute just created to default attribute set -->
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <!-- Get the first option of the attribute created -->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Get the second option of the attribute created -->
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Create Configurable product -->
+            <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create a simple product and give it the attribute with the first option -->
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <field key="status">Out of Stock</field>
+            </createData>
+
+            <!--Create a simple product and give it the attribute with the second option -->
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+                <field key="status">Out of Stock</field>
+            </createData>
+
+            <!-- Create the configurable product -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+
+            <!-- Add the first simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+
+            <!-- Add the second simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+
+        </before>
+        <after>
+            <!-- Delete Created Data -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+
+        <!-- Open ConfigProduct in Store Front Page -->
+        <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="openProductInStoreFront"/>
+
+        <waitForPageLoad stepKey="waitForProductToLoad"/>
+
+        <see userInput="OUT OF STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}"
+             stepKey="seeProductStockStatus"/>
+
+        <see userInput="As low as" selector="{{StorefrontProductInfoMainSection.productPriceLabel}}"
+             stepKey="seeProductPriceLabel"/>
+
+    </test>
+</tests>
