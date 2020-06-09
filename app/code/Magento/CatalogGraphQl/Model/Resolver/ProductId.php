@@ -62,6 +62,12 @@ class ProductId implements ResolverInterface
             );
         }
 
+        if ($productId < 0) {
+            throw new GraphQlInputException(
+                __("'id' input argument should not be negative.")
+            );
+        }
+
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $this->productDataProvider->getProductById($productId, $fields);
         $data = $product->getData();
