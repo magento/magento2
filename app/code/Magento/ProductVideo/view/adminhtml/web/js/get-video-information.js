@@ -290,6 +290,7 @@ define([
              */
             destroy: function () {
                 this.stop();
+
                 if (this._player) {
                     this._player.destroy();
                 }
