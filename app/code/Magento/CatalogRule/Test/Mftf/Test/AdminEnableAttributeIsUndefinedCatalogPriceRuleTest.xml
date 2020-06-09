@@ -44,7 +44,7 @@
             <createData entity="productDropDownAttribute" stepKey="createSecondProductAttribute">
                 <field key="scope">website</field>
             </createData>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
         </before>
         <after>
 
@@ -64,7 +64,7 @@
             <deleteData createDataKey="createSecondProductAttribute" stepKey="deleteSecondProductAttribute"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
         </after>
 
         <!--Create catalog price rule-->
@@ -80,7 +80,6 @@
             <argument name="targetSelectValue" value="is undefined"/>
         </actionGroup>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules"/>
-        <wait time="60" stepKey="waitMinute"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <magentoCLI command="cache:flush" stepKey="flushCache"/>
         <magentoCLI command="cache:flush" stepKey="flushCache3"/>
@@ -129,7 +128,6 @@
             <argument name="targetSelectValue" value="is undefined"/>
         </actionGroup>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules1"/>
-        <wait time="60" stepKey="waitForMinute"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
         <magentoCLI command="cache:flush" stepKey="flushCache1"/>
         <magentoCLI command="cache:flush" stepKey="flushCache2"/>
