@@ -195,6 +195,7 @@ class Resolver implements ResolverInterface
         }
         /** @var Base $applier */
         $applier = $this->appliersList[$fixtureType];
+        $applier->setGlobalConfig($this->config->getGlobalConfig($fixtureType));
         $applier->setClassConfig($this->config->getClassConfig($test, $fixtureType));
         $applier->setMethodConfig($this->config->getMethodConfig($test, $fixtureType));
         $applier->setDataSetConfig(

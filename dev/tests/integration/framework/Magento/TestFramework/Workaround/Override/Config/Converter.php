@@ -34,7 +34,7 @@ class Converter implements ConverterInterface
     public function convert($source)
     {
         $this->xpath = new \DOMXPath($source);
-        $config = [];
+        $config = $this->getGlobalConfig($this->xpath);
         foreach ($this->xpath->query('//test') as $testOverride) {
             $className = ltrim($testOverride->getAttribute('class'), '\\');
             $config[$className] = $this->getTestConfigByFixtureType($testOverride);
@@ -181,5 +181,37 @@ class Converter implements ConverterInterface
             'newValue' => $fixture->getAttribute('newValue'),
             'remove' => $fixture->getAttribute('remove'),
         ];
+    }
+    /**
+     * Get global configurations
+     *
+     * @param \DOMXPath $xpath
+     * @return array
+     */
+    private function getGlobalConfig(\DOMXPath $xpath): array
+    {
+        foreach ($xpath->query('//global') as $globalOverride) {
+            $config = $this->fillGlobalConfigByFixtureType($globalOverride);
+        }
+
+        return $config ?? [];
+    }
+
+    /**
+     * Fill global configurations node
+     *
+     * @param \DOMElement $node
+     * @return array
+     */
+    private function fillGlobalConfigByFixtureType(\DOMElement $node): array
+    {
+        $config = [];
+        foreach (self::FIXTURE_TYPES as $fixtureType) {
+            foreach ($node->getElementsByTagName($fixtureType) as $fixture) {
+                $config['global'][$fixtureType][] = $this->fillAttributes($fixture);
+            }
+        }
+
+        return $config;
     }
 }
