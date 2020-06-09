@@ -100,21 +100,31 @@ class OptionsProcessor
     }
 
     /**
-     * TODO: use this method for bundle options
      *
-     * @param mixed $item
-     * @return mixed|null
+     * @param \Magento\Sales\Api\Data\OrderItemInterface $item
+     * @return array
      */
-    public function getSelectionAttributes($item)
+    public function getBundleOptions(\Magento\Sales\Api\Data\OrderItemInterface $item): array
     {
+        $bundleOptions = [];
         if ($item instanceof \Magento\Sales\Model\Order\Item) {
             $options = $item->getProductOptions();
         } else {
             $options = $item->getOrderItem()->getProductOptions();
         }
-        if (isset($options['bundle_selection_attributes'])) {
-            return $this->serializer->unserialize($options['bundle_selection_attributes']);
+        if (isset($options['bundle_options'])) {
+            //$bundleOptions = $this->serializer->unserialize($options['bundle_options']);
+            foreach ($options['bundle_options'] as $bundleOptionKey => $bundleOption) {
+                $bundleOptions[$bundleOptionKey]['values'] = $bundleOption['value'] ?? [];
+                $bundleOptions[$bundleOptionKey]['label'] = $bundleOption['label'];
+                foreach ($bundleOptions[$bundleOptionKey]['values'] as $bundleOptionValueKey => $bundleOptionValue) {
+                    $bundleOptions[$bundleOptionKey]['values'][$bundleOptionValueKey]['product_sku'] = $bundleOptionValue['title'];
+                    $bundleOptions[$bundleOptionKey]['values'][$bundleOptionValueKey]['product_name'] = $bundleOptionValue['title'];
+                    $bundleOptions[$bundleOptionKey]['values'][$bundleOptionValueKey]['quantity_ordered'] = $bundleOptionValue['qty'];
+                    $bundleOptions[$bundleOptionKey]['values'][$bundleOptionValueKey]['id'] = base64_encode((string)$bundleOptionValueKey);
+                }
+            }
         }
-        return null;
+        return $bundleOptions;
     }
 }
