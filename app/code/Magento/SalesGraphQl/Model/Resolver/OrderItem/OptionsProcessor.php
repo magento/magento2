@@ -100,21 +100,33 @@ class OptionsProcessor
     }
 
     /**
-     * TODO: use this method for bundle options
      *
-     * @param mixed $item
-     * @return mixed|null
+     * @param \Magento\Sales\Api\Data\OrderItemInterface $item
+     * @return array
      */
-    public function getSelectionAttributes($item)
+    public function getBundleOptions(\Magento\Sales\Api\Data\OrderItemInterface $item): array
     {
-        if ($item instanceof \Magento\Sales\Model\Order\Item) {
-            $options = $item->getProductOptions();
-        } else {
-            $options = $item->getOrderItem()->getProductOptions();
+        $bundleOptions = [];
+        if ($item->getProductType() === 'bundle') {
+            if ($item instanceof \Magento\Sales\Model\Order\Item) {
+                $options = $item->getProductOptions();
+            } else {
+                $options = $item->getOrderItem()->getProductOptions();
+            }
+            if (isset($options['bundle_options'])) {
+                //$bundleOptions = $this->serializer->unserialize($options['bundle_options']);
+                foreach ($options['bundle_options'] as $bundleOptionKey => $bundleOption) {
+                    $bundleOptions[$bundleOptionKey]['items'] = $bundleOption['value'] ?? [];
+                    $bundleOptions[$bundleOptionKey]['label'] = $bundleOption['label'];
+                    foreach ($bundleOptions[$bundleOptionKey]['items'] as $bundleOptionValueKey => $bundleOptionValue) {
+                        $bundleOptions[$bundleOptionKey]['items'][$bundleOptionValueKey]['product_sku'] = $bundleOptionValue['title'];
+                        $bundleOptions[$bundleOptionKey]['items'][$bundleOptionValueKey]['product_name'] = $bundleOptionValue['title'];
+                        $bundleOptions[$bundleOptionKey]['items'][$bundleOptionValueKey]['quantity_ordered'] = $bundleOptionValue['qty'];
+                        $bundleOptions[$bundleOptionKey]['items'][$bundleOptionValueKey]['id'] = base64_encode((string)$bundleOptionValueKey);
+                    }
+                }
+            }
         }
-        if (isset($options['bundle_selection_attributes'])) {
-            return $this->serializer->unserialize($options['bundle_selection_attributes']);
-        }
-        return null;
+        return $bundleOptions;
     }
 }
