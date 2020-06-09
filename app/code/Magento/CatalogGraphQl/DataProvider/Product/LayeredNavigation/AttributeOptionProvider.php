@@ -42,15 +42,17 @@ class AttributeOptionProvider
      *
      * @param array $optionIds
      * @param array $attributeCodes
+     * @param int|null $storeId
      * @return array
      * @throws \Zend_Db_Statement_Exception
      */
-    public function getOptions(array $optionIds, array $attributeCodes = []): array
+    public function getOptions(array $optionIds, ?int $storeId, array $attributeCodes = []): array
     {
         if (!$optionIds) {
             return [];
         }
 
+        $storeId = $storeId ?: 0;
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()
             ->from(
@@ -70,10 +72,19 @@ class AttributeOptionProvider
                 ['option_value' => $this->resourceConnection->getTableName('eav_attribute_option_value')],
                 'options.option_id = option_value.option_id',
                 [
-                    'option_label' => 'option_value.value',
                     'option_id' => 'option_value.option_id',
                 ]
-            );
+            )->joinLeft(
+                ['option_value_store' => $this->resourceConnection->getTableName('eav_attribute_option_value')],
+                "options.option_id = option_value_store.option_id AND option_value_store.store_id = {$storeId}",
+                [
+                    'option_label' => $connection->getCheckSql(
+                        'option_value_store.value_id > 0',
+                        'option_value_store.value',
+                        'option_value.value'
+                    )
+                ]
+            )->where('a.attribute_id = options.attribute_id AND option_value.store_id = ?', 0);
 
         $select->where('option_value.option_id IN (?)', $optionIds);
 
