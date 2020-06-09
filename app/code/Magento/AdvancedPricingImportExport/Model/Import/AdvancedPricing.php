@@ -10,7 +10,7 @@ use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface as Va
 use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorInterface;
 
 /**
- * Class AdvancedPricing
+ * Class import advanced pricing
  *
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -42,19 +42,11 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
 
     const TABLE_TIER_PRICE = 'catalog_product_entity_tier_price';
 
-    const DEFAULT_ALL_GROUPS_GROUPED_PRICE_VALUE = '0';
-
     const ENTITY_TYPE_CODE = 'advanced_pricing';
 
     const VALIDATOR_MAIN = 'validator';
 
     const VALIDATOR_WEBSITE = 'validator_website';
-
-    /**
-     * @deprecated
-     * @see VALIDATOR_TIER_PRICE
-     */
-    private const VALIDATOR_TEAR_PRICE = 'validator_tier_price';
 
     private const VALIDATOR_TIER_PRICE = 'validator_tier_price';
 
