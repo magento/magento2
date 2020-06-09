@@ -139,6 +139,7 @@ type InvoiceItem implements InvoiceItemInterface {
 }
 
 type BundleInvoiceItem implements InvoiceItemInterface {
+    bundle_options: [SelectedBundleOptionItems]
     child_items: [InvoiceItemInterface] @doc(description: "A list of child products that are assigned to the bundle product")
 }
 

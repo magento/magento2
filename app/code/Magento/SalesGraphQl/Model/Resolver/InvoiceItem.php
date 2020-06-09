@@ -10,17 +10,40 @@ namespace Magento\SalesGraphQl\Model\Resolver;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Sales\Api\Data\InvoiceInterface as Invoice;
+use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Model\Order;
+use Magento\SalesGraphQl\Model\Resolver\OrderItem\DataProvider as OrderItemProvider;
 
 /**
  * Resolver for Invoice Item
  */
 class InvoiceItem implements ResolverInterface
 {
+    /**
+     * @var ValueFactory
+     */
+    private $valueFactory;
+
+    /**
+     * @var OrderItemProvider
+     */
+    private $orderItemProvider;
+
+    /**
+     * @param ValueFactory $valueFactory
+     * @param OrderItemProvider $orderItemProvider
+     */
+    public function __construct(ValueFactory $valueFactory, OrderItemProvider $orderItemProvider)
+    {
+        $this->valueFactory = $valueFactory;
+        $this->orderItemProvider = $orderItemProvider;
+    }
+
     /**
      * @inheritdoc
      */
@@ -49,16 +72,28 @@ class InvoiceItem implements ResolverInterface
         $invoiceItems = [];
         $parentOrder = $value['order'];
         foreach ($invoiceModel->getItems() as $invoiceItem) {
-            $invoiceItems[] = [
-                'product_sku' => $invoiceItem->getSku(),
-                'product_name' => $invoiceItem->getName(),
-                'product_sale_price' => [
-                    'currency' => $parentOrder->getOrderCurrencyCode(),
-                    'value' => $invoiceItem->getPrice()
-                ],
-                'quantity_invoiced' => $invoiceItem->getQty()
-            ];
+            $this->orderItemProvider->addOrderItemId((int)$invoiceItem->getOrderItemId());
         }
-        return $invoiceItems;
+        return $this->valueFactory->create(function () use ($invoiceModel, $parentOrder) {
+            $itemsList = [];
+            foreach ($invoiceModel->getItems() as $invoiceItem) {
+                $orderItem = $this->orderItemProvider->getOrderItemById((int)$invoiceItem->getOrderItemId());
+                /** @var OrderItemInterface $orderItemModel */
+                $orderItemModel = $orderItem['model'];
+                if (!$orderItemModel->getParentItem()) {
+                    $itemsList[$orderItemModel->getItemId()] = [
+                        'product_name' => $invoiceItem->getName(),
+                        'product_sku' => $invoiceItem->getSku(),
+                        'product_sale_price' => [
+                            'value' => $invoiceItem->getPrice(),
+                            'currency' => $parentOrder->getOrderCurrency()
+                        ],
+                        'product_type' => $orderItem['product_type'],
+                        'quantity_invoiced' => $invoiceItem->getQty()
+                    ];
+                }
+            }
+            return $itemsList;
+        });
     }
 }
