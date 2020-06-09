@@ -63,7 +63,7 @@ define([
          * Display confirmation modal for clearing the cart
          * @private
          */
-        _clearCartConfirmation: function() {
+        _clearCartConfirmation: function () {
             var self = this;
 
             confirm({
@@ -80,7 +80,7 @@ define([
          * Prepares the form and submit to clear the cart
          * @public
          */
-        clearCart: function() {
+        clearCart: function () {
             $(this.options.emptyCartButton).attr('name', 'update_cart_action_temp');
             $(this.options.updateCartActionContainer)
                 .attr('name', 'update_cart_action').attr('value', 'empty_cart');

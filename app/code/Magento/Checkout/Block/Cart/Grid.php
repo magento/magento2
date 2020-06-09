@@ -107,7 +107,8 @@ class Grid extends \Magento\Checkout\Block\Cart
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 100.2.0
      */
     protected function _prepareLayout()
@@ -151,7 +152,8 @@ class Grid extends \Magento\Checkout\Block\Cart
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @since 100.2.0
      */
     public function getItems()
@@ -187,7 +189,7 @@ class Grid extends \Magento\Checkout\Block\Cart
      */
     public function isClearShoppingCartEnabled()
     {
-        return (bool) $this->_scopeConfig->getValue(
+        return (bool)$this->_scopeConfig->getValue(
             self::XPATH_CONFIG_ENABLE_CLEAR_SHOPPING_CART,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
