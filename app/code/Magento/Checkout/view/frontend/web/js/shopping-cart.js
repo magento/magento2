@@ -17,7 +17,7 @@ define([
             var items, i, reload;
 
             $(this.options.emptyCartButton).on('click', $.proxy(function () {
-                this._clearCartConfirmation();
+                this._confirmClearCart();
             }, this));
             items = $.find('[data-role="cart-item-qty"]');
 
@@ -63,7 +63,7 @@ define([
          * Display confirmation modal for clearing the cart
          * @private
          */
-        _clearCartConfirmation: function () {
+        _confirmClearCart: function () {
             var self = this;
 
             confirm({
