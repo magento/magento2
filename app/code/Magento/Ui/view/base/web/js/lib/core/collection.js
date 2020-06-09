@@ -224,7 +224,7 @@ define([
         regionHasElements: function (name) {
             var region = this.getRegion(name);
 
-            return region().length > 0;
+            return region()[0].elems.length > 0;
         },
 
         /**
