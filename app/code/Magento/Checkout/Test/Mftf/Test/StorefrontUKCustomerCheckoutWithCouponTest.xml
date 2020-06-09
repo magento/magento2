@@ -47,6 +47,10 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
         <!-- Open Downloadable Product page -->
         <amOnPage url="{{StorefrontProductPage.url($$createDownloadableProduct.custom_attributes[url_key]$$)}}" stepKey="OpenStoreFrontProductPage"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
@@ -80,11 +84,6 @@
         <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
 
-        <!--Fill the pop up sign form -->
-        <actionGroup ref="StorefrontCustomerSignInPopUpActionGroup" stepKey="customerSignIn">
-            <argument name="customerEmail" value="$$createCustomer.email$$"/>
-            <argument name="customerPwd" value="$$createCustomer.password$$"/>
-        </actionGroup>
         <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout1"/>
         <waitForPageLoad stepKey="waitForShippingMethodSectionToLoad"/>
 

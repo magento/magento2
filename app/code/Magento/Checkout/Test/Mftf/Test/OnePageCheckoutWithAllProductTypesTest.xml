@@ -116,6 +116,10 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
         <!-- Add Simple Product to cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
@@ -168,12 +172,6 @@
         </actionGroup>
 
         <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
-        <waitForPageLoad stepKey="waitForProceedToCheckout"/>
-        <actionGroup ref="FillCustomerSignInPopupFormActionGroup" stepKey="fillCustomerSignInPopupForm">
-            <argument name="customer" value="$$createCustomer$$"/>
-        </actionGroup>
-
-        <amOnPage url="{{CheckoutShippingPage.url}}" stepKey="navigateToShippingPage"/>
         <waitForPageLoad stepKey="waitForShippingPageLoad"/>
 
         <!-- Fill customer address data -->
