@@ -9,11 +9,14 @@ declare(strict_types=1);
 namespace Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator;
 
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
+use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
 use Magento\CatalogImportExport\Model\Import\Product\StoreResolver;
+use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator;
 use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractPrice;
 use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\LocalizedException;
 
 class TierPrice extends AbstractPrice
 {
@@ -48,7 +51,12 @@ class TierPrice extends AbstractPrice
     }
 
     /**
-     * {@inheritdoc}
+     * Initialize method
+     *
+     * @param Product $context
+     *
+     * @return RowValidatorInterface|AbstractImportValidator|void
+     * @throws LocalizedException
      */
     public function init($context)
     {
@@ -59,6 +67,8 @@ class TierPrice extends AbstractPrice
     }
 
     /**
+     * Add decimal error
+     *
      * @param string $attribute
      *
      * @return void
