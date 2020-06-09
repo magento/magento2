@@ -58,7 +58,7 @@
 
         <!--Open Product page in StoreFront -->
         <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
-            <argument name="product" value="$$createBundleProduct$$"/>
+            <argument name="product" value="$createBundleProduct$"/>
         </actionGroup>
 
         <!--Assert Product Price Range -->
@@ -93,8 +93,8 @@
 
         <!--Assert Product items in cart -->
         <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertSimpleProduct1ItemsInCheckOutCart">
-            <argument name="productName" value="$$createBundleProduct.name$$"/>
-            <argument name="productSku" value="$$createBundleProduct.sku$$"/>
+            <argument name="productName" value="$createBundleProduct.name$"/>
+            <argument name="productSku" value="$createBundleProduct.sku$"/>
             <argument name="productPrice" value="$50.00"/>
             <argument name="subtotal" value="$100.00" />
             <argument name="qty" value="2"/>
@@ -107,13 +107,13 @@
         </actionGroup>
         <actionGroup ref="AssertStorefrontElementVisibleActionGroup" stepKey="seeProductOptionInCart">
             <argument name="selector" value="{{CheckoutCartProductSection.productOptionLabel}}"/>
-            <argument name="userInput" value="1 x $$simpleProduct2.name$$ $50.00"/>
+            <argument name="userInput" value="1 x $simpleProduct2.name$ $50.00"/>
         </actionGroup>
 
         <!-- Assert Product in Mini Cart -->
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct3MiniCart">
-            <argument name="productName" value="$$createBundleProduct.name$$"/>
+            <argument name="productName" value="$createBundleProduct.name$"/>
             <argument name="productPrice" value="$50.00"/>
             <argument name="cartSubtotal" value="$100.00" />
             <argument name="qty" value="2"/>
