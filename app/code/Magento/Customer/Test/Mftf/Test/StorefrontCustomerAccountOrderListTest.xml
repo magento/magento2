@@ -10,11 +10,12 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontCustomerAccountOrderListTest">
         <annotations>
-            <stories value="Customer Account Order History List"/>
-            <title value="Customer Account Order History List."/>
-            <description value="Login to Customer Account and navigate on Order History page."/>
+            <stories value="Frontend Customer Account Orders list"/>
+            <title value="Verify that the list of Orders is displayed in the grid after changing the number of items on the page"/>
+            <description value="Verify that the list of Orders is displayed in the grid after changing the number of items on the page."/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-34953"/>
+            <group value="customer"/>
         </annotations>
 
         <before>
@@ -135,6 +136,9 @@
 
         <dontSee selector="{{StorefrontOrderInformationMainSection.emptyMessage}}"
                  userInput="You have placed no orders." stepKey="dontSeeEmptyMessage"/>
+
+        <seeNumberOfElements selector="{{StorefrontCustomerOrderSection.rowsInColumn('id')}}" userInput="15"
+                             stepKey="seeRowsCount"/>
 
     </test>
 </tests>
