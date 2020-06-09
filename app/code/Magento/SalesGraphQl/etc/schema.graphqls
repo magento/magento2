@@ -82,7 +82,7 @@ type OrderItem implements OrderItemInterface {
 }
 
 type BundleOrderItem implements OrderItemInterface {
-    bundle_options: [SelectedBundleOptionItems] @doc(description: "A list of bundle options that are assigned to the bundle product")
+    bundle_options: [SelectedBundleOptionItems] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\BundleOptions")
 }
 
 type SelectedBundleOptionItems {

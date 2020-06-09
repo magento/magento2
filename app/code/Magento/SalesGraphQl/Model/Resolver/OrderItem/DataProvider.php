@@ -129,8 +129,6 @@ class DataProvider
             /** @var OrderInterface $associatedOrder */
             $associatedOrder = $orderList[$orderItem->getOrderId()];
             $itemOptions = $this->optionsProcessor->getItemOptions($orderItem);
-            $bundleOptions = $orderItem->getProductType() === 'bundle' ?
-                $this->optionsProcessor->getBundleOptions($orderItem) : [];
 
             $this->orderItemList[$orderItem->getItemId()] = [
                 'id' => base64_encode($orderItem->getItemId()),
@@ -152,7 +150,6 @@ class DataProvider
                 'quantity_invoiced' => $orderItem->getQtyInvoiced(),
                 'quantity_canceled' => $orderItem->getQtyCanceled(),
                 'quantity_returned' => $orderItem->getQtyReturned(),
-                'bundle_options' => $bundleOptions,
             ];
 
         }

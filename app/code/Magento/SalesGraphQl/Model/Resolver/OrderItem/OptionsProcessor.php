@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\Resolver\OrderItem;
 
-use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Sales\Api\Data\OrderItemInterface;
 
 /**
@@ -15,21 +14,6 @@ use Magento\Sales\Api\Data\OrderItemInterface;
  */
 class OptionsProcessor
 {
-    /**
-     * Serializer
-     *
-     * @var Json
-     */
-    private $serializer;
-
-    /**
-     * @param Json $serializer
-     */
-    public function __construct(Json $serializer)
-    {
-        $this->serializer = $serializer;
-    }
-
     /**
      * Get Order item options.
      *
@@ -97,36 +81,5 @@ class OptionsProcessor
             ];
         }
         return ['selected_options' => $selectedOptions, 'entered_options' => []];
-    }
-
-    /**
-     *
-     * @param \Magento\Sales\Api\Data\OrderItemInterface $item
-     * @return array
-     */
-    public function getBundleOptions(\Magento\Sales\Api\Data\OrderItemInterface $item): array
-    {
-        $bundleOptions = [];
-        if ($item->getProductType() === 'bundle') {
-            if ($item instanceof \Magento\Sales\Model\Order\Item) {
-                $options = $item->getProductOptions();
-            } else {
-                $options = $item->getOrderItem()->getProductOptions();
-            }
-            if (isset($options['bundle_options'])) {
-                //$bundleOptions = $this->serializer->unserialize($options['bundle_options']);
-                foreach ($options['bundle_options'] as $bundleOptionKey => $bundleOption) {
-                    $bundleOptions[$bundleOptionKey]['items'] = $bundleOption['value'] ?? [];
-                    $bundleOptions[$bundleOptionKey]['label'] = $bundleOption['label'];
-                    foreach ($bundleOptions[$bundleOptionKey]['items'] as $bundleOptionValueKey => $bundleOptionValue) {
-                        $bundleOptions[$bundleOptionKey]['items'][$bundleOptionValueKey]['product_sku'] = $bundleOptionValue['title'];
-                        $bundleOptions[$bundleOptionKey]['items'][$bundleOptionValueKey]['product_name'] = $bundleOptionValue['title'];
-                        $bundleOptions[$bundleOptionKey]['items'][$bundleOptionValueKey]['quantity_ordered'] = $bundleOptionValue['qty'];
-                        $bundleOptions[$bundleOptionKey]['items'][$bundleOptionValueKey]['id'] = base64_encode((string)$bundleOptionValueKey);
-                    }
-                }
-            }
-        }
-        return $bundleOptions;
     }
 }
