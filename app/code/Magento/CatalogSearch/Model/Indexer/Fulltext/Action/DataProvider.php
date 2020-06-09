@@ -572,11 +572,11 @@ class DataProvider
         foreach ($indexData as $entityId => $attributeData) {
             foreach ($attributeData as $attributeId => $attributeValues) {
                 $value = $this->getAttributeValue($attributeId, $attributeValues, $storeId);
-                if (!empty($value)) {
+                if ($value !== null && $value !== false && $value != '') {
                     if (!isset($index[$attributeId])) {
                         $index[$attributeId] = [];
                     }
-                        $index[$attributeId][$entityId] = $value;
+                    $index[$attributeId][$entityId] = $value;
                 }
             }
         }
