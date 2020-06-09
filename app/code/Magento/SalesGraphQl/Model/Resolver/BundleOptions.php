@@ -16,7 +16,9 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\SalesGraphQl\Model\Resolver\OrderItem\DataProvider as OrderItemProvider;
 use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Api\Data\InvoiceItemInterface;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Resolve bundle options items for order item
@@ -70,9 +72,9 @@ class BundleOptions implements ResolverInterface
             if (!isset($value['model']) || !($value['model'] instanceof OrderItemInterface)) {
                 throw new LocalizedException(__('"model" value should be specified'));
             }
-            /** @var OrderItemInterface $orderItem */
-            $orderItem = $value['model'];
-            return $this->getBundleOptions($orderItem);
+            /** @var ExtensibleDataInterface $item */
+            $item = $value['model'];
+            return $this->getBundleOptions($item);
         });
     }
 
@@ -80,14 +82,24 @@ class BundleOptions implements ResolverInterface
     /**
      * Format bundle options and values from a parent bundle order item
      *
-     * @param OrderItemInterface $item
+     * @param ExtensibleDataInterface $item
      * @return array
      */
-    private function getBundleOptions(OrderItemInterface $item): array
+    private function getBundleOptions(ExtensibleDataInterface $item): array
     {
         $bundleOptions = [];
         if ($item->getProductType() === 'bundle') {
-            $options = $item->getProductOptions();
+            $options = [];
+            if ($item instanceof OrderItemInterface) {
+                $options = $item->getProductOptions();
+            } elseif  ($item instanceof InvoiceItemInterface) {
+                $orderItemArray = $this->orderItemProvider
+                    ->getOrderItemById((int)$item->getOrderItemId());
+                /** @var OrderItemInterface $orderItem */
+                $orderItem = $orderItemArray['model'];
+                $options = $orderItem->getProductOptions();
+            }
+
             if (isset($options['bundle_options'])) {
                 //loop through options
                 foreach ($options['bundle_options'] as $bundleOptionKey => $bundleOption) {
