@@ -176,10 +176,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
      * @param \Magento\Framework\Json\Helper\Data $jsonHelper
      * @param \Magento\ImportExport\Helper\Data $importExportData
      * @param \Magento\ImportExport\Model\ResourceModel\Import\Data $importData
-     * @param \Magento\Eav\Model\Config $config
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper
-     * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param ProcessingErrorAggregatorInterface $errorAggregator
      * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
      * @param \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory $resourceFactory
@@ -197,10 +195,8 @@ class AdvancedPricing extends \Magento\ImportExport\Model\Import\Entity\Abstract
         \Magento\Framework\Json\Helper\Data $jsonHelper,
         \Magento\ImportExport\Helper\Data $importExportData,
         \Magento\ImportExport\Model\ResourceModel\Import\Data $importData,
-        \Magento\Eav\Model\Config $config,
         \Magento\Framework\App\ResourceConnection $resource,
         \Magento\ImportExport\Model\ResourceModel\Helper $resourceHelper,
-        \Magento\Framework\Stdlib\StringUtils $string,
         ProcessingErrorAggregatorInterface $errorAggregator,
         \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
         \Magento\CatalogImportExport\Model\Import\Proxy\Product\ResourceModelFactory $resourceFactory,
