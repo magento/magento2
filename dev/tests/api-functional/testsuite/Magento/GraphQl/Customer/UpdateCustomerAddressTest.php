@@ -8,12 +8,12 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Customer;
 
 use Exception;
-use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\Integration\Api\CustomerTokenServiceInterface;
 
 /**
  * Update customer address tests
@@ -100,6 +100,7 @@ mutation {
         region_id: {$updateAddress['region']['region_id']}
         region_code: "{$updateAddress['region']['region_code']}"
     }
+    country_code: {$updateAddress['country_code']}
     country_id: {$updateAddress['country_code']}
     street: ["{$updateAddress['street'][0]}","{$updateAddress['street'][1]}"]
     company: "{$updateAddress['company']}"
@@ -169,6 +170,33 @@ MUTATION;
 mutation {
   updateCustomerAddress(id: {$addressId}, input: {
     firstname: ""
+    lastname: "Phillis"
+  }) {
+    id
+  }
+}
+MUTATION;
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+    }
+
+    /**
+     * Verify customers with credentials update address
+     * with missing required Firstname attribute
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
+     */
+    public function testUpdateCustomerAddressWithoutMissingAttribute()
+    {
+        $userName = 'customer@example.com';
+        $password = 'password';
+        $addressId = 1;
+
+        $mutation
+            = <<<MUTATION
+mutation {
+  updateCustomerAddress(id: {$addressId}, input: {
+    firstname: "some"
     lastname: "Phillis"
   }) {
     id
@@ -322,9 +350,6 @@ MUTATION;
      */
     public function testUpdateCustomerAddressWithInvalidIdType()
     {
-        $this->markTestSkipped(
-            'Type validation returns wrong message https://github.com/magento/graphql-ce/issues/735'
-        );
         $userName = 'customer@example.com';
         $password = 'password';
 
@@ -363,7 +388,7 @@ mutation {
 MUTATION;
 
         $this->expectException(Exception::class);
-        $this->expectExceptionMessage('Expected type Int!, found ""');
+        $this->expectExceptionMessage('Field "updateCustomerAddress" argument "id" requires type Int!, found "".');
         $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
@@ -403,7 +428,10 @@ MUTATION;
     {
         return [
             ['', '"input" value must be specified'],
-            ['input: ""', 'requires type CustomerAddressInput, found ""'],
+            [
+                'input: ""',
+                'Field "updateCustomerAddress" argument "input" requires type CustomerAddressInput, found ""'
+            ],
             ['input: "foo"', 'requires type CustomerAddressInput, found "foo"']
         ];
     }
