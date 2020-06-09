@@ -111,10 +111,10 @@ class SecureHtmlRenderer
             function {$listenerFunction} () {
                 {$attributeJavascript};
             }
-            let {$elementName} = document.querySelector("{$elementSelector}");
+            var {$elementName} = document.querySelector("{$elementSelector}");
             if ({$elementName}) {
-                {$elementName}.{$eventName} = (event) => {
-                    let targetElement = {$elementName};
+                {$elementName}.{$eventName} = function (event) {
+                    var targetElement = {$elementName};
                     if (event && event.target) {
                         targetElement = event.target;
                     }
@@ -161,7 +161,7 @@ script;
         return $this->renderTag(
             'script',
             ['type' => 'text/javascript'],
-            "let $elementVariable = document.querySelector('$selector');\n"
+            "var $elementVariable = document.querySelector('$selector');\n"
             ."if ($elementVariable) {\n{$stylesAssignments}}",
             false
         );

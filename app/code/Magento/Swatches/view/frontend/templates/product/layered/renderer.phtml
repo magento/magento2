@@ -55,7 +55,7 @@
                             </div>
                             <?php
                             $element = 'swatchImageOption' .$escaper->escapeJs($option);
-                            $script = 'let ' .$element
+                            $script = 'var ' .$element
                                 .' = document.querySelector(\'div[data-option-id="' .$escaper->escapeJs($option)
                                 .'"]\');' .PHP_EOL;
                             $script .= $element .'.style.background = "url(\''
@@ -81,7 +81,7 @@
                             $backgroundValue = $escaper->escapeJs(
                                 str_replace('\'', '\\\'', $swatchData['swatches'][$option]['value'])
                             );
-                            $script = 'let ' .$element
+                            $script = 'var ' .$element
                                 .' = document.querySelector(\'div[data-option-id="' .$escaper->escapeJs($option)
                                 .'"]\');' .PHP_EOL;
                             $script .= $element .'.style.background = "' .$backgroundValue

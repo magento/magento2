@@ -45,13 +45,26 @@
         prodCompConfIframe.style.position = "absolute";
         prodCompConfIframe.style.top = "-1000px";
         prodCompConfIframe.style.left = "-1000px";
-        document.querySelectorAll(".product_composite_configure_messages").forEach((e) => e.style.display = "none");
-        document.querySelectorAll(".product_composite_configure_form_additional")
-            .forEach((e) => e.style.display = "none");
-        document.querySelectorAll(".product_composite_configure_form_confirmed")
-            .forEach((e) => e.style.display = "none");
-        document.querySelectorAll(".product_composite_configure_confirmed").forEach((e) => e.style.display = "none");
-        document.querySelectorAll(".product-configure-popup").forEach((e) => e.style.display = "none");
+        prodCompConfMessages = document.querySelectorAll(".product_composite_configure_messages");
+        for (var i = 0; i < prodCompConfMessages.length; i++) {
+            prodCompConfMessages[i].style.display = "none";
+        }
+        prodCompConfFormAdd = document.querySelectorAll(".product_composite_configure_form_additional");
+        for (var i = 0; i < prodCompConfFormAdd.length; i++) {
+            prodCompConfFormAdd[i].style.display = "none";
+        }
+        prodCompConfFormConf = document.querySelectorAll(".product_composite_configure_form_confirmed");
+        for (var i = 0; i < prodCompConfFormConf.length; i++) {
+            prodCompConfFormConf[i].style.display = "none";
+        }
+        prodCompConfConf = document.querySelectorAll(".product_composite_configure_confirmed");
+        for (var i = 0; i < prodCompConfConf.length; i++) {
+            prodCompConfConf[i].style.display = "none";
+        }
+        prodConfPopup = document.querySelectorAll(".product-configure-popup");
+        for (var i = 0; i < prodConfPopup.length; i++) {
+            prodConfPopup[i].style.display = "none";
+        }
 
         require([
             "jquery",
