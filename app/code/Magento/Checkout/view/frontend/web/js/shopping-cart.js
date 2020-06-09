@@ -69,6 +69,9 @@ define([
             confirm({
                 content: $.mage.__('Are you sure you want to remove all items from your shopping cart?'),
                 actions: {
+                    /**
+                     * Confirmation modal handler to execute clear cart action
+                     */
                     confirm: function () {
                         self.clearCart();
                     }
