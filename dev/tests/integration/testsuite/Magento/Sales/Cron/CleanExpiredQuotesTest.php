@@ -7,9 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Cron;
 
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Quote\Model\QuoteRepository;
-use Magento\Quote\Model\ResourceModel\Quote\CollectionFactory as QuoteCollectionFactory;
+use Magento\Quote\Model\ResourceModel\Quote\Collection as QuoteCollection;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -26,18 +24,15 @@ class CleanExpiredQuotesTest extends \PHPUnit\Framework\TestCase
     private $cleanExpiredQuotes;
 
     /**
-     * @var QuoteCollectionFactory
-     */
-    private $quoteCollectionFactory;
-
-    /**
      * @inheritdoc
      */
     protected function setUp()
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->cleanExpiredQuotes = $objectManager->get(CleanExpiredQuotes::class);
-        $this->quoteCollectionFactory = $objectManager->get(QuoteCollectionFactory::class);
+        $this->cleanExpiredQuotes = $objectManager->create(
+            CleanExpiredQuotes::class,
+            ['batchSize' => 220]
+        );
     }
 
     /**
@@ -84,7 +79,8 @@ class CleanExpiredQuotesTest extends \PHPUnit\Framework\TestCase
      */
     private function assertQuotesCount(int $expected): void
     {
-        $totalCount = $this->quoteCollectionFactory->create()->getSize();
+        $quoteCollection = Bootstrap::getObjectManager()->create(QuoteCollection::class);
+        $totalCount = $quoteCollection->getSize();
         $this->assertEquals($expected, $totalCount);
     }
 }
