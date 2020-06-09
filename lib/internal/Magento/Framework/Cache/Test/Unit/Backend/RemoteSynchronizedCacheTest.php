@@ -243,7 +243,7 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
         $this->remoteSyncCacheInstance->clean();
     }
 
-    public function testSaveWithRemoteData()
+    public function testSaveWithEqualRemoteData()
     {
         $remoteData = 1;
 
@@ -263,6 +263,21 @@ class RemoteSynchronizedCacheTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
 
         $this->remoteSyncCacheInstance->save($remoteData, 1);
+    }
+
+    public function testSaveWithMismatchedRemoteData()
+    {
+        $remoteData = 1;
+
+        $this->remoteCacheMockExample
+            ->expects($this->at(0))
+            ->method('load')
+            ->willReturn(\hash('sha256', $remoteData));
+
+        $this->remoteCacheMockExample->expects($this->exactly(2))->method('save');
+        $this->localCacheMockExample->expects($this->once())->method('save');
+
+        $this->remoteSyncCacheInstance->save(2, 1);
     }
 
     public function testSaveWithoutRemoteData()
