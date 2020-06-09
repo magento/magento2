@@ -16,6 +16,7 @@
             <argument name="requestPath" type="string"/>
         </arguments>
 
-        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', requestPath)}}" stepKey="seeValueInGrid"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', requestPath)}}"
+                    stepKey="seeValueInGrid"/>
     </actionGroup>
 </actionGroups>
