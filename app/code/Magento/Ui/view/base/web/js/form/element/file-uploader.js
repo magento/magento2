@@ -426,7 +426,7 @@ define([
             } else { // construct message from all aggregatedErrors
                 _.each(this.aggregatedErrors, function (error) {
                     notification().add({
-                        error: true,
+                        error: 'testing',
                         message: '%s' + error.message, // %s to be used as placeholder for html injection
 
                         /**
