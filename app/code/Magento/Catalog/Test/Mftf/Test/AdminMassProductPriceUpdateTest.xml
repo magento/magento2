@@ -57,12 +57,14 @@
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpateSuccessMsg"/>
 
         <!-- Start message queue -->
-        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueueConsumer">
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="runCron1">
             <argument name="consumerName" value="{{AdminProductAttributeUpdateConsumerData.consumerName}}"/>
             <argument name="maxMessages" value="{{AdminProductAttributeUpdateConsumerData.messageLimit}}"/>
         </actionGroup>
         <!-- Run cron -->
-        <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
+        <magentoCLI command="cron:run --group=index" stepKey="runCron2"/>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitFormToReload1"/>
 
         <!--Verify product name, sku and updated price-->
         <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$simpleProduct1.sku$$)}}"/>
