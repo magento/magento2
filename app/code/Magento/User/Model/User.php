@@ -150,6 +150,11 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     private $deploymentConfig;
 
     /**
+     * @var string
+     */
+    protected $_cacheTag = \Magento\Backend\Block\Menu::CACHE_TAGS;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\User\Helper\Data $userData
@@ -684,7 +689,27 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function hasAssigned2Role($user)
     {
-        return $this->getResource()->hasAssigned2Role($user);
+        if ($user instanceof AbstractModel) {
+            $userId = $user->getUserId();
+        } elseif (is_numeric($user) && (int)$user !== 0) {
+            $userId = $user;
+        } else {
+            return null;
+        }
+        $data = $this->_cacheManager->load('assigned_role_' . $userId);
+        if (false === $data) {
+            $data = $this->getResource()->hasAssigned2Role($user);
+
+            $this->_cacheManager->save(
+                $this->serializer->serialize($data),
+                'assigned_role_' . $userId,
+                [\Magento\Backend\Block\Menu::CACHE_TAGS]
+            );
+        } else {
+            $data = $this->serializer->unserialize($data);
+        }
+
+        return $data;
     }
 
     /**
