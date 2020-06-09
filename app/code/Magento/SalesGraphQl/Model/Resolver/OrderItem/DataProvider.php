@@ -134,6 +134,8 @@ class DataProvider
                 'id' => base64_encode($orderItem->getItemId()),
                 'associatedProduct' => $associatedProduct,
                 'model' => $orderItem,
+                'product_name' => $orderItem->getName(),
+                'product_sku' => $orderItem->getSku(),
                 'product_url_key' => $associatedProduct ? $associatedProduct->getUrlKey() : null,
                 'product_type' => $orderItem->getProductType(),
                 'product_sale_price' => [
