@@ -27,7 +27,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->uploaderFactory = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\MediaStorage\Model\File\UploaderFactory::class);
@@ -62,13 +62,14 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Invalid parameter given. A valid $fileId[tmp_name] is expected.
      *
      * @return void
      */
     public function testUploadFileFromNotAllowedFolder(): void
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Invalid parameter given. A valid $fileId[tmp_name] is expected.');
+
         $fileName = 'text.txt';
         $tmpDir = 'tmp';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::LOG);
@@ -87,7 +88,7 @@ class UploaderTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 

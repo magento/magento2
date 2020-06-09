@@ -25,7 +25,7 @@ class IsBlacklistedTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->service = Bootstrap::getObjectManager()->get(IsPathBlacklistedInterface::class);
     }

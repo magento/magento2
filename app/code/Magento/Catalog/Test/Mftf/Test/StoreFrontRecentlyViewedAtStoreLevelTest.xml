@@ -126,10 +126,10 @@
         </actionGroup>
 
         <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductName('2')}}" stepKey="grabDontSeeHomeProduct3"/>
-        <assertNotContains stepKey="assertNotSeeProduct3">
+        <assertStringNotContainsString stepKey="assertNotSeeProduct3">
 			<actualResult type="const">$grabDontSeeHomeProduct3</actualResult>
 			<expectedResult type="const">$$createSimpleProduct3.name$$</expectedResult>
-        </assertNotContains>
+        </assertStringNotContainsString>
 
         <!-- Switch Storeview-->
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStoreViewActionGroup">
@@ -145,10 +145,10 @@
         </actionGroup>
 
         <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductName('2')}}" stepKey="grabStoreView2DontSeeHomeProduct3"/>
-        <assertNotContains stepKey="assertStoreView2NotSeeProduct3">
+        <assertStringNotContainsString stepKey="assertStoreView2NotSeeProduct3">
 			<actualResult type="const">$grabDontSeeHomeProduct3</actualResult>
 			<expectedResult type="const">$$createSimpleProduct3.name$$</expectedResult>
-        </assertNotContains>
+        </assertStringNotContainsString>
 
         <!-- Switch to default store-->
 
@@ -165,10 +165,10 @@
             <argument name="productPosition" value="1"/>
         </actionGroup>
         <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductName('2')}}" stepKey="grabDontSeeHomeProduct1"/>
-        <assertNotContains stepKey="assertNotSeeProduct1">
+        <assertStringNotContainsString stepKey="assertNotSeeProduct1">
 			<actualResult type="const">$grabDontSeeHomeProduct1</actualResult>
 			<expectedResult type="const">$$createSimpleProduct1.name$$</expectedResult>
-        </assertNotContains>
+        </assertStringNotContainsString>
 
     </test>
 </tests>

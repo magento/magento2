@@ -3,33 +3,41 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\HTTP\Test\Unit;
 
-class HeaderTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\HTTP\Header;
+use Magento\Framework\Stdlib\StringUtils;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class HeaderTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var \Magento\Framework\App\Request\Http
+     * @var Http
      */
     protected $_request;
 
     /**
-     * @var \Magento\Framework\Stdlib\StringUtils
+     * @var StringUtils
      */
     protected $_converter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->_objectManager = new ObjectManager($this);
 
         $this->_request =
-            $this->createPartialMock(\Magento\Framework\App\Request\Http::class, ['getServer', 'getRequestUri']);
+            $this->createPartialMock(Http::class, ['getServer', 'getRequestUri']);
 
-        $this->_converter = $this->createPartialMock(\Magento\Framework\Stdlib\StringUtils::class, ['cleanString']);
+        $this->_converter = $this->createPartialMock(StringUtils::class, ['cleanString']);
     }
 
     /**
@@ -47,16 +55,16 @@ class HeaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testHttpMethods($method, $clean, $expectedValue)
     {
-        $this->_request->expects($this->once())->method('getServer')->will($this->returnValue('value'));
+        $this->_request->expects($this->once())->method('getServer')->willReturn('value');
 
         $this->_prepareCleanString($clean);
 
         $headerObject = $this->_objectManager->getObject(
-            \Magento\Framework\HTTP\Header::class,
+            Header::class,
             ['httpRequest' => $this->_request, 'converter' => $this->_converter]
         );
 
-        $method = new \ReflectionMethod(\Magento\Framework\HTTP\Header::class, $method);
+        $method = new \ReflectionMethod(Header::class, $method);
         $result = $method->invokeArgs($headerObject, ['clean' => $clean]);
 
         $this->assertEquals($expectedValue, $result);
@@ -129,12 +137,12 @@ class HeaderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetRequestUri($clean, $expectedValue)
     {
-        $this->_request->expects($this->once())->method('getRequestUri')->will($this->returnValue('value'));
+        $this->_request->expects($this->once())->method('getRequestUri')->willReturn('value');
 
         $this->_prepareCleanString($clean);
 
         $headerObject = $this->_objectManager->getObject(
-            \Magento\Framework\HTTP\Header::class,
+            Header::class,
             ['httpRequest' => $this->_request, 'converter' => $this->_converter]
         );
 
@@ -166,8 +174,8 @@ class HeaderTest extends \PHPUnit\Framework\TestCase
             $cleanStringExpects
         )->method(
             'cleanString'
-        )->will(
-            $this->returnValue('converted value')
+        )->willReturn(
+            'converted value'
         );
         return $this;
     }

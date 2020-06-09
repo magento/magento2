@@ -19,7 +19,7 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
      */
     protected $_theme;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         ComponentRegistrar::register(
             ComponentRegistrar::THEME,
@@ -31,7 +31,7 @@ class RegistrationTest extends \PHPUnit\Framework\TestCase
     /**
      * Initialize base models
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\App\AreaList::class)

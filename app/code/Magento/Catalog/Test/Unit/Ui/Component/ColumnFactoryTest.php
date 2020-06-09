@@ -13,8 +13,8 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\Ui\Component\Listing\Columns\ColumnInterface;
 use Magento\Ui\Component\Filters\FilterModifier;
+use Magento\Ui\Component\Listing\Columns\ColumnInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -75,12 +75,12 @@ class ColumnFactoryTest extends TestCase
                 'getIsVisibleInGrid',
             ]
         );
-        $this->context = $this->createMock(ContextInterface::class);
+        $this->context = $this->getMockForAbstractClass(ContextInterface::class);
         $this->uiComponentFactory = $this->createMock(UiComponentFactory::class);
         $this->column = $this->getMockForAbstractClass(ColumnInterface::class);
         $this->uiComponentFactory->method('create')
             ->willReturn($this->column);
-        $this->timezone = $this->createMock(TimezoneInterface::class);
+        $this->timezone = $this->getMockForAbstractClass(TimezoneInterface::class);
 
         $this->columnFactory = $this->objectManager->getObject(
             ColumnFactory::class,

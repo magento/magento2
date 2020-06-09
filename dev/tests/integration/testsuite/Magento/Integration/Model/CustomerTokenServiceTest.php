@@ -34,7 +34,7 @@ class CustomerTokenServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup CustomerTokenService
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->tokenService = Bootstrap::getObjectManager()->get(
             \Magento\Integration\Model\CustomerTokenService::class
@@ -72,10 +72,11 @@ class CustomerTokenServiceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\AuthenticationException
      */
     public function testCreateCustomerAccessTokenInvalidCustomer()
     {
+        $this->expectException(\Magento\Framework\Exception\AuthenticationException::class);
+
         $customerUserName = 'invalid';
         $password = 'invalid';
         $this->tokenService->createCustomerAccessToken($customerUserName, $password);

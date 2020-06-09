@@ -61,9 +61,9 @@ class RemoveItemTest extends TestCase
      */
     private $loggerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->resultJsonFactoryMock = $this->createPartialMock(
             ResultJsonFactory::class,
             ['create']
@@ -74,7 +74,7 @@ class RemoveItemTest extends TestCase
         );
         $this->sidebarMock = $this->createMock(Sidebar::class);
         $this->formKeyValidatorMock = $this->createMock(Validator::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->action = $objectManager->getObject(

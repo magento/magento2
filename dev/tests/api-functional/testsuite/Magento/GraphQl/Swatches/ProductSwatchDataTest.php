@@ -25,7 +25,7 @@ class ProductSwatchDataTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->swatchMediaHelper = $objectManager->get(SwatchesMedia::class);
@@ -42,13 +42,13 @@ class ProductSwatchDataTest extends GraphQlAbstract
 {
   products(filter: {sku: {eq: "$productSku"}}) {
     items {
-        ... on ConfigurableProduct{    
+        ... on ConfigurableProduct{
       configurable_options{
           values {
             swatch_data{
               value
             }
-          } 
+          }
         }
       }
     }
@@ -86,7 +86,7 @@ QUERY;
 {
   products(filter: {sku: {eq: "$productSku"}}) {
     items {
-        ... on ConfigurableProduct{    
+        ... on ConfigurableProduct{
       configurable_options{
           values {
             swatch_data{
@@ -95,7 +95,7 @@ QUERY;
                 thumbnail
               }
             }
-          } 
+          }
         }
       }
     }
@@ -115,7 +115,7 @@ QUERY;
         $option = $product['configurable_options'][0];
         $this->assertArrayHasKey('values', $option);
         $this->assertEquals($color, $option['values'][0]['swatch_data']['value']);
-        $this->assertContains(
+        $this->assertStringContainsString(
             $option['values'][1]['swatch_data']['value'],
             $this->swatchMediaHelper->getSwatchAttributeImage(Swatch::SWATCH_IMAGE_NAME, $imageName)
         );

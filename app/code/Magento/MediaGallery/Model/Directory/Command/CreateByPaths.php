@@ -63,7 +63,7 @@ class CreateByPaths implements CreateDirectoriesByPathsInterface
                 //phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $name = basename($path);
                 //phpcs:ignore Magento2.Functions.DiscouragedFunction
-                $folder = str_replace($name, '', $path);
+                $folder = substr($path, 0, strrpos($path, $name));
 
                 $this->storage->createDirectory(
                     $name,

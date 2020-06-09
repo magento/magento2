@@ -27,7 +27,7 @@ class AssetsByIdsTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->getAssetsByIds = Bootstrap::getObjectManager()->get(GetAssetsByIdsInterface::class);
     }
@@ -42,7 +42,7 @@ class AssetsByIdsTest extends TestCase
     public function testExecute(): void
     {
         $assets = $this->getAssetsByIds->execute([self::FIXTURE_ASSET_ID]);
-        $this->assertEquals(1, count($assets));
+        $this->assertCount(1, $assets);
         $this->assertEquals($assets[0]->getPath(), self::FIXTURE_ASSET_PATH);
     }
 }

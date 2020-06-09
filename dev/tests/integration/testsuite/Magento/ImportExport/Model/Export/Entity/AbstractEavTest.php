@@ -30,7 +30,7 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
      */
     protected $_entityCode = 'customer';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\TestFramework\ObjectManager  $objectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -48,15 +48,15 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getEntityTypeCode'
-        )->will(
-            $this->returnValue($this->_entityCode)
+        )->willReturn(
+            $this->_entityCode
         );
         $this->_model->expects(
             $this->any()
         )->method(
             'getAttributeCollection'
-        )->will(
-            $this->returnValue($customerAttributes)
+        )->willReturn(
+            $customerAttributes
         );
         $this->_model->__construct(
             $objectManager->get(\Magento\Framework\App\Config\ScopeConfigInterface::class),
