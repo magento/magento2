@@ -118,7 +118,7 @@ class CleanExpiredQuotes
     }
 
     /**
-     * Deletes all quotes in collection
+     * Deletes all quotes from select
      *
      * @param Select $query
      */
@@ -132,7 +132,7 @@ class CleanExpiredQuotes
             try {
                 $this->quoteRepository->delete($quote);
             } catch (Exception $e) {
-                $message = sprintf('Unable to delete expired quote (ID: %s)', $quote->getId());
+                $message = sprintf('Unable to delete expired quote (ID: %s)', $quoteId);
                 $this->logger->error($message, ['exception' => $e]);
             }
         }
