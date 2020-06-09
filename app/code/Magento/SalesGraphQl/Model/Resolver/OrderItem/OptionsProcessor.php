@@ -107,21 +107,23 @@ class OptionsProcessor
     public function getBundleOptions(\Magento\Sales\Api\Data\OrderItemInterface $item): array
     {
         $bundleOptions = [];
-        if ($item instanceof \Magento\Sales\Model\Order\Item) {
-            $options = $item->getProductOptions();
-        } else {
-            $options = $item->getOrderItem()->getProductOptions();
-        }
-        if (isset($options['bundle_options'])) {
-            //$bundleOptions = $this->serializer->unserialize($options['bundle_options']);
-            foreach ($options['bundle_options'] as $bundleOptionKey => $bundleOption) {
-                $bundleOptions[$bundleOptionKey]['values'] = $bundleOption['value'] ?? [];
-                $bundleOptions[$bundleOptionKey]['label'] = $bundleOption['label'];
-                foreach ($bundleOptions[$bundleOptionKey]['values'] as $bundleOptionValueKey => $bundleOptionValue) {
-                    $bundleOptions[$bundleOptionKey]['values'][$bundleOptionValueKey]['product_sku'] = $bundleOptionValue['title'];
-                    $bundleOptions[$bundleOptionKey]['values'][$bundleOptionValueKey]['product_name'] = $bundleOptionValue['title'];
-                    $bundleOptions[$bundleOptionKey]['values'][$bundleOptionValueKey]['quantity_ordered'] = $bundleOptionValue['qty'];
-                    $bundleOptions[$bundleOptionKey]['values'][$bundleOptionValueKey]['id'] = base64_encode((string)$bundleOptionValueKey);
+        if ($item->getProductType() === 'bundle') {
+            if ($item instanceof \Magento\Sales\Model\Order\Item) {
+                $options = $item->getProductOptions();
+            } else {
+                $options = $item->getOrderItem()->getProductOptions();
+            }
+            if (isset($options['bundle_options'])) {
+                //$bundleOptions = $this->serializer->unserialize($options['bundle_options']);
+                foreach ($options['bundle_options'] as $bundleOptionKey => $bundleOption) {
+                    $bundleOptions[$bundleOptionKey]['items'] = $bundleOption['value'] ?? [];
+                    $bundleOptions[$bundleOptionKey]['label'] = $bundleOption['label'];
+                    foreach ($bundleOptions[$bundleOptionKey]['items'] as $bundleOptionValueKey => $bundleOptionValue) {
+                        $bundleOptions[$bundleOptionKey]['items'][$bundleOptionValueKey]['product_sku'] = $bundleOptionValue['title'];
+                        $bundleOptions[$bundleOptionKey]['items'][$bundleOptionValueKey]['product_name'] = $bundleOptionValue['title'];
+                        $bundleOptions[$bundleOptionKey]['items'][$bundleOptionValueKey]['quantity_ordered'] = $bundleOptionValue['qty'];
+                        $bundleOptions[$bundleOptionKey]['items'][$bundleOptionValueKey]['id'] = base64_encode((string)$bundleOptionValueKey);
+                    }
                 }
             }
         }

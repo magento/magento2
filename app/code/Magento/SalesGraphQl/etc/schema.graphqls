@@ -87,7 +87,7 @@ type BundleOrderItem implements OrderItemInterface {
 
 type SelectedBundleOptionItems {
     label: String!
-    values: [OrderItem] @doc(description: "A list of products that represent the values of the parent option")
+    items: [OrderItem] @doc(description: "A list of products that represent the values of the parent option")
 }
 
 type OrderItemOption @doc(description: "Represents order item options like selected or entered") {
