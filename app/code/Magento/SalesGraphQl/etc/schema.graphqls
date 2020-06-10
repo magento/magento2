@@ -87,7 +87,8 @@ type BundleOrderItem implements OrderItemInterface {
 }
 
 type SelectedBundleOptionItems {
-    label: String!
+    id: ID! @doc(description: "The unique identifier of the option")
+    label: String! @doc(description: "The label of the option")
     items: [OrderItem] @doc(description: "A list of products that represent the values of the parent option")
 }
 
@@ -139,8 +140,7 @@ type InvoiceItem implements InvoiceItemInterface {
 }
 
 type BundleInvoiceItem implements InvoiceItemInterface {
-    bundle_options: [SelectedBundleOptionItems]
-    child_items: [InvoiceItemInterface] @doc(description: "A list of child products that are assigned to the bundle product")
+    bundle_options: [SelectedBundleOptionItems] @doc(description: "A list of bundle options that are assigned to the bundle product")
 }
 
 type InvoiceTotal implements SalesTotalAmountInterface @doc(description: "Invoice total amount details") {
