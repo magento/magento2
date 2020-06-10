@@ -426,7 +426,7 @@ define([
             } else { // construct message from all aggregatedErrors
                 _.each(this.aggregatedErrors, function (error) {
                     notification().add({
-                        error: 'testing',
+                        error: true,
                         message: '%s' + error.message, // %s to be used as placeholder for html injection
 
                         /**
@@ -438,7 +438,7 @@ define([
                             var escapedFileName = $('<div>').text(error.filename).html(),
                                 errorMsgBodyHtml = '<strong>%s</strong> %s.<br>'
                                     .replace('%s', escapedFileName)
-                                    .replace('%s', $t('was not uploaded test'));
+                                    .replace('%s', $t('was not uploaded'));
 
                             // html is escaped in message body for notification widget; prepend unescaped html here
                             constructedMessage = constructedMessage.replace('%s', errorMsgBodyHtml);
