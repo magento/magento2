@@ -7,7 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Sales;
 
+use Magento\Bundle\Model\Selection;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -39,6 +42,9 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
     /** @var GetCustomerAuthenticationHeader */
     private $customerAuthenticationHeader;
 
+    /** @var ProductRepositoryInterface */
+    private $productRepository;
+
     protected function setUp():void
     {
         parent::setUp();
@@ -47,6 +53,7 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
         $this->customerAuthenticationHeader = $objectManager->get(GetCustomerAuthenticationHeader::class);
         $this->orderRepository = $objectManager->get(OrderRepositoryInterface::class);
         $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
+        $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
         $this->orderItem = $objectManager->get(Order\Item::class);
     }
 
@@ -76,20 +83,10 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
         product_sale_price{currency value}
       }
       total {
-                    base_grand_total {
-                        value
-                        currency
-                    }
-                    grand_total {
-                        value
-                        currency
-                    }
-                    subtotal {
-                        value
-                        currency
-                    }
-
-                }
+                base_grand_total {value currency}
+                grand_total {value currency}
+                subtotal {value currency}
+              }
     }
    }
  }
@@ -135,6 +132,59 @@ QUERY;
                 'subtotal' => ['value'=> 120,'currency' =>'USD']
             ];
         $this->assertEquals($expectedOrderTotal, $actualOrderTotalFromResponse,'Totals do not match');
+    }
+
+    /**
+     * Test customer order details with bundle products
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/bundle/_files/bundle_product_dropdown_options.php
+     */
+    public function testGetCustomerOrderWithBundleProduct()
+    {
+        $qty = 1;
+        $bundleSku = 'bundle-product-dropdown-options';
+        $simpleProductSku = 'simple2';
+        /** @var Product $simple */
+        $simple = $this->productRepository->get($simpleProductSku);
+        $stockData =[
+            StockItemInterface::QTY => 200,
+            StockItemInterface::MANAGE_STOCK =>true,
+            StockItemInterface::IS_IN_STOCK =>true
+        ];
+        $simple->setQuantityAndStockStatus($stockData);
+        $this->productRepository->save($simple);
+        /** @var Product $bundleProduct */
+        $bundleProduct = $this->productRepository->get($bundleSku);
+        /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
+        $typeInstance = $bundleProduct->getTypeInstance();
+        /** @var $option \Magento\Bundle\Model\Option */
+        $option = $typeInstance->getOptionsCollection($bundleProduct)->getFirstItem();
+        $optionId =(int) $option->getId();
+        /** @var Selection $selection */
+        $selection = $typeInstance->getSelectionsCollection([$option->getId()], $bundleProduct)->getFirstItem();
+        $selection->setSelectionCanChangeQty(1);
+        $this->productRepository->save($bundleProduct);
+        $selectionId = (int)$selection->getSelectionId();
+
+        $cartId = $this->createEmptyCart();
+        $this->addBundleProductToCart($cartId, $qty, $bundleSku, $optionId, $selectionId);
+        $this->setBillingAddress($cartId);
+        $shippingMethod = $this->setShippingAddress($cartId);
+        $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
+        $this->setPaymentMethod($cartId, $paymentMethod);
+        $orderNumber = $this->placeOrder($cartId);
+        $customerOrderResponse = $this->getCustomerOrderQueryBundleProduct($orderNumber);
+
+        $customerOrderItems = $customerOrderResponse[0];
+        $this->assertEquals("Pending", $customerOrderItems['status']);
+
+        $bundledItemInTheOrder = $customerOrderItems['items'][0];
+        $this->assertEquals('bundle-product-dropdown-options', $bundledItemInTheOrder['product_sku']);
+        $this->assertArrayHasKey('child_items', $bundledItemInTheOrder);
+        $childItemInTheOrder = $bundledItemInTheOrder['child_items'][0];
+        $this->assertNotEmpty($childItemInTheOrder);
+        $this->assertEquals('simple-1', $childItemInTheOrder['product_sku']);
+        $this->deleteOrder();
     }
 
     /**
@@ -596,7 +646,7 @@ QUERY;
      * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_10_percent_off_with_discount_on_shipping.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_shipping_excludeTax_order_display_settings.php
      */
-    public function testCustomerOrderWithDiscountsAndTaxesOnShipping()
+    public function testCustomerOrderWithTaxesAndDiscountsOnShippingAndTotal()
     {
         $quantity = 4;
         $sku = 'simple1';
@@ -711,7 +761,7 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_shipping_and_order_display_settings.php
      */
-    public function testCustomerOrderWithTaxesOnShippingAndPrices()
+    public function testCustomerOrderWithTaxesIncludedOnShippingAndTotals()
     {
         $quantity = 2;
         $sku = 'simple1';
@@ -777,6 +827,49 @@ QUERY;
         $currentPassword = 'password';
         $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
     }
+
+    /**
+     * @param string $cartId
+     * @param float $qty
+     * @param string $sku
+     * @param int $optionId
+     * @param int $selectionId
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
+    public function addBundleProductToCart(string $cartId, float $qty, string $sku, int $optionId, int $selectionId)
+    {
+        $query = <<<QUERY
+mutation {
+  addBundleProductsToCart(input:{
+    cart_id:"{$cartId}"
+    cart_items:[
+      {
+        data:{
+          sku:"{$sku}"
+          quantity:$qty
+        }
+        bundle_options:[
+          {
+            id:$optionId
+            quantity:2
+            value:["{$selectionId}"]
+          }
+        ]
+      }
+    ]
+  }) {
+    cart {
+      items {quantity product {sku}}
+      }
+    }
+}
+QUERY;
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+        $this->assertArrayHasKey('cart', $response['addBundleProductsToCart']);
+    }
+
 
     /**
      * @param string $cartId
@@ -1001,6 +1094,75 @@ QUERY;
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $customerOrderItemsInResponse = $response['customer']['orders']['items'];
         return $customerOrderItemsInResponse;
+    }
+
+    /**
+     * Get customer order query for bundle order items
+     *
+     * @param $orderNumber
+     * @return mixed
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
+    private function getCustomerOrderQueryBundleProduct($orderNumber)
+    {
+        $query =
+            <<<QUERY
+{
+     customer {
+       orders(filter:{number:{eq:"{$orderNumber}"}}) {
+         total_count
+         items {
+           number
+           order_date
+           status
+           items{
+            product_sku
+            quantity_ordered
+            __typename
+            ... on BundleOrderItem{
+              child_items{
+                __typename
+                product_sku
+                product_name
+                product_sku
+            product_url_key
+            product_sale_price{value}
+            product_sale_price{value currency}
+            quantity_ordered
+              }
+            }
+          }
+           total {
+             base_grand_total{value currency}
+             grand_total{value currency}
+             total_tax{value}
+             subtotal { value currency }
+             taxes {amount{value currency} title rate}
+             total_shipping{value}
+             shipping_handling
+             {
+               amount_inc_tax{value}
+               amount_exc_tax{value}
+               total_amount{value}
+               taxes {amount{value} title rate}
+             }
+
+           }
+         }
+       }
+     }
+   }
+QUERY;
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+
+        $this->assertArrayHasKey('orders', $response['customer']);
+        $this->assertArrayHasKey('items', $response['customer']['orders']);
+        $customerOrderItemsInResponse = $response['customer']['orders']['items'];
+        return $customerOrderItemsInResponse;
+
+
     }
 
     /**
