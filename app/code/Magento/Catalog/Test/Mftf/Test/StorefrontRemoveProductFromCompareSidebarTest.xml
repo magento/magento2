@@ -15,6 +15,7 @@
             <features value="Catalog"/>
             <severity value="MINOR"/>
             <group value="Catalog"/>
+            <testCaseId value="MC-35068"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="defaultCategory"/>
