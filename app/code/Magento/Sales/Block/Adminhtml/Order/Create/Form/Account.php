@@ -200,6 +200,10 @@ class Account extends AbstractForm
             $data['email'] = $this->getQuote()->getCustomerEmail();
         }
 
+        if ($this->getQuote()->getCustomerGroupId() !== $customer->getGroupId()) {
+            $data['group_id'] = $customer->getGroupId();
+        }
+
         return $data;
     }
 
