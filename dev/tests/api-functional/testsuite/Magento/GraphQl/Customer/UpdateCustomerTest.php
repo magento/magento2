@@ -287,6 +287,36 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
+    public function testUpdateEmailIfEmailIsInvalid()
+    {
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $invalidEmail = 'customer.example.com';
+
+        $query = <<<QUERY
+mutation {
+    updateCustomer(
+        input: {
+            email: "{$invalidEmail}"
+            password: "{$currentPassword}"
+        }
+    ) {
+        customer {
+            email
+        }
+    }
+}
+QUERY;
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('"' . $invalidEmail . '" is not a valid email address.');
+
+        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     */
     public function testEmptyCustomerName()
     {
         $this->expectException(Exception::class);
@@ -316,6 +346,31 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
+    public function testEmptyCustomerLastName()
+    {
+        $query = <<<QUERY
+mutation {
+    updateCustomer(
+        input: {
+            lastname: ""
+        }
+    ) {
+        customer {
+            lastname
+        }
+    }
+}
+QUERY;
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Required parameters are missing: Last Name');
+
+        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders('customer@example.com', 'password'));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     */
     public function testUpdateCustomerWithIncorrectGender()
     {
         $gender = 5;
@@ -336,6 +391,33 @@ mutation {
     }
 }
 QUERY;
+        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders('customer@example.com', 'password'));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testUpdateCustomerIfDobIsInvalid()
+    {
+        $invalidDob = 'bla-bla-bla';
+
+        $query = <<<QUERY
+mutation {
+    updateCustomer(
+        input: {
+            date_of_birth: "{$invalidDob}"
+        }
+    ) {
+        customer {
+            date_of_birth
+        }
+    }
+}
+QUERY;
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage('Invalid date');
+
         $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders('customer@example.com', 'password'));
     }
 
