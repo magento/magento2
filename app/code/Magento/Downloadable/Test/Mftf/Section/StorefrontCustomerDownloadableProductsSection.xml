@@ -10,5 +10,6 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontCustomerDownloadableProductsSection">
         <element name="productName" type="text" selector="//table[@id='my-downloadable-products-table']//strong[contains(@class, 'product-name') and normalize-space(.)='{{productName}}']" parameterized="true"/>
+        <element name="downloadableLink" type="button" selector="//table[@id='my-downloadable-products-table']//a[contains(@class, 'download')]"/>
     </section>
 </sections>
