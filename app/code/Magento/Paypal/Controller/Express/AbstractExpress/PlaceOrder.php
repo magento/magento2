@@ -127,6 +127,7 @@ class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
                 return;
             }
             $this->_initToken(false); // no need in token anymore
+            $this->_getSession()->unsQuoteId(); // clean quote from session that was set in OnAuthorization
             $this->_redirect('checkout/onepage/success');
             return;
         } catch (ApiProcessableException $e) {
