@@ -14,42 +14,9 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Tax\Item as TaxItem;
-use Magento\SalesGraphQl\Model\Orders\GetDiscounts;
-use Magento\SalesGraphQl\Model\Orders\GetTaxes;
 
 class OrderTotal implements ResolverInterface
 {
-    /**
-     * @var GetDiscounts
-     */
-    private $getDiscounts;
-
-    /**
-     * @var GetTaxes
-     */
-    private $getTaxes;
-
-    /**
-     * @var TaxItem
-     */
-    private $taxItem;
-
-    /**
-     * @param GetDiscounts $getDiscounts
-     * @param GetTaxes $getTaxes
-     * @param TaxItem $taxItem
-     */
-    public function __construct(
-        GetDiscounts $getDiscounts,
-        GetTaxes $getTaxes,
-        TaxItem $taxItem
-    ) {
-        $this->getDiscounts = $getDiscounts;
-        $this->getTaxes = $getTaxes;
-        $this->taxItem = $taxItem;
-    }
-
     /**
      * @inheritdoc
      */
@@ -69,38 +36,47 @@ class OrderTotal implements ResolverInterface
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        /** @var Order $orderModel */
-        $orderModel = $value['model'];
-
-        $currency = $orderModel->getOrderCurrencyCode();
-        /** @var TaxItem $taxModel */
-
-        $taxModel = $value['model'];
-        if (!empty($taxModel->getExtensionAttributes()->getAppliedTaxes())) {
-            if (isset($taxModel->getExtensionAttributes()->getAppliedTaxes()[0])) {
-                $appliedTaxes = $taxModel->getExtensionAttributes()->getAppliedTaxes()[0];
-                $appliedTaxesArray = $appliedTaxes->getData();
+        /** @var Order $order */
+        $order = $value['model'];
+        $currency = $order->getOrderCurrencyCode();
+        $extensionAttributes = $order->getExtensionAttributes();
+        $appliedTaxesForItems = $extensionAttributes->getItemAppliedTaxes();
+        $allAppliedTaxesForItemsData[] = [];
+        $appliedShippingTaxesForItemsData[] = [];
+        if (!empty($appliedTaxesForItems)) {
+            foreach ($appliedTaxesForItems as $key => $appliedTaxForItem) {
+                $appliedTaxType = $appliedTaxForItem->getType();
+                $taxLineItems = $appliedTaxForItem->getAppliedTaxes();
+                foreach ($taxLineItems as $taxLineItem) {
+                    if ($appliedTaxType === "shipping") {
+                        $appliedShippingTaxesForItemsData[$key]['title'] = $taxLineItem->getDataByKey('title');
+                        $appliedShippingTaxesForItemsData[$key]['percent'] = $taxLineItem->getDataByKey('percent');
+                        $appliedShippingTaxesForItemsData[$key]['amount'] = $taxLineItem->getDataByKey('amount');
+                    }
+                    $allAppliedTaxesForItemsData[$key]['title'] = $taxLineItem->getDataByKey('title');
+                    $allAppliedTaxesForItemsData[$key]['percent'] = $taxLineItem->getDataByKey('percent');
+                    $allAppliedTaxesForItemsData[$key]['amount'] = $taxLineItem->getDataByKey('amount');
+                }
             }
-        } else {
-            $appliedTaxesArray = [];
         }
 
         $total = [
-                'base_grand_total' => ['value' => $orderModel->getBaseGrandTotal(), 'currency' => $currency],
-                'grand_total' => ['value' => $orderModel->getGrandTotal(), 'currency' => $currency],
-                'subtotal' => ['value' => $orderModel->getSubtotal(), 'currency' => $currency],
-                'total_tax' => ['value' => $orderModel->getTaxAmount(), 'currency' => $currency],
-                'taxes' => $this->getTaxes->execute($orderModel, $appliedTaxesArray),
-                'discounts' => $this->getDiscounts->execute($orderModel),
-                'total_shipping' => ['value' => $orderModel->getShippingAmount(), 'currency' => $currency],
-                'shipping_handling' => [
-                    'amount_excluding_tax' => ['value' => ($orderModel->getShippingInclTax() - $orderModel->getBaseShippingTaxAmount()), 'currency' => $currency],
-                    'amount_including_tax' => ['value' => $orderModel->getShippingInclTax(), 'currency' => $currency],
-                    'total_amount' => ['value' => $orderModel->getBaseShippingAmount(), 'currency' => $currency],
-                    'taxes' => $this->getTaxes->execute($orderModel, $appliedTaxesArray),
-                    'discounts' => $this->getShippingDiscountDetails($orderModel),
-                ]
-            ];
+            'base_grand_total' => ['value' => $order->getBaseGrandTotal(), 'currency' => $currency],
+            'grand_total' => ['value' => $order->getGrandTotal(), 'currency' => $currency],
+            'subtotal' => ['value' => $order->getSubtotal(), 'currency' => $currency],
+            'total_tax' => ['value' => $order->getTaxAmount(), 'currency' => $currency],
+            'taxes' => $this->getAppliedTaxesDetails($order, $allAppliedTaxesForItemsData),
+            'discounts' => $this->getDiscountDetails($order),
+            'total_shipping' => ['value' => $order->getShippingAmount(), 'currency' => $currency],
+            'shipping_handling' => [
+                'amount_excluding_tax' => ['value' => $order->getShippingAmount(), 'currency' => $order->getOrderCurrencyCode()],
+                'amount_including_tax' => ['value' => $order->getShippingInclTax(), 'currency' => $currency],
+                'total_amount' => ['value' => $order->getBaseShippingAmount(), 'currency' => $currency],
+                'taxes' => $this->getAppliedTaxesDetails($order, $appliedShippingTaxesForItemsData),
+                'discounts' => $this->getShippingDiscountDetails($order),
+
+            ]
+        ];
         return $total;
     }
 
@@ -112,14 +88,62 @@ class OrderTotal implements ResolverInterface
      */
     private function getShippingDiscountDetails(Order $order)
     {
-        $discounts [] =
-                [
-                    'label' => $order->getDiscountDescription() ?? "null",
-                    'amount' => [
-                        'value' => $order->getShippingDiscountAmount(),
-                        'currency' => $order->getOrderCurrencyCode()
+        if ($order->getDiscountDescription() === null && $order->getShippingDiscountAmount() === 0) {
+            return null;
+        }
+
+        $shippingDiscounts [] =
+            [
+                'label' => $order->getDiscountDescription() ?? "null",
+                'amount' => [
+                    'value' => $order->getShippingDiscountAmount(),
+                    'currency' => $order->getOrderCurrencyCode()
+                ]
+            ];
+        return $shippingDiscounts;
+    }
+
+    /**
+     * Returns information about an applied discount
+     *
+     * @param Order $order
+     * @return array|null
+     */
+    private function getDiscountDetails(Order $order)
+    {
+        if ($order->getDiscountDescription() === null && $order->getDiscountAmount() === 0) {
+            return null;
+        }
+
+        $discounts [] = [
+            'label' => $order->getDiscountDescription() ?? "null",
+            'amount' => ['value' => $order->getDiscountAmount(), 'currency' => $order->getOrderCurrencyCode()]
+        ];
+        return $discounts;
+    }
+
+    /**
+     * Returns taxes applied to the current order
+     *
+     * @param Order $order
+     * @param array $appliedTaxesArray
+     * @return array|null
+     */
+    private function getAppliedTaxesDetails(Order $order, array $appliedTaxesArray): array
+    {
+        if (empty($appliedTaxesArray)) {
+            $taxes [] = null;
+        } else {
+            foreach ($appliedTaxesArray as $appliedTaxes) {
+                $taxes[] = [
+                    'rate' => $appliedTaxes['percent'] ?? " ",
+                    'title' => $appliedTaxes['title'] ?? " ",
+                    'amount' => ['value' => $appliedTaxes['amount'] ?? 0 , 'currency' => $order->getOrderCurrencyCode()
                     ]
                 ];
-        return $discounts;
+            }
+            /** @var array $taxes */
+            return $taxes;
+        }
     }
 }
