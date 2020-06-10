@@ -51,16 +51,16 @@ class AddProductsToCart implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        if (empty($args['cart_id'])) {
-            throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
+        if (empty($args['cartId'])) {
+            throw new GraphQlInputException(__('Required parameter "cartId" is missing'));
         }
-        if (empty($args['cart_items']) || !is_array($args['cart_items'])
+        if (empty($args['cartItems']) || !is_array($args['cartItems'])
         ) {
-            throw new GraphQlInputException(__('Required parameter "cart_items" is missing'));
+            throw new GraphQlInputException(__('Required parameter "cartItems" is missing'));
         }
 
-        $maskedCartId = $args['cart_id'];
-        $cartItemsData = $args['cart_items'];
+        $maskedCartId = $args['cartId'];
+        $cartItemsData = $args['cartItems'];
         $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
 
         // Shopping Cart validation
