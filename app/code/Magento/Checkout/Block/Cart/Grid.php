@@ -166,7 +166,8 @@ class Grid extends \Magento\Checkout\Block\Cart
 
     /**
      * Verify if display pager on shopping cart
-     * If cart block has custom_items and items qty in the shopping cart<limit from stores configuration
+     *
+     * Check if cart block has custom_items and items qty in the shopping cart<limit from stores configuration
      *
      * @return bool
      */
