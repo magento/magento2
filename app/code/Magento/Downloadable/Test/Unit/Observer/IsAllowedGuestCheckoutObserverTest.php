@@ -18,6 +18,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -27,7 +28,9 @@ use PHPUnit\Framework\TestCase;
 class IsAllowedGuestCheckoutObserverTest extends TestCase
 {
     private const XML_PATH_DISABLE_GUEST_CHECKOUT = 'catalog/downloadable/disable_guest_checkout';
-    
+
+    private const STUB_STORE_ID = 1;
+
     /** @var IsAllowedGuestCheckoutObserver */
     private $isAllowedGuestCheckoutObserver;
 
@@ -55,6 +58,11 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
      * @var MockObject|DataObject
      */
     private $storeMock;
+
+    /**
+     * @var MockObject|StoreManagerInterface
+     */
+    private $storeManagerMock;
 
     /**
      * Sets up the fixture, for example, open a network connection.
@@ -86,12 +94,20 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->isAllowedGuestCheckoutObserver = (new ObjectManagerHelper($this))->getObject(
-            IsAllowedGuestCheckoutObserver::class,
-            [
-                'scopeConfig' => $this->scopeConfigMock,
-            ]
-        );
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $this->storeManagerMock
+            ->method('getStore')
+            ->with(self::STUB_STORE_ID)
+            ->willReturn($this->storeMock);
+
+        $this->isAllowedGuestCheckoutObserver = (new ObjectManagerHelper($this))
+            ->getObject(
+                IsAllowedGuestCheckoutObserver::class,
+                [
+                    'scopeConfig' => $this->scopeConfigMock,
+                    'storeManager'=> $this->storeManagerMock
+                ]
+            );
     }
 
     /**
@@ -103,8 +119,6 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
      */
     public function testIsAllowedGuestCheckoutConfigSetToTrue($productType, $isAllowed): void
     {
-        $storeId = 1;
-
         if ($isAllowed) {
             $this->resultMock->expects($this->at(0))
                 ->method('setIsAllowed')
@@ -144,7 +158,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
 
         $this->storeMock->expects($this->any())
             ->method('getId')
-            ->willReturn($storeId);
+            ->willReturn(self::STUB_STORE_ID);
 
         $this->eventMock->expects($this->once())
             ->method('getResult')
@@ -159,7 +173,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
             ->with(
                 self::XML_PATH_DISABLE_GUEST_CHECKOUT,
                 ScopeInterface::SCOPE_STORE,
-                $storeId
+                self::STUB_STORE_ID
             )
             ->willReturn(true);
 
@@ -186,8 +200,6 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
 
     public function testIsAllowedGuestCheckoutConfigSetToFalse(): void
     {
-        $storeId = 1;
-
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getTypeId'])
@@ -218,10 +230,10 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
         $this->eventMock->expects($this->once())
             ->method('getStore')
             ->willReturn($this->storeMock);
-        
+
         $this->storeMock->expects($this->any())
             ->method('getId')
-            ->willReturn($storeId);
+            ->willReturn(self::STUB_STORE_ID);
 
         $this->eventMock->expects($this->once())
             ->method('getResult')
@@ -236,7 +248,7 @@ class IsAllowedGuestCheckoutObserverTest extends TestCase
             ->with(
                 self::XML_PATH_DISABLE_GUEST_CHECKOUT,
                 ScopeInterface::SCOPE_STORE,
-                $storeId
+                self::STUB_STORE_ID
             )
             ->willReturn(false);
 
