@@ -14,6 +14,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
 
 /**
  * Data provider for order items
@@ -137,6 +138,7 @@ class DataProvider
                     'product_sku' => $orderItem->getSku(),
                     'product_url_key' => $associatedProduct ? $associatedProduct->getUrlKey() : null,
                     'product_type' => $orderItem->getProductType(),
+                    'discounts' => $this->getDiscountDetails($associatedOrder, $orderItem),
                     'product_sale_price' => [
                         'value' => $orderItem->getPrice(),
                         'currency' => $associatedOrder->getOrderCurrencyCode()
@@ -158,6 +160,7 @@ class DataProvider
                     'product_sku' => $orderItem->getSku(),
                     'product_url_key' => $associatedProduct ? $associatedProduct->getUrlKey() : null,
                     'product_type' => $orderItem->getProductType(),
+                    'discounts' => $this->getDiscountDetails($associatedOrder, $orderItem),
                     'product_sale_price' => [
                         'value' => $orderItem->getPrice(),
                         'currency' => $associatedOrder->getOrderCurrencyCode()
@@ -172,7 +175,6 @@ class DataProvider
                     'quantity_returned' => $orderItem->getQtyReturned(),
                 ];
             }
-
         }
 
         return $this->orderItemList;
@@ -229,5 +231,27 @@ class DataProvider
             $orderList[$order->getEntityId()] = $order;
         }
         return $orderList;
+    }
+
+    /**
+     * Returns information about an applied discount
+     *
+     * @param OrderInterface $associatedOrder
+     * @param OrderItemInterface $orderItem
+     * @return array|null
+     */
+    private function getDiscountDetails(OrderInterface $associatedOrder, OrderItemInterface $orderItem)
+    {
+        if ($associatedOrder->getDiscountDescription() === null && $orderItem->getDiscountAmount() == 0
+            && $associatedOrder->getDiscountAmount() == 0
+        ) {
+            return null;
+        }
+
+        $discounts [] = [
+            'label' => $associatedOrder->getDiscountDescription() ?? "null",
+            'amount' => ['value' => $orderItem->getDiscountAmount() ?? 0, 'currency' => $associatedOrder->getOrderCurrencyCode()]
+        ];
+        return $discounts;
     }
 }

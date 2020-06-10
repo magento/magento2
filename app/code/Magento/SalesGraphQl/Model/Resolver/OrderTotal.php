@@ -117,7 +117,10 @@ class OrderTotal implements ResolverInterface
 
         $discounts [] = [
             'label' => $order->getDiscountDescription() ?? "null",
-            'amount' => ['value' => $order->getDiscountAmount(), 'currency' => $order->getOrderCurrencyCode()]
+            'amount' => [
+                'value' => $order->getDiscountAmount(),
+                'currency' => $order->getOrderCurrencyCode()
+            ]
         ];
         return $discounts;
     }

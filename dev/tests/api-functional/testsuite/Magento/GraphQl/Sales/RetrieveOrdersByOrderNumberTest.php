@@ -685,9 +685,134 @@ QUERY;
         $this->setPaymentMethod($cartId, $paymentMethod);
         $orderNumber = $this->placeOrder($cartId);
         $customerOrderResponse = $this->getCustomerOrderQuery($orderNumber);
+        // Asserting discounts on order item level
+        $this->assertEquals(
+            4,
+            $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']
+        );
+        $this->assertEquals(
+            'null',
+            $customerOrderResponse[0]['items'][0]['discounts'][0]['label']
+        );
         $customerOrderItem = $customerOrderResponse[0];
-        //TODO: once discounts are calculated, order Totals can be verified
+        $this->assertTotalsWithTaxesAndDiscountsOnShippingAndTotal($customerOrderItem);
         $this->deleteOrder();
+    }
+
+    /**
+     * Assert order totals including shipping_handling and taxes
+     *
+     * @param array $customerOrderItem
+     */
+    private function assertTotalsWithTaxesAndDiscountsOnShippingAndTotal(array $customerOrderItem): void
+    {
+        $this->assertEquals(
+            58.05,
+            $customerOrderItem['total']['base_grand_total']['value']
+        );
+
+        $this->assertEquals(
+            58.05,
+            $customerOrderItem['total']['grand_total']['value']
+        );
+        $this->assertEquals(
+            40,
+            $customerOrderItem['total']['subtotal']['value']
+        );
+        $this->assertEquals(
+            4.05,
+            $customerOrderItem['total']['total_tax']['value']
+        );
+
+        $this->assertEquals(
+            20,
+            $customerOrderItem['total']['total_shipping']['value']
+        );
+        $this->assertEquals(
+            1.35,
+            $customerOrderItem['total']['taxes'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $customerOrderItem['total']['taxes'][0]['amount']['currency']
+        );
+        $this->assertEquals(
+            'US-TEST-*-Rate-1',
+            $customerOrderItem['total']['taxes'][0]['title']
+        );
+        $this->assertEquals(
+            7.5,
+            $customerOrderItem['total']['taxes'][0]['rate']
+        );
+        $this->assertEquals(
+            2.7,
+            $customerOrderItem['total']['taxes'][1]['amount']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $customerOrderItem['total']['taxes'][1]['amount']['currency']
+        );
+        $this->assertEquals(
+            'US-TEST-*-Rate-1',
+            $customerOrderItem['total']['taxes'][1]['title']
+        );
+        $this->assertEquals(
+            7.5,
+            $customerOrderItem['total']['taxes'][1]['rate']
+        );
+        $this->assertEquals(
+            21.5,
+            $customerOrderItem['total']['shipping_handling']['amount_including_tax']['value']
+        );
+        $this->assertEquals(
+            20,
+            $customerOrderItem['total']['shipping_handling']['amount_excluding_tax']['value']
+        );
+        $this->assertEquals(
+            20,
+            $customerOrderItem['total']['shipping_handling']['total_amount']['value']
+        );
+
+        $this->assertEquals(
+            1.35,
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'US-TEST-*-Rate-1',
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['title']
+        );
+        $this->assertEquals(
+            7.5,
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['rate']
+        );
+        $this->assertEquals(
+            2,
+            $customerOrderItem['total']['shipping_handling']['discounts'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $customerOrderItem['total']['shipping_handling']['discounts'][0]['amount']['currency']
+        );
+        $this->assertEquals(
+            'null',
+            $customerOrderItem['total']['shipping_handling']['discounts'][0]['label']
+        );
+        $this->assertEquals(
+            -6,
+            $customerOrderItem['total']['discounts'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $customerOrderItem['total']['discounts'][0]['amount']['currency']
+        );
+        $this->assertEquals(
+            'null',
+            $customerOrderItem['total']['discounts'][0]['label']
+        );
     }
 
     /**
@@ -1091,13 +1216,14 @@ QUERY;
            number
            order_date
            status
-           items{product_name product_sku quantity_ordered}
+           items{product_name product_sku quantity_ordered discounts {amount{value currency} label}}
            total {
              base_grand_total{value currency}
              grand_total{value currency}
              total_tax{value}
              subtotal { value currency }
              taxes {amount{value currency} title rate}
+             discounts {amount{value currency} label}
              total_shipping{value}
              shipping_handling
              {
@@ -1105,8 +1231,9 @@ QUERY;
                amount_excluding_tax{value}
                total_amount{value currency}
                taxes {amount{value} title rate}
+               discounts {amount{value currency} label}
              }
-             discounts {amount{value currency} label}
+
            }
          }
        }
@@ -1134,51 +1261,7 @@ QUERY;
     {
         $query =
             <<<QUERY
-{
-     customer {
-       orders(filter:{number:{eq:"{$orderNumber}"}}) {
-         total_count
-         items {
-           number
-           order_date
-           status
-           items{
-            product_sku
-            quantity_ordered
-            __typename
-            ... on BundleOrderItem{
-              child_items{
-                __typename
-                product_sku
-                product_name
-                product_sku
-            product_url_key
-            product_sale_price{value}
-            product_sale_price{value currency}
-            quantity_ordered
-              }
-            }
-          }
-           total {
-             base_grand_total{value currency}
-             grand_total{value currency}
-             total_tax{value}
-             subtotal { value currency }
-             taxes {amount{value currency} title rate}
-             total_shipping{value}
-             shipping_handling
-             {
-               amount_including_tax{value}
-               amount_excluding_tax{value}
-               total_amount{value}
-               taxes {amount{value} title rate}
-             }
-
-           }
-         }
-       }
-     }
-   }
+ 
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
