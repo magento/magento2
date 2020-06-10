@@ -5,7 +5,6 @@
  */
 namespace Magento\Framework\Interception\PluginList;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Config\Data\Scoped;
 use Magento\Framework\Config\ReaderInterface;
@@ -18,6 +17,8 @@ use Magento\Framework\ObjectManager\DefinitionInterface as ClassDefinitions;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
+use Magento\Framework\Interception\ConfigLoader;
+use Magento\Framework\App\ObjectManager;
 
 /**
  * Plugin config, provides list of plugins for a type
@@ -89,6 +90,11 @@ class PluginList extends Scoped implements InterceptionPluginList
     private $serializer;
 
     /**
+     * @var ConfigLoader
+     */
+    private $configLoader;
+
+    /**
      * Constructor
      *
      * @param ReaderInterface $reader
@@ -102,6 +108,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      * @param array $scopePriorityScheme
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
+     * @param ConfigLoader|null $configLoader
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -115,7 +122,8 @@ class PluginList extends Scoped implements InterceptionPluginList
         ClassDefinitions $classDefinitions,
         array $scopePriorityScheme = ['global'],
         $cacheId = 'plugins',
-        SerializerInterface $serializer = null
+        SerializerInterface $serializer = null,
+        ConfigLoader $configLoader = null
     ) {
         $this->serializer = $serializer ?: $objectManager->get(Serialize::class);
         parent::__construct($reader, $configScope, $cache, $cacheId, $this->serializer);
@@ -125,6 +133,7 @@ class PluginList extends Scoped implements InterceptionPluginList
         $this->_classDefinitions = $classDefinitions;
         $this->_scopePriorityScheme = $scopePriorityScheme;
         $this->_objectManager = $objectManager;
+        $this->configLoader = $configLoader ?: ObjectManager::getInstance()->get(ConfigLoader::class);
     }
 
     /**
@@ -225,16 +234,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      */
     protected function _sort($itemA, $itemB)
     {
-        if (isset($itemA['sortOrder'])) {
-            if (isset($itemB['sortOrder'])) {
-                return $itemA['sortOrder'] - $itemB['sortOrder'];
-            }
-            return $itemA['sortOrder'];
-        } elseif (isset($itemB['sortOrder'])) {
-            return (0 - (int)$itemB['sortOrder']);
-        } else {
-            return 0;
-        }
+        return ($itemA['sortOrder'] ?? PHP_INT_MIN) - ($itemB['sortOrder'] ?? PHP_INT_MIN);
     }
 
     /**
@@ -286,15 +286,11 @@ class PluginList extends Scoped implements InterceptionPluginList
                 $this->_scopePriorityScheme[] = $scope;
             }
             $cacheId = implode('|', $this->_scopePriorityScheme) . "|" . $this->_cacheId;
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
-            $directoryList = $objectManager->get(DirectoryList::class);
-            $file = $directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/' . $cacheId . '.' . 'php';
-            if (file_exists($file)) {
-                $data = include $file;
-                [$this->_data, $this->_inherited, $this->_processed] = $data;
-                foreach ($this->_scopePriorityScheme as $scopeCode) {
-                    $this->_loadedScopes[$scopeCode] = true;
-                }
+            $configData = $this->configLoader->load($cacheId);
+
+            if ($configData) {
+                [$this->_data, $this->_inherited, $this->_processed] = $configData;
+                $this->_loadedScopes[$scope] = true;
             } else {
                 $data = $this->_cache->load($cacheId);
                 if ($data) {
