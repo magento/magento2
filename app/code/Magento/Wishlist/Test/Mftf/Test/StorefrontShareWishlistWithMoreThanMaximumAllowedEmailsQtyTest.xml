@@ -19,16 +19,17 @@
         </annotations>
         <before>
             <magentoCLI command="config:set wishlist/email/number_limit 1" stepKey="changeEmailsQtyLimit"/>
-            <magentoCLI command="cache:clean" stepKey="cleanCache"/>
+            <magentoCLI command="cache:clean config" stepKey="cleanCache"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
         </before>
         <after>
             <magentoCLI command="config:set wishlist/email/number_limit 10" stepKey="returnDefaultValue"/>
-            <magentoCLI command="cache:clean" stepKey="cacheClean"/>
+            <magentoCLI command="cache:clean config" stepKey="cacheClean"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
