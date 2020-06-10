@@ -1,4 +1,5 @@
 <p align="center">
+  TEST
   <a href="https://magento.com">
     <img src="https://static.magento.com/sites/all/themes/magento/logo.svg" width="300px" alt="Magento" />
   </a>
