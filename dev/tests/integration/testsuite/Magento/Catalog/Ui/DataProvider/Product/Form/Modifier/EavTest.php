@@ -9,6 +9,7 @@ namespace Magento\Catalog\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Model\AttributeSetRepository;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\TestFramework\Eav\Model\GetAttributeGroupByName;
 use Magento\TestFramework\Eav\Model\ResourceModel\GetEntityIdByAttributeId;
 
@@ -34,6 +35,9 @@ class EavTest extends AbstractEavTest
      */
     private $setRepository;
 
+    /** @var ScopeConfigInterface */
+    private $config;
+
     /**
      * @inheritdoc
      */
@@ -43,6 +47,7 @@ class EavTest extends AbstractEavTest
         $this->attributeGroupByName = $this->objectManager->get(GetAttributeGroupByName::class);
         $this->getEntityIdByAttributeId = $this->objectManager->get(GetEntityIdByAttributeId::class);
         $this->setRepository = $this->objectManager->get(AttributeSetRepositoryInterface::class);
+        $this->config = $this->objectManager->get(ScopeConfigInterface::class);
     }
 
     /**
@@ -225,7 +230,8 @@ class EavTest extends AbstractEavTest
      */
     public function testModifyMetaNewProductPageLayoutDefault($attributesMeta): void
     {
-        $attributesMeta = array_merge($attributesMeta, ['default' => '1column']);
+        $defaultLayout = $this->config->getValue('web/default_layouts/default_product_layout');
+        $attributesMeta = array_merge($attributesMeta, ['default' => $defaultLayout]);
         $expectedMeta = $this->addMetaNesting(
             $attributesMeta,
             'design',
