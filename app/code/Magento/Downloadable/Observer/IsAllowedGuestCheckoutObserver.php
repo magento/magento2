@@ -15,6 +15,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Model\Quote;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Checks if guest checkout is allowed then quote contains downloadable products.
@@ -36,14 +37,25 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
      * @var LinkCollectionFactory
      */
     private $linkCollectionFactory;
+    
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
 
     /**
      * @param ScopeConfigInterface $scopeConfig
      * @param LinkCollectionFactory $linkCollectionFactory
+     * @param StoreManagerInterface $storeManager
      */
-    public function __construct(ScopeConfigInterface $scopeConfig, LinkCollectionFactory $linkCollectionFactory) {
+    public function __construct(
+        ScopeConfigInterface $scopeConfig,
+        LinkCollectionFactory $linkCollectionFactory,
+        StoreManagerInterface $storeManager
+    ) {
         $this->scopeConfig = $scopeConfig;
         $this->linkCollectionFactory = $linkCollectionFactory;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -54,7 +66,7 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
      */
     public function execute(Observer $observer)
     {
-        $storeId = (int)$observer->getEvent()->getStore()->getId();
+        $storeId = (int)$this->storeManager->getStore($observer->getEvent()->getStore())->getId();
         $result = $observer->getEvent()->getResult();
 
         /* @var $quote Quote */
