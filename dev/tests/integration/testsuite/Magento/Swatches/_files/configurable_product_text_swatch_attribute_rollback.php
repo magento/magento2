@@ -11,6 +11,7 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 /** @var ObjectManagerInterface $objectManager */
 $objectManager = Bootstrap::getObjectManager();
@@ -41,4 +42,4 @@ foreach ($productsArray as $sku) {
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
 
-require __DIR__ . '/product_text_swatch_attribute_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Swatches/_files/product_text_swatch_attribute_rollback.php');

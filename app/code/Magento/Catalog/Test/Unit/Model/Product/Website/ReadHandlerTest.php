@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Website;
 
@@ -10,9 +11,11 @@ use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Website\ReadHandler;
 use Magento\Catalog\Model\ResourceModel\Product as ResourceModel;
+use Magento\Catalog\Model\ResourceModel\Product\Website\Link;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ReadHandlerTest extends \PHPUnit\Framework\TestCase
+class ReadHandlerTest extends TestCase
 {
     /** @var ResourceModel\Website\Link|MockObject */
     private $websiteLinkMock;
@@ -23,9 +26,9 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     /** @var  ReadHandler  */
     private $readHandler;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->websiteLinkMock = $this->getMockBuilder(ResourceModel\Website\Link::class)
+        $this->websiteLinkMock = $this->getMockBuilder(Link::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->extensionAttributesMock = $this->getMockBuilder(ProductExtensionInterface::class)

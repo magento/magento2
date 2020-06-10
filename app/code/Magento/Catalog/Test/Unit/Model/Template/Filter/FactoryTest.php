@@ -3,17 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Template\Filter;
 
-class FactoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Template\Filter\Factory;
+use Magento\Framework\Filter\Template;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class FactoryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $_objectManagerMock;
 
     /**
-     * @var \Magento\Catalog\Model\Template\Filter\Factory
+     * @var Factory
      */
     protected $_factory;
 
@@ -22,13 +31,13 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->_factory = $objectManagerHelper->getObject(
-            \Magento\Catalog\Model\Template\Filter\Factory::class,
+            Factory::class,
             ['objectManager' => $this->_objectManagerMock]
         );
     }
@@ -40,7 +49,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreate()
     {
-        $className = \Magento\Framework\Filter\Template::class;
+        $className = Template::class;
 
         $filterMock = $this->createMock($className);
         $this->_objectManagerMock->expects(
@@ -50,8 +59,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $className,
             []
-        )->will(
-            $this->returnValue($filterMock)
+        )->willReturn(
+            $filterMock
         );
 
         $this->assertEquals($filterMock, $this->_factory->create($className));
@@ -64,7 +73,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateWithArguments()
     {
-        $className = \Magento\Framework\Filter\Template::class;
+        $className = Template::class;
         $arguments = ['foo', 'bar'];
 
         $filterMock = $this->createMock($className);
@@ -75,8 +84,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $className,
             $arguments
-        )->will(
-            $this->returnValue($filterMock)
+        )->willReturn(
+            $filterMock
         );
 
         $this->assertEquals($filterMock, $this->_factory->create($className, $arguments));
@@ -85,16 +94,18 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Test wrong type exception
      *
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage WrongClass doesn't extend \Magento\Framework\Filter\Template
      * @return void
      */
     public function testWrongTypeException()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('WrongClass doesn\'t extend \Magento\Framework\Filter\Template');
         $className = 'WrongClass';
 
-        $filterMock = $this->getMockBuilder($className)->disableOriginalConstructor()->getMock();
-        $this->_objectManagerMock->expects($this->once())->method('create')->will($this->returnValue($filterMock));
+        $filterMock = $this->getMockBuilder($className)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->_objectManagerMock->expects($this->once())->method('create')->willReturn($filterMock);
 
         $this->_factory->create($className);
     }

@@ -47,7 +47,7 @@ class QuoteRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = BootstrapHelper::getObjectManager();
         $this->quoteRepository = $this->objectManager->create(QuoteRepository::class);

@@ -3,18 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Test\Unit;
 
-use Magento\Framework\FlagFactory;
-use Magento\Framework\Flag\FlagResource;
 use Magento\Framework\Flag;
+use Magento\Framework\Flag\FlagResource;
+use Magento\Framework\FlagFactory;
 use Magento\Framework\FlagManager;
-use \PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class FlagManagerTest
- */
-class FlagManagerTest extends \PHPUnit\Framework\TestCase
+class FlagManagerTest extends TestCase
 {
     /**
      * @var FlagFactory|Mock
@@ -39,7 +39,7 @@ class FlagManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->flagFactoryMock = $this->getMockBuilder(FlagFactory::class)
             ->disableOriginalConstructor()

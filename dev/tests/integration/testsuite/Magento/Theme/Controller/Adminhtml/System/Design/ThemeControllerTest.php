@@ -24,8 +24,8 @@ class ThemeControllerTest extends \Magento\TestFramework\TestCase\AbstractBacken
         $this->getRequest()->setPostValue('id', $theme->getId());
         $this->dispatch('backend/admin/system_design_theme/uploadjs');
         $output = $this->getResponse()->getBody();
-        $this->assertContains('"error":false', $output);
-        $this->assertContains($name, $output);
+        $this->assertStringContainsString('"error":false', $output);
+        $this->assertStringContainsString($name, $output);
     }
 
     /**

@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -7,19 +7,19 @@ namespace Magento\Developer\Test\Unit\Model\Logger\Handler;
 
 use Magento\Developer\Model\Logger\Handler\Debug;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\State;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\ScopeInterface;
 use Monolog\Formatter\FormatterInterface;
 use Monolog\Logger;
-use Magento\Framework\App\DeploymentConfig;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class DebugTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DebugTest extends \PHPUnit\Framework\TestCase
+class DebugTest extends TestCase
 {
     /**
      * @var Debug
@@ -27,34 +27,34 @@ class DebugTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var DriverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DriverInterface|MockObject
      */
     private $filesystemMock;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|MockObject
      */
     private $stateMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var FormatterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FormatterInterface|MockObject
      */
     private $formatterMock;
 
     /**
-     * @var DeploymentConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var DeploymentConfig|MockObject
      */
     private $deploymentConfigMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->filesystemMock = $this->getMockBuilder(DriverInterface::class)
             ->getMockForAbstractClass();

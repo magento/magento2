@@ -21,7 +21,7 @@ abstract class AbstractHeaderTestCase extends \Magento\TestFramework\TestCase\Ab
     /**
      * @inheritDoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_objectManager->configure(

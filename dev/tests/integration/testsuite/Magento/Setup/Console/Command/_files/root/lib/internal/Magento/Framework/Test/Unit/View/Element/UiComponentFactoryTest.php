@@ -29,16 +29,10 @@ class UiComponentFactoryTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Config\DataInterfaceFactory|MockObject */
     protected $dataInterfaceFactoryMock;
 
-    /** @var \SafeReflectionClass|MockObject */
-    protected $safeReflectionClassMock;
-
-    /** @var \SafeReflectionClass|MockObject */
-    protected $safeReflectionClassMock2;
-
     /** @var \Magento\Ui\Config\Reader\Definition\Data|MockObject */
     protected $dataMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerMock = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
             ->getMockForAbstractClass();
@@ -51,12 +45,6 @@ class UiComponentFactoryTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->dataInterfaceFactoryMock = $this->getMockBuilder(\Magento\Framework\Config\DataInterfaceFactory::class)
             ->setMethods(['create'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->safeReflectionClassMock = $this->getMockBuilder(\SafeReflectionClass::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->safeReflectionClassMock2 = $this->getMockBuilder(\SafeReflectionClass::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataMock = $this->createMock(\Magento\Framework\Config\DataInterface::class);

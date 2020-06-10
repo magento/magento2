@@ -57,7 +57,7 @@ class PreprocessorStrategyTest extends TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->alternativeSourceMock = $this->getMockBuilder(AlternativeSourceInterface::class)
             ->getMockForAbstractClass();

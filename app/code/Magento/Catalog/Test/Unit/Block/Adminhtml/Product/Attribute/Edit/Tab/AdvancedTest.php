@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Attribute\Edit\Tab;
 
 use Magento\Catalog\Block\Adminhtml\Product\Attribute\Edit\Tab\Advanced;
@@ -22,13 +24,14 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test product attribute add/edit advanced form tab
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdvancedTest extends \PHPUnit\Framework\TestCase
+class AdvancedTest extends TestCase
 {
     /**
      * @var Advanced
@@ -73,13 +76,13 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->registry = $this->createMock(Registry::class);
         $this->formFactory = $this->createMock(FormFactory::class);
         $this->yesNo = $this->createMock(Yesno::class);
-        $this->localeDate = $this->createMock(TimezoneInterface::class);
+        $this->localeDate = $this->getMockForAbstractClass(TimezoneInterface::class);
         $this->eavData = $this->createMock(EavHelper::class);
         $this->filesystem = $this->createMock(Filesystem::class);
         $this->propertyLocker = $this->createMock(PropertyLocker::class);
@@ -112,21 +115,26 @@ class AdvancedTest extends \PHPUnit\Framework\TestCase
 
         $fieldSet = $this->createMock(Fieldset::class);
         $form = $this->createMock(Form::class);
-        $attributeModel = $this->createPartialMock(
-            Attribute::class,
-            [
-                'getDefaultValue',
-                'setDisabled',
-                'getId',
-                'getEntityType',
-                'getIsUserDefined',
-                'getAttributeCode',
-                'getFrontendInput'
-            ]
-        );
+        $attributeModel = $this->getMockBuilder(Attribute::class)
+            ->addMethods(['setDisabled'])
+            ->onlyMethods(
+                [
+                    'getDefaultValue',
+                    'getId',
+                    'getEntityType',
+                    'getIsUserDefined',
+                    'getAttributeCode',
+                    'getFrontendInput'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $entityType = $this->createMock(EntityType::class);
-        $formElement = $this->createPartialMock(Text::class, ['setDisabled']);
-        $directoryReadInterface = $this->createMock(ReadInterface::class);
+        $formElement = $this->getMockBuilder(Text::class)
+            ->addMethods(['setDisabled'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $directoryReadInterface = $this->getMockForAbstractClass(ReadInterface::class);
 
         $this->registry->expects($this->any())->method('registry')->with('entity_attribute')
             ->willReturn($attributeModel);

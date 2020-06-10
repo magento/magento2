@@ -21,7 +21,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test class for \Magento\Authorization\Model\Acl\Loader\Role
+ * @covers \Magento\Authorization\Model\Acl\Loader\Role
  */
 class RoleTest extends TestCase
 {
@@ -68,7 +68,7 @@ class RoleTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->groupFactoryMock = $this->getMockBuilder(GroupFactory::class)
             ->setMethods(['create', 'getModelInstance'])
@@ -79,7 +79,7 @@ class RoleTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceMock = $this->createMock(ResourceConnection::class);
-        $this->aclDataCacheMock = $this->createMock(CacheInterface::class);
+        $this->aclDataCacheMock = $this->getMockForAbstractClass(CacheInterface::class);
         $this->serializerMock = $this->createPartialMock(
             Json::class,
             ['serialize', 'unserialize']
@@ -125,7 +125,7 @@ class RoleTest extends TestCase
     {
         $this->resourceMock->expects($this->once())
             ->method('getTableName')
-            ->with($this->equalTo('authorization_role'))
+            ->with('authorization_role')
             ->willReturnArgument(1);
 
         $this->adapterMock->expects($this->once())
@@ -162,7 +162,7 @@ class RoleTest extends TestCase
     {
         $this->resourceMock->expects($this->once())
             ->method('getTableName')
-            ->with($this->equalTo('authorization_role'))
+            ->with('authorization_role')
             ->willReturnArgument(1);
 
         $this->adapterMock->expects($this->once())

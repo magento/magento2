@@ -9,11 +9,11 @@ declare(strict_types=1);
 namespace Magento\MediaGallery\Test\Unit\Plugin\Wysiwyg\Images;
 
 use Magento\Cms\Model\Wysiwyg\Images\Storage as StorageSubject;
-use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGallery\Plugin\Wysiwyg\Images\Storage as StoragePlugin;
+use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
@@ -57,6 +57,7 @@ class StorageTest extends TestCase
     /**
      * @var StoragePlugin
      */
+
     private $storage;
 
     /**
@@ -64,11 +65,11 @@ class StorageTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->deleteMediaAssetByPathMock = $this->createMock(DeleteAssetsByPathsInterface::class);
+        $this->deleteMediaAssetByPathMock = $this->getMockForAbstractClass(DeleteAssetsByPathsInterface::class);
         $this->filesystemMock = $this->createMock(Filesystem::class);
-        $this->loggerMock = $this->createMock(LoggerInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->storageSubjectMock = $this->createMock(StorageSubject::class);
-        $this->readInterfaceMock = $this->createMock(ReadInterface::class);
+        $this->readInterfaceMock = $this->getMockForAbstractClass(ReadInterface::class);
 
         $this->storage = (new ObjectManager($this))->getObject(
             StoragePlugin::class,
@@ -85,9 +86,9 @@ class StorageTest extends TestCase
      *
      * @dataProvider pathPathDataProvider
      */
-    public function testAfterDeleteDirectory(string $path): void
+    public function testAfterDeleteDirectory($path): void
     {
-        $directoryRead = $this->createMock(ReadInterface::class);
+        $directoryRead = $this->getMockForAbstractClass(ReadInterface::class);
         $this->filesystemMock->expects($this->any())
             ->method('getDirectoryRead')
             ->willReturn($directoryRead);

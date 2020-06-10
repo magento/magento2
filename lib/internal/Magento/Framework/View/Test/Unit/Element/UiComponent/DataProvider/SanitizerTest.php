@@ -24,7 +24,7 @@ class SanitizerTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->sanitizer = new Sanitizer();
     }

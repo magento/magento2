@@ -24,7 +24,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     /**
      * Model object which used for tests
      *
-     * @var Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Customer|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_model;
 
@@ -48,7 +48,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     /**
      * Create all necessary data for tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

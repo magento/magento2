@@ -51,7 +51,7 @@ To deploy sample data from the GitHub repository:
 
 ## Install Sample Data
 
-Once the sample data is deployed, it will be installed automatically when you install or upgrade your Magento instance either by using the Magento Setup Wizard or from the command line.
+Once the sample data is deployed, it will be installed automatically when you install or upgrade your Magento instance by using the command line.
 
 ## Uninstall Sample Data
 
@@ -74,4 +74,4 @@ The deleted sample data entities will be restored. Those entities, which were ch
 
 ## Documentation
 
-You can find the more detailed description of sample data manipulation procedures at <https://devdocs.magento.com/guides/v2.3/install-gde/install/cli/install-cli-sample-data.html>.
+You can find the more detailed description of sample data manipulation procedures at <https://devdocs.magento.com/guides/v2.4/install-gde/install/cli/install-cli-sample-data.html>.
