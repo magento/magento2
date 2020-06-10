@@ -10,6 +10,7 @@ namespace Magento\QuoteGraphQl\Model\CartItem\DataProvider;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GiftMessage\Api\Data\MessageInterface;
+use Magento\GiftMessage\Api\Data\MessageInterfaceFactory;
 use Magento\GiftMessage\Api\ItemRepositoryInterface;
 use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
 use Magento\Quote\Api\CartItemRepositoryInterface;
@@ -42,21 +43,29 @@ class UpdateCartItems
     private $giftMessageHelper;
 
     /**
+     * @var MessageInterfaceFactory
+     */
+    private $giftMessageFactory;
+
+    /**
      * @param CartItemRepositoryInterface $cartItemRepository
      * @param UpdateCartItem              $updateCartItem
      * @param ItemRepositoryInterface     $itemRepository
      * @param GiftMessageHelper           $giftMessageHelper
+     * @param MessageInterfaceFactory     $giftMessageFactory
      */
     public function __construct(
         CartItemRepositoryInterface $cartItemRepository,
         UpdateCartItem $updateCartItem,
         ItemRepositoryInterface $itemRepository,
-        GiftMessageHelper $giftMessageHelper
+        GiftMessageHelper $giftMessageHelper,
+        MessageInterfaceFactory $giftMessageFactory
     ) {
         $this->cartItemRepository = $cartItemRepository;
         $this->updateCartItem = $updateCartItem;
         $this->itemRepository = $itemRepository;
         $this->giftMessageHelper = $giftMessageHelper;
+        $this->giftMessageFactory = $giftMessageFactory;
     }
 
     /**
@@ -110,6 +119,9 @@ class UpdateCartItems
                     $giftItemMessage = $this->itemRepository->get($cart->getEntityId(), $itemId);
 
                     if (empty($giftItemMessage)) {
+                        /** @var  MessageInterface $giftMessage */
+                        $giftMessage = $this->giftMessageFactory->create();
+                        $this->updateGiftMessageForItem($cart, $giftMessage, $item, $itemId);
                         continue;
                     }
                 } catch (LocalizedException $exception) {
