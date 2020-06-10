@@ -42,8 +42,8 @@ class PluginListGenerator implements OperationInterface
     public function doOperation()
     {
         $scopes = $this->scopeConfig->getAllScopes();
-        // remove primary scope for production mode
-        $scopes = array_diff($scopes, ['primary']); // it does not reindex array
+        // remove primary scope for production mode as it is only called in developer mode
+        $scopes = array_diff($scopes, ['primary']);
 
         $this->configWriter->write($scopes);
     }

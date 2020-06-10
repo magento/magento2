@@ -167,13 +167,13 @@ class ConfigWriter implements ConfigWriterInterface
                     $cacheId,
                     [$this->pluginData, $this->inherited, $this->processed]
                 );
-                // need global scope plugin data for non global scopes
+                // need global & primary scopes plugin data for other scopes
                 if ($scope === 'global') {
                     $this->globalScopePluginData = $this->pluginData;
                 }
-                if (count($this->scopePriorityScheme) > 1) {
+                if (count($this->scopePriorityScheme) > 2) {
                     array_pop($this->scopePriorityScheme);
-                    // merge global scope plugin data to other scopes by default
+                    // merge global & primary scopes plugin data to other scopes by default
                     $this->pluginData = $this->globalScopePluginData;
                 }
             }

@@ -437,6 +437,7 @@
         <arguments>
             <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy</argument>
             <argument name="scopePriorityScheme" xsi:type="array">
+                <item name="primary" xsi:type="string">primary</item>
                 <item name="first" xsi:type="string">global</item>
             </argument>
         </arguments>
