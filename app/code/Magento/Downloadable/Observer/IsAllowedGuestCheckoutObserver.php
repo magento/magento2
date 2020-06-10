@@ -37,7 +37,7 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
      * @var LinkCollectionFactory
      */
     private $linkCollectionFactory;
-    
+
     /**
      * @var StoreManagerInterface
      */
@@ -118,6 +118,8 @@ class IsAllowedGuestCheckoutObserver implements ObserverInterface
     }
 
     /**
+     * Returns not sharable values depending on configuration
+     *
      * @param int $storeId
      * @return array
      */
