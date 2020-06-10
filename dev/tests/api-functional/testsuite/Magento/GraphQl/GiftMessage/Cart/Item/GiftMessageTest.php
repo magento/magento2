@@ -27,6 +27,21 @@ class GiftMessageTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoConfigFixture default_store sales/gift_options/allow_items 0
+     * @magentoApiDataFixture Magento/GiftMessage/_files/guest/quote_with_item_message.php
+     * @throws NoSuchEntityException
+     * @throws Exception
+     */
+    public function testGiftMessageCartForItemNotAllow()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_guest_order_with_gift_message');
+        foreach ($this->requestCartResult($maskedQuoteId)['cart']['items'] as $item) {
+            self::assertArrayHasKey('gift_message', $item);
+            self::assertNull($item['gift_message']);
+        }
+    }
+
+    /**
      * @magentoConfigFixture default_store sales/gift_options/allow_items 1
      * @magentoApiDataFixture Magento/GiftMessage/_files/guest/quote_with_item_message.php
      * @throws NoSuchEntityException
@@ -40,21 +55,6 @@ class GiftMessageTest extends GraphQlAbstract
             self::assertArrayHasKey('to', $item['gift_message']);
             self::assertArrayHasKey('from', $item['gift_message']);
             self::assertArrayHasKey('message', $item['gift_message']);
-        }
-    }
-
-    /**
-     * @magentoConfigFixture default_store sales/gift_options/allow_items 0
-     * @magentoApiDataFixture Magento/GiftMessage/_files/guest/quote_with_item_message.php
-     * @throws NoSuchEntityException
-     * @throws Exception
-     */
-    public function testGiftMessageCartForItemNotAllow()
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_guest_order_with_gift_message');
-        foreach ($this->requestCartResult($maskedQuoteId)['cart']['items'] as $item) {
-            self::assertArrayHasKey('gift_message', $item);
-            self::assertNull($item['gift_message']);
         }
     }
 
