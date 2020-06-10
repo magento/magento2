@@ -174,8 +174,9 @@ class ProductScopeRewriteGenerator
                 continue;
             }
 
-            // category should be loaded per appropriate store if category's URL key has been changed
-            $categories[] = $this->getCategoryWithOverriddenUrlKey($storeId, $category);
+            // Category should be loaded per appropriate store at all times. This is because whilst the URL key on the
+            // category in focus might be unchanged, parent category URL keys might be
+            $categories[] =  $this->categoryRepository->get($category->getEntityId(), $storeId);
         }
 
         $productCategories = $this->objectRegistryFactory->create(['entities' => $categories]);
@@ -234,29 +235,6 @@ class ProductScopeRewriteGenerator
         return false;
     }
 
-    /**
-     * Check if URL key has been changed
-     *
-     * Checks if URL key has been changed for provided category and returns reloaded category,
-     * in other case - returns provided category.
-     *
-     * @param int $storeId
-     * @param Category $category
-     * @return Category
-     */
-    private function getCategoryWithOverriddenUrlKey($storeId, Category $category)
-    {
-        $isUrlKeyOverridden = $this->storeViewService->doesEntityHaveOverriddenUrlKeyForStore(
-            $storeId,
-            $category->getEntityId(),
-            Category::ENTITY
-        );
-
-        if (!$isUrlKeyOverridden) {
-            return $category;
-        }
-        return $this->categoryRepository->get($category->getEntityId(), $storeId);
-    }
 
     /**
      * Check config value of generate_category_product_rewrites
