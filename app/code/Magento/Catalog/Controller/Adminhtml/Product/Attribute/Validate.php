@@ -128,10 +128,13 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
         );
 
         if ($attribute->getId() && !$attributeId || $attributeCode === 'product_type' || $attributeCode === 'type_id') {
-            $message = strlen($this->getRequest()->getParam('attribute_code'))
-                ? __('An attribute with this code already exists.')
-                : __('An attribute with the same code (%1) already exists.', $attributeCode);
-
+            if ($attributeCode === 'product_type' || $attributeCode === 'type_id') {
+                $message = __('Code (%1) is a reserved key and cannot be used as attribute code.', $attributeCode);
+            } else {
+                $message = strlen($this->getRequest()->getParam('attribute_code'))
+                    ? __('An attribute with this code already exists.')
+                    : __('An attribute with the same code (%1) already exists.', $attributeCode);
+            }
             $this->setMessageToResponse($response, [$message]);
 
             $response->setError(true);
