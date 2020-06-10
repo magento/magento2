@@ -136,7 +136,7 @@ class OrderTotal implements ResolverInterface
         } else {
             foreach ($appliedTaxesArray as $appliedTaxes) {
                 $taxes[] = [
-                    'rate' => $appliedTaxes['percent'] ?? " ",
+                    'rate' => $appliedTaxes['percent'] ?? 0,
                     'title' => $appliedTaxes['title'] ?? " ",
                     'amount' => ['value' => $appliedTaxes['amount'] ?? 0 , 'currency' => $order->getOrderCurrencyCode()
                     ]

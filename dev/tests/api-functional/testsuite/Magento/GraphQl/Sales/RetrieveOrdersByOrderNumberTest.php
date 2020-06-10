@@ -83,10 +83,20 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
         product_sale_price{currency value}
       }
       total {
-                base_grand_total {value currency}
-                grand_total {value currency}
-                subtotal {value currency}
-              }
+                    base_grand_total {
+                        value
+                        currency
+                    }
+                    grand_total {
+                        value
+                        currency
+                    }
+                    subtotal {
+                        value
+                        currency
+                    }
+
+                }
     }
    }
  }
@@ -131,7 +141,7 @@ QUERY;
                 'grand_total' => ['value'=> 120,'currency' =>'USD'],
                 'subtotal' => ['value'=> 120,'currency' =>'USD']
             ];
-        $this->assertEquals($expectedOrderTotal, $actualOrderTotalFromResponse,'Totals do not match');
+        $this->assertEquals($expectedOrderTotal, $actualOrderTotalFromResponse, 'Totals do not match');
     }
 
     /**
@@ -306,19 +316,21 @@ QUERY;
         product_type
         product_sale_price{currency value}
       }
-            total {
-                    base_grand_total {value currency}
-                    grand_total {value currency}
+       total {
+                base_grand_total {value currency}
+                 grand_total {value currency}
                     subtotal {value currency}
                     total_shipping{value}
-                    shipping_handling{total_amount{value currency}}
                     total_tax{value currency}
                     taxes {amount {currency value} title rate}
-                    shipping_handling
-                    {
-                     total_amount{value}
-                     taxes{amount{value}}
-                     }
+                   total_shipping{value}
+             shipping_handling
+             {
+               amount_including_tax{value}
+               amount_excluding_tax{value}
+               total_amount{value}
+               taxes {amount{value} title rate}
+             }
                 }
     }
    }
@@ -355,12 +367,12 @@ QUERY;
             $this->assertEquals($orderId, $customerOrderItemsInResponse[$key]['id']);
             $this->assertEquals($orderNumber, $customerOrderItemsInResponse[$key]['number']);
             $this->assertEquals('Processing', $customerOrderItemsInResponse[$key]['status']);
-             $this->assertEquals(
-                 4,
-                 $customerOrderItemsInResponse[$key]['total']['shipping_handling']['total_amount']['value']
-             );
             $this->assertEquals(
-                5,
+                4,
+                $customerOrderItemsInResponse[$key]['total']['shipping_handling']['total_amount']['value']
+            );
+            $this->assertEquals(
+                0,
                 $customerOrderItemsInResponse[$key]['total']['shipping_handling']['taxes'][0]['amount']['value']
             );
             $this->assertEquals(
@@ -369,7 +381,8 @@ QUERY;
             );
             $this->assertEquals(
                 5,
-            $customerOrderItemsInResponse[$key]['total']['total_tax']['value']);
+                $customerOrderItemsInResponse[$key]['total']['total_tax']['value']
+            );
 
             $key++;
         }
@@ -480,7 +493,14 @@ QUERY;
                         value
                         currency
                     }
-                    shipping_handling{total_amount{value currency}}
+                     total_shipping{value}
+             shipping_handling
+             {
+               amount_including_tax{value}
+               amount_excluding_tax{value}
+               total_amount{value}
+               taxes {amount{value} title rate}
+             }
                     subtotal {
                         value
                         currency
@@ -572,7 +592,14 @@ QUERY;
                         value
                         currency
                     }
-                    shipping_handling {total_amount{value currency}}
+                    total_shipping{value}
+                    shipping_handling
+                    {
+                     amount_including_tax{value}
+                     amount_excluding_tax{value}
+                     total_amount{value currency}
+                     taxes {amount{value} title rate}
+                    }
                     subtotal {
                         value
                         currency
@@ -696,62 +723,62 @@ QUERY;
     {
         $this->assertEquals(
             32.25,
-            $customerOrderItem['totals']['base_grand_total']['value']
+            $customerOrderItem['total']['base_grand_total']['value']
         );
 
         $this->assertEquals(
             32.25,
-            $customerOrderItem['totals']['grand_total']['value']
+            $customerOrderItem['total']['grand_total']['value']
         );
         $this->assertEquals(
             20,
-            $customerOrderItem['totals']['subtotal']['value']
+            $customerOrderItem['total']['subtotal']['value']
         );
         $this->assertEquals(
             2.25,
-            $customerOrderItem['totals']['total_tax']['value']
+            $customerOrderItem['total']['total_tax']['value']
         );
 
         $this->assertEquals(
             10,
-            $customerOrderItem['totals']['total_shipping']['value']
+            $customerOrderItem['total']['total_shipping']['value']
         );
         $this->assertEquals(
-            2.25,
-            $customerOrderItem['totals']['taxes'][0]['amount']['value']
+            0.75,
+            $customerOrderItem['total']['taxes'][0]['amount']['value']
         );
         $this->assertEquals(
             'US-TEST-*-Rate-1',
-            $customerOrderItem['totals']['taxes'][0]['title']
+            $customerOrderItem['total']['taxes'][0]['title']
         );
         $this->assertEquals(
             7.5,
-            $customerOrderItem['totals']['taxes'][0]['rate']
+            $customerOrderItem['total']['taxes'][0]['rate']
         );
         $this->assertEquals(
             10.75,
-            $customerOrderItem['totals']['shipping_handling']['amount_inc_tax']['value']
+            $customerOrderItem['total']['shipping_handling']['amount_including_tax']['value']
         );
         $this->assertEquals(
             10,
-            $customerOrderItem['totals']['shipping_handling']['amount_exc_tax']['value']
+            $customerOrderItem['total']['shipping_handling']['amount_excluding_tax']['value']
         );
         $this->assertEquals(
             10,
-            $customerOrderItem['totals']['shipping_handling']['total_amount']['value']
+            $customerOrderItem['total']['shipping_handling']['total_amount']['value']
         );
 
         $this->assertEquals(
-            2.25,
-            $customerOrderItem['totals']['shipping_handling']['taxes'][0]['amount']['value']
+            0.75,
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['amount']['value']
         );
         $this->assertEquals(
             'US-TEST-*-Rate-1',
-            $customerOrderItem['totals']['shipping_handling']['taxes'][0]['title']
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['title']
         );
         $this->assertEquals(
             7.5,
-            $customerOrderItem['totals']['shipping_handling']['taxes'][0]['rate']
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['rate']
         );
     }
     /**
@@ -1064,8 +1091,8 @@ QUERY;
            number
            order_date
            status
-           order_items{product_name product_sku quantity_ordered}
-           totals {
+           items{product_name product_sku quantity_ordered}
+           total {
              base_grand_total{value currency}
              grand_total{value currency}
              total_tax{value}
@@ -1074,9 +1101,9 @@ QUERY;
              total_shipping{value}
              shipping_handling
              {
-               amount_inc_tax{value}
-               amount_exc_tax{value}
-               total_amount{value}
+               amount_including_tax{value}
+               amount_excluding_tax{value}
+               total_amount{value currency}
                taxes {amount{value} title rate}
              }
              discounts {amount{value currency} label}
@@ -1141,8 +1168,8 @@ QUERY;
              total_shipping{value}
              shipping_handling
              {
-               amount_inc_tax{value}
-               amount_exc_tax{value}
+               amount_including_tax{value}
+               amount_excluding_tax{value}
                total_amount{value}
                taxes {amount{value} title rate}
              }
@@ -1161,8 +1188,6 @@ QUERY;
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $customerOrderItemsInResponse = $response['customer']['orders']['items'];
         return $customerOrderItemsInResponse;
-
-
     }
 
     /**
@@ -1193,63 +1218,63 @@ QUERY;
     private function assertTotalsAndShippingWithTaxes(array $customerOrderItem): void
     {
         $this->assertEquals(
-            31.43,
-            $customerOrderItem['totals']['base_grand_total']['value']
+            32.25,
+            $customerOrderItem['total']['base_grand_total']['value']
         );
 
         $this->assertEquals(
-            31.43,
-            $customerOrderItem['totals']['grand_total']['value']
+            32.25,
+            $customerOrderItem['total']['grand_total']['value']
         );
         $this->assertEquals(
             20,
-            $customerOrderItem['totals']['subtotal']['value']
+            $customerOrderItem['total']['subtotal']['value']
         );
         $this->assertEquals(
-            2.19,
-            $customerOrderItem['totals']['total_tax']['value']
-        );
-
-        $this->assertEquals(
-            9.24,
-            $customerOrderItem['totals']['total_shipping']['value']
-        );
-        $this->assertEquals(
-            2.19,
-            $customerOrderItem['totals']['taxes'][0]['amount']['value']
-        );
-        $this->assertEquals(
-            'US-TEST-*-Rate-1',
-            $customerOrderItem['totals']['taxes'][0]['title']
-        );
-        $this->assertEquals(
-            7.5,
-            $customerOrderItem['totals']['taxes'][0]['rate']
-        );
-        $this->assertEquals(
-            9.93,
-            $customerOrderItem['totals']['shipping_handling']['amount_inc_tax']['value']
-        );
-        $this->assertEquals(
-            9.24,
-            $customerOrderItem['totals']['shipping_handling']['amount_exc_tax']['value']
-        );
-        $this->assertEquals(
-            9.24,
-            $customerOrderItem['totals']['shipping_handling']['total_amount']['value']
+            2.25,
+            $customerOrderItem['total']['total_tax']['value']
         );
 
         $this->assertEquals(
-            2.19,
-            $customerOrderItem['totals']['shipping_handling']['taxes'][0]['amount']['value']
+            10,
+            $customerOrderItem['total']['total_shipping']['value']
+        );
+        $this->assertEquals(
+            0.75,
+            $customerOrderItem['total']['taxes'][0]['amount']['value']
         );
         $this->assertEquals(
             'US-TEST-*-Rate-1',
-            $customerOrderItem['totals']['shipping_handling']['taxes'][0]['title']
+            $customerOrderItem['total']['taxes'][0]['title']
         );
         $this->assertEquals(
             7.5,
-            $customerOrderItem['totals']['shipping_handling']['taxes'][0]['rate']
+            $customerOrderItem['total']['taxes'][0]['rate']
+        );
+        $this->assertEquals(
+            10.75,
+            $customerOrderItem['total']['shipping_handling']['amount_including_tax']['value']
+        );
+        $this->assertEquals(
+            10,
+            $customerOrderItem['total']['shipping_handling']['amount_excluding_tax']['value']
+        );
+        $this->assertEquals(
+            10,
+            $customerOrderItem['total']['shipping_handling']['total_amount']['value']
+        );
+
+        $this->assertEquals(
+            0.75,
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'US-TEST-*-Rate-1',
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['title']
+        );
+        $this->assertEquals(
+            7.5,
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['rate']
         );
     }
 
@@ -1297,7 +1322,7 @@ QUERY;
                 $response['customer']['orders']['items'][0]['total']['shipping_handling']['total_amount']['currency']
             );
             $this->assertEquals(
-                5,
+                0,
                 $response['customer']['orders']['items'][0]['total']['taxes'][0]['amount']['value']
             );
             $this->assertEquals(
@@ -1305,6 +1330,5 @@ QUERY;
                 $response['customer']['orders']['items'][0]['total']['taxes'][0]['amount']['currency']
             );
         }
-
     }
 }
