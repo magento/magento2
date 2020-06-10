@@ -60,7 +60,7 @@ class Website extends AbstractImportValidator implements RowValidatorInterface
     /**
      * Validate value
      *
-     * @param mixed $value
+     * @param array $value
      *
      * @return bool
      */
