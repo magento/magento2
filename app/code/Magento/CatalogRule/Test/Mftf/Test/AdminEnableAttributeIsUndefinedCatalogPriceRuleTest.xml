@@ -80,9 +80,12 @@
             <argument name="targetSelectValue" value="is undefined"/>
         </actionGroup>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache3"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!--Check Catalog Price Rule for first product-->
         <amOnPage url="{{StorefrontProductPage.url($$createFirstProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToFirstProductPage"/>
@@ -128,9 +131,12 @@
             <argument name="targetSelectValue" value="is undefined"/>
         </actionGroup>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules1"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache1"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache2"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexSecondTime">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheSecondTime">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!--Check Catalog Price Rule for third product-->
         <amOnPage url="{{StorefrontProductPage.url($$createThirdProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToThirdProductPage"/>
