@@ -50,8 +50,12 @@ class LinksList
         $productLinks = [];
         /** @var \Magento\Catalog\Model\Product $selection */
         foreach ($selectionCollection as $selection) {
+            $bundledProductPrice = $selection->getSelectionPriceValue();
+            if ($bundledProductPrice <= 0){
+                $bundledProductPrice = $selection->getPrice();
+            }
             $selectionPriceType = $product->getPriceType() ? $selection->getSelectionPriceType() : null;
-            $selectionPrice = $product->getPriceType() ? $selection->getSelectionPriceValue() : null;
+            $selectionPrice = $bundledProductPrice ? $bundledProductPrice : null;
 
             /** @var \Magento\Bundle\Api\Data\LinkInterface $productLink */
             $productLink = $this->linkFactory->create();
