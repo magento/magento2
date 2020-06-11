@@ -22,7 +22,7 @@ class BatchProductLinks implements BatchServiceContractResolverInterface
     /**
      * @var string[]
      */
-    private static $linkTypes = ['related', 'upsell', 'crosssell'];
+    private static $linkTypes = ['related', 'upsell', 'crosssell', 'associated'];
 
     /**
      * @inheritDoc
