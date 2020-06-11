@@ -194,14 +194,12 @@ class Account extends AbstractForm
 
         if (array_key_exists('group_id', $data) && empty($data['group_id'])) {
             $data['group_id'] = $this->groupManagement->getDefaultGroup($this->getQuote()->getStoreId())->getId();
+        } elseif (isset($customer) && $this->getQuote()->getCustomerGroupId() !== $customer->getGroupId()) {
+            $data['group_id'] = $customer->getGroupId();
         }
 
         if ($this->getQuote()->getCustomerEmail()) {
             $data['email'] = $this->getQuote()->getCustomerEmail();
-        }
-
-        if ($this->getQuote()->getCustomerGroupId() !== $customer->getGroupId()) {
-            $data['group_id'] = $customer->getGroupId();
         }
 
         return $data;
