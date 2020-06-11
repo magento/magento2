@@ -57,8 +57,8 @@
             & + .grand.excl {
                 .mark,
                 .amount {
-                    border-top: 0;
                     .lib-font-size(14);
+                    border-top: 0;
                     padding-top: 0;
 
                     strong {
@@ -79,18 +79,18 @@
         //  Block title
         .items-in-cart {
             > .title {
-                border-bottom: @border-width__base solid @border-color__base;
                 .lib-css(padding, @indent__s @indent__xl @indent__s 0);
-                cursor: pointer;
                 .lib-icon-font(
-                @icon-down,
-                @_icon-font-size: 12px,
-                @_icon-font-line-height: 12px,
-                @_icon-font-text-hide: true,
-                @_icon-font-margin: 3px 0 0,
-                @_icon-font-position: after,
-                @_icon-font-display: block
+                    @icon-down,
+                    @_icon-font-size: 12px,
+                    @_icon-font-line-height: 12px,
+                    @_icon-font-text-hide: true,
+                    @_icon-font-margin: 3px 0 0,
+                    @_icon-font-position: after,
+                    @_icon-font-display: block
                 );
+                border-bottom: @border-width__base solid @border-color__base;
+                cursor: pointer;
                 margin-bottom: 0;
                 position: relative;
 
@@ -110,8 +110,8 @@
             &.active {
                 > .title {
                     .lib-icon-font-symbol(
-                    @_icon-font-content: @icon-up,
-                    @_icon-font-position: after
+                        @_icon-font-content: @icon-up,
+                        @_icon-font-position: after
                     );
                 }
             }
@@ -146,20 +146,12 @@
             }
 
             .product-item-inner {
-                display: table;
                 margin: 0 0 @indent__s;
                 width: 100%;
             }
 
             .product-item-name-block {
-                display: block;
                 padding-right: @indent__xs;
-                text-align: left;
-            }
-
-            .subtotal {
-                display: block;
-                text-align: left;
             }
 
             .price {
@@ -206,8 +198,8 @@
 .media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__s) {
     .opc-block-summary {
         > .title {
-            border-bottom: 0;
             .lib-css(font-size, @checkout-step-title-mobile__font-size);
+            border-bottom: 0;
             margin-bottom: @indent__base;
             padding-bottom: 0;
         }
@@ -236,7 +228,7 @@
 //  Tablet
 //  _____________________________________________
 
-@media only screen and (max-width: @screen__m) {
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
     .opc-block-summary {
         .product-item {
             .product-item-inner {
@@ -251,6 +243,30 @@
             .subtotal {
                 display: block;
                 text-align: left;
+            }
+        }
+    }
+}
+
+//
+//  Desktop
+//  _____________________________________________
+
+.media-width(@extremum, @break) when (@extremum = 'min') and (@break = @screen__l) {
+    .opc-block-summary {
+        .product-item {
+            .product-item-inner {
+                display: table;
+            }
+
+            .product-item-name-block {
+                display: table-cell;
+                text-align: left;
+            }
+
+            .subtotal {
+                display: table-cell;
+                text-align: right;
             }
         }
     }
