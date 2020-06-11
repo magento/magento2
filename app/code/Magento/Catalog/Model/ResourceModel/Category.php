@@ -13,13 +13,32 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\ResourceModel;
 
+use Exception;
+use Magento\Catalog\Model\Factory;
 use Magento\Catalog\Model\Indexer\Category\Product\Processor;
+use Magento\Catalog\Model\ResourceModel\Category\AggregateCount;
+use Magento\Catalog\Model\ResourceModel\Category\Collection as CollectionCategory;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\Catalog\Model\ResourceModel\Category\Tree as TreeCategory;
+use Magento\Catalog\Model\ResourceModel\Category\TreeFactory;
+use Magento\Eav\Model\Entity\Attribute as AttributeEntity;
+use Magento\Eav\Model\Entity\Context;
+use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Tree\Db;
+use Magento\Framework\Data\Tree\Node\Collection as CollectionNode;
 use Magento\Framework\DataObject;
+use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityManager;
 use Magento\Catalog\Setup\CategorySetup;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Store\Model\StoreManagerInterface;
+use Zend_Db_Expr;
 
 /**
  * Resource model for category entity
@@ -31,7 +50,7 @@ class Category extends AbstractResource
     /**
      * Category tree object
      *
-     * @var \Magento\Framework\Data\Tree\Db
+     * @var Db
      */
     protected $_tree;
 
@@ -64,21 +83,21 @@ class Category extends AbstractResource
     /**
      * Core event manager proxy
      *
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     protected $_eventManager = null;
 
     /**
      * Category collection factory
      *
-     * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_categoryCollectionFactory;
 
     /**
      * Category tree factory
      *
-     * @var \Magento\Catalog\Model\ResourceModel\Category\TreeFactory
+     * @var TreeFactory
      */
     protected $_categoryTreeFactory;
 
@@ -104,28 +123,28 @@ class Category extends AbstractResource
 
     /**
      * Category constructor.
-     * @param \Magento\Eav\Model\Entity\Context $context
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Model\Factory $modelFactory
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
+     * @param Context $context
+     * @param StoreManagerInterface $storeManager
+     * @param Factory $modelFactory
+     * @param ManagerInterface $eventManager
      * @param Category\TreeFactory $categoryTreeFactory
      * @param Category\CollectionFactory $categoryCollectionFactory
      * @param Processor $indexerProcessor
      * @param array $data
-     * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
+     * @param Json|null $serializer
      * @param MetadataPool|null $metadataPool
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Eav\Model\Entity\Context $context,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Model\Factory $modelFactory,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Catalog\Model\ResourceModel\Category\TreeFactory $categoryTreeFactory,
-        \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory $categoryCollectionFactory,
+        Context $context,
+        StoreManagerInterface $storeManager,
+        Factory $modelFactory,
+        ManagerInterface $eventManager,
+        TreeFactory $categoryTreeFactory,
+        CollectionFactory $categoryCollectionFactory,
         Processor $indexerProcessor,
         $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        Json $serializer = null,
         MetadataPool $metadataPool = null
     ) {
         parent::__construct(
@@ -140,15 +159,15 @@ class Category extends AbstractResource
         $this->connectionName  = 'catalog';
         $this->indexerProcessor = $indexerProcessor;
         $this->serializer = $serializer ?: ObjectManager::getInstance()
-            ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+            ->get(Json::class);
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()->get(MetadataPool::class);
     }
 
     /**
      * Entity type getter and lazy loader
      *
-     * @return \Magento\Eav\Model\Entity\Type
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @return Type
+     * @throws LocalizedException
      */
     public function getEntityType()
     {
@@ -199,7 +218,7 @@ class Category extends AbstractResource
     /**
      * Retrieve category tree object
      *
-     * @return \Magento\Framework\Data\Tree\Db
+     * @return Db
      */
     protected function _getTree()
     {
@@ -214,10 +233,10 @@ class Category extends AbstractResource
      * update children count for parent category
      * delete child categories
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @return void
      */
-    protected function _beforeDelete(\Magento\Framework\DataObject $object)
+    protected function _beforeDelete(DataObject $object)
     {
         parent::_beforeDelete($object);
         $this->getAggregateCount()->processDelete($object);
@@ -239,10 +258,10 @@ class Category extends AbstractResource
     /**
      * Delete children categories of specific category
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @return $this
      */
-    public function deleteChildren(\Magento\Framework\DataObject $object)
+    public function deleteChildren(DataObject $object)
     {
         if ($object->getSkipDeleteChildren()) {
             return $this;
@@ -269,12 +288,12 @@ class Category extends AbstractResource
      *
      * Prepare path and increment children count for parent categories
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @return $this
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
-    protected function _beforeSave(\Magento\Framework\DataObject $object)
+    protected function _beforeSave(DataObject $object)
     {
         parent::_beforeSave($object);
 
@@ -307,7 +326,7 @@ class Category extends AbstractResource
 
             $this->getConnection()->update(
                 $this->getEntityTable(),
-                ['children_count' => new \Zend_Db_Expr('children_count+1')],
+                ['children_count' => new Zend_Db_Expr('children_count+1')],
                 ['entity_id IN(?)' => $toUpdateChild]
             );
         }
@@ -319,10 +338,10 @@ class Category extends AbstractResource
      *
      * Save related products ids and update path value
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @return $this
      */
-    protected function _afterSave(\Magento\Framework\DataObject $object)
+    protected function _afterSave(DataObject $object)
     {
         /**
          * Add identifier for new category
@@ -461,7 +480,7 @@ class Category extends AbstractResource
             }
 
             foreach ($newPositions as $delta => $productIds) {
-                $bind = ['position' => new \Zend_Db_Expr("position + ({$delta})")];
+                $bind = ['position' => new Zend_Db_Expr("position + ({$delta})")];
                 $where = ['category_id = ?' => (int)$id, 'product_id IN (?)' => $productIds];
                 $connection->update($this->getCategoryProductTable(), $bind, $where);
             }
@@ -641,7 +660,7 @@ class Category extends AbstractResource
      * Return entities where attribute value is
      *
      * @param array|int $entityIdsFilter
-     * @param \Magento\Eav\Model\Entity\Attribute $attribute
+     * @param AttributeEntity $attribute
      * @param mixed $expectedValue
      * @return array
      */
@@ -687,7 +706,7 @@ class Category extends AbstractResource
 
         $select = $this->getConnection()->select()->from(
             ['main_table' => $productTable],
-            [new \Zend_Db_Expr('COUNT(main_table.product_id)')]
+            [new Zend_Db_Expr('COUNT(main_table.product_id)')]
         )->where(
             'main_table.category_id = :category_id'
         );
@@ -706,15 +725,24 @@ class Category extends AbstractResource
      * @param boolean|string $sorted
      * @param boolean $asCollection
      * @param boolean $toLoad
-     * @return \Magento\Framework\Data\Tree\Node\Collection|\Magento\Catalog\Model\ResourceModel\Category\Collection
+     * @param boolean $onlyActive
+     * @param boolean $includeInMenu
+     * @return CollectionNode|CollectionCategory
      */
-    public function getCategories($parent, $recursionLevel = 0, $sorted = false, $asCollection = false, $toLoad = true)
-    {
+    public function getCategories(
+        $parent,
+        $recursionLevel = 0,
+        $sorted = false,
+        $asCollection = false,
+        $toLoad = true,
+        $onlyActive = true,
+        $includeInMenu = true
+    ) {
         $tree = $this->_categoryTreeFactory->create();
-        /* @var $tree \Magento\Catalog\Model\ResourceModel\Category\Tree */
+        /* @var $tree TreeCategory */
         $nodes = $tree->loadNode($parent)->loadChildren($recursionLevel)->getChildren();
 
-        $tree->addCollectionData(null, $sorted, $parent, $toLoad, true);
+        $tree->addCollectionData(null, $sorted, $parent, $toLoad, $onlyActive, $includeInMenu);
 
         if ($asCollection) {
             return $tree->getCollection();
@@ -726,12 +754,12 @@ class Category extends AbstractResource
      * Return parent categories of category
      *
      * @param \Magento\Catalog\Model\Category $category
-     * @return \Magento\Framework\DataObject[]
+     * @return DataObject[]
      */
     public function getParentCategories($category)
     {
         $pathIds = array_reverse(explode(',', (string)$category->getPathInStore()));
-        /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $categories */
+        /** @var CollectionCategory $categories */
         $categories = $this->_categoryCollectionFactory->create();
         return $categories->setStore(
             $this->_storeManager->getStore()
@@ -794,12 +822,12 @@ class Category extends AbstractResource
      * Return child categories
      *
      * @param \Magento\Catalog\Model\Category $category
-     * @return \Magento\Catalog\Model\ResourceModel\Category\Collection
+     * @return CollectionCategory
      */
     public function getChildrenCategories($category)
     {
         $collection = $category->getCollection();
-        /* @var $collection \Magento\Catalog\Model\ResourceModel\Category\Collection */
+        /* @var $collection CollectionCategory */
         $collection->addAttributeToSelect(
             'url_key'
         )->addAttributeToSelect(
@@ -815,7 +843,7 @@ class Category extends AbstractResource
             $category->getChildren()
         )->setOrder(
             'position',
-            \Magento\Framework\DB\Select::SQL_ASC
+            Select::SQL_ASC
         )->joinUrlRewrite();
 
         return $collection;
@@ -960,7 +988,7 @@ class Category extends AbstractResource
          */
         $connection->update(
             $table,
-            ['children_count' => new \Zend_Db_Expr('children_count - ' . $childrenCount)],
+            ['children_count' => new Zend_Db_Expr('children_count - ' . $childrenCount)],
             ['entity_id IN(?)' => $category->getParentIds()]
         );
 
@@ -969,7 +997,7 @@ class Category extends AbstractResource
          */
         $connection->update(
             $table,
-            ['children_count' => new \Zend_Db_Expr('children_count + ' . $childrenCount)],
+            ['children_count' => new Zend_Db_Expr('children_count + ' . $childrenCount)],
             ['entity_id IN(?)' => $newParent->getPathIds()]
         );
 
@@ -985,14 +1013,14 @@ class Category extends AbstractResource
         $connection->update(
             $table,
             [
-                'path' => new \Zend_Db_Expr(
+                'path' => new Zend_Db_Expr(
                     'REPLACE(' . $pathField . ',' . $connection->quote(
                         $category->getPath() . '/'
                     ) . ', ' . $connection->quote(
                         $newPath . '/'
                     ) . ')'
                 ),
-                'level' => new \Zend_Db_Expr($levelField . ' + ' . $levelDisposition)
+                'level' => new Zend_Db_Expr($levelField . ' + ' . $levelDisposition)
             ],
             [$pathField . ' LIKE ?' => $category->getPath() . '/%']
         );
@@ -1030,7 +1058,7 @@ class Category extends AbstractResource
         $connection = $this->getConnection();
         $positionField = $connection->quoteIdentifier('position');
 
-        $bind = ['position' => new \Zend_Db_Expr($positionField . ' - 1')];
+        $bind = ['position' => new Zend_Db_Expr($positionField . ' - 1')];
         $where = [
             'parent_id = ?' => $category->getParentId(),
             $positionField . ' > ?' => $category->getPosition(),
@@ -1048,7 +1076,7 @@ class Category extends AbstractResource
             $position = 1;
         }
 
-        $bind = ['position' => new \Zend_Db_Expr($positionField . ' + 1')];
+        $bind = ['position' => new Zend_Db_Expr($positionField . ' + 1')];
         $where = ['parent_id = ?' => $newParent->getId(), $positionField . ' >= ?' => $position];
         $connection->update($table, $bind, $where);
 
@@ -1071,7 +1099,7 @@ class Category extends AbstractResource
     /**
      * Reset firstly loaded attributes
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @param integer $entityId
      * @param array|null $attributes
      * @return $this
@@ -1111,11 +1139,11 @@ class Category extends AbstractResource
     /**
      * Save entity's attributes into the object's resource
      *
-     * @param  \Magento\Framework\Model\AbstractModel $object
+     * @param  AbstractModel $object
      * @return $this
-     * @throws \Exception
+     * @throws Exception
      */
-    public function save(\Magento\Framework\Model\AbstractModel $object)
+    public function save(AbstractModel $object)
     {
         $this->getEntityManager()->save($object);
         return $this;
@@ -1129,8 +1157,8 @@ class Category extends AbstractResource
     private function getEntityManager()
     {
         if (null === $this->entityManager) {
-            $this->entityManager = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\EntityManager::class);
+            $this->entityManager = ObjectManager::getInstance()
+                ->get(EntityManager::class);
         }
         return $this->entityManager;
     }
@@ -1143,8 +1171,8 @@ class Category extends AbstractResource
     private function getAggregateCount()
     {
         if (null === $this->aggregateCount) {
-            $this->aggregateCount = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Catalog\Model\ResourceModel\Category\AggregateCount::class);
+            $this->aggregateCount = ObjectManager::getInstance()
+                ->get(AggregateCount::class);
         }
         return $this->aggregateCount;
     }

@@ -3,11 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\ResourceModel\Category;
 
+use Magento\Catalog\Model\Attribute\Config;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\ResourceModel\Category as CategoryResourceModel;
+use Magento\Catalog\Model\ResourceModel\Category\Collection\Factory;
+use Magento\Eav\Model\Entity\Attribute;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Tree\Dbp;
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * @api
@@ -25,17 +39,17 @@ class Tree extends Dbp
     const LEVEL_FIELD = 'level';
 
     /**
-     * @var \Magento\Framework\Event\ManagerInterface
+     * @var ManagerInterface
      */
     private $_eventManager;
 
     /**
-     * @var \Magento\Catalog\Model\Attribute\Config
+     * @var Config
      */
     private $_attributeConfig;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Category\Collection\Factory
+     * @var Factory
      */
     private $_collectionFactory;
 
@@ -61,6 +75,13 @@ class Tree extends Dbp
     protected $_inactiveCategoryIds = null;
 
     /**
+     * Inactive categories items ids
+     *
+     * @var array
+     */
+    protected $_inactiveItems = null;
+
+    /**
      * Store id
      *
      * @var integer
@@ -68,28 +89,28 @@ class Tree extends Dbp
     protected $_storeId = null;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     protected $_coreResource;
 
     /**
      * Store manager
      *
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $_storeManager;
 
     /**
      * Cache
      *
-     * @var \Magento\Framework\App\CacheInterface
+     * @var CacheInterface
      */
     protected $_cache;
 
     /**
      * Catalog category
      *
-     * @var \Magento\Catalog\Model\ResourceModel\Category
+     * @var CategoryResourceModel
      */
     protected $_catalogCategory;
 
@@ -101,22 +122,22 @@ class Tree extends Dbp
 
     /**
      * Tree constructor.
-     * @param \Magento\Catalog\Model\ResourceModel\Category $catalogCategory
-     * @param \Magento\Framework\App\CacheInterface $cache
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Magento\Framework\Event\ManagerInterface $eventManager
-     * @param \Magento\Catalog\Model\Attribute\Config $attributeConfig
+     * @param CategoryResourceModel $catalogCategory
+     * @param CacheInterface $cache
+     * @param StoreManagerInterface $storeManager
+     * @param ResourceConnection $resource
+     * @param ManagerInterface $eventManager
+     * @param Config $attributeConfig
      * @param Collection\Factory $collectionFactory
      */
     public function __construct(
-        \Magento\Catalog\Model\ResourceModel\Category $catalogCategory,
-        \Magento\Framework\App\CacheInterface $cache,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Framework\Event\ManagerInterface $eventManager,
-        \Magento\Catalog\Model\Attribute\Config $attributeConfig,
-        \Magento\Catalog\Model\ResourceModel\Category\Collection\Factory $collectionFactory
+        CategoryResourceModel $catalogCategory,
+        CacheInterface $cache,
+        StoreManagerInterface $storeManager,
+        ResourceConnection $resource,
+        ManagerInterface $eventManager,
+        Config $attributeConfig,
+        Factory $collectionFactory
     ) {
         $this->_catalogCategory = $catalogCategory;
         $this->_cache = $cache;
@@ -170,6 +191,7 @@ class Tree extends Dbp
      * @param array $exclude
      * @param boolean $toLoad
      * @param boolean $onlyActive
+     * @param boolean $includeInMenu
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -179,7 +201,8 @@ class Tree extends Dbp
         $sorted = false,
         $exclude = [],
         $toLoad = true,
-        $onlyActive = false
+        $onlyActive = true,
+        $includeInMenu = true
     ) {
         if ($collection === null) {
             $collection = $this->getCollection($sorted);
@@ -204,7 +227,7 @@ class Tree extends Dbp
                 $collection->addFieldToFilter('entity_id', ['nin' => $disabledIds]);
             }
             $collection->addAttributeToFilter('is_active', 1);
-            $collection->addAttributeToFilter('include_in_menu', 1);
+            $includeInMenu ?: $collection->addAttributeToFilter('include_in_menu', 1);
         }
 
         if ($this->_joinUrlRewriteIntoCollection) {
@@ -447,7 +470,7 @@ class Tree extends Dbp
      */
     protected function _afterMove()
     {
-        $this->_cache->clean([\Magento\Catalog\Model\Category::CACHE_TAG]);
+        $this->_cache->clean([Category::CACHE_TAG]);
         return $this;
     }
 
@@ -499,7 +522,7 @@ class Tree extends Dbp
             $select = $this->_createCollectionDataSelect();
         } else {
             $select = clone $this->_select;
-            $select->order($this->_orderField . ' ' . \Magento\Framework\DB\Select::SQL_ASC);
+            $select->order($this->_orderField . ' ' . Select::SQL_ASC);
         }
         $select->where(implode(' OR ', $where));
 
@@ -547,7 +570,7 @@ class Tree extends Dbp
                 'e.entity_id IN(?)',
                 $pathIds
             )->order(
-                $this->_conn->getLengthSql('e.path') . ' ' . \Magento\Framework\DB\Select::SQL_ASC
+                $this->_conn->getLengthSql('e.path') . ' ' . Select::SQL_ASC
             );
             $result = $this->_conn->fetchAll($select);
             $this->_updateAnchorProductCount($result);
@@ -578,7 +601,7 @@ class Tree extends Dbp
      *
      * @param bool $sorted
      * @param array $optionalAttributes
-     * @return \Magento\Framework\DB\Select
+     * @return Select
      */
     protected function _createCollectionDataSelect($sorted = true, $optionalAttributes = [])
     {
@@ -593,7 +616,7 @@ class Tree extends Dbp
         }
         $resource = $this->_catalogCategory;
         foreach ($attributes as $attributeCode) {
-            /* @var $attribute \Magento\Eav\Model\Entity\Attribute */
+            /* @var $attribute Attribute */
             $attribute = $resource->getAttribute($attributeCode);
             // join non-static attribute table
             if (!$attribute->getBackend()->isStatic()) {
@@ -612,7 +635,7 @@ class Tree extends Dbp
                         ' AND %1$s.attribute_id=%2$d AND %1$s.store_id=%3$d',
                         $tableDefault,
                         $attribute->getId(),
-                        \Magento\Store\Model\Store::DEFAULT_STORE_ID
+                        Store::DEFAULT_STORE_ID
                     ),
                     [$attributeCode => 'value']
                 )->joinLeft(
@@ -680,13 +703,15 @@ class Tree extends Dbp
     }
 
     /**
-     * @return \Magento\Framework\EntityManager\MetadataPool
+     * Get metadata from pool
+     *
+     * @return MetadataPool
      */
     private function getMetadataPool()
     {
         if (null === $this->metadataPool) {
-            $this->metadataPool = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\EntityManager\MetadataPool::class);
+            $this->metadataPool = ObjectManager::getInstance()
+                ->get(MetadataPool::class);
         }
         return $this->metadataPool;
     }

@@ -3,15 +3,44 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Api\CategoryAttributeRepositoryInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\Data\CategoryExtensionInterface;
 use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Api\Data\CategoryTreeInterface;
+use Magento\Catalog\Model\Category\FileInfo;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\Flat;
+use Magento\Catalog\Model\ResourceModel\Category\Tree;
+use Magento\Catalog\Model\ResourceModel\Category\TreeFactory;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Exception;
+use Magento\Framework\Api\AttributeInterface;
 use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\Api\MetadataServiceInterface;
 use Magento\Framework\Convert\ConvertArray;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Data\Tree\Node\Collection as CollectionNode;
+use Magento\Framework\DataObject;
+use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Filter\FilterManager;
+use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Profiler;
+use Magento\Framework\Registry;
+use Magento\Framework\UrlInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
@@ -39,10 +68,10 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
-class Category extends \Magento\Catalog\Model\AbstractModel implements
-    \Magento\Framework\DataObject\IdentityInterface,
-    \Magento\Catalog\Api\Data\CategoryInterface,
-    \Magento\Catalog\Api\Data\CategoryTreeInterface
+class Category extends AbstractModel implements
+    IdentityInterface,
+    CategoryInterface,
+    CategoryTreeInterface
 {
     /**
      * Entity code.
@@ -92,7 +121,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * URL Model instance
      *
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     protected $_url;
 
@@ -144,28 +173,28 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Category tree model
      *
-     * @var \Magento\Catalog\Model\ResourceModel\Category\Tree
+     * @var Tree
      */
     protected $_treeModel = null;
 
     /**
      * Core data
      *
-     * @var \Magento\Framework\Filter\FilterManager
+     * @var FilterManager
      */
     protected $filter;
 
     /**
      * Catalog config
      *
-     * @var \Magento\Catalog\Model\Config
+     * @var Config
      */
     protected $_catalogConfig;
 
     /**
      * Product collection factory
      *
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_productCollectionFactory;
 
@@ -179,7 +208,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Category tree factory
      *
-     * @var \Magento\Catalog\Model\ResourceModel\Category\TreeFactory
+     * @var TreeFactory
      */
     protected $_categoryTreeFactory;
 
@@ -189,17 +218,17 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     protected $flatState;
 
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator
+     * @var CategoryUrlPathGenerator
      */
     protected $categoryUrlPathGenerator;
 
     /**
-     * @var \Magento\UrlRewrite\Model\UrlFinderInterface
+     * @var UrlFinderInterface
      */
     protected $urlFinder;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry
+     * @var IndexerRegistry
      */
     protected $indexerRegistry;
 
@@ -209,55 +238,55 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     protected $categoryRepository;
 
     /**
-     * @var \Magento\Framework\Api\MetadataServiceInterface
+     * @var MetadataServiceInterface
      */
     protected $metadataService;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
+     * @param Context $context
+     * @param Registry $registry
+     * @param ExtensionAttributesFactory $extensionFactory
      * @param AttributeValueFactory $customAttributeFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService
-     * @param \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTreeResource
-     * @param \Magento\Catalog\Model\ResourceModel\Category\TreeFactory $categoryTreeFactory
+     * @param StoreManagerInterface $storeManager
+     * @param CategoryAttributeRepositoryInterface $metadataService
+     * @param Tree $categoryTreeResource
+     * @param TreeFactory $categoryTreeFactory
      * @param \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory
-     * @param \Magento\Framework\UrlInterface $url
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
+     * @param UrlInterface $url
+     * @param CollectionFactory $productCollectionFactory
      * @param Config $catalogConfig
-     * @param \Magento\Framework\Filter\FilterManager $filter
+     * @param FilterManager $filter
      * @param Indexer\Category\Flat\State $flatState
-     * @param \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator
+     * @param CategoryUrlPathGenerator $categoryUrlPathGenerator
      * @param UrlFinderInterface $urlFinder
-     * @param \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry
+     * @param IndexerRegistry $indexerRegistry
      * @param CategoryRepositoryInterface $categoryRepository
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * @param AbstractResource $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory,
+        Context $context,
+        Registry $registry,
+        ExtensionAttributesFactory $extensionFactory,
         AttributeValueFactory $customAttributeFactory,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Catalog\Api\CategoryAttributeRepositoryInterface $metadataService,
-        \Magento\Catalog\Model\ResourceModel\Category\Tree $categoryTreeResource,
-        \Magento\Catalog\Model\ResourceModel\Category\TreeFactory $categoryTreeFactory,
+        StoreManagerInterface $storeManager,
+        CategoryAttributeRepositoryInterface $metadataService,
+        Tree $categoryTreeResource,
+        TreeFactory $categoryTreeFactory,
         \Magento\Store\Model\ResourceModel\Store\CollectionFactory $storeCollectionFactory,
-        \Magento\Framework\UrlInterface $url,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Catalog\Model\Config $catalogConfig,
-        \Magento\Framework\Filter\FilterManager $filter,
+        UrlInterface $url,
+        CollectionFactory $productCollectionFactory,
+        Config $catalogConfig,
+        FilterManager $filter,
         Indexer\Category\Flat\State $flatState,
-        \Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator $categoryUrlPathGenerator,
+        CategoryUrlPathGenerator $categoryUrlPathGenerator,
         UrlFinderInterface $urlFinder,
-        \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
+        IndexerRegistry $indexerRegistry,
         CategoryRepositoryInterface $categoryRepository,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
         array $data = []
     ) {
         $this->metadataService = $metadataService;
@@ -294,10 +323,10 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     {
         // If Flat Index enabled then use it but only on frontend
         if ($this->flatState->isAvailable()) {
-            $this->_init(\Magento\Catalog\Model\ResourceModel\Category\Flat::class);
+            $this->_init(Flat::class);
             $this->_useFlatResource = true;
         } else {
-            $this->_init(\Magento\Catalog\Model\ResourceModel\Category::class);
+            $this->_init(ResourceModel\Category::class);
         }
     }
 
@@ -317,8 +346,8 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Returns model resource
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @return \Magento\Catalog\Model\ResourceModel\Category
+     * @return ResourceModel\Category
+     * @throws LocalizedException
      * @deprecated because resource models should be used directly
      * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
@@ -343,7 +372,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Retrieve URL instance
      *
-     * @return \Magento\Framework\UrlInterface
+     * @return UrlInterface
      */
     public function getUrlInstance()
     {
@@ -353,7 +382,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Retrieve category tree model
      *
-     * @return \Magento\Catalog\Model\ResourceModel\Category\Tree
+     * @return Tree
      */
     public function getTreeModel()
     {
@@ -363,7 +392,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Enter description here...
      *
-     * @return \Magento\Catalog\Model\ResourceModel\Category\Tree
+     * @return Tree
      */
     public function getTreeModelInstance()
     {
@@ -376,7 +405,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param  int $parentId new parent category id
      * @param  null|int $afterCategoryId category id after which we have put current category
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException|\Exception
+     * @throws LocalizedException|\Exception
      */
     public function move($parentId, $afterCategoryId)
     {
@@ -387,7 +416,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         try {
             $parent = $this->categoryRepository->get($parentId, $this->getStoreId());
         } catch (NoSuchEntityException $e) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __(
                     'Sorry, but we can\'t find the new parent category you selected.'
                 ),
@@ -396,11 +425,11 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         }
 
         if (!$this->getId()) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('Sorry, but we can\'t find the new category you selected.')
             );
         } elseif ($parent->getId() == $this->getId()) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __(
                     'We can\'t move the category because the parent category name matches the child category name.'
                 )
@@ -467,7 +496,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get category products collection
      *
-     * @return \Magento\Framework\Data\Collection\AbstractDb
+     * @return AbstractDb
      */
     public function getProductCollection()
     {
@@ -664,7 +693,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param string $attributeCode
      * @return bool|string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function getImageUrl($attributeCode = 'image')
     {
@@ -677,19 +706,19 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                 $isRelativeUrl = substr($image, 0, 1) === '/';
 
                 $mediaBaseUrl = $store->getBaseUrl(
-                    \Magento\Framework\UrlInterface::URL_TYPE_MEDIA
+                    UrlInterface::URL_TYPE_MEDIA
                 );
 
                 if ($isRelativeUrl) {
                     $url = $image;
                 } else {
                     $url = $mediaBaseUrl
-                        . ltrim(\Magento\Catalog\Model\Category\FileInfo::ENTITY_MEDIA_PATH, '/')
+                        . ltrim(FileInfo::ENTITY_MEDIA_PATH, '/')
                         . '/'
                         . $image;
                 }
             } else {
-                throw new \Magento\Framework\Exception\LocalizedException(
+                throw new LocalizedException(
                     __('Something went wrong while getting the image url.')
                 );
             }
@@ -700,7 +729,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get parent category object
      *
-     * @return \Magento\Catalog\Model\Category
+     * @return Category
      */
     public function getParentCategory()
     {
@@ -767,7 +796,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * Retrieve attribute by code
      *
      * @param string $attributeCode
-     * @return \Magento\Eav\Model\Entity\Attribute\AbstractAttribute
+     * @return AbstractAttribute
      */
     private function _getAttribute($attributeCode)
     {
@@ -913,13 +942,13 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Before delete process
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return $this
      */
     public function beforeDelete()
     {
         if ($this->getResource()->isForbiddenToDelete($this->getId())) {
-            throw new \Magento\Framework\Exception\LocalizedException(__('Can\'t delete root category.'));
+            throw new LocalizedException(__('Can\'t delete root category.'));
         }
         return parent::beforeDelete();
     }
@@ -977,18 +1006,34 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param bool $sorted
      * @param bool $asCollection
      * @param bool $toLoad
-     * @return \Magento\Framework\Data\Tree\Node\Collection|\Magento\Catalog\Model\ResourceModel\Category\Collection
+     * @param bool $onlyActive
+     * @param bool $includeInMenu
+     * @return CollectionNode|Collection
      */
-    public function getCategories($parent, $recursionLevel = 0, $sorted = false, $asCollection = false, $toLoad = true)
-    {
-        $categories = $this->getResource()->getCategories($parent, $recursionLevel, $sorted, $asCollection, $toLoad);
-        return $categories;
+    public function getCategories(
+        $parent,
+        $recursionLevel = 0,
+        $sorted = false,
+        $asCollection = false,
+        $toLoad = true,
+        $onlyActive = true,
+        $includeInMenu = true
+    ) {
+        return $this->getResource()->getCategories(
+            $parent,
+            $recursionLevel,
+            $sorted,
+            $asCollection,
+            $toLoad,
+            $onlyActive,
+            $includeInMenu
+        );
     }
 
     /**
      * Return parent categories of current category
      *
-     * @return \Magento\Framework\DataObject[]|\Magento\Catalog\Model\Category[]
+     * @return DataObject[]|Category[]
      */
     public function getParentCategories()
     {
@@ -998,7 +1043,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Return children categories of current category
      *
-     * @return \Magento\Catalog\Model\ResourceModel\Category\Collection|\Magento\Catalog\Model\Category[]
+     * @return Collection|Category[]
      */
     public function getChildrenCategories()
     {
@@ -1008,7 +1053,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Return parent category of current category with own custom design settings
      *
-     * @return \Magento\Catalog\Model\Category
+     * @return Category
      */
     public function getParentDesignCategory()
     {
@@ -1091,7 +1136,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Validate attribute values
      *
-     * @throws \Magento\Eav\Model\Entity\Attribute\Exception
+     * @throws Exception
      * @return true|array
      */
     public function validate()
@@ -1102,7 +1147,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Add reindexCallback
      *
-     * @return \Magento\Catalog\Model\Category
+     * @return Category
      */
     public function afterSave()
     {
@@ -1283,7 +1328,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Returns children data
      *
-     * @return \Magento\Catalog\Api\Data\CategoryTreeInterface[]|null
+     * @return CategoryTreeInterface[]|null
      */
     public function getChildrenData()
     {
@@ -1331,12 +1376,12 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         $dataArray = $this->__toArray();
         //process custom attributes if present
         if (array_key_exists('custom_attributes', $dataArray) && !empty($dataArray['custom_attributes'])) {
-            /** @var \Magento\Framework\Api\AttributeInterface[] $customAttributes */
+            /** @var AttributeInterface[] $customAttributes */
             $customAttributes = $dataArray['custom_attributes'];
             unset($dataArray['custom_attributes']);
             foreach ($customAttributes as $attributeValue) {
-                $dataArray[$attributeValue[\Magento\Framework\Api\AttributeInterface::ATTRIBUTE_CODE]]
-                    = $attributeValue[\Magento\Framework\Api\AttributeInterface::VALUE];
+                $dataArray[$attributeValue[AttributeInterface::ATTRIBUTE_CODE]]
+                    = $attributeValue[AttributeInterface::VALUE];
             }
         }
         return ConvertArray::toFlatArray($dataArray);
@@ -1468,7 +1513,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Set children data
      *
-     * @param \Magento\Catalog\Api\Data\CategoryTreeInterface[] $childrenData
+     * @param CategoryTreeInterface[] $childrenData
      * @return $this
      */
     public function setChildrenData(array $childrenData = null)
@@ -1479,7 +1524,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @inheritdoc
      *
-     * @return \Magento\Catalog\Api\Data\CategoryExtensionInterface|null
+     * @return CategoryExtensionInterface|null
      */
     public function getExtensionAttributes()
     {
@@ -1489,10 +1534,10 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @inheritdoc
      *
-     * @param \Magento\Catalog\Api\Data\CategoryExtensionInterface $extensionAttributes
+     * @param CategoryExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\Catalog\Api\Data\CategoryExtensionInterface $extensionAttributes)
+    public function setExtensionAttributes(CategoryExtensionInterface $extensionAttributes)
     {
         return $this->_setExtensionAttributes($extensionAttributes);
     }
