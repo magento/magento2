@@ -354,5 +354,11 @@
             "Magento\\PhpStan\\": "dev/tests/static/framework/Magento/PhpStan/"
         }
     },
-    "prefer-stable": true
+    "prefer-stable": true,
+    "repositories": {
+        "packages.ayko.com": {
+            "type": "composer",
+            "url": "https://packages.ayko.com/"
+        }
+    }
 }
