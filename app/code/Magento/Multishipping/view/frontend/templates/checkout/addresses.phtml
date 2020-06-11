@@ -16,7 +16,7 @@
 ?>
 <form id="checkout_multishipping_form"
       data-mage-init='{
-          "multiShipping":{},
+          "multiShipping": {"itemsQty": <?= /* @noEscape */ (int)$block->getCheckout()->getQuote()->getItemsSummaryQty() ?>},
           "cartUpdate": {
                "validationURL": "<?= $block->escapeUrl($block->getUrl('multishipping/checkout/checkItems')) ?>",
                "eventName": "updateMulticartItemQty"
