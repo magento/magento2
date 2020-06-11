@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "5f3c699b683c0423f6320bb81c7b8dc4",
+    "content-hash": "02fccb2d01ffd97470ee6ba2f551f5fc",
     "packages": [
         {
             "name": "colinmollenhour/cache-backend-file",
@@ -205,16 +205,6 @@
                 "certificate",
                 "ssl",
                 "tls"
-            ],
-            "funding": [
-                {
-                    "url": "https://packagist.com",
-                    "type": "custom"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/composer/composer",
-                    "type": "tidelift"
-                }
             ],
             "time": "2020-04-08T08:27:21+00:00"
         },
@@ -526,16 +516,16 @@
         },
         {
             "name": "elasticsearch/elasticsearch",
-            "version": "v7.6.1",
+            "version": "v7.7.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/elastic/elasticsearch-php.git",
-                "reference": "d4f24bc43c2af60aece3df20eb689d322f9c8acf"
+                "reference": "1d90a7ff4fb1936dc4376f09d723af75714f6f05"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/d4f24bc43c2af60aece3df20eb689d322f9c8acf",
-                "reference": "d4f24bc43c2af60aece3df20eb689d322f9c8acf",
+                "url": "https://api.github.com/repos/elastic/elasticsearch-php/zipball/1d90a7ff4fb1936dc4376f09d723af75714f6f05",
+                "reference": "1d90a7ff4fb1936dc4376f09d723af75714f6f05",
                 "shasum": ""
             },
             "require": {
@@ -585,7 +575,7 @@
                 "elasticsearch",
                 "search"
             ],
-            "time": "2020-02-15T00:09:00+00:00"
+            "time": "2020-05-13T15:19:26+00:00"
         },
         {
             "name": "ezimuel/guzzlestreams",
@@ -2306,12 +2296,6 @@
                 "laminas",
                 "mail"
             ],
-            "funding": [
-                {
-                    "url": "https://funding.communitybridge.org/projects/laminas-project",
-                    "type": "community_bridge"
-                }
-            ],
             "time": "2020-04-21T16:42:19+00:00"
         },
         {
@@ -3974,20 +3958,6 @@
                 "x.509",
                 "x509"
             ],
-            "funding": [
-                {
-                    "url": "https://github.com/terrafrost",
-                    "type": "github"
-                },
-                {
-                    "url": "https://www.patreon.com/phpseclib",
-                    "type": "patreon"
-                },
-                {
-                    "url": "https://tidelift.com/funding/github/packagist/phpseclib/phpseclib",
-                    "type": "tidelift"
-                }
-            ],
             "time": "2020-04-04T23:17:33+00:00"
         },
         {
@@ -4236,17 +4206,17 @@
             ],
             "authors": [
                 {
+                    "name": "Ben Ramsey",
+                    "email": "ben@benramsey.com",
+                    "homepage": "https://benramsey.com"
+                },
+                {
                     "name": "Marijn Huizendveld",
                     "email": "marijn.huizendveld@gmail.com"
                 },
                 {
                     "name": "Thibaud Fabre",
                     "email": "thibaud@aztech.io"
-                },
-                {
-                    "name": "Ben Ramsey",
-                    "email": "ben@benramsey.com",
-                    "homepage": "https://benramsey.com"
                 }
             ],
             "description": "Formerly rhumsaa/uuid. A PHP 5.4+ library for generating RFC 4122 version 1, 3, 4, and 5 universally unique identifiers (UUID).",
@@ -5823,16 +5793,16 @@
         },
         {
             "name": "aws/aws-sdk-php",
-            "version": "3.140.4",
+            "version": "3.141.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/aws/aws-sdk-php.git",
-                "reference": "298ec070adad5760c4b90348219bb3e6bd7a9322"
+                "reference": "d57dbde176a7db7a6131bb5d325aff63515eabc3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/298ec070adad5760c4b90348219bb3e6bd7a9322",
-                "reference": "298ec070adad5760c4b90348219bb3e6bd7a9322",
+                "url": "https://api.github.com/repos/aws/aws-sdk-php/zipball/d57dbde176a7db7a6131bb5d325aff63515eabc3",
+                "reference": "d57dbde176a7db7a6131bb5d325aff63515eabc3",
                 "shasum": ""
             },
             "require": {
@@ -5903,7 +5873,7 @@
                 "s3",
                 "sdk"
             ],
-            "time": "2020-06-09T18:11:16+00:00"
+            "time": "2020-06-10T18:11:38+00:00"
         },
         {
             "name": "beberlei/assert",
@@ -7478,16 +7448,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "dev-3.0.0-RC3",
+            "version": "3.0.0-RC4",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "aea30ae1df2fe6618478ba8813864c204561fde3"
+                "reference": "34781ccc7385993b1e5bc9182e6ddddde7f2769f"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/aea30ae1df2fe6618478ba8813864c204561fde3",
-                "reference": "aea30ae1df2fe6618478ba8813864c204561fde3",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/34781ccc7385993b1e5bc9182e6ddddde7f2769f",
+                "reference": "34781ccc7385993b1e5bc9182e6ddddde7f2769f",
                 "shasum": ""
             },
             "require": {
@@ -7514,7 +7484,8 @@
                 "symfony/finder": "^5.0",
                 "symfony/mime": "^5.0",
                 "symfony/process": "^4.4",
-                "vlucas/phpdotenv": "^2.4"
+                "vlucas/phpdotenv": "^2.4",
+                "weew/helpers-array": "^1.3"
             },
             "replace": {
                 "facebook/webdriver": "^1.7.1"
@@ -7562,7 +7533,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2020-05-22T19:17:05+00:00"
+            "time": "2020-06-08T18:17:54+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -11070,7 +11041,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "magento/composer": 20,
-        "magento/magento2-functional-testing-framework": 20
+        "magento/magento2-functional-testing-framework": 5
     },
     "prefer-stable": true,
     "prefer-lowest": false,
