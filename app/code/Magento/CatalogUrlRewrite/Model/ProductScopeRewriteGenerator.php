@@ -21,6 +21,9 @@ use Magento\UrlRewrite\Model\MergeDataProviderFactory;
 
 /**
  * Class ProductScopeRewriteGenerator
+ *
+ * Generates Product/Category URLs for different scopes
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductScopeRewriteGenerator
@@ -234,7 +237,6 @@ class ProductScopeRewriteGenerator
         }
         return false;
     }
-
 
     /**
      * Check config value of generate_category_product_rewrites
