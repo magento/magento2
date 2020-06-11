@@ -9,20 +9,35 @@ use Magento\Bundle\Api\Data\LinkInterfaceFactory;
 use Magento\Bundle\Api\Data\OptionInterfaceFactory;
 use Magento\Bundle\Model\Product\Price;
 use Magento\Catalog\Api\Data\ProductExtensionFactory;
+use Magento\Catalog\Api\Data\ProductInterfaceFactory;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/multiple_products.php';
+Resolver::getInstance()->requireDataFixture('Magento/Bundle/_files/multiple_products.php');
 
+$objectManager = Bootstrap::getObjectManager();
+/** @var ProductInterfaceFactory $productFactory */
+$productFactory = $objectManager->get(ProductInterfaceFactory::class);
+/** @var WebsiteRepositoryInterface $websiteRepository */
+$websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
+$defaultWebsiteId = $websiteRepository->get('base')->getId();
 /** @var ProductExtensionFactory $extensionAttributesFactory */
 $extensionAttributesFactory = $objectManager->get(ProductExtensionFactory::class);
 /** @var OptionInterfaceFactory $optionFactory */
 $optionFactory = $objectManager->get(OptionInterfaceFactory::class);
 /** @var LinkInterfaceFactory $linkFactory */
 $linkFactory = $objectManager->get(LinkInterfaceFactory::class);
-
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$product = $productRepository->get('simple1');
+$product2 = $productRepository->get('simple2');
+$product3 = $productRepository->get('simple3');
 $bundleProduct = $productFactory->create();
 $bundleProduct->setTypeId(Type::TYPE_BUNDLE)
     ->setAttributeSetId($bundleProduct->getDefaultAttributeSetId())

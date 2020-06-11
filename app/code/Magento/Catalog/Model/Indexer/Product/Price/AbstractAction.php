@@ -191,7 +191,7 @@ abstract class AbstractAction
                 }
             }
 
-            $query = $insertSelect->insertFromSelect($this->tableMaintainer->getMainTable($dimensions));
+            $query = $insertSelect->insertFromSelect($this->tableMaintainer->getMainTableByDimensions($dimensions));
             $this->getConnection()->query($query);
         }
         return $this;
@@ -403,7 +403,7 @@ abstract class AbstractAction
                     // copy to index
                     $this->_insertFromTable(
                         $temporaryTable,
-                        $this->tableMaintainer->getMainTable($dimensions)
+                        $this->tableMaintainer->getMainTableByDimensions($dimensions)
                     );
                 }
             } else {
@@ -419,7 +419,7 @@ abstract class AbstractAction
     }
 
     /**
-     * Cleanup index for list of entities
+     * Delete Index data index for list of entities
      *
      * @param array $entityIds
      * @return void
@@ -428,7 +428,7 @@ abstract class AbstractAction
     {
         foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
             $select = $this->getConnection()->select()->from(
-                ['index_price' => $this->tableMaintainer->getMainTable($dimensions)],
+                ['index_price' => $this->tableMaintainer->getMainTableByDimensions($dimensions)],
                 null
             )->where('index_price.entity_id IN (?)', $entityIds, \Zend_Db::BIGINT_TYPE);
             $query = $select->deleteFromSelect('index_price');
@@ -496,7 +496,7 @@ abstract class AbstractAction
     {
         $indexTargetTable = $this->getIndexTargetTable();
         if ($indexTargetTable === self::getIndexTargetTable()) {
-            $indexTargetTable = $this->tableMaintainer->getMainTable($dimensions);
+            $indexTargetTable = $this->tableMaintainer->getMainTableByDimensions($dimensions);
         }
         if ($indexTargetTable === self::getIndexTargetTable() . '_replica') {
             $indexTargetTable = $this->tableMaintainer->getMainReplicaTable($dimensions);
@@ -517,7 +517,7 @@ abstract class AbstractAction
     }
 
     /**
-     * Return Product ID field name
+     * Get product Id field name
      *
      * @return string
      */

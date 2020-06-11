@@ -73,9 +73,9 @@ class StockTest extends TestCase
     private $statementMock;
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->selectMock = $this->getMockBuilder(Select::class)
@@ -94,7 +94,7 @@ class StockTest extends TestCase
             ->getMock();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->connectionMock = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
             ->getMock();

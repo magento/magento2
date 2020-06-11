@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Search\Test\Unit\Block;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -51,7 +53,7 @@ class TermsTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

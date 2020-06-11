@@ -26,7 +26,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
     private $generatedTokens;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Stdlib\DateTime\DateTime | \PHPUnit\Framework\MockObject\MockObject
      */
     private $dateTimeMock;
 
@@ -45,7 +45,7 @@ class TokenTest extends \PHPUnit\Framework\TestCase
      */
     private $tokenFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->tokenFactory = $this->objectManager->create(\Magento\Integration\Model\Oauth\TokenFactory::class);

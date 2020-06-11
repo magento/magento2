@@ -3,50 +3,62 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AsynchronousOperations\Test\Unit\Model;
 
-/**
- * Class OperationManagementTest
- */
-class OperationManagementTest extends \PHPUnit\Framework\TestCase
+use Magento\AsynchronousOperations\Api\Data\OperationInterface;
+use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
+use Magento\AsynchronousOperations\Model\OperationManagement;
+use Magento\Framework\EntityManager\EntityManager;
+use Magento\Framework\EntityManager\MetadataPool;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
+class OperationManagementTest extends TestCase
 {
     /**
-     * @var \Magento\AsynchronousOperations\Model\OperationManagement
+     * @var OperationManagement
      */
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $entityManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $operationFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $operationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $loggerMock;
-    
-    protected function setUp()
+    /**
+     * @var MetadataPool|MockObject
+     */
+    private $metadataPoolMock;
+
+    protected function setUp(): void
     {
-        $this->entityManagerMock = $this->createMock(\Magento\Framework\EntityManager\EntityManager::class);
-        $this->metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
+        $this->entityManagerMock = $this->createMock(EntityManager::class);
+        $this->metadataPoolMock = $this->createMock(MetadataPool::class);
         $this->operationFactoryMock = $this->createPartialMock(
-            \Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory::class,
+            OperationInterfaceFactory::class,
             ['create']
         );
         $this->operationMock =
-            $this->createMock(\Magento\AsynchronousOperations\Api\Data\OperationInterface::class);
-        $this->loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->model = new \Magento\AsynchronousOperations\Model\OperationManagement(
+            $this->getMockForAbstractClass(OperationInterface::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->model = new OperationManagement(
             $this->entityManagerMock,
             $this->operationFactoryMock,
             $this->loggerMock

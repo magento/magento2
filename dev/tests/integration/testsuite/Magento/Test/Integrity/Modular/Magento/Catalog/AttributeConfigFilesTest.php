@@ -12,7 +12,7 @@ class AttributeConfigFilesTest extends \PHPUnit\Framework\TestCase
      */
     protected $_schemaFile;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Catalog\Model\Attribute\Config\SchemaLocator $schemaLocator */

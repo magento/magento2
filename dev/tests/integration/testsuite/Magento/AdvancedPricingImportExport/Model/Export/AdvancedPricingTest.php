@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\AdvancedPricingImportExport\Model\Export;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -19,8 +20,7 @@ use Magento\ImportExport\Model\Import\Source\Csv as ImportSourceCsv;
 use Magento\ImportExport\Model\Import;
 
 /**
- * Advanced pricing test
- *
+ * Test for \Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdvancedPricingTest extends TestCase
@@ -41,7 +41,7 @@ class AdvancedPricingTest extends TestCase
     protected $fileSystem;
 
     // @codingStandardsIgnoreStart
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $db = Bootstrap::getInstance()
             ->getBootstrap()
@@ -54,9 +54,10 @@ class AdvancedPricingTest extends TestCase
 
         parent::setUpBeforeClass();
     }
+
     // @codingStandardsIgnoreEnd
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -112,11 +113,11 @@ class AdvancedPricingTest extends TestCase
      */
     private function assertDiscountTypes($exportContent)
     {
-        $this->assertContains(
+        $this->assertStringContainsString(
             '2.0000,8.000000,Fixed',
             $exportContent
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             '10.0000,50.00,Discount',
             $exportContent
         );
@@ -148,7 +149,7 @@ class AdvancedPricingTest extends TestCase
         $csvfile = uniqid('importexport_') . '.csv';
 
         $exportContent = $this->exportData($csvfile);
-        $this->assertContains(
+        $this->assertStringContainsString(
             '"AdvancedPricingSimple 2",test,"ALL GROUPS",3.0000,5.0000',
             $exportContent
         );
@@ -174,11 +175,11 @@ class AdvancedPricingTest extends TestCase
     {
         $csvfile = uniqid('importexport_') . '.csv';
         $exportContent = $this->exportData($csvfile);
-        $this->assertContains(
+        $this->assertStringContainsString(
             'second_simple,"All Websites [USD]","ALL GROUPS",10.0000,3.00,Discount',
             $exportContent
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             'simple,"All Websites [USD]",General,5.0000,95.000000,Fixed',
             $exportContent
         );
@@ -198,13 +199,12 @@ class AdvancedPricingTest extends TestCase
             ]
         );
 
-        $this->assertEquals(
+        $this->assertEqualsWithDelta(
             ['5.0000', '90.000000'],
             [
                 $firstProductTierPrices[0]->getQty(),
                 $firstProductTierPrices[0]->getValue(),
             ],
-            '',
             0.1
         );
 
@@ -216,13 +216,12 @@ class AdvancedPricingTest extends TestCase
             ]
         );
 
-        $this->assertEquals(
+        $this->assertEqualsWithDelta(
             ['5.00', '10.0000'],
             [
                 $secondProductTierPrices[0]->getExtensionAttributes()->getPercentageValue(),
                 $secondProductTierPrices[0]->getQty(),
             ],
-            '',
             0.1
         );
     }
