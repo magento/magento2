@@ -88,7 +88,7 @@ class OrderTotal implements ResolverInterface
      */
     private function getShippingDiscountDetails(Order $order)
     {
-        if ($order->getDiscountDescription() === null && $order->getShippingDiscountAmount() === 0) {
+        if ($order->getDiscountDescription() === null && $order->getShippingDiscountAmount() == 0) {
             return null;
         }
 
@@ -111,7 +111,7 @@ class OrderTotal implements ResolverInterface
      */
     private function getDiscountDetails(Order $order)
     {
-        if ($order->getDiscountDescription() === null && $order->getDiscountAmount() === 0) {
+        if ($order->getDiscountDescription() === null && $order->getDiscountAmount() == 0) {
             return null;
         }
 

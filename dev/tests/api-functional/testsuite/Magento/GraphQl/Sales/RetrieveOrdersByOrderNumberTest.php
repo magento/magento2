@@ -12,6 +12,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\AuthenticationException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
@@ -243,6 +244,7 @@ QUERY;
         $this->assertArrayHasKey('total_count', $response['customer']['orders']);
         $this->assertEquals(6, $response['customer']['orders']['total_count']);
     }
+
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
@@ -466,6 +468,7 @@ QUERY;
 
     /**
      * @param String $orderNumber
+     * @throws AuthenticationException
      * @dataProvider dataProviderIncorrectOrder
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
@@ -564,7 +567,7 @@ QUERY;
      * @param String $orderNumber
      * @param String $store
      * @param int $expectedCount
-     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @throws AuthenticationException
      * @dataProvider dataProviderMultiStores
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Sales/_files/two_orders_with_order_items_two_storeviews.php
@@ -986,7 +989,7 @@ QUERY;
      * @param string $sku
      * @param int $optionId
      * @param int $selectionId
-     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @throws AuthenticationException
      */
     public function addBundleProductToCart(string $cartId, float $qty, string $sku, int $optionId, int $selectionId)
     {
@@ -1255,13 +1258,56 @@ QUERY;
      *
      * @param $orderNumber
      * @return mixed
-     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @throws AuthenticationException
      */
     private function getCustomerOrderQueryBundleProduct($orderNumber)
     {
         $query =
             <<<QUERY
- 
+{
+     customer {
+       orders(filter:{number:{eq:"{$orderNumber}"}}) {
+         total_count
+         items {
+           number
+           order_date
+           status
+           items{
+            product_sku
+            quantity_ordered
+            __typename
+            ... on BundleOrderItem{
+              child_items{
+                __typename
+                product_sku
+                product_name
+                product_sku
+            product_url_key
+            product_sale_price{value}
+            product_sale_price{value currency}
+            quantity_ordered
+              }
+            }
+          }
+           total {
+             base_grand_total{value currency}
+             grand_total{value currency}
+             total_tax{value}
+             subtotal { value currency }
+             taxes {amount{value currency} title rate}
+             total_shipping{value}
+             shipping_handling
+             {
+               amount_including_tax{value}
+               amount_excluding_tax{value}
+               total_amount{value}
+               taxes {amount{value} title rate}
+             }
+           }
+         }
+       }
+     }
+   }
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
