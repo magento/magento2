@@ -19,9 +19,8 @@
             <group value="GroupedProduct"/>
             <group value="SearchEngineElasticsearch"/>
             <skip>
-                  <issueId value="MC-21228"/>
+                  <issueId value="MC-34217"/>
            </skip>
-
         </annotations>
         <before>
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>
