@@ -59,7 +59,7 @@
         <element name="loginBtn" type="input" selector="button#btnLogin"/>
         <element name="reviewUserInfo" type="text" selector="[data-testid=personalized-banner-content]"/>
         <element name="cartIcon" type="text" selector="[data-testid='header-show-cart-dropdown-btn']"/>
-        <element name="itemName" type="text" selector="//p[contains(@class,'CartDropdown_line') and text()='{{productName}}']" parameterized="true"/>
+        <element name="itemName" type="text" selector="//p[contains(@class,'CartDropdown_line') and contains(.,'{{productName}}')]" parameterized="true"/>
         <element name="PayPalSubmitBtn" type="text" selector="#payment-submit-btn"/>
         <element name="nextButton" type="button" selector="#btnNext"/>
         <element name="continueButton" type="button" selector=".continueButton"/>
