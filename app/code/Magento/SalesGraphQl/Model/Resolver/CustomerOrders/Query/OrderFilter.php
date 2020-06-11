@@ -88,7 +88,6 @@ class OrderFilter
         );
         $filterGroups[] = $this->filterGroupBuilder->create();
 
-
         $this->filterGroupBuilder->setFilters(
             [$this->filterBuilder->setField('store_id')->setValue($store->getId())->setConditionType('eq')->create()]
         );

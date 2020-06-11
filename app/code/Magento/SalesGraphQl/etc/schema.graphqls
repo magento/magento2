@@ -89,7 +89,7 @@ type BundleOrderItem implements OrderItemInterface {
 type SelectedBundleOptionItems {
     id: ID! @doc(description: "The unique identifier of the option")
     label: String! @doc(description: "The label of the option")
-    items: [OrderItem] @doc(description: "A list of products that represent the values of the parent option") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\BundleOptions\\SelectedBundleOptionItems")
+    items: [OrderItem] @doc(description: "A list of products that represent the values of the parent option") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\BundleOptions\\SelectedBundleOptionOrderItems")
 }
 
 type OrderItemOption @doc(description: "Represents order item options like selected or entered") {
