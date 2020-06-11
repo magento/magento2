@@ -581,6 +581,7 @@ define([
          */
         _onImageLoaded: function (result, file, oldFile, callback) {
             var data;
+
             try {
                 data = JSON.parse(result);
             } catch (e) {

@@ -5,7 +5,7 @@
  */
 
 require([
-    'jquery/fileUploader/jquery.fileupload-ui',
+    'jquery/fileUploader/jquery.fileupload-image',
     'mage/adminhtml/browser',
     'Magento_Theme/js/form'
 ]);
