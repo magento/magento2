@@ -102,11 +102,6 @@
         <index referenceId="CATALOG_PRODUCT_ENTITY_DECIMAL_ATTRIBUTE_ID" indexType="btree">
             <column name="attribute_id"/>
         </index>
-        <index referenceId="CATALOG_PRODUCT_ENTITY_DECIMAL_ATTRIBUTE_ID_STORE_ID_VALUE" indexType="btree">
-            <column name="attribute_id"/>
-            <column name="store_id"/>
-            <column name="value"/>
-        </index>
     </table>
     <table name="catalog_product_entity_int" resource="default" engine="innodb"
            comment="Catalog Product Integer Attribute Backend Table">

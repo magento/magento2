@@ -194,8 +194,7 @@
         },
         "index": {
             "CATALOG_CATEGORY_ENTITY_DECIMAL_ENTITY_ID": true,
-            "CATALOG_CATEGORY_ENTITY_DECIMAL_ATTRIBUTE_ID": true,
-            "CATALOG_CATEGORY_ENTITY_DECIMAL_STORE_ID": true
+            "CATALOG_CATEGORY_ENTITY_DECIMAL_ATTRIBUTE_ID": true
         },
         "constraint": {
             "PRIMARY": true,
