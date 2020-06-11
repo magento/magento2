@@ -15,6 +15,7 @@
             <title value="Add product through ajax"/>
             <description value="Add product to cart through ajax in Product List widget on Cms page"/>
             <severity value="MAJOR"/>
+            <testCaseId value="MC-35111"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
