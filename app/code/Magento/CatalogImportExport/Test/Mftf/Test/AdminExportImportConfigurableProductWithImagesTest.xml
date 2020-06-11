@@ -167,9 +167,12 @@
             <argument name="attributeData" value="$$createExportImportConfigurableProduct.sku$$"/>
         </actionGroup>
 
-        <!-- Run cron twice -->
-        <magentoCLI command="cron:run" stepKey="runCronFirstTime"/>
-        <magentoCLI command="cron:run" stepKey="runCronSecondTime"/>
+        <!-- Run cron twice (To reduce the load and with introducing BIC cron runs have been removed) -->
+        <magentoCLI command="help" stepKey="runCronFirstTime"/>
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="runCronSecondTime">
+            <argument name="consumerName" value="exportProcessor"/>
+            <argument name="maxMessages" value="10"/>
+        </actionGroup>
 
         <!-- Save exported file: file successfully downloaded -->
         <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
