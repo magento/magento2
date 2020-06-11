@@ -225,7 +225,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
                 );
                 $html .= $this->secureRenderer->renderStyleAsTag(
                     'display:none;',
-                    'row_' . $field->getId() . '_comment'
+                    '#row_' . $field->getId() . '_comment'
                 );
             }
         }
