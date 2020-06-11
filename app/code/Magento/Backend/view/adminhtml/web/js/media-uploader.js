@@ -133,11 +133,11 @@ define([
             this.element.find('input[type=file]').fileupload('option', {
                 processQueue: [{
                     action: 'loadImage',
-                    fileTypes: /^image\/(gif|jpeg|png)$/,
+                    fileTypes: /^image\/(gif|jpeg|png)$/
                 },
                 resizeConfiguration,
                 {
-                    action: 'saveImage',
+                    action: 'saveImage'
                 }]
             });
         }
