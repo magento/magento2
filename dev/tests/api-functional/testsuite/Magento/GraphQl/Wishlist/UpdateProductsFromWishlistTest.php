@@ -93,8 +93,8 @@ class UpdateProductsFromWishlistTest extends GraphQlAbstract
         return <<<MUTATION
 mutation {
   updateProductsInWishlist(
-    wishlist_id: {$wishlistId},
-    wishlist_items: [
+    wishlistId: {$wishlistId},
+    wishlistItems: [
       {
         wishlist_item_id: "{$wishlistItemId}"
         quantity: {$qty}

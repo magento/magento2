@@ -129,8 +129,8 @@ class AddBundleProductToWishlistTest extends GraphQlAbstract
         return <<<MUTATION
 mutation {
   addProductsToWishlist(
-    wishlist_id: {$wishlistId},
-    wishlist_items: [
+    wishlistId: {$wishlistId},
+    wishlistItems: [
       {
         sku: "{$sku}"
         quantity: {$qty}

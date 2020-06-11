@@ -116,8 +116,8 @@ class AddConfigurableProductToWishlistTest extends GraphQlAbstract
         return <<<MUTATION
 mutation {
   addProductsToWishlist(
-    wishlist_id: {$wishlistId},
-    wishlist_items: [
+    wishlistId: {$wishlistId},
+    wishlistItems: [
       {
         sku: "{$childSku}"
         parent_sku: "{$parentSku}"

@@ -87,8 +87,8 @@ class DeleteProductsFromWishlistTest extends GraphQlAbstract
         return <<<MUTATION
 mutation {
   removeProductsFromWishlist(
-    wishlist_id: {$wishlistId},
-    wishlist_items_ids: [{$wishlistItemId}]
+    wishlistId: {$wishlistId},
+    wishlistItemsIds: [{$wishlistItemId}]
 ) {
     userInputErrors {
       code
