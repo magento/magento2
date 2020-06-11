@@ -44,7 +44,7 @@ define([
 
             if (!isResizeEnabled) {
                 resizeConfiguration = {
-                    action: 'resizeImage',
+                    action: 'resizeImage'
                 };
             }
 
