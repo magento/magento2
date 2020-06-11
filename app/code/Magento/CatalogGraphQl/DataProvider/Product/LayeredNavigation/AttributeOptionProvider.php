@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Store\Model\Store;
 
 /**
  * Fetch product attribute option data including attribute info
@@ -41,8 +42,8 @@ class AttributeOptionProvider
      * Get option data. Return list of attributes with option data
      *
      * @param array $optionIds
-     * @param array $attributeCodes
      * @param int|null $storeId
+     * @param array $attributeCodes
      * @return array
      * @throws \Zend_Db_Statement_Exception
      */
@@ -52,7 +53,7 @@ class AttributeOptionProvider
             return [];
         }
 
-        $storeId = $storeId ?: 0;
+        $storeId = $storeId ?: Store::DEFAULT_STORE_ID;
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()
             ->from(
@@ -84,7 +85,10 @@ class AttributeOptionProvider
                         'option_value.value'
                     )
                 ]
-            )->where('a.attribute_id = options.attribute_id AND option_value.store_id = ?', 0);
+            )->where(
+                'a.attribute_id = options.attribute_id AND option_value.store_id = ?',
+                Store::DEFAULT_STORE_ID
+            );
 
         $select->where('option_value.option_id IN (?)', $optionIds);
 
