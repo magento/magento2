@@ -145,14 +145,15 @@ QUERY;
     }
 
     /**
-     * Test customer order details with bundle products
+     * Test customer order details with bundle product with child items
+     *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/bundle/_files/bundle_product_dropdown_options.php
+     * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_two_dropdown_options.php
      */
     public function testGetCustomerOrderWithBundleProduct()
     {
         $qty = 1;
-        $bundleSku = 'bundle-product-dropdown-options';
+        $bundleSku = 'bundle-product-two-dropdown-options';
         $simpleProductSku = 'simple2';
         /** @var Product $simple */
         $simple = $this->productRepository->get($simpleProductSku);
@@ -168,16 +169,19 @@ QUERY;
         /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
         $typeInstance = $bundleProduct->getTypeInstance();
         /** @var $option \Magento\Bundle\Model\Option */
-        $option = $typeInstance->getOptionsCollection($bundleProduct)->getFirstItem();
-        $optionId =(int) $option->getId();
+        $option1 = $typeInstance->getOptionsCollection($bundleProduct)->getFirstItem();
+        $option2 = $typeInstance->getOptionsCollection($bundleProduct)->getLastItem();
+        $optionId1 =(int) $option1->getId();
+        $optionId2 =(int) $option2->getId();
         /** @var Selection $selection */
-        $selection = $typeInstance->getSelectionsCollection([$option->getId()], $bundleProduct)->getFirstItem();
-        $selection->setSelectionCanChangeQty(1);
-        $this->productRepository->save($bundleProduct);
-        $selectionId = (int)$selection->getSelectionId();
+        $selection1 = $typeInstance->getSelectionsCollection([$option1->getId()], $bundleProduct)->getFirstItem();
+        $selectionId1 = (int)$selection1->getSelectionId();
+
+        $selection2 = $typeInstance->getSelectionsCollection([$option2->getId()], $bundleProduct)->getLastItem();
+        $selectionId2 = (int)$selection2->getSelectionId();
 
         $cartId = $this->createEmptyCart();
-        $this->addBundleProductToCart($cartId, $qty, $bundleSku, $optionId, $selectionId);
+        $this->addBundleProductToCart($cartId, $qty, $bundleSku, $optionId1, $selectionId1, $optionId2, $selectionId2);
         $this->setBillingAddress($cartId);
         $shippingMethod = $this->setShippingAddress($cartId);
         $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
@@ -189,7 +193,7 @@ QUERY;
         $this->assertEquals("Pending", $customerOrderItems['status']);
 
         $bundledItemInTheOrder = $customerOrderItems['items'][0];
-        $this->assertEquals('bundle-product-dropdown-options', $bundledItemInTheOrder['product_sku']);
+        $this->assertEquals('bundle-product-two-dropdown-options', $bundledItemInTheOrder['product_sku']);
         $this->assertArrayHasKey('child_items', $bundledItemInTheOrder);
         $childItemInTheOrder = $bundledItemInTheOrder['child_items'][0];
         $this->assertNotEmpty($childItemInTheOrder);
@@ -863,7 +867,7 @@ QUERY;
      * @param int $selectionId
      * @throws \Magento\Framework\Exception\AuthenticationException
      */
-    public function addBundleProductToCart(string $cartId, float $qty, string $sku, int $optionId, int $selectionId)
+    public function addBundleProductToCart(string $cartId, float $qty, string $sku, int $optionId1, int $selectionId1,int $optionId2, int $selectionId2)
     {
         $query = <<<QUERY
 mutation {
@@ -877,9 +881,14 @@ mutation {
         }
         bundle_options:[
           {
-            id:$optionId
+            id:$optionId1
+            quantity:1
+            value:["{$selectionId1}"]
+          }
+          {
+            id:$optionId2
             quantity:2
-            value:["{$selectionId}"]
+            value:["{$selectionId2}"]
           }
         ]
       }
