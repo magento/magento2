@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSearchUrlRewriteByRequestPathActionGroup" extends="AdminSearchAndSelectUrlRewriteInGridActionGroup">
+        <annotations>
+            <description>EXTENDS: SearchAndSelectUrlRewrite. Removes 'clickOnRowSelectButton' and 'clickOnEditButton'.</description>
+        </annotations>
+        <arguments>
+            <argument name="requestPath" type="string"/>
+        </arguments>
+
+        <remove keyForRemoval="clickOnRowSelectButton"/>
+        <remove keyForRemoval="clickOnEditButton"/>
+        <remove keyForRemoval="waitForEditPageToLoad"/>
+    </actionGroup>
+</actionGroups>
