@@ -38,7 +38,9 @@
             </actionGroup>
 
             <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
 
         <after>
@@ -48,8 +50,12 @@
                 <argument name="websiteName" value="{{customWebsite.name}}"/>
             </actionGroup>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearFilters"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 

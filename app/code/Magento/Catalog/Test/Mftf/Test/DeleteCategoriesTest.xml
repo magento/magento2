@@ -75,7 +75,9 @@
 
         <!-- @TODO: Uncomment commented below code after MQE-903 is fixed -->
         <!-- Perform cli reindex. -->
-        <!--<magentoCLI command="indexer:reindex" stepKey="magentoCli"/>-->
+        <!--<actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">-->
+        <!--    <argument name="indices" value=""/>-->
+        <!--</actionGroup>-->
 
         <!-- Delete Default Root Category. -->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPageAfterCLIReindexCommand"/>
