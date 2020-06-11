@@ -145,7 +145,7 @@ class IntegerTest extends TestCase
             ->with($column)
             ->willReturn('COMMENT "Comment"');
         $this->assertEquals(
-            '`int_column` int(10) UNSIGNED NOT NULL DEFAULT 0 AUTO_INCREMENT COMMENT "Comment"',
+            '`int_column` int UNSIGNED NOT NULL DEFAULT 0 AUTO_INCREMENT COMMENT "Comment"',
             $this->integer->toDefinition($column)
         );
     }
@@ -180,13 +180,15 @@ class IntegerTest extends TestCase
     {
         return [
             ['int'],
-            ['int(10)', 10],
+            ['int(10)'],
             ['tinyint'],
-            ['mediumint(5)', 5],
+            ['tinyint(1)', 1],
+            ['tinyint(2)'],
+            ['mediumint(5)'],
             ['mediumint'],
-            ['smallint(3)', 3],
+            ['smallint(3)'],
             ['smallint'],
-            ['bigint(10)', 10],
+            ['bigint(10)'],
             ['bigint'],
         ];
     }

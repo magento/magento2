@@ -9,10 +9,10 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="catalogsearch_recommendations" resource="default" engine="innodb"
            comment="Advanced Search Recommendations">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true" comment="ID"/>
-        <column xsi:type="int" name="query_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="ID"/>
+        <column xsi:type="int" name="query_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Query ID"/>
-        <column xsi:type="int" name="relation_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="relation_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Relation ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>

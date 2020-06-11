@@ -5,8 +5,6 @@
  */
 declare(strict_types=1);
 
-declare(strict_types=1);
-
 return [
     'sku' => 'product-sku',
     '_custom_option_row_title' => 'test row title',
