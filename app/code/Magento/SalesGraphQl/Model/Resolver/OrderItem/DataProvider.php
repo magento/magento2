@@ -149,9 +149,8 @@ class DataProvider
                 'quantity_refunded' => $orderItem->getQtyRefunded(),
                 'quantity_invoiced' => $orderItem->getQtyInvoiced(),
                 'quantity_canceled' => $orderItem->getQtyCanceled(),
-                'quantity_returned' => $orderItem->getQtyReturned(),
+                'quantity_returned' => $orderItem->getQtyReturned()
             ];
-
         }
 
         return $this->orderItemList;
