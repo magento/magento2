@@ -18,7 +18,7 @@ class InvoiceItemTypeResolver implements TypeResolverInterface
     {
         if (isset($data['product_type'])) {
             if ($data['product_type'] == 'bundle') {
-                return 'InvoiceItemBundle';
+                return 'BundleInvoiceItem';
             }
         }
         return 'InvoiceItem';
