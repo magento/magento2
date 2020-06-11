@@ -4,17 +4,17 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Customer\Setup\Patch\Data;
 
 use Magento\Customer\Setup\CustomerSetupFactory;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
- * Class UpdateCustomerAttributeInputFilters
- * @package Magento\Customer\Setup\Patch
+ * Update attribute input filters for customer
  */
 class UpdateCustomerAttributeInputFilters implements DataPatchInterface, PatchVersionInterface
 {
@@ -29,7 +29,6 @@ class UpdateCustomerAttributeInputFilters implements DataPatchInterface, PatchVe
     private $customerSetupFactory;
 
     /**
-     * UpdateCustomerAttributeInputFilters constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param CustomerSetupFactory $customerSetupFactory
      */

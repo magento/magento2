@@ -4,18 +4,18 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Customer\Setup\Patch\Data;
 
 use Magento\Customer\Setup\CustomerSetupFactory;
 use Magento\Framework\Encryption\Encryptor;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
- * Class UpgradePasswordHashAndAddress
- * @package Magento\Customer\Setup\Patch
+ * Update passwordHash and address
  */
 class UpgradePasswordHashAndAddress implements DataPatchInterface, PatchVersionInterface
 {
@@ -30,7 +30,6 @@ class UpgradePasswordHashAndAddress implements DataPatchInterface, PatchVersionI
     private $customerSetupFactory;
 
     /**
-     * UpgradePasswordHashAndAddress constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param CustomerSetupFactory $customerSetupFactory
      */

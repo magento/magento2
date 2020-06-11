@@ -4,18 +4,18 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Customer\Setup\Patch\Data;
 
 use Magento\Customer\Model\Customer;
 use Magento\Customer\Setup\CustomerSetupFactory;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
- * Class AddSecurityTrackingAttributes
- * @package Magento\Customer\Setup\Patch
+ * Class add security tracking attributes to customer
  */
 class AddSecurityTrackingAttributes implements DataPatchInterface, PatchVersionInterface
 {
@@ -30,7 +30,6 @@ class AddSecurityTrackingAttributes implements DataPatchInterface, PatchVersionI
     private $customerSetupFactory;
 
     /**
-     * AddSecurityTrackingAttributes constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param CustomerSetupFactory $customerSetupFactory
      */
