@@ -30,7 +30,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaContentCatalog\Model\ResourceModel\GetCustomAttributesContent">
+    <type name="Magento\MediaContentApi\Model\GetCustomAttributesContent">
         <arguments>
             <argument name="excludedFields" xsi:type="array">
                 <item name="description" xsi:type="string">description</item>

@@ -5,14 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaContentCatalog\Model\ResourceModel;
+namespace Magento\MediaContentApi\Model;
 
 use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Framework\App\ResourceConnection;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
 use Magento\Eav\Model\Config;
-use Magento\MediaContentApi\Model\GetCustomAttributesContentInterface;
 
 /**
  * Get concatenated content from custom attributes for all store views

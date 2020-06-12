@@ -65,7 +65,7 @@ class Product implements ObserverInterface
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         array $fields
     ) {
-        $this->getCustomAttributesContents = $getCustomAttributesContent;
+        $this->getCustomAttributesContent = $getCustomAttributesContent;
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getContent = $getContent;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
@@ -118,7 +118,7 @@ class Product implements ObserverInterface
             $contentIdentity,
             implode(
                 PHP_EOL,
-                $this->getCustomAttributesContents->execute(self::CONTENT_TYPE, (int) $entityId)
+                $this->getCustomAttributesContent->execute(self::CONTENT_TYPE, (int) $entityId)
             )
         );
     }
