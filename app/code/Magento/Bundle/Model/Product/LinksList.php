@@ -39,6 +39,8 @@ class LinksList
     }
 
     /**
+     * Bundle Product Items Data
+     * 
      * @param \Magento\Catalog\Api\Data\ProductInterface $product
      * @param int $optionId
      * @return \Magento\Bundle\Api\Data\LinkInterface[]
