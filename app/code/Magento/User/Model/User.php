@@ -68,7 +68,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * Tag to use for user assigned role caching.
      */
-    const CACHE_TAG = 'user_assigned_role';
+    private const CACHE_TAG = 'user_assigned_role';
 
     /**
      * Model event prefix

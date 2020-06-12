@@ -38,7 +38,7 @@ class Role extends \Magento\Framework\Model\AbstractModel
     /**
      * @var string
      */
-    protected $_cacheTag = User::CACHE_TAG;
+    protected $_cacheTag = 'user_assigned_role';
 
     /**
      * @param \Magento\Framework\Model\Context $context
