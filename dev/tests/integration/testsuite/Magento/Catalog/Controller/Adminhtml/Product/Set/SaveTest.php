@@ -224,6 +224,7 @@ class SaveTest extends AbstractBackendController
      */
     public function testRemoveAttributeFromAttributeSet(): void
     {
+        $this->markTestSkipped('ECP-739');
         $message = 'Attempt to load value of nonexistent EAV attribute';
         $this->removeSyslog();
         $attributeSet = $this->getAttributeSetByName('new_attribute_set');

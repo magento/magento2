@@ -28,10 +28,21 @@ class SetupApplication extends Application
     protected $canInstallSequence = false;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function run()
     {
+        // phpcs:ignore Magento2.Exceptions.DirectThrow
         throw new \Exception("Can't start application.");
+    }
+
+    /**
+     * Create dynamic tables
+     *
+     * @return null
+     */
+    protected function createDynamicTables()
+    {
+        return null;
     }
 }
