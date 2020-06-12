@@ -13,6 +13,7 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
+use Magento\MediaContentApi\Model\GetCustomAttributesContentInterface;
 
 /**
  * Observe the catalog_product_save_after event and run processing relation between product content and media asset
@@ -23,6 +24,7 @@ class Product implements ObserverInterface
     private const TYPE = 'entityType';
     private const ENTITY_ID = 'entityId';
     private const FIELD = 'field';
+    private const CUSTOM_ATTRIBUTES_FIELD = 'product_custom_attribute';
 
     /**
      * @var UpdateContentAssetLinksInterface
@@ -45,19 +47,25 @@ class Product implements ObserverInterface
     private $getContent;
 
     /**
-     * * Create links for product content
-     *
+     * @var GetCustomAttributesContentInterface
+     */
+    private $getCustomAttributesContent;
+    
+    /**
+     * @param GetCustomAttributesContentInterface $getCustomAttributesContent
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetEntityContentsInterface $getContent
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
      * @param array $fields
      */
     public function __construct(
+        GetCustomAttributesContentInterface $getCustomAttributesContent,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         GetEntityContentsInterface $getContent,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         array $fields
     ) {
+        $this->getCustomAttributesContents = $getCustomAttributesContent;
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getContent = $getContent;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
@@ -74,6 +82,7 @@ class Product implements ObserverInterface
     {
         $model = $observer->getEvent()->getData('product');
         if ($model instanceof CatalogProduct) {
+            $this->updateCustomAttributes((int) $model->getEntityId());
             foreach ($this->fields as $field) {
                 if (!$model->dataHasChangedFor($field)) {
                     continue;
@@ -89,5 +98,28 @@ class Product implements ObserverInterface
                 $this->updateContentAssetLinks->execute($contentIdentity, $concatenatedContent);
             }
         }
+    }
+    
+    /**
+     * Update custom product attributes fields.
+     *
+     * @param int $entityId
+     */
+    private function updateCustomAttributes(int $entityId): void
+    {
+        $contentIdentity = $this->contentIdentityFactory->create(
+            [
+                    self::TYPE => self::CONTENT_TYPE,
+                    self::FIELD => self::CUSTOM_ATTRIBUTES_FIELD,
+                    self::ENTITY_ID => $entityId
+                ]
+        );
+        $this->updateContentAssetLinks->execute(
+            $contentIdentity,
+            implode(
+                PHP_EOL,
+                $this->getCustomAttributesContents->execute(self::CONTENT_TYPE, (int) $entityId)
+            )
+        );
     }
 }
