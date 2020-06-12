@@ -98,4 +98,6 @@
             <argument name="queryComplexity" xsi:type="number">300</argument>
         </arguments>
     </type>
+
+    <preference for="Magento\GraphQl\Model\Cors\ConfigurationInterface" type="Magento\GraphQl\Model\Cors\Configuration" />
 </config>
