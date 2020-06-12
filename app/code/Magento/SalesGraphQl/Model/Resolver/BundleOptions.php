@@ -85,7 +85,9 @@ class BundleOptions implements ResolverInterface
     /**
      * Format bundle options and values from a parent bundle order item
      *
-     * @param ExtensibleDataInterface $item
+     * @param OrderItemInterface $item
+     * @param Order|null $order
+     * @param array|null $lineItemToOrderItemMap
      * @return array
      */
     private function getBundleOptions(
@@ -96,35 +98,57 @@ class BundleOptions implements ResolverInterface
         $bundleOptions = [];
         if ($item->getProductType() === 'bundle') {
             $options = $item->getProductOptions();
-            if (isset($options['bundle_options'])) {
-                //loop through options
-                foreach ($options['bundle_options'] as $bundleOptionKey => $bundleOption) {
-                    $bundleOptions[$bundleOptionKey]['label'] = $bundleOption['label'] ?? '';
-                    $bundleOptions[$bundleOptionKey]['id'] = isset($bundleOption['option_id']) ?
-                        base64_encode($bundleOption['option_id']) : null;
-                    $bundleOptions[$bundleOptionKey]['items'] = [];
-                    foreach ($bundleOption['value'] ?? [] as $bundleOptionValueKey => $bundleOptionValue) {
-                        // Find the item assign to the option
-                        /** @var OrderItemInterface $childrenOrderItem */
-                        foreach ($item->getChildrenItems() ?? [] as $childrenOrderItem) {
-                            $childOrderItemOptions = $childrenOrderItem->getProductOptions();
-                            $bundleChildAttributes = $this->serializer
-                                ->unserialize($childOrderItemOptions['bundle_selection_attributes']);
-                            // Value Id is missing from parent, so we have to match the child to parent option
-                            if (isset($bundleChildAttributes['option_id'])
-                                && $bundleChildAttributes['option_id'] == $bundleOption['option_id']) {
-                                $bundleOptions[$bundleOptionKey]['item_ids'][] = $childrenOrderItem->getItemId();
-                                if ($lineItemToOrderItemMap) {
-                                    $bundleOptions[$bundleOptionKey]['items'][] =
-                                        $lineItemToOrderItemMap[$childrenOrderItem->getItemId()];
-                                }
-                            }
-                        }
-                        $bundleOptions[$bundleOptionKey]['order'] = $order;
+            //loop through options
+            foreach ($options['bundle_options'] ?? [] as $bundleOptionId => $bundleOption) {
+                $bundleOptions[$bundleOptionId]['label'] = $bundleOption['label'] ?? '';
+                $bundleOptions[$bundleOptionId]['id'] = isset($bundleOption['option_id']) ?
+                    base64_encode($bundleOption['option_id']) : null;
+                $optionItems = $this->formatBundleOptionItems(
+                    $item,
+                    $bundleOption,
+                    $lineItemToOrderItemMap
+                );
+                $bundleOptions[$bundleOptionId]['item_ids'] = $optionItems['item_ids'];
+                $bundleOptions[$bundleOptionId]['items'] = $optionItems['items'] ?? [];
+                $bundleOptions[$bundleOptionId]['order'] = $order;
+            }
+        }
+        return $bundleOptions;
+    }
+
+    /**
+     * Format Bundle items
+     *
+     * @param OrderItemInterface $item
+     * @param array $bundleOption
+     * @param array|null $lineItemToOrderItemMap
+     * @return array
+     */
+    private function formatBundleOptionItems(
+        OrderItemInterface $item,
+        array $bundleOption,
+        array $lineItemToOrderItemMap = null
+    ) {
+        $optionItems = [];
+        $optionItems['item_ids'] = [];
+        $optionItems['items'] = [];
+        foreach ($bundleOption['value'] ?? [] as $bundleOptionValueKey => $bundleOptionValue) {
+            // Find the item assign to the option
+            /** @var OrderItemInterface $childrenOrderItem */
+            foreach ($item->getChildrenItems() ?? [] as $childrenOrderItem) {
+                $childOrderItemOptions = $childrenOrderItem->getProductOptions();
+                $bundleChildAttributes = $this->serializer
+                    ->unserialize($childOrderItemOptions['bundle_selection_attributes']);
+                // Value Id is missing from parent, so we have to match the child to parent option
+                if (isset($bundleChildAttributes['option_id'])
+                    && $bundleChildAttributes['option_id'] == $bundleOption['option_id']) {
+                    $optionItems['item_ids'][] = $childrenOrderItem->getItemId();
+                    if ($lineItemToOrderItemMap) {
+                        $optionItems['items'][] = $lineItemToOrderItemMap[$childrenOrderItem->getItemId()];
                     }
                 }
             }
         }
-        return $bundleOptions;
+        return $optionItems;
     }
 }
