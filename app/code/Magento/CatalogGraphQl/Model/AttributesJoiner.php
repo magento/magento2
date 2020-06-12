@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model;
 
 use GraphQL\Language\AST\FieldNode;
+use GraphQL\Language\AST\InlineFragmentNode;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 
 /**
@@ -66,14 +67,42 @@ class AttributesJoiner
             /** @var FieldNode $field */
             foreach ($query as $field) {
                 if ($field->kind === 'InlineFragment') {
-                    continue;
+                    $inlineFragmentFields = $this->addInlineFragmentFields($field);
+                    $selectedFields = array_merge($selectedFields, $inlineFragmentFields);
+                } else {
+                    $selectedFields[] = $field->name->value;
                 }
-                $selectedFields[] = $field->name->value;
             }
             $this->setSelectionsForFieldNode($fieldNode, $selectedFields);
         }
 
         return $this->getFieldNodeSelections($fieldNode);
+    }
+
+    /**
+     * Add fields from inline fragment nodes
+     *
+     * @param InlineFragmentNode $inlineFraggmentField
+     * @param array $inlineFragmentFields
+     * @return string[]
+     */
+    private function addInlineFragmentFields(InlineFragmentNode $inlineFraggmentField, $inlineFragmentFields = [])
+    {
+        $query = $inlineFraggmentField->selectionSet->selections;
+        /** @var FieldNode $field */
+        foreach ($query as $field) {
+            if ($field->kind === 'InlineFragment') {
+                $this->addInlineFragmentFields($field, $inlineFragmentFields);
+            } elseif (isset($field->selectionSet->selections)) {
+                if (is_array($queryFields = $this->getQueryFields($field))) {
+                    $inlineFragmentFields = array_merge($inlineFragmentFields, $queryFields);
+                }
+            } else {
+                $inlineFragmentFields[] = $field->name->value;
+            }
+        }
+
+        return array_unique($inlineFragmentFields);
     }
 
     /**

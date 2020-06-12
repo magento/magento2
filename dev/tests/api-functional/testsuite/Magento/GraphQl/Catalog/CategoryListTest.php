@@ -714,4 +714,31 @@ QUERY;
             $this->assertResponseFields($category['children'][$i], $expectedChild);
         }
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterCategoryInlineFragment()
+    {
+        $query = <<<QUERY
+{
+    categoryList(filters: {ids: {eq: "6"}}){
+        ... on CategoryTree {
+            id
+            name
+            url_key
+            url_path
+            children_count
+            path
+            position
+        }
+    }
+}
+QUERY;
+        $result = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertCount(1, $result['categoryList']);
+        $this->assertEquals($result['categoryList'][0]['name'], 'Category 2');
+        $this->assertEquals($result['categoryList'][0]['url_path'], 'category-2');
+    }
 }
