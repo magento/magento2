@@ -15,7 +15,6 @@
         <arguments>
             <argument name="option" type="string"/>
             <argument name="price" type="string"/>
-            <argument name="specialPrice" defaultValue="specialProductPrice"/>
         </arguments>
 
         <selectOption userInput="{{option}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOptionWithSpecialPrice"/>

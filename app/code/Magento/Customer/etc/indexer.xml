@@ -41,6 +41,7 @@
             <field name="postcode" xsi:type="searchable" dataType="varchar"/>
             <field name="country_id" xsi:type="filterable" dataType="varchar"/>
             <field name="region" xsi:type="searchable" dataType="varchar"/>
+            <field name="region_id" xsi:type="filterable" dataType="int"/>
             <field name="street" xsi:type="searchable" dataType="varchar"/>
             <field name="city" xsi:type="searchable" dataType="varchar"/>
             <field name="fax" xsi:type="searchable" dataType="varchar"/>
