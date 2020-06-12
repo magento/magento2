@@ -10,24 +10,29 @@ namespace Magento\CatalogGraphQl\Model;
 use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**
- * {@inheritdoc}
+ * @inheritdoc
  */
 class ProductLinksTypeResolver implements TypeResolverInterface
 {
+    /**
+     * GraphQL type of product links
+     */
+    public const PRODUCT_LINKS_TYPE = 'ProductLinks';
+
     /**
      * @var string[]
      */
     private $linkTypes = ['related', 'upsell', 'crosssell'];
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
-    public function resolveType(array $data) : string
+    public function resolveType(array $data): string
     {
         if (isset($data['link_type'])) {
             $linkType = $data['link_type'];
             if (in_array($linkType, $this->linkTypes)) {
-                return 'ProductLinks';
+                return self::PRODUCT_LINKS_TYPE;
             }
         }
         return '';
