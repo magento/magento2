@@ -15,11 +15,6 @@ use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 class ProductLinksTypeResolver implements TypeResolverInterface
 {
     /**
-     * GraphQL type of product links
-     */
-    public const PRODUCT_LINKS_TYPE = 'ProductLinks';
-
-    /**
      * @var string[]
      */
     private $linkTypes = ['related', 'upsell', 'crosssell'];
@@ -32,7 +27,7 @@ class ProductLinksTypeResolver implements TypeResolverInterface
         if (isset($data['link_type'])) {
             $linkType = $data['link_type'];
             if (in_array($linkType, $this->linkTypes)) {
-                return self::PRODUCT_LINKS_TYPE;
+                return 'ProductLinks';
             }
         }
         return '';
