@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Observer;
 
-use Magento\Catalog\Model\Indexer\Category\Flat\State as FlatState;
 use Magento\Catalog\Model\Indexer\Category\Product\Processor;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
@@ -23,18 +22,11 @@ class CategoryProductIndexer implements ObserverInterface
     private $processor;
 
     /**
-     * @var FlatState
-     */
-    private $flatState;
-
-    /**
      * @param Processor $processor
-     * @param FlatState $flatState
      */
-    public function __construct(Processor $processor, FlatState $flatState)
+    public function __construct(Processor $processor)
     {
         $this->processor = $processor;
-        $this->flatState = $flatState;
     }
 
     /**
@@ -43,7 +35,7 @@ class CategoryProductIndexer implements ObserverInterface
     public function execute(Observer $observer): void
     {
         $productIds = $observer->getEvent()->getProductIds();
-        if (!empty($productIds) && $this->processor->isIndexerScheduled() && $this->flatState->isFlatEnabled()) {
+        if (!empty($productIds) && $this->processor->isIndexerScheduled()) {
             $this->processor->markIndexerAsInvalid();
         }
     }

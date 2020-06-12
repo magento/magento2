@@ -974,6 +974,17 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getCacheTags()
+    {
+        $identities = $this->getIdentities();
+        $cacheTags = !empty($identities) ? (array) $identities : parent::getCacheTags();
+
+        return $cacheTags;
+    }
+
+    /**
      * Set quantity for product
      *
      * @param float $qty
