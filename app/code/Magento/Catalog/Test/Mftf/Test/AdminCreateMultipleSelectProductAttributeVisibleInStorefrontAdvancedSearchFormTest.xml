@@ -87,7 +87,9 @@
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSuccessMessage"/>
 
         <!-- Flash cache -->
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!-- Go to store's advanced catalog search page -->
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroup"/>

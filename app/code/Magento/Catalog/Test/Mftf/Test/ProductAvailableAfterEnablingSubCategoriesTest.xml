@@ -50,7 +50,9 @@
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="seeSuccessMessage"/>
 
         <!--Run re-index task-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryStorefront"/>
         <waitForPageLoad stepKey="waitForCategoryStorefrontPage"/>
