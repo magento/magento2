@@ -41,17 +41,26 @@
             <!--Flush cache-->
             <magentoCLI command="cache:flush" stepKey="cleanCache2"/>
         </after>
+
         <!-- 1. Log in to Admin -->
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
         <!-- 2. Open Marketing - SEO & Search - URL Rewrites -->
-        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="amOnUrlRewriteIndexPage"/>
-        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
-        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="inputProductName"/>
-        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="seeProducturl"/>
-        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', $simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html)}}" stepKey="dontSeeCategoryProducturlKey"/>
-        <amOnPage url="/$simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html" stepKey="navigateToProductPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProductName"/>
+        <actionGroup ref="AdminSearchUrlRewriteByRequestPathActionGroup" stepKey="searchingUrlRewrite">
+            <argument name="requestPath" value="$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathInUrlRewriteGrigActionGroup" stepKey="seeProductUrlInGrid">
+            <argument name="requestPath" value="$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathIsNotFoundInUrlRewriteGrigActionGroup" stepKey="categoryProductUrlIsNotShown">
+            <argument name="requestPath" value="$simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+
+        <!-- 3. Assert the Redirect works and Product is present on StoreFront-->
+        <actionGroup ref="AssertStorefrontProductRedirectActionGroup" stepKey="verifyProductInStoreFrontPage">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+            <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
+            <argument name="productRequestPath" value="/$simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
     </test>
 </tests>
