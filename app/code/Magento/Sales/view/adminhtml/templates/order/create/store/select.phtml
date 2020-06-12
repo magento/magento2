@@ -51,14 +51,14 @@
                                 <div class="admin__field admin__field-option">
                                     <input type="radio"
                                            id="store_<?= (int) $_store->getId() ?>" class="admin__control-radio"/>
+                                    <label class="admin__field-label" for="store_<?= (int) $_store->getId() ?>">
+                                        <?= $block->escapeHtml($_store->getName()) ?>
+                                    </label>
                                     <?= /* @noEscape*/ $secureRenderer->renderEventListenerAsTag(
                                         'onclick',
                                         "order.setStoreId('" .  (int)$_store->getId() . "')",
                                         'input#store_' . (int)$_store->getId()
                                     ) ?>
-                                    <label class="admin__field-label" for="store_<?= (int) $_store->getId() ?>">
-                                        <?= $block->escapeHtml($_store->getName()) ?>
-                                    </label>
                                 </div>
                             </div>
                         </div>
