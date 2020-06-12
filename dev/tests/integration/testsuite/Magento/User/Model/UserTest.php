@@ -332,7 +332,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $this->assertArrayHasKey('role_id', $role[0]);
         $roles = $this->_model->getRoles();
         $this->_model->setRoleId(reset($roles))->deleteFromRole();
-        $this->cache->clean([\Magento\Backend\Block\Menu::CACHE_TAGS]);
+        $this->cache->clean([UserModel::CACHE_TAG]);
         $this->assertEmpty($this->_model->hasAssigned2Role($this->_model));
     }
 

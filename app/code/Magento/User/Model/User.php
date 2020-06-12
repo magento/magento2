@@ -66,6 +66,11 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     const MESSAGE_ID_PASSWORD_EXPIRED = 'magento_user_password_expired';
 
     /**
+     * Tag to use for user assigned role caching.
+     */
+    const CACHE_TAG = 'user_assigned_role';
+
+    /**
      * Model event prefix
      *
      * @var string
@@ -150,9 +155,12 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     private $deploymentConfig;
 
     /**
-     * @var string
+     * @var array
      */
-    protected $_cacheTag = \Magento\Backend\Block\Menu::CACHE_TAGS;
+    protected $_cacheTag = [
+        \Magento\Backend\Block\Menu::CACHE_TAGS,
+        self::CACHE_TAG,
+    ];
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -703,7 +711,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
             $this->_cacheManager->save(
                 $this->serializer->serialize($data),
                 'assigned_role_' . $userId,
-                [\Magento\Backend\Block\Menu::CACHE_TAGS]
+                [self::CACHE_TAG]
             );
         } else {
             $data = $this->serializer->unserialize($data);

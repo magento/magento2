@@ -5,6 +5,8 @@
  */
 namespace Magento\Authorization\Model;
 
+use Magento\User\Model\User;
+
 /**
  * Admin Role Model
  *
@@ -32,6 +34,11 @@ class Role extends \Magento\Framework\Model\AbstractModel
      * @var string
      */
     protected $_eventPrefix = 'authorization_roles';
+
+    /**
+     * @var string
+     */
+    protected $_cacheTag = User::CACHE_TAG;
 
     /**
      * @param \Magento\Framework\Model\Context $context
