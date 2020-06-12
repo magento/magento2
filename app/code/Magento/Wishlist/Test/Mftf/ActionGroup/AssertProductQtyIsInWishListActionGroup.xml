@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertProductQtyIsInWishListActionGroup">
+        <annotations>
+            <description>Assert Product with Quantity is in wishlist.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string"/>
+            <argument name="productQty" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{StorefrontCustomerWishlistPage.url}}" stepKey="goToWishList"/>
+        <waitForPageLoad stepKey="waitForWishList"/>
+        <waitForElement selector="{{StorefrontCustomerWishlistProductSection.ProductTitleByName(productName)}}" time="30" stepKey="assertProductName"/>
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName(productName)}}" stepKey="moveMouseOverProductInfo"/>
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductAddToCartByName(productName)}}" stepKey="seeAddToCart"/>
+        <seeElement selector="{{StorefrontCustomerWishlistProductSection.ProductQuantity(productName)}}" stepKey="seeQtyValue"/>
+        <grabValueFrom selector="{{StorefrontCustomerWishlistProductSection.ProductQuantity(productName)}}" stepKey="grabProductsQty"/>
+        <assertEquals stepKey="assertProductQty">
+            <expectedResult type="string">{{productQty}}</expectedResult>
+            <actualResult type="string">$grabProductsQty</actualResult>
+        </assertEquals>
+
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddProductWithQuantityToWishlistTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="Add to wishlist with qty"/>
+            <title value="Add Product with Quantity to wishlist"/>
+            <description value="Add Product with Quantity to wishlist and verify that Product QTY present in wishlist."/>
+            <severity value="AVERAGE"/>
+            <group value="Wishlist"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.sku$$)}}" stepKey="openProductPage"/>
+
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistWithQtyActionGroup" stepKey="setQtyAndAddToWishlist">
+            <argument name="productVar" value="$createProduct$"/>
+            <argument name="productQty" value="1.5"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertProductQtyIsInWishListActionGroup" stepKey="assertProductPresentInWishlistWithQty">
+            <argument name="productName" value="$$createProduct.name$$"/>
+            <argument name="productQty" value="1.5"/>
+        </actionGroup>
+
+    </test>
+
+</tests>
