@@ -14,6 +14,7 @@
             <stories value="Bundle product validation before add to cart"/>
             <title value="Customer should be able to see only one validation message for checkbox option group"/>
             <description value="Customer should be able to see only one validation message for checkbox option group"/>
+            <testCaseId value="MC-35133"/>
             <severity value="MINOR"/>
             <group value="Bundle"/>
         </annotations>
