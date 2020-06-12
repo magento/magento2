@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaContentApi\Model;
+namespace Magento\MediaContentCatalog\Model\ResourceModel;
 
 use Magento\Catalog\Model\ResourceModel\Product;
 use Magento\Framework\App\ResourceConnection;
@@ -16,10 +16,11 @@ use Magento\Eav\Model\Config;
 /**
  * Get concatenated content from custom attributes for all store views
  */
-class GetCustomAttributesContent implements GetCustomAttributesContentInterface
+class GetCustomAttributesContent implements GetEntityContentsInterface
 {
     private const EDITOR_FIELD = 'text';
     private const TEXT_ATTRIBUTE_TABLE = 'catalog_product_entity_text';
+    private const CONTENT_TYPE = 'catalog_product';
     
     /**
      * @var Config
@@ -62,12 +63,11 @@ class GetCustomAttributesContent implements GetCustomAttributesContentInterface
     /**
      * Get product custom attributes content for all store views
      *
-     * @param string $entityType
-     * @param int $entityId
+     * @param ContentIdentityInterface $contentIdentity
      */
-    public function execute(string $entityType, int $entityId): array
+    public function execute(ContentIdentityInterface $contentIdentity): array
     {
-        $attributes = $this->config->getEntityAttributes($entityType);
+        $attributes = $this->config->getEntityAttributes(self::CONTENT_TYPE);
         $attributesId = [];
 
         foreach ($attributes as $attribute) {
@@ -88,7 +88,7 @@ class GetCustomAttributesContent implements GetCustomAttributesContentInterface
                 $attributesId
             )->where(
                 $connection->quoteIdentifier('abt.' . $attribute->getEntityIdField()) . ' = ?',
-                $entityId
+                $contentIdentity->getEntityId()
             )->distinct(true);
 
             return $connection->fetchCol($select);

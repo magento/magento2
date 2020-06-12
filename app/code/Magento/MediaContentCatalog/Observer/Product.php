@@ -13,7 +13,6 @@ use Magento\Framework\Event\ObserverInterface;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
-use Magento\MediaContentApi\Model\GetCustomAttributesContentInterface;
 
 /**
  * Observe the catalog_product_save_after event and run processing relation between product content and media asset
@@ -24,7 +23,8 @@ class Product implements ObserverInterface
     private const TYPE = 'entityType';
     private const ENTITY_ID = 'entityId';
     private const FIELD = 'field';
-    private const CUSTOM_ATTRIBUTES_FIELD = 'product_custom_attribute';
+    private const CUSTOM_ATTRIBUTES_FIELD = 'custom_attributes';
+    private const CUSTOM_ATTRIBUTES_CONTENT_TYPE = 'catalog_product_custom_attributes';
 
     /**
      * @var UpdateContentAssetLinksInterface
@@ -47,25 +47,17 @@ class Product implements ObserverInterface
     private $getContent;
 
     /**
-     * @var GetCustomAttributesContentInterface
-     */
-    private $getCustomAttributesContent;
-    
-    /**
-     * @param GetCustomAttributesContentInterface $getCustomAttributesContent
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param GetEntityContentsInterface $getContent
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
      * @param array $fields
      */
     public function __construct(
-        GetCustomAttributesContentInterface $getCustomAttributesContent,
         ContentIdentityInterfaceFactory $contentIdentityFactory,
         GetEntityContentsInterface $getContent,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         array $fields
     ) {
-        $this->getCustomAttributesContent = $getCustomAttributesContent;
         $this->contentIdentityFactory = $contentIdentityFactory;
         $this->getContent = $getContent;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
@@ -82,14 +74,13 @@ class Product implements ObserverInterface
     {
         $model = $observer->getEvent()->getData('product');
         if ($model instanceof CatalogProduct) {
-            $this->updateCustomAttributes((int) $model->getEntityId());
             foreach ($this->fields as $field) {
-                if (!$model->dataHasChangedFor($field)) {
+                if ($field !== self::CUSTOM_ATTRIBUTES_FIELD && !$model->dataHasChangedFor($field)) {
                     continue;
                 }
                 $contentIdentity = $this->contentIdentityFactory->create(
                     [
-                        self::TYPE => self::CONTENT_TYPE,
+                        self::TYPE => $this->getEntityType($field),
                         self::FIELD => $field,
                         self::ENTITY_ID => (string) $model->getEntityId(),
                     ]
@@ -99,27 +90,16 @@ class Product implements ObserverInterface
             }
         }
     }
-    
+
     /**
-     * Update custom product attributes fields.
+     * Return content_type by field
      *
-     * @param int $entityId
+     * @param string $field
      */
-    private function updateCustomAttributes(int $entityId): void
+    private function getEntityType(string $field): string
     {
-        $contentIdentity = $this->contentIdentityFactory->create(
-            [
-                    self::TYPE => self::CONTENT_TYPE,
-                    self::FIELD => self::CUSTOM_ATTRIBUTES_FIELD,
-                    self::ENTITY_ID => $entityId
-                ]
-        );
-        $this->updateContentAssetLinks->execute(
-            $contentIdentity,
-            implode(
-                PHP_EOL,
-                $this->getCustomAttributesContent->execute(self::CONTENT_TYPE, (int) $entityId)
-            )
-        );
+        return $field === self::CUSTOM_ATTRIBUTES_FIELD ?
+                      self::CUSTOM_ATTRIBUTES_CONTENT_TYPE :
+                      self::CONTENT_TYPE;
     }
 }

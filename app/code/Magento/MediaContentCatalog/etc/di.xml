@@ -10,6 +10,7 @@
         <arguments>
             <argument name="items" xsi:type="array">
                 <item name="catalog_product" xsi:type="object">Magento\MediaContentCatalog\Model\ResourceModel\GetEntityContent</item>
+                 <item name="catalog_product_custom_attributes" xsi:type="object">Magento\MediaContentCatalog\Model\ResourceModel\GetCustomAttributesContent</item>
                 <item name="catalog_category" xsi:type="object">Magento\MediaContentCatalog\Model\ResourceModel\GetEntityContent</item>
             </argument>
         </arguments>
@@ -27,10 +28,11 @@
             <argument name="fields" xsi:type="array">
                 <item name="description" xsi:type="string">description</item>
                 <item name="short_description" xsi:type="string">short_description</item>
+                <item name="custom_attributes" xsi:type="string">custom_attributes</item> 
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaContentApi\Model\GetCustomAttributesContent">
+    <type name="Magento\MediaContentCatalog\Model\ResourceModel\GetCustomAttributesContent">
         <arguments>
             <argument name="excludedFields" xsi:type="array">
                 <item name="description" xsi:type="string">description</item>
