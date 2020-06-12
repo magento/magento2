@@ -72,11 +72,13 @@
         <click selector="{{AdminUpdateAttributesSection.saveButton}}" stepKey="clickSave"/>
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeSaveSuccess"/>
 
-        <!-- Run cron twice -->
-        <magentoCLI command="cron:run" stepKey="runCron1"/>
-        <magentoCLI command="cron:run" stepKey="runCron2"/>
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitFormToReload1"/>
+        <!-- Start message queue -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueueConsumer">
+            <argument name="consumerName" value="{{AdminProductAttributeWebsiteUpdateConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminProductAttributeWebsiteUpdateConsumerData.messageLimit}}"/>
+        </actionGroup>
+        <!-- Run cron -->
+        <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
 
         <!--Got to Store front product page and check url-->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.sku$$-new)}}" stepKey="navigateToSimpleProductPage"/>
