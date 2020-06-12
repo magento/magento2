@@ -167,6 +167,12 @@ class MinifierTest extends TestCase
             <?php // echo \$block->getChildHtml('anotherChildBlock'); ?>
         <?php // endif; ?>
     </body>
+    <?php
+    \$sometext = <<<SOMETEXT
+    mytext
+    mytextline2
+SOMETEXT;
+    ?>
 </html>
 TEXT;
 
@@ -189,7 +195,10 @@ TEXT;
                 }
             });
             //]]>
-</script><?php echo "http://some.link.com/" ?> <?php echo "//some.link.com/" ?> <?php echo '//some.link.com/' ?> <em>inline text</em> <a href="http://www.<?php echo 'hi' ?>"></a> <?php ?> <?php echo \$block->getChildHtml('someChildBlock'); ?> <?php ?> <?php ?> <?php ?></body></html>
+</script><?php echo "http://some.link.com/" ?> <?php echo "//some.link.com/" ?> <?php echo '//some.link.com/' ?> <em>inline text</em> <a href="http://www.<?php echo 'hi' ?>"></a> <?php ?> <?php echo \$block->getChildHtml('someChildBlock'); ?> <?php ?> <?php ?> <?php ?></body><?php \$sometext = <<<SOMETEXT
+    mytext
+    mytextline2
+SOMETEXT; ?></html>
 TEXT;
 
         $this->appDirectoryMock->expects($this->once())
