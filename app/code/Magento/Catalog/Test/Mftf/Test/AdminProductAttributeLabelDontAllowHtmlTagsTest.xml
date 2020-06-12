@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductAttributeLabelDontAllowHtmlTagsTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product Attribute label must not contain HTML tags"/>
+            <title value="Product Attribute label musts not contain HTML tags"/>
+            <description value="Test whenever HTML tags are allowed for a product attribute label"/>
+            <severity value="CRITICAL"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+        </after>
+
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="openProductAttributePage"/>
+
+        <actionGroup ref="AdminFillProductAttributePropertiesActionGroup" stepKey="fillAttributeDefaultLabel">
+            <argument name="attributeName" value="{{productAttributeWithHtmlTagsInLabel.default_label}}"/>
+            <argument name="attributeType" value="{{productAttributeWithHtmlTagsInLabel.frontend_input}}" />
+        </actionGroup>
+
+        <actionGroup ref="AdminProductAttributePageSwitchTabActionGroup" stepKey="makeManageLabelsTabActive">
+            <argument name="tabName" value="Manage Labels"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminFillProductAttributeDefaultStoreViewActionGroup" stepKey="fillAttributeDefaultStoreViewLabel">
+            <argument name="value" value="{{productAttributeWithHtmlTagsInLabel.default_store_label}}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminSaveProductAttributeActionGroup" stepKey="saveAttribute"/>
+
+        <actionGroup ref="AssertSeeProductAttributeValidationErrorOnManageLabelsTabActionGroup" stepKey="validateAttributeStoreViewLabelForHtmlTags">
+            <argument name="message" value="HTML tags are not allowed"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminProductAttributePageSwitchTabActionGroup" stepKey="makePropertiesTabActive">
+            <argument name="tabName" value="Properties"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertSeeProductAttributeValidationErrorOnPropertiesTabActionGroup" stepKey="validateAttributeLabelForHtmlTags">
+            <argument name="message" value="HTML tags are not allowed"/>
+        </actionGroup>
+    </test>
+</tests>

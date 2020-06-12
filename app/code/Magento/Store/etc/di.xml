@@ -63,9 +63,11 @@
     </type>
     <preference for="Magento\Framework\App\ScopeResolverInterface" type="Magento\Store\Model\Resolver\Store" />
     <preference for="Magento\Framework\App\Router\PathConfigInterface" type="Magento\Store\Model\PathConfig" />
-    <type name="Magento\Framework\App\Action\AbstractAction">
-        <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck" sortOrder="10"/>
-        <plugin name="designLoader" type="Magento\Framework\App\Action\Plugin\Design" />
+    <type name="Magento\Framework\App\ActionInterface">
+        <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck"/>
+        <plugin name="designLoader" type="Magento\Framework\App\Action\Plugin\LoadDesignPlugin"/>
+        <plugin name="eventDispatch"  type="Magento\Framework\App\Action\Plugin\EventDispatchPlugin"/>
+        <plugin name="actionFlagNoDispatch"  type="Magento\Framework\App\Action\Plugin\ActionFlagNoDispatchPlugin"/>
     </type>
     <type name="Magento\Framework\Url\SecurityInfo">
         <plugin name="storeUrlSecurityInfo" type="Magento\Store\Url\Plugin\SecurityInfo"/>

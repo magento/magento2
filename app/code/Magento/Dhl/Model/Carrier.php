@@ -704,7 +704,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         $contentType = $this->getConfigData('content_type');
         $dhlProducts = $this->getDhlProducts($contentType);
 
-        return isset($dhlProducts[$code]) ? $dhlProducts[$code] : false;
+        return $dhlProducts[$code] ?? false;
     }
 
     /**
@@ -1373,7 +1373,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
         if (isset($this->_countryParams->{$countryCode})) {
             $countryParams = new \Magento\Framework\DataObject($this->_countryParams->{$countryCode}->asArray());
         }
-        return isset($countryParams) ? $countryParams : new \Magento\Framework\DataObject();
+        return $countryParams ?? new \Magento\Framework\DataObject();
     }
 
     /**

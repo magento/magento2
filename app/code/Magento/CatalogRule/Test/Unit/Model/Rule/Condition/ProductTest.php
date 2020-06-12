@@ -3,49 +3,52 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\CatalogRule\Test\Unit\Model\Rule\Condition;
 
+use Magento\Catalog\Model\ProductCategoryList;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\CatalogRule\Model\Rule\Condition\Product;
+use Magento\Eav\Model\Config;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ProductTest extends \PHPUnit\Framework\TestCase
+class ProductTest extends TestCase
 {
-    /** @var \Magento\CatalogRule\Model\Rule\Condition\Product */
+    /** @var Product */
     protected $product;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Eav\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Config|MockObject */
     protected $config;
 
-    /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\Product|MockObject */
     protected $productModel;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Product|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Catalog\Model\ResourceModel\Product|MockObject */
     protected $productResource;
 
-    /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Attribute|MockObject */
     protected $eavAttributeResource;
 
-    /** @var \Magento\Catalog\Model\ProductCategoryList|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ProductCategoryList|MockObject */
     private $productCategoryList;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->config = $this->createPartialMock(\Magento\Eav\Model\Config::class, ['getAttribute']);
-        $this->productModel = $this->createPartialMock(\Magento\Catalog\Model\Product::class, [
-                '__wakeup',
-                'hasData',
-                'getData',
-                'getId',
-                'getStoreId',
-                'getResource',
-                'addAttributeToSelect',
-                'getAttributesByCode'
-            ]);
+        $this->config = $this->createPartialMock(Config::class, ['getAttribute']);
+        $this->productModel = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+            ->addMethods(['addAttributeToSelect', 'getAttributesByCode'])
+            ->onlyMethods(['__wakeup', 'hasData', 'getData', 'getId', 'getStoreId', 'getResource'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->productCategoryList = $this->getMockBuilder(\Magento\Catalog\Model\ProductCategoryList::class)
+        $this->productCategoryList = $this->getMockBuilder(ProductCategoryList::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -54,37 +57,35 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->eavAttributeResource = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class,
-            [
+        $this->eavAttributeResource = $this->getMockBuilder(Attribute::class)
+            ->addMethods(['getFrontendLabel', 'getAttributesByCode'])
+            ->onlyMethods([
                 '__wakeup',
                 'isAllowedForRuleCondition',
                 'getDataUsingMethod',
                 'getAttributeCode',
-                'getFrontendLabel',
                 'isScopeGlobal',
                 'getBackendType',
-                'getFrontendInput',
-                'getAttributesByCode'
-            ]
-        );
+                'getFrontendInput'
+            ])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->productResource->expects($this->any())->method('loadAllAttributes')
-            ->will($this->returnSelf());
+        $this->productResource->expects($this->any())->method('loadAllAttributes')->willReturnSelf();
         $this->productResource->expects($this->any())->method('getAttributesByCode')
-            ->will($this->returnValue([$this->eavAttributeResource]));
+            ->willReturn([$this->eavAttributeResource]);
         $this->eavAttributeResource->expects($this->any())->method('isAllowedForRuleCondition')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->eavAttributeResource->expects($this->any())->method('getAttributesByCode')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->eavAttributeResource->expects($this->any())->method('getAttributeCode')
-            ->will($this->returnValue('1'));
+            ->willReturn('1');
         $this->eavAttributeResource->expects($this->any())->method('getFrontendLabel')
-            ->will($this->returnValue('attribute_label'));
+            ->willReturn('attribute_label');
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->product = $this->objectManagerHelper->getObject(
-            \Magento\CatalogRule\Model\Rule\Condition\Product::class,
+            Product::class,
             [
                 'config' => $this->config,
                 'product' => $this->productModel,
@@ -126,28 +127,28 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $this->product->setData('operator', $operator);
 
         $this->config->expects($this->any())->method('getAttribute')
-            ->will($this->returnValue($this->eavAttributeResource));
+            ->willReturn($this->eavAttributeResource);
 
         $this->eavAttributeResource->expects($this->any())->method('isScopeGlobal')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->eavAttributeResource->expects($this->any())->method($input['method'])
-            ->will($this->returnValue($input['type']));
+            ->willReturn($input['type']);
 
         $this->productModel->expects($this->any())->method('hasData')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->productModel->expects($this->at(0))->method('getData')
-            ->will($this->returnValue(['1' => ['1' => $attributeValue]]));
+            ->willReturn(['1' => ['1' => $attributeValue]]);
         $this->productModel->expects($this->any())->method('getData')
-            ->will($this->returnValue($newValue));
+            ->willReturn($newValue);
         $this->productModel->expects($this->any())->method('getId')
-            ->will($this->returnValue('1'));
+            ->willReturn('1');
         $this->productModel->expects($this->once())->method('getStoreId')
-            ->will($this->returnValue('1'));
+            ->willReturn('1');
         $this->productModel->expects($this->any())->method('getResource')
-            ->will($this->returnValue($this->productResource));
+            ->willReturn($this->productResource);
 
         $this->productResource->expects($this->any())->method('getAttribute')
-            ->will($this->returnValue($this->eavAttributeResource));
+            ->willReturn($this->eavAttributeResource);
 
         $this->product->collectValidatedAttributes($this->productModel);
         $this->assertTrue($this->product->validate($this->productModel));

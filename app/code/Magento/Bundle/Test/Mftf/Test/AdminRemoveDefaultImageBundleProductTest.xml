@@ -19,9 +19,10 @@
             <group value="Bundle"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <!-- Delete the bundled product we created in the test body -->

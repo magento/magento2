@@ -4,8 +4,12 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/order.php';
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
+
+$objectManager = Bootstrap::getObjectManager();
 /** @var \Magento\Sales\Model\Order $order */
 $order = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Sales\Model\Order::class);
 $order->loadByIncrementId('100000001');

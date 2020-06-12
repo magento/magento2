@@ -1045,10 +1045,10 @@ class AccountManagement implements AccountManagementInterface
         }
         $customerEmail = $customer->getEmail();
         $this->credentialsValidator->checkPasswordDifferentFromEmail($customerEmail, $newPassword);
+        $this->checkPasswordStrength($newPassword);
         $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
-        $this->checkPasswordStrength($newPassword);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
         $this->destroyCustomerSessions($customer->getId());
         $this->disableAddressValidation($customer);
@@ -1630,6 +1630,7 @@ class AccountManagement implements AccountManagementInterface
      */
     private function destroyCustomerSessions($customerId)
     {
+        $this->sessionManager->regenerateId();
         $sessionLifetime = $this->scopeConfig->getValue(
             \Magento\Framework\Session\Config::XML_PATH_COOKIE_LIFETIME,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE

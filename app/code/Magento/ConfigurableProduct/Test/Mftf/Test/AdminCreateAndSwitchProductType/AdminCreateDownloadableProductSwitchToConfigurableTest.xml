@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateDownloadableProductSwitchToConfigurableTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Product Type Switching"/>
+            <title value="Admin should be able to switch a new product from downloadable to configurable"/>
+            <description value="After selecting a downloadable product when adding Admin should be switch to configurable implicitly"/>
+            <severity value="CRITICAL"/>
+            <useCaseId value="MAGETWO-44165"/>
+            <testCaseId value="MAGETWO-29398"/>
+            <group value="catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="GoToProductCatalogPageActionGroup" stepKey="goToProductCatalogPage"/>
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteConfigurableProduct">
+                <argument name="product" value="_defaultProduct"/>
+            </actionGroup>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetSearch"/>
+            <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+            <deleteData stepKey="deleteAttribute" createDataKey="createConfigProductAttribute"/>
+            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Create configurable product from downloadable product page-->
+        <comment userInput="Create configurable product" stepKey="commentCreateProduct"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+        <!-- Open Dropdown and select downloadable product option -->
+        <comment stepKey="beforeOpenProductFillForm" userInput="Selecting Product from the Add Product Dropdown"/>
+        <actionGroup ref="GoToSpecifiedCreateProductPageActionGroup" stepKey="openProductFillForm">
+            <argument name="productType" value="downloadable"/>
+        </actionGroup>
+        <scrollTo selector="{{AdminProductDownloadableSection.sectionHeader}}" stepKey="scrollToDownloadableInfo"/>
+        <uncheckOption selector="{{AdminProductDownloadableSection.isDownloadableProduct}}" stepKey="checkIsDownloadable"/>
+        <!-- Fill form for Downloadable Product Type -->
+        <comment stepKey="beforeFillProductForm" userInput="Filling Product Form"/>
+        <actionGroup ref="FillMainProductFormActionGroup" stepKey="fillProductForm">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <actionGroup ref="SetProductUrlKeyActionGroup" stepKey="setProductUrl">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <comment before="createConfiguration" stepKey="beforeCreateConfiguration" userInput="Adding Configuration to Product"/>
+        <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="createConfiguration">
+            <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+        </actionGroup>
+        <actionGroup ref="SaveConfiguredProductActionGroup" stepKey="saveProductForm"/>
+        <!-- Check that product was added with implicit type change -->
+        <comment stepKey="beforeVerify" userInput="Verify Product Type Assigned Correctly"/>
+        <actionGroup ref="GoToProductCatalogPageActionGroup" stepKey="goToProductCatalogPage"/>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetSearch"/>
+        <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="searchForProduct">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <see selector="{{AdminProductGridSection.productGridCell('2', 'Type')}}" userInput="Configurable Product" stepKey="seeProductTypeInGrid"/>
+        <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="assertProductInStorefrontProductPage">
+            <argument name="product" value="_defaultProduct"/>
+        </actionGroup>
+        <actionGroup ref="VerifyOptionInProductStorefrontActionGroup" stepKey="verifyConfigurableOption">
+            <argument name="attributeCode" value="$createConfigProductAttribute.default_frontend_label$"/>
+            <argument name="optionName" value="$createConfigProductAttributeOption1.option[store_labels][1][label]$"/>
+        </actionGroup>
+    </test>
+</tests>

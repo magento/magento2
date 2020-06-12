@@ -28,6 +28,9 @@
                     <label>Time of day to send data</label>
                     <frontend_model>Magento\Analytics\Block\Adminhtml\System\Config\CollectionTimeLabel</frontend_model>
                     <backend_model>Magento\Analytics\Model\Config\Backend\CollectionTime</backend_model>
+                    <depends>
+                        <field id="analytics/general/enabled">1</field>
+                    </depends>
                 </field>
                 <field id="vertical" translate="hint label comment" type="select" sortOrder="30" showInDefault="1" showInWebsite="1">
                     <hint>Industry Data</hint>
@@ -36,9 +39,9 @@
                     <source_model>Magento\Analytics\Model\Config\Source\Vertical</source_model>
                     <backend_model>Magento\Analytics\Model\Config\Backend\Vertical</backend_model>
                     <frontend_model>Magento\Analytics\Block\Adminhtml\System\Config\Vertical</frontend_model>
-					<depends>
-						<field id="analytics/general/enabled">1</field>
-					</depends>
+                    <depends>
+                        <field id="analytics/general/enabled">1</field>
+                    </depends>
                 </field>
                 <field id="additional_comment" translate="label comment" type="label" sortOrder="40" showInDefault="1">
                     <label><![CDATA[<strong>Get more insights from Magento Business Intelligence</strong>]]></label>

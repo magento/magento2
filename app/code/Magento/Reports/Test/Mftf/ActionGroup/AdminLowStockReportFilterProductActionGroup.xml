@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminLowStockReportFilterProductActionGroup">
+        <annotations>
+            <description>Filter in "Low Stock" report with by product SKU.</description>
+        </annotations>
+        <arguments>
+            <argument name="sku" type="string" defaultValue="{{_defaultProduct.sku}}"/>
+        </arguments>
+
+        <fillField selector="{{LowStockReportFilterSection.productSku}}" userInput="{{sku}}" stepKey="fillSkuFilterField" />
+        <click selector="{{LowStockReportFilterSection.searchButton}}" stepKey="clickSearch"/>
+    </actionGroup>
+</actionGroups>

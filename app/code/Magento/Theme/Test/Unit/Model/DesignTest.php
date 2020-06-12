@@ -3,16 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test design model
  */
 namespace Magento\Theme\Test\Unit\Model;
 
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\DesignInterface;
 use Magento\Theme\Model\Design;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DesignTest extends \PHPUnit\Framework\TestCase
+class DesignTest extends TestCase
 {
     /**
      * @var Design
@@ -20,53 +30,54 @@ class DesignTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\App\CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CacheInterface|MockObject
      */
     protected $cacheManager;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|MockObject
      */
     protected $localeDate;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime|MockObject
      */
     protected $dateTime;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractResource|MockObject
      */
     protected $resource;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $context = $this->getMockBuilder(\Magento\Framework\Model\Context::class)
+        $context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->localeDate = $this->getMockBuilder(
-            \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class
+            TimezoneInterface::class
         )->getMock();
-        $this->dateTime = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime::class)
+        $this->dateTime = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resource = $this->getMockBuilder(\Magento\Theme\Model\ResourceModel\Design::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cacheManager = $this->getMockBuilder(\Magento\Framework\App\CacheInterface::class)->getMock();
+        $this->cacheManager = $this->getMockBuilder(CacheInterface::class)
+            ->getMock();
 
         $context->expects($this->any())
             ->method('getCacheManager')
             ->willReturn($this->cacheManager);
 
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
             Design::class,
             [
@@ -79,7 +90,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->model = null;
     }
@@ -94,7 +105,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
         $storeId = 1;
         $localDate = '2\28\2000';
         $date = '28-02-2000';
-        $cacheId = 'design_change_' . md5($storeId . $date);
+        $cacheId = 'design_change_' . hash('md5', (string)$storeId . $date);
         $this->localeDate->expects($this->once())
             ->method('scopeTimeStamp')
             ->with($storeId)
@@ -134,7 +145,7 @@ class DesignTest extends \PHPUnit\Framework\TestCase
         $storeId = 1;
         $localDate = '2\28\2000';
         $date = '28-02-2000';
-        $cacheId = 'design_change_' . md5($storeId . $date);
+        $cacheId = 'design_change_' . hash('md5', (string)$storeId . $date);
         $this->localeDate->expects($this->once())
             ->method('scopeTimeStamp')
             ->with($storeId)
@@ -181,7 +192,8 @@ class DesignTest extends \PHPUnit\Framework\TestCase
      */
     public function testChangeDesign()
     {
-        $design = $this->getMockBuilder(\Magento\Framework\View\DesignInterface::class)->getMock();
+        $design = $this->getMockBuilder(DesignInterface::class)
+            ->getMock();
 
         $this->model->setDesign('test');
         /** @var $design \Magento\Framework\View\DesignInterface */

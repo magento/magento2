@@ -51,15 +51,15 @@ class CustomerWishlistResolverTest extends TestCase
     /**
      * Build the Testing Environment
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->getMockBuilder(ContextInterface::class)
             ->setMethods(['getExtensionAttributes', 'getUserId'])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->extensionAttributesMock = $this->getMockBuilder(ContextExtensionInterface::class)
-            ->setMethods(['getIsCustomer'])
-            ->getMock();
+            ->setMethods(['getStore', 'setStore', 'getIsCustomer', 'setIsCustomer'])
+            ->getMockForAbstractClass();
 
         $this->contextMock->method('getExtensionAttributes')
             ->willReturn($this->extensionAttributesMock);

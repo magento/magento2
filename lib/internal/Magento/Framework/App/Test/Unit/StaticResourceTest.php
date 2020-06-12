@@ -3,28 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\State;
-use Magento\Framework\App\Response\FileInterface;
+use Magento\Framework\App\ObjectManager\ConfigLoader;
 use Magento\Framework\App\Request\Http as HttpRequest;
+use Magento\Framework\App\Response\FileInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\App\StaticResource;
 use Magento\Framework\App\View\Asset\Publisher;
-use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Module\ModuleList;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\App\ObjectManager\ConfigLoader;
-use Magento\Framework\App\StaticResource;
-use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\View\Asset\LocalInterface;
+use Magento\Framework\View\Asset\Repository;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StaticResourceTest extends \PHPUnit\Framework\TestCase
+class StaticResourceTest extends TestCase
 {
     /**
      * @var State|MockObject
@@ -81,7 +84,7 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
      */
     private $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stateMock = $this->createMock(State::class);
         $this->responseMock = $this->getMockForAbstractClass(FileInterface::class);
@@ -121,7 +124,7 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
         $this->objectManagerMock->expects($this->never())->method('configure');
         $this->requestMock->expects($this->never())->method('get');
         $this->moduleListMock->expects($this->never())->method('has');
-        $asset = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\LocalInterface::class);
+        $asset = $this->getMockForAbstractClass(LocalInterface::class);
         $asset->expects($this->never())->method('getSourceFile');
         $this->assetRepoMock->expects($this->never())->method('createAsset');
         $this->publisherMock->expects($this->never())->method('publish');
@@ -176,7 +179,7 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
             ->method('has')
             ->with($requestedModule)
             ->willReturn($moduleExists);
-        $asset = $this->getMockForAbstractClass(\Magento\Framework\View\Asset\LocalInterface::class);
+        $asset = $this->getMockForAbstractClass(LocalInterface::class);
         $asset->expects($this->once())
             ->method('getSourceFile')
             ->willReturn('resource/file.css');
@@ -200,7 +203,7 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
     {
         return [
             'developer mode with non-modular resource' => [
-                \Magento\Framework\App\State::MODE_DEVELOPER,
+                State::MODE_DEVELOPER,
                 'area/Magento/theme/locale/dir/file.js',
                 'dir',
                 false,
@@ -210,7 +213,7 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
                 0,
             ],
             'default mode with modular resource' => [
-                \Magento\Framework\App\State::MODE_DEFAULT,
+                State::MODE_DEFAULT,
                 'area/Magento/theme/locale/Namespace_Module/dir/file.js',
                 'Namespace_Module',
                 true,
@@ -222,7 +225,7 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
                 0,
             ],
             'production mode with static_content_on_demand_in_production and with non-modular resource' => [
-                \Magento\Framework\App\State::MODE_PRODUCTION,
+                State::MODE_PRODUCTION,
                 'area/Magento/theme/locale/dir/file.js',
                 'dir',
                 false,
@@ -232,7 +235,7 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
                 1,
             ],
             'production mode with static_content_on_demand_in_production and with modular resource' => [
-                \Magento\Framework\App\State::MODE_PRODUCTION,
+                State::MODE_PRODUCTION,
                 'area/Magento/theme/locale/Namespace_Module/dir/file.js',
                 'Namespace_Module',
                 true,
@@ -246,15 +249,13 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Requested path 'short/path.js' is wrong
-     */
     public function testLaunchWrongPath()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Requested path \'short/path.js\' is wrong');
         $this->stateMock->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue(\Magento\Framework\App\State::MODE_DEVELOPER));
+            ->willReturn(State::MODE_DEVELOPER);
         $this->requestMock->expects($this->once())
             ->method('get')
             ->with('resource')
@@ -266,7 +267,7 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with(\Psr\Log\LoggerInterface::class)
+            ->with(LoggerInterface::class)
             ->willReturn($this->loggerMock);
         $this->loggerMock->expects($this->once())
             ->method('critical');
@@ -285,15 +286,13 @@ class StaticResourceTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->object->catchException($bootstrap, $exception));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     */
     public function testLaunchPathAbove()
     {
+        $this->expectException('InvalidArgumentException');
         $path = 'frontend/..\..\folder_above/././Magento_Ui/template/messages.html';
         $this->stateMock->expects($this->once())
             ->method('getMode')
-            ->will($this->returnValue(State::MODE_DEVELOPER));
+            ->willReturn(State::MODE_DEVELOPER);
         $this->requestMock->expects($this->once())
             ->method('get')
             ->with('resource')

@@ -3,49 +3,60 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Model\Oauth;
+
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Integration\Helper\Oauth\Data;
+use Magento\Integration\Model\Oauth\Nonce;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Integration\Model\Oauth\Nonce
  */
-class NonceTest extends \PHPUnit\Framework\TestCase
+class NonceTest extends TestCase
 {
     /**
-     * @var \Magento\Integration\Model\Oauth\Nonce
+     * @var Nonce
      */
     protected $nonceModel;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \Magento\Integration\Helper\Oauth\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
     protected $oauthDataMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\AbstractResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractResource|MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractDb|MockObject
      */
     protected $resourceCollectionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->contextMock = $this->createPartialMock(\Magento\Framework\Model\Context::class, ['getEventDispatcher']);
+        $this->contextMock = $this->createPartialMock(Context::class, ['getEventDispatcher']);
         $eventManagerMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Event\ManagerInterface::class,
+            ManagerInterface::class,
             [],
             '',
             false,
@@ -55,11 +66,11 @@ class NonceTest extends \PHPUnit\Framework\TestCase
         );
         $this->contextMock->expects($this->once())
             ->method('getEventDispatcher')
-            ->will($this->returnValue($eventManagerMock));
-        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
-        $this->oauthDataMock = $this->createMock(\Magento\Integration\Helper\Oauth\Data::class);
+            ->willReturn($eventManagerMock);
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->oauthDataMock = $this->createMock(Data::class);
         $this->resourceMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\ResourceModel\AbstractResource::class,
+            AbstractResource::class,
             [],
             '',
             false,
@@ -67,8 +78,8 @@ class NonceTest extends \PHPUnit\Framework\TestCase
             true,
             ['getIdFieldName', 'selectByCompositeKey', 'deleteOldEntries']
         );
-        $this->resourceCollectionMock = $this->createMock(\Magento\Framework\Data\Collection\AbstractDb::class);
-        $this->nonceModel = new \Magento\Integration\Model\Oauth\Nonce(
+        $this->resourceCollectionMock = $this->createMock(AbstractDb::class);
+        $this->nonceModel = new Nonce(
             $this->contextMock,
             $this->registryMock,
             $this->oauthDataMock,
@@ -81,16 +92,16 @@ class NonceTest extends \PHPUnit\Framework\TestCase
     {
         $this->oauthDataMock->expects($this->once())
             ->method('isCleanupProbability')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->oauthDataMock->expects($this->once())
             ->method('getCleanupExpirationPeriod')
-            ->will($this->returnValue(30));
+            ->willReturn(30);
 
         $this->resourceMock->expects($this->once())
             ->method('deleteOldEntries')
             ->with(30)
-            ->will($this->returnValue(1));
+            ->willReturn(1);
 
         $this->assertEquals($this->nonceModel, $this->nonceModel->afterSave());
     }
@@ -99,7 +110,7 @@ class NonceTest extends \PHPUnit\Framework\TestCase
     {
         $this->oauthDataMock->expects($this->once())
             ->method('isCleanupProbability')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
 
         $this->oauthDataMock->expects($this->never())
             ->method('getCleanupExpirationPeriod');
@@ -119,7 +130,7 @@ class NonceTest extends \PHPUnit\Framework\TestCase
         $this->resourceMock->expects($this->once())
             ->method('selectByCompositeKey')
             ->with($nonce, $consumerId)
-            ->will($this->returnValue($expectedData));
+            ->willReturn($expectedData);
         $this->nonceModel->loadByCompositeKey($nonce, $consumerId);
 
         $this->assertEquals($expectedData, $this->nonceModel->getData());

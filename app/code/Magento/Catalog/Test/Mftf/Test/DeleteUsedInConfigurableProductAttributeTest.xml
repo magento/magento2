@@ -59,7 +59,7 @@
             </createData>
 
             <!-- Login As Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete the configurable product created in the before block -->
@@ -72,10 +72,10 @@
             <deleteData createDataKey="productAttributeHandle" stepKey="deleteProductAttribute"/>
 
             <!-- Logout -->
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!-- Go to Stores > Attributes > Products. Search and select the product attribute that was used to create the configurable product-->
         <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">

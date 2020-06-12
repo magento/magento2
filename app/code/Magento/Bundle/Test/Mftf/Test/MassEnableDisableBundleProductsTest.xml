@@ -19,11 +19,12 @@
             <group value="Bundle"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct3"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct4"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <!--Clear Filters-->
@@ -120,9 +121,7 @@
         <click selector="{{AdminProductFiltersSection.disable}}" stepKey="ClickOnDisable"/>
         <waitForPageLoad stepKey="waitForPageloadToExecute"/>
 
-        <!--Clear Cache - reindex - resets products according to enabled/disabled view-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <magentoCron stepKey="runCronReindex" groups="index"/>
         <actionGroup ref="ClearPageCacheActionGroup" stepKey="clearing"/>
 
         <!--Confirm bundle products have been disabled-->
