@@ -51,7 +51,7 @@ class LinksList
         /** @var \Magento\Catalog\Model\Product $selection */
         foreach ($selectionCollection as $selection) {
             $bundledProductPrice = $selection->getSelectionPriceValue();
-            if ($bundledProductPrice <= 0){
+            if ($bundledProductPrice <= 0) {
                 $bundledProductPrice = $selection->getPrice();
             }
             $selectionPriceType = $product->getPriceType() ? $selection->getSelectionPriceType() : null;
