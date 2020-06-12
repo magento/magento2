@@ -101,8 +101,8 @@ define([
             this.imageMargin = parseInt(this.imageMargin, 10);
             this.container = $('[data-id="' + this.containerId + '"]')[0];
 
-            this.setEventListener();
             this.setLayoutStyles();
+            this.setEventListener();
 
             return this;
         },
@@ -121,18 +121,15 @@ define([
 
         /**
          * Set layout styles inside the container
-         *
-         * @param {Boolean} isGridInitialized
          */
-        setLayoutStyles: function (isGridInitialized) {
+        setLayoutStyles: function () {
             var containerWidth = parseInt(this.container.clientWidth, 10),
                 rowImages = [],
                 ratio = 0,
                 rowHeight = 0,
                 calcHeight = 0,
                 isLastRow = false,
-                rowNumber = 1,
-                currentWidth;
+                rowNumber = 1;
 
             this.setMinRatio();
 
@@ -150,9 +147,6 @@ define([
                 rowHeight = calcHeight < this.maxImageHeight ? calcHeight : this.maxImageHeight;
                 isLastRow = index + 1 === this.rows().length;
 
-                if (isLastRow && isGridInitialized) {
-                    return false;
-                }
                 this.assignImagesToRow(rowImages, rowNumber, rowHeight, isLastRow);
 
                 rowImages = [];
@@ -180,24 +174,6 @@ define([
                     bottom: isLastRow
                 });
                 img.rowNumber = rowNumber;
-
-                if (isLastRow) {
-                    this.waitForContainer(
-                        function () {
-                            return $('[data-id="' + this.containerId + '"] img').length === 0;
-                        }.bind(this),
-                        function () {
-                            var lastImage =  $('[data-id="' + this.containerId + '"] img').last();
-
-                            if (lastImage.complete) {
-                                this.setLayoutStyles(true);
-                            } else {
-                                lastImage.load(function () {
-                                    this.setLayoutStyles(true);
-                                }.bind(this));
-                            }
-                        }.bind(this));
-                }
             }.bind(this));
 
             images[0].firstInRow = true;
@@ -207,13 +183,13 @@ define([
         /**
          * Wait for container to initialize
          */
-        waitForContainer: function (condition, callback) {
-            if (condition()) {
+        waitForContainer: function (callback) {
+            if (typeof this.container === 'undefined') {
                 setTimeout(function () {
-                    this.waitForContainer(condition, callback);
+                    this.waitForContainer(callback);
                 }.bind(this), 500);
             } else {
-                callback();
+                setTimeout(callback, 0);
             }
         },
 
@@ -221,13 +197,9 @@ define([
          * Set layout styles when container element is loaded.
          */
         setLayoutStylesWhenLoaded: function () {
-            this.waitForContainer(
-                function () {
-                    return _.isUndefined(this.container);
-                }.bind(this),
-                function () {
-                    this.setLayoutStyles();
-                }.bind(this));
+            this.waitForContainer(function () {
+                this.setLayoutStyles();
+            }.bind(this));
         },
 
         /**
