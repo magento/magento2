@@ -3,14 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-/** Create category  */
-require dirname(dirname(__DIR__)) . '/Catalog/_files/category.php';
-/** Create fixture store */
-require dirname(dirname(__DIR__)) . '/Store/_files/second_store.php';
-/** Create product with multiselect attribute */
-require dirname(dirname(__DIR__)) . '/Catalog/_files/products_with_multiselect_attribute.php';
 
-$productModel = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+/** Create category  */
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/category.php');
+/** Create fixture store */
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_store.php');
+/** Create product with multiselect attribute */
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/products_with_multiselect_attribute.php');
+
+$objectManager = Bootstrap::getObjectManager();
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$product = $productRepository->get('simple_ms_1');
+$productModel = $objectManager->create(
     \Magento\Catalog\Model\Product::class
 );
 

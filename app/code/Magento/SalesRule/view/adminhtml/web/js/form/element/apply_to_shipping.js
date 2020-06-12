@@ -22,9 +22,6 @@ define([
          */
         toggleDisabled: function (action) {
             switch (action) {
-                case 'cart_fixed':
-                    this.disabled(true);
-                    break;
                 default:
                     this.disabled(false);
             }

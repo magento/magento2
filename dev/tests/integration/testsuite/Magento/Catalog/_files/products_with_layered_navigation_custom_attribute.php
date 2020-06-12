@@ -5,9 +5,6 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/../../Catalog/_files/attribute_set_based_on_default_set.php';
-require __DIR__ . '/../../Catalog/_files/categories.php';
-
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Setup\CategorySetup;
@@ -17,8 +14,16 @@ use Magento\Indexer\Model\Indexer;
 use Magento\Indexer\Model\Indexer\Collection as IndexerCollection;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use Magento\TestFramework\Eav\Model\GetAttributeSetByName;
+
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/attribute_set_based_on_default_set.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/categories.php');
 
 $objectManager = Bootstrap::getObjectManager();
+/** @var GetAttributeSetByName $getAttributeSetByName */
+$getAttributeSetByName = $objectManager->get(GetAttributeSetByName::class);
+$attributeSet = $getAttributeSetByName->execute('second_attribute_set');
 /** @var Config $eavConfig */
 $eavConfig = $objectManager->get(Config::class);
 /** @var AttributeRepositoryInterface $attributeRepository */

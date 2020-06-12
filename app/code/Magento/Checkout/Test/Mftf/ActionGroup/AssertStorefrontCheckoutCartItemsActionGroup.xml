@@ -14,7 +14,6 @@
         </annotations>
         <arguments>
             <argument name="productName" type="string"/>
-            <argument name="productSku" type="string"/>
             <argument name="productPrice" type="string"/>
             <argument name="subtotal" type="string"/>
             <argument name="qty" type="string"/>
