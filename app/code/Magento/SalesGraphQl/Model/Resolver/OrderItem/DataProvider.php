@@ -14,7 +14,6 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order;
 
 /**
  * Data provider for order items
@@ -138,6 +137,7 @@ class DataProvider
                 'product_sku' => $orderItem->getSku(),
                 'product_url_key' => $associatedProduct ? $associatedProduct->getUrlKey() : null,
                 'product_type' => $orderItem->getProductType(),
+                'discounts' => $this->getDiscountDetails($associatedOrder, $orderItem),
                 'product_sale_price' => [
                     'value' => $orderItem->getPrice(),
                     'currency' => $associatedOrder->getOrderCurrencyCode()
@@ -226,7 +226,10 @@ class DataProvider
 
         $discounts [] = [
             'label' => $associatedOrder->getDiscountDescription() ?? "null",
-            'amount' => ['value' => $orderItem->getDiscountAmount() ?? 0, 'currency' => $associatedOrder->getOrderCurrencyCode()]
+            'amount' => [
+                'value' => $orderItem->getDiscountAmount() ?? 0,
+                'currency' => $associatedOrder->getOrderCurrencyCode()
+            ]
         ];
         return $discounts;
     }
