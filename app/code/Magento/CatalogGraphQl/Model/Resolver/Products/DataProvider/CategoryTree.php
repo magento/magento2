@@ -8,15 +8,16 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
 use GraphQL\Language\AST\FieldNode;
+use GraphQL\Language\AST\NodeKind;
+use Magento\Catalog\Api\Data\CategoryInterface;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
+use Magento\CatalogGraphQl\Model\AttributesJoiner;
 use Magento\CatalogGraphQl\Model\Category\DepthCalculator;
 use Magento\CatalogGraphQl\Model\Category\LevelCalculator;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Catalog\Model\ResourceModel\Category\Collection;
-use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
-use Magento\CatalogGraphQl\Model\AttributesJoiner;
-use Magento\Catalog\Model\Category;
 
 /**
  * Category tree data provider
@@ -54,6 +55,11 @@ class CategoryTree
     private $metadata;
 
     /**
+     * @var ResolveInfo
+     */
+    private $resolverInfo;
+
+    /**
      * @param CollectionFactory $collectionFactory
      * @param AttributesJoiner $attributesJoiner
      * @param DepthCalculator $depthCalculator
@@ -85,8 +91,10 @@ class CategoryTree
     {
         $categoryQuery = $resolveInfo->fieldNodes[0];
         $collection = $this->collectionFactory->create();
+        $this->resolverInfo = $resolveInfo;
+        $this->attributesJoiner->setResolverInfo($resolveInfo);
         $this->joinAttributesRecursively($collection, $categoryQuery);
-        $depth = $this->depthCalculator->calculate($categoryQuery);
+        $depth = $this->depthCalculator->calculate($resolveInfo, $categoryQuery);
         $level = $this->levelCalculator->calculate($rootCategoryId);
 
         // If root category is being filter, we've to remove first slash
@@ -137,11 +145,15 @@ class CategoryTree
 
         /** @var FieldNode $node */
         foreach ($subSelection as $node) {
-            if ($node->kind === 'InlineFragment') {
+            if ($node->kind === NodeKind::INLINE_FRAGMENT) {
                 continue;
+            } elseif ($node->kind === NodeKind::FRAGMENT_SPREAD && isset($this->resolverInfo->fragments[$node->name->value])) {
+                foreach ($this->resolverInfo->fragments[$node->name->value]->selectionSet->selections as $spreadNode) {
+                    $this->joinAttributesRecursively($collection, $spreadNode);
+                }
+            } else {
+                $this->joinAttributesRecursively($collection, $node);
             }
-
-            $this->joinAttributesRecursively($collection, $node);
         }
     }
 }

@@ -7,18 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
-use Magento\CatalogGraphQl\Model\Resolver\Product\ProductCategories;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory;
 use Magento\CatalogGraphQl\Model\AttributesJoiner;
-use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CustomAttributesFlattener;
-use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\CatalogGraphQl\Model\Category\Hydrator as CategoryHydrator;
+use Magento\CatalogGraphQl\Model\Resolver\Product\ProductCategories;
+use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\CustomAttributesFlattener;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
+use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -112,6 +112,7 @@ class Categories implements ResolverInterface
         $categoryIds = $this->productCategories->getCategoryIdsByProduct((int)$product->getId(), (int)$storeId);
         $this->categoryIds = array_merge($this->categoryIds, $categoryIds);
         $that = $this;
+        $that->attributesJoiner->setResolverInfo($info);
 
         return $this->valueFactory->create(
             function () use ($that, $categoryIds, $info) {
