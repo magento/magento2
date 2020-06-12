@@ -7,13 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Sales;
 
+use Magento\Bundle\Model\Selection;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\AuthenticationException;
+use Magento\GraphQl\GetCustomerAuthenticationHeader;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\GraphQl\GetCustomerAuthenticationHeader;
 
 /**
  * Class RetrieveOrdersTest
@@ -37,6 +43,9 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
     /** @var GetCustomerAuthenticationHeader */
     private $customerAuthenticationHeader;
 
+    /** @var ProductRepositoryInterface */
+    private $productRepository;
+
     protected function setUp():void
     {
         parent::setUp();
@@ -45,6 +54,7 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
         $this->customerAuthenticationHeader = $objectManager->get(GetCustomerAuthenticationHeader::class);
         $this->orderRepository = $objectManager->get(OrderRepositoryInterface::class);
         $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
+        $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
         $this->orderItem = $objectManager->get(Order\Item::class);
     }
 
@@ -132,7 +142,248 @@ QUERY;
                 'grand_total' => ['value'=> 120,'currency' =>'USD'],
                 'subtotal' => ['value'=> 120,'currency' =>'USD']
             ];
-        $this->assertEquals($expectedOrderTotal, $actualOrderTotalFromResponse,'Totals do not match');
+        $this->assertEquals($expectedOrderTotal, $actualOrderTotalFromResponse, 'Totals do not match');
+    }
+
+    /**
+     * Test customer order details with bundle product with child items
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_two_dropdown_options.php
+     */
+    public function testGetCustomerOrderWithBundleProduct()
+    {
+        $qty = 1;
+        $bundleSku = 'bundle-product-two-dropdown-options';
+        $simpleProductSku = 'simple2';
+        /** @var Product $simple */
+        $simple = $this->productRepository->get($simpleProductSku);
+        $stockData =[
+            StockItemInterface::QTY => 200,
+            StockItemInterface::MANAGE_STOCK =>true,
+            StockItemInterface::IS_IN_STOCK =>true
+        ];
+        $simple->setQuantityAndStockStatus($stockData);
+        $this->productRepository->save($simple);
+        /** @var Product $bundleProduct */
+        $bundleProduct = $this->productRepository->get($bundleSku);
+        /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
+        $typeInstance = $bundleProduct->getTypeInstance();
+        /** @var $option \Magento\Bundle\Model\Option */
+        $option1 = $typeInstance->getOptionsCollection($bundleProduct)->getFirstItem();
+        $option2 = $typeInstance->getOptionsCollection($bundleProduct)->getLastItem();
+        $optionId1 =(int) $option1->getId();
+        $optionId2 =(int) $option2->getId();
+        /** @var Selection $selection */
+        $selection1 = $typeInstance->getSelectionsCollection([$option1->getId()], $bundleProduct)->getFirstItem();
+        $selectionId1 = (int)$selection1->getSelectionId();
+
+        $selection2 = $typeInstance->getSelectionsCollection([$option2->getId()], $bundleProduct)->getLastItem();
+        $selectionId2 = (int)$selection2->getSelectionId();
+
+        $cartId = $this->createEmptyCart();
+        $this->addBundleProductToCart($cartId, $qty, $bundleSku, $optionId1, $selectionId1, $optionId2, $selectionId2);
+        $this->setBillingAddress($cartId);
+        $shippingMethod = $this->setShippingAddress($cartId);
+        $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
+        $this->setPaymentMethod($cartId, $paymentMethod);
+        $orderNumber = $this->placeOrder($cartId);
+        $customerOrderResponse = $this->getCustomerOrderQueryBundleProduct($orderNumber);
+
+        $customerOrderItems = $customerOrderResponse[0];
+        $this->assertEquals("Pending", $customerOrderItems['status']);
+
+        $bundledItemInTheOrder = $customerOrderItems['items'][0];
+        $this->assertEquals('bundle-product-two-dropdown-options-simple1-simple2', $bundledItemInTheOrder['product_sku']);
+        $this->assertArrayHasKey('child_items', $bundledItemInTheOrder);
+        $childItemInTheOrder = $bundledItemInTheOrder['child_items'][0];
+        $this->assertNotEmpty($childItemInTheOrder);
+        $this->assertEquals('simple1', $childItemInTheOrder['product_sku']);
+        $this->deleteOrder();
+    }
+
+    /**
+     * Test customer order details with bundle products
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_two_dropdown_options.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_10_percent_off_with_discount_on_shipping.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_shipping_excludeTax_order_display_settings.php
+     */
+    public function testGetCustomerOrderWithBundleProductWithTaxesAndDiscounts()
+    {
+        $qty = 4;
+        $bundleSku = 'bundle-product-two-dropdown-options';
+        $simpleProductSku = 'simple2';
+        /** @var Product $simple */
+        $simple = $this->productRepository->get($simpleProductSku);
+        $stockData =[
+            StockItemInterface::QTY => 200,
+            StockItemInterface::MANAGE_STOCK =>true,
+            StockItemInterface::IS_IN_STOCK =>true
+        ];
+        $simple->setQuantityAndStockStatus($stockData);
+        $this->productRepository->save($simple);
+        /** @var Product $bundleProduct */
+        $bundleProduct = $this->productRepository->get($bundleSku);
+        /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
+        $typeInstance = $bundleProduct->getTypeInstance();
+        /** @var $option \Magento\Bundle\Model\Option */
+        $option1 = $typeInstance->getOptionsCollection($bundleProduct)->getFirstItem();
+        $option2 = $typeInstance->getOptionsCollection($bundleProduct)->getLastItem();
+        $optionId1 =(int) $option1->getId();
+        $optionId2 =(int) $option2->getId();
+        /** @var Selection $selection */
+        $selection1 = $typeInstance->getSelectionsCollection([$option1->getId()], $bundleProduct)->getFirstItem();
+        $selectionId1 = (int)$selection1->getSelectionId();
+
+        $selection2 = $typeInstance->getSelectionsCollection([$option2->getId()], $bundleProduct)->getLastItem();
+        $selectionId2 = (int)$selection2->getSelectionId();
+
+        $cartId = $this->createEmptyCart();
+        $this->addBundleProductToCart($cartId, $qty, $bundleSku, $optionId1, $selectionId1, $optionId2, $selectionId2);
+        $this->setBillingAddress($cartId);
+        $shippingMethod = $this->setShippingAddress($cartId);
+        $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
+        $this->setPaymentMethod($cartId, $paymentMethod);
+        $orderNumber = $this->placeOrder($cartId);
+        $customerOrderResponse = $this->getCustomerOrderQueryBundleProduct($orderNumber);
+
+        $customerOrderItems = $customerOrderResponse[0];
+        $this->assertEquals("Pending", $customerOrderItems['status']);
+
+        $bundledItemInTheOrder = $customerOrderItems['items'][0];
+        $this->assertEquals('bundle-product-two-dropdown-options-simple1-simple2', $bundledItemInTheOrder['product_sku']);
+        $this->assertArrayHasKey('child_items', $bundledItemInTheOrder);
+        $childItemInTheOrder = $bundledItemInTheOrder['child_items'][0];
+        $this->assertNotEmpty($childItemInTheOrder);
+        $this->assertEquals('simple1', $childItemInTheOrder['product_sku']);
+        $this->assertEquals(
+            0,
+            $childItemInTheOrder['discounts'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $childItemInTheOrder['discounts'][0]['amount']['currency']
+        );
+        $this->assertEquals(
+            'null',
+            $childItemInTheOrder['discounts'][0]['label']
+        );
+        $this->assertTotalsOnBundleProductWithTaxesAndDiscounts($customerOrderItems);
+        $this->deleteOrder();
+    }
+
+    /**
+     * Assert order totals including shipping_handling and taxes
+     *
+     * @param array $customerOrderItem
+     */
+    private function assertTotalsOnBundleProductWithTaxesAndDiscounts(array $customerOrderItem): void
+    {
+        $this->assertEquals(
+            77.4,
+            $customerOrderItem['total']['base_grand_total']['value']
+        );
+
+        $this->assertEquals(
+            77.4,
+            $customerOrderItem['total']['grand_total']['value']
+        );
+        $this->assertEquals(
+            60,
+            $customerOrderItem['total']['subtotal']['value']
+        );
+        $this->assertEquals(
+            5.4,
+            $customerOrderItem['total']['total_tax']['value']
+        );
+
+        $this->assertEquals(
+            20,
+            $customerOrderItem['total']['total_shipping']['value']
+        );
+        $this->assertEquals(
+            1.35,
+            $customerOrderItem['total']['taxes'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $customerOrderItem['total']['taxes'][0]['amount']['currency']
+        );
+        $this->assertEquals(
+            'US-TEST-*-Rate-1',
+            $customerOrderItem['total']['taxes'][0]['title']
+        );
+        $this->assertEquals(
+            7.5,
+            $customerOrderItem['total']['taxes'][0]['rate']
+        );
+        $this->assertEquals(
+            4.05,
+            $customerOrderItem['total']['taxes'][1]['amount']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $customerOrderItem['total']['taxes'][1]['amount']['currency']
+        );
+        $this->assertEquals(
+            'US-TEST-*-Rate-1',
+            $customerOrderItem['total']['taxes'][1]['title']
+        );
+        $this->assertEquals(
+            7.5,
+            $customerOrderItem['total']['taxes'][1]['rate']
+        );
+        $this->assertEquals(
+            21.5,
+            $customerOrderItem['total']['shipping_handling']['amount_including_tax']['value']
+        );
+        $this->assertEquals(
+            20,
+            $customerOrderItem['total']['shipping_handling']['amount_excluding_tax']['value']
+        );
+        $this->assertEquals(
+            20,
+            $customerOrderItem['total']['shipping_handling']['total_amount']['value']
+        );
+
+        $this->assertEquals(
+            1.35,
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'US-TEST-*-Rate-1',
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['title']
+        );
+        $this->assertEquals(
+            7.5,
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['rate']
+        );
+        $this->assertEquals(
+            2,
+            $customerOrderItem['total']['shipping_handling']['discounts'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $customerOrderItem['total']['shipping_handling']['discounts'][0]['amount']['currency']
+        );
+        $this->assertEquals(
+            'null',
+            $customerOrderItem['total']['shipping_handling']['discounts'][0]['label']
+        );
+        $this->assertEquals(
+            -8,
+            $customerOrderItem['total']['discounts'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $customerOrderItem['total']['discounts'][0]['amount']['currency']
+        );
+        $this->assertEquals(
+            'null',
+            $customerOrderItem['total']['discounts'][0]['label']
+        );
     }
 
     /**
@@ -181,6 +432,7 @@ QUERY;
         $this->assertArrayHasKey('total_count', $response['customer']['orders']);
         $this->assertEquals(6, $response['customer']['orders']['total_count']);
     }
+
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
@@ -254,19 +506,21 @@ QUERY;
         product_type
         product_sale_price{currency value}
       }
-            total {
-                    base_grand_total {value currency}
-                    grand_total {value currency}
+       total {
+                base_grand_total {value currency}
+                 grand_total {value currency}
                     subtotal {value currency}
                     total_shipping{value}
-                    shipping_handling{total_amount{value currency}}
                     total_tax{value currency}
                     taxes {amount {currency value} title rate}
-                    shipping_handling
-                    {
-                     total_amount{value}
-                     taxes{amount{value}}
-                     }
+                   total_shipping{value}
+             shipping_handling
+             {
+               amount_including_tax{value}
+               amount_excluding_tax{value}
+               total_amount{value}
+               taxes {amount{value} title rate}
+             }
                 }
     }
    }
@@ -303,12 +557,12 @@ QUERY;
             $this->assertEquals($orderId, $customerOrderItemsInResponse[$key]['id']);
             $this->assertEquals($orderNumber, $customerOrderItemsInResponse[$key]['number']);
             $this->assertEquals('Processing', $customerOrderItemsInResponse[$key]['status']);
-             $this->assertEquals(
-                 4,
-                 $customerOrderItemsInResponse[$key]['total']['shipping_handling']['total_amount']['value']
-             );
             $this->assertEquals(
-                5,
+                4,
+                $customerOrderItemsInResponse[$key]['total']['shipping_handling']['total_amount']['value']
+            );
+            $this->assertEquals(
+                0,
                 $customerOrderItemsInResponse[$key]['total']['shipping_handling']['taxes'][0]['amount']['value']
             );
             $this->assertEquals(
@@ -317,7 +571,8 @@ QUERY;
             );
             $this->assertEquals(
                 5,
-            $customerOrderItemsInResponse[$key]['total']['total_tax']['value']);
+                $customerOrderItemsInResponse[$key]['total']['total_tax']['value']
+            );
 
             $key++;
         }
@@ -401,6 +656,7 @@ QUERY;
 
     /**
      * @param String $orderNumber
+     * @throws AuthenticationException
      * @dataProvider dataProviderIncorrectOrder
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
@@ -428,7 +684,14 @@ QUERY;
                         value
                         currency
                     }
-                    shipping_handling{total_amount{value currency}}
+                     total_shipping{value}
+             shipping_handling
+             {
+               amount_including_tax{value}
+               amount_excluding_tax{value}
+               total_amount{value}
+               taxes {amount{value} title rate}
+             }
                     subtotal {
                         value
                         currency
@@ -492,7 +755,7 @@ QUERY;
      * @param String $orderNumber
      * @param String $store
      * @param int $expectedCount
-     * @throws \Magento\Framework\Exception\AuthenticationException
+     * @throws AuthenticationException
      * @dataProvider dataProviderMultiStores
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Sales/_files/two_orders_with_order_items_two_storeviews.php
@@ -520,7 +783,14 @@ QUERY;
                         value
                         currency
                     }
-                    shipping_handling {total_amount{value currency}}
+                    total_shipping{value}
+                    shipping_handling
+                    {
+                     amount_including_tax{value}
+                     amount_excluding_tax{value}
+                     total_amount{value currency}
+                     taxes {amount{value} title rate}
+                    }
                     subtotal {
                         value
                         currency
@@ -586,6 +856,771 @@ QUERY;
     }
 
     /**
+     *  Verify the customer order with tax, discount with shipping tax class set for calculation setting
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_10_percent_off_with_discount_on_shipping.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_shipping_excludeTax_order_display_settings.php
+     */
+    public function testCustomerOrderWithTaxesAndDiscountsOnShippingAndTotal()
+    {
+        $quantity = 4;
+        $sku = 'simple1';
+        $cartId = $this->createEmptyCart();
+        $this->addProductToCart($cartId, $quantity, $sku);
+        $this->setBillingAddress($cartId);
+        $shippingMethod = $this->setShippingAddress($cartId);
+        $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
+        $this->setPaymentMethod($cartId, $paymentMethod);
+        $orderNumber = $this->placeOrder($cartId);
+        $customerOrderResponse = $this->getCustomerOrderQuery($orderNumber);
+        // Asserting discounts on order item level
+        $this->assertEquals(
+            4,
+            $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']
+        );
+        $this->assertEquals(
+            'null',
+            $customerOrderResponse[0]['items'][0]['discounts'][0]['label']
+        );
+        $customerOrderItem = $customerOrderResponse[0];
+        $this->assertTotalsWithTaxesAndDiscountsOnShippingAndTotal($customerOrderItem);
+        $this->deleteOrder();
+    }
+
+    /**
+     * Assert order totals including shipping_handling and taxes
+     *
+     * @param array $customerOrderItem
+     */
+    private function assertTotalsWithTaxesAndDiscountsOnShippingAndTotal(array $customerOrderItem): void
+    {
+        $this->assertEquals(
+            58.05,
+            $customerOrderItem['total']['base_grand_total']['value']
+        );
+
+        $this->assertEquals(
+            58.05,
+            $customerOrderItem['total']['grand_total']['value']
+        );
+        $this->assertEquals(
+            40,
+            $customerOrderItem['total']['subtotal']['value']
+        );
+        $this->assertEquals(
+            4.05,
+            $customerOrderItem['total']['total_tax']['value']
+        );
+
+        $this->assertEquals(
+            20,
+            $customerOrderItem['total']['total_shipping']['value']
+        );
+        $this->assertEquals(
+            1.35,
+            $customerOrderItem['total']['taxes'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $customerOrderItem['total']['taxes'][0]['amount']['currency']
+        );
+        $this->assertEquals(
+            'US-TEST-*-Rate-1',
+            $customerOrderItem['total']['taxes'][0]['title']
+        );
+        $this->assertEquals(
+            7.5,
+            $customerOrderItem['total']['taxes'][0]['rate']
+        );
+        $this->assertEquals(
+            2.7,
+            $customerOrderItem['total']['taxes'][1]['amount']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $customerOrderItem['total']['taxes'][1]['amount']['currency']
+        );
+        $this->assertEquals(
+            'US-TEST-*-Rate-1',
+            $customerOrderItem['total']['taxes'][1]['title']
+        );
+        $this->assertEquals(
+            7.5,
+            $customerOrderItem['total']['taxes'][1]['rate']
+        );
+        $this->assertEquals(
+            21.5,
+            $customerOrderItem['total']['shipping_handling']['amount_including_tax']['value']
+        );
+        $this->assertEquals(
+            20,
+            $customerOrderItem['total']['shipping_handling']['amount_excluding_tax']['value']
+        );
+        $this->assertEquals(
+            20,
+            $customerOrderItem['total']['shipping_handling']['total_amount']['value']
+        );
+
+        $this->assertEquals(
+            1.35,
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'US-TEST-*-Rate-1',
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['title']
+        );
+        $this->assertEquals(
+            7.5,
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['rate']
+        );
+        $this->assertEquals(
+            2,
+            $customerOrderItem['total']['shipping_handling']['discounts'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $customerOrderItem['total']['shipping_handling']['discounts'][0]['amount']['currency']
+        );
+        $this->assertEquals(
+            'null',
+            $customerOrderItem['total']['shipping_handling']['discounts'][0]['label']
+        );
+        $this->assertEquals(
+            -6,
+            $customerOrderItem['total']['discounts'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $customerOrderItem['total']['discounts'][0]['amount']['currency']
+        );
+        $this->assertEquals(
+            'null',
+            $customerOrderItem['total']['discounts'][0]['label']
+        );
+    }
+
+    /**
+     *  Verify that the customer order has the tax information on shipping and totals
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_shipping_excludeTax_order_display_settings.php
+     */
+    public function testCustomerOrderWithTaxesExcludedOnShipping()
+    {
+        $quantity = 2;
+        $sku = 'simple1';
+        $cartId = $this->createEmptyCart();
+        $this->addProductToCart($cartId, $quantity, $sku);
+        $this->setBillingAddress($cartId);
+        $shippingMethod = $this->setShippingAddress($cartId);
+        $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
+        $this->setPaymentMethod($cartId, $paymentMethod);
+        $orderNumber = $this->placeOrder($cartId);
+        $customerOrderResponse = $this->getCustomerOrderQuery($orderNumber);
+        $customerOrderItem = $customerOrderResponse[0];
+        $this->assertTotalsAndShippingWithExcludedTaxSetting($customerOrderItem);
+        $this->deleteOrder();
+    }
+
+    /**
+     * Assert order totals including shipping_handling and taxes
+     *
+     * @param array $customerOrderItem
+     */
+    private function assertTotalsAndShippingWithExcludedTaxSetting(array $customerOrderItem): void
+    {
+        $this->assertEquals(
+            32.25,
+            $customerOrderItem['total']['base_grand_total']['value']
+        );
+
+        $this->assertEquals(
+            32.25,
+            $customerOrderItem['total']['grand_total']['value']
+        );
+        $this->assertEquals(
+            20,
+            $customerOrderItem['total']['subtotal']['value']
+        );
+        $this->assertEquals(
+            2.25,
+            $customerOrderItem['total']['total_tax']['value']
+        );
+
+        $this->assertEquals(
+            10,
+            $customerOrderItem['total']['total_shipping']['value']
+        );
+        $this->assertEquals(
+            0.75,
+            $customerOrderItem['total']['taxes'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'US-TEST-*-Rate-1',
+            $customerOrderItem['total']['taxes'][0]['title']
+        );
+        $this->assertEquals(
+            7.5,
+            $customerOrderItem['total']['taxes'][0]['rate']
+        );
+        $this->assertEquals(
+            10.75,
+            $customerOrderItem['total']['shipping_handling']['amount_including_tax']['value']
+        );
+        $this->assertEquals(
+            10,
+            $customerOrderItem['total']['shipping_handling']['amount_excluding_tax']['value']
+        );
+        $this->assertEquals(
+            10,
+            $customerOrderItem['total']['shipping_handling']['total_amount']['value']
+        );
+
+        $this->assertEquals(
+            0.75,
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'US-TEST-*-Rate-1',
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['title']
+        );
+        $this->assertEquals(
+            7.5,
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['rate']
+        );
+    }
+    /**
+     *  Verify that the customer order has the tax information on shipping and totals
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_shipping_and_order_display_settings.php
+     */
+    public function testCustomerOrderWithTaxesIncludedOnShippingAndTotals()
+    {
+        $quantity = 2;
+        $sku = 'simple1';
+        $cartId = $this->createEmptyCart();
+        $this->addProductToCart($cartId, $quantity, $sku);
+
+        $this->setBillingAddress($cartId);
+        $shippingMethod = $this->setShippingAddress($cartId);
+
+        $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
+        $this->setPaymentMethod($cartId, $paymentMethod);
+
+        $orderNumber = $this->placeOrder($cartId);
+        $customerOrderResponse = $this->getCustomerOrderQuery($orderNumber);
+        $customerOrderItem = $customerOrderResponse[0];
+        $this->assertTotalsAndShippingWithTaxes($customerOrderItem);
+        $this->deleteOrder();
+    }
+
+    /**
+     * @return string
+     */
+    private function createEmptyCart(): string
+    {
+        $query = <<<QUERY
+mutation {
+  createEmptyCart
+}
+QUERY;
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+        return $response['createEmptyCart'];
+    }
+
+    /**
+     * @param string $cartId
+     * @param float $qty
+     * @param string $sku
+     * @return void
+     */
+    private function addProductToCart(string $cartId, float $qty, string $sku): void
+    {
+        $query = <<<QUERY
+mutation {
+  addSimpleProductsToCart(
+    input: {
+      cart_id: "{$cartId}"
+      cart_items: [
+        {
+          data: {
+            quantity: {$qty}
+            sku: "{$sku}"
+          }
+        }
+      ]
+    }
+  ) {
+    cart {items{quantity product {sku}}}}
+}
+QUERY;
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+    }
+
+    /**
+     * @param string $cartId
+     * @param float $qty
+     * @param string $sku
+     * @param int $optionId
+     * @param int $selectionId
+     * @throws AuthenticationException
+     */
+    public function addBundleProductToCart(string $cartId, float $qty, string $sku, int $optionId1, int $selectionId1, int $optionId2, int $selectionId2)
+    {
+        $query = <<<QUERY
+mutation {
+  addBundleProductsToCart(input:{
+    cart_id:"{$cartId}"
+    cart_items:[
+      {
+        data:{
+          sku:"{$sku}"
+          quantity:$qty
+        }
+        bundle_options:[
+          {
+            id:$optionId1
+            quantity:1
+            value:["{$selectionId1}"]
+          }
+          {
+            id:$optionId2
+            quantity:2
+            value:["{$selectionId2}"]
+          }
+        ]
+      }
+    ]
+  }) {
+    cart {
+      items {quantity product {sku}}
+      }
+    }
+}
+QUERY;
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+        $this->assertArrayHasKey('cart', $response['addBundleProductsToCart']);
+    }
+
+    /**
+     * @param string $cartId
+     * @param array $auth
+     * @return array
+     */
+    private function setBillingAddress(string $cartId): void
+    {
+        $query = <<<QUERY
+mutation {
+  setBillingAddressOnCart(
+    input: {
+      cart_id: "{$cartId}"
+      billing_address: {
+         address: {
+          firstname: "John"
+          lastname: "Smith"
+          company: "Test company"
+          street: ["test street 1", "test street 2"]
+          city: "Texas City"
+          postcode: "78717"
+          telephone: "5123456677"
+          region: "TX"
+          country_code: "US"
+         }
+      }
+    }
+  ) {
+    cart {
+      billing_address {
+        __typename
+      }
+    }
+  }
+}
+QUERY;
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+    }
+
+    /**
+     * @param string $cartId
+     * @return array
+     */
+    private function setShippingAddress(string $cartId): array
+    {
+        $query = <<<QUERY
+mutation {
+  setShippingAddressesOnCart(
+    input: {
+      cart_id: "$cartId"
+      shipping_addresses: [
+        {
+          address: {
+            firstname: "test shipFirst"
+            lastname: "test shipLast"
+            company: "test company"
+            street: ["test street 1", "test street 2"]
+            city: "Montgomery"
+            region: "AL"
+            postcode: "36013"
+            country_code: "US"
+            telephone: "3347665522"
+          }
+        }
+      ]
+    }
+  ) {
+    cart {
+      shipping_addresses {
+        available_shipping_methods {
+          carrier_code
+          method_code
+          amount {value}
+        }
+      }
+    }
+  }
+}
+QUERY;
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+        $shippingAddress = current($response['setShippingAddressesOnCart']['cart']['shipping_addresses']);
+        $availableShippingMethod = current($shippingAddress['available_shipping_methods']);
+        return $availableShippingMethod;
+    }
+    /**
+     * @param string $cartId
+     * @param array $method
+     * @return array
+     */
+    private function setShippingMethod(string $cartId, array $method): array
+    {
+        $query = <<<QUERY
+mutation {
+  setShippingMethodsOnCart(input:  {
+    cart_id: "{$cartId}",
+    shipping_methods: [
+      {
+         carrier_code: "{$method['carrier_code']}"
+         method_code: "{$method['method_code']}"
+      }
+    ]
+  }) {
+    cart {
+      available_payment_methods {
+        code
+        title
+      }
+    }
+  }
+}
+QUERY;
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+
+        $availablePaymentMethod = current($response['setShippingMethodsOnCart']['cart']['available_payment_methods']);
+        return $availablePaymentMethod;
+    }
+
+    /**
+     * @param string $cartId
+     * @param array $method
+     * @return void
+     */
+    private function setPaymentMethod(string $cartId, array $method): void
+    {
+        $query = <<<QUERY
+mutation {
+  setPaymentMethodOnCart(
+    input: {
+      cart_id: "{$cartId}"
+      payment_method: {
+        code: "{$method['code']}"
+      }
+    }
+  ) {
+    cart {selected_payment_method {code}}
+  }
+}
+QUERY;
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+    }
+
+    /**
+     * @param string $cartId
+     * @return string
+     */
+    private function placeOrder(string $cartId): string
+    {
+        $query = <<<QUERY
+mutation {
+  placeOrder(
+    input: {
+      cart_id: "{$cartId}"
+    }
+  ) {
+    order {
+      order_number
+    }
+  }
+}
+QUERY;
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+        return $response['placeOrder']['order']['order_number'];
+    }
+
+    /**
+     * Get customer order query
+     *
+     * @param string $orderNumber
+     * @return array
+     */
+    private function getCustomerOrderQuery($orderNumber):array
+    {
+        $query =
+            <<<QUERY
+{
+     customer {
+       email
+       orders(filter:{number:{eq:"{$orderNumber}"}}) {
+         total_count
+         items {
+           id
+           number
+           order_date
+           status
+           items{product_name product_sku quantity_ordered discounts {amount{value currency} label}}
+           total {
+             base_grand_total{value currency}
+             grand_total{value currency}
+             total_tax{value}
+             subtotal { value currency }
+             taxes {amount{value currency} title rate}
+             discounts {amount{value currency} label}
+             total_shipping{value}
+             shipping_handling
+             {
+               amount_including_tax{value}
+               amount_excluding_tax{value}
+               total_amount{value currency}
+               taxes {amount{value} title rate}
+               discounts {amount{value currency} label}
+             }
+
+           }
+         }
+       }
+     }
+   }
+QUERY;
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+
+        $this->assertArrayHasKey('orders', $response['customer']);
+        $this->assertArrayHasKey('items', $response['customer']['orders']);
+        $customerOrderItemsInResponse = $response['customer']['orders']['items'];
+        return $customerOrderItemsInResponse;
+    }
+
+    /**
+     * Get customer order query for bundle order items
+     *
+     * @param $orderNumber
+     * @return mixed
+     * @throws AuthenticationException
+     */
+    private function getCustomerOrderQueryBundleProduct($orderNumber)
+    {
+        $query =
+            <<<QUERY
+{
+     customer {
+       orders(filter:{number:{eq:"{$orderNumber}"}}) {
+         total_count
+         items {
+           number
+           order_date
+           status
+           items{
+            product_sku
+            quantity_ordered
+            __typename
+            ... on BundleOrderItem{
+              child_items{
+                discounts{
+                  amount{
+                    value
+                    currency
+                  }
+                  label
+                }
+                __typename
+                product_sku
+                product_name
+                product_sku
+            product_url_key
+            product_sale_price{value}
+            product_sale_price{value currency}
+            quantity_ordered
+              }
+            }
+          }
+           total {
+             base_grand_total{value currency}
+             grand_total{value currency}
+             total_tax{value}
+             subtotal { value currency }
+             taxes {amount{value currency} title rate}
+             discounts{
+                  amount{
+                    value
+                    currency
+                  }
+                  label
+                }
+             total_shipping{value}
+             shipping_handling
+             {
+               amount_including_tax{value}
+               amount_excluding_tax{value}
+               total_amount{value}
+               taxes {amount{value} title rate}
+               discounts{
+                  amount{
+                    value
+                    currency
+                  }
+                  label
+                }
+             }
+           }
+         }
+       }
+     }
+   }
+QUERY;
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+
+        $this->assertArrayHasKey('orders', $response['customer']);
+        $this->assertArrayHasKey('items', $response['customer']['orders']);
+        $customerOrderItemsInResponse = $response['customer']['orders']['items'];
+        return $customerOrderItemsInResponse;
+    }
+
+    /**
+     * @return void
+     */
+    private function deleteOrder(): void
+    {
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+
+        /** @var $order \Magento\Sales\Model\Order */
+        $orderCollection = Bootstrap::getObjectManager()->create(Collection::class);
+        //$orderCollection = $this->orderCollectionFactory->create();
+        foreach ($orderCollection as $order) {
+            $this->orderRepository->delete($order);
+        }
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
+    }
+
+    /**
+     * Assert order totals including shipping_handling and taxes
+     *
+     * @param array $customerOrderItem
+     */
+    private function assertTotalsAndShippingWithTaxes(array $customerOrderItem): void
+    {
+        $this->assertEquals(
+            32.25,
+            $customerOrderItem['total']['base_grand_total']['value']
+        );
+
+        $this->assertEquals(
+            32.25,
+            $customerOrderItem['total']['grand_total']['value']
+        );
+        $this->assertEquals(
+            20,
+            $customerOrderItem['total']['subtotal']['value']
+        );
+        $this->assertEquals(
+            2.25,
+            $customerOrderItem['total']['total_tax']['value']
+        );
+
+        $this->assertEquals(
+            10,
+            $customerOrderItem['total']['total_shipping']['value']
+        );
+        $this->assertEquals(
+            0.75,
+            $customerOrderItem['total']['taxes'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'US-TEST-*-Rate-1',
+            $customerOrderItem['total']['taxes'][0]['title']
+        );
+        $this->assertEquals(
+            7.5,
+            $customerOrderItem['total']['taxes'][0]['rate']
+        );
+        $this->assertEquals(
+            10.75,
+            $customerOrderItem['total']['shipping_handling']['amount_including_tax']['value']
+        );
+        $this->assertEquals(
+            10,
+            $customerOrderItem['total']['shipping_handling']['amount_excluding_tax']['value']
+        );
+        $this->assertEquals(
+            10,
+            $customerOrderItem['total']['shipping_handling']['total_amount']['value']
+        );
+
+        $this->assertEquals(
+            0.75,
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'US-TEST-*-Rate-1',
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['title']
+        );
+        $this->assertEquals(
+            7.5,
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['rate']
+        );
+    }
+
+    /**
      * Assert order totals
      *
      * @param array $response
@@ -629,7 +1664,7 @@ QUERY;
                 $response['customer']['orders']['items'][0]['total']['shipping_handling']['total_amount']['currency']
             );
             $this->assertEquals(
-                5,
+                0,
                 $response['customer']['orders']['items'][0]['total']['taxes'][0]['amount']['value']
             );
             $this->assertEquals(
@@ -637,6 +1672,5 @@ QUERY;
                 $response['customer']['orders']['items'][0]['total']['taxes'][0]['amount']['currency']
             );
         }
-
     }
 }

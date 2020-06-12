@@ -14,6 +14,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\OrderItemRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
 
 /**
  * Data provider for order items
@@ -129,7 +130,6 @@ class DataProvider
             /** @var OrderInterface $associatedOrder */
             $associatedOrder = $orderList[$orderItem->getOrderId()];
             $itemOptions = $this->optionsProcessor->getItemOptions($orderItem);
-
             $this->orderItemList[$orderItem->getItemId()] = [
                 'id' => base64_encode($orderItem->getItemId()),
                 'associatedProduct' => $associatedProduct,
@@ -207,5 +207,27 @@ class DataProvider
             $orderList[$order->getEntityId()] = $order;
         }
         return $orderList;
+    }
+
+    /**
+     * Returns information about an applied discount
+     *
+     * @param OrderInterface $associatedOrder
+     * @param OrderItemInterface $orderItem
+     * @return array|null
+     */
+    private function getDiscountDetails(OrderInterface $associatedOrder, OrderItemInterface $orderItem)
+    {
+        if ($associatedOrder->getDiscountDescription() === null && $orderItem->getDiscountAmount() == 0
+            && $associatedOrder->getDiscountAmount() == 0
+        ) {
+            return null;
+        }
+
+        $discounts [] = [
+            'label' => $associatedOrder->getDiscountDescription() ?? "null",
+            'amount' => ['value' => $orderItem->getDiscountAmount() ?? 0, 'currency' => $associatedOrder->getOrderCurrencyCode()]
+        ];
+        return $discounts;
     }
 }
