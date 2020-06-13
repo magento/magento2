@@ -8,8 +8,10 @@ declare(strict_types=1);
 namespace Magento\Catalog\Plugin\Block;
 
 use Magento\Catalog\Model\Category;
+use Magento\Catalog\Observer\MenuCategoryData;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Tree\Node;
+use function array_merge;
 
 /**
  * Plugin for top menu block
@@ -17,16 +19,14 @@ use Magento\Framework\Data\Tree\Node;
 class Topmenu
 {
     /**
-     * Catalog category
-     *
-     * @var \Magento\Catalog\Helper\Category
-     */
-    protected $catalogCategory;
-
-    /**
      * @var \Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory
      */
     private $collectionFactory;
+
+    /**
+     * @var MenuCategoryData
+     */
+    private $menuCategoryData;
 
     /**
      * @var \Magento\Store\Model\StoreManagerInterface
@@ -47,13 +47,13 @@ class Topmenu
      * @param \Magento\Catalog\Model\Layer\Resolver $layerResolver
      */
     public function __construct(
-        \Magento\Catalog\Helper\Category $catalogCategory,
         \Magento\Catalog\Model\ResourceModel\Category\StateDependentCollectionFactory $categoryCollectionFactory,
+        MenuCategoryData $menuCategoryData,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Catalog\Model\Layer\Resolver $layerResolver
     ) {
-        $this->catalogCategory = $catalogCategory;
         $this->collectionFactory = $categoryCollectionFactory;
+        $this->menuCategoryData = $menuCategoryData;
         $this->storeManager = $storeManager;
         $this->layerResolver = $layerResolver;
     }
@@ -78,7 +78,6 @@ class Topmenu
         $storeId = $this->storeManager->getStore()->getId();
         /** @var \Magento\Catalog\Model\ResourceModel\Category\Collection $collection */
         $collection = $this->getCategoryTree($storeId, $rootId);
-        $currentCategory = $this->getCurrentCategory();
         $mapping = [$rootId => $subject->getMenu()];  // use nodes stack to avoid recursion
         foreach ($collection as $category) {
             $categoryParentId = $category->getParentId();
@@ -97,7 +96,6 @@ class Topmenu
             $categoryNode = new Node(
                 $this->getCategoryAsArray(
                     $category,
-                    $currentCategory,
                     $category->getParentId() == $categoryParentId
                 ),
                 'id',
@@ -152,22 +150,17 @@ class Topmenu
      * Convert category to array
      *
      * @param \Magento\Catalog\Model\Category $category
-     * @param \Magento\Catalog\Model\Category $currentCategory
      * @param bool $isParentActive
      * @return array
      */
-    private function getCategoryAsArray($category, $currentCategory, $isParentActive)
+    private function getCategoryAsArray($category, $isParentActive)
     {
-        $categoryId = $category->getId();
-        return [
-            'name' => $category->getName(),
-            'id' => 'category-node-' . $categoryId,
-            'url' => $this->catalogCategory->getCategoryUrl($category),
-            'has_active' => in_array((string)$categoryId, explode('/', (string)$currentCategory->getPath()), true),
-            'is_active' => $categoryId == $currentCategory->getId(),
+        $menuData = $this->menuCategoryData->getMenuCategoryData($category);
+        $localData = [
             'is_category' => true,
             'is_parent_active' => $isParentActive
         ];
+        return array_merge($localData, $menuData);
     }
 
     /**
