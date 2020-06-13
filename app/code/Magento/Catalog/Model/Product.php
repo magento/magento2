@@ -974,17 +974,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
-     * @inheritDoc
-     */
-    public function getCacheTags()
-    {
-        $identities = $this->getIdentities();
-        $cacheTags = !empty($identities) ? (array) $identities : parent::getCacheTags();
-
-        return $cacheTags;
-    }
-
-    /**
      * Set quantity for product
      *
      * @param float $qty
@@ -2173,7 +2162,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getCacheIdTags()
     {
-        // phpstan:ignore "Call to an undefined static method"
         $tags = parent::getCacheIdTags();
         $affectedCategoryIds = $this->getAffectedCategoryIds();
         if (!$affectedCategoryIds) {
@@ -2354,8 +2342,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getImage()
     {
         $this->getTypeInstance()->setImageFromChildProduct($this);
-
-        // phpstan:ignore "Call to an undefined static method"
         return parent::getImage();
     }
 
@@ -2419,8 +2405,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         }
     }
 
-    //phpcs:disable PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.MethodDoubleUnderscore
-
     /**
      * Return Data Object data in array format.
      *
@@ -2447,8 +2431,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         }
         return $data;
     }
-
-    //phpcs:enable PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.MethodDoubleUnderscore
 
     /**
      * Convert Category model into flat array.
