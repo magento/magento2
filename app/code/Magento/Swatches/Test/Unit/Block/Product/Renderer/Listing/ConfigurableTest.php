@@ -86,10 +86,12 @@ class ConfigurableTest extends TestCase
 
     /** @var MockObject */
     private $variationPricesMock;
+
     /**
      * @var StoreManagerInterface|MockObject
      */
     private $storeManager;
+
     /**
      * @var Context|MockObject
      */
