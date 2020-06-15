@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\TestFramework\Workaround\Override\Fixture\Applier;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+
 /**
  * Class represent config fixtures applying logic
  */
@@ -63,9 +65,21 @@ class ConfigFixture extends Base
     {
         $value = !empty($attributes['newValue']) ? $attributes['newValue'] : $attributes['value'];
 
-        return $attributes['scopeType'] === 'default'
-            ? sprintf('%s/%s %s', $attributes['scopeType'], $attributes['path'], $value)
-            : sprintf('%s_%s %s %s', $attributes['scopeCode'], $attributes['scopeType'], $attributes['path'], $value);
+        if (empty($attributes['scopeType'])) {
+            $result = sprintf('%s %s', $attributes['path'], $value);
+        } elseif ($attributes['scopeType'] === ScopeConfigInterface::SCOPE_TYPE_DEFAULT) {
+            $result  = sprintf('%s/%s %s', $attributes['scopeType'], $attributes['path'], $value);
+        } else {
+            $result = sprintf(
+                '%s_%s %s %s',
+                $attributes['scopeCode'],
+                $attributes['scopeType'],
+                $attributes['path'],
+                $value
+            );
+        }
+
+        return $result;
     }
 
     /**

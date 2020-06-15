@@ -153,3 +153,6 @@ Store,Store
 "Newsletter Subscriptions","Newsletter Subscriptions"
 "We have updated your subscription.","We have updated your subscription."
 "Are you sure you want to delete the selected subscriber(s)?","Are you sure you want to delete the selected subscriber(s)?"
+"Cannot create a newsletter subscription.","Cannot create a newsletter subscription."
+"Enter a valid email address.","Enter a valid email address."
+"Guests can not subscribe to the newsletter. You must create an account to subscribe.","Guests can not subscribe to the newsletter. You must create an account to subscribe."
