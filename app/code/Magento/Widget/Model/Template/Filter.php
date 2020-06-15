@@ -22,21 +22,22 @@ class Filter extends \Magento\Cms\Model\Template\Filter
     protected $_widget;
 
     /**
-     * @param \Magento\Framework\Stdlib\StringUtils $string
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Framework\View\Asset\Repository $assetRepo
+     * @param \Magento\Framework\Stdlib\StringUtils              $string
+     * @param \Psr\Log\LoggerInterface                           $logger
+     * @param \Magento\Framework\Escaper                         $escaper
+     * @param \Magento\Framework\View\Asset\Repository           $assetRepo
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
-     * @param \Magento\Variable\Model\VariableFactory $coreVariableFactory
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\View\LayoutInterface $layout
-     * @param \Magento\Framework\View\LayoutFactory $layoutFactory
-     * @param \Magento\Framework\App\State $appState
-     * @param \Magento\Framework\UrlInterface $urlModel
-     * @param \Pelago\Emogrifier $emogrifier
-     * @param \Magento\Variable\Model\Source\Variables $configVariables
-     * @param \Magento\Widget\Model\ResourceModel\Widget $widgetResource
-     * @param \Magento\Widget\Model\Widget $widget
+     * @param \Magento\Variable\Model\VariableFactory            $coreVariableFactory
+     * @param \Magento\Store\Model\StoreManagerInterface         $storeManager
+     * @param \Magento\Framework\View\LayoutInterface            $layout
+     * @param \Magento\Framework\View\LayoutFactory              $layoutFactory
+     * @param \Magento\Framework\App\State                       $appState
+     * @param \Magento\Framework\UrlInterface                    $urlModel
+     * @param \Pelago\Emogrifier                                 $emogrifier
+     * @param \Magento\Variable\Model\Source\Variables           $configVariables
+     * @param \Magento\Widget\Model\ResourceModel\Widget         $widgetResource
+     * @param \Magento\Widget\Model\Widget                       $widget
+     * @param array                                              $directiveProcessors
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -54,7 +55,8 @@ class Filter extends \Magento\Cms\Model\Template\Filter
         \Pelago\Emogrifier $emogrifier,
         \Magento\Variable\Model\Source\Variables $configVariables,
         \Magento\Widget\Model\ResourceModel\Widget $widgetResource,
-        \Magento\Widget\Model\Widget $widget
+        \Magento\Widget\Model\Widget $widget,
+        array $directiveProcessors = []
     ) {
         $this->_widgetResource = $widgetResource;
         $this->_widget = $widget;
@@ -71,7 +73,10 @@ class Filter extends \Magento\Cms\Model\Template\Filter
             $appState,
             $urlModel,
             $emogrifier,
-            $configVariables
+            $configVariables,
+            [],
+            null,
+            $directiveProcessors
         );
     }
 
