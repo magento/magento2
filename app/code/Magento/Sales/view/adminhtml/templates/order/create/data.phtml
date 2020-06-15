@@ -31,7 +31,7 @@ script;
         <?= /* @noEscape */ $secureRenderer->renderTag(
             'script',
             [],
-            "let elemOrderSearch = document.querySelector('div#order-search');
+            "var elemOrderSearch = document.querySelector('div#order-search');
             if (elemOrderSearch) {
                 elemOrderSearch.style.display = 'none';
                 elemOrderSearch.classList.remove('no-display');

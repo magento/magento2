@@ -76,7 +76,7 @@ class Image extends \Magento\Framework\Data\Form\Element\AbstractElement
                 $url = $this->_urlBuilder->getBaseUrl(['_type' => UrlInterface::URL_TYPE_MEDIA]) . $url;
             }
 
-            $linkId = 'linkId' .$this->random->getRandomString(32);
+            $linkId = 'linkId' .$this->random->getRandomString(8);
             $html = '<a previewlinkid="' .$linkId .'" href="' .
                 $url .
                 '" ' .

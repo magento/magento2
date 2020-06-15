@@ -140,7 +140,7 @@ class Link extends \Magento\Framework\View\Element\Template
         }
 
         if (!$this->getDataUsingMethod('id')) {
-            $this->setDataUsingMethod('id', 'id' .$this->random->getRandomString(32));
+            $this->setDataUsingMethod('id', 'id' .$this->random->getRandomString(8));
         }
 
         return '<li><a ' . $this->getLinkAttributes() . ' >' . $this->escapeHtml($this->getLabel()) . '</a></li>'
