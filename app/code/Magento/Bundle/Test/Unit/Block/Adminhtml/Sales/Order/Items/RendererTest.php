@@ -92,10 +92,11 @@ class RendererTest extends \PHPUnit\Framework\TestCase
 
         $item = $this->createPartialMock(
             \Magento\Sales\Model\Order\Invoice\Item::class,
-            ['getInvoice', 'getOrderItem', '__wakeup']
+            ['getInvoice', 'getOrderItem', 'getOrderItemId', '__wakeup']
         );
-        $item->expects($this->once())->method('getInvoice')->will($this->returnValue($salesModel));
+        $item->expects($this->any())->method('getInvoice')->will($this->returnValue($salesModel));
         $item->expects($this->any())->method('getOrderItem')->will($this->returnValue($this->orderItem));
+        $item->expects($this->any())->method('getOrderItemId')->will($this->returnValue(2));
 
         $this->assertSame([2 => $this->orderItem], $this->model->getChildren($item));
     }

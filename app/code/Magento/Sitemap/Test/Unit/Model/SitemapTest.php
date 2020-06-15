@@ -11,6 +11,8 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Write as DirectoryWrite;
 use Magento\Framework\Filesystem\File\Write;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Translate\InlineInterface;
+use Magento\Framework\ZendEscaper;
 use Magento\Sitemap\Helper\Data;
 use Magento\Sitemap\Model\ItemProvider\ConfigReaderInterface;
 use Magento\Sitemap\Model\ItemProvider\ItemProviderInterface;
@@ -547,7 +549,7 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
                                     new DataObject(
                                         [
                                             'url' => $storeBaseMediaUrl . 'i/m/image1.png',
-                                            'caption' => 'caption & > title < "'
+                                            'caption' => 'Copyright © caption &trade; & > title < "'
                                         ]
                                     ),
                                     new DataObject(
@@ -606,7 +608,8 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
 
         $objectManager = new ObjectManager($this);
         $escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
-
+        $this->setPrivatePropertyValue($escaper, 'escaper', $objectManager->getObject(ZendEscaper::class));
+        $this->setPrivatePropertyValue($escaper, 'translateInline', $this->createMock(InlineInterface::class));
         $constructArguments = $objectManager->getConstructArguments(
             Sitemap::class,
             [
@@ -791,5 +794,22 @@ class SitemapTest extends \PHPUnit\Framework\TestCase
                 null,
             ],
         ];
+    }
+
+    /**
+     * @param mixed $object
+     * @param string $attributeName
+     * @param string $value
+     */
+    private function setPrivatePropertyValue($object, $attributeName, $value): void
+    {
+        $attribute = new \ReflectionProperty($object, $attributeName);
+        if ($attribute->isPublic()) {
+            $object->$attributeName = $value;
+        } else {
+            $attribute->setAccessible(true);
+            $attribute->setValue($object, $value);
+            $attribute->setAccessible(false);
+        }
     }
 }

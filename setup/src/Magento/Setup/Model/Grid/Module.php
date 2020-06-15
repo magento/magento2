@@ -12,6 +12,8 @@ use Magento\Setup\Model\PackagesData;
 
 /**
  * Module grid
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 class Module
 {

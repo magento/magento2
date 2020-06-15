@@ -8,6 +8,11 @@ namespace Magento\Setup\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class MarketplaceCredentials
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
+ */
 class MarketplaceCredentials extends AbstractActionController
 {
     /**

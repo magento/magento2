@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\Newsletter\Model;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterfaceFactory;
+use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
@@ -41,6 +43,37 @@ class SubscriberTest extends TestCase
         $this->subscriberFactory = $this->objectManager->get(SubscriberFactory::class);
         $this->transportBuilder = $this->objectManager->get(TransportBuilderMock::class);
         $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
+    }
+
+    /**
+     * Tests that confirmation code does NOT change after creating Customer account with subscription.
+     *
+     * @magentoDataFixture Magento/Newsletter/_files/subscribers.php
+     * @return void
+     */
+    public function testConfirmationCodeDoesNotChangeWhenCustomerEmailHasSubscription(): void
+    {
+        /** @var Subscriber $subscriber */
+        $subscriber = $this->subscriberFactory->create()
+            ->loadByEmail('customer_confirm@example.com');
+        $confirmCode = $subscriber->getCode();
+
+        /** @var CustomerInterfaceFactory $customerFactory */
+        $customerFactory = $this->objectManager->get(CustomerInterfaceFactory::class);
+        $customerDataObject = $customerFactory->create()
+            ->setFirstname('Firstname')
+            ->setLastname('Lastname')
+            ->setEmail('customer_confirm@example.com');
+
+        /** @var AccountManagementInterface $accountManagement */
+        $accountManagement = $this->objectManager->get(AccountManagementInterface::class);
+        $createdCustomer = $this->customerRepository->save(
+            $customerDataObject,
+            $accountManagement->getPasswordHash('password')
+        );
+
+        $subscriber->loadByCustomerId((int)$createdCustomer->getId());
+        $this->assertEquals($confirmCode, $subscriber->getCode());
     }
 
     /**

@@ -12,6 +12,11 @@ use Zend\View\Model\JsonModel;
 use Magento\Setup\Model\PackagesData;
 use Magento\Setup\Model\PackagesAuth;
 
+/**
+ * Class Marketplace
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
+ */
 class Marketplace extends AbstractActionController
 {
     /**
