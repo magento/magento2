@@ -156,7 +156,7 @@ $scriptString .= <<<script
         setFormValues: function()
         {
             var a;
-            if ($(this.carriersUpsTypeId) == 'UPS') {
+            if (\$F(this.carriersUpsTypeId) == 'UPS') {
                 for (a = 0; a < this.checkingUpsXmlId.length; a++) {
                     $(this.checkingUpsXmlId[a]).removeClassName('required-entry');
                 }
@@ -184,13 +184,13 @@ $scriptString .= <<<script
         },
         changeOriginShipment: function(Event, key)
         {
-            this.originShipmentTitle = key ? key : $('carriers_ups_origin_shipment');
+            this.originShipmentTitle = key ? key : \$F('carriers_ups_origin_shipment');
             this.updateAllowedMethods(this.originShipmentTitle);
         },
         changeFieldsDisabledState: function (fields, key) {
-            $(fields[key]).disabled = $(this.carriersUpsActiveId) !== '1'
+            $(fields[key]).disabled = \$F(this.carriersUpsActiveId) !== '1'
                 || $(fields[key] + '_inherit') !== null
-                && $(fields[key] + '_inherit') === '1';
+                && \$F(fields[key] + '_inherit') === '1';
 
             if ($(fields[key]).next() !== undefined) {
                 $(fields[key]).removeClassName('mage-error').next().remove();
