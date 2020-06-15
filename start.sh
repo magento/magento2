@@ -14,11 +14,11 @@ if [ $MODE != 'production' ]
 then
     cp -a pub.new/* pub/
     cp -a .htaccess pub/
-
     #/// deploy the static content, compile di and flush the cache :)
     php bin/magento deploy:mode:set production
 fi
 
+echo "Startup complete ...."
 
 
 
