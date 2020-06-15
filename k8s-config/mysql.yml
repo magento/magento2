@@ -46,7 +46,7 @@ spec:
         tier: mysql
     spec:
       containers:
-        - image: mysql:5.7
+        - image: percona:latest
           name: mysql
           args:
             - "--ignore-db-dir=lost+found"
