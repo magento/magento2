@@ -14,6 +14,7 @@
             <stories value="Check Configurable doesn't show simple products which are no longer assigned to the website"/>
             <title value="Set visibility for product's option according to current website and check it on the frontend"/>
             <description value="Unassign child product from the main website"/>
+            <testCaseId value="MC-35172"/>
             <group value="product"/>
         </annotations>
         <before>
