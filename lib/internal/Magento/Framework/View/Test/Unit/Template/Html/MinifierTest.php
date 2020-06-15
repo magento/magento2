@@ -113,6 +113,8 @@ class MinifierTest extends TestCase
     /**
      * Covered method minify and test regular expressions
      * @test
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testMinify()
     {
