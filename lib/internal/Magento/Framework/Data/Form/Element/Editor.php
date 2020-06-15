@@ -420,7 +420,7 @@ script
      */
     protected function _getButtonHtml($data)
     {
-        $id = empty($data['id']) ? 'buttonId' .$this->random->getRandomString(32) : $data['id'];
+        $id = empty($data['id']) ? 'buttonId' .$this->random->getRandomString(10) : $data['id'];
 
         $html = '<button type="button"';
         $html .= ' class="scalable ' . (isset($data['class']) ? $data['class'] : '') . '"';
