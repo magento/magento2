@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "32bb52e51d11191eaab933598f15b2fd",
+    "content-hash": "92dbe431360d97af80030834b46dd77d",
     "packages": [
         {
             "name": "colinmollenhour/cache-backend-file",
@@ -7203,7 +7203,7 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "dev-3.0.0-RC5",
+            "version": "3.0.0-RC5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
@@ -10704,7 +10704,7 @@
     "minimum-stability": "stable",
     "stability-flags": {
         "magento/composer": 20,
-        "magento/magento2-functional-testing-framework": 20
+        "magento/magento2-functional-testing-framework": 5
     },
     "prefer-stable": true,
     "prefer-lowest": false,
