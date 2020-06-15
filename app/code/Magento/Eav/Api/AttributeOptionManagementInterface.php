@@ -25,20 +25,6 @@ interface AttributeOptionManagementInterface
     public function add($entityType, $attributeCode, $option);
 
     /**
-     * Update attribute option
-     *
-     * @param string $entityType
-     * @param string $attributeCode
-     * @param int $optionId
-     * @param \Magento\Eav\Api\Data\AttributeOptionInterface $option
-     * @return bool
-     * @throws \Magento\Framework\Exception\StateException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    public function update($entityType, $attributeCode, $optionId, $option);
-
-    /**
      * Delete option from attribute
      *
      * @param int $entityType

@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Eav\Model\Entity\Attribute;
 
 use Magento\Eav\Api\AttributeOptionManagementInterface;
+use Magento\Eav\Api\AttributeOptionUpdateInterface;
 use Magento\Eav\Api\Data\AttributeInterface as EavAttributeInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Eav\Model\AttributeRepository;
@@ -19,7 +20,7 @@ use Magento\Framework\Exception\StateException;
 /**
  * Eav Option Management
  */
-class OptionManagement implements AttributeOptionManagementInterface
+class OptionManagement implements AttributeOptionManagementInterface, AttributeOptionUpdateInterface
 {
     /**
      * @var AttributeRepository
@@ -82,8 +83,12 @@ class OptionManagement implements AttributeOptionManagementInterface
     /**
      * @inheritdoc
      */
-    public function update($entityType, $attributeCode, $optionId, $option)
-    {
+    public function update(
+        string $entityType,
+        string $attributeCode,
+        int $optionId,
+        AttributeOptionInterface $option
+    ): bool {
         $attribute = $this->loadAttribute($entityType, (string)$attributeCode);
         if (empty($optionId)) {
             throw new InputException(__('The option id is empty. Enter the value and try again.'));

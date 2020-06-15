@@ -8,13 +8,16 @@ namespace Magento\Catalog\Model\Product\Attribute;
 
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Catalog\Api\ProductAttributeOptionManagementInterface;
+use Magento\Catalog\Api\ProductAttributeOptionUpdateInterface;
 use Magento\Eav\Api\AttributeOptionManagementInterface;
+use Magento\Eav\Api\AttributeOptionUpdateInterface;
+use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Framework\Exception\InputException;
 
 /**
  * Option management model for product attribute.
  */
-class OptionManagement implements ProductAttributeOptionManagementInterface
+class OptionManagement implements ProductAttributeOptionManagementInterface, ProductAttributeOptionUpdateInterface
 {
     /**
      * @var AttributeOptionManagementInterface
@@ -22,12 +25,20 @@ class OptionManagement implements ProductAttributeOptionManagementInterface
     protected $eavOptionManagement;
 
     /**
+     * @var AttributeOptionUpdateInterface
+     */
+    private $eavOptionUpdate;
+
+    /**
      * @param AttributeOptionManagementInterface $eavOptionManagement
+     * @param AttributeOptionUpdateInterface $eavOptionUpdate
      */
     public function __construct(
-        AttributeOptionManagementInterface $eavOptionManagement
+        AttributeOptionManagementInterface $eavOptionManagement,
+        AttributeOptionUpdateInterface $eavOptionUpdate
     ) {
         $this->eavOptionManagement = $eavOptionManagement;
+        $this->eavOptionUpdate = $eavOptionUpdate;
     }
 
     /**
@@ -56,9 +67,9 @@ class OptionManagement implements ProductAttributeOptionManagementInterface
     /**
      * @inheritdoc
      */
-    public function update($attributeCode, $optionId, $option)
+    public function update(string $attributeCode, int $optionId, AttributeOptionInterface $option): bool
     {
-        return $this->eavOptionManagement->update(
+        return $this->eavOptionUpdate->update(
             ProductAttributeInterface::ENTITY_TYPE_CODE,
             $attributeCode,
             $optionId,
