@@ -314,23 +314,31 @@ QUERY;
         $product2 = $productRepository->get('12345');
         $product3 = $productRepository->get('simple-4');
         $filteredProducts = [$product1, $product2, $product3 ];
-        $countOfFilteredProducts = count($filteredProducts);
         $this->reIndexAndCleanCache();
         $response = $this->graphQlQuery($query);
         $this->assertEquals(3, $response['products']['total_count'], 'Number of products returned is incorrect');
         $this->assertTrue(count($response['products']['filters']) > 0, 'Product filters is not empty');
         $this->assertCount(3, $response['products']['aggregations'], 'Incorrect count of aggregations');
 
-        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
-        for ($itemIndex = 0; $itemIndex < $countOfFilteredProducts; $itemIndex++) {
-            $this->assertNotEmpty($productItemsInResponse[$itemIndex]);
-            //validate that correct products are returned
-            $this->assertResponseFields(
-                $productItemsInResponse[$itemIndex][0],
-                [ 'name' => $filteredProducts[$itemIndex]->getName(),
-                  'sku' => $filteredProducts[$itemIndex]->getSku()
-                ]
-            );
+        foreach ($filteredProducts as $filteredProduct) {
+            $found = false;
+            $responseProduct = null;
+
+            foreach ($response['products']['items'] as $item) {
+                if ($item['sku'] === $filteredProduct->getSku()) {
+                    $found = true;
+                    $responseProduct = $item;
+                    break;
+                }
+            }
+
+            $this->assertTrue($found, "Product with sku {$filteredProduct->getSku()} is not found in response");
+
+            // validate that correct products are returned
+            $this->assertResponseFields($responseProduct, [
+                'name' => $filteredProduct->getName(),
+                'sku' => $filteredProduct->getSku(),
+            ]);
         }
 
         /** @var Config $eavConfig */
@@ -949,18 +957,26 @@ QUERY;
         $this->assertEquals(3, $response['products']['total_count'], 'Total count is incorrect');
         $this->assertCount(2, $response['products']['aggregations']);
 
-        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
-        //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
-        for ($itemIndex = 0; $itemIndex < count($filteredProducts); $itemIndex++) {
-            $this->assertNotEmpty($productItemsInResponse[$itemIndex]);
-            //validate that correct products are returned
-            $this->assertResponseFields(
-                $productItemsInResponse[$itemIndex][0],
-                [ 'name' => $filteredProducts[$itemIndex]->getName(),
-                  'sku' => $filteredProducts[$itemIndex]->getSku(),
-                  'url_key'=> $filteredProducts[$itemIndex]->getUrlKey()
-                ]
-            );
+        foreach ($filteredProducts as $filteredProduct) {
+            $found = false;
+            $responseProduct = null;
+
+            foreach ($response['products']['items'] as $item) {
+                if ($item['sku'] === $filteredProduct->getSku()) {
+                    $found = true;
+                    $responseProduct = $item;
+                    break;
+                }
+            }
+
+            $this->assertTrue($found, "Product with sku {$filteredProduct->getSku()} is not found in response");
+
+            // validate that correct products are returned
+            $this->assertResponseFields($responseProduct, [
+                'name' => $filteredProduct->getName(),
+                'sku' => $filteredProduct->getSku(),
+                'url_key'=> $filteredProduct->getUrlKey(),
+            ]);
         }
     }
 
@@ -1553,25 +1569,32 @@ QUERY;
             foreach ($categoryIds as $index => $value) {
                 $categoryIds[$index] = (int)$value;
             }
-            $categoryInResponse = array_map(
-                null,
-                $categoryIds,
-                $response['products']['items'][$itemIndex]['categories']
-            );
-            foreach ($categoryInResponse as $key => $categoryData) {
-                $this->assertNotEmpty($categoryData);
+
+            $this->assertCount(\count($categoryIds), $response['products']['items'][$itemIndex]['categories']);
+
+            foreach ($categoryIds as $categoryId) {
+                $found = false;
+                $responseCategory = null;
                 /** @var CategoryInterface | Category $category */
-                $category = $categoryRepository->get($categoryInResponse[$key][0]);
-                $this->assertResponseFields(
-                    $categoryInResponse[$key][1],
-                    [
-                        'name' => $category->getName(),
-                        'id' => $category->getId(),
-                        'path' => $category->getPath(),
-                        'children_count' => $category->getChildrenCount(),
-                        'product_count' => $category->getProductCount(),
-                    ]
-                );
+                $category = $categoryRepository->get($categoryId);
+
+                foreach ($response['products']['items'][$itemIndex]['categories'] as $item) {
+                    if ((int)$category->getId() === $item['id']) {
+                        $found = true;
+                        $responseCategory = $item;
+                        break;
+                    }
+                }
+
+                $this->assertTrue($found, "Category with id {$category->getId()} is not found in response");
+
+                $this->assertResponseFields($responseCategory, [
+                    'name' => $category->getName(),
+                    'id' => $category->getId(),
+                    'path' => $category->getPath(),
+                    'children_count' => $category->getChildrenCount(),
+                    'product_count' => $category->getProductCount(),
+                ]);
             }
         }
     }
