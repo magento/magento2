@@ -17,7 +17,6 @@ then
     #/// deploy the static content, compile di and flush the cache :)
     php bin/magento deploy:mode:set production
 fi
-
 echo "Startup complete ...."
 
 
