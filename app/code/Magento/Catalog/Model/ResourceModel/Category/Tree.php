@@ -61,6 +61,13 @@ class Tree extends Dbp
     protected $_inactiveCategoryIds = null;
 
     /**
+     * Inactive items category ids
+     *
+     * @var array
+     */
+    protected $_inactiveItems;
+
+    /**
      * Store id
      *
      * @var integer
@@ -170,6 +177,7 @@ class Tree extends Dbp
      * @param array $exclude
      * @param boolean $toLoad
      * @param boolean $onlyActive
+     * @param boolean $includeMenu
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
@@ -179,7 +187,8 @@ class Tree extends Dbp
         $sorted = false,
         $exclude = [],
         $toLoad = true,
-        $onlyActive = false
+        $onlyActive = false,
+        $includeMenu = true
     ) {
         if ($collection === null) {
             $collection = $this->getCollection($sorted);
@@ -204,7 +213,9 @@ class Tree extends Dbp
                 $collection->addFieldToFilter('entity_id', ['nin' => $disabledIds]);
             }
             $collection->addAttributeToFilter('is_active', 1);
-            $collection->addAttributeToFilter('include_in_menu', 1);
+            if ($includeMenu) {
+                $collection->addAttributeToFilter('include_in_menu', 1);
+            }
         }
 
         if ($this->_joinUrlRewriteIntoCollection) {
@@ -680,6 +691,8 @@ class Tree extends Dbp
     }
 
     /**
+     * Get metadata from pool
+     *
      * @return \Magento\Framework\EntityManager\MetadataPool
      */
     private function getMetadataPool()

@@ -154,7 +154,8 @@ class View
     protected function generateCategoryUrls(int $rootCategoryId, int $storeId): array
     {
         $urls = [];
-        $categories = $this->categoryFactory->create()->getCategories($rootCategoryId, 1, false, true, false);
+        $categories = $this->categoryFactory->create()
+            ->getCategories($rootCategoryId, 1, false, true, false, true, false);
         $categories->setStoreId($storeId);
         foreach ($categories as $category) {
             /** @var Category $category */

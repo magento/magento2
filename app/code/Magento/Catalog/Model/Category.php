@@ -977,12 +977,29 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param bool $sorted
      * @param bool $asCollection
      * @param bool $toLoad
+     * @param bool $onlyActive
+     * @param bool $includeMenu
      * @return \Magento\Framework\Data\Tree\Node\Collection|\Magento\Catalog\Model\ResourceModel\Category\Collection
      */
-    public function getCategories($parent, $recursionLevel = 0, $sorted = false, $asCollection = false, $toLoad = true)
-    {
-        $categories = $this->getResource()->getCategories($parent, $recursionLevel, $sorted, $asCollection, $toLoad);
-        return $categories;
+    public function getCategories(
+        $parent,
+        $recursionLevel = 0,
+        $sorted = false,
+        $asCollection = false,
+        $toLoad = true,
+        $onlyActive = true,
+        $includeMenu = true
+    ) {
+        return $this->getResource()
+            ->getCategories(
+                $parent,
+                $recursionLevel,
+                $sorted,
+                $asCollection,
+                $toLoad,
+                $onlyActive,
+                $includeMenu
+            );
     }
 
     /**
