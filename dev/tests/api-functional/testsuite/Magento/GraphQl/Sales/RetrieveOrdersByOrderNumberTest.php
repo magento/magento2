@@ -14,7 +14,6 @@ use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\GraphQl\GetCustomerAuthenticationHeader;
-use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
@@ -26,19 +25,11 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  */
 class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
 {
-    /**
-     * @var CustomerTokenServiceInterface
-     */
-    private $customerTokenService;
-
     /** @var OrderRepositoryInterface */
     private $orderRepository;
 
     /** @var SearchCriteriaBuilder */
     private $searchCriteriaBuilder;
-
-    /** @var Order\Item */
-    private $orderItem;
 
     /** @var GetCustomerAuthenticationHeader */
     private $customerAuthenticationHeader;
@@ -50,12 +41,10 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
     {
         parent::setUp();
         $objectManager = Bootstrap::getObjectManager();
-        $this->customerTokenService = $objectManager->get(CustomerTokenServiceInterface::class);
         $this->customerAuthenticationHeader = $objectManager->get(GetCustomerAuthenticationHeader::class);
         $this->orderRepository = $objectManager->get(OrderRepositoryInterface::class);
         $this->searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
         $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
-        $this->orderItem = $objectManager->get(Order\Item::class);
     }
 
     /**
@@ -112,17 +101,16 @@ QUERY;
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $this->assertNotEmpty($response['customer']['orders']['items']);
         $customerOrderItemsInResponse = $response['customer']['orders']['items'][0];
-        $expectedCount = count($response['customer']['orders']['items']);
         $this->assertArrayHasKey('items', $customerOrderItemsInResponse);
         $this->assertNotEmpty($customerOrderItemsInResponse['items']);
 
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', '100000002')
             ->create();
         /** @var \Magento\Sales\Api\Data\OrderInterface[] $items */
-        $items = $this->orderRepository->getList($searchCriteria)->getItems();
-        foreach ($items as $item) {
-            $orderId = $item->getEntityId();
-            $orderNumber = $item->getIncrementId();
+        $orders = $this->orderRepository->getList($searchCriteria)->getItems();
+        foreach ($orders as $order) {
+            $orderId = $order->getEntityId();
+            $orderNumber = $order->getIncrementId();
             $this->assertEquals($orderId, $customerOrderItemsInResponse['id']);
             $this->assertEquals($orderNumber, $customerOrderItemsInResponse['number']);
             $this->assertEquals('Processing', $customerOrderItemsInResponse['status']);
@@ -155,16 +143,6 @@ QUERY;
     {
         $qty = 1;
         $bundleSku = 'bundle-product-two-dropdown-options';
-        $simpleProductSku = 'simple2';
-        /** @var Product $simple */
-        $simple = $this->productRepository->get($simpleProductSku);
-        $stockData =[
-            StockItemInterface::QTY => 200,
-            StockItemInterface::MANAGE_STOCK =>true,
-            StockItemInterface::IS_IN_STOCK =>true
-        ];
-        $simple->setQuantityAndStockStatus($stockData);
-        $this->productRepository->save($simple);
         /** @var Product $bundleProduct */
         $bundleProduct = $this->productRepository->get($bundleSku);
         /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
@@ -192,13 +170,40 @@ QUERY;
 
         $customerOrderItems = $customerOrderResponse[0];
         $this->assertEquals("Pending", $customerOrderItems['status']);
-
         $bundledItemInTheOrder = $customerOrderItems['items'][0];
         $this->assertEquals('bundle-product-two-dropdown-options-simple1-simple2', $bundledItemInTheOrder['product_sku']);
-        $this->assertArrayHasKey('child_items', $bundledItemInTheOrder);
-        $childItemInTheOrder = $bundledItemInTheOrder['child_items'][0];
-        $this->assertNotEmpty($childItemInTheOrder);
-        $this->assertEquals('simple1', $childItemInTheOrder['product_sku']);
+        $priceOfBundledItemInOrder = $bundledItemInTheOrder['product_sale_price']['value'];
+        $this->assertEquals(15, $priceOfBundledItemInOrder);
+        $this->assertArrayHasKey('bundle_options', $bundledItemInTheOrder);
+        $bundleOptionsFromResponse = $bundledItemInTheOrder['bundle_options'];
+        $this->assertNotEmpty($bundleOptionsFromResponse);
+        $this->assertEquals(2, count($bundleOptionsFromResponse));
+        $expectedBundleOptions =
+            [
+              [  '__typename' => 'SelectedBundleOptionItems',
+                  'label' => 'Drop Down Option 1',
+                  'items' => [
+                      [
+                        'product_sku' => 'simple1',
+                        'product_name' => 'Simple Product1',
+                        'product_type'=> 'simple',
+                        'quantity_ordered'=> 1
+                      ]
+                ]
+              ],
+                [  '__typename' => 'SelectedBundleOptionItems',
+                    'label' => 'Drop Down Option 2',
+                    'items' => [
+                        [
+                            'product_sku' => 'simple2',
+                            'product_name' => 'Simple Product2',
+                            'product_type'=> 'simple',
+                            'quantity_ordered'=> 2
+                        ]
+                    ]
+                ],
+            ];
+        $this->assertEquals($expectedBundleOptions, $bundleOptionsFromResponse);
         $this->deleteOrder();
     }
 
@@ -481,12 +486,13 @@ QUERY;
      */
     public function testGetMultipleCustomerOrdersQueryWithDefaultPagination()
     {
+        $orderNumbers = ['100000007', '100000008'];
         $query =
             <<<QUERY
 {
   customer
   {
-   orders(filter:{number:{in:["100000007","100000008"]}}){
+   orders(filter:{number:{in:["{$orderNumbers[0]}","{$orderNumbers[1]}"]}}){
     total_count
     page_info{
       total_pages
@@ -545,15 +551,14 @@ QUERY;
         $customerOrderItemsInResponse = $response['customer']['orders']['items'];
         $this->assertCount(2, $response['customer']['orders']['items']);
 
-        $orderNumbers = ['100000007', '100000008'];
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', $orderNumbers, 'in')
             ->create();
         /** @var \Magento\Sales\Api\Data\OrderInterface[] $items */
-        $items = $this->orderRepository->getList($searchCriteria)->getItems();
+        $orders = $this->orderRepository->getList($searchCriteria)->getItems();
         $key = 0;
-        foreach ($items as $item) {
-            $orderId = $item->getEntityId();
-            $orderNumber = $item->getIncrementId();
+        foreach ($orders as $order) {
+            $orderId = $order->getEntityId();
+            $orderNumber = $order->getIncrementId();
             $this->assertEquals($orderId, $customerOrderItemsInResponse[$key]['id']);
             $this->assertEquals($orderNumber, $customerOrderItemsInResponse[$key]['number']);
             $this->assertEquals('Processing', $customerOrderItemsInResponse[$key]['status']);
@@ -1461,30 +1466,23 @@ QUERY;
        orders(filter:{number:{eq:"{$orderNumber}"}}) {
          total_count
          items {
+          id
            number
            order_date
            status
            items{
+            __typename
             product_sku
+            product_name
+            product_url_key
+            product_sale_price{value}
             quantity_ordered
             __typename
             ... on BundleOrderItem{
-              child_items{
-                discounts{
-                  amount{
-                    value
-                    currency
-                  }
-                  label
-                }
+              bundle_options{
                 __typename
-                product_sku
-                product_name
-                product_sku
-            product_url_key
-            product_sale_price{value}
-            product_sale_price{value currency}
-            quantity_ordered
+                label
+                items{ product_sku product_name product_type quantity_ordered}
               }
             }
           }
@@ -1494,13 +1492,6 @@ QUERY;
              total_tax{value}
              subtotal { value currency }
              taxes {amount{value currency} title rate}
-             discounts{
-                  amount{
-                    value
-                    currency
-                  }
-                  label
-                }
              total_shipping{value}
              shipping_handling
              {
@@ -1508,14 +1499,8 @@ QUERY;
                amount_excluding_tax{value}
                total_amount{value}
                taxes {amount{value} title rate}
-               discounts{
-                  amount{
-                    value
-                    currency
-                  }
-                  label
-                }
              }
+             discounts {amount{value currency} label}
            }
          }
        }
