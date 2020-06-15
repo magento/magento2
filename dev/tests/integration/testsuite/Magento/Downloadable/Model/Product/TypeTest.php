@@ -4,52 +4,81 @@
  * See COPYING.txt for license details.
  */
 
-/**
- * Test class for \Magento\Downloadable\Model\Product\Type
- */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Model\Product;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Downloadable\Api\Data\LinkInterfaceFactory;
+use Magento\Downloadable\Api\Data\SampleInterfaceFactory;
+use Magento\Downloadable\Helper\Download;
+use Magento\Downloadable\Model\Link;
+use Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory;
+use Magento\Downloadable\Model\Sample;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Quote\Model\Quote\Item\Option;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\User\Api\Data\UserInterface;
+use PHPUnit\Framework\TestCase;
+
 /**
- * Test for \Magento\Downloadable\Model\Product\Type
+ * Test for \Magento\Downloadable\Model\Product\Type.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TypeTest extends \PHPUnit\Framework\TestCase
+class TypeTest extends TestCase
 {
     /**
-     * @var \Magento\Downloadable\Model\Product\Type
+     * @var Type
      */
-    protected $_model;
+    private $model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
+    /**
+     * @var WriteInterface
+     */
+    private $mediaDirectory;
+
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->_model = $this->objectManager->create(
-            \Magento\Downloadable\Model\Product\Type::class
-        );
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->model = $this->objectManager->create(Type::class);
+        /** @var WriteInterface $mediaDirectory */
+        $this->mediaDirectory = Bootstrap::getObjectManager()->get(Filesystem::class)
+            ->getDirectoryWrite(DirectoryList::MEDIA);
     }
 
     /**
+     * Delete specific data
+     *
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
      * @magentoAppArea adminhtml
+     *
+     * @return void
      */
-    public function testDeleteTypeSpecificData()
+    public function testDeleteTypeSpecificData(): void
     {
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
-        );
+        $product = Bootstrap::getObjectManager()->create(Product::class);
         $product->load(1);
         $product->setOrigData();
         $downloadableData = [];
 
-        $links = $this->_model->getLinks($product);
+        $links = $this->model->getLinks($product);
         $this->assertNotEmpty($links);
-        $samples = $this->_model->getSamples($product);
+        $samples = $this->model->getSamples($product);
         $this->assertNotEmpty($samples->getData());
-        /** @var \Magento\Downloadable\Model\Link $link */
+        /** @var Link $link */
         foreach ($links as $link) {
             $data = $link->getData();
             $data['title'] = 'UPDATED . ' . $data['title'];
@@ -60,45 +89,48 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         }
 
         $product->setDownloadableData($downloadableData);
-        $this->_model->deleteTypeSpecificData($product);
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
-        );
+        $this->model->deleteTypeSpecificData($product);
+        $product = Bootstrap::getObjectManager()->create(Product::class);
         $product->load(1);
 
-        $links = $this->_model->getLinks($product);
+        $links = $this->model->getLinks($product);
         $this->assertEmpty($links);
-        $samples = $this->_model->getSamples($product);
+        $samples = $this->model->getSamples($product);
         $this->assertEmpty($samples->getData());
     }
 
     /**
+     * Save specific data
+     *
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable_with_files.php
      * @magentoAppArea adminhtml
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     *
+     * @return void
      */
-    public function testSaveTypeSpecificData()
+    public function testSaveTypeSpecificData(): void
     {
-        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
+        $objectManager = Bootstrap::getObjectManager();
+        $product = Bootstrap::getObjectManager()->create(
+            Product::class
         );
         $product->load(1);
         $product->setOrigData();
         $downloadableData = [];
 
-        $links = $this->_model->getLinks($product);
+        $links = $this->model->getLinks($product);
         $this->assertNotEmpty($links);
-        $samples = $this->_model->getSamples($product);
+        $samples = $this->model->getSamples($product);
         $this->assertNotEmpty($samples->getData());
         $i=0;
         foreach ($links as $link) {
             $i++;
             $linkData = $link->getData();
             $linkData['is_delete'] = 0;
-            $linkData['type'] = \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE;
+            $linkData['type'] = Download::LINK_TYPE_FILE;
             $linkData['title'] = 'Updated downloadable link #' . $i;
             $downloadableData['link'][] = $linkData;
         }
@@ -107,14 +139,14 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             $i++;
             $sampleData = $sample->getData();
             $sampleData['is_delete'] = 0;
-            $sampleData['type'] = \Magento\Downloadable\Helper\Download::LINK_TYPE_FILE;
+            $sampleData['type'] = Download::LINK_TYPE_FILE;
             $sampleData['title'] = 'Updated downloadable sample #' . $i;
             $downloadableData['sample'][] = $sampleData;
         }
 
         $product->setDownloadableData($downloadableData);
-        $sampleFactory = $objectManager->create(\Magento\Downloadable\Api\Data\SampleInterfaceFactory::class);
-        $linkFactory = $objectManager->create(\Magento\Downloadable\Api\Data\LinkInterfaceFactory::class);
+        $sampleFactory = $objectManager->create(SampleInterfaceFactory::class);
+        $linkFactory = $objectManager->create(LinkInterfaceFactory::class);
         $extension = $product->getExtensionAttributes();
         $expectedLink = [
             'is_shareable' => '2',
@@ -186,17 +218,15 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         }
 
         $product->save();
-        /** @var \Magento\Catalog\Model\Product $product */
-        $product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\Product::class
-        );
+        /** @var Product $product */
+        $product = Bootstrap::getObjectManager()->create(Product::class);
         $product->load(1);
 
         $links = $product->getExtensionAttributes()->getDownloadableProductLinks();
 
         $this->assertNotEmpty($links);
         $this->assertCount(1, $links);
-        /** @var \Magento\Downloadable\Model\Link $link */
+        /** @var Link $link */
         $link = reset($links);
         foreach ($expectedLink as $key => $value) {
             $this->assertTrue($link->hasData($key), 'Key ' . $key . ' not exist!');
@@ -214,9 +244,9 @@ class TypeTest extends \PHPUnit\Framework\TestCase
         $sample = reset($samples);
         $this->assertNotEmpty($sample->getData());
         $this->assertCount(1, $samples);
-        /** @var \Magento\Downloadable\Model\Sample $sample */
+        /** @var Sample $sample */
         $sample = $sample->getData();
-        /** @var \Magento\User\Api\Data\UserInterface $testAttribute */
+        /** @var UserInterface $testAttribute */
         foreach ($expectedSample as $key => $value) {
             $this->assertArrayHasKey($key, $sample);
             $this->assertEquals($value, $sample[$key]);
@@ -224,35 +254,45 @@ class TypeTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Check product buy state
+     *
      * @magentoAppIsolation enabled
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Downloadable/_files/product_downloadable.php
-     * @covers \Magento\Downloadable\Model\Product\Type::checkProductBuyState()
+     *
+     * @return void
      */
-    public function testCheckProductBuyState()
+    public function testCheckProductBuyState(): void
     {
-        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        /** @var ProductRepositoryInterface $productRepository */
         $productRepository =$this->objectManager->create(
-            \Magento\Catalog\Api\ProductRepositoryInterface::class
+            ProductRepositoryInterface::class
         );
         $product = $productRepository->get('downloadable-product');
         $product->setLinksPurchasedSeparately(false);
         $productRepository->save($product);
-        /** @var \Magento\Quote\Model\Quote\Item\Option $option */
+        /** @var Option $option */
         $option = $this->objectManager->create(
-            \Magento\Quote\Model\Quote\Item\Option::class,
+            Option::class,
             ['data' => ['code' => 'info_buyRequest', 'value' => '{"qty":23}']]
         );
         $option->setProduct($product);
         $product->setCustomOptions(['info_buyRequest' => $option]);
 
-        $this->_model->checkProductBuyState($product);
-        $linksFactory = $this->objectManager
-            ->get(\Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory::class);
+        $this->model->checkProductBuyState($product);
+        $linksFactory = $this->objectManager->get(CollectionFactory::class);
         $allLinksIds = $linksFactory->create()->addProductToFilter($product->getEntityId())->getAllIds();
         $this->assertEquals(
             '{"qty":23,"links":["' . implode('","', $allLinksIds) . '"]}',
             $product->getCustomOption('info_buyRequest')->getValue()
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown(): void
+    {
+        $this->mediaDirectory->delete('downloadable/files/');
     }
 }

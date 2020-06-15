@@ -6,6 +6,14 @@
 namespace Magento\Downloadable\Helper;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\Helper\AbstractHelper;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\MediaStorage\Model\File\Uploader;
 
 /**
  * Downloadable Products File Helper
@@ -13,44 +21,46 @@ use Magento\Framework\App\Filesystem\DirectoryList;
  * @api
  * @since 100.0.2
  */
-class File extends \Magento\Framework\App\Helper\AbstractHelper
+class File extends AbstractHelper
 {
     /**
-     * Core file storage database
-     *
-     * @var \Magento\MediaStorage\Helper\File\Storage\Database
+     * @var Database
      */
     protected $_coreFileStorageDatabase = null;
 
     /**
-     * Filesystem object.
-     *
-     * @var \Magento\Framework\Filesystem
+     * @var Filesystem
      */
     protected $_filesystem;
 
     /**
-     * Media Directory object (writable).
-     *
-     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     * @var WriteInterface
      */
     protected $_mediaDirectory;
 
     /**
-     * @param \Magento\Framework\App\Helper\Context $context
-     * @param \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase
-     * @param \Magento\Framework\Filesystem $filesystem
+     * @var DriverInterface
+     */
+    private $driver;
+
+    /**
+     * @param Context $context
+     * @param Database $coreFileStorageDatabase
+     * @param Filesystem $filesystem
+     * @param DriverInterface|null $driver
      * @param array $mimeTypes
      */
     public function __construct(
-        \Magento\Framework\App\Helper\Context $context,
-        \Magento\MediaStorage\Helper\File\Storage\Database $coreFileStorageDatabase,
-        \Magento\Framework\Filesystem $filesystem,
+        Context $context,
+        Database $coreFileStorageDatabase,
+        Filesystem $filesystem,
+        ?DriverInterface $driver = null,
         array $mimeTypes = []
     ) {
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_filesystem = $filesystem;
         $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->driver = $driver ?: ObjectManager::getInstance()->get(DriverInterface::class);
         parent::__construct($context);
         if (!empty($mimeTypes)) {
             foreach ($mimeTypes as $key => $value) {
@@ -61,11 +71,12 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Upload file from temporary folder.
+     *
      * @param string $tmpPath
-     * @param \Magento\MediaStorage\Model\File\Uploader $uploader
+     * @param Uploader $uploader
      * @return array
      */
-    public function uploadFromTmp($tmpPath, \Magento\MediaStorage\Model\File\Uploader $uploader)
+    public function uploadFromTmp($tmpPath, Uploader $uploader)
     {
         $uploader->setAllowRenameFiles(true);
         $uploader->setFilesDispersion(true);
@@ -78,6 +89,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Checking file for moving and move it
+     *
      * @param string $baseTmpPath
      * @param string $basePath
      * @param string $file
@@ -104,6 +116,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
 
     /**
      * Check if file exist in filesystem and try to re-create it from database record if negative.
+     *
      * @param string $file
      * @return bool|int
      */
@@ -127,14 +140,12 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      */
     protected function _moveFileFromTmp($baseTmpPath, $basePath, $file)
     {
-        if (strrpos($file, '.tmp') == strlen($file) - 4) {
-            $file = substr($file, 0, strlen($file) - 4);
+        if (strrpos($file, '.tmp') === strlen($file) - 4) {
+            $file = substr($file, 0, -4);
         }
 
-        $destFile = dirname(
-            $file
-        ) . '/' . \Magento\MediaStorage\Model\File\Uploader::getNewFileName(
-            $this->getFilePath($basePath, $file)
+        $destFile = $this->driver->getParentDirectory($file) . DIRECTORY_SEPARATOR . Uploader::getNewFileName(
+            $this->getFilePath($this->_mediaDirectory->getAbsolutePath($basePath), $file)
         );
 
         $this->_coreFileStorageDatabase->copyFile(
@@ -147,7 +158,7 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
             $this->getFilePath($basePath, $destFile)
         );
 
-        return str_replace('\\', '/', $destFile);
+        return str_replace('\\', DIRECTORY_SEPARATOR, $destFile);
     }
 
     /**
@@ -159,10 +170,10 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getFilePath($path, $file)
     {
-        $path = rtrim($path, '/');
-        $file = ltrim($file, '/');
+        $path = rtrim($path, DIRECTORY_SEPARATOR);
+        $file = ltrim($file, DIRECTORY_SEPARATOR);
 
-        return $path . '/' . $file;
+        return $path . DIRECTORY_SEPARATOR . $file;
     }
 
     /**
@@ -173,13 +184,14 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
      */
     public function getFileFromPathFile($pathFile)
     {
-        $file = substr($pathFile, strrpos($pathFile, '/') + 1);
+        $file = substr($pathFile, strrpos($pathFile, DIRECTORY_SEPARATOR) + 1);
 
         return $file;
     }
 
     /**
      * Get filesize in bytes.
+     *
      * @param string $file
      * @return int
      */
@@ -189,6 +201,8 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Returns file type
+     *
      * @param string $filePath
      * @return string
      */
@@ -199,6 +213,8 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Returns file type by ext
+     *
      * @param string $ext
      * @return string
      */
@@ -212,6 +228,8 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Returns all file types
+     *
      * @return array
      */
     public function getAllFileTypes()
@@ -220,6 +238,8 @@ class File extends \Magento\Framework\App\Helper\AbstractHelper
     }
 
     /**
+     * Returns all mine types
+     *
      * @return array
      */
     public function getAllMineTypes()

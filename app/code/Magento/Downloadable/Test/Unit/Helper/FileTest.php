@@ -12,100 +12,134 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\DriverInterface;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\MediaStorage\Model\File\Uploader;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test for \Magento\Downloadable\Helper\File.
+ */
 class FileTest extends TestCase
 {
     /**
      * @var File
      */
-    private $file;
+    private $model;
 
     /**
-     * Core file storage database
-     *
      * @var Database|MockObject
      */
-    private $coreFileStorageDatabase;
+    private $coreFileStorageDatabaseMock;
 
     /**
-     * Filesystem object.
-     *
-     * @var \Magento\Framework\Filesystem|MockObject
-     */
-    private $filesystem;
-
-    /**
-     * Media Directory object (writable).
-     *
      * @var WriteInterface|MockObject
      */
-    private $mediaDirectory;
+    private $mediaDirectoryMock;
 
     /**
-     * @var Context|MockObject
+     * @var DriverInterface|MockObject
      */
-    private $appContext;
+    private $driverMock;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp(): void
     {
-        $this->mediaDirectory = $this->getMockBuilder(WriteInterface::class)
+        $this->mediaDirectoryMock = $this->getMockBuilder(WriteInterface::class)
             ->getMockForAbstractClass();
 
-        $this->filesystem = $this->getMockBuilder(Filesystem::class)
+        /** @var Filesystem|MockObject $filesystem */
+        $filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->filesystem->expects($this->any())
+        $filesystem->expects($this->any())
             ->method('getDirectoryWrite')
             ->with(DirectoryList::MEDIA)
-            ->willReturn($this->mediaDirectory);
+            ->willReturn($this->mediaDirectoryMock);
 
-        $this->coreFileStorageDatabase =
-            $this->getMockBuilder(Database::class)
-                ->setMethods(['create'])
-                ->disableOriginalConstructor()
-                ->getMock();
-        $this->appContext = $this->getMockBuilder(Context::class)
+        /** @var Context|MockObject $appContext */
+        $appContext = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
-            ->setMethods(
-                [
-                    'getModuleManager',
-                    'getLogger',
-                    'getRequest',
-                    'getUrlBuilder',
-                    'getHttpHeader',
-                    'getEventManager',
-                    'getRemoteAddress',
-                    'getCacheConfig',
-                    'getUrlEncoder',
-                    'getUrlDecoder',
-                    'getScopeConfig'
-                ]
-            )
             ->getMock();
-        $this->file = new File(
-            $this->appContext,
-            $this->coreFileStorageDatabase,
-            $this->filesystem
+
+        $this->coreFileStorageDatabaseMock = $this->getMockBuilder(Database::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->driverMock = $this->getMockBuilder(DriverInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->model = new File(
+            $appContext,
+            $this->coreFileStorageDatabaseMock,
+            $filesystem,
+            $this->driverMock
         );
     }
 
-    public function testUploadFromTmp()
+    /**
+     * Test upload from tmp
+     *
+     * @return void
+     */
+    public function testUploadFromTmp(): void
     {
         $uploaderMock = $this->getMockBuilder(Uploader::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $uploaderMock->expects($this->once())->method('setAllowRenameFiles');
-        $uploaderMock->expects($this->once())->method('setFilesDispersion');
-        $this->mediaDirectory->expects($this->once())->method('getAbsolutePath')->willReturn('absPath');
-        $uploaderMock->expects($this->once())->method('save')->with('absPath')
+        $uploaderMock->expects($this->once())
+            ->method('setAllowRenameFiles');
+        $uploaderMock->expects($this->once())
+            ->method('setFilesDispersion');
+        $this->mediaDirectoryMock->expects($this->once())
+            ->method('getAbsolutePath')
+            ->willReturn('absPath');
+        $uploaderMock->expects($this->once())
+            ->method('save')
+            ->with('absPath')
             ->willReturn(['file' => 'file.jpg', 'path' => 'absPath']);
 
-        $result = $this->file->uploadFromTmp('tmpPath', $uploaderMock);
+        $result = $this->model->uploadFromTmp('tmpPath', $uploaderMock);
 
         $this->assertArrayNotHasKey('path', $result);
+    }
+
+    /**
+     * Test move file from tmp
+     *
+     * @return void
+     */
+    public function testMoveFileFromTmp(): void
+    {
+        $basePath = 'downloadable/files/links';
+        $tmpPath = 'downloadable/tmp/links';
+        $filePath = '/f/i/file.pdf';
+        $file[] = [
+            'file' => $filePath,
+            'name' => 'file.pdf',
+            'status' => 'new',
+        ];
+
+        $this->driverMock->expects($this->once())
+            ->method('getParentDirectory')
+            ->willReturn('/f/i');
+
+        $this->mediaDirectoryMock->expects($this->once())
+            ->method('getAbsolutePath')
+            ->with($basePath)
+            ->willReturn('absPath');
+
+        $this->coreFileStorageDatabaseMock->expects($this->once())
+            ->method('copyFile')
+            ->with($tmpPath . $filePath, $basePath . $filePath);
+        $this->mediaDirectoryMock->expects($this->once())
+            ->method('renameFile')
+            ->with($tmpPath . $filePath, $basePath . $filePath);
+
+        $this->model->moveFileFromTmp($tmpPath, $basePath, $file);
     }
 }
