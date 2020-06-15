@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Plugin\Block;
 
 use Magento\Catalog\Model\Category;
-use Magento\Catalog\Observer\MenuCategoryData;
+use Magento\Catalog\Model\MenuCategoryData;
 use Magento\Framework\Data\Collection;
 use Magento\Framework\Data\Tree\Node;
 use function array_merge;

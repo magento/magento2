@@ -5,13 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Test\Unit\Observer;
+namespace Magento\Catalog\Test\Unit\Model;
 
 use Magento\Catalog\Helper\Category;
 use Magento\Catalog\Helper\Data;
 use Magento\Catalog\Model\Indexer\Category\Flat\State;
 use Magento\Catalog\Model\Layer\Resolver;
-use Magento\Catalog\Observer\MenuCategoryData;
+use Magento\Catalog\Model\MenuCategoryData;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
