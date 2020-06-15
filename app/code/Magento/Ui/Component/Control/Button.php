@@ -129,7 +129,7 @@ class Button extends Template implements ControlInterface
     {
         parent::_beforeToHtml();
 
-        $this->setData('ui_button_widget_hook_id', 'buttonId' .$this->random->getRandomString(32));
+        $this->setData('ui_button_widget_hook_id', 'buttonId' .$this->random->getRandomString(10));
 
         return $this;
     }

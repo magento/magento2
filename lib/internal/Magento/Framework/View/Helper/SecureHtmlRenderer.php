@@ -104,17 +104,17 @@ class SecureHtmlRenderer
             throw new \InvalidArgumentException('Invalid JS event handler data provided');
         }
 
-        $random = $this->random->getRandomString(32);
+        $random = $this->random->getRandomString(10);
         $listenerFunction = 'eventListener' .$random;
         $elementName = 'listenedElement' .$random;
         $script = <<<script
             function {$listenerFunction} () {
                 {$attributeJavascript};
             }
-            let {$elementName} = document.querySelector("{$elementSelector}");
+            var {$elementName} = document.querySelector("{$elementSelector}");
             if ({$elementName}) {
-                {$elementName}.{$eventName} = (event) => {
-                    let targetElement = {$elementName};
+                {$elementName}.{$eventName} = function (event) {
+                    var targetElement = {$elementName};
                     if (event && event.target) {
                         targetElement = event.target;
                     }
@@ -140,30 +140,29 @@ script;
             throw new \InvalidArgumentException('Invalid style data given');
         }
 
-        $elementVariable = 'elem' .$this->random->getRandomString(32);
+        $elementVariable = 'elem' .$this->random->getRandomString(8);
         /** @var string[] $styles */
-        $stylesAssignments = [];
+        $stylesAssignments = '';
         foreach ($stylePairs as $stylePair) {
             $exploded = array_map('trim', explode(':', $stylePair));
             if (count($exploded) < 2) {
                 throw new \InvalidArgumentException('Invalid CSS given');
             }
-            $styleAttribute = SimpleDataObjectConverter::snakeCaseToCamelCase(
-                str_replace('-', '_', trim($exploded[0]))
-            );
+            //Converting to camelCase
+            $styleAttribute = lcfirst(str_replace(' ', '', ucwords(str_replace('-', ' ', $exploded[0]))));
             if (count($exploded) > 2) {
                 //For cases when ":" is encountered in the style's value.
                 $exploded[1] = join('', array_slice($exploded, 1));
             }
-            $styleValue = trim($exploded[1]);
-            $stylesAssignments[] = "$elementVariable.style.$styleAttribute = '$styleValue';";
+            $styleValue = str_replace('\'', '\\\'', trim($exploded[1]));
+            $stylesAssignments .= "$elementVariable.style.$styleAttribute = '$styleValue';\n";
         }
 
         return $this->renderTag(
             'script',
             ['type' => 'text/javascript'],
-            "let $elementVariable = document.querySelector('$selector');\n"
-            ."if ($elementVariable) {\n" .join("\n", $stylesAssignments) ." }",
+            "var $elementVariable = document.querySelector('$selector');\n"
+            ."if ($elementVariable) {\n{$stylesAssignments}}",
             false
         );
     }
