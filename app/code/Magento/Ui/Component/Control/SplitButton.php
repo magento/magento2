@@ -211,7 +211,7 @@ class SplitButton extends Button
             ? $this->getId() .'-' .$option['id']
             : (isset($option['id_attribute']) ?
                 $option['id_attribute']
-                : $this->getId() .'-optId' .$this->random->getRandomString(32));
+                : $this->getId() .'-optId' .$this->random->getRandomString(10));
     }
 
     /**

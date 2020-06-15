@@ -175,6 +175,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
             '-link">' . $element->getLegend() . '</a>' .
             /* @noEscape */ $this->secureRenderer->renderEventListenerAsTag(
                 'onclick',
+                'event.preventDefault();' .
                 "Fieldset.toggleCollapse('" . $element->getHtmlId() . "', '" .
                  $this->_urlBuilder->getUrl('*/*/state') . "'); return false;",
                 'a#' . $element->getHtmlId() . '-head'
@@ -225,7 +226,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
                 );
                 $html .= $this->secureRenderer->renderStyleAsTag(
                     'display:none;',
-                    'row_' . $field->getId() . '_comment'
+                    '#row_' . $field->getId() . '_comment'
                 );
             }
         }
