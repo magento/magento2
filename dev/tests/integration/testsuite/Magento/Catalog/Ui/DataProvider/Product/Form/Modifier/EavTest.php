@@ -230,7 +230,7 @@ class EavTest extends AbstractEavTest
      */
     public function testModifyMetaNewProductPageLayoutDefault($attributesMeta): void
     {
-        $defaultLayout = $this->config->getValue('web/default_layouts/default_product_layout');
+        $defaultLayout = $this->config->getValue('web/default_layouts/default_product_layout') ?? '1column';
         $attributesMeta = array_merge($attributesMeta, ['default' => $defaultLayout]);
         $expectedMeta = $this->addMetaNesting(
             $attributesMeta,
