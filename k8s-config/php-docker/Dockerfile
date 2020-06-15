@@ -13,7 +13,8 @@ docker-php-ext-configure gd --with-png-dir=/usr/include/ \
 && docker-php-ext-configure zip --with-libzip \
 && docker-php-ext-install mysqli bcmath gd pdo_mysql soap xsl zip intl opcache \
 && echo "memory_limit=2G" > /usr/local/etc/php/conf.d/memory-limit.ini \
-&& echo "max_input_vars=10000" > /usr/local/etc/php/conf.d/max-input-vars-php.ini \
+&& echo "max_input_vars=1000" > /usr/local/etc/php/conf.d/max-input-vars-php.ini \
+&& echo "opcache.validate_timestamps=0" >> /usr/local/etc/php/conf.d/docker-php-ext-opcache.ini \
 && curl -sS https://getcomposer.org/installer | php \
 && mv composer.phar /usr/local/bin/composer \
 && rm -rf /var/cache/* /tmp/* /var/tmp/*

@@ -45,8 +45,10 @@ spec:
         app: magento
         tier: mysql
     spec:
+      securityContext:
+        fsGroup: 1000
       containers:
-        - image: percona:latest
+        - image: percona:5.7
           name: mysql
           args:
             - "--ignore-db-dir=lost+found"
