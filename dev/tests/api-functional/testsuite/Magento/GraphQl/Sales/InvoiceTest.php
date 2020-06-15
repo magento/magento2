@@ -65,9 +65,6 @@ query {
               total_amount {
                 value
               }
-              amount_exc_tax {
-                value
-              }
             }
           }
         }
@@ -121,9 +118,6 @@ QUERY;
                     ],
                     'shipping_handling' => [
                         'total_amount' => [
-                            'value' => null
-                        ],
-                        'amount_exc_tax' => [
                             'value' => null
                         ]
                     ]
@@ -192,9 +186,6 @@ query {
           total_amount {
             value
           }
-          amount_exc_tax {
-            value
-          }
         }
       }
     }
@@ -241,9 +232,6 @@ QUERY;
                     'shipping_handling' => [
                         'total_amount' => [
                             'value' => null
-                        ],
-                        'amount_exc_tax' => [
-                            'value' => null
                         ]
                     ]
                 ]
@@ -271,9 +259,6 @@ QUERY;
                     ],
                     'shipping_handling' => [
                         'total_amount' => [
-                            'value' => null
-                        ],
-                        'amount_exc_tax' => [
                             'value' => null
                         ]
                     ]
@@ -327,30 +312,27 @@ query {
               value
             }
             quantity_invoiced
-          }
-          total {
-            subtotal {
-              value
-            }
-            grand_total {
-              value
-            }
-            total_shipping {
-              value
-            }
-      			shipping_handling {
-              total_amount {
-                value
-              }
-              amount_exc_tax {
-                value
-              }
-            }
+      }
+      total {
+        subtotal {
+          value
+        }
+        grand_total {
+          value
+        }
+        total_shipping {
+          value
+        }
+        shipping_handling {
+          total_amount {
+            value
           }
         }
+      }
     }
-  }
- }
+}
+}
+}
 }
 QUERY;
 
@@ -390,9 +372,6 @@ QUERY;
                     ],
                     'shipping_handling' => [
                         'total_amount' => [
-                            'value' => null
-                        ],
-                        'amount_exc_tax' => [
                             'value' => null
                         ]
                     ]

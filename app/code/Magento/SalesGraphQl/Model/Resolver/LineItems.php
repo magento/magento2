@@ -54,16 +54,11 @@ class LineItems implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        /** @var ContextInterface $context */
-        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
-            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
-        }
-
-        if (!isset($value['model']) && !($value['model'] instanceof Invoice)) {
+        if (!isset($value['model']) || !($value['model'] instanceof Invoice)) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        if (!isset($value['order']) && !($value['order'] instanceof Order)) {
+        if (!isset($value['order']) || !($value['order'] instanceof Order)) {
             throw new LocalizedException(__('"order" value should be specified'));
         }
 

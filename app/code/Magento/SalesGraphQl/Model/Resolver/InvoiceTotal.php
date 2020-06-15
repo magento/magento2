@@ -9,10 +9,8 @@ namespace Magento\SalesGraphQl\Model\Resolver;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Sales\Api\Data\InvoiceInterface as Invoice;
 use Magento\Sales\Model\Order;
 
@@ -31,11 +29,6 @@ class InvoiceTotal implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        /** @var ContextInterface $context */
-        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
-            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
-        }
-
         if (!isset($value['model']) && !($value['model'] instanceof Invoice)) {
             throw new LocalizedException(__('"model" value should be specified'));
         }

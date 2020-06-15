@@ -89,7 +89,7 @@ type BundleOrderItem implements OrderItemInterface {
 type SelectedBundleOptionItems {
     id: ID! @doc(description: "The unique identifier of the option")
     label: String! @doc(description: "The label of the option")
-    items: [OrderItem] @doc(description: "A list of products that represent the values of the parent option") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\BundleOptions\\SelectedBundleOptionItems")
+    items: [OrderItem] @doc(description: "A list of products that represent the values of the parent option") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\BundleOptions\\SelectedBundleOptionOrderItems")
 }
 
 type OrderItemOption @doc(description: "Represents order item options like selected or entered") {
@@ -172,7 +172,7 @@ type OrderShipment @doc(description: "Order shipment details") {
 
 type CommentItem @doc(description: "Comment item details") {
     timestamp: String! @doc(description: "The timestamp of the comment")
-    message: String! @doc(description: "The texat of the message")
+    message: String! @doc(description: "The text of the message")
 }
 
 type ShipmentItem @doc(description: "Order shipment item details") {

@@ -22,6 +22,9 @@ $shippingAddress->setId(null)->setAddressType('shipping');
 $payment = $objectManager->create(\Magento\Sales\Model\Order\Payment::class);
 $payment->setMethod('checkmo');
 
+$payment2 = $objectManager->create(\Magento\Sales\Model\Order\Payment::class);
+$payment2->setMethod('checkmo');
+
 /** @var $product \Magento\Catalog\Model\Product */
 $product = $objectManager->create(\Magento\Catalog\Model\Product::class);
 $repository = $objectManager->create(\Magento\Catalog\Model\ProductRepository::class);
@@ -118,7 +121,7 @@ $order2->setCustomerLastname('lastname');
 $order2->setBillingAddress($billingAddress);
 $order2->setShippingAddress($shippingAddress);
 $order2->setAddresses([$billingAddress, $shippingAddress]);
-$order2->setPayment($payment);
+$order2->setPayment($payment2);
 $order2->addItem($orderItem2);
 $order2->setStoreId($objectManager->get(\Magento\Store\Model\StoreManagerInterface::class)->getStore()->getId());
 $order2->setSubtotal(100);
