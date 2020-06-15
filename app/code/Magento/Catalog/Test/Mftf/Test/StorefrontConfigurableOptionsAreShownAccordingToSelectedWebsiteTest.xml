@@ -1,0 +1,166 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableOptionsAreShownAccordingToSelectedWebsiteTest">
+        <annotations>
+            <features value="Configurable Product"/>
+            <stories value="Check Configurable doesn't show simple products which are no longer assigned to the website"/>
+            <title value="Set visibility for product's option according to current website and check it on the frontend"/>
+            <description value="Unassign child product from the main website"/>
+            <group value="product"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create website, Store and Store View-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createNewWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createNewStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+                <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createNewStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStore"/>
+            </actionGroup>
+
+            <!-- Create Default Category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+            <!-- Create configurable Product -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption3" stepKey="createConfigProductAttributeOption3">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="3" stepKey="getConfigAttributeOption3">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <field key="price">40</field>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <field key="price">40</field>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct3">
+                <field key="price">40</field>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption3"/>
+            </createData>
+
+            <createData entity="ConfigurableProductThreeOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+                <requiredEntity createDataKey="getConfigAttributeOption3"/>
+            </createData>
+
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild3">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct3"/>
+            </createData>
+        </before>
+        <after>
+             <!--Delete Created Data-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigChildProduct3" stepKey="deleteConfigChildProduct3"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Go to product page in admin panel and open Configurable product to edit -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
+        <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterProductInGrid">
+            <argument name="name" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Assign Configurable product to second website -->
+        <actionGroup ref="CreatedProductConnectToWebsiteActionGroup" stepKey="assingConfigurableProductToSecondWebsite">
+            <argument name="website" value="customWebsite"/>
+            <argument name="product" value="$$createConfigProduct$$"/>
+        </actionGroup>
+
+        <!-- Go to product page on frontend and assert all options are shown-->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPageOnStorefront">
+            <argument name="productUrl" value="$createConfigProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontConfigurableProductOptionIsShownInDropdownActionGroup" stepKey="seeOptionOne">
+            <argument name="optionName" value="$$createConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="optionLabel" value="$$getConfigAttributeOption1.label$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontConfigurableProductOptionIsShownInDropdownActionGroup" stepKey="seeOptionTwo">
+            <argument name="optionName" value="$$createConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="optionLabel" value="$$getConfigAttributeOption2.label$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontConfigurableProductOptionIsShownInDropdownActionGroup" stepKey="seeOptionThree">
+            <argument name="optionName" value="$$createConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="optionLabel" value="$$getConfigAttributeOption3.label$$"/>
+        </actionGroup>
+
+        <!-- Go to product page in admin panel and unassign child product from the main website -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndexPage"/>
+        <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterChildProductInGrid">
+            <argument name="name" value="$$createConfigChildProduct1.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminProcessProductWebsitesActionGroup" stepKey="processProductWebsites">
+            <argument name="website" value="customWebsite"/>
+            <argument name="websiteToUnassign" value="_defaultWebsite"/>
+            <argument name="product" value="$$createConfigChildProduct1$$"/>
+        </actionGroup>
+
+        <!-- Go to product page on frontend and assert the first option is not shown-->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="goToProductPageOnStorefront">
+            <argument name="productUrl" value="$createConfigProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontConfigurableProductOptionIsNotShownInDropdownActionGroup" stepKey="doNotSeeOptionOne">
+            <argument name="optionName" value="$$createConfigProductAttribute.default_frontend_label$$"/>
+            <argument name="optionLabel" value="$$getConfigAttributeOption1.label$$"/>
+        </actionGroup>
+    </test>
+</tests>
