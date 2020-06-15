@@ -116,6 +116,7 @@ class Subscriber extends AbstractDb
      * @param string $email
      * @param int $websiteId
      * @return array
+     * @throws LocalizedException
      */
     public function loadBySubscriberEmail(string $email, int $websiteId): array
     {
