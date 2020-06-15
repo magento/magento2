@@ -77,6 +77,7 @@ class FileTest extends TestCase
             $appContext,
             $this->coreFileStorageDatabaseMock,
             $filesystem,
+            [],
             $this->driverMock
         );
     }

@@ -11,7 +11,7 @@ use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\Driver\File as FileDriver;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\MediaStorage\Model\File\Uploader;
 
@@ -39,29 +39,31 @@ class File extends AbstractHelper
     protected $_mediaDirectory;
 
     /**
-     * @var DriverInterface
+     * @var FileDriver
      */
-    private $driver;
+    private $fileDriver;
 
     /**
      * @param Context $context
      * @param Database $coreFileStorageDatabase
      * @param Filesystem $filesystem
-     * @param DriverInterface|null $driver
      * @param array $mimeTypes
+     * @param FileDriver|null $fileDriver
      */
     public function __construct(
         Context $context,
         Database $coreFileStorageDatabase,
         Filesystem $filesystem,
-        ?DriverInterface $driver = null,
-        array $mimeTypes = []
+        array $mimeTypes = [],
+        ?FileDriver $fileDriver = null
     ) {
+        parent::__construct($context);
+
         $this->_coreFileStorageDatabase = $coreFileStorageDatabase;
         $this->_filesystem = $filesystem;
         $this->_mediaDirectory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $this->driver = $driver ?: ObjectManager::getInstance()->get(DriverInterface::class);
-        parent::__construct($context);
+        $this->fileDriver = $fileDriver ?: ObjectManager::getInstance()->get(FileDriver::class);
+
         if (!empty($mimeTypes)) {
             foreach ($mimeTypes as $key => $value) {
                 self::$_mimeTypes[$key] = $value;
@@ -111,6 +113,7 @@ class File extends AbstractHelper
             }
             return $fileName;
         }
+
         return '';
     }
 
@@ -144,7 +147,7 @@ class File extends AbstractHelper
             $file = substr($file, 0, -4);
         }
 
-        $destFile = $this->driver->getParentDirectory($file) . DIRECTORY_SEPARATOR . Uploader::getNewFileName(
+        $destFile = $this->fileDriver->getParentDirectory($file) . DIRECTORY_SEPARATOR . Uploader::getNewFileName(
             $this->getFilePath($this->_mediaDirectory->getAbsolutePath($basePath), $file)
         );
 
