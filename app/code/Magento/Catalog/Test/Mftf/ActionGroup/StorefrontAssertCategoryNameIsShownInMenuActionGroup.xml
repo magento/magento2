@@ -15,6 +15,7 @@
         <arguments>
             <argument name="categoryName" type="string"/>
         </arguments>
+
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(categoryName)}}"
                     stepKey="seeCatergoryInStoreFront"/>
     </actionGroup>
