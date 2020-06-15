@@ -5,8 +5,6 @@
  */
 namespace Magento\Authorization\Model;
 
-use Magento\User\Model\User;
-
 /**
  * Admin Role Model
  *
