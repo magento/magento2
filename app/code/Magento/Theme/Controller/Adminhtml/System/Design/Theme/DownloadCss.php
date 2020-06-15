@@ -34,7 +34,7 @@ class DownloadCss extends \Magento\Theme\Controller\Adminhtml\System\Design\Them
                 \Magento\Framework\View\Design\ThemeInterface::class
             )->load($themeId);
             if (!$theme->getId()) {
-                throw new \InvalidArgumentException(sprintf('Theme not found: "%1".', $themeId));
+                throw new \InvalidArgumentException(sprintf('Theme not found: "%1s".', $themeId));
             }
             $asset = $this->_assetRepo->createAsset($fileId, ['themeModel' => $theme]);
             $relPath = $this->_appFileSystem->getDirectoryRead(DirectoryList::ROOT)

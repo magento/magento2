@@ -29,7 +29,7 @@ class Delete extends \Magento\Theme\Controller\Adminhtml\System\Design\Theme
                     \Magento\Framework\View\Design\ThemeInterface::class
                 )->load($themeId);
                 if (!$theme->getId()) {
-                    throw new \InvalidArgumentException(sprintf('We cannot find a theme with id "%1".', $themeId));
+                    throw new \InvalidArgumentException(sprintf('We cannot find a theme with id "%1s".', $themeId));
                 }
                 if (!$theme->isVirtual()) {
                     throw new \InvalidArgumentException(

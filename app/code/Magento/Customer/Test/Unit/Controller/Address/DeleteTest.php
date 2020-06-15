@@ -204,11 +204,11 @@ class DeleteTest extends TestCase
         $exception = new \Exception('Exception');
         $this->messageManager->expects($this->once())
             ->method('addErrorMessage')
-            ->with(__('We can\'t delete the address right now.'))
+            ->with(__("We can't delete the address right now."))
             ->willThrowException($exception);
         $this->messageManager->expects($this->once())
             ->method('addExceptionMessage')
-            ->with($exception, __('We can\'t delete the address right now.'));
+            ->with($exception, __("We can't delete the address right now."));
         $this->resultRedirect->expects($this->once())
             ->method('setPath')
             ->with('*/*/index')

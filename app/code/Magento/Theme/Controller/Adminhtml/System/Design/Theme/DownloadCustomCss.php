@@ -28,7 +28,7 @@ class DownloadCustomCss extends \Magento\Theme\Controller\Adminhtml\System\Desig
             $themeFactory = $this->_objectManager->create(\Magento\Framework\View\Design\Theme\FlyweightFactory::class);
             $theme = $themeFactory->create($themeId);
             if (!$theme) {
-                throw new \InvalidArgumentException(sprintf('We cannot find a theme with id "%1".', $themeId));
+                throw new \InvalidArgumentException(sprintf('We cannot find a theme with id "%1s".', $themeId));
             }
 
             $customCssFiles = $theme->getCustomization()->getFilesByType(
