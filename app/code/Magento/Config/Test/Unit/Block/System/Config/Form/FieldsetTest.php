@@ -243,7 +243,7 @@ class FieldsetTest extends TestCase
         $this->assertStringContainsString('test_field_toHTML', $actual);
 
         $expected = '<div id="row_test_field_id_comment" class="system-tooltip-box">test_field_tootip</div>' .
-        '<style>row_test_field_id_comment { display:none; }</style>';
+        '<style>#row_test_field_id_comment { display:none; }</style>';
         $this->assertStringContainsString($expected, $actual);
         if ($nested) {
             $this->assertStringContainsString('nested', $actual);

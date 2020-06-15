@@ -10,7 +10,10 @@
 <div id="cookie-status">
     <?= $block->escapeHtml(__('The store will not work correctly in the case when cookies are disabled.')); ?>
 </div>
-<?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', '#cookie-status'); ?>
+<?php
+$script = 'document.querySelector("#cookie-status").style.display = "none";';
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', ['type' => 'text/javascript'], $script, false); ?>
 
 <script type="text/x-magento-init">
     {

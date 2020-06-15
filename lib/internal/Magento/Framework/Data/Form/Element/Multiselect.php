@@ -153,8 +153,9 @@ class Multiselect extends AbstractElement
         $result .= $this->getElementHtml();
 
         if ($this->getSelectAll() && $this->getDeselectAll()) {
-            $selectAllId = 'selId' .$this->random->getRandomString(32);
-            $deselectAllId = 'deselId' .$this->random->getRandomString(32);
+            $random = $this->random->getRandomString(4);
+            $selectAllId = 'selId' .$random;
+            $deselectAllId = 'deselId' .$random;
             $result .= '<a href="#" id="' .$selectAllId .'">' .$this->getSelectAll()
                 .'</a> <span class="separator">&nbsp;|&nbsp;</span>';
             $result .= '<a href="#" id="' .$deselectAllId .'">' .$this->getDeselectAll() .'</a>';
@@ -218,7 +219,7 @@ class Multiselect extends AbstractElement
      */
     protected function _optionToHtml($option, $selected)
     {
-        $optionId = 'optId' .$this->random->getRandomString(32);
+        $optionId = 'optId' .$this->random->getRandomString(8);
         $html = '<option value="' . $this->_escape($option['value']) . '" id="' . $optionId . '" ';
         $html .= isset($option['title']) ? 'title="' . $this->_escape($option['title']) . '"' : '';
         if (in_array((string)$option['value'], $selected)) {
