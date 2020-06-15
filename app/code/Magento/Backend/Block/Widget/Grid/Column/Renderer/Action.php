@@ -132,7 +132,7 @@ class Action extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Text
         }
 
         if (empty($action['id'])) {
-            $action['id'] = 'id' .$this->random->getRandomString(32);
+            $action['id'] = 'id' .$this->random->getRandomString(10);
         }
         $actionAttributes->setData($action);
         $onclick = $actionAttributes->getData('onclick');

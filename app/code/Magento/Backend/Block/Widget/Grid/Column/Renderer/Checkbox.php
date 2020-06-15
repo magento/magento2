@@ -176,7 +176,7 @@ class Checkbox extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Abstra
         if ($this->getColumn()->getDisabled()) {
             $disabled = ' disabled="disabled"';
         }
-        $id = 'id' .$this->random->getRandomString(32);
+        $id = 'id' .$this->random->getRandomString(10);
         $html = '<th class="data-grid-th data-grid-actions-cell"><input type="checkbox" ';
         $html .= 'id="' .$id .'" ';
         $html .= 'name="' . $this->getColumn()->getFieldName() . '" ';
