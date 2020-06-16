@@ -95,7 +95,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setPrice(10)
     ->setWeight(1)
     ->setShortDescription("Short description")
-    ->setTaxClassId(2)
+    ->setTaxClassId(0)
     ->setTierPrices($tierPrices)
     ->setDescription('Description with <b>html tag</b>')
     ->setExtensionAttributes($productExtensionAttributesWebsiteIds)
@@ -103,7 +103,7 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setMetaKeyword('meta keyword')
     ->setMetaDescription('meta description')
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
+    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED)
     ->setStockData(
         [
             'use_config_manage_stock'   => 1,
