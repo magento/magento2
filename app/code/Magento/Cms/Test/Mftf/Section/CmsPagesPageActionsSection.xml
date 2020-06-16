@@ -12,7 +12,7 @@
         <element name="filterButton" type="input" selector="//button[text()='Filters']"/>
         <element name="URLKey" type="input" selector="//div[@class='admin__form-field-control']/input[@name='identifier']"/>
         <element name="ApplyFiltersBtn" type="button" selector="//span[text()='Apply Filters']"/>
-        <element name="searchInput" type="input" selector="//*[@id='fulltext']"/>
+        <element name="searchInput" type="input" selector="#fulltext"/>
         <element name="searchButton" type="button" selector="//*[@id='fulltext']/parent::*/button"/>
         <element name="addNewPageButton" type="button" selector="#add" timeout="30"/>
         <element name="select" type="button" selector="//div[text()='{{var1}}']/parent::td//following-sibling::td[@class='data-grid-actions-cell']//button[text()='Select']" parameterized="true"/>
