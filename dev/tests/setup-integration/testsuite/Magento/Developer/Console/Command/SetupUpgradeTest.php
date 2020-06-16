@@ -36,7 +36,7 @@ class SetupUpgradeTest extends SetupTestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->cliCommand = $objectManager->get(CliCommand::class);

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
 use Magento\Sales\Api\Data\OrderInterface;
@@ -27,7 +29,7 @@ class OrderSenderTest extends AbstractSenderTest
      */
     protected $orderResourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stepMockSetup();
 
@@ -42,7 +44,7 @@ class OrderSenderTest extends AbstractSenderTest
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
 
         $this->orderMock->method('getId')
             ->willReturn(self::ORDER_ID);

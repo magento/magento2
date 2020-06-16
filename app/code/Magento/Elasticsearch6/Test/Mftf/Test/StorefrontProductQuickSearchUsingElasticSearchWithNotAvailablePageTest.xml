@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontProductQuickSearchUsingElasticSearchWithNotAvailablePageTest" extends="StorefrontProductQuickSearchUsingElasticSearchTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Storefront Search"/>
+            <title value="Product quick search doesn't throw exception after ES is chosen as search engine with selected page out of range"/>
+            <description value="Verify no elastic search exception is thrown when try to get page with selected page out of range."/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-29383"/>
+            <useCaseId value="MC-25138"/>
+            <group value="catalog"/>
+            <group value="elasticsearch"/>
+            <group value="SearchEngineElasticsearch"/>
+            <group value="catalog_search"/>
+        </annotations>
+        <remove keyForRemoval="selectDisplayedProductInGridPerPage"/>
+        <remove keyForRemoval="assertFirstProductDisplayedOnCatalogSearchPage"/>
+        <remove keyForRemoval="assertSecondProductDisplayedOnCatalogSearchPage"/>
+        <remove keyForRemoval="selectDisplayedProductInGridPerPage"/>
+        <remove keyForRemoval="assertStillOnSecondPage"/>
+        <actionGroup ref="StorefrontQuickSearchWithPaginationActionGroup" stepKey="navigateToUnavailableCatalogSearchResultPage" before="waitForPageLoad">
+            <argument name="phrase" value="AAA"/>
+            <argument name="pageNumber" value="999"/>
+        </actionGroup>
+    </test>
+</tests>

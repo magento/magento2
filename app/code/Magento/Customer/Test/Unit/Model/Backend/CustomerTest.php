@@ -5,29 +5,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\Customer\Model\Backend\Customer testing
  */
 namespace Magento\Customer\Test\Unit\Model\Backend;
 
-class CustomerTest extends \PHPUnit\Framework\TestCase
+use Magento\Customer\Model\Backend\Customer;
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CustomerTest extends TestCase
 {
-    /** @var \Magento\Store\Model\StoreManager|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StoreManager|MockObject */
     protected $_storeManager;
 
-    /** @var \Magento\Customer\Model\Backend\Customer */
+    /** @var Customer */
     protected $_model;
 
     /**
      * Create model
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->_storeManager = $this->createMock(StoreManager::class);
+        $helper = new ObjectManager($this);
         $this->_model = $helper->getObject(
-            \Magento\Customer\Model\Backend\Customer::class,
+            Customer::class,
             ['storeManager' => $this->_storeManager]
         );
     }
@@ -43,8 +51,8 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
     {
         if ($websiteId * 1) {
             $this->_model->setWebsiteId($websiteId);
-            $website = new \Magento\Framework\DataObject(['store_ids' => [$websiteStoreId]]);
-            $this->_storeManager->expects($this->once())->method('getWebsite')->will($this->returnValue($website));
+            $website = new DataObject(['store_ids' => [$websiteStoreId]]);
+            $this->_storeManager->expects($this->once())->method('getWebsite')->willReturn($website);
         } else {
             $this->_model->setStoreId($storeId);
             $this->_storeManager->expects($this->never())->method('getWebsite');

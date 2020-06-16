@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\ConfigInterface;
@@ -12,29 +14,31 @@ use Magento\Analytics\ReportXml\DB\ReportValidator;
 use Magento\Analytics\ReportXml\ReportProvider;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReportWriterTest extends \PHPUnit\Framework\TestCase
+class ReportWriterTest extends TestCase
 {
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     private $configInterfaceMock;
 
     /**
-     * @var ReportValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReportValidator|MockObject
      */
     private $reportValidatorMock;
 
     /**
-     * @var ProviderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProviderFactory|MockObject
      */
     private $providerFactoryMock;
 
     /**
-     * @var ReportProvider|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReportProvider|MockObject
      */
     private $reportProviderMock;
 
@@ -44,7 +48,7 @@ class ReportWriterTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|MockObject
      */
     private $directoryMock;
 
@@ -71,16 +75,15 @@ class ReportWriterTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
-        $this->reportValidatorMock = $this->getMockBuilder(ReportValidator::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->providerFactoryMock = $this->getMockBuilder(ProviderFactory::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->reportProviderMock = $this->getMockBuilder(ReportProvider::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->directoryMock = $this->getMockBuilder(WriteInterface::class)->getMockForAbstractClass();
+        $this->configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
+            ->getMockForAbstractClass();
+        $this->reportValidatorMock = $this->createMock(ReportValidator::class);
+        $this->providerFactoryMock = $this->createMock(ProviderFactory::class);
+        $this->reportProviderMock = $this->createMock(ReportProvider::class);
+        $this->directoryMock = $this->getMockBuilder(WriteInterface::class)
+            ->getMockForAbstractClass();
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->reportWriter = $this->objectManagerHelper->getObject(

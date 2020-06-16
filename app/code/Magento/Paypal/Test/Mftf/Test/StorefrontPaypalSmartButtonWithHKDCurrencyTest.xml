@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontPaypalSmartButtonWithHKDCurrencyTest" extends="AdminOrderRateDisplayedInOneLineTest">
+        <annotations>
+            <features value="Paypal"/>
+            <stories value="PayPal Express Checkout"/>
+            <title value="Mainflow of Paypal Smart Button with HKD currency and merchant country HongKong"/>
+            <description value="Users are able to place order using Paypal Smart Button using HKD currency and merchant country HongKong"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-33274"/>
+            <group value="paypalExpress"/>
+            <skip>
+                <issueId value="MC-33951"/>
+            </skip>
+        </annotations>
+        <before>
+            <!--Enable Advanced Setting-->
+            <magentoCLI command="config:set {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.value}}" stepKey="enableSkipOrderReview"/>
+            <!--Set merchant country-->
+            <magentoCLI command="config:set {{MerchantHongKong.path}} {{MerchantHongKong.value}}" stepKey="setMerchantCountryUK"/>
+            <!--Set Currency options for Default Config-->
+            <magentoCLI command="config:set {{SetCurrencyHKDBaseConfig.path}} {{SetCurrencyHKDBaseConfig.value}}" stepKey="setCurrencyBaseEUR"/>
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForHKD.value}}" stepKey="setAllowedCurrencyEURandUSD"/>
+            <magentoCLI command="config:set {{SetDefaultCurrencyHKDConfig.path}} {{SetDefaultCurrencyHKDConfig.value}}" stepKey="setCurrencyDefaultEUR"/>
+            <!--Set Currency options for Website-->
+            <magentoCLI command="config:set --scope={{SetCurrencyUSDBaseConfig.scope}} --scope-code={{SetCurrencyUSDBaseConfig.scope_code}} {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="setCurrencyBaseEURWebsites"/>
+            <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfigForUSD.scope}} --scope-code={{SetAllowedCurrenciesConfigForUSD.scope_code}} {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForHKD.value}}" stepKey="setAllowedCurrencyWebsitesForEURandUSD"/>
+            <magentoCLI command="config:set --scope={{SetDefaultCurrencyHKDConfig.scope}} --scope-code={{SetDefaultCurrencyHKDConfig.scope_code}} {{SetDefaultCurrencyHKDConfig.path}} {{SetDefaultCurrencyHKDConfig.value}}" stepKey="setCurrencyDefaultEURWebsites"/>
+            <!--Enable Free Shipping-->
+            <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
+        </before>
+        <after>
+            <createData entity="SamplePaypalConfig" stepKey="setDefaultPaypalConfig"/>
+            <magentoCLI command="config:set {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>
+            <!--Set default merchant country-->
+            <magentoCLI command="config:set {{MerchantUnitedStates.path}} {{MerchantUnitedStates.value}}" stepKey="setMerchantCountryDefault"/>
+            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
+        </after>
+        <!-- click on PayPal payment radio button -->
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" after="guestCheckoutFillingShippingSection" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" after="waitForPlaceOrderButton" stepKey="guestSelectCheckMoneyOrderPayment"/>
+
+        <!--Click Paypal button-->
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" after="guestSelectCheckMoneyOrderPayment" stepKey="guestPlaceOrder">
+            <argument name="elementNumber" value="0"/>
+        </actionGroup>
+
+        <!--Login to Paypal in-context-->
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountOneStepActionGroup" after="guestPlaceOrder" stepKey="LoginToPayPal">
+            <argument name="payerName" value="{{Payer.firstName}}"/>
+        </actionGroup>
+
+
+        <!--Submit payment on PayPal site-->
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" after="LoginToPayPal" stepKey="submitPayment"/>
+
+        <waitForElement after="submitPayment" selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumber"/>
+        <actionGroup ref="AdminAssertCurrencyInOrderActionGroup" stepKey="seeEURandUSDRate">
+            <argument name="rate" value="HKD / USD rate"/>
+        </actionGroup>
+        <assertEquals after ="grabRate" stepKey="assertSelectedCategories">
+            <actualResult type="variable">grabRate</actualResult>
+            <expectedResult type="array">[HKD / USD rate:]</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

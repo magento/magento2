@@ -70,8 +70,7 @@
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
 
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
-        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
         <waitForPageLoad stepKey="waitForNewInvoicePageLoad"/>
         <fillField selector="{{AdminInvoiceItemsSection.qtyToInvoiceColumn}}" userInput="1" stepKey="ChangeQtyToInvoice"/>

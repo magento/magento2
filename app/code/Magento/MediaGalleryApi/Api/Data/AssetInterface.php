@@ -13,6 +13,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 /**
  * Represents a media gallery asset which contains information about a media asset entity such
  * as path to the media storage, media asset title and its content type, etc.
+ * @api
  */
 interface AssetInterface extends ExtensibleDataInterface
 {
@@ -38,7 +39,7 @@ interface AssetInterface extends ExtensibleDataInterface
     public function getTitle(): ?string;
 
     /**
-     * Get source of the file
+     * Get the name of the channel/stock/integration file was retrieved from. null if not identified.
      *
      * @return string|null
      */
@@ -75,29 +76,29 @@ interface AssetInterface extends ExtensibleDataInterface
     /**
      * Get created at
      *
-     * @return string
+     * @return string|null
      */
-    public function getCreatedAt(): string;
+    public function getCreatedAt(): ?string;
 
     /**
      * Get updated at
      *
-     * @return string
+     * @return string|null
      */
-    public function getUpdatedAt(): string;
+    public function getUpdatedAt(): ?string;
 
     /**
      * Retrieve existing extension attributes object or create a new one.
      *
      * @return \Magento\MediaGalleryApi\Api\Data\AssetExtensionInterface|null
      */
-    public function getExtensionAttributes(): AssetExtensionInterface;
+    public function getExtensionAttributes(): ?AssetExtensionInterface;
 
     /**
      * Set extension attributes
      *
-     * @param \Magento\MediaGalleryApi\Api\Data\AssetExtensionInterface $extensionAttributes
+     * @param \Magento\MediaGalleryApi\Api\Data\AssetExtensionInterface|null $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(AssetExtensionInterface $extensionAttributes): void;
+    public function setExtensionAttributes(?AssetExtensionInterface $extensionAttributes): void;
 }

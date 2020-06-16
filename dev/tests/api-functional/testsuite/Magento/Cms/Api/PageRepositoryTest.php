@@ -86,7 +86,7 @@ class PageRepositoryTest extends WebapiAbstract
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->pageFactory = Bootstrap::getObjectManager()->create(PageInterfaceFactory::class);
         $this->pageRepository = Bootstrap::getObjectManager()->create(PageRepositoryInterface::class);
@@ -285,10 +285,11 @@ class PageRepositoryTest extends WebapiAbstract
 
     /**
      * Test delete \Magento\Cms\Api\Data\PageInterface
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testDelete()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $pageTitle = self::PAGE_TITLE;
         $pageIdentifier = self::PAGE_IDENTIFIER_PREFIX . uniqid();
         /** @var  PageInterface $pageDataObject */
@@ -378,7 +379,7 @@ class PageRepositoryTest extends WebapiAbstract
 
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(2, $searchResult['total_count']);
-        $this->assertEquals(1, count($searchResult['items']));
+        $this->assertCount(1, $searchResult['items']);
         $this->assertEquals(
             $searchResult['items'][0][PageInterface::IDENTIFIER],
             $cmsPages['third']->getIdentifier()

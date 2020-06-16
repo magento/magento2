@@ -3,53 +3,65 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\Shipping\Test\Unit\Model;
 
-use \Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Model\Order\Shipment\CommentFactory;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\Item\CollectionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class ShipmentTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ShipmentTest extends \PHPUnit\Framework\TestCase
+class ShipmentTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderRepositoryInterface|MockObject
      */
     protected $orderRepository;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment
+     * @var Shipment
      */
     protected $shipment;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->orderRepository = $this->createMock(\Magento\Sales\Api\OrderRepositoryInterface::class);
+        $this->orderRepository = $this->getMockForAbstractClass(OrderRepositoryInterface::class);
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $arguments = [
-            'context' => $this->createMock(\Magento\Framework\Model\Context::class),
-            'registry' => $this->createMock(\Magento\Framework\Registry::class),
+            'context' => $this->createMock(Context::class),
+            'registry' => $this->createMock(Registry::class),
             'localeDate' => $this->createMock(
-                \Magento\Framework\Stdlib\DateTime\TimezoneInterface::class
+                TimezoneInterface::class
             ),
-            'dateTime' => $this->createMock(\Magento\Framework\Stdlib\DateTime::class),
+            'dateTime' => $this->createMock(DateTime::class),
             'orderRepository' => $this->orderRepository,
             'shipmentItemCollectionFactory' => $this->createMock(
-                \Magento\Sales\Model\ResourceModel\Order\Shipment\Item\CollectionFactory::class
+                CollectionFactory::class
             ),
             'trackCollectionFactory' => $this->createMock(
                 \Magento\Sales\Model\ResourceModel\Order\Shipment\Track\CollectionFactory::class
             ),
-            'commentFactory' => $this->createMock(\Magento\Sales\Model\Order\Shipment\CommentFactory::class),
+            'commentFactory' => $this->createMock(CommentFactory::class),
             'commentCollectionFactory' => $this->createMock(
                 \Magento\Sales\Model\ResourceModel\Order\Shipment\Comment\CollectionFactory::class
             ),
         ];
         $this->shipment = $objectManagerHelper->getObject(
-            \Magento\Sales\Model\Order\Shipment::class,
+            Shipment::class,
             $arguments
         );
     }
@@ -60,18 +72,17 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
         $this->shipment->setOrderId($orderId);
         $entityName = 'shipment';
         $order = $this->createPartialMock(
-            \Magento\Sales\Model\Order::class,
+            Order::class,
             ['load', 'setHistoryEntityName', '__wakeUp']
         );
         $this->shipment->setOrderId($orderId);
         $order->expects($this->atLeastOnce())
             ->method('setHistoryEntityName')
-            ->with($entityName)
-            ->will($this->returnSelf());
+            ->with($entityName)->willReturnSelf();
 
         $this->orderRepository->expects($this->atLeastOnce())
             ->method('get')
-            ->will($this->returnValue($order));
+            ->willReturn($order);
 
         $this->assertEquals($order, $this->shipment->getOrder());
     }

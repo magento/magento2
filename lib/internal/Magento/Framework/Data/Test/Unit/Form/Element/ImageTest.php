@@ -3,44 +3,53 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Tests for \Magento\Framework\Data\Form\Element\Image
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
+use Magento\Framework\Data\Form\Element\CollectionFactory;
+use Magento\Framework\Data\Form\Element\Factory;
+use Magento\Framework\Data\Form\Element\Image;
+use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
+use Magento\Framework\Url;
 use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ImageTest extends \PHPUnit\Framework\TestCase
+class ImageTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_objectManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $urlBuilder;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\Image
+     * @var Image
      */
     protected $_image;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
-        $collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
-        $escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
-        $this->urlBuilder = $this->createMock(\Magento\Framework\Url::class);
-        $this->_image = new \Magento\Framework\Data\Form\Element\Image(
+        $factoryMock = $this->createMock(Factory::class);
+        $collectionFactoryMock = $this->createMock(CollectionFactory::class);
+        $escaperMock = $this->createMock(Escaper::class);
+        $this->urlBuilder = $this->createMock(Url::class);
+        $this->_image = new Image(
             $factoryMock,
             $collectionFactoryMock,
             $escaperMock,
             $this->urlBuilder
         );
-        $formMock = new \Magento\Framework\DataObject();
+        $formMock = new DataObject();
         $formMock->getHtmlIdPrefix('id_prefix');
         $formMock->getHtmlIdPrefix('id_suffix');
         $this->_image->setForm($formMock);
@@ -69,11 +78,11 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     public function testGetElementHtmlWithoutValue()
     {
         $html = $this->_image->getElementHtml();
-        $this->assertContains('class="input-file"', $html);
-        $this->assertContains('<input', $html);
-        $this->assertContains('type="file"', $html);
-        $this->assertContains('value=""', $html);
-        $this->assertNotContains('</a>', $html);
+        $this->assertStringContainsString('class="input-file"', $html);
+        $this->assertStringContainsString('<input', $html);
+        $this->assertStringContainsString('type="file"', $html);
+        $this->assertStringContainsString('value=""', $html);
+        $this->assertStringNotContainsString('</a>', $html);
     }
 
     /**
@@ -87,14 +96,14 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             ->with(['_type' => UrlInterface::URL_TYPE_MEDIA])
             ->willReturn('http://localhost/media/');
         $html = $this->_image->getElementHtml();
-        $this->assertContains('class="input-file"', $html);
-        $this->assertContains('<input', $html);
-        $this->assertContains('type="file"', $html);
-        $this->assertContains('value="test_value"', $html);
-        $this->assertContains(
+        $this->assertStringContainsString('class="input-file"', $html);
+        $this->assertStringContainsString('<input', $html);
+        $this->assertStringContainsString('type="file"', $html);
+        $this->assertStringContainsString('value="test_value"', $html);
+        $this->assertStringContainsString(
             '<a href="http://localhost/media/test_value" onclick="imagePreview(\'_image\'); return false;"',
             $html
         );
-        $this->assertContains('<input type="checkbox"', $html);
+        $this->assertStringContainsString('<input type="checkbox"', $html);
     }
 }

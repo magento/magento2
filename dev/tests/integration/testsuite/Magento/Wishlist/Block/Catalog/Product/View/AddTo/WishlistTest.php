@@ -43,7 +43,7 @@ class WishlistTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->registry = $this->objectManager->get(Registry::class);
@@ -56,7 +56,7 @@ class WishlistTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->registry->unregister('product');
 

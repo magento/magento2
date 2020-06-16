@@ -73,7 +73,7 @@
         <selectOption stepKey="selectStaticBlockOnlyOption" userInput="Static block only" selector="{{AdminCategoryDisplaySettingsSection.displayMode}}"/>
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategoryWithProducts"/>
         <waitForPageLoad stepKey="waitForCategorySaved"/>
-        <see userInput="You saved the category." stepKey="seeSuccessMessage"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="seeSuccessMessage"/>
 
         <!--Go to Storefront > category-->
         <amOnPage url="$$simplecategory.name$$.html" stepKey="goToStorefrontCategoryPage"/>

@@ -26,7 +26,7 @@ class IndexTest extends TestCase
      */
     private $resultPageFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
