@@ -11,7 +11,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**
- * @inheritdoc
+ * @inheritDoc
  */
 class InvoiceItemInterfaceTypeResolverComposite implements TypeResolverInterface
 {
@@ -29,10 +29,10 @@ class InvoiceItemInterfaceTypeResolverComposite implements TypeResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @throws GraphQlInputException
      */
-    public function resolveType(array $data) : string
+    public function resolveType(array $data): string
     {
         $resolvedType = null;
 

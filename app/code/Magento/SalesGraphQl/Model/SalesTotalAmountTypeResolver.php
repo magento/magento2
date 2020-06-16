@@ -16,6 +16,6 @@ class SalesTotalAmountTypeResolver implements TypeResolverInterface
      */
     public function resolveType(array $data): string
     {
-        // TODO: Implement resolveType() method.
+        return 'OrderTotal';
     }
 }

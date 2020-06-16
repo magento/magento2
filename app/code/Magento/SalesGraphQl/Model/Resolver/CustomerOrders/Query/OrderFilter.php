@@ -74,7 +74,6 @@ class OrderFilter
      * @param array $args
      * @param StoreInterface $store
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @throws InputException
      */
     public function applyFilter(
         int $userId,
@@ -104,7 +103,11 @@ class OrderFilter
                         if (is_array($value)) {
                             throw new InputException(__('Invalid match filter'));
                         }
-                        $filters[] = $this->addMatchFilter($field, $value, $store);
+                        $searchValue = str_replace('%', '', $value);
+                        $filters[] = $this->filterBuilder->setField($field)
+                            ->setValue("%{$searchValue}%")
+                            ->setConditionType('like')
+                            ->create();
                     } else {
                         $filters[] = $this->filterBuilder->setField($field)
                             ->setValue($value)
@@ -116,39 +119,7 @@ class OrderFilter
 
             $this->filterGroupBuilder->setFilters($filters);
             $filterGroups[] = $this->filterGroupBuilder->create();
-
         }
         $searchCriteriaBuilder->setFilterGroups($filterGroups);
-    }
-
-    /**
-     * Add match filter to collection
-     *
-     * @param Collection $orderCollection
-     * @param string $field
-     * @param string $value
-     * @param StoreInterface $store
-     * @throws InputException
-     */
-    private function addMatchFilter(
-        string $field,
-        string $value,
-        StoreInterface $store
-    ): Filter {
-        $minQueryLength = $this->scopeConfig->getValue(
-            'catalog/search/min_query_length',
-            ScopeInterface::SCOPE_STORE,
-            $store
-        ) ?? self::DEFAULT_MIN_QUERY_LENGTH;
-        $searchValue = str_replace('%', '', $value);
-        $matchLength = strlen($searchValue);
-        if ($matchLength < $minQueryLength) {
-            throw new InputException(__('Invalid match filter. Minimum length is %1.', $minQueryLength));
-        }
-
-        return $this->filterBuilder->setField($field)
-            ->setValue("%{$searchValue}%")
-            ->setConditionType('like')
-            ->create();
     }
 }

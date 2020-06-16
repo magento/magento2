@@ -69,7 +69,10 @@ class OrderTotal implements ResolverInterface
             'discounts' => $this->getDiscountDetails($order),
             'total_shipping' => ['value' => $order->getShippingAmount(), 'currency' => $currency],
             'shipping_handling' => [
-                'amount_excluding_tax' => ['value' => $order->getShippingAmount(), 'currency' => $order->getOrderCurrencyCode()],
+                'amount_excluding_tax' => [
+                    'value' => $order->getShippingAmount(),
+                    'currency' => $order->getOrderCurrencyCode()
+                ],
                 'amount_including_tax' => ['value' => $order->getShippingInclTax(), 'currency' => $currency],
                 'total_amount' => ['value' => $order->getBaseShippingAmount(), 'currency' => $currency],
                 'taxes' => $this->getAppliedTaxesDetails($order, $appliedShippingTaxesForItemsData),
