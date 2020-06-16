@@ -14,6 +14,7 @@
             <title value="Check for Configurable Product the default option doesn't appear."/>
             <description value="Check for Configurable Product the default option doesn't appear on the list options product when an option use."/>
             <testCaseId value="MC-35074"/>
+            <severity value="CRITICAL"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
