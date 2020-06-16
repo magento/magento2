@@ -29,7 +29,10 @@ class InvoiceItemInterfaceTypeResolverComposite implements TypeResolverInterface
     }
 
     /**
-     * @inheritdoc
+     * Resolve item type of an invoice through composite resolvers
+     *
+     * @param array $data
+     * @return string
      * @throws GraphQlInputException
      */
     public function resolveType(array $data): string

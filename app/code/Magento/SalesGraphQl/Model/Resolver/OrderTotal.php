@@ -41,7 +41,7 @@ class OrderTotal implements ResolverInterface
                 $index = $key;
                 $appliedTaxType = $appliedTaxForItem->getType();
                 $taxLineItems = $appliedTaxForItem->getAppliedTaxes();
-                foreach ($taxLineItems as $new => $taxLineItem) {
+                foreach ($taxLineItems as $taxLineItem) {
                     $allAppliedTaxesForItemsData[$key][$index]['title'] = $taxLineItem->getDataByKey('title');
                     $allAppliedTaxesForItemsData[$key][$index]['percent'] = $taxLineItem->getDataByKey('percent');
                     $allAppliedTaxesForItemsData[$key][$index]['amount'] = $taxLineItem->getDataByKey('amount');
@@ -136,7 +136,7 @@ class OrderTotal implements ResolverInterface
         if (empty($appliedTaxesArray)) {
             $taxes [] = [];
         } else {
-            foreach ($appliedTaxesArray as $key =>  $appliedTaxes) {
+            foreach ($appliedTaxesArray as $key => $appliedTaxes) {
                 if (empty($appliedTaxes[$key])) {
                     $taxes [] = [
                         'title' => $appliedTaxes[$key]['title'] ?? " ",

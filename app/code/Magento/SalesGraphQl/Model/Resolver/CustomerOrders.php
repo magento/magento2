@@ -77,7 +77,7 @@ class CustomerOrders implements ResolverInterface
             $orders[] = [
                 'created_at' => $order['created_at'],
                 'grand_total' => $order['grand_total'],
-                'id' => $order['entity_id'],
+                'id' => base64_encode($order['entity_id']),
                 'increment_id' => $order['increment_id'],
                 'number' => $order['increment_id'],
                 'order_date' => $order['created_at'],
