@@ -101,7 +101,8 @@ class CustomerSharingOptionsTest extends WebapiAbstract
      * @param bool $expectingException
      * @dataProvider getCustomerDataWebsiteScopeDataProvider
      *
-     * @magentoConfigFixture customer/account_share/scope 1
+     * @magentoApiDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     * @magentoConfigFixture default_store customer/account_share/scope 1
      */
     public function testGetCustomerDataWebsiteScope(string $storeCode, bool $expectingException)
     {
