@@ -12,7 +12,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
-use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Filesystem\Driver\File as FileDriver;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\MediaStorage\Model\File\Uploader;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -39,7 +39,7 @@ class FileTest extends TestCase
     private $mediaDirectoryMock;
 
     /**
-     * @var DriverInterface|MockObject
+     * @var FileDriver|MockObject
      */
     private $driverMock;
 
@@ -69,7 +69,7 @@ class FileTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->driverMock = $this->getMockBuilder(DriverInterface::class)
+        $this->driverMock = $this->getMockBuilder(FileDriver::class)
             ->disableOriginalConstructor()
             ->getMock();
 
