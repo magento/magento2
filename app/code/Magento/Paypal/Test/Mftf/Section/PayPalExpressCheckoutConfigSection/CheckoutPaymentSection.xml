@@ -9,7 +9,6 @@
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="CheckoutPaymentSection">
         <element name="email" type="input" selector="#checkout-customer-email"/>
-        <element name="payPalPaymentBraintree" type="radio" selector="#braintree_paypal"/>
         <element name="payPalFrame" type="iframe" selector="//iframe[contains(@class, 'zoid-component-frame zoid-visible')]" timeout="5"/>
         <element name="smartButtonPayPalFrame" type="iframe" selector=".component-frame" timeout="10"/>
         <element name="PayPalPaymentRadio" type="radio" selector="input#paypal_express.radio" timeout="30"/>

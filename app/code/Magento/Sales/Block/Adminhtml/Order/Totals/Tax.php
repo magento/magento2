@@ -64,6 +64,7 @@ class Tax extends \Magento\Tax\Block\Sales\Order\Tax
         $this->_taxCalculation = $taxCalculation;
         $this->_taxOrderFactory = $taxOrderFactory;
         $this->_salesAdminHelper = $salesAdminHelper;
+        $data['taxHelper'] = $this->_taxHelper;
         parent::__construct($context, $taxConfig, $data);
     }
 
