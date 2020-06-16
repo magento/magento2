@@ -29,7 +29,7 @@ class BatchProductLinks implements BatchServiceContractResolverInterface
      */
     public function __construct(array $linkTypes)
     {
-       $this->linkTypes = $linkTypes;
+        $this->linkTypes = $linkTypes;
     }
 
     /**
