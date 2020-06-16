@@ -73,7 +73,7 @@ class AssetEndToEndTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->saveAssetsKeywords = Bootstrap::getObjectManager()->get(SaveAssetsKeywordsInterface::class);
         $this->getAssetsKeywords = Bootstrap::getObjectManager()->get(GetAssetsKeywordsInterface::class);
@@ -118,7 +118,7 @@ class AssetEndToEndTest extends TestCase
         $loadedAssets = $this->getAssetsByPath->execute([$asset->getPath()]);
         $loadedAsset = $loadedAssets[0];
 
-        $this->assertEquals(1, count($loadedAssets));
+        $this->assertCount(1, $loadedAssets);
 
         $assetKeywords = $this->assetsKeywordsFactory->create(
             [
@@ -133,14 +133,14 @@ class AssetEndToEndTest extends TestCase
         $this->saveAssetsKeywords->execute([$assetKeywords]);
         $loadedAssetKeywords = $this->getAssetsKeywords->execute([$loadedAsset->getId()]);
 
-        $this->assertEquals(1, count($loadedAssetKeywords));
+        $this->assertCount(1, $loadedAssetKeywords);
 
         /** @var AssetKeywordsInterface $loadedAssetKeywords1 */
         $loadedAssetKeywords1 = current($loadedAssetKeywords);
 
         $loadedKeywords = $loadedAssetKeywords1->getKeywords();
 
-        $this->assertEquals(2, count($loadedKeywords));
+        $this->assertCount(2, $loadedKeywords);
 
         foreach ($loadedKeywords as $theKeyword) {
             $this->assertTrue(in_array($theKeyword->getKeyword(), ['pear', 'plum']));

@@ -12,17 +12,18 @@ use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\UrlRewrite\Model\UrlRewrite;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-/**
- * @var \Magento\Store\Model\Store $store
- */
-require __DIR__ . '/../../Store/_files/store.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/store.php');
 
 $objectManager = Bootstrap::getObjectManager();
-
+/** @var StoreRepositoryInterface $storeRepository */
+$storeRepository = $objectManager->get(StoreRepositoryInterface::class);
+$store = $storeRepository->get('test');
 // reindex catalog search to create store's specific temporary tables
 $indexerRegistry = $objectManager->create(IndexerRegistry::class);
 $indexerRegistry->get(Fulltext::INDEXER_ID)
@@ -41,7 +42,7 @@ $categoryRepository->save($category);
 
 /** @var StoreManagerInterface $storeManager */
 $storeManager = $objectManager->get(StoreManagerInterface::class);
-
+$store = $storeManager->getStore('test');
 // change default store, otherwise store won't be updated for the category
 $storeManager->setCurrentStore($store->getId());
 $category->setUrlKey('cat-1-2')

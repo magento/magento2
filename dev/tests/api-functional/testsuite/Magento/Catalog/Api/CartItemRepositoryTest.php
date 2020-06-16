@@ -25,7 +25,7 @@ class CartItemRepositoryTest extends WebapiAbstract
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -58,7 +58,7 @@ class CartItemRepositoryTest extends WebapiAbstract
         ];
         $response = $this->_webApiCall($serviceInfo, $this->getRequestData($cartId));
         $this->assertTrue($quote->hasProductId($product->getId()));
-        $this->assertEquals(1, count($quote->getAllItems()));
+        $this->assertCount(1, $quote->getAllItems());
         /** @var \Magento\Quote\Api\Data\CartItemInterface $item */
         $item = $quote->getAllItems()[0];
         $this->assertEquals(

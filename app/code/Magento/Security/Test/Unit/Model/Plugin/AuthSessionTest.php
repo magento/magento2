@@ -3,38 +3,49 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Security\Test\Unit\Model\Plugin;
 
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Security\Model\AdminSessionInfo;
+use Magento\Security\Model\AdminSessionsManager;
+use Magento\Security\Model\Plugin\AuthSession;
 use Magento\Security\Model\SecurityCookie;
+use Magento\Security\Model\UserExpirationManager;
+use Magento\User\Model\User;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Security\Model\Plugin\AuthSession testing
  */
-class AuthSessionTest extends \PHPUnit\Framework\TestCase
+class AuthSessionTest extends TestCase
 {
-    /** @var  \Magento\Security\Model\Plugin\AuthSession */
+    /** @var  AuthSession */
     protected $model;
 
-    /** @var \Magento\Framework\App\RequestInterface */
+    /** @var RequestInterface */
     protected $requestMock;
 
-    /** @var \Magento\Framework\Message\ManagerInterface */
+    /** @var ManagerInterface */
     protected $messageManagerMock;
 
-    /** @var \Magento\Security\Model\AdminSessionsManager */
+    /** @var AdminSessionsManager */
     protected $adminSessionsManagerMock;
 
     /** @var SecurityCookie */
     protected $securityCookieMock;
 
-    /** @var \Magento\Backend\Model\Auth\Session */
+    /** @var Session */
     protected $authSessionMock;
 
-    /** @var \Magento\Security\Model\AdminSessionInfo */
+    /** @var AdminSessionInfo */
     protected $currentSessionMock;
 
-    /** @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var  ObjectManager */
     protected $objectManager;
 
     /**@var \Magento\Security\Model\UserExpirationManager */
@@ -47,45 +58,47 @@ class AuthSessionTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
         $this->requestMock = $this->getMockForAbstractClass(
-            \Magento\Framework\App\RequestInterface::class,
+            RequestInterface::class,
             ['getParam', 'getModuleName', 'getActionName'],
             '',
             false
         );
 
-        $this->messageManagerMock = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
 
         $this->adminSessionsManagerMock = $this->createPartialMock(
-            \Magento\Security\Model\AdminSessionsManager::class,
+            AdminSessionsManager::class,
             ['getCurrentSession', 'processProlong', 'getLogoutReasonMessage']
         );
 
         $this->securityCookieMock = $this->createPartialMock(SecurityCookie::class, ['setLogoutReasonCookie']);
 
-        $this->authSessionMock = $this->createPartialMock(
-            \Magento\Backend\Model\Auth\Session::class,
-            ['destroy', 'getUser']
-        );
+        $this->authSessionMock = $this->getMockBuilder(Session::class)
+            ->addMethods(['getUser'])
+            ->onlyMethods(['destroy'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->currentSessionMock = $this->createPartialMock(
-            \Magento\Security\Model\AdminSessionInfo::class,
-            ['isLoggedInStatus', 'getStatus', 'isActive']
-        );
+        $this->currentSessionMock = $this->getMockBuilder(AdminSessionInfo::class)
+            ->addMethods(['getStatus', 'isActive'])
+            ->onlyMethods(['isLoggedInStatus'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->userExpirationManagerMock = $this->createPartialMock(
-            \Magento\Security\Model\UserExpirationManager::class,
+            UserExpirationManager::class,
             ['isUserExpired', 'deactivateExpiredUsersById']
         );
 
-        $this->userMock = $this->createMock(\Magento\User\Model\User::class);
+        $this->userMock = $this->createMock(User::class);
 
         $this->model = $this->objectManager->getObject(
-            \Magento\Security\Model\Plugin\AuthSession::class,
+            AuthSession::class,
             [
                 'request' => $this->requestMock,
                 'messageManager' => $this->messageManagerMock,

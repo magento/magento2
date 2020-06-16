@@ -12,7 +12,7 @@ use Magento\Sales\Model\Order;
 use Magento\User\Model\UserFactory;
 
 /**
- * Add comment after order placed by admin using login-as-customer.
+ * Add comment after order placed by admin using Login as Customer.
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
@@ -41,7 +41,7 @@ class FrontAddCommentOnOrderPlacementPlugin
     }
 
     /**
-     * Add comment after order placed by admin using login-as-customer.
+     * Add comment after order placed by admin using Login as Customer.
      *
      * @param Order $subject
      * @param Order $result

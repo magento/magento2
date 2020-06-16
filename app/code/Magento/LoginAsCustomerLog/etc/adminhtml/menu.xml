@@ -9,11 +9,12 @@
         xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Backend:etc/menu.xsd">
     <menu>
         <add id="Magento_LoginAsCustomerLog::login_log"
-             title="Login As Customer Log"
+             title="Login as Customer Log"
              module="Magento_LoginAsCustomerLog"
              parent="Magento_Customer::customer"
              sortOrder="40"
-             resource="Magento_LoginAsCustomer::login_log"
-             action="loginascustomer"/>
+             resource="Magento_LoginAsCustomerLog::login_log"
+             action="loginascustomer_log/log/index"
+             dependsOnConfig="login_as_customer/general/enabled"/>
     </menu>
 </config>

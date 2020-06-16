@@ -3,13 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit;
 
 use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\ProductMetadata;
+use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ProductMetadataTest extends \PHPUnit\Framework\TestCase
+class ProductMetadataTest extends TestCase
 {
     /**
      * @var ProductMetadata
@@ -17,21 +22,23 @@ class ProductMetadataTest extends \PHPUnit\Framework\TestCase
     private $productMetadata;
 
     /**
-     * @var \Magento\Framework\Composer\ComposerInformation|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComposerInformation|MockObject
      */
     private $composerInformationMock;
 
     /**
-     * @var CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CacheInterface|MockObject
      */
     private $cacheMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->composerInformationMock = $this->getMockBuilder(\Magento\Framework\Composer\ComposerInformation::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->composerInformationMock = $this->getMockBuilder(ComposerInformation::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->cacheMock = $this->getMockBuilder(CacheInterface::class)->getMock();
+        $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->productMetadata = $objectManager->getObject(ProductMetadata::class, ['cache' => $this->cacheMock]);

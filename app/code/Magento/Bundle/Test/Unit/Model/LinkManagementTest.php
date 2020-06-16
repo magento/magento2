@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Bundle\Test\Unit\Model;
 
@@ -26,6 +27,9 @@ use Magento\Catalog\Model\ProductRepository;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\EntityManager\EntityMetadata;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
@@ -138,7 +142,7 @@ class LinkManagementTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
 
@@ -160,14 +164,15 @@ class LinkManagementTest extends TestCase
             ->getMock();
         $this->selectionCollection = $this->getMockBuilder(
             SelectionCollection::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->product = $this->getMockBuilder(Product::class)
             ->setMethods(['getTypeInstance', 'getStoreId', 'getTypeId', '__wakeup', 'getId', 'getData'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->link = $this->getMockBuilder(LinkInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->linkFactory = $this->getMockBuilder(LinkInterfaceFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
@@ -184,7 +189,7 @@ class LinkManagementTest extends TestCase
             OptionCollectionFactory::class,
             ['create']
         );
-        $this->storeManagerMock = $this->createMock(StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->metadataPoolMock = $this->getMockBuilder(MetadataPool::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -220,7 +225,7 @@ class LinkManagementTest extends TestCase
         $this->getOptions();
 
         $this->productRepository->method('get')
-            ->with($this->equalTo($productSku))
+            ->with($productSku)
             ->willReturn($this->product);
 
         $this->product->expects($this->once())
@@ -230,24 +235,24 @@ class LinkManagementTest extends TestCase
         $this->productType->expects($this->once())
             ->method('setStoreFilter')
             ->with(
-                $this->equalTo($this->storeId),
+                $this->storeId,
                 $this->product
             );
         $this->productType->expects($this->once())
             ->method('getSelectionsCollection')
             ->with(
-                $this->equalTo($this->optionIds),
-                $this->equalTo($this->product)
+                $this->optionIds,
+                $this->product
             )
             ->willReturn($this->selectionCollection);
         $this->productType->expects($this->once())
             ->method('getOptionsIds')
-            ->with($this->equalTo($this->product))
+            ->with($this->product)
             ->willReturn($this->optionIds);
 
         $this->optionCollection->expects($this->once())
             ->method('appendSelections')
-            ->with($this->equalTo($this->selectionCollection))
+            ->with($this->selectionCollection)
             ->willReturn([$this->option]);
 
         $this->option->method('getSelections')
@@ -277,7 +282,7 @@ class LinkManagementTest extends TestCase
         $this->getOptions();
 
         $this->productRepository->method('get')
-            ->with($this->equalTo($productSku))
+            ->with($productSku)
             ->willReturn($this->product);
 
         $this->product->expects($this->once())
@@ -287,24 +292,24 @@ class LinkManagementTest extends TestCase
         $this->productType->expects($this->once())
             ->method('setStoreFilter')
             ->with(
-                $this->equalTo($this->storeId),
+                $this->storeId,
                 $this->product
             );
         $this->productType->expects($this->once())
             ->method('getSelectionsCollection')
             ->with(
-                $this->equalTo($this->optionIds),
-                $this->equalTo($this->product)
+                $this->optionIds,
+                $this->product
             )
             ->willReturn($this->selectionCollection);
         $this->productType->expects($this->once())
             ->method('getOptionsIds')
-            ->with($this->equalTo($this->product))
+            ->with($this->product)
             ->willReturn($this->optionIds);
 
         $this->optionCollection->expects($this->once())
             ->method('appendSelections')
-            ->with($this->equalTo($this->selectionCollection))
+            ->with($this->selectionCollection)
             ->willReturn([$this->option]);
 
         $this->option->method('getOptionId')
@@ -318,16 +323,15 @@ class LinkManagementTest extends TestCase
         $this->assertEquals([], $this->model->getChildren($productSku, 1));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     */
     public function testGetChildrenException()
     {
+        $this->expectException(InputException::class);
+
         $productSku = 'productSku';
 
         $this->productRepository->expects($this->once())
             ->method('get')
-            ->with($this->equalTo($productSku))
+            ->with($productSku)
             ->willReturn($this->product);
 
         $this->product->expects($this->once())
@@ -337,12 +341,11 @@ class LinkManagementTest extends TestCase
         $this->assertEquals([$this->link], $this->model->getChildren($productSku));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     */
     public function testAddChildToNotBundleProduct()
     {
-        $productLink = $this->createMock(LinkInterface::class);
+        $this->expectException(InputException::class);
+
+        $productLink = $this->getMockForAbstractClass(LinkInterface::class);
         $productLink->method('getOptionId')
             ->willReturn(1);
 
@@ -353,12 +356,11 @@ class LinkManagementTest extends TestCase
         $this->model->addChild($productMock, 1, $productLink);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     */
     public function testAddChildNonExistingOption()
     {
-        $productLink = $this->createMock(LinkInterface::class);
+        $this->expectException(InputException::class);
+
+        $productLink = $this->getMockForAbstractClass(LinkInterface::class);
         $productLink->method('getOptionId')->willReturn(1);
 
         $productMock = $this->createMock(Product::class);
@@ -368,7 +370,8 @@ class LinkManagementTest extends TestCase
         $this->storeManagerMock->method('getStore')->willReturn($store);
         $store->method('getId')->willReturn(0);
 
-        $emptyOption = $this->getMockBuilder(Option::class)->disableOriginalConstructor()
+        $emptyOption = $this->getMockBuilder(Option::class)
+            ->disableOriginalConstructor()
             ->setMethods(['getId', '__wakeup'])
             ->getMock();
         $emptyOption->expects($this->once())
@@ -378,7 +381,7 @@ class LinkManagementTest extends TestCase
         $optionsCollectionMock = $this->createMock(OptionCollection::class);
         $optionsCollectionMock->expects($this->once())
             ->method('setIdFilter')
-            ->with($this->equalTo(1))
+            ->with(1)
             ->willReturnSelf();
         $optionsCollectionMock->expects($this->once())
             ->method('getFirstItem')
@@ -390,13 +393,12 @@ class LinkManagementTest extends TestCase
         $this->model->addChild($productMock, 1, $productLink);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The bundle product can't contain another composite product.
-     */
     public function testAddChildLinkedProductIsComposite()
     {
-        $productLink = $this->createMock(LinkInterface::class);
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage('The bundle product can\'t contain another composite product.');
+
+        $productLink = $this->getMockForAbstractClass(LinkInterface::class);
         $productLink->method('getSku')->willReturn('linked_product_sku');
         $productLink->method('getOptionId')->willReturn(1);
 
@@ -426,7 +428,8 @@ class LinkManagementTest extends TestCase
         $store->method('getId')
             ->willReturn(0);
 
-        $option = $this->getMockBuilder(Option::class)->disableOriginalConstructor()
+        $option = $this->getMockBuilder(Option::class)
+            ->disableOriginalConstructor()
             ->setMethods(['getId', '__wakeup'])
             ->getMock();
         $option->expects($this->once())->method('getId')->willReturn(1);
@@ -434,7 +437,7 @@ class LinkManagementTest extends TestCase
         $optionsCollectionMock = $this->createMock(OptionCollection::class);
         $optionsCollectionMock->expects($this->once())
             ->method('setIdFilter')
-            ->with($this->equalTo('1'))
+            ->with('1')
             ->willReturnSelf();
         $optionsCollectionMock->expects($this->once())
             ->method('getFirstItem')
@@ -448,11 +451,10 @@ class LinkManagementTest extends TestCase
         $this->model->addChild($productMock, 1, $productLink);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     */
     public function testAddChildProductAlreadyExistsInOption()
     {
+        $this->expectException(CouldNotSaveException::class);
+
         $productLink = $this->getMockBuilder(LinkInterface::class)
             ->setMethods(['getSku', 'getOptionId', 'getSelectionId'])
             ->disableOriginalConstructor()
@@ -462,10 +464,11 @@ class LinkManagementTest extends TestCase
         $productLink->method('getSelectionId')->willReturn(1);
 
         $this->metadataMock->expects($this->once())->method('getLinkField')->willReturn($this->linkField);
-        $productMock = $this->createPartialMock(
-            Product::class,
-            ['getTypeId', 'getCopyFromView', 'getData', 'getTypeInstance', 'getSku']
-        );
+        $productMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['getCopyFromView'])
+            ->onlyMethods(['getTypeId', 'getData', 'getTypeInstance', 'getSku'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $productMock->expects($this->once())->method('getTypeId')->willReturn(
             Type::TYPE_BUNDLE
         );
@@ -491,7 +494,8 @@ class LinkManagementTest extends TestCase
         $this->storeManagerMock->method('getStore')->willReturn($store);
         $store->method('getId')->willReturn(0);
 
-        $option = $this->getMockBuilder(Option::class)->disableOriginalConstructor()
+        $option = $this->getMockBuilder(Option::class)
+            ->disableOriginalConstructor()
             ->setMethods(['getId', '__wakeup'])
             ->getMock();
         $option->expects($this->once())
@@ -501,7 +505,7 @@ class LinkManagementTest extends TestCase
         $optionsCollectionMock = $this->createMock(OptionCollection::class);
         $optionsCollectionMock->expects($this->once())
             ->method('setIdFilter')
-            ->with($this->equalTo(1))
+            ->with(1)
             ->willReturnSelf();
         $optionsCollectionMock->expects($this->once())
             ->method('getFirstItem')
@@ -524,11 +528,10 @@ class LinkManagementTest extends TestCase
         $this->model->addChild($productMock, 1, $productLink);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     */
     public function testAddChildCouldNotSave()
     {
+        $this->expectException(CouldNotSaveException::class);
+
         $productLink = $this->getMockBuilder(LinkInterface::class)
             ->setMethods(['getSku', 'getOptionId', 'getSelectionId'])
             ->disableOriginalConstructor()
@@ -562,7 +565,8 @@ class LinkManagementTest extends TestCase
         $this->storeManagerMock->method('getStore')->willReturn($store);
         $store->method('getId')->willReturn(0);
 
-        $option = $this->getMockBuilder(Option::class)->disableOriginalConstructor()
+        $option = $this->getMockBuilder(Option::class)
+            ->disableOriginalConstructor()
             ->setMethods(['getId', '__wakeup'])
             ->getMock();
         $option->expects($this->once())->method('getId')->willReturn(1);
@@ -570,7 +574,7 @@ class LinkManagementTest extends TestCase
         $optionsCollectionMock = $this->createMock(OptionCollection::class);
         $optionsCollectionMock->expects($this->once())
             ->method('setIdFilter')
-            ->with($this->equalTo(1))
+            ->with(1)
             ->willReturnSelf();
         $optionsCollectionMock->expects($this->once())
             ->method('getFirstItem')
@@ -634,7 +638,8 @@ class LinkManagementTest extends TestCase
         $this->storeManagerMock->method('getStore')->willReturn($store);
         $store->method('getId')->willReturn(0);
 
-        $option = $this->getMockBuilder(Option::class)->disableOriginalConstructor()
+        $option = $this->getMockBuilder(Option::class)
+            ->disableOriginalConstructor()
             ->setMethods(['getId', '__wakeup'])
             ->getMock();
         $option->expects($this->once())->method('getId')->willReturn(1);
@@ -642,7 +647,7 @@ class LinkManagementTest extends TestCase
         $optionsCollectionMock = $this->createMock(OptionCollection::class);
         $optionsCollectionMock->expects($this->once())
             ->method('setIdFilter')
-            ->with($this->equalTo(1))
+            ->with(1)
             ->willReturnSelf();
         $optionsCollectionMock->expects($this->once())
             ->method('getFirstItem')
@@ -724,23 +729,23 @@ class LinkManagementTest extends TestCase
         $this->storeManagerMock->method('getStore')->willReturn($store);
         $store->method('getId')->willReturn(0);
 
-        $selection = $this->createPartialMock(
-            Selection::class,
-            [
-                'save',
-                'getId',
-                'load',
-                'setProductId',
-                'setParentProductId',
-                'setOptionId',
-                'setPosition',
-                'setSelectionQty',
-                'setSelectionPriceType',
-                'setSelectionPriceValue',
-                'setSelectionCanChangeQty',
-                'setIsDefault'
-            ]
-        );
+        $selection = $this->getMockBuilder(Selection::class)
+            ->addMethods(
+                [
+                    'setProductId',
+                    'setParentProductId',
+                    'setOptionId',
+                    'setPosition',
+                    'setSelectionQty',
+                    'setSelectionPriceType',
+                    'setSelectionPriceValue',
+                    'setSelectionCanChangeQty',
+                    'setIsDefault'
+                ]
+            )
+            ->onlyMethods(['save', 'getId', 'load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $selection->expects($this->once())->method('save');
         $selection->expects($this->once())->method('load')->with($id)->willReturnSelf();
         $selection->method('getId')->willReturn($id);
@@ -758,11 +763,10 @@ class LinkManagementTest extends TestCase
         $this->assertTrue($this->model->saveChild($bundleProductSku, $productLink));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\CouldNotSaveException
-     */
     public function testSaveChildFailedToSave()
     {
+        $this->expectException(CouldNotSaveException::class);
+
         $id = 12;
         $linkProductId = 45;
         $parentProductId = 32;
@@ -803,24 +807,24 @@ class LinkManagementTest extends TestCase
         $store->method('getId')
             ->willReturn(0);
 
-        $selection = $this->createPartialMock(
-            Selection::class,
-            [
-                'save',
-                'getId',
-                'load',
-                'setProductId',
-                'setParentProductId',
-                'setSelectionId',
-                'setOptionId',
-                'setPosition',
-                'setSelectionQty',
-                'setSelectionPriceType',
-                'setSelectionPriceValue',
-                'setSelectionCanChangeQty',
-                'setIsDefault'
-            ]
-        );
+        $selection = $this->getMockBuilder(Selection::class)
+            ->addMethods(
+                [
+                    'setProductId',
+                    'setParentProductId',
+                    'setSelectionId',
+                    'setOptionId',
+                    'setPosition',
+                    'setSelectionQty',
+                    'setSelectionPriceType',
+                    'setSelectionPriceValue',
+                    'setSelectionCanChangeQty',
+                    'setIsDefault'
+                ]
+            )
+            ->onlyMethods(['save', 'getId', 'load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $mockException = $this->createMock(Exception::class);
         $selection->expects($this->once())
             ->method('save')
@@ -841,14 +845,13 @@ class LinkManagementTest extends TestCase
         $this->model->saveChild($bundleProductSku, $productLink);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     */
     public function testSaveChildWithoutId()
     {
+        $this->expectException(InputException::class);
+
         $bundleProductSku = 'bundleSku';
         $linkedProductSku = 'simple';
-        $productLink = $this->createMock(LinkInterface::class);
+        $productLink = $this->getMockForAbstractClass(LinkInterface::class);
         $productLink->method('getId')->willReturn(null);
         $productLink->method('getSku')->willReturn($linkedProductSku);
 
@@ -873,16 +876,17 @@ class LinkManagementTest extends TestCase
         $this->model->saveChild($bundleProductSku, $productLink);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage The product link with the "12345" ID field wasn't found. Verify the ID and try again.
-     */
     public function testSaveChildWithInvalidId()
     {
+        $this->expectException(InputException::class);
+        $this->expectExceptionMessage(
+            'The product link with the "12345" ID field wasn\'t found. Verify the ID and try again.'
+        );
+
         $id = 12345;
         $linkedProductSku = 'simple';
         $bundleProductSku = 'bundleProductSku';
-        $productLink = $this->createMock(LinkInterface::class);
+        $productLink = $this->getMockForAbstractClass(LinkInterface::class);
         $productLink->method('getId')->willReturn($id);
         $productLink->method('getSku')->willReturn($linkedProductSku);
 
@@ -924,15 +928,14 @@ class LinkManagementTest extends TestCase
         $this->model->saveChild($bundleProductSku, $productLink);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     */
     public function testSaveChildWithCompositeProductLink()
     {
+        $this->expectException(InputException::class);
+
         $bundleProductSku = 'bundleProductSku';
         $id = 12;
         $linkedProductSku = 'simple';
-        $productLink = $this->createMock(LinkInterface::class);
+        $productLink = $this->getMockForAbstractClass(LinkInterface::class);
         $productLink->method('getId')->willReturn($id);
         $productLink->method('getSku')->willReturn($linkedProductSku);
 
@@ -953,16 +956,15 @@ class LinkManagementTest extends TestCase
         $this->model->saveChild($bundleProductSku, $productLink);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     */
     public function testSaveChildWithSimpleProduct()
     {
+        $this->expectException(InputException::class);
+
         $id = 12;
         $linkedProductSku = 'simple';
         $bundleProductSku = 'bundleProductSku';
 
-        $productLink = $this->createMock(LinkInterface::class);
+        $productLink = $this->getMockForAbstractClass(LinkInterface::class);
         $productLink->method('getId')->willReturn($id);
         $productLink->method('getSku')->willReturn($linkedProductSku);
 
@@ -1015,11 +1017,10 @@ class LinkManagementTest extends TestCase
         $this->assertTrue($this->model->removeChild($productSku, $optionId, $childSku));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     */
     public function testRemoveChildForbidden()
     {
+        $this->expectException(InputException::class);
+
         $this->productRepository->method('get')->willReturn($this->product);
         $productSku = 'productSku';
         $optionId = 1;
@@ -1029,11 +1030,10 @@ class LinkManagementTest extends TestCase
         $this->model->removeChild($productSku, $optionId, $childSku);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     */
     public function testRemoveChildInvalidOptionId()
     {
+        $this->expectException(NoSuchEntityException::class);
+
         $this->productRepository->method('get')->willReturn($this->product);
         $productSku = 'productSku';
         $optionId = 1;
@@ -1057,11 +1057,10 @@ class LinkManagementTest extends TestCase
         $this->model->removeChild($productSku, $optionId, $childSku);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     */
     public function testRemoveChildInvalidChildSku()
     {
+        $this->expectException(NoSuchEntityException::class);
+
         $this->productRepository->method('get')->willReturn($this->product);
         $productSku = 'productSku';
         $optionId = 1;
@@ -1095,11 +1094,11 @@ class LinkManagementTest extends TestCase
             ->willReturn($this->storeId);
         $this->productType->expects($this->once())
             ->method('setStoreFilter')
-            ->with($this->equalTo($this->storeId), $this->equalTo($this->product));
+            ->with($this->storeId, $this->product);
 
         $this->productType->expects($this->once())
             ->method('getOptionsCollection')
-            ->with($this->equalTo($this->product))
+            ->with($this->product)
             ->willReturn($this->optionCollection);
     }
 
@@ -1113,12 +1112,12 @@ class LinkManagementTest extends TestCase
 
         $this->productType->expects($this->once())->method('setStoreFilter');
         $this->productType->expects($this->once())->method('getOptionsCollection')
-            ->with($this->equalTo($this->product))
+            ->with($this->product)
             ->willReturn($this->optionCollection);
 
         $this->productType->expects($this->once())
             ->method('getOptionsIds')
-            ->with($this->equalTo($this->product))
+            ->with($this->product)
             ->willReturn([1, 2, 3]);
 
         $this->productType->expects($this->once())
@@ -1126,7 +1125,7 @@ class LinkManagementTest extends TestCase
             ->willReturn([]);
 
         $this->optionCollection->method('appendSelections')
-            ->with($this->equalTo([]), true)
+            ->with([], true)
             ->willReturn([$this->option]);
     }
 }

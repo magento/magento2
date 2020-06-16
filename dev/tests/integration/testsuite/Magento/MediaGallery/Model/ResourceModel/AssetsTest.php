@@ -55,7 +55,7 @@ class AssetsTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->assetFactory = Bootstrap::getObjectManager()->get(AssetInterfaceFactory::class);
         $this->saveAssets = Bootstrap::getObjectManager()->get(SaveAssetsInterface::class);

@@ -100,7 +100,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 'Child block with category has invalid item name'
             );
 
-            $this->assertRegExp(
+            $this->assertMatchesRegularExpression(
                 '/http:\/\/localhost\/index.php\/.*\/category/',
                 $categoryBlock->getItemUrl(),
                 'Child block with category contains invalid URL'

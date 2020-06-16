@@ -17,6 +17,7 @@
             <description value="Login as admin, create attribute with two options, configurable product with two
                 associated simple products. Add few images for products, check the fotorama thumbnail images
                 (visible and active) for each selected option for the configurable product"/>
+            <severity value="MAJOR"/>
             <group value="swatches"/>
         </annotations>
         <before>

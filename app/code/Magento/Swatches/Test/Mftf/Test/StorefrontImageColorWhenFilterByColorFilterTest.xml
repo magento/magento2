@@ -83,10 +83,10 @@
         <waitForElementVisible selector="{{StorefrontCategorySidebarSection.filterOptionByLabel(visualSwatchOption1.default_label)}}" stepKey="waitForOption"/>
         <click selector="{{StorefrontCategorySidebarSection.filterOptionByLabel(visualSwatchOption1.default_label)}}" stepKey="clickFirstOption"/>
         <grabAttributeFrom selector="{{StorefrontCategoryMainSection.productImage}}" userInput="src" stepKey="grabFirstOptionImg"/>
-        <assertContains stepKey="assertProductFirstOptionImage">
+        <assertStringContainsString stepKey="assertProductFirstOptionImage">
 			<actualResult type="variable">$grabFirstOptionImg</actualResult>
 			<expectedResult type="string">{{MagentoLogo.filename}}</expectedResult>
-        </assertContains>
+        </assertStringContainsString>
         <click selector="{{StorefrontCategorySidebarSection.removeFilter}}" stepKey="removeSideBarFilter"/>
         <actionGroup ref="SelectStorefrontSideBarAttributeOption" stepKey="selectStorefrontProductAttributeForSecondOption">
             <argument name="categoryName" value="$$createCategory.name$$"/>
@@ -95,9 +95,9 @@
         <waitForElementVisible selector="{{StorefrontCategorySidebarSection.filterOptionByLabel(visualSwatchOption2.default_label)}}" stepKey="waitForSecondOption"/>
         <click selector="{{StorefrontCategorySidebarSection.filterOptionByLabel(visualSwatchOption2.default_label)}}" stepKey="clickSecondOption"/>
         <grabAttributeFrom selector="{{StorefrontCategoryMainSection.productImage}}" userInput="src" stepKey="grabSecondOptionImg"/>
-        <assertContains stepKey="assertProductSecondOptionImage">
+        <assertStringContainsString stepKey="assertProductSecondOptionImage">
 			<actualResult type="variable">$grabSecondOptionImg</actualResult>
 			<expectedResult type="string">{{TestImageNew.filename}}</expectedResult>
-        </assertContains>
+        </assertStringContainsString>
     </test>
 </tests>

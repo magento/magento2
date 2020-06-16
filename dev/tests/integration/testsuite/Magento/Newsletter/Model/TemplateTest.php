@@ -19,7 +19,7 @@ class TemplateTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = Bootstrap::getObjectManager()->create(
             \Magento\Newsletter\Model\Template::class
