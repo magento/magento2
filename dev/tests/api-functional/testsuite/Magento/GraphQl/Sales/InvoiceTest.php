@@ -12,7 +12,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Class Invoice Test
+ * Tests the Invoice query
  */
 class InvoiceTest extends GraphQlAbstract
 {
@@ -29,6 +29,7 @@ class InvoiceTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Sales/_files/customer_invoice_with_two_products_and_custom_options.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testSingleInvoiceForLoggedInCustomerQuery()
     {
@@ -150,6 +151,7 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Sales/_files/customer_multiple_invoices_with_two_products_and_custom_options.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testMultipleInvoiceForLoggedInCustomerQuery()
     {
@@ -291,6 +293,7 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Sales/_files/customers_with_invoices.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testMultipleCustomersWithInvoicesQuery()
     {

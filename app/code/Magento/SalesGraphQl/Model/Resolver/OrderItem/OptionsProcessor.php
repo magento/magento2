@@ -30,8 +30,6 @@ class OptionsProcessor
                 $optionsTypes = $this->processOptions($options['options']);
             } elseif (isset($options['attributes_info'])) {
                 $optionsTypes = $this->processAttributesInfo($options['attributes_info']);
-            } elseif (isset($options['additional_options'])) {
-                // TODO $options['additional_options']
             }
         }
         return $optionsTypes;

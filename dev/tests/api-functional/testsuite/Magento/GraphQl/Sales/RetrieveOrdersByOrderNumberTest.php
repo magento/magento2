@@ -93,7 +93,12 @@ QUERY;
 
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
 
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
@@ -155,7 +160,10 @@ QUERY;
         $customerOrderItems = $customerOrderResponse[0];
         $this->assertEquals("Pending", $customerOrderItems['status']);
         $bundledItemInTheOrder = $customerOrderItems['items'][0];
-        $this->assertEquals('bundle-product-two-dropdown-options-simple1-simple2', $bundledItemInTheOrder['product_sku']);
+        $this->assertEquals(
+            'bundle-product-two-dropdown-options-simple1-simple2',
+            $bundledItemInTheOrder['product_sku']
+        );
         $priceOfBundledItemInOrder = $bundledItemInTheOrder['product_sale_price']['value'];
         $this->assertEquals(15, $priceOfBundledItemInOrder);
         $this->assertArrayHasKey('bundle_options', $bundledItemInTheOrder);
@@ -222,7 +230,10 @@ QUERY;
         $this->assertEquals("Pending", $customerOrderItems['status']);
 
         $bundledItemInTheOrder = $customerOrderItems['items'][0];
-        $this->assertEquals('bundle-product-two-dropdown-options-simple1-simple2', $bundledItemInTheOrder['product_sku']);
+        $this->assertEquals(
+            'bundle-product-two-dropdown-options-simple1-simple2',
+            $bundledItemInTheOrder['product_sku']
+        );
         $this->assertArrayHasKey('bundle_options', $bundledItemInTheOrder);
         $childItemsInTheOrder = $bundledItemInTheOrder['bundle_options'];
         $this->assertNotEmpty($childItemsInTheOrder);
@@ -241,6 +252,7 @@ QUERY;
      * Assert order totals including shipping_handling and taxes
      *
      * @param array $customerOrderItem
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function assertTotalsOnBundleProductWithTaxesAndDiscounts(array $customerOrderItem): void
     {
@@ -385,7 +397,12 @@ QUERY;
 
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $this->assertArrayHasKey('total_count', $response['customer']['orders']);
@@ -403,7 +420,7 @@ QUERY;
 {
  customer
  {
-  orders(filter:{number:{match:"00"}}){
+  orders(filter:{number:{match:"0"}}){
    total_count
    page_info{
      total_pages
@@ -429,9 +446,17 @@ QUERY;
 
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Invalid match filter. Minimum length is 3.');
-        $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+        //character length should not trigger an exception
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
+        $this->assertArrayHasKey('orders', $response['customer']);
+        $this->assertArrayHasKey('items', $response['customer']['orders']);
+        $this->assertArrayHasKey('total_count', $response['customer']['orders']);
+        $this->assertEquals(2, $response['customer']['orders']['total_count']);
     }
 
     /**
@@ -490,7 +515,12 @@ QUERY;
 
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
 
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
@@ -678,7 +708,12 @@ QUERY;
 
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
         $this->assertArrayHasKey('customer', $response);
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
@@ -781,7 +816,10 @@ QUERY;
             $query,
             [],
             '',
-            array_merge($this->customerAuthenticationHeader->execute($currentEmail, $currentPassword), ['Store' => $store])
+            array_merge($this->customerAuthenticationHeader->execute(
+                $currentEmail, $currentPassword),
+                ['Store' => $store]
+            )
         );
         $this->assertArrayHasKey('customer', $response);
         $this->assertArrayHasKey('orders', $response['customer']);
@@ -857,6 +895,7 @@ QUERY;
      * Assert order totals including shipping_handling and taxes
      *
      * @param array $customerOrderItem
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function assertTotalsWithTaxesAndDiscountsOnShippingAndTotal(array $customerOrderItem): void
     {
@@ -1085,7 +1124,12 @@ mutation {
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+        $response = $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
         return $response['createEmptyCart'];
     }
 
@@ -1117,11 +1161,20 @@ mutation {
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+        $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
     }
 
-    public function addBundleProductQuery(string $cartId, float $qty, string $sku, array $optionsAndSelectionData)
-    {
+    public function addBundleProductQuery(
+        string $cartId,
+        float $qty,
+        string $sku,
+        array $optionsAndSelectionData
+    ) {
         $query = <<<QUERY
 mutation {
   addBundleProductsToCart(input:{
@@ -1155,7 +1208,12 @@ mutation {
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+        $response = $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
         $this->assertArrayHasKey('cart', $response['addBundleProductsToCart']);
     }
     /**
@@ -1195,7 +1253,12 @@ mutation {
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+        $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
     }
 
     /**
@@ -1240,7 +1303,12 @@ mutation {
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+        $response = $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
         $shippingAddress = current($response['setShippingAddressesOnCart']['cart']['shipping_addresses']);
         $availableShippingMethod = current($shippingAddress['available_shipping_methods']);
         return $availableShippingMethod;
@@ -1274,7 +1342,12 @@ mutation {
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+        $response = $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
 
         $availablePaymentMethod = current($response['setShippingMethodsOnCart']['cart']['available_payment_methods']);
         return $availablePaymentMethod;
@@ -1303,7 +1376,11 @@ mutation {
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+        $this->graphQlMutation(
+            $query, [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
     }
 
     /**
@@ -1327,7 +1404,12 @@ mutation {
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+        $response = $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
         return $response['placeOrder']['order']['order_number'];
     }
 
@@ -1377,7 +1459,12 @@ QUERY;
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
 
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
@@ -1452,7 +1539,12 @@ QUERY;
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlQuery($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
 
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);

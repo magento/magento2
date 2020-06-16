@@ -15,7 +15,7 @@ $objectManager = Bootstrap::getObjectManager();
 $configWriter = $objectManager->get(WriterInterface::class);
 
 //configuration setting for shipping tax class and shipping tax calculation and display
-$configWriter->save('tax/classes/shipping_tax_class','2');
+$configWriter->save('tax/classes/shipping_tax_class', '2');
 $configWriter->save('tax/calculation/shipping_includes_tax', '1');
 $configWriter->save('tax/sales_display/shipping', '3');
 $configWriter->save('tax/display/shipping', '3');

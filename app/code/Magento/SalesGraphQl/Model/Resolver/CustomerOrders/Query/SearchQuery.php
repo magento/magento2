@@ -62,7 +62,7 @@ class SearchQuery
      * Filter order data based off given search criteria
      *
      * @param array $args
-     * @param int $userId,
+     * @param int $userId
      * @param StoreInterface $store
      * @return DataObject
      * @throws InputException

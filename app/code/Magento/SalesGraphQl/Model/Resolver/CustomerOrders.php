@@ -30,7 +30,7 @@ class CustomerOrders implements ResolverInterface
     private $searchQuery;
 
     /**
-     * @param SearchQuery $orderRepository
+     * @param SearchQuery $searchQuery
      */
     public function __construct(
         SearchQuery $searchQuery
