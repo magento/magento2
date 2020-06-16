@@ -55,11 +55,6 @@ class CategoryTree
     private $metadata;
 
     /**
-     * @var ResolveInfo
-     */
-    private $resolverInfo;
-
-    /**
      * @param CollectionFactory $collectionFactory
      * @param AttributesJoiner $attributesJoiner
      * @param DepthCalculator $depthCalculator
@@ -91,9 +86,7 @@ class CategoryTree
     {
         $categoryQuery = $resolveInfo->fieldNodes[0];
         $collection = $this->collectionFactory->create();
-        $this->resolverInfo = $resolveInfo;
-        $this->attributesJoiner->setResolverInfo($resolveInfo);
-        $this->joinAttributesRecursively($collection, $categoryQuery);
+        $this->joinAttributesRecursively($collection, $categoryQuery, $resolveInfo);
         $depth = $this->depthCalculator->calculate($resolveInfo, $categoryQuery);
         $level = $this->levelCalculator->calculate($rootCategoryId);
 
@@ -132,28 +125,27 @@ class CategoryTree
      *
      * @param Collection $collection
      * @param FieldNode $fieldNode
+     * @param ResolveInfo $resolveInfo
      * @return void
      */
-    private function joinAttributesRecursively(Collection $collection, FieldNode $fieldNode) : void
-    {
+    private function joinAttributesRecursively(
+        Collection $collection,
+        FieldNode $fieldNode,
+        ResolveInfo $resolveInfo
+    ): void {
         if (!isset($fieldNode->selectionSet->selections)) {
             return;
         }
 
         $subSelection = $fieldNode->selectionSet->selections;
-        $this->attributesJoiner->join($fieldNode, $collection);
+        $this->attributesJoiner->join($fieldNode, $collection, $resolveInfo);
 
         /** @var FieldNode $node */
         foreach ($subSelection as $node) {
-            if ($node->kind === NodeKind::INLINE_FRAGMENT) {
+            if ($node->kind === NodeKind::INLINE_FRAGMENT || $node->kind === NodeKind::FRAGMENT_SPREAD) {
                 continue;
-            } elseif ($node->kind === NodeKind::FRAGMENT_SPREAD && isset($this->resolverInfo->fragments[$node->name->value])) {
-                foreach ($this->resolverInfo->fragments[$node->name->value]->selectionSet->selections as $spreadNode) {
-                    $this->joinAttributesRecursively($collection, $spreadNode);
-                }
-            } else {
-                $this->joinAttributesRecursively($collection, $node);
             }
+            $this->joinAttributesRecursively($collection, $node, $resolveInfo);
         }
     }
 }
