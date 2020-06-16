@@ -14,6 +14,7 @@
             <title value="My Account Downloadable Product Link after Partially Refunded"/>
             <description value="Verify that Downloadable product is not available in My Download Products tab after it has been partially refunded."/>
             <severity value="CRITICAL"/>
+            <testCaseId value="MC-35198"/>
             <group value="Downloadable"/>
         </annotations>
 
