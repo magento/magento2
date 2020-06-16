@@ -213,7 +213,7 @@ class Converter implements ConverterInterface
     private function fillGlobalConfigByFixtureType(\DOMElement $node): array
     {
         $config = [];
-        foreach (self::FIXTURE_TYPES as $fixtureType) {
+        foreach ($this->supportedFixtureTypes as $fixtureType) {
             foreach ($node->getElementsByTagName($fixtureType) as $fixture) {
                 $config['global'][$fixtureType][] = $this->fillAttributes($fixture);
             }
