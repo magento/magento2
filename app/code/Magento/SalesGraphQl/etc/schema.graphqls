@@ -105,22 +105,19 @@ type OrderItemOption @doc(description: "Represents order item options like selec
     value: String! @doc(description: "The value of the option")
 }
 
-interface SalesTotalAmountInterface @doc(description: "Sales total details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\SalesTotalAmountTypeResolver") {
-    subtotal: Money! @doc(description: "The subtotal of the order, excluding shipping, discounts, and taxes")
-    discounts: [Discount] @doc(description: "The applied discounts to the order")
-    total_tax: Money! @doc(description: "The amount of tax applied to the order")
-    taxes: [TaxItem] @doc(description: "The order tax details")
-    grand_total: Money! @doc(description: "The final total amount, including shipping, discounts, and taxes")
-    base_grand_total: Money! @doc(description: "The final base grand total amount in the base currency")
-}
-
 type TaxItem @doc(description: "The tax item details") {
     amount: Money! @doc(description: "The amount of tax applied to the item")
     title: String! @doc(description: "A title that describes the tax")
     rate: Float @doc(description: "The rate used to calculate the tax")
 }
 ​
-type OrderTotal implements SalesTotalAmountInterface @doc(description: "Contains details about the sales total amounts used to calculate the final price") {
+type OrderTotal  @doc(description: "Contains details about the sales total amounts used to calculate the final price") {
+    subtotal: Money! @doc(description: "The subtotal of the order, excluding shipping, discounts, and taxes")
+    discounts: [Discount] @doc(description: "The applied discounts to the order")
+    total_tax: Money! @doc(description: "The amount of tax applied to the order")
+    taxes: [TaxItem] @doc(description: "The order tax details")
+    grand_total: Money! @doc(description: "The final total amount, including shipping, discounts, and taxes")
+    base_grand_total: Money! @doc(description: "The final base grand total amount in the base currency")
     total_shipping: Money! @doc(description: "The shipping amount for the order")
     shipping_handling: ShippingHandling @doc(description: "Contains details about the shipping and handling costs for the order")
 }
@@ -151,7 +148,13 @@ type BundleInvoiceItem implements InvoiceItemInterface{
     bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\BundleOptions")
 }
 
-type InvoiceTotal implements SalesTotalAmountInterface @doc(description: "Invoice total amount details") {
+type InvoiceTotal {
+    subtotal: Money! @doc(description: "The subtotal of the order, excluding shipping, discounts, and taxes")
+    discounts: [Discount] @doc(description: "The applied discounts to the order")
+    total_tax: Money! @doc(description: "The amount of tax applied to the order")
+    taxes: [TaxItem] @doc(description: "The order tax details")
+    grand_total: Money! @doc(description: "The final total amount, including shipping, discounts, and taxes")
+    base_grand_total: Money! @doc(description: "The final base grand total amount in the base currency")
     total_shipping: Money! @doc(description: "The shipping amount for the invoice")
     shipping_handling: ShippingHandling @doc(description: "Contains details about the shipping and handling costs for the invoice")
 }
@@ -221,8 +224,13 @@ type CreditMemoItem @doc(description: "Credit memo item details") {
     quantity_invoiced: Float @doc(description: "The number of invoiced items")
 }
 
-type CreditMemoTotal implements SalesTotalAmountInterface @doc(description: "Contains credit memo price details") {
-
+type CreditMemoTotal  @doc(description: "Contains credit memo price details") {
+    subtotal: Money! @doc(description: "The subtotal of the order, excluding shipping, discounts, and taxes")
+    discounts: [Discount] @doc(description: "The applied discounts to the order")
+    total_tax: Money! @doc(description: "The amount of tax applied to the order")
+    taxes: [TaxItem] @doc(description: "The order tax details")
+    grand_total: Money! @doc(description: "The final total amount, including shipping, discounts, and taxes")
+    base_grand_total: Money! @doc(description: "The final base grand total amount in the base currency")
 }
 
 enum CheckoutUserInputErrorCodes {

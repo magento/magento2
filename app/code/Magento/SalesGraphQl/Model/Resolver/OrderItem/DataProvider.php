@@ -214,23 +214,23 @@ class DataProvider
      *
      * @param OrderInterface $associatedOrder
      * @param OrderItemInterface $orderItem
-     * @return array|null
+     * @return array
      */
-    private function getDiscountDetails(OrderInterface $associatedOrder, OrderItemInterface $orderItem)
+    private function getDiscountDetails(OrderInterface $associatedOrder, OrderItemInterface $orderItem) : array
     {
         if ($associatedOrder->getDiscountDescription() === null && $orderItem->getDiscountAmount() == 0
             && $associatedOrder->getDiscountAmount() == 0
         ) {
-            return null;
+            $discounts = [];
+        } else {
+            $discounts [] = [
+                'label' => $associatedOrder->getDiscountDescription() ?? "null",
+                'amount' => [
+                    'value' => $orderItem->getDiscountAmount() ?? 0,
+                    'currency' => $associatedOrder->getOrderCurrencyCode()
+                ]
+            ];
         }
-
-        $discounts [] = [
-            'label' => $associatedOrder->getDiscountDescription() ?? "null",
-            'amount' => [
-                'value' => $orderItem->getDiscountAmount() ?? 0,
-                'currency' => $associatedOrder->getOrderCurrencyCode()
-            ]
-        ];
         return $discounts;
     }
 }
