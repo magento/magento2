@@ -147,4 +147,42 @@
             <dataSet name="first_data_set" skip="true"/>
         </method>
     </test>
+    <test class="Magento\TestModuleOverrideConfig\Inheritance\Fixtures\FixturesInterface">
+        <magentoConfigFixture scopeType="store" scopeCode="default" path="test_section/test_group/field_1" value="overridden config fixture value for class"/>
+        <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php"/>
+        <method name="testInterfaceInheritance">
+            <magentoConfigFixture scopeType="store" scopeCode="default" path="test_section/test_group/field_2" newValue="overridden config fixture value for method"/>
+            <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture2_first_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module.php" />
+            <dataSet name="second_data_set">
+                <magentoConfigFixture scopeType="store" scopeCode="default" path="test_section/test_group/field_3" remove="true"/>
+                <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture3_first_module.php" remove="true"/>
+            </dataSet>
+        </method>
+    </test>
+    <test class="Magento\TestModuleOverrideConfig\Inheritance\Fixtures\FixturesAbstractClass">
+        <method name="testAbstractInheritance">
+            <magentoConfigFixture scopeType="store" scopeCode="default" path="test_section/test_group/field_2" remove="true"/>
+            <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture2_first_module.php" remove="true"/>
+            <dataSet name="first_data_set">
+                <magentoConfigFixture scopeType="store" scopeCode="default" path="test_section/test_group/field_3" value="overridden config fixture value for data set from abstract"/>
+                <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture3_first_module.php"/>
+            </dataSet>
+            <dataSet name="second_data_set">
+                <magentoConfigFixture scopeType="store" scopeCode="default" path="test_section/test_group/field_1" newValue="overridden config fixture value for data set from abstract"/>
+                <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture1_second_module.php" />
+            </dataSet>
+        </method>
+    </test>
+    <test class="Magento\TestModuleOverrideConfig\Inheritance\Skip\SkipAbstractClass">
+        <method name="testAbstractSkip" skip="true"/>
+        <method name="testSkipDataSet">
+            <dataSet name="first_data_set" skip="true"/>
+        </method>
+    </test>
+    <test class="Magento\TestModuleOverrideConfig\Inheritance\Skip\SkipInterface">
+        <method name="testInterfaceSkip" skip="true"/>
+        <method name="testSkipDataSet">
+            <dataSet name="second_data_set" skip="true"/>
+        </method>
+    </test>
 </overrides>
