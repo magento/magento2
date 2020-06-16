@@ -14,25 +14,41 @@
     <div id="order-message">
         <?= $block->getChildHtml('message') ?>
     </div>
-    <div id="order-customer-selector" class="fieldset-wrapper order-customer-selector">
+    <div id="order-customer-selector" class="fieldset-wrapper order-customer-selector no-display">
         <?= $block->getChildHtml('customer.grid.container') ?>
     </div>
-    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-        'display:' . /* @noEscape */ $block->getCustomerSelectorDisplay(),
-        'div#order-customer-selector'
-    ) ?>
-    <div id="order-store-selector" class="fieldset-wrapper">
+    <div id="order-store-selector" class="fieldset-wrapper no-display">
         <?= $block->getChildHtml('store') ?>
     </div>
-    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-        'display:' . /* @noEscape */ $block->getStoreSelectorDisplay(),
-        'div#order-store-selector'
-    ) ?>
-    <div id="order-data">
+    <div id="order-data" class="no-display">
         <?= $block->getChildHtml('data') ?>
     </div>
-    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
-        'display:' . /* @noEscape */ $block->getDataSelectorDisplay(),
-        'div#order-data'
-    ) ?>
 </form>
+<?php $scriptString = <<<script
+require(['jquery'], function($){
+    'use strict';
+
+script;
+if ($block->getCustomerSelectorDisplay()) {
+    $scriptString .= <<<script
+    $('div#order-customer-selector').css('display', '{$block->getCustomerSelectorDisplay()}');
+    $('div#order-customer-selector').removeClass('no-display');
+script;
+}
+if ($block->getStoreSelectorDisplay()) {
+    $scriptString .= <<<script
+    $('div#order-store-selector').css('display', '{$block->getStoreSelectorDisplay()}');
+    $('div#order-store-selector').removeClass('no-display');
+script;
+}
+if ($block->getDataSelectorDisplay()) {
+    $scriptString .= <<<script
+    $('div#order-data').css('display', '{$block->getDataSelectorDisplay()}');
+    $('div#order-data').removeClass('no-display');
+script;
+}
+$scriptString .= <<<script
+});
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
