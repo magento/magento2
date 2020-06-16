@@ -138,7 +138,7 @@ class Price extends AbstractFilter
             $this->dataProvider->setPriorIntervals($priorFilters);
         }
 
-        [$from, $to] = $filter;
+        list($from, $to) = $filter;
 
         $this->getLayer()->getProductCollection()->addFieldToFilter(
             'price',
