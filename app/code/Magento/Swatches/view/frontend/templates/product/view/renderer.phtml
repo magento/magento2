@@ -35,7 +35,7 @@ $gallerySwitchingStrategy = $block->getVar('gallery_switch_strategy', 'Magento_C
                 "mediaCallback": "<?= $block->escapeJs($block->escapeUrl($block->getMediaCallback())) ?>",
                 "gallerySwitchStrategy": "<?= $block->escapeJs($gallerySwitchingStrategy) ?: 'replace' ?>",
                 "showTooltip": <?= $block->escapeJs($configurableViewModel->getShowSwatchTooltip()) ?>,
-                "choose_text": "<?= $block->escapeJs($chooseText) ?>",
+                "chooseText": "<?= $block->escapeJs($chooseText) ?>",
                 "classes": {
                     "attributeClass": "<?= $block->escapeJs($classes['attribute']) ?>",
                     "attributeSelectedOptionLabelClass":

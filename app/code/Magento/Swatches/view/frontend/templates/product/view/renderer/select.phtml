@@ -17,7 +17,7 @@ $attributeLabel = $attribute['label'];
 $selectHtml = '<select class="' . $classes['select'] . ' ' . $attributeCode . '">' .
     '<option value="0" data-option-id="0">' . $chooseText . '</option>';
 
-foreach($attribute['options'] as $option) {
+foreach ($attribute['options'] as $option) {
     $optionId = $option['id'];
     $optionLabel = $block->escapeHtml($option['label'] ?? '');
 
@@ -30,5 +30,5 @@ foreach($attribute['options'] as $option) {
     $selectHtml .= '<option ' . $optionAttributes . '>' . $optionLabel . '</option>';
 }
 
-echo $selectHtml . '</select>';
+echo /* @noEscape */ $selectHtml . '</select>';
 ?>

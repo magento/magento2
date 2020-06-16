@@ -11,8 +11,10 @@ $config = $block->getConfig();
 $swatchConfig = $block->getSwatchConfig();
 $sizeConfig = $block->getSwatchSizeConfig();
 $classes = $block->getClasses();
+?>
 
-foreach ($config['attributes'] as $attributeId => $attribute):
+<?php foreach ($config['attributes'] as $attributeId => $attribute): ?>
+    <?php
     $attributeCode = $attribute['code'];
     $attributeLabel = $attribute['label'];
     $attributeLabelId = "option-label-$attributeCode-$attributeId";
@@ -23,7 +25,7 @@ foreach ($config['attributes'] as $attributeId => $attribute):
         $attributeLabelClass .= ' visually-hidden';
         $attributeSelectedClass .= ' visually-hidden';
     }
-?>
+    ?>
     <div
         class="<?= $block->escapeHtml($classes['attribute'] . ' ' . $attributeCode) ?>"
         data-attribute-code="<?= $block->escapeHtml($attributeCode) ?>"
@@ -64,9 +66,10 @@ foreach ($config['attributes'] as $attributeId => $attribute):
                 }
 
                 if ($block->getMoreButtonLimit() === $displayedOptions++) {
-                    $moreButtonClass = $block->escapeHtml($classes['more_button']);
-                    $moreButtonText = $block->escapeHtml($block->getMoreButtonText());
-                    echo '<a href="#" class="' . $moreButtonClass  . '"><span>' . $moreButtonText . '</span></a>';
+                    $moreButtonClass = $classes['more_button'];
+                    $moreButtonText = $block->getMoreButtonText();
+                    echo '<a href="#" class="' . $block->escapeHtml($moreButtonClass) .'"><span>' .
+                        $block->escapeHtml($moreButtonText) . '</span></a>';
                 }
 
                 echo $swatchOption->setOption($option)

@@ -101,10 +101,7 @@
             }
 
             &-options {
-                .lib-css(opacity, @swatch-option__not-rendered__opacity);
-                cursor: default;
                 margin: @indent__s 0;
-                pointer-events: none;
 
                 &:focus {
                     box-shadow: none;
@@ -127,6 +124,12 @@
                     position: absolute;
                     text-align: center;
                     width: 100%;
+                }
+
+                [class*='swatch-opt'] & {
+                    .lib-css(opacity, @swatch-option__not-rendered__opacity);
+                    cursor: default;
+                    pointer-events: none;
                 }
 
                 [data-rendered='true'] & {

@@ -14,7 +14,7 @@ $classes = $block->getClasses();
 
 $optionHtml = '';
 $optionId = $option['id'];
-$optionType = intval($optionConfig['type']);
+$optionType = (int)$optionConfig['type'];
 $optionIndex = $block->getIndex();
 $optionLabel = $block->escapeHtml($optionConfig['label'] ?? '');
 
@@ -81,4 +81,4 @@ switch ($optionType) {
         $optionHtml .= '" ' . $optionAttributes . '>' . $optionLabel;
         break;
 }
-echo /* noEscape */ $optionHtml . '</div>';
+echo /* @noEscape */ $optionHtml . '</div>';

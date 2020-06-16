@@ -420,6 +420,7 @@ class ConfigurableTest extends TestCase
                 ],
             ],
             'productId' => $productId,
+            'chooseText' => __('Choose an Option...'),
             'images' => [],
             'index' => [],
         ];

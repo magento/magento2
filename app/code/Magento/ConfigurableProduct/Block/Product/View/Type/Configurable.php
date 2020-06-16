@@ -235,6 +235,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
             'priceFormat' => $this->localeFormat->getPriceFormat(),
             'prices' => $this->variationPrices->getFormattedPrices($this->getProduct()->getPriceInfo()),
             'productId' => $currentProduct->getId(),
+            'chooseText' => __('Choose an Option...'),
             'images' => $this->getOptionImages(),
             'index' => isset($options['index']) ? $options['index'] : [],
         ];
