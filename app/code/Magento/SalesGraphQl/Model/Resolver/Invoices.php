@@ -39,7 +39,7 @@ class Invoices implements ResolverInterface
         /** @var Invoice $invoice */
         foreach ($orderModel->getInvoiceCollection() as $invoice) {
             $invoices[] = [
-                'id' => $invoice->getEntityId(),
+                'id' => base64_encode($invoice->getEntityId()),
                 'number' => $invoice['increment_id'],
                 'model' => $invoice,
                 'order' => $orderModel

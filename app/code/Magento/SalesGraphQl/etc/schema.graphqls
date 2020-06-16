@@ -83,13 +83,21 @@ type OrderItem implements OrderItemInterface {
 }
 
 type BundleOrderItem implements OrderItemInterface {
-    bundle_options: [SelectedBundleOptionItems] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\BundleOptions")
+    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\BundleOptions")
 }
 
-type SelectedBundleOptionItems {
+type ItemSelectedBundleOption {
     id: ID! @doc(description: "The unique identifier of the option")
     label: String! @doc(description: "The label of the option")
-    items: [OrderItem] @doc(description: "A list of products that represent the values of the parent option") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\BundleOptions\\SelectedBundleOptionOrderItems")
+    values: [ItemSelectedBundleOptionValue!]! @doc(description: "A list of products that represent the values of the parent option")
+}
+
+type ItemSelectedBundleOptionValue {
+    id: ID!
+    product_name: String!
+    product_sku: String!
+    quantity: Float!
+    price: Money!
 }
 
 type OrderItemOption @doc(description: "Represents order item options like selected or entered") {
@@ -121,7 +129,7 @@ type Invoice @doc(description: "Invoice details") {
     id: ID! @doc(description: "The ID of the invoice, used for API purposes")
     number: String! @doc(description: "Sequential invoice number")
     total: InvoiceTotal @doc(description: "Invoice total amount details") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\InvoiceTotal")
-    items: [InvoiceItemInterface] @doc(description: "Invoiced product details") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\LineItems")
+    items: [InvoiceItemInterface] @doc(description: "Invoiced product details") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\InvoiceItems")
     comments: [CommentItem] @doc(description: "Comments on the invoice")
 }
 
@@ -140,13 +148,7 @@ type InvoiceItem implements InvoiceItemInterface {
 }
 
 type BundleInvoiceItem implements InvoiceItemInterface{
-    bundle_options: [SelectedBundleInvoiceOptionItems] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\BundleOptions")
-}
-
-type SelectedBundleInvoiceOptionItems {
-    id: ID! @doc(description: "The unique identifier of the option")
-    label: String! @doc(description: "The label of the option")
-    items: [InvoiceItemInterface] @doc(description: "A list of products that represent the values of the parent option") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\BundleOptions\\SelectedBundleOptionLineItems")
+    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\BundleOptions")
 }
 
 type InvoiceTotal implements SalesTotalAmountInterface @doc(description: "Invoice total amount details") {
