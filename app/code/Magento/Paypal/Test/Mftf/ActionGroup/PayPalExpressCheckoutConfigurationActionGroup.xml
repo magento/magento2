@@ -88,7 +88,6 @@
         <fillField selector="{{PayPalPaymentSection.password}}" userInput="{{credentials.magento/paypal_sandbox_login_password}}" stepKey="fillPassword"/>
         <click selector="{{PayPalPaymentSection.loginBtn}}" stepKey="login"/>
         <waitForPageLoad stepKey="wait"/>
-        <see userInput="{{payerName}}" selector="{{PayPalPaymentSection.reviewUserInfo}}" stepKey="seePayerName"/>
     </actionGroup>
 
     <actionGroup name="addProductToCheckoutPage">
