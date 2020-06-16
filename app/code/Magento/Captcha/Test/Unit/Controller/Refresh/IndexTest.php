@@ -10,6 +10,7 @@ namespace Magento\Captcha\Test\Unit\Controller\Refresh;
 use Magento\Captcha\Controller\Refresh\Index;
 use Magento\Captcha\Helper\Data as CaptchaHelper;
 use Magento\Captcha\Model\CaptchaInterface;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json as ResultJson;
 use Magento\Framework\Controller\Result\JsonFactory as ResultJsonFactory;
@@ -45,6 +46,9 @@ class IndexTest extends TestCase
     /** @var MockObject|JsonSerializer */
     private $jsonSerializerMock;
 
+    /** @var MockObject|Context */
+    private $contextMock;
+
     /** @var Index */
     private $refreshAction;
 
@@ -66,6 +70,8 @@ class IndexTest extends TestCase
         $this->jsonSerializerMock = $this->createMock(JsonSerializer::class);
         $this->captchaHelperMock = $this->createMock(CaptchaHelper::class);
 
+        $this->contextMock = $this->createMock(Context::class);
+
         $this->blockMock->method('setIsAjax')
             ->willReturnSelf();
 
@@ -73,6 +79,7 @@ class IndexTest extends TestCase
             ->willReturn($this->blockMock);
 
         $this->refreshAction = new Index(
+            $this->contextMock,
             $this->requestMock,
             $this->jsonResultFactoryMock,
             $this->captchaHelperMock,

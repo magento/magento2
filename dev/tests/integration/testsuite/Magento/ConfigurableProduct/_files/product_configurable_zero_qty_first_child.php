@@ -5,10 +5,16 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/product_configurable_sku.php';
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/product_configurable_sku.php');
+
+$objectManager = Bootstrap::getObjectManager();
 $childSku = 'simple_10';
-
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
 $childProduct = $productRepository->get($childSku);
 $childProduct->setStockData(
     [

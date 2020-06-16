@@ -1,0 +1,20 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type Cart {
+    gift_message: GiftMessage @resolver (class: "\\Magento\\GiftMessageGraphQl\\Model\\Resolver\\Cart\\GiftMessage") @doc(description: "The entered gift message for the cart")
+}
+
+type SalesItemInterface {
+    gift_message: GiftMessage @doc(description: "The entered gift message for the order item")
+}
+
+type CustomerOrder {
+    gift_message: GiftMessage @resolver (class: "\\Magento\\GiftMessageGraphQl\\Model\\Resolver\\Order\\GiftMessage")  @doc(description: "The entered gift message for the order")
+}
+
+type GiftMessage {
+    to: String! @doc(description: "Recepient name")
+    from: String! @doc(description: "Sender name")
+    message: String! @doc(description: "Gift message text")
+}
