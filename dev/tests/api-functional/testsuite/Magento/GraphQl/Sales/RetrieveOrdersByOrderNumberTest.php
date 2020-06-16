@@ -164,27 +164,29 @@ QUERY;
         $this->assertEquals(2, count($bundleOptionsFromResponse));
         $expectedBundleOptions =
             [
-              [  '__typename' => 'SelectedBundleOptionItems',
+              [  '__typename' => 'ItemSelectedBundleOption',
                   'label' => 'Drop Down Option 1',
-                  'items' => [
+                  'values' => [
                       [
                         'product_sku' => 'simple1',
                         'product_name' => 'Simple Product1',
-                        'product_type'=> 'simple',
-                        'quantity_ordered'=> 1,
-                          'discounts' => null
+                        'quantity'=> 1,
+                          'price' => [
+                            'value' => 1
+                          ]
                       ]
                 ]
               ],
-                [  '__typename' => 'SelectedBundleOptionItems',
+                [  '__typename' => 'ItemSelectedBundleOption',
                     'label' => 'Drop Down Option 2',
-                    'items' => [
+                    'values' => [
                         [
                             'product_sku' => 'simple2',
                             'product_name' => 'Simple Product2',
-                            'product_type'=> 'simple',
-                            'quantity_ordered'=> 2,
-                            'discounts' => null
+                            'quantity'=> 2,
+                            'price' => [
+                                'value' => 2
+                            ]
                         ]
                     ]
                 ],
@@ -228,8 +230,8 @@ QUERY;
         $this->assertEquals('Drop Down Option 1', $childItemsInTheOrder[0]['label']);
         $this->assertEquals('Drop Down Option 2', $childItemsInTheOrder[1]['label']);
 
-        $this->assertEquals('simple1', $childItemsInTheOrder[0]['items'][0]['product_sku']);
-        $this->assertEquals('simple2', $childItemsInTheOrder[1]['items'][0]['product_sku']);
+        $this->assertEquals('simple1', $childItemsInTheOrder[0]['values'][0]['product_sku']);
+        $this->assertEquals('simple2', $childItemsInTheOrder[1]['values'][0]['product_sku']);
 
         $this->assertTotalsOnBundleProductWithTaxesAndDiscounts($customerOrderItems);
         $this->deleteOrder();
@@ -1415,9 +1417,15 @@ QUERY;
               bundle_options{
                 __typename
                 label
-                items{product_sku product_name product_type quantity_ordered discounts{amount{value}}
+                values {
+                  product_sku
+                  product_name
+                  quantity
+                  price {
+                    value
+                  }
+                }
               }
-            }
           }
          }
            total {
