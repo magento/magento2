@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQlSchemaStitching;
 
+use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface as TypeReaderComposite;
 use Magento\Framework\Config\ReaderInterface;
@@ -43,6 +44,11 @@ class GraphQlReader implements ReaderInterface
     private $defaultScope;
 
     /**
+     * @var ComponentRegistrar
+     */
+    private static $componentRegistrar;
+
+    /**
      * @param FileResolverInterface $fileResolver
      * @param TypeReaderComposite $typeReader
      * @param string $fileName
@@ -76,7 +82,7 @@ class GraphQlReader implements ReaderInterface
          * Compatible with @see GraphQlReader::parseTypes
          */
         $knownTypes = [];
-        foreach ($schemaFiles as $partialSchemaContent) {
+        foreach ($schemaFiles as $filePath => $partialSchemaContent) {
             $partialSchemaTypes = $this->parseTypes($partialSchemaContent);
 
             // Keep declarations from current partial schema, add missing declarations from all previously read schemas
@@ -84,8 +90,8 @@ class GraphQlReader implements ReaderInterface
             $schemaContent = implode("\n", $knownTypes);
 
             $partialResults = $this->readPartialTypes($schemaContent);
-
             $results = array_replace_recursive($results, $partialResults);
+            $results = $this->addModuleNameToTypes($results, $filePath);
         }
 
         $results = $this->copyInterfaceFieldsToConcreteTypes($results);
@@ -284,5 +290,58 @@ class GraphQlReader implements ReaderInterface
             }
         }
         return $partialResults;
+    }
+
+    /**
+     * Get a module name by file path
+     *
+     * @param string $file
+     * @return string
+     */
+    private static function getModuleNameForRelevantFile($file)
+    {
+        if (!isset(self::$componentRegistrar)) {
+            self::$componentRegistrar = new ComponentRegistrar();
+        }
+        // Validates file when it belongs to default themes
+        foreach (self::$componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
+            if (strpos($file, $themeDir . '/') !== false) {
+                return '';
+            }
+        }
+
+        $foundModuleName = '';
+        foreach (self::$componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+            if (strpos($file, $moduleDir . '/') !== false) {
+                $foundModuleName = str_replace('_', '\\', $moduleName);
+                break;
+            }
+        }
+        if (empty($foundModuleName)) {
+            return '';
+        }
+
+        return $foundModuleName;
+    }
+
+    /**
+     * Add a module name to types
+     *
+     * @param array $source
+     * @param string $filePath
+     * @return array
+     */
+    private function addModuleNameToTypes(array $source, string $filePath): array
+    {
+        foreach ($source as $typeName => $type) {
+            if (!isset($type['module']) && (
+                    ($type['type'] == 'graphql_interface' && isset($type['typeResolver']))
+                    || isset($type['implements']))
+            ) {
+                $source[$typeName]['module'] = self::getModuleNameForRelevantFile($filePath);
+            }
+        }
+
+        return $source;
     }
 }

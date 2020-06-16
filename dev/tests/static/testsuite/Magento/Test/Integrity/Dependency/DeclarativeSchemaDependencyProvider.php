@@ -17,23 +17,8 @@ use Magento\Framework\Setup\Declaration\Schema\Config\Converter;
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class DeclarativeSchemaDependencyProvider
+class DeclarativeSchemaDependencyProvider extends DependencyProvider
 {
-    /**
-     * Types of dependency between modules.
-     */
-    const TYPE_HARD = 'hard';
-
-    /**
-     * The identifier of dependency for mapping.
-     */
-    const MAP_TYPE_DECLARED = 'declared';
-
-    /**
-     * The identifier of dependency for mapping.
-     */
-    const MAP_TYPE_FOUND = 'found';
-
     /**
      * Declarative name for table entity of the declarative schema.
      */
@@ -57,17 +42,7 @@ class DeclarativeSchemaDependencyProvider
     /**
      * @var array
      */
-    private $mapDependencies = [];
-
-    /**
-     * @var array
-     */
     private $dbSchemaDeclaration = [];
-
-    /**
-     * @var array
-     */
-    private $packageModuleMapping = [];
 
     /**
      * @var array
@@ -143,42 +118,6 @@ class DeclarativeSchemaDependencyProvider
         }
 
         return $this->moduleSchemaFileMapping[$module] ?? '';
-    }
-
-    /**
-     * Initialise map of dependencies.
-     *
-     * @throws \Exception
-     */
-    private function initDeclaredDependencies()
-    {
-        if (empty($this->mapDependencies)) {
-            $jsonFiles = Files::init()->getComposerFiles(ComponentRegistrar::MODULE, false);
-            foreach ($jsonFiles as $file) {
-                $json = new \Magento\Framework\Config\Composer\Package($this->readJsonFile($file));
-                $moduleName = $this->convertModuleName($json->get('name'));
-                $require = array_keys((array)$json->get('require'));
-                $this->presetDependencies($moduleName, $require, self::TYPE_HARD);
-            }
-        }
-    }
-
-    /**
-     * Read data from json file.
-     *
-     * @param string $file
-     * @return mixed
-     * @throws \Exception
-     */
-    private function readJsonFile(string $file, bool $asArray = false)
-    {
-        $decodedJson = json_decode(file_get_contents($file), $asArray);
-        if (null == $decodedJson) {
-            //phpcs:ignore Magento2.Exceptions.DirectThrow
-            throw new \Exception("Invalid Json: $file");
-        }
-
-        return $decodedJson;
     }
 
     /**
@@ -630,74 +569,6 @@ class DeclarativeSchemaDependencyProvider
     }
 
     /**
-     * Add dependencies to dependency list.
-     *
-     * @param string $moduleName
-     * @param array $packageNames
-     * @param string $type
-     *
-     * @return void
-     * @throws \Exception
-     */
-    private function presetDependencies(
-        string $moduleName,
-        array $packageNames,
-        string $type
-    ): void {
-        $packageNames = array_filter($packageNames, function ($packageName) {
-            return $this->getModuleName($packageName) ||
-                0 === strpos($packageName, 'magento/') && 'magento/magento-composer-installer' != $packageName;
-        });
-
-        foreach ($packageNames as $packageName) {
-            $this->addDependencies(
-                $moduleName,
-                $type,
-                self::MAP_TYPE_DECLARED,
-                [$this->convertModuleName($packageName)]
-            );
-        }
-    }
-
-    /**
-     * Returns package name on module name mapping.
-     *
-     * @return array
-     * @throws \Exception
-     */
-    private function getPackageModuleMapping(): array
-    {
-        if (!$this->packageModuleMapping) {
-            $jsonFiles = Files::init()->getComposerFiles(ComponentRegistrar::MODULE, false);
-
-            $packageModuleMapping = [];
-            foreach ($jsonFiles as $file) {
-                $moduleXml = simplexml_load_file(dirname($file) . '/etc/module.xml');
-                $moduleName = str_replace('_', '\\', (string)$moduleXml->module->attributes()->name);
-                $composerJson = $this->readJsonFile($file);
-                $packageName = $composerJson->name;
-                $packageModuleMapping[$packageName] = $moduleName;
-            }
-
-            $this->packageModuleMapping = $packageModuleMapping;
-        }
-
-        return $this->packageModuleMapping;
-    }
-
-    /**
-     * Retrieve Magento style module name.
-     *
-     * @param string $packageName
-     * @return null|string
-     * @throws \Exception
-     */
-    private function getModuleName(string $packageName): ?string
-    {
-        return $this->getPackageModuleMapping()[$packageName] ?? null;
-    }
-
-    /**
      * Retrieve array of dependency items.
      *
      * @param $module
@@ -705,54 +576,8 @@ class DeclarativeSchemaDependencyProvider
      * @param $mapType
      * @return array
      */
-    private function getDeclaredDependencies(string $module, string $type, string $mapType)
+    protected function getDeclaredDependencies(string $module, string $type, string $mapType)
     {
         return $this->mapDependencies[$module][$type][$mapType] ?? [];
-    }
-
-    /**
-     * Add dependency map items.
-     *
-     * @param $module
-     * @param $type
-     * @param $mapType
-     * @param $dependencies
-     */
-    protected function addDependencies(string $module, string $type, string $mapType, array $dependencies)
-    {
-        $this->mapDependencies[$module][$type][$mapType] = array_merge_recursive(
-            $this->getDeclaredDependencies($module, $type, $mapType),
-            $dependencies
-        );
-    }
-
-    /**
-     * Converts a composer json component name into the Magento Module form.
-     *
-     * @param string $jsonName The name of a composer json component or dependency e.g. 'magento/module-theme'
-     * @return string The corresponding Magento Module e.g. 'Magento\Theme'
-     * @throws \Exception
-     */
-    private function convertModuleName(string $jsonName): string
-    {
-        $moduleName = $this->getModuleName($jsonName);
-        if ($moduleName) {
-            return $moduleName;
-        }
-
-        if (strpos($jsonName, 'magento/magento') !== false
-            || strpos($jsonName, 'magento/framework') !== false
-        ) {
-            $moduleName = str_replace('/', "\t", $jsonName);
-            $moduleName = str_replace('framework-', "Framework\t", $moduleName);
-            $moduleName = str_replace('-', ' ', $moduleName);
-            $moduleName = ucwords($moduleName);
-            $moduleName = str_replace("\t", '\\', $moduleName);
-            $moduleName = str_replace(' ', '', $moduleName);
-        } else {
-            $moduleName = $jsonName;
-        }
-
-        return $moduleName;
     }
 }

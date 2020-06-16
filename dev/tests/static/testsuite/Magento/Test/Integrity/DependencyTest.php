@@ -12,6 +12,7 @@ use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Test\Integrity\Dependency\DeclarativeSchemaDependencyProvider;
+use Magento\Test\Integrity\Dependency\GraphQlSchemaDependencyProvider;
 use Magento\TestFramework\Dependency\DbRule;
 use Magento\TestFramework\Dependency\DiRule;
 use Magento\TestFramework\Dependency\LayoutRule;
@@ -783,6 +784,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
     public function collectRedundant()
     {
         $schemaDependencyProvider = new DeclarativeSchemaDependencyProvider();
+        $graphQlSchemaDependencyProvider = new GraphQlSchemaDependencyProvider();
 
         foreach (array_keys(self::$mapDependencies) as $module) {
             $declared = $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_DECLARED);
@@ -790,7 +792,8 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             $found = array_merge(
                 $this->_getDependencies($module, self::TYPE_HARD, self::MAP_TYPE_FOUND),
                 $this->_getDependencies($module, self::TYPE_SOFT, self::MAP_TYPE_FOUND),
-                $schemaDependencyProvider->getDeclaredExistingModuleDependencies($module)
+                $schemaDependencyProvider->getDeclaredExistingModuleDependencies($module),
+                $graphQlSchemaDependencyProvider->getDeclaredExistingModuleDependencies($module)
             );
             $found['Magento\Framework'] = 'Magento\Framework';
             $this->_setDependencies($module, self::TYPE_HARD, self::MAP_TYPE_REDUNDANT, array_diff($declared, $found));
