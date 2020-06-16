@@ -10,12 +10,10 @@ namespace Magento\GraphQl\Sales;
 use Magento\Bundle\Model\Selection;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
-use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\GraphQl\GetCustomerAuthenticationHeader;
 use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -143,24 +141,10 @@ QUERY;
     {
         $qty = 1;
         $bundleSku = 'bundle-product-two-dropdown-options';
-        /** @var Product $bundleProduct */
-        $bundleProduct = $this->productRepository->get($bundleSku);
-        /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
-        $typeInstance = $bundleProduct->getTypeInstance();
-        /** @var $option \Magento\Bundle\Model\Option */
-        $option1 = $typeInstance->getOptionsCollection($bundleProduct)->getFirstItem();
-        $option2 = $typeInstance->getOptionsCollection($bundleProduct)->getLastItem();
-        $optionId1 =(int) $option1->getId();
-        $optionId2 =(int) $option2->getId();
-        /** @var Selection $selection */
-        $selection1 = $typeInstance->getSelectionsCollection([$option1->getId()], $bundleProduct)->getFirstItem();
-        $selectionId1 = (int)$selection1->getSelectionId();
-
-        $selection2 = $typeInstance->getSelectionsCollection([$option2->getId()], $bundleProduct)->getLastItem();
-        $selectionId2 = (int)$selection2->getSelectionId();
+        $optionsAndSelectionData = $this->getBundleOptionAndSelectionData($bundleSku);
 
         $cartId = $this->createEmptyCart();
-        $this->addBundleProductToCart($cartId, $qty, $bundleSku, $optionId1, $selectionId1, $optionId2, $selectionId2);
+        $this->addBundleProductQuery($cartId, $qty, $bundleSku, $optionsAndSelectionData);
         $this->setBillingAddress($cartId);
         $shippingMethod = $this->setShippingAddress($cartId);
         $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
@@ -221,23 +205,10 @@ QUERY;
     {
         $qty = 4;
         $bundleSku = 'bundle-product-two-dropdown-options';
-        /** @var Product $bundleProduct */
-        $bundleProduct = $this->productRepository->get($bundleSku);
-        /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
-        $typeInstance = $bundleProduct->getTypeInstance();
-        /** @var $option \Magento\Bundle\Model\Option */
-        $option1 = $typeInstance->getOptionsCollection($bundleProduct)->getFirstItem();
-        $option2 = $typeInstance->getOptionsCollection($bundleProduct)->getLastItem();
-        $optionId1 =(int) $option1->getId();
-        $optionId2 =(int) $option2->getId();
-        /** @var Selection $selection */
-        $selection1 = $typeInstance->getSelectionsCollection([$option1->getId()], $bundleProduct)->getFirstItem();
-        $selectionId1 = (int)$selection1->getSelectionId();
-        $selection2 = $typeInstance->getSelectionsCollection([$option2->getId()], $bundleProduct)->getLastItem();
-        $selectionId2 = (int)$selection2->getSelectionId();
+        $optionsAndSelectionData = $this->getBundleOptionAndSelectionData($bundleSku);
 
         $cartId = $this->createEmptyCart();
-        $this->addBundleProductToCart($cartId, $qty, $bundleSku, $optionId1, $selectionId1, $optionId2, $selectionId2);
+        $this->addBundleProductQuery($cartId, $qty, $bundleSku, $optionsAndSelectionData);
         $this->setBillingAddress($cartId);
         $shippingMethod = $this->setShippingAddress($cartId);
         $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
@@ -909,38 +880,28 @@ QUERY;
             20,
             $customerOrderItem['total']['total_shipping']['value']
         );
-        $this->assertEquals(
-            1.35,
-            $customerOrderItem['total']['taxes'][0]['amount']['value']
-        );
-        $this->assertEquals(
-            'USD',
-            $customerOrderItem['total']['taxes'][0]['amount']['currency']
-        );
-        $this->assertEquals(
-            'US-TEST-*-Rate-1',
-            $customerOrderItem['total']['taxes'][0]['title']
-        );
-        $this->assertEquals(
-            7.5,
-            $customerOrderItem['total']['taxes'][0]['rate']
-        );
-        $this->assertEquals(
-            2.7,
-            $customerOrderItem['total']['taxes'][1]['amount']['value']
-        );
-        $this->assertEquals(
-            'USD',
-            $customerOrderItem['total']['taxes'][1]['amount']['currency']
-        );
-        $this->assertEquals(
-            'US-TEST-*-Rate-1',
-            $customerOrderItem['total']['taxes'][1]['title']
-        );
-        $this->assertEquals(
-            7.5,
-            $customerOrderItem['total']['taxes'][1]['rate']
-        );
+        $this->assertCount(2, $customerOrderItem['total']['taxes']);
+        $expectedProductAndShippingTaxes =
+            [
+               [
+                    'amount' => [
+                            'value' => 2.7,
+                            'currency' => 'USD'
+                        ],
+                'title' => 'US-TEST-*-Rate-1',
+                'rate' => 7.5
+                ],
+               [
+                'amount' => [
+                    'value' => 1.35,
+                    'currency' => 'USD'
+                ],
+
+                'title' => 'US-TEST-*-Rate-1',
+                'rate' => 7.5
+         ]
+];
+        $this->assertEquals($expectedProductAndShippingTaxes, $customerOrderItem['total']['taxes']);
         $this->assertEquals(
             21.5,
             $customerOrderItem['total']['shipping_handling']['amount_including_tax']['value']
@@ -970,10 +931,7 @@ QUERY;
             2,
             $customerOrderItem['total']['shipping_handling']['discounts'][0]['amount']['value']
         );
-        $this->assertEquals(
-            'USD',
-            $customerOrderItem['total']['shipping_handling']['discounts'][0]['amount']['currency']
-        );
+
         $this->assertEquals(
             'null',
             $customerOrderItem['total']['shipping_handling']['discounts'][0]['label']
@@ -981,10 +939,6 @@ QUERY;
         $this->assertEquals(
             -6,
             $customerOrderItem['total']['discounts'][0]['amount']['value']
-        );
-        $this->assertEquals(
-            'USD',
-            $customerOrderItem['total']['discounts'][0]['amount']['currency']
         );
         $this->assertEquals(
             'null',
@@ -1027,7 +981,6 @@ QUERY;
             32.25,
             $customerOrderItem['total']['base_grand_total']['value']
         );
-
         $this->assertEquals(
             32.25,
             $customerOrderItem['total']['grand_total']['value']
@@ -1040,23 +993,31 @@ QUERY;
             2.25,
             $customerOrderItem['total']['total_tax']['value']
         );
-
         $this->assertEquals(
             10,
             $customerOrderItem['total']['total_shipping']['value']
         );
-        $this->assertEquals(
-            0.75,
-            $customerOrderItem['total']['taxes'][0]['amount']['value']
-        );
-        $this->assertEquals(
-            'US-TEST-*-Rate-1',
-            $customerOrderItem['total']['taxes'][0]['title']
-        );
-        $this->assertEquals(
-            7.5,
-            $customerOrderItem['total']['taxes'][0]['rate']
-        );
+        $expectedProductAndShippingTaxes =
+            [
+                [
+                    'amount' => [
+                        'value' => 1.5,
+                        'currency' => 'USD'
+                    ],
+                    'title' => 'US-TEST-*-Rate-1',
+                    'rate' => 7.5
+                ],
+                [
+                    'amount' => [
+                        'value' => 0.75,
+                        'currency' => 'USD'
+                    ],
+
+                    'title' => 'US-TEST-*-Rate-1',
+                    'rate' => 7.5
+                ]
+            ];
+        $this->assertEquals($expectedProductAndShippingTaxes, $customerOrderItem['total']['taxes']);
         $this->assertEquals(
             10.75,
             $customerOrderItem['total']['shipping_handling']['amount_including_tax']['value']
@@ -1072,7 +1033,7 @@ QUERY;
 
         $this->assertEquals(
             0.75,
-            $customerOrderItem['total']['shipping_handling']['taxes'][0]['amount']['value']
+            $customerOrderItem['total']['shipping_handling']['taxes'][1]['amount']['value']
         );
         $this->assertEquals(
             'US-TEST-*-Rate-1',
@@ -1157,15 +1118,7 @@ QUERY;
         $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
     }
 
-    /**
-     * @param string $cartId
-     * @param float $qty
-     * @param string $sku
-     * @param int $optionId
-     * @param int $selectionId
-     * @throws AuthenticationException
-     */
-    public function addBundleProductToCart(string $cartId, float $qty, string $sku, int $optionId1, int $selectionId1, int $optionId2, int $selectionId2)
+    public function addBundleProductQuery(string $cartId, float $qty, string $sku, array $optionsAndSelectionData)
     {
         $query = <<<QUERY
 mutation {
@@ -1179,14 +1132,14 @@ mutation {
         }
         bundle_options:[
           {
-            id:$optionId1
+            id:$optionsAndSelectionData[0]
             quantity:1
-            value:["{$selectionId1}"]
+            value:["{$optionsAndSelectionData[1]}"]
           }
           {
-            id:$optionId2
+            id:$optionsAndSelectionData[2]
             quantity:2
-            value:["{$selectionId2}"]
+            value:["{$optionsAndSelectionData[3]}"]
           }
         ]
       }
@@ -1203,7 +1156,6 @@ QUERY;
         $response = $this->graphQlMutation($query, [], '', $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword));
         $this->assertArrayHasKey('cart', $response['addBundleProductsToCart']);
     }
-
     /**
      * @param string $cartId
      * @param array $auth
@@ -1640,5 +1592,31 @@ QUERY;
                 $response['customer']['orders']['items'][0]['total']['taxes'][0]['amount']['currency']
             );
         }
+    }
+
+    /**
+     * @param string $bundleSku
+     * @return array
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    private function getBundleOptionAndSelectionData($bundleSku): array
+    {
+        /** @var Product $bundleProduct */
+        $bundleProduct = $this->productRepository->get($bundleSku);
+        /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
+        $typeInstance = $bundleProduct->getTypeInstance();
+        $optionsAndSelections = [];
+        /** @var $option \Magento\Bundle\Model\Option */
+        $option1 = $typeInstance->getOptionsCollection($bundleProduct)->getFirstItem();
+        $option2 = $typeInstance->getOptionsCollection($bundleProduct)->getLastItem();
+        $optionId1 =(int) $option1->getId();
+        $optionId2 =(int) $option2->getId();
+        /** @var Selection $selection */
+        $selection1 = $typeInstance->getSelectionsCollection([$option1->getId()], $bundleProduct)->getFirstItem();
+        $selectionId1 = (int)$selection1->getSelectionId();
+        $selection2 = $typeInstance->getSelectionsCollection([$option2->getId()], $bundleProduct)->getLastItem();
+        $selectionId2 = (int)$selection2->getSelectionId();
+        array_push($optionsAndSelections, $optionId1, $selectionId1, $optionId2, $selectionId2);
+        return $optionsAndSelections;
     }
 }
