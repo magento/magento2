@@ -10,11 +10,12 @@ spec:
     app: magento
 ---
 apiVersion: apps/v1
-kind: StatefulSet
+kind: Deployment
 metadata:
-  name: web
+  name: magento
+  labels:
+    app: magento
 spec:
-  serviceName: "magento"
   replicas: 2
   selector:
     matchLabels:
