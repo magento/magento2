@@ -16,10 +16,8 @@
             <argument name="categoryName" type="string"/>
         </arguments>
 
-        <uncheckOption selector="{{AdminCategoryBasicFieldSection.categoryNameUseDefault}}"
-                       stepKey="uncheckUseDefaultValue"/>
-        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{categoryName}}"
-                   stepKey="changeNameField"/>
+        <uncheckOption selector="{{AdminCategoryBasicFieldSection.categoryNameUseDefault}}" stepKey="uncheckUseDefaultValueENStoreView"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{categoryName}}" stepKey="changeNameField"/>
         <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="clickOnSectionHeader"/>
     </actionGroup>
 </actionGroups>
