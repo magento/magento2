@@ -39,5 +39,7 @@ $checkoutHelper = $block->getData('checkoutHelper');
         <?php endif; ?>
     </td>
 </tr>
-<?= /* @noEscape */ $secureRenderer->renderStyleAsTag($block->getTotal()->getStyle(), 'tr.totals th.mark') ?>
-<?= /* @noEscape */ $secureRenderer->renderStyleAsTag($block->getTotal()->getStyle(), 'tr.totals td.amount') ?>
+<?php if ($block->getTotal()->getStyle()): ?>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($block->getTotal()->getStyle(), 'tr.totals th.mark') ?>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($block->getTotal()->getStyle(), 'tr.totals td.amount') ?>
+<?php endif; ?>
