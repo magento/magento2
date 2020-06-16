@@ -23,6 +23,7 @@
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
 
             <!--Admin login-->
             <actionGroup stepKey="loginToAdminPanel" ref="AdminLoginActionGroup"/>

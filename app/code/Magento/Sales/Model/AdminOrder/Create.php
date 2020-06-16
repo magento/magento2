@@ -1645,6 +1645,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             $data,
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
+        $customer->setStoreId($this->getQuote()->getStoreId());
         $this->getQuote()->updateCustomerData($customer);
         $data = [];
 

@@ -57,7 +57,7 @@ class CalculateCustomOptionCatalogRuleTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->saleableItemMock = $this->createMock(Product::class);

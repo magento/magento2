@@ -25,6 +25,7 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct3"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct4"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <!--Logging out-->
@@ -35,8 +36,7 @@
             <deleteData createDataKey="simpleProduct4" stepKey="deleteSimpleProduct4"/>
         </after>
         <!--Make category-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="goToCategoryPage"/>
-        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryPage"/>
         <actionGroup ref="CreateCategoryActionGroup" stepKey="createASubcategory">
             <argument name="categoryEntity" value="SimpleSubCategory"/>
         </actionGroup>

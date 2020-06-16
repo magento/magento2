@@ -34,7 +34,7 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
      */
     private $mageMode;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -49,7 +49,7 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
             ->setDesignTheme('BackendTest/test_default');
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager->get(State::class)->setMode($this->mageMode);
     }
@@ -135,7 +135,7 @@ class MassactionTest extends \PHPUnit\Framework\TestCase
         $actualItem = $items[$itemId];
         $this->assertEquals($expectedItem['id'], $actualItem->getId());
         $this->assertEquals($expectedItem['label'], $actualItem->getLabel());
-        $this->assertRegExp($expectedItem['url'], $actualItem->getUrl());
+        $this->assertMatchesRegularExpression($expectedItem['url'], $actualItem->getUrl());
         $this->assertEquals($expectedItem['selected'], $actualItem->getSelected());
         $this->assertEquals($expectedItem['blockname'], $actualItem->getBlockName());
     }

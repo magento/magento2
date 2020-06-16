@@ -36,8 +36,8 @@
             </actionGroup>
 
             <!-- Delete product attribute -->
-            <actionGroup ref="DeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
-                <argument name="ProductAttribute" value="colorProductAttribute"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
             </actionGroup>
 
             <!-- Delete attribute set -->

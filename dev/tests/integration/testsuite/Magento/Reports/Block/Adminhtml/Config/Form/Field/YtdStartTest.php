@@ -33,7 +33,7 @@ class YtdStartTest extends AbstractBackendController
         $this->dispatch('backend/admin/system_config/edit/section/reports/');
         $body = $this->getResponse()->getBody();
 
-        $this->assertContains($this->getOptionsHtml('01'), $body);
+        $this->assertStringContainsString($this->getOptionsHtml('01'), $body);
     }
 
     /**

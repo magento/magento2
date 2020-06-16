@@ -78,7 +78,7 @@
 
         <!-- Verify mini cart is empty -->
         <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="assertEmptryCart">
-            <argument name="selector" value="{{StorefrontMiniCartSection.emptyMiniCart}}"/>
+            <argument name="selector" value="{{StorefrontMinicartSection.emptyMiniCart}}"/>
         </actionGroup>
     </test>
 </tests>

@@ -73,7 +73,7 @@ class CacheTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
         $this->getRequest()->setParams(['types' => ['invalid_type_1', 'invalid_type_2', 'config']]);
         $this->dispatch('backend/admin/cache/' . $action);
         $this->assertSessionMessages(
-            $this->contains("These cache type(s) don&#039;t exist: invalid_type_1, invalid_type_2"),
+            $this->containsEqual("These cache type(s) don&#039;t exist: invalid_type_1, invalid_type_2"),
             \Magento\Framework\Message\MessageInterface::TYPE_ERROR
         );
     }

@@ -3,11 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 /**
  * Extends valid Url rewrites
  */
-require __DIR__ . '/url_rewrites.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/url_rewrites.php');
 
 /**
  * Invalid rewrite for product assigned to different category
