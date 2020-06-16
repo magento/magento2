@@ -18,6 +18,7 @@ use Magento\Framework\View\Element\Template\Context;
 use Magento\Swatches\Block\LayeredNavigation\RenderLayered;
 use Magento\Swatches\Helper\Data;
 use Magento\Swatches\Helper\Media;
+use Magento\Theme\Block\Html\Pager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,35 +29,60 @@ use PHPUnit\Framework\TestCase;
  */
 class RenderLayeredTest extends TestCase
 {
-    /** @var MockObject */
-    protected $contextMock;
+    /**
+     * @var RenderLayered|MockObject
+     */
+    private $block;
 
-    /** @var MockObject */
-    protected $requestMock;
+    /**
+     * @var Context|MockObject
+     */
+    private $contextMock;
 
-    /** @var MockObject */
-    protected $urlBuilder;
+    /**
+     * @var RequestInterface|MockObject
+     */
+    private $requestMock;
 
-    /** @var MockObject */
-    protected $eavAttributeMock;
+    /**
+     * @var Url|MockObject
+     */
+    private $urlBuilder;
 
-    /** @var MockObject */
-    protected $layerAttributeFactoryMock;
+    /**
+     * @var Attribute|MockObject
+     */
+    private $eavAttributeMock;
 
-    /** @var MockObject */
-    protected $layerAttributeMock;
+    /**
+     * @var AttributeFactory|MockObject
+     */
+    private $layerAttributeFactoryMock;
 
-    /** @var MockObject */
-    protected $swatchHelperMock;
+    /**
+     * @var \Magento\Catalog\Model\ResourceModel\Layer\Filter\Attribute|MockObject
+     */
+    private $layerAttributeMock;
 
-    /** @var MockObject */
-    protected $mediaHelperMock;
+    /**
+     * @var Data|MockObject
+     */
+    private $swatchHelperMock;
 
-    /** @var MockObject */
-    protected $filterMock;
+    /**
+     * @var Media|MockObject
+     */
+    private $mediaHelperMock;
 
-    /** @var MockObject */
-    protected $block;
+    /**
+     * @var AbstractFilter|MockObject
+     */
+    private $filterMock;
+
+    /**
+     * @var Pager|MockObject
+     */
+    private $htmlBlockPagerMock;
 
     protected function setUp(): void
     {
@@ -66,8 +92,8 @@ class RenderLayeredTest extends TestCase
             Url::class,
             ['getCurrentUrl', 'getRedirectUrl', 'getUrl']
         );
-        $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
-        $this->contextMock->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilder);
+        $this->contextMock->method('getRequest')->willReturn($this->requestMock);
+        $this->contextMock->method('getUrlBuilder')->willReturn($this->urlBuilder);
         $this->eavAttributeMock = $this->createMock(Attribute::class);
         $this->layerAttributeFactoryMock = $this->createPartialMock(
             AttributeFactory::class,
@@ -80,6 +106,7 @@ class RenderLayeredTest extends TestCase
         $this->swatchHelperMock = $this->createMock(Data::class);
         $this->mediaHelperMock = $this->createMock(Media::class);
         $this->filterMock = $this->createMock(AbstractFilter::class);
+        $this->htmlBlockPagerMock = $this->createMock(Pager::class);
 
         $this->block = $this->getMockBuilder(RenderLayered::class)
             ->setMethods(['filter', 'eavAttribute'])
@@ -91,6 +118,7 @@ class RenderLayeredTest extends TestCase
                     $this->swatchHelperMock,
                     $this->mediaHelperMock,
                     [],
+                    $this->htmlBlockPagerMock
                 ]
             )
             ->getMock();
@@ -114,7 +142,7 @@ class RenderLayeredTest extends TestCase
         $item3 = $this->createMock(Item::class);
         $item4 = $this->createMock(Item::class);
 
-        $item1->expects($this->any())->method('__call')->withConsecutive(
+        $item1->method('__call')->withConsecutive(
             ['getValue'],
             ['getCount'],
             ['getValue'],
@@ -128,9 +156,9 @@ class RenderLayeredTest extends TestCase
             'Yellow'
         );
 
-        $item2->expects($this->any())->method('__call')->with('getValue')->willReturn('blue');
+        $item2->method('__call')->with('getValue')->willReturn('blue');
 
-        $item3->expects($this->any())->method('__call')->withConsecutive(
+        $item3->method('__call')->withConsecutive(
             ['getValue'],
             ['getCount']
         )->willReturnOnConsecutiveCalls(
@@ -138,7 +166,7 @@ class RenderLayeredTest extends TestCase
             0
         );
 
-        $item4->expects($this->any())->method('__call')->withConsecutive(
+        $item4->method('__call')->withConsecutive(
             ['getValue'],
             ['getCount'],
             ['getValue'],
@@ -162,22 +190,22 @@ class RenderLayeredTest extends TestCase
         $this->block->method('filter')->willReturn($this->filterMock);
 
         $option1 = $this->createMock(Option::class);
-        $option1->expects($this->any())->method('getValue')->willReturn('yellow');
+        $option1->method('getValue')->willReturn('yellow');
 
         $option2 = $this->createMock(Option::class);
-        $option2->expects($this->any())->method('getValue')->willReturn(null);
+        $option2->method('getValue')->willReturn(null);
 
         $option3 = $this->createMock(Option::class);
-        $option3->expects($this->any())->method('getValue')->willReturn('red');
+        $option3->method('getValue')->willReturn('red');
 
         $option4 = $this->createMock(Option::class);
-        $option4->expects($this->any())->method('getValue')->willReturn('green');
+        $option4->method('getValue')->willReturn('green');
 
         $eavAttribute = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
         $eavAttribute->expects($this->once())
             ->method('getOptions')
             ->willReturn([$option1, $option2, $option3, $option4]);
-        $eavAttribute->expects($this->any())->method('getIsFilterable')->willReturn(0);
+        $eavAttribute->method('getIsFilterable')->willReturn(0);
 
         $this->filterMock->expects($this->once())->method('getAttributeModel')->willReturn($eavAttribute);
         $this->block->method('eavAttribute')->willReturn($eavAttribute);
@@ -200,7 +228,7 @@ class RenderLayeredTest extends TestCase
     {
         $this->block->method('filter')->willReturn($this->filterMock);
         $this->block->setSwatchFilter($this->filterMock);
-        $this->expectException('\RuntimeException');
+        $this->expectException(\RuntimeException::class);
         $this->block->getSwatchData();
     }
 
