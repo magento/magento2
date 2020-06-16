@@ -55,7 +55,7 @@ class Orders implements ResolverInterface
         /** @var Order $order */
         foreach ($orders as $order) {
             $items[] = [
-                'id' => base64_encode($order->getId()),
+                'id' => $order->getId(),
                 'increment_id' => $order->getIncrementId(),
                 'order_number' => $order->getIncrementId(),
                 'created_at' => $order->getCreatedAt(),

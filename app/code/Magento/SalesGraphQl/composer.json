@@ -8,7 +8,6 @@
         "magento/module-sales": "*",
         "magento/module-store": "*",
         "magento/module-catalog": "*",
-        "magento/module-shipping": "*",
         "magento/module-graph-ql": "*"
     },
     "suggest": {

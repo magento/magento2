@@ -462,6 +462,8 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Sales/_files/orders_with_customer.php
+     * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testGetMultipleCustomerOrdersQueryWithDefaultPagination()
     {
@@ -816,7 +818,8 @@ QUERY;
             $query,
             [],
             '',
-            array_merge($this->customerAuthenticationHeader->execute(
+            array_merge(
+                $this->customerAuthenticationHeader->execute(
                 $currentEmail, $currentPassword),
                 ['Store' => $store]
             )
@@ -924,24 +927,23 @@ QUERY;
         $this->assertCount(2, $customerOrderItem['total']['taxes']);
         $expectedProductAndShippingTaxes =
             [
-               [
+                [
                     'amount' => [
-                            'value' => 2.7,
-                            'currency' => 'USD'
-                        ],
-                'title' => 'US-TEST-*-Rate-1',
-                'rate' => 7.5
+                        'value' => 2.7,
+                        'currency' => 'USD',
+                    ],
+                    'title' => 'US-TEST-*-Rate-1',
+                    'rate' => 7.5,
                 ],
-               [
-                'amount' => [
-                    'value' => 1.35,
-                    'currency' => 'USD'
-                ],
-
-                'title' => 'US-TEST-*-Rate-1',
-                'rate' => 7.5
-         ]
-];
+                [
+                    'amount' => [
+                        'value' => 1.35,
+                        'currency' => 'USD'
+                    ],
+                    'title' => 'US-TEST-*-Rate-1',
+                    'rate' => 7.5,
+                ]
+            ];
         $this->assertEquals($expectedProductAndShippingTaxes, $customerOrderItem['total']['taxes']);
         $this->assertEquals(
             21.5,
@@ -1377,7 +1379,8 @@ QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
         $this->graphQlMutation(
-            $query, [],
+            $query,
+            [],
             '',
             $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
         );

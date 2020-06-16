@@ -29,7 +29,10 @@ class OrderItemInterfaceTypeResolverComposite implements TypeResolverInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Resolve item type of an order through composite resolvers
+     *
+     * @param array $data
+     * @return string
      * @throws GraphQlInputException
      */
     public function resolveType(array $data) : string
