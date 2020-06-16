@@ -75,6 +75,22 @@ class Config implements ConfigInterface
     }
 
     /**
+     * Get config from global node
+     *
+     * @param string|null $fixtureType
+     * @return array
+     */
+    public function getGlobalConfig(?string $fixtureType = null): array
+    {
+        $result = $this->config['global'] ?? [];
+        if ($fixtureType) {
+            $result = $result[$fixtureType] ?? [];
+        }
+
+        return $result;
+    }
+
+    /**
      * Self instance setter.
      *
      * @param ConfigInterface $config
