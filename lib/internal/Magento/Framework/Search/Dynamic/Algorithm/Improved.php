@@ -44,7 +44,7 @@ class Improved implements AlgorithmInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getItems(
         BucketInterface $bucket,

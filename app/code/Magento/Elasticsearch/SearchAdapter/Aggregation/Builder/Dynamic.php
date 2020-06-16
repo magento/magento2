@@ -35,7 +35,7 @@ class Dynamic implements BucketBuilderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build(
         RequestBucketInterface $bucket,

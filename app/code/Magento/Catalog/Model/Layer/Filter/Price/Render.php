@@ -72,6 +72,8 @@ class Render
     }
 
     /**
+     * Prepare range data
+     *
      * @param int $range
      * @param int[] $dbRanges
      * @return array
