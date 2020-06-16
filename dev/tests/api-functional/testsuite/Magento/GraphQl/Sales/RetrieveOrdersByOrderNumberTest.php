@@ -187,7 +187,8 @@ QUERY;
                         'product_sku' => 'simple1',
                         'product_name' => 'Simple Product1',
                         'product_type'=> 'simple',
-                        'quantity_ordered'=> 1
+                        'quantity_ordered'=> 1,
+                          'discounts' => null
                       ]
                 ]
               ],
@@ -198,7 +199,8 @@ QUERY;
                             'product_sku' => 'simple2',
                             'product_name' => 'Simple Product2',
                             'product_type'=> 'simple',
-                            'quantity_ordered'=> 2
+                            'quantity_ordered'=> 2,
+                            'discounts' => null
                         ]
                     ]
                 ],
@@ -219,16 +221,6 @@ QUERY;
     {
         $qty = 4;
         $bundleSku = 'bundle-product-two-dropdown-options';
-        $simpleProductSku = 'simple2';
-        /** @var Product $simple */
-        $simple = $this->productRepository->get($simpleProductSku);
-        $stockData =[
-            StockItemInterface::QTY => 200,
-            StockItemInterface::MANAGE_STOCK =>true,
-            StockItemInterface::IS_IN_STOCK =>true
-        ];
-        $simple->setQuantityAndStockStatus($stockData);
-        $this->productRepository->save($simple);
         /** @var Product $bundleProduct */
         $bundleProduct = $this->productRepository->get($bundleSku);
         /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
@@ -241,7 +233,6 @@ QUERY;
         /** @var Selection $selection */
         $selection1 = $typeInstance->getSelectionsCollection([$option1->getId()], $bundleProduct)->getFirstItem();
         $selectionId1 = (int)$selection1->getSelectionId();
-
         $selection2 = $typeInstance->getSelectionsCollection([$option2->getId()], $bundleProduct)->getLastItem();
         $selectionId2 = (int)$selection2->getSelectionId();
 
@@ -259,22 +250,16 @@ QUERY;
 
         $bundledItemInTheOrder = $customerOrderItems['items'][0];
         $this->assertEquals('bundle-product-two-dropdown-options-simple1-simple2', $bundledItemInTheOrder['product_sku']);
-        $this->assertArrayHasKey('child_items', $bundledItemInTheOrder);
-        $childItemInTheOrder = $bundledItemInTheOrder['child_items'][0];
-        $this->assertNotEmpty($childItemInTheOrder);
-        $this->assertEquals('simple1', $childItemInTheOrder['product_sku']);
-        $this->assertEquals(
-            0,
-            $childItemInTheOrder['discounts'][0]['amount']['value']
-        );
-        $this->assertEquals(
-            'USD',
-            $childItemInTheOrder['discounts'][0]['amount']['currency']
-        );
-        $this->assertEquals(
-            'null',
-            $childItemInTheOrder['discounts'][0]['label']
-        );
+        $this->assertArrayHasKey('bundle_options', $bundledItemInTheOrder);
+        $childItemsInTheOrder = $bundledItemInTheOrder['bundle_options'];
+        $this->assertNotEmpty($childItemsInTheOrder);
+        $this->assertCount(2, $childItemsInTheOrder);
+        $this->assertEquals('Drop Down Option 1', $childItemsInTheOrder[0]['label']);
+        $this->assertEquals('Drop Down Option 2', $childItemsInTheOrder[1]['label']);
+
+        $this->assertEquals('simple1', $childItemsInTheOrder[0]['items'][0]['product_sku']);
+        $this->assertEquals('simple2', $childItemsInTheOrder[1]['items'][0]['product_sku']);
+
         $this->assertTotalsOnBundleProductWithTaxesAndDiscounts($customerOrderItems);
         $this->deleteOrder();
     }
@@ -368,10 +353,6 @@ QUERY;
         $this->assertEquals(
             2,
             $customerOrderItem['total']['shipping_handling']['discounts'][0]['amount']['value']
-        );
-        $this->assertEquals(
-            'USD',
-            $customerOrderItem['total']['shipping_handling']['discounts'][0]['amount']['currency']
         );
         $this->assertEquals(
             'null',
@@ -1477,15 +1458,16 @@ QUERY;
             product_url_key
             product_sale_price{value}
             quantity_ordered
-            __typename
+            discounts{amount{value} label}
             ... on BundleOrderItem{
               bundle_options{
                 __typename
                 label
-                items{ product_sku product_name product_type quantity_ordered}
+                items{product_sku product_name product_type quantity_ordered discounts{amount{value}}
               }
             }
           }
+         }
            total {
              base_grand_total{value currency}
              grand_total{value currency}
@@ -1498,6 +1480,7 @@ QUERY;
                amount_including_tax{value}
                amount_excluding_tax{value}
                total_amount{value}
+               discounts{amount{value} label}
                taxes {amount{value} title rate}
              }
              discounts {amount{value currency} label}
