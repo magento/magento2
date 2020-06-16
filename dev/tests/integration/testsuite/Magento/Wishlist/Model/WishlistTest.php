@@ -46,7 +46,7 @@ class WishlistTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = ObjectManager::getInstance();
         $this->wishlistFactory = $this->objectManager->get(WishlistFactory::class);
@@ -215,6 +215,27 @@ class WishlistTest extends TestCase
         $wishlist->updateItem($item->getId(), $buyRequest);
         $updatedItem = $this->getWishlistByCustomerId->getItemBySku(1, 'simple');
         $this->assertEquals(55, $updatedItem->getQty());
+    }
+
+    /**
+     * Update description of wishlist item
+     *
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist.php
+     *
+     * @return void
+     */
+    public function testUpdateItemDescriptionInWishList(): void
+    {
+        $itemDescription = 'Test Description';
+        $wishlist = $this->getWishlistByCustomerId->execute(1);
+        $item = $this->getWishlistByCustomerId->getItemBySku(1, 'simple');
+        $item->setDescription($itemDescription);
+        $this->assertNotNull($item);
+        $buyRequest = $this->dataObjectFactory->create(['data' => ['qty' => 55]]);
+        $wishlist->updateItem($item, $buyRequest);
+        $updatedItem = $this->getWishlistByCustomerId->getItemBySku(1, 'simple');
+        $this->assertEquals(55, $updatedItem->getQty());
+        $this->assertEquals($itemDescription, $updatedItem->getDescription());
     }
 
     /**

@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Block\Product\ProductList;
 
@@ -125,7 +126,7 @@ class ToolbarTest extends TestCase
 
         $this->scopeConfig->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValueMap($scopeConfig));
+            ->willReturnMap($scopeConfig);
 
         $this->catalogConfig = $this->createPartialMock(
             Config::class,
@@ -138,10 +139,10 @@ class ToolbarTest extends TestCase
         );
         $context->expects($this->any())
             ->method('getUrlBuilder')
-            ->will($this->returnValue($this->urlBuilder));
+            ->willReturn($this->urlBuilder);
         $context->expects($this->any())
             ->method('getScopeConfig')
-            ->will($this->returnValue($this->scopeConfig));
+            ->willReturn($this->scopeConfig);
         $context->expects($this->any())
             ->method('getlayout')
             ->will($this->returnValue($this->layout));
@@ -169,7 +170,7 @@ class ToolbarTest extends TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->block = null;
     }
@@ -326,35 +327,35 @@ class ToolbarTest extends TestCase
             ->will($this->returnValue($this->pagerBlock));
         $this->productListHelper->expects($this->exactly(2))
             ->method('getAvailableLimit')
-            ->will($this->returnValue([10 => 10, 20 => 20]));
+            ->willReturn([10 => 10, 20 => 20]);
         $this->memorizer->expects($this->once())
             ->method('getLimit')
-            ->will($this->returnValue($limit));
+            ->willReturn($limit);
         $this->pagerBlock->expects($this->once())
             ->method('setUseContainer')
-            ->will($this->returnValue($this->pagerBlock));
+            ->willReturn($this->pagerBlock);
         $this->pagerBlock->expects($this->once())
             ->method('setShowPerPage')
-            ->will($this->returnValue($this->pagerBlock));
+            ->willReturn($this->pagerBlock);
         $this->pagerBlock->expects($this->once())
             ->method('setShowAmounts')
-            ->will($this->returnValue($this->pagerBlock));
+            ->willReturn($this->pagerBlock);
         $this->pagerBlock->expects($this->once())
             ->method('setFrameLength')
-            ->will($this->returnValue($this->pagerBlock));
+            ->willReturn($this->pagerBlock);
         $this->pagerBlock->expects($this->once())
             ->method('setJump')
-            ->will($this->returnValue($this->pagerBlock));
+            ->willReturn($this->pagerBlock);
         $this->pagerBlock->expects($this->once())
             ->method('setLimit')
             ->with($limit)
-            ->will($this->returnValue($this->pagerBlock));
+            ->willReturn($this->pagerBlock);
         $this->pagerBlock->expects($this->once())
             ->method('setCollection')
-            ->will($this->returnValue($this->pagerBlock));
+            ->willReturn($this->pagerBlock);
         $this->pagerBlock->expects($this->once())
             ->method('toHtml')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $this->assertTrue($this->block->getPagerHtml());
     }
@@ -363,7 +364,7 @@ class ToolbarTest extends TestCase
     {
         $this->catalogConfig->expects($this->atLeastOnce())
             ->method('getAttributeUsedForSortByArray')
-            ->will($this->returnValue(['name' => [], 'price' => []]));
+            ->willReturn(['name' => [], 'price' => []]);
 
         $this->block->setDefaultOrder('field');
     }
@@ -373,7 +374,7 @@ class ToolbarTest extends TestCase
         $data = ['name' => [], 'price' => []];
         $this->catalogConfig->expects($this->once())
             ->method('getAttributeUsedForSortByArray')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
 
         $this->assertEquals($data, $this->block->getAvailableOrders());
         $this->assertEquals($data, $this->block->getAvailableOrders());
@@ -384,7 +385,7 @@ class ToolbarTest extends TestCase
         $data = ['name' => [], 'price' => []];
         $this->catalogConfig->expects($this->once())
             ->method('getAttributeUsedForSortByArray')
-            ->will($this->returnValue($data));
+            ->willReturn($data);
         $expected = $data;
         $expected['order'] = 'value';
         $toolbar = $this->block->addOrderToAvailableOrders('order', 'value');
@@ -396,8 +397,8 @@ class ToolbarTest extends TestCase
         $data = ['name' => [], 'price' => []];
         $this->catalogConfig->expects($this->once())
             ->method('getAttributeUsedForSortByArray')
-            ->will($this->returnValue($data));
-        $toolbar = $this->block->removeOrderFromAvailableOrders('order');
+            ->willReturn($data);
+        $toolbar = $this->block->removeOrderFromAvailableOrders('order', 'value');
         $this->assertEquals($data, $toolbar->getAvailableOrders());
         $toolbar2 = $this->block->removeOrderFromAvailableOrders('name');
         $this->assertEquals(['price' => []], $toolbar2->getAvailableOrders());

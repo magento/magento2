@@ -20,6 +20,9 @@
             <group value="catalog"/>
             <group value="downloadable"/>
             <group value="productVideo"/>
+            <skip>
+                <issueId value="MC-33903"/>
+            </skip>
         </annotations>
         <before>
             <magentoCLI command="downloadable:domains:add" arguments="static.magento.com" before="setYoutubeApiKeyConfig" stepKey="addDownloadableDomain"/>

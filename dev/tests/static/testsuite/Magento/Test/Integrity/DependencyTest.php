@@ -186,7 +186,7 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      *
      * @throws \Exception
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $root = BP;
         $rootJson = json_decode(file_get_contents($root . '/composer.json'), true);

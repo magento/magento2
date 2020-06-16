@@ -45,7 +45,7 @@ class SaveDeleteContentAssetLinksTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->saveContentAssetLinks = Bootstrap::getObjectManager()->get(SaveContentAssetLinksInterface::class);
         $this->getAssetIdsByContentIdentity = Bootstrap::getObjectManager()

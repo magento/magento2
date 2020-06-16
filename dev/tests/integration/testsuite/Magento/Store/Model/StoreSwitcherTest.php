@@ -27,7 +27,7 @@ class StoreSwitcherTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->storeSwitcher = $this->objectManager->get(StoreSwitcher::class);

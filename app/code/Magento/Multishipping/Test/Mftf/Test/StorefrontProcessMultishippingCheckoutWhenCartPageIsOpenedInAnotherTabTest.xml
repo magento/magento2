@@ -22,8 +22,6 @@
         <before>
             <!-- Login as Admin -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
-            <!-- Set configurations -->
-            <magentoCLI command="config:set multishipping/options/checkout_multiple 1" stepKey="allowShippingToMultipleAddresses"/>
             <!-- Create two simple products -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <createData entity="_defaultProduct" stepKey="createFirstProduct">

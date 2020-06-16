@@ -3,22 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Console\Command;
 
+use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Console\Cli;
 use Magento\Framework\Module\DbVersionInfo;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Setup\UpToDateValidatorInterface;
 use Magento\Setup\Console\Command\DbStatusCommand;
-use Magento\Framework\App\DeploymentConfig;
 use Magento\Setup\Model\ObjectManagerProvider;
-use Magento\Framework\ObjectManagerInterface;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * @inheritdoc
  */
-class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
+class DbStatusCommandTest extends TestCase
 {
     /**
      * @var DbVersionInfo|Mock
@@ -43,7 +46,7 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dbVersionInfo = $this->getMockBuilder(DbVersionInfo::class)
             ->disableOriginalConstructor()
@@ -58,15 +61,19 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $this->validators = [
-            'declarative_schema' => $this->getMockBuilder(UpToDateValidatorInterface::class)->getMock(),
-            'up_to_date_schema' => $this->getMockBuilder(UpToDateValidatorInterface::class)->getMock(),
-            'up_to_date_data' => $this->getMockBuilder(UpToDateValidatorInterface::class)->getMock(),
-            'old_validator' => $this->getMockBuilder(UpToDateValidatorInterface::class)->getMock(),
+            'declarative_schema' => $this->getMockBuilder(UpToDateValidatorInterface::class)
+                ->getMock(),
+            'up_to_date_schema' => $this->getMockBuilder(UpToDateValidatorInterface::class)
+                ->getMock(),
+            'up_to_date_data' => $this->getMockBuilder(UpToDateValidatorInterface::class)
+                ->getMock(),
+            'old_validator' => $this->getMockBuilder(UpToDateValidatorInterface::class)
+                ->getMock(),
         ];
 
         $objectManagerProvider->expects($this->any())
             ->method('get')
-            ->will($this->returnValue($objectManager));
+            ->willReturn($objectManager);
         $objectManager->expects(self::exactly(4))
             ->method('get')
             ->willReturnOnConsecutiveCalls(
@@ -94,7 +101,7 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
             ->willReturn(true);
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $tester = new CommandTester($this->command);
         $tester->execute([]);
         $this->assertStringMatchesFormat('All modules are up to date.', $tester->getDisplay());
@@ -105,7 +112,7 @@ class DbStatusCommandTest extends \PHPUnit\Framework\TestCase
     {
         $this->deploymentConfig->expects($this->once())
             ->method('isAvailable')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $tester = new CommandTester($this->command);
         $tester->execute([]);
 

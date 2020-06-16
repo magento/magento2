@@ -18,7 +18,7 @@ class PriceTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $category = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Category::class
@@ -71,17 +71,17 @@ class PriceTest extends \PHPUnit\Framework\TestCase
     public function getRangeItemCountsDataProvider()
     {
         return [
-            [1, [11 => 2, 46 => 1]],
-            [10, [2 => 2, 5 => 1]],
-            [20, [1 => 2, 3 => 1]],
-            [50, [1 => 3]]
+            // These are $inputRange, [$expectedItemCounts] values
+            [1, [11 => 2, 46 => 1, 16 => '1']],
+            [10, [2 => 3, 5 => 1]],
+            [20, [1 => 3, 3 => 1]],
+            [50, [1 => 4]]
         ];
     }
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/categories.php
      * @magentoDbIsolation disabled
-     * @magentoConfigFixture default/catalog/search/engine mysql
      * @dataProvider getRangeItemCountsDataProvider
      */
     public function testGetRangeItemCounts($inputRange, $expectedItemCounts)

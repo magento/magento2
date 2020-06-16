@@ -3,29 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Render;
 
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Render\RenderFactory;
+use Magento\Framework\View\RenderInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RenderFactoryTest extends \PHPUnit\Framework\TestCase
+class RenderFactoryTest extends TestCase
 {
-    /** @var \Magento\Framework\View\Render\RenderFactory */
+    /** @var RenderFactory */
     protected $renderFactory;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ObjectManagerInterface|MockObject */
     protected $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->renderFactory = $this->objectManagerHelper->getObject(
-            \Magento\Framework\View\Render\RenderFactory::class,
+            RenderFactory::class,
             [
                 'objectManager' => $this->objectManagerMock
             ]
@@ -34,26 +40,26 @@ class RenderFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGet()
     {
-        $instance = \Magento\Framework\View\RenderInterface::class;
+        $instance = RenderInterface::class;
         $renderMock = $this->createMock($instance);
         $data = 'RenderInterface';
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo(\Magento\Framework\View\Render\RenderInterface::class))
-            ->will($this->returnValue($renderMock));
+            ->with(\Magento\Framework\View\Render\RenderInterface::class)
+            ->willReturn($renderMock);
         $this->assertInstanceOf($instance, $this->renderFactory->get($data));
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Type "RenderInterface" is not instance on Magento\Framework\View\RenderInterface
-     */
     public function testGetException()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage(
+            'Type "RenderInterface" is not instance on Magento\Framework\View\RenderInterface'
+        );
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo(\Magento\Framework\View\Render\RenderInterface::class))
-            ->will($this->returnValue(new \stdClass()));
+            ->with(\Magento\Framework\View\Render\RenderInterface::class)
+            ->willReturn(new \stdClass());
         $this->renderFactory->get('RenderInterface');
     }
 }

@@ -16,12 +16,12 @@ class WorkingDirectoryTest extends \PHPUnit\Framework\TestCase
      */
     protected $_object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_object = new \Magento\TestFramework\Isolation\WorkingDirectory();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_object = null;
     }

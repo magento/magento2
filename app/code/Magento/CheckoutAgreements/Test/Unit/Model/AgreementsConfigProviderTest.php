@@ -3,60 +3,74 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CheckoutAgreements\Test\Unit\Model;
 
+use Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface;
+use Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface;
+use Magento\CheckoutAgreements\Api\Data\AgreementInterface;
+use Magento\CheckoutAgreements\Model\AgreementModeOptions;
+use Magento\CheckoutAgreements\Model\AgreementsConfigProvider;
 use Magento\CheckoutAgreements\Model\AgreementsProvider;
+use Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Escaper;
 use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests for AgreementsConfigProvider.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AgreementsConfigProviderTest extends \PHPUnit\Framework\TestCase
+class AgreementsConfigProviderTest extends TestCase
 {
     /**
-     * @var \Magento\CheckoutAgreements\Model\AgreementsConfigProvider
+     * @var AgreementsConfigProvider
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $escaperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $checkoutAgreementsListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $agreementsFilterMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $agreementsRepositoryMock = $this->createMock(
-            \Magento\CheckoutAgreements\Api\CheckoutAgreementsRepositoryInterface::class
+            CheckoutAgreementsRepositoryInterface::class
         );
-        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
+        $this->escaperMock = $this->createMock(Escaper::class);
 
         $this->checkoutAgreementsListMock = $this->createMock(
-            \Magento\CheckoutAgreements\Api\CheckoutAgreementsListInterface::class
+            CheckoutAgreementsListInterface::class
         );
         $this->agreementsFilterMock = $this->createMock(
-            \Magento\CheckoutAgreements\Model\Api\SearchCriteria\ActiveStoreAgreementsFilter::class
+            ActiveStoreAgreementsFilter::class
         );
 
-        $this->model = new \Magento\CheckoutAgreements\Model\AgreementsConfigProvider(
+        $this->model = new AgreementsConfigProvider(
             $this->scopeConfigMock,
             $agreementsRepositoryMock,
             $this->escaperMock,
@@ -75,7 +89,7 @@ class AgreementsConfigProviderTest extends \PHPUnit\Framework\TestCase
         $content = 'content';
         $checkboxText = 'checkbox_text';
         $escapedCheckboxText = 'escaped_checkbox_text';
-        $mode = \Magento\CheckoutAgreements\Model\AgreementModeOptions::MODE_AUTO;
+        $mode = AgreementModeOptions::MODE_AUTO;
         $agreementId = 100;
         $contentHeight = '100px';
         $expectedResult = [
@@ -98,8 +112,8 @@ class AgreementsConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
 
-        $agreement = $this->createMock(\Magento\CheckoutAgreements\Api\Data\AgreementInterface::class);
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $agreement = $this->getMockForAbstractClass(AgreementInterface::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->agreementsFilterMock->expects($this->once())
             ->method('buildSearchCriteria')
             ->willReturn($searchCriteriaMock);
@@ -134,7 +148,7 @@ class AgreementsConfigProviderTest extends \PHPUnit\Framework\TestCase
         $escapedContent = 'escaped_content';
         $checkboxText = 'checkbox_text';
         $escapedCheckboxText = 'escaped_checkbox_text';
-        $mode = \Magento\CheckoutAgreements\Model\AgreementModeOptions::MODE_AUTO;
+        $mode = AgreementModeOptions::MODE_AUTO;
         $agreementId = 100;
         $contentHeight = '100px';
         $expectedResult = [
@@ -157,8 +171,8 @@ class AgreementsConfigProviderTest extends \PHPUnit\Framework\TestCase
             ->with(AgreementsProvider::PATH_ENABLED, ScopeInterface::SCOPE_STORE)
             ->willReturn(true);
 
-        $agreement = $this->createMock(\Magento\CheckoutAgreements\Api\Data\AgreementInterface::class);
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
+        $agreement = $this->getMockForAbstractClass(AgreementInterface::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteria::class);
         $this->agreementsFilterMock->expects($this->once())
             ->method('buildSearchCriteria')
             ->willReturn($searchCriteriaMock);

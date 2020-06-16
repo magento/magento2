@@ -3,15 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Pricing\Render;
 
+use Magento\Catalog\Model\Product;
+use Magento\Directory\Model\PriceCurrency;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\Amount\Base;
+use Magento\Framework\Pricing\Render;
+use Magento\Framework\Pricing\Render\Amount;
+use Magento\Framework\Pricing\Render\AmountRenderInterface;
+use Magento\Framework\Pricing\SaleableInterface;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Tax\Helper\Data;
 use Magento\Tax\Pricing\Render\Adjustment;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AdjustmentTest extends \PHPUnit\Framework\TestCase
+class AdjustmentTest extends TestCase
 {
     /**
      * Context mock
@@ -23,52 +38,47 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     /**
      * Price currency model mock
      *
-     * @var \Magento\Directory\Model\PriceCurrency | \PHPUnit_Framework_MockObject_MockObject
+     * @var PriceCurrency|MockObject
      */
     protected $priceCurrencyMock;
 
     /**
      * Price helper mock
      *
-     * @var \Magento\Tax\Helper\Data | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Tax\Helper\Data|MockObject
      */
     protected $taxHelperMock;
 
     /**
-     * @var \Magento\Tax\Pricing\Render\Adjustment
+     * @var Adjustment
      */
     protected $model;
 
     /**
      * Init mocks and model
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->contextMock = $this->createPartialMock(
-            \Magento\Framework\View\Element\Template\Context::class,
-            ['getEventManager', 'getStoreConfig', 'getScopeConfig']
-        );
-        $this->priceCurrencyMock = $this->createMock(\Magento\Directory\Model\PriceCurrency::class);
-        $this->taxHelperMock = $this->createMock(\Magento\Tax\Helper\Data::class);
+        $this->contextMock = $this->getMockBuilder(Context::class)
+            ->addMethods(['getStoreConfig'])
+            ->onlyMethods(['getEventManager', 'getScopeConfig'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->priceCurrencyMock = $this->createMock(PriceCurrency::class);
+        $this->taxHelperMock = $this->createMock(Data::class);
 
-        $eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+        $eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $storeConfigMock = $this->getMockBuilder(\Magento\Store\Model\Store\Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $scopeConfigMock = $this->getMockForAbstractClass(\Magento\Framework\App\Config\ScopeConfigInterface::class);
+        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->contextMock->expects($this->any())
             ->method('getEventManager')
-            ->will($this->returnValue($eventManagerMock));
-        $this->contextMock->expects($this->any())
-            ->method('getStoreConfig')
-            ->will($this->returnValue($storeConfigMock));
+            ->willReturn($eventManagerMock);
         $this->contextMock->expects($this->any())
             ->method('getScopeConfig')
-            ->will($this->returnValue($scopeConfigMock));
+            ->willReturn($scopeConfigMock);
 
         $this->model = new Adjustment(
             $this->contextMock,
@@ -103,7 +113,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $shouldDisplayBothPrices = true;
         $this->taxHelperMock->expects($this->once())
             ->method('displayBothPrices')
-            ->will($this->returnValue($shouldDisplayBothPrices));
+            ->willReturn($shouldDisplayBothPrices);
         $this->assertEquals($shouldDisplayBothPrices, $this->model->displayBothPrices());
     }
 
@@ -115,29 +125,29 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $expectedPriceValue = 1.23;
         $expectedPrice = '$4.56';
 
-        /** @var \Magento\Framework\Pricing\Render\Amount $amountRender */
-        $amountRender = $this->getMockBuilder(\Magento\Framework\Pricing\Render\Amount::class)
+        /** @var Amount $amountRender */
+        $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAmount'])
             ->getMock();
 
-        /** @var \Magento\Framework\Pricing\Amount\Base $baseAmount */
-        $baseAmount = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\Base::class)
+        /** @var Base $baseAmount */
+        $baseAmount = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMock();
 
         $baseAmount->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($expectedPriceValue));
+            ->willReturn($expectedPriceValue);
 
         $amountRender->expects($this->any())
             ->method('getAmount')
-            ->will($this->returnValue($baseAmount));
+            ->willReturn($baseAmount);
 
         $this->priceCurrencyMock->expects($this->any())
             ->method('format')
-            ->will($this->returnValue($expectedPrice));
+            ->willReturn($expectedPrice);
 
         $this->model->render($amountRender);
         $result = $this->model->getDisplayAmountExclTax();
@@ -156,29 +166,29 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $expectedPriceValue = 1.23;
         $expectedPrice = '$4.56';
 
-        /** @var \Magento\Framework\Pricing\Render\Amount $amountRender */
-        $amountRender = $this->getMockBuilder(\Magento\Framework\Pricing\Render\Amount::class)
+        /** @var Amount $amountRender */
+        $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAmount'])
             ->getMock();
-        /** @var \Magento\Framework\Pricing\Amount\Base $baseAmount */
-        $baseAmount = $this->getMockBuilder(\Magento\Framework\Pricing\Amount\Base::class)
+        /** @var Base $baseAmount */
+        $baseAmount = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
             ->setMethods(['getValue'])
             ->getMock();
 
         $baseAmount->expects($this->any())
             ->method('getValue')
-            ->will($this->returnValue($expectedPriceValue));
+            ->willReturn($expectedPriceValue);
 
         $amountRender->expects($this->any())
             ->method('getAmount')
-            ->will($this->returnValue($baseAmount));
+            ->willReturn($baseAmount);
 
         $this->priceCurrencyMock->expects($this->any())
             ->method('format')
-            ->with($this->anything(), $this->equalTo($includeContainer))
-            ->will($this->returnValue($expectedPrice));
+            ->with($this->anything(), $includeContainer)
+            ->willReturn($expectedPrice);
 
         $this->model->render($amountRender);
         $result = $this->model->getDisplayAmount($includeContainer);
@@ -207,24 +217,24 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
      */
     public function testBuildIdWithPrefix($prefix, $saleableId, $suffix, $expectedResult)
     {
-        /** @var \Magento\Framework\Pricing\Render\Amount $amountRender */
-        $amountRender = $this->getMockBuilder(\Magento\Framework\Pricing\Render\Amount::class)
+        /** @var Amount $amountRender */
+        $amountRender = $this->getMockBuilder(Amount::class)
             ->disableOriginalConstructor()
             ->setMethods(['getSaleableItem'])
             ->getMock();
 
-        /** @var \Magento\Catalog\Model\Product $saleable */
-        $saleable = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        /** @var Product $saleable */
+        $saleable = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['getId', '__wakeup'])
             ->getMock();
 
         $amountRender->expects($this->any())
             ->method('getSaleableItem')
-            ->will($this->returnValue($saleable));
+            ->willReturn($saleable);
         $saleable->expects($this->any())
             ->method('getId')
-            ->will($this->returnValue($saleableId));
+            ->willReturn($saleableId);
 
         $this->model->setIdSuffix($suffix);
         $this->model->render($amountRender);
@@ -258,7 +268,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
 
         $this->taxHelperMock->expects($this->once())
             ->method('displayPriceIncludingTax')
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $result = $this->model->displayPriceIncludingTax();
 
@@ -274,7 +284,7 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
 
         $this->taxHelperMock->expects($this->once())
             ->method('displayPriceExcludingTax')
-            ->will($this->returnValue($expectedResult));
+            ->willReturn($expectedResult);
 
         $result = $this->model->displayPriceExcludingTax();
 
@@ -286,8 +296,8 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
         $arguments = [];
         $displayValue = 8.0;
 
-        $amountRender = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Render\AmountRenderInterface::class);
-        $amountMock = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Amount\AmountInterface::class);
+        $amountRender = $this->getMockForAbstractClass(AmountRenderInterface::class);
+        $amountMock = $this->getMockForAbstractClass(AmountInterface::class);
         $amountMock->expects($this->once())
             ->method('getValue')
             ->with(\Magento\Tax\Pricing\Adjustment::ADJUSTMENT_CODE)
@@ -295,17 +305,17 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
 
         $this->taxHelperMock->expects($this->once())
             ->method('displayBothPrices')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->taxHelperMock->expects($this->once())
             ->method('displayPriceExcludingTax')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $amountRender->expects($this->once())
             ->method('setDisplayValue')
             ->with($displayValue);
         $amountRender->expects($this->once())
             ->method('getAmount')
-            ->will($this->returnValue($amountMock));
+            ->willReturn($amountMock);
 
         $this->model->render($amountRender, $arguments);
     }
@@ -313,27 +323,26 @@ class AdjustmentTest extends \PHPUnit\Framework\TestCase
     public function testGetHtmlBoth()
     {
         $arguments = [];
-        $this->model->setZone(\Magento\Framework\Pricing\Render::ZONE_ITEM_VIEW);
+        $this->model->setZone(Render::ZONE_ITEM_VIEW);
 
-        $amountRender = $this->createPartialMock(\Magento\Framework\Pricing\Render\Amount::class, [
-                'setPriceDisplayLabel',
-                'setPriceWrapperCss',
-                'setPriceId',
-                'getSaleableItem'
-            ]);
-        $product = $this->getMockForAbstractClass(\Magento\Framework\Pricing\SaleableInterface::class);
+        $amountRender = $this->getMockBuilder(Amount::class)
+            ->addMethods(['setPriceDisplayLabel', 'setPriceWrapperCss', 'setPriceId'])
+            ->onlyMethods(['getSaleableItem'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $product = $this->getMockForAbstractClass(SaleableInterface::class);
         $product->expects($this->once())
             ->method('getId');
 
         $this->taxHelperMock->expects($this->once())
             ->method('displayBothPrices')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
 
         $amountRender->expects($this->once())
             ->method('setPriceDisplayLabel');
         $amountRender->expects($this->once())
             ->method('getSaleableItem')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
         $amountRender->expects($this->once())
             ->method('setPriceId');
         $amountRender->expects($this->once())

@@ -34,7 +34,7 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Product\Type\Price::class
@@ -67,10 +67,10 @@ class PriceWithDimensionTest extends \PHPUnit\Framework\TestCase
 
         $return = $connection->fetchAll($select);
 
-        $this->assertEquals('10', $return[0]['price']);
-        $this->assertEquals('10', $return[0]['final_price']);
-        $this->assertEquals('19', $return[0]['min_price']);
-        $this->assertEquals('19', $return[0]['max_price']);
+        $this->assertEquals(10, $return[0]['price']);
+        $this->assertEquals(10, $return[0]['final_price']);
+        $this->assertEquals(19, $return[0]['min_price']);
+        $this->assertEquals(19, $return[0]['max_price']);
     }
 
     /**

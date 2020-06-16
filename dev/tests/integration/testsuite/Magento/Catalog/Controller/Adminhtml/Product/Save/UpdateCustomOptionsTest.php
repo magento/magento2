@@ -49,7 +49,7 @@ class UpdateCustomOptionsTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -116,7 +116,7 @@ class UpdateCustomOptionsTest extends AbstractBackendController
             $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
             $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
             $this->assertSessionMessages(
-                $this->contains('You saved the product.'),
+                $this->containsEqual('You saved the product.'),
                 MessageInterface::TYPE_SUCCESS
             );
             $updatedOptions = $this->optionRepository->getProductOptions($product);
