@@ -64,7 +64,7 @@
         "laminas/laminas-uri": "^2.5.1",
         "laminas/laminas-validator": "^2.6.0",
         "laminas/laminas-view": "~2.11.2",
-        "magento/composer": "1.6.x-dev",
+        "magento/composer": "1.6.0",
         "magento/magento-composer-installer": ">=0.1.11",
         "magento/zendframework1": "~1.14.2",
         "monolog/monolog": "^1.17",

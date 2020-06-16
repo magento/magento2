@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "b9aa1fbb37bcee58967d6a244a9ddc81",
+    "content-hash": "07bb75cbd8269245d02b01a19b448f83",
     "packages": [
         {
             "name": "colinmollenhour/cache-backend-file",
@@ -3296,16 +3296,16 @@
         },
         {
             "name": "magento/composer",
-            "version": "1.6.x-dev",
+            "version": "1.6.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/composer.git",
-                "reference": "f3e4bec8fc73a97a6cbc391b1b93d4c32566763d"
+                "reference": "fcc66f535d631788f2ba160ff547357086d9b2c9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/composer/zipball/f3e4bec8fc73a97a6cbc391b1b93d4c32566763d",
-                "reference": "f3e4bec8fc73a97a6cbc391b1b93d4c32566763d",
+                "url": "https://api.github.com/repos/magento/composer/zipball/fcc66f535d631788f2ba160ff547357086d9b2c9",
+                "reference": "fcc66f535d631788f2ba160ff547357086d9b2c9",
                 "shasum": ""
             },
             "require": {
@@ -3328,7 +3328,7 @@
                 "AFL-3.0"
             ],
             "description": "Magento composer library helps to instantiate Composer application and run composer commands.",
-            "time": "2020-05-08T01:07:09+00:00"
+            "time": "2020-06-15T17:52:31+00:00"
         },
         {
             "name": "magento/magento-composer-installer",
@@ -10876,7 +10876,6 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "magento/composer": 20,
         "magento/magento2-functional-testing-framework": 5
     },
     "prefer-stable": true,
