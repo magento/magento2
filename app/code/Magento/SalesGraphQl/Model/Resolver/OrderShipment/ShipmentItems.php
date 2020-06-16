@@ -47,7 +47,7 @@ class ShipmentItems implements ResolverInterface
                     'currency' => $order->getOrderCurrencyCode()
                 ],
                 'quantity_shipped' => $item->getQty(),
-                'model' => $item
+                'model' => $item,
             ];
         }
 

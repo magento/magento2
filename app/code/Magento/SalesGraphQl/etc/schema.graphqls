@@ -47,7 +47,7 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     total: OrderTotal @doc(description: "Contains details about the calculated totals for this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderTotal")
     invoices: [Invoice]! @doc(description: "Invoice list for the order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Invoices")
     credit_memos: [CreditMemo] @doc(description: "credit memo list for the order")
-    shipments: [OrderShipment] @doc(description: "shipment list for the order")
+    shipments: [OrderShipment] @doc(description: "shipment list for the order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderShipments")
     payment_methods: [PaymentMethod] @doc(description: "payment details for the order")
     shipping_address: CustomerAddress @doc(description: "shipping address for the order")
     billing_address: CustomerAddress @doc(description: "billing address for the order")
@@ -166,7 +166,7 @@ type OrderShipment @doc(description: "Order shipment details") {
     id: ID! @doc(description: "The unique ID of the shipment")
     number: String! @doc(description: "The sequential credit shipment number")
     tracking: [ShipmentTracking] @doc(description: "Contains shipment tracking details")
-    items: [ShipmentItem] @doc(description: "Contains items included in the shipment")
+    items: [ShipmentItemInterface] @doc(description: "Contains items included in the shipment") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderShipment\\ShipmentItems")
     comments: [CommentItem] @doc(description: "Comments added to the shipment")
 }
 
@@ -175,13 +175,26 @@ type CommentItem @doc(description: "Comment item details") {
     message: String! @doc(description: "The text of the message")
 }
 
-type ShipmentItem @doc(description: "Order shipment item details") {
+interface ShipmentItemInterface @doc(description: "Order shipment item details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\ShipmentItemTypeResolver"){
     id: ID! @doc(description: "Shipment item unique identifier")
     order_item: OrderItemInterface @doc(description: "Associated order item") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderItem")
     product_name: String @doc(description: "Name of the base product")
     product_sku: String! @doc(description: "SKU of the base product")
     product_sale_price: Money! @doc(description: "Sale price for the base product")
     quantity_shipped: Float! @doc(description: "Number of shipped items")
+}
+
+type ShipmentItem implements ShipmentItemInterface {
+}
+
+type BundleShipmentItem implements ShipmentItemInterface {
+    bundle_options: [ShipmentItemSelectedBundleOptions] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\BundleOptions")
+}
+
+type ShipmentItemSelectedBundleOptions {
+    id: ID! @doc(description: "The unique identifier of the option")
+    label: String! @doc(description: "The label of the option")
+    items: [ShipmentItemInterface] @doc(description: "A list of products that represent the values of the parent option") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\BundleOptions\\SelectedBundleOptionLineItems")
 }
 
 type ShipmentTracking @doc(description: "Order shipment tracking details") {
