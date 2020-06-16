@@ -182,6 +182,7 @@ class FixturesTest extends FixturesAbstractClass implements FixturesInterface
      *
      * @param array $configs
      * @param string $scope
+     * @return void
      */
     private function assertConfigFieldValues(
         array $configs,
@@ -196,6 +197,7 @@ class FixturesTest extends FixturesAbstractClass implements FixturesInterface
      * Asserts count of used fixtures.
      *
      * @param array $fixtures
+     * @return void
      */
     private function assertUsedFixturesCount(array $fixtures): void
     {
