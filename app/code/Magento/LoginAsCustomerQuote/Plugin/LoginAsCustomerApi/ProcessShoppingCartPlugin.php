@@ -15,7 +15,7 @@ use Magento\LoginAsCustomerApi\Api\AuthenticateCustomerBySecretInterface;
 use Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface;
 
 /**
- * Mark customer cart as guest cart and remove all items from it
+ * Remove all items from guest shopping cart and mark cart as not-guest
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
@@ -60,7 +60,7 @@ class ProcessShoppingCartPlugin
     }
 
     /**
-     * Remove all items from guest shopping cart and mark customer cart as not-guest
+     * Remove all items from guest shopping cart and mark cart as not-guest
      *
      * @param AuthenticateCustomerBySecretInterface $subject
      * @param string $secret
