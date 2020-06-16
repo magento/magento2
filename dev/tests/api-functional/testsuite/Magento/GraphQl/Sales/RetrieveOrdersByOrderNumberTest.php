@@ -47,7 +47,7 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Sales/_files/orders_with_customer.php
      */
     public function testGetCustomerOrdersSimpleProductQuery()
     {
@@ -359,7 +359,7 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Sales/_files/orders_with_customer.php
      */
     public function testGetMatchingCustomerOrders()
     {
@@ -411,7 +411,7 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Sales/_files/orders_with_customer.php
      */
     public function testGetMatchingOrdersForLowerQueryLength()
     {
@@ -456,12 +456,12 @@ QUERY;
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $this->assertArrayHasKey('total_count', $response['customer']['orders']);
-        $this->assertEquals(2, $response['customer']['orders']['total_count']);
+        $this->assertEquals(6, $response['customer']['orders']['total_count']);
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Sales/_files/orders_with_customer.php
      */
     public function testGetMultipleCustomerOrdersQueryWithDefaultPagination()
     {
@@ -648,7 +648,7 @@ QUERY;
      * @throws AuthenticationException
      * @dataProvider dataProviderIncorrectOrder
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Sales/_files/orders_with_customer.php
      */
     public function testGetCustomerNonExistingOrderQuery(string $orderNumber)
     {
