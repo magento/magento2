@@ -67,6 +67,7 @@ class DeclarativeSchemaDependencyProvider extends DependencyProvider
         foreach ($dependencies as $dependency) {
             $checkResult = array_intersect($declared, $dependency);
             if ($checkResult) {
+                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $existingDeclared = array_merge($existingDeclared, array_values($checkResult));
             }
         }
@@ -161,6 +162,7 @@ class DeclarativeSchemaDependencyProvider extends DependencyProvider
         } else {
             foreach ($modules as $dependencySet) {
                 if (array_search($moduleName, $dependencySet) === false) {
+                    //phpcs:ignore Magento2.Performance.ForeachArrayMerge
                     $resultDependencies = array_merge(
                         $resultDependencies,
                         $dependencySet
@@ -406,6 +408,7 @@ class DeclarativeSchemaDependencyProvider extends DependencyProvider
                     $this->getDependencyId($tableName, self::SCHEMA_ENTITY_CONSTRAINT, $constraintName);
                 switch ($constraintDeclaration['type']) {
                     case 'foreign':
+                        //phpcs:ignore Magento2.Performance.ForeachArrayMerge
                         $constraintDependencies = array_merge(
                             $constraintDependencies,
                             $this->getFKDependencies($constraintDeclaration)

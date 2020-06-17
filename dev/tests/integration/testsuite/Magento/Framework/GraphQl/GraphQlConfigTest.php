@@ -48,10 +48,12 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
             ['fileResolver' => $fileResolverMock]
         );
         $reader = $objectManager->create(
+            // phpstan:ignore
             \Magento\Framework\GraphQlSchemaStitching\Reader::class,
             ['readers' => ['graphql_reader' => $graphQlReader]]
         );
         $data = $objectManager->create(
+            // phpstan:ignore
             \Magento\Framework\GraphQl\Config\Data ::class,
             ['reader' => $reader]
         );
