@@ -25,7 +25,7 @@ class OrderTotal implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!($value['model'] ?? null) instanceof OrderInterface)  {
+        if (!(($value['model'] ?? null) instanceof OrderInterface)) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
 

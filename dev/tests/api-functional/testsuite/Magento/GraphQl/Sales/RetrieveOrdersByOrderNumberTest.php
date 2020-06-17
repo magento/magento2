@@ -112,7 +112,7 @@ QUERY;
         /** @var \Magento\Sales\Api\Data\OrderInterface[] $items */
         $orders = $this->orderRepository->getList($searchCriteria)->getItems();
         foreach ($orders as $order) {
-            $orderId = $order->getEntityId();
+            $orderId = base64_encode($order->getEntityId());
             $orderNumber = $order->getIncrementId();
             $this->assertEquals($orderId, $customerOrderItemsInResponse['id']);
             $this->assertEquals($orderNumber, $customerOrderItemsInResponse['number']);
@@ -819,8 +819,7 @@ QUERY;
             [],
             '',
             array_merge(
-                $this->customerAuthenticationHeader->execute(
-                $currentEmail, $currentPassword),
+                $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword),
                 ['Store' => $store]
             )
         );

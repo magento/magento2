@@ -55,11 +55,11 @@ class InvoiceItems implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!($value['model'] ?? null) instanceof InvoiceInterface)  {
+        if (!(($value['model'] ?? null) instanceof InvoiceInterface)) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        if (!($value['order'] ?? null) instanceof OrderInterface)  {
+        if (!(($value['order'] ?? null) instanceof OrderInterface)) {
             throw new LocalizedException(__('"order" value should be specified'));
         }
 

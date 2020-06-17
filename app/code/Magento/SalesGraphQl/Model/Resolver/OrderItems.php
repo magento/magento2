@@ -53,7 +53,7 @@ class OrderItems implements ResolverInterface
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
-        if (!($value['model'] ?? null) instanceof OrderInterface)  {
+        if (!(($value['model'] ?? null) instanceof OrderInterface)) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
         /** @var OrderInterface $parentOrder */
