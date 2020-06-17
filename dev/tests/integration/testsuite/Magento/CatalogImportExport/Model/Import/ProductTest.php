@@ -3127,4 +3127,73 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         $productsAfterSecondImport = $this->productRepository->getList($searchCriteria)->getItems();
         $this->assertCount(3, $productsAfterSecondImport);
     }
+
+    /**
+     * Checks that product related links added for all bunches properly after products import
+     */
+    public function testImportProductsWithLinksInDifferentBunches()
+    {
+        $this->importedProducts = [
+            'simple1',
+            'simple2',
+            'simple3',
+            'simple4',
+            'simple5',
+            'simple6',
+        ];
+        $importExportData = $this->getMockBuilder(Data::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $importExportData->expects($this->atLeastOnce())
+            ->method('getBunchSize')
+            ->willReturn(5);
+        $this->_model = $this->objectManager->create(
+            \Magento\CatalogImportExport\Model\Import\Product::class,
+            ['importExportData' => $importExportData]
+        );
+        $linksData = [
+            'related' => [
+                'simple1' => '2',
+                'simple2' => '1'
+            ]
+        ];
+        $pathToFile = __DIR__ . '/_files/products_to_import_with_related.csv';
+        $filesystem = $this->objectManager->create(Filesystem::class);
+
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            Csv::class,
+            [
+                'file' => $pathToFile,
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->_model->setSource($source)
+            ->setParameters(
+                [
+                    'behavior' => Import::BEHAVIOR_APPEND,
+                    'entity' => 'catalog_product'
+                ]
+            )
+            ->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+        $this->_model->importData();
+
+        $resource = $this->objectManager->get(ProductResource::class);
+        $productId = $resource->getIdBySku('simple6');
+        /** @var Product $product */
+        $product = $this->objectManager->create(Product::class);
+        $product->load($productId);
+        $productLinks = [
+            'related' => $product->getRelatedProducts()
+        ];
+        $importedProductLinks = [];
+        foreach ($productLinks as $linkType => $linkedProducts) {
+            foreach ($linkedProducts as $linkedProductData) {
+                $importedProductLinks[$linkType][$linkedProductData->getSku()] = $linkedProductData->getPosition();
+            }
+        }
+        $this->assertEquals($linksData, $importedProductLinks);
+    }
 }
