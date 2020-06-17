@@ -10,6 +10,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Co
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * Join visibility and status tables to product collection
@@ -24,7 +25,8 @@ class VisibilityStatusProcessor implements CollectionProcessorInterface
     public function process(
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
-        array $attributeNames
+        array $attributeNames,
+        ContextInterface $context
     ): Collection {
         $collection->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner');
         $collection->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');

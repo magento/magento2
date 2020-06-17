@@ -63,7 +63,7 @@ class ProductsCount implements ResolverInterface
         $category = $value['model'];
         $productsCollection = $category->getProductCollection();
         $productsCollection->setVisibility($this->catalogProductVisibility->getVisibleInSiteIds());
-        $productsCollection = $this->stockProcessor->process($productsCollection, $this->searchCriteria, []);
+        $productsCollection = $this->stockProcessor->process($productsCollection, $this->searchCriteria, [], $context);
 
         return $productsCollection->getSize();
     }

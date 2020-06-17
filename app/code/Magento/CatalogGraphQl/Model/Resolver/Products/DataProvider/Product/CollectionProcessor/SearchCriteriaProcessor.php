@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface as SearchCriteriaApplier;
+use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * Apply search criteria data to passed in collection.
@@ -38,7 +39,8 @@ class SearchCriteriaProcessor implements CollectionProcessorInterface
     public function process(
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
-        array $attributeNames
+        array $attributeNames,
+        ContextInterface $context
     ): Collection {
         $this->searchCriteriaApplier->process($searchCriteria, $collection);
 

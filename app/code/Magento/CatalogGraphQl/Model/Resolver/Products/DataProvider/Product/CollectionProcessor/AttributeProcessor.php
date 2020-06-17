@@ -10,6 +10,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Co
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * Adds passed in attributes to product collection results
@@ -39,7 +40,8 @@ class AttributeProcessor implements CollectionProcessorInterface
     public function process(
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
-        array $attributeNames
+        array $attributeNames,
+        ContextInterface $context
     ): Collection {
         foreach ($attributeNames as $name) {
             $this->addAttribute($collection, $name);

@@ -10,6 +10,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Deferred;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product as ProductDataProvider;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * Deferred resolver for product data.
@@ -102,11 +103,12 @@ class Product
      * Get product from result set.
      *
      * @param string $sku
+     * @param ContextInterface $context
      * @return array
      */
-    public function getProductBySku(string $sku) : array
+    public function getProductBySku(string $sku, ContextInterface $context) : array
     {
-        $products = $this->fetch();
+        $products = $this->fetch($context);
 
         if (!isset($products[$sku])) {
             return [];
@@ -118,9 +120,10 @@ class Product
     /**
      * Fetch product data and return in array format. Keys for products will be their skus.
      *
+     * @param ContextInterface $context
      * @return array
      */
-    private function fetch() : array
+    private function fetch(ContextInterface $context) : array
     {
         if (empty($this->productSkus) || !empty($this->productList)) {
             return $this->productList;
@@ -131,7 +134,8 @@ class Product
             $this->searchCriteriaBuilder->create(),
             $this->attributeCodes,
             false,
-            true
+            true,
+            $context
         );
 
         /** @var \Magento\Catalog\Model\Product $product */

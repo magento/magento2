@@ -9,6 +9,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * {@inheritdoc}
@@ -34,10 +35,11 @@ class CompositeCollectionProcessor implements CollectionProcessorInterface
     public function process(
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
-        array $attributeNames
+        array $attributeNames,
+        ContextInterface $context
     ): Collection {
         foreach ($this->collectionProcessors as $collectionProcessor) {
-            $collection = $collectionProcessor->process($collection, $searchCriteria, $attributeNames);
+            $collection = $collectionProcessor->process($collection, $searchCriteria, $attributeNames, $context);
         }
 
         return $collection;

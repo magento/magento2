@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * Add necessary joins for extensible entities.
@@ -33,16 +34,13 @@ class ExtensibleEntityProcessor implements CollectionProcessorInterface
     }
 
     /**
-     * @param Collection $collection
-     * @param SearchCriteriaInterface $searchCriteria
-     * @param array $attributeNames
-     * @return Collection
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @inheritdoc
      */
     public function process(
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
-        array $attributeNames
+        array $attributeNames,
+        ContextInterface $context
     ): Collection {
         $this->joinProcessor->process($collection);
 

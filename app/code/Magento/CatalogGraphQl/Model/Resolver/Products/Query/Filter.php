@@ -16,6 +16,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product as ProductProvider;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Search\Model\Query;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Model\ScopeInterface;
@@ -84,16 +85,18 @@ class Filter implements ProductQueryInterface
      *
      * @param array $args
      * @param ResolveInfo $info
+     * @param ContextInterface $context
      * @return SearchResult
      */
     public function getResult(
         array $args,
-        ResolveInfo $info
+        ResolveInfo $info,
+        ContextInterface $context
     ): SearchResult {
         $fields = $this->fieldSelection->getProductsFieldSelection($info);
         try {
             $searchCriteria = $this->buildSearchCriteria($args, $info);
-            $searchResults = $this->productDataProvider->getList($searchCriteria, $fields);
+            $searchResults = $this->productDataProvider->getList($searchCriteria, $fields, false, false, $context);
         } catch (InputException $e) {
             return $this->createEmptyResult($args);
         }

@@ -12,6 +12,7 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Collecti
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatusResource;
+use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * Add stock filtering if configuration requires it.
@@ -46,7 +47,8 @@ class StockProcessor implements CollectionProcessorInterface
     public function process(
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
-        array $attributeNames
+        array $attributeNames,
+        ContextInterface $context
     ): Collection {
         if (!$this->stockConfig->isShowOutOfStock()) {
             $this->stockStatusResource->addIsInStockFilterToCollection($collection);

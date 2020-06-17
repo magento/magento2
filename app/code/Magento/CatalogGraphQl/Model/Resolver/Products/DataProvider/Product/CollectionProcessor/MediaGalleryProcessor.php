@@ -11,6 +11,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Catalog\Model\Product\Media\Config as MediaConfig;
+use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * Add attributes required for every GraphQL product resolution process.
@@ -40,7 +41,8 @@ class MediaGalleryProcessor implements CollectionProcessorInterface
     public function process(
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
-        array $attributeNames
+        array $attributeNames,
+        ContextInterface $context
     ): Collection {
         if (in_array('media_gallery_entries', $attributeNames)) {
             $mediaAttributes = $this->mediaConfig->getMediaAttributeCodes();

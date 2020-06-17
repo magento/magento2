@@ -10,6 +10,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\Co
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * Add attributes required for every GraphQL product resolution process.
@@ -24,7 +25,8 @@ class RequiredColumnsProcessor implements CollectionProcessorInterface
     public function process(
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
-        array $attributeNames
+        array $attributeNames,
+        ContextInterface $context
     ): Collection {
         $collection->addAttributeToSelect('special_price');
         $collection->addAttributeToSelect('special_price_from');
