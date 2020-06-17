@@ -28,19 +28,19 @@ define([
 
             customerData.subscribe(function (data) {
                 this.fullname = data.fullname;
-                this._updateBanner();
+                this.updateBanner();
             }.bind(this));
             loggedAsCustomerData.subscribe(function (data) {
                 this.adminUserId = data.adminUserId;
                 this.websiteName = data.websiteName;
-                this._updateBanner();
+                this.updateBanner();
             }.bind(this));
 
             this.fullname = customerData().fullname;
             this.adminUserId = loggedAsCustomerData().adminUserId;
             this.websiteName = loggedAsCustomerData().websiteName;
 
-            this._updateBanner();
+            this.updateBanner();
         },
 
         /** @inheritdoc */
@@ -51,7 +51,12 @@ define([
             return this;
         },
 
-        _updateBanner: function () {
+        /**
+         * Update banner area
+         *
+         * @returns void
+         */
+        updateBanner: function () {
             if (this.adminUserId !== undefined) {
                 this.isVisible(this.adminUserId);
             }
