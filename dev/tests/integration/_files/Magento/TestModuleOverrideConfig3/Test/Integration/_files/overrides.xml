@@ -35,12 +35,15 @@
     <test class="Magento\TestModuleOverrideConfig\MagentoDataFixture\ReplaceFixtureTest">
         <method name="testReplaceFixtureViaThirdModule">
             <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module.php" />
+            <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module_rollback.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module_rollback.php" />
             <dataSet name="first_data_set">
                 <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module.php" />
+                <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module_rollback.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module_rollback.php" />
             </dataSet>
         </method>
         <method name="testReplaceRequiredFixtureViaThirdModule">
             <magentoDataFixture path="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module.php" newPath="Magento/TestModuleOverrideConfig3/_files/fixture1_third_module.php" />
+            <magentoDataFixture path="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module_rollback.php" newPath="Magento/TestModuleOverrideConfig3/_files/fixture1_third_module_rollback.php" />
         </method>
     </test>
     <test class="Magento\TestModuleOverrideConfig\MagentoDataFixture\SortFixturesTest">
