@@ -9,8 +9,8 @@ namespace Magento\Framework\GraphQlSchemaStitching;
 
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\FileResolverInterface;
-use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface as TypeReaderComposite;
 use Magento\Framework\Config\ReaderInterface;
+use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface as TypeReaderComposite;
 
 /**
  * Reads *.graphqls files from modules and combines the results as array to be used with a library to configure objects
@@ -67,7 +67,10 @@ class GraphQlReader implements ReaderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
+     * @param string|null $scope
+     * @return array
      */
     public function read($scope = null) : array
     {
@@ -335,8 +338,9 @@ class GraphQlReader implements ReaderInterface
     {
         foreach ($source as $typeName => $type) {
             if (!isset($type['module']) && (
-                    ($type['type'] == 'graphql_interface' && isset($type['typeResolver']))
-                    || isset($type['implements']))
+                ($type['type'] == 'graphql_interface' && isset($type['typeResolver']))
+                    || isset($type['implements'])
+            )
             ) {
                 $source[$typeName]['module'] = self::getModuleNameForRelevantFile($filePath);
             }

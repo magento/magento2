@@ -1,12 +1,19 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+declare(strict_types=1);
 
 namespace Magento\Test\Integrity\Dependency;
 
 use Magento\Framework\App\Bootstrap;
 
 /**
- * Class GraphQlSchemaDependencyProvider
- * @package Magento\Test\Integrity\Dependency
+ * Provide information on the dependency between the modules according to the GraphQL schema.
+ *
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class GraphQlSchemaDependencyProvider extends DependencyProvider
 {
@@ -98,10 +105,11 @@ class GraphQlSchemaDependencyProvider extends DependencyProvider
 
         $dependencies = [];
 
-        foreach ($schema as $typeName => $type) {
+        foreach ($schema as $type) {
             if (isset($type['module']) && $type['module'] == $moduleName && isset($type['implements'])) {
-                foreach ($type['implements'] as $interfaceName => $interfaceData) {
-                    $dependOnModule = $schema[$interfaceName]['module'];
+                $interfaces = array_keys($type['implements']);
+                foreach ($interfaces as $interface) {
+                    $dependOnModule = $schema[$interface]['module'];
                     if ($dependOnModule != $moduleName) {
                         $dependencies[] = $dependOnModule;
                     }

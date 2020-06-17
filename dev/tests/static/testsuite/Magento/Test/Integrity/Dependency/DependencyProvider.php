@@ -1,4 +1,10 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+declare(strict_types=1);
 
 namespace Magento\Test\Integrity\Dependency;
 
@@ -82,11 +88,7 @@ abstract class DependencyProvider
      * @return void
      * @throws \Exception
      */
-    protected function presetDependencies(
-        string $moduleName,
-        array $packageNames,
-        string $type
-    ): void
+    protected function presetDependencies(string $moduleName, array $packageNames, string $type): void
     {
         $packageNames = array_filter($packageNames, function ($packageName) {
             return $this->getModuleName($packageName) ||

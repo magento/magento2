@@ -1,8 +1,12 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
+declare(strict_types=1);
 
 namespace Magento\Test\Integrity;
-
 
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
