@@ -48,6 +48,10 @@ spec:
             requests:
               cpu: "500m"
       containers:
+        lifecycle:
+          postStart:
+            exec:
+              command: ["/bin/sh", "-c", "/var/www/html/post.sh"]
         - image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
           name: apache
           ports:

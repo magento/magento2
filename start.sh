@@ -12,12 +12,11 @@ cd /var/www/html
 MODE=$(php bin/magento deploy:mode:show | sed -e 's/\.//g' | awk '{print $4}')
 if [ $MODE != 'production' ]
 then
-    cp -a pub.new/* pub/
-    cp -a .htaccess pub/
     #/// deploy the static content, compile di and flush the cache :)
     php bin/magento deploy:mode:set production
+    php bin/magento maintenance:enable
+    mv pub pub.new
 fi
-php bin/magento cache:flush
 #echo "Release complete ...."
 
 
