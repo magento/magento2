@@ -8,6 +8,6 @@ spec:
       containers:
       - name: php
         image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
-        command: ["/bin/sh", "-c", "/var/www/html/start.sh"]
+        command: ["/bin/sh", "-c", "cd /var/www/html; sh ./start.sh"]
       restartPolicy: Never
   backoffLimit: 4
