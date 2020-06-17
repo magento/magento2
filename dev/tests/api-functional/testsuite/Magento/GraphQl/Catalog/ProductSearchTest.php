@@ -13,6 +13,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryLinkManagement;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Eav\Model\Config;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -364,6 +365,8 @@ QUERY;
         $out = '';
         // phpcs:ignore Magento2.Security.InsecureFunction
         exec("php -f {$appDir}/bin/magento indexer:reindex catalog_category_product", $out);
+        // phpcs:ignore Magento2.Security.InsecureFunction
+        exec("php -f {$appDir}/bin/magento indexer:reindex catalogsearch_fulltext", $out);
         CacheCleaner::cleanAll();
     }
 
@@ -462,7 +465,7 @@ QUERY;
     }
 
     /**
-     * Full text search for Products and then filter the results by custom attribute ( sort is by defaulty by relevance)
+     * Full text search for Products and then filter the results by custom attribute (default sort is relevance)
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_custom_attribute.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -670,7 +673,7 @@ QUERY;
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product1 = $productRepository->get('simple');
         $product2 = $productRepository->get('simple-4');
-        $filteredProducts = [$product1, $product2];
+        $filteredProducts = [$product2, $product1];
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
         for ($itemIndex = 0; $itemIndex < count($filteredProducts); $itemIndex++) {
@@ -678,7 +681,8 @@ QUERY;
             //validate that correct products are returned
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
-                [ 'name' => $filteredProducts[$itemIndex]->getName(),
+                [
+                    'name' => $filteredProducts[$itemIndex]->getName(),
                     'sku' => $filteredProducts[$itemIndex]->getSku()
                 ]
             );
@@ -1116,6 +1120,85 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category_with_three_products.php
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    public function testSortByPosition()
+    {
+        $this->reIndexAndCleanCache();
+        // Get category ID for filtering
+        /** @var Collection $categoryCollection */
+        $categoryCollection = Bootstrap::getObjectManager()->get(Collection::class);
+        $category = $categoryCollection->addFieldToFilter('name', 'Category 999')->getFirstItem();
+        $categoryId = $category->getId();
+
+        $queryAsc = <<<QUERY
+{
+  products(filter: {category_id: {eq: "$categoryId"}}, sort: {position: ASC}) {
+    total_count
+    items {
+      sku
+      name
+    }
+  }
+}
+QUERY;
+        $resultAsc = $this->graphQlQuery($queryAsc);
+        $this->assertArrayNotHasKey('errors', $resultAsc);
+        $productsAsc = array_column($resultAsc['products']['items'], 'sku');
+        $expectedProductsAsc = ['simple1002', 'simple1001', 'simple1000'];
+        // position equal and secondary sort by entity_id DESC
+        $this->assertEquals($expectedProductsAsc, $productsAsc);
+
+        $queryDesc = <<<QUERY
+{
+  products(filter: {category_id: {eq: "$categoryId"}}, sort: {position: DESC}) {
+    total_count
+    items {
+      sku
+      name
+    }
+  }
+}
+QUERY;
+        $resultDesc = $this->graphQlQuery($queryDesc);
+        $this->assertArrayNotHasKey('errors', $resultDesc);
+        $productsDesc = array_column($resultDesc['products']['items'], 'sku');
+        // position equal and secondary sort by entity_id DESC
+        $this->assertEquals($expectedProductsAsc, $productsDesc);
+
+        //revert position
+        $productPositions = $category->getProductsPosition();
+        $count = 1;
+        foreach ($productPositions as $productId => $position) {
+            $productPositions[$productId] = $count;
+            $count++;
+        }
+        ksort($productPositions);
+
+        $category->setPostedProducts($productPositions);
+        $category->save();
+        $this->reIndexAndCleanCache();
+
+        $queryDesc = <<<QUERY
+{
+  products(filter: {category_id: {eq: "$categoryId"}}, sort: {position: ASC}) {
+    total_count
+    items {
+      sku
+      name
+    }
+  }
+}
+QUERY;
+        $resultDesc = $this->graphQlQuery($queryDesc);
+        $this->assertArrayNotHasKey('errors', $resultDesc);
+        $productsDesc = array_column($resultDesc['products']['items'], 'sku');
+        // position NOT equal and oldest entity first
+        $this->assertEquals(array_reverse($expectedProductsAsc), $productsDesc);
+    }
+
+    /**
      * pageSize = total_count and current page = 2
      * expected - error is thrown
      * Actual - empty array
@@ -1457,6 +1540,7 @@ QUERY;
         $categoryRepository = ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
 
         $links = $productLinks->getAssignedProducts($queryCategoryId);
+        $links = array_reverse($links);
         foreach ($response['products']['items'] as $itemIndex => $itemData) {
             $this->assertNotEmpty($itemData);
             $this->assertEquals($response['products']['items'][$itemIndex]['sku'], $links[$itemIndex]->getSku());
