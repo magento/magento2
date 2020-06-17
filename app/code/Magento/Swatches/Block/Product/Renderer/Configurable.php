@@ -165,7 +165,7 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
      */
     protected function getCacheLifetime()
     {
-        return parent::hasCacheLifetime() ? parent::getCacheLifetime() : 3600;
+        return parent::getCacheLifetime() ?? 3600;
     }
 
     /**
@@ -407,6 +407,8 @@ class Configurable extends \Magento\ConfigurableProduct\Block\Product\View\Type\
         if (!empty($swatchImageId) && !empty($imageAttributes['type'])) {
             return $this->imageUrlBuilder->getUrl($childProduct->getData($imageAttributes['type']), $swatchImageId);
         }
+
+        return '';
     }
 
     /**
