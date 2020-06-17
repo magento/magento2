@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Sales\Api\Data\OrderExtensionInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 
 class OrderTotal implements ResolverInterface
@@ -33,24 +34,9 @@ class OrderTotal implements ResolverInterface
         $order = $value['model'];
         $currency = $order->getOrderCurrencyCode();
         $extensionAttributes = $order->getExtensionAttributes();
-        $allAppliedTaxesForItemsData = [];
-        $appliedShippingTaxesForItemsData = [];
-        foreach ($extensionAttributes->getItemAppliedTaxes() ?? [] as $taxItemIndex => $appliedTaxForItem) {
-            foreach ($appliedTaxForItem->getAppliedTaxes() ?? [] as $taxLineItem) {
-                $appliedShippingTaxesForItemsData[$taxItemIndex][$taxItemIndex] = [
-                    'title' => $taxLineItem->getDataByKey('title'),
-                    'percent' => $taxLineItem->getDataByKey('percent'),
-                    'amount' => $taxLineItem->getDataByKey('amount'),
-                ];
-                if ($appliedTaxForItem->getType() === "shipping") {
-                    $appliedShippingTaxesForItemsData[$taxItemIndex][$taxItemIndex] = [
-                        'title' => $taxLineItem->getDataByKey('title'),
-                        'percent' => $taxLineItem->getDataByKey('percent'),
-                        'amount' => $taxLineItem->getDataByKey('amount')
-                    ];
-                }
-            }
-        }
+
+        $allAppliedTaxesForItemsData =  $this->getAllAppliedTaxesForItemsData($extensionAttributes);
+        $appliedShippingTaxesForItemsData = $this->getAppliedShippingTaxesForItemsData($extensionAttributes);
 
         return [
             'base_grand_total' => ['value' => $order->getBaseGrandTotal(), 'currency' => $currency],
@@ -71,6 +57,46 @@ class OrderTotal implements ResolverInterface
                 'discounts' => $this->getShippingDiscountDetails($order),
             ]
         ];
+    }
+
+    /**
+     * @param OrderExtensionInterface $extensionAttributes
+     * @return array
+     */
+    private function getAllAppliedTaxesForItemsData(OrderExtensionInterface $extensionAttributes): array
+    {
+        $allAppliedTaxesForItemsData = [];
+        foreach ($extensionAttributes->getItemAppliedTaxes() ?? [] as $taxItemIndex => $appliedTaxForItem) {
+            foreach ($appliedTaxForItem->getAppliedTaxes() ?? [] as $taxLineItem) {
+                $allAppliedTaxesForItemsData[$taxItemIndex][$taxItemIndex] = [
+                    'title' => $taxLineItem->getDataByKey('title'),
+                    'percent' => $taxLineItem->getDataByKey('percent'),
+                    'amount' => $taxLineItem->getDataByKey('amount'),
+                ];
+            }
+        }
+        return $allAppliedTaxesForItemsData;
+    }
+
+    /**
+     * @param OrderExtensionInterface $extensionAttributes
+     * @return array
+     */
+    private function getAppliedShippingTaxesForItemsData(OrderExtensionInterface $extensionAttributes): array
+    {
+        $appliedShippingTaxesForItemsData = [];
+        foreach ($extensionAttributes->getItemAppliedTaxes() ?? [] as $taxItemIndex => $appliedTaxForItem) {
+            foreach ($appliedTaxForItem->getAppliedTaxes() ?? [] as $taxLineItem) {
+                if ($appliedTaxForItem->getType() === "shipping") {
+                    $appliedShippingTaxesForItemsData[$taxItemIndex][$taxItemIndex] = [
+                        'title' => $taxLineItem->getDataByKey('title'),
+                        'percent' => $taxLineItem->getDataByKey('percent'),
+                        'amount' => $taxLineItem->getDataByKey('amount')
+                    ];
+                }
+            }
+        }
+        return $appliedShippingTaxesForItemsData;
     }
 
     /**

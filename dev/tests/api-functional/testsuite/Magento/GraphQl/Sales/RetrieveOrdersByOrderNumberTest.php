@@ -591,10 +591,6 @@ QUERY;
                 $customerOrderItemsInResponse[$key]['total']['shipping_handling']['total_amount']['value']
             );
             $this->assertEquals(
-                0,
-                $customerOrderItemsInResponse[$key]['total']['shipping_handling']['taxes'][0]['amount']['value']
-            );
-            $this->assertEquals(
                 5,
                 $customerOrderItemsInResponse[$key]['total']['total_shipping']['value']
             );
@@ -1665,14 +1661,6 @@ QUERY;
             $this->assertEquals(
                 'USD',
                 $response['customer']['orders']['items'][0]['total']['shipping_handling']['total_amount']['currency']
-            );
-            $this->assertEquals(
-                0,
-                $response['customer']['orders']['items'][0]['total']['taxes'][0]['amount']['value']
-            );
-            $this->assertEquals(
-                'USD',
-                $response['customer']['orders']['items'][0]['total']['taxes'][0]['amount']['currency']
             );
         }
     }
