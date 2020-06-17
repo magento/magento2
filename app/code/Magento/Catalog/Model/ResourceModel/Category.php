@@ -707,7 +707,7 @@ class Category extends AbstractResource
      * @param boolean $asCollection
      * @param boolean $toLoad
      * @param boolean $onlyActive
-     * @param boolean $includeMenu
+     * @param boolean $onlyIncludeInMenu
      * @return \Magento\Framework\Data\Tree\Node\Collection|\Magento\Catalog\Model\ResourceModel\Category\Collection
      */
     public function getCategories(
@@ -717,13 +717,13 @@ class Category extends AbstractResource
         $asCollection = false,
         $toLoad = true,
         $onlyActive = true,
-        $includeMenu = true
+        $onlyIncludeInMenu = true
     ) {
         $tree = $this->_categoryTreeFactory->create();
         /* @var $tree \Magento\Catalog\Model\ResourceModel\Category\Tree */
         $nodes = $tree->loadNode($parent)->loadChildren($recursionLevel)->getChildren();
 
-        $tree->addCollectionData(null, $sorted, $parent, $toLoad, $onlyActive, $includeMenu);
+        $tree->addCollectionData(null, $sorted, $parent, $toLoad, $onlyActive, $onlyIncludeInMenu);
 
         if ($asCollection) {
             return $tree->getCollection();

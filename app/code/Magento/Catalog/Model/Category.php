@@ -978,7 +978,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
      * @param bool $asCollection
      * @param bool $toLoad
      * @param bool $onlyActive
-     * @param bool $includeMenu
+     * @param bool $onlyIncludeInMenu
      * @return \Magento\Framework\Data\Tree\Node\Collection|\Magento\Catalog\Model\ResourceModel\Category\Collection
      */
     public function getCategories(
@@ -988,7 +988,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
         $asCollection = false,
         $toLoad = true,
         $onlyActive = true,
-        $includeMenu = true
+        $onlyIncludeInMenu = true
     ) {
         return $this->getResource()
             ->getCategories(
@@ -998,7 +998,7 @@ class Category extends \Magento\Catalog\Model\AbstractModel implements
                 $asCollection,
                 $toLoad,
                 $onlyActive,
-                $includeMenu
+                $onlyIncludeInMenu
             );
     }
 

@@ -428,6 +428,60 @@ class CategoryTest extends TestCase
     }
 
     /**
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Catalog/_files/categories_exclude_in_menu.php
+     * @param int $expected
+     * @param array $argument
+     * @dataProvider argumentGetCategory
+     */
+    public function testIncludeMenu($expected, $argument)
+    {
+        $categories = $this->_model
+            ->getCategories(
+                $argument['parent'],
+                $argument['recursion'],
+                $argument['sorted'],
+                $argument['asCollection'],
+                $argument['toLoad'],
+                $argument['onlyActive'],
+                $argument['onlyIncludeInMenu']
+            );
+        $this->assertCount($expected, $categories->getItems());
+    }
+
+    /**
+     * @return array
+     */
+    public function argumentGetCategory(): array
+    {
+        return [
+            ['expected' => 5,
+                    'argument' => [
+                    'parent' => 2,
+                    'recursion' => 1,
+                    'sorted' => false,
+                    'asCollection' => true,
+                    'toLoad' => false,
+                    'onlyActive' => true,
+                    'onlyIncludeInMenu' => true
+                ]
+            ],
+            ['expected' => 7,
+                    'argument' => [
+                    'parent' => 2,
+                    'recursion' => 1,
+                    'sorted' => false,
+                    'asCollection' => true,
+                    'toLoad' => false,
+                    'onlyActive' => true,
+                    'onlyIncludeInMenu' => false
+                ]
+            ]
+        ];
+    }
+
+    /**
      * @magentoDataFixture Magento/Store/_files/second_store.php
      * @magentoDataFixture Magento/Catalog/_files/categories.php
      * @magentoDbIsolation disabled
