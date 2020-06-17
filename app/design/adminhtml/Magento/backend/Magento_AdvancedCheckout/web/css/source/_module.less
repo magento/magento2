@@ -28,10 +28,8 @@
 }
 
 .order-discounts {
-    .action-secondary {
-        + .action-secondary {
-            margin-right: @indent__s;
-        }
+    .action-secondary:not(:first-of-type) {
+        margin-right: @indent__s;
     }
 }
 
