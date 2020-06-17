@@ -85,7 +85,7 @@ class Multiaction extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Act
 
         if (isset($action['process']) && $action['process'] == 'configurable') {
             if ($product->canConfigure()) {
-                $id = 'id' .$this->random->getRandomString(32);
+                $id = 'id' .$this->random->getRandomString(10);
                 $onClick = sprintf('return %s.configureItem(%s)', $action['control_object'], $row->getId());
                 return sprintf(
                     '<a href="%s" id="%s" class="configure-item-link">%s</a>%s',

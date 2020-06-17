@@ -125,7 +125,7 @@ class Select extends AbstractElement
             }
             $html .= '</optgroup>' . "\n";
         } else {
-            $optionId = 'optId' .$this->random->getRandomString(32);
+            $optionId = 'optId' .$this->random->getRandomString(8);
             $html = '<option value="' . $this->_escape($option['value']) . '" id="' .$optionId .'" ';
             $html .= isset($option['title']) ? 'title="' . $this->_escape($option['title']) . '"' : '';
             if (in_array($option['value'], $selected)) {
