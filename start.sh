@@ -15,8 +15,9 @@ then
     #/// deploy the static content, compile di and flush the cache :)
     php bin/magento deploy:mode:set production
     php bin/magento maintenance:enable
-    mv pub pub.new
+    #mv pub pub.new
 fi
+touch pre.txt
 #echo "Release complete ...."
 
 

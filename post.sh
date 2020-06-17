@@ -13,10 +13,11 @@ SOUCRE="pub.new"
 TARGET="pub"
 if [ -d "$SOUCRE" ]; then
   cp -a $SOUCRE/* $TARGET/
-  rm -f $SOURCE
+  #rm -f $SOURCE
   php bin/magento cache:flush
-  touch been-here.txt
+  touch post1.txt
 fi
+touch post2.txt
 php bin/magento maintenance:disable
 
 
