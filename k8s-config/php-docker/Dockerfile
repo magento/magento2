@@ -22,5 +22,7 @@ COPY --chown=www-data . /var/www/html
 USER www-data
 RUN cd /var/www/html \
 && chmod -R 775 pub/static pub/get.php pub/static.php bin/magento \
-&& rm -rf .github/ phpserver/ docker/ magento2-sample-data/ \
-&& composer install --no-cache --no-dev
+&& composer install --no-cache --no-dev \
+&& php bin/magento deploy:mode:set production \
+&& php bin/magento maintenance:enable \
+&& mv pub pub.new \
