@@ -46,9 +46,7 @@ class Dynamic implements BucketBuilderInterface
         /** @var DynamicBucket $bucket */
         $algorithm = $this->algorithmRepository->get($bucket->getMethod(), ['dataProvider' => $dataProvider]);
         $data = $algorithm->getItems($bucket, $dimensions, $this->getEntityStorage($queryResult));
-        $resultData = $this->prepareData($data);
-
-        return $resultData;
+        return $this->prepareData($data);
     }
 
     /**
@@ -78,7 +76,8 @@ class Dynamic implements BucketBuilderInterface
         $resultData = [];
         foreach ($data as $value) {
             $rangeName = "{$value['from']}_{$value['to']}";
-            $resultData[$rangeName] = array_merge(['value' => $rangeName], $value);
+            $value['value'] = $rangeName;
+            $resultData[$rangeName] = $value;
         }
 
         return $resultData;
