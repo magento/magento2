@@ -1,0 +1,13 @@
+apiVersion: batch/v1
+kind: Job
+metadata:
+  name: pre-release-actions
+spec:
+  template:
+    spec:
+      containers:
+      - name: php
+        image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
+        command: ["/bin/sh", "-c", "php bin/magento maintenance:enable --root-dir=/var/www/html"]
+      restartPolicy: Never
+  backoffLimit: 4

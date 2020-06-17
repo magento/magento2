@@ -2,7 +2,7 @@
 
 #############################################
 #
-# Release Actions !!!
+# Post Release Actions !!!
 #
 #############################################
 
@@ -17,8 +17,8 @@ then
     #/// deploy the static content, compile di and flush the cache :)
     php bin/magento deploy:mode:set production
 fi
-php bin/magento cache:clean
-echo "Startup complete ...."
+php bin/magento cache:flush
+#echo "Release complete ...."
 
 
 
