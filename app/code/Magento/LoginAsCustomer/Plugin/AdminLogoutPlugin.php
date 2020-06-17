@@ -45,8 +45,9 @@ class AdminLogoutPlugin
      */
     public function beforeLogout(Auth $subject): void
     {
-        if ($this->config->isEnabled() && $subject->getUser()) {
-            $userId = (int)$subject->getUser()->getId();
+        $user = $subject->getUser();
+        if ($this->config->isEnabled() && $user && $user->getIsLoggedAsCustomer()) {
+            $userId = (int)$user->getId();
             $this->deleteAuthenticationDataForUser->execute($userId);
         }
     }

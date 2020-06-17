@@ -13,4 +13,7 @@
     <preference for="Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataForUserInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\DeleteAuthenticationDataForUser"/>
     <preference for="Magento\LoginAsCustomerApi\Api\ConfigInterface" type="Magento\LoginAsCustomer\Model\Config"/>
     <preference for="Magento\LoginAsCustomerApi\Api\IsLoginAsCustomerSessionActiveInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\IsLoginAsCustomerSessionActive"/>
+    <type name="Magento\Backend\Model\Auth">
+        <plugin name="login_as_customer_admin_logout" type="Magento\LoginAsCustomer\Plugin\AdminLogoutPlugin"/>
+    </type>
 </config>
