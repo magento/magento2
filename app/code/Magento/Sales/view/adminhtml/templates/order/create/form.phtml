@@ -24,31 +24,31 @@
         <?= $block->getChildHtml('data') ?>
     </div>
 </form>
-<?php $scriptString = <<<script
+<?php $scriptString = <<<Script
 require(['jquery'], function($){
     'use strict';
 
-script;
+Script;
 if ($block->getCustomerSelectorDisplay()) {
-    $scriptString .= <<<script
+    $scriptString .= <<<Script
     $('div#order-customer-selector').css('display', '{$block->getCustomerSelectorDisplay()}');
     $('div#order-customer-selector').removeClass('no-display');
-script;
+Script;
 }
 if ($block->getStoreSelectorDisplay()) {
-    $scriptString .= <<<script
+    $scriptString .= <<<Script
     $('div#order-store-selector').css('display', '{$block->getStoreSelectorDisplay()}');
     $('div#order-store-selector').removeClass('no-display');
-script;
+Script;
 }
 if ($block->getDataSelectorDisplay()) {
-    $scriptString .= <<<script
+    $scriptString .= <<<Script
     $('div#order-data').css('display', '{$block->getDataSelectorDisplay()}');
     $('div#order-data').removeClass('no-display');
-script;
+Script;
 }
-$scriptString .= <<<script
+$scriptString .= <<<Script
 });
-script;
+Script;
 ?>
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
