@@ -16,7 +16,7 @@ metadata:
   labels:
     app: magento
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: magento
@@ -25,6 +25,8 @@ spec:
       labels:
         app: magento
     spec:
+      strategy:
+        type: Recreate
       securityContext:
         supplementalGroups:
           - 82
@@ -41,7 +43,7 @@ spec:
           - mountPath: /var/www/html/var
             name: magento-var-volume
             subPath: var
-          command: ["/bin/sh", "-c", "chmod -R 0777 /var/www/html/pub; chgrp -R 82 /var/www/html/pub; /var/www/html/start.sh; chmod -R 0777 /var/www/html/pub; chgrp -R 82 /var/www/html/pub; chmod -R 0775 /var/www/html/var; chgrp -R 82 /var/www/html/var"] 
+          command: ["/bin/sh", "-c", "chmod -R 0777 /var/www/html/pub; chmod -R 0775 /var/www/html/var; chgrp -R 82 /var/www/html/pub /var/www/html/var;"] 
           resources:
             requests:
               cpu: "500m"
