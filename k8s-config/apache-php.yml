@@ -17,6 +17,8 @@ metadata:
     app: magento
 spec:
   replicas: 1
+  strategy:
+    type: Recreate
   selector:
     matchLabels:
       app: magento
@@ -25,8 +27,6 @@ spec:
       labels:
         app: magento
     spec:
-      strategy:
-        type: Recreate
       securityContext:
         supplementalGroups:
           - 82
