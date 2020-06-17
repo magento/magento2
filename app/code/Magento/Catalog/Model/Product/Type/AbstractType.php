@@ -586,6 +586,7 @@ abstract class AbstractType
         }
         if ($options !== null) {
             $results = [];
+            $optionsFromRequest = $buyRequest->getOptions();
             foreach ($options as $option) {
                 /* @var $option \Magento\Catalog\Model\Product\Option */
                 try {
@@ -593,8 +594,14 @@ abstract class AbstractType
                         ->setOption($option)
                         ->setProduct($product)
                         ->setRequest($buyRequest)
-                        ->setProcessMode($processMode)
-                        ->validateUserValue($buyRequest->getOptions());
+                        ->setProcessMode($processMode);
+
+                    if ($product->getSkipCheckRequiredOption() !== true) {
+                        $group->validateUserValue($optionsFromRequest);
+                    } else if ($optionsFromRequest !== null && isset($optionsFromRequest[$option->getId()])) {
+                        $transport->options[$option->getId()] = $optionsFromRequest[$option->getId()];
+                    }
+
                 } catch (LocalizedException $e) {
                     $results[] = $e->getMessage();
                     continue;
