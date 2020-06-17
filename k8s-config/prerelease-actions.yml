@@ -8,6 +8,6 @@ spec:
       containers:
       - name: php
         image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
-        command: ["/bin/sh", "-c", "php bin/magento maintenance:enable --root-dir=/var/www/html"]
+        command: ["/bin/sh", "-c", "php /var/www/html/bin/magento maintenance:enable"]
       restartPolicy: Never
   backoffLimit: 4
