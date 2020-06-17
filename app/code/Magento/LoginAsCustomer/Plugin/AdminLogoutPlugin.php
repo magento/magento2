@@ -14,6 +14,8 @@ use Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataForUserInterface;
 
 /**
  * Delete all Login as Customer sessions for logging out admin.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class AdminLogoutPlugin
 {
