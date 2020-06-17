@@ -22,9 +22,6 @@ use Magento\Framework\Api\Filter;
  */
 class OrderFilter
 {
-    /** Minimum query lenth for the filter */
-    private const DEFAULT_MIN_QUERY_LENGTH = 3;
-
     /**
      * @var ScopeConfigInterface
      */
@@ -70,7 +67,7 @@ class OrderFilter
     /**
      * Filter for filtering the requested categories id's based on url_key, ids, name in the result.
      *
-     * @param string $userId
+     * @param int $userId
      * @param array $args
      * @param StoreInterface $store
      * @param SearchCriteriaBuilder $searchCriteriaBuilder

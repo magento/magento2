@@ -521,7 +521,7 @@ QUERY;
     }
     items
     {
-
+      id
       number
       status
       order_date

@@ -34,7 +34,7 @@ input CustomerOrdersFilterInput @doc(description: "Identifies the filter to use 
 
 type CustomerOrders @doc(description: "The collection of orders that match the conditions defined in the filter") {
     items: [CustomerOrder]! @doc(description: "An array of customer orders")
-    page_info: SearchResultPageInfo @doc(description: "An object that includes the current_page page_info and page_size values specified in the query")
+    page_info: SearchResultPageInfo @doc(description: "An object that includes the current_page, page_info, and page_size values specified in the query")
     total_count: Int @doc(description: "The total count of customer orders")
 }
 
@@ -45,15 +45,15 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     number: String! @doc(description: "The order number")
     items: [OrderItemInterface] @doc(description: "An array containing the items purchased in this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderItems")
     total: OrderTotal @doc(description: "Contains details about the calculated totals for this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderTotal")
-    invoices: [Invoice]! @doc(description: "Invoice list for the order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Invoices")
-    credit_memos: [CreditMemo] @doc(description: "credit memo list for the order")
-    shipments: [OrderShipment] @doc(description: "shipment list for the order")
-    payment_methods: [PaymentMethod] @doc(description: "payment details for the order")
-    shipping_address: CustomerAddress @doc(description: "shipping address for the order")
-    billing_address: CustomerAddress @doc(description: "billing address for the order")
-    carrier: String @doc(description: "shipping carrier for the order delivery")
-    shipping_method: String @doc(description: "shipping method for the order")
-    comments: [CommentItem] @doc(description: "comments on the order")
+    invoices: [Invoice]! @doc(description: "A list of invoices for the order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Invoices")
+    credit_memos: [CreditMemo] @doc(description: "A list of credit memos for the order")
+    shipments: [OrderShipment] @doc(description: "A list of shipments for the order")
+    payment_methods: [PaymentMethod] @doc(description: "Payment details for the order")
+    shipping_address: CustomerAddress @doc(description: "The shipping address for the order")
+    billing_address: CustomerAddress @doc(description: "The billing address for the order")
+    carrier: String @doc(description: "The shipping carrier for the order delivery")
+    shipping_method: String @doc(description: "The delivery method for the order")
+    comments: [CommentItem] @doc(description: "Comments about the order")
     increment_id: String @deprecated(reason: "Use the id attribute instead")
     order_number: String! @deprecated(reason: "Use the number attribute instead")
     created_at: String @deprecated(reason: "Use the order_date attribute instead")
@@ -86,18 +86,18 @@ type BundleOrderItem implements OrderItemInterface {
     bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\BundleOptions")
 }
 
-type ItemSelectedBundleOption {
+type ItemSelectedBundleOption @doc(description: "A list of options of the selected bundle product") {
     id: ID! @doc(description: "The unique identifier of the option")
     label: String! @doc(description: "The label of the option")
     values: [ItemSelectedBundleOptionValue!]! @doc(description: "A list of products that represent the values of the parent option")
 }
 
-type ItemSelectedBundleOptionValue {
-    id: ID!
-    product_name: String!
-    product_sku: String!
-    quantity: Float!
-    price: Money!
+type ItemSelectedBundleOptionValue @doc(description: "A list of values for the selected bundle product") {
+    id: ID! @doc(description: "The unique identifier of the value")
+    product_name: String! @doc(description: "The name of the child bundle product")
+    product_sku: String! @doc(description: "The SKU of the child bundle product")
+    quantity: Float! @doc(description: "Indicates how many of this bundle product were ordered")
+    price: Money! @doc(description: "The price of the child bundle product")
 }
 
 type OrderItemOption @doc(description: "Represents order item options like selected or entered") {
@@ -148,10 +148,10 @@ type BundleInvoiceItem implements InvoiceItemInterface{
     bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\BundleOptions")
 }
 
-type InvoiceTotal {
-    subtotal: Money! @doc(description: "The subtotal of the order, excluding shipping, discounts, and taxes")
-    discounts: [Discount] @doc(description: "The applied discounts to the order")
-    total_tax: Money! @doc(description: "The amount of tax applied to the order")
+type InvoiceTotal @doc(description: "Contains price details from an invoice"){
+    subtotal: Money! @doc(description: "The subtotal of the invoice, excluding shipping, discounts, and taxes")
+    discounts: [Discount] @doc(description: "The applied discounts to the invoice")
+    total_tax: Money! @doc(description: "The amount of tax applied to the invoice")
     taxes: [TaxItem] @doc(description: "The order tax details")
     grand_total: Money! @doc(description: "The final total amount, including shipping, discounts, and taxes")
     base_grand_total: Money! @doc(description: "The final base grand total amount in the base currency")
@@ -224,11 +224,11 @@ type CreditMemoItem @doc(description: "Credit memo item details") {
     quantity_invoiced: Float @doc(description: "The number of invoiced items")
 }
 
-type CreditMemoTotal  @doc(description: "Contains credit memo price details") {
-    subtotal: Money! @doc(description: "The subtotal of the order, excluding shipping, discounts, and taxes")
-    discounts: [Discount] @doc(description: "The applied discounts to the order")
-    total_tax: Money! @doc(description: "The amount of tax applied to the order")
-    taxes: [TaxItem] @doc(description: "The order tax details")
+type CreditMemoTotal  @doc(description: "Contains price details from a credit memo") {
+    subtotal: Money! @doc(description: "The subtotal of the credit memo, excluding shipping, discounts, and taxes")
+    discounts: [Discount] @doc(description: "The applied discounts to the credit memo")
+    total_tax: Money! @doc(description: "The amount of tax applied to the credit memo")
+    taxes: [TaxItem] @doc(description: "The credit memo tax details")
     grand_total: Money! @doc(description: "The final total amount, including shipping, discounts, and taxes")
     base_grand_total: Money! @doc(description: "The final base grand total amount in the base currency")
 }

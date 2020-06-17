@@ -11,7 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Sales\Model\Order;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\InvoiceInterface as Invoice;
 
 /**
@@ -29,11 +29,11 @@ class Invoices implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($value['model']) || !($value['model'] instanceof Order)) {
+        if (!(($value['model'] ?? null) instanceof OrderInterface)) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        /** @var Order $orderModel */
+        /** @var OrderInterface $orderModel */
         $orderModel = $value['model'];
         $invoices = [];
         /** @var Invoice $invoice */

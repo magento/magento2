@@ -11,7 +11,7 @@
         "magento/module-graph-ql": "*"
     },
     "suggest": {
-        "magento/module-search": "*"
+        "magento/module-shipping": "*"
     },
     "license": [
         "OSL-3.0",
