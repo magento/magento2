@@ -53,19 +53,18 @@ class Remove
      * Remove product urls from storage
      *
      * @param \Magento\Catalog\Model\ResourceModel\Category $subject
-     * @param \Closure $proceed
+     * @param mixed $result
      * @param \Magento\Catalog\Api\Data\CategoryInterface $category
      * @return mixed
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDelete(
+    public function afterDelete(
         \Magento\Catalog\Model\ResourceModel\Category $subject,
-        \Closure $proceed,
+        $result,
         \Magento\Catalog\Api\Data\CategoryInterface $category
     ) {
         $categoryIds = $this->childrenCategoriesProvider->getChildrenIds($category, true);
         $categoryIds[] = $category->getId();
-        $result = $proceed($category);
         foreach ($categoryIds as $categoryId) {
             $this->deleteRewritesForCategory($categoryId);
         }

@@ -11,15 +11,15 @@ class Grouped
      * Retrieves grouped product options list
      *
      * @param \Magento\Catalog\Helper\Product\Configuration $subject
-     * @param callable $proceed
+     * @param array $result
      * @param \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundGetOptions(
+    public function afterGetOptions(
         \Magento\Catalog\Helper\Product\Configuration $subject,
-        \Closure $proceed,
+        $result,
         \Magento\Catalog\Model\Product\Configuration\Item\ItemInterface $item
     ) {
         $product = $item->getProduct();
@@ -41,7 +41,7 @@ class Grouped
                 }
             }
 
-            $options = array_merge($options, $proceed($item));
+            $options = array_merge($options, $result);
             $isUnConfigured = true;
             foreach ($options as &$option) {
                 if ($option['value']) {
@@ -51,6 +51,6 @@ class Grouped
             }
             return $isUnConfigured ? [] : $options;
         }
-        return $proceed($item);
+        return $result;
     }
 }

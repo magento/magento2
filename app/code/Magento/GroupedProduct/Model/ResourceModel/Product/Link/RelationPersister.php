@@ -9,6 +9,7 @@ namespace Magento\GroupedProduct\Model\ResourceModel\Product\Link;
 use Magento\Catalog\Model\ProductLink\LinkFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Link;
 use Magento\Catalog\Model\ResourceModel\Product\Relation;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\GroupedProduct\Model\ResourceModel\Product\Link as GroupedLink;
 
 class RelationPersister
@@ -63,16 +64,16 @@ class RelationPersister
      * Remove grouped products from product relation table
      *
      * @param Link $subject
-     * @param \Closure $proceed
+     * @param Link $result
      * @param int $linkId
      * @return Link
+     * @throws LocalizedException
      */
-    public function aroundDeleteProductLink(Link $subject, \Closure $proceed, $linkId)
+    public function afterDeleteProductLink(Link $subject, Link $result, $linkId)
     {
         /** @var \Magento\Catalog\Model\ProductLink\Link $link */
         $link = $this->linkFactory->create();
         $subject->load($link, $linkId, $subject->getIdFieldName());
-        $result = $proceed($linkId);
         if ($link->getLinkTypeId() == GroupedLink::LINK_TYPE_GROUPED) {
             $this->relationProcessor->removeRelations(
                 $link->getProductId(),

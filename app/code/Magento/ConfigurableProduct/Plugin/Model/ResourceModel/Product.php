@@ -129,18 +129,17 @@ class Product
      * Gather configurable parent ids of product being deleted and reindex after delete is complete.
      *
      * @param \Magento\Catalog\Model\ResourceModel\Product $subject
-     * @param \Closure $proceed
+     * @param \Magento\Catalog\Model\ResourceModel\Product $result
      * @param \Magento\Catalog\Model\Product $product
      * @return \Magento\Catalog\Model\ResourceModel\Product
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundDelete(
+    public function afterDelete(
         \Magento\Catalog\Model\ResourceModel\Product $subject,
-        \Closure $proceed,
+        \Magento\Catalog\Model\ResourceModel\Product $result,
         \Magento\Catalog\Model\Product $product
     ) {
         $configurableProductIds = $this->configurable->getParentIdsByChild($product->getId());
-        $result = $proceed($product);
         $this->productIndexer->executeList($configurableProductIds);
 
         return $result;

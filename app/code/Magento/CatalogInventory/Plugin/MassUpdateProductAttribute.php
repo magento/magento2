@@ -81,11 +81,10 @@ class MassUpdateProductAttribute
      * Around execute plugin
      *
      * @param Save $subject
-     * @param callable $proceed
      *
-     * @return \Magento\Framework\Controller\ResultInterface
+     * @return array
      */
-    public function aroundExecute(Save $subject, callable $proceed)
+    public function beforeExecute(Save $subject)
     {
         try {
             /** @var \Magento\Framework\App\RequestInterface $request */
@@ -101,16 +100,16 @@ class MassUpdateProductAttribute
                 $this->updateInventoryInProducts($productIds, $websiteId, $inventoryData);
             }
 
-            return $proceed();
+            return [];
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage($e->getMessage());
-            return $proceed();
+            return [];
         } catch (\Exception $e) {
             $this->messageManager->addExceptionMessage(
                 $e,
                 __('Something went wrong while updating the product(s) attributes.')
             );
-            return $proceed();
+            return [];
         }
     }
 

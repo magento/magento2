@@ -41,19 +41,18 @@ class Plugin
      * Add is_configurable field to attribute presentation
      *
      * @param \Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface $subject
-     * @param callable $proceed
+     * @param array $result
      * @param \Magento\Eav\Model\Entity\Attribute $attribute
      *
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundMap(
+    public function afterMap(
         \Magento\Catalog\Model\Entity\Product\Attribute\Group\AttributeMapperInterface $subject,
-        \Closure $proceed,
+        $result,
         \Magento\Eav\Model\Entity\Attribute $attribute
     ) {
         $setId = $this->registry->registry('current_attribute_set')->getId();
-        $result = $proceed($attribute);
         if (!isset($this->configurableAttributes[$setId])) {
             $this->configurableAttributes[$setId] = $this->attributeFactory->create()->getUsedAttributes($setId);
         }

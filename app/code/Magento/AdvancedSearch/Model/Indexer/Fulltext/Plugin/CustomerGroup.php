@@ -36,18 +36,17 @@ class CustomerGroup extends AbstractPlugin
      * Invalidate indexer on customer group save
      *
      * @param Group $subject
-     * @param \Closure $proceed
+     * @param Attribute $result
      * @param AbstractModel $group
      * @return Attribute
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(
+    public function afterSave(
         Group $subject,
-        \Closure $proceed,
+        Attribute $result,
         AbstractModel $group
     ) {
         $needInvalidation = $group->isObjectNew() || $group->dataHasChangedFor('tax_class_id');
-        $result = $proceed($group);
         if ($needInvalidation) {
             $this->indexerRegistry->get(Fulltext::INDEXER_ID)->invalidate();
         }

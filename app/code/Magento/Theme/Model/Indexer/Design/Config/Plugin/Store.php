@@ -29,14 +29,13 @@ class Store
      * Invalidate design config grid indexer on store creation
      *
      * @param StoreStore $subject
-     * @param \Closure $proceed
+     * @param StoreStore $result
      * @return StoreStore
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(StoreStore $subject, \Closure $proceed)
+    public function afterSave(StoreStore $subject, StoreStore $result)
     {
         $isObjectNew = $subject->getId() == 0;
-        $result = $proceed();
         if ($isObjectNew) {
             $this->indexerRegistry->get(Config::DESIGN_CONFIG_GRID_INDEXER_ID)->invalidate();
         }

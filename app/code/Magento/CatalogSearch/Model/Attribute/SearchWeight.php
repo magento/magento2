@@ -40,21 +40,20 @@ class SearchWeight
      *   when an attribute's search weight is changed.
      *
      * @param \Magento\Catalog\Model\ResourceModel\Attribute $subject
-     * @param \Closure $proceed
+     * @param \Magento\Catalog\Model\ResourceModel\Attribute $proceed
      * @param \Magento\Framework\Model\AbstractModel $attribute
      * @return \Magento\Catalog\Model\ResourceModel\Attribute
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(
+    public function afterSave(
         \Magento\Catalog\Model\ResourceModel\Attribute $subject,
-        \Closure $proceed,
+        \Magento\Catalog\Model\ResourceModel\Attribute $result,
         \Magento\Framework\Model\AbstractModel $attribute
     ) {
         $isNew = $attribute->isObjectNew();
         $isWeightChanged = $attribute->dataHasChangedFor('search_weight');
 
-        $result = $proceed($attribute);
         if ($isNew || $isWeightChanged) {
             $this->config->reset();
         }

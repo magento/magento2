@@ -72,19 +72,19 @@ class CustomerGroup
      * Update price index after customer group saved
      *
      * @param GroupRepositoryInterface $subject
-     * @param \Closure $proceed
+     * @param GroupInterface $result
      * @param GroupInterface $group
      *
      * @return GroupInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(
+    public function afterSave(
         GroupRepositoryInterface $subject,
-        \Closure $proceed,
+        GroupInterface $result,
         GroupInterface $group
     ) {
         $isGroupNew = $group->getId() === null;
-        $group = $proceed($group);
+        $group = $result;
         if ($isGroupNew) {
             foreach ($this->getAffectedDimensions((string)$group->getId()) as $dimensions) {
                 $this->tableMaintainer->createTablesForDimensions($dimensions);

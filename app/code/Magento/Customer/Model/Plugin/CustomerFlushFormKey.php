@@ -37,13 +37,12 @@ class CustomerFlushFormKey
     /**
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param FlushFormKey $subject
-     * @param callable $proceed
-     * @param $args
+     * @param $result
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function aroundExecute(FlushFormKey $subject, callable $proceed, ...$args)
+    public function afterExecute(FlushFormKey $subject, $result)
     {
         $currentFormKey = $this->dataFormKey->getFormKey();
-        $proceed(...$args);
         $beforeParams = $this->session->getBeforeRequestParams();
         if (isset($beforeParams['form_key']) && $beforeParams['form_key'] === $currentFormKey) {
             $beforeParams['form_key'] = $this->dataFormKey->getFormKey();

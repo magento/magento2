@@ -29,14 +29,13 @@ class Website
      * Invalidate design config grid indexer on website creation
      *
      * @param StoreWebsite $subject
-     * @param \Closure $proceed
+     * @param StoreWebsite $result
      * @return StoreWebsite
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundSave(StoreWebsite $subject, \Closure $proceed)
+    public function afterSave(StoreWebsite $subject, StoreWebsite $result)
     {
         $isObjectNew = $subject->getId() == 0;
-        $result = $proceed();
         if ($isObjectNew) {
             $this->indexerRegistry->get(Config::DESIGN_CONFIG_GRID_INDEXER_ID)->invalidate();
         }
