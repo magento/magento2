@@ -34,9 +34,7 @@ $classes = $block->getClasses();
         <span
             id="<?= $block->escapeHtml($attributeLabelId) ?>"
             class="<?= $block->escapeHtml($attributeLabelClass) ?>"
-        >
-            <?= $block->escapeHtml($attributeLabel) ?>
-        </span>
+        ><?= $block->escapeHtml($attributeLabel) ?></span>
         <span class="<?= $block->escapeHtml($attributeSelectedClass) ?>"></span>
         <div
             aria-activedescendant=""
