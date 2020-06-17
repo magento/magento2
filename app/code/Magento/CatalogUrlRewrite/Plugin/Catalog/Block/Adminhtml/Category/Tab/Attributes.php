@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-declare(strict_types=1);
-
 namespace Magento\CatalogUrlRewrite\Plugin\Catalog\Block\Adminhtml\Category\Tab;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
@@ -39,7 +37,7 @@ class Attributes
      * @param array $result
      * @return array
      */
-    public function afterGetAttributesMeta(DataProvider $subject, $result): array
+    public function afterGetAttributesMeta(DataProvider $subject, $result)
     {
         if (!isset($result['url_key'])) {
             return $result;
