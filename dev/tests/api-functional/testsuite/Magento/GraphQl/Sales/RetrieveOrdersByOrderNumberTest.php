@@ -112,9 +112,8 @@ QUERY;
         /** @var \Magento\Sales\Api\Data\OrderInterface[] $items */
         $orders = $this->orderRepository->getList($searchCriteria)->getItems();
         foreach ($orders as $order) {
-            $orderId = $order->getEntityId();
             $orderNumber = $order->getIncrementId();
-            $this->assertEquals($orderId, $customerOrderItemsInResponse['id']);
+            $this->assertNotEmpty($customerOrderItemsInResponse['id']);
             $this->assertEquals($orderNumber, $customerOrderItemsInResponse['number']);
             $this->assertEquals('Processing', $customerOrderItemsInResponse['status']);
         }
@@ -137,12 +136,51 @@ QUERY;
     }
 
     /**
+     *  Verify the customer order with tax, discount with shipping tax class set for calculation setting
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_10_percent_off_with_discount_on_shipping.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_shipping_excludeTax_order_display_settings.php
+     */
+    public function testCustomerOrdersSimpleProductWithTaxesAndDiscounts()
+    {
+        $quantity = 4;
+        $sku = 'simple1';
+        $cartId = $this->createEmptyCart();
+        $this->addProductToCart($cartId, $quantity, $sku);
+        $this->setBillingAddress($cartId);
+        $shippingMethod = $this->setShippingAddress($cartId);
+        $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
+        $this->setPaymentMethod($cartId, $paymentMethod);
+        $orderNumber = $this->placeOrder($cartId);
+        $customerOrderResponse = $this->getCustomerOrderQuery($orderNumber);
+        // Asserting discounts on order item level
+        $this->assertEquals(
+            4,
+            $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'USD',
+            $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']
+        );
+        $this->assertEquals(
+            'null',
+            $customerOrderResponse[0]['items'][0]['discounts'][0]['label']
+        );
+        $customerOrderItem = $customerOrderResponse[0];
+        $this->assertTotalsWithTaxesAndDiscountsOnShippingAndTotal($customerOrderItem);
+        $this->deleteOrder();
+    }
+
+    /**
      * Test customer order details with bundle product with child items
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_two_dropdown_options.php
      */
-    public function testGetCustomerOrderWithBundleProduct()
+    public function testGetCustomerOrderBundleProduct()
     {
         $qty = 1;
         $bundleSku = 'bundle-product-two-dropdown-options';
@@ -211,7 +249,7 @@ QUERY;
      * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_10_percent_off_with_discount_on_shipping.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_shipping_excludeTax_order_display_settings.php
      */
-    public function testGetCustomerOrderWithBundleProductWithTaxesAndDiscounts()
+    public function testGetCustomerOrderBundleProductWithTaxesAndDiscounts()
     {
         $qty = 4;
         $bundleSku = 'bundle-product-two-dropdown-options';
@@ -278,10 +316,16 @@ QUERY;
             20,
             $customerOrderItem['total']['total_shipping']['value']
         );
-        $this->assertEquals(
-            1.35,
-            $customerOrderItem['total']['taxes'][0]['amount']['value']
-        );
+        $this->assertCount(2, $customerOrderItem['total']['taxes']);
+        $expectedProductAndShippingTaxes = [4.05, 1.35];
+
+        $totalTaxes = [];
+        foreach ($customerOrderItem['total']['taxes'] as $totalTaxFromResponse) {
+            array_push($totalTaxes, $totalTaxFromResponse['amount']['value']);
+        }
+        foreach ($totalTaxes as $value) {
+            $this->assertTrue(in_array($value, $expectedProductAndShippingTaxes));
+        }
         $this->assertEquals(
             'USD',
             $customerOrderItem['total']['taxes'][0]['amount']['currency']
@@ -293,10 +337,6 @@ QUERY;
         $this->assertEquals(
             7.5,
             $customerOrderItem['total']['taxes'][0]['rate']
-        );
-        $this->assertEquals(
-            4.05,
-            $customerOrderItem['total']['taxes'][1]['amount']['value']
         );
         $this->assertEquals(
             'USD',
@@ -462,7 +502,6 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Sales/_files/orders_with_customer.php
-     * @magentoApiDataFixture Magento/Sales/_files/orders_with_customer.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testGetMultipleCustomerOrdersQueryWithDefaultPagination()
@@ -482,7 +521,7 @@ QUERY;
     }
     items
     {
-      id
+
       number
       status
       order_date
@@ -543,9 +582,8 @@ QUERY;
         $orders = $this->orderRepository->getList($searchCriteria)->getItems();
         $key = 0;
         foreach ($orders as $order) {
-            $orderId = $order->getEntityId();
             $orderNumber = $order->getIncrementId();
-            $this->assertEquals($orderId, $customerOrderItemsInResponse[$key]['id']);
+            $this->assertNotEmpty($customerOrderItemsInResponse[$key]['id']);
             $this->assertEquals($orderNumber, $customerOrderItemsInResponse[$key]['number']);
             $this->assertEquals('Processing', $customerOrderItemsInResponse[$key]['status']);
             $this->assertEquals(
@@ -820,7 +858,9 @@ QUERY;
             '',
             array_merge(
                 $this->customerAuthenticationHeader->execute(
-                $currentEmail, $currentPassword),
+                    $currentEmail,
+                    $currentPassword
+                ),
                 ['Store' => $store]
             )
         );
@@ -856,45 +896,6 @@ QUERY;
     }
 
     /**
-     *  Verify the customer order with tax, discount with shipping tax class set for calculation setting
-     *
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_10_percent_off_with_discount_on_shipping.php
-     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_shipping_excludeTax_order_display_settings.php
-     */
-    public function testCustomerOrderWithTaxesAndDiscountsOnShippingAndTotal()
-    {
-        $quantity = 4;
-        $sku = 'simple1';
-        $cartId = $this->createEmptyCart();
-        $this->addProductToCart($cartId, $quantity, $sku);
-        $this->setBillingAddress($cartId);
-        $shippingMethod = $this->setShippingAddress($cartId);
-        $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
-        $this->setPaymentMethod($cartId, $paymentMethod);
-        $orderNumber = $this->placeOrder($cartId);
-        $customerOrderResponse = $this->getCustomerOrderQuery($orderNumber);
-        // Asserting discounts on order item level
-        $this->assertEquals(
-            4,
-            $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']
-        );
-        $this->assertEquals(
-            'USD',
-            $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']
-        );
-        $this->assertEquals(
-            'null',
-            $customerOrderResponse[0]['items'][0]['discounts'][0]['label']
-        );
-        $customerOrderItem = $customerOrderResponse[0];
-        $this->assertTotalsWithTaxesAndDiscountsOnShippingAndTotal($customerOrderItem);
-        $this->deleteOrder();
-    }
-
-    /**
      * Assert order totals including shipping_handling and taxes
      *
      * @param array $customerOrderItem
@@ -919,32 +920,29 @@ QUERY;
             4.05,
             $customerOrderItem['total']['total_tax']['value']
         );
-
+        $this->assertEquals(
+            -6,
+            $customerOrderItem['total']['discounts'][0]['amount']['value']
+        );
+        $this->assertEquals(
+            'null',
+            $customerOrderItem['total']['discounts'][0]['label']
+        );
         $this->assertEquals(
             20,
             $customerOrderItem['total']['total_shipping']['value']
         );
         $this->assertCount(2, $customerOrderItem['total']['taxes']);
-        $expectedProductAndShippingTaxes =
-            [
-                [
-                    'amount' => [
-                        'value' => 2.7,
-                        'currency' => 'USD',
-                    ],
-                    'title' => 'US-TEST-*-Rate-1',
-                    'rate' => 7.5,
-                ],
-                [
-                    'amount' => [
-                        'value' => 1.35,
-                        'currency' => 'USD'
-                    ],
-                    'title' => 'US-TEST-*-Rate-1',
-                    'rate' => 7.5,
-                ]
-            ];
-        $this->assertEquals($expectedProductAndShippingTaxes, $customerOrderItem['total']['taxes']);
+        $expectedProductAndShippingTaxes = [2.7, 1.35];
+
+        $totalTaxes = [];
+        foreach ($customerOrderItem['total']['taxes'] as $totalTaxFromResponse) {
+            array_push($totalTaxes, $totalTaxFromResponse['amount']['value']);
+        }
+        foreach ($totalTaxes as $value) {
+            $this->assertTrue(in_array($value, $expectedProductAndShippingTaxes));
+        }
+
         $this->assertEquals(
             21.5,
             $customerOrderItem['total']['shipping_handling']['amount_including_tax']['value']
@@ -978,14 +976,6 @@ QUERY;
         $this->assertEquals(
             'null',
             $customerOrderItem['total']['shipping_handling']['discounts'][0]['label']
-        );
-        $this->assertEquals(
-            -6,
-            $customerOrderItem['total']['discounts'][0]['amount']['value']
-        );
-        $this->assertEquals(
-            'null',
-            $customerOrderItem['total']['discounts'][0]['label']
         );
     }
 
@@ -1040,27 +1030,16 @@ QUERY;
             10,
             $customerOrderItem['total']['total_shipping']['value']
         );
-        $expectedProductAndShippingTaxes =
-            [
-                [
-                    'amount' => [
-                        'value' => 1.5,
-                        'currency' => 'USD'
-                    ],
-                    'title' => 'US-TEST-*-Rate-1',
-                    'rate' => 7.5
-                ],
-                [
-                    'amount' => [
-                        'value' => 0.75,
-                        'currency' => 'USD'
-                    ],
+        $expectedProductAndShippingTaxes = [1.5, 0.75];
 
-                    'title' => 'US-TEST-*-Rate-1',
-                    'rate' => 7.5
-                ]
-            ];
-        $this->assertEquals($expectedProductAndShippingTaxes, $customerOrderItem['total']['taxes']);
+        $totalTaxes = [];
+        foreach ($customerOrderItem['total']['taxes'] as $totalTaxFromResponse) {
+            array_push($totalTaxes, $totalTaxFromResponse['amount']['value']);
+        }
+        foreach ($totalTaxes as $value) {
+            $this->assertTrue(in_array($value, $expectedProductAndShippingTaxes));
+        }
+
         $this->assertEquals(
             10.75,
             $customerOrderItem['total']['shipping_handling']['amount_including_tax']['value']
@@ -1073,10 +1052,11 @@ QUERY;
             10,
             $customerOrderItem['total']['shipping_handling']['total_amount']['value']
         );
+        $this->assertCount(1, $customerOrderItem['total']['shipping_handling']['taxes'], 'Count is incorrect');
 
         $this->assertEquals(
             0.75,
-            $customerOrderItem['total']['shipping_handling']['taxes'][1]['amount']['value']
+            $customerOrderItem['total']['shipping_handling']['taxes'][0]['amount']['value']
         );
         $this->assertEquals(
             'US-TEST-*-Rate-1',
