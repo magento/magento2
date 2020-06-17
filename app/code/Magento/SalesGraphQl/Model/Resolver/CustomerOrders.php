@@ -15,7 +15,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
-use Magento\Sales\Model\Order;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query\SearchQuery;
 use Magento\Store\Api\Data\StoreInterface;
 
@@ -69,10 +69,10 @@ class CustomerOrders implements ResolverInterface
 
         $orders = [];
         foreach (($searchResultDto->getItems() ?? []) as $order) {
-            if (!isset($order['model']) && !($order['model'] instanceof Order)) {
+            if (!($order['model'] ?? null instanceof OrderInterface)) {
                 throw new LocalizedException(__('"model" value should be specified'));
             }
-            /** @var Order $orderModel */
+            /** @var OrderInterface $orderModel */
             $orderModel = $order['model'];
             $orders[] = [
                 'created_at' => $order['created_at'],

@@ -12,10 +12,10 @@ use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Sales\Api\Data\InvoiceInterface as Invoice;
+use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\InvoiceItemInterface;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\Sales\Model\Order;
 use Magento\SalesGraphQl\Model\Resolver\OrderItem\DataProvider as OrderItemProvider;
 
 /**
@@ -55,37 +55,38 @@ class InvoiceItems implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($value['model']) || !($value['model'] instanceof Invoice)) {
+        if (!($value['model'] ?? null) instanceof InvoiceInterface)  {
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        if (!isset($value['order']) || !($value['order'] instanceof Order)) {
+        if (!($value['order'] ?? null) instanceof OrderInterface)  {
             throw new LocalizedException(__('"order" value should be specified'));
         }
 
-        /** @var Invoice $invoiceModel */
+        /** @var InvoiceInterface $invoiceModel */
         $invoiceModel = $value['model'];
-        $parentOrder = $value['order'];
+        /** @var OrderInterface $parentOrderModel */
+        $parentOrderModel = $value['order'];
 
         return $this->valueFactory->create(
-            $this->getInvoiceItems($parentOrder, $invoiceModel->getItems())
+            $this->getInvoiceItems($parentOrderModel, $invoiceModel->getItems())
         );
     }
 
     /**
-     * Get Invoice Item Data
+     * Get invoice items data as promise
      *
-     * @param Order $order
+     * @param OrderInterface $order
      * @param array $invoiceItems
      * @return \Closure
      */
-    public function getInvoiceItems(Order $order, array $invoiceItems)
+    public function getInvoiceItems(OrderInterface $order, array $invoiceItems): \Closure
     {
         $itemsList = [];
         foreach ($invoiceItems as $Item) {
             $this->orderItemProvider->addOrderItemId((int)$Item->getOrderItemId());
         }
-        $itemsList = function () use ($order, $invoiceItems, $itemsList) {
+        return function () use ($order, $invoiceItems, $itemsList): array {
             foreach ($invoiceItems as $invoiceItem) {
                 $orderItem = $this->orderItemProvider->getOrderItemById((int)$invoiceItem->getOrderItemId());
                 /** @var OrderItemInterface $orderItemModel */
@@ -99,19 +100,17 @@ class InvoiceItems implements ResolverInterface
             }
             return $itemsList;
         };
-        return $itemsList;
     }
 
     /**
-     * Get resolved Invoice Item Data
+     * Get formatted invoice item data
      *
-     * @param Order $order
+     * @param OrderInterface $order
      * @param InvoiceItemInterface $invoiceItem
      * @return array
      */
-    private function getInvoiceItemData(Order $order, InvoiceItemInterface $invoiceItem)
+    private function getInvoiceItemData(OrderInterface $order, InvoiceItemInterface $invoiceItem): array
     {
-        /** @var OrderItemInterface $orderItem */
         $orderItem = $this->orderItemProvider->getOrderItemById((int)$invoiceItem->getOrderItemId());
         return [
             'id' => base64_encode($invoiceItem->getEntityId()),

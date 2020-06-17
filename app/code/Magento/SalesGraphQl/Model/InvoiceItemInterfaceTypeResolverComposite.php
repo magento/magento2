@@ -11,7 +11,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**
- * @inheritDoc
+ *  Composite class to resolve invoice item type
  */
 class InvoiceItemInterfaceTypeResolverComposite implements TypeResolverInterface
 {

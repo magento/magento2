@@ -129,14 +129,13 @@ class BundleOptions implements ResolverInterface
             // Value Id is missing from parent, so we have to match the child to parent option
             if (isset($bundleChildAttributes['option_id'])
                 && $bundleChildAttributes['option_id'] == $bundleOptionId) {
+                $item = $this->orderItemProvider->getOrderItemById((int)$childrenOrderItem->getItemId());
                 $optionItems[$childrenOrderItem->getItemId()] = [
                     'id' => base64_encode($childrenOrderItem->getItemId()),
                     'product_name' => $childrenOrderItem->getName(),
                     'product_sku' => $childrenOrderItem->getSku(),
                     'quantity' => $bundleChildAttributes['qty'],
-                    'price' => [
-                        'value' => $bundleChildAttributes['price']
-                    ]
+                    'price' => $item['product_sale_price'],
                 ];
             }
         }

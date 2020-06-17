@@ -14,7 +14,7 @@ use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
-use Magento\Sales\Model\Order;
+use Magento\Sales\Api\Data\OrderInterface;
 use Magento\SalesGraphQl\Model\Resolver\OrderItem\DataProvider as OrderItemProvider;
 
 /**
@@ -53,10 +53,10 @@ class OrderItems implements ResolverInterface
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
-        if (!isset($value['model']) || !($value['model'] instanceof Order)) {
+        if (!($value['model'] ?? null) instanceof OrderInterface)  {
             throw new LocalizedException(__('"model" value should be specified'));
         }
-        /** @var Order $parentOrder */
+        /** @var OrderInterface $parentOrder */
         $parentOrder = $value['model'];
         $orderItemIds = [];
         foreach ($parentOrder->getItems() as $item) {
@@ -69,7 +69,7 @@ class OrderItems implements ResolverInterface
         foreach ($orderItemIds as $orderItemId) {
             $itemsList[] = $this->valueFactory->create(
                 function () use ($orderItemId) {
-                    return $this->orderItemProvider->getOrderItemById($orderItemId);
+                    return $this->orderItemProvider->getOrderItemById((int)$orderItemId);
                 }
             );
         }
