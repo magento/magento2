@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomer\Plugin;
 
 use Magento\Backend\Model\Auth;
+use Magento\Backend\Model\Auth\Session as AuthSession;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 use Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataForUserInterface;
 
@@ -16,6 +17,11 @@ use Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataForUserInterface;
  */
 class AdminLogoutPlugin
 {
+    /**
+     * @var AuthSession
+     */
+    private $authSession;
+
     /**
      * @var ConfigInterface
      */
@@ -27,13 +33,16 @@ class AdminLogoutPlugin
     private $deleteAuthenticationDataForUser;
 
     /**
+     * @param AuthSession $authSession
      * @param ConfigInterface $config
      * @param DeleteAuthenticationDataForUserInterface $deleteAuthenticationDataForUser
      */
     public function __construct(
+        AuthSession $authSession,
         ConfigInterface $config,
         DeleteAuthenticationDataForUserInterface $deleteAuthenticationDataForUser
     ) {
+        $this->authSession = $authSession;
         $this->config = $config;
         $this->deleteAuthenticationDataForUser = $deleteAuthenticationDataForUser;
     }
@@ -46,7 +55,8 @@ class AdminLogoutPlugin
     public function beforeLogout(Auth $subject): void
     {
         $user = $subject->getUser();
-        if ($this->config->isEnabled() && $user && $user->getIsLoggedAsCustomer()) {
+        $isLoggedAsCustomer = $this->authSession->getIsLoggedAsCustomer();
+        if ($this->config->isEnabled() && $user && $isLoggedAsCustomer) {
             $userId = (int)$user->getId();
             $this->deleteAuthenticationDataForUser->execute($userId);
         }
