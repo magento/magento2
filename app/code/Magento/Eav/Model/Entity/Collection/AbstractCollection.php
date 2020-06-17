@@ -1210,6 +1210,16 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             }
         }
 
+        foreach ($this->_itemsById as $items) {
+            foreach ($items as $item) {
+                foreach ($this->_selectAttributes as $attributeCode => $attributeId) {
+                    if (!$item->hasData($attributeCode)) {
+                        $item->setData($attributeCode, null);
+                    }
+                }
+            }
+        }
+
         return $this;
     }
 
