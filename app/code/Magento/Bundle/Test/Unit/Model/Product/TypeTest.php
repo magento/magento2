@@ -1525,7 +1525,7 @@ class TypeTest extends \PHPUnit\Framework\TestCase
 
         $this->parentClass($group, $option, $buyRequest, $product);
 
-        $product->expects($this->once())
+        $product->expects($this->any())
             ->method('getSkipCheckRequiredOption')
             ->willReturn(true);
         $buyRequest->expects($this->once())
@@ -2403,9 +2403,6 @@ class TypeTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $group->expects($this->once())
             ->method('setProcessMode')
-            ->willReturnSelf();
-        $group->expects($this->once())
-            ->method('validateUserValue')
             ->willReturnSelf();
         $group->expects($this->once())
             ->method('prepareForCart')
