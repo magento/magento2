@@ -7,9 +7,9 @@
 namespace Magento\MediaGalleryApi\Model;
 
 /**
- * Returns list of blacklist regexp patterns
+ * Returns list of excluded regexp patterns
  */
-interface BlacklistPatternsConfigInterface
+interface ExcludedPatternsConfigInterface
 {
     /**
      * Get regexp patterns
