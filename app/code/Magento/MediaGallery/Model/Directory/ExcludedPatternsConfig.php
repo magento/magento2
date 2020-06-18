@@ -8,14 +8,14 @@ declare(strict_types=1);
 namespace Magento\MediaGallery\Model\Directory;
 
 use Magento\Framework\Config\DataInterface;
-use Magento\MediaGalleryApi\Model\BlacklistPatternsConfigInterface;
+use Magento\MediaGalleryApi\Model\ExcludedPatternsConfigInterface;
 
 /**
  * Media gallery directory config
  */
-class BlacklistPatternsConfig implements BlacklistPatternsConfigInterface
+class ExcludedPatternsConfig implements ExcludedPatternsConfigInterface
 {
-    private const XML_PATH_BLACKLIST_PATTERNS = 'blacklist/patterns';
+    private const XML_PATH_EXCLUDED_PATTERNS = 'exclude/patterns';
 
     /**
      * @var DataInterface
@@ -37,6 +37,6 @@ class BlacklistPatternsConfig implements BlacklistPatternsConfigInterface
      */
     public function get() : array
     {
-        return $this->data->get(self::XML_PATH_BLACKLIST_PATTERNS);
+        return $this->data->get(self::XML_PATH_EXCLUDED_PATTERNS);
     }
 }
