@@ -135,7 +135,12 @@ class BundleOptions implements ResolverInterface
                     'product_name' => $childrenOrderItem->getName(),
                     'product_sku' => $childrenOrderItem->getSku(),
                     'quantity' => $bundleChildAttributes['qty'],
-                    'price' => $item['product_sale_price'],
+                    'price' => [
+                        //use options price, not child price
+                        'value' => $bundleChildAttributes['price'],
+                        //use currency from order
+                        'currency' => $item['product_sale_price']['currency'] ?? null,
+                    ]
                 ];
             }
         }
