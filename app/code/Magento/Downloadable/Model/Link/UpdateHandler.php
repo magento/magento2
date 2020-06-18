@@ -36,6 +36,7 @@ class UpdateHandler implements ExtensionInterface
      * @param object $entity
      * @param array $arguments
      * @return ProductInterface|object
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute($entity, $arguments = [])
     {
