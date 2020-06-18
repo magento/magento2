@@ -9,11 +9,11 @@ namespace Magento\ConfigurableProductGraphQl\Model\Options;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
-use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\CollectionFactory;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection
     as AttributeCollection;
-use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
-use Magento\Catalog\Model\ProductFactory;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\CollectionFactory;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
@@ -121,6 +121,8 @@ class Collection
             $attributeData = $attribute->getData();
             $this->attributeMap[$productId][$attribute->getId()] = $attribute->getData();
             $this->attributeMap[$productId][$attribute->getId()]['id'] = $attribute->getId();
+            $this->attributeMap[$productId][$attribute->getId()]['attribute_id_v2']
+                = $attribute->getProductAttribute()->getAttributeId();
             $this->attributeMap[$productId][$attribute->getId()]['attribute_code']
                 = $attribute->getProductAttribute()->getAttributeCode();
             $this->attributeMap[$productId][$attribute->getId()]['values'] = $attributeData['options'];

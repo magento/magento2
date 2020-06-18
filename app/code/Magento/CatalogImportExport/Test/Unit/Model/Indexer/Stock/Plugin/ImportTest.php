@@ -5,8 +5,6 @@
  */
 declare(strict_types=1);
 
-declare(strict_types=1);
-
 namespace Magento\CatalogImportExport\Test\Unit\Model\Indexer\Stock\Plugin;
 
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor;

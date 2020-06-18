@@ -5,4 +5,8 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/products_with_layered_navigation_attribute_rollback.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture(
+    'Magento/Catalog/_files/products_with_layered_navigation_attribute_rollback.php'
+);

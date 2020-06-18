@@ -106,7 +106,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
         foreach ($names as $name) {
             try {
                 if ($softComparison) {
-                    $this->assertNotRegExp('/\//', $name);
+                    $this->assertDoesNotMatchRegularExpression('/\//', $name);
                 } elseif ($moduleBlock) {
                     $this->assertFalse(false === strpos($name, '_'));
                     $this->assertMatchesRegularExpression('/^([A-Z][A-Za-z\d_]+)+$/', $name);
