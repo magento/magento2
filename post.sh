@@ -11,14 +11,17 @@ cd /var/www/html
 
 SOUCRE="pub.new"
 TARGET="pub"
-if [ -d "$SOUCRE" ]; then
-  cp -a $SOUCRE/* $TARGET/
-  #rm -f $SOURCE
-  php bin/magento cache:flush
-  touch post1.txt
+MAINTENANCE="var/.maintenance.flag"
+if [ -f "$MAINTENANCE" ]; then
+    mv $SOUCRE/* $TARGET/
+    rm -f $SOURCE
+    php bin/magento cache:flush
+    php bin/magento maintenance:disable
+    touch var/post1.txt
+else 
+    php bin/magento deploy:mode:set production --skip-compilation
+    touch var/post2.txt
 fi
-touch post2.txt
-php bin/magento maintenance:disable
 
 
 

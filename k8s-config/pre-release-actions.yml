@@ -5,6 +5,23 @@ metadata:
 spec:
   template:
     spec:
+      securityContext:
+        supplementalGroups:
+          - 82
+        fsGroup: 82
+      initContainers:
+        - name: setup-pub-dir
+          image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
+          securityContext:
+            runAsUser: 0
+          volumeMounts:
+          - mountPath: /var/www/html/pub
+            name: magento-pub-volume
+            subPath: pub
+          - mountPath: /var/www/html/var
+            name: magento-var-volume
+            subPath: var
+          command: ["/bin/sh", "-c", "chmod -R 0777 /var/www/html/pub; chmod -R 0775 /var/www/html/var; chgrp -R 82 /var/www/html/pub /var/www/html/var;"]
       containers:
       - name: php
         image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME

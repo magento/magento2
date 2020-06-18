@@ -16,8 +16,9 @@ then
     php bin/magento deploy:mode:set production
     php bin/magento maintenance:enable
     mv pub pub.new
+    touch var/pre1.txt
 fi
-touch pre.txt
+touch var/pre2.txt
 #echo "Release complete ...."
 
 
