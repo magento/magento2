@@ -9,7 +9,6 @@ namespace Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\App\ObjectManager;
 
 /**
@@ -176,11 +175,6 @@ abstract class AbstractType
     protected $serializer;
 
     /**
-     * @var DriverInterface
-     */
-    private $filesystemDriver;
-
-    /**
      * Construct
      *
      * @param \Magento\Catalog\Model\Product\Option $catalogProductOption
@@ -193,7 +187,6 @@ abstract class AbstractType
      * @param \Psr\Log\LoggerInterface $logger
      * @param ProductRepositoryInterface $productRepository
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @param DriverInterface|null $filesystemDriver
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -206,8 +199,7 @@ abstract class AbstractType
         \Magento\Framework\Registry $coreRegistry,
         \Psr\Log\LoggerInterface $logger,
         ProductRepositoryInterface $productRepository,
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
-        DriverInterface $filesystemDriver = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null
     ) {
         $this->_catalogProductOption = $catalogProductOption;
         $this->_eavConfig = $eavConfig;
@@ -220,8 +212,6 @@ abstract class AbstractType
         $this->productRepository = $productRepository;
         $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
-        $this->filesystemDriver = $filesystemDriver ?: ObjectManager::getInstance()
-            ->get(DriverInterface::class);
     }
 
     /**
@@ -508,7 +498,8 @@ abstract class AbstractType
                         /** @var $uploader \Zend_File_Transfer_Adapter_Http */
                         $uploader = isset($queueOptions['uploader']) ? $queueOptions['uploader'] : null;
 
-                        $path = $this->filesystemDriver->getParentDirectory($dst);
+                        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                        $path = dirname($dst);
 
                         try {
                             $rootDir = $this->_filesystem->getDirectoryWrite(
