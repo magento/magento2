@@ -17,7 +17,7 @@ use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 use Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface;
 
 /**
- * Observe the adminhtml_cmspage_on_delete event and deletes relation between page content and media asset.
+ * Observe the cms_page_delete_before event and deletes relation between page content and media asset.
  */
 class PageDelete implements ObserverInterface
 {
@@ -32,8 +32,8 @@ class PageDelete implements ObserverInterface
     private $contentIdentityFactory;
 
     /**
-      * @var ContentAssetLinkInterfaceFactory
-      */
+     * @var ContentAssetLinkInterfaceFactory
+     */
     private $contentAssetLinkFactory;
 
     /**
@@ -62,6 +62,7 @@ class PageDelete implements ObserverInterface
      * @param DeleteContentAssetLinksInterface $deleteContentAssetLinks
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param ContentAssetLinkInterfaceFactory $contentAssetLinkFactory
+     * @param arry $fields
      */
     public function __construct(
         ExtractAssetsFromContentInterface $extractAssetsFromContent,
@@ -88,7 +89,7 @@ class PageDelete implements ObserverInterface
     public function execute(Observer $observer): void
     {
         $model = $observer->getEvent()->getData('object');
-        $contentAssetsLinks = [];
+        $contentAssetLinks = [];
         
         if ($model instanceof CmsPage) {
             foreach ($this->fields as $field) {

@@ -32,8 +32,8 @@ class ProductDelete implements ObserverInterface
     private $contentIdentityFactory;
 
     /**
-      * @var ContentAssetLinkInterfaceFactory
-      */
+     * @var ContentAssetLinkInterfaceFactory
+     */
     private $contentAssetLinkFactory;
 
     /**
@@ -62,6 +62,7 @@ class ProductDelete implements ObserverInterface
      * @param DeleteContentAssetLinksInterface $deleteContentAssetLinks
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param ContentAssetLinkInterfaceFactory $contentAssetLinkFactory
+     * @param array $fields
      */
     public function __construct(
         ExtractAssetsFromContentInterface $extractAssetsFromContent,
@@ -88,7 +89,7 @@ class ProductDelete implements ObserverInterface
     public function execute(Observer $observer): void
     {
         $model = $observer->getEvent()->getData('product');
-        $contentAssetsLinks = [];
+        $contentAssetLinks = [];
         
         if ($model instanceof CatalogProduct) {
             foreach ($this->fields as $field) {

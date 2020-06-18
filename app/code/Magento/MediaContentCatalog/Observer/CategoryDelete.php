@@ -32,8 +32,8 @@ class CategoryDelete implements ObserverInterface
     private $contentIdentityFactory;
 
     /**
-      * @var ContentAssetLinkInterfaceFactory
-      */
+     * @var ContentAssetLinkInterfaceFactory
+     */
     private $contentAssetLinkFactory;
 
     /**
@@ -62,6 +62,7 @@ class CategoryDelete implements ObserverInterface
      * @param DeleteContentAssetLinksInterface $deleteContentAssetLinks
      * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param ContentAssetLinkInterfaceFactory $contentAssetLinkFactory
+     * @param array $fields
      */
     public function __construct(
         ExtractAssetsFromContentInterface $extractAssetsFromContent,
@@ -88,7 +89,7 @@ class CategoryDelete implements ObserverInterface
     public function execute(Observer $observer): void
     {
         $model = $observer->getEvent()->getData('category');
-        $contentAssetsLinks = [];
+        $contentAssetLinks = [];
         
         if ($model instanceof CatalogCategory) {
             foreach ($this->fields as $field) {
