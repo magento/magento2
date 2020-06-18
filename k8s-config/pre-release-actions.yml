@@ -16,12 +16,18 @@ spec:
           - mountPath: /var/www/html/var
             name: magento-var-volume
             subPath: var
+          - mountPath: /var/www/html/pub
+            name: magento-pub-volume
+            subPath: pub
         securityContext:
           runAsUser: 0
-        command: ["/bin/sh", "-c", "chmod -R 0775 /var/www/html/var; chgrp -R 82 /var/www/html/var; /var/www/html/start.sh; chgrp -R 82 /var/www/html/var"]
+        command: ["/bin/sh", "-c", "chmod -R 0775 /var/www/html/var /var/www/html/pub; chgrp -R 82 /var/www/html/var /var/www/html/pub; /var/www/html/start.sh; chgrp -R 82 /var/www/html/var /var/www/html/pub"]
       volumes:
       - name: magento-var-volume
         persistentVolumeClaim:
           claimName: nfs-pvc-2
+      - name: magento-pub-volume
+        persistentVolumeClaim:
+          claimName: nfs-pvc-1
       restartPolicy: Never
   backoffLimit: 4

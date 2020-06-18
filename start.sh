@@ -14,7 +14,7 @@ if [ $MODE != 'production' ]
 then
     #/// set maintenance mode
     php bin/magento maintenance:enable
-    mv pub.release/* pub/
+    cp -a pub.release/* pub/
     touch var/pre1.txt
 fi
 touch var/pre2.txt
