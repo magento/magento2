@@ -349,8 +349,8 @@ class ProductDataMapper implements BatchDataMapperInterface
      */
     private function retrieveFieldValue(array $values)
     {
-        $values = \array_unique($values);
+        $values = array_unique($values);
 
-        return count($values) === 1 ? \array_shift($values) : \array_values($values);
+        return count($values) === 1 ? array_shift($values) : array_values($values);
     }
 }
