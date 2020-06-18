@@ -36,7 +36,7 @@ class CompositeCollectionProcessor implements CollectionProcessorInterface
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
         array $attributeNames,
-        ContextInterface $context
+        ContextInterface $context = null
     ): Collection {
         foreach ($this->collectionProcessors as $collectionProcessor) {
             $collection = $collectionProcessor->process($collection, $searchCriteria, $attributeNames, $context);

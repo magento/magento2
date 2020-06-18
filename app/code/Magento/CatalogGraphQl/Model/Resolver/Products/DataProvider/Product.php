@@ -74,7 +74,7 @@ class Product
      * @param string[] $attributes
      * @param bool $isSearch
      * @param bool $isChildSearch
-     * @param ContextInterface $context
+     * @param ContextInterface|null $context
      * @return SearchResultsInterface
      */
     public function getList(
@@ -82,7 +82,7 @@ class Product
         array $attributes = [],
         bool $isSearch = false,
         bool $isChildSearch = false,
-        ContextInterface $context
+        ContextInterface $context = null
     ): SearchResultsInterface {
         /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $collection */
         $collection = $this->collectionFactory->create();

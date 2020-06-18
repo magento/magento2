@@ -85,14 +85,14 @@ class ProductSearch
      * @param SearchCriteriaInterface $searchCriteria
      * @param SearchResultInterface $searchResult
      * @param array $attributes
-     * @param ContextInterface $context
+     * @param ContextInterface|null $context
      * @return SearchResultsInterface
      */
     public function getList(
         SearchCriteriaInterface $searchCriteria,
         SearchResultInterface $searchResult,
         array $attributes = [],
-        ContextInterface $context
+        ContextInterface $context = null
     ): SearchResultsInterface {
         /** @var Collection $collection */
         $collection = $this->collectionFactory->create();

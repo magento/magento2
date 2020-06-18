@@ -20,13 +20,20 @@ use Magento\GraphQl\Model\Query\ContextInterface;
 class RequiredColumnsProcessor implements CollectionProcessorInterface
 {
     /**
-     * {@inheritdoc}
+     * Process collection to add additional joins, attributes, and clauses to a product collection.
+     *
+     * @param Collection $collection
+     * @param SearchCriteriaInterface $searchCriteria
+     * @param array $attributeNames
+     * @param ContextInterface|null $context
+     * @return Collection
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function process(
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
         array $attributeNames,
-        ContextInterface $context
+        ContextInterface $context = null
     ): Collection {
         $collection->addAttributeToSelect('special_price');
         $collection->addAttributeToSelect('special_price_from');
