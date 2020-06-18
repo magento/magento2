@@ -38,4 +38,3 @@ $wishlist->setSharingCode('fixture_unique_code')->save();
 $indexer = Bootstrap::getObjectManager()->create(\Magento\Indexer\Model\Indexer::class);
 $indexer->load('catalog_product_price');
 $indexer->reindexList([$product->getId()]);
-
