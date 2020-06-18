@@ -101,11 +101,11 @@ class CustomerSharingOptionsTest extends WebapiAbstract
      * @param bool $expectingException
      * @dataProvider getCustomerDataWebsiteScopeDataProvider
      *
-     * @magentoApiDataFixture Magento/Store/_files/second_website_with_two_stores.php
      * @magentoConfigFixture default_store customer/account_share/scope 1
      */
     public function testGetCustomerDataWebsiteScope(string $storeCode, bool $expectingException)
     {
+        $this->_markTestAsRestOnly('SOAP is difficult to generate exception messages, inconsistencies in WSDL');
         $this->processGetCustomerData($storeCode, $expectingException);
     }
 
@@ -144,9 +144,10 @@ class CustomerSharingOptionsTest extends WebapiAbstract
         if (TESTS_WEB_API_ADAPTER === 'soap') {
             $arguments['customerId'] = 0;
         }
+
         if ($expectingException) {
-            $this->expectException(\Exception::class);
-            $this->expectExceptionMessage("The consumer isn't authorized to access %resources.");
+            self::expectException(\Exception::class);
+            self::expectExceptionMessage("The consumer isn't authorized to access %resources.");
         }
 
         $this->_webApiCall($serviceInfo, $arguments, null, $storeCode);
