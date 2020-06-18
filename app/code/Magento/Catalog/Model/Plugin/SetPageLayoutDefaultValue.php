@@ -11,7 +11,11 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Plugin;
 
 use Magento\Catalog\Model\Category\DataProvider;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Sets the default value for Category Design Layout if provided
@@ -21,11 +25,28 @@ class SetPageLayoutDefaultValue
     private $defaultValue;
 
     /**
-     * @param string $defaultValue
+     * @var StoreManagerInterface
      */
-    public function __construct(string $defaultValue = "")
-    {
+    protected $storeManager;
+
+    /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @param string $defaultValue
+     * @param ScopeConfigInterface|null $scopeConfig
+     * @param StoreManagerInterface|null $storeManager
+     */
+    public function __construct(
+        string $defaultValue = "",
+        ScopeConfigInterface $scopeConfig = null,
+        StoreManagerInterface $storeManager = null
+    ) {
         $this->defaultValue = $defaultValue;
+        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
+        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
     }
 
     /**
@@ -41,8 +62,16 @@ class SetPageLayoutDefaultValue
     {
         $currentCategory = $subject->getCurrentCategory();
 
+        $defaultAdminValue = $this->scopeConfig->getValue(
+            'web/default_layouts/default_category_layout',
+            ScopeInterface::SCOPE_STORE,
+            $this->storeManager->getStore()
+        );
+
+        $defaultValue = $defaultAdminValue ?: $this->defaultValue;
+
         if ($currentCategory && !$currentCategory->getId() && array_key_exists('page_layout', $result)) {
-            $result['page_layout']['default'] = $this->defaultValue ?: null;
+            $result['page_layout']['default'] = $defaultValue ?: null;
         }
 
         return $result;
