@@ -16,7 +16,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-25622"/>
             <group value="catalog"/>
-            <group value="urlRewrite"/>
+            <group value="url_rewrite"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>

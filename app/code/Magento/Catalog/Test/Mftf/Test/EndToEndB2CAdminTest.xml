@@ -202,8 +202,7 @@
 
         <!--Admin creates category-->
         <comment userInput="Admin creates category." stepKey="adminCreatesCategoryComment" before="navigateToCategoryPage"/>
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
-        <waitForPageLoad time="30" stepKey="waitForCategoryPageLoad"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage"/>
         <!--Create category under Default Category-->
         <click selector="{{AdminCategorySidebarTreeSection.categoryTreeRoot}}" stepKey="clickDefaultCategory"/>
         <actionGroup ref="CheckCategoryNameIsRequiredFieldActionGroup" stepKey="checkCategoryNameIsRequired"/>
@@ -218,8 +217,7 @@
 
         <!--Admin moves category-->
         <comment userInput="Admin moves category." stepKey="adminMovesCategoryComment" before="onCategoryPageToMoveCategory"/>
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="onCategoryPageToMoveCategory"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoadMoveCategory"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="onCategoryPageToMoveCategory"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandTree"/>
         <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}"
                      selector2="{{AdminCategorySidebarTreeSection.categoryTreeRoot}}"
@@ -233,8 +231,7 @@
 
         <!--Admin deletes category-->
         <comment userInput="Admin deletes category" stepKey="deleteCategoryComment"/>
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="onCategoryPageToDeleteCategory"/>
-        <waitForPageLoad time="30" stepKey="waitForCategoryPageDelete"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="onCategoryPageToDeleteCategory"/>
         <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
             <argument name="categoryEntity" value="_defaultCategory"/>
         </actionGroup>

@@ -18,7 +18,7 @@ class LibraryLocationTest extends \PHPUnit\Framework\TestCase
      */
     protected static $root;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$root = BP;
     }

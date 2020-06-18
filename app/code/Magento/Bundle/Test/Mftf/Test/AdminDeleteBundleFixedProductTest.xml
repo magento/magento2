@@ -23,6 +23,7 @@
             <createData entity="FixedBundleProduct" stepKey="createFixedBundleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

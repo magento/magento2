@@ -3,46 +3,47 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav;
-use Magento\Eav\Model\Config;
-use Magento\Eav\Model\Entity\Attribute\Source\SourceInterface;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Phrase;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Ui\DataProvider\EavValidationRules;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection as GroupCollection;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory as GroupCollectionFactory;
-use Magento\Eav\Model\Entity\Attribute\Group;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute as EavAttribute;
+use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory as EavAttributeFactory;
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Eav;
+use Magento\Eav\Api\Data\AttributeGroupInterface;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\Group;
+use Magento\Eav\Model\Entity\Attribute\Source\SourceInterface;
 use Magento\Eav\Model\Entity\Type as EntityType;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\Collection as AttributeCollection;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollectionFactory;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\Collection as GroupCollection;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute\Group\CollectionFactory as GroupCollectionFactory;
+use Magento\Framework\Api\AbstractSimpleObject;
+use Magento\Framework\Api\AttributeInterface;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchResultsInterface;
+use Magento\Framework\Api\SortOrderBuilder;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Currency;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Locale\Currency as CurrencyLocale;
+use Magento\Framework\Phrase;
+use Magento\Framework\Stdlib\ArrayManager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Ui\DataProvider\Mapper\FormElement as FormElementMapper;
 use Magento\Ui\DataProvider\Mapper\MetaProperties as MetaPropertiesMapper;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface;
-use Magento\Framework\Api\SearchCriteria;
-use Magento\Framework\Api\SortOrderBuilder;
-use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
-use Magento\Framework\Api\SearchResultsInterface;
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
-use Magento\Framework\Api\AttributeInterface;
-use Magento\Eav\Api\Data\AttributeGroupInterface;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
-use Magento\Framework\Currency;
-use Magento\Framework\Locale\Currency as CurrencyLocale;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Catalog\Model\ResourceModel\Eav\AttributeFactory as EavAttributeFactory;
-use Magento\Framework\Event\ManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class to test Data provider for eav attributes on product page
- *
  * @method Eav getModel
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -202,7 +203,7 @@ class EavTest extends AbstractModifierTest
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->objectManager = new ObjectManager($this);
@@ -291,7 +292,7 @@ class EavTest extends AbstractModifierTest
             ->getMock();
         $this->eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->eavAttributeFactoryMock->expects($this->any())
             ->method('create')
@@ -325,7 +326,7 @@ class EavTest extends AbstractModifierTest
             ->willReturn($this->attributeCollectionMock);
         $this->productMock->expects($this->any())
             ->method('getAttributes')
-            ->willReturn([$this->attributeMock,]);
+            ->willReturn([$this->attributeMock]);
         $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->setMethods(['load', 'getId', 'getConfig', 'getBaseCurrencyCode'])
             ->getMockForAbstractClass();
@@ -415,7 +416,7 @@ class EavTest extends AbstractModifierTest
             ->willReturnSelf();
         $this->sortOrderBuilderMock->expects($this->once())->method('setAscendingDirection')
             ->willReturnSelf();
-        $dataObjectMock = $this->createMock(\Magento\Framework\Api\AbstractSimpleObject::class);
+        $dataObjectMock = $this->createMock(AbstractSimpleObject::class);
         $this->sortOrderBuilderMock->expects($this->once())->method('create')
             ->willReturn($dataObjectMock);
 
@@ -509,7 +510,8 @@ class EavTest extends AbstractModifierTest
         $this->productMock->method('getCustomAttribute')->willReturn($attributeMock);
         $this->eavAttributeMock->method('usesSource')->willReturn(true);
 
-        $attributeSource = $this->getMockBuilder(SourceInterface::class)->getMockForAbstractClass();
+        $attributeSource = $this->getMockBuilder(SourceInterface::class)
+            ->getMockForAbstractClass();
         $attributeSource->method('getAllOptions')->willReturn($attributeOptions);
 
         $this->eavAttributeMock->method('getSource')->willReturn($attributeSource);
@@ -570,7 +572,6 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0,
-                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
             ],
             'default_null_prod_not_new_locked_and_required' => [
@@ -590,7 +591,6 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0,
-                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
                 'locked' => true,
             ],
@@ -611,7 +611,6 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0,
-                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
             ],
             'default_null_prod_new_and_not_required' => [
@@ -631,7 +630,6 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0,
-                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
             ],
             'default_null_prod_new_locked_and_not_required' => [
@@ -651,7 +649,6 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0,
-                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
                 'locked' => true,
             ],
@@ -672,7 +669,6 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0,
-                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
             ],
             'datetime_null_prod_not_new_and_required' => [
@@ -692,7 +688,6 @@ class EavTest extends AbstractModifierTest
                     'scopeLabel' => '',
                     'globalScope' => false,
                     'sortOrder' => 0,
-                    '__disableTmpl' => ['label' => true, 'code' => true]
                 ],
                 'locked' => false,
                 'frontendInput' => 'datetime',

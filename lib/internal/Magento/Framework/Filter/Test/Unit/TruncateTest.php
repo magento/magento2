@@ -3,9 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Filter\Test\Unit;
 
-class TruncateTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Filter\Truncate;
+use Magento\Framework\Stdlib\StringUtils;
+use PHPUnit\Framework\TestCase;
+
+class TruncateTest extends TestCase
 {
     /**
      * @param string $string
@@ -17,7 +23,7 @@ class TruncateTest extends \PHPUnit\Framework\TestCase
     public function testTruncate($string, $args, $expected, $expectedReminder)
     {
         list($strLib, $length, $etc, $reminder, $breakWords) = $args;
-        $filter = new \Magento\Framework\Filter\Truncate($strLib, $length, $etc, $reminder, $breakWords);
+        $filter = new Truncate($strLib, $length, $etc, $reminder, $breakWords);
         $this->assertEquals($expected, $filter->filter($string));
 
         $this->assertEquals($expectedReminder, $reminder);
@@ -32,13 +38,13 @@ class TruncateTest extends \PHPUnit\Framework\TestCase
         return [
             '1' => [
                 '1234567890',
-                [new \Magento\Framework\Stdlib\StringUtils(), 5, '...', '', true],
+                [new StringUtils(), 5, '...', '', true],
                 '12...',
                 '34567890',
             ],
             '2' => [
                 '123 456 789',
-                [new \Magento\Framework\Stdlib\StringUtils(), 8, '..', $remainder, false],
+                [new StringUtils(), 8, '..', $remainder, false],
                 '123..',
                 ' 456 789',
             ]

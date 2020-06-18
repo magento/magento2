@@ -3,97 +3,116 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\User\Test\Unit\Block\Role\Grid;
+
+use Magento\Authorization\Model\Role;
+use Magento\Authorization\Model\RoleFactory;
+use Magento\Backend\Helper\Data;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadInterface;
+use Magento\Framework\Json\EncoderInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\LayoutInterface;
+use Magento\User\Block\Role\Grid\User;
+use Magento\User\Controller\Adminhtml\User\Role\SaveRole;
+use Magento\User\Model\ResourceModel\Role\User\CollectionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class UserTest to cover Magento\User\Block\Role\Grid\User
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class UserTest extends \PHPUnit\Framework\TestCase
+class UserTest extends TestCase
 {
-    /** @var \Magento\User\Block\Role\Grid\User */
+    /** @var User */
     protected $model;
 
-    /** @var \Magento\Backend\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Data|MockObject */
     protected $backendHelperMock;
 
-    /** @var \Magento\Framework\Json\EncoderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var EncoderInterface|MockObject */
     protected $jsonEncoderMock;
 
-    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Registry|MockObject */
     protected $registryMock;
 
-    /** @var \Magento\Authorization\Model\RoleFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RoleFactory|MockObject */
     protected $roleFactoryMock;
 
-    /** @var \Magento\User\Model\ResourceModel\Role\User\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var CollectionFactory|MockObject */
     protected $userRolesFactoryMock;
 
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RequestInterface|MockObject */
     protected $requestInterfaceMock;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UrlInterface|MockObject */
     protected $urlInterfaceMock;
 
-    /** @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var LayoutInterface|MockObject */
     protected $layoutMock;
 
-    /** @var \Magento\Framework\Filesystem|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Filesystem|MockObject */
     protected $filesystemMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->backendHelperMock = $this->getMockBuilder(\Magento\Backend\Helper\Data::class)
+        $this->backendHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->jsonEncoderMock = $this->getMockBuilder(\Magento\Framework\Json\EncoderInterface::class)
+        $this->jsonEncoderMock = $this->getMockBuilder(EncoderInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMockForAbstractClass();
+
+        $this->registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->registryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->roleFactoryMock = $this->getMockBuilder(\Magento\Authorization\Model\RoleFactory::class)
+        $this->roleFactoryMock = $this->getMockBuilder(RoleFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
         $this->userRolesFactoryMock = $this
-            ->getMockBuilder(\Magento\User\Model\ResourceModel\Role\User\CollectionFactory::class)
+            ->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->requestInterfaceMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->requestInterfaceMock = $this->getMockBuilder(RequestInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMockForAbstractClass();
+
+        $this->urlInterfaceMock = $this->getMockBuilder(UrlInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMockForAbstractClass();
+
+        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods([])
+            ->getMockForAbstractClass();
+
+        $this->filesystemMock = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->urlInterfaceMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $this->filesystemMock = $this->getMockBuilder(\Magento\Framework\Filesystem::class)
-            ->disableOriginalConstructor()
-            ->setMethods([])
-            ->getMock();
-
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
-            \Magento\User\Block\Role\Grid\User::class,
+            User::class,
             [
                 'backendHelper' => $this->backendHelperMock,
                 'jsonEncoder' => $this->jsonEncoderMock,
@@ -123,8 +142,8 @@ class UserTest extends \PHPUnit\Framework\TestCase
     {
         $roleId = 1;
         $roles = ['role1', 'role2', 'role3'];
-        /** @var \Magento\Authorization\Model\Role|\PHPUnit_Framework_MockObject_MockObject */
-        $roleModelMock = $this->getMockBuilder(\Magento\Authorization\Model\Role::class)
+        /** @var Role|MockObject */
+        $roleModelMock = $this->getMockBuilder(Role::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -134,7 +153,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
         $this->registryMock->expects($this->once())
             ->method('registry')
-            ->with(\Magento\User\Controller\Adminhtml\User\Role\SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY)
+            ->with(SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY)
             ->willReturn(null);
 
         $this->roleFactoryMock->expects($this->once())->method('create')->willReturn($roleModelMock);
@@ -149,8 +168,8 @@ class UserTest extends \PHPUnit\Framework\TestCase
     {
         $roleId = 1;
         $roles = ['role1', 'role2', 'role3'];
-        /** @var \Magento\Authorization\Model\Role|\PHPUnit_Framework_MockObject_MockObject */
-        $roleModelMock = $this->getMockBuilder(\Magento\Authorization\Model\Role::class)
+        /** @var Role|MockObject */
+        $roleModelMock = $this->getMockBuilder(Role::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -160,7 +179,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
         $this->registryMock->expects($this->once())
             ->method('registry')
-            ->with(\Magento\User\Controller\Adminhtml\User\Role\SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY)
+            ->with(SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY)
             ->willReturn('role1=value1&role2=value2&role3=value3');
 
         $this->roleFactoryMock->expects($this->never())->method('create')->willReturn($roleModelMock);
@@ -173,8 +192,8 @@ class UserTest extends \PHPUnit\Framework\TestCase
     {
         $roleId = 1;
         $roles = [];
-        /** @var \Magento\Authorization\Model\Role|\PHPUnit_Framework_MockObject_MockObject */
-        $roleModelMock = $this->getMockBuilder(\Magento\Authorization\Model\Role::class)
+        /** @var Role|MockObject */
+        $roleModelMock = $this->getMockBuilder(Role::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
@@ -184,7 +203,7 @@ class UserTest extends \PHPUnit\Framework\TestCase
 
         $this->registryMock->expects($this->once())
             ->method('registry')
-            ->with(\Magento\User\Controller\Adminhtml\User\Role\SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY)
+            ->with(SaveRole::IN_ROLE_USER_FORM_DATA_SESSION_KEY)
             ->willReturn(null);
 
         $this->roleFactoryMock->expects($this->once())->method('create')->willReturn($roleModelMock);
@@ -197,11 +216,11 @@ class UserTest extends \PHPUnit\Framework\TestCase
     public function testPrepareColumns()
     {
         $this->requestInterfaceMock->expects($this->any())->method('getParam')->willReturn(1);
-        $layoutBlockMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
+        $layoutBlockMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
-        $blockMock = $this->getMockBuilder(\Magento\Framework\View\Element\AbstractBlock::class)
+            ->getMockForAbstractClass();
+        $blockMock = $this->getMockBuilder(AbstractBlock::class)
             ->disableOriginalConstructor()
             ->setMethods(['setGrid', 'setId', 'setData', 'getLayout', 'getChildNames', 'isAvailable'])
             ->setMockClassName('mainblock')
@@ -217,10 +236,10 @@ class UserTest extends \PHPUnit\Framework\TestCase
         $layoutBlockMock->expects($this->any())->method('getChildName')->willReturn('name');
         $layoutBlockMock->expects($this->any())->method('getBlock')->willReturn($blockMock);
         $layoutBlockMock->expects($this->any())->method('createBlock')->willReturn($blockMock);
-        $directoryMock = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\ReadInterface::class)
+        $directoryMock = $this->getMockBuilder(ReadInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->filesystemMock->expects($this->any())->method('getDirectoryRead')->willReturn($directoryMock);
         $directoryMock->expects($this->any())->method('getRelativePath')->willReturn('filename');
 
