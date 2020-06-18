@@ -297,6 +297,35 @@ class ProductRepositoryTest extends WebapiAbstract
     }
 
     /**
+     * Update downloadable product extension attribute and check data
+     *
+     * @return void
+     */
+    public function testUpdateDownloadableProductData(): void
+    {
+        $this->createDownloadableProduct();
+        $extensionAttributes = ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY;
+
+        $productData = [
+            ProductInterface::SKU => self::PRODUCT_SKU,
+            ProductInterface::EXTENSION_ATTRIBUTES_KEY => [
+                'stock_item' => [
+                    'manage_stock' => false,
+                ],
+            ],
+        ];
+
+        $response = $this->saveProduct($productData);
+
+        $this->assertArrayHasKey(ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY, $response);
+        $this->assertArrayHasKey('downloadable_product_samples', $response[$extensionAttributes]);
+        $this->assertArrayHasKey('downloadable_product_links', $response[$extensionAttributes]);
+
+        $this->assertCount(2, $response[$extensionAttributes]['downloadable_product_samples']);
+        $this->assertCount(2, $response[$extensionAttributes]['downloadable_product_links']);
+    }
+
+    /**
      * Update downloadable product, update two links and change file content
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */

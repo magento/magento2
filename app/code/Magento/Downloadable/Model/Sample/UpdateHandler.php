@@ -5,15 +5,18 @@
  */
 namespace Magento\Downloadable\Model\Sample;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Downloadable\Api\SampleRepositoryInterface as SampleRepository;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
- * Class UpdateHandler
+ * UpdateHandler for downloadable product samples
  */
 class UpdateHandler implements ExtensionInterface
 {
+    private const GLOBAL_SCOPE_ID = 0;
+
     /**
      * @var SampleRepository
      */
@@ -28,35 +31,48 @@ class UpdateHandler implements ExtensionInterface
     }
 
     /**
+     * Update samples for downloadable product if exist
+     *
      * @param object $entity
      * @param array $arguments
-     * @return \Magento\Catalog\Api\Data\ProductInterface|object
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return ProductInterface|object
      */
     public function execute($entity, $arguments = [])
     {
-        /** @var $entity \Magento\Catalog\Api\Data\ProductInterface */
-        if ($entity->getTypeId() != Type::TYPE_DOWNLOADABLE) {
-            return $entity;
+        $samples = $entity->getExtensionAttributes()->getDownloadableProductSamples();
+
+        /** @var $entity ProductInterface */
+        if ($samples && $entity->getTypeId() === Type::TYPE_DOWNLOADABLE) {
+            $this->updateSamples($entity, $samples);
         }
 
-        /** @var \Magento\Downloadable\Api\Data\SampleInterface[] $samples */
-        $samples = $entity->getExtensionAttributes()->getDownloadableProductSamples() ?: [];
-        $updatedSamples = [];
+        return $entity;
+    }
+
+    /**
+     * Update product samples
+     *
+     * @param ProductInterface $entity
+     * @param array $samples
+     * @return void
+     */
+    private function updateSamples(ProductInterface $entity, array $samples): void
+    {
+        $isGlobalScope = (int) $entity->getStoreId() === self::GLOBAL_SCOPE_ID;
         $oldSamples = $this->sampleRepository->getList($entity->getSku());
+
+        $updatedSamples = [];
         foreach ($samples as $sample) {
             if ($sample->getId()) {
                 $updatedSamples[$sample->getId()] = true;
             }
-            $this->sampleRepository->save($entity->getSku(), $sample, !(bool)$entity->getStoreId());
+            $this->sampleRepository->save($entity->getSku(), $sample, $isGlobalScope);
         }
-        /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
+
         foreach ($oldSamples as $sample) {
             if (!isset($updatedSamples[$sample->getId()])) {
                 $this->sampleRepository->delete($sample->getId());
             }
         }
-
-        return $entity;
     }
 }

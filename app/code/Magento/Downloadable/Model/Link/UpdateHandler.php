@@ -5,15 +5,18 @@
  */
 namespace Magento\Downloadable\Model\Link;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Downloadable\Api\LinkRepositoryInterface as LinkRepository;
 use Magento\Downloadable\Model\Product\Type;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
 /**
- * Class UpdateHandler
+ * UpdateHandler for downloadable product links
  */
 class UpdateHandler implements ExtensionInterface
 {
+    private const GLOBAL_SCOPE_ID = 0;
+
     /**
      * @var LinkRepository
      */
@@ -28,35 +31,48 @@ class UpdateHandler implements ExtensionInterface
     }
 
     /**
+     * Update links for downloadable product if exist
+     *
      * @param object $entity
      * @param array $arguments
-     * @return \Magento\Catalog\Api\Data\ProductInterface|object
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return ProductInterface|object
      */
     public function execute($entity, $arguments = [])
     {
-        /** @var $entity \Magento\Catalog\Api\Data\ProductInterface */
-        if ($entity->getTypeId() != Type::TYPE_DOWNLOADABLE) {
-            return $entity;
+        $links = $entity->getExtensionAttributes()->getDownloadableProductLinks();
+
+        /** @var $entity ProductInterface */
+        if ($links && $entity->getTypeId() === Type::TYPE_DOWNLOADABLE) {
+            $this->updateLinks($entity, $links);
         }
 
-        /** @var \Magento\Downloadable\Api\Data\LinkInterface[] $links */
-        $links = $entity->getExtensionAttributes()->getDownloadableProductLinks() ?: [];
-        $updatedLinks = [];
+        return $entity;
+    }
+
+    /**
+     * Update product links
+     *
+     * @param ProductInterface $entity
+     * @param array $links
+     * @return void
+     */
+    private function updateLinks(ProductInterface $entity, array $links): void
+    {
+        $isGlobalScope = (int) $entity->getStoreId() === self::GLOBAL_SCOPE_ID;
         $oldLinks = $this->linkRepository->getList($entity->getSku());
+
+        $updatedLinks = [];
         foreach ($links as $link) {
             if ($link->getId()) {
                 $updatedLinks[$link->getId()] = true;
             }
-            $this->linkRepository->save($entity->getSku(), $link, !(bool)$entity->getStoreId());
+            $this->linkRepository->save($entity->getSku(), $link, $isGlobalScope);
         }
-        /** @var \Magento\Catalog\Api\Data\ProductInterface $entity */
+
         foreach ($oldLinks as $link) {
             if (!isset($updatedLinks[$link->getId()])) {
                 $this->linkRepository->delete($link->getId());
             }
         }
-
-        return $entity;
     }
 }
