@@ -183,5 +183,31 @@ define(['rjsResolver', 'mixins'], function (resolver, mixins) {
 
             require([name], function () {});
         });
+
+        it('applies mixins for modules that have no dependencies', function (done) {
+            var name = 'tests/assets/mixins/mixins-applied-no-dependencies',
+                mixinName = 'tests/assets/mixins/mixins-applied-no-dependencies-ext';
+
+            mixins.hasMixins.and.returnValue(true);
+            mixins.getMixins.and.returnValue([mixinName]);
+
+            define(name, {
+                value: 'original'
+            });
+
+            define(mixinName, [], function () {
+                return function (module) {
+                    module.value = 'changed';
+
+                    return module;
+                };
+            });
+
+            require([name], function (module) {
+                expect(module.value).toBe('changed');
+
+                done();
+            });
+        });
     });
 });

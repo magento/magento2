@@ -18,8 +18,6 @@
             <testCaseId value="MC-14382" />
             <group value="security"/>
             <group value="mtf_migrated"/>
-            <!-- skip due to MQE-1964 -->
-            <group value="skip"/>
         </annotations>
         <before>
             <!-- Log in to Admin Panel -->
