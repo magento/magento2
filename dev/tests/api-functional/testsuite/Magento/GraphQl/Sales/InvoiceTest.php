@@ -10,6 +10,7 @@ namespace Magento\GraphQl\Sales;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\GraphQl\GetCustomerAuthenticationHeader;
 
 /**
  * Tests the Invoice query
@@ -21,10 +22,14 @@ class InvoiceTest extends GraphQlAbstract
      */
     private $customerTokenService;
 
+    /** @var GetCustomerAuthenticationHeader */
+    private $customerAuthenticationHeader;
+
     protected function setUp(): void
     {
-        parent::setUp();
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
+        $this->customerAuthenticationHeader
+            = Bootstrap::getObjectManager()->get(GetCustomerAuthenticationHeader::class);
     }
 
     /**
@@ -77,14 +82,17 @@ QUERY;
 
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
 
-        $expectedData = [
-            [
-                'order_number' => '100000001',
-                'status' => 'Processing',
-                'grand_total' => 100.00
-            ]
+        $expectedOrdersData = [
+            'order_number' => '100000001',
+            'status' => 'Processing',
+            'grand_total' => 100.00
         ];
 
         $expectedInvoiceData = [
@@ -126,27 +134,25 @@ QUERY;
             ]
         ];
 
-        $actualData = $response['customer']['orders']['items'];
+        $actualData = $response['customer']['orders']['items'][0];
 
-        foreach ($expectedData as $key => $data) {
-            $this->assertEquals(
-                $data['order_number'],
-                $actualData[$key]['order_number'],
-                "order_number is different than the expected for order - " . $data['order_number']
-            );
-            $this->assertEquals(
-                $data['grand_total'],
-                $actualData[$key]['grand_total'],
-                "grand_total is different than the expected for order - " . $data['order_number']
-            );
-            $this->assertEquals(
-                $data['status'],
-                $actualData[$key]['status'],
-                "status is different than the expected for order - " . $data['order_number']
-            );
-            $invoices = $actualData[$key]['invoices'];
-            $this->assertResponseFields($invoices, $expectedInvoiceData);
-        }
+        $this->assertEquals(
+            $expectedOrdersData['order_number'],
+            $actualData['order_number'],
+            "order_number is different than the expected for order - " . $expectedOrdersData['order_number']
+        );
+        $this->assertEquals(
+            $expectedOrdersData['grand_total'],
+            $actualData['grand_total'],
+            "grand_total is different than the expected for order - " . $expectedOrdersData['order_number']
+        );
+        $this->assertEquals(
+            $expectedOrdersData['status'],
+            $actualData['status'],
+            "status is different than the expected for order - " . $expectedOrdersData['order_number']
+        );
+        $invoices = $actualData['invoices'];
+        $this->assertResponseFields($invoices, $expectedInvoiceData);
     }
 
     /**
@@ -183,10 +189,20 @@ query {
         }
         total_shipping {
           value
+          currency
         }
         shipping_handling {
           total_amount {
             value
+            currency
+          }
+          amount_including_tax {
+            value
+            currency
+          }
+          amount_excluding_tax {
+            value
+            currency
           }
         }
       }
@@ -199,14 +215,17 @@ QUERY;
 
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
 
-        $expectedData = [
-            [
-                'order_number' => '100000002',
-                'status' => 'Processing',
-                'grand_total' => 50.00
-            ]
+        $expectedOrdersData = [
+            'order_number' => '100000002',
+            'status' => 'Processing',
+            'grand_total' => 50.00
         ];
 
         $expectedInvoiceData = [
@@ -226,14 +245,24 @@ QUERY;
                         'value' => 30
                     ],
                     'grand_total' => [
-                        'value' => 30
+                        'value' => 50
                     ],
                     'total_shipping' => [
-                        'value' => 0
+                        'value' => 20,
+                        'currency' => 'USD'
                     ],
                     'shipping_handling' => [
                         'total_amount' => [
-                            'value' => null
+                            'value' => 20,
+                            'currency' => 'USD'
+                        ],
+                        'amount_including_tax' => [
+                            'value' => 25,
+                            'currency' => 'USD'
+                        ],
+                        'amount_excluding_tax' => [
+                            'value' => 20,
+                            'currency' => 'USD'
                         ]
                     ]
                 ]
@@ -257,38 +286,45 @@ QUERY;
                         'value' => 10
                     ],
                     'total_shipping' => [
-                        'value' => 0
+                        'value' => 0,
+                        'currency' => 'USD'
                     ],
                     'shipping_handling' => [
                         'total_amount' => [
-                            'value' => null
+                            'value' => 0,
+                            'currency' => 'USD'
+                        ],
+                        'amount_including_tax' => [
+                            'value' => 0,
+                            'currency' => 'USD'
+                        ],
+                        'amount_excluding_tax' => [
+                            'value' => 0,
+                            'currency' => 'USD'
                         ]
                     ]
                 ]
             ]
         ];
 
-        $actualData = $response['customer']['orders']['items'];
-
-        foreach ($expectedData as $key => $data) {
-            $this->assertEquals(
-                $data['order_number'],
-                $actualData[$key]['order_number'],
-                "order_number is different than the expected for order - " . $data['order_number']
-            );
-            $this->assertEquals(
-                $data['grand_total'],
-                $actualData[$key]['grand_total'],
-                "grand_total is different than the expected for order - " . $data['order_number']
-            );
-            $this->assertEquals(
-                $data['status'],
-                $actualData[$key]['status'],
-                "status is different than the expected for order - " . $data['order_number']
-            );
-            $invoices = $actualData[$key]['invoices'];
-            $this->assertResponseFields($invoices, $expectedInvoiceData);
-        }
+        $actualData = $response['customer']['orders']['items'][0];
+        $this->assertEquals(
+            $expectedOrdersData['order_number'],
+            $actualData['order_number'],
+            "order_number is different than the expected for order - " . $expectedOrdersData['order_number']
+        );
+        $this->assertEquals(
+            $expectedOrdersData['grand_total'],
+            $actualData['grand_total'],
+            "grand_total is different than the expected for order - " . $expectedOrdersData['order_number']
+        );
+        $this->assertEquals(
+            $expectedOrdersData['status'],
+            $actualData['status'],
+            "status is different than the expected for order - " . $expectedOrdersData['order_number']
+        );
+        $invoices = $actualData['invoices'];
+        $this->assertResponseFields($invoices, $expectedInvoiceData);
     }
 
     /**
@@ -313,23 +349,22 @@ query {
             product_sku
             product_sale_price {
               value
+              currency
             }
             quantity_invoiced
       }
       total {
         subtotal {
           value
+          currency
         }
         grand_total {
           value
+          currency
         }
         total_shipping {
           value
-        }
-        shipping_handling {
-          total_amount {
-            value
-          }
+          currency
         }
       }
     }
@@ -341,14 +376,17 @@ QUERY;
 
         $currentEmail = 'customer@search.example.com';
         $currentPassword = 'password';
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
 
-        $expectedData = [
-            [
-                'order_number' => '100000001',
-                'status' => 'Processing',
-                'grand_total' => 100.00
-            ]
+        $expectedOrdersData = [
+            'order_number' => '100000001',
+            'status' => 'Processing',
+            'grand_total' => 100.00
         ];
 
         $expectedInvoiceData = [
@@ -358,84 +396,46 @@ QUERY;
                         'product_name' => 'Simple Product',
                         'product_sku' => 'simple',
                         'product_sale_price' => [
-                            'value' => 10
+                            'value' => 10,
+                            'currency' => 'USD'
                         ],
                         'quantity_invoiced' => 1
                     ]
                 ],
                 'total' => [
                     'subtotal' => [
-                        'value' => 100
+                        'value' => 100,
+                        'currency' => 'USD'
                     ],
                     'grand_total' => [
-                        'value' => 100
+                        'value' => 100,
+                        'currency' => 'USD'
                     ],
                     'total_shipping' => [
-                        'value' => 0
-                    ],
-                    'shipping_handling' => [
-                        'total_amount' => [
-                            'value' => null
-                        ]
+                        'value' => 0,
+                        'currency' => 'USD'
                     ]
                 ]
             ]
         ];
 
-        $actualData = $response['customer']['orders']['items'];
-
-        foreach ($expectedData as $key => $data) {
-            $this->assertEquals(
-                $data['order_number'],
-                $actualData[$key]['order_number'],
-                "order_number is different than the expected for order - " . $data['order_number']
-            );
-            $this->assertEquals(
-                $data['grand_total'],
-                $actualData[$key]['grand_total'],
-                "grand_total is different than the expected for order - " . $data['order_number']
-            );
-            $this->assertEquals(
-                $data['status'],
-                $actualData[$key]['status'],
-                "status is different than the expected for order - " . $data['order_number']
-            );
-            $invoices = $actualData[$key]['invoices'];
-            $this->assertResponseFields($invoices, $expectedInvoiceData);
-        }
-    }
-
-    /**
-     */
-    public function testOrdersQueryNotAuthorized()
-    {
-        $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The current customer isn\'t authorized.');
-
-        $query = <<<QUERY
-{
-  customer {
-      orders {
-        items {
-          increment_id
-          grand_total
-        }
-      }
-  }
-}
-QUERY;
-        $this->graphQlQuery($query);
-    }
-
-    /**
-     * @param string $email
-     * @param string $password
-     * @return array
-     * @throws \Magento\Framework\Exception\AuthenticationException
-     */
-    private function getCustomerAuthHeaders(string $email, string $password): array
-    {
-        $customerToken = $this->customerTokenService->createCustomerAccessToken($email, $password);
-        return ['Authorization' => 'Bearer ' . $customerToken];
+        $actualData = $response['customer']['orders']['items'][0];
+        $this->assertEquals(
+            $expectedOrdersData['order_number'],
+            $actualData['order_number'],
+            "order_number is different than the expected for order - " . $expectedOrdersData['order_number']
+        );
+        $this->assertEquals(
+            $expectedOrdersData['grand_total'],
+            $actualData['grand_total'],
+            "grand_total is different than the expected for order - " . $expectedOrdersData['order_number']
+        );
+        $this->assertEquals(
+            $expectedOrdersData['status'],
+            $actualData['status'],
+            "status is different than the expected for order - " . $expectedOrdersData['order_number']
+        );
+        $invoices = $actualData['invoices'];
+        $this->assertResponseFields($invoices, $expectedInvoiceData);
     }
 }

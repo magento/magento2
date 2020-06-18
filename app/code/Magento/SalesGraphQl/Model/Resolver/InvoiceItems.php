@@ -118,7 +118,7 @@ class InvoiceItems implements ResolverInterface
             'product_sku' => $invoiceItem->getSku(),
             'product_sale_price' => [
                 'value' => $invoiceItem->getPrice(),
-                'currency' => $order->getOrderCurrency()
+                'currency' => $order->getOrderCurrencyCode()
             ],
             'quantity_invoiced' => $invoiceItem->getQty(),
             'model' => $invoiceItem,

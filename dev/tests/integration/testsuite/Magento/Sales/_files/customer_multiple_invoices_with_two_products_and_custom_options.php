@@ -104,10 +104,15 @@ $order->setCustomerId(1)
 $orderService = $objectManager->create(
     \Magento\Sales\Api\InvoiceManagementInterface::class
 );
+/** @var \Magento\Sales\Api\Data\InvoiceInterface $invoice */
 $invoice = $orderService->prepareInvoice($order, [$orderItem->getId() => 3]);
 $invoice->register();
-$invoice->setGrandTotal(30);
+$invoice->setGrandTotal(50);
 $invoice->setSubTotal(30);
+$invoice->setShippingInclTax(20);
+$invoice->setShippingAmount(20);
+$invoice->setBaseShippingAmount(20);
+$invoice->setShippingInclTax(25);
 $order = $invoice->getOrder();
 $order->setIsInProcess(true);
 $transactionSave = $objectManager

@@ -42,38 +42,17 @@ class InvoiceTotal implements ResolverInterface
         /** @var Invoice $invoiceModel */
         $invoiceModel = $value['model'];
         $currency = $orderModel->getOrderCurrencyCode();
-        $totals = [
+        return [
             'base_grand_total' => ['value' => $invoiceModel->getBaseGrandTotal(), 'currency' => $currency],
             'grand_total' => ['value' =>  $invoiceModel->getGrandTotal(), 'currency' => $currency],
             'subtotal' => ['value' =>  $invoiceModel->getSubtotal(), 'currency' => $currency],
             'total_tax' => ['value' =>  $invoiceModel->getTaxAmount(), 'currency' => $currency],
-            'taxes' => $this->getAppliedTaxes($invoiceModel, $currency),
             'total_shipping' => ['value' => $invoiceModel->getShippingAmount(), 'currency' => $currency],
             'shipping_handling' => [
-                'amount_exc_tax' => ['value' => $invoiceModel->getShippingTaxAmount(), 'currency' => $currency],
-                'amount_inc_tax' => ['value' => $invoiceModel->getShippingInclTax(), 'currency' => $currency],
-                'total_amount' => ['value' => $invoiceModel->getBaseShippingTaxAmount(), 'currency' => $currency],
-                'taxes' => $this->getAppliedTaxes($invoiceModel, $currency)
+                'amount_excluding_tax' => ['value' => $invoiceModel->getShippingAmount(), 'currency' => $currency],
+                'amount_including_tax' => ['value' => $invoiceModel->getShippingInclTax(), 'currency' => $currency],
+                'total_amount' => ['value' => $invoiceModel->getBaseShippingAmount(), 'currency' => $currency],
             ]
         ];
-        return $totals;
-    }
-
-    /**
-     * Returns taxes applied to the current invoice
-     *
-     * @param Invoice $invoiceModel
-     * @param string $currency
-     * @return array
-     */
-    private function getAppliedTaxes(Invoice $invoiceModel, string $currency): array
-    {
-        $taxes[] = [
-            'rate' => $invoiceModel->getStoreToOrderRate(),
-            'title' => $invoiceModel->getCustomerName(),
-            'amount' => [ 'value' =>  $invoiceModel->getTaxAmount(), 'currency' => $currency
-            ]
-        ];
-        return $taxes;
     }
 }
