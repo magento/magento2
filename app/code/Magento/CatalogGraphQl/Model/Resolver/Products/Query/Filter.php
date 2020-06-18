@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\Query;
 
-use Magento\Catalog\Model\Layer\Resolver as LayerResolver;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\InputException;
@@ -37,11 +36,6 @@ class Filter implements ProductQueryInterface
     private $productDataProvider;
 
     /**
-     * @var LayerResolver
-     */
-    private $layerResolver;
-
-    /**
      * FieldSelection
      */
     private $fieldSelection;
@@ -59,7 +53,6 @@ class Filter implements ProductQueryInterface
     /**
      * @param SearchResultFactory $searchResultFactory
      * @param ProductProvider $productDataProvider
-     * @param LayerResolver $layerResolver
      * @param FieldSelection $fieldSelection
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param ScopeConfigInterface $scopeConfig
@@ -67,14 +60,12 @@ class Filter implements ProductQueryInterface
     public function __construct(
         SearchResultFactory $searchResultFactory,
         ProductProvider $productDataProvider,
-        LayerResolver $layerResolver,
         FieldSelection $fieldSelection,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         ScopeConfigInterface $scopeConfig
     ) {
         $this->searchResultFactory = $searchResultFactory;
         $this->productDataProvider = $productDataProvider;
-        $this->layerResolver = $layerResolver;
         $this->fieldSelection = $fieldSelection;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->scopeConfig = $scopeConfig;

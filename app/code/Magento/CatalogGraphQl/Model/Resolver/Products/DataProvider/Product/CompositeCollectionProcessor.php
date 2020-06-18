@@ -30,7 +30,13 @@ class CompositeCollectionProcessor implements CollectionProcessorInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Process collection to add additional joins, attributes, and clauses to a product collection.
+     *
+     * @param Collection $collection
+     * @param SearchCriteriaInterface $searchCriteria
+     * @param array $attributeNames
+     * @param ContextInterface|null $context
+     * @return Collection
      */
     public function process(
         Collection $collection,
