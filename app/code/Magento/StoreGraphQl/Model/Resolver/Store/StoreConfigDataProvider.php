@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\StoreGraphQl\Model\Resolver\Store;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Store\Api\Data\StoreConfigInterface;
 use Magento\Store\Api\StoreConfigManagerInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Api\Data\StoreInterface;
@@ -55,24 +56,26 @@ class StoreConfigDataProvider
      */
     public function getStoreConfigData(StoreInterface $store): array
     {
-        $storeConfigData = array_merge(
-            $this->getBaseConfigData($store),
-            $this->getExtendedConfigData((int)$store->getId())
-        );
-        return $storeConfigData;
+        $stores = $this->storeConfigManager->getStoreConfigs();
+        $defaultStoreConfig = current($this->storeConfigManager->getStoreConfigs([$store->getCode()]));
+        $defaultStoreConfigData = $this->prepareStoreConfigData($defaultStoreConfig);
+
+        foreach ($stores as $storeConfig) {
+            $defaultStoreConfigData['stores'][] = $this->prepareStoreConfigData($storeConfig);
+        }
+
+        return $defaultStoreConfigData;
     }
 
     /**
-     * Get base config data
+     * Prepare store config data
      *
-     * @param StoreInterface $store
+     * @param StoreConfigInterface $storeConfig
      * @return array
      */
-    private function getBaseConfigData(StoreInterface $store) : array
+    private function prepareStoreConfigData($storeConfig): array
     {
-        $storeConfig = current($this->storeConfigManager->getStoreConfigs([$store->getCode()]));
-
-        $storeConfigData = [
+        return array_merge([
             'id' => $storeConfig->getId(),
             'code' => $storeConfig->getCode(),
             'website_id' => $storeConfig->getWebsiteId(),
@@ -83,14 +86,13 @@ class StoreConfigDataProvider
             'weight_unit' => $storeConfig->getWeightUnit(),
             'base_url' => $storeConfig->getBaseUrl(),
             'base_link_url' => $storeConfig->getBaseLinkUrl(),
-            'base_static_url' => $storeConfig->getSecureBaseStaticUrl(),
+            'base_static_url' => $storeConfig->getBaseStaticUrl(),
             'base_media_url' => $storeConfig->getBaseMediaUrl(),
             'secure_base_url' => $storeConfig->getSecureBaseUrl(),
             'secure_base_link_url' => $storeConfig->getSecureBaseLinkUrl(),
             'secure_base_static_url' => $storeConfig->getSecureBaseStaticUrl(),
             'secure_base_media_url' => $storeConfig->getSecureBaseMediaUrl()
-        ];
-        return $storeConfigData;
+        ], $this->getExtendedConfigData((int)$storeConfig->getId()));
     }
 
     /**
