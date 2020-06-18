@@ -54,10 +54,13 @@ class DepthCalculator
      * @param ResolveInfo $resolveInfo
      * @param InlineFragmentNode $inlineFragmentField
      * @param array $depth
-     * @return int[]
+     * @return int
      */
-    private function addInlineFragmentDepth(ResolveInfo $resolveInfo, InlineFragmentNode $inlineFragmentField, $depth = [])
-    {
+    private function addInlineFragmentDepth(
+        ResolveInfo $resolveInfo,
+        InlineFragmentNode
+        $inlineFragmentField, $depth = []
+    ): int {
         $selections = $inlineFragmentField->selectionSet->selections;
         /** @var FieldNode $field */
         foreach ($selections as $field) {
