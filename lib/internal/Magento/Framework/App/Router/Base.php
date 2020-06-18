@@ -179,7 +179,7 @@ class Base implements \Magento\Framework\App\RouterInterface
 
         $path = trim($request->getPathInfo(), '/');
 
-        $params = explode('/', $path ? $path : $this->pathConfig->getDefaultPath());
+        $params = explode('/', $path ?: (string)$this->pathConfig->getDefaultPath());
         foreach ($this->_requiredParams as $paramName) {
             $output[$paramName] = array_shift($params);
         }
