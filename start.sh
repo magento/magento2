@@ -12,10 +12,8 @@ cd /var/www/html
 MODE=$(php bin/magento deploy:mode:show | sed -e 's/\.//g' | awk '{print $4}')
 if [ $MODE != 'production' ]
 then
-    #/// deploy the static content, compile di and flush the cache :)
-    php bin/magento deploy:mode:set production
+    #/// set maintenance mode
     php bin/magento maintenance:enable
-    mv pub pub.new
     touch var/pre1.txt
 fi
 touch var/pre2.txt

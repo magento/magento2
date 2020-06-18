@@ -9,22 +9,19 @@ spec:
         supplementalGroups:
           - 82
         fsGroup: 82
-      initContainers:
-        - name: setup-pub-dir
-          image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
-          securityContext:
-            runAsUser: 0
-          volumeMounts:
-          - mountPath: /var/www/html/pub
-            name: magento-pub-volume
-            subPath: pub
-          - mountPath: /var/www/html/var
-            name: magento-var-volume
-            subPath: var
-          command: ["/bin/sh", "-c", "chmod -R 0777 /var/www/html/pub; chmod -R 0775 /var/www/html/var; chgrp -R 82 /var/www/html/pub /var/www/html/var;"]
       containers:
       - name: php
         image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
-        command: ["/bin/sh", "-c", "/var/www/html/start.sh"]
+        volumeMounts:
+          - mountPath: /var/www/html/var
+            name: magento-var-volume
+            subPath: var
+        securityContext:
+          runAsUser: 0
+        command: ["/bin/sh", "-c", "chmod -R 0775 /var/www/html/var; chgrp -R 82 /var/www/html/var; /var/www/html/start.sh; chgrp -R 82 /var/www/html/var"]
+      volumes:
+      - name: magento-var-volume
+        persistentVolumeClaim:
+          claimName: nfs-pvc-2
       restartPolicy: Never
   backoffLimit: 4
