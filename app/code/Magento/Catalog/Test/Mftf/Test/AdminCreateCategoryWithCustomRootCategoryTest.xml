@@ -22,7 +22,7 @@
         </before>
         <after>
             <actionGroup ref="DeleteCustomStoreActionGroup" stepKey="deleteCustomStore">
-                <argument name="storeGroupName" value="customStore.name"/>
+                <argument name="storeGroupName" value="customStoreGroup.name"/>
             </actionGroup>
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCreatedNewRootCategory">
                 <argument name="categoryEntity" value="NewRootCategory"/>
@@ -45,19 +45,19 @@
         <!--Create a Store-->
         <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStore">
             <argument name="website" value="{{_defaultWebsite.name}}"/>
-            <argument name="store" value="{{customStore.name}}"/>
+            <argument name="store" value="{{customStoreGroup.name}}"/>
             <argument name="rootCategory" value="{{NewRootCategory.name}}"/>
         </actionGroup>
         <!--Create a Store View-->
         <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
-            <argument name="StoreGroup" value="customStore"/>
+            <argument name="StoreGroup" value="customStoreGroup"/>
             <argument name="customStore" value="customStore"/>
         </actionGroup>
         <!--Go to store front page-->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="openHomepage"/>
         <!--Verify subcategory displayed in store front page-->
         <actionGroup ref="StorefrontSwitchStoreActionGroup" stepKey="switchToCustomStore">
-            <argument name="storeName" value="{{customStore.name}}"/>
+            <argument name="storeName" value="{{customStoreGroup.name}}"/>
         </actionGroup>
         <actionGroup ref="StorefrontAssertCategoryNameIsShownInMenuActionGroup" stepKey="seeCatergoryNameInStoreFront">
             <argument name="categoryName" value="{{SimpleSubCategory.name}}"/>
