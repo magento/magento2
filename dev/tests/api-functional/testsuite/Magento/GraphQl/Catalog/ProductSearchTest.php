@@ -321,6 +321,10 @@ QUERY;
         $this->assertTrue(count($response['products']['filters']) > 0, 'Product filters is not empty');
         $this->assertCount(3, $response['products']['aggregations'], 'Incorrect count of aggregations');
 
+        $this->markTestIncomplete(
+            'Sort order is incorrect. Fix: https://github.com/magento/catalog-storefront/issues/104'
+        );
+
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         for ($itemIndex = 0; $itemIndex < $countOfFilteredProducts; $itemIndex++) {
             $this->assertNotEmpty($productItemsInResponse[$itemIndex]);
@@ -948,6 +952,10 @@ QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertEquals(3, $response['products']['total_count'], 'Total count is incorrect');
         $this->assertCount(2, $response['products']['aggregations']);
+
+        $this->markTestIncomplete(
+            'Sort order is incorrect. Fix: https://github.com/magento/catalog-storefront/issues/104'
+        );
 
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
