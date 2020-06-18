@@ -7,18 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Model;
 
-use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
+use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for IsPathBlacklistedInterface
+ * Test for IsPathExcludedInterface
  */
-class IsBlacklistedTest extends TestCase
+class IsExcludedTest extends TestCase
 {
-
     /**
-     * @var IsPathBlacklistedInterface
+     * @var IsPathExcludedInterface
      */
     private $service;
 
@@ -27,23 +26,23 @@ class IsBlacklistedTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->service = Bootstrap::getObjectManager()->get(IsPathBlacklistedInterface::class);
+        $this->service = Bootstrap::getObjectManager()->get(IsPathExcludedInterface::class);
     }
 
     /**
-     * Testing the blacklisted paths
+     * Testing the excluded paths
      *
      * @param string $path
-     * @param bool $isBlacklisted
+     * @param bool $isExcluded
      * @dataProvider pathsProvider
      */
-    public function testExecute(string $path, bool $isBlacklisted): void
+    public function testExecute(string $path, bool $isExcluded): void
     {
-        $this->assertEquals($isBlacklisted, $this->service->execute($path));
+        $this->assertEquals($isExcluded, $this->service->execute($path));
     }
 
     /**
-     * Provider of paths and if the path should be in the blacklist
+     * Provider of paths and if the path should be in the excluded list
      *
      * @return array
      */
