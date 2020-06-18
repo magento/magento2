@@ -88,20 +88,19 @@ class BlockDelete implements ObserverInterface
      */
     public function execute(Observer $observer): void
     {
-        $model = $observer->getEvent()->getData('object');
+        $block = $observer->getEvent()->getData('object');
         $contentAssetLinks = [];
         
-        if ($model instanceof CmsBlock) {
+        if ($block instanceof CmsBlock) {
             foreach ($this->fields as $field) {
                 $contentIdentity = $this->contentIdentityFactory->create(
                     [
                         self::TYPE => self::CONTENT_TYPE,
                         self::FIELD => $field,
-                        self::ENTITY_ID => (string) $model->getId(),
+                        self::ENTITY_ID => (string) $block->getId(),
                     ]
                 );
-                
-                $assets = $this->extractAssetsFromContent->execute((string) $model->getData($field));
+                $assets = $this->extractAssetsFromContent->execute((string) $block->getData($field));
                 
                 foreach ($assets as $asset) {
                     $contentAssetLinks[] = $this->contentAssetLinkFactory->create(

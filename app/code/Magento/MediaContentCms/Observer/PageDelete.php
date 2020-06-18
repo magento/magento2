@@ -88,20 +88,20 @@ class PageDelete implements ObserverInterface
      */
     public function execute(Observer $observer): void
     {
-        $model = $observer->getEvent()->getData('object');
+        $page = $observer->getEvent()->getData('object');
         $contentAssetLinks = [];
         
-        if ($model instanceof CmsPage) {
+        if ($page instanceof CmsPage) {
             foreach ($this->fields as $field) {
                 $contentIdentity = $this->contentIdentityFactory->create(
                     [
                         self::TYPE => self::CONTENT_TYPE,
                         self::FIELD => $field,
-                        self::ENTITY_ID => (string) $model->getId(),
+                        self::ENTITY_ID => (string) $page->getId(),
                     ]
                 );
                 
-                $assets = $this->extractAssetsFromContent->execute((string) $model->getData($field));
+                $assets = $this->extractAssetsFromContent->execute((string) $page->getData($field));
                 
                 foreach ($assets as $asset) {
                     $contentAssetLinks[] = $this->contentAssetLinkFactory->create(

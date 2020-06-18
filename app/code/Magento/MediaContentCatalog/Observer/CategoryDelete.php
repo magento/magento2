@@ -17,7 +17,7 @@ use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 use Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface;
 
 /**
- * Observe the catalog_category_delete event and deletes relation between category content and media asset.
+ * Observe the catalog_category_delete_after event and deletes relation between category content and media asset.
  */
 class CategoryDelete implements ObserverInterface
 {
@@ -88,16 +88,16 @@ class CategoryDelete implements ObserverInterface
      */
     public function execute(Observer $observer): void
     {
-        $model = $observer->getEvent()->getData('category');
+        $category = $observer->getEvent()->getData('category');
         $contentAssetLinks = [];
         
-        if ($model instanceof CatalogCategory) {
+        if ($category instanceof CatalogCategory) {
             foreach ($this->fields as $field) {
                 $contentIdentity = $this->contentIdentityFactory->create(
                     [
                         self::TYPE => self::CONTENT_TYPE,
                         self::FIELD => $field,
-                        self::ENTITY_ID => (string) $model->getEntityId(),
+                        self::ENTITY_ID => (string) $category->getEntityId(),
                     ]
                 );
                 $content = implode(PHP_EOL, $this->getContent->execute($contentIdentity));

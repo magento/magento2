@@ -88,20 +88,20 @@ class ProductDelete implements ObserverInterface
      */
     public function execute(Observer $observer): void
     {
-        $model = $observer->getEvent()->getData('product');
+        $product = $observer->getEvent()->getData('product');
         $contentAssetLinks = [];
         
-        if ($model instanceof CatalogProduct) {
+        if ($product instanceof CatalogProduct) {
             foreach ($this->fields as $field) {
                 $contentIdentity = $this->contentIdentityFactory->create(
                     [
                         self::TYPE => self::CONTENT_TYPE,
                         self::FIELD => $field,
-                        self::ENTITY_ID => (string) $model->getEntityId(),
+                        self::ENTITY_ID => (string) $product->getEntityId(),
                     ]
                 );
-                $content = implode(PHP_EOL, $this->getContent->execute($contentIdentity));
-                $assets = $this->extractAssetsFromContent->execute($content);
+                $productContent = implode(PHP_EOL, $this->getContent->execute($contentIdentity));
+                $assets = $this->extractAssetsFromContent->execute($productContent);
 
                 foreach ($assets as $asset) {
                     $contentAssetLinks[] = $this->contentAssetLinkFactory->create(
