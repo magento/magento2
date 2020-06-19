@@ -154,16 +154,14 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
 
         $this->assertEquals('simple1', $childItemsInTheOrder[0]['values'][0]['product_sku']);
         $this->assertEquals('simple2', $childItemsInTheOrder[1]['values'][0]['product_sku']);
-
-        //$this->assertTotalsOnBundleProductWithTaxesAndDiscounts($customerOrderItems);
-        $this->assertTotalsOnBundleProductWithTaxesAndDiscounts2($customerOrderItems['total']);
+        $this->assertTotalsOnBundleProductWithTaxesAndDiscounts($customerOrderItems['total']);
         $this->deleteOrder();
     }
 
     /**
      * @param array $customerOrderItemTotal
      */
-    private function assertTotalsOnBundleProductWithTaxesAndDiscounts2(array $customerOrderItemTotal): void
+    private function assertTotalsOnBundleProductWithTaxesAndDiscounts(array $customerOrderItemTotal): void
     {
         $this->assertCount(2, $customerOrderItemTotal['taxes']);
         $expectedProductAndShippingTaxes = [4.05, 1.35];
@@ -213,117 +211,6 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
     }
 
     /**
-     * Assert order totals including shipping_handling and taxes
-     *
-     * @param array $customerOrderItem
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    private function assertTotalsOnBundleProductWithTaxesAndDiscounts(array $customerOrderItem): void
-    {
-        $this->assertEquals(
-            77.4,
-            $customerOrderItem['total']['base_grand_total']['value']
-        );
-
-        $this->assertEquals(
-            77.4,
-            $customerOrderItem['total']['grand_total']['value']
-        );
-        $this->assertEquals(
-            60,
-            $customerOrderItem['total']['subtotal']['value']
-        );
-        $this->assertEquals(
-            5.4,
-            $customerOrderItem['total']['total_tax']['value']
-        );
-
-        $this->assertEquals(
-            20,
-            $customerOrderItem['total']['total_shipping']['value']
-        );
-        $this->assertCount(2, $customerOrderItem['total']['taxes']);
-        $expectedProductAndShippingTaxes = [4.05, 1.35];
-
-        $totalTaxes = [];
-        foreach ($customerOrderItem['total']['taxes'] as $totalTaxFromResponse) {
-            array_push($totalTaxes, $totalTaxFromResponse['amount']['value']);
-        }
-        foreach ($totalTaxes as $value) {
-            $this->assertTrue(in_array($value, $expectedProductAndShippingTaxes));
-        }
-        $this->assertEquals(
-            'USD',
-            $customerOrderItem['total']['taxes'][0]['amount']['currency']
-        );
-        $this->assertEquals(
-            'US-TEST-*-Rate-1',
-            $customerOrderItem['total']['taxes'][0]['title']
-        );
-        $this->assertEquals(
-            7.5,
-            $customerOrderItem['total']['taxes'][0]['rate']
-        );
-        $this->assertEquals(
-            'USD',
-            $customerOrderItem['total']['taxes'][1]['amount']['currency']
-        );
-        $this->assertEquals(
-            'US-TEST-*-Rate-1',
-            $customerOrderItem['total']['taxes'][1]['title']
-        );
-        $this->assertEquals(
-            7.5,
-            $customerOrderItem['total']['taxes'][1]['rate']
-        );
-        $this->assertEquals(
-            21.5,
-            $customerOrderItem['total']['shipping_handling']['amount_including_tax']['value']
-        );
-        $this->assertEquals(
-            20,
-            $customerOrderItem['total']['shipping_handling']['amount_excluding_tax']['value']
-        );
-        $this->assertEquals(
-            20,
-            $customerOrderItem['total']['shipping_handling']['total_amount']['value']
-        );
-
-        $this->assertEquals(
-            1.35,
-            $customerOrderItem['total']['shipping_handling']['taxes'][0]['amount']['value']
-        );
-        $this->assertEquals(
-            'US-TEST-*-Rate-1',
-            $customerOrderItem['total']['shipping_handling']['taxes'][0]['title']
-        );
-        $this->assertEquals(
-            7.5,
-            $customerOrderItem['total']['shipping_handling']['taxes'][0]['rate']
-        );
-        $this->assertEquals(
-            2,
-            $customerOrderItem['total']['shipping_handling']['discounts'][0]['amount']['value']
-        );
-        $this->assertEquals(
-            'null',
-            $customerOrderItem['total']['shipping_handling']['discounts'][0]['label']
-        );
-        $this->assertEquals(
-            -8,
-            $customerOrderItem['total']['discounts'][0]['amount']['value']
-        );
-        $this->assertEquals(
-            'USD',
-            $customerOrderItem['total']['discounts'][0]['amount']['currency']
-        );
-        $this->assertEquals(
-            'null',
-            $customerOrderItem['total']['discounts'][0]['label']
-        );
-    }
-
-    /**
      * @return string
      */
     private function createEmptyCart(): string
@@ -345,41 +232,14 @@ QUERY;
     }
 
     /**
+     *  Add bundle product to cart with Graphql query
+     *
      * @param string $cartId
      * @param float $qty
      * @param string $sku
-     * @return void
+     * @param array $optionsAndSelectionData
+     * @throws AuthenticationException
      */
-    private function addProductToCart(string $cartId, float $qty, string $sku): void
-    {
-        $query = <<<QUERY
-mutation {
-  addSimpleProductsToCart(
-    input: {
-      cart_id: "{$cartId}"
-      cart_items: [
-        {
-          data: {
-            quantity: {$qty}
-            sku: "{$sku}"
-          }
-        }
-      ]
-    }
-  ) {
-    cart {items{quantity product {sku}}}}
-}
-QUERY;
-        $currentEmail = 'customer@example.com';
-        $currentPassword = 'password';
-        $this->graphQlMutation(
-            $query,
-            [],
-            '',
-            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
-        );
-    }
-
     public function addBundleProductQuery(
         string $cartId,
         float $qty,

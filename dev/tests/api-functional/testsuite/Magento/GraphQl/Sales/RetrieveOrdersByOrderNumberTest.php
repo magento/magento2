@@ -10,6 +10,7 @@ namespace Magento\GraphQl\Sales;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\AuthenticationException;
+use Magento\Framework\Registry;
 use Magento\GraphQl\GetCustomerAuthenticationHeader;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Order\Collection;
@@ -107,7 +108,7 @@ QUERY;
 
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', '100000002')
             ->create();
-        /** @var \Magento\Sales\Api\Data\OrderInterface[] $items */
+        /** @var \Magento\Sales\Api\Data\OrderInterface[] $orders */
         $orders = $this->orderRepository->getList($searchCriteria)->getItems();
         foreach ($orders as $order) {
             $orderNumber = $order->getIncrementId();
@@ -115,21 +116,20 @@ QUERY;
             $this->assertEquals($orderNumber, $customerOrderItemsInResponse['number']);
             $this->assertEquals('Processing', $customerOrderItemsInResponse['status']);
         }
-        $expectedOrderItems =
-            [ 'quantity_ordered'=> 2,
-                'product_sku'=> 'simple',
-                'product_name'=> 'Simple Product',
-                'product_sale_price'=> ['currency'=> 'USD', 'value'=> 10]
-            ];
+        $expectedOrderItems = [
+            'quantity_ordered'=> 2,
+            'product_sku'=> 'simple',
+            'product_name'=> 'Simple Product',
+            'product_sale_price'=> ['currency'=> 'USD', 'value'=> 10]
+        ];
         $actualOrderItemsFromResponse = $customerOrderItemsInResponse['items'][0];
         $this->assertEquals($expectedOrderItems, $actualOrderItemsFromResponse);
         $actualOrderTotalFromResponse = $response['customer']['orders']['items'][0]['total'];
-        $expectedOrderTotal =
-            [
-                'base_grand_total' => ['value'=> 120,'currency' =>'USD'],
-                'grand_total' => ['value'=> 120,'currency' =>'USD'],
-                'subtotal' => ['value'=> 120,'currency' =>'USD']
-            ];
+        $expectedOrderTotal = [
+            'base_grand_total' => ['value'=> 120,'currency' =>'USD'],
+            'grand_total' => ['value'=> 120,'currency' =>'USD'],
+            'subtotal' => ['value'=> 120,'currency' =>'USD']
+        ];
         $this->assertEquals($expectedOrderTotal, $actualOrderTotalFromResponse, 'Totals do not match');
     }
 
@@ -155,27 +155,18 @@ QUERY;
         $orderNumber = $this->placeOrder($cartId);
         $customerOrderResponse = $this->getCustomerOrderQuery($orderNumber);
         // Asserting discounts on order item level
-        $this->assertEquals(
-            4,
-            $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']
-        );
-        $this->assertEquals(
-            'USD',
-            $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']
-        );
-        $this->assertEquals(
-            'null',
-            $customerOrderResponse[0]['items'][0]['discounts'][0]['label']
-        );
+        $this->assertEquals(4, $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']);
+        $this->assertEquals('USD', $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']);
+        $this->assertEquals('Discount', $customerOrderResponse[0]['items'][0]['discounts'][0]['label']);
         $customerOrderItem = $customerOrderResponse[0];
-        $this->assertTotalsWithTaxesAndDiscounts2($customerOrderItem['total']);
+        $this->assertTotalsWithTaxesAndDiscounts($customerOrderItem['total']);
         $this->deleteOrder();
     }
 
     /**
      * @param array $customerOrderItemTotal
      */
-    private function assertTotalsWithTaxesAndDiscounts2(array $customerOrderItemTotal): void
+    private function assertTotalsWithTaxesAndDiscounts(array $customerOrderItemTotal): void
     {
         $this->assertCount(2, $customerOrderItemTotal['taxes']);
         $expectedProductAndShippingTaxes = [2.7, 1.35];
@@ -332,6 +323,7 @@ QUERY;
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $this->assertArrayHasKey('total_count', $response['customer']['orders']);
         $this->assertEquals(6, $response['customer']['orders']['total_count']);
+        $this->assertCount($response['customer']['orders']['total_count'], $response['customer']['orders']['items']);
     }
 
     /**
@@ -342,8 +334,7 @@ QUERY;
     public function testGetMultipleCustomerOrdersQueryWithDefaultPagination()
     {
         $orderNumbers = ['100000007', '100000008'];
-        $query =
-            <<<QUERY
+        $query = <<<QUERY
 {
   customer
   {
@@ -396,7 +387,7 @@ QUERY;
             '',
             $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
         );
-
+        $this->assertArrayNotHasKey('errors', $response);
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $this->assertArrayHasKey('total_count', $response['customer']['orders']);
@@ -410,31 +401,22 @@ QUERY;
         $customerOrderItemsInResponse = $response['customer']['orders']['items'];
         $this->assertCount(2, $response['customer']['orders']['items']);
 
-        $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', $orderNumbers, 'in')
+        $searchCriteria = $this->searchCriteriaBuilder
+            ->addFilter('increment_id', $orderNumbers, 'in')
             ->create();
-        /** @var \Magento\Sales\Api\Data\OrderInterface[] $items */
         $orders = $this->orderRepository->getList($searchCriteria)->getItems();
         $key = 0;
         foreach ($orders as $order) {
             $orderId = base64_encode($order->getEntityId());
             $orderNumber = $order->getIncrementId();
-            $this->assertNotEmpty($customerOrderItemsInResponse[$key]['id']);
-            $this->assertEquals($orderId, $customerOrderItemsInResponse[$key]['id']);
-            $this->assertEquals($orderNumber, $customerOrderItemsInResponse[$key]['number']);
-            $this->assertEquals('Processing', $customerOrderItemsInResponse[$key]['status']);
-            $this->assertEquals(
-                4,
-                $customerOrderItemsInResponse[$key]['total']['shipping_handling']['total_amount']['value']
-            );
-            $this->assertEquals(
-                5,
-                $customerOrderItemsInResponse[$key]['total']['total_shipping']['value']
-            );
-            $this->assertEquals(
-                5,
-                $customerOrderItemsInResponse[$key]['total']['total_tax']['value']
-            );
-
+            $orderItemInResponse = $customerOrderItemsInResponse[$key];
+            $this->assertNotEmpty($orderItemInResponse['id']);
+            $this->assertEquals($orderId, $orderItemInResponse['id']);
+            $this->assertEquals($orderNumber, $orderItemInResponse['number']);
+            $this->assertEquals('Processing', $orderItemInResponse['status']);
+            $this->assertEquals(5, $orderItemInResponse['total']['shipping_handling']['total_amount']['value']);
+            $this->assertEquals(5, $orderItemInResponse['total']['total_shipping']['value']);
+            $this->assertEquals(5, $orderItemInResponse['total']['total_tax']['value']);
             $key++;
         }
     }
@@ -500,7 +482,7 @@ QUERY;
             '',
             $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
         );
-        $this->assertEmpty($responseWithWrongCustomer['customer']['orders']['total_count']);
+        $this->assertEquals(0, $responseWithWrongCustomer['customer']['orders']['total_count']);
         $this->assertEmpty($responseWithWrongCustomer['customer']['orders']['items']);
 
         $currentEmail = 'customer@example.com';
@@ -511,7 +493,7 @@ QUERY;
             '',
             $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
         );
-        $this->assertNotEmpty($responseWithCorrectCustomer['customer']['orders']['total_count']);
+        $this->assertEquals(1, $responseWithCorrectCustomer['customer']['orders']['total_count']);
         $this->assertNotEmpty($responseWithCorrectCustomer['customer']['orders']['items']);
     }
 
@@ -527,55 +509,74 @@ QUERY;
         $query =
             <<<QUERY
 {
-  customer
-  {
-   orders(filter:{number:{eq:"{$orderNumber}"}}){
-    items
-    {
-      number
-      items{
-        product_sku
+  customer {
+    orders(filter: {number: {eq: "{$orderNumber}"}}) {
+      items {
+        number
+        items {
+          product_sku
+        }
+        total {
+          base_grand_total {
+            value
+            currency
+          }
+          grand_total {
+            value
+            currency
+          }
+          total_shipping {
+            value
+          }
+          shipping_handling {
+            amount_including_tax {
+              value
+            }
+            amount_excluding_tax {
+              value
+            }
+            total_amount {
+              value
+            }
+            taxes {
+              amount {
+                value
+              }
+              title
+              rate
+            }
+          }
+          subtotal {
+            value
+            currency
+          }
+          taxes {
+            amount {
+              value
+              currency
+            }
+            title
+            rate
+          }
+          discounts {
+            amount {
+              value
+              currency
+            }
+            label
+          }
+        }
       }
-      total {
-                    base_grand_total {
-                        value
-                        currency
-                    }
-                    grand_total {
-                        value
-                        currency
-                    }
-                     total_shipping{value}
-             shipping_handling
-             {
-               amount_including_tax{value}
-               amount_excluding_tax{value}
-               total_amount{value}
-               taxes {amount{value} title rate}
-             }
-                    subtotal {
-                        value
-                        currency
-                    }
-                    taxes {amount{value currency} title rate}
-                    discounts {
-                        amount {
-                            value
-                            currency
-                        }
-                        label
-                    }
-                }
-    }
-    page_info {
+      page_info {
         current_page
         page_size
         total_pages
+      }
+      total_count
     }
-    total_count
-   }
- }
+  }
 }
+
 QUERY;
 
         $currentEmail = 'customer@example.com';
@@ -586,6 +587,7 @@ QUERY;
             '',
             $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
         );
+        $this->assertArrayNotHasKey('errors', $response);
         $this->assertArrayHasKey('customer', $response);
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
@@ -653,20 +655,11 @@ QUERY;
        }
 QUERY;
 
-        $currentEmail = 'customer@example.com';
-        $currentPassword = 'password';
-        $response = $this->graphQlQuery(
-            $query,
-            [],
-            '',
-            array_merge(
-                $this->customerAuthenticationHeader->execute(
-                    $currentEmail,
-                    $currentPassword
-                ),
-                ['Store' => $store]
-            )
+        $headers = array_merge(
+            $this->customerAuthenticationHeader->execute('customer@example.com', 'password'),
+            ['Store' => $store]
         );
+        $response = $this->graphQlQuery($query, [], '', $headers);
         $this->assertArrayHasKey('customer', $response);
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
@@ -720,7 +713,8 @@ QUERY;
     }
 
     /**
-     *  Verify that the customer order has the tax information on shipping and totals
+     * Verify that the customer order has the tax information on shipping and totals
+     *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
@@ -743,7 +737,12 @@ QUERY;
         $this->deleteOrder();
     }
 
-    private function assertTotalsAndShippingWithExcludedTaxSetting($customerOrderItemTotal)
+    /**
+     * Assert totals and shipping amounts with taxes excluded
+     *
+     * @param $customerOrderItemTotal
+     */
+    private function assertTotalsAndShippingWithExcludedTaxSetting($customerOrderItemTotal): void
     {
         $this->assertCount(2, $customerOrderItemTotal['taxes']);
         $expectedProductAndShippingTaxes = [1.5, 0.75];
@@ -786,7 +785,8 @@ QUERY;
     }
 
     /**
-     *  Verify that the customer order has the tax information on shipping and totals
+     * Verify that the customer order has the tax information on shipping and totals
+     *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
@@ -813,6 +813,8 @@ QUERY;
     }
 
     /**
+     * Check order totals an shipping amounts with taxes
+     *
      * @param array $customerOrderItemTotal
      */
     private function assertTotalsAndShippingWithTaxes(array $customerOrderItemTotal): void
@@ -857,6 +859,8 @@ QUERY;
     }
 
     /**
+     * Create an empty cart with GraphQl mutation
+     *
      * @return string
      */
     private function createEmptyCart(): string
@@ -878,6 +882,8 @@ QUERY;
     }
 
     /**
+     * Add product to cart with GraphQl query
+     *
      * @param string $cartId
      * @param float $qty
      * @param string $sku
@@ -913,57 +919,11 @@ QUERY;
         );
     }
 
-    public function addBundleProductQuery(
-        string $cartId,
-        float $qty,
-        string $sku,
-        array $optionsAndSelectionData
-    ) {
-        $query = <<<QUERY
-mutation {
-  addBundleProductsToCart(input:{
-    cart_id:"{$cartId}"
-    cart_items:[
-      {
-        data:{
-          sku:"{$sku}"
-          quantity:$qty
-        }
-        bundle_options:[
-          {
-            id:$optionsAndSelectionData[0]
-            quantity:1
-            value:["{$optionsAndSelectionData[1]}"]
-          }
-          {
-            id:$optionsAndSelectionData[2]
-            quantity:2
-            value:["{$optionsAndSelectionData[3]}"]
-          }
-        ]
-      }
-    ]
-  }) {
-    cart {
-      items {quantity product {sku}}
-      }
-    }
-}
-QUERY;
-        $currentEmail = 'customer@example.com';
-        $currentPassword = 'password';
-        $response = $this->graphQlMutation(
-            $query,
-            [],
-            '',
-            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
-        );
-        $this->assertArrayHasKey('cart', $response['addBundleProductsToCart']);
-    }
     /**
+     * Set billing address on cart with GraphQL mutation
+     *
      * @param string $cartId
-     * @param array $auth
-     * @return array
+     * @return void
      */
     private function setBillingAddress(string $cartId): void
     {
@@ -1006,6 +966,8 @@ QUERY;
     }
 
     /**
+     * Set shipping address on cart with GraphQl query
+     *
      * @param string $cartId
      * @return array
      */
@@ -1057,7 +1019,10 @@ QUERY;
         $availableShippingMethod = current($shippingAddress['available_shipping_methods']);
         return $availableShippingMethod;
     }
+
     /**
+     * Set shipping method on cart with GraphQl mutation
+     *
      * @param string $cartId
      * @param array $method
      * @return array
@@ -1098,6 +1063,8 @@ QUERY;
     }
 
     /**
+     * Set payment method on cart with GrpahQl mutation
+     *
      * @param string $cartId
      * @param array $method
      * @return void
@@ -1129,6 +1096,8 @@ QUERY;
     }
 
     /**
+     * Place order using GraphQl mutation
+     *
      * @param string $cartId
      * @return string
      */
@@ -1164,7 +1133,7 @@ QUERY;
      * @param string $orderNumber
      * @return array
      */
-    private function getCustomerOrderQuery($orderNumber):array
+    private function getCustomerOrderQuery($orderNumber): array
     {
         $query =
             <<<QUERY
@@ -1213,17 +1182,18 @@ QUERY;
 
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
-        $customerOrderItemsInResponse = $response['customer']['orders']['items'];
-        return $customerOrderItemsInResponse;
+        return $response['customer']['orders']['items'];
     }
 
     /**
+     * Clean up orders
+     *
      * @return void
      */
     private function deleteOrder(): void
     {
-        /** @var \Magento\Framework\Registry $registry */
-        $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+        /** @var Registry $registry */
+        $registry = Bootstrap::getObjectManager()->get(Registry::class);
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', true);
         /** @var $order \Magento\Sales\Model\Order */
