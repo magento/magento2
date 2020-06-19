@@ -69,7 +69,7 @@ class Address
                 $attributesForSave[] = 'billing_address_id';
             }
             $shippingAddress = $order->getShippingAddress();
-            if ($shippingAddress && $order->getShippigAddressId() != $shippingAddress->getId()) {
+            if ($shippingAddress && $order->getShippingAddressId() != $shippingAddress->getId()) {
                 $order->setShippingAddressId($shippingAddress->getId());
                 $attributesForSave[] = 'shipping_address_id';
             }
