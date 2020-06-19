@@ -191,17 +191,64 @@
     #AddDefaultCharset UTF-8
     AddType 'text/html; charset=UTF-8' html
 
+#############################################
+#
+# Aditional directives to improve caching
+#
+#############################################
+
+# Below is custom site speed items
+# We need to set correct content-type for fonts
+AddType application/vnd.ms-fontobject .eot 
+AddType application/x-font-ttf .ttf
+AddType application/x-font-opentype .otf
+AddType application/x-font-woff .woff .woff2
+AddType image/svg+xml .svg
+
 <IfModule mod_expires.c>
 
 ############################################
 ## Add default Expires header
 ## http://developer.yahoo.com/performance/rules.html#expires
-
+    ExpiresActive On
     ExpiresDefault "access plus 1 year"
     ExpiresByType text/html A0
     ExpiresByType text/plain A0
-
+    ExpiresByType image/x-icon "access plus 604800 seconds"
+    ExpiresByType image/jpeg "access plus 604800 seconds"
+    ExpiresByType image/png "access plus 604800 seconds"
+    ExpiresByType image/gif "access plus 604800 seconds"
+    ExpiresByType text/css "access plus 604800 seconds"
+    ExpiresByType text/javascript "access plus 604800 seconds"
+    ExpiresByType application/javascript "access plus 604800 seconds"
+    ExpiresByType application/x-javascript "access plus 604800 seconds"
+    ExpiresByType text/html "access plus 600 seconds"
+    ExpiresByType application/xhtml+xml "access plus 600 seconds"
+    # This part sets the expires for the fonts
+    ExpiresByType application/vnd.ms-fontobject "access plus 1 year"
+    ExpiresByType application/x-font-ttf "access plus 1 year"
+    ExpiresByType application/x-font-opentype "access plus 1 year"
+    ExpiresByType application/x-font-woff "access plus 1 year"
+    ExpiresByType image/svg+xml "access plus 1 year"
 </IfModule>
+
+# This sets up browser cache control
+# BEGIN Cache-Control Headers
+<ifModule mod_headers.c>
+  <filesMatch "\.(ico|jpe?g|png|gif|swf)$">
+    Header set Cache-Control "public"
+  </filesMatch>
+  <filesMatch "\.(css)$">
+    Header set Cache-Control "public"
+  </filesMatch>
+  <filesMatch "\.(js)$">
+    Header set Cache-Control "private"
+  </filesMatch>
+  <filesMatch "\.(x?html?|php)$">
+    Header set Cache-Control "private, must-revalidate"
+  </filesMatch>
+</ifModule>
+# END Cache-Control Headers
 
 ###########################################
 ## Deny access to root files to hide sensitive application information
