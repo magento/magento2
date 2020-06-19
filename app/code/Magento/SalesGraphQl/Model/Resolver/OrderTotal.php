@@ -93,7 +93,7 @@ class OrderTotal implements ResolverInterface
     /**
      * Retrieve applied taxes that apply to shipping
      *
-     * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface $extensionAttributes
+     * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface $itemAppliedTaxes
      * @return array
      */
     private function getAppliedShippingTaxesForItems(array $itemAppliedTaxes): array
@@ -125,7 +125,7 @@ class OrderTotal implements ResolverInterface
         if (!($order->getDiscountDescription() === null && $order->getShippingDiscountAmount() == 0)) {
             $shippingDiscounts[] =
                 [
-                    'label' => $order->getDiscountDescription() ?? "null",
+                    'label' => $order->getDiscountDescription() ?? __('Discount'),
                     'amount' => [
                         'value' => $order->getShippingDiscountAmount(),
                         'currency' => $order->getOrderCurrencyCode()
@@ -146,7 +146,7 @@ class OrderTotal implements ResolverInterface
         $discounts = [];
         if (!($order->getDiscountDescription() === null && $order->getDiscountAmount() == 0)) {
             $discounts[] = [
-                'label' => $order->getDiscountDescription() ?? __("Discount"),
+                'label' => $order->getDiscountDescription() ?? __('Discount'),
                 'amount' => [
                     'value' => $order->getDiscountAmount(),
                     'currency' => $order->getOrderCurrencyCode()

@@ -19,7 +19,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Class RetrieveOrdersWithBundleProductByOrderNumberTest
+ * Test for orders with bundle product
  */
 class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
 {
