@@ -10,7 +10,7 @@ class Monolog extends ParentMonolog
     /**
      * {@inheritdoc}
      */
-    public function __construct($name, array $handlers = [], array $processors = [])
+    public function __construct(\Dxc\Logger\Helper\Data $name, array $handlers = [], array $processors = [])
     {
         $instanceName = $name->getKubernetesPodDetails();
         $handlers = array_values($handlers);
