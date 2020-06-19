@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Model\Sample;
 
 use Magento\Catalog\Api\Data\ProductInterface;
@@ -33,16 +36,15 @@ class UpdateHandler implements ExtensionInterface
     /**
      * Update samples for downloadable product if exist
      *
-     * @param object $entity
+     * @param ProductInterface $entity
      * @param array $arguments
-     * @return ProductInterface|object
+     * @return ProductInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute($entity, $arguments = [])
+    public function execute($entity, $arguments = []): ProductInterface
     {
         $samples = $entity->getExtensionAttributes()->getDownloadableProductSamples();
 
-        /** @var $entity ProductInterface */
         if ($samples && $entity->getTypeId() === Type::TYPE_DOWNLOADABLE) {
             $this->updateSamples($entity, $samples);
         }
