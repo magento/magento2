@@ -12,6 +12,8 @@ namespace Magento\Theme\Model\PageLayout\Config;
  */
 class Builder implements \Magento\Framework\View\Model\PageLayout\Config\BuilderInterface
 {
+    const CACHE_KEY_LAYOUTS = 'THEME_LAYOUTS_FILES_MERGED';
+
     /**
      * @var \Magento\Framework\View\PageLayout\ConfigFactory
      */
@@ -33,18 +35,26 @@ class Builder implements \Magento\Framework\View\Model\PageLayout\Config\Builder
     private $configFiles = [];
 
     /**
+     * @var \Magento\Framework\App\Cache\Type\Layout
+     */
+    protected $cacheModel;
+
+    /**
      * @param \Magento\Framework\View\PageLayout\ConfigFactory $configFactory
      * @param \Magento\Framework\View\PageLayout\File\Collector\Aggregated $fileCollector
      * @param \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection
+     * @param \Magento\Framework\App\Cache\Type\Layout $cacheModel
      */
     public function __construct(
         \Magento\Framework\View\PageLayout\ConfigFactory $configFactory,
         \Magento\Framework\View\PageLayout\File\Collector\Aggregated $fileCollector,
-        \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection
+        \Magento\Theme\Model\ResourceModel\Theme\Collection $themeCollection,
+        \Magento\Framework\App\Cache\Type\Layout $cacheModel
     ) {
         $this->configFactory = $configFactory;
         $this->fileCollector = $fileCollector;
         $this->themeCollection = $themeCollection;
+        $this->cacheModel = $cacheModel;
         $this->themeCollection->setItemObjectClass(\Magento\Theme\Model\Theme\Data::class);
     }
 
@@ -57,7 +67,7 @@ class Builder implements \Magento\Framework\View\Model\PageLayout\Config\Builder
     }
 
     /**
-     * Retrieve configuration files.
+     * Retrieve configuration files. Caches merged layouts.xml XML files.
      *
      * @return array
      */
@@ -65,10 +75,17 @@ class Builder implements \Magento\Framework\View\Model\PageLayout\Config\Builder
     {
         if (!$this->configFiles) {
             $configFiles = [];
-            foreach ($this->themeCollection->loadRegisteredThemes() as $theme) {
-                $configFiles[] = $this->fileCollector->getFilesContent($theme, 'layouts.xml');
+            $this->configFiles = $this->cacheModel->load(self::CACHE_KEY_LAYOUTS);
+            if (!empty($this->configFiles)) {
+                $this->configFiles = @unserialize($this->configFiles);//if value in cache is corrupted.
             }
-            $this->configFiles = array_merge(...$configFiles);
+            if (empty($this->configFiles)) {
+                foreach ($this->themeCollection->loadRegisteredThemes() as $theme) {
+                    $configFiles[] = $this->fileCollector->getFilesContent($theme, 'layouts.xml');
+                }
+                $this->configFiles = array_merge(...$configFiles);
+                $this->cacheModel->save(serialize($this->configFiles), self::CACHE_KEY_LAYOUTS);
+            }
         }
 
         return $this->configFiles;
