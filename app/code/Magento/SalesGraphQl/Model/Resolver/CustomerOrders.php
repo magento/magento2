@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\Resolver;
 
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -14,9 +15,9 @@ use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query\SearchQuery;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query\OrderFilter;
 use Magento\Store\Api\Data\StoreInterface;
 
 /**
@@ -25,17 +26,33 @@ use Magento\Store\Api\Data\StoreInterface;
 class CustomerOrders implements ResolverInterface
 {
     /**
-     * @var SearchQuery
+     * @var SearchCriteriaBuilder
      */
-    private $searchQuery;
+    private $searchCriteriaBuilder;
 
     /**
-     * @param SearchQuery $searchQuery
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * @var OrderFilter
+     */
+    private $orderFilter;
+
+    /**
+     * @param OrderRepositoryInterface $orderRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param OrderFilter $orderFilter
      */
     public function __construct(
-        SearchQuery $searchQuery
+        OrderRepositoryInterface $orderRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        OrderFilter $orderFilter
     ) {
-        $this->searchQuery = $searchQuery;
+        $this->orderRepository = $orderRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->orderFilter = $orderFilter;
     }
 
     /**
@@ -48,7 +65,6 @@ class CustomerOrders implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        /** @var ContextInterface $context */
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
@@ -62,13 +78,31 @@ class CustomerOrders implements ResolverInterface
         /** @var StoreInterface $store */
         $store = $context->getExtensionAttributes()->getStore();
         try {
-            $searchResultDto = $this->searchQuery->getResult($args, $userId, $store);
+            $filterGroups = $this->orderFilter->createFilterGroups($args, $userId, (int)$store->getId());
+            $this->searchCriteriaBuilder->setFilterGroups($filterGroups);
+            if (isset($args['currentPage'])) {
+                $this->searchCriteriaBuilder->setCurrentPage($args['currentPage']);
+            }
+            if (isset($args['pageSize'])) {
+                $this->searchCriteriaBuilder->setPageSize($args['pageSize']);
+            }
+
+            $searchCriteria = $this->searchCriteriaBuilder->create();
+            $searchResult = $this->orderRepository->getList($searchCriteria);
+            $orderArray = [];
+            /** @var OrderInterface $order */
+            foreach ($searchResult->getItems() as $key => $order) {
+                $orderArray[$key] = $order->getData();
+                $orderArray[$key]['model'] = $order;
+            }
+
+            $maxPages = (int)ceil($searchResult->getTotalCount() / $searchResult->getPageSize());
         } catch (InputException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
 
         $orders = [];
-        foreach (($searchResultDto->getItems() ?? []) as $order) {
+        foreach ($orderArray as $order) {
             if (!($order['model'] ?? null instanceof OrderInterface)) {
                 throw new LocalizedException(__('"model" value should be specified'));
             }
@@ -89,12 +123,12 @@ class CustomerOrders implements ResolverInterface
         }
 
         return [
-            'total_count' => $searchResultDto->getTotalCount(),
+            'total_count' => $searchResult->getTotalCount(),
             'items' => $orders,
             'page_info'   => [
-                'page_size'    => $searchResultDto->getPageSize(),
-                'current_page' => $searchResultDto->getCurrentPage(),
-                'total_pages' => $searchResultDto->getTotalPages(),
+                'page_size'    => $searchResult->getPageSize(),
+                'current_page' => $searchResult->getCurPage(),
+                'total_pages' => $maxPages,
             ]
         ];
     }

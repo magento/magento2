@@ -18,14 +18,14 @@ class OrderItemInterfaceTypeResolverComposite implements TypeResolverInterface
     /**
      * TypeResolverInterface[]
      */
-    private $productTypeNameResolvers = [];
+    private $orderItemTypeResolvers = [];
 
     /**
-     * @param TypeResolverInterface[] $productTypeNameResolvers
+     * @param TypeResolverInterface[] $orderItemTypeResolvers
      */
-    public function __construct(array $productTypeNameResolvers = [])
+    public function __construct(array $orderItemTypeResolvers = [])
     {
-        $this->productTypeNameResolvers = $productTypeNameResolvers;
+        $this->orderItemTypeResolvers = $orderItemTypeResolvers;
     }
 
     /**
@@ -39,20 +39,20 @@ class OrderItemInterfaceTypeResolverComposite implements TypeResolverInterface
     {
         $resolvedType = null;
 
-        foreach ($this->productTypeNameResolvers as $productTypeNameResolver) {
+        foreach ($this->orderItemTypeResolvers as $orderItemTypeResolver) {
             if (!isset($data['product_type'])) {
                 throw new GraphQlInputException(
                     __('Missing key %1 in sales item data', ['product_type'])
                 );
             }
-            $resolvedType = $productTypeNameResolver->resolveType($data);
+            $resolvedType = $orderItemTypeResolver->resolveType($data);
             if (!empty($resolvedType)) {
                 return $resolvedType;
             }
         }
 
         throw new GraphQlInputException(
-            __('Concrete type for %1 not implemented', ['InvoiceItemInterface'])
+            __('Concrete type for %1 not implemented', ['OrderItemInterface'])
         );
     }
 }
