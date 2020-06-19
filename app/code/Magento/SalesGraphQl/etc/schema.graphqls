@@ -109,7 +109,7 @@ type TaxItem @doc(description: "The tax item details") {
     title: String! @doc(description: "A title that describes the tax")
     rate: Float! @doc(description: "The rate used to calculate the tax")
 }
-​
+
 type OrderTotal @doc(description: "Contains details about the sales total amounts used to calculate the final price") {
     subtotal: Money! @doc(description: "The subtotal of the order, excluding shipping, discounts, and taxes")
     discounts: [Discount] @doc(description: "The applied discounts to the order")
