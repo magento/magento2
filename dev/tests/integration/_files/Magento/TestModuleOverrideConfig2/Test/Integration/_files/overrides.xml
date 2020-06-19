@@ -152,12 +152,13 @@
             <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module.php" />
             <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module_rollback.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module_rollback.php" />
             <dataSet name="first_data_set">
-                <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture2_first_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module.php" />
-                <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture2_first_module_rollback.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module_rollback.php" />
+                <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module.php" />
+                <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module_rollback.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module_rollback.php" />
             </dataSet>
         </method>
         <method name="testReplaceRequiredFixture">
             <magentoDataFixture path="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module.php" />
+            <magentoDataFixture path="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module_rollback.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module_rollback.php" />
         </method>
     </test>
     <test class="Magento\TestModuleOverrideConfig\MagentoDataFixture\SortFixturesTest">
@@ -203,4 +204,9 @@
             <dataSet name="first_data_set" skip="true"/>
         </method>
     </test>
+    <global>
+        <magentoDataFixture path="Magento/TestModuleOverrideConfig/_files/global_fixture_first_module.php" />
+        <magentoConfigFixture scopeType="store" scopeCode="current" path="test_section/test_group/field_4" value="4th field globally overridden value"/>
+        <magentoConfigFixture scopeType="store" scopeCode="current" path="test_section/test_group/field_5" newValue="5th field globally replaced value"/>
+    </global>
 </overrides>
