@@ -216,7 +216,7 @@ class ConfigWriter implements ConfigWriterInterface
      *
      * @return array
      */
-    private function getClassDefinitions()
+    public function getClassDefinitions()
     {
         return $this->classDefinitions->getClasses();
     }
@@ -227,7 +227,7 @@ class ConfigWriter implements ConfigWriterInterface
      * @param string $scopeCode
      * @return bool
      */
-    private function isCurrentScope($scopeCode)
+    public function isCurrentScope($scopeCode)
     {
         return $this->scopeConfig->getCurrentScope() === $scopeCode;
     }
@@ -314,7 +314,7 @@ class ConfigWriter implements ConfigWriterInterface
      * @param array $plugins
      * @return void
      */
-    private function trimInstanceStartingBackslash(&$plugins)
+    public function trimInstanceStartingBackslash(&$plugins)
     {
         foreach ($plugins as &$plugin) {
             $plugin['instance'] = ltrim($plugin['instance'], '\\');
@@ -327,7 +327,7 @@ class ConfigWriter implements ConfigWriterInterface
      * @param array $plugins
      * @return void
      */
-    private function filterPlugins(array &$plugins)
+    public function filterPlugins(array &$plugins)
     {
         foreach ($plugins as $name => $plugin) {
             if (empty($plugin['instance'])) {
@@ -367,7 +367,7 @@ class ConfigWriter implements ConfigWriterInterface
      * @param array $itemB
      * @return int
      */
-    private function sort($itemA, $itemB)
+    public function sort($itemA, $itemB)
     {
         return ($itemA['sortOrder'] ?? PHP_INT_MIN) - ($itemB['sortOrder'] ?? PHP_INT_MIN);
     }

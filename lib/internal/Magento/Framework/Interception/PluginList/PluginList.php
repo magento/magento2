@@ -18,7 +18,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\Interception\ConfigLoader;
-use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Interception\ConfigWriter;
 
 /**
  * Plugin config, provides list of plugins for a type
@@ -80,11 +80,6 @@ class PluginList extends Scoped implements InterceptionPluginList
     protected $_pluginInstances = [];
 
     /**
-     * @var \Psr\Log\LoggerInterface
-     */
-    private $logger;
-
-    /**
      * @var SerializerInterface
      */
     private $serializer;
@@ -93,6 +88,11 @@ class PluginList extends Scoped implements InterceptionPluginList
      * @var ConfigLoader
      */
     private $configLoader;
+
+    /**
+     * @var ConfigWriter
+     */
+    private $configWriter;
 
     /**
      * Constructor
@@ -109,6 +109,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
      * @param ConfigLoader|null $configLoader
+     * @param ConfigWriter|null $configWriter
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -123,7 +124,8 @@ class PluginList extends Scoped implements InterceptionPluginList
         array $scopePriorityScheme = ['global'],
         $cacheId = 'plugins',
         SerializerInterface $serializer = null,
-        ConfigLoader $configLoader = null
+        ConfigLoader $configLoader = null,
+        ConfigWriter $configWriter = null
     ) {
         $this->serializer = $serializer ?: $objectManager->get(Serialize::class);
         parent::__construct($reader, $configScope, $cache, $cacheId, $this->serializer);
@@ -133,7 +135,8 @@ class PluginList extends Scoped implements InterceptionPluginList
         $this->_classDefinitions = $classDefinitions;
         $this->_scopePriorityScheme = $scopePriorityScheme;
         $this->_objectManager = $objectManager;
-        $this->configLoader = $configLoader ?: ObjectManager::getInstance()->get(ConfigLoader::class);
+        $this->configLoader = $configLoader ?: $this->_objectManager->get(ConfigLoader::class);
+        $this->configWriter = $configWriter ?: $this->_objectManager->get(ConfigWriter::class);
     }
 
     /**
@@ -176,9 +179,9 @@ class PluginList extends Scoped implements InterceptionPluginList
             }
             $this->_inherited[$type] = null;
             if (is_array($plugins) && count($plugins)) {
-                $this->filterPlugins($plugins);
+                $this->configWriter->filterPlugins($plugins);
                 uasort($plugins, [$this, '_sort']);
-                $this->trimInstanceStartingBackslash($plugins);
+                $this->configWriter->trimInstanceStartingBackslash($plugins);
                 $this->_inherited[$type] = $plugins;
                 $lastPerMethod = [];
                 foreach ($plugins as $key => $plugin) {
@@ -213,19 +216,6 @@ class PluginList extends Scoped implements InterceptionPluginList
     }
 
     /**
-     * Trims starting backslash from plugin instance name
-     *
-     * @param array $plugins
-     * @return void
-     */
-    private function trimInstanceStartingBackslash(&$plugins)
-    {
-        foreach ($plugins as &$plugin) {
-            $plugin['instance'] = ltrim($plugin['instance'], '\\');
-        }
-    }
-
-    /**
      * Sort items
      *
      * @param array $itemA
@@ -234,7 +224,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      */
     protected function _sort($itemA, $itemB)
     {
-        return ($itemA['sortOrder'] ?? PHP_INT_MIN) - ($itemB['sortOrder'] ?? PHP_INT_MIN);
+        return $this->configWriter->sort($itemA, $itemB);
     }
 
     /**
@@ -281,8 +271,8 @@ class PluginList extends Scoped implements InterceptionPluginList
     protected function _loadScopedData()
     {
         $scope = $this->_configScope->getCurrentScope();
-        if (false == isset($this->_loadedScopes[$scope])) {
-            $index = array_search($scope, $this->_scopePriorityScheme);
+        if (false === isset($this->_loadedScopes[$scope])) {
+            $index = array_search($scope, $this->_scopePriorityScheme, true);
             /**
              * Force current scope to be at the end of the scheme to ensure that default priority scopes are loaded.
              * Mostly happens when the current scope is primary.
@@ -363,7 +353,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      */
     protected function isCurrentScope($scopeCode)
     {
-        return $this->_configScope->getCurrentScope() === $scopeCode;
+        return $this->configWriter->isCurrentScope($scopeCode);
     }
 
     /**
@@ -373,7 +363,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      */
     protected function getClassDefinitions()
     {
-        return $this->_classDefinitions->getClasses();
+        return $this->configWriter->getClassDefinitions();
     }
 
     /**
@@ -394,35 +384,5 @@ class PluginList extends Scoped implements InterceptionPluginList
                 }
             }
         }
-    }
-
-    /**
-     * Remove from list not existing plugins
-     *
-     * @param array $plugins
-     * @return void
-     */
-    private function filterPlugins(array &$plugins)
-    {
-        foreach ($plugins as $name => $plugin) {
-            if (empty($plugin['instance'])) {
-                unset($plugins[$name]);
-                $this->getLogger()->info("Reference to undeclared plugin with name '{$name}'.");
-            }
-        }
-    }
-
-    /**
-     * Get logger
-     *
-     * @return \Psr\Log\LoggerInterface
-     * @deprecated 100.2.0
-     */
-    private function getLogger()
-    {
-        if ($this->logger === null) {
-            $this->logger = $this->_objectManager->get(\Psr\Log\LoggerInterface::class);
-        }
-        return $this->logger;
     }
 }
