@@ -7,23 +7,23 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Model\Directory;
 
-use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
-use Magento\MediaGalleryApi\Model\BlacklistPatternsConfigInterface;
+use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
+use Magento\MediaGalleryApi\Model\ExcludedPatternsConfigInterface;
 
 /**
- * Check if the path is blacklisted for media gallery. Directory path may be blacklisted if it's reserved by the system
+ * Check if the path is excluded for media gallery. Directory path may be blacklisted if it's reserved by the system
  */
-class IsBlacklisted implements IsPathBlacklistedInterface
+class IsExcluded implements IsPathExcludedInterface
 {
     /**
-     * @var BlacklistPatternsConfigInterface
+     * @var ExcludedPatternsConfigInterface
      */
     private $config;
 
     /**
-     * @param BlacklistPatternsConfigInterface $config
+     * @param ExcludedPatternsConfigInterface $config
      */
-    public function __construct(BlacklistPatternsConfigInterface $config)
+    public function __construct(ExcludedPatternsConfigInterface $config)
     {
         $this->config = $config;
     }
