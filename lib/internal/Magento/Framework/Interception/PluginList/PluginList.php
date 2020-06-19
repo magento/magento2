@@ -298,7 +298,21 @@ class PluginList extends Scoped implements InterceptionPluginList
                         $this->_loadedScopes[$scopeCode] = true;
                     }
                 } else {
-                    foreach ($this->_loadScopedVirtualTypes() as $class) {
+                    [
+                        $virtualTypes,
+                        $this->_scopePriorityScheme,
+                        $this->_loadedScopes,
+                        $this->_data,
+                        $this->_inherited,
+                        $this->_processed
+                    ] = $this->configWriter->loadScopedVirtualTypes(
+                        $this->_scopePriorityScheme,
+                        $this->_loadedScopes,
+                        $this->_data,
+                        $this->_inherited,
+                        $this->_processed
+                    );
+                    foreach ($virtualTypes as $class) {
                         $this->_inheritPlugins($class);
                     }
                     foreach ($this->getClassDefinitions() as $class) {
@@ -312,37 +326,6 @@ class PluginList extends Scoped implements InterceptionPluginList
             }
             $this->_pluginInstances = [];
         }
-    }
-
-    /**
-     * Load virtual types for current scope
-     *
-     * @return array
-     */
-    private function _loadScopedVirtualTypes()
-    {
-        $virtualTypes = [];
-        foreach ($this->_scopePriorityScheme as $scopeCode) {
-            if (!isset($this->_loadedScopes[$scopeCode])) {
-                $data = $this->_reader->read($scopeCode) ?: [];
-                unset($data['preferences']);
-                if (count($data) > 0) {
-                    $this->_inherited = [];
-                    $this->_processed = [];
-                    $this->merge($data);
-                    foreach ($data as $class => $config) {
-                        if (isset($config['type'])) {
-                            $virtualTypes[] = $class;
-                        }
-                    }
-                }
-                $this->_loadedScopes[$scopeCode] = true;
-            }
-            if ($this->isCurrentScope($scopeCode)) {
-                break;
-            }
-        }
-        return $virtualTypes;
     }
 
     /**
@@ -374,15 +357,6 @@ class PluginList extends Scoped implements InterceptionPluginList
      */
     public function merge(array $config)
     {
-        foreach ($config as $type => $typeConfig) {
-            if (isset($typeConfig['plugins'])) {
-                $type = ltrim($type, '\\');
-                if (isset($this->_data[$type])) {
-                    $this->_data[$type] = array_replace_recursive($this->_data[$type], $typeConfig['plugins']);
-                } else {
-                    $this->_data[$type] = $typeConfig['plugins'];
-                }
-            }
-        }
+        $this->_data = $this->configWriter->merge($config, $this->_data);
     }
 }

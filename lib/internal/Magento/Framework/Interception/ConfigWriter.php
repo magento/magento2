@@ -154,7 +154,21 @@ class ConfigWriter implements ConfigWriterInterface
                     $this->scopePriorityScheme[] = $scope;
                 }
                 $cacheId = implode('|', $this->scopePriorityScheme) . "|" . $this->cacheId;
-                foreach ($this->loadScopedVirtualTypes() as $class) {
+                [
+                    $virtualTypes,
+                    $this->scopePriorityScheme,
+                    $this->loadedScopes,
+                    $this->pluginData,
+                    $this->inherited,
+                    $this->processed
+                ] = $this->loadScopedVirtualTypes(
+                    $this->scopePriorityScheme,
+                    $this->loadedScopes,
+                    $this->pluginData,
+                    $this->inherited,
+                    $this->processed
+                );
+                foreach ($virtualTypes as $class) {
                     $this->inheritPlugins($class);
                 }
                 foreach ($this->pluginData as $className => $value) {
@@ -183,32 +197,37 @@ class ConfigWriter implements ConfigWriterInterface
     /**
      * Load virtual types for current scope
      *
+     * @param array $scopePriorityScheme
+     * @param array $loadedScopes
+     * @param array|null $pluginData
+     * @param array $inherited
+     * @param array $processed
      * @return array
      */
-    private function loadScopedVirtualTypes()
+    public function loadScopedVirtualTypes($scopePriorityScheme, $loadedScopes, $pluginData, $inherited, $processed)
     {
         $virtualTypes = [];
-        foreach ($this->scopePriorityScheme as $scopeCode) {
-            if (!isset($this->loadedScopes[$scopeCode])) {
+        foreach ($scopePriorityScheme as $scopeCode) {
+            if (!isset($loadedScopes[$scopeCode])) {
                 $data = $this->reader->read($scopeCode) ?: [];
                 unset($data['preferences']);
                 if (count($data) > 0) {
-                    $this->inherited = [];
-                    $this->processed = [];
-                    $this->merge($data);
+                    $inherited = [];
+                    $processed = [];
+                    $pluginData = $this->merge($data, $pluginData);
                     foreach ($data as $class => $config) {
                         if (isset($config['type'])) {
                             $virtualTypes[] = $class;
                         }
                     }
                 }
-                $this->loadedScopes[$scopeCode] = true;
+                $loadedScopes[$scopeCode] = true;
             }
             if ($this->isCurrentScope($scopeCode)) {
                 break;
             }
         }
-        return $virtualTypes;
+        return [$virtualTypes, $scopePriorityScheme, $loadedScopes, $pluginData, $inherited, $processed];
     }
 
     /**
@@ -341,23 +360,23 @@ class ConfigWriter implements ConfigWriterInterface
      * Merge configuration
      *
      * @param array $config
-     * @return void
+     * @param array|null $pluginData
+     * @return array
      */
-    private function merge(array $config)
+    public function merge(array $config, $pluginData)
     {
         foreach ($config as $type => $typeConfig) {
             if (isset($typeConfig['plugins'])) {
                 $type = ltrim($type, '\\');
-                if (isset($this->pluginData[$type])) {
-                    $this->pluginData[$type] = array_replace_recursive(
-                        $this->pluginData[$type],
-                        $typeConfig['plugins']
-                    );
+                if (isset($pluginData[$type])) {
+                    $pluginData[$type] = array_replace_recursive($pluginData[$type], $typeConfig['plugins']);
                 } else {
-                    $this->pluginData[$type] = $typeConfig['plugins'];
+                    $pluginData[$type] = $typeConfig['plugins'];
                 }
             }
         }
+
+        return $pluginData;
     }
 
     /**
