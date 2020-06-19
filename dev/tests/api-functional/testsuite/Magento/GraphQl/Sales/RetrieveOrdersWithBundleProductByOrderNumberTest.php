@@ -185,28 +185,28 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
             'total_tax' => ['value' => 5.4, 'currency' =>'USD'],
             'total_shipping' => ['value' => 20, 'currency' =>'USD'],
             'shipping_handling' => [
-            'amount_including_tax' => ['value' => 21.5],
-            'amount_excluding_tax' => ['value' => 20],
-            'total_amount' => ['value' => 20],
-            'discounts' => [
-              0 => ['amount'=>['value'=>2],
-                  'label' => 'null'
-                  ]
+                'amount_including_tax' => ['value' => 21.5],
+                'amount_excluding_tax' => ['value' => 20],
+                'total_amount' => ['value' => 20],
+                'discounts' => [
+                    0 => ['amount'=>['value'=>2],
+                        'label' => 'Discount'
+                    ]
                 ],
-            'taxes'=> [
-              0 => [
-                    'amount'=>['value' => 1.35],
-                    'title' => 'US-TEST-*-Rate-1',
-                    'rate' => 7.5
-               ]
+                'taxes'=> [
+                    0 => [
+                        'amount'=>['value' => 1.35],
+                        'title' => 'US-TEST-*-Rate-1',
+                        'rate' => 7.5
+                    ]
+                ]
+            ],
+            'discounts' => [
+                0 => ['amount' => [ 'value' => -8, 'currency' =>'USD'],
+                    'label' => 'Discount'
+                ]
             ]
-        ],
-        'discounts' => [
-              0 => ['amount' => [ 'value' => -8, 'currency' =>'USD'],
-                    'label' => 'null'
-              ]
-        ]
-      ];
+        ];
         $this->assertResponseFields($customerOrderItemTotal, $assertionMap);
     }
 

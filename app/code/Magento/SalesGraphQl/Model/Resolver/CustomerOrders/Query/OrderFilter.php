@@ -9,13 +9,9 @@ namespace Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
-use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\Search\FilterGroup;
 
 /**
  * Order filter allows to filter collection using 'increment_id' as order number, from the search criteria.
@@ -65,19 +61,18 @@ class OrderFilter
     }
 
     /**
-     * Filter for filtering the requested categories id's based on url_key, ids, name in the result.
+     * Create filter for filtering the requested categories id's based on url_key, ids, name in the result.
      *
-     * @param int $userId
      * @param array $args
-     * @param StoreInterface $store
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param int $userId
+     * @param int $storeId
+     * @return FilterGroup[]
      */
-    public function applyFilter(
-        int $userId,
+    public function createFilterGroups(
         array $args,
-        StoreInterface $store,
-        SearchCriteriaBuilder $searchCriteriaBuilder
-    ): void {
+        int $userId,
+        int $storeId
+    ): array {
         $filterGroups = [];
         $this->filterGroupBuilder->setFilters(
             [$this->filterBuilder->setField('customer_id')->setValue($userId)->setConditionType('eq')->create()]
@@ -85,7 +80,7 @@ class OrderFilter
         $filterGroups[] = $this->filterGroupBuilder->create();
 
         $this->filterGroupBuilder->setFilters(
-            [$this->filterBuilder->setField('store_id')->setValue($store->getId())->setConditionType('eq')->create()]
+            [$this->filterBuilder->setField('store_id')->setValue($storeId)->setConditionType('eq')->create()]
         );
         $filterGroups[] = $this->filterGroupBuilder->create();
 
@@ -117,6 +112,6 @@ class OrderFilter
             $this->filterGroupBuilder->setFilters($filters);
             $filterGroups[] = $this->filterGroupBuilder->create();
         }
-        $searchCriteriaBuilder->setFilterGroups($filterGroups);
+        return $filterGroups;
     }
 }

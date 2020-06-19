@@ -15,7 +15,6 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Sales\Api\Data\InvoiceItemInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\SalesGraphQl\Model\Resolver\OrderItem\DataProvider as OrderItemProvider;
 
 /**
  * Resolve bundle options items for order item
@@ -35,22 +34,14 @@ class BundleOptions implements ResolverInterface
     private $valueFactory;
 
     /**
-     * @var OrderItemProvider
-     */
-    private $orderItemProvider;
-
-    /**
      * @param ValueFactory $valueFactory
-     * @param OrderItemProvider $orderItemProvider
      * @param Json $serializer
      */
     public function __construct(
         ValueFactory $valueFactory,
-        OrderItemProvider $orderItemProvider,
         Json $serializer
     ) {
         $this->valueFactory = $valueFactory;
-        $this->orderItemProvider = $orderItemProvider;
         $this->serializer = $serializer;
     }
 
@@ -66,13 +57,13 @@ class BundleOptions implements ResolverInterface
             if ($value['model'] instanceof OrderItemInterface) {
                 /** @var OrderItemInterface $item */
                 $item = $value['model'];
-                return $this->getBundleOptions($item);
+                return $this->getBundleOptions($item, $value);
             }
             if ($value['model'] instanceof InvoiceItemInterface) {
                 /** @var InvoiceItemInterface $item */
                 $item = $value['model'];
                 // Have to pass down order and item to map to avoid refetching all data
-                return $this->getBundleOptions($item->getOrderItem());
+                return $this->getBundleOptions($item->getOrderItem(), $value);
             }
             return null;
         });
@@ -82,10 +73,12 @@ class BundleOptions implements ResolverInterface
      * Format bundle options and values from a parent bundle order item
      *
      * @param OrderItemInterface $item
+     * @param array $formattedItem
      * @return array
      */
     private function getBundleOptions(
-        OrderItemInterface $item
+        OrderItemInterface $item,
+        array $formattedItem
     ): array {
         $bundleOptions = [];
         if ($item->getProductType() === 'bundle') {
@@ -98,6 +91,7 @@ class BundleOptions implements ResolverInterface
                 if (isset($bundleOption['option_id'])) {
                     $bundleOptions[$bundleOptionId]['values'] = $this->formatBundleOptionItems(
                         $item,
+                        $formattedItem,
                         $bundleOption['option_id']
                     );
                 } else {
@@ -112,11 +106,13 @@ class BundleOptions implements ResolverInterface
      * Format Bundle items
      *
      * @param OrderItemInterface $item
+     * @param array $formattedItem
      * @param string $bundleOptionId
      * @return array
      */
     private function formatBundleOptionItems(
         OrderItemInterface $item,
+        array $formattedItem,
         string $bundleOptionId
     ) {
         $optionItems = [];
@@ -129,7 +125,6 @@ class BundleOptions implements ResolverInterface
             // Value Id is missing from parent, so we have to match the child to parent option
             if (isset($bundleChildAttributes['option_id'])
                 && $bundleChildAttributes['option_id'] == $bundleOptionId) {
-                $item = $this->orderItemProvider->getOrderItemById((int)$childrenOrderItem->getItemId());
                 $optionItems[$childrenOrderItem->getItemId()] = [
                     'id' => base64_encode($childrenOrderItem->getItemId()),
                     'product_name' => $childrenOrderItem->getName(),
@@ -139,7 +134,7 @@ class BundleOptions implements ResolverInterface
                         //use options price, not child price
                         'value' => $bundleChildAttributes['price'],
                         //use currency from order
-                        'currency' => $item['product_sale_price']['currency'] ?? null,
+                        'currency' => $formattedItem['product_sale_price']['currency'] ?? null,
                     ]
                 ];
             }

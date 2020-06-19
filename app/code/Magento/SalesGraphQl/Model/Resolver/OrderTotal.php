@@ -35,8 +35,12 @@ class OrderTotal implements ResolverInterface
         $currency = $order->getOrderCurrencyCode();
         $extensionAttributes = $order->getExtensionAttributes();
 
-        $allAppliedTaxesForItemsData =  $this->getAllAppliedTaxesForItemsData($extensionAttributes);
-        $appliedShippingTaxesForItemsData = $this->getAppliedShippingTaxesForItemsData($extensionAttributes);
+        $allAppliedTaxesForItemsData =  $this->getAllAppliedTaxesForItems(
+            $extensionAttributes->getItemAppliedTaxes() ?? []
+        );
+        $appliedShippingTaxesForItemsData = $this->getAppliedShippingTaxesForItems(
+            $extensionAttributes->getItemAppliedTaxes() ?? []
+        );
 
         return [
             'base_grand_total' => ['value' => $order->getBaseGrandTotal(), 'currency' => $currency],
@@ -51,8 +55,14 @@ class OrderTotal implements ResolverInterface
                     'value' => $order->getShippingAmount(),
                     'currency' => $order->getOrderCurrencyCode()
                 ],
-                'amount_including_tax' => ['value' => $order->getShippingInclTax(), 'currency' => $currency],
-                'total_amount' => ['value' => $order->getBaseShippingAmount(), 'currency' => $currency],
+                'amount_including_tax' => [
+                    'value' => $order->getShippingInclTax(),
+                    'currency' => $currency
+                ],
+                'total_amount' => [
+                    'value' => $order->getShippingAmount(),
+                    'currency' => $currency
+                ],
                 'taxes' => $this->getAppliedTaxesDetails($order, $appliedShippingTaxesForItemsData),
                 'discounts' => $this->getShippingDiscountDetails($order),
             ]
@@ -60,13 +70,15 @@ class OrderTotal implements ResolverInterface
     }
 
     /**
-     * @param OrderExtensionInterface $extensionAttributes
+     * Retrieve applied taxes that apply to items
+     *
+     * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface[] $itemAppliedTaxes
      * @return array
      */
-    private function getAllAppliedTaxesForItemsData(OrderExtensionInterface $extensionAttributes): array
+    private function getAllAppliedTaxesForItems(array $itemAppliedTaxes): array
     {
         $allAppliedTaxesForItemsData = [];
-        foreach ($extensionAttributes->getItemAppliedTaxes() ?? [] as $taxItemIndex => $appliedTaxForItem) {
+        foreach ($itemAppliedTaxes as $taxItemIndex => $appliedTaxForItem) {
             foreach ($appliedTaxForItem->getAppliedTaxes() ?? [] as $taxLineItem) {
                 $allAppliedTaxesForItemsData[$taxItemIndex][$taxItemIndex] = [
                     'title' => $taxLineItem->getDataByKey('title'),
@@ -79,13 +91,15 @@ class OrderTotal implements ResolverInterface
     }
 
     /**
-     * @param OrderExtensionInterface $extensionAttributes
+     * Retrieve applied taxes that apply to shipping
+     *
+     * @param \Magento\Tax\Api\Data\OrderTaxDetailsItemInterface $extensionAttributes
      * @return array
      */
-    private function getAppliedShippingTaxesForItemsData(OrderExtensionInterface $extensionAttributes): array
+    private function getAppliedShippingTaxesForItems(array $itemAppliedTaxes): array
     {
         $appliedShippingTaxesForItemsData = [];
-        foreach ($extensionAttributes->getItemAppliedTaxes() ?? [] as $taxItemIndex => $appliedTaxForItem) {
+        foreach ($itemAppliedTaxes as $taxItemIndex => $appliedTaxForItem) {
             foreach ($appliedTaxForItem->getAppliedTaxes() ?? [] as $taxLineItem) {
                 if ($appliedTaxForItem->getType() === "shipping") {
                     $appliedShippingTaxesForItemsData[$taxItemIndex][$taxItemIndex] = [
@@ -132,7 +146,7 @@ class OrderTotal implements ResolverInterface
         $discounts = [];
         if (!($order->getDiscountDescription() === null && $order->getDiscountAmount() == 0)) {
             $discounts[] = [
-                'label' => $order->getDiscountDescription() ?? "null",
+                'label' => $order->getDiscountDescription() ?? __("Discount"),
                 'amount' => [
                     'value' => $order->getDiscountAmount(),
                     'currency' => $order->getOrderCurrencyCode()

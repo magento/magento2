@@ -137,6 +137,7 @@ class DataProvider
                 'product_sku' => $orderItem->getSku(),
                 'product_url_key' => $associatedProduct ? $associatedProduct->getUrlKey() : null,
                 'product_type' => $orderItem->getProductType(),
+                'status' => $orderItem->getStatus(),
                 'discounts' => $this->getDiscountDetails($associatedOrder, $orderItem),
                 'product_sale_price' => [
                     'value' => $orderItem->getPrice(),
@@ -224,7 +225,7 @@ class DataProvider
             $discounts = [];
         } else {
             $discounts [] = [
-                'label' => $associatedOrder->getDiscountDescription() ?? "null",
+                'label' => $associatedOrder->getDiscountDescription() ?? _('Discount'),
                 'amount' => [
                     'value' => $orderItem->getDiscountAmount() ?? 0,
                     'currency' => $associatedOrder->getOrderCurrencyCode()

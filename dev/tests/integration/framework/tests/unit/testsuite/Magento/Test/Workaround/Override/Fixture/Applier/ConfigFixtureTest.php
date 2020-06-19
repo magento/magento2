@@ -23,6 +23,7 @@ class ConfigFixtureTest extends TestCase
      */
     protected function setUp(): void
     {
+        $this->markTestSkipped('MC-35305');
         parent::setUp();
 
         $this->object = new ConfigFixture();

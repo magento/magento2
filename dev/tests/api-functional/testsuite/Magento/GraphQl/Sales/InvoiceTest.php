@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Sales;
 
-use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\GraphQl\GetCustomerAuthenticationHeader;
@@ -17,17 +16,11 @@ use Magento\GraphQl\GetCustomerAuthenticationHeader;
  */
 class InvoiceTest extends GraphQlAbstract
 {
-    /**
-     * @var CustomerTokenServiceInterface
-     */
-    private $customerTokenService;
-
     /** @var GetCustomerAuthenticationHeader */
     private $customerAuthenticationHeader;
 
     protected function setUp(): void
     {
-        $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
         $this->customerAuthenticationHeader
             = Bootstrap::getObjectManager()->get(GetCustomerAuthenticationHeader::class);
     }
