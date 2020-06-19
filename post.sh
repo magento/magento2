@@ -19,7 +19,6 @@ if [ -f "$MAINTENANCE" ]; then
     php bin/magento cache:flush
     chgrp -R 82 pub/ var/
     php bin/magento maintenance:disable
-    touch var/post1.txt
 fi
 
 

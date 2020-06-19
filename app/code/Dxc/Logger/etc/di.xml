@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\Framework\Logger\Monolog">
+    <preference for="Magento\Framework\Logger\Monolog" type="Dxc\Logger\Framework\Logger\Monolog" />
+    <type name="Dxc\Logger\Framework\Logger\Monolog">
         <arguments>
-            <argument name="name" xsi:type="object">Dxc\Logger\Helper\Data::getKubernetesPodDetails</argument>
+            <argument name="name" xsi:type="object">Dxc\Logger\Helper\Data</argument>
         </arguments>
     </type>
 </config>
