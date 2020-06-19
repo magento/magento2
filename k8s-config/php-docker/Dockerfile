@@ -21,6 +21,6 @@ docker-php-ext-configure gd --with-png-dir=/usr/include/ \
 COPY --chown=www-data . /var/www/html
 USER www-data
 RUN cd /var/www/html \
-&& chmod -R 775 pub/static pub/get.php pub/static.php bin/magento \
+&& cp .htaccess pub/ \
 && mv pub pub.release \
 && composer install --no-cache --no-dev
