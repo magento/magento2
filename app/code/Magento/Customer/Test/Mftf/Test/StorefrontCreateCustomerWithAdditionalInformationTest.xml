@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCreateCustomerWithAdditionalInformationTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Create a Customer via the Storefront with Additional Information"/>
+            <title value="Customer should be able to create an account with additional information via the storefront"/>
+            <description value="Customer should be able to create an account with additional information such like Company, VAT number, Phone via the storefront"/>
+            <severity value="MAJOR"/>
+            <group value="customer"/>
+            <group value="create"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set customer/address/show_address_fields 1" stepKey="setShowAddressInformation"/>
+            <magentoCLI command="config:set customer/address/prefix_show opt" stepKey="setShowPrefix"/>
+            <magentoCLI command="config:set customer/address/middlename_show opt" stepKey="setShowMiddleName"/>
+            <magentoCLI command="config:set customer/address/suffix_show opt" stepKey="setShowSuffix"/>
+            <magentoCLI command="config:set customer/address/dob_show opt" stepKey="setShowDOB"/>
+            <magentoCLI command="config:set customer/address/taxvat_show opt" stepKey="setShowTaxNumber"/>
+            <magentoCLI command="config:set customer/address/gender_show opt" stepKey="setShowGender"/>
+            <magentoCLI command="config:set customer/address/telephone_show opt" stepKey="setShowTelephone"/>
+            <magentoCLI command="config:set customer/address/company_show opt" stepKey="setShowCompany"/>
+            <magentoCLI command="config:set customer/address/fax_show opt" stepKey="setShowFax"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set customer/address/show_address_fields 0" stepKey="setShowAddressInformation"/>
+            <magentoCLI command="config:set customer/address/prefix_show ''" stepKey="setShowPrefix"/>
+            <magentoCLI command="config:set customer/address/middlename_show ''" stepKey="setShowMiddleName"/>
+            <magentoCLI command="config:set customer/address/suffix_show ''" stepKey="setShowSuffix"/>
+            <magentoCLI command="config:set customer/address/dob_show ''" stepKey="setShowDOB"/>
+            <magentoCLI command="config:set customer/address/taxvat_show ''" stepKey="setShowTaxNumber"/>
+            <magentoCLI command="config:set customer/address/gender_show ''" stepKey="setShowGender"/>
+            <magentoCLI command="config:set customer/address/telephone_show ''" stepKey="setShowTelephone"/>
+            <magentoCLI command="config:set customer/address/company_show ''" stepKey="setShowCompany"/>
+            <magentoCLI command="config:set customer/address/fax_show ''" stepKey="setShowFax"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+        </after>
+
+        <actionGroup ref="StorefrontCustomerCreateAccountWithAdditionalInformationActionGroup" stepKey="SignUpNewUser">
+            <argument name="Customer" value="CustomerEntityOne"/>
+            <argument name="dob" value="{{EN_US_DATE.short4DigitYear}}"/>
+            <argument name="address" value="CustomerAddressSimple"/>
+        </actionGroup>
+
+    </test>
+</tests>
