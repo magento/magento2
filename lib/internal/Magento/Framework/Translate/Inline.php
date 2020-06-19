@@ -70,6 +70,19 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
     protected $state;
 
     /**
+     * @var array
+     */
+    private $allowedAreas = [
+        \Magento\Framework\App\Area::AREA_FRONTEND,
+        \Magento\Framework\App\Area::AREA_ADMINHTML
+    ];
+
+    /**
+     * @var \Magento\Framework\App\State
+     */
+    private $appState;
+
+    /**
      * Initialize inline translation model
      *
      * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
@@ -78,6 +91,7 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
      * @param Inline\ConfigInterface $config
      * @param Inline\ParserInterface $parser
      * @param Inline\StateInterface $state
+     * @param \Magento\Framework\App\State $appState
      * @param string $templateFileName
      * @param string $translatorRoute
      * @param null $scope
@@ -89,6 +103,7 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
         \Magento\Framework\Translate\Inline\ConfigInterface $config,
         \Magento\Framework\Translate\Inline\ParserInterface $parser,
         \Magento\Framework\Translate\Inline\StateInterface $state,
+        \Magento\Framework\App\State $appState,
         $templateFileName = '',
         $translatorRoute = '',
         $scope = null
@@ -99,6 +114,7 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
         $this->config = $config;
         $this->parser = $parser;
         $this->state = $state;
+        $this->appState = $appState;
         $this->templateFileName = $templateFileName;
         $this->translatorRoute = $translatorRoute;
         $this->scope = $scope;
@@ -115,7 +131,8 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
             if (!$this->scope instanceof \Magento\Framework\App\ScopeInterface) {
                 $scope = $this->scopeResolver->getScope($this->scope);
             }
-            $this->isAllowed = $this->config->isActive($scope)
+            $this->isAllowed = $this->isAreaAllowed()
+                && $this->config->isActive($scope)
                 && $this->config->isDevAllowed($scope);
         }
         return $this->state->isEnabled() && $this->isAllowed;
@@ -248,5 +265,22 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
             }
         }
         return $this;
+    }
+
+    /**
+     * Indicates whether the current area is valid for inline translation
+     *
+     * @return bool
+     */
+    private function isAreaAllowed()
+    {
+        try {
+            return in_array(
+                $this->appState->getAreaCode(),
+                $this->allowedAreas
+            );
+        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            return false;
+        }
     }
 }
