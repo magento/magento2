@@ -73,10 +73,7 @@ class ImageMagickTest extends TestCase
         $this->imageMagic->watermark($imagePath);
     }
 
-    /**
-     * @return array
-     */
-    public function watermarkDataProvider()
+    public function watermarkDataProvider(): array
     {
         return [
             ['', ImageMagick::ERROR_WATERMARK_IMAGE_ABSENT],
@@ -85,6 +82,44 @@ class ImageMagickTest extends TestCase
                 __DIR__ . '/_files/invalid_image.jpg',
                 ImageMagick::ERROR_WRONG_IMAGE
             ]
+        ];
+    }
+
+    /**
+     * @param string $imagePath
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @dataProvider cmykDataProvider
+     */
+    public function testCmyk(string $imagePath)
+    {
+        $this->imageMagic->open($imagePath);
+        $this->assertEquals(\Imagick::COLORSPACE_CMYK, $this->imageMagic->getOriginalColorspace());
+        $this->assertEquals(\Imagick::COLORSPACE_SRGB, $this->imageMagic->getColorspace());
+    }
+
+    public function cmykDataProvider(): array
+    {
+        return [
+            [__DIR__ . '/_files/cmyk_image.jpg']
+        ];
+    }
+
+    /**
+     * @param string $imagePath
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @dataProvider srgbDataProvider
+     */
+    public function testSrgb(string $imagePath)
+    {
+        $this->imageMagic->open($imagePath);
+        $this->assertEquals(\Imagick::COLORSPACE_SRGB, $this->imageMagic->getOriginalColorspace());
+        $this->assertEquals(\Imagick::COLORSPACE_SRGB, $this->imageMagic->getColorspace());
+    }
+
+    public function srgbDataProvider(): array
+    {
+        return [
+            [__DIR__ . '/_files/srgb_image.jpg']
         ];
     }
 
