@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Payment\Model\Method;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
@@ -95,8 +96,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     }
 
     /**
-     * Method that will be executed instead of authorize or capture
-     * if flag isInitializeNeeded set to true
+     * Method that will be executed instead of authorize or capture if flag isInitializeNeeded set to true
      *
      * @param string $paymentAction
      * @param object $stateObject
@@ -118,8 +118,6 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
 
     /**
      * Flag if we need to run payment initialize while order place.
-     * Initialization is needed, when order status was selected as "processing"  in the configuration,
-     * but payment action was selected as: "don't auto-create invoices"
      *
      * @return bool
      * @api
@@ -142,10 +140,10 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     public function isAvailable(\Magento\Quote\Api\Data\CartInterface $quote = null)
     {
         return parent::isAvailable(
-                $quote
-            ) && null !== $quote && $this->priceCurrency->round(
-                $quote->getGrandTotal()
-            ) == 0;
+            $quote
+        ) && null !== $quote && $this->priceCurrency->round(
+            $quote->getGrandTotal()
+        ) == 0;
     }
 
     /**
