@@ -7,9 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Sales;
 
-use Magento\Bundle\Model\Selection;
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\GraphQl\GetCustomerAuthenticationHeader;
@@ -170,231 +168,60 @@ QUERY;
             $customerOrderResponse[0]['items'][0]['discounts'][0]['label']
         );
         $customerOrderItem = $customerOrderResponse[0];
-        $this->assertTotalsWithTaxesAndDiscountsOnShippingAndTotal($customerOrderItem);
+        $this->assertTotalsWithTaxesAndDiscounts2($customerOrderItem['total']);
         $this->deleteOrder();
     }
 
     /**
-     * Test customer order details with bundle product with child items
-     *
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_two_dropdown_options.php
+     * @param array $customerOrderItemTotal
      */
-    public function testGetCustomerOrderBundleProduct()
+    private function assertTotalsWithTaxesAndDiscounts2(array $customerOrderItemTotal): void
     {
-        $qty = 1;
-        $bundleSku = 'bundle-product-two-dropdown-options';
-        $optionsAndSelectionData = $this->getBundleOptionAndSelectionData($bundleSku);
-
-        $cartId = $this->createEmptyCart();
-        $this->addBundleProductQuery($cartId, $qty, $bundleSku, $optionsAndSelectionData);
-        $this->setBillingAddress($cartId);
-        $shippingMethod = $this->setShippingAddress($cartId);
-        $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
-        $this->setPaymentMethod($cartId, $paymentMethod);
-        $orderNumber = $this->placeOrder($cartId);
-        $customerOrderResponse = $this->getCustomerOrderQueryBundleProduct($orderNumber);
-
-        $customerOrderItems = $customerOrderResponse[0];
-        $this->assertEquals("Pending", $customerOrderItems['status']);
-        $bundledItemInTheOrder = $customerOrderItems['items'][0];
-        $this->assertEquals(
-            'bundle-product-two-dropdown-options-simple1-simple2',
-            $bundledItemInTheOrder['product_sku']
-        );
-        $priceOfBundledItemInOrder = $bundledItemInTheOrder['product_sale_price']['value'];
-        $this->assertEquals(15, $priceOfBundledItemInOrder);
-        $this->assertArrayHasKey('bundle_options', $bundledItemInTheOrder);
-        $bundleOptionsFromResponse = $bundledItemInTheOrder['bundle_options'];
-        $this->assertNotEmpty($bundleOptionsFromResponse);
-        $this->assertEquals(2, count($bundleOptionsFromResponse));
-        $expectedBundleOptions =
-            [
-              [  '__typename' => 'ItemSelectedBundleOption',
-                  'label' => 'Drop Down Option 1',
-                  'values' => [
-                      [
-                        'product_sku' => 'simple1',
-                        'product_name' => 'Simple Product1',
-                        'quantity'=> 1,
-                          'price' => [
-                            'value' => 1
-                          ]
-                      ]
-                ]
-              ],
-                [  '__typename' => 'ItemSelectedBundleOption',
-                    'label' => 'Drop Down Option 2',
-                    'values' => [
-                        [
-                            'product_sku' => 'simple2',
-                            'product_name' => 'Simple Product2',
-                            'quantity'=> 2,
-                            'price' => [
-                                'value' => 2
-                            ]
-                        ]
-                    ]
-                ],
-            ];
-        $this->assertEquals($expectedBundleOptions, $bundleOptionsFromResponse);
-        $this->deleteOrder();
-    }
-
-    /**
-     * Test customer order details with bundle products
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_two_dropdown_options.php
-     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
-     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_10_percent_off_with_discount_on_shipping.php
-     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_shipping_excludeTax_order_display_settings.php
-     */
-    public function testGetCustomerOrderBundleProductWithTaxesAndDiscounts()
-    {
-        $qty = 4;
-        $bundleSku = 'bundle-product-two-dropdown-options';
-        $optionsAndSelectionData = $this->getBundleOptionAndSelectionData($bundleSku);
-
-        $cartId = $this->createEmptyCart();
-        $this->addBundleProductQuery($cartId, $qty, $bundleSku, $optionsAndSelectionData);
-        $this->setBillingAddress($cartId);
-        $shippingMethod = $this->setShippingAddress($cartId);
-        $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
-        $this->setPaymentMethod($cartId, $paymentMethod);
-        $orderNumber = $this->placeOrder($cartId);
-        $customerOrderResponse = $this->getCustomerOrderQueryBundleProduct($orderNumber);
-
-        $customerOrderItems = $customerOrderResponse[0];
-        $this->assertEquals("Pending", $customerOrderItems['status']);
-
-        $bundledItemInTheOrder = $customerOrderItems['items'][0];
-        $this->assertEquals(
-            'bundle-product-two-dropdown-options-simple1-simple2',
-            $bundledItemInTheOrder['product_sku']
-        );
-        $this->assertArrayHasKey('bundle_options', $bundledItemInTheOrder);
-        $childItemsInTheOrder = $bundledItemInTheOrder['bundle_options'];
-        $this->assertNotEmpty($childItemsInTheOrder);
-        $this->assertCount(2, $childItemsInTheOrder);
-        $this->assertEquals('Drop Down Option 1', $childItemsInTheOrder[0]['label']);
-        $this->assertEquals('Drop Down Option 2', $childItemsInTheOrder[1]['label']);
-
-        $this->assertEquals('simple1', $childItemsInTheOrder[0]['values'][0]['product_sku']);
-        $this->assertEquals('simple2', $childItemsInTheOrder[1]['values'][0]['product_sku']);
-
-        $this->assertTotalsOnBundleProductWithTaxesAndDiscounts($customerOrderItems);
-        $this->deleteOrder();
-    }
-
-    /**
-     * Assert order totals including shipping_handling and taxes
-     *
-     * @param array $customerOrderItem
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    private function assertTotalsOnBundleProductWithTaxesAndDiscounts(array $customerOrderItem): void
-    {
-        $this->assertEquals(
-            77.4,
-            $customerOrderItem['total']['base_grand_total']['value']
-        );
-
-        $this->assertEquals(
-            77.4,
-            $customerOrderItem['total']['grand_total']['value']
-        );
-        $this->assertEquals(
-            60,
-            $customerOrderItem['total']['subtotal']['value']
-        );
-        $this->assertEquals(
-            5.4,
-            $customerOrderItem['total']['total_tax']['value']
-        );
-
-        $this->assertEquals(
-            20,
-            $customerOrderItem['total']['total_shipping']['value']
-        );
-        $this->assertCount(2, $customerOrderItem['total']['taxes']);
-        $expectedProductAndShippingTaxes = [4.05, 1.35];
-
+        $this->assertCount(2, $customerOrderItemTotal['taxes']);
+        $expectedProductAndShippingTaxes = [2.7, 1.35];
         $totalTaxes = [];
-        foreach ($customerOrderItem['total']['taxes'] as $totalTaxFromResponse) {
+        foreach ($customerOrderItemTotal['taxes'] as $totalTaxFromResponse) {
             array_push($totalTaxes, $totalTaxFromResponse['amount']['value']);
         }
         foreach ($totalTaxes as $value) {
             $this->assertTrue(in_array($value, $expectedProductAndShippingTaxes));
         }
-        $this->assertEquals(
-            'USD',
-            $customerOrderItem['total']['taxes'][0]['amount']['currency']
-        );
-        $this->assertEquals(
-            'US-TEST-*-Rate-1',
-            $customerOrderItem['total']['taxes'][0]['title']
-        );
-        $this->assertEquals(
-            7.5,
-            $customerOrderItem['total']['taxes'][0]['rate']
-        );
-        $this->assertEquals(
-            'USD',
-            $customerOrderItem['total']['taxes'][1]['amount']['currency']
-        );
-        $this->assertEquals(
-            'US-TEST-*-Rate-1',
-            $customerOrderItem['total']['taxes'][1]['title']
-        );
-        $this->assertEquals(
-            7.5,
-            $customerOrderItem['total']['taxes'][1]['rate']
-        );
-        $this->assertEquals(
-            21.5,
-            $customerOrderItem['total']['shipping_handling']['amount_including_tax']['value']
-        );
-        $this->assertEquals(
-            20,
-            $customerOrderItem['total']['shipping_handling']['amount_excluding_tax']['value']
-        );
-        $this->assertEquals(
-            20,
-            $customerOrderItem['total']['shipping_handling']['total_amount']['value']
-        );
-
-        $this->assertEquals(
-            1.35,
-            $customerOrderItem['total']['shipping_handling']['taxes'][0]['amount']['value']
-        );
-        $this->assertEquals(
-            'US-TEST-*-Rate-1',
-            $customerOrderItem['total']['shipping_handling']['taxes'][0]['title']
-        );
-        $this->assertEquals(
-            7.5,
-            $customerOrderItem['total']['shipping_handling']['taxes'][0]['rate']
-        );
-        $this->assertEquals(
-            2,
-            $customerOrderItem['total']['shipping_handling']['discounts'][0]['amount']['value']
-        );
-        $this->assertEquals(
-            'null',
-            $customerOrderItem['total']['shipping_handling']['discounts'][0]['label']
-        );
-        $this->assertEquals(
-            -8,
-            $customerOrderItem['total']['discounts'][0]['amount']['value']
-        );
-        $this->assertEquals(
-            'USD',
-            $customerOrderItem['total']['discounts'][0]['amount']['currency']
-        );
-        $this->assertEquals(
-            'null',
-            $customerOrderItem['total']['discounts'][0]['label']
-        );
+        foreach ($customerOrderItemTotal['taxes'] as $taxData) {
+            $this->assertEquals('USD', $taxData['amount']['currency']);
+            $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
+            $this->assertEquals(7.5, $taxData['rate']);
+        }
+        unset($customerOrderItemTotal['taxes']);
+        $assertionMap = [
+            'base_grand_total' => ['value' => 58.05, 'currency' =>'USD'],
+            'grand_total' => ['value' => 58.05, 'currency' =>'USD'],
+            'subtotal' => ['value' => 40, 'currency' =>'USD'],
+            'total_tax' => ['value' => 4.05, 'currency' =>'USD'],
+            'total_shipping' => ['value' => 20, 'currency' =>'USD'],
+            'shipping_handling' => [
+                'amount_including_tax' => ['value' => 21.5],
+                'amount_excluding_tax' => ['value' => 20],
+                'total_amount' => ['value' => 20, 'currency' =>'USD'],
+                'discounts' => [
+                    0 => ['amount'=>['value'=> 2, 'currency' =>'USD'],
+                        'label' => 'null'
+                    ]
+                ],
+                'taxes'=> [
+                    0 => [
+                        'amount'=>['value' => 1.35],
+                        'title' => 'US-TEST-*-Rate-1',
+                        'rate' => 7.5
+                    ]
+                ]
+            ],
+            'discounts' => [
+                0 => ['amount' => [ 'value' => -6, 'currency' =>'USD'],
+                    'label' => 'null'
+                ]
+            ]
+        ];
+        $this->assertResponseFields($customerOrderItemTotal, $assertionMap);
     }
 
     /**
@@ -447,6 +274,14 @@ QUERY;
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $this->assertArrayHasKey('total_count', $response['customer']['orders']);
         $this->assertEquals(6, $response['customer']['orders']['total_count']);
+        $this->assertCount(6, $response['customer']['orders']['items']);
+        $customerOrderItems = $response['customer']['orders']['items'];
+        $expectedOrderNumbers = ['100000002', '100000004', '100000005','100000006', '100000007', '100000008'];
+        $actualOrdersFromResponse = [];
+        foreach ($customerOrderItems as $order) {
+            array_push($actualOrdersFromResponse, $order['number']);
+        }
+        $this->assertEquals($expectedOrderNumbers, $actualOrdersFromResponse, 'Order numbers do not match');
     }
 
     /**
@@ -512,7 +347,7 @@ QUERY;
 {
   customer
   {
-   orders(filter:{number:{in:["{$orderNumbers[0]}","{$orderNumbers[1]}"]}}){
+    orders(filter:{number:{in:["{$orderNumbers[0]}","{$orderNumbers[1]}"]}}){
     total_count
     page_info{
       total_pages
@@ -532,22 +367,21 @@ QUERY;
         product_type
         product_sale_price{currency value}
       }
-       total {
-                base_grand_total {value currency}
-                 grand_total {value currency}
-                    subtotal {value currency}
-                    total_shipping{value}
-                    total_tax{value currency}
-                    taxes {amount {currency value} title rate}
-                   total_shipping{value}
-             shipping_handling
-             {
+      total{
+        base_grand_total {value currency}
+        grand_total {value currency}
+        subtotal {value currency}
+        total_shipping{value}
+        total_tax{value currency}
+        taxes {amount {currency value} title rate}
+        total_shipping{value}
+        shipping_handling{
                amount_including_tax{value}
                amount_excluding_tax{value}
                total_amount{value}
                taxes {amount{value} title rate}
-             }
-                }
+               }
+           }
     }
    }
  }
@@ -582,8 +416,10 @@ QUERY;
         $orders = $this->orderRepository->getList($searchCriteria)->getItems();
         $key = 0;
         foreach ($orders as $order) {
+            $orderId = base64_encode($order->getEntityId());
             $orderNumber = $order->getIncrementId();
             $this->assertNotEmpty($customerOrderItemsInResponse[$key]['id']);
+            $this->assertEquals($orderId, $customerOrderItemsInResponse[$key]['id']);
             $this->assertEquals($orderNumber, $customerOrderItemsInResponse[$key]['number']);
             $this->assertEquals('Processing', $customerOrderItemsInResponse[$key]['status']);
             $this->assertEquals(
@@ -795,55 +631,26 @@ QUERY;
         $query =
             <<<QUERY
 {
-  customer
-  {
-   orders(filter:{number:{eq:"{$orderNumber}"}}){
-    items
-    {
-      number
-      items{
-        product_sku
-      }
-      total {
-                    base_grand_total {
-                        value
-                        currency
-                    }
-                    grand_total {
-                        value
-                        currency
-                    }
-                    total_shipping{value}
-                    shipping_handling
-                    {
-                     amount_including_tax{value}
-                     amount_excluding_tax{value}
-                     total_amount{value currency}
-                     taxes {amount{value} title rate}
-                    }
-                    subtotal {
-                        value
-                        currency
-                    }
-                    taxes {amount{value currency} title rate}
-                    discounts {
-                        amount {
-                            value
-                            currency
-                        }
-                        label
-                    }
-                }
-    }
-    page_info {
-        current_page
-        page_size
-        total_pages
-    }
-    total_count
-   }
- }
-}
+    customer {
+           orders(filter:{number:{eq:"{$orderNumber}"}}) {
+            page_info {current_page page_size total_pages}
+             total_count
+             items {
+               number
+               items{ product_sku }
+               total {
+                 base_grand_total{value currency}
+                 grand_total{value currency}
+                 subtotal { value currency }
+                 shipping_handling
+                 {
+                   total_amount{value currency}
+                 }
+               }
+             }
+           }
+         }
+       }
 QUERY;
 
         $currentEmail = 'customer@example.com';
@@ -866,8 +673,29 @@ QUERY;
         $this->assertCount($expectedCount, $response['customer']['orders']['items']);
         $this->assertArrayHasKey('total_count', $response['customer']['orders']);
         $this->assertEquals($expectedCount, (int)$response['customer']['orders']['total_count']);
-
         $this->assertTotals($response, $expectedCount);
+    }
+
+    /**
+     * @param array $response
+     * @param int $expectedCount
+     */
+    private function assertTotals(array $response, int $expectedCount): void
+    {
+        $assertionMap = [
+            'base_grand_total' => ['value' => 100, 'currency' =>'USD'],
+            'grand_total' => ['value' => 100, 'currency' =>'USD'],
+            'subtotal' => ['value' => 110, 'currency' =>'USD'],
+            'shipping_handling' => [
+                'total_amount' => ['value' => 10, 'currency' =>'USD']
+            ]
+        ];
+        if ($expectedCount === 0) {
+            $this->assertEmpty($response['customer']['orders']['items']);
+        } else {
+            $customerOrderItemTotal = $response['customer']['orders']['items'][0]['total'];
+            $this->assertResponseFields($customerOrderItemTotal, $assertionMap);
+        }
     }
 
     /**
@@ -892,90 +720,6 @@ QUERY;
     }
 
     /**
-     * Assert order totals including shipping_handling and taxes
-     *
-     * @param array $customerOrderItem
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     */
-    private function assertTotalsWithTaxesAndDiscountsOnShippingAndTotal(array $customerOrderItem): void
-    {
-        $this->assertEquals(
-            58.05,
-            $customerOrderItem['total']['base_grand_total']['value']
-        );
-
-        $this->assertEquals(
-            58.05,
-            $customerOrderItem['total']['grand_total']['value']
-        );
-        $this->assertEquals(
-            40,
-            $customerOrderItem['total']['subtotal']['value']
-        );
-        $this->assertEquals(
-            4.05,
-            $customerOrderItem['total']['total_tax']['value']
-        );
-        $this->assertEquals(
-            -6,
-            $customerOrderItem['total']['discounts'][0]['amount']['value']
-        );
-        $this->assertEquals(
-            'null',
-            $customerOrderItem['total']['discounts'][0]['label']
-        );
-        $this->assertEquals(
-            20,
-            $customerOrderItem['total']['total_shipping']['value']
-        );
-        $this->assertCount(2, $customerOrderItem['total']['taxes']);
-        $expectedProductAndShippingTaxes = [2.7, 1.35];
-
-        $totalTaxes = [];
-        foreach ($customerOrderItem['total']['taxes'] as $totalTaxFromResponse) {
-            array_push($totalTaxes, $totalTaxFromResponse['amount']['value']);
-        }
-        foreach ($totalTaxes as $value) {
-            $this->assertTrue(in_array($value, $expectedProductAndShippingTaxes));
-        }
-
-        $this->assertEquals(
-            21.5,
-            $customerOrderItem['total']['shipping_handling']['amount_including_tax']['value']
-        );
-        $this->assertEquals(
-            20,
-            $customerOrderItem['total']['shipping_handling']['amount_excluding_tax']['value']
-        );
-        $this->assertEquals(
-            20,
-            $customerOrderItem['total']['shipping_handling']['total_amount']['value']
-        );
-
-        $this->assertEquals(
-            1.35,
-            $customerOrderItem['total']['shipping_handling']['taxes'][0]['amount']['value']
-        );
-        $this->assertEquals(
-            'US-TEST-*-Rate-1',
-            $customerOrderItem['total']['shipping_handling']['taxes'][0]['title']
-        );
-        $this->assertEquals(
-            7.5,
-            $customerOrderItem['total']['shipping_handling']['taxes'][0]['rate']
-        );
-        $this->assertEquals(
-            2,
-            $customerOrderItem['total']['shipping_handling']['discounts'][0]['amount']['value']
-        );
-
-        $this->assertEquals(
-            'null',
-            $customerOrderItem['total']['shipping_handling']['discounts'][0]['label']
-        );
-    }
-
-    /**
      *  Verify that the customer order has the tax information on shipping and totals
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
@@ -995,74 +739,52 @@ QUERY;
         $orderNumber = $this->placeOrder($cartId);
         $customerOrderResponse = $this->getCustomerOrderQuery($orderNumber);
         $customerOrderItem = $customerOrderResponse[0];
-        $this->assertTotalsAndShippingWithExcludedTaxSetting($customerOrderItem);
+        $this->assertTotalsAndShippingWithExcludedTaxSetting($customerOrderItem['total']);
         $this->deleteOrder();
     }
 
-    /**
-     * Assert order totals including shipping_handling and taxes
-     *
-     * @param array $customerOrderItem
-     */
-    private function assertTotalsAndShippingWithExcludedTaxSetting(array $customerOrderItem): void
+    private function assertTotalsAndShippingWithExcludedTaxSetting($customerOrderItemTotal)
     {
-        $this->assertEquals(
-            32.25,
-            $customerOrderItem['total']['base_grand_total']['value']
-        );
-        $this->assertEquals(
-            32.25,
-            $customerOrderItem['total']['grand_total']['value']
-        );
-        $this->assertEquals(
-            20,
-            $customerOrderItem['total']['subtotal']['value']
-        );
-        $this->assertEquals(
-            2.25,
-            $customerOrderItem['total']['total_tax']['value']
-        );
-        $this->assertEquals(
-            10,
-            $customerOrderItem['total']['total_shipping']['value']
-        );
+        $this->assertCount(2, $customerOrderItemTotal['taxes']);
         $expectedProductAndShippingTaxes = [1.5, 0.75];
 
         $totalTaxes = [];
-        foreach ($customerOrderItem['total']['taxes'] as $totalTaxFromResponse) {
+        foreach ($customerOrderItemTotal['taxes'] as $totalTaxFromResponse) {
             array_push($totalTaxes, $totalTaxFromResponse['amount']['value']);
         }
         foreach ($totalTaxes as $value) {
             $this->assertTrue(in_array($value, $expectedProductAndShippingTaxes));
         }
-
-        $this->assertEquals(
-            10.75,
-            $customerOrderItem['total']['shipping_handling']['amount_including_tax']['value']
-        );
-        $this->assertEquals(
-            10,
-            $customerOrderItem['total']['shipping_handling']['amount_excluding_tax']['value']
-        );
-        $this->assertEquals(
-            10,
-            $customerOrderItem['total']['shipping_handling']['total_amount']['value']
-        );
-        $this->assertCount(1, $customerOrderItem['total']['shipping_handling']['taxes'], 'Count is incorrect');
-
-        $this->assertEquals(
-            0.75,
-            $customerOrderItem['total']['shipping_handling']['taxes'][0]['amount']['value']
-        );
-        $this->assertEquals(
-            'US-TEST-*-Rate-1',
-            $customerOrderItem['total']['shipping_handling']['taxes'][0]['title']
-        );
-        $this->assertEquals(
-            7.5,
-            $customerOrderItem['total']['shipping_handling']['taxes'][0]['rate']
-        );
+        foreach ($customerOrderItemTotal['taxes'] as $taxData) {
+            $this->assertEquals('USD', $taxData['amount']['currency']);
+            $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
+            $this->assertEquals(7.5, $taxData['rate']);
+        }
+        unset($customerOrderItemTotal['taxes']);
+        $assertionMap = [
+            'base_grand_total' => ['value' => 32.25, 'currency' =>'USD'],
+            'grand_total' => ['value' => 32.25, 'currency' =>'USD'],
+            'total_tax' => ['value' => 2.25, 'currency' =>'USD'],
+            'subtotal' => ['value' => 20, 'currency' =>'USD'],
+            'discounts' => [],
+            'total_shipping' => ['value' => 10, 'currency' =>'USD'],
+            'shipping_handling' => [
+                'amount_including_tax' => ['value' => 10.75],
+                'amount_excluding_tax' => ['value' => 10],
+                'total_amount' => ['value' => 10, 'currency' =>'USD'],
+                'taxes'=> [
+                    0 => [
+                        'amount'=>['value' => 0.75],
+                        'title' => 'US-TEST-*-Rate-1',
+                        'rate' => 7.5
+                    ]
+                ],
+                'discounts' =>[]
+            ]
+        ];
+        $this->assertResponseFields($customerOrderItemTotal, $assertionMap);
     }
+
     /**
      *  Verify that the customer order has the tax information on shipping and totals
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
@@ -1086,8 +808,52 @@ QUERY;
         $orderNumber = $this->placeOrder($cartId);
         $customerOrderResponse = $this->getCustomerOrderQuery($orderNumber);
         $customerOrderItem = $customerOrderResponse[0];
-        $this->assertTotalsAndShippingWithTaxes($customerOrderItem);
+        $this->assertTotalsAndShippingWithTaxes($customerOrderItem['total']);
         $this->deleteOrder();
+    }
+
+    /**
+     * @param array $customerOrderItemTotal
+     */
+    private function assertTotalsAndShippingWithTaxes(array $customerOrderItemTotal): void
+    {
+        $this->assertCount(2, $customerOrderItemTotal['taxes']);
+        $expectedProductAndShippingTaxes = [1.5, 0.75];
+        $totalTaxes = [];
+        foreach ($customerOrderItemTotal['taxes'] as $totalTaxFromResponse) {
+            array_push($totalTaxes, $totalTaxFromResponse['amount']['value']);
+        }
+        foreach ($totalTaxes as $value) {
+            $this->assertTrue(in_array($value, $expectedProductAndShippingTaxes));
+        }
+        foreach ($customerOrderItemTotal['taxes'] as $taxData) {
+            $this->assertEquals('USD', $taxData['amount']['currency']);
+            $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
+            $this->assertEquals(7.5, $taxData['rate']);
+        }
+        unset($customerOrderItemTotal['taxes']);
+        unset($customerOrderItemTotal['shipping_handling']['discounts']);
+        $assertionMap = [
+            'base_grand_total' => ['value' => 32.25, 'currency' =>'USD'],
+            'grand_total' => ['value' => 32.25, 'currency' =>'USD'],
+            'total_tax' => ['value' => 2.25, 'currency' =>'USD'],
+            'subtotal' => ['value' => 20, 'currency' =>'USD'],
+            'total_shipping' => ['value' => 10, 'currency' =>'USD'],
+            'shipping_handling' => [
+                'amount_including_tax' => ['value' => 10.75],
+                'amount_excluding_tax' => ['value' => 10],
+                'total_amount' => ['value' => 10, 'currency' =>'USD'],
+
+                'taxes'=> [
+                    0 => [
+                        'amount'=>['value' => 0.75],
+                        'title' => 'US-TEST-*-Rate-1',
+                        'rate' => 7.5
+                    ]
+                ]
+            ]
+        ];
+        $this->assertResponseFields($customerOrderItemTotal, $assertionMap);
     }
 
     /**
@@ -1416,11 +1182,11 @@ QUERY;
            total {
              base_grand_total{value currency}
              grand_total{value currency}
-             total_tax{value}
+             total_tax{value currency}
              subtotal { value currency }
              taxes {amount{value currency} title rate}
              discounts {amount{value currency} label}
-             total_shipping{value}
+             total_shipping{value currency}
              shipping_handling
              {
                amount_including_tax{value}
@@ -1452,86 +1218,6 @@ QUERY;
     }
 
     /**
-     * Get customer order query for bundle order items
-     *
-     * @param $orderNumber
-     * @return mixed
-     * @throws AuthenticationException
-     */
-    private function getCustomerOrderQueryBundleProduct($orderNumber)
-    {
-        $query =
-            <<<QUERY
-{
-     customer {
-       orders(filter:{number:{eq:"{$orderNumber}"}}) {
-         total_count
-         items {
-          id
-           number
-           order_date
-           status
-           items{
-            __typename
-            product_sku
-            product_name
-            product_url_key
-            product_sale_price{value}
-            quantity_ordered
-            discounts{amount{value} label}
-            ... on BundleOrderItem{
-              bundle_options{
-                __typename
-                label
-                values {
-                  product_sku
-                  product_name
-                  quantity
-                  price {
-                    value
-                  }
-                }
-              }
-          }
-         }
-           total {
-             base_grand_total{value currency}
-             grand_total{value currency}
-             total_tax{value}
-             subtotal { value currency }
-             taxes {amount{value currency} title rate}
-             total_shipping{value}
-             shipping_handling
-             {
-               amount_including_tax{value}
-               amount_excluding_tax{value}
-               total_amount{value}
-               discounts{amount{value} label}
-               taxes {amount{value} title rate}
-             }
-             discounts {amount{value currency} label}
-           }
-         }
-       }
-     }
-   }
-QUERY;
-        $currentEmail = 'customer@example.com';
-        $currentPassword = 'password';
-        $response = $this->graphQlQuery(
-            $query,
-            [],
-            '',
-            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
-        );
-
-        $this->assertArrayHasKey('orders', $response['customer']);
-        $this->assertArrayHasKey('items', $response['customer']['orders']);
-        $customerOrderItemsInResponse = $response['customer']['orders']['items'];
-        return $customerOrderItemsInResponse;
-    }
-
-    /**
      * @return void
      */
     private function deleteOrder(): void
@@ -1540,154 +1226,12 @@ QUERY;
         $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', true);
-
         /** @var $order \Magento\Sales\Model\Order */
         $orderCollection = Bootstrap::getObjectManager()->create(Collection::class);
-        //$orderCollection = $this->orderCollectionFactory->create();
         foreach ($orderCollection as $order) {
             $this->orderRepository->delete($order);
         }
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', false);
-    }
-
-    /**
-     * Assert order totals including shipping_handling and taxes
-     *
-     * @param array $customerOrderItem
-     */
-    private function assertTotalsAndShippingWithTaxes(array $customerOrderItem): void
-    {
-        $this->assertEquals(
-            32.25,
-            $customerOrderItem['total']['base_grand_total']['value']
-        );
-
-        $this->assertEquals(
-            32.25,
-            $customerOrderItem['total']['grand_total']['value']
-        );
-        $this->assertEquals(
-            20,
-            $customerOrderItem['total']['subtotal']['value']
-        );
-        $this->assertEquals(
-            2.25,
-            $customerOrderItem['total']['total_tax']['value']
-        );
-
-        $this->assertEquals(
-            10,
-            $customerOrderItem['total']['total_shipping']['value']
-        );
-        $this->assertEquals(
-            0.75,
-            $customerOrderItem['total']['taxes'][0]['amount']['value']
-        );
-        $this->assertEquals(
-            'US-TEST-*-Rate-1',
-            $customerOrderItem['total']['taxes'][0]['title']
-        );
-        $this->assertEquals(
-            7.5,
-            $customerOrderItem['total']['taxes'][0]['rate']
-        );
-        $this->assertEquals(
-            10.75,
-            $customerOrderItem['total']['shipping_handling']['amount_including_tax']['value']
-        );
-        $this->assertEquals(
-            10,
-            $customerOrderItem['total']['shipping_handling']['amount_excluding_tax']['value']
-        );
-        $this->assertEquals(
-            10,
-            $customerOrderItem['total']['shipping_handling']['total_amount']['value']
-        );
-
-        $this->assertEquals(
-            0.75,
-            $customerOrderItem['total']['shipping_handling']['taxes'][0]['amount']['value']
-        );
-        $this->assertEquals(
-            'US-TEST-*-Rate-1',
-            $customerOrderItem['total']['shipping_handling']['taxes'][0]['title']
-        );
-        $this->assertEquals(
-            7.5,
-            $customerOrderItem['total']['shipping_handling']['taxes'][0]['rate']
-        );
-    }
-
-    /**
-     * Assert order totals
-     *
-     * @param array $response
-     * @param int $expectedCount
-     */
-    private function assertTotals(array $response, int $expectedCount): void
-    {
-        if ($expectedCount === 0) {
-            $this->assertEmpty($response['customer']['orders']['items']);
-        } else {
-            $this->assertEquals(
-                100,
-                $response['customer']['orders']['items'][0]['total']['base_grand_total']['value']
-            );
-            $this->assertEquals(
-                'USD',
-                $response['customer']['orders']['items'][0]['total']['base_grand_total']['currency']
-            );
-            $this->assertEquals(
-                100,
-                $response['customer']['orders']['items'][0]['total']['grand_total']['value']
-            );
-            $this->assertEquals(
-                'USD',
-                $response['customer']['orders']['items'][0]['total']['grand_total']['currency']
-            );
-            $this->assertEquals(
-                110,
-                $response['customer']['orders']['items'][0]['total']['subtotal']['value']
-            );
-            $this->assertEquals(
-                'USD',
-                $response['customer']['orders']['items'][0]['total']['subtotal']['currency']
-            );
-            $this->assertEquals(
-                10,
-                $response['customer']['orders']['items'][0]['total']['shipping_handling']['total_amount']['value']
-            );
-            $this->assertEquals(
-                'USD',
-                $response['customer']['orders']['items'][0]['total']['shipping_handling']['total_amount']['currency']
-            );
-        }
-    }
-
-    /**
-     * @param string $bundleSku
-     * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    private function getBundleOptionAndSelectionData($bundleSku): array
-    {
-        /** @var Product $bundleProduct */
-        $bundleProduct = $this->productRepository->get($bundleSku);
-        /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
-        $typeInstance = $bundleProduct->getTypeInstance();
-        $optionsAndSelections = [];
-        /** @var $option \Magento\Bundle\Model\Option */
-        $option1 = $typeInstance->getOptionsCollection($bundleProduct)->getFirstItem();
-        $option2 = $typeInstance->getOptionsCollection($bundleProduct)->getLastItem();
-        $optionId1 =(int) $option1->getId();
-        $optionId2 =(int) $option2->getId();
-        /** @var Selection $selection */
-        $selection1 = $typeInstance->getSelectionsCollection([$option1->getId()], $bundleProduct)->getFirstItem();
-        $selectionId1 = (int)$selection1->getSelectionId();
-        $selection2 = $typeInstance->getSelectionsCollection([$option2->getId()], $bundleProduct)->getLastItem();
-        $selectionId2 = (int)$selection2->getSelectionId();
-        array_push($optionsAndSelections, $optionId1, $selectionId1, $optionId2, $selectionId2);
-        return $optionsAndSelections;
     }
 }

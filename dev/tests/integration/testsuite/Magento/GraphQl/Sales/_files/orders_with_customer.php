@@ -116,7 +116,7 @@ foreach ($orders as $orderData) {
     $newPayment = clone $payment;
     $newPayment->setId(null);
     /** @var $order \Magento\Sales\Model\Order */
-    $order = Bootstrap::getObjectManager()->create(
+    $order = $objectManager->create(
         \Magento\Sales\Model\Order::class
     );
 
@@ -140,8 +140,7 @@ foreach ($orders as $orderData) {
         ->setSku($product->getSku());
 
 
-    $order
-        ->setData($orderData)
+    $order->setData($orderData)
         ->addItem($orderItem)
         ->setCustomerIsGuest(false)
         ->setCustomerId(1)
