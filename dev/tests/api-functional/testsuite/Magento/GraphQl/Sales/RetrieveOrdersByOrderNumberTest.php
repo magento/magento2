@@ -164,7 +164,7 @@ QUERY;
             $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']
         );
         $this->assertEquals(
-            'null',
+            'Discount',
             $customerOrderResponse[0]['items'][0]['discounts'][0]['label']
         );
         $customerOrderItem = $customerOrderResponse[0];
@@ -204,7 +204,7 @@ QUERY;
                 'total_amount' => ['value' => 20, 'currency' =>'USD'],
                 'discounts' => [
                     0 => ['amount'=>['value'=> 2, 'currency' =>'USD'],
-                        'label' => 'null'
+                        'label' => 'Discount'
                     ]
                 ],
                 'taxes'=> [
@@ -217,7 +217,7 @@ QUERY;
             ],
             'discounts' => [
                 0 => ['amount' => [ 'value' => -6, 'currency' =>'USD'],
-                    'label' => 'null'
+                    'label' => 'Discount'
                 ]
             ]
         ];

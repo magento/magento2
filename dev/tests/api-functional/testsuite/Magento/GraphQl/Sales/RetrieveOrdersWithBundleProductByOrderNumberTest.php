@@ -19,7 +19,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Class RetrieveOrdersWithBundleProductByOrderNumberTest
+ * Test for orders that have a bundle product
  */
 class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
 {
@@ -155,7 +155,7 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
         $this->assertEquals('simple1', $childItemsInTheOrder[0]['values'][0]['product_sku']);
         $this->assertEquals('simple2', $childItemsInTheOrder[1]['values'][0]['product_sku']);
 
-        //$this->assertTotalsOnBundleProductWithTaxesAndDiscounts($customerOrderItems);
+        $this->assertTotalsOnBundleProductWithTaxesAndDiscounts($customerOrderItems);
         $this->assertTotalsOnBundleProductWithTaxesAndDiscounts2($customerOrderItems['total']);
         $this->deleteOrder();
     }
@@ -187,28 +187,28 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
             'total_tax' => ['value' => 5.4, 'currency' =>'USD'],
             'total_shipping' => ['value' => 20, 'currency' =>'USD'],
             'shipping_handling' => [
-            'amount_including_tax' => ['value' => 21.5],
-            'amount_excluding_tax' => ['value' => 20],
-            'total_amount' => ['value' => 20],
-            'discounts' => [
-              0 => ['amount'=>['value'=>2],
-                  'label' => 'null'
-                  ]
+                'amount_including_tax' => ['value' => 21.5],
+                'amount_excluding_tax' => ['value' => 20],
+                'total_amount' => ['value' => 20],
+                'discounts' => [
+                    0 => ['amount'=>['value'=>2],
+                        'label' => 'Discount'
+                    ]
                 ],
-            'taxes'=> [
-              0 => [
-                    'amount'=>['value' => 1.35],
-                    'title' => 'US-TEST-*-Rate-1',
-                    'rate' => 7.5
-               ]
+                'taxes'=> [
+                    0 => [
+                        'amount'=>['value' => 1.35],
+                        'title' => 'US-TEST-*-Rate-1',
+                        'rate' => 7.5
+                    ]
+                ]
+            ],
+            'discounts' => [
+                0 => ['amount' => [ 'value' => -8, 'currency' =>'USD'],
+                    'label' => 'Discount'
+                ]
             ]
-        ],
-        'discounts' => [
-              0 => ['amount' => [ 'value' => -8, 'currency' =>'USD'],
-                    'label' => 'null'
-              ]
-        ]
-      ];
+        ];
         $this->assertResponseFields($customerOrderItemTotal, $assertionMap);
     }
 
@@ -306,7 +306,7 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
             $customerOrderItem['total']['shipping_handling']['discounts'][0]['amount']['value']
         );
         $this->assertEquals(
-            'null',
+            'Discount',
             $customerOrderItem['total']['shipping_handling']['discounts'][0]['label']
         );
         $this->assertEquals(
@@ -318,7 +318,7 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
             $customerOrderItem['total']['discounts'][0]['amount']['currency']
         );
         $this->assertEquals(
-            'null',
+            'Discount',
             $customerOrderItem['total']['discounts'][0]['label']
         );
     }

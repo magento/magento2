@@ -34,7 +34,7 @@ class InvoiceTotal implements ResolverInterface
         }
 
         if (!(($value['order'] ?? null) instanceof OrderInterface)) {
-                throw new LocalizedException(__('"order" value should be specified'));
+            throw new LocalizedException(__('"order" value should be specified'));
         }
 
         /** @var OrderInterface $orderModel */
