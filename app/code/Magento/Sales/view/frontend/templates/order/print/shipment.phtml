@@ -14,12 +14,14 @@
     <?php foreach ($block->getShipmentsCollection() as $shipment): ?>
         <div class="order-details-items shipments">
             <div class="order-title">
-                <strong><?= $escaper->escapeHtml(
-                            __(
-                                'Shipment #%1',
-                                $block->getObjectData($shipment, 'increment_id')
-                            )
-                        ) ?></strong>
+                <strong>
+                    <?= $escaper->escapeHtml(
+                        __(
+                            'Shipment #%1',
+                            $block->getObjectData($shipment, 'increment_id')
+                        )
+                    ) ?>
+                </strong>
             </div>
             <div class="table-wrapper order-items-shipment">
                 <table class="data table table-order-items shipment"
