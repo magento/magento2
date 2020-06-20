@@ -102,7 +102,8 @@ class CustomerOrders implements ResolverInterface
      * @param OrderInterface[] $orderModels
      * @return array
      */
-    private function formatOrdersArray(array $orderModels) {
+    private function formatOrdersArray(array $orderModels)
+    {
         $ordersArray = [];
         foreach ($orderModels as $orderModel) {
             $ordersArray[] = [
@@ -130,7 +131,8 @@ class CustomerOrders implements ResolverInterface
      * @return \Magento\Sales\Api\Data\OrderSearchResultInterface
      * @throws InputException
      */
-    private function getSearchResult(array $args, int $userId, int $storeId) {
+    private function getSearchResult(array $args, int $userId, int $storeId)
+    {
         $filterGroups = $this->orderFilter->createFilterGroups($args, $userId, (int)$storeId);
         $this->searchCriteriaBuilder->setFilterGroups($filterGroups);
         if (isset($args['currentPage'])) {
