@@ -20,7 +20,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 class InvoiceTotal implements ResolverInterface
 {
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function resolve(
         Field $field,

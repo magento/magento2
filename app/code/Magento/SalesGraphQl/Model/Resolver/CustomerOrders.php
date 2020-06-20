@@ -56,7 +56,7 @@ class CustomerOrders implements ResolverInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function resolve(
         Field $field,
@@ -77,59 +77,68 @@ class CustomerOrders implements ResolverInterface
         $userId = $context->getUserId();
         /** @var StoreInterface $store */
         $store = $context->getExtensionAttributes()->getStore();
+
         try {
-            $filterGroups = $this->orderFilter->createFilterGroups($args, $userId, (int)$store->getId());
-            $this->searchCriteriaBuilder->setFilterGroups($filterGroups);
-            if (isset($args['currentPage'])) {
-                $this->searchCriteriaBuilder->setCurrentPage($args['currentPage']);
-            }
-            if (isset($args['pageSize'])) {
-                $this->searchCriteriaBuilder->setPageSize($args['pageSize']);
-            }
-
-            $searchCriteria = $this->searchCriteriaBuilder->create();
-            $searchResult = $this->orderRepository->getList($searchCriteria);
-            $orderArray = [];
-            /** @var OrderInterface $order */
-            foreach ($searchResult->getItems() as $key => $order) {
-                $orderArray[$key] = $order->getData();
-                $orderArray[$key]['model'] = $order;
-            }
-
+            $searchResult = $this->getSearchResult($args, (int) $userId, (int)$store->getId());
             $maxPages = (int)ceil($searchResult->getTotalCount() / $searchResult->getPageSize());
         } catch (InputException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
 
-        $orders = [];
-        foreach ($orderArray as $order) {
-            if (!($order['model'] ?? null instanceof OrderInterface)) {
-                throw new LocalizedException(__('"model" value should be specified'));
-            }
-            /** @var OrderInterface $orderModel */
-            $orderModel = $order['model'];
-            $orders[] = [
-                'created_at' => $order['created_at'],
-                'grand_total' => $order['grand_total'],
-                'id' => base64_encode($order['entity_id']),
-                'increment_id' => $order['increment_id'],
-                'number' => $order['increment_id'],
-                'order_date' => $order['created_at'],
-                'order_number' => $order['increment_id'],
-                'status' => $orderModel->getStatusLabel(),
-                'shipping_method' => $orderModel->getShippingDescription(),
-                'model' => $orderModel,
-            ];
-        }
-
         return [
             'total_count' => $searchResult->getTotalCount(),
-            'items' => $orders,
+            'items' => $this->formatOrdersArray($searchResult->getItems()),
             'page_info'   => [
                 'page_size'    => $searchResult->getPageSize(),
                 'current_page' => $searchResult->getCurPage(),
                 'total_pages' => $maxPages,
             ]
         ];
+    }
+
+    /**
+     * Format order models for graphql schema
+     *
+     * @param OrderInterface[] $orderModels
+     * @return array
+     */
+    private function formatOrdersArray(array $orderModels) {
+        $ordersArray = [];
+        foreach ($orderModels as $orderModel) {
+            $ordersArray[] = [
+                'created_at' => $orderModel->getCreatedAt(),
+                'grand_total' => $orderModel->getGrandTotal(),
+                'id' => base64_encode($orderModel->getEntityId()),
+                'increment_id' => $orderModel->getIncrementId(),
+                'number' => $orderModel->getIncrementId(),
+                'order_date' => $orderModel->getCreatedAt(),
+                'order_number' => $orderModel->getIncrementId(),
+                'status' => $orderModel->getStatusLabel(),
+                'shipping_method' => $orderModel->getShippingDescription(),
+                'model' => $orderModel,
+            ];
+        }
+        return $ordersArray;
+    }
+
+    /**
+     * Get search result from graphql query arguments
+     *
+     * @param array $args
+     * @param int $userId
+     * @param int $storeId
+     * @return \Magento\Sales\Api\Data\OrderSearchResultInterface
+     * @throws InputException
+     */
+    private function getSearchResult(array $args, int $userId, int $storeId) {
+        $filterGroups = $this->orderFilter->createFilterGroups($args, $userId, (int)$storeId);
+        $this->searchCriteriaBuilder->setFilterGroups($filterGroups);
+        if (isset($args['currentPage'])) {
+            $this->searchCriteriaBuilder->setCurrentPage($args['currentPage']);
+        }
+        if (isset($args['pageSize'])) {
+            $this->searchCriteriaBuilder->setPageSize($args['pageSize']);
+        }
+        return $this->orderRepository->getList($this->searchCriteriaBuilder->create());
     }
 }

@@ -17,7 +17,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 class OrderTotal implements ResolverInterface
 {
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function resolve(
         Field $field,

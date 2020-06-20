@@ -20,7 +20,7 @@ use Magento\Sales\Api\Data\InvoiceInterface;
 class Invoices implements ResolverInterface
 {
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function resolve(
         Field $field,

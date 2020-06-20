@@ -486,65 +486,6 @@ QUERY;
     }
 
     /**
-     * Get customer order query
-     *
-     * @param string $orderNumber
-     * @return array
-     */
-    private function getCustomerOrderQuery($orderNumber):array
-    {
-        $query =
-            <<<QUERY
-{
-     customer {
-       email
-       orders(filter:{number:{eq:"{$orderNumber}"}}) {
-         total_count
-         items {
-           id
-           number
-           order_date
-           status
-           items{product_name product_sku quantity_ordered discounts {amount{value currency} label}}
-           total {
-             base_grand_total{value currency}
-             grand_total{value currency}
-             total_tax{value}
-             subtotal { value currency }
-             taxes {amount{value currency} title rate}
-             discounts {amount{value currency} label}
-             total_shipping{value}
-             shipping_handling
-             {
-               amount_including_tax{value}
-               amount_excluding_tax{value}
-               total_amount{value currency}
-               taxes {amount{value} title rate}
-               discounts {amount{value currency} label}
-             }
-
-           }
-         }
-       }
-     }
-   }
-QUERY;
-        $currentEmail = 'customer@example.com';
-        $currentPassword = 'password';
-        $response = $this->graphQlQuery(
-            $query,
-            [],
-            '',
-            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
-        );
-
-        $this->assertArrayHasKey('orders', $response['customer']);
-        $this->assertArrayHasKey('items', $response['customer']['orders']);
-        $customerOrderItemsInResponse = $response['customer']['orders']['items'];
-        return $customerOrderItemsInResponse;
-    }
-
-    /**
      * Get customer order query for bundle order items
      *
      * @param $orderNumber
