@@ -5,7 +5,6 @@ parameters:
 	excludes_analyse:
 		- %rootDir%/../../../lib/internal/Magento/Framework/ObjectManager/Test/Unit/*
 		- %rootDir%/../../../*/_files/*
-		- %rootDir%/../../../dev/tests/functional/*
 		- %rootDir%/../../../dev/tests/*/Fixtures/*
 		- %rootDir%/../../../dev/tests/*/tmp/*
 		- %rootDir%/../../../dev/tests/*/_generated/*
