@@ -169,13 +169,13 @@ class ConfigWriter implements ConfigWriterInterface
                     $this->processed
                 );
                 foreach ($virtualTypes as $class) {
-                    $this->inheritPlugins($class);
+                    $this->inheritPlugins($class, $this->pluginData, $this->inherited, $this->processed);
                 }
                 foreach ($this->pluginData as $className => $value) {
-                    $this->inheritPlugins($className);
+                    $this->inheritPlugins($className, $this->pluginData, $this->inherited, $this->processed);
                 }
                 foreach ($this->getClassDefinitions() as $class) {
-                    $this->inheritPlugins($class);
+                    $this->inheritPlugins($class, $this->pluginData, $this->inherited, $this->processed);
                 }
                 $this->configWriter->write(
                     $cacheId,
@@ -255,25 +255,27 @@ class ConfigWriter implements ConfigWriterInterface
      * Collect parent types configuration for requested type
      *
      * @param string $type
+     * @param array $pluginData
+     * @param array $inherited
+     * @param array $processed
      * @return array
-     * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    private function inheritPlugins($type)
+    public function inheritPlugins($type, &$pluginData, &$inherited, &$processed)
     {
         $type = ltrim($type, '\\');
-        if (!isset($this->inherited[$type])) {
+        if (!isset($inherited[$type])) {
             $realType = $this->omConfig->getOriginalInstanceType($type);
 
             if ($realType !== $type) {
-                $plugins = $this->inheritPlugins($realType);
+                $plugins = $this->inheritPlugins($realType, $pluginData, $inherited, $processed);
             } elseif ($this->relations->has($type)) {
                 $relations = $this->relations->getParents($type);
                 $plugins = [];
                 foreach ($relations as $relation) {
                     if ($relation) {
-                        $relationPlugins = $this->inheritPlugins($relation);
+                        $relationPlugins = $this->inheritPlugins($relation, $pluginData, $inherited, $processed);
                         if ($relationPlugins) {
                             $plugins = array_replace_recursive($plugins, $relationPlugins);
                         }
@@ -282,19 +284,19 @@ class ConfigWriter implements ConfigWriterInterface
             } else {
                 $plugins = [];
             }
-            if (isset($this->pluginData[$type])) {
+            if (isset($pluginData[$type])) {
                 if (!$plugins) {
-                    $plugins = $this->pluginData[$type];
+                    $plugins = $pluginData[$type];
                 } else {
-                    $plugins = array_replace_recursive($plugins, $this->pluginData[$type]);
+                    $plugins = array_replace_recursive($plugins, $pluginData[$type]);
                 }
             }
-            $this->inherited[$type] = null;
+            $inherited[$type] = null;
             if (is_array($plugins) && count($plugins)) {
                 $this->filterPlugins($plugins);
                 uasort($plugins, [$this, 'sort']);
                 $this->trimInstanceStartingBackslash($plugins);
-                $this->inherited[$type] = $plugins;
+                $inherited[$type] = $plugins;
                 $lastPerMethod = [];
                 foreach ($plugins as $key => $plugin) {
                     // skip disabled plugins
@@ -310,21 +312,21 @@ class ConfigWriter implements ConfigWriterInterface
                         $current = $lastPerMethod[$pluginMethod] ?? '__self';
                         $currentKey = $type . '_' . $pluginMethod . '_' . $current;
                         if ($methodTypes & DefinitionInterface::LISTENER_AROUND) {
-                            $this->processed[$currentKey][DefinitionInterface::LISTENER_AROUND] = $key;
+                            $processed[$currentKey][DefinitionInterface::LISTENER_AROUND] = $key;
                             $lastPerMethod[$pluginMethod] = $key;
                         }
                         if ($methodTypes & DefinitionInterface::LISTENER_BEFORE) {
-                            $this->processed[$currentKey][DefinitionInterface::LISTENER_BEFORE][] = $key;
+                            $processed[$currentKey][DefinitionInterface::LISTENER_BEFORE][] = $key;
                         }
                         if ($methodTypes & DefinitionInterface::LISTENER_AFTER) {
-                            $this->processed[$currentKey][DefinitionInterface::LISTENER_AFTER][] = $key;
+                            $processed[$currentKey][DefinitionInterface::LISTENER_AFTER][] = $key;
                         }
                     }
                 }
             }
             return $plugins;
         }
-        return $this->inherited[$type];
+        return $inherited[$type];
     }
 
     /**

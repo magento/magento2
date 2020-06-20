@@ -22,8 +22,6 @@ use Magento\Framework\Interception\ConfigWriter;
 
 /**
  * Plugin config, provides list of plugins for a type
- *
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PluginList extends Scoped implements InterceptionPluginList
 {
@@ -144,75 +142,10 @@ class PluginList extends Scoped implements InterceptionPluginList
      *
      * @param string $type
      * @return array
-     * @throws \InvalidArgumentException
-     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     protected function _inheritPlugins($type)
     {
-        $type = ltrim($type, '\\');
-        if (!isset($this->_inherited[$type])) {
-            $realType = $this->_omConfig->getOriginalInstanceType($type);
-
-            if ($realType !== $type) {
-                $plugins = $this->_inheritPlugins($realType);
-            } elseif ($this->_relations->has($type)) {
-                $relations = $this->_relations->getParents($type);
-                $plugins = [];
-                foreach ($relations as $relation) {
-                    if ($relation) {
-                        $relationPlugins = $this->_inheritPlugins($relation);
-                        if ($relationPlugins) {
-                            $plugins = array_replace_recursive($plugins, $relationPlugins);
-                        }
-                    }
-                }
-            } else {
-                $plugins = [];
-            }
-            if (isset($this->_data[$type])) {
-                if (!$plugins) {
-                    $plugins = $this->_data[$type];
-                } else {
-                    $plugins = array_replace_recursive($plugins, $this->_data[$type]);
-                }
-            }
-            $this->_inherited[$type] = null;
-            if (is_array($plugins) && count($plugins)) {
-                $this->configWriter->filterPlugins($plugins);
-                uasort($plugins, [$this, '_sort']);
-                $this->configWriter->trimInstanceStartingBackslash($plugins);
-                $this->_inherited[$type] = $plugins;
-                $lastPerMethod = [];
-                foreach ($plugins as $key => $plugin) {
-                    // skip disabled plugins
-                    if (isset($plugin['disabled']) && $plugin['disabled']) {
-                        unset($plugins[$key]);
-                        continue;
-                    }
-                    $pluginType = $this->_omConfig->getOriginalInstanceType($plugin['instance']);
-                    if (!class_exists($pluginType)) {
-                        throw new \InvalidArgumentException('Plugin class ' . $pluginType . ' doesn\'t exist');
-                    }
-                    foreach ($this->_definitions->getMethodList($pluginType) as $pluginMethod => $methodTypes) {
-                        $current = isset($lastPerMethod[$pluginMethod]) ? $lastPerMethod[$pluginMethod] : '__self';
-                        $currentKey = $type . '_' . $pluginMethod . '_' . $current;
-                        if ($methodTypes & DefinitionInterface::LISTENER_AROUND) {
-                            $this->_processed[$currentKey][DefinitionInterface::LISTENER_AROUND] = $key;
-                            $lastPerMethod[$pluginMethod] = $key;
-                        }
-                        if ($methodTypes & DefinitionInterface::LISTENER_BEFORE) {
-                            $this->_processed[$currentKey][DefinitionInterface::LISTENER_BEFORE][] = $key;
-                        }
-                        if ($methodTypes & DefinitionInterface::LISTENER_AFTER) {
-                            $this->_processed[$currentKey][DefinitionInterface::LISTENER_AFTER][] = $key;
-                        }
-                    }
-                }
-            }
-            return $plugins;
-        }
-        return $this->_inherited[$type];
+        return $this->configWriter->inheritPlugins($type, $this->_data, $this->_inherited, $this->_processed);
     }
 
     /**
