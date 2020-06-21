@@ -15,7 +15,6 @@
         "magento/module-graph-ql": "*"
     },
     "suggest": {
-        "magento/module-graph-ql": "*",
         "magento/module-graph-ql-cache": "*",
         "magento/module-store-graph-ql": "*"
     },
