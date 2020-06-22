@@ -10,11 +10,13 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminOrderPagerTest">
         <annotations>
+            <features value="Sales"/>
             <stories value="Admin order pager"/>
             <title value="Check pager is working"/>
             <description value="Check Pager in order add products grid"/>
             <severity value="AVERAGE"/>
             <testCaseId value="MC-35349"/>
+            <useCaseId value="MC-35316"/>
             <group value="sales"/>
         </annotations>
         <before>
@@ -91,8 +93,7 @@
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <!-- Delete category and products -->
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Delete products -->
             <deleteData createDataKey="createProduct01" stepKey="deleteProduct1"/>
             <deleteData createDataKey="createProduct02" stepKey="deleteProduct2"/>
             <deleteData createDataKey="createProduct03" stepKey="deleteProduct3"/>
@@ -115,6 +116,9 @@
             <deleteData createDataKey="createProduct20" stepKey="deleteProduct20"/>
             <deleteData createDataKey="createProduct21" stepKey="deleteProduct21"/>
 
+            <!-- Delete Category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
             <!-- Delete Customer -->
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
@@ -124,10 +128,13 @@
             <argument name="customer" value="$createCustomer$"/>
         </actionGroup>
 
+        <waitForElementVisible selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="waitForAddProductsButtonAppeared"/>
         <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
-        <click selector="{{AdminDataGridPaginationSection.nextPage}}" stepKey="clickNextPage"/>
+        <dontSee selector="{{AdminDataGridPaginationSection.prevPageActive}}" stepKey="previousPageDisabled"/>
+        <click selector="{{AdminDataGridPaginationSection.nextPageActive}}" stepKey="clickNextPage"/>
         <seeInField selector="{{AdminDataGridPaginationSection.selectedPage}}" userInput="2" stepKey="seeSecondPageOrderGrid"/>
-        <click selector="{{AdminDataGridPaginationSection.previousPage}}" stepKey="clickPreviousPage"/>
+        <click selector="{{AdminDataGridPaginationSection.prevPageActive}}" stepKey="clickPreviousPage"/>
         <seeInField selector="{{AdminDataGridPaginationSection.selectedPage}}" userInput="1" stepKey="seeFirstPageOrderGrid"/>
+        <dontSee selector="{{AdminDataGridPaginationSection.prevPageActive}}" stepKey="prevPageDisabled"/>
     </test>
 </tests>
