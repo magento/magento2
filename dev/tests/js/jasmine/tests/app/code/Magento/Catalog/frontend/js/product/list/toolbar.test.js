@@ -10,24 +10,20 @@ define([
     'use strict';
 
     describe('Magento_Catalog/js/product/list/toolbar', function () {
-        var widget,
-            wdContainer;
+        var widget;
 
         beforeEach(function () {
-            wdContainer = $('<div class="toolbar toolbar-products"></div>');
-            widget = wdContainer.productListToolbarForm();
-        });
-
-        afterEach(function () {
-            $(wdContainer).remove();
+            widget = new productListToolbarForm();
         });
 
         it('Widget extends jQuery object', function () {
-            expect($.fn.productListToolbarForm).toBeDefined();
+            expect($.mage.productListToolbarForm).toBeDefined();
         });
 
         it('Toolbar is initialized', function () {
-            expect(wdContainer.productListToolbarForm('option', 'isToolbarInitialized')).not.toBe(false);
+            spyOn(widget, '_create');
+            widget._create();
+            expect(widget._create).toHaveBeenCalled();
         });
     });
 });

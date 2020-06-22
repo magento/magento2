@@ -9,6 +9,8 @@ define([
 ], function ($) {
     'use strict';
 
+    var isToolbarInitialized = false;
+
     /**
      * ProductListToolbarForm Widget - this widget is setting cookie and submitting form according to toolbar controls
      */
@@ -30,20 +32,19 @@ define([
             limitDefault: '9',
             url: '',
             formKey: '',
-            post: false,
-            isToolbarInitialized: false
+            post: false
         },
 
         /** @inheritdoc */
         _create: function () {
-            if (this.options.isToolbarInitialized) {
-                return;
+            if (isToolbarInitialized) {
+                return false;
             }
             this._bind($(this.options.modeControl), this.options.mode, this.options.modeDefault);
             this._bind($(this.options.directionControl), this.options.direction, this.options.directionDefault);
             this._bind($(this.options.orderControl), this.options.order, this.options.orderDefault);
             this._bind($(this.options.limitControl), this.options.limit, this.options.limitDefault);
-            this.options.isToolbarInitialized = true;
+            isToolbarInitialized = true;
         },
 
         /** @inheritdoc */
