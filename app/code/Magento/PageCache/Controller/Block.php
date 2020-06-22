@@ -41,21 +41,30 @@ abstract class Block extends \Magento\Framework\App\Action\Action
     private $layoutCacheKeyName = 'mage_pagecache';
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    protected $logger;
+
+    /**
+     * Block constructor.
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
-     * @param Json $jsonSerializer
-     * @param Base64Json $base64jsonSerializer
-     * @param LayoutCacheKeyInterface $layoutCacheKey
+     * @param \Psr\Log\LoggerInterface $logger
+     * @param Json|null $jsonSerializer
+     * @param Base64Json|null $base64jsonSerializer
+     * @param LayoutCacheKeyInterface|null $layoutCacheKey
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Translate\InlineInterface $translateInline,
+        \Psr\Log\LoggerInterface $logger,
         Json $jsonSerializer = null,
         Base64Json $base64jsonSerializer = null,
         LayoutCacheKeyInterface $layoutCacheKey = null
     ) {
         parent::__construct($context);
         $this->translateInline = $translateInline;
+        $this->logger = $logger;
         $this->jsonSerializer = $jsonSerializer
             ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
         $this->base64jsonSerializer = $base64jsonSerializer
@@ -77,7 +86,7 @@ abstract class Block extends \Magento\Framework\App\Action\Action
         if (!$handles || !$blocks) {
             return [];
         }
-        $blocks = $this->jsonSerializer->unserialize($blocks);
+        $blocks = $this->unserialize($blocks);
         $handles = $this->base64jsonSerializer->unserialize($handles);
 
         $layout = $this->_view->getLayout();
@@ -94,5 +103,16 @@ abstract class Block extends \Magento\Framework\App\Action\Action
         }
 
         return $data;
+    }
+
+    /**
+     * Unserialize JSON string
+     *
+     * @param $string
+     * @return array|null
+     */
+    protected function unserialize($string)
+    {
+        return $this->jsonSerializer->unserialize($string);
     }
 }

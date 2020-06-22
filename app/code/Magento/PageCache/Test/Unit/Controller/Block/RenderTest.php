@@ -23,6 +23,7 @@ use Magento\PageCache\Controller\Block\Render;
 use Magento\PageCache\Test\Unit\Block\Controller\StubBlock;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -70,6 +71,11 @@ class RenderTest extends TestCase
     protected $layoutCacheKeyMock;
 
     /**
+     * @var LoggerInterface|MockObject
+     */
+    protected $loggerMock;
+
+    /**
      * Set up before test
      */
     protected function setUp(): void
@@ -100,6 +106,9 @@ class RenderTest extends TestCase
         $this->viewMock = $this->getMockBuilder(View::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->layoutMock->expects($this->any())
             ->method('getUpdate')
@@ -117,6 +126,7 @@ class RenderTest extends TestCase
             [
                 'context' => $contextMock,
                 'translateInline' => $this->translateInline,
+                'logger' => $this->loggerMock,
                 'jsonSerializer' => new Json(),
                 'base64jsonSerializer' => new Base64Json(),
                 'layoutCacheKey' => $this->layoutCacheKeyMock
@@ -127,8 +137,8 @@ class RenderTest extends TestCase
     public function testExecuteNotAjax()
     {
         $this->requestMock->expects($this->once())->method('isAjax')->willReturn(false);
-        $this->requestMock->expects($this->once())->method('setActionName')->willReturn('noroute');
-        $this->requestMock->expects($this->once())->method('setDispatched')->willReturn(false);
+        $this->requestMock->expects($this->once())->method('setActionName')->with('noroute');
+        $this->requestMock->expects($this->once())->method('setDispatched')->with(false);
         $this->layoutCacheKeyMock->expects($this->never())
             ->method('addCacheKeys');
         $this->action->execute();
@@ -140,11 +150,27 @@ class RenderTest extends TestCase
     public function testExecuteNoParams()
     {
         $this->requestMock->expects($this->once())->method('isAjax')->willReturn(true);
-        $this->requestMock->expects($this->at(6))
+        $this->requestMock->expects($this->at(1))
+            ->method('getRouteName')
+            ->willReturn('magento_pagecache');
+        $this->requestMock->expects($this->at(2))
+            ->method('getControllerName')
+            ->willReturn('render');
+        $this->requestMock->expects($this->at(3))
+            ->method('getActionName')
+            ->willReturn('render_block');
+        $this->requestMock->expects($this->at(4))
+            ->method('getRequestUri')
+            ->willReturn('uri');
+        $this->requestMock->expects($this->at(5))
+            ->method('getParam')
+            ->with('originalRequest')
+            ->willReturn('{"route":"route","controller":"controller","action":"action","uri":"uri"}');
+        $this->requestMock->expects($this->at(10))
             ->method('getParam')
             ->with('blocks', '')
             ->willReturn('');
-        $this->requestMock->expects($this->at(7))
+        $this->requestMock->expects($this->at(11))
             ->method('getParam')
             ->with('handles', '')
             ->willReturn('');
@@ -224,5 +250,231 @@ class RenderTest extends TestCase
             ->with(json_encode($expectedData));
 
         $this->action->execute();
+    }
+
+    /**
+     * Test execute with invalid origin request parameters.
+     *
+     * @param $currentRoute
+     * @param $currentController
+     * @param $currentAction
+     * @param $currentRequestUri
+     * @param $originalRequest
+     * @dataProvider dataProviderOriginRequestInvalidParam
+     * @throws \Magento\Framework\Exception\NotFoundException
+     */
+    public function testExecuteInvalidOriginRequestParams(
+        $currentRoute,
+        $currentController,
+        $currentAction,
+        $currentRequestUri,
+        $originalRequest
+    ) {
+        $this->requestMock->expects($this->once())->method('isAjax')->willReturn(true);
+        $this->requestMock->expects($this->at(1))
+            ->method('getRouteName')
+            ->willReturn($currentRoute);
+        $this->requestMock->expects($this->at(2))
+            ->method('getControllerName')
+            ->willReturn($currentController);
+        $this->requestMock->expects($this->at(3))
+            ->method('getActionName')
+            ->willReturn($currentAction);
+        $this->requestMock->expects($this->at(4))
+            ->method('getRequestUri')
+            ->willReturn($currentRequestUri);
+        $this->requestMock->expects($this->at(5))
+            ->method('getParam')
+            ->with('originalRequest')
+            ->willReturn($originalRequest);
+        $this->requestMock->expects($this->once())->method('setActionName')->with('noroute');
+        $this->requestMock->expects($this->once())->method('setDispatched')->with(false);
+        $this->layoutCacheKeyMock->expects($this->never())
+            ->method('addCacheKeys');
+        $this->action->execute();
+    }
+
+    /**
+     * Test execute with invalid origin request JSON string.
+     *
+     * @param $currentRoute
+     * @param $currentController
+     * @param $currentAction
+     * @param $currentRequestUri
+     * @param $originalRequest
+     * @dataProvider dataProviderOriginRequestInvalidJSON
+     * @throws \Magento\Framework\Exception\NotFoundException
+     */
+    public function testExecuteInvalidOriginRequestJSON(
+        $currentRoute,
+        $currentController,
+        $currentAction,
+        $currentRequestUri,
+        $originalRequest
+    ) {
+        $this->requestMock->expects($this->once())->method('isAjax')->willReturn(true);
+        $this->requestMock->expects($this->at(1))
+            ->method('getRouteName')
+            ->willReturn($currentRoute);
+        $this->requestMock->expects($this->at(2))
+            ->method('getControllerName')
+            ->willReturn($currentController);
+        $this->requestMock->expects($this->at(3))
+            ->method('getActionName')
+            ->willReturn($currentAction);
+        $this->requestMock->expects($this->at(4))
+            ->method('getRequestUri')
+            ->willReturn($currentRequestUri);
+        $this->requestMock->expects($this->at(5))
+            ->method('getParam')
+            ->with('originalRequest')
+            ->willReturn($originalRequest);
+        $this->requestMock->expects($this->once())->method('setActionName')->with('noroute');
+        $this->requestMock->expects($this->once())->method('setDispatched')->with(false);
+        $this->layoutCacheKeyMock->expects($this->never())
+            ->method('addCacheKeys');
+        $this->loggerMock->expects($this->once())->method('critical');
+        $this->action->execute();
+    }
+
+    /**
+     * Test execute method for the request with empty current request parameters.
+     *
+     * @param $currentRoute
+     * @param $currentController
+     * @param $currentAction
+     * @param $currentRequestUri
+     * @dataProvider dataProviderEmptyCurrentRequestParams
+     * @throws \Magento\Framework\Exception\NotFoundException
+     */
+    public function testExecuteEmptyCurrentRequestParams(
+        $currentRoute,
+        $currentController,
+        $currentAction,
+        $currentRequestUri
+    ) {
+        $this->requestMock->expects($this->once())->method('isAjax')->willReturn(true);
+        $this->requestMock->expects($this->at(1))
+            ->method('getRouteName')
+            ->willReturn($currentRoute);
+        $this->requestMock->expects($this->at(2))
+            ->method('getControllerName')
+            ->willReturn($currentController);
+        $this->requestMock->expects($this->at(3))
+            ->method('getActionName')
+            ->willReturn($currentAction);
+        $this->requestMock->expects($this->at(4))
+            ->method('getRequestUri')
+            ->willReturn($currentRequestUri);
+        $this->requestMock->expects($this->once())->method('setActionName')->with('noroute');
+        $this->requestMock->expects($this->once())->method('setDispatched')->with(false);
+        $this->layoutCacheKeyMock->expects($this->never())
+            ->method('addCacheKeys');
+        $this->action->execute();
+    }
+
+    /**
+     * Data provider for testExecuteInvalidOriginRequestJSON method.
+     *
+     * @return array
+     */
+    public function dataProviderOriginRequestInvalidJSON()
+    {
+        return [
+            [
+                'route',
+                'controller',
+                'currentAction',
+                'currentRequestUri',
+                '{"controller"|\&&&%%%%%:"controller","action":"action","uri":"uri"}'
+            ],
+            [
+                'route',
+                'controller',
+                'currentAction',
+                'currentRequestUri',
+                '["routes":"route","controller":"controller","action":"action","uri":"uri"]'
+            ]
+        ];
+    }
+
+    /**
+     * Data provider for testExecuteEmptyCurrentRequestParams method.
+     *
+     * @return array
+     */
+    public function dataProviderEmptyCurrentRequestParams()
+    {
+        return [
+            [
+                '',
+                'controller',
+                'currentAction',
+                'currentRequestUri',
+            ],
+            [
+                'route',
+                '',
+                'currentAction',
+                'currentRequestUri',
+            ],
+            [
+                'route',
+                'controller',
+                '',
+                'currentRequestUri',
+            ],
+            [
+                'route',
+                'controller',
+                'currentAction',
+                '',
+            ],
+            [
+                '',
+                '',
+                '',
+                ''
+            ]
+        ];
+    }
+
+    /**
+     * Data provider for testExecuteInvalidOriginRequestParams method.
+     *
+     * @return array
+     */
+    public function dataProviderOriginRequestInvalidParam()
+    {
+        return [
+            [
+                'route',
+                'controller',
+                'currentAction',
+                'currentRequestUri',
+                '{"controller":"controller","action":"action","uri":"uri"}'
+            ],
+            [
+                'route',
+                'controller',
+                'currentAction',
+                'currentRequestUri',
+                '{"routes":"route","controller":"controller","action":"action","uri":"uri"}'
+            ],
+            [
+                'route',
+                'controller',
+                'currentAction',
+                'currentRequestUri',
+                ''
+            ],
+            [
+                'route',
+                'controller',
+                'currentAction',
+                'currentRequestUri',
+                '{"routes":"","controller":"","action":"","uri":""}'
+            ]
+        ];
     }
 }
