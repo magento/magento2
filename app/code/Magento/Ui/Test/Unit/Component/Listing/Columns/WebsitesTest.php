@@ -60,7 +60,7 @@ class WebsitesTest extends ColumnTest
             ->willReturn($selectMock);
 
         $this->dataProviderMock = $this->getMockBuilder(DataProviderInterface::class)
-            ->addMethods(['getCollection', 'getSelect'])
+            ->setMethods(['getCollection', 'getSelect'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
