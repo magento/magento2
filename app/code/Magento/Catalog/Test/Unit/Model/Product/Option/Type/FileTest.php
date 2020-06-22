@@ -12,7 +12,7 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverPool;
 
 /**
- * Class FileTest.
+ * Test file option type
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
