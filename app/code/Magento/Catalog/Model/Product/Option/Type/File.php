@@ -332,7 +332,11 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function getFormattedOptionValue($optionValue)
     {
         if ($this->_formattedOptionValue === null) {
-            $value = $this->serializer->unserialize($optionValue);
+            try {
+                $value = $this->serializer->unserialize($optionValue);
+            } catch (\InvalidArgumentException $e) {
+                return $optionValue;
+            }
             if ($value === null) {
                 return $optionValue;
             }

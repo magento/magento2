@@ -273,6 +273,10 @@ class Cart extends DataObject implements CartInterface
                  * with the same id may have different sets of order attributes.
                  */
                 $product = $this->productRepository->getById($orderItem->getProductId(), false, $storeId, true);
+                if ($orderItem->getOrderId() !== null) {
+                    //reorder existing order
+                    $product->setSkipCheckRequiredOption(true);
+                }
             } catch (NoSuchEntityException $e) {
                 return $this;
             }
@@ -283,7 +287,14 @@ class Cart extends DataObject implements CartInterface
             } else {
                 $info->setQty(1);
             }
-
+            $productOptions = $orderItem->getProductOptions();
+            if ($productOptions !== null && !empty($productOptions['options'])) {
+                $formattedOptions = [];
+                foreach ($productOptions['options'] as $option) {
+                    $formattedOptions[$option['option_id']] = $option['option_value'];
+                }
+                $info->setData('options', $formattedOptions);
+            }
             $this->addProduct($product, $info);
         }
         return $this;
