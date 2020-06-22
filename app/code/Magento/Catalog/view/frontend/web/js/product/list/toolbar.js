@@ -30,15 +30,20 @@ define([
             limitDefault: '9',
             url: '',
             formKey: '',
-            post: false
+            post: false,
+            isToolbarInitialized: false
         },
 
         /** @inheritdoc */
         _create: function () {
+            if (this.options.isToolbarInitialized) {
+                return;
+            }
             this._bind($(this.options.modeControl), this.options.mode, this.options.modeDefault);
             this._bind($(this.options.directionControl), this.options.direction, this.options.directionDefault);
             this._bind($(this.options.orderControl), this.options.order, this.options.orderDefault);
             this._bind($(this.options.limitControl), this.options.limit, this.options.limitDefault);
+            this.options.isToolbarInitialized = true;
         },
 
         /** @inheritdoc */
