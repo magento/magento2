@@ -103,7 +103,7 @@ input PayflowProTokenInput @doc(description:"Input required to fetch payment tok
 
 input PayflowProInput @doc(description:"Required input for Payflow Pro and Payments Pro payment methods.") {
     cc_details: CreditCardDetailsInput! @doc(description: "Required input for credit card related information")
-    is_active_payment_token_enabler: Boolean! @doc(description:"States whether an entered by a customer credit/debit card should be tokenized for later usage. Required only if Vault is enabled for PayPal Payflow Pro payment integration.")
+    is_active_payment_token_enabler: Boolean @doc(description:"States whether an entered by a customer credit/debit card should be tokenized for later usage. Required only if Vault is enabled for PayPal Payflow Pro payment integration.")
 }
 
 input CreditCardDetailsInput @doc(description:"Required fields for Payflow Pro and Payments Pro credit card payments") {
