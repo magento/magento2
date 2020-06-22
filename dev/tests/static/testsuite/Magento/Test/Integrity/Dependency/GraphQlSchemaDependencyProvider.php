@@ -9,6 +9,8 @@ declare(strict_types=1);
 namespace Magento\Test\Integrity\Dependency;
 
 use Magento\Framework\App\Bootstrap;
+use Magento\Framework\GraphQlSchemaStitching\GraphQlReader;
+use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeReaderComposite;
 
 /**
  * Provide information on the dependency between the modules according to the GraphQL schema.
@@ -86,7 +88,8 @@ class GraphQlSchemaDependencyProvider extends DependencyProvider
     {
         if (!$this->parsedSchema) {
             $objectManager = Bootstrap::create(BP, $_SERVER)->getObjectManager();
-            $reader = $objectManager->create(\Magento\Framework\GraphQlSchemaStitching\GraphQlReader::class);
+            $typeReader = $objectManager->create(TypeReaderComposite::class);
+            $reader = $objectManager->create(GraphQlReader::class, ['typeReader' => $typeReader]);
             $this->parsedSchema = $reader->read();
         }
 
