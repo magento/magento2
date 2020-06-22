@@ -10,6 +10,7 @@ namespace Magento\StoreGraphQl\Model\Resolver\Store;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Api\Data\StoreConfigInterface;
 use Magento\Store\Api\StoreConfigManagerInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Api\Data\StoreInterface;
 
@@ -34,18 +35,26 @@ class StoreConfigDataProvider
     private $extendedConfigData;
 
     /**
+     * @var StoreRepositoryInterface
+     */
+    private $storeRepository;
+
+    /**
      * @param StoreConfigManagerInterface $storeConfigManager
      * @param ScopeConfigInterface $scopeConfig
+     * @param StoreRepositoryInterface $storeRepository
      * @param array $extendedConfigData
      */
     public function __construct(
         StoreConfigManagerInterface $storeConfigManager,
         ScopeConfigInterface $scopeConfig,
+        StoreRepositoryInterface $storeRepository,
         array $extendedConfigData = []
     ) {
         $this->storeConfigManager = $storeConfigManager;
         $this->scopeConfig = $scopeConfig;
         $this->extendedConfigData = $extendedConfigData;
+        $this->storeRepository = $storeRepository;
     }
 
     /**
@@ -56,11 +65,24 @@ class StoreConfigDataProvider
      */
     public function getStoreConfigData(StoreInterface $store): array
     {
-        $stores = $this->storeConfigManager->getStoreConfigs();
-        $defaultStoreConfig = current($this->storeConfigManager->getStoreConfigs([$store->getCode()]));
+        $defaultStoreConfig = $this->storeConfigManager->getStoreConfig($store);
         $defaultStoreConfigData = $this->prepareStoreConfigData($defaultStoreConfig);
 
-        foreach ($stores as $storeConfig) {
+        return $this->addStores($defaultStoreConfigData);
+    }
+
+    /**
+     * Add all stores
+     *
+     * @param array $defaultStoreConfigData
+     * @return mixed
+     */
+    private function addStores($defaultStoreConfigData)
+    {
+        $stores = $this->storeRepository->getList();
+
+        foreach ($stores as $store) {
+            $storeConfig = $this->storeConfigManager->getStoreConfig($store);
             $defaultStoreConfigData['stores'][] = $this->prepareStoreConfigData($storeConfig);
         }
 
@@ -101,7 +123,7 @@ class StoreConfigDataProvider
      * @param int $storeId
      * @return array
      */
-    private function getExtendedConfigData(int $storeId)
+    private function getExtendedConfigData(int $storeId): array
     {
         $extendedConfigData = [];
         foreach ($this->extendedConfigData as $key => $path) {
