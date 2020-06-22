@@ -66,9 +66,10 @@ class Attributes
     private function getUrlRewriteMeta(CategoryInterface $category): array
     {
         return [
-            'value' => $category->getUrlKey(),
+            'value' => $this->isSaveRewriteHistory($category->getStoreId()) ? $category->getUrlKey() : '',
             'valueMap' => [
-                'true' => $this->isSaveRewriteHistory($category->getStoreId()) ? $category->getUrlKey() : false
+                'false' => '',
+                'true' => $category->getUrlKey()
             ],
             'disabled' => true,
         ];

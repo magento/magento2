@@ -67,10 +67,11 @@ class AttributesTest extends TestCase
      * @dataProvider attributesMetaDataProvider
      *
      * @param bool $configEnabled
-     * @param bool|string $expected
+     * @param string $expectedValue
+     * @param string $expectedValueMap
      * @return void
      */
-    public function testGetAttributesMeta(bool $configEnabled, $expected): void
+    public function testGetAttributesMeta(bool $configEnabled, string $expectedValue, string $expectedValueMap): void
     {
         $this->categoryMock->expects($this->once())
             ->method('getId')
@@ -93,11 +94,11 @@ class AttributesTest extends TestCase
         $this->assertArrayHasKey('url_key_create_redirect', $result);
 
         $this->assertArrayHasKey('value', $result['url_key_create_redirect']);
-        $this->assertEquals(self::STUB_URL_KEY, $result['url_key_create_redirect']['value']);
+        $this->assertEquals($expectedValue, $result['url_key_create_redirect']['value']);
 
         $this->assertArrayHasKey('valueMap', $result['url_key_create_redirect']);
         $this->assertArrayHasKey('true', $result['url_key_create_redirect']['valueMap']);
-        $this->assertEquals($expected, $result['url_key_create_redirect']['valueMap']['true']);
+        $this->assertEquals($expectedValueMap, $result['url_key_create_redirect']['valueMap']['true']);
 
         $this->assertArrayHasKey('disabled', $result['url_key_create_redirect']);
         $this->assertTrue($result['url_key_create_redirect']['disabled']);
@@ -111,8 +112,8 @@ class AttributesTest extends TestCase
     public function attributesMetaDataProvider(): array
     {
         return [
-            'save rewrite history config enabled' => [true, self::STUB_URL_KEY],
-            'save rewrite history config disabled' => [false, false]
+            'save rewrite history config enabled' => [true, self::STUB_URL_KEY, self::STUB_URL_KEY],
+            'save rewrite history config disabled' => [false, '', 'url_key_777']
         ];
     }
 
