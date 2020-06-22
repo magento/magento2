@@ -95,7 +95,7 @@ class StoreConfigDataProvider
      * @param StoreConfigInterface $storeConfig
      * @return array
      */
-    private function prepareStoreConfigData($storeConfig): array
+    private function prepareStoreConfigData(StoreConfigInterface $storeConfig): array
     {
         return array_merge([
             'id' => $storeConfig->getId(),
