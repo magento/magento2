@@ -23,8 +23,6 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
 {
     const PAYMENT_METHOD_FREE_CODE = 'free';
 
-    const PAYMENT_ACTION_NO = 'no_action';
-
     /**
      * XML Paths for configuration constants
      */
@@ -108,7 +106,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     public function initialize($paymentAction, $stateObject)
     {
         if ($this->getConfigData('order_status') == 'processing' &&
-            (!$paymentAction || $paymentAction == self::PAYMENT_ACTION_NO)
+            (!$paymentAction || $paymentAction == 'no_action')
         ) {
             $stateObject->setState(\Magento\Sales\Model\Order::STATE_PROCESSING)
                 ->setStatus('processing');
@@ -126,7 +124,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     {
         return
             $this->getConfigData('order_status') == 'processing' &&
-            $this->getConfigPaymentAction() == self::PAYMENT_ACTION_NO ?
+            $this->getConfigPaymentAction() == 'no_action' ?
                 true :
                 parent::isInitializeNeeded();
     }
@@ -165,6 +163,6 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
     public function getConfigPaymentAction()
     {
         return $this->getConfigData('order_status') == 'pending' ? null :
-            (($action = parent::getConfigPaymentAction()) ? $action : self::PAYMENT_ACTION_NO);
+            (($action = parent::getConfigPaymentAction()) ? $action : 'no_action');
     }
 }
