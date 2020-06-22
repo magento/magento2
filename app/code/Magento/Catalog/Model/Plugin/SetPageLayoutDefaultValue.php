@@ -27,7 +27,7 @@ class SetPageLayoutDefaultValue
     /**
      * @var StoreManagerInterface
      */
-    protected $storeManager;
+    private $storeManager;
 
     /**
      * @var ScopeConfigInterface
