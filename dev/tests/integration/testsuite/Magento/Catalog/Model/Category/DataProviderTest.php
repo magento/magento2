@@ -3,20 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 namespace Magento\Catalog\Model\Category;
 
-use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate;
-use Magento\Catalog\Model\CategoryFactory;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Registry;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Framework\Registry;
 use PHPUnit\Framework\TestCase;
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate;
 
 /**
  * @magentoDbIsolation enabled
@@ -46,16 +41,6 @@ class DataProviderTest extends TestCase
     private $fakeFiles;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
-
-    /**
      * Create subject instance.
      *
      * @return DataProvider
@@ -83,8 +68,6 @@ class DataProviderTest extends TestCase
         $this->registry = $objectManager->get(Registry::class);
         $this->categoryFactory = $objectManager->get(CategoryFactory::class);
         $this->fakeFiles = $objectManager->get(CategoryLayoutUpdateManager::class);
-        $this->scopeConfig = $objectManager->get(ScopeConfigInterface::class);
-        $this->storeManager = $objectManager->get(StoreManagerInterface::class);
     }
 
     /**
@@ -237,62 +220,5 @@ class DataProviderTest extends TestCase
         sort($expectedList);
         sort($list);
         $this->assertEquals($expectedList, $list);
-    }
-
-    /**
-     * Check that proper options are returned for a category.
-     *
-     * @dataProvider categoryDefaultMetaDataProvider
-     * @param $data
-     * @return void
-     * @throws NoSuchEntityException
-     */
-    public function testDefaultLayoutMeta($data): void
-    {
-        $defaultAdminValue = $this->scopeConfig->getValue(
-            'web/default_layouts/default_category_layout',
-            ScopeInterface::SCOPE_STORE,
-            $this->storeManager->getStore()
-        );
-
-        /** @var Category $category */
-        $category = $this->categoryFactory->create();
-
-        if ($data['createNewCategory']) {
-            $category->setName('Net Test Category');
-        } else {
-            $category->load(2);
-        }
-
-        $this->registry->register('category', $category);
-        $meta = $this->dataProvider->getMeta();
-        $defaultCategoryLayout = $meta["design"]["children"]["page_layout"]["arguments"]["data"]["config"]["default"];
-        $this->registry->unregister('category');
-
-        if ($data['defaultValueEqSettings']) {
-            $this->assertEquals($defaultAdminValue, $defaultCategoryLayout);
-        } else {
-            $this->assertEquals($data['expectedDefaultValue'], $defaultCategoryLayout);
-        }
-    }
-
-    public function categoryDefaultMetaDataProvider()
-    {
-        return [
-            [
-                [
-                    'createNewCategory' => false,
-                    'expectedDefaultValue' => null,
-                    'defaultValueEqSettings' => false
-                ]
-            ],
-            [
-                [
-                    'createNewCategory' => true,
-                    'expectedDefaultValue' => false,
-                    'defaultValueEqSettings' => true
-                ]
-            ]
-        ];
     }
 }
