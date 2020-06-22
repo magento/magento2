@@ -11,6 +11,7 @@ use Magento\Backend\App\Action;
 use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\Auth\Session;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Config\Share;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
@@ -81,6 +82,11 @@ class Login extends Action implements HttpGetActionInterface
     private $url;
 
     /**
+     * @var Share
+     */
+    private $share;
+
+    /**
      * @param Context $context
      * @param Session $authSession
      * @param StoreManagerInterface $storeManager
@@ -90,6 +96,7 @@ class Login extends Action implements HttpGetActionInterface
      * @param SaveAuthenticationDataInterface $saveAuthenticationData ,
      * @param DeleteAuthenticationDataForUserInterface $deleteAuthenticationDataForUser
      * @param Url $url
+     * @param Share $share
      */
     public function __construct(
         Context $context,
@@ -100,7 +107,8 @@ class Login extends Action implements HttpGetActionInterface
         AuthenticationDataInterfaceFactory $authenticationDataFactory,
         SaveAuthenticationDataInterface $saveAuthenticationData,
         DeleteAuthenticationDataForUserInterface $deleteAuthenticationDataForUser,
-        Url $url
+        Url $url,
+        Share $share
     ) {
         parent::__construct($context);
 
@@ -112,6 +120,7 @@ class Login extends Action implements HttpGetActionInterface
         $this->saveAuthenticationData = $saveAuthenticationData;
         $this->deleteAuthenticationDataForUser = $deleteAuthenticationDataForUser;
         $this->url = $url;
+        $this->share = $share;
     }
 
     /**
@@ -149,6 +158,8 @@ class Login extends Action implements HttpGetActionInterface
                 $this->messageManager->addNoticeMessage(__('Please select a Store View to login in.'));
                 return $resultRedirect->setPath('customer/index/edit', ['id' => $customerId]);
             }
+        } elseif ($this->share->isGlobalScope()) {
+            $storeId = (int)$this->storeManager->getDefaultStoreView()->getId();
         } else {
             $storeId = (int)$customer->getStoreId();
         }
