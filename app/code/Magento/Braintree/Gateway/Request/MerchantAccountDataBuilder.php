@@ -13,6 +13,9 @@ use Magento\Payment\Gateway\Request\BuilderInterface;
 
 /**
  * Adds Merchant Account ID to the request if it was specified in the configuration.
+ *
+ * @deprecated Starting from Magento 2.3.6 Braintree payment method core integration is deprecated
+ * in favor of official payment integration available on the marketplace
  */
 class MerchantAccountDataBuilder implements BuilderInterface
 {

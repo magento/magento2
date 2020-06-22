@@ -59,22 +59,27 @@
         <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="AdminSwitchStoreViewActionGroup"/>
         <!-- Update attribute -->
         <checkOption selector="{{AdminEditProductAttributesSection.ChangeAttributePriceToggle}}" stepKey="toggleToChangePrice"/>
-        <fillField selector="{{AdminEditProductAttributesSection.AttributePrice}}" userInput="$$createProductOne.price$$0" stepKey="fillAttributeNameField"/>
+        <fillField selector="{{AdminEditProductAttributesSection.AttributePrice}}" userInput="$createProductOne.price$0" stepKey="fillAttributeNameField"/>
         <click selector="{{AdminEditProductAttributesSection.Save}}" stepKey="save"/>
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" time="60" stepKey="waitForSuccessMessage"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="Message is added to queue" stepKey="seeAttributeUpdateSuccessMsg"/>
 
-        <!-- Run cron twice -->
-        <magentoCLI command="cron:run" arguments="--group=consumers" stepKey="runCron1"/>
-        <magentoCLI command="cron:run" arguments="--group=consumers" stepKey="runCron2"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <!-- Start message queue for product attribute consumer -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="runCron1">
+            <argument name="consumerName" value="{{AdminProductAttributeUpdateMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminProductAttributeUpdateMessageConsumerData.messageLimit}}"/>
+        </actionGroup>
+        <magentoCLI command="cron:run --group=index" stepKey="runCron2"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Assert on storefront default view -->
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupDefault"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndPriceActionGroup" stepKey="searchByNameDefault">
-            <argument name="name" value="&quot;$$createProductOne.name$$&quot;"/>
-            <argument name="priceFrom" value="$$createProductOne.price$$0"/>
-            <argument name="priceTo" value="$$createProductOne.price$$0"/>
+            <argument name="name" value="&quot;$createProductOne.name$&quot;"/>
+            <argument name="priceFrom" value="$createProductOne.price$0"/>
+            <argument name="priceTo" value="$createProductOne.price$0"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultDefault"/>
         <waitForElementVisible selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="waitForSearchResultInDefaultView"/>
@@ -84,9 +89,9 @@
         <actionGroup ref="GoToStoreViewAdvancedCatalogSearchActionGroup" stepKey="GoToStoreViewAdvancedCatalogSearchActionGroupCustom"/>
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="StorefrontSwitchStoreViewActionGroup"/>
         <actionGroup ref="StorefrontAdvancedCatalogSearchByProductNameAndPriceActionGroup" stepKey="searchByNameCustom">
-            <argument name="name" value="&quot;$$createProductOne.name$$&quot;"/>
-            <argument name="priceFrom" value="$$createProductOne.price$$0"/>
-            <argument name="priceTo" value="$$createProductOne.price$$0"/>
+            <argument name="name" value="&quot;$createProductOne.name$&quot;"/>
+            <argument name="priceFrom" value="$createProductOne.price$0"/>
+            <argument name="priceTo" value="$createProductOne.price$0"/>
         </actionGroup>
         <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResultCustom"/>
         <waitForElementVisible selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="waitForSearchResultInCustomView"/>

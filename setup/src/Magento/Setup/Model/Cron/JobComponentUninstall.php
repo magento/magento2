@@ -11,6 +11,8 @@ use Magento\Framework\Composer\ComposerInformation;
 
 /**
  * Job to remove a component. Run by Setup Cron Task
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveParameterList)
  */
