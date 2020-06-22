@@ -9,6 +9,19 @@ spec:
   selector:
     app: magento
 ---
+apiVersion: autoscaling/v1
+kind: HorizontalPodAutoscaler
+metadata:
+  name: magento
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: magento
+  minReplicas: 1
+  maxReplicas: 7
+  targetCPUUtilizationPercentage: 50
+---
 apiVersion: apps/v1
 kind: Deployment
 metadata:
