@@ -17,31 +17,31 @@ type ProductReviews {
 
 type ProductReview @doc(description: "Details of a product review") {
     product: ProductInterface! @doc(description: "Contains details about the reviewed product") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product")
-    summary: String! @doc(description: "The review summary (a.k.a title")
+    summary: String! @doc(description: "The summary (title) of the review")
     text: String! @doc(description: "The review text.")
-    nickname: String! @doc(description: "The customer's nickname. Defaults to customer name if logged in.")
+    nickname: String! @doc(description: "The customer's nickname. Defaults to the customer name, if logged in")
     created_at: String! @doc(description: "Date indicating when the review was created.")
     average_rating: Float! @doc(description: "The average rating for product review.") @resolver(class: "Magento\\ReviewGraphQl\\Model\\Resolver\\Product\\Review\\AverageRating")
-    ratings_breakdown: [ProductReviewRating!]! @doc(description: "An array of ratings by rating category. For example quality, price.") @resolver(class: "Magento\\ReviewGraphQl\\Model\\Resolver\\Product\\Review\\RatingBreakdown")
+    ratings_breakdown: [ProductReviewRating!]! @doc(description: "An array of ratings by rating category, such as quality, price, and value") @resolver(class: "Magento\\ReviewGraphQl\\Model\\Resolver\\Product\\Review\\RatingBreakdown")
 }
 
 type ProductReviewRating {
-    name: String! @doc(description: "The review rating name for example quality, price.")
-    value: String! @doc(description: "The rating value given by customer. Possible values by default: 1 to 5.")
+    name: String! @doc(description: "The label assigned to an aspect of a product that is being rated, such as quality or price")
+    value: String! @doc(description: "The rating value given by customer. By default, possible values range from 1 to 5.")
 }
 
 type Query {
-    productReviewRatingsMetadata: ProductReviewRatingsMetadata! @doc(description: "Metadata required by clients to render ratings & reviews section.") @resolver(class: "Magento\\ReviewGraphQl\\Model\\Resolver\\ProductReviewRatingsMetadata")
+    productReviewRatingsMetadata: ProductReviewRatingsMetadata! @doc(description: "Retrieves metadata required by clients to render the Reviews section.") @resolver(class: "Magento\\ReviewGraphQl\\Model\\Resolver\\ProductReviewRatingsMetadata")
 }
 
 type ProductReviewRatingsMetadata {
-    items: [ProductReviewRatingMetadata!]! @doc(description: "List of product reviews sorted based on position")
+    items: [ProductReviewRatingMetadata!]! @doc(description: "List of product reviews sorted by position")
 }
 
 type ProductReviewRatingMetadata {
-    id: String! @doc(description: "Base 64 encoded rating id.")
-    name: String! @doc(description: "The review rating name for example quality, price")
-    values: [ProductReviewRatingValueMetadata!]! @doc(description: "List of product review ratings sorted based on position.") @resolver(class: "Magento\\ReviewGraphQl\\Model\\Resolver\\ProductReviewRatingValueMetadata")
+    id: String! @doc(description: "Base64 encoded rating ID.")
+    name: String! @doc(description: "The label assigned to an aspect of a product that is being rated, such as quality or price")
+    values: [ProductReviewRatingValueMetadata!]! @doc(description: "List of product review ratings sorted by position.") @resolver(class: "Magento\\ReviewGraphQl\\Model\\Resolver\\ProductReviewRatingValueMetadata")
 }
 
 type ProductReviewRatingValueMetadata {
@@ -53,26 +53,26 @@ type Customer {
     reviews(
         pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once."),
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return."),
-    ): ProductReviews! @resolver(class: "Magento\\ReviewGraphQl\\Model\\Resolver\\Customer\\Reviews")
+    ): ProductReviews! @doc(description: "Contains the customer's product reviews") @resolver(class: "Magento\\ReviewGraphQl\\Model\\Resolver\\Customer\\Reviews")
 }
 
 type Mutation {
-    createProductReview(input: CreateProductReviewInput!): CreateProductReviewOutput! @resolver(class: "Magento\\ReviewGraphQl\\Model\\Resolver\\CreateProductReview")
+    createProductReview(input: CreateProductReviewInput!): CreateProductReviewOutput! @doc(description: "Creates a product review for the specified SKU") @resolver(class: "Magento\\ReviewGraphQl\\Model\\Resolver\\CreateProductReview")
 }
 
 type CreateProductReviewOutput {
-    review: ProductReview!
+    review: ProductReview! @doc(description: "Contains the completed product review")
 }
 
 input CreateProductReviewInput {
-    sku: String! @doc(description: "The SKU of the product that the review is assigned")
-    nickname: String! @doc(description: "The customer's nickname. Defaults to customer name if logged in.")
-    summary: String! @doc(description: "The review summary (a.k.a title")
+    sku: String! @doc(description: "The SKU of the reviewed product")
+    nickname: String! @doc(description: "The customer's nickname. Defaults to the customer name, if logged in")
+    summary: String! @doc(description: "The summary (title) of the review")
     text: String! @doc(description: "The review text.")
     ratings: [ProductReviewRatingInput!]! @doc(description: "Ratings details by category. e.g price: 5, quality: 4 etc")
 }
 
 input ProductReviewRatingInput {
-    id: String! @doc(description: "Base 64 encoded rating id.")
+    id: String! @doc(description: "Base64 encoded rating ID.")
     value_id: String! @doc(description: "Base 64 encoded rating value id.")
 }
