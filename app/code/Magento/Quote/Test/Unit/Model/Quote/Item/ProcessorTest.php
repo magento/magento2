@@ -81,7 +81,8 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
                 'setCustomPrice',
                 'setOriginalCustomPrice',
                 'setData',
-                'setprice'
+                'setprice',
+                'getParentItem'
             ]
         );
         $this->quoteItemFactoryMock->expects($this->any())
@@ -446,5 +447,42 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
             ->will($this->returnValue($customPrice));
 
         $this->processor->prepare($this->itemMock, $this->objectMock, $this->productMock);
+    }
+
+    /**
+     * @param bool $isChildrenCalculated
+     * @dataProvider prepareChildProductDataProvider
+     */
+    public function testPrepareChildProduct(bool $isChildrenCalculated): void
+    {
+        $finalPrice = 10;
+        $this->objectMock->method('getResetCount')
+            ->willReturn(false);
+        $this->productMock->method('getFinalPrice')
+            ->willReturn($finalPrice);
+        $this->itemMock->expects($isChildrenCalculated ? $this->once() : $this->never())
+            ->method('setPrice')
+            ->with($finalPrice)
+            ->willReturnSelf();
+        $parentItem = $this->createConfiguredMock(
+            \Magento\Quote\Model\Quote\Item::class,
+            [
+                'isChildrenCalculated' => $isChildrenCalculated
+            ]
+        );
+        $this->itemMock->method('getParentItem')
+            ->willReturn($parentItem);
+        $this->processor->prepare($this->itemMock, $this->objectMock, $this->productMock);
+    }
+
+    /**
+     * @return array
+     */
+    public function prepareChildProductDataProvider(): array
+    {
+        return [
+            [false],
+            [true]
+        ];
     }
 }
