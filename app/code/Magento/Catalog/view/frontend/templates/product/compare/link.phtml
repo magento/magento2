@@ -13,17 +13,15 @@
         <?= $block->escapeHtml(__('Compare Products')) ?>
         <!-- ko if: compareProducts().count -->
         <span class="counter qty">
-            <span data-bind="text: compareProducts().count"></span>
-            <!-- ko if: (compareProducts().count === 1) -->
-                <?= $block->escapeHtmlAttr(__(' item')) ?>
-            <!--/ko-->
-            <!-- ko if: (compareProducts().count > 1) -->
-                <?= $block->escapeHtmlAttr(__(' items')) ?>
-            <!--/ko-->
+            <span data-bind="text: getCounterLabel()"></span>
         </span>
         <!-- /ko -->
     </a>
 </li>
 <script type="text/x-magento-init">
-{"[data-role=compare-products-link]": {"Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>}}
+{
+    "[data-role=compare-products-link]": {
+        "Magento_Ui/js/core/app": <?= /* @noEscape */ $block->getJsLayout() ?>
+    }
+}
 </script>

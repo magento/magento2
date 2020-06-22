@@ -15,13 +15,7 @@ $viewModel = $block->getData('sidebar_view_model');
             <strong role="heading" aria-level="2"><?= $block->escapeHtml($block->getTitle()) ?></strong>
             <!-- ko if: wishlist().counter -->
             <span class="counter no-display" data-bind="css: {'no-display': !wishlist().counter}">
-                <span data-bind="text: wishlist().counter"></span>
-                <!-- ko if: (wishlist().counter === 1) -->
-                    <?= $block->escapeHtmlAttr(__(' item')) ?>
-                <!--/ko-->
-                <!-- ko if: (wishlist().counter > 1) -->
-                    <?= $block->escapeHtmlAttr(__(' items')) ?>
-                <!--/ko-->
+                <span data-bind="text: getCounterLabel()"></span>
             </span>
             <!-- /ko -->
         </div>

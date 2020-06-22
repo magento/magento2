@@ -17,14 +17,8 @@ $viewModel = $block->getData('compare_view_model');
             <?= $block->escapeHtml(__('Compare Products')) ?>
         </strong>
         <!-- ko if: compareProducts().count -->
-        <span class="counter qty no-display" data-bind="css: {'no-display': !compareProducts().count}">
-            <span data-bind="text: compareProducts().count"></span>
-            <!-- ko if: (compareProducts().count === 1) -->
-                <?= $block->escapeHtmlAttr(__(' item')) ?>
-            <!--/ko-->
-            <!-- ko if: (compareProducts().count > 1) -->
-                <?= $block->escapeHtmlAttr(__(' items')) ?>
-            <!--/ko-->
+        <span class="counter no-display" data-bind="css: {'no-display': !compareProducts().count}">
+            <span data-bind="text: getCounterLabel()"></span>
         </span>
         <!-- /ko -->
     </div>
