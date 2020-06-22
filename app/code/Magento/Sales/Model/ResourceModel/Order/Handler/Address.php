@@ -9,9 +9,6 @@ namespace Magento\Sales\Model\ResourceModel\Order\Handler;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\ResourceModel\Attribute;
 
-/**
- * Class Address
- */
 class Address
 {
     /**
