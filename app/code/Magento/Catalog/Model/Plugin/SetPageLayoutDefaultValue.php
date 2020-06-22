@@ -62,15 +62,15 @@ class SetPageLayoutDefaultValue
     {
         $currentCategory = $subject->getCurrentCategory();
 
-        $defaultAdminValue = $this->scopeConfig->getValue(
-            'web/default_layouts/default_category_layout',
-            ScopeInterface::SCOPE_STORE,
-            $this->storeManager->getStore()
-        );
-
-        $defaultValue = $defaultAdminValue ?: $this->defaultValue;
-
         if ($currentCategory && !$currentCategory->getId() && array_key_exists('page_layout', $result)) {
+            $defaultAdminValue = $this->scopeConfig->getValue(
+                'web/default_layouts/default_category_layout',
+                ScopeInterface::SCOPE_STORE,
+                $this->storeManager->getStore()
+            );
+
+            $defaultValue = $defaultAdminValue ?: $this->defaultValue;
+
             $result['page_layout']['default'] = $defaultValue ?: null;
         }
 
