@@ -1,11 +1,17 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 
 namespace Magento\GraphQl\Model\Cors;
 
-
 use Magento\Framework\App\Config\ScopeConfigInterface;
 
+/**
+ * Configuration provider for GraphQL CORS settings
+ */
 class Configuration implements ConfigurationInterface
 {
     const XML_PATH_CORS_HEADERS_ENABLED = 'graphql/cors/enabled';
@@ -47,7 +53,7 @@ class Configuration implements ConfigurationInterface
 
     public function getMaxAge(): int
     {
-        return $this->scopeConfig->getValue(self::XML_PATH_CORS_MAX_AGE);
+        return (int) $this->scopeConfig->getValue(self::XML_PATH_CORS_MAX_AGE);
     }
 
     public function isCredentialsAllowed(): bool

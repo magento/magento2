@@ -1,16 +1,21 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 
 namespace Magento\GraphQl\Controller\HttpResponse\Cors;
 
 use Magento\Framework\App\Response\HeaderProvider\HeaderProviderInterface;
 use Magento\GraphQl\Model\Cors\ConfigurationInterface;
 
+/**
+ * Provides value for Access-Control-Allow-Headers header if CORS is enabled
+ */
 class CorsAllowHeadersHeaderProvider implements HeaderProviderInterface
 {
-    protected $headerName = 'Access-Control-Allow-Headers';
-
-    protected $headerValue = '';
+    private $headerName;
 
     /**
      * CORS configuration provider
@@ -19,9 +24,12 @@ class CorsAllowHeadersHeaderProvider implements HeaderProviderInterface
      */
     private $corsConfiguration;
 
-    public function __construct(ConfigurationInterface $corsConfiguration)
-    {
+    public function __construct(
+        ConfigurationInterface $corsConfiguration,
+        string $headerName
+    ) {
         $this->corsConfiguration = $corsConfiguration;
+        $this->headerName = $headerName;
     }
 
     public function getName()
@@ -36,8 +44,6 @@ class CorsAllowHeadersHeaderProvider implements HeaderProviderInterface
 
     public function getValue()
     {
-        return $this->corsConfiguration->getAllowedHeaders()
-            ? $this->corsConfiguration->getAllowedHeaders()
-            : $this->headerValue;
+        return $this->corsConfiguration->getAllowedHeaders();
     }
 }
