@@ -103,9 +103,16 @@ try {
             $themePackageList
         )
     );
-
+    $overrideConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        Magento\TestFramework\Workaround\Override\Config::class
+    );
+    $overrideConfig->init();
+    Magento\TestFramework\Workaround\Override\Config::setInstance($overrideConfig);
+    Magento\TestFramework\Workaround\Override\Fixture\Resolver::setInstance(
+        new  \Magento\TestFramework\Workaround\Override\Fixture\Resolver($overrideConfig)
+    );
     /* Unset declared global variables to release the PHPUnit from maintaining their values between tests */
-    unset($testsBaseDir, $logWriter, $settings, $shell, $application, $bootstrap);
+    unset($testsBaseDir, $settings, $shell, $application, $bootstrap, $overrideConfig);
 } catch (\Exception $e) {
     // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
     echo $e . PHP_EOL;
