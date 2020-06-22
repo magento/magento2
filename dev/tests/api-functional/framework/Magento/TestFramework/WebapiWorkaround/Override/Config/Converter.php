@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\TestFramework\WebapiWorkaround\Override\Config;
 
 use Magento\TestFramework\Annotation\AdminConfigFixture;
-use Magento\TestFramework\Annotation\ApiConfigFixture;
 use Magento\TestFramework\Annotation\ApiDataFixture;
 use Magento\TestFramework\Annotation\ConfigFixture;
 use Magento\TestFramework\Annotation\DataFixture;
@@ -20,14 +19,6 @@ use Magento\TestFramework\Workaround\Override\Config\Converter as IntegrationCon
  */
 class Converter extends IntegrationConverter
 {
-    protected const FIXTURE_TYPES = [
-        ApiDataFixture::ANNOTATION,
-        ApiConfigFixture::ANNOTATION,
-        DataFixture::ANNOTATION,
-        DataFixtureBeforeTransaction::ANNOTATION,
-        AdminConfigFixture::ANNOTATION,
-    ];
-
     /**
      * Fill node attributes values
      *
