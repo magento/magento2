@@ -14,13 +14,13 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Abstract model for product type implementation
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * phpcs:disable Magento2.Classes.AbstractApi
  */
 abstract class AbstractType
 {

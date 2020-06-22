@@ -303,8 +303,8 @@ class Cart extends DataObject implements CartInterface
     /**
      * Get product object based on requested product information
      *
-     * @param   Product|int|string $productInfo
-     * @return  Product
+     * @param Product|int|string $productInfo
+     * @return Product
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getProduct($productInfo)
@@ -344,8 +344,8 @@ class Cart extends DataObject implements CartInterface
     /**
      * Get request for product add to cart procedure
      *
-     * @param   \Magento\Framework\DataObject|int|array $requestInfo
-     * @return  \Magento\Framework\DataObject
+     * @param \Magento\Framework\DataObject|int|array $requestInfo
+     * @return \Magento\Framework\DataObject
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     protected function _getProductRequest($requestInfo)

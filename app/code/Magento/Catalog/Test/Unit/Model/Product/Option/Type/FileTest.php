@@ -136,6 +136,14 @@ class FileTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    public function testGetFormattedOptionValueWithUnserializedValue()
+    {
+        $fileObject = $this->getFileObject();
+
+        $value = 'some unserialized value, 1, 2.test';
+        $this->assertEquals($value, $fileObject->getFormattedOptionValue($value));
+    }
+
     public function testGetCustomizedView()
     {
         $fileObject = $this->getFileObject();
