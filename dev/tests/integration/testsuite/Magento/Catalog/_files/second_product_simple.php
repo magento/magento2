@@ -22,3 +22,6 @@ $product2
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setStockData(['use_config_manage_stock' => 0])
     ->save();
+$indexerProcessor = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+    ->get(\Magento\Catalog\Model\Indexer\Product\Price\Processor::class);
+$indexerProcessor->reindexRow($product2->getId());
