@@ -59,15 +59,13 @@ class AddUserInfoToContext implements ContextParametersProcessorInterface
 
         $contextParameters->addExtensionAttribute('is_customer', $this->isCustomer($currentUserId, $currentUserType));
 
-        if ($this->isCustomer($currentUserId, $currentUserType)) {
-            try {
-                $customerGroupId = $this->customerRepository->getById($currentUserId)->getGroupId();
-            } catch (\Exception $e) {
-                $customerGroupId = GroupInterface::NOT_LOGGED_IN_ID;
-            }
-
-            $contextParameters->addExtensionAttribute('customer_group_id', $customerGroupId);
+        try {
+            $customerGroupId = $this->customerRepository->getById($currentUserId)->getGroupId();
+        } catch (\Exception $e) {
+            $customerGroupId = GroupInterface::NOT_LOGGED_IN_ID;
         }
+
+        $contextParameters->addExtensionAttribute('customer_group_id', $customerGroupId);
 
         return $contextParameters;
     }
