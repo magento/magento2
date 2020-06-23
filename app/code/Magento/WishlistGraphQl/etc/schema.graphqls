@@ -57,7 +57,7 @@ input EnteredOptionInput @doc(description: "Defines a customer-entered option") 
     value: String! @doc(description: "Text the customer entered")
 }
 
-type RemoveProductsFromWishlistOutput @doc(description: "Contains the customer\`s wish list and any errors encountered") {
+type RemoveProductsFromWishlistOutput @doc(description: "Contains the customer's wish list and any errors encountered") {
     wishlist: Wishlist! @doc(description: "Contains the wish list with after items were successfully deleted")
     userInputErrors:[CheckoutUserInputError]! @doc(description:"An array of errors encountered while deleting products from a wish list")
 }
