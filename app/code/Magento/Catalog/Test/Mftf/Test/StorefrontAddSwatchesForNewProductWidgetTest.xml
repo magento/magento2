@@ -41,13 +41,17 @@
             <argument name="page_id" value="2" />
         </actionGroup>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContentTabForPage"/>
-        <actionGroup ref="AdminInsertWidgetToCmsPageContentActionGroup" stepKey="insertWidgetToCmsPageContentActionGroup">
-            <argument name="widgetType" value="Catalog New Products List"/>
-        </actionGroup>
+        <waitForElementVisible selector="{{TinyMCESection.TinyMCE4}}" stepKey="waitForTinyMCE4"/>
+        <seeElement selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="seeWidgetIcon"/>
+        <click selector="{{TinyMCESection.InsertWidgetIcon}}" stepKey="clickInsertWidgetIcon"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <selectOption selector="{{WidgetSection.WidgetType}}" userInput="Catalog New Products List" stepKey="selectWidgetType"/>
+        <waitForPageLoad stepKey="waitForWidgetOptions"/>
         <actionGroup ref="AdminClickInsertWidgetActionGroup" stepKey="clickInsertWidgetButton"/>
         <actionGroup ref="SaveCmsPageActionGroup" stepKey="clickSaveButton"/>
 
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
 
         <seeElement selector="{{StorefrontProductInfoMainSection.swatchAttributeOptions}}" stepKey="seeSwatchesOnNewProductsWidget"/>
