@@ -9,6 +9,8 @@ use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Config\Data\Scoped;
 use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\Config\ScopeInterface;
+use Magento\Framework\Interception\ConfigLoaderInterface;
+use Magento\Framework\Interception\ConfigWriterInterface;
 use Magento\Framework\Interception\DefinitionInterface;
 use Magento\Framework\Interception\PluginListInterface as InterceptionPluginList;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
@@ -17,8 +19,6 @@ use Magento\Framework\ObjectManager\DefinitionInterface as ClassDefinitions;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Serialize\Serializer\Serialize;
-use Magento\Framework\Interception\ConfigLoader;
-use Magento\Framework\Interception\ConfigWriter;
 
 /**
  * Plugin config, provides list of plugins for a type
@@ -83,12 +83,12 @@ class PluginList extends Scoped implements InterceptionPluginList
     private $serializer;
 
     /**
-     * @var ConfigLoader
+     * @var ConfigLoaderInterface
      */
     private $configLoader;
 
     /**
-     * @var ConfigWriter
+     * @var ConfigWriterInterface
      */
     private $configWriter;
 
@@ -106,8 +106,8 @@ class PluginList extends Scoped implements InterceptionPluginList
      * @param array $scopePriorityScheme
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
-     * @param ConfigLoader|null $configLoader
-     * @param ConfigWriter|null $configWriter
+     * @param ConfigLoaderInterface|null $configLoader
+     * @param ConfigWriterInterface|null $configWriter
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -122,8 +122,8 @@ class PluginList extends Scoped implements InterceptionPluginList
         array $scopePriorityScheme = ['global'],
         $cacheId = 'plugins',
         SerializerInterface $serializer = null,
-        ConfigLoader $configLoader = null,
-        ConfigWriter $configWriter = null
+        ConfigLoaderInterface $configLoader = null,
+        ConfigWriterInterface $configWriter = null
     ) {
         $this->serializer = $serializer ?: $objectManager->get(Serialize::class);
         parent::__construct($reader, $configScope, $cache, $cacheId, $this->serializer);
@@ -133,8 +133,8 @@ class PluginList extends Scoped implements InterceptionPluginList
         $this->_classDefinitions = $classDefinitions;
         $this->_scopePriorityScheme = $scopePriorityScheme;
         $this->_objectManager = $objectManager;
-        $this->configLoader = $configLoader ?: $this->_objectManager->get(ConfigLoader::class);
-        $this->configWriter = $configWriter ?: $this->_objectManager->get(ConfigWriter::class);
+        $this->configLoader = $configLoader ?: $this->_objectManager->get(ConfigLoaderInterface::class);
+        $this->configWriter = $configWriter ?: $this->_objectManager->get(ConfigWriterInterface::class);
     }
 
     /**

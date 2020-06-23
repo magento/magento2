@@ -14,7 +14,7 @@ interface ConfigWriterInterface
      * Write interception configuration for scopes.
      *
      * @param array $scopes
-     * @return array
+     * @return void
      */
     public function write($scopes);
 }

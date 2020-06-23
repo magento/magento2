@@ -25,7 +25,11 @@ class ConfigLoader implements ConfigLoaderInterface
     }
 
     /**
-     * @inheritDoc
+     * Load interception configuration data per scope.
+     *
+     * @param string $cacheId
+     * @return array
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     public function load($cacheId)
     {

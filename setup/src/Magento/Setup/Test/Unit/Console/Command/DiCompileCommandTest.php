@@ -160,7 +160,7 @@ class DiCompileCommandTest extends TestCase
             ->with(ProgressBar::class)
             ->willReturn($progressBar);
 
-        $this->managerMock->expects($this->exactly(8))->method('addOperation')
+        $this->managerMock->expects($this->exactly(9))->method('addOperation')
             ->withConsecutive(
                 [OperationFactory::PROXY_GENERATOR, []],
                 [OperationFactory::REPOSITORY_GENERATOR, $this->anything()],
@@ -178,7 +178,8 @@ class DiCompileCommandTest extends TestCase
                 [OperationFactory::INTERCEPTION, $this->anything()],
                 [OperationFactory::AREA_CONFIG_GENERATOR, $this->anything()],
                 [OperationFactory::INTERCEPTION_CACHE, $this->anything()],
-                [OperationFactory::APPLICATION_ACTION_LIST_GENERATOR, $this->anything()]
+                [OperationFactory::APPLICATION_ACTION_LIST_GENERATOR, $this->anything()],
+                [OperationFactory::PLUGIN_LIST_GENERATOR, $this->anything()]
             );
 
         $this->managerMock->expects($this->once())->method('process');

@@ -143,7 +143,10 @@ class ConfigWriter implements ConfigWriterInterface
     }
 
     /**
-     * @inheritDoc
+     * Write interception configuration for scopes.
+     *
+     * @param array $scopes
+     * @return void
      */
     public function write($scopes)
     {
