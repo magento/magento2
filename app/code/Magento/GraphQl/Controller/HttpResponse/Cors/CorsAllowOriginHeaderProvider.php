@@ -24,6 +24,10 @@ class CorsAllowOriginHeaderProvider implements HeaderProviderInterface
      */
     private $corsConfiguration;
 
+    /**
+     * @param ConfigurationInterface $corsConfiguration
+     * @param string $headerName
+     */
     public function __construct(
         ConfigurationInterface $corsConfiguration,
         string $headerName
