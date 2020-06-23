@@ -15,7 +15,6 @@
             <testCaseId value="MC-5335"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
-            <group value="urlRewrite"/>
         </annotations>
 
         <before>

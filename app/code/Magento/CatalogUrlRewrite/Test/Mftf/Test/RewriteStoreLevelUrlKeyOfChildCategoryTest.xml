@@ -15,7 +15,6 @@
             <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-94934"/>
             <group value="CatalogUrlRewrite"/>
-            <group value="urlRewrite"/>
         </annotations>
 
         <before>
@@ -46,8 +45,7 @@
             <argument name="value" value="gear-global"/>
         </actionGroup>
 
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefrontPage"/>
 
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="storefrontSwitchStoreView"/>
 

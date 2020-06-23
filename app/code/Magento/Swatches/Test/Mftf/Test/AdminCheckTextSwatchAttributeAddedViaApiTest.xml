@@ -14,6 +14,7 @@
             <title value="Add Swatch Text Product Attribute via API"/>
             <description value="Login as admin, create swatch text product attribute.Go to New Product page,
                 check the created attribute is available on the page."/>
+            <severity value="MAJOR"/>
             <group value="swatches"/>
         </annotations>
         <before>
@@ -31,7 +32,7 @@
             <deleteData createDataKey="createTextSwatchConfigProductAttribute" stepKey="deleteAttribute"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+           <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Open the new simple product page -->

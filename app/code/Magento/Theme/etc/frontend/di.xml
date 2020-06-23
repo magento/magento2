@@ -27,8 +27,10 @@
         <plugin name="result-messages" type="Magento\Theme\Controller\Result\MessagePlugin"/>
     </type>
     <type name="Magento\Framework\App\Response\Http">
-        <plugin name="result-js-footer" type="Magento\Theme\Controller\Result\JsFooterPlugin"/>
         <plugin name="asyncCssLoad" type="Magento\Theme\Controller\Result\AsyncCssPlugin"/>
+    </type>
+    <type name="Magento\Framework\View\Result\Layout">
+        <plugin name="deferJsToFooter" type="Magento\Theme\Controller\Result\JsFooterPlugin" sortOrder="-10"/>
     </type>
     <type name="Magento\Theme\Block\Html\Header\CriticalCss">
         <arguments>

@@ -25,7 +25,7 @@ class AsyncClientInterfaceTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->client = Bootstrap::getObjectManager()->get(AsyncClientInterface::class);
     }
@@ -40,8 +40,8 @@ class AsyncClientInterfaceTest extends TestCase
         $response2 = $this->client->request($request);
         $this->assertEquals(200, $response2->get()->getStatusCode());
         $this->assertEquals(200, $response1->get()->getStatusCode());
-        $this->assertContains('Magento. All Rights Reserved', $response1->get()->getBody());
-        $this->assertContains('Magento. All Rights Reserved', $response2->get()->getBody());
+        $this->assertStringContainsString('Magento. All Rights Reserved', $response1->get()->getBody());
+        $this->assertStringContainsString('Magento. All Rights Reserved', $response2->get()->getBody());
         $date1 = new \DateTime($response1->get()->getHeaders()['date']);
         $date2 = new \DateTime($response2->get()->getHeaders()['date']);
         $this->assertLessThanOrEqual(1, abs($date1->format('U') - $date2->format('U')));
@@ -50,11 +50,12 @@ class AsyncClientInterfaceTest extends TestCase
     /**
      * Test cancelling a request.
      *
-     * @expectedException \Magento\Framework\Async\CancelingDeferredException
-     * @expectedExceptionMessage Deferred is canceled
      */
     public function testCancel(): void
     {
+        $this->expectException(\Magento\Framework\Async\CancelingDeferredException::class);
+        $this->expectExceptionMessage('Deferred is canceled');
+
         $request = new Request('https://magento.com/home-page', Request::METHOD_GET, [], null);
         $response = $this->client->request($request);
         $response->cancel(true);
@@ -65,11 +66,12 @@ class AsyncClientInterfaceTest extends TestCase
     /**
      * Test failing cancelling a request.
      *
-     * @expectedException \Magento\Framework\Async\CancelingDeferredException
-     * @expectedExceptionMessage Failed to cancel HTTP request
      */
     public function testCancelFail(): void
     {
+        $this->expectException(\Magento\Framework\Async\CancelingDeferredException::class);
+        $this->expectExceptionMessage('Failed to cancel HTTP request');
+
         $request = new Request('https://magento.com/home-page', Request::METHOD_GET, [], null);
         $response = $this->client->request($request);
         $response->cancel();

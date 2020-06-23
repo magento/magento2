@@ -61,10 +61,9 @@
 
         <!-- Step 1: User browses catalog -->
         <comment userInput="Start of browsing catalog" stepKey="startOfBrowsingCatalog"/>
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnHomePage"/>
-        <waitForPageLoad stepKey="homeWaitForPageLoad"/>
-        <waitForElementVisible selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="homeWaitForWelcomeMessage"/>
-        <see userInput="Default welcome msg!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="homeCheckWelcome"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+        <waitForElementVisible selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="homeWaitForWelcomeMessage"/>
+        <see userInput="Default welcome msg!" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="homeCheckWelcome"/>
 
         <!-- Open Category -->
         <comment userInput="Open category" stepKey="commentOpenCategory"/>

@@ -39,7 +39,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout2"/>
         </after>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="amOnAdminCategoryPage"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="amOnAdminCategoryPage"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <!--Create new root category-->
@@ -72,8 +72,7 @@
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickOkOnModalDialog1"/>
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logout1"/>
         <!--Go to storefront and verify created subcategory on frontend-->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad2"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
         <actionGroup ref="CheckCategoryOnStorefrontActionGroup" stepKey="checkCreatedSubcategory1OnFrontend">
             <argument name="categoryEntity" value="SimpleSubCategory"/>
         </actionGroup>

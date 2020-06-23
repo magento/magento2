@@ -130,11 +130,12 @@ QUERY;
     /**
      * Verify the message when identifier does not exist.
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The CMS page with the "" ID doesn't exist.
      */
     public function testGetCmsPageByNonExistentIdentifier()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The CMS page with the "" ID doesn\'t exist.');
+
         $query =
             <<<QUERY
 {
@@ -186,11 +187,12 @@ QUERY;
      * Verify the message when CMS Page selected by identifier is disabled
      *
      * @magentoApiDataFixture Magento/Cms/_files/noroute.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The CMS page with the "no-route" ID doesn't exist.
      */
     public function testGetDisabledCmsPageByIdentifier()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The CMS page with the "no-route" ID doesn\'t exist.');
+
         $cmsPageIdentifier = 'no-route';
         $query =
             <<<QUERY

@@ -77,8 +77,7 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!-- Switch default store view on store view created below -->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForStorefrontPageLoad"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage"/>
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="SwitchStoreView">
             <argument name="storeView" value="customStore"/>
         </actionGroup>

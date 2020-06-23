@@ -17,7 +17,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\DataObject;
 
 /**
- * Class InvoiceSender
+ * Sends order invoice email to the customer.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -108,7 +108,9 @@ class InvoiceSender extends Sender
 
             $transport = [
                 'order' => $order,
+                'order_id' => $order->getId(),
                 'invoice' => $invoice,
+                'invoice_id' => $invoice->getId(),
                 'comment' => $invoice->getCustomerNoteNotify() ? $invoice->getCustomerNote() : '',
                 'billing' => $order->getBillingAddress(),
                 'payment_html' => $this->getPaymentHtml($order),

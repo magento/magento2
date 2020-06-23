@@ -71,7 +71,8 @@ class BundlePrice extends AbstractModifier
             $meta,
             [
                 'imports' => [
-                    'disabled' => 'ns = ${ $.ns }, index = ' . static::CODE_PRICE_TYPE . ':checked'
+                    'disabled' => 'ns = ${ $.ns }, index = ' . static::CODE_PRICE_TYPE . ':checked',
+                    '__disableTmpl' => ['disabled' => false],
                 ]
             ]
         );
@@ -86,7 +87,8 @@ class BundlePrice extends AbstractModifier
             $meta,
             [
                 'imports' => [
-                    'disabled' => 'ns = ${ $.ns }, index = ' . static::CODE_PRICE_TYPE . ':checked'
+                    'disabled' => 'ns = ${ $.ns }, index = ' . static::CODE_PRICE_TYPE . ':checked',
+                    '__disableTmpl' => ['disabled' => false],
                 ]
             ]
         );
