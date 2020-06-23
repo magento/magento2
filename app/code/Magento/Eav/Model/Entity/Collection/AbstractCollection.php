@@ -1210,12 +1210,11 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
             }
         }
 
+        $selectedAttributeCodes = array_keys($this->_selectAttributes);
         foreach ($this->_itemsById as $items) {
             foreach ($items as $item) {
-                foreach ($this->_selectAttributes as $attributeCode => $attributeId) {
-                    if (!$item->hasData($attributeCode)) {
-                        $item->setData($attributeCode, null);
-                    }
+                foreach (array_diff($selectedAttributeCodes, array_keys($item->getData())) as $attributeCode) {
+                    $item->setData($attributeCode, null);
                 }
             }
         }
