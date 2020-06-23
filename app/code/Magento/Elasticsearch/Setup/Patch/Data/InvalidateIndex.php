@@ -13,7 +13,6 @@ use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
 
-
 /**
  * Invalidate fulltext index
  */
@@ -45,6 +44,7 @@ class InvalidateIndex implements DataPatchInterface
     public function apply()
     {
         $this->indexerRegistry->get(FulltextIndexer::INDEXER_ID)->invalidate();
+        return $this;
     }
 
     /**
