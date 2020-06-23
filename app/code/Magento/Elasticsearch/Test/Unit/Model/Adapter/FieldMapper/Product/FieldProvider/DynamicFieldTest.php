@@ -251,7 +251,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                         if ($type === 'string') {
                             return 'string';
                         } elseif ($type === 'float') {
-                            return 'float';
+                            return 'double';
                         } elseif ($type === 'integer') {
                             return 'integer';
                         } else {
