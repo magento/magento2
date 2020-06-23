@@ -13,7 +13,7 @@ class AbstractAgreementTest extends \Magento\TestFramework\Indexer\TestCase
     /** @var \Magento\Paypal\Model\Method\Agreement */
     protected $_model;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $db = Bootstrap::getInstance()->getBootstrap()
             ->getApplication()
@@ -26,12 +26,12 @@ class AbstractAgreementTest extends \Magento\TestFramework\Indexer\TestCase
         parent::setUpBeforeClass();
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $config = $this->getMockBuilder(\Magento\Paypal\Model\Config::class)->disableOriginalConstructor()->getMock();
-        $config->expects($this->any())->method('isMethodAvailable')->will($this->returnValue(true));
+        $config->expects($this->any())->method('isMethodAvailable')->willReturn(true);
         $proMock = $this->getMockBuilder(\Magento\Paypal\Model\Pro::class)->disableOriginalConstructor()->getMock();
-        $proMock->expects($this->any())->method('getConfig')->will($this->returnValue($config));
+        $proMock->expects($this->any())->method('getConfig')->willReturn($config);
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Paypal\Model\Method\Agreement::class,
             ['data' => [$proMock]]
@@ -90,7 +90,7 @@ class AbstractAgreementTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * teardown
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }

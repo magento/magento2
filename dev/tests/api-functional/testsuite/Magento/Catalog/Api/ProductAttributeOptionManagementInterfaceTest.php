@@ -43,7 +43,7 @@ class ProductAttributeOptionManagementInterfaceTest extends WebapiAbstract
 
         $response = $this->_webApiCall($serviceInfo, ['attributeCode' => $testAttributeCode]);
 
-        $this->assertTrue(is_array($response));
+        $this->assertIsArray($response);
         $this->assertEquals($expectedOptions, $response);
     }
 

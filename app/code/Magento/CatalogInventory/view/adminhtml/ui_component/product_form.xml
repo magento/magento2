@@ -11,7 +11,7 @@
             <options>
                 <option name="buttons" xsi:type="array">
                     <item name="0" xsi:type="array">
-                        <item name="text" xsi:type="string">Done</item>
+                        <item name="text" xsi:type="string" translate="true">Done</item>
                         <item name="class" xsi:type="string">action-primary</item>
                         <item name="actions" xsi:type="array">
                             <item name="0" xsi:type="array">
@@ -21,7 +21,7 @@
                         </item>
                     </item>
                 </option>
-                <option name="title" xsi:type="string">Advanced Inventory</option>
+                <option name="title" xsi:type="string" translate="true">Advanced Inventory</option>
             </options>
             <onCancel>actionDone</onCancel>
             <dataScope>data.product</dataScope>

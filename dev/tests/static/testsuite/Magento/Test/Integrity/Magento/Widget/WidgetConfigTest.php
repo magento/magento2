@@ -12,7 +12,7 @@ class WidgetConfigTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Framework\Config\Dom\UrnResolver */
     protected $urnResolver;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->urnResolver = new \Magento\Framework\Config\Dom\UrnResolver();
     }

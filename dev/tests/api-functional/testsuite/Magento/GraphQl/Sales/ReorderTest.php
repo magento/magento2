@@ -42,7 +42,7 @@ class ReorderTest extends GraphQlAbstract
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
@@ -85,11 +85,12 @@ class ReorderTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Sales/_files/customer_order_item_with_product_and_custom_options.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testReorderWithoutAuthorisedCustomer()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $query = $this->getQuery(self::ORDER_NUMBER);
         $this->graphQlMutation($query);
     }

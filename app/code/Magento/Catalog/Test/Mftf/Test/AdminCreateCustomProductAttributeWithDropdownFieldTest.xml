@@ -23,7 +23,7 @@
 
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
 
             <!--Create Category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>

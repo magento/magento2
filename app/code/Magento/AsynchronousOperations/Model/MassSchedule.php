@@ -16,6 +16,7 @@ use Magento\Authorization\Model\UserContextInterface;
 use Magento\Framework\Bulk\BulkManagementInterface;
 use Magento\Framework\DataObject\IdentityGeneratorInterface;
 use Magento\Framework\Encryption\Encryptor;
+use Magento\AsynchronousOperations\Api\SaveMultipleOperationsInterface;
 use Magento\Framework\Exception\BulkException;
 use Magento\Framework\Exception\LocalizedException;
 use Psr\Log\LoggerInterface;
@@ -68,6 +69,11 @@ class MassSchedule
     private $encryptor;
 
     /**
+     * @var SaveMultipleOperationsInterface
+     */
+    private $saveMultipleOperations;
+
+    /**
      * Initialize dependencies.
      *
      * @param IdentityGeneratorInterface $identityService
@@ -78,6 +84,7 @@ class MassSchedule
      * @param OperationRepositoryInterface $operationRepository
      * @param UserContextInterface $userContext
      * @param Encryptor $encryptor
+     * @param SaveMultipleOperationsInterface $saveMultipleOperations
      */
     public function __construct(
         IdentityGeneratorInterface $identityService,
@@ -87,7 +94,8 @@ class MassSchedule
         LoggerInterface $logger,
         OperationRepositoryInterface $operationRepository,
         UserContextInterface $userContext,
-        Encryptor $encryptor
+        Encryptor $encryptor,
+        SaveMultipleOperationsInterface $saveMultipleOperations
     ) {
         $this->identityService = $identityService;
         $this->itemStatusInterfaceFactory = $itemStatusInterfaceFactory;
@@ -97,6 +105,7 @@ class MassSchedule
         $this->operationRepository = $operationRepository;
         $this->userContext = $userContext;
         $this->encryptor = $encryptor;
+        $this->saveMultipleOperations = $saveMultipleOperations;
     }
 
     /**
@@ -159,6 +168,7 @@ class MassSchedule
             }
         }
 
+        $this->saveMultipleOperations->execute($operations);
         if (!$this->bulkManagement->scheduleBulk($groupId, $operations, $bulkDescription, $userId)) {
             throw new LocalizedException(
                 __('Something went wrong while processing the request.')

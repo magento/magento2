@@ -49,7 +49,7 @@
             <!-- Product C in 2 categories M and N -->
             <createData entity="SimpleProduct2" stepKey="productC"/>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <actionGroup ref="AdminAssignProductToCategoryActionGroup" stepKey="assignCategoryNAndMToProductC">
                 <argument name="productId" value="$$productC.id$$"/>
                 <argument name="categoryName" value="$$categoryN.name$$, $$categoryM.name$$"/>

@@ -22,7 +22,7 @@
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
                 <field key="price">100</field>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="SetCustomerDataLifetimeActionGroup" stepKey="setCustomerDataLifetime">
                 <argument name="minutes" value="1"/>
             </actionGroup>

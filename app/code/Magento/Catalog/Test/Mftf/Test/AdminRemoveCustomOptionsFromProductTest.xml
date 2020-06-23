@@ -30,7 +30,7 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <!-- Edit Simple Product -->
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct">
             <argument name="productId" value="$$createProduct.id$$"/>

@@ -23,7 +23,7 @@
             <createData entity="Simple_US_Customer" stepKey="createSecondCustomer">
                 <field key="firstname">&quot;Jane Doe&quot;</field>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="createFirstCustomer" stepKey="deleteFirstCustomer"/>

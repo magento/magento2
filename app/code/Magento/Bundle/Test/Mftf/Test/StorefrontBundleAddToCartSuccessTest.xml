@@ -19,7 +19,7 @@
             <group value="Bundle"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
         </before>
@@ -100,8 +100,7 @@
         <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{BundleProduct.name}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
 
         <!-- Verify cart contents -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCart"/>
-        <waitForPageLoad stepKey="waitForCart"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCart"/>
         <see selector="{{StorefrontBundledSection.nthItemOptionsTitle('1')}}" userInput="Option One" stepKey="seeOption1"/>
         <see selector="{{StorefrontBundledSection.nthItemOptionsTitle('2')}}" userInput="Option Two" stepKey="seeOption2"/>
         <see selector="{{StorefrontBundledSection.nthItemOptionsTitle('3')}}" userInput="Option Three" stepKey="seeOption3"/>

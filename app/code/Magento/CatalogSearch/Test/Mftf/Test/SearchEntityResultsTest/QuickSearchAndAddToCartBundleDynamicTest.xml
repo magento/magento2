@@ -37,7 +37,7 @@
                 <field key="qty">10</field>
             </createData>
             <!--Finish bundle creation-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
                 <argument name="productId" value="$$createBundleProduct.id$$"/>
             </actionGroup>

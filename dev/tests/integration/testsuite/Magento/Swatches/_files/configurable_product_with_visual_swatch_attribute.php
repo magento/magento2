@@ -6,6 +6,7 @@
 declare(strict_types=1);
 
 use Magento\Catalog\Api\Data\ProductExtensionInterfaceFactory;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
@@ -16,10 +17,16 @@ use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/visual_swatch_attribute_with_different_options_type.php';
+Resolver::getInstance()->requireDataFixture(
+    'Magento/Swatches/_files/visual_swatch_attribute_with_different_options_type.php'
+);
 
 $objectManager = Bootstrap::getObjectManager();
+/** @var ProductAttributeRepositoryInterface $productAttributeRepository */
+$productAttributeRepository = $objectManager->get(ProductAttributeRepositoryInterface::class);
+$attribute = $productAttributeRepository->get('test_configurable');
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 /** @var ProductFactory $productFactory */

@@ -46,7 +46,7 @@ class FindByUrlRewriteTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManger = Bootstrap::getObjectManager();
         $this->productResource = $this->objectManger->get(ProductResource::class);

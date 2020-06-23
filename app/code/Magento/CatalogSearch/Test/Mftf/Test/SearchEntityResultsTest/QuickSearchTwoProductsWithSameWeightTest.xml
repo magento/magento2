@@ -15,7 +15,7 @@
             <severity value="MAJOR"/>
             <testCaseId value="MC-14796"/>
             <group value="CatalogSearch"/>
-            <group value="SearchEngineMysql"/>
+            <group value="SearchEngineElasticsearch"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
@@ -26,8 +26,7 @@
             <createData entity="productAlphabeticalB" stepKey="product2">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
-
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
             <!-- Create and Assign Attribute to product1-->
             <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct1">
@@ -76,6 +75,7 @@
             <deleteData stepKey="deleteProduct1" createDataKey="product1"/>
             <deleteData stepKey="deleteProduct2" createDataKey="product2"/>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
+
         </after>
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
@@ -83,11 +83,11 @@
         </actionGroup>
         <actionGroup ref="StorefrontQuickSearchCheckProductNameInGridActionGroup" stepKey="assertProduct1Position">
             <argument name="productName" value="$product1.name$"/>
-            <argument name="index" value="2"/>
+            <argument name="index" value="1"/>
         </actionGroup>
         <actionGroup ref="StorefrontQuickSearchCheckProductNameInGridActionGroup" stepKey="assertProduct2Position">
             <argument name="productName" value="$product2.name$"/>
-            <argument name="index" value="1"/>
+            <argument name="index" value="2"/>
         </actionGroup>
     </test>
 </tests>

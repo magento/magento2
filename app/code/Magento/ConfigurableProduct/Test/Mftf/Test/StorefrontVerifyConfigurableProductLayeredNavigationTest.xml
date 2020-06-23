@@ -21,7 +21,7 @@
 
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
 
             <!-- Create Default Category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>

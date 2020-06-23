@@ -31,7 +31,7 @@
 
             <!-- Create product attribute set -->
             <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="attribute" stepKey="deleteProductAttribute"/>

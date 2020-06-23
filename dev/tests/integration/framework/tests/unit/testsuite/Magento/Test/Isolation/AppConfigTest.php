@@ -19,12 +19,12 @@ class AppConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = new \Magento\TestFramework\Isolation\AppConfig();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->model = null;
     }

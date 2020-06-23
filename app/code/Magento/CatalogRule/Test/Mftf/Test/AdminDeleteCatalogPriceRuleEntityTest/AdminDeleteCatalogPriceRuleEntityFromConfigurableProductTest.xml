@@ -75,7 +75,7 @@
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
             <amOnPage url="{{AdminNewCatalogPriceRulePage.url}}" stepKey="openNewCatalogPriceRulePage"/>
             <waitForPageLoad stepKey="waitForPageToLoad1"/>
@@ -135,8 +135,7 @@
         <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="You added $$createConfigProduct1.name$ to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="openMiniShoppingCart1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad5"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniShoppingCart1"/>
         <see selector="{{StorefrontMinicartSection.productPriceByName($$createConfigProduct1.name$$)}}" userInput="$$createConfigProduct1.price$$" stepKey="seeCorrectProductPrice1"/>
     </test>
 </tests>

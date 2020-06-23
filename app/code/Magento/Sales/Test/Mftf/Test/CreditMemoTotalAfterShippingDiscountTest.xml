@@ -66,7 +66,7 @@
         <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverOverProduct"/>
         <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addToCart"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductToAdd"/>
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickCart"/>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <!-- fill out customer information -->
@@ -92,7 +92,7 @@
         <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
         <!-- Search for Order in the order grid -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
@@ -103,8 +103,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask4"/>
 
         <!-- Create invoice -->
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
-        <waitForPageLoad stepKey="waitForOrderPageToLoad"/>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
         <waitForPageLoad stepKey="waitForNewInvoicePageToLoad"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seeNewInvoiceInPageTitle" after="clickInvoiceButton"/>

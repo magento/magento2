@@ -18,7 +18,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="NewRootCategory" stepKey="rootCategory"/>
             <createData entity="SimpleRootSubCategory" stepKey="category">
                 <requiredEntity createDataKey="rootCategory"/>
@@ -59,8 +59,7 @@
         <waitForPageLoad stepKey="waitForProductToLoad"/>
 
         <!--Update URL Key-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoaded2"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleRootSubCategory.name)}}" stepKey="selectCategory1"/>
         <scrollTo selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="scrollToSearchEngineOptimization"/>

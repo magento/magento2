@@ -20,7 +20,7 @@
             <group value="importExport"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create English and Chinese store views-->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createEnglishStoreView">
                 <argument name="StoreGroup" value="_defaultStoreGroup"/>

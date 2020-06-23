@@ -62,7 +62,7 @@
             </createData>
             <updateData entity="ApiSimpleProductUpdateDescription" stepKey="updateConfigProduct" createDataKey="createConfigProduct"/>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </before>
         <after>
             <!-- @TODO: Uncomment once MQE-679 is fixed -->
@@ -78,6 +78,8 @@
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <magentoCLI command="indexer:reindex" stepKey="reindexAll"/>
+            <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </after>
 
         <!-- Verify Configurable Product in checkout cart items -->

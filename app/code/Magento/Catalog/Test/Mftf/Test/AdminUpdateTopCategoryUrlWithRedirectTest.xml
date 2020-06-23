@@ -20,7 +20,7 @@
 
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!-- Create three level nested category -->
             <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
             <createData entity="Two_nested_categories" stepKey="createTwoLevelNestedCategories">
@@ -38,8 +38,7 @@
         </after>
 
         <!-- Open Category page -->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoaded"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
 
         <!-- Open 3rd Level category -->
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>

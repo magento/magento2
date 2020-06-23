@@ -79,7 +79,7 @@ class StaticProperties
      */
     protected static function _isClassCleanable(\ReflectionClass $reflectionClass)
     {
-        // do not process blacklisted classes from integration framework
+        // do not process skipped classes from integration framework
         foreach (self::$_classesToSkip as $notCleanableClass) {
             if ($reflectionClass->getName() == $notCleanableClass || is_subclass_of(
                 $reflectionClass->getName(),

@@ -23,7 +23,7 @@ class LicenseTest extends \PHPUnit\Framework\TestCase
 
                 foreach ($matches[0] as $commentText) {
                     foreach (['Irubin Consulting Inc', 'DBA Varien', 'Magento Inc'] as $legacyText) {
-                        $this->assertNotContains(
+                        $this->assertStringNotContainsString(
                             $legacyText,
                             $commentText,
                             "The license of file {$filename} contains legacy text."

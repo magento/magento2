@@ -20,7 +20,7 @@
             <group value="ConfigurableProduct"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="dropdownProductAttribute" stepKey="createProductAttribute"/>
         </before>
         <after>

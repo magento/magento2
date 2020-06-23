@@ -20,11 +20,12 @@
         </annotations>
         <before>
             <!--Admin login-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct3"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct4"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <!--Logging out-->
@@ -35,8 +36,7 @@
             <deleteData createDataKey="simpleProduct4" stepKey="deleteSimpleProduct4"/>
         </after>
         <!--Make category-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="goToCategoryPage"/>
-        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryPage"/>
         <actionGroup ref="CreateCategoryActionGroup" stepKey="createASubcategory">
             <argument name="categoryEntity" value="SimpleSubCategory"/>
         </actionGroup>
@@ -79,8 +79,7 @@
         <magentoCron stepKey="runCronReindex" groups="index"/>
 
         <!--Go to category page-->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
-        <waitForPageLoad stepKey="waitForHomePageToload"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="cartClickCategory"/>
 
         <!--Check in grid view-->
