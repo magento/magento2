@@ -11,6 +11,7 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\LoginAsCustomerApi\Api\AuthenticateCustomerBySecretInterface;
 use Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface;
+use Magento\LoginAsCustomerApi\Api\SetLoggedAsCustomerAdminIdInterface;
 
 /**
  * @inheritdoc
@@ -30,15 +31,23 @@ class AuthenticateCustomerBySecret implements AuthenticateCustomerBySecretInterf
     private $customerSession;
 
     /**
+     * @var SetLoggedAsCustomerAdminIdInterface
+     */
+    private $setLoggedAsCustomerAdminId;
+
+    /**
      * @param GetAuthenticationDataBySecretInterface $getAuthenticationDataBySecret
      * @param Session $customerSession
+     * @param SetLoggedAsCustomerAdminIdInterface $setLoggedAsCustomerAdminId
      */
     public function __construct(
         GetAuthenticationDataBySecretInterface $getAuthenticationDataBySecret,
-        Session $customerSession
+        Session $customerSession,
+        SetLoggedAsCustomerAdminIdInterface $setLoggedAsCustomerAdminId
     ) {
         $this->getAuthenticationDataBySecret = $getAuthenticationDataBySecret;
         $this->customerSession = $customerSession;
+        $this->setLoggedAsCustomerAdminId = $setLoggedAsCustomerAdminId;
     }
 
     /**
@@ -58,6 +67,6 @@ class AuthenticateCustomerBySecret implements AuthenticateCustomerBySecretInterf
         }
 
         $this->customerSession->regenerateId();
-        $this->customerSession->setLoggedAsCustomerAdmindId($authenticationData->getAdminId());
+        $this->setLoggedAsCustomerAdminId->execute($authenticationData->getAdminId());
     }
 }

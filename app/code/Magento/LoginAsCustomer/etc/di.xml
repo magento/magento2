@@ -13,6 +13,10 @@
     <preference for="Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataForUserInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\DeleteAuthenticationDataForUser"/>
     <preference for="Magento\LoginAsCustomerApi\Api\ConfigInterface" type="Magento\LoginAsCustomer\Model\Config"/>
     <preference for="Magento\LoginAsCustomerApi\Api\IsLoginAsCustomerSessionActiveInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\IsLoginAsCustomerSessionActive"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\GetLoggedAsCustomerAdminIdInterface" type="Magento\LoginAsCustomer\Model\GetLoggedAsCustomerAdminId"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\GetLoggedAsCustomerCustomerIdInterface" type="Magento\LoginAsCustomer\Model\GetLoggedAsCustomerCustomerId"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\SetLoggedAsCustomerAdminIdInterface" type="Magento\LoginAsCustomer\Model\SetLoggedAsCustomerAdminId"/>
+    <preference for="Magento\LoginAsCustomerApi\Api\SetLoggedAsCustomerCustomerIdInterface" type="Magento\LoginAsCustomer\Model\SetLoggedAsCustomerCustomerId"/>
     <type name="Magento\Backend\Model\Auth">
         <plugin name="login_as_customer_admin_logout" type="Magento\LoginAsCustomer\Plugin\AdminLogoutPlugin"/>
     </type>

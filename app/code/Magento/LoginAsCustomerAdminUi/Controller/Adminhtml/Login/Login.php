@@ -23,6 +23,7 @@ use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
 use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterfaceFactory;
 use Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataForUserInterface;
 use Magento\LoginAsCustomerApi\Api\SaveAuthenticationDataInterface;
+use Magento\LoginAsCustomerApi\Api\SetLoggedAsCustomerCustomerIdInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -81,6 +82,11 @@ class Login extends Action implements HttpGetActionInterface
     private $url;
 
     /**
+     * @var SetLoggedAsCustomerCustomerIdInterface
+     */
+    private $setLoggedAsCustomerCustomerId;
+
+    /**
      * @param Context $context
      * @param Session $authSession
      * @param StoreManagerInterface $storeManager
@@ -90,6 +96,9 @@ class Login extends Action implements HttpGetActionInterface
      * @param SaveAuthenticationDataInterface $saveAuthenticationData ,
      * @param DeleteAuthenticationDataForUserInterface $deleteAuthenticationDataForUser
      * @param Url $url
+     * @param SetLoggedAsCustomerCustomerIdInterface $setLoggedAsCustomerCustomerId
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -100,7 +109,8 @@ class Login extends Action implements HttpGetActionInterface
         AuthenticationDataInterfaceFactory $authenticationDataFactory,
         SaveAuthenticationDataInterface $saveAuthenticationData,
         DeleteAuthenticationDataForUserInterface $deleteAuthenticationDataForUser,
-        Url $url
+        Url $url,
+        SetLoggedAsCustomerCustomerIdInterface $setLoggedAsCustomerCustomerId
     ) {
         parent::__construct($context);
 
@@ -112,6 +122,7 @@ class Login extends Action implements HttpGetActionInterface
         $this->saveAuthenticationData = $saveAuthenticationData;
         $this->deleteAuthenticationDataForUser = $deleteAuthenticationDataForUser;
         $this->url = $url;
+        $this->setLoggedAsCustomerCustomerId = $setLoggedAsCustomerCustomerId;
     }
 
     /**
@@ -167,7 +178,7 @@ class Login extends Action implements HttpGetActionInterface
 
         $this->deleteAuthenticationDataForUser->execute($userId);
         $secret = $this->saveAuthenticationData->execute($authenticationData);
-        $this->authSession->setIsLoggedAsCustomer(true);
+        $this->setLoggedAsCustomerCustomerId->execute($customerId);
 
         $redirectUrl = $this->getLoginProceedRedirectUrl($secret, $storeId);
         $resultRedirect->setUrl($redirectUrl);
