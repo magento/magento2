@@ -8,8 +8,9 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomer\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Stdlib\DateTime\DateTime;
+use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Stdlib\DateTime\DateTime;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
 use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterfaceFactory;
@@ -20,6 +21,11 @@ use Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface;
  */
 class GetAuthenticationDataBySecret implements GetAuthenticationDataBySecretInterface
 {
+    /**
+     * @var EncryptorInterface
+     */
+    private $encryptor;
+
     /**
      * @var ResourceConnection
      */
@@ -41,17 +47,20 @@ class GetAuthenticationDataBySecret implements GetAuthenticationDataBySecretInte
     private $authenticationDataFactory;
 
     /**
+     * @param EncryptorInterface $encryptor
      * @param ResourceConnection $resourceConnection
      * @param DateTime $dateTime
      * @param ConfigInterface $config
      * @param AuthenticationDataInterfaceFactory $authenticationDataFactory
      */
     public function __construct(
+        EncryptorInterface $encryptor,
         ResourceConnection $resourceConnection,
         DateTime $dateTime,
         ConfigInterface $config,
         AuthenticationDataInterfaceFactory $authenticationDataFactory
     ) {
+        $this->encryptor = $encryptor;
         $this->resourceConnection = $resourceConnection;
         $this->dateTime = $dateTime;
         $this->config = $config;
@@ -71,9 +80,11 @@ class GetAuthenticationDataBySecret implements GetAuthenticationDataBySecretInte
             $this->dateTime->gmtTimestamp() - $this->config->getAuthenticationDataExpirationTime()
         );
 
+        $hash = $this->encryptor->hash($secret);
+
         $select = $connection->select()
             ->from(['main_table' => $tableName])
-            ->where('main_table.secret = ?', $secret)
+            ->where('main_table.secret = ?', $hash)
             ->where('main_table.created_at > ?', $timePoint);
 
         $data = $connection->fetchRow($select);
