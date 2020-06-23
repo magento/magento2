@@ -38,6 +38,6 @@
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="guestGoToCheckout"/>
 
         <fillField userInput="Sample text" selector="{{CheckoutShippingSection.telephone}}" stepKey="enterAlphabeticalSymbols"/>
-        <see userInput="Please enter a valid phone number. For example (123) 456-7890, 123-456-7890, +(123)4567890, +1234567890" selector="{{CheckoutShippingSection.addressFieldValidationError}}" stepKey="checkPhoneFieldValidationIsPassed"/>
+        <see userInput="Please enter a valid phone number. For example (123) 456-7890 or 123-456-7890." selector="{{CheckoutShippingSection.addressFieldValidationError}}" stepKey="checkPhoneFieldValidationIsPassed"/>
     </test>
 </tests>

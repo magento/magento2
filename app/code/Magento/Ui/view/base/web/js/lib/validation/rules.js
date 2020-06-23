@@ -432,13 +432,6 @@ define([
             },
             $.mage.__('Please enter a valid phone number. For example (123) 456-7890 or 123-456-7890.')
         ],
-        'validate-phone': [
-            function (value) {
-                return utils.isEmptyNoTrim(value) ||
-                    /^[+]*[(]{0,1}[0-9]{1,4}[)]{0,1}[-\s\.\/0-9]*$/.test(value);
-            },
-            $.mage.__('Please enter a valid phone number. For example (123) 456-7890, 123-456-7890, +(123)4567890, +1234567890')//eslint-disable-line max-len
-        ],
         'validate-fax': [
             function (value) {
                 return utils.isEmptyNoTrim(value) || /^(\()?\d{3}(\))?(-|\s)?\d{3}(-|\s)\d{4}$/.test(value);

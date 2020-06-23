@@ -224,7 +224,7 @@
                                                                     </item>
                                                                     <item name="telephone" xsi:type="array">
                                                                         <item name="validation" xsi:type="array">
-                                                                            <item name="validate-phone" xsi:type="number">0</item>
+                                                                            <item name="validate-phoneStrict" xsi:type="number">0</item>
                                                                         </item>
                                                                         <item name="config" xsi:type="array">
                                                                             <item name="tooltip" xsi:type="array">
