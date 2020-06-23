@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GiftMessageGraphQl\Model\Resolver\Cart;
+namespace Magento\GiftMessageGraphQl\Model\Resolver\Cart\Item;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -14,18 +14,18 @@ use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\GiftMessage\Api\CartRepositoryInterface;
+use Magento\GiftMessage\Api\ItemRepositoryInterface;
 use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
 
 /**
- * Class provides ability to get GiftMessage for cart
+ * Class provides ability to get GiftMessage for cart item
  */
 class GiftMessage implements ResolverInterface
 {
     /**
-     * @var CartRepositoryInterface
+     * @var ItemRepositoryInterface
      */
-    private $cartRepository;
+    private $itemRepository;
 
     /**
      * @var GiftMessageHelper
@@ -33,19 +33,19 @@ class GiftMessage implements ResolverInterface
     private $giftMessageHelper;
 
     /**
-     * @param CartRepositoryInterface $cartRepository
+     * @param ItemRepositoryInterface $itemRepository
      * @param GiftMessageHelper       $giftMessageHelper
      */
     public function __construct(
-        CartRepositoryInterface $cartRepository,
+        ItemRepositoryInterface $itemRepository,
         GiftMessageHelper $giftMessageHelper
     ) {
-        $this->cartRepository = $cartRepository;
+        $this->itemRepository = $itemRepository;
         $this->giftMessageHelper = $giftMessageHelper;
     }
 
     /**
-     * Return information about Gift message of cart
+     * Return information about Gift message for item cart
      *
      * @param Field            $field
      * @param ContextInterface $context
@@ -54,7 +54,6 @@ class GiftMessage implements ResolverInterface
      * @param array|null       $args
      *
      * @return array|Value|mixed
-     *
      * @throws GraphQlInputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -69,26 +68,30 @@ class GiftMessage implements ResolverInterface
             throw new GraphQlInputException(__('"model" value must be specified'));
         }
 
-        $cart = $value['model'];
+        $quoteItem = $value['model'];
 
-        if (!$this->giftMessageHelper->isMessagesAllowed('order', $cart)) {
+        if (!$this->giftMessageHelper->isMessagesAllowed('items', $quoteItem)) {
+            return null;
+        }
+
+        if (!$this->giftMessageHelper->isMessagesAllowed('item', $quoteItem)) {
             return null;
         }
 
         try {
-            $giftCartMessage = $this->cartRepository->get($cart->getId());
+            $giftItemMessage = $this->itemRepository->get($quoteItem->getQuoteId(), $quoteItem->getItemId());
         } catch (LocalizedException $e) {
-            throw new GraphQlInputException(__('Can\'t load cart.'));
+            throw new GraphQlInputException(__('Can\'t load cart item'));
         }
 
-        if (!isset($giftCartMessage)) {
+        if (!isset($giftItemMessage)) {
             return null;
         }
 
         return [
-            'to' => $giftCartMessage->getRecipient() ?? '',
-            'from' =>  $giftCartMessage->getSender() ?? '',
-            'message'=>  $giftCartMessage->getMessage() ?? ''
+            'to' => $giftItemMessage->getRecipient() ?? '',
+            'from' =>  $giftItemMessage->getSender() ?? '',
+            'message'=>  $giftItemMessage->getMessage() ?? ''
         ];
     }
 }
