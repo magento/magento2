@@ -5,6 +5,10 @@
  */
 namespace Magento\Store\Model\Service;
 
+/**
+ * Class StoreConfigManager
+ * Allows to get store config
+ */
 class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterface
 {
     /**
@@ -53,6 +57,8 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
     }
 
     /**
+     * Get store configs
+     *
      * @param string[] $storeCodes list of stores by store codes, will return all if storeCodes is not set
      * @return \Magento\Store\Api\Data\StoreConfigInterface[]
      */
@@ -71,6 +77,8 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
     }
 
     /**
+     * Get store config
+     *
      * @param \Magento\Store\Model\Store $store
      * @return \Magento\Store\Api\Data\StoreConfigInterface
      */
@@ -81,7 +89,8 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
 
         $storeConfig->setId($store->getId())
             ->setCode($store->getCode())
-            ->setWebsiteId($store->getWebsiteId());
+            ->setWebsiteId($store->getWebsiteId())
+            ->setStoreName($store->getName());
 
         foreach ($this->configPaths as $methodName => $configPath) {
             $configValue = $this->scopeConfig->getValue(

@@ -87,6 +87,9 @@ class StoreConfigManagerTest extends TestCase
         $storeMock->expects($this->once())
             ->method('getWebsiteId')
             ->willReturn($storeConfig['website_id']);
+        $storeMock->expects($this->any())
+            ->method('getName')
+            ->willReturn($storeConfig['store_name']);
 
         $urlMap = [
             [UrlInterface::URL_TYPE_WEB, false, $storeConfig['base_url']],
@@ -145,6 +148,7 @@ class StoreConfigManagerTest extends TestCase
         $baseCurrencyCode = 'USD';
         $defaultDisplayCurrencyCode = 'GBP';
         $weightUnit = 'lbs';
+        $storeName = 'Default Store View';
 
         $storeMocks = [];
         $storeConfigs = [
@@ -159,6 +163,7 @@ class StoreConfigManagerTest extends TestCase
             'secure_base_static_url' => $secureBaseStaticUrl,
             'base_media_url' => $baseMediaUrl,
             'secure_base_media_url' => $secureBaseMediaUrl,
+            'store_name' => $storeName,
         ];
         $storeMocks[] = $this->getStoreMock($storeConfigs);
 
@@ -205,6 +210,7 @@ class StoreConfigManagerTest extends TestCase
         $this->assertEquals($secureBaseStaticUrl, $result[0]->getSecureBaseStaticUrl());
         $this->assertEquals($baseMediaUrl, $result[0]->getBaseMediaUrl());
         $this->assertEquals($secureBaseMediaUrl, $result[0]->getSecureBaseMediaUrl());
+        $this->assertEquals($storeName, $result[0]->getStoreName());
 
         $this->assertEquals($timeZone, $result[0]->getTimezone());
         $this->assertEquals($locale, $result[0]->getLocale());

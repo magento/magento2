@@ -7,7 +7,7 @@ namespace Magento\Store\Model\Data;
 
 /**
  * Class StoreConfig
- *
+ * Allows to get and set store config values
  * @codeCoverageIgnore
  */
 class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implements
@@ -29,6 +29,7 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
     const KEY_SECURE_BASE_LINK_URL = 'secure_base_link_url';
     const KEY_SECURE_BASE_STATIC_URL = 'secure_base_static_url';
     const KEY_SECURE_BASE_MEDIA_URL = 'secure_base_media_url';
+    const KEY_STORE_NAME = 'store_name';
 
     /**
      * Get store id
@@ -188,7 +189,7 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
     }
 
     /**
-     * set base URL
+     * Set base URL
      *
      * @param string $baseUrl
      * @return $this
@@ -293,7 +294,7 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
     }
 
     /**
-     * set secure base URL
+     * Set secure base URL
      *
      * @param string $secureBaseUrl
      * @return $this
@@ -367,7 +368,7 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @return \Magento\Store\Api\Data\StoreConfigExtensionInterface|null
      */
@@ -377,7 +378,7 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @param \Magento\Store\Api\Data\StoreConfigExtensionInterface $extensionAttributes
      * @return $this
@@ -386,5 +387,26 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
         \Magento\Store\Api\Data\StoreConfigExtensionInterface $extensionAttributes
     ) {
         return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * Get store code
+     *
+     * @return string
+     */
+    public function getStoreName()
+    {
+        return $this->_get(self::KEY_STORE_NAME);
+    }
+
+    /**
+     * Set store name
+     *
+     * @param string $storeName
+     * @return $this
+     */
+    public function setStoreName(string $storeName)
+    {
+        return $this->setData(self::KEY_STORE_NAME, $storeName);
     }
 }
