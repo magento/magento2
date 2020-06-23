@@ -110,7 +110,7 @@ class ProductSearch
         $searchResults = $this->searchResultsFactory->create();
         $searchResults->setSearchCriteria($searchCriteriaForCollection);
         $searchResults->setItems($collection->getItems());
-        $searchResults->setTotalCount($collection->getSize());
+        $searchResults->setTotalCount($searchResult->getTotalCount());
         return $searchResults;
     }
 
