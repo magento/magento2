@@ -21,12 +21,12 @@ class PartialIndex
     /**
      * @var ResourceConnection
      */
-    protected $resource;
+    private $resource;
 
     /**
      * @var AdapterInterface
      */
-    protected $connection;
+    private $connection;
 
     /**
      * @var IndexBuilder
