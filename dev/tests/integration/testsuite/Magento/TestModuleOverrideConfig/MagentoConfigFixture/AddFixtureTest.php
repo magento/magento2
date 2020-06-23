@@ -32,6 +32,17 @@ class AddFixtureTest extends AbstractOverridesTest
     }
 
     /**
+     * Checks that fixture added in global node successfully applied
+     *
+     * @return void
+     */
+    public function testGloballyAddFixture(): void
+    {
+        $value = $this->config->getValue('test_section/test_group/field_4', ScopeInterface::SCOPE_STORES);
+        $this->assertEquals('4th field globally overridden value', $value);
+    }
+
+    /**
      * Checks that fixture added in test class node successfully applied
      *
      * @return void

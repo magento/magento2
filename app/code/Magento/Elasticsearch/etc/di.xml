@@ -13,6 +13,7 @@
     <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\Converter" />
     <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter" />
     <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\CompositeFieldProvider" />
+    <preference for="Magento\Framework\Search\Dynamic\DataProviderInterface" type="Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider" />
     <preference for="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface" type="Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplier"/>
     <type name="Magento\Catalog\Model\Indexer\Category\Product\Action\Rows">
         <plugin name="catalogsearchFulltextProductAssignment" type="Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Category\Product\Action\Rows"/>
@@ -536,7 +537,7 @@
     </type>
     <type name="Magento\Search\Model\SearchEngine\Validator">
         <arguments>
-            <argument name="engineBlacklist" xsi:type="array">
+            <argument name="excludedEngineList" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">Elasticsearch 2</item>
             </argument>
             <argument name="engineValidators" xsi:type="array">

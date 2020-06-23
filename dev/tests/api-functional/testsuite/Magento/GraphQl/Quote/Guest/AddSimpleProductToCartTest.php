@@ -82,6 +82,54 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/product_with_image_no_options.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     */
+    public function testAddProductToCartWithImage()
+    {
+        $sku = 'simple-2';
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+
+        $query = <<<QUERY
+mutation {
+  addSimpleProductsToCart(input: {
+    cart_id: "$maskedQuoteId",
+    cart_items: [{data: {sku: "$sku", quantity: 1}}]
+  }) {
+    cart {
+      items {
+        id
+        prices{
+          price {
+            value
+          }
+        }
+        quantity
+        product {
+          sku
+          name
+          image {
+            label
+            url
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+
+        $response = $this->graphQlMutation($query);
+        $this->assertArrayHasKey('cart', $response['addSimpleProductsToCart']);
+        $this->assertCount(1, $response['addSimpleProductsToCart']['cart']['items']);
+        $cartItem = $response['addSimpleProductsToCart']['cart']['items'][0];
+        $this->assertEquals('11', $cartItem['prices']['price']['value']);
+        $this->assertEquals($sku, $cartItem['product']['sku']);
+        $expectedImageRegex = '/^https?:\/\/.+magento_image(_[0-9]+)?.jpg$/';
+        $this->assertMatchesRegularExpression($expectedImageRegex, $cartItem['product']['image']['url']);
+    }
+
+    /**
      * Add disabled product to cart
      *
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
