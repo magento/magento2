@@ -53,25 +53,18 @@ class ProductId implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $productId = (int) ($args['id'] ?? 0);
+        $productIds = ($args['ids'] ?? []);
         $fields = $this->productFieldsSelector->getProductFieldsFromInfo($info);
 
-        if (!$productId) {
-            throw new GraphQlInputException(
-                __("'id' input argument is required.")
-            );
-        }
+        /** @var \Magento\Catalog\Model\Product[] $products */
+        $products = $this->productDataProvider->getProductByIds($productIds, $fields);
+        $data = [];
 
-        if ($productId < 0) {
-            throw new GraphQlInputException(
-                __("'id' input argument should not be negative.")
-            );
+        foreach ($products as $product) {
+            $productData = $product->getData();
+            $productData['model'] = $product;
+            $data[] = $productData;
         }
-
-        /** @var \Magento\Catalog\Model\Product $product */
-        $product = $this->productDataProvider->getProductById($productId, $fields);
-        $data = $product->getData();
-        $data['model'] = $product;
 
         return $data;
     }

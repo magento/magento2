@@ -10,16 +10,16 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product\DataProvider;
 use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
- * Provides product data by product ID.
+ * Provides product data by product IDs.
  */
 interface ProductDataProviderInterface
 {
     /**
-     * Retrieve product by product ID.
+     * Retrieve product by product IDs.
      *
-     * @param int $productId
+     * @param array $productIds
      * @param array $attributeCodes
-     * @return ProductInterface
+     * @return ProductInterface[]
      */
-    public function getProductById(int $productId, array $attributeCodes): ProductInterface;
+    public function getProductByIds(array $productIds, array $attributeCodes): array;
 }

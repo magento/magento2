@@ -42,18 +42,23 @@ class ProductDataProvider implements ProductDataProviderInterface
     }
 
     /**
-     * Get product data by ID with full data set
+     * Get list of products by IDs with full data set
      *
-     * @param int $productId
+     * @param array $productIds
      * @param array $attributeCodes
-     * @return ProductInterface|Product
+     * @return ProductInterface[]|Product[]
      */
-    public function getProductById(int $productId, array $attributeCodes): ProductInterface
+    public function getProductByIds(array $productIds, array $attributeCodes): array
     {
-        /** @var Product $product */
-        $product = $this->productFactory->create();
-        $this->productResourceModel->load($product, $productId, $attributeCodes);
+        $products = [];
 
-        return $product;
+        foreach ($productIds as $productId) {
+            /** @var Product $product */
+            $product = $this->productFactory->create();
+            $this->productResourceModel->load($product, $productId, $attributeCodes);
+            $products[] = $product;
+        }
+
+        return $products;
     }
 }

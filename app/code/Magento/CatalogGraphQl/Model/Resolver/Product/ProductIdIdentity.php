@@ -11,7 +11,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\GraphQl\Query\Resolver\IdentityInterface;
 
 /**
- * Identity for resolved product by ID
+ * Identity for resolved products by IDs
  */
 class ProductIdIdentity implements IdentityInterface
 {
@@ -21,14 +21,14 @@ class ProductIdIdentity implements IdentityInterface
     private $cacheTag = Product::CACHE_TAG;
 
     /**
-     * Get product id for cache tag
+     * Get product ids for cache tag
      *
      * @param array $resolvedData
      * @return array
      */
     public function getIdentities(array $resolvedData): array
     {
-        return empty($resolvedData['id']) ?
-            [] : [$this->cacheTag, $resolvedData['id']];
+        return empty($resolvedData['ids']) ?
+            [] : [$this->cacheTag, implode('_', $resolvedData['ids'])];
     }
 }
