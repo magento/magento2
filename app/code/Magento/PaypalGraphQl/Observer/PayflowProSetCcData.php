@@ -53,6 +53,7 @@ class PayflowProSetCcData extends AbstractDataAssignObserver
      * @param Observer $observer
      *
      * @throws GraphQlInputException
+     * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
      */
     public function execute(Observer $observer)
     {
@@ -64,7 +65,7 @@ class PayflowProSetCcData extends AbstractDataAssignObserver
             return;
         }
 
-        if($this->customerSession->isLoggedIn() && $this->isPayflowProVaultEnable()) {
+        if ($this->customerSession->isLoggedIn() && $this->isPayflowProVaultEnable()) {
             if (!isset($additionalData[self::IS_ACTIVE_PAYMENT_TOKEN_ENABLER])) {
                 throw new GraphQlInputException(
                     __('Required parameter "is_active_payment_token_enabler" is missing.')

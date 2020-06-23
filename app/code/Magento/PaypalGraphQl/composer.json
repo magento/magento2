@@ -13,7 +13,8 @@
         "magento/module-quote-graph-ql": "*",
         "magento/module-sales": "*",
         "magento/module-payment": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-customer": "*"
     },
     "suggest": {
         "magento/module-graph-ql": "*"
