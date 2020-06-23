@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminVerifyDefaultCurrentTreePathTest">
+        <annotations>
+            <features value="Cms"/>
+            <group value="Cms"/>
+            <stories value="MediaGallery verify preselcted folders on Category Page"/>
+            <title value="Admin should be able to see preselected default folder in Media Gallery"/>
+            <description value="Admin should be able to see preselected default folder in Media Gallery"/>
+        </annotations>        
+        <before>
+            <magentoCLI command="config:set {{WysiwygEnabledByDefault.path}} {{WysiwygEnabledByDefault.value}}" stepKey="enableWysiwyg" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+
+        <after>
+            <magentoCLI command="config:set {{WysiwygEnabledByDefault.path}} {{WysiwygDisabledByDefault.value}}" stepKey="disableWysiwyg" />
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="NavigateToMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
+        <!-- Verify catalog/category folder selected -->
+        <waitForPageLoad stepKey="waitForFoldersLoad"/>
+        <seeElement selector="{{MediaGallerySection.highlightedFolder('Y2F0YWxvZy9jYXRlZ29yeQ--')}}" stepKey="assertCategoryFolder"/>
+        <actionGroup ref="AdminCloseMediaGalleryActionGroup" stepKey="closeMediaGallery"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
+        <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="opneMediaGalleryFromTinyMce4"/>
+         <!-- Verify wysiwyg folder selected -->
+        <seeElement selector="{{MediaGallerySection.highlightedFolder('d3lzaXd5Zw--')}}" stepKey="assertWysiwygFolder"/>
+    </test>
+</tests>

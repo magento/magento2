@@ -3,6 +3,7 @@
  * See COPYING.txt for license details.
  */
 
+/* global Base64 */
 define([
     'jquery',
     'jquery/ui',
@@ -101,7 +102,36 @@ define([
                             tree.jstree('select_node', folderEl);
                         });
                     }
+                },
+
+                /**
+                 * Get currentPath decode it returns new path array
+                 */
+                _parseCurrentPath = function () {
+                    var paths = [],
+                        decodedPath = Base64.idDecode(window.MediabrowserUtility.pathId).split('/');
+
+                    $.each(decodedPath, function (i, val) {
+                        var isLastElement = i === decodedPath.length - 1;
+
+                        if (isLastElement) {
+                            paths[i] = window.MediabrowserUtility.pathId;
+                        } else {
+                            paths[i] = Base64.idEncode(val);
+                        }
+                    });
+                    paths.unshift('root');
+                    paths.reverse();
+
+                    return paths;
                 };
+
+            $(window).on('reload.MediaGallery', function () {
+                path = _parseCurrentPath();
+                tree.jstree('deselect_all');
+                recursiveOpen();
+
+            });
 
             recursiveOpen();
         },
