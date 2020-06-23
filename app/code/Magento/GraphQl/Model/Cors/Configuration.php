@@ -24,41 +24,73 @@ class Configuration implements ConfigurationInterface
     /**
      * @var ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
+    /**
+     * @param ScopeConfigInterface $scopeConfig
+     */
     public function __construct(ScopeConfigInterface $scopeConfig)
     {
         $this->scopeConfig = $scopeConfig;
     }
 
+    /**
+     * Are CORS headers enabled
+     *
+     * @return bool
+     */
     public function isEnabled(): bool
     {
         return $this->scopeConfig->isSetFlag(self::XML_PATH_CORS_HEADERS_ENABLED);
     }
 
+    /**
+     * Get allowed origins or null if stored configuration is empty
+     *
+     * @return string|null
+     */
     public function getAllowedOrigins(): ?string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_CORS_ALLOWED_ORIGINS);
     }
 
+    /**
+     * Get allowed headers or null if stored configuration is empty
+     *
+     * @return string|null
+     */
     public function getAllowedHeaders(): ?string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_CORS_ALLOWED_HEADERS);
     }
 
+    /**
+     * Get allowed methods or null if stored configuration is empty
+     *
+     * @return string|null
+     */
     public function getAllowedMethods(): ?string
     {
         return $this->scopeConfig->getValue(self::XML_PATH_CORS_ALLOWED_METHODS);
     }
 
+    /**
+     * Get max age header value
+     *
+     * @return int
+     */
     public function getMaxAge(): int
     {
         return (int) $this->scopeConfig->getValue(self::XML_PATH_CORS_MAX_AGE);
     }
 
+    /**
+     * Are credentials allowed
+     *
+     * @return bool
+     */
     public function isCredentialsAllowed(): bool
     {
         return $this->scopeConfig->isSetFlag(self::XML_PATH_CORS_ALLOW_CREDENTIALS);
     }
-
 }

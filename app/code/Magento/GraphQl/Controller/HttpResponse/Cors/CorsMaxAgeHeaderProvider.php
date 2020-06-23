@@ -32,16 +32,31 @@ class CorsMaxAgeHeaderProvider implements HeaderProviderInterface
         $this->headerName = $headerName;
     }
 
+    /**
+     * Get name of header
+     *
+     * @return string
+     */
     public function getName()
     {
         return $this->headerName;
     }
 
+    /**
+     * Check if header can be applied
+     *
+     * @return bool
+     */
     public function canApply()
     {
         return $this->corsConfiguration->isEnabled() && $this->getValue();
     }
 
+    /**
+     * Get value for header
+     *
+     * @return string
+     */
     public function getValue()
     {
         return $this->corsConfiguration->getMaxAge();
