@@ -7,8 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Translate\Test\Unit;
 
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\App\State as AppState;
 use Magento\Framework\Translate\Inline;
 use Magento\Framework\Translate\Inline\ConfigInterface;
 use Magento\Framework\Translate\Inline\ParserFactory;
@@ -51,6 +53,11 @@ class InlineTest extends TestCase
      */
     protected $stateMock;
 
+    /**
+     * @var AppState|MockObject
+     */
+    protected $appStateMock;
+
     protected function setUp(): void
     {
         $this->scopeResolverMock =
@@ -60,6 +67,7 @@ class InlineTest extends TestCase
         $this->configMock = $this->getMockForAbstractClass(ConfigInterface::class);
         $this->parserMock = $this->getMockForAbstractClass(ParserInterface::class);
         $this->stateMock = $this->getMockForAbstractClass(StateInterface::class);
+        $this->appStateMock = $this->createMock(AppState::class);
     }
 
     /**
@@ -79,7 +87,8 @@ class InlineTest extends TestCase
             $this->layoutMock,
             $this->configMock,
             $this->parserMock,
-            $this->stateMock
+            $this->stateMock,
+            $this->appStateMock
         );
 
         $this->assertEquals($result, $model->isAllowed());
@@ -111,7 +120,8 @@ class InlineTest extends TestCase
             $this->layoutMock,
             $this->configMock,
             $this->parserMock,
-            $this->stateMock
+            $this->stateMock,
+            $this->appStateMock
         );
         $this->assertEquals($this->parserMock, $model->getParser());
     }
@@ -133,6 +143,7 @@ class InlineTest extends TestCase
             $this->configMock,
             $this->parserMock,
             $this->stateMock,
+            $this->appStateMock,
             '',
             '',
             $scope
@@ -201,6 +212,7 @@ class InlineTest extends TestCase
             $this->configMock,
             $this->parserMock,
             $this->stateMock,
+            $this->appStateMock,
             '',
             '',
             $scope
@@ -266,6 +278,7 @@ class InlineTest extends TestCase
             $this->configMock,
             $this->parserMock,
             $this->stateMock,
+            $this->appStateMock,
             '',
             '',
             $scope
@@ -292,8 +305,13 @@ class InlineTest extends TestCase
      * @param bool $isDevAllowed
      * @param null|string $scope
      */
-    protected function prepareIsAllowed($isEnabled, $isActive, $isDevAllowed, $scope = null)
-    {
+    protected function prepareIsAllowed(
+        $isEnabled,
+        $isActive,
+        $isDevAllowed,
+        $scope = null,
+        $area = Area::AREA_FRONTEND
+    ) {
         $scopeMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
         $this->stateMock->expects($this->any())->method('isEnabled')->willReturn($isEnabled);
         $this->scopeResolverMock->expects(
@@ -322,6 +340,14 @@ class InlineTest extends TestCase
             'isDevAllowed'
         )->willReturn(
             $isDevAllowed
+        );
+
+        $this->appStateMock->expects(
+            ($isActive && $isDevAllowed) ? $this->once() : $this->never()
+        )->method(
+            'getAreaCode'
+        )->willReturn(
+            $area
         );
     }
 }
