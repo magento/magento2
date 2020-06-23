@@ -30,7 +30,7 @@ class DictionaryTest extends \PHPUnit\Framework\TestCase
      */
     private $configFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->directoryFactory = $this->objectManager->create(

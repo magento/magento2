@@ -39,7 +39,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout2"/>
         </after>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="amOnAdminCategoryPage"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="amOnAdminCategoryPage"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <!--Create new root category-->

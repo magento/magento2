@@ -43,7 +43,7 @@ class RemoveConfigurableProductFromCartTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -65,7 +65,7 @@ class RemoveConfigurableProductFromCartTest extends GraphQlAbstract
 
         $this->assertArrayHasKey('cart', $response['removeItemFromCart']);
         $this->assertArrayHasKey('items', $response['removeItemFromCart']['cart']);
-        $this->assertEquals(0, count($response['removeItemFromCart']['cart']['items']));
+        $this->assertCount(0, $response['removeItemFromCart']['cart']['items']);
     }
 
     /**

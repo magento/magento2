@@ -1,17 +1,19 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Test\Unit\Block\Adminhtml\System\Config;
 
-use Magento\Developer\Block\Adminhtml\System\Config\WorkflowType;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Backend\Block\Template\Context;
+use Magento\Developer\Block\Adminhtml\System\Config\WorkflowType;
 use Magento\Framework\App\State;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class WorkflowTypeTest extends \PHPUnit\Framework\TestCase
+class WorkflowTypeTest extends TestCase
 {
     /**
      * @var WorkflowType
@@ -24,7 +26,7 @@ class WorkflowTypeTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var AbstractElement|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractElement|MockObject
      */
     private $elementMock;
 
@@ -34,11 +36,11 @@ class WorkflowTypeTest extends \PHPUnit\Framework\TestCase
     private $context;
 
     /**
-     * @var State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|MockObject
      */
     private $appStateMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
         $this->elementMock = $this->createMock(AbstractElement::class);

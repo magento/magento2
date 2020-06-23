@@ -12,6 +12,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
 
 /**
  * Represents a media gallery keyword. This object contains information about a media asset keyword entity.
+ * @api
  */
 interface KeywordInterface extends ExtensibleDataInterface
 {
@@ -34,13 +35,13 @@ interface KeywordInterface extends ExtensibleDataInterface
      *
      * @return \Magento\MediaGalleryApi\Api\Data\KeywordExtensionInterface|null
      */
-    public function getExtensionAttributes(): KeywordExtensionInterface;
+    public function getExtensionAttributes(): ?KeywordExtensionInterface;
 
     /**
      * Set extension attributes
      *
-     * @param \Magento\MediaGalleryApi\Api\Data\KeywordExtensionInterface $extensionAttributes
+     * @param \Magento\MediaGalleryApi\Api\Data\KeywordExtensionInterface|null $extensionAttributes
      * @return void
      */
-    public function setExtensionAttributes(KeywordExtensionInterface $extensionAttributes): void;
+    public function setExtensionAttributes(?KeywordExtensionInterface $extensionAttributes): void;
 }

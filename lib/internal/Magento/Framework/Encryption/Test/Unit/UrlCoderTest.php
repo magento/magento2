@@ -3,17 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Encryption\Test\Unit;
 
-class UrlCoderTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Encryption\UrlCoder;
+use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class UrlCoderTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Encryption\UrlCoder
+     * @var UrlCoder
      */
     protected $_urlCoder;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_urlMock;
 
@@ -27,10 +34,10 @@ class UrlCoderTest extends \PHPUnit\Framework\TestCase
      */
     protected $_encodeUrl = 'aHR0cDovL2V4YW1wbGUuY29t';
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_urlMock = $this->createMock(\Magento\Framework\UrlInterface::class);
-        $this->_urlCoder = new \Magento\Framework\Encryption\UrlCoder($this->_urlMock);
+        $this->_urlMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->_urlCoder = new UrlCoder($this->_urlMock);
     }
 
     public function testDecode()
@@ -41,8 +48,8 @@ class UrlCoderTest extends \PHPUnit\Framework\TestCase
             'sessionUrlVar'
         )->with(
             $this->_url
-        )->will(
-            $this->returnValue('expected')
+        )->willReturn(
+            'expected'
         );
         $this->assertEquals('expected', $this->_urlCoder->decode($this->_encodeUrl));
     }

@@ -11,11 +11,13 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Model\ValidatorResultInterface;
 use Magento\Sales\Model\ValidatorResultInterfaceFactory;
 use Magento\Sales\Model\ValidatorResultMerger;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @covers \Magento\Sales\Model\ValidatorResultMerger
  */
-class ValidatorResultMergerTest extends \PHPUnit\Framework\TestCase
+class ValidatorResultMergerTest extends TestCase
 {
     /**
      * Testable Object
@@ -32,7 +34,7 @@ class ValidatorResultMergerTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var ValidatorResultInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidatorResultInterfaceFactory|MockObject
      */
     private $validatorResultFactoryMock;
 
@@ -41,10 +43,11 @@ class ValidatorResultMergerTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validatorResultFactoryMock = $this->getMockBuilder(ValidatorResultInterfaceFactory::class)
-        ->setMethods(['create'])->disableOriginalConstructor()->getMock();
+            ->setMethods(['create'])->disableOriginalConstructor()
+            ->getMock();
         $this->objectManager = new ObjectManager($this);
         $this->validatorResultMerger = $this->objectManager->getObject(
             ValidatorResultMerger::class,
@@ -61,9 +64,9 @@ class ValidatorResultMergerTest extends \PHPUnit\Framework\TestCase
      */
     public function testMerge()
     {
-        $validatorResultMock = $this->createMock(ValidatorResultInterface::class);
-        $orderValidationResultMock = $this->createMock(ValidatorResultInterface::class);
-        $creditmemoValidationResultMock = $this->createMock(ValidatorResultInterface::class);
+        $validatorResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
+        $orderValidationResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
+        $creditmemoValidationResultMock = $this->getMockForAbstractClass(ValidatorResultInterface::class);
         $itemsValidationMessages = [['test04', 'test05'], ['test06']];
         $this->validatorResultFactoryMock->expects($this->once())->method('create')
             ->willReturn($validatorResultMock);

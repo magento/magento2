@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\View\Asset\Image;
 
 use Magento\Catalog\Model\Product\Media\ConfigInterface;
@@ -10,11 +12,10 @@ use Magento\Catalog\Model\View\Asset\Image\Context;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ContextTest
- */
-class ContextTest extends \PHPUnit\Framework\TestCase
+class ContextTest extends TestCase
 {
     /**
      * @var Context
@@ -22,25 +23,27 @@ class ContextTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var WriteInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriteInterface|MockObject
      */
     protected $mediaDirectory;
 
     /**
-     * @var ContextInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ContextInterface|MockObject
      */
     protected $mediaConfig;
 
     /**
-     * @var Filesystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filesystem|MockObject
      */
     protected $filesystem;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->mediaConfig = $this->getMockBuilder(ConfigInterface::class)->getMockForAbstractClass();
+        $this->mediaConfig = $this->getMockBuilder(ConfigInterface::class)
+            ->getMockForAbstractClass();
         $this->mediaConfig->expects($this->any())->method('getBaseMediaPath')->willReturn('catalog/product');
-        $this->mediaDirectory = $this->getMockBuilder(WriteInterface::class)->getMockForAbstractClass();
+        $this->mediaDirectory = $this->getMockBuilder(WriteInterface::class)
+            ->getMockForAbstractClass();
         $this->mediaDirectory->expects($this->once())->method('create')->with('catalog/product');
         $this->filesystem = $this->getMockBuilder(Filesystem::class)
             ->disableOriginalConstructor()

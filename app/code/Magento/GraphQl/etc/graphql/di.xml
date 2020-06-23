@@ -15,10 +15,6 @@
                     <item name="type" xsi:type="object">Magento\Webapi\Model\Authorization\TokenUserContext</item>
                     <item name="sortOrder" xsi:type="string">10</item>
                 </item>
-                <item name="oauthUserContext" xsi:type="array">
-                    <item name="type" xsi:type="object">Magento\Webapi\Model\Authorization\OauthUserContext</item>
-                    <item name="sortOrder" xsi:type="string">40</item>
-                </item>
                 <item name="guestUserContext" xsi:type="array">
                     <item name="type" xsi:type="object">Magento\Webapi\Model\Authorization\GuestUserContext</item>
                     <item name="sortOrder" xsi:type="string">100</item>

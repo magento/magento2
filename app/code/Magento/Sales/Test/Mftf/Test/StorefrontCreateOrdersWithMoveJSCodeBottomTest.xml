@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCreateOrdersWithMoveJSCodeBottomTest">
+        <annotations>
+            <stories value="Create a product and orders with set 'Move Js code to the bottom' to 'Yes'."/>
+            <title value="Create a product and orders with set 'Move Js code to the bottom' to 'Yes'."/>
+            <description value="Create a product and orders with a set 'Move JS code to the bottom of the page' to 'Yes' for registered customers and guests."/>
+            <severity value="MAJOR"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{StorefrontEnableMoveJsCodeBottom.path}} {{StorefrontEnableMoveJsCodeBottom.value}}" stepKey="moveJsCodeBottomEnable"/>
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="logInAsAdmin"/>
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryPage"/>
+            <actionGroup ref="CreateCategoryActionGroup" stepKey="createCategory">
+                <argument name="categoryEntity" value="_defaultCategory"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateSimpleProductActionGroup" stepKey="createSimpleProduct">
+                <argument name="category" value="_defaultCategory"/>
+                <argument name="simpleProduct" value="_defaultProduct"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryPage"/>
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
+                <argument name="categoryEntity" value="_defaultCategory"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductActionGroup" stepKey="deleteSimpleProduct">
+                <argument name="productName" value="_defaultProduct.name"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="Simple_US_Customer.email"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+
+            <magentoCLI command="config:set {{StorefrontDisableMoveJsCodeBottom.path}} {{StorefrontDisableMoveJsCodeBottom.value}}" stepKey="moveJsCodeBottomDisable"/>
+            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+        </after>
+
+        <!-- Go to Storefront and place order for guest -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage">
+            <argument name="productUrl" value="{{_defaultProduct.urlKey}}"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="guestGoToCheckoutFromCart"/>
+        <actionGroup ref="GuestCheckoutFillNewShippingAddressActionGroup" stepKey="fillNewShippingAddress">
+            <argument name="customer" value="Simple_Customer_Without_Address" />
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFreeShipping">
+            <argument name="shippingMethodName" value="Flat Rate"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutReview"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="guestPlaceOrder" />
+
+        <!-- Go to frontend and make a user account and login with it -->
+        <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+        <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+            <argument name="customer" value="Simple_US_Customer"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+        <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+            <argument name="messageType" value="success"/>
+            <argument name="message" value="Thank you for registering with Main Website Store."/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddNewCustomerAddressActionGroup" stepKey="AddNewAddress">
+            <argument name="Address" value="US_Address_TX"/>
+        </actionGroup>
+
+        <!-- Go to Storefront and place order for customer -->
+        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openStorefrontProductPage2">
+            <argument name="productUrl" value="{{_defaultProduct.urlKey}}"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart2">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="customerGoToCheckoutFromCart"/>
+
+        <actionGroup ref="StorefrontSetShippingMethodActionGroup" stepKey="setShippingMethodFreeShipping2">
+            <argument name="shippingMethodName" value="Flat Rate"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="goToCheckoutReview2"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
+        <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="customerPlaceOrder" />
+        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="singOutCustomer" />
+    </test>
+</tests>

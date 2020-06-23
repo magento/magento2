@@ -10,6 +10,5 @@
     <actionGroup name="AdminSaveCategoryActionGroup">
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategoryWithProducts"/>
         <waitForPageLoad stepKey="waitForCategorySaved"/>
-        <see userInput="You saved the category." stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>

@@ -38,8 +38,8 @@
             <!--Open Index Management Page and Select Index mode "Update by Schedule" -->
             <magentoCLI stepKey="setIndexerMode" command="indexer:set-mode" arguments="schedule" />
             <!-- Run cron twice -->
-            <magentoCLI command="cron:run" stepKey="runCron1"/>
-            <magentoCLI command="cron:run" stepKey="runCron2"/>
+            <magentoCLI command="cron:run" arguments="--group=index" stepKey="runCron1"/>
+            <magentoCLI command="cron:run" arguments="--group=index" stepKey="runCron2"/>
         </before>
         <after>
             <magentoCLI stepKey="setFlatCatalogCategory" command="config:set catalog/frontend/flat_catalog_category 0 "/>
@@ -55,8 +55,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Select created category and disable Include In Menu option-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="selectCreatedCategory"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>

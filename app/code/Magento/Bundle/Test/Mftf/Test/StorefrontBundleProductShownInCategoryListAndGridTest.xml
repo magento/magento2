@@ -36,8 +36,7 @@
             <deleteData createDataKey="simpleProduct4" stepKey="deleteSimpleProduct4"/>
         </after>
         <!--Make category-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="goToCategoryPage"/>
-        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="goToCategoryPage"/>
         <actionGroup ref="CreateCategoryActionGroup" stepKey="createASubcategory">
             <argument name="categoryEntity" value="SimpleSubCategory"/>
         </actionGroup>
