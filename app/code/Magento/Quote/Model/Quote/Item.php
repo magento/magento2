@@ -430,7 +430,7 @@ class Item extends \Magento\Quote\Model\Quote\Item\AbstractItem implements \Mage
         $this->setData('product', $product)
             ->setProductId($product->getId())
             ->setProductType($product->getTypeId())
-            ->setSku($this->getProduct()->getSku())
+            ->setSku($product->getSku())
             ->setName($product->getName())
             ->setWeight($this->getProduct()->getWeight())
             ->setTaxClassId($product->getTaxClassId())
