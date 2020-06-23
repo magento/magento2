@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Setup\Test\Unit\Model\ConfigOptionsList;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Setup\Option\FlagConfigOption;
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Model\ConfigOptionsList\Cache as CacheConfigOptionsList;
@@ -48,7 +49,7 @@ class CacheTest extends TestCase
     public function testGetOptions()
     {
         $options = $this->configOptionsList->getOptions();
-        $this->assertCount(8, $options);
+        $this->assertCount(9, $options);
 
         $this->assertArrayHasKey(0, $options);
         $this->assertInstanceOf(SelectConfigOption::class, $options[0]);
@@ -81,6 +82,10 @@ class CacheTest extends TestCase
         $this->assertArrayHasKey(7, $options);
         $this->assertInstanceOf(TextConfigOption::class, $options[7]);
         $this->assertEquals('cache-id-prefix', $options[7]->getName());
+
+        $this->assertArrayHasKey(8, $options);
+        $this->assertInstanceOf(FlagConfigOption::class, $options[8]);
+        $this->assertEquals('allow-parallel-generation', $options[8]->getName());
     }
 
     /**
@@ -94,7 +99,7 @@ class CacheTest extends TestCase
             'cache' => [
                 'frontend' => [
                     'default' => [
-                        'backend' => '\\Magento\\Framework\\Cache\\Backend\Redis',
+                        'backend' => \Magento\Framework\Cache\Backend\Redis::class,
                         'backend_options' => [
                             'server' => '',
                             'port' => '',
@@ -105,11 +110,13 @@ class CacheTest extends TestCase
                         ],
                         'id_prefix' => $this->expectedIdPrefix(),
                     ]
-                ]
+                ],
+                'allow_parallel_generation' => '',
             ]
         ];
 
-        $configData = $this->configOptionsList->createConfig(['cache-backend'=>'redis'], $this->deploymentConfigMock);
+        $configData = $this->configOptionsList
+            ->createConfig(['cache-backend' => 'redis'], $this->deploymentConfigMock);
 
         $this->assertEquals($expectedConfigData, $configData->getData());
     }
@@ -123,7 +130,7 @@ class CacheTest extends TestCase
             'cache' => [
                 'frontend' => [
                     'default' => [
-                        'backend' => '\\Magento\\Framework\\Cache\\Backend\Redis',
+                        'backend' => \Magento\Framework\Cache\Backend\Redis::class,
                         'backend_options' => [
                             'server' => 'localhost',
                             'port' => '1234',
@@ -134,7 +141,8 @@ class CacheTest extends TestCase
                         ],
                         'id_prefix' => $this->expectedIdPrefix(),
                     ]
-                ]
+                ],
+                'allow_parallel_generation' => null,
             ]
         ];
 
@@ -211,7 +219,7 @@ class CacheTest extends TestCase
         ];
         $this->validatorMock->expects($this->once())
             ->method('isValidConnection')
-            ->with(['host'=>'localhost', 'db'=>'', 'port'=>'', 'password'=>''])
+            ->with(['host' => 'localhost', 'db' => '', 'port' => '', 'password' => ''])
             ->willReturn(true);
 
         $errors = $this->configOptionsList->validate($options, $this->deploymentConfigMock);

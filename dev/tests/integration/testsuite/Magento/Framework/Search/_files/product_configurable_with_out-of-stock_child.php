@@ -9,8 +9,9 @@ use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\DefaultCategory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/product_configurable.php';
+Resolver::getInstance()->requireDataFixture('Magento/Framework/Search/_files/product_configurable.php');
 
 $objectManager = Bootstrap::getObjectManager();
 

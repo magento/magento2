@@ -10,7 +10,6 @@ namespace Magento\Framework\Lock\Test\Unit\Backend;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
-use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Lock\Backend\Database;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -90,7 +89,6 @@ class DatabaseTest extends TestCase
     }
 
     /**
-     * @throws AlreadyExistsException
      * @throws \Zend_Db_Statement_Exception
      */
     public function testLock()
@@ -107,7 +105,6 @@ class DatabaseTest extends TestCase
     }
 
     /**
-     * @throws AlreadyExistsException
      * @throws \Zend_Db_Statement_Exception
      */
     public function testlockWithTooLongName()
@@ -124,12 +121,10 @@ class DatabaseTest extends TestCase
     }
 
     /**
-     * @throws AlreadyExistsException
      * @throws \Zend_Db_Statement_Exception
      */
     public function testlockWithAlreadyAcquiredLockInSameSession()
     {
-        $this->expectException('Magento\Framework\Exception\AlreadyExistsException');
         $this->deploymentConfig
             ->method('isDbAvailable')
             ->with()
@@ -138,12 +133,11 @@ class DatabaseTest extends TestCase
             ->method('fetchColumn')
             ->willReturn(true);
 
-        $this->database->lock('testLock');
-        $this->database->lock('differentLock');
+        $this->assertTrue($this->database->lock('testLock'));
+        $this->assertTrue($this->database->lock('differentLock'));
     }
 
     /**
-     * @throws AlreadyExistsException
      * @throws \Zend_Db_Statement_Exception
      */
     public function testLockWithUnavailableDeploymentConfig()
