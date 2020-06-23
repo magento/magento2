@@ -47,7 +47,7 @@ input WishlistItemInput @doc(description: "Defines the items to add to a wish li
     entered_options: [EnteredOptionInput!] @doc(description: "An array of options that the customer entered")
 }
 
-type AddProductsToWishlistOutput @doc(description: "Contains the customer\`s wish list and any errors encountered") {
+type AddProductsToWishlistOutput @doc(description: "Contains the customer's wish list and any errors encountered") {
     wishlist: Wishlist! @doc(description: "Contains the wish list with all items that were successfully added")
     userInputErrors:[CheckoutUserInputError]! @doc(description: "An array of errors encountered while adding products to a wish list")
 }
@@ -70,7 +70,7 @@ input WishlistItemUpdateInput @doc(description: "Defines updates to items in a w
     entered_options: [EnteredOptionInput!] @doc(description: "An array of options that the customer entered")
 }
 
-type UpdateProductsInWishlistOutput @doc(description: "Contains the customer\`s wish list and any errors encountered") {
+type UpdateProductsInWishlistOutput @doc(description: "Contains the customer's wish list and any errors encountered") {
     wishlist: Wishlist! @doc(description: "Contains the wish list with all items that were successfully updated")
     userInputErrors:[CheckoutUserInputError]! @doc(description:"An array of errors encountered while updating products in a wish list")
 }
