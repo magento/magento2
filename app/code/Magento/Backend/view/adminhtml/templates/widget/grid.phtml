@@ -101,7 +101,8 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()): 0;
                                     'onclick',
                                     /* @noEscape */ $block->getJsObjectName() . '.setPage(\'' .
                                         /* @noEscape */ ($_curPage - 1) . '\');event.preventDefault();',
-                                    'button.action-previous'
+                                    'div#' . $block->escapeJs($block->getId()) .
+                                    ' .admin__data-grid-pager button.action-previous:not(.disabled)'
                                 ) ?>
                             <?php else: ?>
                                 <button type="button" class="action-previous disabled">
@@ -137,7 +138,8 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()): 0;
                                     'onclick',
                                     /* @noEscape */ $block->getJsObjectName() . '.setPage(\'' .
                                     /* @noEscape */ ($_curPage + 1) . '\');event.preventDefault();',
-                                    'button.action-next'
+                                    'div#' . $block->escapeJs($block->getId()) .
+                                    ' .admin__data-grid-pager button.action-next:not(.disabled)'
                                 ) ?>
                             <?php else: ?>
                                 <button type="button" class="action-next disabled">
