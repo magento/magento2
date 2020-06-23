@@ -5,12 +5,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GoogleOptimizer\Observer;
 
 use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
+ * Abstract entity for saving codes
+ *
  * @api
  * @since 100.0.2
  */
@@ -96,7 +100,9 @@ abstract class AbstractSave implements ObserverInterface
         $this->_initRequestParams();
 
         if ($this->_isNewCode()) {
-            $this->_saveCode();
+            if (!$this->_isEmptyCode()) {
+                $this->_saveCode();
+            }
         } else {
             $this->_loadCode();
             if ($this->_isEmptyCode()) {
@@ -185,6 +191,8 @@ abstract class AbstractSave implements ObserverInterface
     }
 
     /**
+     * Check data availability
+     *
      * @return bool
      */
     private function isDataAvailable()
@@ -194,6 +202,8 @@ abstract class AbstractSave implements ObserverInterface
     }
 
     /**
+     * Get request data
+     *
      * @return mixed
      */
     private function getRequestData()
