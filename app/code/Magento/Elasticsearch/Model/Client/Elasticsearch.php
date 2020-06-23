@@ -267,7 +267,7 @@ class Elasticsearch implements ClientInterface
                                 'match' => 'price_*',
                                 'match_mapping' => 'string',
                                 'mapping' => [
-                                    'type' => 'float',
+                                    'type' => 'double',
                                     'store' => true
                                 ],
                             ],
