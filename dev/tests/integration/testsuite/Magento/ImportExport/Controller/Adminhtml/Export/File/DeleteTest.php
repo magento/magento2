@@ -51,6 +51,7 @@ class DeleteTest extends AbstractBackendController
      *
      * @return void
      * @magentoConfigFixture default_store admin/security/use_form_key 1
+     * @magentoAppArea adminhtml
      */
     public function testExecute(): void
     {
