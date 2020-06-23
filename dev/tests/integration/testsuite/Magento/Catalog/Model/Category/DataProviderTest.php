@@ -240,59 +240,46 @@ class DataProviderTest extends TestCase
     }
 
     /**
-     * Check if category default page layout will be properly returned by DataProvider
+     * Check if existing category page layout will remain unaffected by category page layout default value setting
      *
-     * @dataProvider categoryDefaultMetaDataProvider
-     * @param $data
      * @return void
+     */
+    public function testExistingCategoryLayoutUnaffectedByDefaults(): void
+    {
+        /** @var Category $category */
+        $category = $this->categoryFactory->create();
+        $category->load(2);
+
+        $this->registry->register('category', $category);
+        $meta = $this->dataProvider->getMeta();
+        $categoryPageLayout = $meta["design"]["children"]["page_layout"]["arguments"]["data"]["config"]["default"];
+        $this->registry->unregister('category');
+
+        $this->assertNull($categoryPageLayout);
+    }
+
+    /**
+     * Check if category page layout default value setting will apply to the new category during it's creation
+     *
      * @throws NoSuchEntityException
      */
-    public function testDefaultLayoutMeta($data): void
+    public function testNewCategoryLayoutMatchesDefault(): void
     {
-        $defaultAdminValue = $this->scopeConfig->getValue(
+        $categoryDefaultPageLayout = $this->scopeConfig->getValue(
             'web/default_layouts/default_category_layout',
             ScopeInterface::SCOPE_STORE,
-            $this->storeManager->getStore()
+            $this->storeManager->getStore()->getId()
         );
 
         /** @var Category $category */
         $category = $this->categoryFactory->create();
-
-        if ($data['createNewCategory']) {
-            $category->setName('Net Test Category');
-        } else {
-            $category->load(2);
-        }
+        $category->setName('Net Test Category');
 
         $this->registry->register('category', $category);
         $meta = $this->dataProvider->getMeta();
-        $defaultCategoryLayout = $meta["design"]["children"]["page_layout"]["arguments"]["data"]["config"]["default"];
+        $categoryPageLayout = $meta["design"]["children"]["page_layout"]["arguments"]["data"]["config"]["default"];
         $this->registry->unregister('category');
 
-        if ($data['defaultValueEqSettings']) {
-            $this->assertEquals($defaultAdminValue, $defaultCategoryLayout);
-        } else {
-            $this->assertEquals($data['expectedDefaultValue'], $defaultCategoryLayout);
-        }
-    }
-
-    public function categoryDefaultMetaDataProvider(): array
-    {
-        return [
-            [
-                [
-                    'createNewCategory' => false,
-                    'expectedDefaultValue' => null,
-                    'defaultValueEqSettings' => false
-                ]
-            ],
-            [
-                [
-                    'createNewCategory' => true,
-                    'expectedDefaultValue' => false,
-                    'defaultValueEqSettings' => true
-                ]
-            ]
-        ];
+        $this->assertEquals($categoryDefaultPageLayout, $categoryPageLayout);
     }
 }

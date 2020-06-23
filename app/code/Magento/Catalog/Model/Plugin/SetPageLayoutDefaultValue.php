@@ -35,18 +35,18 @@ class SetPageLayoutDefaultValue
     private $scopeConfig;
 
     /**
-     * @param string $defaultValue
      * @param ScopeConfigInterface|null $scopeConfig
      * @param StoreManagerInterface|null $storeManager
+     * @param string $defaultValue
      */
     public function __construct(
-        string $defaultValue = "",
-        ScopeConfigInterface $scopeConfig = null,
-        StoreManagerInterface $storeManager = null
+        ScopeConfigInterface $scopeConfig,
+        StoreManagerInterface $storeManager,
+        string $defaultValue = ""
     ) {
         $this->defaultValue = $defaultValue;
-        $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
-        $this->storeManager = $storeManager ?: ObjectManager::getInstance()->get(StoreManagerInterface::class);
+        $this->scopeConfig = $scopeConfig;
+        $this->storeManager = $storeManager;
     }
 
     /**
@@ -66,7 +66,7 @@ class SetPageLayoutDefaultValue
             $defaultAdminValue = $this->scopeConfig->getValue(
                 'web/default_layouts/default_category_layout',
                 ScopeInterface::SCOPE_STORE,
-                $this->storeManager->getStore()
+                $this->storeManager->getStore()->getId()
             );
 
             $defaultValue = $defaultAdminValue ?: $this->defaultValue;
