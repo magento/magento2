@@ -30,9 +30,5 @@
         <waitForPageLoad stepKey="waitForFoldersLoad"/>
         <seeElement selector="{{MediaGallerySection.highlightedFolder('Y2F0YWxvZy9jYXRlZ29yeQ--')}}" stepKey="assertCategoryFolder"/>
         <actionGroup ref="AdminCloseMediaGalleryActionGroup" stepKey="closeMediaGallery"/>
-        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
-        <actionGroup ref="AdminOpenMediaGalleryTinyMce4ActionGroup" stepKey="opneMediaGalleryFromTinyMce4"/>
-         <!-- Verify wysiwyg folder selected -->
-        <seeElement selector="{{MediaGallerySection.highlightedFolder('d3lzaXd5Zw--')}}" stepKey="assertWysiwygFolder"/>
     </test>
 </tests>
