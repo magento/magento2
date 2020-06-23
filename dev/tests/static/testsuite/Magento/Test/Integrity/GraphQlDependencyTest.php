@@ -22,7 +22,7 @@ class GraphQlDependencyTest extends \PHPUnit\Framework\TestCase
     /**
      * Sets up data
      *
-     * @throws \Exception
+     * @throws \Magento\TestFramework\Inspection\Exception
      */
     protected function setUp(): void
     {
@@ -34,11 +34,12 @@ class GraphQlDependencyTest extends \PHPUnit\Framework\TestCase
                 'MAGETWO-43654: The build is running from vendor/magento. DependencyTest is skipped.'
             );
         }
-        $this->dependencyProvider = new GraphQlSchemaDependencyProvider();
+        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $this->dependencyProvider = $objectManager->create(GraphQlSchemaDependencyProvider::class);
     }
 
     /**
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testUndeclaredDependencies()
     {
@@ -49,6 +50,9 @@ class GraphQlDependencyTest extends \PHPUnit\Framework\TestCase
          *
          * @param string $fileType
          * @param string $file
+         * @throws \Magento\Framework\Exception\LocalizedException
+         * @throws \Magento\TestFramework\Inspection\Exception
+         * @throws \PHPUnit\Framework\AssertionFailedError
          */
             function ($file) {
                 $componentRegistrar = new ComponentRegistrar();
@@ -112,14 +116,13 @@ class GraphQlDependencyTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $file
      * @return mixed
-     * @throws \Exception
+     * @throws \Magento\TestFramework\Inspection\Exception
      */
     private function readJsonFile(string $file, bool $asArray = false)
     {
         $decodedJson = json_decode(file_get_contents($file), $asArray);
         if (null == $decodedJson) {
-            //phpcs:ignore Magento2.Exceptions.DirectThrow
-            throw new \Exception("Invalid Json: $file");
+            throw new \Magento\TestFramework\Inspection\Exception("Invalid Json: $file");
         }
 
         return $decodedJson;

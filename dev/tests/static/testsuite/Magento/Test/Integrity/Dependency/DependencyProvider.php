@@ -11,7 +11,7 @@ namespace Magento\Test\Integrity\Dependency;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 
-abstract class DependencyProvider
+class DependencyProvider
 {
     /**
      * Types of dependency between modules.
@@ -31,41 +31,20 @@ abstract class DependencyProvider
     /**
      * @var array
      */
-    protected $mapDependencies = [];
+    private $mapDependencies = [];
 
     /**
      * @var array
      */
-    protected $packageModuleMapping = [];
-
-    /**
-     * Retrieve array of dependency items.
-     *
-     * @param $module
-     * @param $type
-     * @param $mapType
-     * @return array
-     */
-    abstract protected function getDeclaredDependencies(string $module, string $type, string $mapType);
-
-    /**
-     * @param string $moduleName
-     * @return array
-     */
-    abstract public function getDeclaredExistingModuleDependencies(string $moduleName): array;
-
-    /**
-     * @param string $moduleName
-     * @return array
-     */
-    abstract public function getUndeclaredModuleDependencies(string $moduleName): array;
+    private $packageModuleMapping = [];
 
     /**
      * Initialise map of dependencies.
      *
+     * @throws \Magento\TestFramework\Inspection\Exception
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function initDeclaredDependencies()
+    public function initDeclaredDependencies()
     {
         if (empty($this->mapDependencies)) {
             $jsonFiles = Files::init()->getComposerFiles(ComponentRegistrar::MODULE, false);
@@ -79,6 +58,35 @@ abstract class DependencyProvider
     }
 
     /**
+     * Add dependency map items.
+     *
+     * @param $module
+     * @param $type
+     * @param $mapType
+     * @param $dependencies
+     */
+    public function addDependencies(string $module, string $type, string $mapType, array $dependencies)
+    {
+        $this->mapDependencies[$module][$type][$mapType] = array_merge_recursive(
+            $this->getDeclaredDependencies($module, $type, $mapType),
+            $dependencies
+        );
+    }
+
+    /**
+     * Retrieve array of dependency items.
+     *
+     * @param $module
+     * @param $type
+     * @param $mapType
+     * @return array
+     */
+    public function getDeclaredDependencies(string $module, string $type, string $mapType): array
+    {
+        return $this->mapDependencies[$module][$type][$mapType] ?? [];
+    }
+
+    /**
      * Add dependencies to dependency list.
      *
      * @param string $moduleName
@@ -86,9 +94,10 @@ abstract class DependencyProvider
      * @param string $type
      *
      * @return void
-     * @throws \Exception
+     * @throws \Magento\TestFramework\Inspection\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function presetDependencies(string $moduleName, array $packageNames, string $type): void
+    private function presetDependencies(string $moduleName, array $packageNames, string $type): void
     {
         $packageNames = array_filter($packageNames, function ($packageName) {
             return $this->getModuleName($packageName) ||
@@ -108,9 +117,10 @@ abstract class DependencyProvider
     /**
      * @param string $jsonName
      * @return string
-     * @throws \Exception
+     * @throws \Magento\TestFramework\Inspection\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function convertModuleName(string $jsonName): string
+    private function convertModuleName(string $jsonName): string
     {
         $moduleName = $this->getModuleName($jsonName);
         if ($moduleName) {
@@ -138,14 +148,13 @@ abstract class DependencyProvider
      *
      * @param string $file
      * @return mixed
-     * @throws \Exception
+     * @throws \Magento\TestFramework\Inspection\Exception
      */
-    protected function readJsonFile(string $file, bool $asArray = false)
+    private function readJsonFile(string $file, bool $asArray = false)
     {
         $decodedJson = json_decode(file_get_contents($file), $asArray);
         if (null == $decodedJson) {
-            //phpcs:ignore Magento2.Exceptions.DirectThrow
-            throw new \Exception("Invalid Json: $file");
+            throw new \Magento\TestFramework\Inspection\Exception("Invalid Json: $file");
         }
 
         return $decodedJson;
@@ -156,9 +165,10 @@ abstract class DependencyProvider
      *
      * @param string $packageName
      * @return null|string
-     * @throws \Exception
+     * @throws \Magento\TestFramework\Inspection\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function getModuleName(string $packageName): ?string
+    private function getModuleName(string $packageName): ?string
     {
         return $this->getPackageModuleMapping()[$packageName] ?? null;
     }
@@ -167,9 +177,10 @@ abstract class DependencyProvider
      * Returns package name on module name mapping.
      *
      * @return array
-     * @throws \Exception
+     * @throws \Magento\TestFramework\Inspection\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    protected function getPackageModuleMapping(): array
+    private function getPackageModuleMapping(): array
     {
         if (!$this->packageModuleMapping) {
             $jsonFiles = Files::init()->getComposerFiles(ComponentRegistrar::MODULE, false);
@@ -187,21 +198,5 @@ abstract class DependencyProvider
         }
 
         return $this->packageModuleMapping;
-    }
-
-    /**
-     * Add dependency map items.
-     *
-     * @param $module
-     * @param $type
-     * @param $mapType
-     * @param $dependencies
-     */
-    protected function addDependencies(string $module, string $type, string $mapType, array $dependencies)
-    {
-        $this->mapDependencies[$module][$type][$mapType] = array_merge_recursive(
-            $this->getDeclaredDependencies($module, $type, $mapType),
-            $dependencies
-        );
     }
 }

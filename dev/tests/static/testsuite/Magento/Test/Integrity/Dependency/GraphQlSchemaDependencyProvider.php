@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\Test\Integrity\Dependency;
 
-use Magento\Framework\App\Bootstrap;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeReaderComposite;
 
@@ -17,7 +16,7 @@ use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeReaderComposite;
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class GraphQlSchemaDependencyProvider extends DependencyProvider
+class GraphQlSchemaDependencyProvider
 {
     /**
      * @var array
@@ -25,10 +24,17 @@ class GraphQlSchemaDependencyProvider extends DependencyProvider
     private $parsedSchema = [];
 
     /**
-     * GraphQlSchemaDependencyProvider constructor.
+     * @var DependencyProvider
      */
-    public function __construct()
+    private $dependencyProvider;
+
+    /**
+     * GraphQlSchemaDependencyProvider constructor.
+     * @param DependencyProvider $dependencyProvider
+     */
+    public function __construct(DependencyProvider $dependencyProvider)
     {
+        $this->dependencyProvider = $dependencyProvider;
         $this->getGraphQlSchemaDeclaration();
     }
 
@@ -37,13 +43,18 @@ class GraphQlSchemaDependencyProvider extends DependencyProvider
      *
      * @param string $moduleName
      * @return array
-     * @throws \Exception
+     * @throws \Magento\TestFramework\Inspection\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getDeclaredExistingModuleDependencies(string $moduleName): array
     {
-        $this->initDeclaredDependencies();
+        $this->dependencyProvider->initDeclaredDependencies();
         $dependencies = $this->getDependenciesFromSchema($moduleName);
-        $declared = $this->getDeclaredDependencies($moduleName, self::TYPE_HARD, self::MAP_TYPE_DECLARED);
+        $declared = $this->dependencyProvider->getDeclaredDependencies(
+            $moduleName,
+            DependencyProvider::TYPE_HARD,
+            DependencyProvider::MAP_TYPE_DECLARED
+        );
         return array_unique(array_values(array_intersect($declared, $dependencies)));
     }
 
@@ -57,26 +68,14 @@ class GraphQlSchemaDependencyProvider extends DependencyProvider
      *
      * @param string $moduleName
      * @return array
-     * @throws \Exception
+     * @throws \Magento\TestFramework\Inspection\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getUndeclaredModuleDependencies(string $moduleName): array
     {
-        $this->initDeclaredDependencies();
+        $this->dependencyProvider->initDeclaredDependencies();
         $dependencies = $this->getDependenciesFromSchema($moduleName);
         return $this->collectDependencies($moduleName, $dependencies);
-    }
-
-    /**
-     * Retrieve array of dependency items.
-     *
-     * @param $module
-     * @param $type
-     * @param $mapType
-     * @return array
-     */
-    protected function getDeclaredDependencies(string $module, string $type, string $mapType): array
-    {
-        return $this->mapDependencies[$module][$type][$mapType] ?? [];
     }
 
     /**
@@ -87,7 +86,7 @@ class GraphQlSchemaDependencyProvider extends DependencyProvider
     private function getGraphQlSchemaDeclaration(): array
     {
         if (!$this->parsedSchema) {
-            $objectManager = Bootstrap::create(BP, $_SERVER)->getObjectManager();
+            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
             $typeReader = $objectManager->create(TypeReaderComposite::class);
             $reader = $objectManager->create(GraphQlReader::class, ['typeReader' => $typeReader]);
             $this->parsedSchema = $reader->read();
@@ -135,18 +134,26 @@ class GraphQlSchemaDependencyProvider extends DependencyProvider
         if (empty($dependencies)) {
             return [];
         }
-        $declared = $this->getDeclaredDependencies($currentModuleName, self::TYPE_HARD, self::MAP_TYPE_DECLARED);
+        $declared = $this->dependencyProvider->getDeclaredDependencies(
+            $currentModuleName,
+            DependencyProvider::TYPE_HARD,
+            DependencyProvider::MAP_TYPE_DECLARED
+        );
         $checkResult = array_intersect($declared, $dependencies);
 
         if (empty($checkResult)) {
-            $this->addDependencies(
+            $this->dependencyProvider->addDependencies(
                 $currentModuleName,
-                self::TYPE_HARD,
-                self::MAP_TYPE_FOUND,
+                DependencyProvider::TYPE_HARD,
+                DependencyProvider::MAP_TYPE_FOUND,
                 [$currentModuleName => $dependencies]
             );
         }
 
-        return $this->getDeclaredDependencies($currentModuleName, self::TYPE_HARD, self::MAP_TYPE_FOUND);
+        return $this->dependencyProvider->getDeclaredDependencies(
+            $currentModuleName,
+            DependencyProvider::TYPE_HARD,
+            DependencyProvider::MAP_TYPE_FOUND
+        );
     }
 }

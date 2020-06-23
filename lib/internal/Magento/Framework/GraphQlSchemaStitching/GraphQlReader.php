@@ -21,6 +21,8 @@ class GraphQlReader implements ReaderInterface
 
     const GRAPHQL_SCHEMA_FILE = 'schema.graphqls';
 
+    const GRAPHQL_INTERFACE = 'graphql_interface';
+
     /**
      * File locator
      *
@@ -301,18 +303,11 @@ class GraphQlReader implements ReaderInterface
      * @param string $file
      * @return string
      */
-    private static function getModuleNameForRelevantFile($file)
+    private static function getModuleNameForRelevantFile(string $file): string
     {
         if (!isset(self::$componentRegistrar)) {
             self::$componentRegistrar = new ComponentRegistrar();
         }
-        // Validates file when it belongs to default themes
-        foreach (self::$componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
-            if (strpos($file, $themeDir . '/') !== false) {
-                return '';
-            }
-        }
-
         $foundModuleName = '';
         foreach (self::$componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
             if (strpos($file, $moduleDir . '/') !== false) {
@@ -321,7 +316,7 @@ class GraphQlReader implements ReaderInterface
             }
         }
         if (empty($foundModuleName)) {
-            return '';
+            $foundModuleName = '';
         }
 
         return $foundModuleName;
@@ -338,7 +333,7 @@ class GraphQlReader implements ReaderInterface
     {
         foreach ($source as $typeName => $type) {
             if (!isset($type['module']) && (
-                ($type['type'] == 'graphql_interface' && isset($type['typeResolver']))
+                ($type['type'] == self::GRAPHQL_INTERFACE && isset($type['typeResolver']))
                     || isset($type['implements'])
             )
             ) {

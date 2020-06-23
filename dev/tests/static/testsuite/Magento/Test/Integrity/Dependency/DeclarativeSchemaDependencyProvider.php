@@ -17,7 +17,7 @@ use Magento\Framework\Setup\Declaration\Schema\Config\Converter;
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class DeclarativeSchemaDependencyProvider extends DependencyProvider
+class DeclarativeSchemaDependencyProvider
 {
     /**
      * Declarative name for table entity of the declarative schema.
@@ -50,6 +50,16 @@ class DeclarativeSchemaDependencyProvider extends DependencyProvider
     private $moduleSchemaFileMapping = [];
 
     /**
+     * @var DependencyProvider
+     */
+    private $dependencyProvider;
+
+    public function __construct(DependencyProvider $dependencyProvider)
+    {
+        $this->dependencyProvider = $dependencyProvider;
+    }
+
+    /**
      * Provide declared dependencies between modules based on the declarative schema configuration.
      *
      * @param string $moduleName
@@ -58,10 +68,14 @@ class DeclarativeSchemaDependencyProvider extends DependencyProvider
      */
     public function getDeclaredExistingModuleDependencies(string $moduleName): array
     {
-        $this->initDeclaredDependencies();
+        $this->dependencyProvider->initDeclaredDependencies();
         $dependencies = $this->getDependenciesFromFiles($this->getSchemaFileNameByModuleName($moduleName));
         $dependencies = $this->filterSelfDependency($moduleName, $dependencies);
-        $declared = $this->getDeclaredDependencies($moduleName, self::TYPE_HARD, self::MAP_TYPE_DECLARED);
+        $declared = $this->dependencyProvider->getDeclaredDependencies(
+            $moduleName,
+            DependencyProvider::TYPE_HARD,
+            DependencyProvider::MAP_TYPE_DECLARED
+        );
 
         $existingDeclared = [];
         foreach ($dependencies as $dependency) {
@@ -89,7 +103,7 @@ class DeclarativeSchemaDependencyProvider extends DependencyProvider
      */
     public function getUndeclaredModuleDependencies(string $moduleName): array
     {
-        $this->initDeclaredDependencies();
+        $this->dependencyProvider->initDeclaredDependencies();
         $dependencies = $this->getDependenciesFromFiles($this->getSchemaFileNameByModuleName($moduleName));
         $dependencies = $this->filterSelfDependency($moduleName, $dependencies);
         return $this->collectDependencies($moduleName, $dependencies);
@@ -100,7 +114,7 @@ class DeclarativeSchemaDependencyProvider extends DependencyProvider
      *
      * @param string $module
      * @return string
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getSchemaFileNameByModuleName(string $module): string
     {
@@ -128,10 +142,10 @@ class DeclarativeSchemaDependencyProvider extends DependencyProvider
      * @param array $dependencies
      * @return array
      */
-    private function filterSelfDependency(string $moduleName, array $dependencies):array
+    private function filterSelfDependency(string $moduleName, array $dependencies): array
     {
         foreach ($dependencies as $id => $modules) {
-            $decodedId = $this->decodeDependencyId($id);
+            $decodedId = self::decodeDependencyId($id);
             $entityType = $decodedId['entityType'];
             if ($entityType === self::SCHEMA_ENTITY_TABLE || $entityType === "column") {
                 if (array_search($moduleName, $modules) !== false) {
@@ -178,7 +192,7 @@ class DeclarativeSchemaDependencyProvider extends DependencyProvider
      * Retrieve declarative schema declaration.
      *
      * @return array
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getDeclarativeSchema(): array
     {
@@ -201,10 +215,9 @@ class DeclarativeSchemaDependencyProvider extends DependencyProvider
                 array_push($tableDeclaration['modules'], $moduleName);
                 $moduleDeclaration = array_replace_recursive(
                     $moduleDeclaration,
-                    [self::SCHEMA_ENTITY_TABLE =>
-                        [
-                            $tableName => $tableDeclaration,
-                        ]
+                    [self::SCHEMA_ENTITY_TABLE => [
+                        $tableName => $tableDeclaration,
+                    ]
                     ]
                 );
                 foreach ($entityTypes as $entityType) {
@@ -213,11 +226,9 @@ class DeclarativeSchemaDependencyProvider extends DependencyProvider
                     }
                     $moduleDeclaration = array_replace_recursive(
                         $moduleDeclaration,
-                        [self::SCHEMA_ENTITY_TABLE =>
-                            [
-                                $tableName =>
-                                    $this->addModuleAssigment($tableDeclaration, $entityType, $moduleName)
-                            ]
+                        [self::SCHEMA_ENTITY_TABLE => [
+                            $tableName => $this->addModuleAssigment($tableDeclaration, $entityType, $moduleName)
+                        ]
                         ]
                     );
                 }
@@ -236,7 +247,7 @@ class DeclarativeSchemaDependencyProvider extends DependencyProvider
      * @param string $entityType
      * @param null|string $entityName
      * @return array
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function resolveEntityDependencies(string $tableName, string $entityType, ?string $entityName = null): array
     {
@@ -319,7 +330,7 @@ class DeclarativeSchemaDependencyProvider extends DependencyProvider
      *
      * @param array $moduleDeclaration
      * @return array
-     * @throws \Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getDisabledDependencies(array $moduleDeclaration): array
     {
@@ -532,7 +543,7 @@ class DeclarativeSchemaDependencyProvider extends DependencyProvider
      * @param array $dependencies
      * @return array
      */
-    private function collectDependencies($currentModuleName, $dependencies = [])
+    private function collectDependencies($currentModuleName, $dependencies = []): array
     {
         if (empty($dependencies)) {
             return [];
@@ -541,7 +552,11 @@ class DeclarativeSchemaDependencyProvider extends DependencyProvider
             $this->collectDependency($dependencyName, $dependency, $currentModuleName);
         }
 
-        return $this->getDeclaredDependencies($currentModuleName, self::TYPE_HARD, self::MAP_TYPE_FOUND);
+        return $this->dependencyProvider->getDeclaredDependencies(
+            $currentModuleName,
+            DependencyProvider::TYPE_HARD,
+            DependencyProvider::MAP_TYPE_FOUND
+        );
     }
 
     /**
@@ -556,31 +571,22 @@ class DeclarativeSchemaDependencyProvider extends DependencyProvider
         array $dependency,
         string $currentModule
     ) {
-        $declared = $this->getDeclaredDependencies($currentModule, self::TYPE_HARD, self::MAP_TYPE_DECLARED);
+        $declared = $this->dependencyProvider->getDeclaredDependencies(
+            $currentModule,
+            DependencyProvider::TYPE_HARD,
+            DependencyProvider::MAP_TYPE_DECLARED
+        );
         $checkResult = array_intersect($declared, $dependency);
 
         if (empty($checkResult)) {
-            $this->addDependencies(
+            $this->dependencyProvider->addDependencies(
                 $currentModule,
-                self::TYPE_HARD,
-                self::MAP_TYPE_FOUND,
+                DependencyProvider::TYPE_HARD,
+                DependencyProvider::MAP_TYPE_FOUND,
                 [
                     $dependencyName => $dependency,
                 ]
             );
         }
-    }
-
-    /**
-     * Retrieve array of dependency items.
-     *
-     * @param $module
-     * @param $type
-     * @param $mapType
-     * @return array
-     */
-    protected function getDeclaredDependencies(string $module, string $type, string $mapType)
-    {
-        return $this->mapDependencies[$module][$type][$mapType] ?? [];
     }
 }
