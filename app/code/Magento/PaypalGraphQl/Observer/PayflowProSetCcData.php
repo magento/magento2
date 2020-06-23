@@ -17,6 +17,7 @@ use Magento\Customer\Model\Session as CustomerModelSession;
 
 /**
  * Class PayflowProSetCcData set CcData to quote payment
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class PayflowProSetCcData extends AbstractDataAssignObserver
 {
@@ -53,7 +54,6 @@ class PayflowProSetCcData extends AbstractDataAssignObserver
      * @param Observer $observer
      *
      * @throws GraphQlInputException
-     * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
      */
     public function execute(Observer $observer)
     {
