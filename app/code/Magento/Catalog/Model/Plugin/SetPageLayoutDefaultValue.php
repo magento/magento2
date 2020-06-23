@@ -12,7 +12,6 @@ namespace Magento\Catalog\Model\Plugin;
 
 use Magento\Catalog\Model\Category\DataProvider;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -35,8 +34,8 @@ class SetPageLayoutDefaultValue
     private $scopeConfig;
 
     /**
-     * @param ScopeConfigInterface|null $scopeConfig
-     * @param StoreManagerInterface|null $storeManager
+     * @param ScopeConfigInterface $scopeConfig
+     * @param StoreManagerInterface $storeManager
      * @param string $defaultValue
      */
     public function __construct(
