@@ -14,6 +14,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 
 /**
  * Class DeclarativeDependencyTest
+ * Test for undeclared dependencies in declarative schema
  */
 class DeclarativeDependencyTest extends \PHPUnit\Framework\TestCase
 {
