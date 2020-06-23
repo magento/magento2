@@ -74,12 +74,13 @@ class InlineTest extends TestCase
      * @param bool $isEnabled
      * @param bool $isActive
      * @param bool $isDevAllowed
+     * @param string $area
      * @param bool $result
      * @dataProvider isAllowedDataProvider
      */
-    public function testIsAllowed($isEnabled, $isActive, $isDevAllowed, $result)
+    public function testIsAllowed($isEnabled, $isActive, $isDevAllowed, $area, $result)
     {
-        $this->prepareIsAllowed($isEnabled, $isActive, $isDevAllowed);
+        $this->prepareIsAllowed($isEnabled, $isActive, $isDevAllowed, null, $area);
 
         $model = new Inline(
             $this->scopeResolverMock,
@@ -101,14 +102,21 @@ class InlineTest extends TestCase
     public function isAllowedDataProvider()
     {
         return [
-            [true, true, true, true],
-            [true, false, true, false],
-            [true, true, false, false],
-            [true, false, false, false],
-            [false, true, true, false],
-            [false, false, true, false],
-            [false, true, false, false],
-            [false, false, false, false],
+            [true, true, true, Area::AREA_FRONTEND, true],
+            [true, false, true, Area::AREA_FRONTEND, false],
+            [true, true, false, Area::AREA_FRONTEND, false],
+            [true, false, false, Area::AREA_FRONTEND, false],
+            [false, true, true, Area::AREA_FRONTEND, false],
+            [false, false, true, Area::AREA_FRONTEND, false],
+            [false, true, false, Area::AREA_FRONTEND, false],
+            [false, false, false, Area::AREA_FRONTEND, false],
+            [true, true, true, Area::AREA_GLOBAL, false],
+            [true, true, true, Area::AREA_ADMINHTML, true],
+            [true, true, true, Area::AREA_DOC, false],
+            [true, true, true, Area::AREA_CRONTAB, false],
+            [true, true, true, Area::AREA_WEBAPI_REST, false],
+            [true, true, true, Area::AREA_WEBAPI_SOAP, false],
+            [true, true, true, Area::AREA_GRAPHQL, false]
         ];
     }
 
