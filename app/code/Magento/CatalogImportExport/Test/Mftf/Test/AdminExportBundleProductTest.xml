@@ -80,9 +80,13 @@
                 <requiredEntity createDataKey="secondSimpleProductForFixedWithAttribute"/>
             </createData>
 
-            <!-- Run cron twice -->
-            <magentoCLI command="cron:run" stepKey="runCron1"/>
-            <magentoCLI command="cron:run" stepKey="runCron2"/>
+            <!-- Run cron twice (To reduce the load and with introducing BIC cron runs have been removed) -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runCron1">
+                <argument name="indices" value="catalog_category_product catalogrule_product catalog_product_price catalogsearch_fulltext "/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="runCron2">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
 
             <!-- Login as admin -->
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
@@ -118,9 +122,12 @@
         <!-- Export created below products -->
         <actionGroup ref="exportAllProducts" stepKey="exportCreatedProducts"/>
 
-        <!-- Run cron -->
-        <magentoCLI command="cron:run" stepKey="runCron3"/>
-        <magentoCLI command="cron:run" stepKey="runCron4"/>
+        <!-- Run cron (To reduce the load and with introducing BIC cron runs have been removed) -->
+        <magentoCLI command="help" stepKey="runCron3"/>
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="runCron4">
+            <argument name="consumerName" value="exportProcessor"/>
+            <argument name="maxMessages" value="10"/>
+        </actionGroup>
 
         <!-- Download product -->
         <actionGroup ref="downloadFileByRowIndex" stepKey="downloadCreatedProducts">
