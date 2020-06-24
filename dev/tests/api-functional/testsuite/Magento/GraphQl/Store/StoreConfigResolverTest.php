@@ -7,7 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Store;
 
+use Exception;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\Data\StoreConfigInterface;
 use Magento\Store\Api\StoreConfigManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
@@ -18,7 +20,7 @@ use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test the GraphQL endpoint's StoreConfigs query
+ * Test the GraphQL endpoint's StoreConfigs and AvailableStores queries
  */
 class StoreConfigResolverTest extends GraphQlAbstract
 {
@@ -34,9 +36,9 @@ class StoreConfigResolverTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Store/_files/store.php
      * @magentoConfigFixture default_store store/information/name Default Store
-     * @magentoConfigFixture test_store store/information/name Test Store
+     * @throws NoSuchEntityException
      */
-    public function testGetStoreConfig()
+    public function testGetStoreConfig(): void
     {
         /** @var  StoreConfigManagerInterface $defaultStoreConfigsManager */
         $defaultStoreConfigsManager = $this->objectManager->get(StoreConfigManagerInterface::class);
@@ -48,12 +50,10 @@ class StoreConfigResolverTest extends GraphQlAbstract
         $store = $storeRepository->getById($storeId);
         /** @var StoreConfigInterface $defaultStoreConfig */
         $defaultStoreConfig = current($defaultStoreConfigsManager->getStoreConfigs([$store->getCode()]));
-        /** @var StoreConfigInterface $storeConfigs */
-        $storeConfigs = $defaultStoreConfigsManager->getStoreConfigs();
         $query
             = <<<QUERY
 {
-  storeConfig{
+  storeConfig {
     id,
     code,
     website_id,
@@ -71,36 +71,55 @@ class StoreConfigResolverTest extends GraphQlAbstract
     secure_base_static_url,
     secure_base_media_url,
     store_name
-    stores {
-        id,
-        code,
-        website_id,
-        locale,
-        base_currency_code,
-        default_display_currency_code,
-        timezone,
-        weight_unit,
-        base_url,
-        base_link_url,
-        base_static_url,
-        base_media_url,
-        secure_base_url,
-        secure_base_link_url,
-        secure_base_static_url,
-        secure_base_media_url,
-        store_name
-    }
   }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('storeConfig', $response);
         $this->validateStoreConfig($defaultStoreConfig, $response['storeConfig']);
+    }
 
-        $this->assertArrayHasKey('stores', $response['storeConfig']);
+    /**
+     * @magentoApiDataFixture Magento/Store/_files/store.php
+     * @magentoConfigFixture default_store store/information/name Default Store
+     * @magentoConfigFixture test_store store/information/name Test Store
+     * @throws Exception
+     */
+    public function testAvailableStoreConfigs(): void
+    {
+        /** @var  StoreConfigManagerInterface $defaultStoreConfigsManager */
+        $defaultStoreConfigsManager = $this->objectManager->get(StoreConfigManagerInterface::class);
+        $storeConfigs = $defaultStoreConfigsManager->getStoreConfigs();
+
+        $query
+            = <<<QUERY
+{
+  availableStores {
+    id,
+    code,
+    website_id,
+    locale,
+    base_currency_code,
+    default_display_currency_code,
+    timezone,
+    weight_unit,
+    base_url,
+    base_link_url,
+    base_static_url,
+    base_media_url,
+    secure_base_url,
+    secure_base_link_url,
+    secure_base_static_url,
+    secure_base_media_url,
+    store_name
+  }
+}
+QUERY;
+        $response = $this->graphQlQuery($query);
+
+        $this->assertArrayHasKey('availableStores', $response);
         foreach ($storeConfigs as $key => $storeConfig) {
-            $this->assertArrayHasKey($key, $response['storeConfig']['stores']);
-            $this->validateStoreConfig($storeConfig, $response['storeConfig']['stores'][$key]);
+            $this->validateStoreConfig($storeConfig, $response['availableStores'][$key]);
         }
     }
 
