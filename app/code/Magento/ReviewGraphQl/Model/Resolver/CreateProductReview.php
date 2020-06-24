@@ -15,6 +15,7 @@ use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Review\Helper\Data as ReviewHelper;
+use Magento\Review\Model\Review\Config as ReviewsConfig;
 use Magento\ReviewGraphQl\Mapper\ReviewDataMapper;
 use Magento\ReviewGraphQl\Model\Review\AddReviewToProduct;
 use Magento\Store\Api\Data\StoreInterface;
@@ -40,19 +41,27 @@ class CreateProductReview implements ResolverInterface
     private $reviewDataMapper;
 
     /**
+     * @var ReviewsConfig
+     */
+    private $reviewsConfig;
+
+    /**
      * @param AddReviewToProduct $addReviewToProduct
      * @param ReviewDataMapper $reviewDataMapper
      * @param ReviewHelper $reviewHelper
+     * @param ReviewsConfig $reviewsConfig
      */
     public function __construct(
         AddReviewToProduct $addReviewToProduct,
         ReviewDataMapper $reviewDataMapper,
-        ReviewHelper $reviewHelper
+        ReviewHelper $reviewHelper,
+        ReviewsConfig $reviewsConfig
     ) {
 
         $this->addReviewToProduct = $addReviewToProduct;
         $this->reviewDataMapper = $reviewDataMapper;
         $this->reviewHelper = $reviewHelper;
+        $this->reviewsConfig = $reviewsConfig;
     }
 
     /**
@@ -78,6 +87,10 @@ class CreateProductReview implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        if (false === $this->reviewsConfig->isEnabled()) {
+            throw new GraphQlAuthorizationException(__('Creating product reviews are not currently available.'));
+        }
+
         $input = $args['input'];
         $customerId = null;
 

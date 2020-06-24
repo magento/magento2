@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Review\Model\Review\Config as ReviewsConfig;
 use Magento\Review\Model\Review\SummaryFactory;
 use Magento\Store\Api\Data\StoreInterface;
 
@@ -28,12 +29,20 @@ class RatingSummary implements ResolverInterface
     private $summaryFactory;
 
     /**
+     * @var ReviewsConfig
+     */
+    private $reviewsConfig;
+
+    /**
      * @param SummaryFactory $summaryFactory
+     * @param ReviewsConfig $reviewsConfig
      */
     public function __construct(
-        SummaryFactory $summaryFactory
+        SummaryFactory $summaryFactory,
+        ReviewsConfig $reviewsConfig
     ) {
         $this->summaryFactory = $summaryFactory;
+        $this->reviewsConfig = $reviewsConfig;
     }
 
     /**
@@ -58,6 +67,10 @@ class RatingSummary implements ResolverInterface
         array $value = null,
         array $args = null
     ): float {
+        if (false === $this->reviewsConfig->isEnabled()) {
+            return 0;
+        }
+
         if (!isset($value['model'])) {
             throw new GraphQlInputException(__('Value must contain "model" property.'));
         }

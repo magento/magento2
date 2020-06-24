@@ -29,7 +29,6 @@ class ReviewDataMapper
             'text' => $review->getData('detail'),
             'nickname' => $review->getData('nickname'),
             'created_at' => $review->getData('created_at'),
-            'rating_votes' => $review->getData('rating_votes'),
             'sku' => $review->getSku(),
             'model' => $review
         ];

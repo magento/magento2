@@ -15,6 +15,7 @@ use Magento\Catalog\Model\Product;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Review\Model\Review;
+use Magento\Review\Model\Review\Config as ReviewsConfig;
 
 /**
  * Product total review count
@@ -27,11 +28,18 @@ class ReviewCount implements ResolverInterface
     private $review;
 
     /**
-     * @param Review $review
+     * @var ReviewsConfig
      */
-    public function __construct(Review $review)
+    private $reviewsConfig;
+
+    /**
+     * @param Review $review
+     * @param ReviewsConfig $reviewsConfig
+     */
+    public function __construct(Review $review, ReviewsConfig $reviewsConfig)
     {
         $this->review = $review;
+        $this->reviewsConfig = $reviewsConfig;
     }
 
     /**
@@ -56,6 +64,10 @@ class ReviewCount implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        if (false === $this->reviewsConfig->isEnabled()) {
+            return 0;
+        }
+
         if (!isset($value['model'])) {
             throw new GraphQlInputException(__('Value must contain "model" property.'));
         }

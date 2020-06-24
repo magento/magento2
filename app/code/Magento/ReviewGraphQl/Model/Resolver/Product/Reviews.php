@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Review\Model\Review\Config as ReviewsConfig;
 use Magento\ReviewGraphQl\Model\DataProvider\AggregatedReviewsDataProvider;
 use Magento\ReviewGraphQl\Model\DataProvider\ProductReviewsDataProvider;
 
@@ -33,15 +34,23 @@ class Reviews implements ResolverInterface
     private $aggregatedReviewsDataProvider;
 
     /**
+     * @var ReviewsConfig
+     */
+    private $reviewsConfig;
+
+    /**
      * @param ProductReviewsDataProvider $productReviewsDataProvider
      * @param AggregatedReviewsDataProvider $aggregatedReviewsDataProvider
+     * @param ReviewsConfig $reviewsConfig
      */
     public function __construct(
         ProductReviewsDataProvider $productReviewsDataProvider,
-        AggregatedReviewsDataProvider $aggregatedReviewsDataProvider
+        AggregatedReviewsDataProvider $aggregatedReviewsDataProvider,
+        ReviewsConfig $reviewsConfig
     ) {
         $this->productReviewsDataProvider = $productReviewsDataProvider;
         $this->aggregatedReviewsDataProvider = $aggregatedReviewsDataProvider;
+        $this->reviewsConfig = $reviewsConfig;
     }
 
     /**
@@ -66,6 +75,10 @@ class Reviews implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        if (false === $this->reviewsConfig->isEnabled()) {
+            return ['items' => []];
+        }
+
         if (!isset($value['model'])) {
             throw new GraphQlInputException(__('Value must contain "model" property.'));
         }

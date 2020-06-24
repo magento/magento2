@@ -15,6 +15,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Review\Model\ResourceModel\Rating\Collection as RatingCollection;
 use Magento\Review\Model\ResourceModel\Rating\CollectionFactory;
 use Magento\Review\Model\Review;
+use Magento\Review\Model\Review\Config as ReviewsConfig;
 use Magento\Store\Api\Data\StoreInterface;
 
 /**
@@ -28,11 +29,18 @@ class ProductReviewRatingsMetadata implements ResolverInterface
     private $ratingCollectionFactory;
 
     /**
-     * @param CollectionFactory $ratingCollectionFactory
+     * @var ReviewsConfig
      */
-    public function __construct(CollectionFactory $ratingCollectionFactory)
+    private $reviewsConfig;
+
+    /**
+     * @param CollectionFactory $ratingCollectionFactory
+     * @param ReviewsConfig $reviewsConfig
+     */
+    public function __construct(CollectionFactory $ratingCollectionFactory, ReviewsConfig $reviewsConfig)
     {
         $this->ratingCollectionFactory = $ratingCollectionFactory;
+        $this->reviewsConfig = $reviewsConfig;
     }
 
     /**
@@ -55,6 +63,10 @@ class ProductReviewRatingsMetadata implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        if (false === $this->reviewsConfig->isEnabled()) {
+            return ['items' => []];
+        }
+
         $items = [];
         /** @var StoreInterface $store */
         $store = $context->getExtensionAttributes()->getStore();
