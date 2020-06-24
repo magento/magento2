@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Plugin;
 
-use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Model\Service\OrderService;
-use Magento\SalesRule\Model\Coupon\UpdateCouponUsages;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteManagement;
+use Magento\SalesRule\Model\Coupon\Quote\UpdateCouponUsages;
 
 /**
- * Increments number of coupon usages after placing order.
+ * Increments number of coupon usages before placing order
  */
 class CouponUsagesIncrement
 {
@@ -24,24 +24,22 @@ class CouponUsagesIncrement
     /**
      * @param UpdateCouponUsages $updateCouponUsages
      */
-    public function __construct(
-        UpdateCouponUsages $updateCouponUsages
-    ) {
+    public function __construct(UpdateCouponUsages $updateCouponUsages)
+    {
         $this->updateCouponUsages = $updateCouponUsages;
     }
 
     /**
-     * Increments number of coupon usages after placing order.
+     * Increments number of coupon usages before placing order
      *
-     * @param OrderService $subject
-     * @param OrderInterface $result
-     * @return OrderInterface
+     * @param QuoteManagement $subject
+     * @param Quote $quote
+     * @param array $orderData
+     * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterPlace(OrderService $subject, OrderInterface $result): OrderInterface
+    public function beforeSubmit(QuoteManagement $subject, Quote $quote, $orderData = [])
     {
-        $this->updateCouponUsages->execute($result, true);
-
-        return $result;
+        $this->updateCouponUsages->execute($quote, true);
     }
 }
