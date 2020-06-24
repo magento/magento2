@@ -49,6 +49,6 @@ class AssignCouponDataAfterOrderCustomerAssignObserver implements ObserverInterf
             return;
         }
 
-        $this->updateCouponUsages->execute($order, false);
+        $this->updateCouponUsages->execute($order, true);
     }
 }
