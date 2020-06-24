@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 use Magento\Catalog\Api\Data\ProductInterface;
 
 /**
- * Configurable test
+ * Test reindex of configurable products
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @magentoAppArea adminhtml
@@ -137,7 +137,6 @@ class ConfigurableTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/enable_price_index_schedule.php
-     * @magentoDataFixture Magento/CatalogInventory/_files/enable_stock_index_schedule.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable_with_assigned_simples.php
      * @magentoDbIsolation disabled
      *
