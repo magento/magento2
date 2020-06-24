@@ -125,24 +125,21 @@ class Collection extends AbstractCollection implements OrderAddressSearchResultI
             $connection->quoteIdentifier('rct.default_name'),
             $connection->quoteIdentifier('main_table.region')
         );
-        $expression = $connection->getIfNullSql(
-            $connection->quoteIdentifier('rnt.name'),
-            $defaultNameExpr
-        );
+        $expression = $connection->getIfNullSql($connection->quoteIdentifier('rnt.name'), $defaultNameExpr);
 
         $regionIdField = $connection->quoteIdentifier('main_table.region_id');
         $localeCondition = $connection->quoteInto("rnt.locale=?", $locale);
 
         $this->getSelect()
  	 	    ->joinLeft(
- 	 	 	    ['rct' => $this->getTable('directory_country_region')],
- 	 	 	"rct.region_id={$regionIdField}",
+ 	 	        ['rct' => $this->getTable('directory_country_region')],
+                "rct.region_id={$regionIdField}",
                 []
             )->joinLeft(
                 ['rnt' => $this->getTable('directory_country_region_name')],
-            "rnt.region_id={$regionIdField} AND {$localeCondition}",
+                "rnt.region_id={$regionIdField} AND {$localeCondition}",
                 ['region' => $expression]
-            );
+        );
 
         return $this;
     }
