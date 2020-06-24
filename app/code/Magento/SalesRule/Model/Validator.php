@@ -387,8 +387,8 @@ class Validator extends \Magento\Framework\Model\AbstractModel
                     $address->setCartFixedRules($cartRules);
                     break;
                 case Rule::BUY_X_GET_Y_ACTION:
-                    $qty = $this->getDiscountQtyAllItemsBuyXGetYAction($quote, $rule);
-                    $quoteAmount = $address->getBaseShippingAmount() / $quote->getItemsQty() * $qty;
+                    $allQtyDiscount = $this->getDiscountQtyAllItemsBuyXGetYAction($quote, $rule);
+                    $quoteAmount = $address->getBaseShippingAmount() / $quote->getItemsQty() * $allQtyDiscount;
                     $discountAmount = $this->priceCurrency->convert($quoteAmount, $quote->getStore());
                     $baseDiscountAmount = $quoteAmount;
                     break;
@@ -495,25 +495,25 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @param Rule $rule
      * @return float
      */
-    private function getDiscountQtyAllItemsBuyXGetYAction($quote, $rule)
+    private function getDiscountQtyAllItemsBuyXGetYAction(Quote $quote, Rule $rule): float
     {
         $discountAllQty = 0;
         foreach ($quote->getItems() as $item) {
             $qty = $item->getQty();
 
-            $x = $rule->getDiscountStep();
-            $y = $rule->getDiscountAmount();
-            if (!$x || $y > $x) {
+            $discountStep = $rule->getDiscountStep();
+            $discountAmount = $rule->getDiscountAmount();
+            if (!$discountStep || $discountAmount > $discountStep) {
                 continue;
             }
-            $buyAndDiscountQty = $x + $y;
+            $buyAndDiscountQty = $discountStep + $discountAmount;
 
             $fullRuleQtyPeriod = floor($qty / $buyAndDiscountQty);
             $freeQty = $qty - $fullRuleQtyPeriod * $buyAndDiscountQty;
 
-            $discountQty = $fullRuleQtyPeriod * $y;
-            if ($freeQty > $x) {
-                $discountQty += $freeQty - $x;
+            $discountQty = $fullRuleQtyPeriod * $discountAmount;
+            if ($freeQty > $discountStep) {
+                $discountQty += $freeQty - $discountStep;
             }
 
             $discountAllQty += $discountQty;
