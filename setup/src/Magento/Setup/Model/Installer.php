@@ -338,6 +338,7 @@ class Installer
             $script[] = ['Cleaning up database...', 'cleanupDb', []];
         }
         $script[] = ['Installing database schema:', 'installSchema', [$request]];
+        $script[] = ['Installing search configuration...', 'installSearchConfiguration', [$request]];
         $script[] = ['Installing user configuration...', 'installUserConfig', [$request]];
         $script[] = ['Enabling caches:', 'updateCaches', [true]];
         $script[] = ['Installing data...', 'installDataFixtures', [$request]];
@@ -817,6 +818,28 @@ class Installer
     }
 
     /**
+     * Clear memory tables
+     *
+     * Memory tables that used in old versions of Magento for indexing purposes should be cleaned
+     * Otherwise some supported DB solutions like Galeracluster may have replication error
+     * when memory engine will be switched to InnoDb
+     *
+     * @param SchemaSetupInterface $setup
+     * @return void
+     */
+    private function cleanMemoryTables(SchemaSetupInterface $setup)
+    {
+        $connection = $setup->getConnection();
+        $tables = $connection->getTables();
+        foreach ($tables as $table) {
+            $tableData = $connection->showTableStatus($table);
+            if (isset($tableData['Engine']) && $tableData['Engine'] === 'MEMORY') {
+                $connection->truncateTable($table);
+            }
+        }
+    }
+
+    /**
      * Installs DB schema
      *
      * @param array $request
@@ -834,6 +857,7 @@ class Installer
         $setup = $this->setupFactory->create($this->context->getResources());
         $this->setupModuleRegistry($setup);
         $this->setupCoreTables($setup);
+        $this->cleanMemoryTables($setup);
         $this->log->log('Schema creation/updates:');
         $this->declarativeInstallSchema($request);
         $this->handleDBSchemaData($setup, 'schema', $request);
@@ -1104,6 +1128,21 @@ class Installer
             $configModel->setDataByPath($key, $val);
             $configModel->save();
         }
+    }
+
+    /**
+     * Configure search engine on install
+     *
+     * @param \ArrayObject|array $data
+     * @return void
+     * @throws \Magento\Framework\Validation\ValidationException
+     * @throws \Magento\Setup\Exception
+     */
+    public function installSearchConfiguration($data)
+    {
+        /** @var SearchConfig $searchConfig */
+        $searchConfig = $this->objectManagerProvider->get()->get(SearchConfig::class);
+        $searchConfig->saveConfiguration($data);
     }
 
     /**

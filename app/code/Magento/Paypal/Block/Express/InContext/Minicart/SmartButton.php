@@ -27,6 +27,8 @@ class SmartButton extends Template implements ShortcutInterface
 {
     private const ALIAS_ELEMENT_INDEX = 'alias';
 
+    const PAYPAL_BUTTON_ID = 'paypal-express-in-context-checkout-main';
+
     /**
      * @var Config
      */

@@ -111,8 +111,7 @@ class Loader
      * </code>
      *
      * @return \Traversable
-     *
-     * @author Josh Di Fabio <joshdifabio@gmail.com>
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
     private function getModuleConfigs()
     {

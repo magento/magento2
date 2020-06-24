@@ -16,12 +16,14 @@
             <description value="Admin can not able create a CMS block with marginal space in identifier field"/>
             <severity value="CRITICAL"/>
             <group value="Cms"/>
-            <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
         </before>
-
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
         <amOnPage url="{{CmsNewBlock.url}}" stepKey="amOnBlocksCreationForm"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <!--Verify Save&Duplicate button and Save&Close button-->

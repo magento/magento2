@@ -20,7 +20,7 @@
             <group value="CatalogRule"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
 
             <createData entity="ApiCategory" stepKey="createFirstCategory"/>
             <createData entity="ApiSimpleProduct" stepKey="createFirstProduct">
@@ -44,6 +44,7 @@
             <createData entity="productDropDownAttribute" stepKey="createSecondProductAttribute">
                 <field key="scope">website</field>
             </createData>
+            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
         </before>
         <after>
 
@@ -63,8 +64,7 @@
             <deleteData createDataKey="createSecondProductAttribute" stepKey="deleteSecondProductAttribute"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
         </after>
 
         <!--Create catalog price rule-->
@@ -80,7 +80,6 @@
             <argument name="targetSelectValue" value="is undefined"/>
         </actionGroup>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules"/>
-        <wait time="60" stepKey="waitMinute"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <magentoCLI command="cache:flush" stepKey="flushCache"/>
         <magentoCLI command="cache:flush" stepKey="flushCache3"/>
@@ -89,13 +88,19 @@
         <amOnPage url="{{StorefrontProductPage.url($$createFirstProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToFirstProductPage"/>
         <waitForPageLoad stepKey="waitForFirstProductPageLoad"/>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.updatedPrice}}" stepKey="grabFirstProductUpdatedPrice"/>
-        <assertEquals expected='$110.70' expectedType="string" actual="($grabFirstProductUpdatedPrice)" stepKey="assertFirstProductUpdatedPrice"/>
+        <assertEquals stepKey="assertFirstProductUpdatedPrice">
+			<actualResult type="const">($grabFirstProductUpdatedPrice)</actualResult>
+			<expectedResult type="string">$110.70</expectedResult>
+        </assertEquals>
 
         <!--Check Catalog Price Rule for second product-->
         <amOnPage url="{{StorefrontProductPage.url($$createSecondProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSecondProductPage"/>
         <waitForPageLoad stepKey="waitForSecondProductPageLoad"/>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.updatedPrice}}" stepKey="grabSecondProductUpdatedPrice"/>
-        <assertEquals expected='$110.70' expectedType="string" actual="($grabFirstProductUpdatedPrice)" stepKey="assertSecondProductUpdatedPrice"/>
+        <assertEquals stepKey="assertSecondProductUpdatedPrice">
+			<actualResult type="const">($grabFirstProductUpdatedPrice)</actualResult>
+			<expectedResult type="string">$110.70</expectedResult>
+        </assertEquals>
 
         <!--Delete previous attribute and Catalog Price Rule-->
         <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
@@ -123,7 +128,6 @@
             <argument name="targetSelectValue" value="is undefined"/>
         </actionGroup>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules1"/>
-        <wait time="60" stepKey="waitForMinute"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
         <magentoCLI command="cache:flush" stepKey="flushCache1"/>
         <magentoCLI command="cache:flush" stepKey="flushCache2"/>
@@ -132,12 +136,18 @@
         <amOnPage url="{{StorefrontProductPage.url($$createThirdProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToThirdProductPage"/>
         <waitForPageLoad stepKey="waitForThirdProductPageLoad"/>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.updatedPrice}}" stepKey="grabThirdProductUpdatedPrice"/>
-        <assertEquals expected='$110.70' expectedType="string" actual="($grabThirdProductUpdatedPrice)" stepKey="assertThirdProductUpdatedPrice"/>
+        <assertEquals stepKey="assertThirdProductUpdatedPrice">
+			<actualResult type="const">($grabThirdProductUpdatedPrice)</actualResult>
+			<expectedResult type="string">$110.70</expectedResult>
+        </assertEquals>
 
         <!--Check Catalog Price Rule for forth product-->
         <amOnPage url="{{StorefrontProductPage.url($$createForthProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToForthProductPage"/>
         <waitForPageLoad stepKey="waitForForthProductPageLoad"/>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.updatedPrice}}" stepKey="grabForthProductUpdatedPrice"/>
-        <assertEquals expected='$110.70' expectedType="string" actual="($grabForthProductUpdatedPrice)" stepKey="assertForthProductUpdatedPrice"/>
+        <assertEquals stepKey="assertForthProductUpdatedPrice">
+			<actualResult type="const">($grabForthProductUpdatedPrice)</actualResult>
+			<expectedResult type="string">$110.70</expectedResult>
+        </assertEquals>
     </test>
 </tests>

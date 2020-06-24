@@ -22,8 +22,8 @@
         <before>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>

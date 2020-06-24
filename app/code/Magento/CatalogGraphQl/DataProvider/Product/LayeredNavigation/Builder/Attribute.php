@@ -133,6 +133,7 @@ class Attribute implements LayerBuilderInterface
      * Get list of attributes with options
      *
      * @param AggregationInterface $aggregation
+     * @param int|null $storeId
      * @return array
      * @throws \Zend_Db_Statement_Exception
      */

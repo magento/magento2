@@ -5,6 +5,12 @@
  */
 namespace Magento\Setup\Module\Di\App\Task;
 
+use Magento\Setup\Module\Di\App\Task\Operation\AppActionListGenerator;
+use Magento\Setup\Module\Di\App\Task\Operation\PluginListGenerator;
+
+/**
+ * Factory that creates list of OperationInterface classes
+ */
 class OperationFactory
 {
     /**
@@ -48,6 +54,11 @@ class OperationFactory
     const APPLICATION_CODE_GENERATOR = 'application_code_generator';
 
     /**
+     * Application action list generator
+     */
+    const APPLICATION_ACTION_LIST_GENERATOR = 'application_action_list_generator';
+
+    /**
      * Operations definitions
      *
      * @var array
@@ -61,6 +72,7 @@ class OperationFactory
         self::INTERCEPTION_CACHE => \Magento\Setup\Module\Di\App\Task\Operation\InterceptionCache::class,
         self::REPOSITORY_GENERATOR => \Magento\Setup\Module\Di\App\Task\Operation\RepositoryGenerator::class,
         self::PROXY_GENERATOR => \Magento\Setup\Module\Di\App\Task\Operation\ProxyGenerator::class,
+        self::APPLICATION_ACTION_LIST_GENERATOR => AppActionListGenerator::class,
     ];
 
     /**

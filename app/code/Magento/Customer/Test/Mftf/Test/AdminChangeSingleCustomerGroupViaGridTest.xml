@@ -23,7 +23,7 @@
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <createData entity="CustomerGroupChange" stepKey="createCustomerGroup"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Delete created data-->

@@ -45,6 +45,9 @@ class DateType extends ProductDateOptionType
     {
         if (isset($values[$this->getOption()->getId()])) {
             $value = $values[$this->getOption()->getId()];
+            if (isset($value['date']) || isset($value['day'], $value['month'], $value['year'])) {
+                return $values;
+            }
             $dateTime = \DateTime::createFromFormat(DateTime::DATETIME_PHP_FORMAT, $value);
 
             if ($dateTime === false) {

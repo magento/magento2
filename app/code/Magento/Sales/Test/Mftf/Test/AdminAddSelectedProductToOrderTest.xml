@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddSelectedProductToOrderTest">
+        <annotations>
+            <features value="CatalogInventory"/>
+            <stories value="Admin create order"/>
+            <title value="Add selected products to order in Admin when requested qty more than available"/>
+            <description value="Trying to add selected products to order in Admin when requested qty more than available"/>
+            <useCaseId value="MC-29184"/>
+            <testCaseId value="MC-31589"/>
+            <severity value="MAJOR"/>
+            <group value="sales"/>
+            <group value="catalogInventory"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="simpleCustomer"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Initiate create new order -->
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderPageWithExistingCustomer">
+            <argument name="customer" value="$simpleCustomer$"/>
+        </actionGroup>
+        <!-- Add to order maximum available quantity - 1 -->
+        <executeJS function="return {{SimpleProduct2.quantity}} - 1" stepKey="maxQtyMinusOne"/>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProductToOrderWithMaxQtyMinusOne">
+            <argument name="product" value="$simpleProduct$"/>
+            <argument name="productQty" value="{$maxQtyMinusOne}"/>
+        </actionGroup>
+        <!-- Check that there is no error or notice -->
+        <actionGroup ref="AssertAdminItemOrderedErrorNotVisibleActionGroup" stepKey="assertNoticeAbsent">
+            <argument name="productName" value="$simpleProduct.name$"/>
+            <argument name="messageType" value="notice"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminItemOrderedErrorNotVisibleActionGroup" stepKey="assertErrorAbsent">
+            <argument name="productName" value="$simpleProduct.name$"/>
+            <argument name="messageType" value="error"/>
+        </actionGroup>
+        <!-- Add to order maximum available quantity -->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProductToOrder">
+            <argument name="product" value="$simpleProduct$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <!-- Check that there is no error or notice -->
+        <actionGroup ref="AssertAdminItemOrderedErrorNotVisibleActionGroup" stepKey="assertNoticeAbsentAgain">
+            <argument name="productName" value="$simpleProduct.name$"/>
+            <argument name="messageType" value="notice"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminItemOrderedErrorNotVisibleActionGroup" stepKey="assertErrorAbsentAgain">
+            <argument name="productName" value="$simpleProduct.name$"/>
+            <argument name="messageType" value="error"/>
+        </actionGroup>
+        <!-- Add to order one more quantity -->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProductToOrderAgain">
+            <argument name="product" value="$simpleProduct$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <!-- Check that error remains -->
+        <see userInput="The requested qty is not available" stepKey="assertProductErrorRemains"/>
+    </test>
+</tests>

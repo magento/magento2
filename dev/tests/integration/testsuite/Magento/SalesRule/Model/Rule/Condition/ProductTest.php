@@ -24,7 +24,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -87,7 +87,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         $rule = $this->objectManager->get(Registry::class)
             ->registry('_fixture/Magento_SalesRule_Sku_Exclude');
 
-        $this->assertEquals(false, $rule->validate($quote));
+        $this->assertFalse($rule->validate($quote));
     }
 
     /**

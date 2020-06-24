@@ -49,8 +49,14 @@ class MergeQuoteItemsTest extends TestCase
     {
         $this->plugin = (new ObjectManagerHelper($this))->getObject(MergeQuoteItems::class);
         $this->processorMock = $this->createMock(Processor::class);
-        $this->resultMock = $this->createPartialMock(Item::class, ['setGiftMessageId']);
-        $this->sourceMock = $this->createPartialMock(Item::class, ['getGiftMessageId']);
+        $this->resultMock = $this->getMockBuilder(Item::class)
+            ->addMethods(['setGiftMessageId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->sourceMock = $this->getMockBuilder(Item::class)
+            ->addMethods(['getGiftMessageId'])
+            ->disableOriginalConstructor()
+            ->getMock();
     }
 
     /**

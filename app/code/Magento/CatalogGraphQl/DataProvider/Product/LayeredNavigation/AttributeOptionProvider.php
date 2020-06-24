@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\CatalogGraphQl\DataProvider\Product\LayeredNavigation;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Store\Model\Store;
 
 /**
  * Fetch product attribute option data including attribute info
@@ -46,6 +47,7 @@ class AttributeOptionProvider
      * Get option data. Return list of attributes with option data
      *
      * @param array $optionIds
+     * @param int|null $storeId
      * @param array $attributeCodes
      * @return array
      * @throws \Zend_Db_Statement_Exception
@@ -56,6 +58,7 @@ class AttributeOptionProvider
             return [];
         }
 
+        $storeId = $storeId ?: Store::DEFAULT_STORE_ID;
         $connection = $this->resourceConnection->getConnection();
         $select = $connection->select()            
             ->from(
@@ -83,10 +86,22 @@ class AttributeOptionProvider
                 ['option_value' => $this->resourceConnection->getTableName('eav_attribute_option_value')],
                 'options.option_id = option_value.option_id',
                 [
-                    'option_label' => 'option_value.value',
                     'option_id' => 'option_value.option_id',
                     'option_store_id' => 'option_value.store_id'
                 ]
+            )->joinLeft(
+                ['option_value_store' => $this->resourceConnection->getTableName('eav_attribute_option_value')],
+                "options.option_id = option_value_store.option_id AND option_value_store.store_id = {$storeId}",
+                [
+                    'option_label' => $connection->getCheckSql(
+                        'option_value_store.value_id > 0',
+                        'option_value_store.value',
+                        'option_value.value'
+                    )
+                ]
+            )->where(
+                'a.attribute_id = options.attribute_id AND option_value.store_id = ?',
+                Store::DEFAULT_STORE_ID
             );
 
         $select->where('option_value.option_id IN (?)', $optionIds);

@@ -24,7 +24,7 @@
             <createData entity="SimpleProduct" stepKey="product">
                 <requiredEntity createDataKey="category"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
@@ -86,8 +86,7 @@
         <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addProductToCart"/>
         <waitForPageLoad stepKey="waitForAddToCart"/>
         <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCartPage"/>
-        <waitForPageLoad stepKey="waitForCartPage"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage"/>
         <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="applyCoupon">
             <argument name="coupon" value="_defaultCoupon"/>
         </actionGroup>
