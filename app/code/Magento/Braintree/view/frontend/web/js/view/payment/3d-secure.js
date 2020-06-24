@@ -126,7 +126,7 @@ define([
      }
      String.prototype.toASCII = function() {
 
-       return this.replace(/[^A-Za-z0-9\[\] ]/g, function(a) { console.log('toASCII='+a); return diacriticsMap[a] || a; })
+       return this.replace(/[^A-Za-z0-9\[\] ]/g, function(a) { return diacriticsMap[a] || a; })
      };
      String.prototype.isASCII = function() {
        return this == this.toASCII();
