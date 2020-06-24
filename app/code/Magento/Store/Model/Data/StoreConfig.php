@@ -6,8 +6,8 @@
 namespace Magento\Store\Model\Data;
 
 /**
- * Class StoreConfig
  * Allows to get and set store config values
+ *
  * @codeCoverageIgnore
  */
 class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implements

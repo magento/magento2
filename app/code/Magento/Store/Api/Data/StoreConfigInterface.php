@@ -6,10 +6,9 @@
 namespace Magento\Store\Api\Data;
 
 /**
- * StoreConfig interface
  * Interface for store config
+ *
  * @api
- * @since 100.0.2
  */
 interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInterface
 {
