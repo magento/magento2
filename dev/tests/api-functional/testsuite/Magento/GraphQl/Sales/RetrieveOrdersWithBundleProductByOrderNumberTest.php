@@ -163,8 +163,8 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
      */
     private function assertTotalsOnBundleProductWithTaxesAndDiscounts(array $customerOrderItemTotal): void
     {
-        $this->assertCount(2, $customerOrderItemTotal['taxes']);
-        $expectedProductAndShippingTaxes = [4.05, 1.35];
+        $this->assertCount(1, $customerOrderItemTotal['taxes']);
+        $expectedProductAndShippingTaxes = [5.4];
         $totalTaxes = [];
         foreach ($customerOrderItemTotal['taxes'] as $totalTaxFromResponse) {
             array_push($totalTaxes, $totalTaxFromResponse['amount']['value']);

@@ -168,8 +168,8 @@ QUERY;
      */
     private function assertTotalsWithTaxesAndDiscounts(array $customerOrderItemTotal): void
     {
-        $this->assertCount(2, $customerOrderItemTotal['taxes']);
-        $expectedProductAndShippingTaxes = [2.7, 1.35];
+        $this->assertCount(1, $customerOrderItemTotal['taxes']);
+        $expectedProductAndShippingTaxes = [4.05];
         $totalTaxes = [];
         foreach ($customerOrderItemTotal['taxes'] as $totalTaxFromResponse) {
             array_push($totalTaxes, $totalTaxFromResponse['amount']['value']);
@@ -744,8 +744,8 @@ QUERY;
      */
     private function assertTotalsAndShippingWithExcludedTaxSetting($customerOrderItemTotal): void
     {
-        $this->assertCount(2, $customerOrderItemTotal['taxes']);
-        $expectedProductAndShippingTaxes = [1.5, 0.75];
+        $this->assertCount(1, $customerOrderItemTotal['taxes']);
+        $expectedProductAndShippingTaxes = [2.25];
 
         $totalTaxes = [];
         foreach ($customerOrderItemTotal['taxes'] as $totalTaxFromResponse) {
@@ -819,8 +819,8 @@ QUERY;
      */
     private function assertTotalsAndShippingWithTaxes(array $customerOrderItemTotal): void
     {
-        $this->assertCount(2, $customerOrderItemTotal['taxes']);
-        $expectedProductAndShippingTaxes = [1.5, 0.75];
+        $this->assertCount(1, $customerOrderItemTotal['taxes']);
+        $expectedProductAndShippingTaxes = [2.25];
         $totalTaxes = [];
         foreach ($customerOrderItemTotal['taxes'] as $totalTaxFromResponse) {
             array_push($totalTaxes, $totalTaxFromResponse['amount']['value']);
