@@ -24,19 +24,24 @@ class SearchTest extends WebapiAbstract
      */
     private $product;
 
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
         $productSku = 'simple';
 
         $objectManager = Bootstrap::getObjectManager();
-        $productRepository = $objectManager->create(ProductRepositoryInterface::class);
+        $productRepository = $objectManager->get(ProductRepositoryInterface::class);
         $this->product = $productRepository->get($productSku);
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * Tests that webapi call returns response when search criteria is valid.
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
      */
-    public function testExistingProductSearch()
+    public function testExistingProductSearch(): void
     {
         $productName = $this->product->getName();
 
@@ -47,14 +52,16 @@ class SearchTest extends WebapiAbstract
 
         self::assertArrayHasKey('search_criteria', $response);
         self::assertArrayHasKey('items', $response);
-        self::assertGreaterThan(0, count($response['items']));
+        self::assertGreaterThan(1, count($response['items']));
         self::assertGreaterThan(0, $response['items'][0]['id']);
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * Tests that response is empty if invalid data is provided.
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/products.php
      */
-    public function testNonExistentProductSearch()
+    public function testNonExistentProductSearch(): void
     {
         $searchCriteria = $this->buildSearchCriteria('nonExistentProduct');
         $serviceInfo = $this->buildServiceInfo($searchCriteria);
