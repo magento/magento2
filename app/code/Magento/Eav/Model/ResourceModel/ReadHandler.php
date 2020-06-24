@@ -185,6 +185,10 @@ class ReadHandler implements AttributeInterface
                     );
                 }
             }
+
+            foreach (array_diff($attributesMap, array_keys($entityData)) as $attributeCode) {
+                $entityData[$attributeCode] = null;
+            }
         }
         return $entityData;
     }
