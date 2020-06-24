@@ -233,7 +233,7 @@
         <see userInput="Updated rules applied." selector="{{ContentManagementSection.StoreConfigurationPageSuccessMessage}}" stepKey="seeSuccessMessage"/>
 
         <!-- Run cron -->
-        <magentoCLI command="cron:run" stepKey="runCron"/>
+        <magentoCron stepKey="runAllCronJobs"/>
         <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
         <!-- Go to Frontend and open the simple product -->
