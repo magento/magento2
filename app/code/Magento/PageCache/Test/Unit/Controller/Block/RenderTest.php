@@ -162,15 +162,15 @@ class RenderTest extends TestCase
         $this->requestMock->expects($this->at(4))
             ->method('getRequestUri')
             ->willReturn('uri');
-        $this->requestMock->expects($this->at(5))
+        $this->requestMock->expects($this->at(9))
             ->method('getParam')
             ->with('originalRequest')
             ->willReturn('{"route":"route","controller":"controller","action":"action","uri":"uri"}');
-        $this->requestMock->expects($this->at(10))
+        $this->requestMock->expects($this->at(14))
             ->method('getParam')
             ->with('blocks', '')
             ->willReturn('');
-        $this->requestMock->expects($this->at(11))
+        $this->requestMock->expects($this->at(15))
             ->method('getParam')
             ->with('handles', '')
             ->willReturn('');
@@ -212,16 +212,16 @@ class RenderTest extends TestCase
         $this->requestMock->expects($this->at(4))
             ->method('getRequestUri')
             ->willReturn('uri');
-        $this->requestMock->expects($this->at(5))
+        $this->requestMock->expects($this->at(9))
             ->method('getParam')
             ->with('originalRequest')
             ->willReturn($originalRequest);
 
-        $this->requestMock->expects($this->at(10))
+        $this->requestMock->expects($this->at(14))
             ->method('getParam')
             ->with('blocks', '')
             ->willReturn(json_encode($blocks));
-        $this->requestMock->expects($this->at(11))
+        $this->requestMock->expects($this->at(15))
             ->method('getParam')
             ->with('handles', '')
             ->willReturn(base64_encode(json_encode($handles)));
@@ -283,7 +283,7 @@ class RenderTest extends TestCase
         $this->requestMock->expects($this->at(4))
             ->method('getRequestUri')
             ->willReturn($currentRequestUri);
-        $this->requestMock->expects($this->at(5))
+        $this->requestMock->expects($this->at(9))
             ->method('getParam')
             ->with('originalRequest')
             ->willReturn($originalRequest);
@@ -325,7 +325,7 @@ class RenderTest extends TestCase
         $this->requestMock->expects($this->at(4))
             ->method('getRequestUri')
             ->willReturn($currentRequestUri);
-        $this->requestMock->expects($this->at(5))
+        $this->requestMock->expects($this->at(9))
             ->method('getParam')
             ->with('originalRequest')
             ->willReturn($originalRequest);
@@ -460,13 +460,6 @@ class RenderTest extends TestCase
                 'currentAction',
                 'currentRequestUri',
                 '{"routes":"route","controller":"controller","action":"action","uri":"uri"}'
-            ],
-            [
-                'route',
-                'controller',
-                'currentAction',
-                'currentRequestUri',
-                ''
             ],
             [
                 'route',

@@ -17,7 +17,7 @@ class Render extends \Magento\PageCache\Controller\Block implements HttpGetActio
      */
     public function execute()
     {
-        if (!$this->getRequest()->isAjax()) {
+        if (!$this->validateRequestParameters()) {
             $this->_forward('noroute');
             return;
         }
@@ -28,32 +28,10 @@ class Render extends \Magento\PageCache\Controller\Block implements HttpGetActio
             $currentControllerName = $this->getRequest()->getControllerName();
             $currentActionName = $this->getRequest()->getActionName();
             $currentRequestUri = $this->getRequest()->getRequestUri();
-            if (!$currentRoute
-                || !$currentControllerName
-                || !$currentActionName
-                || !$currentRequestUri) {
+            if (!$this->validateAndProcessOriginalRequest()) {
                 $this->_forward('noroute');
                 return;
             }
-            $origRequest = $this->getRequest()->getParam('originalRequest');
-            if ($origRequest !== null) {
-                if ($origRequest && is_string($origRequest)) {
-                    $origRequest = $this->unserialize($origRequest);
-                }
-                if (!is_array($origRequest)
-                    || !isset($origRequest['route'])
-                    || !isset($origRequest['controller'])
-                    || !isset($origRequest['action'])
-                    || !isset($origRequest['uri'])) {
-                    $this->_forward('noroute');
-                    return;
-                }
-                $this->getRequest()->setRouteName($origRequest['route']);
-                $this->getRequest()->setControllerName($origRequest['controller']);
-                $this->getRequest()->setActionName($origRequest['action']);
-                $this->getRequest()->setRequestUri($origRequest['uri']);
-            }
-
             /** @var \Magento\Framework\View\Element\BlockInterface[] $blocks */
             $blocks = $this->_getBlocks();
             $data = [];
@@ -76,5 +54,47 @@ class Render extends \Magento\PageCache\Controller\Block implements HttpGetActio
             $this->_forward('noroute');
             return;
         }
+    }
+
+    /**
+     * Validate request parameters.
+     *
+     * @return bool
+     */
+    private function validateRequestParameters()
+    {
+        if (!$this->getRequest()->isAjax()
+            || !$this->getRequest()->getRouteName()
+            || !$this->getRequest()->getControllerName()
+            || !$this->getRequest()->getActionName()
+            || !$this->getRequest()->getRequestUri()) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Validate and process original request parameter.
+     *
+     * @return bool
+     */
+    private function validateAndProcessOriginalRequest()
+    {
+        $origRequest = $this->getRequest()->getParam('originalRequest');
+        if ($origRequest !== null && $origRequest && is_string($origRequest)) {
+            $origRequest = $this->unserialize($origRequest);
+            if (!is_array($origRequest)
+                || !isset($origRequest['route'])
+                || !isset($origRequest['controller'])
+                || !isset($origRequest['action'])
+                || !isset($origRequest['uri'])) {
+                return false;
+            }
+            $this->getRequest()->setRouteName($origRequest['route']);
+            $this->getRequest()->setControllerName($origRequest['controller']);
+            $this->getRequest()->setActionName($origRequest['action']);
+            $this->getRequest()->setRequestUri($origRequest['uri']);
+        }
+        return true;
     }
 }

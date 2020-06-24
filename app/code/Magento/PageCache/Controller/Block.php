@@ -7,9 +7,11 @@
  */
 namespace Magento\PageCache\Controller;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Base64Json;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
+use Psr\Log\LoggerInterface;
 
 abstract class Block extends \Magento\Framework\App\Action\Action
 {
@@ -49,7 +51,7 @@ abstract class Block extends \Magento\Framework\App\Action\Action
      * Block constructor.
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Framework\Translate\InlineInterface $translateInline
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param LoggerInterface $logger
      * @param Json|null $jsonSerializer
      * @param Base64Json|null $base64jsonSerializer
      * @param LayoutCacheKeyInterface|null $layoutCacheKey
@@ -57,20 +59,21 @@ abstract class Block extends \Magento\Framework\App\Action\Action
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
         \Magento\Framework\Translate\InlineInterface $translateInline,
-        \Psr\Log\LoggerInterface $logger,
+        LoggerInterface $logger = null,
         Json $jsonSerializer = null,
         Base64Json $base64jsonSerializer = null,
         LayoutCacheKeyInterface $layoutCacheKey = null
     ) {
         parent::__construct($context);
         $this->translateInline = $translateInline;
-        $this->logger = $logger;
+        $this->logger = $logger
+            ?: ObjectManager::getInstance()->get(LoggerInterface::class);
         $this->jsonSerializer = $jsonSerializer
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Json::class);
+            ?: ObjectManager::getInstance()->get(Json::class);
         $this->base64jsonSerializer = $base64jsonSerializer
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(Base64Json::class);
+            ?: ObjectManager::getInstance()->get(Base64Json::class);
         $this->layoutCacheKey = $layoutCacheKey
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(LayoutCacheKeyInterface::class);
+            ?: ObjectManager::getInstance()->get(LayoutCacheKeyInterface::class);
     }
 
     /**
@@ -108,7 +111,7 @@ abstract class Block extends \Magento\Framework\App\Action\Action
     /**
      * Unserialize JSON string
      *
-     * @param $string
+     * @param string $string
      * @return array|null
      */
     protected function unserialize($string)
