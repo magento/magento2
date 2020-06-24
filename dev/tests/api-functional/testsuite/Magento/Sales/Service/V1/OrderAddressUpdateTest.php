@@ -75,7 +75,7 @@ class OrderAddressUpdateTest extends WebapiAbstract
         $billingAddress = $actualOrder->getBillingAddress();
 
         $validate = [
-            OrderAddress::REGION => 'CA',
+            OrderAddress::REGION => 'California',
             OrderAddress::POSTCODE => '11111',
             OrderAddress::LASTNAME => 'lastname',
             OrderAddress::STREET => 'street',

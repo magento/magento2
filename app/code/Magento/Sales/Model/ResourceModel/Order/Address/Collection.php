@@ -93,8 +93,8 @@ class Collection extends AbstractCollection implements OrderAddressSearchResultI
     protected function _initSelect()
     {
         parent::_initSelect();
-        $this->joinRegionNameTable();
- 	 	return $this;
+        $this->joinRegions();
+        return $this;
     }
 
     /**
@@ -112,17 +112,27 @@ class Collection extends AbstractCollection implements OrderAddressSearchResultI
     }
 
     /**
-     * Join region name table by current locale
+     * Join region name table with current locale
      *
      * @return $this
      */
-    private function joinRegionNameTable()
+    private function joinRegions()
     {
         $locale = $this->localeResolver->getLocale();
-
         $connection = $this->getConnection();
+
+        $defaultNameExpr = $connection->getIfNullSql(
+            $connection->quoteIdentifier('rct.default_name'),
+            $connection->quoteIdentifier('main_table.region')
+        );
+        $expression = $connection->getIfNullSql(
+            $connection->quoteIdentifier('rnt.name'),
+            $defaultNameExpr
+        );
+
         $regionIdField = $connection->quoteIdentifier('main_table.region_id');
         $localeCondition = $connection->quoteInto("rnt.locale=?", $locale);
+
         $this->getSelect()
  	 	    ->joinLeft(
  	 	 	    ['rct' => $this->getTable('directory_country_region')],
@@ -131,28 +141,9 @@ class Collection extends AbstractCollection implements OrderAddressSearchResultI
             )->joinLeft(
                 ['rnt' => $this->getTable('directory_country_region_name')],
             "rnt.region_id={$regionIdField} AND {$localeCondition}",
-                ['region' => $this->getRegionNameExpresion()]
+                ['region' => $expression]
             );
 
         return $this;
-    }
-
-    /**
-     * Get SQL Expresion to define Region Name field by locale
-     *
-     * @return \Zend_Db_Expr
-     */
-    private function getRegionNameExpresion(): \Zend_Db_Expr
-    {
-        $connection = $this->getConnection();
-        $defaultNameExpr = $connection->getIfNullSql(
-            $connection->quoteIdentifier('rct.default_name'),
-            $connection->quoteIdentifier('main_table.region')
-        );
-
-        return $connection->getIfNullSql(
-            $connection->quoteIdentifier('rnt.name'),
-            $defaultNameExpr
-        );
     }
 }
