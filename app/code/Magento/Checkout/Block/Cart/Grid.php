@@ -23,11 +23,6 @@ class Grid extends \Magento\Checkout\Block\Cart
     const XPATH_CONFIG_NUMBER_ITEMS_TO_DISPLAY_PAGER = 'checkout/cart/number_items_to_display_pager';
 
     /**
-     * Config settings path to enable clear shopping cart button
-     */
-    const XPATH_CONFIG_ENABLE_CLEAR_SHOPPING_CART = 'checkout/cart/enable_clear_shopping_cart';
-
-    /**
      * @var \Magento\Quote\Model\ResourceModel\Quote\Item\Collection
      */
     private $itemsCollection;
@@ -107,7 +102,7 @@ class Grid extends \Magento\Checkout\Block\Cart
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @since 100.2.0
      */
@@ -152,7 +147,7 @@ class Grid extends \Magento\Checkout\Block\Cart
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @since 100.2.0
      */
@@ -166,8 +161,7 @@ class Grid extends \Magento\Checkout\Block\Cart
 
     /**
      * Verify if display pager on shopping cart
-     *
-     * Check if cart block has custom_items and items qty in the shopping cart<limit from stores configuration
+     * If cart block has custom_items and items qty in the shopping cart<limit from stores configuration
      *
      * @return bool
      */
@@ -181,18 +175,5 @@ class Grid extends \Magento\Checkout\Block\Cart
             $this->isPagerDisplayed = !$this->getCustomItems() && $availableLimit < $this->getItemsCount();
         }
         return $this->isPagerDisplayed;
-    }
-
-    /**
-     * Check if clear shopping cart button is enabled
-     *
-     * @return bool
-     */
-    public function isClearShoppingCartEnabled()
-    {
-        return (bool)$this->_scopeConfig->getValue(
-            self::XPATH_CONFIG_ENABLE_CLEAR_SHOPPING_CART,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        );
     }
 }

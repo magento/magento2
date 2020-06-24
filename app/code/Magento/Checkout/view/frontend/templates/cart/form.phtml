@@ -56,7 +56,7 @@
                 <span><?= $block->escapeHtml(__('Continue Shopping')) ?></span>
             </a>
         <?php endif; ?>
-        <?php if ($block->isClearShoppingCartEnabled()): ?>
+        <?php if ($block->getViewModel()->isClearShoppingCartEnabled()): ?>
             <button type="button"
                     name="update_cart_action"
                     data-cart-empty=""
