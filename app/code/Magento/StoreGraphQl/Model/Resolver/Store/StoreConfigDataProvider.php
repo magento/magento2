@@ -57,7 +57,7 @@ class StoreConfigDataProvider
     {
         return array_merge(
             $this->getBaseConfigData($store),
-            $this->getExtendedConfigData((int)$store->getId()),
+            $this->getExtendedConfigData((int)$store->getId())
         );
     }
 
