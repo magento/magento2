@@ -3,60 +3,68 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Ui\Component;
 
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
+use Magento\Customer\Api\Data\OptionInterface;
 use Magento\Customer\Ui\Component\FilterFactory;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponentFactory;
+use Magento\Ui\Component\Listing\Columns\ColumnInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test FilterFactory Class
  */
-class FilterFactoryTest extends \PHPUnit\Framework\TestCase
+class FilterFactoryTest extends TestCase
 {
-    /** @var \Magento\Customer\Api\Data\OptionInterface|MockObject */
+    /** @var OptionInterface|MockObject */
     protected $attributeOption;
 
-    /** @var \Magento\Framework\View\Element\UiComponent\ContextInterface|MockObject */
+    /** @var ContextInterface|MockObject */
     protected $context;
 
-    /** @var \Magento\Framework\View\Element\UiComponentFactory|MockObject */
+    /** @var UiComponentFactory|MockObject */
     protected $componentFactory;
 
-    /** @var \Magento\Customer\Api\Data\AttributeMetadataInterface|MockObject */
+    /** @var AttributeMetadataInterface|MockObject */
     protected $attributeMetadata;
 
-    /** @var \Magento\Ui\Component\Listing\Columns\ColumnInterface|MockObject */
+    /** @var ColumnInterface|MockObject */
     protected $filter;
 
     /** @var FilterFactory */
     protected $filterFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->context = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Element\UiComponent\ContextInterface::class,
+            ContextInterface::class,
             [],
             '',
             false
         );
         $this->componentFactory = $this->createPartialMock(
-            \Magento\Framework\View\Element\UiComponentFactory::class,
+            UiComponentFactory::class,
             ['create']
         );
         $this->attributeMetadata = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\AttributeMetadataInterface::class,
+            AttributeMetadataInterface::class,
             [],
             '',
             false
         );
         $this->filter = $this->getMockForAbstractClass(
-            \Magento\Ui\Component\Listing\Columns\ColumnInterface::class,
+            ColumnInterface::class,
             [],
             '',
             false
         );
         $this->attributeOption = $this->getMockForAbstractClass(
-            \Magento\Customer\Api\Data\OptionInterface::class,
+            OptionInterface::class,
             [],
             '',
             false

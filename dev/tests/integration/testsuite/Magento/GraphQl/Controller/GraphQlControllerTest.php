@@ -41,7 +41,7 @@ class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
     /** @var Http */
     private $request;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $db = Bootstrap::getInstance()->getBootstrap()
             ->getApplication()
@@ -54,7 +54,7 @@ class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
         parent::setUpBeforeClass();
     }
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);

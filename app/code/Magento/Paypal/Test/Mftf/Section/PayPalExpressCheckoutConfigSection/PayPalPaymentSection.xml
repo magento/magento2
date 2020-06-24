@@ -16,8 +16,13 @@
         <element name="reviewUserInfo" type="text" selector="[data-testid=personalized-banner-content]"/>
         <element name="cartIcon" type="text" selector="[data-testid='header-show-cart-dropdown-btn']"/>
         <element name="itemName" type="text" selector="//p[contains(@class,'CartDropdown_line') and text()='{{productName}}']" parameterized="true"/>
-        <element name="PayPalSubmitBtn" type="text" selector="#payment-submit-btn"/>
+        <element name="paypalSubmitBtn" type="text" selector="#payment-submit-btn"/>
         <element name="nextButton" type="button" selector="#btnNext"/>
         <element name="continueButton" type="button" selector=".continueButton"/>
+        <element name="userName" type="text" selector="#reviewUserInfo"/>
+        <element name="notYouLink" type="input" selector="#backToInputEmailLink"/>
+        <element name="shippingMethod" type="text" selector="#shippingMethodCharge > span.selectedShippingMethod"/>
+        <element name="paypalCart" type="text" selector="#transactionCart"/>
+        <element name="productNamePosition" type="text" selector=".itemName"/>
     </section>
 </sections>

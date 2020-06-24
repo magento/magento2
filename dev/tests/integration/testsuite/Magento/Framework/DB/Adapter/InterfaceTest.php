@@ -9,6 +9,9 @@
  */
 namespace Magento\Framework\DB\Adapter;
 
+/**
+ * @magentoDbIsolation disabled
+ */
 class InterfaceTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -31,7 +34,7 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
      */
     protected $_twoColumnIdxName;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\Framework\Setup\ModuleDataSetupInterface $installer */
         $installer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -69,14 +72,14 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     /**
      * Cleanup DDL cache for the fixture table
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_connection->dropTable($this->_tableName);
         $this->_connection->resetDdlCache($this->_tableName);
         $this->_connection = null;
     }
 
-    protected function assertPreConditions()
+    protected function assertPreConditions(): void
     {
         $this->assertTrue(
             $this->_connection->tableColumnExists($this->_tableName, 'column1'),
@@ -209,10 +212,11 @@ class InterfaceTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Zend_Db_Exception
      */
     public function testInsertArrayTwoColumnsWithSimpleData()
     {
+        $this->expectException(\Zend_Db_Exception::class);
+
         $this->_connection->insertArray($this->_tableName, ['column1', 'column2'], [1, 2]);
     }
 

@@ -16,7 +16,7 @@ class ProductImageTest extends GraphQlAbstract
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -36,12 +36,12 @@ class ProductImageTest extends GraphQlAbstract
             label
         }
     }
-  }    
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertContains('magento_image.jpg', $response['products']['items'][0]['image']['url']);
+        self::assertStringContainsString('magento_image.jpg', $response['products']['items'][0]['image']['url']);
         self::assertTrue($this->checkImageExists($response['products']['items'][0]['image']['url']));
         self::assertEquals('Image Alt Text', $response['products']['items'][0]['image']['label']);
     }
@@ -65,7 +65,7 @@ QUERY;
             label
         }
     }
-  }    
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -96,12 +96,12 @@ QUERY;
             label
         }
     }
-  }    
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertContains('magento_image.jpg', $response['products']['items'][0]['small_image']['url']);
+        self::assertStringContainsString('magento_image.jpg', $response['products']['items'][0]['small_image']['url']);
         self::assertTrue($this->checkImageExists($response['products']['items'][0]['small_image']['url']));
         self::assertEquals('Image Alt Text', $response['products']['items'][0]['small_image']['label']);
     }
@@ -121,12 +121,12 @@ QUERY;
             label
         }
     }
-  }    
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
 
-        self::assertContains('magento_image.jpg', $response['products']['items'][0]['thumbnail']['url']);
+        self::assertStringContainsString('magento_image.jpg', $response['products']['items'][0]['thumbnail']['url']);
         self::assertTrue($this->checkImageExists($response['products']['items'][0]['thumbnail']['url']));
         self::assertEquals('Image Alt Text', $response['products']['items'][0]['thumbnail']['label']);
     }

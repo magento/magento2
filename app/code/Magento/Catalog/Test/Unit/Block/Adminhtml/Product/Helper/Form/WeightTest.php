@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Block\Adminhtml\Product\Helper\Form;
 
 use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight;
@@ -42,15 +44,16 @@ class WeightTest extends TestCase
      */
     protected $localeFormat;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->weightSwitcher = $this->createPartialMock(
-            Radios::class,
-            ['setId', 'setName', 'setLabel', 'setForm']
-        );
-        $this->weightSwitcher->method('setId')->will($this->returnSelf());
-        $this->weightSwitcher->method('setName')->will($this->returnSelf());
-        $this->weightSwitcher->method('setLabel')->will($this->returnSelf());
+        $this->weightSwitcher = $this->getMockBuilder(Radios::class)
+            ->addMethods(['setName', 'setLabel'])
+            ->onlyMethods(['setId', 'setForm'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->weightSwitcher->method('setId')->willReturnSelf();
+        $this->weightSwitcher->method('setName')->willReturnSelf();
+        $this->weightSwitcher->method('setLabel')->willReturnSelf();
 
         $this->factory = $this->createMock(Factory::class);
         $this->factory->expects(
@@ -58,7 +61,7 @@ class WeightTest extends TestCase
         )->method(
             'create'
         )->with(
-            $this->equalTo('radios')
+            'radios'
         )->willReturn(
             $this->weightSwitcher
         );
@@ -85,9 +88,8 @@ class WeightTest extends TestCase
         $this->weightSwitcher->method(
             'setForm'
         )->with(
-            $this->equalTo($form)
-        )->will(
-            $this->returnSelf()
+            $form
+        )->willReturnSelf(
         );
 
         $this->_model->setForm($form);

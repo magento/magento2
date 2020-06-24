@@ -3,48 +3,60 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AsynchronousOperations\Test\Unit\Controller\Cron;
 
-class BulkCleanupTest extends \PHPUnit\Framework\TestCase
+use Magento\AsynchronousOperations\Cron\BulkCleanup;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Framework\Stdlib\DateTime;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class BulkCleanupTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $metadataPoolMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $dateTimeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var \Magento\AsynchronousOperations\Cron\BulkCleanup
+     * @var BulkCleanup
      */
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $timeMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->dateTimeMock = $this->createMock(\Magento\Framework\Stdlib\DateTime::class);
-        $this->scopeConfigMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->resourceConnectionMock = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
-        $this->metadataPoolMock = $this->createMock(\Magento\Framework\EntityManager\MetadataPool::class);
+        $this->dateTimeMock = $this->createMock(DateTime::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->resourceConnectionMock = $this->createMock(ResourceConnection::class);
+        $this->metadataPoolMock = $this->createMock(MetadataPool::class);
         $this->timeMock = $this->createMock(\Magento\Framework\Stdlib\DateTime\DateTime::class);
-        $this->model = new \Magento\AsynchronousOperations\Cron\BulkCleanup(
+        $this->model = new BulkCleanup(
             $this->metadataPoolMock,
             $this->resourceConnectionMock,
             $this->dateTimeMock,
@@ -60,8 +72,8 @@ class BulkCleanupTest extends \PHPUnit\Framework\TestCase
         $bulkLifetimeMultiplier = 10;
         $bulkLifetime = 3600 * 24 * $bulkLifetimeMultiplier;
 
-        $adapterMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
-        $entityMetadataMock = $this->createMock(\Magento\Framework\EntityManager\EntityMetadataInterface::class);
+        $adapterMock = $this->getMockForAbstractClass(AdapterInterface::class);
+        $entityMetadataMock = $this->getMockForAbstractClass(EntityMetadataInterface::class);
 
         $this->metadataPoolMock->expects($this->once())->method('getMetadata')->with($this->stringContains($entityType))
             ->willReturn($entityMetadataMock);

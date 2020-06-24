@@ -25,7 +25,7 @@ class MultiSelectTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->factory = Bootstrap::getObjectManager()->get(MultiSelectFactory::class);
     }

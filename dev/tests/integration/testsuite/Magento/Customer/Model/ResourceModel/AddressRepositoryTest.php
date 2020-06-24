@@ -45,7 +45,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -97,7 +97,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Tear down.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->customerRegistry->remove(1);
     }
@@ -132,11 +132,12 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture  Magento/Customer/_files/customer_address.php
      * @magentoDataFixture  Magento/Customer/_files/customer_two_addresses.php
      * @magentoAppIsolation enabled
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with addressId = 4200
      */
     public function testSaveAddressesIdSetButNotAlreadyExisting()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with addressId = 4200');
+
         $proposedAddress = $this->_createSecondAddress()->setId(4200);
         $this->repository->save($proposedAddress);
     }
@@ -160,11 +161,12 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
      * Test for method get address by id with incorrect id.
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage No such entity with addressId = 12345
      */
     public function testGetAddressByIdBadAddressId()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+        $this->expectExceptionMessage('No such entity with addressId = 12345');
+
         $this->repository->getById(12345);
     }
 
@@ -386,7 +388,7 @@ class AddressRepositoryTest extends \PHPUnit\Framework\TestCase
         $items = array_values($searchResults->getItems());
 
         $this->assertEquals(count($expectedResult), $searchResults->getTotalCount());
-        $this->assertEquals(1, count($items));
+        $this->assertCount(1, $items);
 
         $expectedResultIndex = count($expectedResult) - 1;
 

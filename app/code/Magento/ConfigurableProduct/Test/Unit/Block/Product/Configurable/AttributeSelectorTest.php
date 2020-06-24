@@ -3,26 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Block\Product\Configurable;
 
-class AttributeSelectorTest extends \PHPUnit\Framework\TestCase
+use Magento\ConfigurableProduct\Block\Product\Configurable\AttributeSelector;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AttributeSelectorTest extends TestCase
 {
     /**
-     * @var \Magento\ConfigurableProduct\Block\Product\Configurable\AttributeSelector
+     * @var AttributeSelector
      */
     protected $attributeSelector;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $urlBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->urlBuilder = $this->createMock(\Magento\Framework\UrlInterface::class);
+        $helper = new ObjectManager($this);
+        $this->urlBuilder = $this->getMockForAbstractClass(UrlInterface::class);
         $this->attributeSelector = $helper->getObject(
-            \Magento\ConfigurableProduct\Block\Product\Configurable\AttributeSelector::class,
+            AttributeSelector::class,
             ['urlBuilder' => $this->urlBuilder]
         );
     }
@@ -35,8 +43,8 @@ class AttributeSelectorTest extends \PHPUnit\Framework\TestCase
             'getUrl'
         )->with(
             '*/product_set/save'
-        )->will(
-            $this->returnValue('some_url')
+        )->willReturn(
+            'some_url'
         );
         $this->assertEquals('some_url', $this->attributeSelector->getAttributeSetCreationUrl());
     }
@@ -50,8 +58,8 @@ class AttributeSelectorTest extends \PHPUnit\Framework\TestCase
             'getUrl'
         )->with(
             '*/product_attribute/suggestConfigurableAttributes'
-        )->will(
-            $this->returnValue($source)
+        )->willReturn(
+            $source
         );
         $expected = ['source' => $source, 'minLength' => 0, 'className' => 'category-select', 'showAll' => true];
         $this->assertEquals($expected, $this->attributeSelector->getSuggestWidgetOptions());

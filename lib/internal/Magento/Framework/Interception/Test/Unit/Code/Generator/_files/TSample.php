@@ -60,7 +60,7 @@ class TSample
     /**
      * @param string ...$variadicValue
      */
-    public function byRefTypeHintedVariadic(string & ...$variadicValue)
+    public function byRefTypeHintedVariadic(string &...$variadicValue)
     {
         $this->variadicValue = $variadicValue;
     }

@@ -44,7 +44,7 @@ class EmailTemplateTest extends AbstractController
      */
     private $formKey;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->transportBuilderMock = $this->_objectManager->get(TransportBuilderMock::class);
