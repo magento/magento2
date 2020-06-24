@@ -537,7 +537,7 @@
     </type>
     <type name="Magento\Search\Model\SearchEngine\Validator">
         <arguments>
-            <argument name="engineBlacklist" xsi:type="array">
+            <argument name="excludedEngineList" xsi:type="array">
                 <item name="elasticsearch" xsi:type="string">Elasticsearch 2</item>
             </argument>
             <argument name="engineValidators" xsi:type="array">
