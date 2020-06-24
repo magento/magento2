@@ -29,28 +29,45 @@
         <!--Open category page-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
 
-        <!--Update category and make category inactive-->
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
-        <click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="disableCategory"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForCategorySaved"/>
+        <!--&lt;!&ndash;Update category and make category inactive&ndash;&gt;-->
+        <!--<click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>-->
+        <!--<click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>-->
+
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="navigateToCreatedCategory">
+            <argument name="Category" value="$$createDefaultCategory$$"/>
+        </actionGroup>
+        <!--&lt;!&ndash;&ndash;&gt;-->
+        <!--<click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="disableCategory"/>-->
+        <!--<click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>-->
+        <!--<waitForPageLoad stepKey="waitForCategorySaved"/>-->
+        <actionGroup ref="AdminDisableActiveCategoryActionGroup" stepKey="disableCategory"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
         <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle" />
-        <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="dontCategoryIsChecked"/>
+        <!--<dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="dontCategoryIsChecked"/>-->
+        <actionGroup ref="AssertAdminCategoryIsInactiveActionGroup" stepKey="seeDisabledCategory"/>
 
         <!--Verify Inactive Category is store front page-->
-        <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.name)}}"  stepKey="amOnCategoryPage"/>
-        <waitForPageLoad stepKey="waitForPageToBeLoaded"/>
-        <dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="dontSeeCategoryOnStoreNavigationBar"/>
-        <waitForPageLoad time="15" stepKey="wait"/>
+        <!--&lt;!&ndash;<amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.name)}}"  stepKey="amOnCategoryPage"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;<waitForPageLoad stepKey="waitForPageToBeLoaded"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;<dontSeeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(_defaultCategory.name)}}" stepKey="dontSeeCategoryOnStoreNavigationBar"/>&ndash;&gt;-->
+        <!--&lt;!&ndash;<waitForPageLoad time="15" stepKey="wait"/>&ndash;&gt;-->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
+        <actionGroup ref="StorefrontAssertCategoryNameIsNotShownInMenuActionGroup" stepKey="doNotSeeCategoryNameInMenu">
+            <argument name="categoryName" value="$$createDefaultCategory.name$$"/>
+        </actionGroup>
 
         <!--Verify Inactive Category in category page -->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage1"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree1"/>
+        <!--<click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree1"/>-->
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandCategoryTree"/>
         <seeElement  selector="{{AdminCategoryContentSection.categoryInTree(_defaultCategory.name)}}" stepKey="assertCategoryInTree" />
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory1"/>
+        <!--<click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory1"/>-->
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
+            <argument name="category" value="$$createDefaultCategory$$"/>
+        </actionGroup>
         <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seeCategoryPageTitle1" />
-        <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="assertCategoryIsInactive"/>
+        <!--<dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="assertCategoryIsInactive"/>-->
+        <actionGroup ref="AssertAdminCategoryIsInactiveActionGroup" stepKey="assertCategoryIsInactive"/>
     </test>
 </tests>
