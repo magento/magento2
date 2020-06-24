@@ -52,6 +52,8 @@ class CollectionTest extends TestCase
      */
     public function testCollectionWithJpLocale()
     {
+        $locale = 'JA_jp';
+        $this->localeResolverMock->method('getLocale')->willReturn($locale);
         $order = Bootstrap::getObjectManager()->create(Order::class)
             ->loadByIncrementId('100000001');
         $addressData = [
