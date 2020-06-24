@@ -56,8 +56,8 @@ class StoreConfigDataProvider
     public function getStoreConfigData(StoreInterface $store): array
     {
         return array_merge(
+            $this->getBaseConfigData($store),
             $this->getExtendedConfigData((int)$store->getId()),
-            $this->getBaseConfigData($store)
         );
     }
 
@@ -88,7 +88,7 @@ class StoreConfigDataProvider
             'secure_base_link_url' => $storeConfig->getSecureBaseLinkUrl(),
             'secure_base_static_url' => $storeConfig->getSecureBaseStaticUrl(),
             'secure_base_media_url' => $storeConfig->getSecureBaseMediaUrl(),
-            'store_name' => $storeConfig->getStoreName()
+            'store_name' => $store->getName()
         ];
     }
 

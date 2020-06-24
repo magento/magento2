@@ -269,19 +269,4 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function setExtensionAttributes(
         \Magento\Store\Api\Data\StoreConfigExtensionInterface $extensionAttributes
     );
-
-    /**
-     * Get store code
-     *
-     * @return string
-     */
-    public function getStoreName();
-
-    /**
-     * Set store name
-     *
-     * @param string $storeName
-     * @return $this
-     */
-    public function setStoreName(string $storeName);
 }
