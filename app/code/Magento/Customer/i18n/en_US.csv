@@ -542,3 +542,8 @@ Addresses,Addresses
 "The store view is not in the associated website.","The store view is not in the associated website."
 "The Store View selected for sending Welcome email from is not related to the customer's associated website.","The Store View selected for sending Welcome email from is not related to the customer's associated website."
 "Add/Update Address","Add/Update Address"
+"Cannot reset the customer's password","Cannot reset the customer's password"
+"The email address has an invalid format.","The email address has an invalid format."
+"You must specify an email address.","You must specify an email address."
+"resetPasswordToken must be specified","resetPasswordToken must be specified"
+"newPassword must be specified","newPassword must be specified"
