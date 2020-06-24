@@ -10,14 +10,19 @@ declare(strict_types=1);
  */
 namespace Magento\Theme\Test\Unit\Model\PageLayout\Config;
 
+use Magento\Framework\App\Cache\Type\FrontendPool;
+use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
+use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\PageLayout\Config;
 use Magento\Framework\View\PageLayout\File\Collector\Aggregated;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Theme\Model\PageLayout\Config\Builder;
 use Magento\Theme\Model\ResourceModel\Theme\Collection;
 use Magento\Theme\Model\Theme\Data;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\App\Cache\Type\Layout;
 
 class BuilderTest extends TestCase
 {
@@ -42,6 +47,11 @@ class BuilderTest extends TestCase
     protected $themeCollection;
 
     /**
+     * @var Layout|MockObject
+     */
+    protected $cacheModel;
+
+    /**
      * SetUp method
      *
      * @return void
@@ -58,21 +68,26 @@ class BuilderTest extends TestCase
         )->disableOriginalConstructor()
             ->getMock();
 
+        $helper = new ObjectManager($this);
         $this->themeCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->cacheModel = $this->getMockBuilder(Layout::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
         $this->themeCollection->expects($this->once())
             ->method('setItemObjectClass')
             ->with(Data::class)
             ->willReturnSelf();
-
         $helper = new ObjectManager($this);
         $this->builder = $helper->getObject(
             Builder::class,
             [
                 'configFactory' => $this->configFactory,
                 'fileCollector' => $this->fileCollector,
-                'themeCollection' => $this->themeCollection
+                'themeCollection' => $this->themeCollection,
+                'cacheModel' => $this->cacheModel,
             ]
         );
     }
@@ -84,6 +99,7 @@ class BuilderTest extends TestCase
      */
     public function testGetPageLayoutsConfig()
     {
+        $this->cacheModel->clean();
         $files1 = ['content layouts_1.xml', 'content layouts_2.xml'];
         $files2 = ['content layouts_3.xml', 'content layouts_4.xml'];
 
