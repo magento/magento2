@@ -174,7 +174,7 @@ class ConfigWriter implements ConfigWriterInterface
                 foreach ($virtualTypes as $class) {
                     $this->inheritPlugins($class, $this->pluginData, $this->inherited, $this->processed);
                 }
-                foreach ($this->pluginData as $className => $value) {
+                foreach (array_keys($this->pluginData) as $className) {
                     $this->inheritPlugins($className, $this->pluginData, $this->inherited, $this->processed);
                 }
                 foreach ($this->getClassDefinitions() as $class) {

@@ -130,8 +130,7 @@ class PluginListTest extends TestCase
 
     public function testGetPlugin()
     {
-        $inheritPlugins = function ($type)
-        {
+        $inheritPlugins = function ($type) {
             $inheritedItem = [
                 Item::class => [
                     'advanced_plugin' => [
@@ -147,17 +146,12 @@ class PluginListTest extends TestCase
             $processedItem = [
                 'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item_getName___self' => [
                     2 => 'advanced_plugin',
-                    4 => [
-                        'advanced_plugin'
-                    ]
+                    4 => ['advanced_plugin']
                 ],
                 'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item_getName_advanced_plugin' => [
-                    4 => [
-                        'simple_plugin'
-                    ]
+                    4 => ['simple_plugin']
                 ]
             ];
-
             $inheritedItemContainer = [
                 ItemContainer::class => [
                     'simple_plugin' => [
@@ -168,12 +162,9 @@ class PluginListTest extends TestCase
             ];
             $processedItemContainer = [
                 'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer_getName___self' => [
-                    4 => [
-                        'simple_plugin'
-                    ]
+                    4 => ['simple_plugin']
                 ]
             ];
-
             $inheritedStartingBackslash = [
                 StartingBackslash::class => [
                     'simple_plugin' => [
@@ -187,12 +178,10 @@ class PluginListTest extends TestCase
                 $this->_inherited = $inheritedItem;
                 $this->_processed = $processedItem;
             }
-
             if ($type === 'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer') {
                 $this->_inherited = array_merge($inheritedItem, $inheritedItemContainer);
                 $this->_processed = array_merge($processedItem, $processedItemContainer);
             }
-
             if ($type === 'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\StartingBackslash') {
                 $this->_inherited = array_merge($inheritedItem, $inheritedItemContainer, $inheritedStartingBackslash);
                 $this->_processed = array_merge($processedItem, $processedItemContainer);
@@ -203,14 +192,8 @@ class PluginListTest extends TestCase
 
         $this->configScopeMock->method('getCurrentScope')->willReturn('backend');
         $this->object->getNext(Item::class, 'getName');
-        $this->object->getNext(
-            ItemContainer::class,
-            'getName'
-        );
-        $this->object->getNext(
-            StartingBackslash::class,
-            'getName'
-        );
+        $this->object->getNext(ItemContainer::class, 'getName');
+        $this->object->getNext(StartingBackslash::class, 'getName');
         $this->assertEquals(
             Simple::class,
             $this->object->getPlugin(
@@ -261,8 +244,7 @@ class PluginListTest extends TestCase
         $this->setScopePriorityScheme($scopePriorityScheme);
         $this->configScopeMock->method('getCurrentScope')->willReturn($scopeCode);
 
-        $inheritPlugins = function ($type)
-        {
+        $inheritPlugins = function ($type) {
             $inheritedItem = [
                 Item::class => [
                     'simple_plugin' => [
@@ -327,8 +309,7 @@ class PluginListTest extends TestCase
             ->with('global|scope|interception')
             ->willReturn($serializedData);
 
-        $inheritPlugins = function ($type)
-        {
+        $inheritPlugins = function ($type) {
             $inherited = [
                 0 => 'key',
                 'Type' => null
@@ -365,8 +346,7 @@ class PluginListTest extends TestCase
             ->with('global|scope|interception')
             ->willReturn($data);
 
-        $inheritPlugins = function ($type)
-        {
+        $inheritPlugins = function ($type) {
             $inherited = [
                 0 => 'key',
                 'Type' => null
