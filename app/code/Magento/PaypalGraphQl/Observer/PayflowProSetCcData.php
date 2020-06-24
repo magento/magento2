@@ -8,12 +8,12 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Observer;
 
+use Magento\Customer\Model\Session as CustomerModelSession;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Quote\Api\Data\PaymentInterface;
-use Magento\Customer\Model\Session as CustomerModelSession;
 
 /**
  * Class PayflowProSetCcData set CcData to quote payment
@@ -80,9 +80,11 @@ class PayflowProSetCcData extends AbstractDataAssignObserver
             $paymentModel->setData(self::IS_ACTIVE_PAYMENT_TOKEN_ENABLER, false);
         }
 
-        foreach ($additionalData['cc_details'] as $ccKey => $ccValue) {
-            $paymentModel->setData($ccKey, $ccValue);
-        }
+        $ccData = $additionalData['cc_details'];
+        $paymentModel->setCcType($ccData['cc_type']);
+        $paymentModel->setCcExpYear($ccData['cc_exp_year']);
+        $paymentModel->setCcExpMonth($ccData['cc_exp_month']);
+        $paymentModel->setCcLast4($ccData['cc_last_4']);
     }
 
     /**
