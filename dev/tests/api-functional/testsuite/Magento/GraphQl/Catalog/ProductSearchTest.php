@@ -1503,6 +1503,7 @@ QUERY;
      *
      * @magentoApiDataFixture Magento/Catalog/_files/product_in_multiple_categories.php
      * @return void
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function testFilterProductsBySingleCategoryId()
     {
@@ -1559,7 +1560,7 @@ QUERY;
             $this->assertEquals($response['products']['items'][$itemIndex]['type_id'], $product->getTypeId());
             $this->assertNotEmpty($response['products']['items'][$itemIndex]['categories']);
 
-            // uncomment after fix test
+            // uncomment after fix test. DON'T forget to remove UnusedLocalVariables skip in doc block
 
             // $categoryIds  = $product->getCategoryIds();
             // foreach ($categoryIds as $index => $value) {
@@ -1589,7 +1590,6 @@ QUERY;
         $this->markTestIncomplete(
             'Sort order is incorrect. Fix: https://github.com/magento/catalog-storefront/issues/104'
         );
-
     }
 
     /**
