@@ -24,6 +24,7 @@ use Magento\Config\Model\Config\PathValidatorFactory;
  *
  * @api
  * @since 100.2.0
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigShowCommand extends Command
 {
