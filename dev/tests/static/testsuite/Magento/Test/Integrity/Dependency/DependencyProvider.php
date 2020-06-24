@@ -39,22 +39,13 @@ class DependencyProvider
     private $packageModuleMapping = [];
 
     /**
-     * Initialise map of dependencies.
-     *
-     * @throws \Magento\TestFramework\Inspection\Exception
+     * DependencyProvider constructor.
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\TestFramework\Inspection\Exception
      */
-    public function initDeclaredDependencies()
+    public function __construct()
     {
-        if (empty($this->mapDependencies)) {
-            $jsonFiles = Files::init()->getComposerFiles(ComponentRegistrar::MODULE, false);
-            foreach ($jsonFiles as $file) {
-                $json = new \Magento\Framework\Config\Composer\Package($this->readJsonFile($file));
-                $moduleName = $this->convertModuleName($json->get('name'));
-                $require = array_keys((array)$json->get('require'));
-                $this->presetDependencies($moduleName, $require, self::TYPE_HARD);
-            }
-        }
+        $this->initDeclaredDependencies();
     }
 
     /**
@@ -84,6 +75,25 @@ class DependencyProvider
     public function getDeclaredDependencies(string $module, string $type, string $mapType): array
     {
         return $this->mapDependencies[$module][$type][$mapType] ?? [];
+    }
+
+    /**
+     * Initialise map of dependencies.
+     *
+     * @throws \Magento\TestFramework\Inspection\Exception
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function initDeclaredDependencies()
+    {
+        if (empty($this->mapDependencies)) {
+            $jsonFiles = Files::init()->getComposerFiles(ComponentRegistrar::MODULE, false);
+            foreach ($jsonFiles as $file) {
+                $json = new \Magento\Framework\Config\Composer\Package($this->readJsonFile($file));
+                $moduleName = $this->convertModuleName($json->get('name'));
+                $require = array_keys((array)$json->get('require'));
+                $this->presetDependencies($moduleName, $require, self::TYPE_HARD);
+            }
+        }
     }
 
     /**

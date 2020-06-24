@@ -54,6 +54,10 @@ class DeclarativeSchemaDependencyProvider
      */
     private $dependencyProvider;
 
+    /**
+     * DeclarativeSchemaDependencyProvider constructor.
+     * @param DependencyProvider $dependencyProvider
+     */
     public function __construct(DependencyProvider $dependencyProvider)
     {
         $this->dependencyProvider = $dependencyProvider;
@@ -68,7 +72,6 @@ class DeclarativeSchemaDependencyProvider
      */
     public function getDeclaredExistingModuleDependencies(string $moduleName): array
     {
-        $this->dependencyProvider->initDeclaredDependencies();
         $dependencies = $this->getDependenciesFromFiles($this->getSchemaFileNameByModuleName($moduleName));
         $dependencies = $this->filterSelfDependency($moduleName, $dependencies);
         $declared = $this->dependencyProvider->getDeclaredDependencies(
@@ -103,7 +106,6 @@ class DeclarativeSchemaDependencyProvider
      */
     public function getUndeclaredModuleDependencies(string $moduleName): array
     {
-        $this->dependencyProvider->initDeclaredDependencies();
         $dependencies = $this->getDependenciesFromFiles($this->getSchemaFileNameByModuleName($moduleName));
         $dependencies = $this->filterSelfDependency($moduleName, $dependencies);
         return $this->collectDependencies($moduleName, $dependencies);

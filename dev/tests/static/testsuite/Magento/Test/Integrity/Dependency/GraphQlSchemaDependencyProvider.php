@@ -48,7 +48,6 @@ class GraphQlSchemaDependencyProvider
      */
     public function getDeclaredExistingModuleDependencies(string $moduleName): array
     {
-        $this->dependencyProvider->initDeclaredDependencies();
         $dependencies = $this->getDependenciesFromSchema($moduleName);
         $declared = $this->dependencyProvider->getDeclaredDependencies(
             $moduleName,
@@ -73,7 +72,6 @@ class GraphQlSchemaDependencyProvider
      */
     public function getUndeclaredModuleDependencies(string $moduleName): array
     {
-        $this->dependencyProvider->initDeclaredDependencies();
         $dependencies = $this->getDependenciesFromSchema($moduleName);
         return $this->collectDependencies($moduleName, $dependencies);
     }
