@@ -85,11 +85,9 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
 
         <!-- Verify total on order page -->
-        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderById">
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
-        <waitForPageLoad stepKey="waitForAdminOrderPageLoad"/>
         <scrollTo selector="{{AdminOrderTotalSection.grandTotal}}" stepKey="scrollToOrderTotalSection"/>
         <see selector="{{AdminOrderTotalSection.grandTotal}}" userInput="$createProduct.price$" stepKey="checkTotal"/>
     </test>
