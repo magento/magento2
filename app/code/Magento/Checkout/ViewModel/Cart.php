@@ -4,6 +4,7 @@ namespace Magento\Checkout\ViewModel;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\View\Element\Block\ArgumentInterface;
 use Magento\Framework\View\Element\Context;
+use Magento\Store\Model\ScopeInterface;
 
 class Cart implements ArgumentInterface
 {
@@ -37,7 +38,7 @@ class Cart implements ArgumentInterface
     {
         return (bool) $this->_scopeConfig->getValue(
             self::XPATH_CONFIG_ENABLE_CLEAR_SHOPPING_CART,
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_STORE
         );
     }
 }

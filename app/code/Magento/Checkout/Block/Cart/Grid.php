@@ -103,7 +103,6 @@ class Grid extends \Magento\Checkout\Block\Cart
 
     /**
      * {@inheritdoc}
-     *
      * @since 100.2.0
      */
     protected function _prepareLayout()
@@ -148,7 +147,6 @@ class Grid extends \Magento\Checkout\Block\Cart
 
     /**
      * {@inheritdoc}
-     *
      * @since 100.2.0
      */
     public function getItems()
