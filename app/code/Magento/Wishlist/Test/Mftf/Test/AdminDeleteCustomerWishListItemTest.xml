@@ -43,6 +43,7 @@
             <argument name="productVar" value="$createProduct$"/>
         </actionGroup>
         <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logout"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogoutBeforeCheck"/>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="navigateToCustomerEditPage">
             <argument name="customer" value="$createCustomer$"/>
