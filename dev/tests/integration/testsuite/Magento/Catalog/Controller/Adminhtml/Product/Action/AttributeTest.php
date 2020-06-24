@@ -20,7 +20,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     private $publisherConsumerController;
     private $consumers = ['product_action_attribute.update'];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->publisherConsumerController = Bootstrap::getObjectManager()->create(
             PublisherConsumerController::class,
@@ -45,7 +45,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->publisherConsumerController->stopConsumers();
         parent::tearDown();

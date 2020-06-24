@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Data\Test\Unit;
 
-use \Magento\Framework\Data\SearchResultProcessor;
+use Magento\Framework\Api\CriteriaInterface;
+use Magento\Framework\Data\AbstractSearchResult;
+use Magento\Framework\Data\SearchResultProcessor;
+use Magento\Framework\DataObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class SearchResultProcessorTest
- */
-class SearchResultProcessorTest extends \PHPUnit\Framework\TestCase
+class SearchResultProcessorTest extends TestCase
 {
     /**
      * @var SearchResultProcessor
@@ -18,22 +22,22 @@ class SearchResultProcessorTest extends \PHPUnit\Framework\TestCase
     protected $searchResultProcessor;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $searchResultCollectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $searchCriteriaMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->searchCriteriaMock = $this->getMockBuilder(\Magento\Framework\Api\CriteriaInterface::class)
+        $this->searchCriteriaMock = $this->getMockBuilder(CriteriaInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $this->searchResultCollectionMock = $this->getMockBuilder(\Magento\Framework\Data\AbstractSearchResult::class)
+        $this->searchResultCollectionMock = $this->getMockBuilder(AbstractSearchResult::class)
             ->disableOriginalConstructor()
             ->setMethods(['getSearchCriteria', 'getItems', 'getItemId'])
             ->getMockForAbstractClass();
@@ -66,8 +70,8 @@ class SearchResultProcessorTest extends \PHPUnit\Framework\TestCase
         $itemData = ['id' => 1];
         $itemData2 = ['id' => 2];
 
-        $testItem = new \Magento\Framework\DataObject($itemData);
-        $testItem2 = new \Magento\Framework\DataObject($itemData2);
+        $testItem = new DataObject($itemData);
+        $testItem2 = new DataObject($itemData2);
 
         $this->searchResultCollectionMock->expects($this->once())
             ->method('getItems')
@@ -81,8 +85,8 @@ class SearchResultProcessorTest extends \PHPUnit\Framework\TestCase
         $itemData = ['id' => 1];
         $itemData2 = ['id' => 2];
 
-        $testItem = new \Magento\Framework\DataObject($itemData);
-        $testItem2 = new \Magento\Framework\DataObject($itemData2);
+        $testItem = new DataObject($itemData);
+        $testItem2 = new DataObject($itemData2);
 
         $this->searchResultCollectionMock->expects($this->once())
             ->method('getItems')
@@ -96,7 +100,7 @@ class SearchResultProcessorTest extends \PHPUnit\Framework\TestCase
         $itemData = ['id' => 1];
         $ids = [1];
 
-        $testItem = new \Magento\Framework\DataObject($itemData);
+        $testItem = new DataObject($itemData);
 
         $this->searchResultCollectionMock->expects($this->once())
             ->method('getItems')
@@ -114,8 +118,8 @@ class SearchResultProcessorTest extends \PHPUnit\Framework\TestCase
         $itemData = ['id' => 1];
         $itemData2 = ['id' => 2];
 
-        $testItem = new \Magento\Framework\DataObject($itemData);
-        $testItem2 = new \Magento\Framework\DataObject($itemData2);
+        $testItem = new DataObject($itemData);
+        $testItem2 = new DataObject($itemData2);
 
         $this->searchResultCollectionMock->expects($this->once())
             ->method('getItems')
@@ -130,7 +134,7 @@ class SearchResultProcessorTest extends \PHPUnit\Framework\TestCase
         $columnValue = 'columnValue';
         $itemData = ['id' => 1, $columnKey => $columnValue];
 
-        $testItem = new \Magento\Framework\DataObject($itemData);
+        $testItem = new DataObject($itemData);
 
         $this->searchResultCollectionMock->expects($this->once())
             ->method('getItems')
@@ -145,8 +149,8 @@ class SearchResultProcessorTest extends \PHPUnit\Framework\TestCase
         $itemData = ['id' => 1, $columnKey => $columnValue];
         $itemData2 = ['id' => 2, $columnKey => $columnValue];
 
-        $testItem = new \Magento\Framework\DataObject($itemData);
-        $testItem2 = new \Magento\Framework\DataObject($itemData2);
+        $testItem = new DataObject($itemData);
+        $testItem2 = new DataObject($itemData2);
 
         $this->searchResultCollectionMock->expects($this->once())
             ->method('getItems')
@@ -166,8 +170,8 @@ class SearchResultProcessorTest extends \PHPUnit\Framework\TestCase
         $itemData = ['id' => 1, $columnKey => $columnValue];
         $itemData2 = ['id' => 2, $columnKey => $columnValue2];
 
-        $testItem = new \Magento\Framework\DataObject($itemData);
-        $testItem2 = new \Magento\Framework\DataObject($itemData2);
+        $testItem = new DataObject($itemData);
+        $testItem2 = new DataObject($itemData2);
 
         $this->searchResultCollectionMock->expects($this->once())
             ->method('getItems')

@@ -3,23 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
 
 use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Message\ManagerInterface;
-use Magento\Framework\ObjectManager\ObjectManager;
 use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\View\Result\PageFactory;
-use Magento\Framework\Controller\ResultFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class AttributeTest
- */
-class AttributeTest extends \PHPUnit\Framework\TestCase
+class AttributeTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -27,41 +27,41 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
     protected $objectManager;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|MockObject
      */
     protected $coreRegistryMock;
 
     /**
-     * @var FrontendInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FrontendInterface|MockObject
      */
     protected $attributeLabelCacheMock;
 
     /**
-     * @var PageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PageFactory|MockObject
      */
     protected $resultPageFactoryMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     protected $requestMock;
 
     /**
-     * @var ResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultFactory|MockObject
      */
     protected $resultFactoryMock;
 
     /**
-     * @var ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     protected $messageManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
         $this->contextMock = $this->getMockBuilder(Context::class)
@@ -83,7 +83,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->contextMock->expects($this->any())
             ->method('getRequest')

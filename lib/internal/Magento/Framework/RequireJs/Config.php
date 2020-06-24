@@ -293,25 +293,26 @@ config;
      */
     public function getMinResolverCode()
     {
-        $excludes = ['url.indexOf(baseUrl) === 0'];
+        $excludes = ['url.indexOf(baseUrl)===0'];
         foreach ($this->minification->getExcludes('js') as $expression) {
             $excludes[] = '!url.match(/' . str_replace('/', '\/', $expression) . '/)';
         }
         $excludesCode = empty($excludes) ? 'true' : implode('&&', $excludes);
 
         $result = <<<code
-    var ctx = require.s.contexts._,
-        origNameToUrl = ctx.nameToUrl,
-        baseUrl = ctx.config.baseUrl;
+    (function () {
+        var ctx = require.s.contexts._,
+            origNameToUrl = ctx.nameToUrl,
+            baseUrl = ctx.config.baseUrl;
 
-    ctx.nameToUrl = function() {
-        var url = origNameToUrl.apply(ctx, arguments);
-        if ({$excludesCode}) {
-            url = url.replace(/(\.min)?\.js$/, '.min.js');
-        }
-        return url;
-    };
-
+        ctx.nameToUrl = function() {
+            var url = origNameToUrl.apply(ctx, arguments);
+            if ({$excludesCode}) {
+                url = url.replace(/(\.min)?\.js$/, '.min.js');
+            }
+            return url;
+        };
+    })();
 code;
 
         if ($this->minification->isEnabled('js')) {

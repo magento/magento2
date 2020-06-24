@@ -66,7 +66,7 @@
         <seeInField selector="{{AdminTaxRateFormSection.taxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="seeRuleName2"/>
         <seeInField selector="{{AdminTaxRateFormSection.zipCode}}" userInput="*" stepKey="seeZipCode"/>
         <seeOptionIsSelected selector="{{AdminTaxRateFormSection.country}}" userInput="Australia" stepKey="seeCountry2"/>
-        <seeInField selector="{{AdminTaxRateFormSection.rate}}" userInput="20" stepKey="seeRate"/>
+        <seeInField selector="{{AdminTaxRateFormSection.rate}}" userInput="20.0000" stepKey="seeRate"/>
 
         <!-- Go to the tax rule grid page and verify our tax rate can be used in the rule -->
         <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleIndex1"/>

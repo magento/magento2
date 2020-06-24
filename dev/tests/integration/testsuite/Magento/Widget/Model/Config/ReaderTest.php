@@ -16,11 +16,11 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     private $fileResolver;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->fileResolver = $this->getMockForAbstractClass(\Magento\Framework\Config\FileResolverInterface::class);
         $objectManager = Bootstrap::getObjectManager();

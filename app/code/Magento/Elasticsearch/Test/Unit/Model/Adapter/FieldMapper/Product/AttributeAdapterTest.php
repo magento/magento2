@@ -7,19 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper\Product;
 
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
 use Magento\Framework\Api\CustomAttributesDataInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\Model\AbstractExtensibleModel;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface
-    as FieldTypeConverterInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD)
  */
-class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
+class AttributeAdapterTest extends TestCase
 {
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter
+     * @var AttributeAdapter
      */
     private $adapter;
 
@@ -33,7 +33,7 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attribute = $this->getMockBuilder(CustomAttributesDataInterface::class)
             ->disableOriginalConstructor()
@@ -51,7 +51,7 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
         $objectManager = new ObjectManagerHelper($this);
 
         $this->adapter = $objectManager->getObject(
-            \Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter::class,
+            AttributeAdapter::class,
             [
                 'attribute' => $this->attribute,
                 'attributeCode' => 'code',
@@ -338,9 +338,9 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
     public function isFilterableProvider()
     {
         return [
-            [true, false, true,],
-            [true, false, true,],
-            [false, false, false,]
+            [true, false, true],
+            [true, false, true],
+            [false, false, false]
         ];
     }
 
@@ -350,8 +350,8 @@ class AttributeAdapterTest extends \PHPUnit\Framework\TestCase
     public function isStringServiceFieldTypeProvider()
     {
         return [
-            ['string', 'text', false,],
-            ['text', 'text', true,]
+            ['string', 'text', false],
+            ['text', 'text', true]
         ];
     }
 

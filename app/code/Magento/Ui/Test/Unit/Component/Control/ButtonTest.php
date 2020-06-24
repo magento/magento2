@@ -3,17 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component\Control;
 
 use Magento\Framework\Escaper;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template\Context;
 use Magento\Ui\Component\Control\Button;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ButtonTest
- */
-class ButtonTest extends \PHPUnit\Framework\TestCase
+class ButtonTest extends TestCase
 {
     /**
      * @var Button
@@ -21,31 +22,32 @@ class ButtonTest extends \PHPUnit\Framework\TestCase
     protected $button;
 
     /**
-     * @var Context| \PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var UrlInterface| \PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlBuilderMock;
 
     /**
      * Escaper
      *
-     * @var Escaper| \PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|MockObject
      */
     protected $escaperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->contextMock = $this->createPartialMock(
-            \Magento\Framework\View\Element\Template\Context::class,
-            ['getPageLayout', 'getUrlBuilder', 'getEscaper']
-        );
-        $this->urlBuilderMock = $this->getMockForAbstractClass(\Magento\Framework\UrlInterface::class);
+        $this->contextMock = $this->getMockBuilder(Context::class)
+            ->addMethods(['getPageLayout'])
+            ->onlyMethods(['getUrlBuilder', 'getEscaper'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->contextMock->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
-        $this->escaperMock = $this->createPartialMock(\Magento\Framework\Escaper::class, ['escapeHtml']);
+        $this->escaperMock = $this->createPartialMock(Escaper::class, ['escapeHtml']);
         $this->contextMock->expects($this->any())->method('getEscaper')->willReturn($this->escaperMock);
         $this->button = new Button($this->contextMock);
     }
