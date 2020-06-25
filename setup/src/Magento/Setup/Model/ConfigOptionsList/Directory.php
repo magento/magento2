@@ -36,9 +36,12 @@ class Directory implements ConfigOptionsListInterface
     private $selectOptions = [true, false];
 
     /**
+     * Create config and update document root value according to provided options
+     *
      * @param array $options
      * @param DeploymentConfig $deploymentConfig
      * @return ConfigData|ConfigData[]
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function createConfig(array $options, DeploymentConfig $deploymentConfig)
     {
@@ -78,6 +81,7 @@ class Directory implements ConfigOptionsListInterface
      * @param array $options
      * @param DeploymentConfig $deploymentConfig
      * @return array|string[]
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function validate(array $options, DeploymentConfig $deploymentConfig)
     {
