@@ -200,7 +200,7 @@ QUERY;
                 ]
             ],
             'discounts' => [
-                0 => ['amount' => [ 'value' => -6, 'currency' =>'USD'],
+                0 => ['amount' => [ 'value' => 6, 'currency' =>'USD'],
                     'label' => 'Discount'
                 ]
             ]
@@ -287,7 +287,7 @@ QUERY;
                 ]
             ],
             'discounts' => [
-                0 => ['amount' => [ 'value' => -6, 'currency' =>'USD'],
+                0 => ['amount' => [ 'value' => 6, 'currency' =>'USD'],
                     'label' => 'Discount'
                 ]
             ]
@@ -911,7 +911,6 @@ QUERY;
                 'amount_including_tax' => ['value' => 10.75],
                 'amount_excluding_tax' => ['value' => 10],
                 'total_amount' => ['value' => 10, 'currency' =>'USD'],
-
                 'taxes'=> [
                     0 => [
                         'amount'=>['value' => 0.75],
