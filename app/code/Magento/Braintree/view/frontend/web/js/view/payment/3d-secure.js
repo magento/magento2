@@ -253,9 +253,7 @@ define([
                 .then(function () {
                     self.threeDSecureInstance.verifyCard(options, function (err, payload) {
                         if (err) {
-                            fullScreenLoader.stopLoader();
                             self.state.reject(err.message);
-
                             return;
                         }
 
@@ -265,15 +263,16 @@ define([
                             context.paymentPayload.nonce = payload.nonce;
                             self.state.resolve();
                         } else {
-                            fullScreenLoader.stopLoader();
                             self.state.reject($t('Please try again with another form of payment.'));
                         }
                     });
                 })
                 .fail(function () {
-                    fullScreenLoader.stopLoader();
                     self.state.reject($t('Please try again with another form of payment.'));
-                });
+                })
+                .always(function () {
+                    fullScreenLoader.stopLoader();
+                });;
 
             return self.state.promise();
         },
