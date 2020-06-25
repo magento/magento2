@@ -265,7 +265,6 @@ define([
                         } else {
                             self.state.reject($t('Please try again with another form of payment.'));
                         }
-						fullScreenLoader.stopLoader();
                     });
                 })
                 .fail(function () {
