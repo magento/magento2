@@ -60,10 +60,16 @@ class DataProviderTest extends TestCase
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        parent::setUp();
         $objectManager = Bootstrap::getObjectManager();
+        $objectManager->configure([
+            'preferences' => [
+                \Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager::class
+                => \Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager::class
+            ]
+        ]);
+        parent::setUp();
         $this->dataProvider = $this->createDataProvider();
         $this->registry = $objectManager->get(Registry::class);
         $this->categoryFactory = $objectManager->get(CategoryFactory::class);

@@ -71,18 +71,19 @@ QUERY;
             $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
         );
 
-        $this->assertEquals(null, $response['customer']['id']);
+        $this->assertNull($response['customer']['id']);
         $this->assertEquals('John', $response['customer']['firstname']);
         $this->assertEquals('Smith', $response['customer']['lastname']);
         $this->assertEquals($currentEmail, $response['customer']['email']);
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testGetCustomerIfUserIsNotAuthorized()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $query = <<<QUERY
 query {
     customer {
@@ -97,11 +98,12 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The account is locked.
      */
     public function testGetCustomerIfAccountIsLocked()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The account is locked.');
+
         $this->lockCustomer(1);
 
         $currentEmail = 'customer@example.com';

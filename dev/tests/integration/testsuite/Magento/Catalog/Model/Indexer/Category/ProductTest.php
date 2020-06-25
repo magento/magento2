@@ -32,7 +32,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      */
     private $categoryRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\Framework\Indexer\IndexerInterface indexer */
         $this->indexer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(

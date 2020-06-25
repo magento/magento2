@@ -22,7 +22,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
     /** @var string */
     protected $_requestId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -48,7 +48,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_customerSession->setCustomerId(null);

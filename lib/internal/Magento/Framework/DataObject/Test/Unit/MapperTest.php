@@ -3,31 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\DataObject\Test\Unit;
 
-class MapperTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\DataObject;
+use Magento\Framework\DataObject\Mapper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class MapperTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\DataObject\Mapper
+     * @var Mapper
      */
     protected $mapper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $fromMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $toMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->fromMock = $this->createMock(\Magento\Framework\DataObject::class);
-        $this->toMock = $this->createMock(\Magento\Framework\DataObject::class);
-        $this->mapper = new \Magento\Framework\DataObject\Mapper();
+        $this->fromMock = $this->createMock(DataObject::class);
+        $this->toMock = $this->createMock(DataObject::class);
+        $this->mapper = new Mapper();
     }
 
     public function testAccumulateByMapWhenToIsArrayFromIsObject()
@@ -35,8 +41,8 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         $map['key'] = 'map_value';
         $to['key'] = 'from_value';
         $default['new_key'] = 'default_value';
-        $this->fromMock->expects($this->once())->method('hasData')->with('key')->will($this->returnValue(true));
-        $this->fromMock->expects($this->once())->method('getData')->with('key')->will($this->returnValue('from_value'));
+        $this->fromMock->expects($this->once())->method('hasData')->with('key')->willReturn(true);
+        $this->fromMock->expects($this->once())->method('getData')->with('key')->willReturn('from_value');
         $expected['key'] = 'from_value';
         $expected['map_value'] = 'from_value';
         $expected['new_key'] = 'default_value';
@@ -55,8 +61,8 @@ class MapperTest extends \PHPUnit\Framework\TestCase
         ];
         $default = [0];
         $map['key'] = ['value'];
-        $this->fromMock->expects($this->once())->method('hasData')->with('key')->will($this->returnValue(false));
-        $this->fromMock->expects($this->once())->method('getData')->with('key')->will($this->returnValue(true));
+        $this->fromMock->expects($this->once())->method('hasData')->with('key')->willReturn(false);
+        $this->fromMock->expects($this->once())->method('getData')->with('key')->willReturn(true);
         $this->assertEquals($this->toMock, $this->mapper->accumulateByMap($from, $to, $map, $default));
     }
 

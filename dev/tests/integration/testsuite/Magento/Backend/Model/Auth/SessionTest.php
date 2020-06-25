@@ -31,7 +31,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
@@ -43,7 +43,7 @@ class SessionTest extends \PHPUnit\Framework\TestCase
         $this->auth->logout();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->auth = null;
         $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class)->setCurrentScope(null);

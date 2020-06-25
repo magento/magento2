@@ -62,7 +62,7 @@ class DebugHintsTest extends TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMockForAbstractClass();
@@ -83,7 +83,7 @@ class DebugHintsTest extends TestCase
 
         $this->httpMock = $this->createMock(Http::class);
 
-        $storeMock = $this->createMock(StoreInterface::class);
+        $storeMock = $this->getMockForAbstractClass(StoreInterface::class);
         $storeMock->expects($this->once())
             ->method('getCode')
             ->willReturn(static::STORE_CODE);
@@ -115,7 +115,7 @@ class DebugHintsTest extends TestCase
 
         $this->setupConfigFixture($debugHintsPath, true, $showBlockHints);
 
-        $engine = $this->createMock(TemplateEngineInterface::class);
+        $engine = $this->getMockForAbstractClass(TemplateEngineInterface::class);
 
         $debugHintsDecoratorMock = $this->getMockBuilder(
             DebugHintsDecorator::class
@@ -188,7 +188,7 @@ class DebugHintsTest extends TestCase
 
         $this->setupConfigFixture($debugHintsPath, $showTemplateHints, true);
 
-        $engine = $this->createMock(TemplateEngineInterface::class);
+        $engine = $this->getMockForAbstractClass(TemplateEngineInterface::class);
 
         $subjectMock = $this->getMockBuilder(TemplateEngineFactory::class)
             ->disableOriginalConstructor()

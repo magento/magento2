@@ -11,9 +11,17 @@ use Magento\CatalogRule\Model\Rule\Condition\Combine;
 use Magento\CatalogRule\Model\Rule\Condition\Product;
 use Magento\CatalogRule\Model\RuleFactory;
 use Magento\Customer\Model\Group;
+use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/configurable_product_with_percent_rule.php';
+Resolver::getInstance()->requireDataFixture(
+    'Magento/CatalogRuleConfigurable/_files/configurable_product_with_percent_rule.php'
+);
 
+$objectManager = Bootstrap::getObjectManager();
+/** @var WebsiteRepositoryInterface $websiteRepository */
+$websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 /** @var CatalogRuleRepositoryInterface $ruleRepository */
 $ruleRepository = $objectManager->get(CatalogRuleRepositoryInterface::class);
 /** @var Rule $firstRule */

@@ -3,10 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Setup\Declaration\Schema\Db;
 
-use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\SqlVersionProvider;
 use Magento\Framework\Setup\Declaration\Schema\Dto\ElementInterface;
 
 /**
@@ -20,27 +21,22 @@ class DefinitionAggregator implements DbDefinitionProcessorInterface
     private $definitionProcessors;
 
     /**
-     * @var ResourceConnection
+     * @var SqlVersionProvider
      */
-    private $resourceConnection;
-
-    /**
-     * @var string
-     */
-    private $dbVersion;
+    private $sqlVersionProvider;
 
     /**
      * Constructor.
      *
-     * @param ResourceConnection $resourceConnection
+     * @param SqlVersionProvider $sqlVersionProvider
      * @param DbDefinitionProcessorInterface[] $definitionProcessors
      */
     public function __construct(
-        ResourceConnection $resourceConnection,
+        SqlVersionProvider $sqlVersionProvider,
         array $definitionProcessors
     ) {
         $this->definitionProcessors = $definitionProcessors;
-        $this->resourceConnection = $resourceConnection;
+        $this->sqlVersionProvider = $sqlVersionProvider;
     }
 
     /**
@@ -80,21 +76,6 @@ class DefinitionAggregator implements DbDefinitionProcessorInterface
     }
 
     /**
-     * Get DB version
-     *
-     * @return string
-     */
-    private function getDatabaseVersion(): string
-    {
-        if (!$this->dbVersion) {
-            $this->dbVersion = $this->resourceConnection->getConnection('default')
-                ->fetchPairs("SHOW variables LIKE 'version'")['version'];
-        }
-
-        return $this->dbVersion;
-    }
-
-    /**
      * Processes `$value` to be compatible with MySQL.
      *
      * @param array $data
@@ -109,7 +90,7 @@ class DefinitionAggregator implements DbDefinitionProcessorInterface
         if ($defaultValue === "'NULL'") {
             return "NULL";
         }
-        if ($defaultValue === "NULL" && strpos($this->getDatabaseVersion(), 'MariaDB') !== false) {
+        if ($defaultValue === "NULL" && $this->isMariaDbSqlConnection()) {
             return null;
         }
         /*
@@ -128,5 +109,18 @@ class DefinitionAggregator implements DbDefinitionProcessorInterface
         $defaultValue = str_replace("'", "", $defaultValue);
 
         return $defaultValue;
+    }
+
+    /**
+     * Checks if MariaDB used as SQL engine
+     *
+     * @return bool
+     */
+    private function isMariaDbSqlConnection(): bool
+    {
+        return strpos(
+            $this->sqlVersionProvider->getSqlVersion(),
+            SqlVersionProvider::MARIA_DB_10_VERSION
+        ) === 0;
     }
 }

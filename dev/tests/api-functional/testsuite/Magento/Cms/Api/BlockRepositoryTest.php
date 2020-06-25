@@ -50,7 +50,7 @@ class BlockRepositoryTest extends WebapiAbstract
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->blockFactory = Bootstrap::getObjectManager()->create(\Magento\Cms\Api\Data\BlockInterfaceFactory::class);
         $this->blockRepository = Bootstrap::getObjectManager()
@@ -63,7 +63,7 @@ class BlockRepositoryTest extends WebapiAbstract
     /**
      * Clear temporary data
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         if ($this->currentBlock) {
             $this->blockRepository->delete($this->currentBlock);
@@ -185,10 +185,11 @@ class BlockRepositoryTest extends WebapiAbstract
 
     /**
      * Test delete \Magento\Cms\Api\Data\BlockInterface
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testDelete()
     {
+        $this->expectException(\Magento\Framework\Exception\NoSuchEntityException::class);
+
         $blockTitle = 'Block title';
         $blockIdentifier = 'block-title';
         /** @var  \Magento\Cms\Api\Data\BlockInterface $blockDataObject */
@@ -276,7 +277,7 @@ class BlockRepositoryTest extends WebapiAbstract
 
         $searchResult = $this->_webApiCall($serviceInfo, $requestData);
         $this->assertEquals(2, $searchResult['total_count']);
-        $this->assertEquals(1, count($searchResult['items']));
+        $this->assertCount(1, $searchResult['items']);
         $this->assertEquals(
             $searchResult['items'][0][BlockInterface::IDENTIFIER],
             $cmsBlocks['third']->getIdentifier()

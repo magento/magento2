@@ -15,7 +15,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  */
 class CollectionTest extends \Magento\TestFramework\Indexer\TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $db = Bootstrap::getInstance()->getBootstrap()
             ->getApplication()
@@ -70,7 +70,7 @@ class CollectionTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * teardown
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
     }

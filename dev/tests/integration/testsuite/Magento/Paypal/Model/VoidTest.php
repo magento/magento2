@@ -47,7 +47,7 @@ class VoidTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        /** @var \Magento\Paypal\Model\Payflowpro|\PHPUnit_Framework_MockObject_MockObject $instance */
+        /** @var \Magento\Paypal\Model\Payflowpro|\PHPUnit\Framework\MockObject\MockObject $instance */
         $instance = $this->getMockBuilder(\Magento\Paypal\Model\Payflowpro::class)
             ->setMethods(['setStore'])
             ->setConstructorArgs(
