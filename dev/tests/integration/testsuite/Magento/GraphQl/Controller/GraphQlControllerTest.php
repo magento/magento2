@@ -13,6 +13,7 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\GraphQl\AbstractGraphQl;
 
 /**
  * Tests the dispatch method in the GraphQl Controller class using a simple product query
@@ -22,7 +23,7 @@ use Magento\TestFramework\Helper\Bootstrap;
  * @magentoDbIsolation disabled
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
+class GraphQlControllerTest extends AbstractGraphQl
 {
     const CONTENT_TYPE = 'application/json';
 
@@ -41,6 +42,11 @@ class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
     /** @var Http */
     private $request;
 
+    /**
+     * @inheritdoc
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
     public static function setUpBeforeClass(): void
     {
         $db = Bootstrap::getInstance()->getBootstrap()
@@ -54,13 +60,19 @@ class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
         parent::setUpBeforeClass();
     }
 
-    protected function setUp(): void
+    /**
+     * @inheritdoc
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    protected function setUp() : void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
         $this->metadataPool = $this->objectManager->get(MetadataPool::class);
         $this->request = $this->objectManager->get(Http::class);
+        parent::setUp();
     }
 
     /**
@@ -155,9 +167,11 @@ QUERY;
         $this->assertEquals($product->getName(), $output['data']['products']['items'][0]['name']);
     }
 
-    /** Test request is dispatched and response generated when using GET request with parameterized query string
+    /**
+     * Test request is dispatched and response generated when using GET request with parameterized query string
      *
      * @return void
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function testDispatchGetWithParameterizedVariables() : void
     {
