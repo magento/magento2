@@ -15,6 +15,7 @@ $objectManager = Bootstrap::getObjectManager();
 $registry = $objectManager->get(Registry::class);
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
+$productRepository->cleanCache();
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 

@@ -23,6 +23,7 @@ $defaultWebsiteId = $websiteRepository->get('base')->getId();
 $defaultCategory = $objectManager->get(DefaultCategory::class);
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
+$productRepository->cleanCache();
 /** @var ProductInterfaceFactory $productFactory */
 $productFactory = $objectManager->get(ProductInterfaceFactory::class);
 $product = $productFactory->create();
