@@ -10,6 +10,7 @@ namespace Magento\CatalogCustomerGraphQl\Model\Resolver\Product\Price;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
+use Magento\Catalog\Pricing\Price\TierPrice;
 use Magento\Customer\Model\GroupManagement;
 use Magento\Catalog\Api\Data\ProductTierPriceInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool as PriceProviderPool;
@@ -97,7 +98,11 @@ class Tiers
         if (empty($this->products[$productId])) {
             return null;
         }
-        return $this->products[$productId]->getTierPrices();
+
+        /** @var TierPrice $tierPrice */
+        $tierPrice = $this->products[$productId]->getPriceInfo()->getPrice(TierPrice::PRICE_CODE);
+
+        return $tierPrice->getTierPriceList();
     }
 
     /**
