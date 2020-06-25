@@ -10,7 +10,6 @@ namespace Magento\GraphQl\Controller;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\App\Request\Http;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\GraphQl\AbstractGraphQl;
@@ -35,9 +34,6 @@ class GraphQlControllerTest extends AbstractGraphQl
 
     /** @var SerializerInterface */
     private $jsonSerializer;
-
-    /** @var MetadataPool */
-    private $metadataPool;
 
     /** @var Http */
     private $request;
@@ -70,7 +66,6 @@ class GraphQlControllerTest extends AbstractGraphQl
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
         $this->jsonSerializer = $this->objectManager->get(SerializerInterface::class);
-        $this->metadataPool = $this->objectManager->get(MetadataPool::class);
         $this->request = $this->objectManager->get(Http::class);
         parent::setUp();
     }
@@ -115,12 +110,11 @@ QUERY;
         $this->request->setHeaders($headers);
         $response = $this->graphql->dispatch($this->request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
 
         $this->assertArrayNotHasKey('errors', $output, 'Response has errors');
         $this->assertNotEmpty($output['data']['products']['items'], 'Products array has items');
         $this->assertNotEmpty($output['data']['products']['items'][0], 'Products array has items');
-        $this->assertEquals($product->getData($linkField), $output['data']['products']['items'][0]['id']);
+        $this->assertEquals($product->getId(), $output['data']['products']['items'][0]['id']);
         $this->assertEquals($product->getSku(), $output['data']['products']['items'][0]['sku']);
         $this->assertEquals($product->getName(), $output['data']['products']['items'][0]['name']);
     }
@@ -157,12 +151,11 @@ QUERY;
         $this->request->setQueryValue('query', $query);
         $response = $this->graphql->dispatch($this->request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
 
         $this->assertArrayNotHasKey('errors', $output, 'Response has errors');
         $this->assertNotEmpty($output['data']['products']['items'], 'Products array has items');
         $this->assertNotEmpty($output['data']['products']['items'][0], 'Products array has items');
-        $this->assertEquals($product->getData($linkField), $output['data']['products']['items'][0]['id']);
+        $this->assertEquals($product->getId(), $output['data']['products']['items'][0]['id']);
         $this->assertEquals($product->getSku(), $output['data']['products']['items'][0]['sku']);
         $this->assertEquals($product->getName(), $output['data']['products']['items'][0]['name']);
     }
@@ -210,12 +203,11 @@ QUERY;
         $this->request->setParams($queryParams);
         $response = $this->graphql->dispatch($this->request);
         $output = $this->jsonSerializer->unserialize($response->getContent());
-        $linkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
 
         $this->assertArrayNotHasKey('errors', $output, 'Response has errors');
         $this->assertNotEmpty($output['data']['products']['items'], 'Products array has items');
         $this->assertNotEmpty($output['data']['products']['items'][0], 'Products array has items');
-        $this->assertEquals($product->getData($linkField), $output['data']['products']['items'][0]['id']);
+        $this->assertEquals($product->getId(), $output['data']['products']['items'][0]['id']);
         $this->assertEquals($product->getSku(), $output['data']['products']['items'][0]['sku']);
         $this->assertEquals($product->getName(), $output['data']['products']['items'][0]['name']);
     }
