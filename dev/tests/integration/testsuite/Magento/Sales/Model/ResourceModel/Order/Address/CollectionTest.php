@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Model\ResourceModel\Order\Address;
 
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\Sales\Model\Order\Payment;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Api\Data\OrderAddressInterface as OrderAddress;
 use Magento\Backend\Model\Locale\Resolver;
@@ -43,19 +45,6 @@ class CollectionTest extends TestCase
         Bootstrap::getObjectManager()->addSharedInstance($this->localeResolverMock, ResolverInterface::class);
         Bootstrap::getObjectManager()->addSharedInstance($this->localeResolverMock, Resolver::class);
 
-        $this->addressCollectionFactory = Bootstrap::getObjectManager()->get(CollectionFactory::class);
-    }
-
-    /**
-     * @magentoDataFixture Magento/Directory/_files/region_name_jp.php
-     * @magentoDataFixture Magento/Sales/_files/order.php
-     */
-    public function testCollectionWithJpLocale()
-    {
-        $locale = 'JA_jp';
-        $this->localeResolverMock->method('getLocale')->willReturn($locale);
-        $order = Bootstrap::getObjectManager()->create(Order::class)
-            ->loadByIncrementId('100000001');
         $addressData = [
             OrderAddress::REGION => 'Alabama',
             OrderAddress::REGION_ID => '1',
@@ -72,7 +61,37 @@ class CollectionTest extends TestCase
         $billingAddress->setAddressType('billing');
         $shippingAddress = clone $billingAddress;
         $shippingAddress->setId(null)->setAddressType('shipping');
-        $order->setBillingAddress($billingAddress)->setShippingAddress($shippingAddress)->save();
+        $payment = Bootstrap::getObjectManager()->create(Payment::class);
+        $payment->setMethod('payflowpro')
+            ->setCcExpMonth('5')
+            ->setCcLast4('0005')
+            ->setCcType('AE')
+            ->setCcExpYear('2022');
+        $order = Bootstrap::getObjectManager()->create(Order::class);
+        $order->setIncrementId('100000001')
+            ->setSubtotal(100)
+            ->setBaseSubtotal(100)
+            ->setCustomerEmail('admin@example.com')
+            ->setCustomerIsGuest(true)
+            ->setBillingAddress($billingAddress)
+            ->setShippingAddress($shippingAddress)
+            ->setStoreId(Bootstrap::getObjectManager()->get(StoreManagerInterface::class)->getStore()->getId())
+            ->setPayment($payment);
+        $order->save();
+
+        $this->addressCollectionFactory = Bootstrap::getObjectManager()->get(CollectionFactory::class);
+    }
+
+    /**
+     * @magentoDataFixture Magento/Directory/_files/region_name_jp.php
+     */
+    public function testCollectionWithJpLocale()
+    {
+        $locale = 'JA_jp';
+        $this->localeResolverMock->method('getLocale')->willReturn($locale);
+
+        $order = Bootstrap::getObjectManager()->create(Order::class)
+            ->loadByIncrementId('100000001');
 
         $collection = $this->addressCollectionFactory->create()->setOrderFilter($order);
         foreach ($collection as $address) {
