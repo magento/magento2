@@ -24,7 +24,7 @@ class GetCustomerByTokenTest extends TestCase
      */
     private $customerByToken;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->customerByToken = $this->objectManager->get(GetCustomerByToken::class);
@@ -35,7 +35,8 @@ class GetCustomerByTokenTest extends TestCase
      */
     public function testExecuteWithNoSuchEntityException(): void
     {
-        $this->expectExceptionMessage('No such entity with rp_token = ' . self::RESET_PASSWORD);
+        self::expectException(NoSuchEntityException::class);
+        self::expectExceptionMessage('No such entity with rp_token = ' . self::RESET_PASSWORD);
         $this->customerByToken->execute(self::RESET_PASSWORD);
     }
 }

@@ -54,7 +54,7 @@ class GetCustomerByTokenTest extends TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->searchCriteriaBuilderMock = $this->createMock(SearchCriteriaBuilder::class);
         $this->searchCriteriaMock = $this->createMock(SearchCriteria::class);
