@@ -17,6 +17,9 @@
             <testCaseId value="MC-8510"/>
             <severity value="CRITICAL"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-121"/><!-- catalog-storefront/issues/121 -->
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>

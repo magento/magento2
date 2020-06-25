@@ -17,6 +17,9 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-11557"/>
             <group value="configurable_product"/>
+            <skip>
+                <issueId value="MC-121"/><!-- catalog-storefront/issues/121 -->
+            </skip>
         </annotations>
         <before>
             <!-- Add downloadable domains -->

@@ -18,6 +18,9 @@
             <testCaseId value="MC-219"/>
             <group value="bundle"/>
             <group value="WYSIWYGDisabled"/>
+            <skip>
+                <issueId value="MC-121"/><!-- catalog-storefront/issues/121 -->
+            </skip>
         </annotations>
         <before>
             <!-- Create Simple Product -->

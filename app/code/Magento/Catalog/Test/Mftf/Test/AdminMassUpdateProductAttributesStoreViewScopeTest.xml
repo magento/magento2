@@ -97,6 +97,9 @@
             <group value="Catalog"/>
             <group value="Product Attributes"/>
             <group value="SearchEngineMysql"/>
+            <skip>
+                <issueId value="MC-121"/><!-- catalog-storefront/issues/121 -->
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>

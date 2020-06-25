@@ -17,6 +17,9 @@
             <severity value="AVERAGE"/>
             <testCaseId value="MC-75"/>
             <group value="SalesRule"/>
+            <skip>
+                <issueId value="MC-121"/><!-- catalog-storefront/issues/121 -->
+            </skip>
         </annotations>
 
         <before>
