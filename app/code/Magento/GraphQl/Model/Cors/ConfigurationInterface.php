@@ -17,35 +17,35 @@ interface ConfigurationInterface
      *
      * @return bool
      */
-    public function isEnabled() : bool;
+    public function isEnabled(): bool;
 
     /**
      * Get allowed origins or null if stored configuration is empty
      *
      * @return string|null
      */
-    public function getAllowedOrigins() : ?string;
+    public function getAllowedOrigins(): ?string;
 
     /**
      * Get allowed headers or null if stored configuration is empty
      *
      * @return string|null
      */
-    public function getAllowedHeaders() : ?string;
+    public function getAllowedHeaders(): ?string;
 
     /**
      * Get allowed methods or null if stored configuration is empty
      *
      * @return string|null
      */
-    public function getAllowedMethods() : ?string;
+    public function getAllowedMethods(): ?string;
 
     /**
      * Get max age header value
      *
      * @return int
      */
-    public function getMaxAge() : int;
+    public function getMaxAge(): int;
 
     /**
      * Are credentials allowed

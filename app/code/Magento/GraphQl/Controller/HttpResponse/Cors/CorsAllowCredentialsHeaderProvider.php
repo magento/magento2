@@ -44,7 +44,7 @@ class CorsAllowCredentialsHeaderProvider implements HeaderProviderInterface
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->headerName;
     }
@@ -54,7 +54,7 @@ class CorsAllowCredentialsHeaderProvider implements HeaderProviderInterface
      *
      * @return string
      */
-    public function getValue()
+    public function getValue(): string
     {
         return "1";
     }
@@ -64,7 +64,7 @@ class CorsAllowCredentialsHeaderProvider implements HeaderProviderInterface
      *
      * @return bool
      */
-    public function canApply() : bool
+    public function canApply(): bool
     {
         return $this->corsConfiguration->isEnabled() && $this->corsConfiguration->isCredentialsAllowed();
     }

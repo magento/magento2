@@ -15,6 +15,9 @@ use Magento\GraphQl\Model\Cors\ConfigurationInterface;
  */
 class CorsMaxAgeHeaderProvider implements HeaderProviderInterface
 {
+    /**
+     * @var string
+     */
     private $headerName;
 
     /**
@@ -41,7 +44,7 @@ class CorsMaxAgeHeaderProvider implements HeaderProviderInterface
      *
      * @return string
      */
-    public function getName()
+    public function getName(): string
     {
         return $this->headerName;
     }
@@ -51,7 +54,7 @@ class CorsMaxAgeHeaderProvider implements HeaderProviderInterface
      *
      * @return bool
      */
-    public function canApply()
+    public function canApply(): bool
     {
         return $this->corsConfiguration->isEnabled() && $this->getValue();
     }
@@ -59,10 +62,10 @@ class CorsMaxAgeHeaderProvider implements HeaderProviderInterface
     /**
      * Get value for header
      *
-     * @return string
+     * @return string|null
      */
-    public function getValue()
+    public function getValue(): ?string
     {
-        return $this->corsConfiguration->getMaxAge();
+        return (string) $this->corsConfiguration->getMaxAge();
     }
 }
