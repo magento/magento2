@@ -10,6 +10,8 @@ namespace Magento\StoreGraphQl\Model\Resolver\Store;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Store\Api\Data\StoreConfigInterface;
 use Magento\Store\Api\StoreConfigManagerInterface;
+use Magento\Store\Model\ResourceModel\Store\Collection;
+use Magento\Store\Model\ResourceModel\StoreWebsiteRelation;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Api\Data\StoreInterface;
 
@@ -34,18 +36,34 @@ class StoreConfigDataProvider
     private $extendedConfigData;
 
     /**
+     * @var StoreWebsiteRelation
+     */
+    private $storeWebsiteRelation;
+
+    /**
+     * @var Collection
+     */
+    private $storeCollection;
+
+    /**
      * @param StoreConfigManagerInterface $storeConfigManager
      * @param ScopeConfigInterface $scopeConfig
+     * @param StoreWebsiteRelation $storeWebsiteRelation
+     * @param Collection $storeCollection
      * @param array $extendedConfigData
      */
     public function __construct(
         StoreConfigManagerInterface $storeConfigManager,
         ScopeConfigInterface $scopeConfig,
+        StoreWebsiteRelation $storeWebsiteRelation,
+        Collection $storeCollection,
         array $extendedConfigData = []
     ) {
         $this->storeConfigManager = $storeConfigManager;
         $this->scopeConfig = $scopeConfig;
         $this->extendedConfigData = $extendedConfigData;
+        $this->storeWebsiteRelation = $storeWebsiteRelation;
+        $this->storeCollection = $storeCollection;
     }
 
     /**
@@ -61,17 +79,23 @@ class StoreConfigDataProvider
     }
 
     /**
-     * Get available stores
+     * Get website available stores
      *
+     * @param StoreInterface $store
      * @return array
      */
-    public function getAvailableStores(): array
+    public function getAvailableStoreConfig(StoreInterface $store): array
     {
+        $storeIds = $this->storeWebsiteRelation->getStoreByWebsiteId($store->getWebsiteId());
+        $websiteStores = $this->storeCollection->addIdFilter($storeIds);
         $storesConfigData = [];
-        $storeConfigs = $this->storeConfigManager->getStoreConfigs();
 
-        foreach ($storeConfigs as $storeConfig) {
-            $storesConfigData[] = $this->prepareStoreConfigData($storeConfig);
+        foreach ($websiteStores as $websiteStore) {
+            if ($websiteStore->getIsActive()) {
+                $storesConfigData[] = $this->prepareStoreConfigData(
+                    $this->storeConfigManager->getStoreConfig($websiteStore)
+                );
+            }
         }
 
         return $storesConfigData;

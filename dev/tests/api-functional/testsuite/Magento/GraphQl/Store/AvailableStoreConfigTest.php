@@ -8,23 +8,22 @@ declare(strict_types=1);
 namespace Magento\GraphQl\Store;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\Data\StoreConfigInterface;
 use Magento\Store\Api\StoreConfigManagerInterface;
-use Magento\Store\Api\StoreRepositoryInterface;
-use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * Test the GraphQL endpoint's StoreConfigs and AvailableStores queries
  */
-class StoreConfigResolverTest extends GraphQlAbstract
+class AvailableStoreConfigTest extends GraphQlAbstract
 {
 
-    /** @var ObjectManager */
+    /**
+     * @var ObjectManagerInterface
+     */
     private $objectManager;
 
     /**
@@ -37,25 +36,32 @@ class StoreConfigResolverTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Store/_files/store.php
+     * @magentoApiDataFixture Magento/Store/_files/inactive_store.php
      * @magentoConfigFixture default_store store/information/name Default Store
-     * @throws NoSuchEntityException
+     * @magentoConfigFixture test_store store/information/name Test Store
      */
-    public function testGetStoreConfig(): void
+    public function testDefaultWebsiteAvailableStoreConfigs(): void
     {
-        /** @var  StoreConfigManagerInterface $storeConfigManager */
+        /** @var StoreConfigManagerInterface $storeConfigManager */
         $storeConfigManager = $this->objectManager->get(StoreConfigManagerInterface::class);
-        /** @var StoreResolverInterface $storeResolver */
-        $storeResolver = $this->objectManager->get(StoreResolverInterface::class);
-        /** @var StoreRepositoryInterface $storeRepository */
-        $storeRepository = $this->objectManager->get(StoreRepositoryInterface::class);
-        $storeId = $storeResolver->getCurrentStoreId();
-        $store = $storeRepository->getById($storeId);
-        /** @var StoreConfigInterface $defaultStoreConfig */
-        $defaultStoreConfig = current($storeConfigManager->getStoreConfigs([$store->getCode()]));
+        $storeConfigs = $storeConfigManager->getStoreConfigs();
+
+        $expectedAvailableStores = [];
+        $expectedAvailableStoreCodes = [
+            'default',
+            'test'
+        ];
+
+        foreach ($storeConfigs as $storeConfig) {
+            if (in_array($storeConfig->getCode(), $expectedAvailableStoreCodes)) {
+                $expectedAvailableStores[] = $storeConfig;
+            }
+        }
+
         $query
             = <<<QUERY
 {
-  storeConfig {
+  availableStores {
     id,
     code,
     website_id,
@@ -77,8 +83,55 @@ class StoreConfigResolverTest extends GraphQlAbstract
 }
 QUERY;
         $response = $this->graphQlQuery($query);
-        $this->assertArrayHasKey('storeConfig', $response);
-        $this->validateStoreConfig($defaultStoreConfig, $response['storeConfig']);
+
+        $this->assertArrayHasKey('availableStores', $response);
+        foreach ($expectedAvailableStores as $key => $storeConfig) {
+            $this->validateStoreConfig($storeConfig, $response['availableStores'][$key]);
+        }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Store/_files/second_website_with_two_stores.php
+     * @magentoConfigFixture fixture_second_store_store store/information/name Fixture Second Store
+     * @magentoConfigFixture fixture_third_store_store store/information/name Fixture Third Store
+     */
+    public function testNonDefaultWebsiteAvailableStoreConfigs(): void
+    {
+        /** @var StoreConfigManagerInterface $storeConfigManager */
+        $storeConfigManager = $this->objectManager->get(StoreConfigManagerInterface::class);
+        $storeConfigs = $storeConfigManager->getStoreConfigs(['fixture_second_store', 'fixture_third_store']);
+
+        $query
+            = <<<QUERY
+{
+  availableStores {
+    id,
+    code,
+    website_id,
+    locale,
+    base_currency_code,
+    default_display_currency_code,
+    timezone,
+    weight_unit,
+    base_url,
+    base_link_url,
+    base_static_url,
+    base_media_url,
+    secure_base_url,
+    secure_base_link_url,
+    secure_base_static_url,
+    secure_base_media_url,
+    store_name
+  }
+}
+QUERY;
+        $headerMap = ['Store' => 'fixture_second_store'];
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+
+        $this->assertArrayHasKey('availableStores', $response);
+        foreach ($storeConfigs as $key => $storeConfig) {
+            $this->validateStoreConfig($storeConfig, $response['availableStores'][$key]);
+        }
     }
 
     /**
