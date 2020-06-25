@@ -15,7 +15,7 @@ use Magento\Store\Model\ScopeInterface;
  */
 class Config
 {
-    const XML_PATH_WISHLIST_ACTIVE = 'catalog/review/active';
+    const XML_PATH_REVIEW_ACTIVE = 'catalog/review/active';
 
     /**
      * @var ScopeConfigInterface
@@ -39,7 +39,7 @@ class Config
     public function isEnabled(): bool
     {
         return $this->scopeConfig->isSetFlag(
-            self::XML_PATH_WISHLIST_ACTIVE,
+            self::XML_PATH_REVIEW_ACTIVE,
             ScopeInterface::SCOPE_STORES
         );
     }

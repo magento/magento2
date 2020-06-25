@@ -64,9 +64,9 @@ class AverageRating implements ResolverInterface
         /** @var Review $review */
         $review = $value['model'];
         $summary = $this->ratingFactory->create()->getReviewSummary($review->getId());
-        $averageRating = $summary->getSum();
+        $averageRating = $summary->getSum() ?: 0;
 
-        if ($summary->getSum() > 0) {
+        if ($averageRating > 0) {
             $averageRating = (float) number_format($summary->getSum() / $summary->getCount() / 20, 2);
         }
 
