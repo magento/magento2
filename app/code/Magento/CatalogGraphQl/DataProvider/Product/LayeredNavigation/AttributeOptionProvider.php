@@ -90,11 +90,11 @@ class AttributeOptionProvider
                 Store::DEFAULT_STORE_ID
             );
 
-        $select->where('a.attribute_code IN (?)', $attributeCodes);
+        $select->where('option_value.option_id IN (?)', $optionIds);
 
         if (!empty($attributeCodes)) {
             $select->orWhere(
-                'a.attribute_code in (?) AND a.frontend_input = \'boolean\'',
+                'a.attribute_code in (?) AND a.frontend_input in (\'boolean\', \'price\')',
                 $attributeCodes
             );
         }
