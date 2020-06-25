@@ -170,7 +170,7 @@ class OrderTest extends TestCase
         $payment = $this->objectManager->create(Payment::class);
         $payment->setMethod('checkmo');
 
-        $order->setStoreId($store->getId())->setPayment($payment);
+        $order->setStoreId($store->getId());
         $order->setXForwardedFor($xForwardedFor);
         $order->setPayment($payment);
         $this->resourceModel->save($order);
