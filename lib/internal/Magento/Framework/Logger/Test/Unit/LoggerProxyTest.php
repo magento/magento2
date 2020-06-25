@@ -20,14 +20,14 @@ class LoggerProxyTest extends \PHPUnit\Framework\TestCase
     public static function methodsList()
     {
         return [
-            ['emergency'],
-            ['alert'],
-            ['critical'],
-            ['error'],
-            ['warning'],
-            ['notice'],
-            ['info'],
-            ['debug'],
+            [LogLevel::EMERGENCY],
+            [LogLevel::ALERT],
+            [LogLevel::CRITICAL],
+            [LogLevel::ERROR],
+            [LogLevel::WARNING],
+            [LogLevel::NOTICE],
+            [LogLevel::INFO],
+            [LogLevel::DEBUG],
         ];
     }
 
@@ -47,13 +47,18 @@ class LoggerProxyTest extends \PHPUnit\Framework\TestCase
         $logger = $this->getMockBuilder(LoggerInterface::class)
             ->getMockForAbstractClass();
 
-        $objectManager->expects($this->once())
+        $objectManager->expects($this->atLeastOnce())
+            ->method('get')
+            ->with(DeploymentConfig::class)
+            ->willReturn($deploymentConfig);
+
+        $objectManager->expects($this->atLeastOnce())
             ->method('get')
             ->with(Monolog::class)
             ->willReturn($logger);
         $logger->expects($this->once())->method($method)->with('test');
 
-        $loggerProxy = new LoggerProxy($objectManager, $deploymentConfig);
+        $loggerProxy = new LoggerProxy($objectManager);
         $loggerProxy->$method('test');
     }
 
@@ -83,7 +88,7 @@ class LoggerProxyTest extends \PHPUnit\Framework\TestCase
             ->willReturn($logger);
         $logger->expects($this->once())->method('log')->with(LogLevel::ALERT, 'test');
 
-        $loggerProxy = new LoggerProxy($objectManager, $deploymentConfig);
+        $loggerProxy = new LoggerProxy($objectManager);
         $loggerProxy->log(LogLevel::ALERT, 'test');
     }
 }

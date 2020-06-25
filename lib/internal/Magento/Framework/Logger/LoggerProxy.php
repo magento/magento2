@@ -29,22 +29,14 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
     private $logger;
 
     /**
-     * @var DeploymentConfig
-     */
-    private $deploymentConfig;
-
-    /**
      * Proxy constructor
      *
      * @param ObjectManagerInterface $objectManager
-     * @param DeploymentConfig $deploymentConfig
      */
     public function __construct(
-        ObjectManagerInterface $objectManager,
-        DeploymentConfig $deploymentConfig
+        ObjectManagerInterface $objectManager
     ) {
         $this->objectManager = $objectManager;
-        $this->deploymentConfig = $deploymentConfig;
     }
 
     /**
@@ -89,8 +81,9 @@ class LoggerProxy implements LoggerInterface, NoninterceptableInterface
     private function getLogger(): LoggerInterface
     {
         if (!$this->logger) {
-            $instanceName = $this->deploymentConfig->get('log/type') ?? Monolog::class;
-            $args = $this->deploymentConfig->get('log/args');
+            $deploymentConfig = $this->objectManager->get(DeploymentConfig::class);
+            $instanceName = $deploymentConfig->get('log/type') ?? Monolog::class;
+            $args = $deploymentConfig->get('log/args');
 
             if ($args) {
                 $this->logger = $this->objectManager->create($instanceName, $args);
