@@ -47,5 +47,4 @@ $quote->setStoreId(1)
     ->setEmail($customer->getEmail())
     ->addProduct($productRepository->get('taxable_product'), 1);
 
-$quote->collectTotals();
 $quoteRepository->save($quote);

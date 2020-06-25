@@ -47,5 +47,4 @@ $quote->setStoreId(1)
     ->setEmail($customer->getEmail())
     ->addProduct($productRepository->get('simple_not_visible_1'), 1);
 
-$quote->collectTotals();
 $quoteRepository->save($quote);
