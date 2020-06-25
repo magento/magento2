@@ -6,7 +6,7 @@
 namespace Magento\TestFramework\Interception;
 
 use Magento\Framework\Interception\ConfigLoaderInterface;
-use Magento\Framework\Interception\ConfigWriterInterface;
+use Magento\Framework\Interception\PluginListGenerator;
 use Magento\Framework\Serialize\SerializerInterface;
 
 /**
@@ -34,7 +34,7 @@ class PluginList extends \Magento\Framework\Interception\PluginList\PluginList
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
      * @param ConfigLoaderInterface|null $configLoader
-     * @param ConfigWriterInterface|null $configWriter
+     * @param PluginListGenerator|null $pluginListGenerator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -50,7 +50,7 @@ class PluginList extends \Magento\Framework\Interception\PluginList\PluginList
         $cacheId = 'plugins',
         SerializerInterface $serializer = null,
         ConfigLoaderInterface $configLoader = null,
-        ConfigWriterInterface $configWriter = null
+        PluginListGenerator $pluginListGenerator = null
     ) {
         parent::__construct(
             $reader,
@@ -65,7 +65,7 @@ class PluginList extends \Magento\Framework\Interception\PluginList\PluginList
             $cacheId,
             $serializer,
             $configLoader,
-            $configWriter
+            $pluginListGenerator
         );
         $this->_originScopeScheme = $this->_scopePriorityScheme;
     }

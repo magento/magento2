@@ -10,9 +10,9 @@ namespace Magento\Framework\Interception\Test\Unit\PluginList;
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Interception\ConfigLoaderInterface;
-use Magento\Framework\Interception\ConfigWriterInterface;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\Interception\PluginList\PluginList;
+use Magento\Framework\Interception\PluginListGenerator;
 use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item;
 use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer;
 use Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainerPlugin\Simple as ItemContainerPlugin;
@@ -94,15 +94,17 @@ class PluginListTest extends TestCase
         $this->configLoaderMock = $this->getMockBuilder(ConfigLoaderInterface::class)
             ->onlyMethods(['load'])
             ->getMockForAbstractClass();
-        $configWriterMock = $this->getMockBuilder(ConfigWriterInterface::class)
-            ->addMethods(['loadScopedVirtualTypes', 'getClassDefinitions', 'inheritPlugins'])
-            ->getMockForAbstractClass();
-        $configWriterMock->method('loadScopedVirtualTypes')
+        $pluginListGeneratorMock = $this->getMockBuilder(PluginListGenerator::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['loadScopedVirtualTypes', 'inheritPlugins'])
+            ->getMock();
+        $pluginListGeneratorMock->method('loadScopedVirtualTypes')
             ->willReturnMap($loadScoped);
-        $configWriterMock->method('getClassDefinitions')
-            ->willReturn([]);
 
-        $definitions = new Runtime();
+        $definitions = $this->getMockBuilder(Runtime::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $definitions->method('getClasses')->willReturn([]);
 
         // tested class is a mock to be able to set its protected properties values in closure
         $this->object = $this->getMockBuilder(PluginList::class)
@@ -122,7 +124,7 @@ class PluginListTest extends TestCase
                     'cacheId' => 'interception',
                     'serializer' => $this->serializerMock,
                     'configLoader' => $this->configLoaderMock,
-                    'configWriter' => $configWriterMock
+                    'pluginListGenerator' => $pluginListGeneratorMock
                 ]
             )
             ->getMock();
@@ -175,16 +177,16 @@ class PluginListTest extends TestCase
             ];
 
             if ($type === 'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item') {
-                $this->_inherited = $inheritedItem;
-                $this->_processed = $processedItem;
+                $this->_inherited = $inheritedItem; /** @phpstan-ignore-line */
+                $this->_processed = $processedItem; /** @phpstan-ignore-line */
             }
             if ($type === 'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\ItemContainer') {
-                $this->_inherited = array_merge($inheritedItem, $inheritedItemContainer);
-                $this->_processed = array_merge($processedItem, $processedItemContainer);
+                $this->_inherited = array_merge($inheritedItem, $inheritedItemContainer); /** @phpstan-ignore-line */
+                $this->_processed = array_merge($processedItem, $processedItemContainer); /** @phpstan-ignore-line */
             }
             if ($type === 'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\StartingBackslash') {
-                $this->_inherited = array_merge($inheritedItem, $inheritedItemContainer, $inheritedStartingBackslash);
-                $this->_processed = array_merge($processedItem, $processedItemContainer);
+                $this->_inherited = array_merge($inheritedItem, $inheritedItemContainer, $inheritedStartingBackslash); /** @phpstan-ignore-line */
+                $this->_processed = array_merge($processedItem, $processedItemContainer); /** @phpstan-ignore-line */
             }
         };
         $inheritPlugins = $inheritPlugins->bindTo($this->object, PluginList::class);
@@ -262,8 +264,8 @@ class PluginListTest extends TestCase
             ];
 
             if ($type === 'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\Item') {
-                $this->_inherited = $inheritedItem;
-                $this->_processed = $processedItem;
+                $this->_inherited = $inheritedItem; /** @phpstan-ignore-line */
+                $this->_processed = $processedItem; /** @phpstan-ignore-line */
             }
         };
         $inheritPlugins = $inheritPlugins->bindTo($this->object, PluginList::class);
@@ -319,8 +321,8 @@ class PluginListTest extends TestCase
             ];
 
             if ($type === 'Type') {
-                $this->_inherited = $inherited;
-                $this->_processed = $processed;
+                $this->_inherited = $inherited; /** @phpstan-ignore-line */
+                $this->_processed = $processed; /** @phpstan-ignore-line */
             }
         };
         $inheritPlugins = $inheritPlugins->bindTo($this->object, PluginList::class);
@@ -356,8 +358,8 @@ class PluginListTest extends TestCase
             ];
 
             if ($type === 'Type') {
-                $this->_inherited = $inherited;
-                $this->_processed = $processed;
+                $this->_inherited = $inherited; /** @phpstan-ignore-line */
+                $this->_processed = $processed; /** @phpstan-ignore-line */
             }
         };
         $inheritPlugins = $inheritPlugins->bindTo($this->object, PluginList::class);

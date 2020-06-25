@@ -10,7 +10,7 @@ use Magento\Setup\Module\Di\App\Task\OperationInterface;
 use Magento\Framework\Interception\ConfigWriterInterface;
 
 /**
- * Writes plugins configuration data per scope to generated metadata files.
+ * Writes plugin list configuration data per scope to generated metadata.
  */
 class PluginListGenerator implements OperationInterface
 {

@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework\Interception;
 
-use Magento\Framework\App\ObjectManager\ConfigWriterInterface as ObjectManagerConfigWriterInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
@@ -14,9 +14,9 @@ use Magento\Framework\ObjectManager\RelationsInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Interception configuration writer for scopes.
+ * Plugin list configuration writer and loader for scopes.
  */
-class ConfigWriter implements ConfigWriterInterface
+class PluginListGenerator implements ConfigWriterInterface, ConfigLoaderInterface
 {
     /**
      * @var ScopeInterface
@@ -78,9 +78,9 @@ class ConfigWriter implements ConfigWriterInterface
     private $logger;
 
     /**
-     * @var ObjectManagerConfigWriterInterface
+     * @var DirectoryList
      */
-    private $configWriter;
+    private $directoryList;
 
     /**
      * @var array
@@ -117,7 +117,7 @@ class ConfigWriter implements ConfigWriterInterface
      * @param DefinitionInterface $definitions
      * @param ClassDefinitions $classDefinitions
      * @param LoggerInterface $logger
-     * @param ObjectManagerConfigWriterInterface $configWriter
+     * @param DirectoryList $directoryList
      * @param array $scopePriorityScheme
      */
     public function __construct(
@@ -128,7 +128,7 @@ class ConfigWriter implements ConfigWriterInterface
         DefinitionInterface $definitions,
         ClassDefinitions $classDefinitions,
         LoggerInterface $logger,
-        ObjectManagerConfigWriterInterface $configWriter,
+        DirectoryList $directoryList,
         array $scopePriorityScheme = ['global']
     ) {
         $this->reader = $reader;
@@ -138,7 +138,7 @@ class ConfigWriter implements ConfigWriterInterface
         $this->definitions = $definitions;
         $this->classDefinitions = $classDefinitions;
         $this->logger = $logger;
-        $this->configWriter = $configWriter;
+        $this->directoryList = $directoryList;
         $this->scopePriorityScheme = $scopePriorityScheme;
     }
 
@@ -180,7 +180,7 @@ class ConfigWriter implements ConfigWriterInterface
                 foreach ($this->getClassDefinitions() as $class) {
                     $this->inheritPlugins($class, $this->pluginData, $this->inherited, $this->processed);
                 }
-                $this->configWriter->write(
+                $this->writeConfig(
                     $cacheId,
                     [$this->pluginData, $this->inherited, $this->processed]
                 );
@@ -195,6 +195,23 @@ class ConfigWriter implements ConfigWriterInterface
                 }
             }
         }
+    }
+
+    /**
+     * Load interception configuration data per scope.
+     *
+     * @param string $cacheId
+     * @return array
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    public function load($cacheId)
+    {
+        $file = $this->directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/' . $cacheId . '.' . 'php';
+        if (file_exists($file)) {
+            return include $file;
+        }
+
+        return [];
     }
 
     /**
@@ -238,7 +255,7 @@ class ConfigWriter implements ConfigWriterInterface
      *
      * @return array
      */
-    public function getClassDefinitions()
+    private function getClassDefinitions()
     {
         return $this->classDefinitions->getClasses();
     }
@@ -249,7 +266,7 @@ class ConfigWriter implements ConfigWriterInterface
      * @param string $scopeCode
      * @return bool
      */
-    public function isCurrentScope($scopeCode)
+    private function isCurrentScope($scopeCode)
     {
         return $this->scopeConfig->getCurrentScope() === $scopeCode;
     }
@@ -297,7 +314,9 @@ class ConfigWriter implements ConfigWriterInterface
             $inherited[$type] = null;
             if (is_array($plugins) && count($plugins)) {
                 $this->filterPlugins($plugins);
-                uasort($plugins, [$this, 'sort']);
+                uasort($plugins, function ($itemA, $itemB) {
+                    return ($itemA['sortOrder'] ?? PHP_INT_MIN) - ($itemB['sortOrder'] ?? PHP_INT_MIN);
+                });
                 $this->trimInstanceStartingBackslash($plugins);
                 $inherited[$type] = $plugins;
                 $lastPerMethod = [];
@@ -385,14 +404,33 @@ class ConfigWriter implements ConfigWriterInterface
     }
 
     /**
-     * Sort items
+     * Writes config in storage
      *
-     * @param array $itemA
-     * @param array $itemB
-     * @return int
+     * @param string $key
+     * @param array $config
+     * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function sort($itemA, $itemB)
+    private function writeConfig(string $key, array $config)
     {
-        return ($itemA['sortOrder'] ?? PHP_INT_MIN) - ($itemB['sortOrder'] ?? PHP_INT_MIN);
+        $this->initialize();
+        $configuration = sprintf('<?php return %s;', var_export($config, true));
+        file_put_contents(
+            $this->directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/' . $key  . '.php',
+            $configuration
+        );
+    }
+
+    /**
+     * Initializes writer
+     *
+     * @return void
+     * @throws \Magento\Framework\Exception\FileSystemException
+     */
+    private function initialize()
+    {
+        if (!file_exists($this->directoryList->getPath(DirectoryList::GENERATED_METADATA))) {
+            mkdir($this->directoryList->getPath(DirectoryList::GENERATED_METADATA));
+        }
     }
 }

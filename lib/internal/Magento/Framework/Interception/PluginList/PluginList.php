@@ -10,8 +10,8 @@ use Magento\Framework\Config\Data\Scoped;
 use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\Config\ScopeInterface;
 use Magento\Framework\Interception\ConfigLoaderInterface;
-use Magento\Framework\Interception\ConfigWriterInterface;
 use Magento\Framework\Interception\DefinitionInterface;
+use Magento\Framework\Interception\PluginListGenerator;
 use Magento\Framework\Interception\PluginListInterface as InterceptionPluginList;
 use Magento\Framework\Interception\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\RelationsInterface;
@@ -88,9 +88,9 @@ class PluginList extends Scoped implements InterceptionPluginList
     private $configLoader;
 
     /**
-     * @var ConfigWriterInterface
+     * @var PluginListGenerator
      */
-    private $configWriter;
+    private $pluginListGenerator;
 
     /**
      * Constructor
@@ -107,7 +107,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      * @param string|null $cacheId
      * @param SerializerInterface|null $serializer
      * @param ConfigLoaderInterface|null $configLoader
-     * @param ConfigWriterInterface|null $configWriter
+     * @param PluginListGenerator|null $pluginListGenerator
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -123,7 +123,7 @@ class PluginList extends Scoped implements InterceptionPluginList
         $cacheId = 'plugins',
         SerializerInterface $serializer = null,
         ConfigLoaderInterface $configLoader = null,
-        ConfigWriterInterface $configWriter = null
+        PluginListGenerator $pluginListGenerator = null
     ) {
         $this->serializer = $serializer ?: $objectManager->get(Serialize::class);
         parent::__construct($reader, $configScope, $cache, $cacheId, $this->serializer);
@@ -134,7 +134,7 @@ class PluginList extends Scoped implements InterceptionPluginList
         $this->_scopePriorityScheme = $scopePriorityScheme;
         $this->_objectManager = $objectManager;
         $this->configLoader = $configLoader ?: $this->_objectManager->get(ConfigLoaderInterface::class);
-        $this->configWriter = $configWriter ?: $this->_objectManager->get(ConfigWriterInterface::class);
+        $this->pluginListGenerator = $pluginListGenerator ?: $this->_objectManager->get(PluginListGenerator::class);
     }
 
     /**
@@ -145,7 +145,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      */
     protected function _inheritPlugins($type)
     {
-        return $this->configWriter->inheritPlugins($type, $this->_data, $this->_inherited, $this->_processed);
+        return $this->pluginListGenerator->inheritPlugins($type, $this->_data, $this->_inherited, $this->_processed);
     }
 
     /**
@@ -157,7 +157,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      */
     protected function _sort($itemA, $itemB)
     {
-        return $this->configWriter->sort($itemA, $itemB);
+        return ($itemA['sortOrder'] ?? PHP_INT_MIN) - ($itemB['sortOrder'] ?? PHP_INT_MIN);
     }
 
     /**
@@ -238,7 +238,7 @@ class PluginList extends Scoped implements InterceptionPluginList
                         $this->_data,
                         $this->_inherited,
                         $this->_processed
-                    ] = $this->configWriter->loadScopedVirtualTypes(
+                    ] = $this->pluginListGenerator->loadScopedVirtualTypes(
                         $this->_scopePriorityScheme,
                         $this->_loadedScopes,
                         $this->_data,
@@ -269,7 +269,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      */
     protected function isCurrentScope($scopeCode)
     {
-        return $this->configWriter->isCurrentScope($scopeCode);
+        return $this->_configScope->getCurrentScope() === $scopeCode;
     }
 
     /**
@@ -279,7 +279,7 @@ class PluginList extends Scoped implements InterceptionPluginList
      */
     protected function getClassDefinitions()
     {
-        return $this->configWriter->getClassDefinitions();
+        return $this->_classDefinitions->getClasses();
     }
 
     /**
@@ -290,6 +290,6 @@ class PluginList extends Scoped implements InterceptionPluginList
      */
     public function merge(array $config)
     {
-        $this->_data = $this->configWriter->merge($config, $this->_data);
+        $this->_data = $this->pluginListGenerator->merge($config, $this->_data);
     }
 }
