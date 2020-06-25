@@ -185,7 +185,8 @@ class PluginListTest extends TestCase
                 $this->_processed = array_merge($processedItem, $processedItemContainer); /** @phpstan-ignore-line */
             }
             if ($type === 'Magento\Framework\Interception\Test\Unit\Custom\Module\Model\StartingBackslash') {
-                $this->_inherited = array_merge($inheritedItem, $inheritedItemContainer, $inheritedStartingBackslash); /** @phpstan-ignore-line */
+                /** @phpstan-ignore-next-line */
+                $this->_inherited = array_merge($inheritedItem, $inheritedItemContainer, $inheritedStartingBackslash);
                 $this->_processed = array_merge($processedItem, $processedItemContainer); /** @phpstan-ignore-line */
             }
         };
