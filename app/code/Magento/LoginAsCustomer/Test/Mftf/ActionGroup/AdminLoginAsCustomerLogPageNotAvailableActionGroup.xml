@@ -15,7 +15,6 @@
 
         <amOnPage url="{{AdminLoginAsCustomerLogPage.url}}" stepKey="openAdminLoginAsCustomerLogPage"/>
         <waitForPageLoad stepKey="waitForLoginAsCustomerLogPageLoad"/>
-        <see userInput="Sorry, you need permissions to view this content."
-             selector="{{AdminMessagesSection.accessDenied}}" stepKey="seeAccessDenied"/>
+        <see userInput="404 Error" selector="{{AdminHeaderSection.pageHeading}}" stepKey="see404PageHeading"/>
     </actionGroup>
 </actionGroups>

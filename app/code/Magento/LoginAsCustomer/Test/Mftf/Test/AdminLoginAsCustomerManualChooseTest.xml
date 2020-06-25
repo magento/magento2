@@ -19,7 +19,7 @@
             <severity value="CRITICAL"/>
             <group value="login_as_customer"/>
             <skip>
-                <issueId value="https://github.com/magento/magento2-login-as-customer/issues/102"/>
+                <issueId value="https://github.com/magento/magento2-login-as-customer/issues/58"/>
             </skip>
         </annotations>
         <before>

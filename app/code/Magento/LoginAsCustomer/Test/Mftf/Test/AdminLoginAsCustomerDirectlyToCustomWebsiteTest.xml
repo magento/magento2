@@ -17,9 +17,6 @@
                 value="Verify admin user can directly login into customer account on custom website using 'Login as customer' functionality"/>
             <severity value="BLOCKER"/>
             <group value="login_as_customer"/>
-            <skip>
-                <issueId value="https://github.com/magento/magento2-login-as-customer/issues/102"/>
-            </skip>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
@@ -77,7 +74,6 @@
         </actionGroup>
 
         <!-- Assert Customer logged on Custom Website -->
-        <actionGroup ref="StorefrontClickOnHeaderLogoActionGroup" stepKey="clickOnStorefrontHeaderLogo"/>
         <actionGroup ref="AssertStorefrontStoreCodeInUrlActionGroup" stepKey="seeStoreCodeInUrl">
             <argument name="storeCode" value="{{customStoreEN.code}}"/>
         </actionGroup>
