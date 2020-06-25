@@ -26,7 +26,6 @@
         <clearField selector="{{AdminOrderFormBillingAddressSection.Phone}}" stepKey="clearPhoneField"/>
         <seeElement selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="seeShippingMethodNotSelected"/>
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="trySubmitOrder"/>
-        <see selector="{{AdminOrderFormBillingAddressSection.emailError}}" userInput="This is a required field." stepKey="seeThatEmailIsRequired"/>
         <see selector="{{AdminOrderFormBillingAddressSection.firstNameError}}" userInput="This is a required field." stepKey="seeFirstNameRequired"/>
         <see selector="{{AdminOrderFormBillingAddressSection.lastNameError}}" userInput="This is a required field." stepKey="seeLastNameRequired"/>
         <see selector="{{AdminOrderFormBillingAddressSection.streetAddressError}}" userInput="This is a required field." stepKey="seeStreetRequired"/>

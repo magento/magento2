@@ -14,7 +14,7 @@
             <stories value="Bundle Product Pricing"/>
             <title value="Admin should be able to apply fixed pricing for Bundled Product"/>
             <description value="Admin should be able to apply fixed pricing for Bundled Product"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-186"/>
             <group value="Bundle"/>
         </annotations>
@@ -23,9 +23,9 @@
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
-
+            <magentoCron stepKey="runCronIndex" groups="index"/>
             <!--Admin login-->
-            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdmin"/>
+            <actionGroup stepKey="loginToAdminPanel" ref="AdminLoginActionGroup"/>
         </before>
         <after>
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>

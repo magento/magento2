@@ -136,7 +136,14 @@ class ListProduct extends AbstractProduct implements IdentityInterface
      */
     public function getLoadedProductCollection()
     {
-        return $this->_getProductCollection();
+        $collection = $this->_getProductCollection();
+
+        $categoryId = $this->getLayer()->getCurrentCategory()->getId();
+        foreach ($collection as $product) {
+            $product->setData('category_id', $categoryId);
+        }
+
+        return $collection;
     }
 
     /**
@@ -355,6 +362,7 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         }
 
         foreach ($this->_getProductCollection() as $item) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $identities = array_merge($identities, $item->getIdentities());
         }
 
@@ -474,8 +482,6 @@ class ListProduct extends AbstractProduct implements IdentityInterface
         if ($origCategory) {
             $layer->setCurrentCategory($origCategory);
         }
-
-        $this->addToolbarBlock($collection);
 
         $this->_eventManager->dispatch(
             'catalog_block_product_list_collection',

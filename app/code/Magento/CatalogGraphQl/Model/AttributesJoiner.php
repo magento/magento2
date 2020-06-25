@@ -45,7 +45,7 @@ class AttributesJoiner
      * @param AbstractCollection $collection
      * @return void
      */
-    public function join(FieldNode $fieldNode, AbstractCollection $collection) : void
+    public function join(FieldNode $fieldNode, AbstractCollection $collection): void
     {
         foreach ($this->getQueryFields($fieldNode) as $field) {
             $this->addFieldToCollection($collection, $field);
@@ -60,19 +60,20 @@ class AttributesJoiner
      */
     public function getQueryFields(FieldNode $fieldNode): array
     {
-        if (!isset($this->queryFields[$fieldNode->name->value])) {
-            $this->queryFields[$fieldNode->name->value] = [];
+        if (null === $this->getFieldNodeSelections($fieldNode)) {
             $query = $fieldNode->selectionSet->selections;
+            $selectedFields = [];
             /** @var FieldNode $field */
             foreach ($query as $field) {
                 if ($field->kind === 'InlineFragment') {
                     continue;
                 }
-                $this->queryFields[$fieldNode->name->value][] = $field->name->value;
+                $selectedFields[] = $field->name->value;
             }
+            $this->setSelectionsForFieldNode($fieldNode, $selectedFields);
         }
 
-        return $this->queryFields[$fieldNode->name->value];
+        return $this->getFieldNodeSelections($fieldNode);
     }
 
     /**
@@ -83,7 +84,7 @@ class AttributesJoiner
      * @param AbstractCollection $collection
      * @param string $field
      */
-    private function addFieldToCollection(AbstractCollection $collection, string $field)
+    private function addFieldToCollection(AbstractCollection $collection, string $field): void
     {
         $attribute = isset($this->fieldToAttributeMap[$field]) ? $this->fieldToAttributeMap[$field] : $field;
 
@@ -98,5 +99,29 @@ class AttributesJoiner
                 $collection->addAttributeToSelect($attribute);
             }
         }
+    }
+
+    /**
+     * Get the fields selections for a query node
+     *
+     * @param FieldNode $fieldNode
+     * @return array|null
+     */
+    private function getFieldNodeSelections(FieldNode $fieldNode): ?array
+    {
+        return $this->queryFields[$fieldNode->name->value][$fieldNode->name->loc->start] ?? null;
+    }
+
+    /**
+     * Set the field selections for a query node
+     *
+     * Index nodes by name and position so nodes with same name don't collide
+     *
+     * @param FieldNode $fieldNode
+     * @param array $selectedFields
+     */
+    private function setSelectionsForFieldNode(FieldNode $fieldNode, array $selectedFields): void
+    {
+        $this->queryFields[$fieldNode->name->value][$fieldNode->name->loc->start] = $selectedFields;
     }
 }

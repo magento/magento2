@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="PayPalPaymentSection">
+        <element name="guestCheckout" type="input" selector="#guest"/>
+        <element name="loginSection" type="input" selector=" #main&gt;#login"/>
+        <element name="email" type="input" selector="//input[contains(@name, 'email') and not(contains(@style, 'display:none'))]"/>
+        <element name="password" type="input" selector="//input[contains(@name, 'password') and not(contains(@style, 'display:none'))]"/>
+        <element name="loginBtn" type="input" selector="button#btnLogin"/>
+        <element name="reviewUserInfo" type="text" selector="[data-testid=personalized-banner-content]"/>
+        <element name="cartIcon" type="text" selector="[data-testid='header-show-cart-dropdown-btn']"/>
+        <element name="itemName" type="text" selector="//p[contains(@class,'CartDropdown_line') and text()='{{productName}}']" parameterized="true"/>
+        <element name="paypalSubmitBtn" type="text" selector="#payment-submit-btn"/>
+        <element name="nextButton" type="button" selector="#btnNext"/>
+        <element name="continueButton" type="button" selector=".continueButton"/>
+        <element name="userName" type="text" selector="#reviewUserInfo"/>
+        <element name="notYouLink" type="input" selector="#backToInputEmailLink"/>
+        <element name="shippingMethod" type="text" selector="#shippingMethodCharge > span.selectedShippingMethod"/>
+        <element name="paypalCart" type="text" selector="#transactionCart"/>
+        <element name="productNamePosition" type="text" selector=".itemName"/>
+    </section>
+</sections>

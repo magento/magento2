@@ -26,7 +26,7 @@ class XmlTest extends \PHPUnit\Framework\TestCase
                 /** @var \SimpleXMLElement $node */
                 foreach ($nodes as $node) {
                     $type = (string)$node['type'];
-                    $this->assertNotRegExp('/\//', $type, "Factory name detected: {$type}.");
+                    $this->assertDoesNotMatchRegularExpression('/\//', $type, "Factory name detected: {$type}.");
                 }
             },
             \Magento\Framework\App\Utility\Files::init()->getConfigFiles('widget.xml')

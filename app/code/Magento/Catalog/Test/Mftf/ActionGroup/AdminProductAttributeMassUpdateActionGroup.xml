@@ -20,6 +20,7 @@
         <seeInCurrentUrl url="{{ProductAttributesEditPage.url}}" stepKey="seeAttributePageEditUrl"/>
         <click selector="{{AdminUpdateAttributesSection.toggleName}}" stepKey="clickToChangeName"/>
         <fillField selector="{{AdminUpdateAttributesSection.name}}" userInput="{{product.name}}" stepKey="fillFieldName"/>
+        <scrollTo selector="{{AdminUpdateAttributesSection.toggleDescription}}" x="0" y="-80" stepKey="scrollToDescription"/>
         <click selector="{{AdminUpdateAttributesSection.toggleDescription}}" stepKey="clickToChangeDescription"/>
         <fillField selector="{{AdminUpdateAttributesSection.description}}" userInput="{{product.description}}" stepKey="fillFieldDescription"/>
         <click selector="{{AdminUpdateAttributesSection.saveButton}}" stepKey="save"/>

@@ -14,7 +14,7 @@
             <stories value="Create/Edit bundle product in Admin"/>
             <title value="Admin should be able to add/edit bundle items when creating/editing a bundle product"/>
             <description value="Admin should be able to add/edit bundle items when creating/editing a bundle product"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-223"/>
             <group value="Bundle"/>
         </annotations>
@@ -25,8 +25,9 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct3"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
             <!--Admin login-->
-            <actionGroup stepKey="loginToAdminPanel" ref="LoginAsAdmin"/>
+            <actionGroup stepKey="loginToAdminPanel" ref="AdminLoginActionGroup"/>
         </before>
         <after>
             <!--Deleting data-->

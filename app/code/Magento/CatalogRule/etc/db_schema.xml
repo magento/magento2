@@ -8,19 +8,19 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="catalogrule" resource="default" engine="innodb" comment="CatalogRule">
-        <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="rule_id" unsigned="true" nullable="false" identity="true"
                 comment="Entity ID"/>
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Name"/>
         <column xsi:type="text" name="description" nullable="true" comment="Description"/>
         <column xsi:type="date" name="from_date" comment="From"/>
         <column xsi:type="date" name="to_date" comment="To"/>
-        <column xsi:type="smallint" name="is_active" padding="6" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="smallint" name="is_active" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Is Active"/>
         <column xsi:type="mediumtext" name="conditions_serialized" nullable="true" comment="Conditions Serialized"/>
         <column xsi:type="mediumtext" name="actions_serialized" nullable="true" comment="Actions Serialized"/>
-        <column xsi:type="smallint" name="stop_rules_processing" padding="6" unsigned="false" nullable="false"
+        <column xsi:type="smallint" name="stop_rules_processing" unsigned="false" nullable="false"
                 identity="false" default="1" comment="Stop Rules Processing"/>
-        <column xsi:type="int" name="sort_order" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="sort_order" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Sort Order"/>
         <column xsi:type="varchar" name="simple_action" nullable="true" length="32" comment="Simple Action"/>
         <column xsi:type="decimal" name="discount_amount" scale="6" precision="20" unsigned="false" nullable="false"
@@ -36,26 +36,26 @@
         </index>
     </table>
     <table name="catalogrule_product" resource="default" engine="innodb" comment="CatalogRule Product">
-        <column xsi:type="int" name="rule_product_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="rule_product_id" unsigned="true" nullable="false" identity="true"
                 comment="Rule Product ID"/>
-        <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"
+        <column xsi:type="int" name="rule_id" unsigned="true" nullable="false" identity="false" default="0"
                 comment="Rule ID"/>
-        <column xsi:type="int" name="from_time" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="from_time" unsigned="true" nullable="false" identity="false"
                 default="0" comment="From Time"/>
-        <column xsi:type="int" name="to_time" padding="10" unsigned="true" nullable="false" identity="false" default="0"
+        <column xsi:type="int" name="to_time" unsigned="true" nullable="false" identity="false" default="0"
                 comment="To time"/>
-        <column xsi:type="int" name="customer_group_id" padding="11" unsigned="false" nullable="true" identity="false"/>
-        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="customer_group_id" unsigned="false" nullable="true" identity="false"/>
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Product ID"/>
         <column xsi:type="varchar" name="action_operator" nullable="true" length="10" default="to_fixed"
                 comment="Action Operator"/>
         <column xsi:type="decimal" name="action_amount" scale="6" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Action Amount"/>
-        <column xsi:type="smallint" name="action_stop" padding="6" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="smallint" name="action_stop" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Action Stop"/>
-        <column xsi:type="int" name="sort_order" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="sort_order" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Sort Order"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 comment="Website ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rule_product_id"/>
@@ -86,15 +86,15 @@
         </index>
     </table>
     <table name="catalogrule_product_price" resource="default" engine="innodb" comment="CatalogRule Product Price">
-        <column xsi:type="int" name="rule_product_price_id" padding="10" unsigned="true" nullable="false"
+        <column xsi:type="int" name="rule_product_price_id" unsigned="true" nullable="false"
                 identity="true" comment="Rule Product PriceId"/>
         <column xsi:type="date" name="rule_date" nullable="false" comment="Rule Date"/>
-        <column xsi:type="int" name="customer_group_id" padding="11" unsigned="false" nullable="true" identity="false"/>
-        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="customer_group_id" unsigned="false" nullable="true" identity="false"/>
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Product ID"/>
         <column xsi:type="decimal" name="rule_price" scale="6" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Rule Price"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 comment="Website ID"/>
         <column xsi:type="date" name="latest_start_date" comment="Latest StartDate"/>
         <column xsi:type="date" name="earliest_end_date" comment="Earliest EndDate"/>
@@ -118,11 +118,11 @@
         </index>
     </table>
     <table name="catalogrule_group_website" resource="default" engine="innodb" comment="CatalogRule Group Website">
-        <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"
+        <column xsi:type="int" name="rule_id" unsigned="true" nullable="false" identity="false" default="0"
                 comment="Rule ID"/>
-        <column xsi:type="int" name="customer_group_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="customer_group_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Customer Group ID"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Website ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rule_id"/>
@@ -137,9 +137,9 @@
         </index>
     </table>
     <table name="catalogrule_website" resource="default" engine="innodb" comment="Catalog Rules To Websites Relations">
-        <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="rule_id" unsigned="true" nullable="false" identity="false"
                 comment="Rule ID"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 comment="Website ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rule_id"/>
@@ -157,9 +157,9 @@
     </table>
     <table name="catalogrule_customer_group" resource="default" engine="innodb"
            comment="Catalog Rules To Customer Groups Relations">
-        <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="rule_id" unsigned="true" nullable="false" identity="false"
                 comment="Rule ID"/>
-        <column xsi:type="int" name="customer_group_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="customer_group_id" unsigned="true" nullable="false" identity="false"
                 comment="Customer Group ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rule_id"/>
@@ -176,26 +176,26 @@
         </index>
     </table>
     <table name="catalogrule_product_replica" resource="default" engine="innodb" comment="CatalogRule Product">
-        <column xsi:type="int" name="rule_product_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="rule_product_id" unsigned="true" nullable="false" identity="true"
                 comment="Rule Product ID"/>
-        <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"
+        <column xsi:type="int" name="rule_id" unsigned="true" nullable="false" identity="false" default="0"
                 comment="Rule ID"/>
-        <column xsi:type="int" name="from_time" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="from_time" unsigned="true" nullable="false" identity="false"
                 default="0" comment="From Time"/>
-        <column xsi:type="int" name="to_time" padding="10" unsigned="true" nullable="false" identity="false" default="0"
+        <column xsi:type="int" name="to_time" unsigned="true" nullable="false" identity="false" default="0"
                 comment="To time"/>
-        <column xsi:type="int" name="customer_group_id" padding="11" unsigned="false" nullable="true" identity="false"/>
-        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="customer_group_id" unsigned="false" nullable="true" identity="false"/>
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Product ID"/>
         <column xsi:type="varchar" name="action_operator" nullable="true" default="to_fixed" length="10"
                 comment="Action Operator"/>
         <column xsi:type="decimal" name="action_amount" scale="6" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Action Amount"/>
-        <column xsi:type="smallint" name="action_stop" padding="6" unsigned="false" nullable="false" identity="false"
+        <column xsi:type="smallint" name="action_stop" unsigned="false" nullable="false" identity="false"
                 default="0" comment="Action Stop"/>
-        <column xsi:type="int" name="sort_order" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="sort_order" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Sort Order"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 comment="Website ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rule_product_id"/>
@@ -227,15 +227,15 @@
     </table>
     <table name="catalogrule_product_price_replica" resource="default" engine="innodb"
            comment="CatalogRule Product Price">
-        <column xsi:type="int" name="rule_product_price_id" padding="10" unsigned="true" nullable="false"
+        <column xsi:type="int" name="rule_product_price_id" unsigned="true" nullable="false"
                 identity="true" comment="Rule Product PriceId"/>
         <column xsi:type="date" name="rule_date" nullable="false" comment="Rule Date"/>
-        <column xsi:type="int" name="customer_group_id" padding="11" unsigned="false" nullable="true" identity="false"/>
-        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="customer_group_id" unsigned="false" nullable="true" identity="false"/>
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Product ID"/>
         <column xsi:type="decimal" name="rule_price" scale="6" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Rule Price"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 comment="Website ID"/>
         <column xsi:type="date" name="latest_start_date" comment="Latest StartDate"/>
         <column xsi:type="date" name="earliest_end_date" comment="Earliest EndDate"/>
@@ -260,11 +260,11 @@
     </table>
     <table name="catalogrule_group_website_replica" resource="default" engine="innodb"
            comment="CatalogRule Group Website">
-        <column xsi:type="int" name="rule_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"
+        <column xsi:type="int" name="rule_id" unsigned="true" nullable="false" identity="false" default="0"
                 comment="Rule ID"/>
-        <column xsi:type="int" name="customer_group_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="customer_group_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Customer Group ID"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Website ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="rule_id"/>

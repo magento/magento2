@@ -21,7 +21,7 @@
 
         <before>
             <actionGroup ref="AdminCreateApiConfigurableProductActionGroup" stepKey="createConfigurableProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
@@ -38,7 +38,9 @@
         </after>
 
         <!--Open edit product page-->
-        <amOnPage url="{{AdminProductEditPage.url($$createConfigProductCreateConfigurableProduct.id$$)}}" stepKey="goToProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$$createConfigProductCreateConfigurableProduct.id$$"/>
+        </actionGroup>
 
         <!--Open edit configuration wizard-->
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickEditConfigurations"/>

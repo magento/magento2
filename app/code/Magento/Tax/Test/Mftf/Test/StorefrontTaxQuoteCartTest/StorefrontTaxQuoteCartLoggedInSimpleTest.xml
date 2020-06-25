@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontTaxQuoteCartLoggedInSimpleTest">
+        <annotations>
+            <features value="Tax"/>
+            <stories value="Tax Calculation in Shopping Cart"/>
+            <title value="Tax for Simple Product Quote should be recalculated in Shopping Cart for Logged in Customer with Default Address"/>
+            <description value="Tax for Simple Product Quote should be recalculated in Shopping Cart for Logged in Customer with Default Address"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-295"/>
+            <group value="Tax"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+
+            <!-- Fill in rules to display tax in the cart -->
+            <actionGroup ref="EditTaxConfigurationByUIActionGroup" stepKey="fillDefaultTaxForms"/>
+
+            <!-- Go to tax rule page -->
+            <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulePage"/>
+            <waitForPageLoad stepKey="waitForTaxRatePage"/>
+            <click stepKey="addNewTaxRate" selector="{{AdminGridMainControls.add}}"/>
+            <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
+
+            <!-- Add NY and CA tax rules -->
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addNYTaxRate">
+                <argument name="taxCode" value="SimpleTaxNY"/>
+            </actionGroup>
+
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addCATaxRate">
+                <argument name="taxCode" value="SimpleTaxCA"/>
+            </actionGroup>
+
+            <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+            <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
+
+            <!-- Fill out form for a new user with address -->
+            <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+            <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+                <argument name="customer" value="Simple_US_Customer_NY"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+            <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+                <argument name="messageType" value="success"/>
+                <argument name="message" value="Thank you for registering with Main Website Store."/>
+            </actionGroup>
+
+            <actionGroup ref="EnterCustomerAddressInfoActionGroup" stepKey="enterAddressInfo">
+                <argument name="Address" value="US_Address_NY"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Go to the tax rule page and delete the row we created-->
+            <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulesPage"/>
+            <waitForPageLoad stepKey="waitForRulesPage"/>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
+                <argument name="name" value="SampleRule"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+
+            <!-- Go to the tax rate page -->
+            <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRatesPage"/>
+            <waitForPageLoad stepKey="waitForRatesPage"/>
+
+            <!-- Delete the two tax rates that were created -->
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
+                <argument name="name" value="{{SimpleTaxNY.state}}-{{SimpleTaxNY.rate}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteCARate">
+                <argument name="name" value="{{SimpleTaxCA.state}}-{{SimpleTaxCA.rate}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+
+            <!-- Ensure tax won't be shown in the cart -->
+            <actionGroup ref="ChangeToDefaultTaxConfigurationUIActionGroup" stepKey="changeToDefaultTaxConfiguration"/>
+
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+        </after>
+
+        <!-- Go to the created product page and add it to the cart -->
+        <amOnPage url="$$simpleProduct1.sku$$.html" stepKey="goToSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPage"/>
+        <click stepKey="addSimpleProductToCart" selector="{{StorefrontProductActionSection.addToCart}}"/>
+        <waitForPageLoad stepKey="waitForProductAdded"/>
+        <see stepKey="seeSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You added"/>
+
+        <!-- Assert that taxes are applied correctly for NY -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckout"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask"/>
+
+        <waitForElementVisible stepKey="waitForOverviewVisible" selector="{{CheckoutPaymentSection.tax}}"/>
+        <waitForText userInput="$5.00" selector="{{CheckoutPaymentSection.orderSummaryShippingTotal}}" time="30" stepKey="waitForCorrectShippingAmount"/>
+        <see stepKey="seeTax" selector="{{CheckoutPaymentSection.tax}}" userInput="$10.30"/>
+        <click stepKey="expandTax" selector="{{CheckoutPaymentSection.tax}}"/>
+        <see stepKey="seeTaxPercent" selector="{{CheckoutPaymentSection.taxPercentage}}" userInput="({{SimpleTaxNY.rate}}%)"/>
+        <see stepKey="seeTotalIncl" selector="{{CheckoutPaymentSection.orderSummaryTotalIncluding}}" userInput="$138.30"/>
+        <see stepKey="seeTotalExcl" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$128.00"/>
+
+        <!-- Change the address -->
+        <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress">
+            <argument name="taxCode" value="SimpleTaxSwiss"/>
+        </actionGroup>
+
+        <!-- Assert that taxes are applied correctly for Switzerland -->
+        <see stepKey="seeTax2" selector="{{CheckoutPaymentSection.tax}}" userInput="$0.00"/>
+        <see stepKey="seeTotalIncl2" selector="{{CheckoutPaymentSection.orderSummaryTotalIncluding}}" userInput="$128.00"/>
+        <see stepKey="seeTotalExcl2" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$128.00"/>
+
+        <!-- Change the address -->
+        <actionGroup ref="ChangeSummaryQuoteAddressActionGroup" stepKey="changeAddress2">
+            <argument name="taxCode" value="SimpleTaxCA"/>
+        </actionGroup>
+
+        <!-- Assert that taxes are applied correctly for CA -->
+        <see stepKey="seeTax3" selector="{{CheckoutPaymentSection.tax}}" userInput="$10.15"/>
+        <click stepKey="expandTax2" selector="{{CheckoutPaymentSection.tax}}"/>
+        <see stepKey="seeTaxPercent2" selector="{{CheckoutPaymentSection.taxPercentage}}" userInput="({{SimpleTaxCA.rate}}%)"/>
+        <see stepKey="seeTotalIncl3" selector="{{CheckoutPaymentSection.orderSummaryTotalIncluding}}" userInput="$138.15"/>
+        <see stepKey="seeTotalExcl3" selector="{{CheckoutPaymentSection.orderSummaryTotalExcluding}}" userInput="$128.00"/>
+    </test>
+</tests>

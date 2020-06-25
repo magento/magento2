@@ -52,8 +52,7 @@
         <amOnPage url="{{StorefrontCustomerSignOutPage.url}}" stepKey="signOut"/>
         <waitForLoadingMaskToDisappear stepKey="waitSignOutPage"/>
         <resetCookie userInput="persistent_shopping_cart" stepKey="resetPersistentCookie"/>
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnHomePageAfterResetPersistentCookie"/>
-        <waitForPageLoad stepKey="waitHomePageLoadAfterResetCookie"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePageAfterResetPersistentCookie"/>
         <!--Step 4: Add the product to shopping cart and open cart-->
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToProductPageAsGuestUser"/>
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCartAsGuestUser">

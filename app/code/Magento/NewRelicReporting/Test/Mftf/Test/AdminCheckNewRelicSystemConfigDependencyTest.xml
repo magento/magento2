@@ -18,7 +18,7 @@
             <group value="NewRelicReporting"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminNavigateToNewRelicConfigurationActionGroup" stepKey="goToConfigPage"/>
             <actionGroup ref="AdminExpandConfigSectionActionGroup" stepKey="expandingGeneralSection">
                 <argument name="sectionName" value="General"/>

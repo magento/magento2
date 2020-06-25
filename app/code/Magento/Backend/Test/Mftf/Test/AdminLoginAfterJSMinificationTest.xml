@@ -22,7 +22,7 @@
         <before>
             <magentoCLI command="config:set {{MinifyJavaScriptFilesEnableConfigData.path}} {{MinifyJavaScriptFilesEnableConfigData.value}}" stepKey="enableJsMinification"/>
             <magentoCLI command="cache:clean config" stepKey="cleanCache"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <magentoCLI command="config:set {{MinifyJavaScriptFilesDisableConfigData.path}} {{MinifyJavaScriptFilesDisableConfigData.value}}" stepKey="disableJsMinification"/>

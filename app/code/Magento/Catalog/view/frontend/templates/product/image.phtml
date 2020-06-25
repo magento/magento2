@@ -8,9 +8,11 @@
 /** @var $block \Magento\Catalog\Block\Product\Image */
 /** @var $escaper \Magento\Framework\Escaper */
 ?>
-
+<!--deprecated template as image_with_borders is a primary one-->
 <img class="photo image <?= $escaper->escapeHtmlAttr($block->getClass()) ?>"
-    <?= $escaper->escapeHtml($block->getCustomAttributes()) ?>
+    <?php foreach ($block->getCustomAttributes() as $name => $value): ?>
+        <?= $escaper->escapeHtmlAttr($name) ?>="<?= $escaper->escapeHtmlAttr($value) ?>"
+    <?php endforeach; ?>
     src="<?= $escaper->escapeUrl($block->getImageUrl()) ?>"
     loading="lazy"
     width="<?= $escaper->escapeHtmlAttr($block->getWidth()) ?>"

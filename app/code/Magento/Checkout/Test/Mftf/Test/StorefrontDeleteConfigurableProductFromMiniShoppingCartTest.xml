@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <!-- Create Default Category -->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
 
@@ -74,7 +74,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Add Configurable Product to the cart -->

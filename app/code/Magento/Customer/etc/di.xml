@@ -357,6 +357,11 @@
     <type name="Magento\Framework\App\ActionInterface">
         <plugin name="customerNotification" type="Magento\Customer\Model\Plugin\CustomerNotification"/>
     </type>
+    <type name="Magento\Customer\Model\Authorization\CustomerSessionUserContext">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
     <type name="Magento\PageCache\Observer\FlushFormKey">
         <plugin name="customerFlushFormKey" type="Magento\Customer\Model\Plugin\CustomerFlushFormKey"/>
     </type>

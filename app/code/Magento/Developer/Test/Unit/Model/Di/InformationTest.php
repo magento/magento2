@@ -1,47 +1,49 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Test\Unit\Model\Di;
 
+use Magento\Developer\Model\Di\Information;
+use Magento\Developer\Model\Di\PluginList;
 use Magento\Framework\ObjectManager\ConfigInterface;
 use Magento\Framework\ObjectManager\DefinitionInterface;
-use Magento\Developer\Model\Di\PluginList;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Developer\Model\Di\Information;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class InformationTest extends \PHPUnit\Framework\TestCase
+class InformationTest extends TestCase
 {
     /**
-     * @var \Magento\Developer\Model\Di\Information
+     * @var Information
      */
     private $object;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\ObjectManager\ConfigInterface
+     * @var MockObject|ConfigInterface
      */
     private $objectManagerConfig;
 
     /**
-     * @var \Magento\Framework\ObjectManager\DefinitionInterface
+     * @var DefinitionInterface
      */
     private $definitions;
 
     /**
-     * @var \Magento\Developer\Model\Di\PluginList
+     * @var PluginList
      */
     private $pluginList;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerConfig = $this->getMockBuilder(ConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->definitions = $this->getMockBuilder(DefinitionInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->pluginList = $this->getMockBuilder(PluginList::class)
             ->disableOriginalConstructor()

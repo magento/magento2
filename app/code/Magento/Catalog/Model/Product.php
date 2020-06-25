@@ -73,9 +73,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     const STORE_ID = 'store_id';
 
     /**
-     * @var string
+     * @var string|bool
      */
-    protected $_cacheTag = self::CACHE_TAG;
+    protected $_cacheTag = false;
 
     /**
      * @var string
@@ -725,9 +725,14 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getCategoryId()
     {
+        if ($this->hasData('category_id')) {
+            return $this->getData('category_id');
+        }
         $category = $this->_registry->registry('current_category');
-        if ($category && in_array($category->getId(), $this->getCategoryIds())) {
-            return $category->getId();
+        $categoryId = $category ? $category->getId() : null;
+        if ($categoryId && in_array($categoryId, $this->getCategoryIds())) {
+            $this->setData('category_id', $categoryId);
+            return $categoryId;
         }
         return false;
     }
@@ -873,7 +878,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function beforeSave()
     {
-        $this->cleanCache();
         $this->setTypeHasOptions(false);
         $this->setTypeHasRequiredOptions(false);
         $this->setHasOptions(false);
@@ -1540,11 +1544,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
                 }
                 $image['url'] = $this->getMediaConfig()->getMediaUrl($image['file']);
                 $image['id'] = $image['value_id'];
-
-                // @deprecated 'path' should not be used
-                // The file can be absent in local filesystem if remote storage is used
                 $image['path'] = $directory->getAbsolutePath($this->getMediaConfig()->getMediaPath($image['file']));
-
                 $images->addItem(new \Magento\Framework\DataObject($image));
             }
             $this->setData('media_gallery_images', $images);

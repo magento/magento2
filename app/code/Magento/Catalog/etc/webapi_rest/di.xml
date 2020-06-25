@@ -37,7 +37,7 @@
     </type>
     <type name="Magento\Catalog\Model\Product\Webapi\ProductOutputProcessor">
         <arguments>
-            <argument name="deserializer" xsi:type="object">Magento\Framework\Webapi\Rest\Request\Deserializer\Json</argument>
+            <argument name="deserializer" xsi:type="object">Magento\Catalog\Model\Product\Webapi\Rest\RequestTypeBasedDeserializer</argument>
         </arguments>
     </type>
 </config>

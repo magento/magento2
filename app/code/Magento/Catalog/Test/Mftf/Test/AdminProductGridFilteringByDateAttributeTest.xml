@@ -19,7 +19,7 @@
             <group value="product"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProductWithNewFromDate" stepKey="createSimpleProductWithDate"/>
         </before>
         <after>

@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="queue_lock" resource="default" engine="innodb"
            comment="Messages that were processed are inserted here to be locked.">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true"
                 comment="Message ID"/>
         <column xsi:type="varchar" name="message_code" nullable="false" length="255" default="" comment="Message Code"/>
         <column xsi:type="timestamp" name="created_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"

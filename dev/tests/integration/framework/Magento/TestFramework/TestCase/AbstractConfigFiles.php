@@ -23,7 +23,7 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
     protected $_reader;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var \PHPUnit\Framework\MockObject\MockObject
      */
     protected $_fileResolverMock;
 
@@ -37,7 +37,7 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
      */
     protected $componentRegistrar;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->componentRegistrar = new ComponentRegistrar();
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -51,7 +51,7 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
             $validateStateMock = $this->getMockBuilder(
                 \Magento\Framework\Config\ValidationStateInterface::class
             )->disableOriginalConstructor()->getMock();
-            $validateStateMock->expects($this->any())->method('isValidationRequired')->will($this->returnValue(true));
+            $validateStateMock->expects($this->any())->method('isValidationRequired')->willReturn(true);
 
             $this->_reader = $this->_objectManager->create(
                 $this->_getReaderClassName(),
@@ -66,7 +66,7 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
         }
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_objectManager->removeSharedInstance($this->_getReaderClassName());
     }
@@ -102,7 +102,7 @@ abstract class AbstractConfigFiles extends \PHPUnit\Framework\TestCase
         // have the file resolver return all relevant xml files
         $this->_fileResolverMock->expects($this->any())
             ->method('get')
-            ->will($this->returnValue($this->getXmlConfigFiles()));
+            ->willReturn($this->getXmlConfigFiles());
 
         try {
             // this will merge all xml files and validate them

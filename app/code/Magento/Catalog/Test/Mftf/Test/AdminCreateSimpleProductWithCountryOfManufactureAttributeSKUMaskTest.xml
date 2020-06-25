@@ -21,7 +21,7 @@
 
         <before>
             <magentoCLI stepKey="setCountryOfManufacture" command="config:set catalog/fields_masks/sku" arguments="{{name}}-{{country_of_manufacture}}"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <magentoCLI stepKey="setName" command="config:set catalog/fields_masks/sku" arguments="{{name}}"/>
