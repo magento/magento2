@@ -56,9 +56,9 @@ class DeclarativeSchemaDependencyProvider
 
     /**
      * DeclarativeSchemaDependencyProvider constructor.
-     * @param DependencyProvider $dependencyProvider
+     * @param \Magento\Test\Integrity\Dependency\DependencyProvider\Proxy $dependencyProvider
      */
-    public function __construct(DependencyProvider $dependencyProvider)
+    public function __construct(\Magento\Test\Integrity\Dependency\DependencyProvider\Proxy $dependencyProvider)
     {
         $this->dependencyProvider = $dependencyProvider;
     }
