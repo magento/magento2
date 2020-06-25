@@ -55,7 +55,8 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
              return false;
         }
 
-        $this->cache->save($this->lockSign, $this->getIdentifier($name), [], $timeout * 100);
+        $timeout = $timeout <= 0 ? null : $timeout;
+        $this->cache->save($this->lockSign, $this->getIdentifier($name), [], $timeout);
 
         $data = $this->cache->load($this->getIdentifier($name));
 
