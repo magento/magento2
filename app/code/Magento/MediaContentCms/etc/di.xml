@@ -20,4 +20,18 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\MediaContentCms\Observer\PageDelete">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="content" xsi:type="string">content</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaContentCms\Observer\BlockDelete">
+        <arguments>
+            <argument name="fields" xsi:type="array">
+                <item name="content" xsi:type="string">content</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
