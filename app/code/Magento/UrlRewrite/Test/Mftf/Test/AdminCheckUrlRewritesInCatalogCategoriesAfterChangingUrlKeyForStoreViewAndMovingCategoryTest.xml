@@ -17,6 +17,9 @@
             <testCaseId value="MC-5352"/>
             <group value="url_rewrite"/>
             <group value="mtf_migrated"/>
+            <skip>
+                <issueId value="MC-121"/><!-- catalog-storefront/issues/121 -->
+            </skip>
         </annotations>
         <before>
             <!-- Create two sub-categories in default category with simple products -->
