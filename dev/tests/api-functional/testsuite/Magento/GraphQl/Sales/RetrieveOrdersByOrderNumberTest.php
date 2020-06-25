@@ -169,19 +169,12 @@ QUERY;
     private function assertTotalsWithTaxesAndDiscounts(array $customerOrderItemTotal): void
     {
         $this->assertCount(1, $customerOrderItemTotal['taxes']);
-        $expectedProductAndShippingTaxes = [4.05];
-        $totalTaxes = [];
-        foreach ($customerOrderItemTotal['taxes'] as $totalTaxFromResponse) {
-            array_push($totalTaxes, $totalTaxFromResponse['amount']['value']);
-        }
-        foreach ($totalTaxes as $value) {
-            $this->assertTrue(in_array($value, $expectedProductAndShippingTaxes));
-        }
-        foreach ($customerOrderItemTotal['taxes'] as $taxData) {
-            $this->assertEquals('USD', $taxData['amount']['currency']);
-            $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
-            $this->assertEquals(7.5, $taxData['rate']);
-        }
+        $taxData = $customerOrderItemTotal['taxes'][0];
+        $this->assertEquals('USD', $taxData['amount']['currency']);
+        $this->assertEquals(4.05, $taxData['amount']['value']);
+        $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
+        $this->assertEquals(7.5, $taxData['rate']);
+
         unset($customerOrderItemTotal['taxes']);
         $assertionMap = [
             'base_grand_total' => ['value' => 58.05, 'currency' =>'USD'],
@@ -203,6 +196,93 @@ QUERY;
                         'amount'=>['value' => 1.35],
                         'title' => 'US-TEST-*-Rate-1',
                         'rate' => 7.5
+                    ]
+                ]
+            ],
+            'discounts' => [
+                0 => ['amount' => [ 'value' => -6, 'currency' =>'USD'],
+                    'label' => 'Discount'
+                ]
+            ]
+        ];
+        $this->assertResponseFields($customerOrderItemTotal, $assertionMap);
+    }
+
+    /**
+     *  Verify the customer order with tax, discount with shipping tax class set for calculation setting
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_al.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_10_percent_off_with_discount_on_shipping.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_shipping_excludeTax_order_display_settings.php
+     */
+    public function testCustomerOrdersSimpleProductWithTaxesAndDiscountsWithTwoRules()
+    {
+        $quantity = 4;
+        $sku = 'simple1';
+        $cartId = $this->createEmptyCart();
+        $this->addProductToCart($cartId, $quantity, $sku);
+        $this->setBillingAddress($cartId);
+        $shippingMethod = $this->setShippingAddress($cartId);
+        $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
+        $this->setPaymentMethod($cartId, $paymentMethod);
+        $orderNumber = $this->placeOrder($cartId);
+        $customerOrderResponse = $this->getCustomerOrderQuery($orderNumber);
+        // Asserting discounts on order item level
+        $this->assertEquals(4, $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']);
+        $this->assertEquals('USD', $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']);
+        $this->assertEquals('Discount', $customerOrderResponse[0]['items'][0]['discounts'][0]['label']);
+        $customerOrderItem = $customerOrderResponse[0];
+        $this->assertTotalsWithTaxesAndDiscountsWithTwoRules($customerOrderItem['total']);
+        $this->deleteOrder();
+    }
+
+    /**
+     * @param array $customerOrderItemTotal
+     */
+    private function assertTotalsWithTaxesAndDiscountsWithTwoRules(array $customerOrderItemTotal): void
+    {
+        $this->assertCount(2, $customerOrderItemTotal['taxes']);
+        $taxData = $customerOrderItemTotal['taxes'][0];
+        $this->assertEquals('USD', $taxData['amount']['currency']);
+        $this->assertEquals(4.05, $taxData['amount']['value']);
+        $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
+        $this->assertEquals(7.5, $taxData['rate']);
+
+        $secondTaxData = $customerOrderItemTotal['taxes'][1];
+        $this->assertEquals('USD', $secondTaxData['amount']['currency']);
+        $this->assertEquals(2.97, $secondTaxData['amount']['value']);
+        $this->assertEquals('US-AL-*-Rate-1', $secondTaxData['title']);
+        $this->assertEquals(5.5, $secondTaxData['rate']);
+
+        unset($customerOrderItemTotal['taxes']);
+        $assertionMap = [
+            'base_grand_total' => ['value' => 61.02, 'currency' =>'USD'],
+            'grand_total' => ['value' => 61.02, 'currency' =>'USD'],
+            'subtotal' => ['value' => 40, 'currency' =>'USD'],
+            'total_tax' => ['value' => 7.02, 'currency' =>'USD'],
+            'total_shipping' => ['value' => 20, 'currency' =>'USD'],
+            'shipping_handling' => [
+                'amount_including_tax' => ['value' => 22.6],
+                'amount_excluding_tax' => ['value' => 20],
+                'total_amount' => ['value' => 20, 'currency' =>'USD'],
+                'discounts' => [
+                    0 => ['amount'=>['value'=> 2, 'currency' =>'USD'],
+                        'label' => 'Discount'
+                    ]
+                ],
+                'taxes'=> [
+                    0 => [
+                        'amount'=>['value' => 1.35],
+                        'title' => 'US-TEST-*-Rate-1',
+                        'rate' => 7.5
+                    ],
+                    1 => [
+                        'amount'=>['value' => 0.99],
+                        'title' => 'US-AL-*-Rate-1',
+                        'rate' => 5.5
                     ]
                 ]
             ],
@@ -745,20 +825,12 @@ QUERY;
     private function assertTotalsAndShippingWithExcludedTaxSetting($customerOrderItemTotal): void
     {
         $this->assertCount(1, $customerOrderItemTotal['taxes']);
-        $expectedProductAndShippingTaxes = [2.25];
+        $taxData = $customerOrderItemTotal['taxes'][0];
+        $this->assertEquals('USD', $taxData['amount']['currency']);
+        $this->assertEquals(2.25, $taxData['amount']['value']);
+        $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
+        $this->assertEquals(7.5, $taxData['rate']);
 
-        $totalTaxes = [];
-        foreach ($customerOrderItemTotal['taxes'] as $totalTaxFromResponse) {
-            array_push($totalTaxes, $totalTaxFromResponse['amount']['value']);
-        }
-        foreach ($totalTaxes as $value) {
-            $this->assertTrue(in_array($value, $expectedProductAndShippingTaxes));
-        }
-        foreach ($customerOrderItemTotal['taxes'] as $taxData) {
-            $this->assertEquals('USD', $taxData['amount']['currency']);
-            $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
-            $this->assertEquals(7.5, $taxData['rate']);
-        }
         unset($customerOrderItemTotal['taxes']);
         $assertionMap = [
             'base_grand_total' => ['value' => 32.25, 'currency' =>'USD'],
@@ -820,19 +892,13 @@ QUERY;
     private function assertTotalsAndShippingWithTaxes(array $customerOrderItemTotal): void
     {
         $this->assertCount(1, $customerOrderItemTotal['taxes']);
-        $expectedProductAndShippingTaxes = [2.25];
-        $totalTaxes = [];
-        foreach ($customerOrderItemTotal['taxes'] as $totalTaxFromResponse) {
-            array_push($totalTaxes, $totalTaxFromResponse['amount']['value']);
-        }
-        foreach ($totalTaxes as $value) {
-            $this->assertTrue(in_array($value, $expectedProductAndShippingTaxes));
-        }
-        foreach ($customerOrderItemTotal['taxes'] as $taxData) {
-            $this->assertEquals('USD', $taxData['amount']['currency']);
-            $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
-            $this->assertEquals(7.5, $taxData['rate']);
-        }
+
+        $taxData = $customerOrderItemTotal['taxes'][0];
+        $this->assertEquals('USD', $taxData['amount']['currency']);
+        $this->assertEquals(2.25, $taxData['amount']['value']);
+        $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
+        $this->assertEquals(7.5, $taxData['rate']);
+
         unset($customerOrderItemTotal['taxes']);
         unset($customerOrderItemTotal['shipping_handling']['discounts']);
         $assertionMap = [

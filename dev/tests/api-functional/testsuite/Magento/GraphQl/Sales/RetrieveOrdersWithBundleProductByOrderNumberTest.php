@@ -164,19 +164,12 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
     private function assertTotalsOnBundleProductWithTaxesAndDiscounts(array $customerOrderItemTotal): void
     {
         $this->assertCount(1, $customerOrderItemTotal['taxes']);
-        $expectedProductAndShippingTaxes = [5.4];
-        $totalTaxes = [];
-        foreach ($customerOrderItemTotal['taxes'] as $totalTaxFromResponse) {
-            array_push($totalTaxes, $totalTaxFromResponse['amount']['value']);
-        }
-        foreach ($totalTaxes as $value) {
-            $this->assertTrue(in_array($value, $expectedProductAndShippingTaxes));
-        }
-        foreach ($customerOrderItemTotal['taxes'] as $taxData) {
-            $this->assertEquals('USD', $taxData['amount']['currency']);
-            $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
-            $this->assertEquals(7.5, $taxData['rate']);
-        }
+        $taxData = $customerOrderItemTotal['taxes'][0];
+        $this->assertEquals('USD', $taxData['amount']['currency']);
+        $this->assertEquals(5.4, $taxData['amount']['value']);
+        $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
+        $this->assertEquals(7.5, $taxData['rate']);
+
         unset($customerOrderItemTotal['taxes']);
         $assertionMap = [
             'base_grand_total' => ['value' => 77.4, 'currency' =>'USD'],

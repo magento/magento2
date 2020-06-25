@@ -188,11 +188,13 @@ class OrderTotal implements ResolverInterface
      * @param array $appliedShippingTaxesForItemsData
      * @return array
      */
-    private function getAppliedShippingTaxesDetails(OrderInterface $order, array $appliedShippingTaxesForItemsData): array
-    {
+    private function getAppliedShippingTaxesDetails(
+        OrderInterface $order,
+        array $appliedShippingTaxesForItemsData
+    ): array {
         $shippingTaxes = [];
-        foreach ($appliedShippingTaxesForItemsData  as $appliedTaxesKeyIndex => $appliedShippingTaxes) {
-            foreach ($appliedShippingTaxes as $key => $appliedShippingTax) {
+        foreach ($appliedShippingTaxesForItemsData as $appliedShippingTaxes) {
+            foreach ($appliedShippingTaxes as $appliedShippingTax) {
                 $appliedShippingTaxesArray = [
                     'title' => $appliedShippingTax['title'] ?? null,
                     'amount' => [
