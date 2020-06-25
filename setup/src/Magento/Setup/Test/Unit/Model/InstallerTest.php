@@ -326,9 +326,10 @@ namespace Magento\Setup\Test\Unit\Model {
             $setup = $this->createMock(Setup::class);
             $table = $this->createMock(Table::class);
             $connection = $this->getMockBuilder(AdapterInterface::class)
-                ->setMethods(['getSchemaListener', 'newTable'])
+                ->setMethods(['getSchemaListener', 'newTable', 'getTables'])
                 ->getMockForAbstractClass();
             $connection->expects($this->any())->method('getSchemaListener')->willReturn($this->schemaListenerMock);
+            $connection->expects($this->once())->method('getTables')->willReturn([]);
             $setup->expects($this->any())->method('getConnection')->willReturn($connection);
             $table->expects($this->any())->method('addColumn')->willReturn($table);
             $table->expects($this->any())->method('setComment')->willReturn($table);
@@ -449,12 +450,12 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Installing user configuration...'],
                         ['Enabling caches:'],
                         ['Current status:'],
-                        [print_r(['foo' => 1, 'bar' => 1], true)],
+                        ['foo: 1'],
+                        ['bar: 1'],
                         ['Installing data...'],
                         ['Data install/update:'],
                         ['Disabling caches:'],
                         ['Current status:'],
-                        [print_r([], true)],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Data post-updates:'],
@@ -462,7 +463,6 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Module \'Bar_Two\':'],
                         ['Enabling caches:'],
                         ['Current status:'],
-                        [print_r([], true)],
                         ['Caches clearing:'],
                         ['Cache cleared successfully'],
                         ['Disabling Maintenance Mode:'],
@@ -501,12 +501,12 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Installing user configuration...'],
                         ['Enabling caches:'],
                         ['Current status:'],
-                        [print_r(['foo' => 1, 'bar' => 1], true)],
+                        ['foo: 1'],
+                        ['bar: 1'],
                         ['Installing data...'],
                         ['Data install/update:'],
                         ['Disabling caches:'],
                         ['Current status:'],
-                        [print_r([], true)],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Data post-updates:'],
@@ -514,7 +514,6 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Module \'Bar_Two\':'],
                         ['Enabling caches:'],
                         ['Current status:'],
-                        [print_r([], true)],
                         ['Installing admin user...'],
                         ['Caches clearing:'],
                         ['Cache cleared successfully'],
