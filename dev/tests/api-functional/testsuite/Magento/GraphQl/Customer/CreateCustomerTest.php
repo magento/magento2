@@ -116,14 +116,18 @@ QUERY;
      */
     public function testCreateCustomerIfInputDataIsEmpty()
     {
+        $exceptionMessage = 'Field CustomerCreateInput.email of required type String! was not provided.
+Field CustomerCreateInput.firstname of required type String! was not provided.
+Field CustomerCreateInput.lastname of required type String! was not provided.';
+
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('"input" value should be specified');
+        $this->expectExceptionMessage($exceptionMessage);
 
         $query = <<<QUERY
 mutation {
     createCustomer(
         input: {
-        
+
         }
     ) {
         customer {
@@ -144,7 +148,7 @@ QUERY;
     public function testCreateCustomerIfEmailMissed()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Required parameters are missing: Email');
+        $this->expectExceptionMessage('Field CustomerCreateInput.email of required type String! was not provided');
 
         $newFirstname = 'Richard';
         $newLastname = 'Rowe';
@@ -234,7 +238,7 @@ QUERY;
     public function testCreateCustomerIfPassedAttributeDosNotExistsInCustomerInput()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Field "test123" is not defined by type CustomerInput.');
+        $this->expectExceptionMessage('Field "test123" is not defined by type CustomerCreateInput.');
 
         $newFirstname = 'Richard';
         $newLastname = 'Rowe';

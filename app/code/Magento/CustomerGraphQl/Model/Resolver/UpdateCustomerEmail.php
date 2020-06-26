@@ -1,20 +1,24 @@
 <?php
-
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
 
 namespace Magento\CustomerGraphQl\Model\Resolver;
-
 
 use Magento\CustomerGraphQl\Model\Customer\ExtractCustomerData;
 use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
 use Magento\CustomerGraphQl\Model\Customer\UpdateCustomerAccount;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
-use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\GraphQl\Model\Query\ContextInterface;
 
+/**
+ * Customer email update, used for GraphQL request processing
+ */
 class UpdateCustomerEmail implements ResolverInterface
 {
     /**
@@ -55,13 +59,9 @@ class UpdateCustomerEmail implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        /** @var \Magento\GraphQl\Model\Query\ContextInterface $context */
+        /** @var ContextInterface $context */
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
-        }
-
-        if (empty($args['email']) || empty($args['password'])) {
-            throw new GraphQlInputException(__('"email" and "password" values should be specified'));
         }
 
         $customer = $this->getCustomer->execute($context);
