@@ -48,26 +48,17 @@ class PluginListGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $this->application = Bootstrap::getInstance()->getBootstrap()->getApplication();
         $this->directoryList = new DirectoryList(BP, $this->getCustomDirs());
-        $this->file = Bootstrap::getObjectManager()->create(DriverInterface::class);
-        $reader = Bootstrap::getObjectManager()->create(
-        // phpstan:ignore "Class Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy not found."
-            \Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy::class
-        );
-        $scopeConfig = Bootstrap::getObjectManager()->create(\Magento\Framework\Config\Scope::class);
-        $omConfig = Bootstrap::getObjectManager()->create(
-            \Magento\Framework\Interception\ObjectManager\Config\Developer::class
-        );
-        $relations = Bootstrap::getObjectManager()->create(
-            \Magento\Framework\ObjectManager\Relations\Runtime::class
-        );
-        $definitions = Bootstrap::getObjectManager()->create(
-            \Magento\Framework\Interception\Definition\Runtime::class
-        );
-        $classDefinitions = Bootstrap::getObjectManager()->create(
-            \Magento\Framework\ObjectManager\Definition\Runtime::class
-        );
-        // phpstan:ignore "Class Psr\Log\LoggerInterface\Proxy not found."
-        $logger = Bootstrap::getObjectManager()->create(\Psr\Log\LoggerInterface\Proxy::class);
+        $this->file = new \Magento\Framework\Filesystem\Driver\File();
+        $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $reader = new \Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy($objectManager);
+        $areaList = $this->createMock(\Magento\Framework\App\AreaList::class);
+        $areaList->method('getCodes')->willReturn([]);
+        $scopeConfig = new \Magento\Framework\Config\Scope($areaList, 'global');
+        $omConfig = new \Magento\Framework\Interception\ObjectManager\Config\Developer();
+        $relations = new \Magento\Framework\ObjectManager\Relations\Runtime();
+        $definitions = new \Magento\Framework\Interception\Definition\Runtime();
+        $classDefinitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
         $this->model = new PluginListGenerator(
             $reader,
             $scopeConfig,
