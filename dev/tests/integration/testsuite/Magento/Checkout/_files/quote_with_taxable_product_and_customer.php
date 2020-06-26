@@ -23,6 +23,7 @@ require __DIR__ . '/../../../Magento/Catalog/_files/taxable_simple_product.php';
 $objectManager = Bootstrap::getObjectManager();
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
+$productRepository->cleanCache();
 /** @var CartRepositoryInterface $quoteRepository */
 $quoteRepository = $objectManager->get(CartRepositoryInterface::class);
 /** @var AddressInterface $quoteShippingAddress */
@@ -47,4 +48,5 @@ $quote->setStoreId(1)
     ->setEmail($customer->getEmail())
     ->addProduct($productRepository->get('taxable_product'), 1);
 
+//$quote->collectTotals();
 $quoteRepository->save($quote);

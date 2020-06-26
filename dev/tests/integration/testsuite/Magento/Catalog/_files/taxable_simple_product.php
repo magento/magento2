@@ -31,7 +31,7 @@ $productData = [
     ProductInterface::TYPE_ID => Type::TYPE_SIMPLE,
     ProductInterface::ATTRIBUTE_SET_ID => $product->getDefaultAttributeSetId(),
     ProductInterface::SKU => 'taxable_product',
-    ProductInterface::NAME => 'Product with category',
+    ProductInterface::NAME => 'Taxable Product',
     ProductInterface::PRICE => 10,
     ProductInterface::VISIBILITY => Visibility::VISIBILITY_BOTH,
     ProductInterface::STATUS => Status::STATUS_ENABLED,
@@ -43,7 +43,7 @@ $productData = [
         'is_in_stock' => 1,
     ],
     'category_ids' => [$defaultCategory->getId()],
-    'tax_class_id' => 2 //Taxable Goods
+    'tax_class_id' => 2, //Taxable Goods
 ];
 $product->setData($productData);
 
