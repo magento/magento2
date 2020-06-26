@@ -185,7 +185,8 @@ class StaticProperties
                 | Files::INCLUDE_TESTS
             ),
             function ($classFile) {
-                return StaticProperties::_isClassInCleanableFolders($classFile)
+                return strpos($classFile, 'TestFramework')  === -1
+                    && StaticProperties::_isClassInCleanableFolders($classFile)
                     // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     && strpos(file_get_contents($classFile), ' static ')  > 0;
             }
