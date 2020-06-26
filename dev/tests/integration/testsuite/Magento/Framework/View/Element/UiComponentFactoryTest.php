@@ -29,7 +29,7 @@ class UiComponentFactoryTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->factory = Bootstrap::getObjectManager()->get(UiComponentFactoryFactory::class);
     }

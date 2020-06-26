@@ -7,9 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\Checkout\Test\Unit\Controller\Cart;
 
+use Magento\Checkout\Controller\Cart\Add;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\Result\RedirectFactory;
+use Magento\Framework\Data\Form\FormKey\Validator;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AddTest extends \PHPUnit\Framework\TestCase
+class AddTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -17,27 +25,27 @@ class AddTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Data\Form\FormKey\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var Validator|MockObject
      */
     private $formKeyValidator;
 
     /**
-     * @var \Magento\Framework\Controller\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var RedirectFactory|MockObject
      */
     private $resultRedirectFactory;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     private $request;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ManagerInterface|MockObject
      */
     private $messageManager;
 
     /**
-     * @var \Magento\Checkout\Controller\Cart\Add|\PHPUnit_Framework_MockObject_MockObject
+     * @var Add|MockObject
      */
     private $cartAdd;
 
@@ -46,21 +54,25 @@ class AddTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->formKeyValidator = $this->getMockBuilder(\Magento\Framework\Data\Form\FormKey\Validator::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->formKeyValidator = $this->getMockBuilder(Validator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->resultRedirectFactory =
-            $this->getMockBuilder(\Magento\Framework\Controller\Result\RedirectFactory::class)
-                ->disableOriginalConstructor()->getMock();
-        $this->request = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
-            ->disableOriginalConstructor()->getmock();
-        $this->messageManager = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            $this->getMockBuilder(RedirectFactory::class)
+                ->disableOriginalConstructor()
+                ->getMock();
+        $this->request = $this->getMockBuilder(RequestInterface::class)
+            ->disableOriginalConstructor()
+            ->getmock();
+        $this->messageManager = $this->getMockBuilder(ManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->cartAdd = $this->objectManagerHelper->getObject(
-            \Magento\Checkout\Controller\Cart\Add::class,
+            Add::class,
             [
                 '_formKeyValidator' => $this->formKeyValidator,
                 'resultRedirectFactory' => $this->resultRedirectFactory,
@@ -77,7 +89,7 @@ class AddTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute()
     {
-        $redirect = $this->getMockBuilder(\Magento\Framework\Controller\Result\Redirect::class)
+        $redirect = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
         $path = '*/*/';

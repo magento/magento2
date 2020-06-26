@@ -21,7 +21,7 @@
     <preference for="Magento\MediaGalleryApi\Api\CreateDirectoriesByPathsInterface" type="Magento\MediaGallery\Model\Directory\Command\CreateByPaths"/>
     <preference for="Magento\MediaGalleryApi\Api\DeleteDirectoriesByPathsInterface" type="Magento\MediaGallery\Model\Directory\Command\DeleteByPaths"/>
 
-    <preference for="Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface" type="Magento\MediaGallery\Model\Directory\IsBlacklisted"/>
+    <preference for="Magento\MediaGalleryApi\Api\IsPathExcludedInterface" type="Magento\MediaGallery\Model\Directory\IsExcluded"/>
 
     <preference for="Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface" type="Magento\MediaGallery\Model\ResourceModel\DeleteAssetsByPaths"/>
     <preference for="Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface" type="Magento\MediaGallery\Model\ResourceModel\GetAssetsByIds"/>
@@ -40,7 +40,7 @@
             <argument name="converter" xsi:type="object">Magento\MediaGallery\Model\Directory\Config\Converter</argument>
             <argument name="schemaLocator" xsi:type="object">Magento\MediaGallery\Model\Directory\Config\SchemaLocator</argument>
             <argument name="idAttributes" xsi:type="array">
-                <item name="/config/blacklist/patterns/pattern" xsi:type="string">name</item>
+                <item name="/config/exclude/patterns/pattern" xsi:type="string">name</item>
             </argument>
         </arguments>
     </virtualType>
@@ -50,11 +50,10 @@
             <argument name="cacheId" xsi:type="string">Media_Gallery_Patterns_CacheId</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\MediaGallery\Model\Directory\BlacklistPatternsConfig">
+    <type name="Magento\MediaGallery\Model\Directory\ExcludedPatternsConfig">
         <arguments>
             <argument name="data" xsi:type="object">Magento\MediaGallery\Model\Directory\Config\Data</argument>
         </arguments>
     </type>
-
-    <preference for="Magento\MediaGalleryApi\Model\BlacklistPatternsConfigInterface" type="Magento\MediaGallery\Model\Directory\BlacklistPatternsConfig"/>
+    <preference for="Magento\MediaGalleryApi\Model\ExcludedPatternsConfigInterface" type="Magento\MediaGallery\Model\Directory\ExcludedPatternsConfig"/>
 </config>

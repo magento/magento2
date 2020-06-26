@@ -3,41 +3,52 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\System\Design\Theme\Tab;
 
-class JsTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Model\Url;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\File;
+use Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js;
+use Magento\Theme\Model\Theme;
+use PHPUnit\Framework\TestCase;
+
+class JsTest extends TestCase
 {
     /**
-     * @var \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js
+     * @var Js
      */
     protected $_model;
 
     /**
-     * @var \Magento\Backend\Model\Url
+     * @var Url
      */
     protected $_urlBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_urlBuilder = $this->createMock(\Magento\Backend\Model\Url::class);
+        $this->_urlBuilder = $this->createMock(Url::class);
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $constructArguments = $objectManagerHelper->getConstructArguments(
-            \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js::class,
+            Js::class,
             [
-                'formFactory' => $this->createMock(\Magento\Framework\Data\FormFactory::class),
-                'objectManager' => $this->createMock(\Magento\Framework\ObjectManagerInterface::class),
+                'formFactory' => $this->createMock(FormFactory::class),
+                'objectManager' => $this->getMockForAbstractClass(ObjectManagerInterface::class),
                 'urlBuilder' => $this->_urlBuilder
             ]
         );
 
-        $this->_model = $this->getMockBuilder(\Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js::class)
+        $this->_model = $this->getMockBuilder(Js::class)
             ->setMethods(['_getCurrentTheme'])
             ->setConstructorArgs($constructArguments)
             ->getMock();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }
@@ -48,7 +59,7 @@ class JsTest extends \PHPUnit\Framework\TestCase
      */
     protected function _getMethod($name)
     {
-        $class = new \ReflectionClass(\Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Tab\Js::class);
+        $class = new \ReflectionClass(Js::class);
         $method = $class->getMethod($name);
         $method->setAccessible(true);
         return $method;
@@ -59,7 +70,7 @@ class JsTest extends \PHPUnit\Framework\TestCase
         $method = $this->_getMethod('_getAdditionalElementTypes');
         $result = $method->invokeArgs($this->_model, []);
         $expectedResult = [
-            'js_files' => \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\Form\Element\File::class,
+            'js_files' => File::class,
         ];
         $this->assertEquals($expectedResult, $result);
     }
@@ -73,10 +84,10 @@ class JsTest extends \PHPUnit\Framework\TestCase
     {
         $themeId = 2;
         $uploadUrl = 'upload_url';
-        $themeMock = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['isVirtual', 'getId', '__wakeup']);
-        $themeMock->expects($this->any())->method('getId')->will($this->returnValue($themeId));
+        $themeMock = $this->createPartialMock(Theme::class, ['isVirtual', 'getId', '__wakeup']);
+        $themeMock->expects($this->any())->method('getId')->willReturn($themeId);
 
-        $this->_model->expects($this->any())->method('_getCurrentTheme')->will($this->returnValue($themeMock));
+        $this->_model->expects($this->any())->method('_getCurrentTheme')->willReturn($themeMock);
 
         $this->_urlBuilder->expects(
             $this->once()
@@ -85,8 +96,8 @@ class JsTest extends \PHPUnit\Framework\TestCase
         )->with(
             'adminhtml/system_design_theme/uploadjs',
             ['id' => $themeId]
-        )->will(
-            $this->returnValue($uploadUrl)
+        )->willReturn(
+            $uploadUrl
         );
 
         $this->assertEquals($uploadUrl, $this->_model->getJsUploadUrl());

@@ -69,7 +69,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         'is_decimal_divided'
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -95,15 +95,15 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             )
         );
         $exportData = $this->model->export();
-        $this->assertContains('New Product', $exportData);
+        $this->assertStringContainsString('New Product', $exportData);
 
-        $this->assertContains('Option 1 & Value 1"', $exportData);
-        $this->assertContains('Option 1 & Value 2"', $exportData);
-        $this->assertContains('Option 1 & Value 3"', $exportData);
-        $this->assertContains('Option 4 ""!@#$%^&*', $exportData);
-        $this->assertContains('test_option_code_2', $exportData);
-        $this->assertContains('max_characters=10', $exportData);
-        $this->assertContains('text_attribute=!@#$%^&*()_+1234567890-=|\\:;""\'<,>.?/', $exportData);
+        $this->assertStringContainsString('Option 1 & Value 1"', $exportData);
+        $this->assertStringContainsString('Option 1 & Value 2"', $exportData);
+        $this->assertStringContainsString('Option 1 & Value 3"', $exportData);
+        $this->assertStringContainsString('Option 4 ""!@#$%^&*', $exportData);
+        $this->assertStringContainsString('test_option_code_2', $exportData);
+        $this->assertStringContainsString('max_characters=10', $exportData);
+        $this->assertStringContainsString('text_attribute=!@#$%^&*()_+1234567890-=|\\:;""\'<,>.?/', $exportData);
         $occurrencesCount = substr_count($exportData, 'Hello "" &"" Bring the water bottle when you can!');
         $this->assertEquals(1, $occurrencesCount);
     }
@@ -122,8 +122,8 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             )
         );
         $exportData = $this->model->export();
-        $this->assertContains('simple ""1""', $exportData);
-        $this->assertContains('Category with slash\/ symbol', $exportData);
+        $this->assertStringContainsString('simple ""1""', $exportData);
+        $this->assertStringContainsString('Category with slash\/ symbol', $exportData);
     }
 
     /**
@@ -160,20 +160,20 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Filesystem\Directory\Write::class,
             ['getParentDirectory', 'isWritable', 'isFile', 'readFile', 'openFile']
         );
-        $directoryMock->expects($this->any())->method('getParentDirectory')->will($this->returnValue('some#path'));
-        $directoryMock->expects($this->any())->method('isWritable')->will($this->returnValue(true));
-        $directoryMock->expects($this->any())->method('isFile')->will($this->returnValue(true));
+        $directoryMock->expects($this->any())->method('getParentDirectory')->willReturn('some#path');
+        $directoryMock->expects($this->any())->method('isWritable')->willReturn(true);
+        $directoryMock->expects($this->any())->method('isFile')->willReturn(true);
         $directoryMock->expects(
             $this->any()
         )->method(
             'readFile'
-        )->will(
-            $this->returnValue('some string read from file')
+        )->willReturn(
+            'some string read from file'
         );
-        $directoryMock->expects($this->once())->method('openFile')->will($this->returnValue($fileWrite));
+        $directoryMock->expects($this->once())->method('openFile')->willReturn($fileWrite);
 
         $filesystemMock = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryWrite']);
-        $filesystemMock->expects($this->once())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));
+        $filesystemMock->expects($this->once())->method('getDirectoryWrite')->willReturn($directoryMock);
 
         $exportAdapter = new \Magento\ImportExport\Model\Export\Adapter\Csv($filesystemMock);
 
@@ -189,7 +189,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function verifyHeaderColumns(array $headerColumns): void
     {
         foreach (self::$stockItemAttributes as $stockItemAttribute) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $stockItemAttribute,
                 $headerColumns,
                 "Stock item attribute {$stockItemAttribute} is absent among header columns"
@@ -237,11 +237,11 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\Filesystem\Directory\Write::class,
             ['getParentDirectory', 'isWritable']
         );
-        $directoryMock->expects($this->any())->method('getParentDirectory')->will($this->returnValue('some#path'));
-        $directoryMock->expects($this->any())->method('isWritable')->will($this->returnValue(true));
+        $directoryMock->expects($this->any())->method('getParentDirectory')->willReturn('some#path');
+        $directoryMock->expects($this->any())->method('isWritable')->willReturn(true);
 
         $filesystemMock = $this->createPartialMock(\Magento\Framework\Filesystem::class, ['getDirectoryWrite']);
-        $filesystemMock->expects($this->once())->method('getDirectoryWrite')->will($this->returnValue($directoryMock));
+        $filesystemMock->expects($this->once())->method('getDirectoryWrite')->willReturn($directoryMock);
 
         $exportAdapter = new \Magento\ImportExport\Model\Export\Adapter\Csv($filesystemMock);
 
@@ -288,10 +288,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         );
         $exportData = $this->model->export();
 
-        $this->assertContains('""Option 2""', $exportData);
-        $this->assertContains('""Option 3""', $exportData);
-        $this->assertContains('""Option 4 """"!@#$%^&*""', $exportData);
-        $this->assertContains('text_attribute=""!@#$%^&*()_+1234567890-=|\:;""""\'<,>.?/', $exportData);
+        $this->assertStringContainsString('""Option 2""', $exportData);
+        $this->assertStringContainsString('""Option 3""', $exportData);
+        $this->assertStringContainsString('""Option 4 """"!@#$%^&*""', $exportData);
+        $this->assertStringContainsString('text_attribute=""!@#$%^&*()_+1234567890-=|\:;""""\'<,>.?/', $exportData);
     }
 
     /**
@@ -319,10 +319,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
 
         $exportData = $this->model->export();
 
-        $this->assertContains('Simple Product', $exportData);
-        $this->assertContains('Simple Product Three', $exportData);
-        $this->assertNotContains('Simple Product Two', $exportData);
-        $this->assertNotContains('Simple Product Not Visible On Storefront', $exportData);
+        $this->assertStringContainsString('Simple Product', $exportData);
+        $this->assertStringContainsString('Simple Product Three', $exportData);
+        $this->assertStringNotContainsString('Simple Product Two', $exportData);
+        $this->assertStringNotContainsString('Simple Product Not Visible On Storefront', $exportData);
     }
 
     /**
@@ -588,10 +588,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     ): void {
         $exportData = $this->doExport(['quantity_and_stock_status' => $value]);
         foreach ($productsIncluded as $productName) {
-            $this->assertContains($productName, $exportData);
+            $this->assertStringContainsString($productName, $exportData);
         }
         foreach ($productsNotIncluded as $productName) {
-            $this->assertNotContains($productName, $exportData);
+            $this->assertStringNotContainsString($productName, $exportData);
         }
     }
     /**

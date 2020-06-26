@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Test\Unit\Model\Link;
 
 use Magento\Catalog\Api\Data\ProductExtensionInterface;
@@ -11,16 +13,18 @@ use Magento\Downloadable\Api\Data\LinkInterface;
 use Magento\Downloadable\Api\LinkRepositoryInterface;
 use Magento\Downloadable\Model\Link\UpdateHandler;
 use Magento\Downloadable\Model\Product\Type;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
+class UpdateHandlerTest extends TestCase
 {
     /** @var UpdateHandler */
     protected $model;
 
-    /** @var LinkRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var LinkRepositoryInterface|MockObject */
     protected $linkRepositoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->linkRepositoryMock = $this->getMockBuilder(LinkRepositoryInterface::class)
             ->getMockForAbstractClass();
@@ -37,21 +41,21 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
         $linkId = 11;
         $linkToDeleteId = 22;
 
-        /** @var LinkInterface|\PHPUnit_Framework_MockObject_MockObject $linkMock */
+        /** @var LinkInterface|MockObject $linkMock */
         $linkMock = $this->getMockBuilder(LinkInterface::class)
             ->getMock();
         $linkMock->expects($this->exactly(3))
             ->method('getId')
             ->willReturn($linkId);
 
-        /** @var LinkInterface|\PHPUnit_Framework_MockObject_MockObject $linkToDeleteMock */
+        /** @var LinkInterface|MockObject $linkToDeleteMock */
         $linkToDeleteMock = $this->getMockBuilder(LinkInterface::class)
             ->getMock();
         $linkToDeleteMock->expects($this->exactly(2))
             ->method('getId')
             ->willReturn($linkToDeleteId);
 
-        /** @var ProductExtensionInterface|\PHPUnit_Framework_MockObject_MockObject $productExtensionMock */
+        /** @var ProductExtensionInterface|MockObject $productExtensionMock */
         $productExtensionMock = $this->getMockBuilder(ProductExtensionInterface::class)
             ->setMethods(['getDownloadableProductLinks'])
             ->getMockForAbstractClass();
@@ -59,7 +63,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
             ->method('getDownloadableProductLinks')
             ->willReturn([$linkMock]);
 
-        /** @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject $entityMock */
+        /** @var ProductInterface|MockObject $entityMock */
         $entityMock = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['getTypeId', 'getExtensionAttributes', 'getSku', 'getStoreId'])
             ->getMockForAbstractClass();
@@ -92,7 +96,7 @@ class UpdateHandlerTest extends \PHPUnit\Framework\TestCase
 
     public function testExecuteNonDownloadable()
     {
-        /** @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject $entityMock */
+        /** @var ProductInterface|MockObject $entityMock */
         $entityMock = $this->getMockBuilder(ProductInterface::class)
             ->setMethods(['getTypeId', 'getExtensionAttributes', 'getSku', 'getStoreId'])
             ->getMockForAbstractClass();

@@ -3,12 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Aggregation\Builder;
 
 use Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Term;
+use Magento\Framework\Search\Dynamic\DataProviderInterface;
+use Magento\Framework\Search\Request\Aggregation\TermBucket;
+use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TermTest extends \PHPUnit\Framework\TestCase
+class TermTest extends TestCase
 {
     /**
      * @var Term
@@ -16,17 +23,17 @@ class TermTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Search\Request\BucketInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BucketInterface|MockObject
      */
     protected $requestBuckedInterface;
 
     /**
-     * @var \Magento\Framework\Search\Dynamic\DataProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataProviderInterface|MockObject
      */
     protected $dataProviderContainer;
 
     /**
-     * @var \Magento\Framework\Search\Request\Aggregation\TermBucket|\PHPUnit_Framework_MockObject_MockObject
+     * @var TermBucket|MockObject
      */
     protected $bucket;
 
@@ -35,19 +42,19 @@ class TermTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->requestBuckedInterface = $this->getMockBuilder(\Magento\Framework\Search\Request\BucketInterface::class)
+        $this->requestBuckedInterface = $this->getMockBuilder(BucketInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->dataProviderContainer = $this->getMockBuilder(
-            \Magento\Framework\Search\Dynamic\DataProviderInterface::class
+            DataProviderInterface::class
         )
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->bucket = $this->getMockBuilder(\Magento\Framework\Search\Request\Aggregation\TermBucket::class)
+        $this->bucket = $this->getMockBuilder(TermBucket::class)
             ->setMethods(['getName'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -55,7 +62,7 @@ class TermTest extends \PHPUnit\Framework\TestCase
         $objectManagerHelper = new ObjectManagerHelper($this);
 
         $this->model = $objectManagerHelper->getObject(
-            \Magento\Elasticsearch\SearchAdapter\Aggregation\Builder\Term::class,
+            Term::class,
             []
         );
     }

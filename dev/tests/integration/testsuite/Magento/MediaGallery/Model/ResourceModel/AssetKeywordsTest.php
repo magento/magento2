@@ -52,7 +52,7 @@ class AssetKeywordsTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->saveAssetsKeywords = Bootstrap::getObjectManager()->get(SaveAssetsKeywordsInterface::class);
         $this->getAssetsKeywords = Bootstrap::getObjectManager()->get(GetAssetsKeywordsInterface::class);
@@ -74,7 +74,7 @@ class AssetKeywordsTest extends TestCase
         $keywords = ['pear', 'plum'];
 
         $loadedAssets = $this->getAssetsByPath->execute([self::FIXTURE_ASSET_PATH]);
-        $this->assertEquals(1, count($loadedAssets));
+        $this->assertCount(1, $loadedAssets);
         $loadedAsset = current($loadedAssets);
 
         $assetKeywords = $this->assetsKeywordsFactory->create(
@@ -87,7 +87,7 @@ class AssetKeywordsTest extends TestCase
         $this->saveAssetsKeywords->execute([$assetKeywords]);
         $loadedAssetKeywords = $this->getAssetsKeywords->execute([$loadedAsset->getId()]);
 
-        $this->assertEquals(1, count($loadedAssetKeywords));
+        $this->assertCount(1, $loadedAssetKeywords);
 
         /** @var AssetKeywordsInterface $loadedAssetKeyword */
         $loadedAssetKeyword = current($loadedAssetKeywords);

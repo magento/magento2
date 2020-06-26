@@ -83,7 +83,7 @@ class DataProvider
     private $storeManager;
 
     /**
-     * @var \Magento\CatalogSearch\Model\ResourceModel\Engine
+     * @var \Magento\CatalogSearch\Model\ResourceModel\EngineInterface
      */
     private $engine;
 
@@ -323,7 +323,7 @@ class DataProvider
                 'catelogsearch_searchable_attributes_load_after',
                 ['engine' => $this->engine, 'attributes' => $attributes]
             );
-            
+
             $this->eventManager->dispatch(
                 'catalogsearch_searchable_attributes_load_after',
                 ['engine' => $this->engine, 'attributes' => $attributes]
@@ -572,11 +572,11 @@ class DataProvider
         foreach ($indexData as $entityId => $attributeData) {
             foreach ($attributeData as $attributeId => $attributeValues) {
                 $value = $this->getAttributeValue($attributeId, $attributeValues, $storeId);
-                if (!empty($value)) {
+                if ($value !== null && $value !== false && $value != '') {
                     if (!isset($index[$attributeId])) {
                         $index[$attributeId] = [];
                     }
-                        $index[$attributeId][$entityId] = $value;
+                    $index[$attributeId][$entityId] = $value;
                 }
             }
         }

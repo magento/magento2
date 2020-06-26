@@ -12,6 +12,7 @@ namespace Magento\TestFramework\Dependency;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
+use Magento\TestFramework\Dependency\Reader\ClassScanner;
 use Magento\TestFramework\Dependency\Route\RouteMapper;
 use Magento\TestFramework\Exception\NoSuchActionException;
 
@@ -80,23 +81,32 @@ class PhpRule implements RuleInterface
     private $whitelists;
 
     /**
+     * @var ClassScanner
+     */
+    private $classScanner;
+
+    /**
      * @param array $mapRouters
      * @param array $mapLayoutBlocks
      * @param array $pluginMap
      * @param array $whitelists
-     * @throws \Exception
+     * @param ClassScanner|null $classScanner
+     *
+     * @throws LocalizedException
      */
     public function __construct(
         array $mapRouters,
         array $mapLayoutBlocks,
         array $pluginMap = [],
-        array $whitelists = []
+        array $whitelists = [],
+        ClassScanner $classScanner = null
     ) {
         $this->_mapRouters = $mapRouters;
         $this->_mapLayoutBlocks = $mapLayoutBlocks;
         $this->pluginMap = $pluginMap ?: null;
         $this->routeMapper = new RouteMapper();
         $this->whitelists = $whitelists;
+        $this->classScanner = $classScanner ?? new ClassScanner();
     }
 
     /**
@@ -176,7 +186,7 @@ class PhpRule implements RuleInterface
             if (empty($matches['class_inside_module'][$i]) && !empty($matches['module_scoped_key'][$i])) {
                 $dependencyType = RuleInterface::TYPE_SOFT;
             } else {
-                $currentClass = $this->getClassFromFilepath($file, $currentModule);
+                $currentClass = $this->getClassFromFilepath($file);
                 $dependencyType = $this->isPluginDependency($currentClass, $dependencyClass)
                     ? RuleInterface::TYPE_SOFT
                     : RuleInterface::TYPE_HARD;
@@ -196,14 +206,11 @@ class PhpRule implements RuleInterface
      * Get class name from filename based on class/file naming conventions
      *
      * @param string $filepath
-     * @param string $module
      * @return string
      */
-    private function getClassFromFilepath($filepath, $module)
+    private function getClassFromFilepath(string $filepath): string
     {
-        $class = strstr($filepath, str_replace(['_', '\\', '/'], DIRECTORY_SEPARATOR, $module));
-        $class = str_replace(DIRECTORY_SEPARATOR, '\\', strstr($class, '.php', true));
-        return $class;
+        return $this->classScanner->getClassName($filepath);
     }
 
     /**
@@ -267,7 +274,8 @@ class PhpRule implements RuleInterface
         if ($subject === $dependency) {
             return true;
         } elseif ($subject) {
-            $subjectModule = substr($subject, 0, strpos($subject, '\\', 9)); // (strlen('Magento\\') + 1) === 9
+            $moduleNameLength = strpos($subject, '\\', strpos($subject, '\\') + 1);
+            $subjectModule = substr($subject, 0, $moduleNameLength);
             return strpos($dependency, $subjectModule) === 0;
         } else {
             return false;

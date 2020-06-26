@@ -35,7 +35,7 @@ class AttributeTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->attribute = $this->objectManager->get(Attribute::class);
@@ -45,7 +45,7 @@ class AttributeTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->attribute = null;
         $this->objectManager = null;
@@ -102,10 +102,11 @@ class AttributeTest extends TestCase
      * @param string $locale
      * @param string $expected
      * @dataProvider beforeSaveErrorDataDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testBeforeSaveErrorData($defaultValue, $backendType, $locale, $expected)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+
         $this->attribute->setDefaultValue($defaultValue);
         $this->attribute->setBackendType($backendType);
         $this->localeResolver->setLocale($locale);

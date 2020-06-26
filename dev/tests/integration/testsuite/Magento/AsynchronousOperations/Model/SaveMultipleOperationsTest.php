@@ -47,7 +47,7 @@ class SaveMultipleOperationsTest extends \PHPUnit\Framework\TestCase
     /**
      * Set Up the test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->saveMultipleOperationsInterface = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             SaveMultipleOperationsInterface::class
