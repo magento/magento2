@@ -61,8 +61,17 @@ class PartialIndex
             ['crp' => $indexTableName],
             'product_id'
         );
-        $selectAll = $this->connection->select()->from(
-            ['crp' => $indexTableName]
+        $selectFields = $this->connection->select()->from(
+            ['crp' => $indexTableName],
+            [
+                'rule_date',
+                'customer_group_id',
+                'product_id',
+                'rule_price',
+                'website_id',
+                'latest_start_date',
+                'earliest_end_date',
+            ]
         );
         $where = ['product_id' .' NOT IN (?)' => $select];
         //remove products that are no longer used in indexing
@@ -70,9 +79,17 @@ class PartialIndex
         //add updated products to indexing
         $this->connection->query(
             $this->connection->insertFromSelect(
-                $selectAll,
+                $selectFields,
                 $this->resource->getTableName('catalogrule_product_price_replica'),
-                [],
+                [
+                    'rule_date',
+                    'customer_group_id',
+                    'product_id',
+                    'rule_price',
+                    'website_id',
+                    'latest_start_date',
+                    'earliest_end_date',
+                ],
                 AdapterInterface::INSERT_ON_DUPLICATE
             )
         );
