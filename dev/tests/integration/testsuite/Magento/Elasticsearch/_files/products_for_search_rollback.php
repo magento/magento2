@@ -9,6 +9,7 @@ use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 Bootstrap::getInstance()->getInstance()->reinitialize();
 
@@ -30,7 +31,7 @@ foreach ($productSkus as $sku) {
     }
 }
 
-include __DIR__ . '/../../Catalog/_files/category_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/category_rollback.php');
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);

@@ -4,10 +4,15 @@
  * See COPYING.txt for license details.
  */
 
-require 'order.php';
-/** @var \Magento\Catalog\Model\Product $product */
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
+
+$objectManager = Bootstrap::getObjectManager();
 /** @var \Magento\Sales\Model\Order $order */
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
 
 $orderItems = [
     [

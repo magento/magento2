@@ -190,7 +190,7 @@ class ProductDataMapper implements BatchDataMapperInterface
                 $attributeValues = [$productId => $attributeValues];
             }
             $attributeValues = $this->prepareAttributeValues($productId, $attribute, $attributeValues, $storeId);
-            $productAttributes += $this->convertAttribute($attribute, $attributeValues);
+            $productAttributes += $this->convertAttribute($attribute, $attributeValues, $storeId);
         }
 
         return $productAttributes;
@@ -201,18 +201,19 @@ class ProductDataMapper implements BatchDataMapperInterface
      *
      * @param Attribute $attribute
      * @param array $attributeValues
+     * @param int $storeId
      * @return array
      */
-    private function convertAttribute(Attribute $attribute, array $attributeValues): array
+    private function convertAttribute(Attribute $attribute, array $attributeValues, int $storeId): array
     {
         $productAttributes = [];
 
         $retrievedValue = $this->retrieveFieldValue($attributeValues);
-        if ($retrievedValue) {
+        if ($retrievedValue !== null) {
             $productAttributes[$attribute->getAttributeCode()] = $retrievedValue;
 
             if ($attribute->getIsSearchable()) {
-                $attributeLabels = $this->getValuesLabels($attribute, $attributeValues);
+                $attributeLabels = $this->getValuesLabels($attribute, $attributeValues, $storeId);
                 $retrievedLabel = $this->retrieveFieldValue($attributeLabels);
                 if ($retrievedLabel) {
                     $productAttributes[$attribute->getAttributeCode() . '_value'] = $retrievedLabel;
@@ -299,20 +300,21 @@ class ProductDataMapper implements BatchDataMapperInterface
      *
      * @param Attribute $attribute
      * @param array $attributeValues
+     * @param int $storeId
      * @return array
      */
-    private function getValuesLabels(Attribute $attribute, array $attributeValues): array
+    private function getValuesLabels(Attribute $attribute, array $attributeValues, int $storeId): array
     {
         $attributeLabels = [];
 
-        $options = $this->getAttributeOptions($attribute);
+        $options = $this->getAttributeOptions($attribute, $storeId);
         if (empty($options)) {
             return $attributeLabels;
         }
 
-        foreach ($attributeValues as $attributeValue) {
-            if (isset($options[$attributeValue])) {
-                $attributeLabels[] = $options[$attributeValue]->getLabel();
+        foreach ($options as $option) {
+            if (\in_array($option['value'], $attributeValues)) {
+                $attributeLabels[] = $option['label'];
             }
         }
 
@@ -323,20 +325,23 @@ class ProductDataMapper implements BatchDataMapperInterface
      * Retrieve options for attribute
      *
      * @param Attribute $attribute
+     * @param int $storeId
      * @return array
      */
-    private function getAttributeOptions(Attribute $attribute): array
+    private function getAttributeOptions(Attribute $attribute, int $storeId): array
     {
-        if (!isset($this->attributeOptionsCache[$attribute->getId()])) {
-            $options = $attribute->getOptions() ?? [];
-            $optionsByValue = [];
-            foreach ($options as $option) {
-                $optionsByValue[$option->getValue()] = $option;
-            }
-            $this->attributeOptionsCache[$attribute->getId()] = $optionsByValue;
+        if (!isset($this->attributeOptionsCache[$storeId][$attribute->getId()])) {
+            $attributeStoreId = $attribute->getStoreId();
+            /**
+             * Load array format of options.
+             * $attribute->getOptions() loads options into data objects which can be costly.
+             */
+            $options = $attribute->usesSource() ? $attribute->setStoreId($storeId)->getSource()->getAllOptions() : [];
+            $this->attributeOptionsCache[$storeId][$attribute->getId()] = $options;
+            $attribute->setStoreId($attributeStoreId);
         }
 
-        return $this->attributeOptionsCache[$attribute->getId()];
+        return $this->attributeOptionsCache[$storeId][$attribute->getId()];
     }
 
     /**
@@ -349,7 +354,7 @@ class ProductDataMapper implements BatchDataMapperInterface
      */
     private function retrieveFieldValue(array $values)
     {
-        $values = \array_filter(\array_unique($values));
+        $values = \array_unique($values);
 
         return count($values) === 1 ? \array_shift($values) : \array_values($values);
     }

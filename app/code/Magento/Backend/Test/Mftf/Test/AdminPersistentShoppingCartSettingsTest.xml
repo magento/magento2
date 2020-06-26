@@ -15,6 +15,7 @@
             <title value="Admin should be able to manage persistent shopping cart settings"/>
             <description value="Admin should be able to enable persistent shopping cart in Magento Admin backend and see additional options"/>
             <group value="backend"/>
+            <severity value="MAJOR"/>
         </annotations>
 
         <before>
