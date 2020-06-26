@@ -178,6 +178,7 @@ class CartTest extends TestCase
             ->getMock();
 
         $this->model = new SharedCart(
+            $this->context,
             $this->cart,
             $this->optionFactory,
             $this->itemFactory,

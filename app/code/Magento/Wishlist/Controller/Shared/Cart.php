@@ -11,14 +11,16 @@ namespace Magento\Wishlist\Controller\Shared;
 use Magento\Catalog\Model\Product\Exception as ProductException;
 use Magento\Checkout\Helper\Cart as CartHelper;
 use Magento\Checkout\Model\Cart as CustomerCart;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context as ActionContext;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
-use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\Item\OptionFactory;
 use Magento\Wishlist\Model\ItemFactory;
@@ -29,7 +31,7 @@ use Magento\Wishlist\Model\ResourceModel\Item\Option\Collection as OptionCollect
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Cart implements HttpGetActionInterface
+class Cart extends Action implements HttpGetActionInterface
 {
     /**
      * @var CustomerCart
@@ -77,6 +79,7 @@ class Cart implements HttpGetActionInterface
     private $resultFactory;
 
     /**
+     * @param ActionContext $context
      * @param CustomerCart $cart
      * @param OptionFactory $optionFactory
      * @param ItemFactory $itemFactory
@@ -88,6 +91,7 @@ class Cart implements HttpGetActionInterface
      * @param ResultFactory $resultFactory
      */
     public function __construct(
+        ActionContext $context,
         CustomerCart $cart,
         OptionFactory $optionFactory,
         ItemFactory $itemFactory,
@@ -107,6 +111,7 @@ class Cart implements HttpGetActionInterface
         $this->redirect = $redirect;
         $this->messageManager = $messageManager;
         $this->resultFactory = $resultFactory;
+        parent::__construct($context);
     }
 
     /**

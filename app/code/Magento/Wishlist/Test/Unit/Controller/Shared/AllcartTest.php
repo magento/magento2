@@ -27,14 +27,14 @@ class AllcartTest extends TestCase
     protected $allcartController;
 
     /**
-     * @var Context
-     */
-    protected $context;
-
-    /**
      * @var WishlistProvider|MockObject
      */
     protected $wishlistProviderMock;
+
+    /**
+     * @var Context|MockObject
+     */
+    protected $contextMock;
 
     /**
      * @var ItemCarrier|MockObject
@@ -74,6 +74,9 @@ class AllcartTest extends TestCase
         $this->itemCarrierMock = $this->getMockBuilder(ItemCarrier::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->contextMock = $this->getMockBuilder(Context::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->wishlistMock = $this->getMockBuilder(Wishlist::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -100,6 +103,7 @@ class AllcartTest extends TestCase
             );
 
         $this->allcartController = new Allcart(
+            $this->contextMock,
             $this->itemCarrierMock,
             $this->requestMock,
             $this->resultFactoryMock,

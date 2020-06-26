@@ -8,14 +8,16 @@ declare(strict_types=1);
 
 namespace Magento\Wishlist\Controller\Shared;
 
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\Result\Forward;
 use Magento\Framework\Controller\Result\Redirect;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Wishlist\Model\ItemCarrier;
 
-class Allcart implements HttpGetActionInterface
+class Allcart extends Action implements HttpGetActionInterface
 {
     /**
      * @var ItemCarrier
@@ -38,12 +40,14 @@ class Allcart implements HttpGetActionInterface
     private $resultFactory;
 
     /**
+     * @param Context $context
      * @param ItemCarrier $itemCarrier
      * @param RequestInterface $request
      * @param ResultFactory $resultFactory
      * @param WishlistProvider $wishlistProvider
      */
     public function __construct(
+        Context $context,
         ItemCarrier $itemCarrier,
         RequestInterface $request,
         ResultFactory $resultFactory,
@@ -53,6 +57,7 @@ class Allcart implements HttpGetActionInterface
         $this->request = $request;
         $this->resultFactory = $resultFactory;
         $this->wishlistProvider = $wishlistProvider;
+        parent::__construct($context);
     }
 
     /**
