@@ -13,6 +13,9 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Sales\Api\Data\OrderInterface;
 
+/**
+ * Resolve order totals taxes and discounts for order
+ */
 class OrderTotal implements ResolverInterface
 {
     /**
