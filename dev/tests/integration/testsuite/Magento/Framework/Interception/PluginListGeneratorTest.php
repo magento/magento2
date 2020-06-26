@@ -11,9 +11,6 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Magento\TestFramework\Application;
 use Magento\TestFramework\Helper\Bootstrap;
 
-/**
- * @magentoAppIsolation enabled
- */
 class PluginListGeneratorTest extends \PHPUnit\Framework\TestCase
 {
     /**
