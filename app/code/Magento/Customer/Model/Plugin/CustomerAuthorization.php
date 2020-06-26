@@ -7,10 +7,7 @@
 namespace Magento\Customer\Model\Plugin;
 
 use Magento\Authorization\Model\UserContextInterface;
-use Magento\Customer\Model\CustomerFactory;
-use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
 use Magento\Integration\Api\AuthorizationServiceInterface as AuthorizationService;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Plugin around \Magento\Framework\Authorization::isAllowed
@@ -22,41 +19,16 @@ class CustomerAuthorization
     /**
      * @var UserContextInterface
      */
-    private $userContext;
-
-    /**
-     * @var CustomerFactory
-     */
-    private $customerFactory;
-
-    /**
-     * @var CustomerResource
-     */
-    private $customerResource;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
+    protected $userContext;
 
     /**
      * Inject dependencies.
      *
      * @param UserContextInterface $userContext
-     * @param CustomerFactory $customerFactory
-     * @param CustomerResource $customerResource
-     * @param StoreManagerInterface $storeManager
      */
-    public function __construct(
-        UserContextInterface $userContext,
-        CustomerFactory $customerFactory,
-        CustomerResource $customerResource,
-        StoreManagerInterface $storeManager
-    ) {
+    public function __construct(UserContextInterface $userContext)
+    {
         $this->userContext = $userContext;
-        $this->customerFactory = $customerFactory;
-        $this->customerResource = $customerResource;
-        $this->storeManager = $storeManager;
     }
 
     /**
@@ -81,15 +53,9 @@ class CustomerAuthorization
             && $this->userContext->getUserId()
             && $this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER
         ) {
-            $customer = $this->customerFactory->create();
-            $this->customerResource->load($customer, $this->userContext->getUserId());
-            $currentStoreId = $this->storeManager->getStore()->getId();
-            $sharedStoreIds = $customer->getSharedStoreIds();
-            if (in_array($currentStoreId, $sharedStoreIds)) {
-                return true;
-            }
+            return true;
+        } else {
+            return $proceed($resource, $privilege);
         }
-
-        return $proceed($resource, $privilege);
     }
 }

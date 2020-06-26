@@ -14,159 +14,109 @@ use Magento\Framework\View\Element\Html\Link\Current;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * @covers \Magento\Framework\View\Element\Html\Link\Current
- */
 class CurrentTest extends TestCase
 {
     /**
-     * @var UrlInterface|MockObject
+     * @var MockObject
      */
-    private $_urlBuilderMock;
+    protected $_urlBuilderMock;
 
     /**
-     * @var Http|MockObject
+     * @var MockObject
      */
-    private $_requestMock;
+    protected $_requestMock;
 
     /**
-     * @var Current
+     * @var ObjectManager
      */
-    private $currentLink;
+    protected $_objectManager;
 
-    /**
-     * @inheritDoc
-     */
     protected function setUp(): void
     {
-        $this->_urlBuilderMock = $this->createMock(UrlInterface::class);
+        $this->_objectManager = new ObjectManager($this);
+        $this->_urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
         $this->_requestMock = $this->createMock(Http::class);
+    }
 
-        $this->currentLink = (new ObjectManager($this))->getObject(
+    public function testGetUrl()
+    {
+        $path = 'test/path';
+        $url = 'http://example.com/asdasd';
+
+        $this->_urlBuilderMock->expects($this->once())->method('getUrl')->with($path)->willReturn($url);
+
+        /** @var Current $link */
+        $link = $this->_objectManager->getObject(
+            Current::class,
+            ['urlBuilder' => $this->_urlBuilderMock]
+        );
+
+        $link->setPath($path);
+        $this->assertEquals($url, $link->getHref());
+    }
+
+    public function testIsCurrentIfIsset()
+    {
+        /** @var Current $link */
+        $link = $this->_objectManager->getObject(Current::class);
+        $link->setCurrent(true);
+        $this->assertTrue($link->isCurrent());
+    }
+
+    /**
+     * Test if the current url is the same as link path
+     *
+     * @return void
+     */
+    public function testIsCurrent()
+    {
+        $path = 'test/index';
+        $url = 'http://example.com/test/index';
+
+        $this->_requestMock->expects($this->once())
+            ->method('getPathInfo')
+            ->willReturn('/test/index/');
+        $this->_requestMock->expects($this->once())
+            ->method('getModuleName')
+            ->willReturn('test');
+        $this->_requestMock->expects($this->once())
+            ->method('getControllerName')
+            ->willReturn('index');
+        $this->_requestMock->expects($this->once())
+            ->method('getActionName')
+            ->willReturn('index');
+        $this->_urlBuilderMock->expects($this->at(0))
+            ->method('getUrl')
+            ->with($path)
+            ->willReturn($url);
+        $this->_urlBuilderMock->expects($this->at(1))
+            ->method('getUrl')
+            ->with('test/index')
+            ->willReturn($url);
+
+        /** @var Current $link */
+        $link = $this->_objectManager->getObject(
             Current::class,
             [
                 'urlBuilder' => $this->_urlBuilderMock,
                 'request' => $this->_requestMock
             ]
         );
+
+        $link->setPath($path);
+        $this->assertTrue($link->isCurrent());
     }
 
-    /**
-     * Test get Url
-     */
-    public function testGetUrl(): void
+    public function testIsCurrentFalse()
     {
-        $pathStub = 'test/path';
-        $urlStub = 'http://example.com/asdasd';
+        $this->_urlBuilderMock->expects($this->at(0))->method('getUrl')->willReturn('1');
+        $this->_urlBuilderMock->expects($this->at(1))->method('getUrl')->willReturn('2');
 
-        $this->_urlBuilderMock->expects($this->once())
-            ->method('getUrl')
-            ->with($pathStub)
-            ->will($this->returnValue($urlStub));
-
-        $this->currentLink->setPath($pathStub);
-
-        $this->assertEquals($urlStub, $this->currentLink->getHref());
-    }
-
-    /**
-     * Test if set current
-     */
-    public function testIsCurrentIfIsset(): void
-    {
-        $this->currentLink->setCurrent(true);
-        $this->assertTrue($this->currentLink->isCurrent());
-    }
-
-    /**
-     * Test if the current url is the same as link path
-     *
-     * @param string $pathStub
-     * @param string $urlStub
-     * @param array $request
-     * @param bool $expected
-     * @dataProvider isCurrentDataProvider
-     */
-    public function testIsCurrent($pathStub, $urlStub, $request, $expected): void
-    {
-        $this->_requestMock->expects($this->any())
-            ->method('getPathInfo')
-            ->will($this->returnValue($request['pathInfoStub']));
-        $this->_requestMock->expects($this->any())
-            ->method('getModuleName')
-            ->will($this->returnValue($request['moduleStub']));
-        $this->_requestMock->expects($this->any())
-            ->method('getControllerName')
-            ->will($this->returnValue($request['controllerStub']));
-        $this->_requestMock->expects($this->any())
-            ->method('getActionName')
-            ->will($this->returnValue($request['actionStub']));
-
-        $this->_urlBuilderMock->expects($this->at(0))
-            ->method('getUrl')
-            ->with($pathStub)
-            ->will($this->returnValue($urlStub));
-        $this->_urlBuilderMock->expects($this->at(1))
-            ->method('getUrl')
-            ->with($request['mcaStub'])
-            ->will($this->returnValue($request['getUrl']));
-
-        if ($request['mcaStub'] == '') {
-            $this->_urlBuilderMock->expects($this->at(2))
-                ->method('getUrl')
-                ->with('*/*/*', ['_current' => false, '_use_rewrite' => true])
-                ->will($this->returnValue($urlStub));
-        }
-
-        $this->currentLink->setPath($pathStub);
-        $this->assertEquals($expected, $this->currentLink->isCurrent());
-    }
-
-    /**
-     * Data provider for is current
-     */
-    public function isCurrentDataProvider(): array
-    {
-        return [
-            'url with MCA' => [
-                'pathStub' => 'test/path',
-                'urlStub' => 'http://example.com/asdasd',
-                'requestStub' => [
-                    'pathInfoStub' => '/test/index/',
-                    'moduleStub' => 'test',
-                    'controllerStub' => 'index',
-                    'actionStub' => 'index',
-                    'mcaStub' => 'test/index',
-                    'getUrl' => 'http://example.com/asdasd/'
-                ],
-                'excepted' => true
-            ],
-            'url with CMS' => [
-                'pathStub' => 'test',
-                'urlStub' => 'http://example.com/test',
-                'requestStub' => [
-                    'pathInfoStub' => '//test//',
-                    'moduleStub' => 'cms',
-                    'controllerStub' => 'page',
-                    'actionStub' => 'view',
-                    'mcaStub' => '',
-                    'getUrl' => 'http://example.com/'
-                ],
-                'excepted' => true
-            ],
-            'Test if is current false' => [
-                'pathStub' => 'test/path',
-                'urlStub' => 'http://example.com/tests',
-                'requestStub' => [
-                    'pathInfoStub' => '/test/index/',
-                    'moduleStub' => 'test',
-                    'controllerStub' => 'index',
-                    'actionStub' => 'index',
-                    'mcaStub' => 'test/index',
-                    'getUrl' => 'http://example.com/asdasd/'
-                ],
-                'excepted' => false
-            ]
-        ];
+        /** @var Current $link */
+        $link = $this->_objectManager->getObject(
+            Current::class,
+            ['urlBuilder' => $this->_urlBuilderMock, 'request' => $this->_requestMock]
+        );
+        $this->assertFalse($link->isCurrent());
     }
 }

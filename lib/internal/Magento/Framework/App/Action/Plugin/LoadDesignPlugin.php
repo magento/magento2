@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-namespace Magento\Theme\Plugin;
+namespace Magento\Framework\App\Action\Plugin;
 
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\Config\Dom\ValidationException;
@@ -21,12 +21,12 @@ class LoadDesignPlugin
     /**
      * @var DesignLoader
      */
-    private $designLoader;
+    protected $_designLoader;
 
     /**
      * @var MessageManagerInterface
      */
-    private $messageManager;
+    protected $messageManager;
 
     /**
      * @param DesignLoader $designLoader
@@ -36,7 +36,7 @@ class LoadDesignPlugin
         DesignLoader $designLoader,
         MessageManagerInterface $messageManager
     ) {
-        $this->designLoader = $designLoader;
+        $this->_designLoader = $designLoader;
         $this->messageManager = $messageManager;
     }
 
@@ -50,7 +50,7 @@ class LoadDesignPlugin
     public function beforeExecute(ActionInterface $subject)
     {
         try {
-            $this->designLoader->load();
+            $this->_designLoader->load();
         } catch (LocalizedException $e) {
             if ($e->getPrevious() instanceof ValidationException) {
                 /** @var MessageInterface $message */

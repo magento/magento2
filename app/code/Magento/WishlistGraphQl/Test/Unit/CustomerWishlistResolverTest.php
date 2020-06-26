@@ -14,7 +14,6 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\Wishlist\Model\Wishlist;
-use Magento\Wishlist\Model\Wishlist\Config;
 use Magento\Wishlist\Model\WishlistFactory;
 use Magento\WishlistGraphQl\Model\Resolver\CustomerWishlistResolver;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -50,11 +49,6 @@ class CustomerWishlistResolverTest extends TestCase
     private $resolver;
 
     /**
-     * @var Config|MockObject
-     */
-    private $wishlistConfigMock;
-
-    /**
      * Build the Testing Environment
      */
     protected function setUp(): void
@@ -80,12 +74,9 @@ class CustomerWishlistResolverTest extends TestCase
             ->setMethods(['loadByCustomerId', 'getId', 'getSharingCode', 'getUpdatedAt', 'getItemsCount'])
             ->getMock();
 
-        $this->wishlistConfigMock = $this->createMock(Config::class);
-
         $objectManager = new ObjectManager($this);
         $this->resolver = $objectManager->getObject(CustomerWishlistResolver::class, [
-            'wishlistFactory' => $this->wishlistFactoryMock,
-            'wishlistConfig' => $this->wishlistConfigMock
+            'wishlistFactory' => $this->wishlistFactoryMock
         ]);
     }
 
@@ -94,8 +85,6 @@ class CustomerWishlistResolverTest extends TestCase
      */
     public function testThrowExceptionWhenUserNotAuthorized(): void
     {
-        $this->wishlistConfigMock->method('isEnabled')->willReturn(true);
-
         // Given
         $this->extensionAttributesMock->method('getIsCustomer')
             ->willReturn(false);
@@ -118,8 +107,6 @@ class CustomerWishlistResolverTest extends TestCase
      */
     public function testFactoryCreatesWishlistByAuthorizedCustomerId(): void
     {
-        $this->wishlistConfigMock->method('isEnabled')->willReturn(true);
-
         // Given
         $this->extensionAttributesMock->method('getIsCustomer')
             ->willReturn(true);

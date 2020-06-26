@@ -69,8 +69,7 @@
         },
         "index": {
             "CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID": true,
-            "CATALOG_PRODUCT_ENTITY_INT_STORE_ID": true,
-            "CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID_STORE_ID_VALUE": true
+            "CATALOG_PRODUCT_ENTITY_INT_STORE_ID": true
         },
         "constraint": {
             "PRIMARY": true,

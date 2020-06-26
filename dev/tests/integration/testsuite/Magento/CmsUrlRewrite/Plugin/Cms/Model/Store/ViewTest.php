@@ -25,7 +25,7 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewriteFactory;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for plugin which is listening store resource model and on save replace cms page url rewrites.
+ * Test for plugin which is listening store resource model and on save replace cms page url rewrites
  *
  * @magentoAppArea adminhtml
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -84,10 +84,9 @@ class ViewTest extends TestCase
     /**
      * Test of replacing cms page url rewrites on create and delete store
      *
-     * @magentoDataFixture Magento/Cms/_files/two_cms_page_with_same_url_for_different_stores.php
      * @magentoDataFixture Magento/Cms/_files/pages.php
      */
-    public function testUrlRewritesChangesAfterStoreSave(): void
+    public function testUrlRewritesChangesAfterStoreSave()
     {
         $storeId = $this->createStore();
         $this->assertUrlRewritesCount($storeId, 'page100', 1);
@@ -99,16 +98,16 @@ class ViewTest extends TestCase
     }
 
     /**
-     * Assert url rewrites count by store id and request path
+     * Assert url rewrites count by store id
      *
      * @param int $storeId
-     * @param string $requestPath
+     * @param string $pageIdentifier
      * @param int $expectedCount
      */
-    private function assertUrlRewritesCount(int $storeId, string $requestPath, int $expectedCount): void
+    private function assertUrlRewritesCount(int $storeId, string $pageIdentifier, int $expectedCount): void
     {
         $data = [
-            UrlRewrite::REQUEST_PATH => $requestPath,
+            UrlRewrite::REQUEST_PATH => $pageIdentifier,
             UrlRewrite::STORE_ID => $storeId
         ];
         $urlRewrites = $this->urlFinder->findAllByData($data);
@@ -117,6 +116,8 @@ class ViewTest extends TestCase
 
     /**
      * Create test store
+     *
+     * @return int
      */
     private function createStore(): int
     {
@@ -133,6 +134,7 @@ class ViewTest extends TestCase
      * Delete test store
      *
      * @param int $storeId
+     * @return void
      */
     private function deleteStore(int $storeId): void
     {

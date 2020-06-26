@@ -83,12 +83,6 @@ class Result
             }
         }
 
-        /**
-         * Clear validation messages to prevent wrong validation for subsequent price update.
-         * Work around for backward compatible changes.
-         */
-        $this->failedItems = [];
-
         return $failedItems;
     }
 }

@@ -49,7 +49,7 @@ class CategoryTest extends TestCase
      */
     protected $objectManager;
 
-    /** @var CategoryResource */
+    /** @var CategoryRepository */
     private $categoryResource;
 
     /** @var CategoryRepositoryInterface */
@@ -353,17 +353,6 @@ class CategoryTest extends TestCase
         $this->_model->unsetData();
         $this->_model->load(5);
         $this->assertEquals($this->_model->getId(), null);
-    }
-
-    /**
-     * @magentoDbIsolation enabled
-     * @magentoAppArea adminhtml
-     * @magentoDataFixture Magento/Catalog/_files/categories_no_products.php
-     */
-    public function testChildrenCountAfterDeleteParentCategory(): void
-    {
-        $this->categoryRepository->deleteByIdentifier(3);
-        $this->assertEquals(8, $this->categoryResource->getChildrenCount(1));
     }
 
     /**

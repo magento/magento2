@@ -14,22 +14,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaContentCatalog\Observer\ProductDelete">
-        <arguments>
-            <argument name="fields" xsi:type="array">
-                <item name="description" xsi:type="string">description</item>
-                <item name="short_description" xsi:type="string">short_description</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\MediaContentCatalog\Observer\CategoryDelete">
-        <arguments>
-            <argument name="fields" xsi:type="array">
-                <item name="image" xsi:type="string">image</item>
-                <item name="description" xsi:type="string">description</item>
-            </argument>
-        </arguments>
-    </type>
     <type name="Magento\MediaContentCatalog\Observer\Category">
         <arguments>
             <argument name="fields" xsi:type="array">

@@ -8,15 +8,11 @@ namespace Magento\Catalog\Model\ResourceModel\Category;
 use Magento\Catalog\Model\Category;
 
 /**
- * Aggregate count for parent category after deleting child category
- *
  * Class AggregateCount
  */
 class AggregateCount
 {
     /**
-     * Reduces children count for parent categories
-     *
      * @param Category $category
      * @return void
      */
@@ -29,7 +25,9 @@ class AggregateCount
          */
         $parentIds = $category->getParentIds();
         if ($parentIds) {
-            $data = ['children_count' => new \Zend_Db_Expr('children_count - 1')];
+            $childDecrease = $category->getChildrenCount() + 1;
+            // +1 is itself
+            $data = ['children_count' => new \Zend_Db_Expr('children_count - ' . $childDecrease)];
             $where = ['entity_id IN(?)' => $parentIds];
             $resourceModel->getConnection()->update($resourceModel->getEntityTable(), $data, $where);
         }

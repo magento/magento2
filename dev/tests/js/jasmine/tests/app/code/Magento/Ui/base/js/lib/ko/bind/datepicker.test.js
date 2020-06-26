@@ -8,7 +8,6 @@ define([
     'jquery',
     'moment',
     'mageUtils',
-    'mage/calendar',
     'Magento_Ui/js/lib/knockout/bindings/datepicker'
 ], function (ko, $, moment, utils) {
     'use strict';
@@ -19,7 +18,6 @@ define([
             config;
 
         beforeEach(function () {
-            jasmine.clock().install();
             element = $('<input />');
             observable = ko.observable();
 
@@ -40,7 +38,6 @@ define([
         });
 
         afterEach(function () {
-            jasmine.clock().uninstall();
             element.remove();
         });
 
@@ -65,16 +62,12 @@ define([
             expectedDate = moment(date, utils.convertToMomentFormat(inputFormat)).toDate();
             observable(date);
 
-            jasmine.clock().tick(100);
-
             expect(expectedDate.valueOf()).toEqual(element.datepicker('getDate').valueOf());
         });
 
         it('clear picked date\'s value after clear observable value', function () {
             element.datepicker('setTimezoneDate').blur().trigger('change');
             observable('');
-
-            jasmine.clock().tick(100);
 
             expect(null).toEqual(element.datepicker('getDate'));
         });

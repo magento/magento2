@@ -128,39 +128,6 @@ class SaveGoogleExperimentScriptObserverTest extends TestCase
     }
 
     /**
-     * Test that code is not saving when request is empty
-     *
-     * @return void
-     */
-    public function testCreatingCodeIfRequestIsEmpty(): void
-    {
-        $this->_helperMock->expects(
-            $this->once()
-        )->method(
-            'isGoogleExperimentActive'
-        )->with(
-            $this->_storeId
-        )->willReturn(
-            true
-        );
-
-        $this->_requestMock->expects(
-            $this->exactly(3)
-        )->method(
-            'getParam'
-        )->with(
-            'google_experiment'
-        )->willReturn(
-            ['code_id' => '', 'experiment_script' => '']
-        );
-
-        $this->_codeMock->expects($this->never())->method('addData');
-        $this->_codeMock->expects($this->never())->method('save');
-
-        $this->_modelObserver->execute($this->_eventObserverMock);
-    }
-
-    /**
      * @param array $params
      * @dataProvider dataProviderWrongRequestForCreating
      */

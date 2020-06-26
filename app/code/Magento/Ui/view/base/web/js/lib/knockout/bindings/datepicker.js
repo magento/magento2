@@ -7,8 +7,11 @@ define([
     'ko',
     'underscore',
     'jquery',
-    'mage/translate'
-], function (ko, _, $, $t) {
+    'mage/translate',
+    'mage/calendar',
+    'moment',
+    'mageUtils'
+], function (ko, _, $, $t, calendar, moment, utils) {
     'use strict';
 
     var defaults = {
@@ -43,12 +46,10 @@ define([
                 observable = config;
             }
 
-            require(['mage/calendar'], function () {
-                $(el).calendar(options);
+            $(el).calendar(options);
 
-                ko.utils.registerEventHandler(el, 'change', function () {
-                    observable(this.value);
-                });
+            ko.utils.registerEventHandler(el, 'change', function () {
+                observable(this.value);
             });
         },
 
@@ -61,7 +62,6 @@ define([
          */
         update: function (element, valueAccessor) {
             var config = valueAccessor(),
-                $element = $(element),
                 observable,
                 options = {},
                 newVal;
@@ -75,21 +75,26 @@ define([
                 observable = config;
             }
 
-            require(['moment', 'mage/utils/misc', 'mage/calendar'], function (moment, utils) {
-                if (_.isEmpty(observable())) {
-                    newVal = null;
-                } else {
-                    newVal = moment(
-                        observable(),
-                        utils.convertToMomentFormat(
-                            options.dateFormat + (options.showsTime ? ' ' + options.timeFormat : '')
-                        )
-                    ).toDate();
+            if (_.isEmpty(observable())) {
+                if ($(element).datepicker('getDate')) {
+                    $(element).datepicker('setDate', null);
+                    $(element).blur();
                 }
+            } else {
+                newVal = moment(
+                    observable(),
+                    utils.convertToMomentFormat(
+                        options.dateFormat + (options.showsTime ? ' ' + options.timeFormat : '')
+                    )
+                ).toDate();
 
-                $element.datepicker('setDate', newVal);
-                $element.blur();
-            });
+                if ($(element).datepicker('getDate') == null ||
+                    newVal.valueOf() !== $(element).datepicker('getDate').valueOf()
+                ) {
+                    $(element).datepicker('setDate', newVal);
+                    $(element).blur();
+                }
+            }
         }
     };
 });
