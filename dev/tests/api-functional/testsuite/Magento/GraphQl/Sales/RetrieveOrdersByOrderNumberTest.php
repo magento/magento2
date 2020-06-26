@@ -157,7 +157,7 @@ QUERY;
         // Asserting discounts on order item level
         $this->assertEquals(4, $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']);
         $this->assertEquals('USD', $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']);
-        $this->assertEquals('Discount', $customerOrderResponse[0]['items'][0]['discounts'][0]['label']);
+        $this->assertEquals('Discount Label for 10% off', $customerOrderResponse[0]['items'][0]['discounts'][0]['label']);
         $customerOrderItem = $customerOrderResponse[0];
         $this->assertTotalsWithTaxesAndDiscounts($customerOrderItem['total']);
         $this->deleteOrder();
@@ -188,7 +188,7 @@ QUERY;
                 'total_amount' => ['value' => 20, 'currency' =>'USD'],
                 'discounts' => [
                     0 => ['amount'=>['value'=> 2, 'currency' =>'USD'],
-                        'label' => 'Discount'
+                        'label' => 'Discount Label for 10% off'
                     ]
                 ],
                 'taxes'=> [
@@ -201,7 +201,7 @@ QUERY;
             ],
             'discounts' => [
                 0 => ['amount' => [ 'value' => 6, 'currency' =>'USD'],
-                    'label' => 'Discount'
+                    'label' => 'Discount Label for 10% off'
                 ]
             ]
         ];
@@ -233,7 +233,7 @@ QUERY;
         // Asserting discounts on order item level
         $this->assertEquals(4, $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']);
         $this->assertEquals('USD', $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']);
-        $this->assertEquals('Discount', $customerOrderResponse[0]['items'][0]['discounts'][0]['label']);
+        $this->assertEquals('Discount Label for 10% off', $customerOrderResponse[0]['items'][0]['discounts'][0]['label']);
         $customerOrderItem = $customerOrderResponse[0];
         $this->assertTotalsWithTaxesAndDiscountsWithTwoRules($customerOrderItem['total']);
         $this->deleteOrder();
@@ -270,7 +270,7 @@ QUERY;
                 'total_amount' => ['value' => 20, 'currency' =>'USD'],
                 'discounts' => [
                     0 => ['amount'=>['value'=> 2, 'currency' =>'USD'],
-                        'label' => 'Discount'
+                        'label' => 'Discount Label for 10% off'
                     ]
                 ],
                 'taxes'=> [
@@ -288,7 +288,7 @@ QUERY;
             ],
             'discounts' => [
                 0 => ['amount' => [ 'value' => 6, 'currency' =>'USD'],
-                    'label' => 'Discount'
+                    'label' => 'Discount Label for 10% off'
                 ]
             ]
         ];

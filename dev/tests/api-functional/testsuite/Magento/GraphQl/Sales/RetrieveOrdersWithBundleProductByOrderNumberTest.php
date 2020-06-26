@@ -145,6 +145,11 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
             'bundle-product-two-dropdown-options-simple1-simple2',
             $bundledItemInTheOrder['product_sku']
         );
+        $this->assertEquals(6, $bundledItemInTheOrder['discounts'][0]['amount']['value']);
+        $this->assertEquals(
+            'Discount Label for 10% off',
+            $bundledItemInTheOrder["discounts"][0]['label']
+        );
         $this->assertArrayHasKey('bundle_options', $bundledItemInTheOrder);
         $childItemsInTheOrder = $bundledItemInTheOrder['bundle_options'];
         $this->assertNotEmpty($childItemsInTheOrder);
@@ -183,7 +188,7 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
                 'total_amount' => ['value' => 20],
                 'discounts' => [
                     0 => ['amount'=>['value'=> 2],
-                        'label' => 'Discount'
+                        'label' => 'Discount Label for 10% off'
                     ]
                 ],
                 'taxes'=> [
@@ -196,7 +201,7 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
             ],
             'discounts' => [
                 0 => ['amount' => [ 'value' => 8, 'currency' =>'USD'],
-                    'label' => 'Discount'
+                    'label' => 'Discount Label for 10% off'
                 ]
             ]
         ];
