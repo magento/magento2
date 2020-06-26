@@ -87,7 +87,7 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
      * @param Store|StoreInterface $store
      * @return StoreConfigInterface
      */
-    public function getStoreConfig($store)
+    protected function getStoreConfig($store)
     {
         /** @var StoreConfig $storeConfig */
         $storeConfig = $this->storeConfigFactory->create();

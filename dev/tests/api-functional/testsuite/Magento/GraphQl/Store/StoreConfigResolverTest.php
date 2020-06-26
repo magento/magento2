@@ -19,7 +19,7 @@ use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test the GraphQL endpoint's StoreConfigs and AvailableStores queries
+ * Test the GraphQL endpoint's StoreConfigs query
  */
 class StoreConfigResolverTest extends GraphQlAbstract
 {

@@ -41,4 +41,29 @@ class StoreWebsiteRelation
         $data = $connection->fetchCol($storeSelect);
         return $data;
     }
+
+    /**
+     * Get website store codes
+     *
+     * @param int $websiteId
+     * @param bool $available
+     * @return array
+     */
+    public function getWebsiteStoreCodes($websiteId, $available = false): array
+    {
+        $connection = $this->resource->getConnection();
+        $storeTable = $this->resource->getTableName('store');
+        $storeSelect = $connection->select()->from($storeTable, ['code'])->where(
+            'website_id = ?',
+            $websiteId
+        );
+
+        if ($available) {
+            $storeSelect = $storeSelect->where(
+                'is_active = 1'
+            );
+        }
+
+        return $connection->fetchCol($storeSelect);
+    }
 }

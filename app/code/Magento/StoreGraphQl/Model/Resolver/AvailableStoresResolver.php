@@ -41,6 +41,8 @@ class AvailableStoresResolver implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        return $this->storeConfigDataProvider->getAvailableStoreConfig($context->getExtensionAttributes()->getStore());
+        return $this->storeConfigDataProvider->getAvailableStoreConfig(
+            $context->getExtensionAttributes()->getStore()->getWebsiteId()
+        );
     }
 }
