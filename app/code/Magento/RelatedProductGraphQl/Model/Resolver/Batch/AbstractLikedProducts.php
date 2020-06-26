@@ -110,6 +110,10 @@ abstract class AbstractLikedProducts implements BatchResolverInterface
         //Matching products with related products.
         $relationsData = [];
         foreach ($relations as $productId => $relatedIds) {
+            //Remove related products that not exist in map list.
+            $relatedIds = array_filter($relatedIds, function ($relatedId) use ($relatedProducts) {
+                return isset($relatedProducts[$relatedId]);
+            });
             $relationsData[$productId] = array_map(
                 function ($id) use ($relatedProducts) {
                     return $relatedProducts[$id];
