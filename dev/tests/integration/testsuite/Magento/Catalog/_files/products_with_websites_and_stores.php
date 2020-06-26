@@ -3,8 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../Store/_files/second_website_with_two_stores.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_website_with_two_stores.php');
 
 $website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Website::class);
 /** @var $website \Magento\Store\Model\Website */
