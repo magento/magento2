@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\RequireJs\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -35,21 +36,30 @@ class FileManager
     private $assetRepo;
 
     /**
+     * @var \Magento\Framework\Filesystem\Io\File
+     */
+    private $fileSystemFile;
+
+    /**
+     * FileManager constructor.
      * @param Config $config
      * @param \Magento\Framework\Filesystem $appFilesystem
      * @param AppState $appState
      * @param \Magento\Framework\View\Asset\Repository $assetRepo
+     * @param \Magento\Framework\Filesystem\Io\File $fileSystemFile
      */
     public function __construct(
         Config $config,
         \Magento\Framework\Filesystem $appFilesystem,
         AppState $appState,
-        \Magento\Framework\View\Asset\Repository $assetRepo
+        \Magento\Framework\View\Asset\Repository $assetRepo,
+        \Magento\Framework\Filesystem\Io\File $fileSystemFile
     ) {
         $this->config = $config;
         $this->filesystem = $appFilesystem;
         $this->appState = $appState;
         $this->assetRepo = $assetRepo;
+        $this->fileSystemFile = $fileSystemFile;
     }
 
     /**
@@ -157,7 +167,7 @@ class FileManager
      */
     public function createStaticJsAsset()
     {
-        if ($this->appState->getMode() != AppState::MODE_PRODUCTION) {
+        if ($this->appState->getMode() == AppState::MODE_DEVELOPER) {
             return false;
         }
         return $this->assetRepo->createAsset(Config::STATIC_FILE_NAME);
@@ -171,7 +181,7 @@ class FileManager
     public function createBundleJsPool()
     {
         $bundles = [];
-        if ($this->appState->getMode() == AppState::MODE_PRODUCTION) {
+        if ($this->appState->getMode() != AppState::MODE_DEVELOPER) {
             $libDir = $this->filesystem->getDirectoryRead(DirectoryList::STATIC_VIEW);
             /** @var $context \Magento\Framework\View\Asset\File\FallbackContext */
             $context = $this->assetRepo->getStaticViewFileContext();
@@ -183,7 +193,7 @@ class FileManager
             }
 
             foreach ($libDir->read($bundleDir) as $bundleFile) {
-                if (pathinfo($bundleFile, PATHINFO_EXTENSION) !== 'js') {
+                if ($this->fileSystemFile->getPathInfo($bundleFile, PATHINFO_EXTENSION) !== 'js') {
                     continue;
                 }
                 $relPath = $libDir->getRelativePath($bundleFile);
@@ -196,9 +206,9 @@ class FileManager
 
     /**
      * Remove all bundles from pool
-     * @deprecated 100.1.1
      *
      * @return bool
+     * @deprecated 100.1.1
      */
     public function clearBundleJsPool()
     {

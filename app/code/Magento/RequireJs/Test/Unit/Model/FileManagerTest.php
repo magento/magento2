@@ -20,6 +20,7 @@ use Magento\Framework\View\Asset\Repository;
 use Magento\RequireJs\Model\FileManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Filesystem\Io\File as FileSystemFile;
 
 class FileManagerTest extends TestCase
 {
@@ -64,7 +65,14 @@ class FileManagerTest extends TestCase
         $this->fileSystem = $this->createMock(Filesystem::class);
         $this->appState = $this->createMock(State::class);
         $this->assetRepoMock = $this->createMock(Repository::class);
-        $this->object = new FileManager($this->configMock, $this->fileSystem, $this->appState, $this->assetRepoMock);
+        $fileSystemFile = $this->createMock(FileSystemFile::class);
+        $this->object = new FileManager(
+            $this->configMock,
+            $this->fileSystem,
+            $this->appState,
+            $this->assetRepoMock,
+            $fileSystemFile
+        );
         $this->dir = $this->getMockForAbstractClass(WriteInterface::class);
         $this->asset = $this->createMock(File::class);
     }
@@ -145,6 +153,7 @@ class FileManagerTest extends TestCase
         $context = $this->createMock(FallbackContext::class);
         $assetRepo = $this->createMock(Repository::class);
         $config = $this->createMock(Config::class);
+        $fileSystemFile = $this->createMock(FileSystemFile::class);
 
         $config
             ->expects($this->never())
@@ -197,7 +206,12 @@ class FileManagerTest extends TestCase
             ->with('static')
             ->willReturn($dirRead);
 
-        $object = new FileManager($config, $this->fileSystem, $this->appState, $assetRepo);
+        $fileSystemFile->expects($this->exactly(3))
+            ->method('getPathInfo')
+            ->withAnyParameters()
+            ->willReturn('js', 'js', 'not_js');
+
+        $object = new FileManager($config, $this->fileSystem, $this->appState, $assetRepo, $fileSystemFile);
 
         $result = $object->createBundleJsPool();
 
