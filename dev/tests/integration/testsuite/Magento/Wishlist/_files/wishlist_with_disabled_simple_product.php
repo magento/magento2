@@ -30,4 +30,3 @@ $indexer = \Magento\TestFramework\Helper\Bootstrap
     ::getObjectManager()->create(\Magento\Indexer\Model\Indexer::class);
 $indexer->load('catalog_product_price');
 $indexer->reindexList([$product->getId()]);
-
