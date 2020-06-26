@@ -11,6 +11,8 @@ namespace Magento\Test\Integrity\Dependency;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Setup\Declaration\Schema\Config\Converter;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Inspection\Exception as InspectionException;
 
 /**
  * Provide information on the dependency between the modules according to the declarative schema.
@@ -22,22 +24,22 @@ class DeclarativeSchemaDependencyProvider
     /**
      * Declarative name for table entity of the declarative schema.
      */
-    const SCHEMA_ENTITY_TABLE = 'table';
+    public const SCHEMA_ENTITY_TABLE = 'table';
 
     /**
      * Declarative name for column entity of the declarative schema.
      */
-    const SCHEMA_ENTITY_COLUMN = 'column';
+    public const SCHEMA_ENTITY_COLUMN = 'column';
 
     /**
      * Declarative name for constraint entity of the declarative schema.
      */
-    const SCHEMA_ENTITY_CONSTRAINT = 'constraint';
+    public const SCHEMA_ENTITY_CONSTRAINT = 'constraint';
 
     /**
      * Declarative name for index entity of the declarative schema.
      */
-    const SCHEMA_ENTITY_INDEX = 'index';
+    public const SCHEMA_ENTITY_INDEX = 'index';
 
     /**
      * @var array
@@ -55,10 +57,9 @@ class DeclarativeSchemaDependencyProvider
     private $dependencyProvider;
 
     /**
-     * DeclarativeSchemaDependencyProvider constructor.
-     * @param \Magento\Test\Integrity\Dependency\DependencyProvider\Proxy $dependencyProvider
+     * @param DependencyProvider $dependencyProvider
      */
-    public function __construct(\Magento\Test\Integrity\Dependency\DependencyProvider\Proxy $dependencyProvider)
+    public function __construct(DependencyProvider $dependencyProvider)
     {
         $this->dependencyProvider = $dependencyProvider;
     }
@@ -116,7 +117,7 @@ class DeclarativeSchemaDependencyProvider
      *
      * @param string $module
      * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function getSchemaFileNameByModuleName(string $module): string
     {
@@ -194,7 +195,7 @@ class DeclarativeSchemaDependencyProvider
      * Retrieve declarative schema declaration.
      *
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function getDeclarativeSchema(): array
     {
@@ -249,7 +250,7 @@ class DeclarativeSchemaDependencyProvider
      * @param string $entityType
      * @param null|string $entityName
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function resolveEntityDependencies(string $tableName, string $entityType, ?string $entityName = null): array
     {
@@ -332,7 +333,7 @@ class DeclarativeSchemaDependencyProvider
      *
      * @param array $moduleDeclaration
      * @return array
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     private function getDisabledDependencies(array $moduleDeclaration): array
     {
@@ -445,7 +446,7 @@ class DeclarativeSchemaDependencyProvider
      * @param string $tableName
      * @param array $entityDeclaration
      * @return array
-     * @throws \Exception
+     * @throws LocalizedException
      */
     private function getComplexDependency(string $tableName, array $entityDeclaration): array
     {
@@ -471,7 +472,7 @@ class DeclarativeSchemaDependencyProvider
      *
      * @param array $moduleDeclaration
      * @return array
-     * @throws \Exception
+     * @throws LocalizedException
      */
     private function getIndexDependencies(array $moduleDeclaration): array
     {
@@ -541,9 +542,11 @@ class DeclarativeSchemaDependencyProvider
     /**
      * Collect module dependencies.
      *
-     * @param string $currentModuleName
+     * @param $currentModuleName
      * @param array $dependencies
      * @return array
+     * @throws InspectionException
+     * @throws LocalizedException
      */
     private function collectDependencies($currentModuleName, $dependencies = []): array
     {
@@ -562,11 +565,13 @@ class DeclarativeSchemaDependencyProvider
     }
 
     /**
-     * Collect a module dependency.
+     *  Collect a module dependency.
      *
      * @param string $dependencyName
      * @param array $dependency
      * @param string $currentModule
+     * @throws LocalizedException
+     * @throws InspectionException
      */
     private function collectDependency(
         string $dependencyName,

@@ -17,11 +17,11 @@ use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterfa
  */
 class GraphQlReader implements ReaderInterface
 {
-    const GRAPHQL_PLACEHOLDER_FIELD_NAME = 'placeholder_graphql_field';
+    public const GRAPHQL_PLACEHOLDER_FIELD_NAME = 'placeholder_graphql_field';
 
-    const GRAPHQL_SCHEMA_FILE = 'schema.graphqls';
+    public const GRAPHQL_SCHEMA_FILE = 'schema.graphqls';
 
-    const GRAPHQL_INTERFACE = 'graphql_interface';
+    public const GRAPHQL_INTERFACE = 'graphql_interface';
 
     /**
      * File locator
@@ -315,9 +315,6 @@ class GraphQlReader implements ReaderInterface
                 break;
             }
         }
-        if (empty($foundModuleName)) {
-            $foundModuleName = '';
-        }
 
         return $foundModuleName;
     }
@@ -333,7 +330,7 @@ class GraphQlReader implements ReaderInterface
     {
         foreach ($source as $typeName => $type) {
             if (!isset($type['module']) && (
-                ($type['type'] == self::GRAPHQL_INTERFACE && isset($type['typeResolver']))
+                ($type['type'] === self::GRAPHQL_INTERFACE && isset($type['typeResolver']))
                     || isset($type['implements'])
             )
             ) {

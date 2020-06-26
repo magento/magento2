@@ -10,23 +10,26 @@ namespace Magento\Test\Integrity\Dependency;
 
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Config\Composer\Package;
+use Magento\TestFramework\Inspection\Exception as InspectionException;
 
 class DependencyProvider
 {
     /**
      * Types of dependency between modules.
      */
-    const TYPE_HARD = 'hard';
+    public const TYPE_HARD = 'hard';
 
     /**
      * The identifier of dependency for mapping.
      */
-    const MAP_TYPE_DECLARED = 'declared';
+    public const MAP_TYPE_DECLARED = 'declared';
 
     /**
      * The identifier of dependency for mapping.
      */
-    const MAP_TYPE_FOUND = 'found';
+    public const MAP_TYPE_FOUND = 'found';
 
     /**
      * @var array
@@ -39,14 +42,9 @@ class DependencyProvider
     private $packageModuleMapping = [];
 
     /**
-     * DependencyProvider constructor.
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\TestFramework\Inspection\Exception
+     * @var bool
      */
-    public function __construct()
-    {
-        $this->initDeclaredDependencies();
-    }
+    private $isInited = false;
 
     /**
      * Add dependency map items.
@@ -55,9 +53,14 @@ class DependencyProvider
      * @param $type
      * @param $mapType
      * @param $dependencies
+     * @throws LocalizedException
+     * @throws InspectionException
      */
     public function addDependencies(string $module, string $type, string $mapType, array $dependencies)
     {
+        if (!$this->isInited) {
+            $this->initDeclaredDependencies();
+        }
         $this->mapDependencies[$module][$type][$mapType] = array_merge_recursive(
             $this->getDeclaredDependencies($module, $type, $mapType),
             $dependencies
@@ -71,24 +74,30 @@ class DependencyProvider
      * @param $type
      * @param $mapType
      * @return array
+     * @throws LocalizedException
+     * @throws InspectionException
      */
     public function getDeclaredDependencies(string $module, string $type, string $mapType): array
     {
+        if (!$this->isInited) {
+            $this->initDeclaredDependencies();
+        }
         return $this->mapDependencies[$module][$type][$mapType] ?? [];
     }
 
     /**
      * Initialise map of dependencies.
      *
-     * @throws \Magento\TestFramework\Inspection\Exception
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws InspectionException
+     * @throws LocalizedException
      */
     private function initDeclaredDependencies()
     {
+        $this->isInited = true;
         if (empty($this->mapDependencies)) {
             $jsonFiles = Files::init()->getComposerFiles(ComponentRegistrar::MODULE, false);
             foreach ($jsonFiles as $file) {
-                $json = new \Magento\Framework\Config\Composer\Package($this->readJsonFile($file));
+                $json = new Package($this->readJsonFile($file));
                 $moduleName = $this->convertModuleName($json->get('name'));
                 $require = array_keys((array)$json->get('require'));
                 $this->presetDependencies($moduleName, $require, self::TYPE_HARD);
@@ -104,8 +113,8 @@ class DependencyProvider
      * @param string $type
      *
      * @return void
-     * @throws \Magento\TestFramework\Inspection\Exception
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws InspectionException
+     * @throws LocalizedException
      */
     private function presetDependencies(string $moduleName, array $packageNames, string $type): void
     {
@@ -127,8 +136,8 @@ class DependencyProvider
     /**
      * @param string $jsonName
      * @return string
-     * @throws \Magento\TestFramework\Inspection\Exception
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws InspectionException
+     * @throws LocalizedException
      */
     private function convertModuleName(string $jsonName): string
     {
@@ -158,13 +167,13 @@ class DependencyProvider
      *
      * @param string $file
      * @return mixed
-     * @throws \Magento\TestFramework\Inspection\Exception
+     * @throws InspectionException
      */
     private function readJsonFile(string $file, bool $asArray = false)
     {
         $decodedJson = json_decode(file_get_contents($file), $asArray);
         if (null == $decodedJson) {
-            throw new \Magento\TestFramework\Inspection\Exception("Invalid Json: $file");
+            throw new InspectionException("Invalid Json: $file");
         }
 
         return $decodedJson;
@@ -175,8 +184,8 @@ class DependencyProvider
      *
      * @param string $packageName
      * @return null|string
-     * @throws \Magento\TestFramework\Inspection\Exception
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws InspectionException
+     * @throws LocalizedException
      */
     private function getModuleName(string $packageName): ?string
     {
@@ -187,8 +196,8 @@ class DependencyProvider
      * Returns package name on module name mapping.
      *
      * @return array
-     * @throws \Magento\TestFramework\Inspection\Exception
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws InspectionException
+     * @throws LocalizedException
      */
     private function getPackageModuleMapping(): array
     {

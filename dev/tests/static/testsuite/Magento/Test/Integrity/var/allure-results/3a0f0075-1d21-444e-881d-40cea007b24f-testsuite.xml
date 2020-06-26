@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<alr:test-suite xmlns:alr="urn:model.allure.qatools.yandex.ru" start="1592475309651" stop="1592475309672" version="1.4.0">
+  <name>Magento\Test\Integrity\DeclarativeDependencyTest</name>
+  <test-cases>
+    <test-case start="1592475309653" stop="1592475309671" status="broken">
+      <name>testUndeclaredDependencies</name>
+      <failure>
+        <message>Class 'Magento\Test\Integrity\Dependency\DeclarativeSchemaDependencyProvider' not found</message>
+        <stack-trace>#0 /Users/a1/Documents/local/magento2/vendor/phpunit/phpunit/src/Framework/TestCase.php(772): PHPUnit\Framework\TestResult-&gt;run(Object(Magento\Test\Integrity\DeclarativeDependencyTest))
+#1 /Users/a1/Documents/local/magento2/vendor/phpunit/phpunit/src/Framework/TestSuite.php(639): PHPUnit\Framework\TestCase-&gt;run(Object(PHPUnit\Framework\TestResult))
+#2 /Users/a1/Documents/local/magento2/vendor/phpunit/phpunit/src/TextUI/TestRunner.php(653): PHPUnit\Framework\TestSuite-&gt;run(Object(PHPUnit\Framework\TestResult))
+#3 /Users/a1/Documents/local/magento2/vendor/phpunit/phpunit/src/TextUI/Command.php(108): PHPUnit\TextUI\TestRunner-&gt;run(Object(PHPUnit\Framework\TestSuite), Array, Array, true)
+#4 /Users/a1/Documents/local/magento2/vendor/phpunit/phpunit/src/TextUI/Command.php(68): PHPUnit\TextUI\Command-&gt;run(Array, true)
+#5 /Users/a1/Documents/local/magento2/vendor/phpunit/phpunit/phpunit(61): PHPUnit\TextUI\Command::main()
+#6 {main}</stack-trace>
+      </failure>
+    </test-case>
+  </test-cases>
+</alr:test-suite>

@@ -10,6 +10,9 @@ namespace Magento\Test\Integrity\Dependency;
 
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeReaderComposite;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Inspection\Exception as InspectionException;
 
 /**
  * Provide information on the dependency between the modules according to the GraphQL schema.
@@ -29,13 +32,11 @@ class GraphQlSchemaDependencyProvider
     private $dependencyProvider;
 
     /**
-     * GraphQlSchemaDependencyProvider constructor.
-     * @param \Magento\Test\Integrity\Dependency\DependencyProvider\Proxy $dependencyProvider
+     * @param DependencyProvider $dependencyProvider
      */
-    public function __construct(\Magento\Test\Integrity\Dependency\DependencyProvider\Proxy $dependencyProvider)
+    public function __construct(DependencyProvider $dependencyProvider)
     {
         $this->dependencyProvider = $dependencyProvider;
-        $this->getGraphQlSchemaDeclaration();
     }
 
     /**
@@ -43,8 +44,8 @@ class GraphQlSchemaDependencyProvider
      *
      * @param string $moduleName
      * @return array
-     * @throws \Magento\TestFramework\Inspection\Exception
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
+     * @throws InspectionException
      */
     public function getDeclaredExistingModuleDependencies(string $moduleName): array
     {
@@ -67,8 +68,8 @@ class GraphQlSchemaDependencyProvider
      *
      * @param string $moduleName
      * @return array
-     * @throws \Magento\TestFramework\Inspection\Exception
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws InspectionException
+     * @throws LocalizedException
      */
     public function getUndeclaredModuleDependencies(string $moduleName): array
     {
@@ -84,7 +85,7 @@ class GraphQlSchemaDependencyProvider
     private function getGraphQlSchemaDeclaration(): array
     {
         if (!$this->parsedSchema) {
-            $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+            $objectManager = ObjectManager::getInstance();
             $typeReader = $objectManager->create(TypeReaderComposite::class);
             $reader = $objectManager->create(GraphQlReader::class, ['typeReader' => $typeReader]);
             $this->parsedSchema = $reader->read();
@@ -101,16 +102,16 @@ class GraphQlSchemaDependencyProvider
      */
     private function getDependenciesFromSchema(string $moduleName): array
     {
-        $schema = $this->parsedSchema;
+        $schema = $this->getGraphQlSchemaDeclaration();
 
         $dependencies = [];
 
         foreach ($schema as $type) {
-            if (isset($type['module']) && $type['module'] == $moduleName && isset($type['implements'])) {
+            if (isset($type['module']) && $type['module'] === $moduleName && isset($type['implements'])) {
                 $interfaces = array_keys($type['implements']);
                 foreach ($interfaces as $interface) {
                     $dependOnModule = $schema[$interface]['module'];
-                    if ($dependOnModule != $moduleName) {
+                    if ($dependOnModule !== $moduleName) {
                         $dependencies[] = $dependOnModule;
                     }
                 }
@@ -126,6 +127,8 @@ class GraphQlSchemaDependencyProvider
      * @param string $currentModuleName
      * @param array $dependencies
      * @return array
+     * @throws InspectionException
+     * @throws LocalizedException
      */
     private function collectDependencies(string $currentModuleName, array $dependencies = []): array
     {

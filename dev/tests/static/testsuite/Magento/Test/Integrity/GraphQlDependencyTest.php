@@ -8,11 +8,17 @@ declare(strict_types=1);
 
 namespace Magento\Test\Integrity;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Utility\AggregateInvoker;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Test\Integrity\Dependency\GraphQlSchemaDependencyProvider;
+use Magento\TestFramework\Inspection\Exception as InspectionException;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\TestCase;
 
-class GraphQlDependencyTest extends \PHPUnit\Framework\TestCase
+class GraphQlDependencyTest extends TestCase
 {
     /**
      * @var GraphQlSchemaDependencyProvider
@@ -22,7 +28,7 @@ class GraphQlDependencyTest extends \PHPUnit\Framework\TestCase
     /**
      * Sets up data
      *
-     * @throws \Magento\TestFramework\Inspection\Exception
+     * @throws InspectionException
      */
     protected function setUp(): void
     {
@@ -34,25 +40,25 @@ class GraphQlDependencyTest extends \PHPUnit\Framework\TestCase
                 'MAGETWO-43654: The build is running from vendor/magento. DependencyTest is skipped.'
             );
         }
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $objectManager = ObjectManager::getInstance();
         $this->dependencyProvider = $objectManager->create(GraphQlSchemaDependencyProvider::class);
     }
 
     /**
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function testUndeclaredDependencies()
     {
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
         $invoker(
         /**
          * Check undeclared modules dependencies for specified file
          *
          * @param string $fileType
          * @param string $file
-         * @throws \Magento\Framework\Exception\LocalizedException
-         * @throws \Magento\TestFramework\Inspection\Exception
-         * @throws \PHPUnit\Framework\AssertionFailedError
+         * @throws LocalizedException
+         * @throws InspectionException
+         * @throws AssertionFailedError
          */
             function ($file) {
                 $componentRegistrar = new ComponentRegistrar();
@@ -116,13 +122,13 @@ class GraphQlDependencyTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $file
      * @return mixed
-     * @throws \Magento\TestFramework\Inspection\Exception
+     * @throws InspectionException
      */
     private function readJsonFile(string $file, bool $asArray = false)
     {
         $decodedJson = json_decode(file_get_contents($file), $asArray);
         if (null == $decodedJson) {
-            throw new \Magento\TestFramework\Inspection\Exception("Invalid Json: $file");
+            throw new InspectionException("Invalid Json: $file");
         }
 
         return $decodedJson;
