@@ -45,11 +45,34 @@ class PluginListGeneratorTest extends \PHPUnit\Framework\TestCase
     {
         $this->application = Bootstrap::getInstance()->getBootstrap()->getApplication();
         $this->directoryList = new DirectoryList(BP, $this->getCustomDirs());
-        $this->file = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            DriverInterface::class
+        $this->file = Bootstrap::getObjectManager()->create(DriverInterface::class);
+        $reader = Bootstrap::getObjectManager()->create(
+            \Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy::class
         );
-        $this->model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            PluginListGenerator::class
+        $scopeConfig = Bootstrap::getObjectManager()->create(\Magento\Framework\Config\Scope::class);
+        $omConfig = Bootstrap::getObjectManager()->create(
+            \Magento\Framework\Interception\ObjectManager\Config\Developer::class
+        );
+        $relations = Bootstrap::getObjectManager()->create(
+            \Magento\Framework\ObjectManager\Relations\Runtime::class
+        );
+        $definitions = Bootstrap::getObjectManager()->create(
+            \Magento\Framework\Interception\Definition\Runtime::class
+        );
+        $classDefinitions = Bootstrap::getObjectManager()->create(
+            \Magento\Framework\ObjectManager\Definition\Runtime::class
+        );
+        $logger = Bootstrap::getObjectManager()->create(\Psr\Log\LoggerInterface\Proxy::class);
+        $this->model = new PluginListGenerator(
+            $reader,
+            $scopeConfig,
+            $omConfig,
+            $relations,
+            $definitions,
+            $classDefinitions,
+            $logger,
+            $this->directoryList,
+            ['primary', 'global']
         );
     }
 
@@ -71,7 +94,7 @@ class PluginListGeneratorTest extends \PHPUnit\Framework\TestCase
                 2 => 'response-http-page-cache'
             ]
         ];
-        // Here in test I assume that this class below has 3 plugins. But the amount of plugins and class itself
+        // Here in test is assumed that this class below has 3 plugins. But the amount of plugins and class itself
         // may vary. If it is changed, please update these assertions.
         $this->assertArrayHasKey(
             'Magento\\Framework\\App\\Response\\Http_sendResponse___self',

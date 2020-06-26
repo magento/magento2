@@ -65,6 +65,9 @@ class DiCompileCommandTest extends TestCase
     /** @var OutputFormatterInterface|MockObject */
     private $outputFormatterMock;
 
+    /** @var Filesystem\Io\File|MockObject */
+    private $fileMock;
+
     protected function setUp(): void
     {
         $this->deploymentConfigMock = $this->createMock(DeploymentConfig::class);
@@ -96,6 +99,14 @@ class DiCompileCommandTest extends TestCase
         $this->fileDriverMock = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->fileDriverMock->method('getParentDirectory')->willReturnMap(
+            [
+                ['/path/to/module/one', '/path/to/module'],
+                ['/path/to/module', '/path/to'],
+                ['/path (1)/to/module/two', '/path (1)/to/module'],
+                ['/path (1)/to/module', '/path (1)/to'],
+            ]
+        );
         $this->componentRegistrarMock = $this->createMock(ComponentRegistrar::class);
         $this->componentRegistrarMock->expects($this->any())->method('getPaths')->willReturnMap([
             [ComponentRegistrar::MODULE, ['/path/to/module/one', '/path (1)/to/module/two']],
@@ -108,6 +119,17 @@ class DiCompileCommandTest extends TestCase
         $this->outputMock = $this->getMockForAbstractClass(OutputInterface::class);
         $this->outputMock->method('getFormatter')
             ->willReturn($this->outputFormatterMock);
+        $this->fileMock = $this->getMockBuilder(Filesystem\Io\File::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->fileMock->method('getPathInfo')->willReturnMap(
+            [
+                ['/path/to/module/one', ['basename' => 'one']],
+                ['/path/to/module', ['basename' => 'module']],
+                ['/path (1)/to/module/two', ['basename' => 'two']],
+                ['/path (1)/to/module', ['basename' => 'module']],
+            ]
+        );
 
         $this->command = new DiCompileCommand(
             $this->deploymentConfigMock,
@@ -116,7 +138,8 @@ class DiCompileCommandTest extends TestCase
             $objectManagerProviderMock,
             $this->filesystemMock,
             $this->fileDriverMock,
-            $this->componentRegistrarMock
+            $this->componentRegistrarMock,
+            $this->fileMock
         );
     }
 
