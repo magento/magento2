@@ -47,6 +47,7 @@ class PluginListGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->directoryList = new DirectoryList(BP, $this->getCustomDirs());
         $this->file = Bootstrap::getObjectManager()->create(DriverInterface::class);
         $reader = Bootstrap::getObjectManager()->create(
+        // phpstan:ignore "Class Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy not found."
             \Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy::class
         );
         $scopeConfig = Bootstrap::getObjectManager()->create(\Magento\Framework\Config\Scope::class);
@@ -62,6 +63,7 @@ class PluginListGeneratorTest extends \PHPUnit\Framework\TestCase
         $classDefinitions = Bootstrap::getObjectManager()->create(
             \Magento\Framework\ObjectManager\Definition\Runtime::class
         );
+        // phpstan:ignore "Class Psr\Log\LoggerInterface\Proxy not found."
         $logger = Bootstrap::getObjectManager()->create(\Psr\Log\LoggerInterface\Proxy::class);
         $this->model = new PluginListGenerator(
             $reader,
