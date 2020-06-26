@@ -157,7 +157,10 @@ QUERY;
         // Asserting discounts on order item level
         $this->assertEquals(4, $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']);
         $this->assertEquals('USD', $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']);
-        $this->assertEquals('Discount Label for 10% off', $customerOrderResponse[0]['items'][0]['discounts'][0]['label']);
+        $this->assertEquals(
+            'Discount Label for 10% off',
+            $customerOrderResponse[0]['items'][0]['discounts'][0]['label']
+        );
         $customerOrderItem = $customerOrderResponse[0];
         $this->assertTotalsWithTaxesAndDiscounts($customerOrderItem['total']);
         $this->deleteOrder();
@@ -233,7 +236,10 @@ QUERY;
         // Asserting discounts on order item level
         $this->assertEquals(4, $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']);
         $this->assertEquals('USD', $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']);
-        $this->assertEquals('Discount Label for 10% off', $customerOrderResponse[0]['items'][0]['discounts'][0]['label']);
+        $this->assertEquals(
+            'Discount Label for 10% off',
+            $customerOrderResponse[0]['items'][0]['discounts'][0]['label']
+        );
         $customerOrderItem = $customerOrderResponse[0];
         $this->assertTotalsWithTaxesAndDiscountsWithTwoRules($customerOrderItem['total']);
         $this->deleteOrder();
