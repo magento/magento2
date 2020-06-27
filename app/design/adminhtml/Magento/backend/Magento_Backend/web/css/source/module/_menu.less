@@ -275,7 +275,7 @@
             }
         }
 
-        &._show {
+        &:hover {
             > .submenu {
                 transform: translateX(0);
                 visibility: visible;
@@ -309,6 +309,10 @@
     }
 
     .submenu {
+        [data-role='close-submenu'] {
+            display: none;
+        }
+
         li {
             min-width: @submenu-column__width;
         }
