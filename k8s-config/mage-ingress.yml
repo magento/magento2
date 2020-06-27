@@ -1,0 +1,23 @@
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: magento-ingress
+  #annotations: 
+  #  kubernetes.io/ingress.allow-http: "false"
+spec:
+  tls:
+  - secretName: wwwmage-secret
+  - secretName: staticmage-secret
+  rules:
+  - host: www.mage.xyz
+    http:
+      paths:
+      - backend:
+          serviceName: magento
+          servicePort: mage-https-port
+  - host: static.mage.xyz
+    http:
+      paths:
+      - backend:
+          serviceName: magento
+          servicePort: mage-https-port

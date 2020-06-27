@@ -45,13 +45,13 @@ spec:
       paths:
       - backend:
           serviceName: magento
-          servicePort: mage-http-port
+          servicePort: mage-https-port
   - host: static.mage.xyz
     http:
       paths:
       - backend:
           serviceName: magento
-          servicePort: mage-http-port
+          servicePort: mage-https-port
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -107,6 +107,26 @@ spec:
           - mountPath: /var/www/html/pub
             name: magento-pub-volume
             subPath: pub
+          livenessProbe:
+            httpGet:
+              path: /healthz/blank.png
+              port: mage-http-port
+              scheme: http
+              httpHeaders:
+              - name: X-Forwarded-Proto
+                value: https
+            failureThreshold: 1
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /healthz/blank.png
+              port: mage-http-port
+              scheme: http
+              httpHeaders:
+              - name: X-Forwarded-Proto
+                value: https
+            failureThreshold: 1
+            periodSeconds: 10
         - image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
           lifecycle:
             postStart:
