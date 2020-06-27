@@ -111,7 +111,7 @@ spec:
             httpGet:
               path: /healthz/blank.png
               port: mage-http-port
-              scheme: http
+              scheme: HTTP
               httpHeaders:
               - name: X-Forwarded-Proto
                 value: https
@@ -121,7 +121,7 @@ spec:
             httpGet:
               path: /healthz/blank.png
               port: mage-http-port
-              scheme: http
+              scheme: HTTP
               httpHeaders:
               - name: X-Forwarded-Proto
                 value: https
