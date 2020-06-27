@@ -3,7 +3,8 @@ kind: Service
 metadata:
   name: magento
   annotations:
-    cloud.google.com/app-protocols: '{"mage-https-port":"HTTPS", "mage-http-port":"HTTP"}'
+    #cloud.google.com/app-protocols: '{"mage-https-port":"HTTPS", "mage-http-port":"HTTP"}'
+    cloud.google.com/app-protocols: '{"mage-http-port":"HTTP"}'
 spec:
   type: NodePort
   selector:
@@ -111,14 +112,12 @@ spec:
             httpGet:
               path: /healthz/
               port: 80
-              scheme: HTTP
             failureThreshold: 1
             periodSeconds: 10
           readinessProbe:
             httpGet:
               path: /healthz/
               port: 80
-              scheme: HTTP
             failureThreshold: 1
             periodSeconds: 10
         - image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
