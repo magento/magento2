@@ -5,6 +5,9 @@
  */
 namespace Magento\TestFramework\TestCase;
 
+use Magento\Framework\Authorization;
+use Magento\TestFramework\ObjectManager;
+
 /**
  * A parent class for backend controllers - contains directives for admin user creation and authentication.
  *
@@ -58,7 +61,12 @@ abstract class AbstractBackendController extends \Magento\TestFramework\TestCase
         parent::setUp();
 
         $this->_objectManager->get(\Magento\Backend\Model\UrlInterface::class)->turnOffSecretKey();
-
+        /**
+         * Authorization can be created on test bootstrap...
+         * If it will be created on test bootstrap we will have invalid RoleLocator object.
+         * As tests by default are run not from adminhtml area...
+         */
+        ObjectManager::getInstance()->removeSharedInstance(Authorization::class);
         $this->_auth = $this->_objectManager->get(\Magento\Backend\Model\Auth::class);
         $this->_session = $this->_auth->getAuthStorage();
         $credentials = $this->_getAdminCredentials();
