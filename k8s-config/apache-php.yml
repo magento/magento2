@@ -9,9 +9,9 @@ spec:
   selector:
     app: magento
   ports:
-  - name: mage-https-port
-    port: 443
-    targetPort: 80
+  #- name: mage-https-port
+  #  port: 443
+  #  targetPort: 80
   - name: mage-http-port
     port: 80
     targetPort: 80
@@ -45,13 +45,13 @@ spec:
       paths:
       - backend:
           serviceName: magento
-          servicePort: mage-https-port
+          servicePort: mage-http-port
   - host: static.mage.xyz
     http:
       paths:
       - backend:
           serviceName: magento
-          servicePort: mage-https-port
+          servicePort: mage-http-port
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -109,22 +109,16 @@ spec:
             subPath: pub
           livenessProbe:
             httpGet:
-              path: /healthz/blank.png
-              port: mage-http-port
+              path: /healthz/
+              port: 80
               scheme: HTTP
-              httpHeaders:
-              - name: X-Forwarded-Proto
-                value: https
             failureThreshold: 1
             periodSeconds: 10
           readinessProbe:
             httpGet:
-              path: /healthz/blank.png
-              port: mage-http-port
+              path: /healthz/
+              port: 80
               scheme: HTTP
-              httpHeaders:
-              - name: X-Forwarded-Proto
-                value: https
             failureThreshold: 1
             periodSeconds: 10
         - image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
