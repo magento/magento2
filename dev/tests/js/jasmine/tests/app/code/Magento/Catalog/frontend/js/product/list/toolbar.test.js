@@ -35,9 +35,9 @@ define([
 
         it('Toolbar is initialized once', function () {
             spyOn($.mage.productListToolbarForm.prototype, '_bind');
+            var secondToolbar = $('<div class="toolbar"></div>');
 
             toolbar.productListToolbarForm();
-            var secondToolbar = $('<div class="toolbar"></div>');
             secondToolbar.productListToolbarForm();
 
             expect($.mage.productListToolbarForm.prototype._bind).toHaveBeenCalledTimes(4);
