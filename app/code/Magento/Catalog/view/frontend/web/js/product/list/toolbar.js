@@ -38,7 +38,7 @@ define([
         /** @inheritdoc */
         _create: function () {
             if (isToolbarInitialized) {
-                return false;
+                return;
             }
             this._bind($(this.options.modeControl), this.options.mode, this.options.modeDefault);
             this._bind($(this.options.directionControl), this.options.direction, this.options.directionDefault);

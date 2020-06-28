@@ -10,10 +10,14 @@ define([
     'use strict';
 
     describe('Magento_Catalog/js/product/list/toolbar', function () {
-        var widget;
+        var toolbar;
 
         beforeEach(function () {
-            widget = new productListToolbarForm();
+            toolbar = $('<div class="toolbar"></div>');
+        });
+
+        afterEach(function () {
+            toolbar.remove();
         });
 
         it('Widget extends jQuery object', function () {
@@ -21,9 +25,22 @@ define([
         });
 
         it('Toolbar is initialized', function () {
-            spyOn(widget, '_create');
-            widget._create();
-            expect(widget._create).toHaveBeenCalled();
+            spyOn($.mage.productListToolbarForm.prototype, '_create');
+
+            toolbar.productListToolbarForm();
+
+            expect($.mage.productListToolbarForm.prototype._create).toEqual(jasmine.any(Function));
+            expect($.mage.productListToolbarForm.prototype._create).toHaveBeenCalledTimes(1);
+        });
+
+        it('Toolbar is initialized once', function () {
+            spyOn($.mage.productListToolbarForm.prototype, '_bind');
+
+            toolbar.productListToolbarForm();
+            var secondToolbar = $('<div class="toolbar"></div>');
+            secondToolbar.productListToolbarForm();
+
+            expect($.mage.productListToolbarForm.prototype._bind).toHaveBeenCalledTimes(4);
         });
     });
 });
