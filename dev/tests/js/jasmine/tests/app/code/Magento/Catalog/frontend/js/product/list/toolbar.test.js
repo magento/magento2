@@ -41,6 +41,7 @@ define([
             secondToolbar.productListToolbarForm();
 
             expect($.mage.productListToolbarForm.prototype._bind).toHaveBeenCalledTimes(4);
+            secondToolbar.remove();
         });
     });
 });
