@@ -10,6 +10,10 @@ type Query {
         sort: ProductAttributeSortInput @doc(description: "Specifies which attributes to sort on, and whether to return the results in ascending or descending order.")
     ): Products
     @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Products") @doc(description: "The products query searches for products that match the criteria specified in the search and filter attributes.") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\Identity")
+    productsByID (
+        ids: [ID!]! @doc(description: "Product IDs.")
+    ): [ProductInterface]
+    @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\ProductsByID") @doc(description: "The productsByID query fetches products that match the specified IDs.") @cache(cacheIdentity: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductsByIdIdentity")
     category (
      id: Int @doc(description: "Id of the category.")
     ): CategoryTree
