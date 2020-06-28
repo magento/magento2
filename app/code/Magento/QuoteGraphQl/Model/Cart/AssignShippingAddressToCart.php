@@ -16,7 +16,7 @@ use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\ShippingAddressManagementInterface;
 
 /**
- * Assign shipping address to cart
+ * Assigning shipping address to cart
  */
 class AssignShippingAddressToCart
 {
