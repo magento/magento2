@@ -111,14 +111,14 @@ spec:
               port: 443
             failureThreshold: 1
             periodSeconds: 50
-            timeoutSeconds: 2
+            timeoutSeconds: 3
           readinessProbe:
             httpGet:
               path: /healthz
               port: 443
             failureThreshold: 1
             periodSeconds: 50
-            timeoutSeconds: 2
+            timeoutSeconds: 3
         - image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
           lifecycle:
             postStart:
