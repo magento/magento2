@@ -4,7 +4,7 @@ metadata:
   name: magento
   annotations:
     #cloud.google.com/app-protocols: '{"mage-https-port":"HTTPS", "mage-http-port":"HTTP"}'
-    cloud.google.com/app-protocols: '{"mage-https-port":"HTTP2"}'
+    cloud.google.com/app-protocols: '{"mage-https-port":"HTTPS","mage-http-port":"HTTP"}'
 spec:
   type: NodePort
   selector:
@@ -12,6 +12,8 @@ spec:
   ports:
   - name: mage-https-port
     port: 443
+  - name: mage-http-port
+    port: 80
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
@@ -92,7 +94,7 @@ spec:
         - image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
           name: apache
           ports:
-            - containerPort: 443
+            - containerPort: 80
               name: apache
           resources:
             requests:
@@ -107,15 +109,15 @@ spec:
             subPath: pub
           livenessProbe:
             httpGet:
-              path: /healthz
-              port: 443
+              path: /healthz/
+              port: 80
             failureThreshold: 1
             periodSeconds: 50
             timeoutSeconds: 3
           readinessProbe:
             httpGet:
-              path: /healthz
-              port: 443
+              path: /healthz/
+              port: 80
             failureThreshold: 1
             periodSeconds: 50
             timeoutSeconds: 3
