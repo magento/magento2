@@ -4,18 +4,14 @@ metadata:
   name: magento
   annotations:
     #cloud.google.com/app-protocols: '{"mage-https-port":"HTTPS", "mage-http-port":"HTTP"}'
-    cloud.google.com/app-protocols: '{"mage-http-port":"HTTP"}'
+    cloud.google.com/app-protocols: '{"mage-https-port":"HTTP2"}'
 spec:
   type: NodePort
   selector:
     app: magento
   ports:
-  #- name: mage-https-port
-  #  port: 443
-  #  targetPort: 80
-  - name: mage-http-port
-    port: 80
-    targetPort: 80
+  - name: mage-https-port
+    port: 443
 ---
 apiVersion: autoscaling/v1
 kind: HorizontalPodAutoscaler
@@ -28,7 +24,7 @@ spec:
     name: magento
   minReplicas: 1
   maxReplicas: 7
-  targetCPUUtilizationPercentage: 50
+  targetCPUUtilizationPercentage: 75
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -46,13 +42,13 @@ spec:
       paths:
       - backend:
           serviceName: magento
-          servicePort: mage-http-port
+          servicePort: mage-https-port
   - host: static.mage.xyz
     http:
       paths:
       - backend:
           serviceName: magento
-          servicePort: mage-http-port
+          servicePort: mage-https-port
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -96,30 +92,33 @@ spec:
         - image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
           name: apache
           ports:
-            - containerPort: 80
+            - containerPort: 443
               name: apache
           resources:
             requests:
+              memory: "32Mi"
+              cpu: "200m"
+            limits:
+              memory: "64Mi"
               cpu: "250m"
-            #limits:
-            #  memory: "128Mi"
-            #  cpu: "500m"
           volumeMounts:
           - mountPath: /var/www/html/pub
             name: magento-pub-volume
             subPath: pub
           livenessProbe:
             httpGet:
-              path: /healthz/
-              port: 80
+              path: /healthz
+              port: 443
             failureThreshold: 1
-            periodSeconds: 10
+            periodSeconds: 50
+            timeoutSeconds: 2
           readinessProbe:
             httpGet:
-              path: /healthz/
-              port: 80
+              path: /healthz
+              port: 443
             failureThreshold: 1
-            periodSeconds: 10
+            periodSeconds: 50
+            timeoutSeconds: 2
         - image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
           lifecycle:
             postStart:
@@ -128,10 +127,11 @@ spec:
           name: php
           resources:
             requests:
-              cpu: "250m"
-            #limits:
-            #  memory: "128Mi"
-            #  cpu: "500m"
+              memory: "128Mi"
+              cpu: "500m"
+            limits:
+              memory: "256Mi"
+              cpu: "750m"
           ports:
             - containerPort: 9000
               name: php
