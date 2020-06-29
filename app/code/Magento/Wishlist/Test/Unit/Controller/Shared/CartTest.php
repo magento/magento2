@@ -183,11 +183,7 @@ class CartTest extends TestCase
             $this->optionFactory,
             $this->itemFactory,
             $this->cartHelper,
-            $this->escaper,
-            $this->request,
-            $this->redirect,
-            $this->messageManager,
-            $this->resultFactory
+            $this->escaper
         );
     }
 

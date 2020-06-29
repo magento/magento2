@@ -105,8 +105,6 @@ class AllcartTest extends TestCase
         $this->allcartController = new Allcart(
             $this->contextMock,
             $this->itemCarrierMock,
-            $this->requestMock,
-            $this->resultFactoryMock,
             $this->wishlistProviderMock
         );
     }
