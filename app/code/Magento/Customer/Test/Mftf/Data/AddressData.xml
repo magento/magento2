@@ -172,7 +172,7 @@
         <data key="city">London</data>
         <data key="postcode">SE1 7RW</data>
         <data key="country_id">GB</data>
-        <data key="telephone">444-44-444-44</data>
+        <data key="telephone">444-444-4444</data>
     </entity>
     <entity name="US_Address_Utah" type="address">
         <data key="firstname">John</data>
@@ -227,7 +227,7 @@
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
         <data key="company">Magento</data>
-        <data key="telephone">0123456789-02134567</data>
+        <data key="telephone">888-777-7890</data>
         <array key="street">
             <item>172, Westminster Bridge Rd</item>
             <item>7700 xyz street</item>
