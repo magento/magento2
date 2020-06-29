@@ -14,13 +14,10 @@ use Magento\Checkout\Model\Cart as CustomerCart;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context as ActionContext;
 use Magento\Framework\App\Action\HttpGetActionInterface;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\Controller\Result\Redirect as ResultRedirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Escaper;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Message\ManagerInterface as MessageManagerInterface;
 use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\Item\OptionFactory;
 use Magento\Wishlist\Model\ItemFactory;
@@ -59,36 +56,12 @@ class Cart extends Action implements HttpGetActionInterface
     private $escaper;
 
     /**
-     * @var RequestInterface
-     */
-    private $request;
-
-    /**
-     * @var RedirectInterface
-     */
-    private $redirect;
-
-    /**
-     * @var MessageManagerInterface
-     */
-    private $messageManager;
-
-    /**
-     * @var ResultFactory
-     */
-    private $resultFactory;
-
-    /**
      * @param ActionContext $context
      * @param CustomerCart $cart
      * @param OptionFactory $optionFactory
      * @param ItemFactory $itemFactory
      * @param CartHelper $cartHelper
      * @param Escaper $escaper
-     * @param RequestInterface $request
-     * @param RedirectInterface $redirect
-     * @param MessageManagerInterface $messageManager
-     * @param ResultFactory $resultFactory
      */
     public function __construct(
         ActionContext $context,
@@ -96,21 +69,13 @@ class Cart extends Action implements HttpGetActionInterface
         OptionFactory $optionFactory,
         ItemFactory $itemFactory,
         CartHelper $cartHelper,
-        Escaper $escaper,
-        RequestInterface $request,
-        RedirectInterface $redirect,
-        MessageManagerInterface $messageManager,
-        ResultFactory $resultFactory
+        Escaper $escaper
     ) {
         $this->cart = $cart;
         $this->optionFactory = $optionFactory;
         $this->itemFactory = $itemFactory;
         $this->cartHelper = $cartHelper;
         $this->escaper = $escaper;
-        $this->request = $request;
-        $this->redirect = $redirect;
-        $this->messageManager = $messageManager;
-        $this->resultFactory = $resultFactory;
         parent::__construct($context);
     }
 
@@ -124,13 +89,13 @@ class Cart extends Action implements HttpGetActionInterface
      */
     public function execute()
     {
-        $itemId = (int)$this->request->getParam('item');
+        $itemId = (int)$this->getRequest()->getParam('item');
 
         /* @var $item Item */
         $item = $this->itemFactory->create()
             ->load($itemId);
 
-        $redirectUrl = $this->redirect->getRefererUrl();
+        $redirectUrl = $this->_redirect->getRefererUrl();
 
         try {
             /** @var OptionCollection $options */
