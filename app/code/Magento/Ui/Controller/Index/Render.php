@@ -35,25 +35,35 @@ use Psr\Log\LoggerInterface;
 class Render extends Action implements HttpGetActionInterface
 {
     /**
+     * @var Context
+     */
+    private $context;
+
+    /**
      * @var UiComponentFactory
      */
     private $uiComponentFactory;
+
     /**
      * @var UiComponentTypeResolver
      */
     private $contentTypeResolver;
+
     /**
      * @var JsonFactory
      */
     private $resultJsonFactory;
+
     /**
      * @var Escaper
      */
     private $escaper;
+
     /**
      * @var LoggerInterface
      */
     private $logger;
+
     /**
      * @var AuthorizationInterface
      */
@@ -76,6 +86,7 @@ class Render extends Action implements HttpGetActionInterface
         LoggerInterface $logger = null
     ) {
         parent::__construct($context);
+        $this->context = $context;
         $this->uiComponentFactory = $uiComponentFactory;
         $this->authorization = $context->getAuthorization();
         $this->contentTypeResolver = $contentTypeResolver
