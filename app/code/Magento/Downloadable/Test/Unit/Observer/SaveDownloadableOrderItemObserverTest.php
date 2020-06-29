@@ -176,6 +176,9 @@ class SaveDownloadableOrderItemObserverTest extends TestCase
         $itemMock->expects($this->any())
             ->method('getProductType')
             ->willReturn(DownloadableProductType::TYPE_DOWNLOADABLE);
+        $itemMock->expects($this->any())
+            ->method('getStatusId')
+            ->willReturn(Item::STATUS_PENDING);
 
         $this->orderMock->expects($this->once())
             ->method('getStoreId')
