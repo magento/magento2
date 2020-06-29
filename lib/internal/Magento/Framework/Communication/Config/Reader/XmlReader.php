@@ -16,7 +16,8 @@ class XmlReader extends \Magento\Framework\Config\Reader\Filesystem
      * @var array
      */
     protected $_idAttributes = [
-        '/config/topic' => 'name'
+        '/config/topic' => 'name',
+        '/config/topic/handler' => 'name'
     ];
 
     /**
