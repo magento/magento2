@@ -369,9 +369,32 @@ class Price
      */
     public function getTierPrices($product)
     {
+        $tierPricesRaw = $this->getExistingPrices($product, 'tier_price');
+
+        return $this->buildProductTierPriceInterfaceObjects($tierPricesRaw);
+    }
+
+    /**
+     * Return ProductTierPriceInterface[] given raw tier prices array
+     *
+     * @param array $tierPricesRaw
+     * @return \Magento\Catalog\Api\Data\ProductTierPriceInterface[]
+     */
+    public function transformTierPrices($tierPricesRaw)
+    {
+        return $this->buildProductTierPriceInterfaceObjects($tierPricesRaw);
+    }
+
+    /**
+     * Return ProductTierPriceInterface[] given raw tier prices array
+     *
+     * @param array $tierPricesRaw
+     * @return \Magento\Catalog\Api\Data\ProductTierPriceInterface[]
+     */
+    private function buildProductTierPriceInterfaceObjects($tierPricesRaw)
+    {
         $prices = [];
-        $tierPrices = $this->getExistingPrices($product, 'tier_price');
-        foreach ($tierPrices as $price) {
+        foreach ($tierPricesRaw as $price) {
             /** @var \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice */
             $tierPrice = $this->tierPriceFactory->create()
                 ->setExtensionAttributes($this->tierPriceExtensionFactory->create());

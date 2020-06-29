@@ -130,21 +130,18 @@ class PriceTiers implements ResolverInterface
         $tiers = [];
 
         foreach ($tierPrices as $tierPrice) {
-            $websitePrice = $tierPrice['website_price'];
-            $percentValue = $tierPrice['percentage_value'];
-            $quantity = $tierPrice['price_qty'];
-
+            $percentValue = $tierPrice->getExtensionAttributes()->getPercentageValue();
             if ($percentValue && is_numeric($percentValue)) {
                 $discount = $this->discount->getDiscountByPercent($productPrice, (float)$percentValue);
             } else {
-                $discount = $this->discount->getDiscountByDifference($productPrice, (float)$websitePrice);
+                $discount = $this->discount->getDiscountByDifference($productPrice, (float)$tierPrice->getValue());
             }
 
             $tiers[] = [
                 "discount" => $discount,
-                "quantity" => $quantity,
+                "quantity" => $tierPrice->getQty(),
                 "final_price" => [
-                    "value" => $websitePrice,
+                    "value" => $tierPrice->getValue(),
                     "currency" => $store->getCurrentCurrencyCode()
                 ]
             ];
