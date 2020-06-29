@@ -11,10 +11,9 @@ namespace Magento\Ui\Controller\Index;
 use Laminas\Http\AbstractMessage;
 use Laminas\Http\Response;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\App\Response\RedirectInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Controller\Result\Json;
@@ -33,7 +32,7 @@ use Psr\Log\LoggerInterface;
  * @SuppressWarnings(PHPMD.AllPurposeAction)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Render implements HttpGetActionInterface
+class Render extends Action implements HttpGetActionInterface
 {
     /**
      * @var UiComponentFactory
@@ -59,25 +58,10 @@ class Render implements HttpGetActionInterface
      * @var AuthorizationInterface
      */
     private $authorization;
-    /**
-     * @var RequestInterface
-     */
-    private $request;
-    /**
-     * @var RedirectInterface
-     */
-    private $redirect;
-    /**
-     * @var ResponseInterface
-     */
-    private $response;
 
     /**
      * @param Context $context
      * @param UiComponentFactory $uiComponentFactory
-     * @param RequestInterface $request
-     * @param RedirectInterface $redirect
-     * @param ResponseInterface $response
      * @param UiComponentTypeResolver|null $contentTypeResolver
      * @param JsonFactory|null $resultJsonFactory
      * @param Escaper|null $escaper
@@ -86,14 +70,12 @@ class Render implements HttpGetActionInterface
     public function __construct(
         Context $context,
         UiComponentFactory $uiComponentFactory,
-        RequestInterface $request,
-        RedirectInterface $redirect,
-        ResponseInterface $response,
         ?UiComponentTypeResolver $contentTypeResolver = null,
         JsonFactory $resultJsonFactory = null,
         Escaper $escaper = null,
         LoggerInterface $logger = null
     ) {
+        parent::__construct($context);
         $this->uiComponentFactory = $uiComponentFactory;
         $this->authorization = $context->getAuthorization();
         $this->contentTypeResolver = $contentTypeResolver
@@ -101,9 +83,6 @@ class Render implements HttpGetActionInterface
         $this->resultJsonFactory = $resultJsonFactory ?? ObjectManager::getInstance()->get(JsonFactory::class);
         $this->escaper = $escaper ?? ObjectManager::getInstance()->get(Escaper::class);
         $this->logger = $logger ?? ObjectManager::getInstance()->get(LoggerInterface::class);
-        $this->request = $request;
-        $this->redirect = $redirect;
-        $this->response = $response;
     }
 
     /**
@@ -113,20 +92,20 @@ class Render implements HttpGetActionInterface
      */
     public function execute()
     {
-        if ($this->request->getParam('namespace') === null) {
+        if ($this->getRequest()->getParam('namespace') === null) {
             $this->redirect('admin/noroute');
 
             return;
         }
 
         try {
-            $component = $this->uiComponentFactory->create($this->request->getParam('namespace'));
+            $component = $this->uiComponentFactory->create($this->getRequest()->getParam('namespace'));
             if ($this->validateAclResource($component->getContext()->getDataProvider()->getConfigData())) {
                 $this->prepareComponent($component);
-                $this->response->appendBody((string)$component->render());
+                $this->getResponse()->appendBody((string)$component->render());
 
                 $contentType = $this->contentTypeResolver->resolve($component->getContext());
-                $this->response->setHeader('Content-Type', $contentType, true);
+                $this->getResponse()->setHeader('Content-Type', $contentType, true);
             } else {
                 /** @var Json $resultJson */
                 $resultJson = $this->resultJsonFactory->create();
@@ -184,8 +163,8 @@ class Render implements HttpGetActionInterface
      */
     private function redirect($path, $arguments = []): ResponseInterface
     {
-        $this->redirect->redirect($this->response, $path, $arguments);
-        return $this->response;
+        $this->_redirect->redirect($this->getResponse(), $path, $arguments);
+        return $this->getResponse();
     }
 
     /**
@@ -198,7 +177,7 @@ class Render implements HttpGetActionInterface
     {
         if (isset($dataProviderConfigData['aclResource'])) {
             if (!$this->authorization->isAllowed($dataProviderConfigData['aclResource'])) {
-                if (!$this->request->isAjax()) {
+                if (!$this->getRequest()->isAjax()) {
                     $this->redirect('noroute');
                 }
 
