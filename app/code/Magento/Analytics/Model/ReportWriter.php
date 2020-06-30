@@ -10,7 +10,6 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
  * Writes reports in files in csv format
- * @inheritdoc
  */
 class ReportWriter implements ReportWriterInterface
 {
@@ -54,7 +53,7 @@ class ReportWriter implements ReportWriterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function write(WriteInterface $directory, $path)
     {
