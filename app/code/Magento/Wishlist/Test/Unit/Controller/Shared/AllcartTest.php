@@ -77,6 +77,21 @@ class AllcartTest extends TestCase
         $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->wishlistMock = $this->getMockBuilder(Wishlist::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->requestMock = $this->getMockBuilder(Http::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultFactoryMock = $this->getMockBuilder(ResultFactory::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->resultForwardMock = $this->getMockBuilder(Forward::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->allcartController = new Allcart(
             $this->contextMock,

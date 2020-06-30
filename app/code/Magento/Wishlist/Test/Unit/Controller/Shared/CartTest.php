@@ -173,6 +173,9 @@ class CartTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->product = $this->getMockBuilder(Product::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->model = new SharedCart(
             $this->context,
