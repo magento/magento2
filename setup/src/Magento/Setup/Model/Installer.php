@@ -46,6 +46,7 @@ use Magento\Setup\Module\DataSetupFactory;
 use Magento\Setup\Module\SetupFactory;
 use Magento\Setup\Validator\DbValidator;
 use Magento\Store\Model\Store;
+use Magento\Framework\App\Cache\Manager;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -1311,8 +1312,8 @@ class Installer
      */
     private function updateCaches($isEnabled, $types = [])
     {
-        /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
-        $cacheManager = $this->objectManagerProvider->get()->create(\Magento\Framework\App\Cache\Manager::class);
+        /** @var Manager $cacheManager */
+        $cacheManager = $this->objectManagerProvider->get()->create(Manager::class);
 
         $availableTypes = $cacheManager->getAvailableTypes();
         $types = empty($types) ? $availableTypes : array_intersect($availableTypes, $types);
@@ -1331,8 +1332,9 @@ class Installer
         );
 
         $this->log->log('Current status:');
-        // phpcs:ignore Magento2.Functions.DiscouragedFunction
-        $this->log->log(print_r($cacheStatus, true));
+        foreach ($cacheStatus as $cache => $status) {
+            $this->log->log(sprintf('%s: %d', $cache, $status));
+        }
     }
 
     /**
@@ -1344,8 +1346,8 @@ class Installer
      */
     private function cleanCaches()
     {
-        /** @var \Magento\Framework\App\Cache\Manager $cacheManager */
-        $cacheManager = $this->objectManagerProvider->get()->get(\Magento\Framework\App\Cache\Manager::class);
+        /** @var Manager $cacheManager */
+        $cacheManager = $this->objectManagerProvider->get()->get(Manager::class);
         $types = $cacheManager->getAvailableTypes();
         $cacheManager->clean($types);
         $this->log->log('Cache cleared successfully');
