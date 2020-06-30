@@ -5,6 +5,8 @@
  */
 namespace Magento\Setup\Validator;
 
+use Laminas\Validator\Ip;
+
 /**
  * Class to validate list of IPs for maintenance commands
  */
@@ -66,14 +68,32 @@ class IpValidator
      */
     private function filterIps(array $ips)
     {
-        foreach ($ips as $ip) {
-            if (filter_var($ip, FILTER_VALIDATE_IP)) {
-                $this->validIps[] = $ip;
-            } elseif ($ip == 'none') {
-                $this->none[] = $ip;
-            } else {
-                $this->invalidIps[] = $ip;
+        foreach ($ips as $range) {
+            if ($range === 'none') {
+                $this->none[] = $range;
+                continue;
             }
+
+            $subnetMask = 32;
+            $ip = $range;
+            if (strpos($range, '/') !== false) {
+                [$ip, $subnetMask] = explode('/', $range);
+            }
+
+            $ipValidator = new Ip();
+            if (!$ipValidator->isValid($ip)) {
+                $this->invalidIps[] = $range;
+                continue;
+            }
+
+            $ipv4Validator = new Ip(['allowipv6' => false]);
+            $maxBits = $ipv4Validator->isValid($ip) ? 32 : 128;
+            if ($subnetMask < 0 || $subnetMask > $maxBits) {
+                $this->invalidIps[] = $range;
+                continue;
+            }
+
+            $this->validIps[] = $range;
         }
     }
 }

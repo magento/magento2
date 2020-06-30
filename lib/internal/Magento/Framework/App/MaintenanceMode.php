@@ -6,8 +6,10 @@
 namespace Magento\Framework\App;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Event\Manager;
+use Magento\Framework\HTTP\IpChecker;
 
 /**
  * Application Maintenance Mode
@@ -45,13 +47,21 @@ class MaintenanceMode
     private $eventManager;
 
     /**
+     * @var IpChecker
+     */
+    private $ipChecker;
+
+    /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param Manager|null $eventManager
+     * @param IpChecker|null $ipChecker
+     * @throws FileSystemException
      */
-    public function __construct(Filesystem $filesystem, ?Manager $eventManager = null)
+    public function __construct(Filesystem $filesystem, ?Manager $eventManager = null, ?IpChecker $ipChecker = null)
     {
         $this->flagDir = $filesystem->getDirectoryWrite(self::FLAG_DIR);
         $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(Manager::class);
+        $this->ipChecker = $ipChecker ?: ObjectManager::getInstance()->get(IpChecker::class);
     }
 
     /**
@@ -68,7 +78,7 @@ class MaintenanceMode
             return false;
         }
         $info = $this->getAddressInfo();
-        return !in_array($remoteAddr, $info);
+        return $info === [] || !$this->ipChecker->isInRange($remoteAddr, $info);
     }
 
     /**
@@ -122,7 +132,7 @@ class MaintenanceMode
     {
         if ($this->flagDir->isExist(self::IP_FILENAME)) {
             $temp = $this->flagDir->readFile(self::IP_FILENAME);
-            return explode(',', trim($temp));
+            return array_filter(explode(',', trim($temp)));
         } else {
             return [];
         }
