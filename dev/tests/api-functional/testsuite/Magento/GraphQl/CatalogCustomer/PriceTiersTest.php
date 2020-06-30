@@ -147,7 +147,7 @@ class PriceTiersTest extends GraphQlAbstract
      */
     private function getValueForQuantity(float $quantity, array $tiers)
     {
-        $filteredResult = array_values(array_filter($tiers, function($tier) use ($quantity) {
+        $filteredResult = array_values(array_filter($tiers, function ($tier) use ($quantity) {
             if ((float)$tier['quantity'] == $quantity) {
                 return $tier;
             }
