@@ -10,9 +10,9 @@ namespace Magento\CatalogCustomerGraphQl\Pricing\Price;
 
 use Magento\Catalog\Model\Product;
 use Magento\Customer\Api\GroupManagementInterface;
-use Magento\Customer\Model\Session;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\App\ObjectManager;
 
 class TierPrice extends \Magento\Catalog\Pricing\Price\TierPrice
 {
@@ -22,7 +22,6 @@ class TierPrice extends \Magento\Catalog\Pricing\Price\TierPrice
      * @param float $quantity
      * @param CalculatorInterface $calculator
      * @param PriceCurrencyInterface $priceCurrency
-     * @param Session $customerSession
      * @param GroupManagementInterface $groupManagement
      * @param int $customerGroupId
      */
@@ -31,7 +30,6 @@ class TierPrice extends \Magento\Catalog\Pricing\Price\TierPrice
         $quantity,
         CalculatorInterface $calculator,
         PriceCurrencyInterface $priceCurrency,
-        Session $customerSession,
         GroupManagementInterface $groupManagement,
         $customerGroupId
     ) {
@@ -40,7 +38,7 @@ class TierPrice extends \Magento\Catalog\Pricing\Price\TierPrice
             $quantity,
             $calculator,
             $priceCurrency,
-            $customerSession,
+            ObjectManager::getInstance()->get(\Magento\Customer\Model\Session::class),
             $groupManagement
         );
 

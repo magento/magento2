@@ -10,12 +10,11 @@ namespace Magento\CatalogCustomerGraphQl\Model\Resolver\Product\Price;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
-use Magento\CatalogCustomerGraphQl\Pricing\Price\TierPrice;
 use Magento\Customer\Model\GroupManagement;
 use Magento\Catalog\Api\Data\ProductTierPriceInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool as PriceProviderPool;
-use Magento\Framework\App\ObjectManager;
 use Magento\Catalog\Model\Product\Type\Price;
+use Magento\CatalogCustomerGraphQl\Pricing\Price\TierPriceFactory;
 
 /**
  * Get product tier price information
@@ -63,24 +62,32 @@ class Tiers
     private $price;
 
     /**
+     * @var TierPriceFactory
+     */
+    private $tierPriceFactory;
+
+    /**
      * @param CollectionFactory $collectionFactory
      * @param ProductResource $productResource
      * @param PriceProviderPool $priceProviderPool
      * @param int $customerGroupId
      * @param Price $price
+     * @param TierPriceFactory $tierPriceFactory
      */
     public function __construct(
         CollectionFactory $collectionFactory,
         ProductResource $productResource,
         PriceProviderPool $priceProviderPool,
         $customerGroupId,
-        Price $price
+        Price $price,
+        TierPriceFactory $tierPriceFactory
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->productResource = $productResource;
         $this->priceProviderPool = $priceProviderPool;
         $this->customerGroupId = $customerGroupId;
         $this->price = $price;
+        $this->tierPriceFactory = $tierPriceFactory;
     }
 
     /**
@@ -110,7 +117,7 @@ class Tiers
         }
 
         /** @var TierPrice $tierPrice */
-        $tierPrice = ObjectManager::getInstance()->create(TierPrice::class,
+        $tierPrice = $this->tierPriceFactory->create(
             [
                 'saleableItem' => $this->products[$productId],
                 'quantity' => 1,
