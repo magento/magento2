@@ -27,7 +27,11 @@ $salesRule->setData(
         'discount_step' => 0,
         'apply_to_shipping' => 1,
         'stop_rules_processing' => 1,
-        'website_ids' => [$websiteId]
+        'website_ids' => [$websiteId],
+         'store_labels' => [
+            'store_id' => 0,
+            'store_label' => 'Discount Label for 10% off',
+         ]
     ]
 );
 
