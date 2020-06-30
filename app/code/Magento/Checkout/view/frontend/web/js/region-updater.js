@@ -157,7 +157,10 @@ define([
                 regionInput = $(this.options.regionInputId),
                 postcode = $(this.options.postcodeId),
                 label = regionList.parent().siblings('label'),
-                container = regionList.parents('div.field');
+                container = regionList.parents('div.field'),
+                regionsEntries,
+                regionId,
+                regionData;
 
             this._clearError();
             this._checkRegionRequired(country);
@@ -168,8 +171,14 @@ define([
             // Populate state/province dropdown list if available or use input box
             if (this.options.regionJson[country]) {
                 this._removeSelectOptions(regionList);
-                $.each(this.options.regionJson[country], $.proxy(function (key, value) {
-                    this._renderSelectOption(regionList, key, value);
+                regionsEntries = Object.entries(this.options.regionJson[country]);
+                regionsEntries.sort(function (a, b) {
+                    return a[1].name > b[1].name ? 1 : -1;
+                });
+                $.each(regionsEntries, $.proxy(function (key, value) {
+                    regionId = value[0];
+                    regionData = value[1];
+                    this._renderSelectOption(regionList, regionId, regionData);
                 }, this));
 
                 if (this.currentRegionOption) {
