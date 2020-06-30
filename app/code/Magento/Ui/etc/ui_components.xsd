@@ -62,4 +62,5 @@
     <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/exportButton.xsd"/>
     <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/listingToolbar.xsd"/>
     <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/dataProvider.xsd"/>
+    <xs:include schemaLocation="urn:magento:module:Magento_Ui:view/base/ui_component/etc/definition/urlFilterApplier.xsd"/>
 </xs:schema>

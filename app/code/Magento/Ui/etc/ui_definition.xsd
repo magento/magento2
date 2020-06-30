@@ -77,6 +77,7 @@
             <xs:element name="wysiwyg" type="componentWysiwyg"/>
             <xs:element name="inlineEditing" type="componentInlineEditing"/>
             <xs:element name="urlInput" type="componentUrlInput"/>
+            <xs:element name="urlFilterApplier" type="componentUrlFilterApplier" />
         </xs:choice>
     </xs:complexType>
 </xs:schema>

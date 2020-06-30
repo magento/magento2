@@ -284,4 +284,5 @@
     </dynamicRows>
     <htmlContent class="Magento\Ui\Component\HtmlContent" component="Magento_Ui/js/form/components/html"/>
     <button class="Magento\Ui\Component\Container" component="Magento_Ui/js/form/components/button"/>
+    <urlFilterApplier class="Magento\Ui\Component\UrlFilterApplier" component="Magento_Ui/js/grid/url-filter-applier" />
 </components>

@@ -499,6 +499,7 @@
             </argument>
         </schema>
     </component>
+    <component name="urlFilterApplier" include="uiElementSettings"/>
     <component name="filterSearch" include="uiElementSettings">
         <schema name="current">
             <argument name="data" xsi:type="array">
