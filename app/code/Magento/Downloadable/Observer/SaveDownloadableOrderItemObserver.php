@@ -86,7 +86,9 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
             //order not saved in the database
             return $this;
         }
-        if ($orderItem->getProductType() != \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE) {
+        if ($orderItem->getProductType() !== \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
+            && $orderItem->getRealProductType() !== \Magento\Downloadable\Model\Product\Type::TYPE_DOWNLOADABLE
+        ) {
             return $this;
         }
         $product = $orderItem->getProduct();
