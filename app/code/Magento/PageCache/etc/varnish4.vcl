@@ -121,13 +121,6 @@ sub vcl_hash {
         hash_data(regsub(req.http.cookie, "^.*?X-Magento-Vary=([^;]+);*.*$", "\1"));
     }
 
-    # For multi site configurations to not cache each other's content
-    if (req.http.host) {
-        hash_data(req.http.host);
-    } else {
-        hash_data(server.ip);
-    }
-
     if (req.url ~ "/graphql") {
         call process_graphql_headers;
     }
