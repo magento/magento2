@@ -11,6 +11,8 @@ use Magento\Catalog\Api\Data\ProductExtensionInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type\Price;
 use Magento\CatalogInventory\Model\StockRegistry;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Phrase;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
@@ -217,6 +219,80 @@ class SubtotalTest extends TestCase
         $quoteItem->setQuote($quote);
         $quote->method('getItemsCollection')
             ->willReturn([$quoteItem]);
+        $address = $this->createPartialMock(
+            Address::class,
+            [
+                'removeItem',
+                'getQuote'
+            ]
+        );
+        $address->method('getQuote')
+            ->willReturn($quote);
+        $address->expects($this->once())
+            ->method('removeItem')
+            ->with($addressItemId);
+        $addressItem = $this->createPartialMock(
+            AddressItem::class,
+            [
+                'getId',
+                'getQuoteItemId'
+            ]
+        );
+        $addressItem->setAddress($address);
+        $addressItem->method('getId')
+            ->willReturn($addressItemId);
+        $addressItem->method('getQuoteItemId')
+            ->willReturn($addressQuoteItemId);
+        $shipping = $this->createMock(ShippingInterface::class);
+        $shipping->method('getAddress')
+            ->willReturn($address);
+        $shippingAssignmentMock = $this->createMock(ShippingAssignmentInterface::class);
+        $shippingAssignmentMock->method('getShipping')
+            ->willReturn($shipping);
+        $shippingAssignmentMock->method('getItems')
+            ->willReturn([$addressItem]);
+        $total = $this->createPartialMock(
+            Total::class,
+            []
+        );
+        $this->subtotalModel->collect($quote, $shippingAssignmentMock, $total);
+    }
+
+    /**
+     * Test the items referencing non-existent products
+     * are being removed from the quote.
+     */
+    public function testCollectWithNonExistentProduct()
+    {
+        $addressItemId = 38203;
+        $addressQuoteItemId = 7643;
+        $storeId = 1;
+        $quote = $this->createPartialMock(
+            Quote::class,
+            [
+                'getItemsCollection',
+                'getItemById',
+                'removeItem'
+            ]
+        );
+        $quote->setData(
+            [
+                'store_id' => $storeId
+            ]
+        );
+        $quoteItem = $this->createPartialMock(
+            Item::class,
+            ['getProduct']
+        );
+        $quoteItem->expects($this->once())->method('getProduct')
+            ->willThrowException(new NoSuchEntityException(new Phrase('Entity Id does not exist')));
+        $quoteItem->setQuote($quote);
+        $quote->method('getItemsCollection')
+            ->willReturn([$quoteItem]);
+        $quote->expects($this->exactly(1))->method('getItemById')
+            ->with($addressQuoteItemId)->willReturn($quoteItem);
+        $quote->expects($this->once())->method('removeItem')
+            ->willReturnSelf();
         $address = $this->createPartialMock(
             Address::class,
             [

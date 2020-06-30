@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\ConfigurableProduct\Plugin\Tax\Model\Sales\Total\Quote;
 
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterface;
 use Magento\Tax\Api\Data\QuoteDetailsItemInterfaceFactory;
@@ -34,11 +35,15 @@ class CommonTaxCollector
         QuoteDetailsItemInterfaceFactory $itemDataObjectFactory,
         AbstractItem $item
     ) : QuoteDetailsItemInterface {
-        if ($item->getProduct()->getTypeId() === Configurable::TYPE_CODE && $item->getHasChildren()) {
-            $childItem = $item->getChildren()[0];
-            $result->getTaxClassKey()->setValue($childItem->getProduct()->getTaxClassId());
+        try {
+            $product = $item->getProduct();
+            if ($product && $product->getTypeId() === Configurable::TYPE_CODE && $item->getHasChildren()) {
+                $childItem = $item->getChildren()[0];
+                $result->getTaxClassKey()->setValue($childItem->getProduct()->getTaxClassId());
+            }
+        } catch (NoSuchEntityException $e) {
+            // Product does not exist. It will be removed from the quote automatically.
         }
-
         return $result;
     }
 }

@@ -5,6 +5,8 @@
  */
 namespace Magento\SalesRule\Model\Rule\Condition\Product;
 
+use Magento\Framework\Exception\NoSuchEntityException;
+
 class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
 {
     /**
@@ -65,7 +67,12 @@ class Found extends \Magento\SalesRule\Model\Rule\Condition\Product\Combine
         foreach ($model->getAllItems() as $item) {
             $found = $all;
             foreach ($this->getConditions() as $cond) {
-                $validated = $cond->validate($item);
+                try {
+                    $validated = $cond->validate($item);
+                } catch (NoSuchEntityException $e) {
+                    $this->_logger->error($e);
+                    return false;
+                }
                 if ($all && !$validated || !$all && $validated) {
                     $found = $validated;
                     break;

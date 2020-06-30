@@ -18,6 +18,8 @@ use Magento\Tax\Api\Data\TaxClassKeyInterface;
 use Magento\Tax\Model\Sales\Total\Quote\CommonTaxCollector;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Phrase;
 
 /**
  * Test for CommonTaxCollector plugin
@@ -92,5 +94,60 @@ class CommonTaxCollectorTest extends TestCase
             $this->createMock(QuoteDetailsItemInterfaceFactory::class),
             $quoteItemMock
         );
+    }
+
+    /**
+     * Test the case when a product associated to the quote item has been deleted.
+     * In such a case an exception is thrown and catched. The plugin does not alter
+     * the returned quote details item.
+     */
+    public function testAfterMapItemNonExistentProduct()
+    {
+        $childTaxClassId = 10;
+
+        /** @var Product|MockObject $childProductMock */
+        $childProductMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['getTaxClassId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $childProductMock->method('getTaxClassId')->willReturn($childTaxClassId);
+        /* @var AbstractItem|MockObject $quoteItemMock */
+        $childQuoteItemMock = $this->createMock(
+            AbstractItem::class
+        );
+        $childQuoteItemMock->expects($this->never())->method('getProduct');
+
+        /** @var Product|MockObject $productMock */
+        $productMock = $this->createPartialMock(
+            Product::class,
+            ['getTypeId']
+        );
+        $productMock->expects($this->never())->method('getTypeId');
+        /* @var AbstractItem|MockObject $quoteItemMock */
+        $quoteItemMock = $this->getMockBuilder(AbstractItem::class)
+            ->addMethods(['getHasChildren'])
+            ->onlyMethods(['getProduct', 'getChildren', 'getQuote', 'getAddress', 'getOptionByCode'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $quoteItemMock->expects($this->once())->method('getProduct')
+            ->willThrowException(new NoSuchEntityException(new Phrase('Entity Id does not exist')));
+        $quoteItemMock->expects($this->never())->method('getHasChildren')->willReturn(true);
+        $quoteItemMock->expects($this->never())->method('getChildren')->willReturn([$childQuoteItemMock]);
+
+        /* @var TaxClassKeyInterface|MockObject $taxClassObjectMock */
+        $taxClassObjectMock = $this->getMockForAbstractClass(TaxClassKeyInterface::class);
+        $taxClassObjectMock->expects($this->never())->method('setValue');
+
+        /* @var QuoteDetailsItemInterface|MockObject $quoteDetailsItemMock */
+        $quoteDetailsItemMock = $this->getMockForAbstractClass(QuoteDetailsItemInterface::class);
+        $quoteDetailsItemMock->expects($this->never())->method('getTaxClassKey');
+
+        $result = $this->commonTaxCollectorPlugin->afterMapItem(
+            $this->createMock(CommonTaxCollector::class),
+            $quoteDetailsItemMock,
+            $this->createMock(QuoteDetailsItemInterfaceFactory::class),
+            $quoteItemMock
+        );
+        $this->assertEquals($quoteDetailsItemMock, $result);
     }
 }

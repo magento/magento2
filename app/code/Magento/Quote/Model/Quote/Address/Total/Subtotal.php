@@ -5,6 +5,7 @@
  */
 namespace Magento\Quote\Model\Quote\Address\Total;
 
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Address\Item as AddressItem;
 use Magento\Quote\Model\Quote\Item;
@@ -94,30 +95,35 @@ class Subtotal extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
         }
         $valid = false;
         if ($quoteItem) {
-            $product = $quoteItem->getProduct();
-            /**
-             * Quote super mode flag mean what we work with quote without restriction
-             */
-            if ($product && ($item->getQuote()->getIsSuperMode() || $product->isVisibleInCatalog())) {
-                $product->setCustomerGroupId($quoteItem->getQuote()->getCustomerGroupId());
-                $quoteItem->setConvertedPrice(null);
-                $originalPrice = $product->getPrice();
-                if ($quoteItem->getParentItem() && $quoteItem->isChildrenCalculated()) {
-                    $finalPrice = $quoteItem->getParentItem()->getProduct()->getPriceModel()->getChildFinalPrice(
-                        $quoteItem->getParentItem()->getProduct(),
-                        $quoteItem->getParentItem()->getQty(),
-                        $product,
-                        $quoteItem->getQty()
-                    );
-                    $this->_calculateRowTotal($item, $finalPrice, $originalPrice);
-                } elseif (!$quoteItem->getParentItem()) {
-                    $finalPrice = $product->getFinalPrice($quoteItem->getQty());
-                    $this->_calculateRowTotal($item, $finalPrice, $originalPrice);
-                    $this->_addAmount($item->getRowTotal());
-                    $this->_addBaseAmount($item->getBaseRowTotal());
-                    $address->setTotalQty($address->getTotalQty() + $item->getQty());
+            try {
+                $product = $quoteItem->getProduct();
+                /**
+                 * Quote super mode flag mean what we work with quote without restriction
+                 */
+                if ($product && ($item->getQuote()->getIsSuperMode() || $product->isVisibleInCatalog())) {
+                    $product->setCustomerGroupId($quoteItem->getQuote()->getCustomerGroupId());
+                    $quoteItem->setConvertedPrice(null);
+                    $originalPrice = $product->getPrice();
+                    if ($quoteItem->getParentItem() && $quoteItem->isChildrenCalculated()) {
+                        $finalPrice = $quoteItem->getParentItem()->getProduct()->getPriceModel()->getChildFinalPrice(
+                            $quoteItem->getParentItem()->getProduct(),
+                            $quoteItem->getParentItem()->getQty(),
+                            $product,
+                            $quoteItem->getQty()
+                        );
+                        $this->_calculateRowTotal($item, $finalPrice, $originalPrice);
+                    } elseif (!$quoteItem->getParentItem()) {
+                        $finalPrice = $product->getFinalPrice($quoteItem->getQty());
+                        $this->_calculateRowTotal($item, $finalPrice, $originalPrice);
+                        $this->_addAmount($item->getRowTotal());
+                        $this->_addBaseAmount($item->getBaseRowTotal());
+                        $address->setTotalQty($address->getTotalQty() + $item->getQty());
+                    }
+                    $valid = true;
                 }
-                $valid = true;
+            } catch (NoSuchEntityException $e) {
+                // Product does not exist. Return false and remove that item from the cart.
+                return false;
             }
         }
         return $valid;

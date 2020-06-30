@@ -197,7 +197,6 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
             $productIds[] = (int)$item->getProductId();
         }
         $this->_productIds = array_merge($this->_productIds, $productIds);
-        $this->removeItemsWithAbsentProducts();
         /**
          * Assign options and products
          */
@@ -355,29 +354,5 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\VersionContro
     private function skipStockStatusFilter(ProductCollection $productCollection): void
     {
         $productCollection->setFlag('has_stock_status_filter', true);
-    }
-
-    /**
-     * Find and remove quote items with non existing products
-     *
-     * @return void
-     */
-    private function removeItemsWithAbsentProducts(): void
-    {
-        if (count($this->_productIds) === 0) {
-            return;
-        }
-
-        $productCollection = $this->_productCollectionFactory->create()->addIdFilter($this->_productIds);
-        $existingProductsIds = $productCollection->getAllIds();
-        $absentProductsIds = array_diff($this->_productIds, $existingProductsIds);
-        // Remove not existing products from items collection
-        if (!empty($absentProductsIds)) {
-            foreach ($absentProductsIds as $productIdToExclude) {
-                /** @var \Magento\Quote\Model\Quote\Item $quoteItem */
-                $quoteItem = $this->getItemByColumnValue('product_id', $productIdToExclude);
-                $this->removeItemByKey($quoteItem->getId());
-            }
-        }
     }
 }
