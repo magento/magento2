@@ -128,6 +128,9 @@ class RenderTest extends TestCase
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->responseMock = $this->getMockBuilder(HttpResponse::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->redirectMock = $this->getMockBuilder(RedirectInterface::class)
             ->disableOriginalConstructor()
             ->getMock();
