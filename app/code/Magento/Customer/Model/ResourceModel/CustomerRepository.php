@@ -196,6 +196,7 @@ class CustomerRepository implements CustomerRepositoryInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function save(CustomerInterface $customer, $passwordHash = null)
     {
