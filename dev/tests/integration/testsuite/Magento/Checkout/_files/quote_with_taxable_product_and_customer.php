@@ -47,6 +47,4 @@ $quote->setStoreId(1)
     ->setReservedOrderId('test_order_with_taxable_product')
     ->setEmail($customer->getEmail())
     ->addProduct($productRepository->get('taxable_product'), 1);
-
-//$quote->collectTotals();
 $quoteRepository->save($quote);
