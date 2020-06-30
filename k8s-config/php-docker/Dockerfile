@@ -19,7 +19,7 @@ docker-php-ext-configure gd --with-png-dir=/usr/include/ \
 && mv composer.phar /usr/local/bin/composer \
 && rm -rf /var/cache/* /tmp/* /var/tmp/*
 ## copy the fpm config over
-COPY k8s-config/php-docker/fpm.www.conf /usr/local/etc/php-fpm.d/www.conf
+COPY k8s-config/php-docker/fpm-www.conf /usr/local/etc/php-fpm.d/www.conf
 COPY --chown=www-data . /var/www/html
 USER www-data
 RUN cd /var/www/html \
