@@ -76,7 +76,7 @@ spec:
         fsGroup: 82
       initContainers:
         - name: setup-pub-dir
-          image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
+          image: eu.gcr.io/magento2-269418/magento2-php72:399
           securityContext:
             runAsUser: 0
           volumeMounts:
@@ -91,18 +91,18 @@ spec:
             requests:
               cpu: "500m"
       containers:
-        - image: eu.gcr.io/magento2-269418/magento2-apache24:$TAG_NAME
+        - image: eu.gcr.io/magento2-269418/magento2-apache24:399
           name: apache
           ports:
             - containerPort: 80
               name: apache
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "200m"
+              memory: "256Mi"
+              cpu: "300m"
             limits:
-              memory: "128Mi"
-              cpu: "250m"
+              memory: "256Mi"
+              cpu: "350m"
           volumeMounts:
           - mountPath: /var/www/html/pub
             name: magento-pub-volume
@@ -121,7 +121,7 @@ spec:
             failureThreshold: 1
             periodSeconds: 50
             timeoutSeconds: 3
-        - image: eu.gcr.io/magento2-269418/magento2-php72:$TAG_NAME
+        - image: eu.gcr.io/magento2-269418/magento2-php72:399
           lifecycle:
             postStart:
               exec:
