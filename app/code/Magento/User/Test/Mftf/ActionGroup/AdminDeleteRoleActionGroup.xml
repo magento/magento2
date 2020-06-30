@@ -12,9 +12,6 @@
         <annotations>
             <description>Deletes a User Role that contains the text 'Role'. PLEASE NOTE: The Action Group values are Hardcoded.</description>
         </annotations>
-        <arguments>
-            <argument name="role" defaultValue=""/>
-        </arguments>
 
         <click stepKey="clickOnRole" selector="{{AdminDeleteRoleSection.theRole}}"/>
         <fillField stepKey="TypeCurrentPassword" selector="{{AdminDeleteRoleSection.current_pass}}" userInput="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>

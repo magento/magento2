@@ -47,7 +47,7 @@ class DryRunTest extends SetupTestCase
         );
         self::assertFileExists($logFileName);
         $data = file_get_contents($logFileName);
-        self::assertEquals($data, $this->getData()[0]);
+        self::assertEquals($this->getData()[0], $data);
     }
 
     /**
@@ -67,6 +67,6 @@ class DryRunTest extends SetupTestCase
         $this->cliCommad->upgrade(['dry-run' => true]);
         self::assertFileExists($logFileName);
         $data = file_get_contents($logFileName);
-        self::assertEquals($data, $this->getData()[0]);
+        self::assertEquals($this->getData()[0], $data);
     }
 }

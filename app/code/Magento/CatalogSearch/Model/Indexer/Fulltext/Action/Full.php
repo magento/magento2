@@ -125,7 +125,7 @@ class Full
     protected $storeManager;
 
     /**
-     * @var \Magento\CatalogSearch\Model\ResourceModel\Engine
+     * @var \Magento\CatalogSearch\Model\ResourceModel\EngineInterface
      */
     protected $engine;
 
@@ -182,13 +182,6 @@ class Full
     protected $connection;
 
     /**
-     * @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\IndexIteratorFactory
-     * @deprecated 100.1.6 DataProvider used directly without IndexIterator
-     * @see self::$dataProvider
-     */
-    private $iteratorFactory;
-
-    /**
      * @var \Magento\Framework\EntityManager\MetadataPool
      */
     private $metadataPool;
@@ -223,11 +216,12 @@ class Full
      * @param \Magento\CatalogSearch\Model\ResourceModel\Fulltext $fulltextResource
      * @param \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory
      * @param \Magento\Framework\Indexer\ConfigInterface $indexerConfig
-     * @param \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\IndexIteratorFactory $indexIteratorFactory
-     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     * @param DataProvider $dataProvider
+     * @param mixed $indexIteratorFactory
+     * @param \Magento\Framework\EntityManager\MetadataPool|null $metadataPool
+     * @param DataProvider|null $dataProvider
      * @param int $batchSize
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ResourceConnection $resource,
@@ -247,7 +241,7 @@ class Full
         \Magento\CatalogSearch\Model\ResourceModel\Fulltext $fulltextResource,
         \Magento\Framework\Search\Request\DimensionFactory $dimensionFactory,
         \Magento\Framework\Indexer\ConfigInterface $indexerConfig,
-        \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\IndexIteratorFactory $indexIteratorFactory,
+        $indexIteratorFactory = null,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool = null,
         DataProvider $dataProvider = null,
         $batchSize = 500
@@ -270,7 +264,6 @@ class Full
         $this->localeDate = $localeDate;
         $this->fulltextResource = $fulltextResource;
         $this->dimensionFactory = $dimensionFactory;
-        $this->iteratorFactory = $indexIteratorFactory;
         $this->metadataPool = $metadataPool ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\EntityManager\MetadataPool::class);
         $this->dataProvider = $dataProvider ?: ObjectManager::getInstance()->get(DataProvider::class);
