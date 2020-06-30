@@ -12,7 +12,7 @@ define([
     return Component.extend({
         defaults: {
             filterProvider: 'componentType = filters, ns = ${ $.ns }',
-            filters: null,
+            filterKey: 'filters',
             modules: {
                 filterComponent: '${ $.filterProvider }',
             }
@@ -34,14 +34,40 @@ define([
          * Apply filter
          */
         apply: function () {
+            var urlFilter = this.getFilterParam();
+
             if (_.isUndefined(this.filterComponent())) {
                 setTimeout(function () {this.apply()}.bind(this), 100);
             } else {
-                if (!_.isNull(this.filters)) {
-                    this.filterComponent().setData(this.filters, false);
-                    this.filterComponent().apply();
-                }
+                 if (Object.keys(urlFilter).length) {
+                     this.filterComponent().setData(urlFilter, false);
+                     this.filterComponent().apply();
+                 }
             }
+        },
+
+        /**
+         * Get filter param from url
+         *
+         * @returns {Object}
+         */
+        getFilterParam: function () {
+            var searchString = decodeURI(location.search);
+
+            return _.chain(searchString.slice(1).split('&'))
+                .map(function (item) {
+                    if (item && item.search(this.filterKey) !== -1) {
+                        var itemArray = item.split('=');
+
+                        itemArray[0] = itemArray[0].replace(this.filterKey, '')
+                                .replace(/[\[\]]/g, '');
+
+                        return itemArray
+                    }
+                }.bind(this))
+                .compact()
+                .object()
+                .value();
         }
     });
 });

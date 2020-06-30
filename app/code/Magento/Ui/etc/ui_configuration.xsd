@@ -107,7 +107,6 @@
             <xs:element ref="text" maxOccurs="unbounded"/>
             <xs:element ref="textarea" maxOccurs="unbounded"/>
             <xs:element ref="wysiwyg" maxOccurs="unbounded"/>
-            <xs:element ref="urlFilterApplier" maxOccurs="unbounded" />
         </xs:choice>
     </xs:group>
     <xs:group name="fieldsetElements">
@@ -207,7 +206,6 @@
             <xs:element ref="text" maxOccurs="unbounded"/>
             <xs:element ref="textarea" maxOccurs="unbounded"/>
             <xs:element ref="wysiwyg" maxOccurs="unbounded"/>
-            <xs:element ref="urlFilterApplier" maxOccurs="unbounded" />
         </xs:choice>
     </xs:group>
 
@@ -823,14 +821,6 @@
             <xs:documentation>
                 The Url Input component allows to insert External URL and relative URL into the content. Add abilities
                 to define custom url link types.
-            </xs:documentation>
-        </xs:annotation>
-    </xs:element>
-    <xs:element name="urlFilterApplier" type="componentUrlFilterApplier">
-        <xs:annotation>
-            <xs:documentation>
-                The Url Filter Applier component retrieves the values from the "filters" GET parameter and applies it
-                to the grid.
             </xs:documentation>
         </xs:annotation>
     </xs:element>
