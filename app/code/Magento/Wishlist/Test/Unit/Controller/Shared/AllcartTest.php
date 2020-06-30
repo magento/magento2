@@ -12,6 +12,7 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\Controller\Result\Forward;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Wishlist\Controller\Shared\Allcart;
 use Magento\Wishlist\Controller\Shared\WishlistProvider;
 use Magento\Wishlist\Model\ItemCarrier;
@@ -27,6 +28,11 @@ class AllcartTest extends TestCase
     protected $allcartController;
 
     /**
+     * @var ObjectManagerHelper
+     */
+    protected $objectManagerHelper;
+
+    /**
      * @var WishlistProvider|MockObject
      */
     protected $wishlistProviderMock;
@@ -34,7 +40,7 @@ class AllcartTest extends TestCase
     /**
      * @var Context|MockObject
      */
-    protected $contextMock;
+    protected $context;
 
     /**
      * @var ItemCarrier|MockObject
@@ -74,9 +80,6 @@ class AllcartTest extends TestCase
         $this->itemCarrierMock = $this->getMockBuilder(ItemCarrier::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
         $this->wishlistMock = $this->getMockBuilder(Wishlist::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -93,8 +96,26 @@ class AllcartTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->resultFactoryMock->expects($this->any())
+            ->method('create')
+            ->willReturnMap(
+                [
+                    [ResultFactory::TYPE_REDIRECT, [], $this->resultRedirectMock],
+                    [ResultFactory::TYPE_FORWARD, [], $this->resultForwardMock]
+                ]
+            );
+
+        $this->objectManagerHelper = new ObjectManagerHelper($this);
+        $this->context = $this->objectManagerHelper->getObject(
+            Context::class,
+            [
+                'request' => $this->requestMock,
+                'resultFactory' => $this->resultFactoryMock
+            ]
+        );
+
         $this->allcartController = new Allcart(
-            $this->contextMock,
+            $this->context,
             $this->itemCarrierMock,
             $this->wishlistProviderMock
         );
