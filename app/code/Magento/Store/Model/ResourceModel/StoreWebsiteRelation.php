@@ -49,7 +49,7 @@ class StoreWebsiteRelation
      * @param bool $available
      * @return array
      */
-    public function getWebsiteStoreCodes($websiteId, $available = false): array
+    public function getWebsiteStoreCodes(string $websiteId, bool $available = false): array
     {
         $connection = $this->resource->getConnection();
         $storeTable = $this->resource->getTableName('store');
