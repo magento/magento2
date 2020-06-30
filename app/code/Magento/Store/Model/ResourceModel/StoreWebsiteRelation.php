@@ -45,7 +45,7 @@ class StoreWebsiteRelation
     /**
      * Get website store codes
      *
-     * @param int $websiteId
+     * @param string $websiteId
      * @param bool $available
      * @return array
      */

@@ -44,6 +44,21 @@ interface StoreConfigInterface extends \Magento\Framework\Api\ExtensibleDataInte
     public function setCode($code);
 
     /**
+     * Get store name
+     *
+     * @return string
+     */
+    public function getName();
+
+    /**
+     * Set store code
+     *
+     * @param string $name
+     * @return $this
+     */
+    public function setName($name);
+
+    /**
      * Get website id of the store
      *
      * @return int

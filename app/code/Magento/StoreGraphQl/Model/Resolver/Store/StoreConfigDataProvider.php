@@ -75,7 +75,7 @@ class StoreConfigDataProvider
      * @param string $websiteId
      * @return array
      */
-    public function getAvailableStoreConfig($websiteId): array
+    public function getAvailableStoreConfig(string $websiteId): array
     {
         $websiteStores = $this->storeWebsiteRelation->getWebsiteStoreCodes($websiteId, true);
         $storeConfigs = $this->storeConfigManager->getStoreConfigs($websiteStores);
@@ -112,7 +112,8 @@ class StoreConfigDataProvider
             'secure_base_url' => $storeConfig->getSecureBaseUrl(),
             'secure_base_link_url' => $storeConfig->getSecureBaseLinkUrl(),
             'secure_base_static_url' => $storeConfig->getSecureBaseStaticUrl(),
-            'secure_base_media_url' => $storeConfig->getSecureBaseMediaUrl()
+            'secure_base_media_url' => $storeConfig->getSecureBaseMediaUrl(),
+            'store_name' => $storeConfig->getName(),
         ], $this->getExtendedConfigData((int)$storeConfig->getId()));
     }
 

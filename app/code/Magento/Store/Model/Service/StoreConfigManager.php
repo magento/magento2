@@ -94,7 +94,8 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
 
         $storeConfig->setId($store->getId())
             ->setCode($store->getCode())
-            ->setWebsiteId($store->getWebsiteId());
+            ->setWebsiteId($store->getWebsiteId())
+            ->setName($store->getName());
 
         foreach ($this->configPaths as $methodName => $configPath) {
             $configValue = $this->scopeConfig->getValue(

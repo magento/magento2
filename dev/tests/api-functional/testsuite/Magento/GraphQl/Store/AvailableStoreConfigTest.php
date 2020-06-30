@@ -27,24 +27,26 @@ class AvailableStoreConfigTest extends GraphQlAbstract
     private $objectManager;
 
     /**
+     * @var StoreConfigManagerInterface
+     */
+    private $storeConfigManager;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->storeConfigManager = $this->objectManager->get(StoreConfigManagerInterface::class);
     }
 
     /**
      * @magentoApiDataFixture Magento/Store/_files/store.php
      * @magentoApiDataFixture Magento/Store/_files/inactive_store.php
-     * @magentoConfigFixture default_store store/information/name Default Store
-     * @magentoConfigFixture test_store store/information/name Test Store
      */
     public function testDefaultWebsiteAvailableStoreConfigs(): void
     {
-        /** @var StoreConfigManagerInterface $storeConfigManager */
-        $storeConfigManager = $this->objectManager->get(StoreConfigManagerInterface::class);
-        $storeConfigs = $storeConfigManager->getStoreConfigs();
+        $storeConfigs = $this->storeConfigManager->getStoreConfigs();
 
         $expectedAvailableStores = [];
         $expectedAvailableStoreCodes = [
@@ -92,14 +94,10 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Store/_files/second_website_with_two_stores.php
-     * @magentoConfigFixture fixture_second_store_store store/information/name Fixture Second Store
-     * @magentoConfigFixture fixture_third_store_store store/information/name Fixture Third Store
      */
     public function testNonDefaultWebsiteAvailableStoreConfigs(): void
     {
-        /** @var StoreConfigManagerInterface $storeConfigManager */
-        $storeConfigManager = $this->objectManager->get(StoreConfigManagerInterface::class);
-        $storeConfigs = $storeConfigManager->getStoreConfigs(['fixture_second_store', 'fixture_third_store']);
+        $storeConfigs = $this->storeConfigManager->getStoreConfigs(['fixture_second_store', 'fixture_third_store']);
 
         $query
             = <<<QUERY
@@ -140,10 +138,8 @@ QUERY;
      * @param StoreConfigInterface $storeConfig
      * @param array $responseConfig
      */
-    private function validateStoreConfig($storeConfig, $responseConfig): void
+    private function validateStoreConfig(StoreConfigInterface $storeConfig, array $responseConfig): void
     {
-        /* @var $scopeConfig ScopeConfigInterface */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
         $this->assertEquals($storeConfig->getId(), $responseConfig['id']);
         $this->assertEquals($storeConfig->getCode(), $responseConfig['code']);
         $this->assertEquals($storeConfig->getLocale(), $responseConfig['locale']);
@@ -162,10 +158,6 @@ QUERY;
         $this->assertEquals($storeConfig->getSecureBaseLinkUrl(), $responseConfig['secure_base_link_url']);
         $this->assertEquals($storeConfig->getSecureBaseStaticUrl(), $responseConfig['secure_base_static_url']);
         $this->assertEquals($storeConfig->getSecureBaseMediaUrl(), $responseConfig['secure_base_media_url']);
-        $this->assertEquals($scopeConfig->getValue(
-            'store/information/name',
-            ScopeInterface::SCOPE_STORE,
-            $storeConfig->getId()
-        ), $responseConfig['store_name']);
+        $this->assertEquals($storeConfig->getName(), $responseConfig['store_name']);
     }
 }
