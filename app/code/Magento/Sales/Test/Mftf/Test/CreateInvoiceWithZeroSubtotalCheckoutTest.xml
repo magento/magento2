@@ -86,7 +86,7 @@
         <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
 
         <!-- Open created order -->
-        <actionGroup ref="AdminOpenOrdersPageActionGroup" stepKey="goToOrdersPage"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrdersPage"/>
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridById">
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>

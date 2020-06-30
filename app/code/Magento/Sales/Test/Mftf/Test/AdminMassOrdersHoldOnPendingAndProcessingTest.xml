@@ -60,7 +60,7 @@
         <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createInvoice"/>
 
         <!-- Navigate to backend: Go to Sales > Orders -->
-        <actionGroup ref="AdminOpenOrdersPageActionGroup" stepKey="onOrderPage"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
 

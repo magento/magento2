@@ -77,7 +77,7 @@
         <actionGroup ref="StorefrontRegisterCustomerAfterCheckoutActionGroup" stepKey="registerCustomer"/>
 
         <!-- Open Order Index Page -->
-        <actionGroup ref="AdminOpenOrdersPageActionGroup" stepKey="goToOrders"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
 
         <!-- Filter Order using orderId and assert order-->
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">

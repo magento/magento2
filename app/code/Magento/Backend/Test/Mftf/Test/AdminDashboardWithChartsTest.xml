@@ -93,7 +93,7 @@
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessInvoiceMessage"/>
         <!--Create Shipment for the order-->
         <comment userInput="Create Shipment for the order" stepKey="createShipmentForOrder"/>
-        <actionGroup ref="AdminOpenOrdersPageActionGroup" stepKey="onOrdersPage2"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrdersPage2"/>
         <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="openOrderPageForShip"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
         <waitForPageLoad stepKey="waitForShipmentPagePage"/>

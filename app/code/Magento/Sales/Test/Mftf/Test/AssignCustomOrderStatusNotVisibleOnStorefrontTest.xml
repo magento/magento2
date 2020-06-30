@@ -85,7 +85,7 @@
         <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
 
         <!-- Assert order status is correct -->
-        <actionGroup ref="AdminOpenOrdersPageActionGroup" stepKey="goToOrdersPage"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrdersPage"/>
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridById">
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>
@@ -109,7 +109,7 @@
         <see selector="{{StorefrontOrderInformationMainSection.emptyMessage}}" userInput="You have placed no orders." stepKey="seeEmptyMessage"/>
 
         <!-- Cancel order -->
-        <actionGroup ref="AdminOpenOrdersPageActionGroup" stepKey="goToAdminOrdersPage"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToAdminOrdersPage"/>
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridByOrderId">
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>

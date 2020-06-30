@@ -95,7 +95,7 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
         <!-- Search for Order in the order grid -->
-        <actionGroup ref="AdminOpenOrdersPageActionGroup" stepKey="onOrdersPage"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrdersPage"/>
         <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilter"/>
         <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum"/>
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>

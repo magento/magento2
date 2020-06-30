@@ -76,7 +76,7 @@
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductStockStatus"/>
 
         <!-- Open Order Index Page -->
-        <actionGroup ref="AdminOpenOrdersPageActionGroup" stepKey="goToOrders"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
 
         <!-- Filter Order using orderId -->
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
@@ -97,7 +97,7 @@
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductStockStatusAfterCancelOrder"/>
 
         <!-- Open Order Index Page -->
-        <actionGroup ref="AdminOpenOrdersPageActionGroup" stepKey="goToOrders1"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders1"/>
 
         <!-- Filter Order using orderId -->
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById1">

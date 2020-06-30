@@ -71,7 +71,7 @@
         <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
 
         <!-- Open created order -->
-        <actionGroup ref="AdminOpenOrdersPageActionGroup" stepKey="goToOrdersPage"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrdersPage"/>
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridById">
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>
@@ -100,7 +100,7 @@
         <grabFromCurrentUrl regex="~/invoice_id/(\d+)/~" stepKey="grabInvoiceId"/>
 
         <!-- Assert no invoice button -->
-        <actionGroup ref="AdminOpenOrdersPageActionGroup" stepKey="goToOrders"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdForAssertingInvoiceBtn">
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>
@@ -144,7 +144,7 @@
         <grabFromCurrentUrl regex="~/shipment_id/(\d+)/~" stepKey="grabShipmentId"/>
 
         <!-- Assert no ship button -->
-        <actionGroup ref="AdminOpenOrdersPageActionGroup" stepKey="goToAdminOrdersPage"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToAdminOrdersPage"/>
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridByIdForAssertingShipBtn">
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>
