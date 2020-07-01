@@ -40,7 +40,7 @@
                 <click selector="{{CurrencySetupSection.currencyOptions}}" stepKey="closeOptions"/>
                 <waitForPageLoad stepKey="waitForCloseOptions"/>
                 <click stepKey="saveUnselectedConfigs" selector="{{AdminConfigSection.saveButton}}"/>
-                <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+                <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
                 <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
                 <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             </after>
