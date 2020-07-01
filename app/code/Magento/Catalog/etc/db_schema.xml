@@ -536,6 +536,19 @@
             <column name="position"/>
         </index>
     </table>
+    <table name="catalog_compare_list" resource="default" engine="innodb"
+           comment="Catalog Compare List Table">
+        <column xsi:type="int" name="catalog_compare_list_id" padding="10" unsigned="true" nullable="false"
+                identity="true" comment="Compare List ID"/>
+        <column xsi:type="int" name="list_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="List ID"/>
+        <constraint xsi:type="primary" referenceId="PRIMARY">
+            <column name="catalog_compare_list_id"/>
+        </constraint>
+        <index referenceId="CATALOG_COMPARE_LIST_LIST_ID" indexType="btree">
+            <column name="list_id"/>
+        </index>
+    </table>
     <table name="catalog_compare_item" resource="default" engine="innodb" comment="Catalog Compare Table">
         <column xsi:type="int" name="catalog_compare_item_id" unsigned="true" nullable="false"
                 identity="true" comment="Compare Item ID"/>
@@ -547,6 +560,8 @@
                 default="0" comment="Product ID"/>
         <column xsi:type="smallint" name="store_id" unsigned="true" nullable="true" identity="false"
                 comment="Store ID"/>
+        <column xsi:type="int" name="list_id" padding="10" unsigned="true" nullable="false" identity="false"
+                comment="List ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="catalog_compare_item_id"/>
         </constraint>
@@ -558,6 +573,8 @@
                     referenceColumn="entity_id" onDelete="CASCADE"/>
         <constraint xsi:type="foreign" referenceId="CATALOG_COMPARE_ITEM_STORE_ID_STORE_STORE_ID" table="catalog_compare_item"
                     column="store_id" referenceTable="store" referenceColumn="store_id" onDelete="SET NULL"/>
+        <constraint xsi:type="foreign" referenceId="CATALOG_COMPARE_ITEM_LIST_ID_CATALOG_COMPARE_LIST_LIST_ID" table="catalog_compare_item"
+                    column="list_id" referenceTable="catalog_compare_list" referenceColumn="list_id" onDelete="CASCADE"/>
         <index referenceId="CATALOG_COMPARE_ITEM_PRODUCT_ID" indexType="btree">
             <column name="product_id"/>
         </index>
