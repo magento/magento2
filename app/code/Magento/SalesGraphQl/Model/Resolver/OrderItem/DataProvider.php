@@ -225,9 +225,9 @@ class DataProvider
             $discounts = [];
         } else {
             $discounts [] = [
-                'label' => $associatedOrder->getDiscountDescription() ?? _('Discount'),
+                'label' => $associatedOrder->getDiscountDescription() ?? __('Discount'),
                 'amount' => [
-                    'value' => $orderItem->getDiscountAmount() ?? 0,
+                    'value' => abs($orderItem->getDiscountAmount()) ?? 0,
                     'currency' => $associatedOrder->getOrderCurrencyCode()
                 ]
             ];
