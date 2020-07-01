@@ -12,7 +12,7 @@
         <annotations>
             <features value="Catalog"/>
             <stories value="Filter product using GET URL parameter"/>
-            <title value="Verify that filter is applied when filters parameter is set on url"/>
+            <title value="Verify that filter is applied on product grid when filters parameter is set on url"/>
             <description value="Accessing product grid url with filters parameter"/>
             <severity value="MAJOR"/>
             <testCaseId value="to-be-added"/>
