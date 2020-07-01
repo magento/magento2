@@ -16,7 +16,8 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * Class GenerateFixturesCommandCommandTest
- * @package Magento\Setup\Console\Command
+ *
+ * @magentoDbIsolation disabled
  */
 class GenerateFixturesCommandTest extends \Magento\TestFramework\Indexer\TestCase
 {
