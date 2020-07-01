@@ -31,7 +31,6 @@
         <see selector="{{CmsPagesPageActionsSection.pagesGridRowByTitle($$createPage.title$$)}}" userInput="$$createPage.title$$" stepKey="seePage"/>
         <seeElement selector="{{CmsPagesPageActionsSection.activeFilter}}" stepKey="seeEnabledFilters"/>
         <see selector="{{CmsPagesPageActionsSection.activeFilter}}" userInput="Title: $$createPage.title$$" stepKey="seePageTitleFilter"/>
-        <click selector="{{CmsPagesPageActionsSection.clearFilters}}" stepKey="clearFilters" />
-        <waitForPageLoad stepKey="waitForClearFilter"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
     </test>
 </tests>

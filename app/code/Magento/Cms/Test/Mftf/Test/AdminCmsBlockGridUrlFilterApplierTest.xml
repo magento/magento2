@@ -31,7 +31,6 @@
         <see selector="{{BlockPageActionsSection.blockGridRowByTitle($$createBlock.title$$)}}" userInput="$$createBlock.title$$" stepKey="seeBlock"/>
         <seeElement selector="{{BlockPageActionsSection.activeFilterDiv}}" stepKey="seeEnabledFilters"/>
         <see selector="{{BlockPageActionsSection.activeFilterDiv}}" userInput="Title: $$createBlock.title$$" stepKey="seeBlockTitleFilter"/>
-        <click selector="{{BlockPageActionsSection.clearFilters}}" stepKey="clearFilters" />
-        <waitForPageLoad stepKey="waitForClearFilter"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
     </test>
 </tests>

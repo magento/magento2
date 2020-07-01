@@ -31,7 +31,6 @@
         <see selector="{{AdminProductGridSection.productGridNameProduct($$createSimpleProduct.name$$)}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProduct"/>
         <seeElement selector="{{AdminProductGridFilterSection.enabledFilters}}" stepKey="seeEnabledFilters"/>
         <see selector="{{AdminProductGridFilterSection.enabledFilters}}" userInput="Name: $$createSimpleProduct.name$$" stepKey="seeProductNameFilter"/>
-        <click selector="{{AdminProductGridFilterSection.clearFilters}}" stepKey="clearFilters" />
-        <waitForPageLoad stepKey="waitForClearFilter"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
     </test>
 </tests>
