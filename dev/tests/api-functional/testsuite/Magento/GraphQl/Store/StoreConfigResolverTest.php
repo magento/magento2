@@ -7,13 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Store;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Api\Data\StoreConfigInterface;
 use Magento\Store\Api\StoreConfigManagerInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\StoreResolverInterface;
-use Magento\Store\Model\ScopeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -88,8 +86,6 @@ QUERY;
      */
     private function validateStoreConfig($storeConfig, $responseConfig): void
     {
-        /* @var $scopeConfig ScopeConfigInterface */
-        $scopeConfig = $this->objectManager->get(ScopeConfigInterface::class);
         $this->assertEquals($storeConfig->getId(), $responseConfig['id']);
         $this->assertEquals($storeConfig->getCode(), $responseConfig['code']);
         $this->assertEquals($storeConfig->getLocale(), $responseConfig['locale']);

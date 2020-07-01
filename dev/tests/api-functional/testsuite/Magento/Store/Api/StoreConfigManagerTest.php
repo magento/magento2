@@ -43,6 +43,7 @@ class StoreConfigManagerTest extends WebapiAbstract
         $expectedKeys = [
             'id',
             'code',
+            'name',
             'website_id',
             'locale',
             'base_currency_code',
