@@ -10,6 +10,7 @@
     <body>
         <referenceContainer name="content">
             <uiComponent name="cms_page_listing"/>
+            <block class="Magento\Backend\Block\Template" template="Magento_Cms::url_filter_applier.phtml" />
         </referenceContainer>
     </body>
 </page>
