@@ -27,6 +27,8 @@ class StoreWebsiteRelation
     }
 
     /**
+     * Get store by website id
+     *
      * @param int $websiteId
      * @return array
      */

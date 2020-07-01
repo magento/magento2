@@ -37,7 +37,6 @@ class StoreConfigResolverTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Store/_files/store.php
-     * @magentoConfigFixture default_store store/information/name Default Store
      * @throws NoSuchEntityException
      */
     public function testGetStoreConfig(): void
@@ -109,10 +108,6 @@ QUERY;
         $this->assertEquals($storeConfig->getSecureBaseLinkUrl(), $responseConfig['secure_base_link_url']);
         $this->assertEquals($storeConfig->getSecureBaseStaticUrl(), $responseConfig['secure_base_static_url']);
         $this->assertEquals($storeConfig->getSecureBaseMediaUrl(), $responseConfig['secure_base_media_url']);
-        $this->assertEquals($scopeConfig->getValue(
-            'store/information/name',
-            ScopeInterface::SCOPE_STORE,
-            $storeConfig->getId()
-        ), $responseConfig['store_name']);
+        $this->assertEquals($storeConfig->getName(), $responseConfig['store_name']);
     }
 }
