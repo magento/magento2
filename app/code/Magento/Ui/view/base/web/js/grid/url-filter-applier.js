@@ -11,8 +11,9 @@ define([
 
     return Component.extend({
         defaults: {
-            filterProvider: 'componentType = filters, ns = ${ $.ns }',
+            filterProvider: 'componentType = filters',
             filterKey: 'filters',
+            searchString: location.search,
             modules: {
                 filterComponent: '${ $.filterProvider }',
             }
@@ -34,12 +35,12 @@ define([
          * Apply filter
          */
         apply: function () {
-            var urlFilter = this.getFilterParam();
+            var urlFilter = this.getFilterParam(this.searchString);
 
             if (_.isUndefined(this.filterComponent())) {
                 setTimeout(function () {this.apply()}.bind(this), 100);
             } else {
-                 if (Object.keys(urlFilter).length) {
+                if (Object.keys(urlFilter).length) {
                      this.filterComponent().setData(urlFilter, false);
                      this.filterComponent().apply();
                  }
@@ -51,8 +52,8 @@ define([
          *
          * @returns {Object}
          */
-        getFilterParam: function () {
-            var searchString = decodeURI(location.search);
+        getFilterParam: function (url) {
+            var searchString = decodeURI(url);
 
             return _.chain(searchString.slice(1).split('&'))
                 .map(function (item) {
