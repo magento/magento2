@@ -25,7 +25,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="OpenProductCatalogPage"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
         <waitForPageLoad stepKey="waitForProductToggleToSelectProduct"/>
         <click selector="{{AdminProductGridActionSection.addVirtualProduct}}" stepKey="clickVirtualProduct"/>
@@ -41,7 +41,7 @@
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
 
         <!-- Verify we see created virtual product(from the above step) on the product grid page -->
-        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="OpenProductCatalogPage1"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage1"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickSelector"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFilter"/>
         <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{virtualProductWithRequiredFields.name}}" stepKey="fillProductName1"/>

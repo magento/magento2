@@ -48,7 +48,7 @@
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
 
         <!-- Search created simple product(from above step) in the grid page to verify sku masked as name and country of manufacture -->
-        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="OpenProductCatalogPageToSearchCreatedSimpleProduct"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPageToSearchCreatedSimpleProduct"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>
         <fillField selector="{{AdminProductGridFilterSection.skuFilter}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.name}}-{{nameAndAttributeSkuMaskSimpleProduct.country_of_manufacture_label}}" stepKey="fillSkuFilterFieldWithNameAndCountryOfManufactureInput" />

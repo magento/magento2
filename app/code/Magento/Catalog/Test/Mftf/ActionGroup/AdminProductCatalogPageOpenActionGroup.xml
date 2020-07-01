@@ -13,7 +13,7 @@
             <description>Goes to the Admin Product Catalog Page grid page.</description>
         </annotations>
 
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
+        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductCatalogPage"/>
         <waitForPageLoad stepKey="waitForProductCatalogPageLoad"/>
     </actionGroup>
 </actionGroups>
