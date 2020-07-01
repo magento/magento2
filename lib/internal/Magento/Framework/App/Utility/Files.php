@@ -1410,9 +1410,6 @@ class Files
             '/dev/tests/integration/testsuite/Magento/Test/Integrity',
             '/dev/tests/static/framework',
             '/dev/tests/static/testsuite',
-            '/dev/tests/functional/tests/app',
-            '/dev/tests/functional/lib',
-            '/dev/tests/functional/vendor/magento/mtf',
             '/setup/src'
         ];
         foreach ($directories as $key => $dir) {

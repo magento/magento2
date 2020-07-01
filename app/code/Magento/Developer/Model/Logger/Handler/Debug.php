@@ -22,11 +22,6 @@ class Debug extends \Magento\Framework\Logger\Handler\Debug
     private $state;
 
     /**
-     * @var ScopeConfigInterface
-     */
-    private $scopeConfig;
-
-    /**
      * @var DeploymentConfig
      */
     private $deploymentConfig;
@@ -34,7 +29,6 @@ class Debug extends \Magento\Framework\Logger\Handler\Debug
     /**
      * @param DriverInterface $filesystem
      * @param State $state
-     * @param ScopeConfigInterface $scopeConfig
      * @param DeploymentConfig $deploymentConfig
      * @param string $filePath
      * @throws \Exception
@@ -42,14 +36,12 @@ class Debug extends \Magento\Framework\Logger\Handler\Debug
     public function __construct(
         DriverInterface $filesystem,
         State $state,
-        ScopeConfigInterface $scopeConfig,
         DeploymentConfig $deploymentConfig,
         $filePath = null
     ) {
         parent::__construct($filesystem, $filePath);
 
         $this->state = $state;
-        $this->scopeConfig = $scopeConfig;
         $this->deploymentConfig = $deploymentConfig;
     }
 

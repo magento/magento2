@@ -17,9 +17,6 @@
             <group value="CatalogSearch"/>
             <group value="SearchEngineElasticsearch"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MC-21228"/>
-            </skip>
         </annotations>
         <executeJS function="var s = '$createSimpleProduct.name$'; var ret=s.substring(0,3); return ret;" stepKey="getFirstThreeLetters" before="searchStorefront"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
