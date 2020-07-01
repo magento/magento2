@@ -43,8 +43,7 @@
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.price}}" stepKey="fillSimpleProductPrice"/>
         <fillField selector="{{AdminProductFormSection.productWeight}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.weight}}" stepKey="fillSimpleProductWeight"/>
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{nameAndAttributeSkuMaskSimpleProduct.quantity}}" stepKey="fillSimpleProductQuantity"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForSimpleProductToSave"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
         <!-- Verify customer see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
 

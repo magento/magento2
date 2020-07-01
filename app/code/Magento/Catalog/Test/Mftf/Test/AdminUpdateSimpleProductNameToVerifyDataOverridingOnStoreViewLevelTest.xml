@@ -64,8 +64,7 @@
 
         <!-- Update default simple product with name -->
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{simpleProductDataOverriding.name}}" stepKey="fillSimpleProductName"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForSimpleProductSave"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickButtonSave"/>
 
         <!-- Verify customer see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>

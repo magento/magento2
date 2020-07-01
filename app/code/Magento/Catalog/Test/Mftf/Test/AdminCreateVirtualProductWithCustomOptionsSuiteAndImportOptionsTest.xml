@@ -112,8 +112,7 @@
         <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType(virtualProductCustomizableOption4.title,'1')}}" userInput="{{virtualProductCustomizableOption4.option_1_price_type}}" stepKey="selectOptionPriceTypeForFourthDataSetSecondRow"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueSku(virtualProductCustomizableOption4.title,'1')}}" userInput="{{virtualProductCustomizableOption4.option_1_sku}}" stepKey="fillOptionSkuForFourthDataSetSecondRow"/>
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForVirtualProductSaved"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
 
         <!-- Verify we see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
