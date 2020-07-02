@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomer\Model;
 
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\LoginAsCustomerApi\Api\AuthenticateCustomerBySecretInterface;
 use Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface;
@@ -43,11 +44,11 @@ class AuthenticateCustomerBySecret implements AuthenticateCustomerBySecretInterf
     public function __construct(
         GetAuthenticationDataBySecretInterface $getAuthenticationDataBySecret,
         Session $customerSession,
-        SetLoggedAsCustomerAdminIdInterface $setLoggedAsCustomerAdminId
+        ?SetLoggedAsCustomerAdminIdInterface $setLoggedAsCustomerAdminId = null
     ) {
         $this->getAuthenticationDataBySecret = $getAuthenticationDataBySecret;
         $this->customerSession = $customerSession;
-        $this->setLoggedAsCustomerAdminId = $setLoggedAsCustomerAdminId;
+        $this->setLoggedAsCustomerAdminId = $setLoggedAsCustomerAdminId ?? ObjectManager::getInstance()->get(SetLoggedAsCustomerAdminIdInterface::class);
     }
 
     /**

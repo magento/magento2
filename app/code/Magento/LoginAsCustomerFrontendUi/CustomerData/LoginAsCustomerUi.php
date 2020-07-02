@@ -9,6 +9,7 @@ namespace Magento\LoginAsCustomerFrontendUi\CustomerData;
 
 use Magento\Customer\CustomerData\SectionSourceInterface;
 use Magento\Customer\Model\Session;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\LoginAsCustomerApi\Api\GetLoggedAsCustomerAdminIdInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -43,11 +44,11 @@ class LoginAsCustomerUi implements SectionSourceInterface
     public function __construct(
         Session $customerSession,
         StoreManagerInterface $storeManager,
-        GetLoggedAsCustomerAdminIdInterface $getLoggedAsCustomerAdminId
+        ?GetLoggedAsCustomerAdminIdInterface $getLoggedAsCustomerAdminId = null
     ) {
         $this->customerSession = $customerSession;
         $this->storeManager = $storeManager;
-        $this->getLoggedAsCustomerAdminId = $getLoggedAsCustomerAdminId;
+        $this->getLoggedAsCustomerAdminId = $getLoggedAsCustomerAdminId ?? ObjectManager::getInstance()->get(GetLoggedAsCustomerAdminIdInterface::class);
     }
 
     /**

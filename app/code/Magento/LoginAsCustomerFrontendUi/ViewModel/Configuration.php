@@ -9,6 +9,7 @@ namespace Magento\LoginAsCustomerFrontendUi\ViewModel;
 
 use Magento\Customer\Model\Context;
 use Magento\Framework\App\Http\Context as HttpContext;
+use Magento\Framework\App\ObjectManager;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 use Magento\LoginAsCustomerApi\Api\GetLoggedAsCustomerAdminIdInterface;
 
@@ -40,11 +41,11 @@ class Configuration implements \Magento\Framework\View\Element\Block\ArgumentInt
     public function __construct(
         ConfigInterface $config,
         HttpContext $httpContext,
-        GetLoggedAsCustomerAdminIdInterface $getLoggedAsCustomerAdminId
+        ?GetLoggedAsCustomerAdminIdInterface $getLoggedAsCustomerAdminId = null
     ) {
         $this->config = $config;
         $this->httpContext = $httpContext;
-        $this->getLoggedAsCustomerAdminId = $getLoggedAsCustomerAdminId;
+        $this->getLoggedAsCustomerAdminId = $getLoggedAsCustomerAdminId ?? ObjectManager::getInstance()->get(GetLoggedAsCustomerAdminIdInterface::class);
     }
 
     /**

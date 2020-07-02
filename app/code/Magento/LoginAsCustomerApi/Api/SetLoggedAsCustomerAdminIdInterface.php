@@ -9,8 +9,6 @@ namespace Magento\LoginAsCustomerApi\Api;
 
 /**
  * Set id of Admin logged as Customer.
- *
- * @api
  */
 interface SetLoggedAsCustomerAdminIdInterface
 {
