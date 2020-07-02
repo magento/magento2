@@ -73,6 +73,7 @@ class OrderButtonTest extends TestCase
      */
     public function testGetButtonDataWithCustomer(): void
     {
+        $this->registry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
         $this->registry->register(RegistryConstants::CURRENT_CUSTOMER_ID, 1);
         $data = $this->button->getButtonData();
         $this->assertNotEmpty($data);

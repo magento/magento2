@@ -34,6 +34,5 @@ $quote->setStoreId(1)
     ->setCustomer($customer)
     ->setCheckoutMethod(Onepage::METHOD_CUSTOMER)
     ->setReservedOrderId('test_order_with_customer_without_address')
-    ->setEmail($customer->getEmail())
     ->addProduct($productRepository->get('simple2'), 1);
 $quoteRepository->save($quote);
