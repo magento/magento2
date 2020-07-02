@@ -5,12 +5,13 @@
  */
 
 /** @var $block \Magento\Backend\Block\Template */
+/** @var \Magento\Framework\Escaper $escaper */
 ?>
 <script type="text/x-magento-init">
     {
         "*": {
             "Magento_Ui/js/grid/url-filter-applier": {
-                "listingNamespace": "<?= $block->getListingNamespace() ?>"
+                "listingNamespace": "<?= $escaper->escapeJs($block->getListingNamespace()) ?>"
             }
         }
     }
