@@ -23,6 +23,7 @@
             <createData entity="simpleProductWithShortNameAndSku" stepKey="createSimpleProduct"/>
         </before>
         <after>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
@@ -31,6 +32,5 @@
         <see selector="{{AdminProductGridSection.productGridNameProduct($$createSimpleProduct.name$$)}}" userInput="$$createSimpleProduct.name$$" stepKey="seeProduct"/>
         <seeElement selector="{{AdminProductGridFilterSection.enabledFilters}}" stepKey="seeEnabledFilters"/>
         <see selector="{{AdminProductGridFilterSection.enabledFilters}}" userInput="Name: $$createSimpleProduct.name$$" stepKey="seeProductNameFilter"/>
-        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
     </test>
 </tests>

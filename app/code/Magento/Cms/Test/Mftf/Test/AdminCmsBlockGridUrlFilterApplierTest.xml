@@ -23,6 +23,7 @@
             <createData entity="Sales25offBlock" stepKey="createBlock"/>
         </before>
         <after>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
             <deleteData createDataKey="createBlock" stepKey="deletePage"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
@@ -31,6 +32,5 @@
         <see selector="{{BlockPageActionsSection.blockGridRowByTitle($$createBlock.title$$)}}" userInput="$$createBlock.title$$" stepKey="seeBlock"/>
         <seeElement selector="{{BlockPageActionsSection.activeFilterDiv}}" stepKey="seeEnabledFilters"/>
         <see selector="{{BlockPageActionsSection.activeFilterDiv}}" userInput="Title: $$createBlock.title$$" stepKey="seeBlockTitleFilter"/>
-        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
     </test>
 </tests>

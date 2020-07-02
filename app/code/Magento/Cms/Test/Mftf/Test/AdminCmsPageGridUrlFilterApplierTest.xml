@@ -23,6 +23,7 @@
             <createData entity="_defaultCmsPage" stepKey="createPage"/>
         </before>
         <after>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
             <deleteData createDataKey="createPage" stepKey="deletePage"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
@@ -31,6 +32,5 @@
         <see selector="{{CmsPagesPageActionsSection.pagesGridRowByTitle($$createPage.title$$)}}" userInput="$$createPage.title$$" stepKey="seePage"/>
         <seeElement selector="{{CmsPagesPageActionsSection.activeFilter}}" stepKey="seeEnabledFilters"/>
         <see selector="{{CmsPagesPageActionsSection.activeFilter}}" userInput="Title: $$createPage.title$$" stepKey="seePageTitleFilter"/>
-        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
     </test>
 </tests>

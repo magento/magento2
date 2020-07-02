@@ -11,7 +11,8 @@ define([
 
     return Component.extend({
         defaults: {
-            filterProvider: 'componentType = filters',
+            listingNamespace: null,
+            filterProvider: 'componentType = filters, ns = ${ $.listingNamespace }',
             filterKey: 'filters',
             searchString: location.search,
             modules: {
@@ -44,6 +45,7 @@ define([
 
                 return;
             }
+
             if (Object.keys(urlFilter).length) {
                 this.filterComponent().setData(urlFilter, false);
                 this.filterComponent().apply();
