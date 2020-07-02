@@ -5,7 +5,7 @@
 
 define([
     'uiComponent',
-    'underscore',
+    'underscore'
 ], function (Component, _) {
     'use strict';
 
@@ -15,7 +15,7 @@ define([
             filterKey: 'filters',
             searchString: location.search,
             modules: {
-                filterComponent: '${ $.filterProvider }',
+                filterComponent: '${ $.filterProvider }'
             }
         },
 
@@ -38,12 +38,14 @@ define([
             var urlFilter = this.getFilterParam(this.searchString);
 
             if (_.isUndefined(this.filterComponent())) {
-                setTimeout(function () {this.apply()}.bind(this), 100);
+                setTimeout(function () {
+                    this.apply();
+                }.bind(this), 100);
             } else {
                 if (Object.keys(urlFilter).length) {
-                     this.filterComponent().setData(urlFilter, false);
-                     this.filterComponent().apply();
-                 }
+                    this.filterComponent().setData(urlFilter, false);
+                    this.filterComponent().apply();
+                }
             }
         },
 
