@@ -13,6 +13,7 @@ use Magento\Backend\Model\Auth\Session;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Model\Config\Share;
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Controller\ResultInterface;
@@ -108,7 +109,7 @@ class Login extends Action implements HttpGetActionInterface
         SaveAuthenticationDataInterface $saveAuthenticationData,
         DeleteAuthenticationDataForUserInterface $deleteAuthenticationDataForUser,
         Url $url,
-        Share $share
+        Share $share = null
     ) {
         parent::__construct($context);
 
@@ -120,7 +121,7 @@ class Login extends Action implements HttpGetActionInterface
         $this->saveAuthenticationData = $saveAuthenticationData;
         $this->deleteAuthenticationDataForUser = $deleteAuthenticationDataForUser;
         $this->url = $url;
-        $this->share = $share;
+        $this->share = $share ?? ObjectManager::getInstance()->get(Share::class);
     }
 
     /**
