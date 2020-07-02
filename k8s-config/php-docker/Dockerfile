@@ -4,7 +4,7 @@ LABEL maintainer="Cristian Pini"
 ENV TZ=Europe/London
 RUN apk update; \
 apk upgrade; \
-apk add --no-cache tzdata freetype freetype-dev libxslt-dev libpng libjpeg libxml2-dev zlib libwebp-dev libpng-dev jpeg-dev icu-dev zlib-dev libzip-dev; \
+apk add --no-cache fcgi tzdata freetype freetype-dev libxslt-dev libpng libjpeg libxml2-dev zlib libwebp-dev libpng-dev jpeg-dev icu-dev zlib-dev libzip-dev; \
 apk add --no-cache $PHPIZE_DEPS; \
 docker-php-ext-configure gd --with-png-dir=/usr/include/ \
                                 --with-jpeg-dir=/usr/include/ \

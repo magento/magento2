@@ -76,7 +76,7 @@ spec:
         fsGroup: 82
       initContainers:
         - name: setup-pub-dir
-          image: eu.gcr.io/magento2-269418/magento2-php72:402
+          image: eu.gcr.io/magento2-269418/magento2-php72:404
           securityContext:
             runAsUser: 0
           volumeMounts:
@@ -91,7 +91,7 @@ spec:
             requests:
               cpu: "500m"
       containers:
-        - image: eu.gcr.io/magento2-269418/magento2-apache24:402
+        - image: eu.gcr.io/magento2-269418/magento2-apache24:404
           name: apache
           ports:
             - containerPort: 80
@@ -121,25 +121,12 @@ spec:
             failureThreshold: 1
             periodSeconds: 50
             timeoutSeconds: 3
-        - image: eu.gcr.io/magento2-269418/magento2-php72:402
+        - image: eu.gcr.io/magento2-269418/magento2-php72:404
           lifecycle:
             postStart:
               exec:
                 command: ["/bin/sh", "-c", "/var/www/html/post.sh"]
           name: php
-          livenessProbe:
-            exec:
-              command:
-                - php-fpm-healthcheck
-                - --listen-queue=10 # fails if there are more than 10 processes waiting in the fpm queue
-            initialDelaySeconds: 0
-            periodSeconds: 10
-          readinessProbe:
-            exec:
-              command:
-                - php-fpm-healthcheck # a simple ping since this means it's ready to handle traffic
-            initialDelaySeconds: 1
-            periodSeconds: 5
           resources:
             requests:
               memory: "1Gi"
