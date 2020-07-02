@@ -6,6 +6,7 @@
 
 namespace Magento\CatalogRule\Model\Indexer;
 
+use DateTime;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogRule\Model\ResourceModel\Rule\Collection as RuleCollection;
 use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
@@ -14,6 +15,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
 use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Catalog rule index builder
@@ -151,6 +154,11 @@ class IndexBuilder
     private $productLoader;
 
     /**
+     * @var TimezoneInterface|mixed
+     */
+    private $localeDate;
+
+    /**
      * @param RuleCollectionFactory $ruleCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
      * @param \Magento\Framework\App\ResourceConnection $resource
@@ -170,6 +178,7 @@ class IndexBuilder
      * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
      * @param ProductLoader|null $productLoader
      * @param TableSwapper|null $tableSwapper
+     * @param TimezoneInterface|null $localeDate
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -191,7 +200,8 @@ class IndexBuilder
         RuleProductPricesPersistor $pricesPersistor = null,
         \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null,
         ProductLoader $productLoader = null,
-        TableSwapper $tableSwapper = null
+        TableSwapper $tableSwapper = null,
+        ?TimezoneInterface $localeDate = null
     ) {
         $this->resource = $resource;
         $this->connection = $resource->getConnection();
@@ -231,6 +241,8 @@ class IndexBuilder
         );
         $this->tableSwapper = $tableSwapper ??
             ObjectManager::getInstance()->get(TableSwapper::class);
+        $this->localeDate = $localeDate ??
+            ObjectManager::getInstance()->get(TimezoneInterface::class);
     }
 
     /**
@@ -389,7 +401,9 @@ class IndexBuilder
      * @param Rule $rule
      * @param int $productEntityId
      * @param array $websiteIds
+     *
      * @return void
+     * @throws \Exception
      */
     private function assignProductToRule(Rule $rule, int $productEntityId, array $websiteIds): void
     {
@@ -404,9 +418,6 @@ class IndexBuilder
         );
 
         $customerGroupIds = $rule->getCustomerGroupIds();
-        $fromTime = strtotime($rule->getFromDate());
-        $toTime = strtotime($rule->getToDate());
-        $toTime = $toTime ? $toTime + self::SECONDS_IN_DAY - 1 : 0;
         $sortOrder = (int)$rule->getSortOrder();
         $actionOperator = $rule->getSimpleAction();
         $actionAmount = $rule->getDiscountAmount();
@@ -414,6 +425,16 @@ class IndexBuilder
 
         $rows = [];
         foreach ($websiteIds as $websiteId) {
+            $scopeTz = new \DateTimeZone(
+                $this->localeDate->getConfigTimezone(ScopeInterface::SCOPE_WEBSITE, $websiteId)
+            );
+            $fromTime = $rule->getFromDate()
+                ? (new DateTime($rule->getFromDate(), $scopeTz))->getTimestamp()
+                : 0;
+            $toTime = $rule->getToDate()
+                ? (new DateTime($rule->getToDate(), $scopeTz))->getTimestamp() + IndexBuilder::SECONDS_IN_DAY - 1
+                : 0;
+
             foreach ($customerGroupIds as $customerGroupId) {
                 $rows[] = [
                     'rule_id' => $ruleId,
