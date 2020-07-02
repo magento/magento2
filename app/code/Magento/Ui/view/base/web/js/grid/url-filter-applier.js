@@ -41,11 +41,12 @@ define([
                 setTimeout(function () {
                     this.apply();
                 }.bind(this), 100);
-            } else {
-                if (Object.keys(urlFilter).length) {
-                    this.filterComponent().setData(urlFilter, false);
-                    this.filterComponent().apply();
-                }
+
+                return;
+            }
+            if (Object.keys(urlFilter).length) {
+                this.filterComponent().setData(urlFilter, false);
+                this.filterComponent().apply();
             }
         },
 
@@ -55,17 +56,18 @@ define([
          * @returns {Object}
          */
         getFilterParam: function (url) {
-            var searchString = decodeURI(url);
+            var searchString = decodeURI(url),
+                itemArray;
 
             return _.chain(searchString.slice(1).split('&'))
                 .map(function (item) {
                     if (item && item.search(this.filterKey) !== -1) {
-                        var itemArray = item.split('=');
+                        itemArray = item.split('=');
 
                         itemArray[0] = itemArray[0].replace(this.filterKey, '')
                                 .replace(/[\[\]]/g, '');
 
-                        return itemArray
+                        return itemArray;
                     }
                 }.bind(this))
                 .compact()
