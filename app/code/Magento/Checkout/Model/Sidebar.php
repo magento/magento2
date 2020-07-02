@@ -99,6 +99,9 @@ class Sidebar
     public function removeQuoteItem($itemId)
     {
         $this->cart->removeItem($itemId);
+        // Totals MUST be recollected after removal of the item.
+        // Otherwise there may be data inconsistencies in the quote.
+        $this->cart->getQuote()->setTotalsCollectedFlag(false);
         $this->cart->save();
         return $this;
     }

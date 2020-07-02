@@ -133,6 +133,21 @@ class SidebarTest extends TestCase
             ->method('removeItem')
             ->with($itemId)
             ->willReturnSelf();
+        $quoteMock = $this->getMockBuilder(Quote::class)
+            ->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'setTotalsCollectedFlag'
+                ]
+            )
+            ->getMock();
+        $quoteMock->expects($this->once())
+            ->method('setTotalsCollectedFlag')
+            ->with(false)
+            ->willReturnSelf();
+        $this->cartMock->expects($this->once())
+            ->method('getQuote')
+            ->willReturn($quoteMock);
         $this->cartMock->expects($this->once())
             ->method('save')
             ->willReturnSelf();
