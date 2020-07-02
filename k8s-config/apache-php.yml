@@ -26,7 +26,7 @@ spec:
     name: magento
   minReplicas: 1
   maxReplicas: 7
-  targetCPUUtilizationPercentage: 75
+  targetCPUUtilizationPercentage: 60
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -98,11 +98,11 @@ spec:
               name: apache
           resources:
             requests:
-              memory: "128Mi"
-              cpu: "200m"
+              memory: "64Mi"
+              cpu: "100m"
             limits:
-              memory: "128Mi"
-              cpu: "250m"
+              memory: "64Mi"
+              cpu: "200m"
           volumeMounts:
           - mountPath: /var/www/html/pub
             name: magento-pub-volume
@@ -130,10 +130,10 @@ spec:
           resources:
             requests:
               memory: "1Gi"
-              cpu: "500m"
+              cpu: "200m"
             limits:
               memory: "1Gi"
-              cpu: "500m"
+              cpu: "300m"
           ports:
             - containerPort: 9000
               name: php
