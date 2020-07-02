@@ -29,7 +29,6 @@ class ConfigProvider implements ArgumentInterface
 
     /**
      * @param ScopeConfigInterface $scopeConfig
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig
