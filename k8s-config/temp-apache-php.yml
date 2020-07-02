@@ -26,7 +26,7 @@ spec:
     name: magento
   minReplicas: 1
   maxReplicas: 7
-  targetCPUUtilizationPercentage: 75
+  targetCPUUtilizationPercentage: 65
 ---
 apiVersion: networking.k8s.io/v1beta1
 kind: Ingress
@@ -76,7 +76,7 @@ spec:
         fsGroup: 82
       initContainers:
         - name: setup-pub-dir
-          image: eu.gcr.io/magento2-269418/magento2-php72:399
+          image: eu.gcr.io/magento2-269418/magento2-php72:402
           securityContext:
             runAsUser: 0
           volumeMounts:
@@ -91,18 +91,18 @@ spec:
             requests:
               cpu: "500m"
       containers:
-        - image: eu.gcr.io/magento2-269418/magento2-apache24:399
+        - image: eu.gcr.io/magento2-269418/magento2-apache24:402
           name: apache
           ports:
             - containerPort: 80
               name: apache
           resources:
             requests:
-              memory: "256Mi"
-              cpu: "300m"
+              memory: "64Mi"
+              cpu: "150m"
             limits:
-              memory: "256Mi"
-              cpu: "350m"
+              memory: "64Mi"
+              cpu: "200m"
           volumeMounts:
           - mountPath: /var/www/html/pub
             name: magento-pub-volume
@@ -121,19 +121,32 @@ spec:
             failureThreshold: 1
             periodSeconds: 50
             timeoutSeconds: 3
-        - image: eu.gcr.io/magento2-269418/magento2-php72:399
+        - image: eu.gcr.io/magento2-269418/magento2-php72:402
           lifecycle:
             postStart:
               exec:
                 command: ["/bin/sh", "-c", "/var/www/html/post.sh"]
           name: php
+          livenessProbe:
+            exec:
+              command:
+                - php-fpm-healthcheck
+                - --listen-queue=10 # fails if there are more than 10 processes waiting in the fpm queue
+            initialDelaySeconds: 0
+            periodSeconds: 10
+          readinessProbe:
+            exec:
+              command:
+                - php-fpm-healthcheck # a simple ping since this means it's ready to handle traffic
+            initialDelaySeconds: 1
+            periodSeconds: 5
           resources:
             requests:
               memory: "1Gi"
-              cpu: "500m"
+              cpu: "250m"
             limits:
               memory: "1Gi"
-              cpu: "500m"
+              cpu: "300m"
           ports:
             - containerPort: 9000
               name: php
