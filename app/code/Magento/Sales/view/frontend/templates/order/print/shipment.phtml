@@ -6,14 +6,17 @@
 ?>
 <?php /* @var $block \Magento\Sales\Block\Order\PrintOrder\Shipment */ ?>
 <?php $order = $block->getOrder(); ?>
-<?php if (!$block->getObjectData($order, 'is_virtual')) : ?>
-    <?php foreach ($block->getShipmentsCollection() as $shipment) : ?>
+<?php if (!$block->getObjectData($order, 'is_virtual')): ?>
+    <?php foreach ($block->getShipmentsCollection() as $shipment): ?>
         <div class="order-details-items shipments">
             <div class="order-title">
-                <strong><?= $block->escapeHtml(__('Shipment #%1', $block->getObjectData($shipment, 'increment_id'))) ?></strong>
+                <strong>
+                    <?= $block->escapeHtml(__('Shipment #%1', $block->getObjectData($shipment, 'increment_id'))) ?>
+                </strong>
             </div>
             <div class="table-wrapper order-items-shipment">
-                <table class="data table table-order-items shipment" id="my-shipment-table-<?= (int) $block->getObjectData($shipment, 'id') ?>">
+                <table class="data table table-order-items shipment"
+                       id="my-shipment-table-<?= (int) $block->getObjectData($shipment, 'id') ?>">
                     <caption class="table-caption"><?= $block->escapeHtml(__('Items Invoiced')) ?></caption>
                     <thead>
                     <tr>
@@ -22,7 +25,7 @@
                         <th class="col price"><?= $block->escapeHtml(__('Qty Shipped')) ?></th>
                     </tr>
                     </thead>
-                    <?php foreach ($block->getShipmentItems($shipment) as $item) : ?>
+                    <?php foreach ($block->getShipmentItems($shipment) as $item): ?>
                         <tbody>
                             <?= $block->getItemHtml($item) ?>
                         </tbody>
@@ -53,25 +56,33 @@
                         </thead>
                         <tbody class="block-content">
                         <tr>
-                            <td data-th="<?= $block->escapeHtml(__('Shipping Address')) ?>">
+                            <td data-th="<?= $block->escapeHtml(__('Shipping Address')) ?>"
+                                class="order-shipping-address">
                                 <address><?= $block->getShipmentAddressFormattedHtml($shipment) ?></address>
                             </td>
-                            <td data-th="<?= $block->escapeHtml(__('Shipping Method')) ?>">
+                            <td data-th="<?= $block->escapeHtml(__('Shipping Method')) ?>"
+                                class="order-shipping-method">
                                 <?= $block->escapeHtml($block->getObjectData($order, 'shipping_description')) ?>
                                 <?php $tracks = $block->getShipmentTracks($shipment);
-                                if ($tracks) : ?>
+                                if ($tracks): ?>
                                     <dl class="order-tracking">
-                                        <?php foreach ($tracks as $track) : ?>
-                                            <dt class="tracking-title"><?= $block->escapeHtml($block->getObjectData($track, 'title')) ?></dt>
-                                            <dd class="tracking-content"><?= $block->escapeHtml($block->getObjectData($track, 'number')) ?></dd>
+                                        <?php foreach ($tracks as $track): ?>
+                                            <dt class="tracking-title">
+                                                <?= $block->escapeHtml($block->getObjectData($track, 'title')) ?>
+                                            </dt>
+                                            <dd class="tracking-content">
+                                                <?= $block->escapeHtml($block->getObjectData($track, 'number')) ?>
+                                            </dd>
                                         <?php endforeach; ?>
                                     </dl>
                                 <?php endif; ?>
                             </td>
-                            <td data-th="<?= $block->escapeHtml(__('Billing Address')) ?>">
+                            <td data-th="<?= $block->escapeHtml(__('Billing Address')) ?>"
+                                class="order-billing-address">
                                 <address><?= $block->getBillingAddressFormattedHtml($order) ?></address>
                             </td>
-                            <td class="box-content" data-th="<?= $block->escapeHtml(__('Payment Method')) ?>">
+                            <td data-th="<?= $block->escapeHtml(__('Payment Method')) ?>"
+                                class="order-payment-method">
                                 <?= $block->getPaymentInfoHtml() ?>
                             </td>
                         </tr>

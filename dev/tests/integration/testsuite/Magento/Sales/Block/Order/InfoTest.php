@@ -110,9 +110,7 @@ class InfoTest extends TestCase
             1,
             Xpath::getElementsCountForXpath(
                 sprintf(
-                    "//div[contains(@class, 'box-order-shipping-method') and contains(.//span, '%s')]"
-                    . "//div[contains(text(), '%s')]",
-                    __('Shipping Method'),
+                    "//td[contains(@class, 'order-shipping-method') and contains(text(), '%s')]",
                     $order->getShippingDescription()
                 ),
                 $blockHtml
@@ -130,7 +128,7 @@ class InfoTest extends TestCase
      */
     private function assertOrderAddress(OrderAddressInterface $address, string $html): void
     {
-        $addressBoxXpath = sprintf("//div[contains(@class, 'box-order-%s-address')]", $address->getAddressType())
+        $addressBoxXpath = sprintf("//td[contains(@class, 'order-%s-address')]", $address->getAddressType())
             . "//address[contains(., '%s')]";
         $this->assertEquals(
             1,

@@ -183,7 +183,7 @@ class InvoiceTest extends TestCase
             __('Order Information') . ' title wasn\'t found.'
         );
         foreach ([$order->getShippingAddress(), $order->getBillingAddress()] as $address) {
-            $addressBoxXpath = sprintf("//div[contains(@class, 'box-order-%s-address')]", $address->getAddressType())
+            $addressBoxXpath = sprintf("//td[contains(@class, 'order-%s-address')]", $address->getAddressType())
                 . "//address[contains(., '%s')]";
             $this->assertEquals(
                 1,
@@ -214,9 +214,7 @@ class InvoiceTest extends TestCase
             1,
             Xpath::getElementsCountForXpath(
                 sprintf(
-                    "//div[contains(@class, 'box-order-shipping-method') and contains(.//strong, '%s')]"
-                    . "//div[contains(text(), '%s')]",
-                    __('Shipping Method'),
+                    "//td[contains(@class, 'order-shipping-method') and contains(text(), '%s')]",
                     $order->getShippingDescription()
                 ),
                 $html

@@ -14,7 +14,7 @@
         <table class="data">
             <thead>
             <tr>
-                <?php if (!$_order->getIsVirtual()) : ?>
+                <?php if (!$_order->getIsVirtual()): ?>
                     <th>
                         <strong class="box-title">
                             <span><?= $block->escapeHtml(__('Shipping Address')) ?></span>
@@ -40,22 +40,24 @@
             </thead>
             <tbody class="block-content">
             <tr>
-                <?php if (!$_order->getIsVirtual()) : ?>
-                    <td data-th="<?= $block->escapeHtml(__('Shipping Address')) ?>" class="box-content order-shipping-address">
-                        <address><?= /* @noEscape */ $block->getFormattedAddress($_order->getShippingAddress()) ?></address>
+                <?php if (!$_order->getIsVirtual()): ?>
+                    <td data-th="<?= $block->escapeHtml(__('Shipping Address')) ?>" class="order-shipping-address">
+                        <address>
+                            <?= /* @noEscape */ $block->getFormattedAddress($_order->getShippingAddress()) ?>
+                        </address>
                     </td>
-                    <td data-th="<?= $block->escapeHtml(__('Shipping Method')) ?>" class="box-content order-shipping-method">
-                        <?php if ($_order->getShippingDescription()) : ?>
+                    <td data-th="<?= $block->escapeHtml(__('Shipping Method')) ?>" class="order-shipping-method">
+                        <?php if ($_order->getShippingDescription()):?>
                             <?= $block->escapeHtml($_order->getShippingDescription()) ?>
-                        <?php else : ?>
+                        <?php else: ?>
                             <?= $block->escapeHtml(__('No shipping information available')) ?>
                         <?php endif ?>
                     </td>
                 <?php endif ?>
-                <td data-th="<?= $block->escapeHtml(__('Billing Address')) ?>" class="box-content order-billing-address">
+                <td data-th="<?= $block->escapeHtml(__('Billing Address')) ?>" class="order-billing-address">
                     <address><?= /* @noEscape */ $block->getFormattedAddress($_order->getBillingAddress()) ?></address>
                 </td>
-                <td data-th="<?= $block->escapeHtml(__('Payment Method')) ?>" class="box-content order-payment-method">
+                <td data-th="<?= $block->escapeHtml(__('Payment Method')) ?>" class="order-payment-method">
                     <?= $block->getPaymentInfoHtml() ?>
                 </td>
             </tr>

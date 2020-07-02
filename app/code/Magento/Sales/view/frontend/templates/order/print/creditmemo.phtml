@@ -6,12 +6,12 @@
 ?>
 <?php $_order = $block->getOrder() ?>
 <?php $_creditmemo = $block->getCreditmemo() ?>
-<?php if ($_creditmemo) : ?>
+<?php if ($_creditmemo): ?>
     <?php $_creditmemos = [$_creditmemo]; ?>
-<?php else : ?>
+<?php else: ?>
     <?php $_creditmemos = $_order->getCreditmemosCollection() ?>
 <?php endif; ?>
-<?php foreach ($_creditmemos as $_creditmemo) : ?>
+<?php foreach ($_creditmemos as $_creditmemo): ?>
 <div class="order-details-items creditmemo">
     <div class="order-title">
         <strong><?= $block->escapeHtml(__('Refund #%1', $_creditmemo->getIncrementId())) ?></strong>
@@ -31,8 +31,8 @@
                 </tr>
             </thead>
             <?php $_items = $_creditmemo->getAllItems(); ?>
-            <?php foreach ($_items as $_item) : ?>
-                <?php if (!$_item->getOrderItem()->getParentItem()) : ?>
+            <?php foreach ($_items as $_item): ?>
+                <?php if (!$_item->getOrderItem()->getParentItem()): ?>
                     <tbody>
                         <?= $block->getItemHtml($_item) ?>
                     </tbody>
@@ -51,7 +51,7 @@
             <table class="data table">
                 <thead>
                 <tr>
-                    <?php if (!$_order->getIsVirtual()) : ?>
+                    <?php if (!$_order->getIsVirtual()): ?>
                         <th>
                             <span><?= $block->escapeHtml(__('Shipping Address')) ?></span>
                         </th>
@@ -69,24 +69,30 @@
                 </thead>
                 <tbody class="block-content">
                 <tr>
-                    <?php if (!$_order->getIsVirtual()) : ?>
-                        <td data-th="<?= $block->escapeHtml(__('Shipping Address')) ?>">
+                    <?php if (!$_order->getIsVirtual()): ?>
+                        <td data-th="<?= $block->escapeHtml(__('Shipping Address')) ?>"
+                            class="order-shipping-address">
                             <?php $_shipping = $_creditmemo->getShippingAddress() ?>
                             <address><?= /* @noEscape */ $block->formatAddress($_shipping, 'html') ?></address>
                         </td>
-                        <td data-th="<?= $block->escapeHtml(__('Shipping Method')) ?>">
-                            <?php if ($_order->getShippingDescription()) : ?>
+                        <td data-th="<?= $block->escapeHtml(__('Shipping Method')) ?>"
+                            class="order-shipping-method">
+                            <?php if ($_order->getShippingDescription()): ?>
                                 <?= $block->escapeHtml($_order->getShippingDescription()) ?>
-                            <?php else : ?>
+                            <?php else: ?>
                                 <?= $block->escapeHtml(__('No shipping information available')) ?>
                             <?php endif; ?>
                         </td>
                     <?php endif ?>
-                    <td data-th="<?= $block->escapeHtml(__('Billing Address')) ?>">
+                    <td data-th="<?= $block->escapeHtml(__('Billing Address')) ?>"
+                        class="order-billing-address">
                         <?php $_billing = $_creditmemo->getbillingAddress() ?>
-                        <address><?= /* @noEscape */ $block->formatAddress($_order->getBillingAddress(), 'html') ?></address>
+                        <address>
+                            <?= /* @noEscape */ $block->formatAddress($_order->getBillingAddress(), 'html') ?>
+                        </address>
                     </td>
-                    <td class="box-content" data-th="<?= $block->escapeHtml(__('Payment Method')) ?>">
+                    <td data-th="<?= $block->escapeHtml(__('Payment Method')) ?>"
+                        class="order-payment-method">
                         <?= $block->getPaymentInfoHtml() ?>
                     </td>
                 </tr>

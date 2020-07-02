@@ -150,8 +150,8 @@ class ShipmentTest extends TestCase
         );
         foreach ([$order->getShippingAddress(), $order->getBillingAddress()] as $address) {
             $addressBoxXpath = ($address->getAddressType() == 'shipping')
-                ? "//div[contains(@class, 'box-order-shipping-address')]//address[contains(., '%s')]"
-                : "//div[contains(@class, 'box-order-billing-method')]//address[contains(., '%s')]";
+                ? "//td[contains(@class, 'order-shipping-address')]//address[contains(., '%s')]"
+                : "//td[contains(@class, 'order-billing-address')]//address[contains(., '%s')]";
             $this->assertEquals(
                 1,
                 Xpath::getElementsCountForXpath(sprintf($addressBoxXpath, $address->getName()), $html),
@@ -181,9 +181,7 @@ class ShipmentTest extends TestCase
             1,
             Xpath::getElementsCountForXpath(
                 sprintf(
-                    "//div[contains(@class, 'box-order-shipping-method') and contains(.//strong, '%s')]"
-                    . "//div[contains(text(), '%s')]",
-                    __('Shipping Method'),
+                    "//td[contains(@class, 'order-shipping-method') and contains(text(), '%s')]",
                     $order->getShippingDescription()
                 ),
                 $html
