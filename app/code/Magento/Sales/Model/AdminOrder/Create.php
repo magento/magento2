@@ -662,6 +662,14 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             if (is_numeric($qty)) {
                 $buyRequest->setQty($qty);
             }
+            $productOptions = $orderItem->getProductOptions();
+            if ($productOptions !== null && !empty($productOptions['options'])) {
+                $formattedOptions = [];
+                foreach ($productOptions['options'] as $option) {
+                    $formattedOptions[$option['option_id']] = $option['option_value'];
+                }
+                $buyRequest->setData('options', $formattedOptions);
+            }
             $item = $this->getQuote()->addProduct($product, $buyRequest);
             if (is_string($item)) {
                 return $item;
