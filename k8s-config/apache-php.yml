@@ -86,7 +86,13 @@ spec:
           - mountPath: /var/www/html/var
             name: magento-var-volume
             subPath: var
-          command: ["/bin/sh", "-c", "chmod -R 0777 /var/www/html/pub; chmod -R 0775 /var/www/html/var; chgrp -R 82 /var/www/html/pub /var/www/html/var;"] 
+          command: ["/bin/sh"]
+          args: 
+            - -c
+            - | 
+              chmod -R 0777 /var/www/html/pub; 
+              chmod -R 0775 /var/www/html/var; 
+              chgrp -R 82 /var/www/html/pub /var/www/html/var; 
           resources:
             requests:
               cpu: "500m"

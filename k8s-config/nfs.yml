@@ -92,9 +92,9 @@ spec:
             containerPort: 111 
         resources:
           requests:
-            cpu: 1 # 500 millicpus
+            cpu: 3
           limits:
-            cpu: 1    # 1 cpu
+            cpu: 3 
         volumeMounts:
           - mountPath: /data
             name: nfs-pvc
