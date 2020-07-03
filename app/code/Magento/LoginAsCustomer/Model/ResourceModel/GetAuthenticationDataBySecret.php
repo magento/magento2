@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Model\ResourceModel;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Exception\LocalizedException;
@@ -21,11 +22,6 @@ use Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface;
  */
 class GetAuthenticationDataBySecret implements GetAuthenticationDataBySecretInterface
 {
-    /**
-     * @var EncryptorInterface
-     */
-    private $encryptor;
-
     /**
      * @var ResourceConnection
      */
@@ -47,24 +43,29 @@ class GetAuthenticationDataBySecret implements GetAuthenticationDataBySecretInte
     private $authenticationDataFactory;
 
     /**
-     * @param EncryptorInterface $encryptor
+     * @var EncryptorInterface
+     */
+    private $encryptor;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param DateTime $dateTime
      * @param ConfigInterface $config
      * @param AuthenticationDataInterfaceFactory $authenticationDataFactory
+     * @param EncryptorInterface|null $encryptor
      */
     public function __construct(
-        EncryptorInterface $encryptor,
         ResourceConnection $resourceConnection,
         DateTime $dateTime,
         ConfigInterface $config,
-        AuthenticationDataInterfaceFactory $authenticationDataFactory
+        AuthenticationDataInterfaceFactory $authenticationDataFactory,
+        ?EncryptorInterface $encryptor = null
     ) {
-        $this->encryptor = $encryptor;
         $this->resourceConnection = $resourceConnection;
         $this->dateTime = $dateTime;
         $this->config = $config;
         $this->authenticationDataFactory = $authenticationDataFactory;
+        $this->encryptor = $encryptor ?? ObjectManager::getInstance()->get(EncryptorInterface::class);
     }
 
     /**

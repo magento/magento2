@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomer\Model\ResourceModel;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Encryption\EncryptorInterface;
 use Magento\Framework\Math\Random;
@@ -46,15 +47,15 @@ class SaveAuthenticationData implements SaveAuthenticationDataInterface
      * @param Random $random
      */
     public function __construct(
-        EncryptorInterface $encryptor,
         ResourceConnection $resourceConnection,
         DateTime $dateTime,
-        Random $random
+        Random $random,
+        ?EncryptorInterface $encryptor = null
     ) {
-        $this->encryptor = $encryptor;
         $this->resourceConnection = $resourceConnection;
         $this->dateTime = $dateTime;
         $this->random = $random;
+        $this->encryptor = $encryptor ?? ObjectManager::getInstance()->get(EncryptorInterface::class);
     }
 
     /**
