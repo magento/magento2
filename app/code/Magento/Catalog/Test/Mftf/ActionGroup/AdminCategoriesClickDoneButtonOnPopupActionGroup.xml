@@ -8,11 +8,12 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminSubmitCategoriesPopupActionGroup">
+    <actionGroup name="AdminCategoriesClickDoneButtonOnPopupActionGroup">
         <annotations>
             <description>Clicks the "Done" button on the Search Categories popup.</description>
         </annotations>
 
         <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneButton" />
+        <waitForPageLoad stepKey="waitForCategoryApply"/>
     </actionGroup>
 </actionGroups>

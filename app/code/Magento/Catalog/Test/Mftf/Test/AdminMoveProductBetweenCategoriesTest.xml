@@ -76,8 +76,7 @@
         <fillField userInput="{{SimpleSubCategory.name}}" selector="{{AdminProductFormSection.searchCategory}}" stepKey="fillSearch"/>
         <waitForPageLoad stepKey="waitForSubCategory"/>
         <click selector="{{AdminProductFormSection.selectCategory(SimpleSubCategory.name)}}" stepKey="selectSub1Category"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickDone"/>
-        <waitForPageLoad stepKey="waitForApplyCategory"/>
+        <actionGroup ref="AdminCategoriesClickDoneButtonOnPopupActionGroup" stepKey="clickDone"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickSave"/>
         <waitForPageLoad stepKey="waitForSavingChanges"/>
 
@@ -107,8 +106,7 @@
         <click selector="{{AdminProductFormSection.unselectCategories(SimpleSubCategory.name)}}" stepKey="removeCategory"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="openDropDown"/>
         <checkOption selector="{{AdminProductFormSection.selectCategory($$createSecondCategory.name$$)}}" stepKey="selectCategory"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="pressButtonDone"/>
-        <waitForPageLoad stepKey="waitForApplyCategory2"/>
+        <actionGroup ref="AdminCategoriesClickDoneButtonOnPopupActionGroup" stepKey="pressButtonDone"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="pushButtonSave"/>
         <waitForPageLoad stepKey="waitForSavingProduct"/>
 
@@ -179,8 +177,7 @@
         <fillField userInput="{$grabNameSubCategory}" selector="{{AdminProductFormSection.searchCategory}}" stepKey="fillSearchField"/>
         <waitForPageLoad stepKey="waitForSearchSubCategory"/>
         <click selector="{{AdminProductFormSection.selectCategory({$grabNameSubCategory})}}" stepKey="selectSubCategory"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickButtonDone"/>
-        <waitForPageLoad stepKey="waitForCategoryApply"/>
+        <actionGroup ref="AdminCategoriesClickDoneButtonOnPopupActionGroup" stepKey="clickButtonDone"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickButtonSave"/>
         <waitForPageLoad stepKey="waitForSaveChanges"/>
 

@@ -71,11 +71,11 @@
         <actionGroup ref="SetCategoryByNameActionGroup" stepKey="unselectInitialCategory">
             <argument name="categoryName" value="$$rootCategory.name$$"/>
         </actionGroup>
-        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="pressDoneButton"/>
+        <actionGroup ref="AdminCategoriesClickDoneButtonOnPopupActionGroup" stepKey="pressDoneButton"/>
         <actionGroup ref="SetCategoryByNameActionGroup" stepKey="setNewCategory">
             <argument name="categoryName" value="$$category.name$$"/>
         </actionGroup>
-        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneButton"/>
+        <actionGroup ref="AdminCategoriesClickDoneButtonOnPopupActionGroup" stepKey="clickOnDoneButton"/>
         <actionGroup ref="SaveProductFormNoSuccessCheckActionGroup" stepKey="saveProduct"/>
 
         <!-- Verify customer see success message -->
