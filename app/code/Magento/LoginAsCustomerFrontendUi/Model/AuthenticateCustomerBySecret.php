@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\LoginAsCustomer\Model;
+namespace Magento\LoginAsCustomerFrontendUi\Model;
 
 use Magento\Customer\Model\Session;
 use Magento\Framework\Exception\LocalizedException;
