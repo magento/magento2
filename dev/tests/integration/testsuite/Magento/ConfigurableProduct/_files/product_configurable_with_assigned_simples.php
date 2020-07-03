@@ -16,6 +16,7 @@ use Magento\CatalogInventory\Model\Stock\Item;
 use Magento\ConfigurableProduct\Helper\Product\Options\Factory;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Api\Data\AttributeOptionInterface;
+use Magento\Eav\Model\Config;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
@@ -25,6 +26,9 @@ Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/
 
 $installer = Bootstrap::getObjectManager()->create(CategorySetup::class);
 $attributeSetId = $installer->getAttributeSetId('catalog_product', 'Default');
+
+$eavConfig = Bootstrap::getObjectManager()->get(Config::class);
+$attribute = $eavConfig->getAttribute('catalog_product', 'test_configurable');
 
 $product = Bootstrap::getObjectManager()->create(Product::class);
 $product->setTypeId(Configurable::TYPE_CODE)
