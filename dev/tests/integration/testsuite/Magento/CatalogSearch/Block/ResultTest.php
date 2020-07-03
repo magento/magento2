@@ -41,7 +41,12 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $this->configProvider = $this->objectManager->get(ConfigProvider::class);
     }
 
-    public function testSetListOrders()
+    /**
+     * Set list orders test
+     *
+     * @return void
+     */
+    public function testSetListOrders(): void
     {
         $this->layout->addBlock(Text::class, 'head');
         // The tested block is using head block
