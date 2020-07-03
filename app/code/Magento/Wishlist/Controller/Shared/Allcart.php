@@ -16,30 +16,33 @@ use Magento\Framework\Controller\Result\Redirect;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Wishlist\Model\ItemCarrier;
 
+/**
+ * Wishlist Allcart Controller
+ */
 class Allcart extends Action implements HttpGetActionInterface
 {
     /**
-     * @var ItemCarrier
-     */
-    private $itemCarrier;
-
-    /**
      * @var WishlistProvider
      */
-    private $wishlistProvider;
+    protected $wishlistProvider;
+
+    /**
+     * @var ItemCarrier
+     */
+    protected $itemCarrier;
 
     /**
      * @param Context $context
-     * @param ItemCarrier $itemCarrier
      * @param WishlistProvider $wishlistProvider
+     * @param ItemCarrier $itemCarrier
      */
     public function __construct(
         Context $context,
-        ItemCarrier $itemCarrier,
-        WishlistProvider $wishlistProvider
+        WishlistProvider $wishlistProvider,
+        ItemCarrier $itemCarrier
     ) {
-        $this->itemCarrier = $itemCarrier;
         $this->wishlistProvider = $wishlistProvider;
+        $this->itemCarrier = $itemCarrier;
         parent::__construct($context);
     }
 
@@ -61,6 +64,7 @@ class Allcart extends Action implements HttpGetActionInterface
         /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setUrl($redirectUrl);
+
         return $resultRedirect;
     }
 }

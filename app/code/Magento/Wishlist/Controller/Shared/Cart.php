@@ -33,27 +33,27 @@ class Cart extends Action implements HttpGetActionInterface
     /**
      * @var CustomerCart
      */
-    private $cart;
+    protected $cart;
 
     /**
      * @var OptionFactory
      */
-    private $optionFactory;
+    protected $optionFactory;
 
     /**
      * @var ItemFactory
      */
-    private $itemFactory;
+    protected $itemFactory;
 
     /**
      * @var CartHelper
      */
-    private $cartHelper;
+    protected $cartHelper;
 
     /**
      * @var Escaper
      */
-    private $escaper;
+    protected $escaper;
 
     /**
      * @param ActionContext $context
@@ -128,6 +128,7 @@ class Cart extends Action implements HttpGetActionInterface
         /** @var ResultRedirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
         $resultRedirect->setUrl($redirectUrl);
+
         return $resultRedirect;
     }
 }
