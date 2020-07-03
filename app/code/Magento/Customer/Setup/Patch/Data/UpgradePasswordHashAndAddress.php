@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Customer\Setup\Patch\Data;
@@ -42,7 +41,7 @@ class UpgradePasswordHashAndAddress implements DataPatchInterface, PatchVersionI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -57,9 +56,13 @@ class UpgradePasswordHashAndAddress implements DataPatchInterface, PatchVersionI
         ];
         $customerSetup = $this->customerSetupFactory->create(['setup' => $this->moduleDataSetup]);
         $customerSetup->upgradeAttributes($entityAttributes);
+
+        return $this;
     }
 
     /**
+     * Password hash upgrade
+     *
      * @return void
      */
     private function upgradeHash()
@@ -92,7 +95,7 @@ class UpgradePasswordHashAndAddress implements DataPatchInterface, PatchVersionI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -102,7 +105,7 @@ class UpgradePasswordHashAndAddress implements DataPatchInterface, PatchVersionI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -110,7 +113,7 @@ class UpgradePasswordHashAndAddress implements DataPatchInterface, PatchVersionI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

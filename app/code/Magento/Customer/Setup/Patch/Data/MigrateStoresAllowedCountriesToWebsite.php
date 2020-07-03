@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Customer\Setup\Patch\Data;
@@ -53,6 +52,7 @@ class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, Patc
 
     /**
      * @inheritdoc
+     *
      * @throws Exception
      */
     public function apply()
@@ -67,6 +67,8 @@ class MigrateStoresAllowedCountriesToWebsite implements DataPatchInterface, Patc
             $this->moduleDataSetup->getConnection()->rollBack();
             throw $e;
         }
+
+        return $this;
     }
 
     /**

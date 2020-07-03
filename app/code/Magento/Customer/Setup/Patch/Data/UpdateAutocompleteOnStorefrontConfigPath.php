@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Customer\Setup\Patch\Data;
@@ -33,7 +32,7 @@ class UpdateAutocompleteOnStorefrontConfigPath implements DataPatchInterface, Pa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -42,10 +41,12 @@ class UpdateAutocompleteOnStorefrontConfigPath implements DataPatchInterface, Pa
             ['path' => Form::XML_PATH_ENABLE_AUTOCOMPLETE],
             ['path = ?' => 'general/restriction/autocomplete_on_storefront']
         );
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -55,7 +56,7 @@ class UpdateAutocompleteOnStorefrontConfigPath implements DataPatchInterface, Pa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -63,7 +64,7 @@ class UpdateAutocompleteOnStorefrontConfigPath implements DataPatchInterface, Pa
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Customer\Setup\Patch\Data;
@@ -47,7 +46,7 @@ class RemoveCheckoutRegisterAndUpdateAttributes implements DataPatchInterface, P
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -99,10 +98,12 @@ class RemoveCheckoutRegisterAndUpdateAttributes implements DataPatchInterface, P
             'source_model',
             Address\Attribute\Source\Region::class
         );
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -112,7 +113,7 @@ class RemoveCheckoutRegisterAndUpdateAttributes implements DataPatchInterface, P
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -120,7 +121,7 @@ class RemoveCheckoutRegisterAndUpdateAttributes implements DataPatchInterface, P
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

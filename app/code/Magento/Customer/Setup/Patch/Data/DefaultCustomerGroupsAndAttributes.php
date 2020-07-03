@@ -44,7 +44,8 @@ class DefaultCustomerGroupsAndAttributes implements DataPatchInterface, PatchVer
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function apply()
@@ -146,10 +147,12 @@ class DefaultCustomerGroupsAndAttributes implements DataPatchInterface, PatchVer
             ['attribute_id']
         );
         $migrationSetup->doUpdateClassAliases();
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -157,7 +160,7 @@ class DefaultCustomerGroupsAndAttributes implements DataPatchInterface, PatchVer
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -165,7 +168,7 @@ class DefaultCustomerGroupsAndAttributes implements DataPatchInterface, PatchVer
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

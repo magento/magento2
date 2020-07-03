@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Customer\Setup\Patch\Data;
@@ -42,7 +41,7 @@ class AddNonSpecifiedGenderAttributeOption implements DataPatchInterface, PatchV
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -52,10 +51,12 @@ class AddNonSpecifiedGenderAttributeOption implements DataPatchInterface, PatchV
 
         $option = ['attribute_id' => $attributeId, 'values' => [3 => 'Not Specified']];
         $customerSetup->addAttributeOption($option);
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -65,7 +66,7 @@ class AddNonSpecifiedGenderAttributeOption implements DataPatchInterface, PatchV
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -73,7 +74,7 @@ class AddNonSpecifiedGenderAttributeOption implements DataPatchInterface, PatchV
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

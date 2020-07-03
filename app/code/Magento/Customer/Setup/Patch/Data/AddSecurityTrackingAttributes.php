@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Customer\Setup\Patch\Data;
@@ -42,7 +41,7 @@ class AddSecurityTrackingAttributes implements DataPatchInterface, PatchVersionI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -93,12 +92,14 @@ class AddSecurityTrackingAttributes implements DataPatchInterface, PatchVersionI
         $this->moduleDataSetup->getConnection()->update(
             $configTable,
             ['value' => new \Zend_Db_Expr('value*24')],
-            ['path = ?' => \Magento\Customer\Model\Customer::XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD]
+            ['path = ?' => Customer::XML_PATH_CUSTOMER_RESET_PASSWORD_LINK_EXPIRATION_PERIOD]
         );
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -108,7 +109,7 @@ class AddSecurityTrackingAttributes implements DataPatchInterface, PatchVersionI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -116,7 +117,7 @@ class AddSecurityTrackingAttributes implements DataPatchInterface, PatchVersionI
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

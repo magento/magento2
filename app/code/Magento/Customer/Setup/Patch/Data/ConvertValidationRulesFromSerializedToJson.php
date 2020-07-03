@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Customer\Setup\Patch\Data;
@@ -42,7 +41,7 @@ class ConvertValidationRulesFromSerializedToJson implements DataPatchInterface, 
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -53,10 +52,12 @@ class ConvertValidationRulesFromSerializedToJson implements DataPatchInterface, 
             'attribute_id',
             'validate_rules'
         );
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -66,7 +67,7 @@ class ConvertValidationRulesFromSerializedToJson implements DataPatchInterface, 
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -74,7 +75,7 @@ class ConvertValidationRulesFromSerializedToJson implements DataPatchInterface, 
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

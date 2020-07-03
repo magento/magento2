@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Customer\Setup\Patch\Data;
@@ -41,7 +40,7 @@ class UpdateCustomerAttributeInputFilters implements DataPatchInterface, PatchVe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -71,10 +70,12 @@ class UpdateCustomerAttributeInputFilters implements DataPatchInterface, PatchVe
             ],
         ];
         $customerSetup->upgradeAttributes($entityAttributes);
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -84,7 +85,7 @@ class UpdateCustomerAttributeInputFilters implements DataPatchInterface, PatchVe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -92,7 +93,7 @@ class UpdateCustomerAttributeInputFilters implements DataPatchInterface, PatchVe
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
