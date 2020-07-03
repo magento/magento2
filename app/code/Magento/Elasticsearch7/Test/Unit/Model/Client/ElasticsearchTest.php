@@ -453,10 +453,18 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'mapping' => [
                                             'type' => 'text',
                                             'index' => true,
-                                            'copy_to' => '_search'
+                                            'copy_to' => '_search',
                                         ],
                                     ],
-                                ]
+                                ],
+                                [
+                                    'integer_mapping' => [
+                                        'match_mapping_type' => 'long',
+                                        'mapping' => [
+                                            'type' => 'integer',
+                                        ],
+                                    ],
+                                ],
                             ],
                         ],
                     ],
@@ -524,10 +532,18 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'mapping' => [
                                             'type' => 'text',
                                             'index' => true,
-                                            'copy_to' => '_search'
+                                            'copy_to' => '_search',
                                         ],
                                     ],
-                                ]
+                                ],
+                                [
+                                    'integer_mapping' => [
+                                        'match_mapping_type' => 'long',
+                                        'mapping' => [
+                                            'type' => 'integer',
+                                        ],
+                                    ],
+                                ],
                             ],
                         ],
                     ],
