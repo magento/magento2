@@ -46,7 +46,7 @@
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage2"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="clickOnCreatedSimpleSubCategory1"/>
         <click selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}" stepKey="setNoToIncludeInMenuSelect"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton1"/>
+        <actionGroup ref="AdminCategorySaveActionGroup" stepKey="clickSaveButton1"/>
         <seeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="seeCheckboxEnableCategoryIsChecked"/>
         <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.IncludeInMenu}}" stepKey="dontSeeCheckboxIncludeInMenuIsChecked"/>
         <!--Go to storefront and verify visibility of categories-->
@@ -58,7 +58,7 @@
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="clickOnCreatedSimpleSubCategory2"/>
         <click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="SetNoToEnableCategorySelect"/>
         <click selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}" stepKey="SetYesToIncludeInMenuSelect"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton2"/>
+        <actionGroup ref="AdminCategorySaveActionGroup" stepKey="clickSaveButton2"/>
         <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="dontSeeCheckboxEnableCategoryIsChecked"/>
         <seeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.IncludeInMenu}}" stepKey="seeCheckboxIncludeInMenuIsChecked"/>
         <!--Go to storefront and verify visibility of categories-->
@@ -69,7 +69,7 @@
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage4"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="clickOnCreatedSimpleSubCategory3"/>
         <click selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}" stepKey="setNoToIncludeInMenuSelect2"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton3"/>
+        <actionGroup ref="AdminCategorySaveActionGroup" stepKey="clickSaveButton3"/>
         <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="dontSeeCheckboxEnableCategoryIsChecked2"/>
         <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.IncludeInMenu}}" stepKey="dontSeeCheckboxIncludeInMenuIsChecked2"/>
         <!--Go to storefront and verify visibility of categories-->

@@ -152,7 +152,7 @@
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree('$$createNewRootCategoryA.name$$')}}" stepKey="clickOnNewRootCategoryA"/>
         <waitForPageLoad stepKey="waitForPageNewRootCategoryALoad" />
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="Default Category" stepKey="enterCategoryNameAsDefaultCategory"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategoryDefaultCategory"/>
+        <actionGroup ref="AdminCategorySaveActionGroup" stepKey="saveCategoryDefaultCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessageAfterSaveDefaultCategory"/>
     </test>
 </tests>

@@ -45,7 +45,7 @@
             <argument name="Category" value="$$simpleSubCategory$$"/>
         </actionGroup>
         <actionGroup ref="AdminEnableCategoryActionGroup" stepKey="enableCategory"/>
-        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
+        <actionGroup ref="AdminCategorySaveActionGroup" stepKey="saveCategory"/>
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="seeSuccessMessage"/>
 
         <!--Run re-index task-->

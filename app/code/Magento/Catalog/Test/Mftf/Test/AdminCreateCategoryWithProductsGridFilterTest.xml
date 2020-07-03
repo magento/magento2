@@ -72,8 +72,7 @@
         <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="{{defaultSimpleProduct.name}}"  stepKey="selectDefaultProduct"/>
         <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton1"/>
         <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectDefaultProductFromTableRow"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="WaitForCategorySaved"/>
+        <actionGroup ref="AdminCategorySaveActionGroup" stepKey="clickSaveButton"/>
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="successMessageYouSavedTheCategory"/>
         <!--Verify product with grid filter is not not visible-->
         <amOnPage url="{{StorefrontProductPage.url(defaultSimpleProduct.urlKey)}}" stepKey="seeOnProductPage"/>

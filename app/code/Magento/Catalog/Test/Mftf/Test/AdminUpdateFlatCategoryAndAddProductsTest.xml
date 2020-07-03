@@ -73,8 +73,7 @@
         <waitForPageLoad stepKey="waitFroPageToLoad1"/>
         <scrollTo  selector="{{AdminCategoryContentSection.productTableRow}}"  stepKey="scrollToTableRow"/>
         <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProductFromTableRow"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory"/>
-        <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
+        <actionGroup ref="AdminCategorySaveActionGroup" stepKey="saveSubCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
         <!--Open Index Management Page and verify flat categoryIndex status-->
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>

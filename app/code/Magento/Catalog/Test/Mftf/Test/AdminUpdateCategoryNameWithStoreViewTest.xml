@@ -65,7 +65,7 @@
             <argument name="category" value="$$category$$"/>
         </actionGroup>
         <actionGroup ref="AdminChangeCategoryNameActionGroup" stepKey="updateCategoryName"/>
-        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
+        <actionGroup ref="AdminCategorySaveActionGroup" stepKey="saveCategory"/>
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
 
         <!--Verify the Category is not present in Store Front-->

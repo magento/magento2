@@ -40,7 +40,7 @@
         <actionGroup ref="AdminCategoriesSetDisplayModeActionGroup" stepKey="setDisplay">
             <argument name="value" value="Static block only"/>
         </actionGroup>
-        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
+        <actionGroup ref="AdminCategorySaveActionGroup" stepKey="saveCategory"/>
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
 
         <actionGroup ref="AssertStorefrontTextOnCategoryPageActionGroup" stepKey="assertBlockOnCategoryFrontPage">

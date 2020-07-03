@@ -7,7 +7,11 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminSaveCategoryActionGroup">
+    <actionGroup name="AdminCategorySaveActionGroup">
+        <annotations>
+            <description>Clicks the "Save" button on the Category page.</description>
+        </annotations>
+
         <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategoryWithProducts"/>
         <waitForPageLoad stepKey="waitForCategorySaved"/>
     </actionGroup>

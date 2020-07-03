@@ -44,7 +44,7 @@
         </actionGroup>
         <actionGroup ref="SaveImageActionGroup" stepKey="insertImage"/>
         <actionGroup ref="FillOutUploadImagePopupActionGroup" stepKey="fillOutUploadImagePopup" />
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCatalog"/>
+        <actionGroup ref="AdminCategorySaveActionGroup" stepKey="saveCatalog"/>
         <amOnPage url="/{{SimpleSubCategory.name_lwr}}.html" stepKey="goToCategoryFrontPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
         <seeElement selector="{{StorefrontCategoryMainSection.mediaDescription(ImageUpload3.content)}}" stepKey="assertMediaDescription"/>
