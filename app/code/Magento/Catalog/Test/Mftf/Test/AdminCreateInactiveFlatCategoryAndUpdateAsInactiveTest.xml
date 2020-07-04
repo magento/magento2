@@ -59,8 +59,7 @@
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(CatNotActive.name)}}" stepKey="selectCreatedCategory"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory"/>
-        <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
         <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{CatNotActive.name}}" stepKey="seeUpdatedCategoryTitle"/>
         <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}"  stepKey="verifyInactiveCategory"/>
