@@ -42,7 +42,7 @@
         <scrollTo selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" x="0" y="-80" stepKey="scrollToDisplaySetting"/>
         <click selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" stepKey="selectDisplaySetting"/>
         <checkOption selector="{{CategoryDisplaySettingsSection.anchor}}" stepKey="enableAnchor"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory"/>
 
         <!--Create a Subcategory under _defaultCategory category-->
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
