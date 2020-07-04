@@ -13,7 +13,11 @@ RUN docker-php-ext-configure gd --with-png-dir=/usr/include/ \
                                    --with-freetype-dir=/usr/inlcude/ \
  && docker-php-ext-configure zip --with-libzip \
  && docker-php-ext-install mysqli bcmath gd pdo_mysql soap xsl zip intl opcache \
- && docker-php-ext-enable xdebug;
+ && docker-php-ext-enable xdebug \
+ && npm install -g grunt-cli \
+ && curl -sS https://getcomposer.org/installer | php \
+ && mv composer.phar /usr/local/bin/composer \
+ && rm -rf /var/cache/* /tmp/* /var/tmp/* 
 COPY xdebug.ini /usr/local/etc/php/conf.d/docker-php-ext-xdebug.ini
 COPY memory-limit-php.ini /usr/local/etc/php/conf.d/memory-limit-php.ini
 COPY max-input-vars-php.ini /usr/local/etc/php/conf.d/max-input-vars-php.ini
