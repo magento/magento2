@@ -53,8 +53,7 @@
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="updateredirecturl" stepKey="updateUrlKey"/>
         <checkOption selector="{{AdminCategorySEOSection.UrlKeyRedirectCheckbox}}" stepKey="checkPermanentRedirectCheckBox"/>
         <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="selectSearchEngineOptimization1"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveUpdatedCategory"/>
-        <waitForPageLoad stepKey="waitForCategoryToSave"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveUpdatedCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
 
         <!-- Get Category ID -->

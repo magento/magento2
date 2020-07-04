@@ -165,6 +165,7 @@
             <scrollToTopOfPage stepKey="scrollToTop"/>
             <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveTaxOptions"/>
             <waitForPageLoad stepKey="waitForTaxSaved"/>
+
             <see userInput="You saved the configuration." selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccess"/>
 
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
