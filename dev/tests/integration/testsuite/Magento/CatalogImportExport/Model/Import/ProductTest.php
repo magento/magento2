@@ -3196,4 +3196,29 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
         }
         $this->assertEquals($linksData, $importedProductLinks);
     }
+
+    /**
+     * Tests that image name does not have to be prefixed by slash
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
+     */
+    public function testUpdateImageByNameNotPrefixedWithSlash()
+    {
+        $expectedLabelForDefaultStoreView = 'image label updated';
+        $expectedImageFile = '/m/a/magento_image.jpg';
+        $secondStoreCode = 'fixturestore';
+        $productSku = 'simple';
+        $this->importDataForMediaTest('import_image_name_without_slash.csv');
+        $product = $this->getProductBySku($productSku);
+        $imageItems = $product->getMediaGalleryImages()->getItems();
+        $this->assertCount(1, $imageItems);
+        $imageItem = array_shift($imageItems);
+        $this->assertEquals($expectedImageFile, $imageItem->getFile());
+        $this->assertEquals($expectedLabelForDefaultStoreView, $imageItem->getLabel());
+        $product = $this->getProductBySku($productSku, $secondStoreCode);
+        $imageItems = $product->getMediaGalleryImages()->getItems();
+        $this->assertCount(0, $imageItems);
+    }
 }
