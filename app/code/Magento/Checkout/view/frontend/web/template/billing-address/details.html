@@ -7,6 +7,9 @@
 <div if="isAddressDetailsVisible() && currentBillingAddress()" class="billing-address-details">
     <text args="currentBillingAddress().prefix"/> <text args="currentBillingAddress().firstname"/> <text args="currentBillingAddress().middlename"/>
     <text args="currentBillingAddress().lastname"/> <text args="currentBillingAddress().suffix"/><br/>
+    <if args="currentBillingAddress().company">
+        <text args="currentBillingAddress().company"/><br/>
+    </if>
     <text args="_.values(currentBillingAddress().street).join(', ')"/><br/>
     <text args="currentBillingAddress().city "/>, <span text="currentBillingAddress().region"></span> <text args="currentBillingAddress().postcode"/><br/>
     <text args="getCountryName(currentBillingAddress().countryId)"/><br/>
