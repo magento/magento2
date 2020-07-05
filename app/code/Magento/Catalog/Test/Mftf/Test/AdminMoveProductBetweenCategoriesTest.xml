@@ -76,7 +76,7 @@
         <fillField userInput="{{SimpleSubCategory.name}}" selector="{{AdminProductFormSection.searchCategory}}" stepKey="fillSearch"/>
         <waitForPageLoad stepKey="waitForSubCategory"/>
         <click selector="{{AdminProductFormSection.selectCategory(SimpleSubCategory.name)}}" stepKey="selectSub1Category"/>
-        <actionGroup ref="AdminCategoriesClickDoneButtonOnPopupActionGroup" stepKey="clickDone"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickDone"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickSave"/>
         <waitForPageLoad stepKey="waitForSavingChanges"/>
 
@@ -106,7 +106,7 @@
         <click selector="{{AdminProductFormSection.unselectCategories(SimpleSubCategory.name)}}" stepKey="removeCategory"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="openDropDown"/>
         <checkOption selector="{{AdminProductFormSection.selectCategory($$createSecondCategory.name$$)}}" stepKey="selectCategory"/>
-        <actionGroup ref="AdminCategoriesClickDoneButtonOnPopupActionGroup" stepKey="pressButtonDone"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="pressButtonDone"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="pushButtonSave"/>
         <waitForPageLoad stepKey="waitForSavingProduct"/>
 
@@ -177,7 +177,7 @@
         <fillField userInput="{$grabNameSubCategory}" selector="{{AdminProductFormSection.searchCategory}}" stepKey="fillSearchField"/>
         <waitForPageLoad stepKey="waitForSearchSubCategory"/>
         <click selector="{{AdminProductFormSection.selectCategory({$grabNameSubCategory})}}" stepKey="selectSubCategory"/>
-        <actionGroup ref="AdminCategoriesClickDoneButtonOnPopupActionGroup" stepKey="clickButtonDone"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickButtonDone"/>
         <click selector="{{AdminProductFormSection.save}}" stepKey="clickButtonSave"/>
         <waitForPageLoad stepKey="waitForSaveChanges"/>
 
