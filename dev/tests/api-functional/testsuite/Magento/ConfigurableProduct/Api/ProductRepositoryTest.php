@@ -229,7 +229,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertArrayHasKey('attribute_id', $configurableProductOption);
         $this->assertEquals($configurableAttribute->getId(), $configurableProductOption['attribute_id']);
         $this->assertArrayHasKey('values', $configurableProductOption);
-        $this->assertEquals($attributeValue, $configurableAttribute['values'][0]['value_index']);
+        $this->assertEquals($attributeValue, $configurableProductOption['values'][0]['value_index']);
     }
 
     /**
