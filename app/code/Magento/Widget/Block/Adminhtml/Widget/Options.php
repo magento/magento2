@@ -158,6 +158,10 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
             $data['value'] = $parameter->getValue();
         }
 
+        if ($parameter->getType() == 'text' && $data['value'] != '') {
+            $data['value'] = $this->_widget->decodeReservedChars($data['value']);
+        }
+
         //prepare unique id value
         if ($fieldName == 'unique_id' && $data['value'] == '') {
             $data['value'] = hash('sha256', microtime(1));

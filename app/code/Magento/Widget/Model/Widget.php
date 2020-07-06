@@ -478,6 +478,24 @@ class Widget
     }
 
     /**
+     * @param $string
+     * @return array
+     */
+    public function decodeReservedChars($string)
+    {
+        $map = [
+            '{' => urlencode('{'),
+            '}' => urlencode('}')
+        ];
+
+        return str_replace(
+            array_values($map),
+            array_keys($map),
+            $string
+        );
+    }
+
+    /**
      * @param $widget
      * @param $name
      * @return bool
