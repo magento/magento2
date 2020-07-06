@@ -71,7 +71,7 @@
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$0.90" stepKey="seeCorrectPrice2"/>
 
         <!-- Delete the rule -->
-        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
+        <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage"/>
         <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
             <argument name="name" value="{{_defaultCatalogRule.name}}"/>
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
