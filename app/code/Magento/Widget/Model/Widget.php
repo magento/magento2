@@ -304,6 +304,8 @@ class Widget
             if ($name == 'conditions') {
                 $name = 'conditions_encoded';
                 $value = $this->conditionsHelper->encode($value);
+            } elseif ($this->isTextType($widget, $name)) {
+                $value = $this->encodeReservedChars($value);
             } elseif (is_array($value)) {
                 $value = implode(',', $value);
             } elseif (trim($value) == '') {
@@ -455,5 +457,42 @@ class Widget
         $aOrder = (int)$firstElement->getData('sort_order');
         $bOrder = (int)$secondElement->getData('sort_order');
         return $aOrder < $bOrder ? -1 : ($aOrder > $bOrder ? 1 : 0);
+    }
+
+    /**
+     * @param $string
+     * @return string|string[]
+     */
+    private function encodeReservedChars($string)
+    {
+        $map = [
+            '{' => urlencode('{'),
+            '}' => urlencode('}')
+        ];
+
+        return str_replace(
+            array_keys($map),
+            array_values($map),
+            $string
+        );
+    }
+
+    /**
+     * @param $widget
+     * @param $name
+     * @return bool
+     */
+    private function isTextType($widget, $name)
+    {
+        $parameters = $widget->getParameters();
+
+        if (isset($parameters[$name]) && is_object($parameters[$name])) {
+            $type = $parameters[$name]->getType();
+            if ($type == 'text') {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
