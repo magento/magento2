@@ -368,14 +368,20 @@ abstract class AbstractAction
         $productsTypes = $this->getProductsTypes($changedIds);
         $parentProductsTypes = $this->getParentProductsTypes($changedIds);
 
-        $changedIds = array_merge($changedIds, ...array_values($parentProductsTypes));
+        $changedIds = array_unique(array_merge($changedIds, ...array_values($parentProductsTypes)));
         $productsTypes = array_merge_recursive($productsTypes, $parentProductsTypes);
 
         if ($changedIds) {
             $this->deleteIndexData($changedIds);
         }
-        foreach ($productsTypes as $productType => $entityIds) {
-            $indexer = $this->_getIndexer($productType);
+
+        $typeIndexers = $this->getTypeIndexers();
+        foreach ($typeIndexers as $productType => $indexer) {
+            $entityIds = $productsTypes[$productType] ?? [];
+            if (empty($entityIds)) {
+                continue;
+            }
+
             if ($indexer instanceof DimensionalIndexerInterface) {
                 foreach ($this->dimensionCollectionFactory->create() as $dimensions) {
                     $this->tableMaintainer->createMainTmpTable($dimensions);
