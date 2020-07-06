@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="ContentManagementSection">
+        <element name="WYSIWYGOptions" type="button" selector="#cms_wysiwyg-head" timeout="60"/>
+        <element name="CheckIfTabExpand" type="button" selector="#cms_wysiwyg-head:not(.open)"/>
+        <element name="EnableSystemValue" type="button" selector="#cms_wysiwyg_enabled_inherit"/>
+        <element name="EnableWYSIWYG" type="button" selector="#cms_wysiwyg_enabled"/>
+        <element name="SwitcherSystemValue" type="button" selector="#cms_wysiwyg_editor_inherit" timeout="60"/>
+        <element name="Switcher" type="button" selector="#cms_wysiwyg_editor"/>
+        <element name="StaticURL" type="button" selector="#cms_wysiwyg_use_static_urls_in_catalog"/>
+        <element name="Save" type="button" selector="#save" timeout="30"/>
+        <element name="StoreConfigurationPageSuccessMessage" type="text" selector="#messages [data-ui-id='messages-message-success']"/>
+    </section>
+</sections>

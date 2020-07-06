@@ -8,18 +8,18 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="weee_tax" resource="default" engine="innodb" comment="Weee Tax">
-        <column xsi:type="int" name="value_id" padding="11" unsigned="false" nullable="false" identity="true"
+        <column xsi:type="int" name="value_id" unsigned="false" nullable="false" identity="true"
                 comment="Value ID"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Website ID"/>
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Entity ID"/>
         <column xsi:type="varchar" name="country" nullable="true" length="2" comment="Country"/>
         <column xsi:type="decimal" name="value" scale="4" precision="12" unsigned="false" nullable="false" default="0"
                 comment="Value"/>
-        <column xsi:type="int" name="state" padding="11" unsigned="false" nullable="false" identity="false" default="0"
+        <column xsi:type="int" name="state" unsigned="false" nullable="false" identity="false" default="0"
                 comment="State"/>
-        <column xsi:type="smallint" name="attribute_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="attribute_id" unsigned="true" nullable="false" identity="false"
                 comment="Attribute ID"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="value_id"/>

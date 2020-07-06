@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!--Create 2 websites (with stores, store views)-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="category"/>
             <createData entity="_defaultProduct" stepKey="product">
                 <requiredEntity createDataKey="category"/>
@@ -67,7 +67,7 @@
             <deleteData createDataKey="product" stepKey="deleteFirstProduct"/>
             <magentoCLI stepKey="reindex" command="indexer:reindex"/>
             <magentoCLI stepKey="flushCache" command="cache:flush"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create product-->

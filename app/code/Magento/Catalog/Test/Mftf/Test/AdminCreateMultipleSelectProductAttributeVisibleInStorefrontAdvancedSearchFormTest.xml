@@ -15,7 +15,7 @@
             <title value="Create product attribute of type Multiple Select and check its visibility on frontend in Advanced Search form"/>
             <description value="Admin should be able to create product attribute of type Multiple Select and check its visibility on frontend in Advanced Search form"/>
             <testCaseId value="MC-10828"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
         </annotations>
 
@@ -31,7 +31,7 @@
 
             <!-- Create product attribute set -->
             <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete product attribute -->
@@ -40,7 +40,10 @@
             <!-- Delete product attribute set -->
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
 
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Filter product attribute set by attribute set name -->

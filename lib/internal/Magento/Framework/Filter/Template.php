@@ -91,7 +91,7 @@ class Template implements \Zend_Filter_Interface
     /**
      * @var bool
      */
-    private $strictMode = false;
+    private $strictMode = true;
 
     /**
      * @var VariableResolverInterface|null

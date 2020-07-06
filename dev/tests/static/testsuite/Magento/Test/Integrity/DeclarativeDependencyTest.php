@@ -27,7 +27,7 @@ class DeclarativeDependencyTest extends \PHPUnit\Framework\TestCase
      *
      * @throws \Exception
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $root = BP;
         $rootJson = $this->readJsonFile($root . '/composer.json', true);

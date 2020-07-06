@@ -115,7 +115,7 @@
                     <label>Enable Template Path Hints for Storefront</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="template_hints_storefront_show_with_parameter" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
+                <field id="template_hints_storefront_show_with_parameter" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Enable Hints for Storefront with URL Parameter</label>
                     <depends>
                         <field id="*/*/template_hints_storefront">1</field>
@@ -123,7 +123,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Use URL parameter to enable template path hints for Storefront</comment>
                 </field>
-                <field id="template_hints_parameter_value" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="template_hints_parameter_value" translate="label comment" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Parameter Value</label>
                     <depends>
                         <field id="*/*/template_hints_storefront">1</field>
@@ -341,7 +341,7 @@
             </group>
             <group id="upload_configuration" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Images Upload Configuration</label>
-                <field id="enable_resize" translate="label" type="select" sortOrder="200" showInDefault="1" canRestore="1">
+                <field id="enable_resize" translate="label comment" type="select" sortOrder="200" showInDefault="1" canRestore="1">
                     <label>Enable Frontend Resize</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Resize performed via javascript before file upload.</comment>
@@ -459,9 +459,7 @@
                     <label>Add Store Code to Urls</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Store</backend_model>
-                    <comment>
-                        <![CDATA[<strong style="color:red">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third-party services (e.g. PayPal etc.).]]>
-                    </comment>
+                    <comment><![CDATA[<strong style="color:red">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third-party services (e.g. PayPal etc.).]]></comment>
                 </field>
                 <field id="redirect_to_base" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Auto-redirect to Base URL</label>

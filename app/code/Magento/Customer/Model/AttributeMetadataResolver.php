@@ -6,17 +6,17 @@ declare(strict_types=1);
  */
 namespace Magento\Customer\Model;
 
-use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
-use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Customer\Api\Data\AddressInterface;
-use Magento\Ui\DataProvider\EavValidationRules;
-use Magento\Ui\Component\Form\Field;
-use Magento\Eav\Model\Entity\Type;
-use Magento\Eav\Api\Data\AttributeInterface;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Config\Share as ShareConfig;
-use Magento\Customer\Model\FileUploaderDataResolver;
+use Magento\Customer\Model\ResourceModel\Address\Attribute\Source\CountryWithWebsites;
+use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Type;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Ui\Component\Form\Field;
+use Magento\Ui\DataProvider\EavValidationRules;
 
 /**
  * Class to build meta data of the customer or customer address attribute
@@ -76,24 +76,32 @@ class AttributeMetadataResolver
     private $shareConfig;
 
     /**
+     * @var GroupManagement
+     */
+    private $groupManagement;
+
+    /**
      * @param CountryWithWebsites $countryWithWebsiteSource
      * @param EavValidationRules $eavValidationRules
      * @param FileUploaderDataResolver $fileUploaderDataResolver
      * @param ContextInterface $context
      * @param ShareConfig $shareConfig
+     * @param GroupManagement|null $groupManagement
      */
     public function __construct(
         CountryWithWebsites $countryWithWebsiteSource,
         EavValidationRules $eavValidationRules,
         FileUploaderDataResolver $fileUploaderDataResolver,
         ContextInterface $context,
-        ShareConfig $shareConfig
+        ShareConfig $shareConfig,
+        ?GroupManagement $groupManagement = null
     ) {
         $this->countryWithWebsiteSource = $countryWithWebsiteSource;
         $this->eavValidationRules = $eavValidationRules;
         $this->fileUploaderDataResolver = $fileUploaderDataResolver;
         $this->context = $context;
         $this->shareConfig = $shareConfig;
+        $this->groupManagement = $groupManagement ?? ObjectManager::getInstance()->get(GroupManagement::class);
     }
 
     /**
@@ -111,6 +119,7 @@ class AttributeMetadataResolver
         bool $allowToShowHiddenAttributes
     ): array {
         $meta = $this->modifyBooleanAttributeMeta($attribute);
+        $this->modifyGroupAttributeMeta($attribute);
         // use getDataUsingMethod, since some getters are defined and apply additional processing of returning value
         foreach (self::$metaProperties as $metaName => $origName) {
             $value = $attribute->getDataUsingMethod($origName);
@@ -194,6 +203,21 @@ class AttributeMetadataResolver
         }
 
         return $meta;
+    }
+
+    /**
+     * Modify group attribute meta data
+     *
+     * @param AttributeInterface $attribute
+     * @return void
+     */
+    private function modifyGroupAttributeMeta(AttributeInterface $attribute): void
+    {
+        if ($attribute->getAttributeCode() === 'group_id') {
+            $defaultGroup = $this->groupManagement->getDefaultGroup();
+            $defaultGroupId = !empty($defaultGroup) ? $defaultGroup->getId() : null;
+            $attribute->setDataUsingMethod(self::$metaProperties['default'], $defaultGroupId);
+        }
     }
 
     /**

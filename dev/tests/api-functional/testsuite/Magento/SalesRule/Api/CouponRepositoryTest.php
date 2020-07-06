@@ -20,7 +20,7 @@ class CouponRepositoryTest extends WebapiAbstract
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -80,7 +80,7 @@ class CouponRepositoryTest extends WebapiAbstract
         $this->assertEquals($inputData, $result);
 
         //test delete
-        $this->assertEquals(true, $this->deleteCoupon($couponId));
+        $this->assertTrue($this->deleteCoupon($couponId));
     }
 
     // verify (and remove) the fields that are set by the Sales Rule

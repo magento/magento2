@@ -4,17 +4,18 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Analytics\Setup\Patch\Data;
 
 use Magento\Analytics\Model\Config\Backend\Enabled\SubscriptionHandler;
+use Magento\Config\Model\Config\Source\Enabledisable;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
- * Initial patch.
- *
- * @package Magento\Analytics\Setup\Patch
+ * Active subscription process for Advanced Reporting
  */
 class PrepareInitialConfig implements DataPatchInterface, PatchVersionInterface
 {
@@ -24,50 +25,47 @@ class PrepareInitialConfig implements DataPatchInterface, PatchVersionInterface
     private $moduleDataSetup;
 
     /**
-     * PrepareInitialConfig constructor.
+     * @var SubscriptionHandler
+     */
+    private $subscriptionHandler;
+
+    /**
+     * @var string
+     */
+    private $subscriptionEnabledConfigPath = 'analytics/subscription/enabled';
+
+    /**
      * @param ModuleDataSetupInterface $moduleDataSetup
+     * @param SubscriptionHandler $subscriptionHandler
      */
     public function __construct(
-        ModuleDataSetupInterface $moduleDataSetup
+        ModuleDataSetupInterface $moduleDataSetup,
+        SubscriptionHandler $subscriptionHandler
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
+        $this->subscriptionHandler = $subscriptionHandler;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function apply()
     {
-        $this->moduleDataSetup->getConnection()->insertMultiple(
+        $this->moduleDataSetup->getConnection()->insert(
             $this->moduleDataSetup->getTable('core_config_data'),
             [
-                [
-                    'scope' => 'default',
-                    'scope_id' => 0,
-                    'path' => 'analytics/subscription/enabled',
-                    'value' => 1
-                ],
-                [
-                    'scope' => 'default',
-                    'scope_id' => 0,
-                    'path' => SubscriptionHandler::CRON_STRING_PATH,
-                    'value' => join(' ', SubscriptionHandler::CRON_EXPR_ARRAY)
-                ]
+                'path' => $this->subscriptionEnabledConfigPath,
+                'value' => Enabledisable::ENABLE_VALUE,
             ]
         );
 
-        $this->moduleDataSetup->getConnection()->insert(
-            $this->moduleDataSetup->getTable('flag'),
-            [
-                'flag_code' => SubscriptionHandler::ATTEMPTS_REVERSE_COUNTER_FLAG_CODE,
-                'state' => 0,
-                'flag_data' => 24,
-            ]
-        );
+        $this->subscriptionHandler->processEnabled();
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public static function getDependencies()
     {
@@ -75,7 +73,7 @@ class PrepareInitialConfig implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public static function getVersion()
     {
@@ -83,7 +81,7 @@ class PrepareInitialConfig implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function getAliases()
     {

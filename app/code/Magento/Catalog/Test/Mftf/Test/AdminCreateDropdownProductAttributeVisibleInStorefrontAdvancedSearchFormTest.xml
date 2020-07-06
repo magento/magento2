@@ -15,7 +15,7 @@
             <title value="AdminCreateDropdownProductAttributeVisibleInStorefrontAdvancedSearchFormTest"/>
             <description value="Admin should able to create product Dropdown attribute and check its visibility on frontend in Advanced Search form"/>
             <testCaseId value="MC-10827"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
         </annotations>
 
@@ -31,10 +31,15 @@
 
             <!-- Create product attribute set -->
             <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <deleteData createDataKey="attribute" stepKey="deleteProductAttribute"/>
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Filter product attribute set by attribute set name -->

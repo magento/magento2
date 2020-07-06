@@ -3,26 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model\Product\Plugin;
 
-class UpdateQuoteItemsTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\ResourceModel\Product;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Quote\Model\Product\Plugin\UpdateQuoteItems;
+use Magento\Quote\Model\ResourceModel\Quote;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class UpdateQuoteItemsTest extends TestCase
 {
     /**
-     * @var \Magento\Quote\Model\Product\Plugin\UpdateQuoteItems
+     * @var UpdateQuoteItems
      */
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Quote\Model\ResourceModel\Quote
+     * @var MockObject|Quote
      */
-    private $quoteResource ;
+    private $quoteResource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->quoteResource = $this->getMockBuilder(\Magento\Quote\Model\ResourceModel\Quote::class)
+        $this->quoteResource = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->model = new \Magento\Quote\Model\Product\Plugin\UpdateQuoteItems($this->quoteResource);
+        $this->model = new UpdateQuoteItems($this->quoteResource);
     }
 
     /**
@@ -34,8 +43,8 @@ class UpdateQuoteItemsTest extends \PHPUnit\Framework\TestCase
      */
     public function testAfterUpdate($originalPrice, $newPrice, $callMethod, $tierPriceChanged = false)
     {
-        $productResourceMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Product::class);
-        $productMock = $this->getMockBuilder(\Magento\Framework\Model\AbstractModel::class)
+        $productResourceMock = $this->createMock(Product::class);
+        $productMock = $this->getMockBuilder(AbstractModel::class)
             ->disableOriginalConstructor()
             ->setMethods(['getOrigData', 'getPrice', 'getId', 'getData'])
             ->getMockForAbstractClass();
