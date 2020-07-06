@@ -58,8 +58,7 @@
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductFilterLoad"/>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage"/>
 
         <!-- Create configurations based off the Text Swatch we created earlier -->
         <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations"/>
