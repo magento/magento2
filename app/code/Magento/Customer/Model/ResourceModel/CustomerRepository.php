@@ -196,7 +196,6 @@ class CustomerRepository implements CustomerRepositoryInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function save(CustomerInterface $customer, $passwordHash = null)
     {
@@ -281,10 +280,7 @@ class CustomerRepository implements CustomerRepositoryInterface
                     $savedAddressIds[] = $address->getId();
                 }
             }
-            $addressIdsToDelete = array_diff($existingAddressIds, $savedAddressIds);
-            foreach ($addressIdsToDelete as $addressId) {
-                $this->addressRepository->deleteById($addressId);
-            }
+            $this->deleteAddressesByIds(array_diff($existingAddressIds, $savedAddressIds));
         }
         $this->customerRegistry->remove($customerId);
         $savedCustomer = $this->get($customer->getEmail(), $customer->getWebsiteId());
@@ -297,6 +293,19 @@ class CustomerRepository implements CustomerRepositoryInterface
             ]
         );
         return $savedCustomer;
+    }
+
+    /**
+     * Delete addresses by ids
+     *
+     * @param array $addressIds
+     * @return void
+     */
+    private function deleteAddressesByIds(array $addressIds): void
+    {
+        foreach ($addressIds as $id) {
+            $this->addressRepository->deleteById($id);
+        }
     }
 
     /**
