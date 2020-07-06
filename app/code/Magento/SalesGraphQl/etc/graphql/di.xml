@@ -8,14 +8,14 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <type name="Magento\SalesGraphQl\Model\OrderItemInterfaceTypeResolverComposite">
         <arguments>
-            <argument name="productTypeNameResolvers" xsi:type="array">
+            <argument name="orderItemTypeResolvers" xsi:type="array">
                 <item name="order_catalog_item_type_resolver" xsi:type="object">Magento\SalesGraphQl\Model\OrderItemTypeResolver</item>
             </argument>
         </arguments>
     </type>
     <type name="Magento\SalesGraphQl\Model\InvoiceItemInterfaceTypeResolverComposite">
         <arguments>
-            <argument name="productTypeNameResolvers" xsi:type="array">
+            <argument name="invoiceItemTypeResolvers" xsi:type="array">
                 <item name="invoice_catalog_item_type_resolver" xsi:type="object">Magento\SalesGraphQl\Model\InvoiceItemTypeResolver</item>
             </argument>
         </arguments>

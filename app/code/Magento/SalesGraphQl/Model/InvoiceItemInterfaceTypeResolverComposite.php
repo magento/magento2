@@ -11,38 +11,41 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**
- * @inheritdoc
+ *  Composite class to resolve invoice item type
  */
 class InvoiceItemInterfaceTypeResolverComposite implements TypeResolverInterface
 {
     /**
-     * TypeResolverInterface[]
+     * @var TypeResolverInterface[]
      */
-    private $productTypeNameResolvers = [];
+    private $invoiceItemTypeResolvers = [];
 
     /**
-     * @param TypeResolverInterface[] $productTypeNameResolvers
+     * @param TypeResolverInterface[] $invoiceItemTypeResolvers
      */
-    public function __construct(array $productTypeNameResolvers = [])
+    public function __construct(array $invoiceItemTypeResolvers = [])
     {
-        $this->productTypeNameResolvers = $productTypeNameResolvers;
+        $this->invoiceItemTypeResolvers = $invoiceItemTypeResolvers;
     }
 
     /**
-     * {@inheritdoc}
+     * Resolve item type of an invoice through composite resolvers
+     *
+     * @param array $data
+     * @return string
      * @throws GraphQlInputException
      */
-    public function resolveType(array $data) : string
+    public function resolveType(array $data): string
     {
         $resolvedType = null;
 
-        foreach ($this->productTypeNameResolvers as $productTypeNameResolver) {
+        foreach ($this->invoiceItemTypeResolvers as $invoiceItemTypeResolver) {
             if (!isset($data['product_type'])) {
                 throw new GraphQlInputException(
                     __('Missing key %1 in sales item data', ['product_type'])
                 );
             }
-            $resolvedType = $productTypeNameResolver->resolveType($data);
+            $resolvedType = $invoiceItemTypeResolver->resolveType($data);
             if (!empty($resolvedType)) {
                 return $resolvedType;
             }

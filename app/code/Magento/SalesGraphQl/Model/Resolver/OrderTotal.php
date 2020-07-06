@@ -9,16 +9,17 @@ namespace Magento\SalesGraphQl\Model\Resolver;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
-use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Sales\Model\Order;
+use Magento\Sales\Api\Data\OrderInterface;
 
+/**
+ * Resolve order totals taxes and discounts for order
+ */
 class OrderTotal implements ResolverInterface
 {
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function resolve(
         Field $field,
@@ -27,49 +28,177 @@ class OrderTotal implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        /** @var ContextInterface $context */
-        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
-            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
-        }
-
-        if (!isset($value['model']) && !($value['model'] instanceof Order)) {
+        if (!(($value['model'] ?? null) instanceof OrderInterface)) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        /** @var Order $orderModel */
-        $orderModel = $value['model'];
-        $currency = $orderModel->getOrderCurrencyCode();
-        $totals = [
-                'base_grand_total' => ['value' => $orderModel->getBaseGrandTotal(), 'currency' => $currency],
-                'grand_total' => ['value' =>  $orderModel->getGrandTotal(), 'currency' => $currency],
-                'subtotal' => ['value' =>  $orderModel->getSubtotal(), 'currency' => $currency],
-                'total_tax' => ['value' =>  $orderModel->getTaxAmount(), 'currency' => $currency],
-                'taxes' => $this->getAppliedTaxes($orderModel),
-                'total_shipping' => ['value' => $orderModel->getShippingAmount(), 'currency' => $currency],
-                'shipping_handling' => [
-                    'amount_exc_tax' => ['value' => $orderModel->getShippingTaxAmount(), 'currency' => $currency],
-                    'amount_inc_tax' => ['value' => $orderModel->getShippingInclTax(), 'currency' => $currency],
-                    'total_amount' => ['value' => $orderModel->getBaseShippingAmount(), 'currency' => $currency],
-                    'taxes' => $this->getAppliedTaxes($orderModel)
-                    ]
+        /** @var OrderInterface $order */
+        $order = $value['model'];
+        $currency = $order->getOrderCurrencyCode();
+
+        return [
+            'base_grand_total' => ['value' => $order->getBaseGrandTotal(), 'currency' => $currency],
+            'grand_total' => ['value' => $order->getGrandTotal(), 'currency' => $currency],
+            'subtotal' => ['value' => $order->getSubtotal(), 'currency' => $currency],
+            'total_tax' => ['value' => $order->getTaxAmount(), 'currency' => $currency],
+            'taxes' => $this->getAppliedTaxesDetails($order),
+            'discounts' => $this->getDiscountDetails($order),
+            'total_shipping' => ['value' => $order->getShippingAmount(), 'currency' => $currency],
+            'shipping_handling' => [
+                'amount_excluding_tax' => [
+                    'value' => $order->getShippingAmount(),
+                    'currency' => $order->getOrderCurrencyCode()
+                ],
+                'amount_including_tax' => [
+                    'value' => $order->getShippingInclTax(),
+                    'currency' => $currency
+                ],
+                'total_amount' => [
+                    'value' => $order->getShippingAmount(),
+                    'currency' => $currency
+                ],
+                'taxes' => $this->getAppliedShippingTaxesDetails($order),
+                'discounts' => $this->getShippingDiscountDetails($order),
+            ]
         ];
-        return $totals;
     }
 
     /**
-     * Returns taxes applied to the current order
+     * Retrieve applied taxes that apply to the order
      *
-     * @param Order $orderModel
+     * @param OrderInterface $order
      * @return array
      */
-    private function getAppliedTaxes(Order $orderModel): array
+    private function getAllAppliedTaxesOnOrders(OrderInterface $order): array
     {
-        $taxes[] = [
-            'rate' => $orderModel->getStoreToOrderRate(),
-            'title' => $orderModel->getCustomerName(),
-            'amount' => [ 'value' =>  $orderModel->getTaxAmount(), 'currency' => $orderModel->getOrderCurrencyCode()
-            ]
-        ];
+        $extensionAttributes = $order->getExtensionAttributes();
+        $appliedTaxes = $extensionAttributes->getAppliedTaxes() ?? [];
+        $allAppliedTaxOnOrders = [];
+        foreach ($appliedTaxes as $taxIndex => $appliedTaxesData) {
+            $allAppliedTaxOnOrders[$taxIndex] = [
+                'title' => $appliedTaxesData->getDataByKey('title'),
+                'percent' => $appliedTaxesData->getDataByKey('percent'),
+                'amount' => $appliedTaxesData->getDataByKey('amount'),
+            ];
+        }
+        return $allAppliedTaxOnOrders;
+    }
+
+    /**
+     * Return taxes applied to the current order
+     *
+     * @param OrderInterface $order
+     * @return array
+     */
+    private function getAppliedTaxesDetails(OrderInterface $order): array
+    {
+        $allAppliedTaxOnOrders = $this->getAllAppliedTaxesOnOrders($order);
+        $taxes = [];
+        foreach ($allAppliedTaxOnOrders as $appliedTaxes) {
+            $appliedTaxesArray = [
+                'rate' => $appliedTaxes['percent'] ?? 0,
+                'title' => $appliedTaxes['title'] ?? null,
+                'amount' => [
+                    'value' => $appliedTaxes['amount'] ?? 0,
+                    'currency' => $order->getOrderCurrencyCode()
+                ]
+            ];
+            $taxes[] = $appliedTaxesArray;
+        }
         return $taxes;
+    }
+
+    /**
+     * Return information about an applied discount
+     *
+     * @param OrderInterface $order
+     * @return array
+     */
+    private function getDiscountDetails(OrderInterface $order): array
+    {
+        $orderDiscounts = [];
+        if (!($order->getDiscountDescription() === null && $order->getDiscountAmount() == 0)) {
+            $orderDiscounts[] = [
+                'label' => $order->getDiscountDescription() ?? __('Discount'),
+                'amount' => [
+                    'value' => abs($order->getDiscountAmount()),
+                    'currency' => $order->getOrderCurrencyCode()
+                ]
+            ];
+        }
+        return $orderDiscounts;
+    }
+
+    /**
+     * Retrieve applied shipping taxes on items for the orders
+     *
+     * @param OrderInterface $order
+     * @return array
+     */
+    private function getAppliedShippingTaxesForItems(OrderInterface $order): array
+    {
+        $extensionAttributes = $order->getExtensionAttributes();
+        $itemAppliedTaxes = $extensionAttributes->getItemAppliedTaxes() ?? [];
+        $appliedShippingTaxesForItems = [];
+        foreach ($itemAppliedTaxes as $appliedTaxForItem) {
+            if ($appliedTaxForItem->getType() === "shipping") {
+                foreach ($appliedTaxForItem->getAppliedTaxes() ?? [] as $taxLineItem) {
+                    $taxItemIndexTitle = $taxLineItem->getDataByKey('title');
+                    $appliedShippingTaxesForItems[$taxItemIndexTitle] = [
+                        'title' => $taxLineItem->getDataByKey('title'),
+                        'percent' => $taxLineItem->getDataByKey('percent'),
+                        'amount' => $taxLineItem->getDataByKey('amount')
+                    ];
+                }
+            }
+        }
+        return $appliedShippingTaxesForItems;
+    }
+
+    /**
+     * Return taxes applied to the current order
+     *
+     * @param OrderInterface $order
+     * @return array
+     */
+    private function getAppliedShippingTaxesDetails(
+        OrderInterface $order
+    ): array {
+        $appliedShippingTaxesForItems = $this->getAppliedShippingTaxesForItems($order);
+        $shippingTaxes = [];
+        foreach ($appliedShippingTaxesForItems as $appliedShippingTaxes) {
+            $appliedShippingTaxesArray = [
+                'rate' => $appliedShippingTaxes['percent'] ?? 0,
+                'title' => $appliedShippingTaxes['title'] ?? null,
+                'amount' => [
+                    'value' => $appliedShippingTaxes['amount'] ?? 0,
+                    'currency' => $order->getOrderCurrencyCode()
+                ]
+            ];
+            $shippingTaxes[] = $appliedShippingTaxesArray;
+        }
+        return $shippingTaxes;
+    }
+
+    /**
+     * Return information about an applied discount
+     *
+     * @param OrderInterface $order
+     * @return array
+     */
+    private function getShippingDiscountDetails(OrderInterface $order): array
+    {
+        $shippingDiscounts = [];
+        if (!($order->getDiscountDescription() === null && $order->getShippingDiscountAmount() == 0)) {
+            $shippingDiscounts[] =
+                [
+                    'label' => $order->getDiscountDescription() ?? __('Discount'),
+                    'amount' => [
+                        'value' => abs($order->getShippingDiscountAmount()),
+                        'currency' => $order->getOrderCurrencyCode()
+                    ]
+                ];
+        }
+        return $shippingDiscounts;
     }
 }

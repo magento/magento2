@@ -7,17 +7,14 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\Resolver;
 
-use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\Sales\Api\Data\LineItemInterface;
+use Magento\Sales\Api\Data\InvoiceItemInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\Sales\Model\Order;
-use Magento\SalesGraphQl\Model\Resolver\OrderItem\DataProvider as OrderItemProvider;
 
 /**
  * Resolve bundle options items for order item
@@ -37,22 +34,14 @@ class BundleOptions implements ResolverInterface
     private $valueFactory;
 
     /**
-     * @var OrderItemProvider
-     */
-    private $orderItemProvider;
-
-    /**
      * @param ValueFactory $valueFactory
-     * @param OrderItemProvider $orderItemProvider
      * @param Json $serializer
      */
     public function __construct(
         ValueFactory $valueFactory,
-        OrderItemProvider $orderItemProvider,
         Json $serializer
     ) {
         $this->valueFactory = $valueFactory;
-        $this->orderItemProvider = $orderItemProvider;
         $this->serializer = $serializer;
     }
 
@@ -66,17 +55,15 @@ class BundleOptions implements ResolverInterface
                 throw new LocalizedException(__('"model" value should be specified'));
             }
             if ($value['model'] instanceof OrderItemInterface) {
-                /** @var ExtensibleDataInterface $item */
+                /** @var OrderItemInterface $item */
                 $item = $value['model'];
-                return $this->getBundleOptions($item, null, null);
+                return $this->getBundleOptions($item, $value);
             }
-            if ($value['model'] instanceof LineItemInterface) {
-                /** @var LineItemInterface $item */
+            if ($value['model'] instanceof InvoiceItemInterface) {
+                /** @var InvoiceItemInterface $item */
                 $item = $value['model'];
-                $lineItemToOrderItemMap = $value['line_item_to_order_item_map'];
-                $order = $value['order'];
                 // Have to pass down order and item to map to avoid refetching all data
-                return $this->getBundleOptions($item->getOrderItem(), $order, $lineItemToOrderItemMap);
+                return $this->getBundleOptions($item->getOrderItem(), $value);
             }
             return null;
         });
@@ -85,46 +72,74 @@ class BundleOptions implements ResolverInterface
     /**
      * Format bundle options and values from a parent bundle order item
      *
-     * @param ExtensibleDataInterface $item
+     * @param OrderItemInterface $item
+     * @param array $formattedItem
      * @return array
      */
     private function getBundleOptions(
         OrderItemInterface $item,
-        Order $order = null,
-        array $lineItemToOrderItemMap = null
+        array $formattedItem
     ): array {
         $bundleOptions = [];
         if ($item->getProductType() === 'bundle') {
             $options = $item->getProductOptions();
-            if (isset($options['bundle_options'])) {
-                //loop through options
-                foreach ($options['bundle_options'] as $bundleOptionKey => $bundleOption) {
-                    $bundleOptions[$bundleOptionKey]['label'] = $bundleOption['label'] ?? '';
-                    $bundleOptions[$bundleOptionKey]['id'] = isset($bundleOption['option_id']) ?
-                        base64_encode($bundleOption['option_id']) : null;
-                    $bundleOptions[$bundleOptionKey]['items'] = [];
-                    foreach ($bundleOption['value'] ?? [] as $bundleOptionValueKey => $bundleOptionValue) {
-                        // Find the item assign to the option
-                        /** @var OrderItemInterface $childrenOrderItem */
-                        foreach ($item->getChildrenItems() ?? [] as $childrenOrderItem) {
-                            $childOrderItemOptions = $childrenOrderItem->getProductOptions();
-                            $bundleChildAttributes = $this->serializer
-                                ->unserialize($childOrderItemOptions['bundle_selection_attributes']);
-                            // Value Id is missing from parent, so we have to match the child to parent option
-                            if (isset($bundleChildAttributes['option_id'])
-                                && $bundleChildAttributes['option_id'] == $bundleOption['option_id']) {
-                                $bundleOptions[$bundleOptionKey]['item_ids'][] = $childrenOrderItem->getItemId();
-                                if ($lineItemToOrderItemMap) {
-                                    $bundleOptions[$bundleOptionKey]['items'][] =
-                                        $lineItemToOrderItemMap[$childrenOrderItem->getItemId()];
-                                }
-                            }
-                        }
-                        $bundleOptions[$bundleOptionKey]['order'] = $order;
-                    }
+            //loop through options
+            foreach ($options['bundle_options'] ?? [] as $bundleOptionId => $bundleOption) {
+                $bundleOptions[$bundleOptionId]['label'] = $bundleOption['label'] ?? '';
+                $bundleOptions[$bundleOptionId]['id'] = isset($bundleOption['option_id']) ?
+                    base64_encode($bundleOption['option_id']) : null;
+                if (isset($bundleOption['option_id'])) {
+                    $bundleOptions[$bundleOptionId]['values'] = $this->formatBundleOptionItems(
+                        $item,
+                        $formattedItem,
+                        $bundleOption['option_id']
+                    );
+                } else {
+                    $bundleOptions[$bundleOptionId]['values'] = [];
                 }
             }
         }
         return $bundleOptions;
+    }
+
+    /**
+     * Format Bundle items
+     *
+     * @param OrderItemInterface $item
+     * @param array $formattedItem
+     * @param string $bundleOptionId
+     * @return array
+     */
+    private function formatBundleOptionItems(
+        OrderItemInterface $item,
+        array $formattedItem,
+        string $bundleOptionId
+    ) {
+        $optionItems = [];
+        // Find the item assign to the option
+        /** @var OrderItemInterface $childrenOrderItem */
+        foreach ($item->getChildrenItems() ?? [] as $childrenOrderItem) {
+            $childOrderItemOptions = $childrenOrderItem->getProductOptions();
+            $bundleChildAttributes = $this->serializer
+                ->unserialize($childOrderItemOptions['bundle_selection_attributes'] ?? '');
+            // Value Id is missing from parent, so we have to match the child to parent option
+            if (isset($bundleChildAttributes['option_id'])
+                && $bundleChildAttributes['option_id'] == $bundleOptionId) {
+                $optionItems[$childrenOrderItem->getItemId()] = [
+                    'id' => base64_encode($childrenOrderItem->getItemId()),
+                    'product_name' => $childrenOrderItem->getName(),
+                    'product_sku' => $childrenOrderItem->getSku(),
+                    'quantity' => $bundleChildAttributes['qty'],
+                    'price' => [
+                        //use options price, not child price
+                        'value' => $bundleChildAttributes['price'],
+                        //use currency from order
+                        'currency' => $formattedItem['product_sale_price']['currency'] ?? null,
+                    ]
+                ];
+            }
+        }
+
+        return $optionItems;
     }
 }

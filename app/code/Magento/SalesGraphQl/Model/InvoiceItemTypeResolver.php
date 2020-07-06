@@ -9,6 +9,9 @@ namespace Magento\SalesGraphQl\Model;
 
 use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
+/**
+ * Leaf for composite class to resolve invoice item type
+ */
 class InvoiceItemTypeResolver implements TypeResolverInterface
 {
     /**

@@ -129,7 +129,6 @@ class DataProvider
             /** @var OrderInterface $associatedOrder */
             $associatedOrder = $orderList[$orderItem->getOrderId()];
             $itemOptions = $this->optionsProcessor->getItemOptions($orderItem);
-
             $this->orderItemList[$orderItem->getItemId()] = [
                 'id' => base64_encode($orderItem->getItemId()),
                 'associatedProduct' => $associatedProduct,
@@ -138,6 +137,8 @@ class DataProvider
                 'product_sku' => $orderItem->getSku(),
                 'product_url_key' => $associatedProduct ? $associatedProduct->getUrlKey() : null,
                 'product_type' => $orderItem->getProductType(),
+                'status' => $orderItem->getStatus(),
+                'discounts' => $this->getDiscountDetails($associatedOrder, $orderItem),
                 'product_sale_price' => [
                     'value' => $orderItem->getPrice(),
                     'currency' => $associatedOrder->getOrderCurrencyCode()
@@ -207,5 +208,30 @@ class DataProvider
             $orderList[$order->getEntityId()] = $order;
         }
         return $orderList;
+    }
+
+    /**
+     * Returns information about an applied discount
+     *
+     * @param OrderInterface $associatedOrder
+     * @param OrderItemInterface $orderItem
+     * @return array
+     */
+    private function getDiscountDetails(OrderInterface $associatedOrder, OrderItemInterface $orderItem) : array
+    {
+        if ($associatedOrder->getDiscountDescription() === null && $orderItem->getDiscountAmount() == 0
+            && $associatedOrder->getDiscountAmount() == 0
+        ) {
+            $discounts = [];
+        } else {
+            $discounts [] = [
+                'label' => $associatedOrder->getDiscountDescription() ?? __('Discount'),
+                'amount' => [
+                    'value' => abs($orderItem->getDiscountAmount()) ?? 0,
+                    'currency' => $associatedOrder->getOrderCurrencyCode()
+                ]
+            ];
+        }
+        return $discounts;
     }
 }
