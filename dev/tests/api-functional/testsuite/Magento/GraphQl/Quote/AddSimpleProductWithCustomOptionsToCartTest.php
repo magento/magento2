@@ -98,7 +98,7 @@ class AddSimpleProductWithCustomOptionsToCartTest extends GraphQlAbstract
 
         $query = $this->getQuery($maskedQuoteId, $sku, $quantity, $customizableOptions);
 
-        self::expectExceptionMessage(
+        $this->expectExceptionMessage(
             'The product\'s required option(s) weren\'t entered. Make sure the options are entered and try again.'
         );
         $this->graphQlMutation($query);
@@ -141,10 +141,10 @@ class AddSimpleProductWithCustomOptionsToCartTest extends GraphQlAbstract
     private function getQuery(string $maskedQuoteId, string $sku, float $quantity, string $customizableOptions): string
     {
         return <<<QUERY
-mutation {  
+mutation {
   addSimpleProductsToCart(
     input: {
-      cart_id: "{$maskedQuoteId}", 
+      cart_id: "{$maskedQuoteId}",
       cart_items: [
         {
           data: {
@@ -183,7 +183,7 @@ QUERY;
     private function buildExpectedValuesArray(string $assignedValue, string $type) : array
     {
         if ($type === 'date') {
-            return [['value' => date('M d, Y', strtotime($assignedValue))]];
+            return [['value' => $assignedValue]];
         }
         $assignedOptionsArray = explode(',', trim($assignedValue, '[]'));
         $expectedArray = [];
