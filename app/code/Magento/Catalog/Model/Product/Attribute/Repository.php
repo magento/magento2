@@ -7,6 +7,7 @@
 namespace Magento\Catalog\Model\Product\Attribute;
 
 use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 
@@ -218,8 +219,8 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      */
     protected function generateCode($label)
     {
-        $code = substr(preg_replace('/[^a-z_0-9]/', '_', $this->filterManager->translitUrl($label)), 0, 30);
-        $validatorAttrCode = new \Zend_Validate_Regex(['pattern' => '/^[a-z][a-z_0-9]{0,29}[a-z0-9]$/']);
+        $code = substr(preg_replace('/[^a-zA-Z_0-9]/', '_', $this->filterManager->translitUrl($label)), 0, Attribute::ATTRIBUTE_CODE_MAX_LENGTH);
+        $validatorAttrCode = new \Zend_Validate_Regex(['pattern' => '/^[a-zA-Z][a-zA-Z_0-9]{0,29}[a-zA-Z0-9]$/']);    
         if (!$validatorAttrCode->isValid($code)) {
             $code = 'attr_' . ($code ?: substr(md5(time()), 0, 8));
         }
@@ -235,7 +236,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
      */
     protected function validateCode($code)
     {
-        $validatorAttrCode = new \Zend_Validate_Regex(['pattern' => '/^[a-z][a-z_0-9]{0,30}$/']);
+        $validatorAttrCode = new \Zend_Validate_Regex(['pattern' => '/^[a-zA-Z][a-zA-Z_0-9]{0,' . Attribute::ATTRIBUTE_CODE_MAX_LENGTH . '}$/']);
         if (!$validatorAttrCode->isValid($code)) {
             throw InputException::invalidFieldValue('attribute_code', $code);
         }
