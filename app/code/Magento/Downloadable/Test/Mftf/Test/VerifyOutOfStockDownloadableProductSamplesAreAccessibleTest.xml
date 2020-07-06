@@ -15,6 +15,7 @@
             <title value="Samples of Downloadable Products are accessible, if product is out of stock"/>
             <description value="Samples of Downloadable Products are accessible, if product is out of stock"/>
             <severity value="MAJOR"/>
+            <testCaseId value="MC-35639"/>
             <group value="downloadable"/>
             <group value="catalog"/>
         </annotations>
