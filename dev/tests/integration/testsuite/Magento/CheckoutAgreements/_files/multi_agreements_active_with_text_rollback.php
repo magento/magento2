@@ -4,15 +4,28 @@
  * See COPYING.txt for license details.
  */
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-/** @var $agreement \Magento\CheckoutAgreements\Model\Agreement */
-$agreement = $objectManager->create(\Magento\CheckoutAgreements\Model\Agreement::class);
-$agreement->load('First Checkout Agreement (active)', 'name');
+declare(strict_types=1);
+
+use Magento\CheckoutAgreements\Model\Agreement;
+use Magento\CheckoutAgreements\Model\ResourceModel\Agreement as AgreementResource;
+use Magento\TestFramework\Helper\Bootstrap;
+
+$objectManager = Bootstrap::getObjectManager();
+
+/**
+ * @var $agreement         Agreement
+ * @var $agreementResource AgreementResource
+ */
+$agreement = $objectManager->create(Agreement::class);
+$agreementResource = $objectManager->create(AgreementResource::class);
+
+$agreementResource->load($agreement, 'First Checkout Agreement (active)', 'name');
 if ($agreement->getId()) {
-    $agreement->delete();
+    $agreementResource->delete($agreement);
 }
-$agreement = $objectManager->create(\Magento\CheckoutAgreements\Model\Agreement::class);
-$agreement->load('Second Checkout Agreement (active)', 'name');
+
+$agreement = $objectManager->create(Agreement::class);
+$agreementResource->load($agreement, 'Second Checkout Agreement (active)', 'name');
 if ($agreement->getId()) {
-    $agreement->delete();
+    $agreementResource->delete($agreement);
 }
