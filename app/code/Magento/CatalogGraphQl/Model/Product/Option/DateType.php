@@ -9,8 +9,8 @@ namespace Magento\CatalogGraphQl\Model\Product\Option;
 
 use Magento\Catalog\Model\Product\Option\Type\Date as ProductDateOptionType;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\Stdlib\DateTime;
 
 /**
  * CatalogGraphQl product option date type
@@ -24,6 +24,7 @@ class DateType extends ProductDateOptionType
      *
      * @param array $values All product option values, i.e. array (option_id => mixed, option_id => mixed...)
      * @return ProductDateOptionType
+     * @throws LocalizedException
      */
     public function validateUserValue($values)
     {
@@ -37,8 +38,9 @@ class DateType extends ProductDateOptionType
     /**
      * Format date value from string to date array
      *
-     * @param [] $values
-     * @return []
+     * @param array $values
+     * @return mixed
+     * @throws GraphQlInputException
      * @throws LocalizedException
      */
     private function formatValues($values)
@@ -76,5 +78,19 @@ class DateType extends ProductDateOptionType
     public function useCalendar()
     {
         return false;
+    }
+
+    /**
+     * Return option value for quote option
+     *
+     * @param string $optionValue Prepared for cart option value
+     * @return string
+     */
+    public function getFormattedOptionValue($optionValue)
+    {
+        if ($this->_formattedOptionValue === null) {
+            $this->_formattedOptionValue = $optionValue;
+        }
+        return $this->_formattedOptionValue;
     }
 }
