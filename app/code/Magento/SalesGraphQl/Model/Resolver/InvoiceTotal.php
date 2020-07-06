@@ -11,8 +11,8 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Sales\Api\Data\InvoiceInterface as Invoice;
-use Magento\Sales\Model\Order;
+use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Api\Data\OrderInterface;
 
 /**
  * Resolver for Invoice total
@@ -20,7 +20,7 @@ use Magento\Sales\Model\Order;
 class InvoiceTotal implements ResolverInterface
 {
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function resolve(
         Field $field,
@@ -29,51 +29,39 @@ class InvoiceTotal implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($value['model']) && !($value['model'] instanceof Invoice)) {
+        if (!(($value['model'] ?? null) instanceof InvoiceInterface)) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        if (!isset($value['order']) && !($value['order'] instanceof Order)) {
+        if (!(($value['order'] ?? null) instanceof OrderInterface)) {
             throw new LocalizedException(__('"order" value should be specified'));
         }
 
-        /** @var Order $orderModel */
+        /** @var OrderInterface $orderModel */
         $orderModel = $value['order'];
-        /** @var Invoice $invoiceModel */
+        /** @var InvoiceInterface $invoiceModel */
         $invoiceModel = $value['model'];
         $currency = $orderModel->getOrderCurrencyCode();
-        $totals = [
+        return [
             'base_grand_total' => ['value' => $invoiceModel->getBaseGrandTotal(), 'currency' => $currency],
             'grand_total' => ['value' =>  $invoiceModel->getGrandTotal(), 'currency' => $currency],
             'subtotal' => ['value' =>  $invoiceModel->getSubtotal(), 'currency' => $currency],
             'total_tax' => ['value' =>  $invoiceModel->getTaxAmount(), 'currency' => $currency],
-            'taxes' => $this->getAppliedTaxes($invoiceModel, $currency),
             'total_shipping' => ['value' => $invoiceModel->getShippingAmount(), 'currency' => $currency],
             'shipping_handling' => [
-                'amount_exc_tax' => ['value' => $invoiceModel->getShippingTaxAmount(), 'currency' => $currency],
-                'amount_inc_tax' => ['value' => $invoiceModel->getShippingInclTax(), 'currency' => $currency],
-                'total_amount' => ['value' => $invoiceModel->getBaseShippingTaxAmount(), 'currency' => $currency],
-                'taxes' => $this->getAppliedTaxes($invoiceModel, $currency)
+                'amount_excluding_tax' => [
+                    'value' => $invoiceModel->getShippingAmount(),
+                    'currency' => $currency
+                ],
+                'amount_including_tax' => [
+                    'value' => $invoiceModel->getShippingInclTax(),
+                    'currency' => $currency
+                ],
+                'total_amount' => [
+                    'value' => $invoiceModel->getShippingAmount(),
+                    'currency' => $currency
+                ],
             ]
         ];
-        return $totals;
-    }
-
-    /**
-     * Returns taxes applied to the current invoice
-     *
-     * @param Invoice $invoiceModel
-     * @param string $currency
-     * @return array
-     */
-    private function getAppliedTaxes(Invoice $invoiceModel, string $currency): array
-    {
-        $taxes[] = [
-            'rate' => $invoiceModel->getStoreToOrderRate(),
-            'title' => $invoiceModel->getCustomerName(),
-            'amount' => [ 'value' =>  $invoiceModel->getTaxAmount(), 'currency' => $currency
-            ]
-        ];
-        return $taxes;
     }
 }

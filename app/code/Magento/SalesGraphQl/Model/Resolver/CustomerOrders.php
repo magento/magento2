@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\Resolver;
 
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -14,9 +15,9 @@ use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\GraphQl\Model\Query\ContextInterface;
-use Magento\Sales\Model\Order;
-use Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query\SearchQuery;
+use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query\OrderFilter;
 use Magento\Store\Api\Data\StoreInterface;
 
 /**
@@ -25,21 +26,37 @@ use Magento\Store\Api\Data\StoreInterface;
 class CustomerOrders implements ResolverInterface
 {
     /**
-     * @var SearchQuery
+     * @var SearchCriteriaBuilder
      */
-    private $searchQuery;
+    private $searchCriteriaBuilder;
 
     /**
-     * @param SearchQuery $orderRepository
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * @var OrderFilter
+     */
+    private $orderFilter;
+
+    /**
+     * @param OrderRepositoryInterface $orderRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param OrderFilter $orderFilter
      */
     public function __construct(
-        SearchQuery $searchQuery
+        OrderRepositoryInterface $orderRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        OrderFilter $orderFilter
     ) {
-        $this->searchQuery = $searchQuery;
+        $this->orderRepository = $orderRepository;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->orderFilter = $orderFilter;
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function resolve(
         Field $field,
@@ -48,7 +65,6 @@ class CustomerOrders implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        /** @var ContextInterface $context */
         if (false === $context->getExtensionAttributes()->getIsCustomer()) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
         }
@@ -61,41 +77,70 @@ class CustomerOrders implements ResolverInterface
         $userId = $context->getUserId();
         /** @var StoreInterface $store */
         $store = $context->getExtensionAttributes()->getStore();
+
         try {
-            $searchResultDto = $this->searchQuery->getResult($args, $userId, $store);
+            $searchResult = $this->getSearchResult($args, (int) $userId, (int)$store->getId());
+            $maxPages = (int)ceil($searchResult->getTotalCount() / $searchResult->getPageSize());
         } catch (InputException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
         }
 
-        $orders = [];
-        foreach (($searchResultDto->getItems() ?? []) as $order) {
-            if (!isset($order['model']) && !($order['model'] instanceof Order)) {
-                throw new LocalizedException(__('"model" value should be specified'));
-            }
-            /** @var Order $orderModel */
-            $orderModel = $order['model'];
-            $orders[] = [
-                'created_at' => $order['created_at'],
-                'grand_total' => $order['grand_total'],
-                'id' => $order['entity_id'],
-                'increment_id' => $order['increment_id'],
-                'number' => $order['increment_id'],
-                'order_date' => $order['created_at'],
-                'order_number' => $order['increment_id'],
+        return [
+            'total_count' => $searchResult->getTotalCount(),
+            'items' => $this->formatOrdersArray($searchResult->getItems()),
+            'page_info'   => [
+                'page_size'    => $searchResult->getPageSize(),
+                'current_page' => $searchResult->getCurPage(),
+                'total_pages' => $maxPages,
+            ]
+        ];
+    }
+
+    /**
+     * Format order models for graphql schema
+     *
+     * @param OrderInterface[] $orderModels
+     * @return array
+     */
+    private function formatOrdersArray(array $orderModels)
+    {
+        $ordersArray = [];
+        foreach ($orderModels as $orderModel) {
+            $ordersArray[] = [
+                'created_at' => $orderModel->getCreatedAt(),
+                'grand_total' => $orderModel->getGrandTotal(),
+                'id' => base64_encode($orderModel->getEntityId()),
+                'increment_id' => $orderModel->getIncrementId(),
+                'number' => $orderModel->getIncrementId(),
+                'order_date' => $orderModel->getCreatedAt(),
+                'order_number' => $orderModel->getIncrementId(),
                 'status' => $orderModel->getStatusLabel(),
                 'shipping_method' => $orderModel->getShippingDescription(),
                 'model' => $orderModel,
             ];
         }
+        return $ordersArray;
+    }
 
-        return [
-            'total_count' => $searchResultDto->getTotalCount(),
-            'items' => $orders,
-            'page_info'   => [
-                'page_size'    => $searchResultDto->getPageSize(),
-                'current_page' => $searchResultDto->getCurrentPage(),
-                'total_pages' => $searchResultDto->getTotalPages(),
-            ]
-        ];
+    /**
+     * Get search result from graphql query arguments
+     *
+     * @param array $args
+     * @param int $userId
+     * @param int $storeId
+     * @return \Magento\Sales\Api\Data\OrderSearchResultInterface
+     * @throws InputException
+     */
+    private function getSearchResult(array $args, int $userId, int $storeId)
+    {
+        $filterGroups = $this->orderFilter->createFilterGroups($args, $userId, (int)$storeId);
+        $this->searchCriteriaBuilder->setFilterGroups($filterGroups);
+        if (isset($args['currentPage'])) {
+            $this->searchCriteriaBuilder->setCurrentPage($args['currentPage']);
+        }
+        if (isset($args['pageSize'])) {
+            $this->searchCriteriaBuilder->setPageSize($args['pageSize']);
+        }
+        return $this->orderRepository->getList($this->searchCriteriaBuilder->create());
     }
 }

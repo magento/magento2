@@ -5,13 +5,12 @@
  */
 declare(strict_types=1);
 
-use Magento\Customer\Model\GroupManagement;
 use Magento\SalesRule\Model\Rule;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
-$websiteId = Bootstrap::getObjectManager()->get(StoreManagerInterface::class)
+$websiteId = $objectManager->get(StoreManagerInterface::class)
     ->getWebsite()
     ->getId();
 
@@ -28,7 +27,11 @@ $salesRule->setData(
         'discount_step' => 0,
         'apply_to_shipping' => 1,
         'stop_rules_processing' => 1,
-        'website_ids' => [$websiteId]
+        'website_ids' => [$websiteId],
+         'store_labels' => [
+            'store_id' => 0,
+            'store_label' => 'Discount Label for 10% off',
+         ]
     ]
 );
 
@@ -39,16 +42,14 @@ $salesRule->getConditions()->loadArray([
     'value' => '1',
     'is_value_processed' => null,
     'aggregator' => 'all',
-    'conditions' =>
-        [
+    'conditions' => [
             [
                 'type' => \Magento\SalesRule\Model\Rule\Condition\Address::class,
                 'attribute' => 'base_subtotal',
                 'operator' => '>=',
                 'value' => '20',
                 'is_value_processed' => false,
-                'actions' =>
-                    [
+                'actions' => [
                         [
                             'type' => \Magento\SalesRule\Model\Rule\Condition\Product\Combine::class,
                             'attribute' => null,

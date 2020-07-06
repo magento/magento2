@@ -9,22 +9,15 @@ namespace Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
-use Magento\Sales\Model\ResourceModel\Order\Collection;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Exception\InputException;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\Filter;
+use Magento\Framework\Api\Search\FilterGroup;
 
 /**
  * Order filter allows to filter collection using 'increment_id' as order number, from the search criteria.
  */
 class OrderFilter
 {
-    /** Minimum query lenth for the filter */
-    private const DEFAULT_MIN_QUERY_LENGTH = 3;
-
     /**
      * @var ScopeConfigInterface
      */
@@ -68,20 +61,18 @@ class OrderFilter
     }
 
     /**
-     * Filter for filtering the requested categories id's based on url_key, ids, name in the result.
+     * Create filter for filtering the requested categories id's based on url_key, ids, name in the result.
      *
-     * @param string $userId
      * @param array $args
-     * @param StoreInterface $store
-     * @param SearchCriteriaBuilder $searchCriteriaBuilder
-     * @throws InputException
+     * @param int $userId
+     * @param int $storeId
+     * @return FilterGroup[]
      */
-    public function applyFilter(
-        int $userId,
+    public function createFilterGroups(
         array $args,
-        StoreInterface $store,
-        SearchCriteriaBuilder $searchCriteriaBuilder
-    ): void {
+        int $userId,
+        int $storeId
+    ): array {
         $filterGroups = [];
         $this->filterGroupBuilder->setFilters(
             [$this->filterBuilder->setField('customer_id')->setValue($userId)->setConditionType('eq')->create()]
@@ -89,7 +80,7 @@ class OrderFilter
         $filterGroups[] = $this->filterGroupBuilder->create();
 
         $this->filterGroupBuilder->setFilters(
-            [$this->filterBuilder->setField('store_id')->setValue($store->getId())->setConditionType('eq')->create()]
+            [$this->filterBuilder->setField('store_id')->setValue($storeId)->setConditionType('eq')->create()]
         );
         $filterGroups[] = $this->filterGroupBuilder->create();
 
@@ -104,7 +95,11 @@ class OrderFilter
                         if (is_array($value)) {
                             throw new InputException(__('Invalid match filter'));
                         }
-                        $filters[] = $this->addMatchFilter($field, $value, $store);
+                        $searchValue = str_replace('%', '', $value);
+                        $filters[] = $this->filterBuilder->setField($field)
+                            ->setValue("%{$searchValue}%")
+                            ->setConditionType('like')
+                            ->create();
                     } else {
                         $filters[] = $this->filterBuilder->setField($field)
                             ->setValue($value)
@@ -116,39 +111,7 @@ class OrderFilter
 
             $this->filterGroupBuilder->setFilters($filters);
             $filterGroups[] = $this->filterGroupBuilder->create();
-
         }
-        $searchCriteriaBuilder->setFilterGroups($filterGroups);
-    }
-
-    /**
-     * Add match filter to collection
-     *
-     * @param Collection $orderCollection
-     * @param string $field
-     * @param string $value
-     * @param StoreInterface $store
-     * @throws InputException
-     */
-    private function addMatchFilter(
-        string $field,
-        string $value,
-        StoreInterface $store
-    ): Filter {
-        $minQueryLength = $this->scopeConfig->getValue(
-            'catalog/search/min_query_length',
-            ScopeInterface::SCOPE_STORE,
-            $store
-        ) ?? self::DEFAULT_MIN_QUERY_LENGTH;
-        $searchValue = str_replace('%', '', $value);
-        $matchLength = strlen($searchValue);
-        if ($matchLength < $minQueryLength) {
-            throw new InputException(__('Invalid match filter. Minimum length is %1.', $minQueryLength));
-        }
-
-        return $this->filterBuilder->setField($field)
-            ->setValue("%{$searchValue}%")
-            ->setConditionType('like')
-            ->create();
+        return $filterGroups;
     }
 }
