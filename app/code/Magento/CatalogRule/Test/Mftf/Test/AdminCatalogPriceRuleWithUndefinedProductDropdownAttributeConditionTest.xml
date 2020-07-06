@@ -51,18 +51,19 @@
             <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
             <!-- Reindex after Catalog Price Rule creation -->
             <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="runIndexerUsingCronAfterCatalogPriceRuleCreated"/>
+            <wait time="1" stepKey="waitForReindex"/>
         </before>
         <after>
-            <!-- Delete Catalog Price Rule -->
-            <actionGroup ref="RemoveCatalogPriceRule" stepKey="deleteSecondCatalogPriceRule">
-                <argument name="ruleName" value="{{_defaultCatalogRule.name}}"/>
-            </actionGroup>
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
             <!-- Delete created via API data -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteFirstCategory"/>
             <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
+            <!-- Delete Catalog Price Rule -->
+            <actionGroup ref="RemoveCatalogPriceRule" stepKey="deleteSecondCatalogPriceRule">
+                <argument name="ruleName" value="{{_defaultCatalogRule.name}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
             <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="runIndexerUsingCronAfterAttributesWasDeleted"/>
         </after>
 
