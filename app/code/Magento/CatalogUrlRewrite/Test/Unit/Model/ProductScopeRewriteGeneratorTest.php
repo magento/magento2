@@ -71,7 +71,7 @@ class ProductScopeRewriteGeneratorTest extends TestCase
     private $configMock;
 
     /** @var CategoryRepositoryInterface|MockObject */
-    private $categoryRepository;
+    private $categoryRepositoryMock;
 
     protected function setUp(): void
     {
@@ -130,7 +130,7 @@ class ProductScopeRewriteGeneratorTest extends TestCase
         $this->configMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMock();
 
-        $this->categoryRepository = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
+        $this->categoryRepositoryMock = $this->getMockForAbstractClass(CategoryRepositoryInterface::class);
 
         $this->productScopeGenerator = (new ObjectManager($this))->getObject(
             ProductScopeRewriteGenerator::class,
@@ -144,7 +144,7 @@ class ProductScopeRewriteGeneratorTest extends TestCase
                 'storeManager' => $this->storeManager,
                 'mergeDataProviderFactory' => $mergeDataProviderFactory,
                 'config' => $this->configMock,
-                'categoryRepository' => $this->categoryRepository
+                'categoryRepository' => $this->categoryRepositoryMock
             ]
         );
         $this->categoryMock = $this->getMockBuilder(Category::class)
@@ -222,7 +222,7 @@ class ProductScopeRewriteGeneratorTest extends TestCase
         $this->anchorUrlRewriteGenerator->expects($this->any())->method('generate')
             ->willReturn([]);
 
-        $this->categoryRepository->expects($this->once())->method('get')->willReturn($this->categoryMock);
+        $this->categoryRepositoryMock->expects($this->once())->method('get')->willReturn($this->categoryMock);
 
         $this->assertEquals(
             ['category-1_1' => $canonical],
