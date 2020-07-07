@@ -8,9 +8,7 @@ declare(strict_types=1);
 namespace Magento\Sales\Block\Order\Email\Items;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\View\Element\Template;
-use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Creditmemo\Item as CreditmemoItem;
 use Magento\Sales\Model\Order\Invoice\Item as InvoiceItem;
 use Magento\Sales\Model\Order\Item as OrderItem;
@@ -27,7 +25,7 @@ class DefaultItems extends Template
     /**
      * Retrieve current order model instance
      *
-     * @return Order
+     * @return \Magento\Sales\Model\Order
      */
     public function getOrder()
     {
@@ -97,7 +95,7 @@ class DefaultItems extends Template
     /**
      * Return product additional information block
      *
-     * @return AbstractBlock
+     * @return \Magento\Framework\View\Element\AbstractBlock
      * @throws LocalizedException
      */
     public function getProductAdditionalInformationBlock()
