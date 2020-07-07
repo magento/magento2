@@ -20,4 +20,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\SalesGraphQl\Model\CreditmemoItemInterfaceTypeResolverComposite">
+        <arguments>
+            <argument name="creditmemoItemTypeResolvers" xsi:type="array">
+                <item name="creditmemo_catalog_item_type_resolver" xsi:type="object">Magento\SalesGraphQl\Model\CreditmemoItemTypeResolver</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

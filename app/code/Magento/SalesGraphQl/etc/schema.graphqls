@@ -47,6 +47,7 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     total: OrderTotal @doc(description: "Contains details about the calculated totals for this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderTotal")
     invoices: [Invoice]! @doc(description: "A list of invoices for the order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Invoices")
     shipments: [OrderShipment] @doc(description: "A list of shipments for the order")
+    credit_memos: [CreditMemo] @doc(description: "A list of credit memos") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemos")
     payment_methods: [PaymentMethod] @doc(description: "Payment details for the order")
     shipping_address: CustomerAddress @doc(description: "The shipping address for the order")
     billing_address: CustomerAddress @doc(description: "The billing address for the order")
@@ -197,6 +198,39 @@ type PaymentMethod @doc(description: "Contains details about the payment method 
     name: String! @doc(description: "The label that describes the payment method")
     type: String! @doc(description: "The payment method code that indicates how the order was paid for")
     additional_data: [KeyValue] @doc(description:  "Additional data per payment method type")
+}
+
+type CreditMemo @doc(description: "Credit memo details") {
+    id: ID! @doc(description: "The unique ID of the credit memo, used for API purposes")
+    number: String! @doc(description: "The sequential credit memo number")
+    items: [CreditMemoItem] @doc(description: "An array containing details about refunded items") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemo\\CreditMemoItems")
+    total: CreditMemoTotal @doc(description: "Contains details about the total refunded amount") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemo\\CreditMemoTotal")
+    comments: [CommentItem] @doc(description: "Comments on the credit memo") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemo\\CreditMemoComments")
+}
+
+interface CreditMemoItemInterface @doc(description: "Credit memo item details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\CreditmemoItemInterfaceTypeResolverComposite") {
+    id: ID! @doc(description: "The unique ID of the credit memo item, used for API purposes")
+    order_item: OrderItemInterface @doc(description: "The order item the credit memo is applied to") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderItem")
+    product_name: String @doc(description: "The name of the base product")
+    product_sku: String! @doc(description: "SKU of the base product")
+    product_sale_price: Money! @doc(description: "The sale price for the base product, including selected options")
+    quantity_refunded: Float @doc(description: "The number of refunded items")
+}
+
+type CreditMemoItem implements CreditMemoItemInterface {
+}
+
+type BundleCreditMemoItem implements CreditMemoIntemInterface {
+    bundle_options: [ItemSelectedBundleOption]
+}
+
+type CreditMemoTotal @doc(description: "Credit memo price details") {
+    subtotal: Money! @doc(description: "The subtotal amount, excluding shipping, discounts, and tax")
+    total_tax: Money! @doc(description: "The total tax amount")
+    grand_total: Money! @doc(description: "The final total amount, including shipping and taxes")
+    base_grand_total: Money! @doc(description: "The final total amount in the base currency")
+    shipping_amount: Money! @doc(description: "The refunded shipping fees")
+    adjustment: Money! @doc(description: "An adjustment manually applied to the order")
 }
 
 type KeyValue @doc(description: "The key-value type") {
