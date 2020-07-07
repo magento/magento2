@@ -10,7 +10,7 @@ namespace Magento\LoginAsCustomerAdminUi\Block\Adminhtml;
 use Magento\Backend\Block\Template;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface;
-use Magento\Store\Ui\Component\Listing\Column\Store\Options as StoreOptions;
+use Magento\LoginAsCustomerAdminUi\Ui\Customer\Component\ConfirmationPopup\Options as StoreOptions;
 
 /**
  * Login confirmation pop-up
