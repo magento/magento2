@@ -20,6 +20,7 @@ define([
             ).fail(
                 function () {
                     var deferred = $.Deferred(),
+
                         /**
                          * Update coupon form
                          */
@@ -33,7 +34,7 @@ define([
                     getTotalsAction([], deferred);
                     $.when(deferred).done(updateCouponCallback);
                 }
-            )
+            );
 
             return result;
         });
