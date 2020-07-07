@@ -716,7 +716,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $hasDueAmount = $this->canInvoice() && ($checkAmtTotalPaid);
         //case when paid amount is refunded and order has creditmemo created
         $creditmemos = ($this->getCreditmemosCollection() === false) ?
-             true : (count($this->getCreditmemosCollection()) > 0);
+             true : ($this->_memoCollectionFactory->create()->setOrderFilter($this)->getTotalCount() > 0);
         $paidAmtIsRefunded = $this->getTotalRefunded() == $totalPaid && $creditmemos;
         if (($hasDueAmount || $paidAmtIsRefunded) ||
             (!$checkAmtTotalPaid &&
