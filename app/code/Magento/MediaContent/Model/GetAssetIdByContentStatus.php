@@ -90,7 +90,7 @@ class GetAssetIdByContentStatus implements GetAssetIdByContentStatusInterface
             []
         )->where(
             'content_table.' . $this->statusColumn . ' = ?',
-            $this->getValueFromMap($value)
+            $value
         );
 
         $result = $this->connection->getConnection()->fetchAll($sql);
@@ -98,17 +98,5 @@ class GetAssetIdByContentStatus implements GetAssetIdByContentStatusInterface
         return array_map(function ($item) {
             return $item['asset_id'];
         }, $result);
-    }
-
-    /**
-     * @param string $value
-     * @return string
-     */
-    private function getValueFromMap(string $value): string
-    {
-        if (count($this->valueMap) > 0 && array_key_exists($value, $this->valueMap)) {
-            return $this->valueMap[$value];
-        }
-        return $value;
     }
 }

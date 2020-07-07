@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\MediaContent\Model;
 
+use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;
 use Magento\MediaContentApi\Model\GetAssetIdByContentStatusInterface;
 
@@ -16,7 +18,6 @@ use Magento\MediaContentApi\Model\GetAssetIdByContentStatusInterface;
 class GetAssetIdByEavContentStatus implements GetAssetIdByContentStatusInterface
 {
     private const TABLE_CONTENT_ASSET = 'media_content_asset';
-    private const TABLE_EAV_ATTRIBUTE = 'eav_attribute';
 
     /**
      * @var ResourceConnection
@@ -24,9 +25,9 @@ class GetAssetIdByEavContentStatus implements GetAssetIdByContentStatusInterface
     private $connection;
 
     /**
-     * @var string
+     * @var Config
      */
-    private $entityEavTypeTable;
+    private $config;
 
     /**
      * @var string
@@ -39,47 +40,41 @@ class GetAssetIdByEavContentStatus implements GetAssetIdByContentStatusInterface
     private $entityType;
 
     /**
-     * @var int
-     */
-    private $entityTypeId;
-
-    /**
      * @var array
      */
     private $valueMap;
 
     /**
-     * GetEavContentIdByStatus constructor.
+     * GetAssetIdByEavContentStatus constructor.
      * @param ResourceConnection $resource
-     * @param string $entityEavTypeTable
+     * @param Config $config
      * @param string $attributeCode
      * @param string $entityType
-     * @param int $entityTypeId
      * @param array $valueMap
      */
     public function __construct(
         ResourceConnection $resource,
-        string $entityEavTypeTable,
+        Config $config,
         string $attributeCode,
         string $entityType,
-        int $entityTypeId,
         array $valueMap = []
     ) {
         $this->connection = $resource;
-        $this->entityEavTypeTable = $entityEavTypeTable;
+        $this->config = $config;
         $this->attributeCode = $attributeCode;
         $this->entityType = $entityType;
-        $this->entityTypeId = $entityTypeId;
         $this->valueMap = $valueMap;
     }
 
     /**
      * @param string $value
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute(string $value): array
     {
-        $statusAttributeId = $this->getAttributeId();
+        $statusAttribute = $this->config->getAttribute($this->entityType, $this->attributeCode);
+
         $sql = $this->connection->getConnection()->select()->from(
             ['asset_content_table' => $this->connection->getTableName(self::TABLE_CONTENT_ASSET)],
             ['asset_id']
@@ -87,9 +82,10 @@ class GetAssetIdByEavContentStatus implements GetAssetIdByContentStatusInterface
             'entity_type = ?',
             $this->entityType
         )->joinInner(
-            ['entity_eav_type' => $this->connection->getTableName($this->entityEavTypeTable)],
-            'asset_content_table.entity_id = entity_eav_type.entity_id AND entity_eav_type.attribute_id = ' .
-            $statusAttributeId,
+            ['entity_eav_type' => $statusAttribute->getBackendTable()],
+            'asset_content_table.entity_id = entity_eav_type.' . $statusAttribute->getEntityIdField() .
+            ' AND entity_eav_type.attribute_id = ' .
+            $statusAttribute->getAttributeId(),
             []
         )->where(
             'entity_eav_type.value = ?',
@@ -101,25 +97,6 @@ class GetAssetIdByEavContentStatus implements GetAssetIdByContentStatusInterface
         return array_map(function ($item) {
             return $item['asset_id'];
         }, $result);
-    }
-
-    /**
-     * @return string
-     */
-    private function getAttributeId(): string
-    {
-        $sql = $this->connection->getConnection()->select()->from(
-            ['eav' => $this->connection->getTableName(self::TABLE_EAV_ATTRIBUTE)],
-            ['attribute_id']
-        )->where(
-            'entity_type_id = ?',
-            $this->entityTypeId
-        )->where(
-            'attribute_code = ?',
-            $this->attributeCode
-        );
-
-        return $this->connection->getConnection()->fetchOne($sql);
     }
 
     /**
