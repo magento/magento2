@@ -131,6 +131,7 @@ class Widget
      */
     public function getConfigAsXml($type)
     {
+        // phpstan:ignore
         return $this->getXmlElementByType($type);
     }
 
@@ -463,7 +464,7 @@ class Widget
     /**
      * Encode reserved chars
      *
-     * @param $string
+     * @param string $string
      * @return string|string[]
      */
     private function encodeReservedChars($string)
@@ -483,7 +484,7 @@ class Widget
     /**
      * Decode reserved chars
      *
-     * @param $string
+     * @param string $string
      * @return array
      */
     public function decodeReservedChars($string)
@@ -503,8 +504,8 @@ class Widget
     /**
      * Is text type Widget parameter
      *
-     * @param $widget
-     * @param $name
+     * @param \Magento\Framework\DataObject $widget
+     * @param string $name
      * @return bool
      */
     private function isTextType($widget, $name)
