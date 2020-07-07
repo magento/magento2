@@ -293,6 +293,7 @@ class Widget
      * @param array $params Pre-configured Widget Params
      * @param bool $asIs Return result as widget directive(true) or as placeholder image(false)
      * @return string Widget directive ready to parse
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getWidgetDeclaration($type, $params = [], $asIs = true)
     {
@@ -460,6 +461,8 @@ class Widget
     }
 
     /**
+     * Encode reserved chars
+     *
      * @param $string
      * @return string|string[]
      */
@@ -478,6 +481,8 @@ class Widget
     }
 
     /**
+     * Decode reserved chars
+     *
      * @param $string
      * @return array
      */
@@ -496,6 +501,8 @@ class Widget
     }
 
     /**
+     * Is text type Widget parameter
+     *
      * @param $widget
      * @param $name
      * @return bool
