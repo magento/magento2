@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Interception;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -143,12 +145,9 @@ class PluginListGenerator implements ConfigWriterInterface, ConfigLoaderInterfac
     }
 
     /**
-     * Write interception configuration for scopes.
-     *
-     * @param array $scopes
-     * @return void
+     * @inheritdoc
      */
-    public function write($scopes)
+    public function write(array $scopes): void
     {
         foreach ($scopes as $scope) {
             $this->scopeConfig->setCurrentScope($scope);
@@ -198,13 +197,9 @@ class PluginListGenerator implements ConfigWriterInterface, ConfigLoaderInterfac
     }
 
     /**
-     * Load interception configuration data per scope.
-     *
-     * @param string $cacheId
-     * @return array
-     * @throws \Magento\Framework\Exception\FileSystemException
+     * @inheritdoc
      */
-    public function load($cacheId)
+    public function load(string $cacheId): array
     {
         $file = $this->directoryList->getPath(DirectoryList::GENERATED_METADATA) . '/' . $cacheId . '.' . 'php';
         if (file_exists($file)) {
