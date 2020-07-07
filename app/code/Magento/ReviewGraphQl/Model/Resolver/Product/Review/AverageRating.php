@@ -67,7 +67,10 @@ class AverageRating implements ResolverInterface
         $averageRating = $summary->getSum() ?: 0;
 
         if ($averageRating > 0) {
-            $averageRating = (float) number_format($summary->getSum() / $summary->getCount() / 20, 2);
+            $averageRating = (float) number_format(
+                (int) $summary->getSum() / (int) $summary->getCount(),
+                2
+            );
         }
 
         return $averageRating;

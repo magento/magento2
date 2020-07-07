@@ -43,7 +43,7 @@ class CustomerReviewsDataProvider
     {
         /** @var ReviewsCollection $reviewsCollection */
         $reviewsCollection = $this->collectionFactory->create();
-        $reviewsCollection->addStatusFilter(Review::STATUS_APPROVED)
+        $reviewsCollection
             ->addCustomerFilter($customerId)
             ->setPageSize($pageSize)
             ->setCurPage($currentPage)
