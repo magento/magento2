@@ -438,7 +438,7 @@ class ElasticsearchTest extends TestCase
                                         'match' => 'price_*',
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
-                                            'type' => 'float',
+                                            'type' => 'double',
                                             'store' => true,
                                         ],
                                     ],
@@ -509,7 +509,7 @@ class ElasticsearchTest extends TestCase
                                         'match' => 'price_*',
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
-                                            'type' => 'float',
+                                            'type' => 'double',
                                             'store' => true,
                                         ],
                                     ],
