@@ -13,7 +13,8 @@
         "magento/module-customer-graph-ql": "*",
         "magento/module-sales": "*",
         "magento/module-directory": "*",
-        "magento/module-graph-ql": "*"
+        "magento/module-graph-ql": "*",
+        "magento/module-gift-message": "*"
     },
     "suggest": {
         "magento/module-graph-ql-cache": "*"
