@@ -36,7 +36,7 @@ interface AdapterInterface
     const INSERT_ON_DUPLICATE = 1;
 
     const INSERT_IGNORE = 2;
-    
+
     /** Strategy for updating data in table. See https://dev.mysql.com/doc/refman/5.7/en/replace.html */
     const REPLACE = 4;
 
@@ -1126,6 +1126,14 @@ interface AdapterInterface
      * @return array
      */
     public function getTables($likeCondition = null);
+
+    /**
+     * Retrieve triggers list
+     *
+     * @param null|string $likeCondition
+     * @return array
+     */
+    public function getTriggers($likeCondition = null);
 
     /**
      * Generates case SQL fragment

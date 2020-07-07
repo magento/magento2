@@ -6,9 +6,13 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
-use Magento\Framework\App\State as AppState;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\DB\Ddl\Trigger;
+use Magento\Framework\Mview\View\CollectionInterface as ViewCollection;
+use Magento\Framework\Mview\View\StateInterface;
 use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
@@ -52,22 +56,30 @@ class UpgradeCommand extends AbstractSetupCommand
      */
     private $searchConfigFactory;
 
+    /*
+     * @var ViewCollection
+     */
+    private $viewCollection;
+
     /**
      * @param InstallerFactory $installerFactory
      * @param SearchConfigFactory $searchConfigFactory
      * @param DeploymentConfig $deploymentConfig
      * @param AppState|null $appState
+     * @param ViewCollection|null $viewCollection
      */
     public function __construct(
         InstallerFactory $installerFactory,
         SearchConfigFactory $searchConfigFactory,
         DeploymentConfig $deploymentConfig = null,
-        AppState $appState = null
+        AppState $appState = null,
+        ViewCollection $viewCollection = null
     ) {
         $this->installerFactory = $installerFactory;
         $this->searchConfigFactory = $searchConfigFactory;
         $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
         $this->appState = $appState ?: ObjectManager::getInstance()->get(AppState::class);
+        $this->viewCollection = $viewCollection ?: ObjectManager::getInstance()->get(ViewCollection::class);
         parent::__construct();
     }
 
@@ -130,6 +142,9 @@ class UpgradeCommand extends AbstractSetupCommand
             $installer->updateModulesSequence($keepGenerated);
             $searchConfig = $this->searchConfigFactory->create();
             $searchConfig->validateSearchEngine();
+
+            $this->removeUnusedTriggers();
+
             $installer->installSchema($request);
             $installer->installDataFixtures($request);
 
@@ -156,5 +171,44 @@ class UpgradeCommand extends AbstractSetupCommand
         }
 
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+    }
+
+    /**
+     * Remove unused triggers
+     */
+    private function removeUnusedTriggers()
+    {
+        // unsubscribe mview
+        $viewList = $this->viewCollection->getViewsByStateMode(StateInterface::MODE_ENABLED);
+        foreach ($viewList as $view) {
+            /** @var \Magento\Framework\Mview\ViewInterface $view */
+            $view->unsubscribe();
+        }
+
+        // remove extra triggers that have correct naming structure
+        /* @var ResourceConnection $resource */
+        $resource = ObjectManager::getInstance()->get(ResourceConnection::class);
+        $connection = $resource->getConnection();
+        $triggers = $connection->getTriggers();
+        foreach ($triggers as $trigger) {
+            $triggerNames = [];
+            foreach (Trigger::getListOfEvents() as $event) {
+                $triggerName = $resource->getTriggerName(
+                    $resource->getTableName($trigger['Table']),
+                    Trigger::TIME_AFTER,
+                    $event
+                );
+                $triggerNames[] = strtolower($triggerName);
+            }
+            if (in_array($trigger['Trigger'], $triggerNames)) {
+                $connection->dropTrigger($trigger['Trigger']);
+            }
+        }
+
+        // subscribe mview
+        foreach ($viewList as $view) {
+            /** @var \Magento\Framework\Mview\ViewInterface $view */
+            $view->subscribe();
+        }
     }
 }
