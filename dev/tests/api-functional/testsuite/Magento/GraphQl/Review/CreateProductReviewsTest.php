@@ -82,7 +82,7 @@ class CreateProductReviewsTest extends GraphQlAbstract
             'nickname' => $customerName,
             'summary' => 'Summary Test',
             'text' => 'Text Test',
-            'average_rating' => 3.33,
+            'average_rating' => 66.67,
             'ratings_breakdown' => [
                 [
                     'name' => 'Price',

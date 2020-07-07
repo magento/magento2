@@ -226,7 +226,7 @@ QUERY;
             'nickname' => 'Nickname',
             'summary' => 'Review Summary',
             'text' => 'Review text',
-            'average_rating' => 2,
+            'average_rating' => 40,
             'ratings_breakdown' => [
                 [
                     'name' => 'Quality',
