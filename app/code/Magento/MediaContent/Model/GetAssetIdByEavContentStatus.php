@@ -7,13 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\MediaContent\Model;
 
-use Magento\Eav\Api\Data\AttributeInterface;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;
 use Magento\MediaContentApi\Model\GetAssetIdByContentStatusInterface;
 
 /**
- * Class GetAssetIdByEavContentStatus
+ * Class responsible to return Asset id by eav entity status
  */
 class GetAssetIdByEavContentStatus implements GetAssetIdByContentStatusInterface
 {
@@ -46,6 +45,7 @@ class GetAssetIdByEavContentStatus implements GetAssetIdByContentStatusInterface
 
     /**
      * GetAssetIdByEavContentStatus constructor.
+     *
      * @param ResourceConnection $resource
      * @param Config $config
      * @param string $attributeCode
@@ -67,11 +67,10 @@ class GetAssetIdByEavContentStatus implements GetAssetIdByContentStatusInterface
     }
 
     /**
-     * @param string $value
-     * @return array
+     * @inheritDoc
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute(string $value): array
+    public function execute(string $status): array
     {
         $statusAttribute = $this->config->getAttribute($this->entityType, $this->attributeCode);
 
@@ -89,7 +88,7 @@ class GetAssetIdByEavContentStatus implements GetAssetIdByContentStatusInterface
             []
         )->where(
             'entity_eav_type.value = ?',
-            $this->getValueFromMap($value)
+            $this->getValueFromMap($status)
         );
 
         $result = $this->connection->getConnection()->fetchAll($sql);
@@ -100,6 +99,8 @@ class GetAssetIdByEavContentStatus implements GetAssetIdByContentStatusInterface
     }
 
     /**
+     * Get a value from a value map
+     *
      * @param string $value
      * @return string
      */

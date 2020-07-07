@@ -10,7 +10,7 @@ namespace Magento\MediaContent\Model;
 use Magento\MediaContentApi\Model\GetAssetIdByContentStatusInterface;
 
 /**
- * Class GetAssetIdByContentStatusComposite
+ * Class responsible to return Asset ids by content status
  */
 class GetAssetIdByContentStatusComposite implements GetAssetIdByContentStatusInterface
 {
@@ -21,6 +21,7 @@ class GetAssetIdByContentStatusComposite implements GetAssetIdByContentStatusInt
 
     /**
      * GetAssetIdByContentStatusComposite constructor.
+     *
      * @param array $getAssetIdByContentStatusArray
      */
     public function __construct($getAssetIdByContentStatusArray = [])
@@ -29,14 +30,16 @@ class GetAssetIdByContentStatusComposite implements GetAssetIdByContentStatusInt
     }
 
     /**
-     * @param string $value
+     * Get Asset ids by Content status
+     *
+     * @param string $status
      * @return array
      */
-    public function execute(string $value): array
+    public function execute(string $status): array
     {
         $ids = [];
         foreach ($this->getAssetIdByContentStatusArray as $getAssetIdByContentStatus) {
-            $ids = array_merge($ids, $getAssetIdByContentStatus->execute($value));
+            $ids = array_merge($ids, $getAssetIdByContentStatus->execute($status));
         }
         return array_unique($ids);
     }

@@ -11,7 +11,7 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\MediaContentApi\Model\GetAssetIdByContentStatusInterface;
 
 /**
- * Class GetAssetIdByContentStatus
+ * Class responsible to return Asset id by entity status
  */
 class GetAssetIdByContentStatus implements GetAssetIdByContentStatusInterface
 {
@@ -48,7 +48,8 @@ class GetAssetIdByContentStatus implements GetAssetIdByContentStatusInterface
     private $valueMap;
 
     /**
-     * GetContentIdByStatus constructor.
+     * GetAssetIdByContentStatus constructor.
+     *
      * @param ResourceConnection $resource
      * @param string $entityType
      * @param string $contentTable
@@ -73,8 +74,7 @@ class GetAssetIdByContentStatus implements GetAssetIdByContentStatusInterface
     }
 
     /**
-     * @param string $value
-     * @return array
+     * @inheritDoc
      */
     public function execute(string $value): array
     {
