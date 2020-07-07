@@ -6,11 +6,12 @@
 define([
     'jquery',
     'Magento_Catalog/js/product/list/toolbar'
-], function ($, productListToolbarForm) {
+], function ($) {
     'use strict';
 
     describe('Magento_Catalog/js/product/list/toolbar', function () {
-        var toolbar;
+        var widget,
+            toolbar;
 
         beforeEach(function () {
             toolbar = $('<div class="toolbar"></div>');
@@ -33,15 +34,14 @@ define([
             expect($.mage.productListToolbarForm.prototype._create).toHaveBeenCalledTimes(1);
         });
 
-        it('Toolbar is initialized once', function () {
-            spyOn($.mage.productListToolbarForm.prototype, '_bind');
-            var secondToolbar = $('<div class="toolbar"></div>');
-
+        it('Toolbar receives options properly', function () {
             toolbar.productListToolbarForm();
-            secondToolbar.productListToolbarForm();
+            expect(toolbar.productListToolbarForm('option', 'page')).toBe('p');
+        });
 
-            expect($.mage.productListToolbarForm.prototype._bind).toHaveBeenCalledTimes(4);
-            secondToolbar.remove();
+        it('Toolbar receives element properly', function () {
+            widget = toolbar.productListToolbarForm();
+            expect(widget).toBe(toolbar);
         });
     });
 });
