@@ -107,9 +107,20 @@ class Calendar extends \Magento\Framework\View\Element\Template
             ]
         );
 
-        // get "today" and "week" words
-        $this->assign('today', $this->encoder->encode($localeData['fields']['day']['relative']['0']));
-        $this->assign('week', $this->encoder->encode($localeData['fields']['week']['dn']));
+        /**
+         * Get "today" and "week" words
+         *
+         * Fields value in the current position have been added to ICU Data tables,
+         * starting with ICU library version 51.1.
+         * Due to fact that we do not use these variables in templates, we do not initialize them for older versions
+         *
+         * @see https://github.com/unicode-org/icu/blob/release-50-2/icu4c/source/data/locales/en.txt
+         * @see https://github.com/unicode-org/icu/blob/release-51-2/icu4c/source/data/locales/en.txt
+         */
+        if ($localeData->get('fields')) {
+            $this->assign('today', $this->encoder->encode($localeData['fields']['day']['relative']['0']));
+            $this->assign('week', $this->encoder->encode($localeData['fields']['week']['dn']));
+        }
 
         // get "am" & "pm" words
         $this->assign('am', $this->encoder->encode($localeData['calendar']['gregorian']['AmPmMarkers']['0']));
