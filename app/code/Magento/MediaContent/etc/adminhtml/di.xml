@@ -1,0 +1,55 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\MediaContent\Model\GetAssetIdByContentStatusComposite">
+        <arguments>
+            <argument name="getAssetIdByContentStatusArray" xsi:type="array">
+                <item name="getAssetIdByProductStatus" xsi:type="object">Magento\MediaContent\Model\GetAssetIdByProductStatus</item>
+                <item name="getAssetIdByCategoryStatus" xsi:type="object">Magento\MediaContent\Model\GetAssetIdByCategoryStatus</item>
+                <item name="getAssetIdByPageStatus" xsi:type="object">Magento\MediaContent\Model\GetAssetIdByPageStatus</item>
+                <item name="getAssetIdByBlockStatus" xsi:type="object">Magento\MediaContent\Model\GetAssetIdByBlockStatus</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\MediaContent\Model\GetAssetIdByProductStatus" type="Magento\MediaContent\Model\GetAssetIdByEavContentStatus">
+        <arguments>
+            <argument name="entityEavTypeTable" xsi:type="string">catalog_product_entity_int</argument>
+            <argument name="attributeCode" xsi:type="string">status</argument>
+            <argument name="entityType" xsi:type="string">catalog_product</argument>
+            <argument name="entityTypeId" xsi:type="string">4</argument>
+            <argument name="valueMap" xsi:type="array">
+                <item name="1" xsi:type="string">1</item>
+                <item name="0" xsi:type="string">2</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaContent\Model\GetAssetIdByCategoryStatus" type="Magento\MediaContent\Model\GetAssetIdByEavContentStatus">
+        <arguments>
+            <argument name="entityEavTypeTable" xsi:type="string">catalog_category_entity_int</argument>
+            <argument name="attributeCode" xsi:type="string">is_active</argument>
+            <argument name="entityType" xsi:type="string">catalog_category</argument>
+            <argument name="entityTypeId" xsi:type="string">3</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaContent\Model\GetAssetIdByPageStatus" type="Magento\MediaContent\Model\GetAssetIdByContentStatus">
+        <arguments>
+            <argument name="entityType" xsi:type="string">cms_page</argument>
+            <argument name="contentTable" xsi:type="string">cms_page</argument>
+            <argument name="idColumn" xsi:type="string">page_id</argument>
+            <argument name="statusColumn" xsi:type="string">is_active</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaContent\Model\GetAssetIdByBlockStatus" type="Magento\MediaContent\Model\GetAssetIdByContentStatus">
+        <arguments>
+            <argument name="entityType" xsi:type="string">cms_block</argument>
+            <argument name="contentTable" xsi:type="string">cms_block</argument>
+            <argument name="idColumn" xsi:type="string">block_id</argument>
+            <argument name="statusColumn" xsi:type="string">is_active</argument>
+        </arguments>
+    </virtualType>
+</config>
