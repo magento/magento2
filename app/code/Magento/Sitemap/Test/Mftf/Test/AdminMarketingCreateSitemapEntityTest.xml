@@ -15,6 +15,7 @@
             <title value="Sitemap Creation"/>
             <description value="Sitemap Entity Creation"/>
             <testCaseId value="MC-14312"/>
+            <severity value="MAJOR"/>
             <group value="sitemap"/>
             <group value="mtf_migrated"/>
         </annotations>

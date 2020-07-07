@@ -11,6 +11,7 @@
     <operation name="CreateSwatchProductAttributeForm" dataType="SwatchProductAttributeForm" type="create"
                auth="adminFormKey" url="catalog/product_attribute/save" method="POST" successRegex="/messages-message-success/" returnRegex="">
         <contentType>application/x-www-form-urlencoded</contentType>
+        <field key="attribute_id">string</field>
         <field key="frontend_label[0]">string</field>
         <field key="frontend_label[1]">string</field>
         <field key="frontend_input">string</field>
@@ -42,5 +43,8 @@
         <field key="is_visible_on_front">string</field>
         <field key="used_in_product_listing">string</field>
         <field key="used_for_sort_by">string</field>
+    </operation>
+    <operation name="DeleteSwatchProductAttributeForm" dataType="SwatchProductAttributeForm" type="delete" auth="adminOauth" url="/V1/products/attributes/{attribute_code}" method="DELETE">
+        <contentType>application/json</contentType>
     </operation>
 </operations>
