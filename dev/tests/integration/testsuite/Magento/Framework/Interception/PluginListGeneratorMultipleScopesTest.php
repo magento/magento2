@@ -12,12 +12,16 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Magento\TestFramework\Application;
 use Magento\TestFramework\Helper\Bootstrap;
 
-class PluginListGeneratorTest extends \PHPUnit\Framework\TestCase
+class PluginListGeneratorMultipleScopesTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * Generated plugin list config for frontend scope
+     * Generated plugin list configs for frontend, adminhtml, graphql scopes
      */
-    const CACHE_ID = 'primary|global|frontend|plugin-list';
+    private $cacheIds = [
+        'primary|global|frontend|plugin-list',
+        'primary|global|adminhtml|plugin-list',
+        'primary|global|graphql|plugin-list'
+    ];
 
     /**
      * @var PluginListGenerator
@@ -80,35 +84,19 @@ class PluginListGeneratorTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Test plugin list configuration generation and load.
+     * Test multiple scopes plugin list configuration generation and load.
      */
-    public function testPluginListConfigGeneration()
+    public function testPluginListMultipleScopesConfigGeneration()
     {
-        $scopes = ['frontend'];
+        $scopes = ['frontend', 'adminhtml', 'graphql'];
         $this->model->write($scopes);
-        $configData = $this->model->load(self::CACHE_ID);
-        $this->assertNotEmpty($configData[0]);
-        $this->assertNotEmpty($configData[1]);
-        $this->assertNotEmpty($configData[2]);
-        $expected = [
-            1 => [
-                0 => 'genericHeaderPlugin',
-                1 => 'asyncCssLoad',
-                2 => 'response-http-page-cache'
-            ]
-        ];
-        // Here in test is assumed that this class below has 3 plugins. But the amount of plugins and class itself
-        // may vary. If it is changed, please update these assertions.
-        $this->assertArrayHasKey(
-            'Magento\\Framework\\App\\Response\\Http_sendResponse___self',
-            $configData[2],
-            'Processed plugin does not exist in the processed plugins array.'
-        );
-        $this->assertSame(
-            $expected,
-            $configData[2]['Magento\\Framework\\App\\Response\\Http_sendResponse___self'],
-            'Plugin configurations are not equal'
-        );
+
+        foreach ($this->cacheIds as $cacheId) {
+            $configData = $this->model->load($cacheId);
+            $this->assertNotEmpty($configData[0]);
+            $this->assertNotEmpty($configData[1]);
+            $this->assertNotEmpty($configData[2]);
+        }
     }
 
     /**
@@ -131,11 +119,13 @@ class PluginListGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     protected function tearDown(): void
     {
-        $filePath = $this->directoryList->getPath(DirectoryList::GENERATED_METADATA)
-            . '/' . self::CACHE_ID . '.' . 'php';
+        foreach ($this->cacheIds as $cacheId) {
+            $filePath = $this->directoryList->getPath(DirectoryList::GENERATED_METADATA)
+                . '/' . $cacheId . '.' . 'php';
 
-        if (file_exists($filePath)) {
-            $this->file->deleteFile($filePath);
+            if (file_exists($filePath)) {
+                $this->file->deleteFile($filePath);
+            }
         }
     }
 }

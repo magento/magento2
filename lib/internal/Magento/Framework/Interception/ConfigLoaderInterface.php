@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Interception;
 
-use Magento\Framework\Exception\FileSystemException;
-
 /**
  * Interception configuration loader interface.
  */
@@ -19,7 +17,6 @@ interface ConfigLoaderInterface
      *
      * @param string $cacheId
      * @return array
-     * @throws FileSystemException
      */
     public function load(string $cacheId): array;
 }
