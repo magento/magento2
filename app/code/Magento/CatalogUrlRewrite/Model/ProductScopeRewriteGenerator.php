@@ -237,8 +237,11 @@ class ProductScopeRewriteGenerator
     }
 
     /**
-     * Checks if URL key has been changed for provided category and returns reloaded category in other case - returns provided category.
+     * Check if URL key has been changed
      *
+     * Checks if URL key has been changed for provided category and returns reloaded category,
+     * in other case - returns provided category.
+     * 
      * Category should be loaded per appropriate store at all times. This is because whilst the URL key on the
      * category in focus might be unchanged, parent category URL keys might be. If the category store ID
      * and passed store ID are the same then return current category as it is correct but may have changed in memory
