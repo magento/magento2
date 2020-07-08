@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\BatchDataMapper;
 
 use Magento\AdvancedSearch\Model\Adapter\DataMapper\AdditionalFieldsProviderInterface;
@@ -15,11 +16,15 @@ use Magento\Elasticsearch\Model\Adapter\Document\Builder;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldType\Date;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
+ * Unit tests for \Magento\Elasticsearch\Model\Adapter\BatchDataMapper\ProductDataMapper class.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
+class ProductDataMapperTest extends TestCase
 {
     /**
      * @var ProductDataMapper
@@ -27,37 +32,37 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var Builder|MockObject
      */
     private $builderMock;
 
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|MockObject
      */
     private $attribute;
 
     /**
-     * @var FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FieldMapperInterface|MockObject
      */
     private $fieldMapperMock;
 
     /**
-     * @var Date|\PHPUnit_Framework_MockObject_MockObject
+     * @var Date|MockObject
      */
     private $dateFieldTypeMock;
 
     /**
-     * @var AdditionalFieldsProviderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdditionalFieldsProviderInterface|MockObject
      */
     private $additionalFieldsProvider;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var DataProvider|MockObject
      */
     private $dataProvider;
 
     /**
-     * Set up test environment.
+     * @inheritdoc
      */
     protected function setUp()
     {
@@ -67,6 +72,11 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
         $this->attribute = $this->createMock(Attribute::class);
         $this->additionalFieldsProvider = $this->createMock(AdditionalFieldsProviderInterface::class);
         $this->dateFieldTypeMock = $this->createMock(Date::class);
+        $filterableAttributeTypes = [
+            'boolean' => 'boolean',
+            'multiselect' => 'multiselect',
+            'select' => 'select',
+        ];
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
@@ -77,6 +87,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
                 'dateFieldType' => $this->dateFieldTypeMock,
                 'dataProvider' => $this->dataProvider,
                 'additionalFieldsProvider' => $this->additionalFieldsProvider,
+                'filterableAttributeTypes' => $filterableAttributeTypes,
             ]
         );
     }
@@ -155,8 +166,8 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
             $productId => [$attributeId => $attributeValue],
         ];
         $documents = $this->model->map($documentData, $storeId, $context);
-        $returnAttributeData['store_id'] = $storeId;
-        $this->assertEquals($returnAttributeData, $documents[$productId]);
+        $returnAttributeData = ['store_id' => $storeId] + $returnAttributeData;
+        $this->assertSame($returnAttributeData, $documents[$productId]);
     }
 
     /**
@@ -192,9 +203,9 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
      * Return attribute mock
      *
      * @param array attributeData
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
-    private function getAttribute(array $attributeData): \PHPUnit_Framework_MockObject_MockObject
+    private function getAttribute(array $attributeData): MockObject
     {
         $attributeMock = $this->createPartialMock(
             Attribute::class,
@@ -301,8 +312,8 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
                         ['value' => '2', 'label' => 'Disabled'],
                     ],
                 ],
-                [10  => '1', 11 => '2'],
-                ['status' => '1'],
+                [10 => '1', 11 => '2'],
+                ['status' => 1],
             ],
             'select without options' => [
                 10,
@@ -314,7 +325,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
                     'options' => [],
                 ],
                 '44',
-                ['color' => '44'],
+                ['color' => 44],
             ],
             'unsearchable select with options' => [
                 10,
@@ -329,7 +340,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 '44',
-                ['color' => '44'],
+                ['color' => 44],
             ],
             'searchable select with options' => [
                 10,
@@ -344,7 +355,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 '44',
-                ['color' => '44', 'color_value' => 'red'],
+                ['color' => 44, 'color_value' => 'red'],
             ],
             'composite select with options' => [
                 10,
@@ -359,7 +370,7 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
                     ],
                 ],
                 [10 => '44', 11 => '45'],
-                ['color' => ['44', '45'], 'color_value' => ['red', 'black']],
+                ['color' => [44, 45], 'color_value' => ['red', 'black']],
             ],
             'multiselect without options' => [
                 10,
@@ -426,10 +437,10 @@ class ProductDataMapperTest extends \PHPUnit\Framework\TestCase
                     'backend_type' => 'int',
                     'frontend_input' => 'int',
                     'is_searchable' => false,
-                    'options' => []
+                    'options' => [],
                 ],
                 15,
-                []
+                [],
             ],
         ];
     }

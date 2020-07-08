@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="UpdateBundleProductViaImportTest">
+        <annotations>
+            <stories value="Update Bundle product via import"/>
+            <features value="Import/Export"/>
+            <title value="Bundle relations is removed when products are re-imported"/>
+            <description value="Bundle relations is removed when products are re-imported"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-35605"/>
+            <useCaseId value="MC-35484"/>
+            <group value="importExport"/>
+        </annotations>
+        <before>
+            <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!-- Delete products created via import -->
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteBundleProduct">
+                <argument name="sku" value="Bundle"/>
+            </actionGroup>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSimpleProduct">
+                <argument name="sku" value="Simple"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!-- Create Bundle product via import -->
+        <actionGroup ref="AdminImportProductsActionGroup" stepKey="adminImportProductsCreate">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="catalog_product_import_bundle.csv"/>
+            <argument name="importNoticeMessage" value="Created: 2, Updated: 0, Deleted: 0"/>
+        </actionGroup>
+        <magentoCLI command="cache:flush" arguments="full_page" stepKey="flushCacheAfterCreate"/>
+        <magentoCLI command="indexer:reindex" stepKey="indexerReindexAfterCreate"/>
+
+        <!-- Check Bundle product is visible on the storefront-->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPageAfterCreation">
+            <argument name="categoryName" value="New"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup"
+                     stepKey="assertBundleProductInStockAfterCreation">
+            <argument name="productName" value="Bundle"/>
+        </actionGroup>
+
+        <!-- Update Bundle product via import -->
+        <actionGroup ref="AdminImportProductsActionGroup" stepKey="adminImportProductsUpdate">
+            <argument name="behavior" value="Add/Update"/>
+            <argument name="importFile" value="catalog_product_import_bundle.csv"/>
+            <argument name="importNoticeMessage" value="Created: 0, Updated: 2, Deleted: 0"/>
+        </actionGroup>
+        <magentoCLI command="cache:flush" arguments="full_page" stepKey="flushCacheAfterUpdate"/>
+        <magentoCLI command="indexer:reindex" stepKey="indexerReindexAfterUpdate"/>
+
+        <!-- Check Bundle product is still visible on the storefront-->
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openCategoryPageAfterUpdate">
+            <argument name="categoryName" value="New"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup"
+                     stepKey="assertBundleProductInStockAfterUpdate">
+            <argument name="productName" value="Bundle"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @magentoDbIsolation enabled
  * @magentoAppIsolation disabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class WishlistTest extends TestCase
 {
@@ -117,6 +118,7 @@ class WishlistTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Wishlist/_files/wishlist.php
+     * @magentoDbIsolation disabled
      *
      * @return void
      */
