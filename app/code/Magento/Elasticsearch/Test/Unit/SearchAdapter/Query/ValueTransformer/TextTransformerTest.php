@@ -25,7 +25,8 @@ class TextTransformerTest extends \PHPUnit\Framework\TestCase
     public function setUp()
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->model = $objectManagerHelper->getObject(TextTransformer::class,
+        $this->model = $objectManagerHelper->getObject(
+            TextTransformer::class,
             [
                 '$preprocessors' => [],
             ]
