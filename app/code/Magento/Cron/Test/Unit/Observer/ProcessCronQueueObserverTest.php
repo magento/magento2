@@ -1047,8 +1047,8 @@ class ProcessCronQueueObserverTest extends TestCase
         $this->scheduleCollectionMock->expects($this->any())->method('load')->willReturnSelf();
 
         $scheduleMock->expects($this->any())->method('getCollection')->willReturn($this->scheduleCollectionMock);
-        $scheduleMock->expects($this->exactly(9))->method('getResource')->willReturn($this->scheduleResourceMock);
-        $this->scheduleFactoryMock->expects($this->exactly(10))->method('create')->willReturn($scheduleMock);
+        $scheduleMock->expects($this->exactly(10))->method('getResource')->willReturn($this->scheduleResourceMock);
+        $this->scheduleFactoryMock->expects($this->exactly(11))->method('create')->willReturn($scheduleMock);
 
         $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
 
@@ -1078,11 +1078,29 @@ class ProcessCronQueueObserverTest extends TestCase
             )
             ->willReturn(1);
 
-        $this->scheduleResourceMock->expects($this->exactly(5))
+        $connectionMock->expects($this->once())
+            ->method('quoteInto')
+            ->with(
+                'status = ? AND job_code IN (?) AND (scheduled_at < UTC_TIMESTAMP() - INTERVAL 1 DAY)',
+                ['test_job1'],
+                'running'
+            )
+            ->willReturn('');
+
+        $connectionMock->expects($this->once())
+            ->method('update')
+            ->with(
+                $tableName,
+                ['status' => 'error', 'messages' => 'Time out'],
+                ''
+            )
+            ->willReturn(0);
+
+        $this->scheduleResourceMock->expects($this->exactly(6))
             ->method('getTable')
             ->with($tableName)
             ->willReturn($tableName);
-        $this->scheduleResourceMock->expects($this->exactly(14))
+        $this->scheduleResourceMock->expects($this->exactly(15))
             ->method('getConnection')
             ->willReturn($connectionMock);
 

@@ -65,31 +65,47 @@ class Schedule extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     public function trySetJobUniqueStatusAtomic($scheduleId, $newStatus, $currentStatus)
     {
         $connection = $this->getConnection();
+        $connection->beginTransaction();
 
         // this condition added to avoid cron jobs locking after incorrect termination of running job
         $match = $connection->quoteInto(
             'existing.job_code = current.job_code ' .
-            'AND (existing.executed_at > UTC_TIMESTAMP() - INTERVAL 1 DAY OR existing.executed_at IS NULL) ' .
-            'AND existing.status = ?',
+            'AND existing.status = ? ' .
+            'AND (existing.executed_at > UTC_TIMESTAMP() - INTERVAL 1 DAY OR existing.executed_at IS NULL)',
             $newStatus
         );
 
+        // Select and lock all related schedules - this prevents deadlock in case cron overlaps and two jobs of
+        // the same code attempt to lock at the same time, and force them to serialize
         $selectIfUnlocked = $connection->select()
+            ->from(
+                ['current' => $this->getTable('cron_schedule')],
+                []
+            )
             ->joinLeft(
                 ['existing' => $this->getTable('cron_schedule')],
                 $match,
-                ['status' => new \Zend_Db_Expr($connection->quote($newStatus))]
+                ['existing.schedule_id']
             )
             ->where('current.schedule_id = ?', $scheduleId)
             ->where('current.status = ?', $currentStatus)
-            ->where('existing.schedule_id IS NULL');
+            ->forUpdate(true);
 
-        $update = $connection->updateFromSelect($selectIfUnlocked, ['current' => $this->getTable('cron_schedule')]);
-        $result = $connection->query($update)->rowCount();
-
-        if ($result == 1) {
-            return true;
+        $scheduleId = $connection->fetchOne($selectIfUnlocked);
+        if (!empty($scheduleId)) {
+            // Existing running schedule found
+            $connection->commit();
+            return false;
         }
-        return false;
+
+        // Mark our schedule as running
+        $connection->update(
+            $this->getTable('cron_schedule'),
+            ['status' => new \Zend_Db_Expr($connection->quote($newStatus))],
+            ['schedule_id = ?' => $scheduleId]
+        );
+
+        $connection->commit();
+        return true;
     }
 }

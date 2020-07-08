@@ -550,6 +550,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         );
 
         $this->cleanupDisabledJobs($groupId);
+        $this->cleanupRunningJobs($groupId);
 
         $historySuccess = (int)$this->getCronGroupConfigurationValue($groupId, self::XML_PATH_HISTORY_SUCCESS);
         $historyFailure = (int)$this->getCronGroupConfigurationValue($groupId, self::XML_PATH_HISTORY_FAILURE);
@@ -694,6 +695,35 @@ class ProcessCronQueueObserver implements ObserverInterface
 
             $this->logger->info(sprintf('%d cron jobs were cleaned', $count));
         }
+    }
+
+    /**
+     * Cleanup jobs that were left in a running state due to an unexpected stop
+     *
+     * @param string $groupId
+     * @return void
+     */
+    private function cleanupRunningJobs($groupId)
+    {
+        $scheduleResource = $this->_scheduleFactory->create()->getResource();
+        $connection = $scheduleResource->getConnection();
+
+        $jobs = $this->_config->getJobs();
+
+        $connection->update(
+            $scheduleResource->getMainTable(),
+            [
+                'status' => \Magento\Cron\Model\Schedule::STATUS_ERROR,
+                'messages' => 'Time out'
+            ],
+            $connection->quoteInto(
+                'status = ? ' .
+                'AND job_code IN (?) ' .
+                'AND (scheduled_at < UTC_TIMESTAMP() - INTERVAL 1 DAY)',
+                \Magento\Cron\Model\Schedule::STATUS_RUNNING,
+                array_keys($jobs[$groupId])
+            )
+        );
     }
 
     /**
