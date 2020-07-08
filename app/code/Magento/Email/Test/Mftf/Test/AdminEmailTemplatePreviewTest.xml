@@ -27,14 +27,18 @@
 
         <after>
             <!--Delete created Template-->
-            <actionGroup ref="DeleteEmailTemplateActionGroup" stepKey="deleteTemplate"/>
+            <actionGroup ref="DeleteEmailTemplateActionGroup" stepKey="deleteTemplate">
+                <argument name="templateName" value="{{EmailTemplate.templateName}}"/>
+            </actionGroup>
             <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clearFilters"/>
             <!--Logout from Admin Area-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
 
         <actionGroup ref="CreateCustomTemplateActionGroup" stepKey="createTemplate"/>
-        <actionGroup ref="PreviewEmailTemplateActionGroup" stepKey="previewTemplate"/>
+        <actionGroup ref="PreviewEmailTemplateActionGroup" stepKey="previewTemplate">
+            <argument name="templateName" value="{{EmailTemplate.templateName}}"/>
+        </actionGroup>
         <actionGroup ref="AssertEmailTemplateContentActionGroup" stepKey="assertContent"/>
     </test>
 </tests>

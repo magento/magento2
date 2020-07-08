@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMarketingEmailTemplateUpdateTest">
+        <annotations>
+            <features value="Email"/>
+            <stories value="Email Updating"/>
+            <title value="Email Updating Test"/>
+            <description value="Admin should be able update created Email Template"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToMarketingEmailTemplatesPage">
+                <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+                <argument name="submenuUiId" value="{{AdminMenuMarketingCommunicationsEmailTemplates.dataUiId}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminNavigateToCreateEmailTemplatePageActionGroup" stepKey="navigateToCreateEmailTemplatePage"/>
+            <actionGroup ref="AdminMarketingCreateCustomEmailTemplateActionGroup" stepKey="createEmailTemplate">
+                <argument name="templateName" value="{{EmailTemplate.templateName}}"/>
+                <argument name="templateSubject" value="{{EmailTemplate.templateSubject}}"/>
+                <argument name="templateContent" value="{{EmailTemplate.templateText}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="DeleteEmailTemplateActionGroup" stepKey="deleteEmailTemplate">
+                <argument name="templateName" value="{{EmailTemplateUpdated.templateName}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminMarketingFindAndOpenEmailTemplateByNameActionGroup" stepKey="openCreatedEmailTemplate">
+            <argument name="templateName" value="{{EmailTemplate.templateName}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMarketingCreateCustomEmailTemplateActionGroup" stepKey="updateEmailTemplate">
+            <argument name="templateName" value="{{EmailTemplateUpdated.templateName}}"/>
+            <argument name="templateSubject" value="{{EmailTemplateUpdated.templateSubject}}"/>
+            <argument name="templateContent" value="{{EmailTemplateUpdated.templateText}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="You saved the email template."/>
+            <argument name="messageType" value="success"/>
+        </actionGroup>
+        <actionGroup ref="AdminMarketingFindAndOpenEmailTemplateByNameActionGroup" stepKey="FindUpdatedEmailTemplate">
+            <argument name="templateName" value="{{EmailTemplateUpdated.templateName}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminEmailTemplateFormActionGroup" stepKey="assertEmailForm">
+            <argument name="templateName" value="{{EmailTemplateUpdated.templateName}}"/>
+            <argument name="templateSubject" value="{{EmailTemplateUpdated.templateSubject}}"/>
+            <argument name="templateContent" value="{{EmailTemplateUpdated.templateText}}"/>
+        </actionGroup>
+    </test>
+</tests>

@@ -13,4 +13,9 @@
         <data key="templateSubject" unique="suffix">Template Subject_</data>
         <data key="templateText" unique="suffix">Template Text_</data>
     </entity>
+    <entity name="EmailTemplateUpdated" type="template">
+        <data key="templateName" unique="suffix">Updated Template</data>
+        <data key="templateSubject" unique="suffix">Updated Template Subject_</data>
+        <data key="templateText" unique="suffix">Updated Template Text_</data>
+    </entity>
 </entities>

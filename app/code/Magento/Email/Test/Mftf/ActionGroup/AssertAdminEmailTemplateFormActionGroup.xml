@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminEmailTemplateFormActionGroup">
+        <arguments>
+            <argument name="templateName" type="string"/>
+            <argument name="templateSubject" type="string"/>
+            <argument name="templateContent" type="string"/>
+        </arguments>
+        <seeInField selector="{{AdminEmailTemplateEditSection.templateCode}}" userInput="{{templateName}}" stepKey="seeTemplateName"/>
+        <seeInField selector="{{AdminEmailTemplateEditSection.templateSubject}}" userInput="{{templateSubject}}" stepKey="seeTemplateSubject"/>
+        <seeInField selector="{{AdminEmailTemplateEditSection.templateText}}" userInput="{{templateContent}}" stepKey="seeTemplateContent"/>
+    </actionGroup>
+</actionGroups>

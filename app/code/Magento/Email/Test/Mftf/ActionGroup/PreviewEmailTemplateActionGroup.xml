@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="PreviewEmailTemplateActionGroup" extends="FindAndOpenEmailTemplateActionGroup">
+    <actionGroup name="PreviewEmailTemplateActionGroup" extends="AdminMarketingFindAndOpenEmailTemplateByNameActionGroup">
         <click selector="{{AdminEmailTemplateEditSection.previewTemplateButton}}" after="checkTemplateName" stepKey="clickPreviewTemplate"/>
         <switchToNextTab after="clickPreviewTemplate" stepKey="switchToNewOpenedTab"/>
         <seeInCurrentUrl url="{{AdminEmailTemplatePreviewPage.url}}" after="switchToNewOpenedTab" stepKey="seeCurrentUrl"/>
