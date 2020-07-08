@@ -31,7 +31,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
         $jsFuncs = ['doFilter', 'resetFilter'];
         foreach ($jsFuncs as $func) {
             $regexp = sprintf($regexpTemplate, $func);
-            $this->assertRegExp($regexp, $html);
+            $this->assertMatchesRegularExpression($regexp, $html);
         }
     }
 }

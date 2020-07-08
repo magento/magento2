@@ -354,7 +354,6 @@
                     <additionalClasses>
                         <class name="admin__field-small">true</class>
                     </additionalClasses>
-                    <addBefore>$</addBefore>
                     <label translate="true">Layered Navigation Price Step</label>
                 </settings>
             </field>

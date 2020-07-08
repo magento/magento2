@@ -152,6 +152,15 @@ class Pool implements \Iterator
         if (isset($this->_instances[$identifier])) {
             return $this->_instances[$identifier];
         }
-        throw new \InvalidArgumentException("Cache frontend '{$identifier}' is not recognized.");
+
+        if (!isset($this->_instances[self::DEFAULT_FRONTEND_ID])) {
+            throw new \InvalidArgumentException(
+                "Cache frontend '{$identifier}' is not recognized. As well as " .
+                self::DEFAULT_FRONTEND_ID .
+                "cache is not configured"
+            );
+        }
+
+        return $this->_instances[self::DEFAULT_FRONTEND_ID];
     }
 }

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver;
 
+use Magento\CatalogGraphQl\Model\Resolver\Products\Query\ProductQueryInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Filter;
 use Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search;
@@ -24,27 +25,9 @@ use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
 class Products implements ResolverInterface
 {
     /**
-     * @var Builder
-     * @deprecated
-     */
-    private $searchCriteriaBuilder;
-
-    /**
-     * @var Search
+     * @var ProductQueryInterface
      */
     private $searchQuery;
-
-    /**
-     * @var Filter
-     * @deprecated
-     */
-    private $filterQuery;
-
-    /**
-     * @var SearchFilter
-     * @deprecated
-     */
-    private $searchFilter;
 
     /**
      * @var SearchCriteriaBuilder
@@ -52,23 +35,14 @@ class Products implements ResolverInterface
     private $searchApiCriteriaBuilder;
 
     /**
-     * @param Builder $searchCriteriaBuilder
-     * @param Search $searchQuery
-     * @param Filter $filterQuery
-     * @param SearchFilter $searchFilter
+     * @param ProductQueryInterface $searchQuery
      * @param SearchCriteriaBuilder|null $searchApiCriteriaBuilder
      */
     public function __construct(
-        Builder $searchCriteriaBuilder,
-        Search $searchQuery,
-        Filter $filterQuery,
-        SearchFilter $searchFilter,
+        ProductQueryInterface $searchQuery,
         SearchCriteriaBuilder $searchApiCriteriaBuilder = null
     ) {
-        $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->searchQuery = $searchQuery;
-        $this->filterQuery = $filterQuery;
-        $this->searchFilter = $searchFilter;
         $this->searchApiCriteriaBuilder = $searchApiCriteriaBuilder ??
             \Magento\Framework\App\ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
     }
@@ -95,11 +69,7 @@ class Products implements ResolverInterface
             );
         }
 
-        //get product children fields queried
-        $productFields = (array)$info->getFieldSelection(1);
-        $includeAggregations = isset($productFields['filters']) || isset($productFields['aggregations']);
-        $searchCriteria = $this->searchApiCriteriaBuilder->build($args, $includeAggregations);
-        $searchResult = $this->searchQuery->getResult($searchCriteria, $info, $args);
+        $searchResult = $this->searchQuery->getResult($args, $info);
 
         if ($searchResult->getCurrentPage() > $searchResult->getTotalPages() && $searchResult->getTotalCount() > 0) {
             throw new GraphQlInputException(

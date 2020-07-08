@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSaveProductAttributeActionGroup">
+        <annotations>
+            <description>Clicks on Save button to save the attribute.</description>
+        </annotations>
+
+        <waitForElementVisible selector="{{AttributePropertiesSection.Save}}" stepKey="waitForSaveButton"/>
+        <click selector="{{AttributePropertiesSection.Save}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad stepKey="waitForAttributeToSave"/>
+    </actionGroup>
+</actionGroups>

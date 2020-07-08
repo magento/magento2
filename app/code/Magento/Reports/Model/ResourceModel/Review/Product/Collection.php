@@ -11,7 +11,11 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Review\Product;
 
+use Magento\Framework\DB\Select;
+
 /**
+ * Review collection class
+ *
  * @api
  * @since 100.0.2
  */
@@ -51,7 +55,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             'e.entity_id = r.entity_pk_value',
             [
                 'review_cnt' => new \Zend_Db_Expr(sprintf('(%s)', $subSelect)),
-                'created_at' => 'MAX(r.created_at)'
+                'last_review' => 'MAX(r.created_at)'
             ]
         )->group(
             'e.entity_id'
@@ -87,7 +91,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      */
     public function addAttributeToSort($attribute, $dir = self::SORT_ORDER_ASC)
     {
-        if (in_array($attribute, ['review_cnt', 'created_at', 'avg_rating', 'avg_rating_approved'])) {
+        if (in_array($attribute, ['review_cnt', 'last_review', 'avg_rating', 'avg_rating_approved'])) {
             $this->getSelect()->order($attribute . ' ' . $dir);
             return $this;
         }
@@ -96,24 +100,49 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Add attribute to filter
+     *
+     * @param string $attribute
+     * @param array|null $condition
+     * @param string $joinType
+     * @return $this|\Magento\Catalog\Model\ResourceModel\Product\Collection
+     */
+    public function addAttributeToFilter($attribute, $condition = null, $joinType = 'inner')
+    {
+        $aggregateFilterArray = ['review_cnt', 'last_review', 'avg_rating', 'avg_rating_approved'];
+        if (is_string($attribute) &&
+            in_array($attribute, $aggregateFilterArray)) {
+            $conditionSql = $this->_getConditionSql($attribute, $condition);
+            $this->getSelect()->having($conditionSql, null, Select::TYPE_CONDITION);
+        }
+        return in_array($attribute, $aggregateFilterArray) ? $this :
+            parent::addAttributeToFilter($attribute, $condition, $joinType);
+    }
+
+    /**
      * Get select count sql
      *
      * @return \Magento\Framework\DB\Select
+     * @throws \Zend_Db_Select_Exception
      */
     public function getSelectCountSql()
     {
         $this->_renderFilters();
 
-        /* @var \Magento\Framework\DB\Select $select */
+        /* @var Select $select */
         $select = clone $this->getSelect();
-        $select->reset(\Magento\Framework\DB\Select::ORDER);
-        $select->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
-        $select->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
-        $select->reset(\Magento\Framework\DB\Select::COLUMNS);
-        $select->resetJoinLeft();
-        $select->columns(new \Zend_Db_Expr('1'));
+        $havingClauses = $select->getPart(Select::HAVING);
+        $select->reset(Select::ORDER);
+        $select->reset(Select::LIMIT_COUNT);
+        $select->reset(Select::LIMIT_OFFSET);
 
-        /* @var \Magento\Framework\DB\Select $countSelect */
+        if (empty($havingClauses)) {
+            $select->reset(Select::COLUMNS);
+            $select->reset(Select::HAVING);
+            $select->resetJoinLeft();
+            $select->columns(new \Zend_Db_Expr('1'));
+        }
+        /* @var Select $countSelect */
         $countSelect = clone $select;
         $countSelect->reset();
         $countSelect->from($select, "COUNT(*)");

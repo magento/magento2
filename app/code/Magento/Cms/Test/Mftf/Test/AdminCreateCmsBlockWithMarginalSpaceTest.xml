@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCmsBlockWithMarginalSpaceTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="CMS Block Identifier with marginal space"/>
+            <title value="Admin can not able create a CMS block with marginal space in identifier field"/>
+            <description value="Admin can not able create a CMS block with marginal space in identifier field"/>
+            <severity value="CRITICAL"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+        <amOnPage url="{{CmsNewBlock.url}}" stepKey="amOnBlocksCreationForm"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <!--Verify Save&Duplicate button and Save&Close button-->
+        <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn1" />
+        <see selector="{{BlockNewPagePageActionsSection.saveAndDuplicate}}" userInput="Save &amp; Duplicate" stepKey="seeSaveAndDuplicate"/>
+        <see selector="{{BlockNewPagePageActionsSection.saveAndClose}}" userInput="Save &amp; Close" stepKey="seeSaveAndClose"/>
+        <!--Create new CMS Block page with marginal space in identifier field-->
+        <actionGroup ref="AdminFillCmsBlockFormActionGroup" stepKey="FillOutBlockContent">
+            <argument name="cmsBlockDataTitle" value="Default Block" />
+            <argument name="cmsBlockDataIdentifier" value=" block " />
+            <argument name="cmsBlockDataContent" value="Here is a block test. Yeah!" />
+        </actionGroup>
+        <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn2" />
+        <click selector="{{BlockNewPagePageActionsSection.saveAndClose}}" stepKey="clicksaveAndClose" />
+        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <see userInput="No marginal white space please" stepKey="seeNoMarginalSpaceMsgOnIdentifierField"/>
+    </test>
+</tests>

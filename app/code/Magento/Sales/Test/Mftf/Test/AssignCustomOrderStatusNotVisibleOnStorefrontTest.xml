@@ -27,7 +27,7 @@
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Disable created order status -->
@@ -43,7 +43,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
             <!-- Log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create order status -->
@@ -87,7 +87,7 @@
         <!-- Assert order status is correct -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage"/>
         <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrdersGridById">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridById">
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>
         <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickCreatedOrderInGrid"/>
@@ -112,7 +112,7 @@
         <!-- Cancel order -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToAdminOrdersPage"/>
         <waitForPageLoad stepKey="waitForAdminOrdersPageLoad"/>
-        <actionGroup ref="filterOrderGridById" stepKey="filterOrdersGridByOrderId">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridByOrderId">
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>
         <checkOption selector="{{AdminOrdersGridSection.checkOrder}}" stepKey="selectOrder"/>

@@ -170,6 +170,12 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <attribute type="shared">1</attribute>
                 </field>
+                <field id="fmf" translate="label comment" type="select" sortOrder="45" showInDefault="1" showInWebsite="1" showInStore="0">
+                    <label>Fraud Management Filters</label>
+                    <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <comment>Be sure to configure Fraud Management Filters in your PayPal account in "Service Settings/Fraud Protection" section. Attention! Please don't use Total Purchase Price Ceiling/Floor Filters. Current integration doesn't support them.</comment>
+                    <config_path>payment/payflowpro/fmf</config_path>
+                </field>
                 <group id="paypal_payflow_avs_check" translate="label" showInDefault="1" showInWebsite="1" sortOrder="80">
                     <label>CVV and AVS Settings</label>
                     <field id="heading_avs_settings" translate="label" sortOrder="0" showInDefault="1" showInWebsite="1">

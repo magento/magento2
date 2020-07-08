@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddRestrictedRoleActionGroup" extends="AdminCreateRoleActionGroup">
+        <remove keyForRemoval="navigateToNewRole"/>
+        <remove keyForRemoval="waitForPageLoad1"/>
+        <remove keyForRemoval="fillRoleName"/>
+        <remove keyForRemoval="enterPassword"/>
+        <remove keyForRemoval="clickRoleResourcesTab"/>
+        <remove keyForRemoval="waitForScopeSelection"/>
+        <remove keyForRemoval="clickSaveRoleButton"/>
+        <remove keyForRemoval="waitForPageLoad2"/>
+        <scrollTo selector="{{AdminEditRoleInfoSection.blockName('restrictedRole')}}"  x="0" y="-100" stepKey="scrollToResourceElement" after="selectResourceAccessCustom"/>
+    </actionGroup>
+</actionGroups>

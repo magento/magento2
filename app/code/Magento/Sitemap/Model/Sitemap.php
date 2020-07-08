@@ -10,6 +10,7 @@ use Magento\Config\Model\Config\Reader\Source\Deployed\DocumentRoot;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem;
 use Magento\Framework\UrlInterface;
 use Magento\Robots\Model\Config\Value;
 use Magento\Sitemap\Model\ItemProvider\ItemProviderInterface;
@@ -192,6 +193,16 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     private $lastModMinTsVal;
 
     /**
+     * @var Filesystem
+     */
+    private $filesystem;
+
+    /**
+     * @var DocumentRoot
+     */
+    private $documentRoot;
+
+    /**
      * Initialize dependencies.
      *
      * @param \Magento\Framework\Model\Context $context
@@ -238,8 +249,9 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
     ) {
         $this->_escaper = $escaper;
         $this->_sitemapData = $sitemapData;
-        $documentRoot = $documentRoot ?: ObjectManager::getInstance()->get(DocumentRoot::class);
-        $this->_directory = $filesystem->getDirectoryWrite($documentRoot->getPath());
+        $this->documentRoot = $documentRoot ?: ObjectManager::getInstance()->get(DocumentRoot::class);
+        $this->filesystem = $filesystem;
+        $this->_directory = $filesystem->getDirectoryWrite($this->documentRoot->getPath());
         $this->_categoryFactory = $categoryFactory;
         $this->_productFactory = $productFactory;
         $this->_cmsFactory = $cmsFactory;
@@ -559,20 +571,34 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
             foreach ($images->getCollection() as $image) {
                 $row .= '<image:image>';
                 $row .= '<image:loc>' . $this->_escaper->escapeUrl($image->getUrl()) . '</image:loc>';
-                $row .= '<image:title>' . $this->_escaper->escapeHtml($images->getTitle()) . '</image:title>';
+                $row .= '<image:title>' . $this->escapeXmlText($images->getTitle()) . '</image:title>';
                 if ($image->getCaption()) {
-                    $row .= '<image:caption>' . $this->_escaper->escapeHtml($image->getCaption()) . '</image:caption>';
+                    $row .= '<image:caption>' . $this->escapeXmlText($image->getCaption()) . '</image:caption>';
                 }
                 $row .= '</image:image>';
             }
             // Add PageMap image for Google web search
             $row .= '<PageMap xmlns="http://www.google.com/schemas/sitemap-pagemap/1.0"><DataObject type="thumbnail">';
-            $row .= '<Attribute name="name" value="' . $this->_escaper->escapeHtml($images->getTitle()) . '"/>';
+            $row .= '<Attribute name="name" value="' . $this->_escaper->escapeHtmlAttr($images->getTitle()) . '"/>';
             $row .= '<Attribute name="src" value="' . $this->_escaper->escapeUrl($images->getThumbnail()) . '"/>';
             $row .= '</DataObject></PageMap>';
         }
 
         return '<url>' . $row . '</url>';
+    }
+
+    /**
+     * Escape string for XML context.
+     *
+     * @param string $text
+     * @return string
+     */
+    private function escapeXmlText(string $text): string
+    {
+        $doc = new \DOMDocument('1.0', 'UTF-8');
+        $fragment = $doc->createDocumentFragment();
+        $fragment->appendChild($doc->createTextNode($text));
+        return $doc->saveXML($fragment);
     }
 
     /**
@@ -727,6 +753,9 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
      */
     protected function _getDocumentRoot()
     {
+        if (PHP_SAPI === 'cli') {
+            return $this->getDocumentRootFromBaseDir() ?? '';
+        }
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         return realpath($this->_request->getServer('DOCUMENT_ROOT'));
     }
@@ -742,10 +771,14 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         $storeParsedUrl = parse_url($this->_getStoreBaseUrl());
         $url = $storeParsedUrl['scheme'] . '://' . $storeParsedUrl['host'];
 
-        $documentRoot = trim(str_replace('\\', '/', $this->_getDocumentRoot()), '/');
-        $baseDir = trim(str_replace('\\', '/', $this->_getBaseDir()), '/');
+        // Set document root to false if we were unable to get it
+        $documentRoot = $this->_getDocumentRoot() ?: false;
+        if ($documentRoot) {
+            $documentRoot = trim(str_replace(DIRECTORY_SEPARATOR, '/', $documentRoot), '/');
+        }
+        $baseDir = trim(str_replace(DIRECTORY_SEPARATOR, '/', $this->_getBaseDir()), '/');
 
-        if (strpos($baseDir, (string) $documentRoot) === 0) {
+        if ($documentRoot !== false && strpos($baseDir, (string) $documentRoot) === 0) {
             //case when basedir is in document root
             $installationFolder = trim(str_replace($documentRoot, '', $baseDir), '/');
             $storeDomain = rtrim($url . '/' . $installationFolder, '/');
@@ -865,5 +898,31 @@ class Sitemap extends \Magento\Framework\Model\AbstractModel implements \Magento
         return [
             Value::CACHE_TAG . '_' . $this->getStoreId(),
         ];
+    }
+
+    /**
+     * Get document root using base directory (root directory) and base path (base url path)
+     *
+     * Document root is determined using formula: BaseDir = DocumentRoot + BasePath.
+     * Returns <b>NULL</b> if BaseDir does not end with BasePath (e.g document root contains a symlink to BaseDir).
+     *
+     * @return string|null
+     */
+    private function getDocumentRootFromBaseDir(): ?string
+    {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
+        $basePath = rtrim(parse_url($this->_getStoreBaseUrl(UrlInterface::URL_TYPE_WEB), PHP_URL_PATH) ?: '', '/');
+        $basePath = str_replace('/', DIRECTORY_SEPARATOR, $basePath);
+        $basePath = rtrim($basePath, DIRECTORY_SEPARATOR);
+        $baseDir = rtrim($this->_getBaseDir(), DIRECTORY_SEPARATOR);
+        $length = strlen($basePath);
+        if (!$length) {
+            $documentRoot = $baseDir;
+        } elseif (substr($baseDir, -$length) === $basePath) {
+            $documentRoot = rtrim(substr($baseDir, 0, strlen($baseDir) - $length), DIRECTORY_SEPARATOR);
+        } else {
+            $documentRoot = null;
+        }
+        return $documentRoot;
     }
 }

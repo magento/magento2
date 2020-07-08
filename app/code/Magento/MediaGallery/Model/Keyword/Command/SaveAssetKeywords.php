@@ -7,15 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Model\Keyword\Command;
 
-use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
-use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\MediaGallery\Model\ResourceModel\Keyword\SaveAssetLinks;
+use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
+use Magento\MediaGalleryApi\Model\Keyword\Command\SaveAssetKeywordsInterface;
+use Psr\Log\LoggerInterface;
 
 /**
- * Class SaveAssetKeywords
+ * Save media asset keywords to database
+ * @deprecated use \Magento\MediaGalleryApi\Api\SaveAssetKeywordsInterface instead
  */
 class SaveAssetKeywords implements SaveAssetKeywordsInterface
 {
@@ -34,21 +37,31 @@ class SaveAssetKeywords implements SaveAssetKeywordsInterface
     private $saveAssetLinks;
 
     /**
-     * SaveAssetKeywords constructor.
-     *
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param ResourceConnection $resourceConnection
      * @param SaveAssetLinks $saveAssetLinks
+     * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        SaveAssetLinks $saveAssetLinks
+        SaveAssetLinks $saveAssetLinks,
+        LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->saveAssetLinks = $saveAssetLinks;
+        $this->logger = $logger;
     }
 
     /**
-     * @inheritdoc
+     * Save asset keywords.
+     *
+     * @param KeywordInterface[] $keywords
+     * @param int $assetId
+     * @throws CouldNotSaveException
      */
     public function execute(array $keywords, int $assetId): void
     {
@@ -72,6 +85,7 @@ class SaveAssetKeywords implements SaveAssetKeywordsInterface
                 $this->saveAssetLinks->execute($assetId, $this->getKeywordIds($data));
             }
         } catch (\Exception $exception) {
+            $this->logger->critical($exception);
             $message = __('An error occurred during save asset keyword: %1', $exception->getMessage());
             throw new CouldNotSaveException($message, $exception);
         }

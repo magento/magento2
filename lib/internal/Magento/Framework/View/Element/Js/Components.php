@@ -9,6 +9,8 @@ use Magento\Framework\App\State;
 use Magento\Framework\View\Element\Template;
 
 /**
+ * Block for Components
+ *
  * @api
  */
 class Components extends Template

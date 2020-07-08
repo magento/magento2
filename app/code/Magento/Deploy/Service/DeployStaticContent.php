@@ -156,7 +156,7 @@ class DeployStaticContent
      */
     private function getProcessesAmount(array $options)
     {
-        return isset($options[Options::JOBS_AMOUNT]) ? (int)$options[Options::JOBS_AMOUNT] : 0;
+        return (int)($options[Options::JOBS_AMOUNT] ?? 0);
     }
 
     /**

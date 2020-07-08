@@ -19,7 +19,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
 
 /**
- * Class WhitelistDeclarationTest
+ * Checks whitelisted tables behaviour
+ *
+ * @magentoDbIsolation disabled
  */
 class WhitelistDeclarationTest extends \PHPUnit\Framework\TestCase
 {
@@ -33,7 +35,7 @@ class WhitelistDeclarationTest extends \PHPUnit\Framework\TestCase
      */
     private $schemaConfig;
 
-    public function setUp()
+    protected function setUp(): void
     {
         /** @var ObjectManagerInterface|ObjectManager $objectManager */
         $objectManager = Bootstrap::getObjectManager();

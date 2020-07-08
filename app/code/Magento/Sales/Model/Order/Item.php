@@ -232,7 +232,7 @@ class Item extends AbstractModel implements OrderItemInterface
      */
     public function getSimpleQtyToShip()
     {
-        $qty = $this->getQtyOrdered() - $this->getQtyShipped() - $this->getQtyRefunded() - $this->getQtyCanceled();
+        $qty = $this->getQtyOrdered() - max($this->getQtyShipped(), $this->getQtyRefunded()) - $this->getQtyCanceled();
         return max(round($qty, 8), 0);
     }
 
@@ -385,6 +385,8 @@ class Item extends AbstractModel implements OrderItemInterface
      *
      * @param string $statusId
      * @return \Magento\Framework\Phrase
+     *
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getStatusName($statusId)
     {
@@ -422,6 +424,8 @@ class Item extends AbstractModel implements OrderItemInterface
      * Retrieve order item statuses array
      *
      * @return array
+     *
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getStatuses()
     {
@@ -1319,7 +1323,13 @@ class Item extends AbstractModel implements OrderItemInterface
      */
     public function getPrice()
     {
-        return $this->getData(OrderItemInterface::PRICE);
+        $price = $this->getData(OrderItemInterface::PRICE);
+
+        if ($price === null) {
+            return $price;
+        }
+
+        return (float) $price;
     }
 
     /**

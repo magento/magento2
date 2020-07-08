@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminUpdateCustomerGenderInCustomersGridActionGroup">
+        <annotations>
+            <description>Update customer gender attribute value on customers grid page</description>
+        </annotations>
+        <arguments>
+            <argument name="customerEmail" defaultValue="{{Simple_US_Customer.email}}" type="string"/>
+            <argument name="genderValue" defaultValue="{{Gender.empty}}" type="string"/>
+        </arguments>
+
+        <click selector="{{AdminDataGridTableSection.rowTemplate(customerEmail)}}" stepKey="clickCustomersGridRow"/>
+        <waitForElementVisible selector="{{AdminCustomerGridInlineEditorSection.customerGenderEditor}}" stepKey="waitForGenderElementAppears"/>
+        <selectOption userInput="{{genderValue}}" selector="{{AdminCustomerGridInlineEditorSection.customerGenderEditor}}" stepKey="selectGenderValue"/>
+        <click selector="{{AdminCustomerGridInlineEditorSection.saveInGrid}}" stepKey="saveCustomer"/>
+    </actionGroup>
+</actionGroups>

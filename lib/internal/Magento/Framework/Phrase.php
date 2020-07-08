@@ -101,7 +101,7 @@ class Phrase implements \JsonSerializable
     {
         try {
             return self::getRenderer()->render([$this->text], $this->getArguments());
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             return $this->getText();
         }
     }

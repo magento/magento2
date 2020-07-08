@@ -18,17 +18,17 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <!-- Create Simple Product -->
             <createData entity="SimpleSubCategory" stepKey="category"/>
             <!-- Create category -->
             <createData entity="defaultSimpleProduct" stepKey="createSimpleProduct"/>
             <!-- Create First StoreView  -->
-            <actionGroup ref="CreateStoreView" stepKey="createCustomStoreViewEn">
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createCustomStoreViewEn">
                 <argument name="storeView" value="customStoreEN"/>
             </actionGroup>
             <!-- Create Second StoreView -->
-            <actionGroup ref="CreateStoreView" stepKey="createCustomStoreViewFr">
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createCustomStoreViewFr">
                 <argument name="storeView" value="customStoreFR"/>
             </actionGroup>
             <!--Run full reindex and clear caches -->
@@ -54,12 +54,11 @@
             </actionGroup>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Select Created Category-->
         <magentoCLI command="indexer:reindex" stepKey="reindexBeforeFlow"/>
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="selectCreatedCategory"/>
         <waitForPageLoad stepKey="waitForTheCategoryPageToLoaded"/>

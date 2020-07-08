@@ -24,10 +24,16 @@ class Url implements ResolverInterface
      * @var ImageFactory
      */
     private $productImageFactory;
+
     /**
      * @var PlaceholderProvider
      */
     private $placeholderProvider;
+
+    /**
+     * @var string[]
+     */
+    private $placeholderCache = [];
 
     /**
      * @param ImageFactory $productImageFactory
@@ -64,12 +70,8 @@ class Url implements ResolverInterface
         if (isset($value['image_type'])) {
             $imagePath = $product->getData($value['image_type']);
             return $this->getImageUrl($value['image_type'], $imagePath);
-        }
-        if (isset($value['file'])) {
-            $image = $this->productImageFactory->create();
-            $image->setDestinationSubdir('image')->setBaseFile($value['file']);
-            $imageUrl = $image->getUrl();
-            return $imageUrl;
+        } elseif (isset($value['file'])) {
+            return $this->getImageUrl('image', $value['file']);
         }
         return [];
     }
@@ -84,12 +86,16 @@ class Url implements ResolverInterface
      */
     private function getImageUrl(string $imageType, ?string $imagePath): string
     {
+        if (empty($imagePath) && !empty($this->placeholderCache[$imageType])) {
+            return $this->placeholderCache[$imageType];
+        }
         $image = $this->productImageFactory->create();
         $image->setDestinationSubdir($imageType)
             ->setBaseFile($imagePath);
 
         if ($image->isBaseFilePlaceholder()) {
-            return $this->placeholderProvider->getPlaceholder($imageType);
+            $this->placeholderCache[$imageType] = $this->placeholderProvider->getPlaceholder($imageType);
+            return $this->placeholderCache[$imageType];
         }
 
         return $image->getUrl();

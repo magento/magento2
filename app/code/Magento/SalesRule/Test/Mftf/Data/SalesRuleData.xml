@@ -464,4 +464,13 @@
         <requiredEntity type="SalesRuleLabel">SalesRuleLabelDefault</requiredEntity>
         <requiredEntity type="SalesRuleLabel">SalesRuleLabelStore1</requiredEntity>
     </entity>
+
+    <entity name="TestSalesRuleWithInvalidData" type="SalesRule">
+        <data key="userPerCustomer">one</data>
+        <data key="userPerCoupon">one</data>
+        <data key="priority">one</data>
+        <data key="discountStep">one</data>
+        <data key="discountAmount">one</data>
+        <data key="maximumQtyDiscount">one</data>
+    </entity>
 </entities>

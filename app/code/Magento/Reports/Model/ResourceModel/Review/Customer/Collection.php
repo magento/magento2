@@ -11,8 +11,13 @@
  */
 namespace Magento\Reports\Model\ResourceModel\Review\Customer;
 
+use Magento\Framework\DB\Select;
+
 /**
+ * Report Customer Review collection
+ *
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
 class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
@@ -104,38 +109,49 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * Additional processing of 'customer_name' field is required, as it is a concat field, which can not be aliased.
      * @see _joinCustomers
      */
     public function addFieldToFilter($field, $condition = null)
     {
+        if ($field === 'review_cnt') {
+            $conditionSql = $this->_getConditionSql($field, $condition);
+            $this->getSelect()->having($conditionSql, null, Select::TYPE_CONDITION);
+        }
+
         if ($field === 'customer_name') {
             $field = $this->getConnection()->getConcatSql(['customer.firstname', 'customer.lastname'], ' ');
         }
 
-        return parent::addFieldToFilter($field, $condition);
+        return ($field === 'review_cnt') ? $this : parent::addFieldToFilter($field, $condition);
     }
 
     /**
      * Get select count sql
      *
-     * @return string
+     * @return \Magento\Framework\DB\Select
+     * @throws \Zend_Db_Select_Exception
      */
     public function getSelectCountSql()
     {
         $countSelect = clone $this->getSelect();
+        $havingClauses = $countSelect->getPart(Select::HAVING);
+        $whereClauses = $countSelect->getPart(Select::WHERE);
         $countSelect->reset(\Magento\Framework\DB\Select::ORDER);
-        $countSelect->reset(\Magento\Framework\DB\Select::GROUP);
-        $countSelect->reset(\Magento\Framework\DB\Select::HAVING);
         $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_COUNT);
         $countSelect->reset(\Magento\Framework\DB\Select::LIMIT_OFFSET);
-        $countSelect->reset(\Magento\Framework\DB\Select::COLUMNS);
-        $countSelect->reset(\Magento\Framework\DB\Select::WHERE);
-
-        $countSelect->columns(new \Zend_Db_Expr('COUNT(DISTINCT detail.customer_id)'));
-
-        return $countSelect;
+        if (empty($whereClauses)) {
+            $countSelect->reset(\Magento\Framework\DB\Select::WHERE);
+        }
+        if (empty($havingClauses)) {
+            $countSelect->reset(\Magento\Framework\DB\Select::HAVING);
+            $countSelect->columns(new \Zend_Db_Expr('COUNT(DISTINCT detail.customer_id)'));
+        }
+        $aggregateSelect = clone $countSelect;
+        $aggregateSelect->reset();
+        $aggregateSelect->from($countSelect, 'COUNT(*)');
+        return $aggregateSelect;
     }
 }

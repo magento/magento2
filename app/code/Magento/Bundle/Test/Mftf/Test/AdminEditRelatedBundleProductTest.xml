@@ -20,13 +20,14 @@
         </annotations>
         <before>
             <!--Admin login-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct0"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <!-- Delete the bundled product -->
-            <actionGroup stepKey="deleteBundle" ref="deleteProductUsingProductGrid">
+            <actionGroup stepKey="deleteBundle" ref="DeleteProductUsingProductGridActionGroup">
                 <argument name="product" value="BundleProduct"/>
             </actionGroup>
             <!--Logging out-->
@@ -38,15 +39,15 @@
         <!-- Create a bundle product -->
         <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageBundle"/>
         <waitForPageLoad stepKey="waitForProductPageLoadBundle"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateBundleProduct">
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateBundleProduct">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
 
-        <actionGroup ref="fillProductNameAndSkuInProductForm" stepKey="fillBundleProductNameAndSku">
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillBundleProductNameAndSku">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
 
-        <actionGroup ref="addRelatedProductBySku" stepKey="addRelatedProduct0">
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct0">
             <argument name="sku" value="$$simpleProduct0.sku$$"/>
         </actionGroup>
 
@@ -54,7 +55,7 @@
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
 
-        <actionGroup ref="addRelatedProductBySku" stepKey="addRelatedProduct1">
+        <actionGroup ref="AddRelatedProductBySkuActionGroup" stepKey="addRelatedProduct1">
             <argument name="sku" value="$$simpleProduct1.sku$$"/>
         </actionGroup>
 
@@ -69,6 +70,8 @@
         <scrollTo selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" stepKey="scrollTo"/>
         <conditionalClick selector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDropdown}}" dependentSelector="{{AdminProductFormRelatedUpSellCrossSellSection.relatedDependent}}" visible="false" stepKey="openDropDownIfClosedRelatedSee"/>
         <see selector="{{AdminProductFormRelatedUpSellCrossSellSection.selectedRelatedProduct}}" userInput="$$simpleProduct1.sku$$" stepKey="seeRelatedProduct"/>
+
+        <magentoCLI command="cron:run --group=index" stepKey="runCronIndexer"/>
 
         <!--See related product in storefront-->
         <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>

@@ -63,7 +63,7 @@
         <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '4')}}" stepKey="filterBySwatch4"/>
 
         <!-- Deletes the created configurable product-->
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteConfigurableProduct">
+        <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteConfigurableProduct">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
 

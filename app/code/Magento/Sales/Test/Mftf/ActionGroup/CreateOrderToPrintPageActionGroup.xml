@@ -34,13 +34,4 @@
         <click selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="clickOrderLink"/>
         <click selector="{{StorefrontCustomerOrderViewSection.printOrderLink}}" stepKey="clickPrintOrderLink"/>
     </actionGroup>
-    
-    <actionGroup name="CreateOrderToPrintPageWithSelectedPaymentMethodActionGroup" extends="CreateOrderToPrintPageActionGroup">
-        <annotations>
-            <description>EXTENDS: CreateOrderToPrintPageActionGroup. Clicks on 'Check / Money Order'.</description>
-        </annotations>
-
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" after="clickNext" stepKey="waitForPaymentSectionLoaded"/>
-        <conditionalClick selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" dependentSelector="{{CheckoutPaymentSection.billingAddress}}" visible="false" before="waitForPlaceOrderButton" stepKey="clickCheckMoneyOrderPayment"/>
-    </actionGroup>
 </actionGroups>

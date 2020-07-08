@@ -17,7 +17,7 @@
     </legend>
     <div class="product-options fieldset admin__fieldset">
         <?php foreach ($_attributes as $_attribute) : ?>
-            <div class="field admin__field _required required">
+            <div class="field admin__field required">
                 <label class="label admin__field-label"><?=
                     $block->escapeHtml($_attribute->getProductAttribute()->getStoreLabel($_product->getStoreId()));
                 ?></label>

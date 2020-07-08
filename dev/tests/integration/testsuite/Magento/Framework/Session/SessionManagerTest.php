@@ -52,7 +52,7 @@ namespace Magento\Framework\Session {
             SessionManagerTest::$isIniSetInvoked[$varName] = $newValue;
             return true;
         }
-        return call_user_func_array('\ini_set', func_get_args());
+        return call_user_func_array('\ini_set', [$varName, $newValue]);
     }
 
     /**
@@ -111,11 +111,11 @@ namespace Magento\Framework\Session {
         private $request;
 
         /**
-         * @var State|\PHPUnit_Framework_MockObject_MockObject
+         * @var State|\PHPUnit\Framework\MockObject\MockObject
          */
         private $appState;
 
-        protected function setUp()
+        protected function setUp(): void
         {
             $this->sessionName = 'frontEndSession';
 
@@ -141,7 +141,7 @@ namespace Magento\Framework\Session {
             $this->request = $this->objectManager->get(\Magento\Framework\App\RequestInterface::class);
         }
 
-        protected function tearDown()
+        protected function tearDown(): void
         {
             global $mockPHPFunctions;
             $mockPHPFunctions = false;
@@ -213,14 +213,15 @@ namespace Magento\Framework\Session {
         public function testSetSessionId()
         {
             $this->initializeModel();
-            $sessionId = $this->model->getSessionId();
-            $this->appState->expects($this->atLeastOnce())
+            $this->assertNotEmpty($this->model->getSessionId());
+            $this->appState->expects($this->any())
                 ->method('getAreaCode')
                 ->willReturn(\Magento\Framework\App\Area::AREA_FRONTEND);
-            $this->model->setSessionId($this->sidResolver->getSid($this->model));
-            $this->assertEquals($sessionId, $this->model->getSessionId());
 
             $this->model->setSessionId('test');
+            $this->assertEquals('test', $this->model->getSessionId());
+            /* Use not valid identifier */
+            $this->model->setSessionId('test_id');
             $this->assertEquals('test', $this->model->getSessionId());
         }
 
@@ -230,17 +231,14 @@ namespace Magento\Framework\Session {
         public function testSetSessionIdFromParam()
         {
             $this->initializeModel();
-            $this->appState->expects($this->atLeastOnce())
+            $this->appState->expects($this->any())
                 ->method('getAreaCode')
                 ->willReturn(\Magento\Framework\App\Area::AREA_FRONTEND);
+            $currentId = $this->model->getSessionId();
             $this->assertNotEquals('test_id', $this->model->getSessionId());
-            $this->request->getQuery()->set($this->sidResolver->getSessionIdQueryParam($this->model), 'test-id');
+            $this->request->getQuery()->set(SidResolverInterface::SESSION_ID_QUERY_PARAM, 'test-id');
             $this->model->setSessionId($this->sidResolver->getSid($this->model));
-            $this->assertEquals('test-id', $this->model->getSessionId());
-            /* Use not valid identifier */
-            $this->request->getQuery()->set($this->sidResolver->getSessionIdQueryParam($this->model), 'test_id');
-            $this->model->setSessionId($this->sidResolver->getSid($this->model));
-            $this->assertEquals('test-id', $this->model->getSessionId());
+            $this->assertEquals($currentId, $this->model->getSessionId());
         }
 
         public function testGetSessionIdForHost()
@@ -269,11 +267,12 @@ namespace Magento\Framework\Session {
         }
 
         /**
-         * @expectedException \Magento\Framework\Exception\SessionException
-         * @expectedExceptionMessage Area code not set: Area code must be set before starting a session.
          */
         public function testStartAreaNotSet()
         {
+            $this->expectException(\Magento\Framework\Exception\SessionException::class);
+            $this->expectExceptionMessage('Area code not set: Area code must be set before starting a session.');
+
             $scope = $this->objectManager->get(\Magento\Framework\Config\ScopeInterface::class);
             $appState = new \Magento\Framework\App\State($scope);
 

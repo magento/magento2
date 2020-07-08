@@ -7,14 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Model\Asset\Command;
 
-use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\MediaGalleryApi\Model\Asset\Command\DeleteByPathInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class DeleteByPath
+ * Delete media asset by path
+ *
+ * @deprecated use \Magento\MediaGalleryApi\Api\DeleteAssetsByPathInterface instead
+ * @see \Magento\MediaGalleryApi\Api\DeleteAssetsByPathInterface
  */
 class DeleteByPath implements DeleteByPathInterface
 {
@@ -62,11 +65,11 @@ class DeleteByPath implements DeleteByPathInterface
             $tableName = $this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET);
             $connection->delete($tableName, [self::MEDIA_GALLERY_ASSET_PATH . ' = ?' => $mediaAssetPath]);
         } catch (\Exception $exception) {
+            $this->logger->critical($exception);
             $message = __(
                 'Could not delete media asset with path %path: %error',
                 ['path' => $mediaAssetPath, 'error' => $exception->getMessage()]
             );
-            $this->logger->critical($message);
             throw new CouldNotDeleteException($message, $exception);
         }
     }

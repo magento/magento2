@@ -24,87 +24,87 @@
             <magentoCLI stepKey="allowSpecificValue" command="config:set checkout/cart/number_items_to_display_pager 20" />
 
             <createData entity="SimpleTwo" stepKey="simpleProduct1"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem1">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem1">
                 <argument name="product" value="$$simpleProduct1$$"/>
             </actionGroup>
             <createData entity="SimpleTwo" stepKey="simpleProduct2"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem2">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem2">
                 <argument name="product" value="$simpleProduct2$$"/>
             </actionGroup>
             <createData entity="SimpleTwo" stepKey="simpleProduct3"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem3">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem3">
                 <argument name="product" value="$simpleProduct3$$"/>
             </actionGroup>
             <createData entity="SimpleTwo" stepKey="simpleProduct4"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem4">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem4">
                 <argument name="product" value="$simpleProduct4$$"/>
             </actionGroup>
             <createData entity="SimpleTwo" stepKey="simpleProduct5"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem5">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem5">
                 <argument name="product" value="$simpleProduct5$$"/>
             </actionGroup>
             <createData entity="SimpleTwo" stepKey="simpleProduct6"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem6">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem6">
                 <argument name="product" value="$simpleProduct6$$"/>
             </actionGroup>
             <createData entity="SimpleTwo" stepKey="simpleProduct7"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem7">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem7">
                 <argument name="product" value="$simpleProduct7$$"/>
             </actionGroup>
             <createData entity="SimpleTwo" stepKey="simpleProduct8"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem8">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem8">
                 <argument name="product" value="$simpleProduct8$$"/>
             </actionGroup>
             <createData entity="SimpleTwo" stepKey="simpleProduct9"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem9">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem9">
                 <argument name="product" value="$simpleProduct9$$"/>
             </actionGroup>
             <createData entity="SimpleTwo" stepKey="simpleProduct10"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem10">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem10">
                 <argument name="product" value="$$simpleProduct10$$"/>
             </actionGroup>
             <createData entity="SimpleTwo" stepKey="simpleProduct11"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem11">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem11">
                 <argument name="product" value="$$simpleProduct11$$"/>
             </actionGroup>
             <createData entity="SimpleTwo" stepKey="simpleProduct12"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem12">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem12">
                 <argument name="product" value="$$simpleProduct12$$"/>
             </actionGroup>
             <createData entity="SimpleTwo" stepKey="simpleProduct13"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem13">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem13">
                 <argument name="product" value="$$simpleProduct13$$"/>
             </actionGroup>
             <createData entity="SimpleTwo" stepKey="simpleProduct14"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem14">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem14">
                 <argument name="product" value="$$simpleProduct14$$"/>
             </actionGroup>
             <createData entity="SimpleTwo" stepKey="simpleProduct15"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem15">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem15">
                 <argument name="product" value="$$simpleProduct15$$"/>
             </actionGroup>
             <createData entity="SimpleTwo" stepKey="simpleProduct16"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem16">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem16">
                 <argument name="product" value="$$simpleProduct16$$"/>
             </actionGroup>
             <createData entity="SimpleTwo" stepKey="simpleProduct17"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem17">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem17">
                 <argument name="product" value="$$simpleProduct17$$"/>
             </actionGroup>
             <createData entity="SimpleTwo" stepKey="simpleProduct18"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem18">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem18">
                 <argument name="product" value="$$simpleProduct18$$"/>
             </actionGroup>
             <createData entity="SimpleTwo" stepKey="simpleProduct19"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem19">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem19">
                 <argument name="product" value="$$simpleProduct19$$"/>
             </actionGroup>
             <createData entity="SimpleTwo" stepKey="simpleProduct20"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem20">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem20">
                 <argument name="product" value="$$simpleProduct20$$"/>
             </actionGroup>
             <createData entity="SimpleTwo" stepKey="simpleProduct21"/>
-            <actionGroup ref="AddSimpleProductToCart" stepKey="CartItem21">
+            <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="CartItem21">
                 <argument name="product" value="$$simpleProduct21$$"/>
             </actionGroup>
         </before>
@@ -131,7 +131,7 @@
             <deleteData createDataKey="simpleProduct20" stepKey="deleteCartItem20"/>
             <deleteData createDataKey="simpleProduct21" stepKey="deleteCartItem21"/>
         </after>
-        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="goToCartPage" />
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage" />
         <actionGroup ref="AssertToolbarTextIsVisibleInCartActionGroup" stepKey="VerifyPagerText">
             <argument name="text" value="Items 1 to 20 of 21 total"/>
         </actionGroup>

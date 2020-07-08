@@ -13,6 +13,7 @@ use Magento\TestFramework\CodingStandard\Tool\CodeSniffer;
 use Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper;
 use Magento\TestFramework\CodingStandard\Tool\CopyPasteDetector;
 use Magento\TestFramework\CodingStandard\Tool\PhpCompatibility;
+use Magento\TestFramework\CodingStandard\Tool\PhpStan;
 use PHPMD\TextUI\Command;
 
 /**
@@ -35,7 +36,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$pathToSource = BP;
         self::$reportDir = self::$pathToSource . '/dev/tests/static/report';
@@ -141,7 +142,7 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             function () {
                 // if no list files, probably, this is the dev environment
                 // phpcs:ignore Generic.PHP.NoSilencedErrors,Magento2.Security.InsecureFunction
-                @exec('git diff --cached --name-only', $addedFiles);
+                @exec('git diff --cached --name-only --diff-filter=A', $addedFiles);
                 return $addedFiles;
             }
         );
@@ -429,9 +430,9 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             }
         }
 
-        $this->assertEquals(
+        $this->assertCount(
             0,
-            count($filesMissingStrictTyping),
+            $filesMissingStrictTyping,
             "Following files are missing strict type declaration:"
             . PHP_EOL
             . implode(PHP_EOL, $filesMissingStrictTyping)
@@ -463,6 +464,72 @@ class LiveCodeTest extends \PHPUnit\Framework\TestCase
             0,
             $result,
             'PHP Compatibility detected violation(s):' . PHP_EOL . $report
+        );
+    }
+
+    /**
+     * Test code quality using PHPStan
+     *
+     * @throws \Exception
+     */
+    public function testPhpStan()
+    {
+        $reportFile = self::$reportDir . '/phpstan_report.txt';
+        $confFile = __DIR__ . '/_files/phpstan/phpstan.neon';
+
+        if (!file_exists($reportFile)) {
+            touch($reportFile);
+        }
+
+        $fileList = self::getWhitelist(['php']);
+        $blackList = Files::init()->readLists(__DIR__ . '/_files/phpstan/blacklist/*.txt');
+        if ($blackList) {
+            $blackListPattern = sprintf('#(%s)#i', implode('|', $blackList));
+            $fileList = array_filter(
+                $fileList,
+                function ($path) use ($blackListPattern) {
+                    return !preg_match($blackListPattern, $path);
+                }
+            );
+        }
+
+        $phpStan = new PhpStan($confFile, $reportFile);
+        $exitCode = $phpStan->run($fileList);
+        $report = file_get_contents($reportFile);
+
+        $errorMessage = empty($report) ?
+            'PHPStan command run failed.' : 'PHPStan detected violation(s):' . PHP_EOL . $report;
+        $this->assertEquals(0, $exitCode, $errorMessage);
+    }
+
+    /**
+     * Tests whitelisted fixtures for reuse other fixtures.
+     */
+    public function testFixtureReuse()
+    {
+        $changedFiles =  self::getWhitelist(['php']);
+        $toBeTestedFiles = self::filterFiles($changedFiles, ['php'], []);
+
+        $filesWithIncorrectReuse = [];
+        foreach ($toBeTestedFiles as $fileName) {
+            //check only _files and Fixtures directory
+            if (!preg_match('/integration.+\/(_files|Fixtures)/', $fileName)) {
+                continue;
+            }
+            $file = str_replace(["\n", "\r"], '', file_get_contents($fileName));
+            if (preg_match('/(?<![\=\s*])\b(require|require_once|include)\b/', $file)) {
+                $filesWithIncorrectReuse[] = $fileName;
+            }
+        }
+
+        $this->assertEquals(
+            0,
+            count($filesWithIncorrectReuse),
+            "The following files incorrectly reuse fixtures:"
+            . PHP_EOL
+            . implode(PHP_EOL, $filesWithIncorrectReuse)
+            . PHP_EOL
+            . 'Please use Magento\TestFramework\Workaround\Override\Fixture\Resolver::requireDataFixture'
         );
     }
 }

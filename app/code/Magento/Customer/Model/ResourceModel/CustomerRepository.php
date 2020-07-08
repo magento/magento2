@@ -17,6 +17,7 @@ use Magento\Customer\Model\CustomerRegistry;
 use Magento\Customer\Model\Data\CustomerSecureFactory;
 use Magento\Customer\Model\Delegation\Data\NewOperation;
 use Magento\Customer\Model\Delegation\Storage as DelegatedStorage;
+use Magento\Customer\Model\ResourceModel\Customer\Collection;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
@@ -30,6 +31,8 @@ use Magento\Store\Model\StoreManagerInterface;
 
 /**
  * Customer repository.
+ *
+ * CRUD operations for customer entity
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -187,8 +190,7 @@ class CustomerRepository implements CustomerRepositoryInterface
     {
         /** @var NewOperation|null $delegatedNewOperation */
         $delegatedNewOperation = !$customer->getId() ? $this->delegatedStorage->consumeNewOperation() : null;
-        $prevCustomerData = null;
-        $prevCustomerDataArr = null;
+        $prevCustomerData = $prevCustomerDataArr = null;
         if ($customer->getId()) {
             $prevCustomerData = $this->getById($customer->getId());
             $prevCustomerDataArr = $prevCustomerData->__toArray();
@@ -214,6 +216,7 @@ class CustomerRepository implements CustomerRepositoryInterface
                 $prevCustomerData ? $prevCustomerData->getStoreId() : $this->storeManager->getStore()->getId()
             );
         }
+        $this->setCustomerGroupId($customerModel, $customerArr, $prevCustomerDataArr);
         // Need to use attribute set or future updates can cause data loss
         if (!$customerModel->getAttributeSetId()) {
             $customerModel->setAttributeSetId(CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER);
@@ -450,6 +453,20 @@ class CustomerRepository implements CustomerRepositoryInterface
     {
         if (isset($customerArray['ignore_validation_flag'])) {
             $customerModel->setData('ignore_validation_flag', true);
+        }
+    }
+
+    /**
+     * Set customer group id
+     *
+     * @param Customer $customerModel
+     * @param array $customerArr
+     * @param array $prevCustomerDataArr
+     */
+    private function setCustomerGroupId($customerModel, $customerArr, $prevCustomerDataArr)
+    {
+        if (!isset($customerArr['group_id']) && $prevCustomerDataArr && isset($prevCustomerDataArr['group_id'])) {
+            $customerModel->setGroupId($prevCustomerDataArr['group_id']);
         }
     }
 }

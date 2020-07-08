@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminFillCmsBlockFormActionGroup">
+        <annotations>
+            <description>Fills in the Block Title, Identifier with marginal space, Store View and Content. PLEASE NOTE: The values are passed through arguments in test.</description>
+        </annotations>
+        <arguments>
+            <argument name="cmsBlockDataTitle" type="string" />
+            <argument name="cmsBlockDataIdentifier" type="string" />
+            <argument name="cmsBlockDataContent" type="string" />
+        </arguments>
+        <fillField selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" userInput="{{cmsBlockDataTitle}}" stepKey="fillFieldTitle1"/>
+        <fillField selector="{{BlockNewPageBasicFieldsSection.identifier}}" userInput="{{cmsBlockDataIdentifier}}" stepKey="fillFieldIdentifier"/>
+        <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView"/>
+        <fillField selector="{{BlockContentSection.TextArea}}" userInput="{{cmsBlockDataContent}}" stepKey="fillContentField"/>
+    </actionGroup>
+</actionGroups>

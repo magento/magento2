@@ -20,7 +20,7 @@ class FrontTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -44,7 +44,7 @@ class FrontTest extends \PHPUnit\Framework\TestCase
         $coreRegistry->unregister('entity_attribute');
         $coreRegistry->register('entity_attribute', $model);
 
-        $this->assertRegExp('/<select\sid="is_searchable".*disabled="disabled"/', $this->block->toHtml());
+        $this->assertMatchesRegularExpression('/<select\sid="is_searchable".*disabled="disabled"/', $this->block->toHtml());
     }
 
     /**

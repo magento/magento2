@@ -219,7 +219,7 @@ class Package
      */
     public function getParam($name)
     {
-        return isset($this->params[$name]) ? $this->params[$name] : null;
+        return $this->params[$name] ?? null;
     }
 
     /**
@@ -253,7 +253,7 @@ class Package
      */
     public function getFile($fileId)
     {
-        return isset($this->files[$fileId]) ? $this->files[$fileId] : false;
+        return $this->files[$fileId] ?? false;
     }
 
     /**
@@ -443,12 +443,11 @@ class Package
      */
     public function getParentMap()
     {
-        $map = [];
+        $map = [[]];
         foreach ($this->getParentPackages() as $parentPackage) {
-            // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
-            $map = array_merge($map, $parentPackage->getMap());
+            $map[] = $parentPackage->getMap();
         }
-        return $map;
+        return array_merge(...$map);
     }
 
     /**
@@ -462,10 +461,8 @@ class Package
         $files = [[]];
         foreach ($this->getParentPackages() as $parentPackage) {
             if ($type === null) {
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
                 $files[] = $parentPackage->getFiles();
             } else {
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
                 $files[] = $parentPackage->getFilesByType($type);
             }
         }

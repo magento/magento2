@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontBundleAddToCartSuccessTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Bundle product details page"/>
+            <title value="Customer should be able to add the bundle product to the cart"/>
+            <description value="Customer should be able to add the bundle product to the cart"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-232"/>
+            <group value="Bundle"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+        </before>
+        <after>
+            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="logout"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+        </after>
+
+        <!-- Start creating a bundle product -->
+        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
+        <waitForPageLoad stepKey="waitForProductList"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillNameAndSku">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+
+        <!-- Add Option One, a "Drop-down" type option -->
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts1">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
+            <argument name="prodTwoSku" value="$$simpleProduct2.sku$$"/>
+            <argument name="optionTitle" value="Option One"/>
+            <argument name="inputType" value="select"/>
+        </actionGroup>
+
+        <!-- Add Option Two, a "Radio Buttons" type option -->
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts2">
+            <argument name="x" value="1"/>
+            <argument name="n" value="2"/>
+            <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
+            <argument name="prodTwoSku" value="$$simpleProduct2.sku$$"/>
+            <argument name="optionTitle" value="Option Two"/>
+            <argument name="inputType" value="radio"/>
+        </actionGroup>
+
+        <!-- Add Option Three, a "Checkbox" type option -->
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts3">
+            <argument name="x" value="2"/>
+            <argument name="n" value="3"/>
+            <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
+            <argument name="prodTwoSku" value="$$simpleProduct2.sku$$"/>
+            <argument name="optionTitle" value="Option Three"/>
+            <argument name="inputType" value="checkbox"/>
+        </actionGroup>
+
+        <!-- Add Option Four, a "Multi Select" type option -->
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts4">
+            <argument name="x" value="3"/>
+            <argument name="n" value="4"/>
+            <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
+            <argument name="prodTwoSku" value="$$simpleProduct2.sku$$"/>
+            <argument name="optionTitle" value="Option Four"/>
+            <argument name="inputType" value="multi"/>
+        </actionGroup>
+
+        <!-- Save product and go to storefront -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>
+        <waitForPageLoad stepKey="waitForStorefront"/>
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
+
+        <!-- Select all applicable options -->
+        <selectOption selector="select.bundle-option-select" userInput="$$simpleProduct1.name$$ +$123.00" stepKey="selectOption1"/>
+        <click selector="input[type='radio']:nth-of-type(1)" stepKey="selectOption2"/>
+        <checkOption selector="input[type='checkbox']:nth-of-type(1)" stepKey="selectOption3"/>
+        <selectOption selector="select[multiple='multiple']" userInput="$$simpleProduct1.name$$ +$123.00" stepKey="selectOption4"/>
+
+        <!-- Customize and add the bundle product to our cart -->
+        <click selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="clickAddToCart1"/>
+        <dontSee selector="{{StorefrontBundledSection.nthOptionDiv('1')}}" userInput="This is a required field." stepKey="validForm1"/>
+        <dontSee selector="{{StorefrontBundledSection.nthOptionDiv('2')}}" userInput="Please select one of the options." stepKey="validForm2"/>
+        <dontSee selector="{{StorefrontBundledSection.nthOptionDiv('3')}}" userInput="Please select one of the options." stepKey="validForm3"/>
+        <dontSee selector="{{StorefrontBundledSection.nthOptionDiv('4')}}" userInput="This is a required field." stepKey="validForm4"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{BundleProduct.name}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
+
+        <!-- Verify cart contents -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCart"/>
+        <see selector="{{StorefrontBundledSection.nthItemOptionsTitle('1')}}" userInput="Option One" stepKey="seeOption1"/>
+        <see selector="{{StorefrontBundledSection.nthItemOptionsTitle('2')}}" userInput="Option Two" stepKey="seeOption2"/>
+        <see selector="{{StorefrontBundledSection.nthItemOptionsTitle('3')}}" userInput="Option Three" stepKey="seeOption3"/>
+        <see selector="{{StorefrontBundledSection.nthItemOptionsTitle('4')}}" userInput="Option Four" stepKey="seeOption4"/>
+        <see selector="{{StorefrontBundledSection.nthItemOptionsValue('1')}}" userInput="50 x $$simpleProduct1.name$$ $123.00" stepKey="seeOptionValue1"/>
+        <see selector="{{StorefrontBundledSection.nthItemOptionsValue('2')}}" userInput="50 x $$simpleProduct1.name$$ $123.00" stepKey="seeOptionValue2"/>
+        <see selector="{{StorefrontBundledSection.nthItemOptionsValue('3')}}" userInput="50 x $$simpleProduct1.name$$ $123.00" stepKey="seeOptionValue3"/>
+        <see selector="{{StorefrontBundledSection.nthItemOptionsValue('4')}}" userInput="50 x $$simpleProduct1.name$$ $123.00" stepKey="seeOptionValue4"/>
+    </test>
+</tests>

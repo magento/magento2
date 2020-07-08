@@ -31,6 +31,7 @@ define([
                 defaultValueText: $('#default_value_text'),
                 defaultValueTextarea: $('#default_value_textarea'),
                 defaultValueDate: $('#default_value_date'),
+                defaultValueDatetime: $('#default_value_datetime'),
                 defaultValueYesno: $('#default_value_yesno'),
                 isGlobal: $('#is_global'),
                 useProductImageForSwatch: $('#use_product_image_for_swatch'),
@@ -178,6 +179,7 @@ define([
                         defaultValueTextVisibility = false,
                         defaultValueTextareaVisibility = false,
                         defaultValueDateVisibility = false,
+                        defaultValueDatetimeVisibility = false,
                         defaultValueYesnoVisibility = false,
                         scopeVisibility = true,
                         useProductImageForSwatch = false,
@@ -201,6 +203,10 @@ define([
 
                         case 'date':
                             defaultValueDateVisibility = true;
+                            break;
+
+                        case 'datetime':
+                            defaultValueDatetimeVisibility = true;
                             break;
 
                         case 'boolean':
@@ -256,6 +262,7 @@ define([
                                     defaultValueTextVisibility = false;
                                     defaultValueTextareaVisibility = false;
                                     defaultValueDateVisibility = false;
+                                    defaultValueDatetimeVisibility = false;
                                     defaultValueYesnoVisibility = false;
                                     break;
 
@@ -279,6 +286,7 @@ define([
                     this.setRowVisibility(this.defaultValueText, defaultValueTextVisibility);
                     this.setRowVisibility(this.defaultValueTextarea, defaultValueTextareaVisibility);
                     this.setRowVisibility(this.defaultValueDate, defaultValueDateVisibility);
+                    this.setRowVisibility(this.defaultValueDatetime, defaultValueDatetimeVisibility);
                     this.setRowVisibility(this.defaultValueYesno, defaultValueYesnoVisibility);
                     this.setRowVisibility(this.isGlobal, scopeVisibility);
 

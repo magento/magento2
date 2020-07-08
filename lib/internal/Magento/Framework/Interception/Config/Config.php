@@ -187,8 +187,6 @@ class Config implements \Magento\Framework\Interception\ConfigInterface
      */
     private function initializeUncompiled($classDefinitions = [])
     {
-        $this->cacheManager->clean($this->_cacheId);
-
         $this->generateIntercepted($classDefinitions);
 
         $this->cacheManager->save($this->_cacheId, $this->_intercepted);

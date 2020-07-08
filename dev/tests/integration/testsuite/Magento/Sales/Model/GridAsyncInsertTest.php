@@ -46,7 +46,7 @@ class GridAsyncInsertTest extends \PHPUnit\Framework\TestCase
      */
     private $grid;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
 

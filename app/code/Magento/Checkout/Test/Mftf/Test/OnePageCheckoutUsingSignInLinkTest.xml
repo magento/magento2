@@ -30,7 +30,7 @@
         </before>
         <after>
             <!-- Admin log out -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Customer Log out -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
@@ -45,12 +45,12 @@
         <!-- Add Simple Product to cart -->
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
         <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addToCartFromStorefrontProductPage">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$$createSimpleProduct.name$$"/>
         </actionGroup>
 
         <!-- Go to shopping cart -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <actionGroup ref="FillShippingZipForm" stepKey="fillShippingZipForm">
             <argument name="address" value="US_Address_CA"/>
         </actionGroup>
@@ -76,18 +76,21 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
 
         <!-- Login as admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Open created order in backend -->
         <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
         <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
-        <actionGroup ref="OpenOrderById" stepKey="filterOrderGridById">
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
 
         <!-- Assert that shipping and billing address are the same -->
         <grabTextFrom selector="{{AdminShipmentAddressInformationSection.shippingAddress}}" stepKey="shippingAddress"/>
         <grabTextFrom selector="{{AdminShipmentAddressInformationSection.billingAddress}}" stepKey="billingAddress"/>
-        <assertEquals stepKey="assertAddress" actual="$billingAddress" expected="$shippingAddress"/>
+        <assertEquals stepKey="assertAddress">
+			<actualResult type="const">$billingAddress</actualResult>
+			<expectedResult type="const">$shippingAddress</expectedResult>
+        </assertEquals>
     </test>
 </tests>

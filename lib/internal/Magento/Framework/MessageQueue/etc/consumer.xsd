@@ -32,7 +32,7 @@
             </xs:documentation>
         </xs:annotation>
         <xs:restriction base="xs:string">
-            <xs:pattern value="[a-zA-Z\\]+::[a-zA-Z]+" />
+            <xs:pattern value="[a-zA-Z0-9\\]+::[a-zA-Z0-9]+" />
             <xs:minLength value="5" />
         </xs:restriction>
     </xs:simpleType>

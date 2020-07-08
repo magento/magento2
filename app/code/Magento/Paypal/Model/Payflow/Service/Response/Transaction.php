@@ -19,7 +19,8 @@ use Magento\Quote\Model\Quote\Payment;
 use Magento\Sales\Api\Data\OrderPaymentInterface;
 
 /**
- * Class Transaction
+ * Process PayPal transaction response.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Transaction
@@ -90,7 +91,7 @@ class Transaction
         $response = $this->transparent->mapGatewayResponse((array) $gatewayTransactionResponse, $response);
 
         $this->logger->debug(
-            (array) $gatewayTransactionResponse,
+            ['PayPal PayflowPro response:' => (array)$gatewayTransactionResponse],
             (array) $this->transparent->getDebugReplacePrivateDataKeys(),
             (bool) $this->transparent->getDebugFlag()
         );
@@ -116,6 +117,7 @@ class Transaction
 
         $payment->setData(OrderPaymentInterface::CC_TYPE, $response->getData(OrderPaymentInterface::CC_TYPE));
         $payment->setAdditionalInformation(Payflowpro::PNREF, $response->getData(Payflowpro::PNREF));
+        $payment->setAdditionalInformation('result_code', $response->getData('result'));
 
         $expDate = $response->getData('expdate');
         $expMonth = $this->getCcExpMonth($expDate);

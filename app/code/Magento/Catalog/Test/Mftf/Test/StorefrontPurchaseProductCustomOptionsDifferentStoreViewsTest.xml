@@ -32,7 +32,7 @@
                 <field key="price">100</field>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
             <!--Create storeView 1-->
 
@@ -63,13 +63,13 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView2">
                 <argument name="customStore" value="customStoreFR"/>
             </actionGroup>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearWebsitesGridFilters"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearWebsitesGridFilters"/>
 
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFilter"/>
 
             <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-            <actionGroup ref="clearFiltersAdminDataGrid" stepKey="clearProductsGridFilters"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
         </after>
 
@@ -196,11 +196,11 @@
 
         <!-- Open Order -->
 
-        <actionGroup ref="filterOrderGridById" stepKey="openOrdersGrid">
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="openOrdersGrid">
             <argument name="orderId" value="{$grabOrderNumber}"/>
         </actionGroup>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
+
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
 
         <!-- Checking the correctness of displayed custom options for user parameters on Order -->
 
@@ -209,7 +209,7 @@
 
         <!-- Switch to FR Store View Storefront -->
 
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnProduct4Page"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnProduct4Page"/>
 
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStore">
             <argument name="storeView" value="customStoreFR"/>

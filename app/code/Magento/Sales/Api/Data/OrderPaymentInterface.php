@@ -1043,6 +1043,14 @@ interface OrderPaymentInterface extends \Magento\Framework\Api\ExtensibleDataInt
     public function setCcTransId($id);
 
     /**
+     * Set the additional information for the order payment.
+     *
+     * @param string[] $additionalInformation
+     * @return $this
+     */
+    public function setAdditionalInformation($additionalInformation);
+
+    /**
      * Sets the address status for the order payment.
      *
      * @param string $addressStatus
