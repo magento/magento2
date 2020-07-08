@@ -60,7 +60,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteFirstCategory"/>
             <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
             <!-- Delete Catalog Price Rule -->
-            <actionGroup ref="RemoveCatalogPriceRule" stepKey="deleteSecondCatalogPriceRule">
+            <actionGroup ref="RemoveCatalogPriceRule" stepKey="deleteCatalogPriceRule">
                 <argument name="ruleName" value="{{_defaultCatalogRule.name}}"/>
             </actionGroup>
             <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
