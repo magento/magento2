@@ -16,6 +16,7 @@
             <description value="Guest cannot subscribe to Newsletter if it is disallowed in configurations"/>
             <group value="newsletter"/>
             <group value="configuration"/>
+            <testCaseId value="MC-35728"/>
         </annotations>
         <before>
             <magentoCLI stepKey="disableGuestSubscription" command="config:set newsletter/subscription/allow_guest_subscribe 0"/>
