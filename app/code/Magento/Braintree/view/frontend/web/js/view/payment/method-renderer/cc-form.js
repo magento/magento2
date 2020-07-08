@@ -91,7 +91,12 @@ define(
                     })
                     .then(function (hostedFieldsInstance) {
                         self.hostedFieldsInstance = hostedFieldsInstance;
-                        self.isPlaceOrderActionAllowed(false);
+
+                        if ($('#billing-address-same-as-shipping-braintree').is(':checked')) {
+                            self.isPlaceOrderActionAllowed(true);
+                        } else {
+                            self.isPlaceOrderActionAllowed(false);
+                        }
                         self.initFormValidationEvents(hostedFieldsInstance);
 
                         return self.hostedFieldsInstance;
