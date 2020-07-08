@@ -96,6 +96,7 @@ class ConfigurableProductViewTest extends GraphQlAbstract
         configurable_options {
           id
           attribute_id
+          attribute_id_v2
           label
           position
           use_default
@@ -335,12 +336,7 @@ QUERY;
                 $mediaGalleryEntries,
                 "Precondition failed since there are incorrect number of media gallery entries"
             );
-            $this->assertIsArray($actualResponse['variants']
-                    [$variantKey]
-                    ['product']
-                    ['media_gallery_entries']
-                
-            );
+            $this->assertIsArray($actualResponse['variants'][$variantKey]['product']['media_gallery_entries']);
             $this->assertCount(
                 1,
                 $actualResponse['variants'][$variantKey]['product']['media_gallery_entries'],
@@ -348,10 +344,7 @@ QUERY;
             );
             $mediaGalleryEntry = $mediaGalleryEntries[0];
             $this->assertResponseFields(
-                $actualResponse['variants']
-                [$variantKey]
-                ['product']
-                ['media_gallery_entries'][0],
+                $actualResponse['variants'][$variantKey]['product']['media_gallery_entries'][0],
                 [
                     'disabled' => (bool)$mediaGalleryEntry->isDisabled(),
                     'file' => $mediaGalleryEntry->getFile(),
@@ -363,12 +356,7 @@ QUERY;
             );
             $videoContent = $mediaGalleryEntry->getExtensionAttributes()->getVideoContent();
             $this->assertResponseFields(
-                $actualResponse['variants']
-                [$variantKey]
-                ['product']
-                ['media_gallery_entries']
-                [0]
-                ['video_content'],
+                $actualResponse['variants'][$variantKey]['product']['media_gallery_entries'][0]['video_content'],
                 [
                     'media_type' =>$videoContent->getMediaType(),
                     'video_description' => $videoContent->getVideoDescription(),
@@ -454,6 +442,11 @@ QUERY;
             $actualResponse['configurable_options'][0]['attribute_id'],
             $configurableAttributeOption['attribute_id']
         );
+        $this->assertEquals(
+            $actualResponse['configurable_options'][0]['attribute_id_v2'],
+            $configurableAttributeOption['attribute_id']
+        );
+        $this->assertIsInt($actualResponse['configurable_options'][0]['attribute_id_v2']);
         $this->assertEquals(
             $actualResponse['configurable_options'][0]['label'],
             $configurableAttributeOption['label']

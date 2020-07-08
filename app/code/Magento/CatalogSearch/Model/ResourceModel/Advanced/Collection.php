@@ -27,7 +27,6 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchCriteria
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierFactory;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Api\Search\SearchResultInterface;
-use Magento\Search\Model\EngineResolver;
 
 /**
  * Advanced search collection
@@ -42,11 +41,6 @@ use Magento\Search\Model\EngineResolver;
 class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 {
     /**
-     * Config search engine path.
-     */
-    private const SEARCH_ENGINE_VALUE_PATH = 'catalog/search/engine';
-
-    /**
      * List Of filters
      * @var array
      */
@@ -56,12 +50,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @var \Magento\Search\Api\SearchInterface
      */
     private $search;
-
-    /**
-     * @var \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory
-     * @deprecated There must be no dependencies on specific adapter in generic search implementation
-     */
-    private $temporaryStorageFactory;
 
     /**
      * @var SearchCriteriaBuilder
@@ -140,9 +128,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
      * @param \Magento\Customer\Api\GroupManagementInterface $groupManagement
-     * @param \Magento\CatalogSearch\Model\Advanced\Request\Builder $requestBuilder
-     * @param \Magento\Search\Model\SearchEngine $searchEngine
-     * @param \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory
+     * @param mixed $requestBuilder
+     * @param mixed $searchEngine
+     * @param mixed $temporaryStorageFactory
      * @param \Magento\Framework\DB\Adapter\AdapterInterface|null $connection
      * @param SearchResultFactory|null $searchResultFactory
      * @param ProductLimitationFactory|null $productLimitationFactory
@@ -154,6 +142,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param EngineResolverInterface|null $engineResolver
      * @param DefaultFilterStrategyApplyCheckerInterface|null $defaultFilterStrategyApplyChecker
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         \Magento\Framework\Data\Collection\EntityFactory $entityFactory,
@@ -175,9 +164,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Framework\Stdlib\DateTime $dateTime,
         \Magento\Customer\Api\GroupManagementInterface $groupManagement,
-        \Magento\CatalogSearch\Model\Advanced\Request\Builder $requestBuilder,
-        \Magento\Search\Model\SearchEngine $searchEngine,
-        \Magento\Framework\Search\Adapter\Mysql\TemporaryStorageFactory $temporaryStorageFactory,
+        $requestBuilder = null,
+        $searchEngine = null,
+        $temporaryStorageFactory = null,
         \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
         SearchResultFactory $searchResultFactory = null,
         ProductLimitationFactory $productLimitationFactory = null,
@@ -189,9 +178,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         EngineResolverInterface $engineResolver = null,
         DefaultFilterStrategyApplyCheckerInterface $defaultFilterStrategyApplyChecker = null
     ) {
-        $this->requestBuilder = $requestBuilder;
-        $this->searchEngine = $searchEngine;
-        $this->temporaryStorageFactory = $temporaryStorageFactory;
         $this->searchRequestName = $searchRequestName;
         if ($searchResultFactory === null) {
             $this->searchResultFactory = \Magento\Framework\App\ObjectManager::getInstance()
@@ -374,11 +360,6 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function _loadEntities($printQuery = false, $logQuery = false)
     {
         $this->getEntity();
-
-        $currentSearchEngine = $this->_scopeConfig->getValue(self::SEARCH_ENGINE_VALUE_PATH);
-        if ($this->_pageSize && $currentSearchEngine === EngineResolver::CATALOG_SEARCH_MYSQL_ENGINE) {
-            $this->getSelect()->limitPage($this->getCurPage(), $this->_pageSize);
-        }
 
         $this->printLogQuery($printQuery, $logQuery);
 
