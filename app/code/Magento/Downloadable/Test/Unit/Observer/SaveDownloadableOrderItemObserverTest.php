@@ -160,6 +160,9 @@ class SaveDownloadableOrderItemObserverTest extends \PHPUnit\Framework\TestCase
         $itemMock->expects($this->any())
             ->method('getProductType')
             ->willReturn(DownloadableProductType::TYPE_DOWNLOADABLE);
+        $itemMock->expects($this->any())
+            ->method('getRealProductType')
+            ->willReturn(DownloadableProductType::TYPE_DOWNLOADABLE);
 
         $this->orderMock->expects($this->once())
             ->method('getStoreId')
@@ -294,6 +297,9 @@ class SaveDownloadableOrderItemObserverTest extends \PHPUnit\Framework\TestCase
             ->willReturn($itemId);
         $itemMock->expects($this->any())
             ->method('getProductType')
+            ->willReturn(DownloadableProductType::TYPE_DOWNLOADABLE);
+        $itemMock->expects($this->any())
+            ->method('getRealProductType')
             ->willReturn(DownloadableProductType::TYPE_DOWNLOADABLE);
 
         $purchasedLink = $this->getMockBuilder(\Magento\Downloadable\Model\Link\Purchased::class)
