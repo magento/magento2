@@ -59,6 +59,14 @@ class Builder implements BuilderInterface
                             array_keys($filter)
                         ),
                         'char_filter' => array_keys($charFilter)
+                    ],
+                    'sku' => [
+                        'type' => 'custom',
+                        'tokenizer' => 'keyword',
+                        'filter' => array_merge(
+                            ['lowercase', 'keyword_repeat'],
+                            array_keys($filter)
+                        ),
                     ]
                 ],
                 'tokenizer' => $tokenizer,
@@ -85,8 +93,8 @@ class Builder implements BuilderInterface
     {
         $tokenizer = [
             'default_tokenizer' => [
-                'type' => 'standard',
-            ],
+                'type' => 'standard'
+            ]
         ];
         return $tokenizer;
     }
