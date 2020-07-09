@@ -82,6 +82,7 @@ class CliTest extends \PHPUnit\Framework\TestCase
      * @param bool $isPub
      * @param array $params
      * @dataProvider documentRootIsPubProvider
+     * @magentoAppIsolation enabled
      */
     public function testDocumentRootIsPublic($isPub, $params)
     {
