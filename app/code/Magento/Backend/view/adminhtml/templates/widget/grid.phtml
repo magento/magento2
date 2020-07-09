@@ -188,8 +188,8 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()): 0;
         $scriptString .= 'deps.push(\'mage/adminhtml/grid\');' . PHP_EOL;
 
         $scriptString .= '
-require(deps, function('. ($block->getDependencyJsObject() ? 'registry' : '') .'){' . PHP_EOL .'
-        //TODO: getJsObjectName and getRowClickCallback has unexpected behavior. Should be removed' . PHP_EOL;
+require(deps, function('. ($block->getDependencyJsObject() ? 'registry' : '') .'){' . PHP_EOL;
+        //TODO: getJsObjectName and getRowClickCallback has unexpected behavior. Should be removed
         if ($block->getDependencyJsObject()) {
             $scriptString .= 'registry.get(\'' . $block->escapeJs($block->getDependencyJsObject()) .
                 '\', function ('. $block->escapeJs($block->getDependencyJsObject()) . ') {' . PHP_EOL;
