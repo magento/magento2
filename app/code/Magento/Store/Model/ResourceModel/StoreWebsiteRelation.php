@@ -45,17 +45,17 @@ class StoreWebsiteRelation
     }
 
     /**
-     * Get website store codes
+     * Get website store data
      *
      * @param string $websiteId
      * @param bool $available
      * @return array
      */
-    public function getWebsiteStoreCodes(string $websiteId, bool $available = false): array
+    public function getWebsiteStores(string $websiteId, bool $available = false): array
     {
         $connection = $this->resource->getConnection();
         $storeTable = $this->resource->getTableName('store');
-        $storeSelect = $connection->select()->from($storeTable, ['code'])->where(
+        $storeSelect = $connection->select()->from($storeTable)->where(
             'website_id = ?',
             $websiteId
         );
@@ -66,6 +66,6 @@ class StoreWebsiteRelation
             );
         }
 
-        return $connection->fetchCol($storeSelect);
+        return $connection->fetchAll($storeSelect);
     }
 }

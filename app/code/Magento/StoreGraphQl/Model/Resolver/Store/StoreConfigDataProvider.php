@@ -66,7 +66,7 @@ class StoreConfigDataProvider
     public function getStoreConfigData(StoreInterface $store): array
     {
         $defaultStoreConfig = $this->storeConfigManager->getStoreConfigs([$store->getCode()]);
-        return $this->prepareStoreConfigData(current($defaultStoreConfig));
+        return $this->prepareStoreConfigData(current($defaultStoreConfig), $store->getName());
     }
 
     /**
@@ -77,12 +77,15 @@ class StoreConfigDataProvider
      */
     public function getAvailableStoreConfig(string $websiteId): array
     {
-        $websiteStores = $this->storeWebsiteRelation->getWebsiteStoreCodes($websiteId, true);
-        $storeConfigs = $this->storeConfigManager->getStoreConfigs($websiteStores);
+        $websiteStores = $this->storeWebsiteRelation->getWebsiteStores($websiteId, true);
+        $storeCodes = array_column($websiteStores, 'code');
+
+        $storeConfigs = $this->storeConfigManager->getStoreConfigs($storeCodes);
         $storesConfigData = [];
 
         foreach ($storeConfigs as $storeConfig) {
-            $storesConfigData[] = $this->prepareStoreConfigData($storeConfig);
+            $key = array_search($storeConfig->getCode(), array_column($websiteStores, 'code'), true);
+            $storesConfigData[] = $this->prepareStoreConfigData($storeConfig, $websiteStores[$key]['name']);
         }
 
         return $storesConfigData;
@@ -92,9 +95,10 @@ class StoreConfigDataProvider
      * Prepare store config data
      *
      * @param StoreConfigInterface $storeConfig
+     * @param string $storeName
      * @return array
      */
-    private function prepareStoreConfigData(StoreConfigInterface $storeConfig): array
+    private function prepareStoreConfigData(StoreConfigInterface $storeConfig, string $storeName): array
     {
         return array_merge([
             'id' => $storeConfig->getId(),
@@ -113,7 +117,7 @@ class StoreConfigDataProvider
             'secure_base_link_url' => $storeConfig->getSecureBaseLinkUrl(),
             'secure_base_static_url' => $storeConfig->getSecureBaseStaticUrl(),
             'secure_base_media_url' => $storeConfig->getSecureBaseMediaUrl(),
-            'store_name' => $storeConfig->getName(),
+            'store_name' => $storeName,
         ], $this->getExtendedConfigData((int)$storeConfig->getId()));
     }
 

@@ -75,7 +75,7 @@ class StoreConfigResolverTest extends GraphQlAbstract
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertArrayHasKey('storeConfig', $response);
-        $this->validateStoreConfig($defaultStoreConfig, $response['storeConfig']);
+        $this->validateStoreConfig($defaultStoreConfig, $response['storeConfig'], $store->getName());
     }
 
     /**
@@ -83,9 +83,13 @@ QUERY;
      *
      * @param StoreConfigInterface $storeConfig
      * @param array $responseConfig
+     * @param string $storeName
      */
-    private function validateStoreConfig($storeConfig, $responseConfig): void
-    {
+    private function validateStoreConfig(
+        StoreConfigInterface $storeConfig,
+        array $responseConfig,
+        string $storeName
+    ): void {
         $this->assertEquals($storeConfig->getId(), $responseConfig['id']);
         $this->assertEquals($storeConfig->getCode(), $responseConfig['code']);
         $this->assertEquals($storeConfig->getLocale(), $responseConfig['locale']);

@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Store;
 
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Api\Data\StoreConfigInterface;
 use Magento\Store\Api\StoreConfigManagerInterface;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\ResourceModel\Store as StoreResource;
+use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -32,12 +32,18 @@ class AvailableStoreConfigTest extends GraphQlAbstract
     private $storeConfigManager;
 
     /**
+     * @var StoreResource
+     */
+    private $storeResource;
+
+    /**
      * @inheritDoc
      */
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->storeConfigManager = $this->objectManager->get(StoreConfigManagerInterface::class);
+        $this->storeResource = $this->objectManager->get(StoreResource::class);
     }
 
     /**
@@ -140,6 +146,8 @@ QUERY;
      */
     private function validateStoreConfig(StoreConfigInterface $storeConfig, array $responseConfig): void
     {
+        $store = $this->objectManager->get(Store::class);
+        $this->storeResource->load($store, $storeConfig->getCode(), 'code');
         $this->assertEquals($storeConfig->getId(), $responseConfig['id']);
         $this->assertEquals($storeConfig->getCode(), $responseConfig['code']);
         $this->assertEquals($storeConfig->getLocale(), $responseConfig['locale']);

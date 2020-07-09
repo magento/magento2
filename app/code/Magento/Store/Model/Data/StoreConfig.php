@@ -15,7 +15,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
 {
     const KEY_ID = 'id';
     const KEY_CODE = 'code';
-    const KEY_NAME = 'name';
     const KEY_WEBSITE_ID = 'website_id';
     const KEY_LOCALE = 'locale';
     const KEY_BASE_CURRENCY_CODE = 'base_currency_code';
@@ -71,27 +70,6 @@ class StoreConfig extends \Magento\Framework\Api\AbstractExtensibleObject implem
     public function setCode($code)
     {
         return $this->setData(self::KEY_CODE, $code);
-    }
-
-    /**
-     * Get store name
-     *
-     * @return string
-     */
-    public function getName()
-    {
-        return $this->_get(self::KEY_NAME);
-    }
-
-    /**
-     * Get store name
-     *
-     * @param string $name
-     * @return $this
-     */
-    public function setName($name)
-    {
-        return $this->setData(self::KEY_NAME, $name);
     }
 
     /**
