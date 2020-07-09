@@ -13,14 +13,11 @@ use Magento\MediaContentApi\Model\GetAssetIdByContentFieldInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 
 /**
- * Class responsible to return Asset id by content field
+ * Class responsible to return Asset ids by product store
  */
 class GetAssetIdByProductStore implements GetAssetIdByContentFieldInterface
 {
     private const TABLE_CONTENT_ASSET = 'media_content_asset';
-    private const ENTITY_STOREVIEW_RELATION = 'store_view';
-    private const ENTITY_STOREGROUP_RELATION = 'store_group';
-    private const ENTITY_WEBSITE_RELATION = 'website';
 
     /**
      * @var ResourceConnection

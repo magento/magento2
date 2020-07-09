@@ -36,6 +36,7 @@ class GetAssetIdByContentFieldComposite implements GetAssetIdByContentFieldInter
     {
         $ids = [];
         foreach ($this->getAssetIdByContentFieldArray as $getAssetIdByContentField) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $ids = array_merge($ids, $getAssetIdByContentField->execute($value));
         }
         return array_unique($ids);

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentCatalog\Model;
 
+use Magento\Catalog\Api\CategoryManagementInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaContentApi\Model\GetAssetIdByContentFieldInterface;
@@ -14,11 +15,12 @@ use Magento\Store\Api\GroupRepositoryInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 
 /**
- * Class responsible to return Asset id by content field
+ * Class responsible to return Asset id by category store
  */
 class GetAssetIdByCategoryStore implements GetAssetIdByContentFieldInterface
 {
     private const TABLE_CONTENT_ASSET = 'media_content_asset';
+    private const TABLE_CATALOG_CATEGORY = 'catalog_category_entity';
 
     /**
      * @var ResourceConnection
@@ -67,7 +69,7 @@ class GetAssetIdByCategoryStore implements GetAssetIdByContentFieldInterface
     {
         $storeView = $this->storeRepository->getById($value);
         $storeGroup = $this->storeGroupRepository->get($storeView->getStoreGroupId());
-        $categoryIds = $this->getCategoryIdsByRootCategory($storeGroup->getRootCategoryId());
+        $categoryIds = $this->getCategoryIdsByRootCategory((int) $storeGroup->getRootCategoryId());
         $sql = $this->connection->getConnection()->select()->from(
             ['asset_content_table' => $this->connection->getTableName(self::TABLE_CONTENT_ASSET)],
             ['asset_id']
@@ -86,21 +88,15 @@ class GetAssetIdByCategoryStore implements GetAssetIdByContentFieldInterface
         }, $result);
     }
 
-    private function getCategoryIdsByRootCategory($rootCategoryId)
+    /**
+     * This function returns an array of category ids that have content and are under the root parameter
+     *
+     * @param $rootCategoryId
+     * @return array
+     */
+    private function getCategoryIdsByRootCategory(int $rootCategoryId): array
     {
-        $contentCategoriesSql = $this->connection->getConnection()->select()->from(
-            ['asset_content_table' => $this->connection->getTableName(self::TABLE_CONTENT_ASSET)],
-            ['entity_id']
-        )->where(
-            'entity_type = ?',
-            $this->entityType
-        )->joinInner(
-            ['category_table' => $this->connection->getTableName('catalog_category_entity')],
-            'asset_content_table.entity_id = category_table.entity_id',
-            ['path']
-        );
-
-        $result = $this->connection->getConnection()->fetchAll($contentCategoriesSql);
+        $result = $this->getCategoryIdsAndPath();
 
         $result = array_filter($result, function ($item) use ($rootCategoryId) {
             $pathArray = explode("/", $item['path']);
@@ -116,5 +112,27 @@ class GetAssetIdByCategoryStore implements GetAssetIdByContentFieldInterface
         return array_map(function ($item) {
             return $item['entity_id'];
         }, $result);
+    }
+
+    /**
+     * This function returns an array of category_id and path of categories that have content
+     *
+     * @return array
+     */
+    private function getCategoryIdsAndPath(): array
+    {
+        $contentCategoriesSql = $this->connection->getConnection()->select()->from(
+            ['asset_content_table' => $this->connection->getTableName(self::TABLE_CONTENT_ASSET)],
+            ['entity_id']
+        )->where(
+            'entity_type = ?',
+            $this->entityType
+        )->joinInner(
+            ['category_table' => $this->connection->getTableName(self::TABLE_CATALOG_CATEGORY)],
+            'asset_content_table.entity_id = category_table.entity_id',
+            ['path']
+        );
+
+        return $this->connection->getConnection()->fetchAll($contentCategoriesSql);
     }
 }
