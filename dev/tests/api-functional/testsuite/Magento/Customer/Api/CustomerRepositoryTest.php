@@ -296,7 +296,7 @@ class CustomerRepositoryTest extends WebapiAbstract
             $this->assertEquals(HTTPExceptionCodes::HTTP_UNAUTHORIZED, $e->getCode());
         }
         /** @var Customer $data */
-        $data = $this->_getCustomerData($customerData[Customer::ID]);
+        $data = $this->getCustomerData($customerData[Customer::ID]);
         $this->assertNotNull($data->getId());
     }
 
