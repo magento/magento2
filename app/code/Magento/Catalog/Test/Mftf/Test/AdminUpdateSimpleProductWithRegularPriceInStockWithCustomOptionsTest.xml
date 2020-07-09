@@ -148,9 +148,7 @@
         <!-- Verify added Product in cart -->
         <selectOption selector="{{StorefrontProductPageSection.customOptionDropDown}}" userInput="{{simpleProductCustomizableOption.option_0_title}} +$98.00" stepKey="selectCustomOption"/>
         <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="1" stepKey="fillProductQuantity"/>
-        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="clickOnAddToCartButton"/>
-        <waitForPageLoad stepKey="waitForProductToAddInCart"/>
-        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
         <seeElement selector="{{StorefrontProductPageSection.successMsg}}" stepKey="seeYouAddedSimpleprod4ToYourShoppingCartSuccessSaveMessage"/>
         <seeElement selector="{{StorefrontMinicartSection.quantity(1)}}" stepKey="seeAddedProductQuantityInCart"/>
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
