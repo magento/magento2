@@ -12,7 +12,7 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\Cus
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\MediaContentApi\Model\GetAssetIdByContentFieldInterface;
 
-class ContentStatus implements CustomFilterInterface
+class StoreView implements CustomFilterInterface
 {
     private const TABLE_ALIAS = 'main_table';
 

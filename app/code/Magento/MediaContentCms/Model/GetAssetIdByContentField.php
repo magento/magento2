@@ -5,15 +5,17 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaContent\Model;
+namespace Magento\MediaContentCms\Model;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\MediaContentApi\Model\GetAssetIdByContentStatusInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\MediaContentApi\Model\GetAssetIdByContentFieldInterface;
+use Magento\Store\Api\StoreRepositoryInterface;
 
 /**
- * Class responsible to return Asset id by entity status
+ * Class responsible to return Asset id by content field
  */
-class GetAssetIdByContentStatus implements GetAssetIdByContentStatusInterface
+class GetAssetIdByContentField implements GetAssetIdByContentFieldInterface
 {
     private const TABLE_CONTENT_ASSET = 'media_content_asset';
 
@@ -30,47 +32,40 @@ class GetAssetIdByContentStatus implements GetAssetIdByContentStatusInterface
     /**
      * @var string
      */
-    private $contentTable;
+    private $fieldTable;
 
     /**
      * @var string
      */
-    private $statusColumn;
+    private $fieldColumn;
 
     /**
      * @var string
      */
     private $idColumn;
 
-    /**
-     * @var array
-     */
-    private $valueMap;
 
     /**
-     * GetAssetIdByContentStatus constructor.
+     * GetAssetIdByContentField constructor.
      *
      * @param ResourceConnection $resource
      * @param string $entityType
-     * @param string $contentTable
+     * @param string $fieldTable
      * @param string $idColumn
-     * @param string $statusColumn
-     * @param array $valueMap
+     * @param string $fieldColumn
      */
     public function __construct(
         ResourceConnection $resource,
         string $entityType,
-        string $contentTable,
+        string $fieldTable,
         string $idColumn,
-        string $statusColumn,
-        array $valueMap = []
+        string $fieldColumn
     ) {
         $this->connection = $resource;
         $this->entityType = $entityType;
-        $this->contentTable = $contentTable;
+        $this->fieldTable = $fieldTable;
         $this->idColumn = $idColumn;
-        $this->statusColumn = $statusColumn;
-        $this->valueMap = $valueMap;
+        $this->fieldColumn = $fieldColumn;
     }
 
     /**
@@ -85,11 +80,11 @@ class GetAssetIdByContentStatus implements GetAssetIdByContentStatusInterface
             'entity_type = ?',
             $this->entityType
         )->joinInner(
-            ['content_table' => $this->connection->getTableName($this->contentTable)],
-            'asset_content_table.entity_id = content_table.' . $this->idColumn,
+            ['field_table' => $this->connection->getTableName($this->fieldTable)],
+            'asset_content_table.entity_id = field_table.' . $this->idColumn,
             []
         )->where(
-            'content_table.' . $this->statusColumn . ' = ?',
+            'field_table.' . $this->fieldColumn . ' = ?',
             $value
         );
 

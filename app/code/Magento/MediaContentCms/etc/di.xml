@@ -34,4 +34,52 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\MediaContentCms\Model\GetAssetIdByBlockStore" type="Magento\MediaContentCms\Model\GetAssetIdByContentField">
+        <arguments>
+            <argument name="entityType" xsi:type="string">cms_block</argument>
+            <argument name="fieldTable" xsi:type="string">cms_block_store</argument>
+            <argument name="idColumn" xsi:type="string">block_id</argument>
+            <argument name="fieldColumn" xsi:type="string">store_id</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaContentCms\Model\GetAssetIdByPageStore" type="Magento\MediaContentCms\Model\GetAssetIdByContentField">
+        <arguments>
+            <argument name="entityType" xsi:type="string">cms_page</argument>
+            <argument name="fieldTable" xsi:type="string">cms_page_store</argument>
+            <argument name="idColumn" xsi:type="string">page_id</argument>
+            <argument name="fieldColumn" xsi:type="string">store_id</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaContentCms\Model\GetAssetIdByPageStatus" type="Magento\MediaContentCms\Model\GetAssetIdByContentField">
+        <arguments>
+            <argument name="entityType" xsi:type="string">cms_page</argument>
+            <argument name="fieldTable" xsi:type="string">cms_page</argument>
+            <argument name="idColumn" xsi:type="string">page_id</argument>
+            <argument name="fieldColumn" xsi:type="string">is_active</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaContentCms\Model\GetAssetIdByBlockStatus" type="Magento\MediaContentCms\Model\GetAssetIdByContentField">
+        <arguments>
+            <argument name="entityType" xsi:type="string">cms_block</argument>
+            <argument name="fieldTable" xsi:type="string">cms_block</argument>
+            <argument name="idColumn" xsi:type="string">block_id</argument>
+            <argument name="fieldColumn" xsi:type="string">is_active</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaContent\Model\GetAssetIdByContentStatusComposite">
+        <arguments>
+            <argument name="getAssetIdByContentFieldArray" xsi:type="array">
+                <item name="getAssetIdByPageStatus" xsi:type="object">Magento\MediaContentCms\Model\GetAssetIdByPageStatus</item>
+                <item name="getAssetIdByBlockStatus" xsi:type="object">Magento\MediaContentCms\Model\GetAssetIdByBlockStatus</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaContent\Model\GetAssetIdByContentStoreComposite">
+        <arguments>
+            <argument name="getAssetIdByContentFieldArray" xsi:type="array">
+                <item name="getAssetIdByPageStore" xsi:type="object">Magento\MediaContentCms\Model\GetAssetIdByPageStore</item>
+                <item name="getAssetIdByBlockStore" xsi:type="object">Magento\MediaContentCms\Model\GetAssetIdByBlockStore</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

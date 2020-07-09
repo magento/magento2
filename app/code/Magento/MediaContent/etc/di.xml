@@ -43,4 +43,6 @@
             <argument name="data" xsi:type="object">Magento\MediaContent\Model\Content\Config\Data</argument>
         </arguments>
     </type>
+    <virtualType name="Magento\MediaContent\Model\GetAssetIdByContentStatusComposite" type="Magento\MediaContent\Model\GetAssetIdByContentFieldComposite"/>
+    <virtualType name="Magento\MediaContent\Model\GetAssetIdByContentStoreComposite" type="Magento\MediaContent\Model\GetAssetIdByContentFieldComposite"/>
 </config>

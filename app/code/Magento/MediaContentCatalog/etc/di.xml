@@ -46,4 +46,36 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\MediaContentCatalog\Model\GetAssetIdByProductStatus" type="Magento\MediaContentCatalog\Model\GetAssetIdByEavContentField">
+        <arguments>
+            <argument name="attributeCode" xsi:type="string">status</argument>
+            <argument name="entityType" xsi:type="string">catalog_product</argument>
+            <argument name="valueMap" xsi:type="array">
+                <item name="1" xsi:type="string">1</item>
+                <item name="0" xsi:type="string">2</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaContentCatalog\Model\GetAssetIdByCategoryStatus" type="Magento\MediaContentCatalog\Model\GetAssetIdByEavContentField">
+        <arguments>
+            <argument name="attributeCode" xsi:type="string">is_active</argument>
+            <argument name="entityType" xsi:type="string">catalog_category</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaContent\Model\GetAssetIdByContentStatusComposite">
+        <arguments>
+            <argument name="getAssetIdByContentFieldArray" xsi:type="array">
+                <item name="getAssetIdByProductStatus" xsi:type="object">Magento\MediaContentCatalog\Model\GetAssetIdByProductStatus</item>
+                <item name="getAssetIdByCategoryStatus" xsi:type="object">Magento\MediaContentCatalog\Model\GetAssetIdByCategoryStatus</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaContent\Model\GetAssetIdByContentStoreComposite">
+        <arguments>
+            <argument name="getAssetIdByContentFieldArray" xsi:type="array">
+                <item name="getAssetIdByProductStore" xsi:type="object">Magento\MediaContentCatalog\Model\GetAssetIdByProductStore</item>
+                <item name="getAssetIdByCategoryStore" xsi:type="object">Magento\MediaContentCatalog\Model\GetAssetIdByCategoryStore</item>
+            </argument>
+        </arguments>
+    </virtualType>
 </config>

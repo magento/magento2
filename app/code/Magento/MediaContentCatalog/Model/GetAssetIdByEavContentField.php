@@ -5,16 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaContent\Model;
+namespace Magento\MediaContentCatalog\Model;
 
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;
-use Magento\MediaContentApi\Model\GetAssetIdByContentStatusInterface;
+use Magento\MediaContentApi\Model\GetAssetIdByContentFieldInterface;
 
 /**
- * Class responsible to return Asset id by eav entity status
+ * Class responsible to return Asset id by eav content field
  */
-class GetAssetIdByEavContentStatus implements GetAssetIdByContentStatusInterface
+class GetAssetIdByEavContentField implements GetAssetIdByContentFieldInterface
 {
     private const TABLE_CONTENT_ASSET = 'media_content_asset';
 
@@ -70,7 +70,7 @@ class GetAssetIdByEavContentStatus implements GetAssetIdByContentStatusInterface
      * @inheritDoc
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function execute(string $status): array
+    public function execute(string $value): array
     {
         $statusAttribute = $this->config->getAttribute($this->entityType, $this->attributeCode);
 
@@ -88,7 +88,7 @@ class GetAssetIdByEavContentStatus implements GetAssetIdByContentStatusInterface
             []
         )->where(
             'entity_eav_type.value = ?',
-            $this->getValueFromMap($status)
+            $this->getValueFromMap($value)
         );
 
         $result = $this->connection->getConnection()->fetchAll($sql);

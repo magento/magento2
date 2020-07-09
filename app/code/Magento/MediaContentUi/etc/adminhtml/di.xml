@@ -10,12 +10,18 @@
         <arguments>
             <argument name="customFilters" xsi:type="array">
                 <item name="content_status" xsi:type="object">Magento\MediaContentUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\ContentStatus</item>
+                <item name="store_id" xsi:type="object">Magento\MediaContentUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\StoreView</item>
             </argument>
         </arguments>
     </virtualType>
     <type name="Magento\MediaContentUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\ContentStatus">
         <arguments>
             <argument name="getAssetIdByContentStatus" xsi:type="object">Magento\MediaContent\Model\GetAssetIdByContentStatusComposite</argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaContentUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\StoreView">
+        <arguments>
+            <argument name="getAssetIdByContentStatus" xsi:type="object">Magento\MediaContent\Model\GetAssetIdByContentStoreComposite</argument>
         </arguments>
     </type>
 </config>
