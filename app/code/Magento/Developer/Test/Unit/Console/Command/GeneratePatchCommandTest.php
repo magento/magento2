@@ -44,7 +44,7 @@ class GeneratePatchCommandTest extends TestCase
      */
     private $command;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->componentRegistrarMock = $this->createMock(ComponentRegistrar::class);
         $this->directoryListMock = $this->createMock(DirectoryList::class);
@@ -86,7 +86,7 @@ class GeneratePatchCommandTest extends TestCase
                 GeneratePatchCommand::INPUT_KEY_PATCH_NAME => 'SomePatch'
             ]
         );
-        $this->assertContains('successfully generated', $commandTester->getDisplay());
+        $this->assertStringContainsString('successfully generated', $commandTester->getDisplay());
     }
 
     public function testWrongParameter()
