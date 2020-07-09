@@ -25,10 +25,12 @@ class UpdateCustomerEmail implements ResolverInterface
      * @var GetCustomer
      */
     private $getCustomer;
+
     /**
      * @var UpdateCustomerAccount
      */
     private $updateCustomerAccount;
+
     /**
      * @var ExtractCustomerData
      */
@@ -50,7 +52,7 @@ class UpdateCustomerEmail implements ResolverInterface
     }
 
     /**
-     * @inheritdoc
+     * Resolves customer email update mutation
      */
     public function resolve(
         Field $field,
@@ -67,7 +69,10 @@ class UpdateCustomerEmail implements ResolverInterface
         $customer = $this->getCustomer->execute($context);
         $this->updateCustomerAccount->execute(
             $customer,
-            ['email' => $args['email'], 'password' => $args['password']],
+            [
+                'email' => $args['email'] ?? null,
+                'password' => $args['password'] ?? null
+            ],
             $context->getExtensionAttributes()->getStore()
         );
 
