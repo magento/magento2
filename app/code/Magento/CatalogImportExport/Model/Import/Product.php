@@ -3062,7 +3062,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
         $existStockData = $stockItemDo->getData();
 
-        if (isset($rowData['qty']) && $rowData['qty'] == 0) {
+        if (isset($rowData['qty']) && $rowData['qty'] == 0 && !isset($rowData['is_in_stock'])) {
             $rowData['is_in_stock'] = 0;
         }
 
@@ -3074,6 +3074,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         );
 
         if ($this->stockConfiguration->isQty($this->skuProcessor->getNewSku($sku)['type_id'])) {
+            if (isset($rowData['qty']) && $rowData['qty'] == 0) {
+                $row['is_in_stock'] = 0;
+            }
             $stockItemDo->setData($row);
             $row['is_in_stock'] = $row['is_in_stock'] ?? $this->stockStateProvider->verifyStock($stockItemDo);
             if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
