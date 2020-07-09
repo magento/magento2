@@ -11,7 +11,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\State as AppState;
 use Magento\Framework\DB\Ddl\Trigger;
-use Magento\Framework\Mview\View\CollectionInterface as ViewCollection;
+use Magento\Framework\Mview\View\CollectionFactory as ViewCollectionFactory;
 use Magento\Framework\Mview\View\StateInterface;
 use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
@@ -57,29 +57,29 @@ class UpgradeCommand extends AbstractSetupCommand
     private $searchConfigFactory;
 
     /*
-     * @var ViewCollection
+     * @var ViewCollectionFactory
      */
-    private $viewCollection;
+    private $viewCollectionFactory;
 
     /**
      * @param InstallerFactory $installerFactory
      * @param SearchConfigFactory $searchConfigFactory
      * @param DeploymentConfig $deploymentConfig
      * @param AppState|null $appState
-     * @param ViewCollection|null $viewCollection
+     * @param ViewCollectionFactory|null $viewCollectionFactory
      */
     public function __construct(
         InstallerFactory $installerFactory,
         SearchConfigFactory $searchConfigFactory,
         DeploymentConfig $deploymentConfig = null,
         AppState $appState = null,
-        ViewCollection $viewCollection = null
+        ViewCollectionFactory $viewCollectionFactory = null
     ) {
         $this->installerFactory = $installerFactory;
         $this->searchConfigFactory = $searchConfigFactory;
         $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
         $this->appState = $appState ?: ObjectManager::getInstance()->get(AppState::class);
-        $this->viewCollection = $viewCollection ?: ObjectManager::getInstance()->get(ViewCollection::class);
+        $this->viewCollectionFactory = $viewCollectionFactory ?: ObjectManager::getInstance()->get(ViewCollectionFactory::class);
         parent::__construct();
     }
 
@@ -179,14 +179,15 @@ class UpgradeCommand extends AbstractSetupCommand
     private function removeUnusedTriggers()
     {
         // unsubscribe mview
-        $viewList = $this->viewCollection->getViewsByStateMode(StateInterface::MODE_ENABLED);
+        $viewCollection = $this->viewCollectionFactory->create();
+        $viewList = $viewCollection->getViewsByStateMode(StateInterface::MODE_ENABLED);
         foreach ($viewList as $view) {
             /** @var \Magento\Framework\Mview\ViewInterface $view */
             $view->unsubscribe();
         }
 
         // remove extra triggers that have correct naming structure
-        /* @var ResourceConnection $resource */
+        /** @var ResourceConnection $resource */
         $resource = ObjectManager::getInstance()->get(ResourceConnection::class);
         $connection = $resource->getConnection();
         $triggers = $connection->getTriggers();
