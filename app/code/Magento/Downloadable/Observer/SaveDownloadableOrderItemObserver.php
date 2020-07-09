@@ -148,7 +148,6 @@ class SaveDownloadableOrderItemObserver implements ObserverInterface
                         )->setOrderItemId(
                             $orderItem->getId()
                         );
-
                         $this->_objectCopyService->copyFieldsetToTarget(
                             \downloadable_sales_copy_link::class,
                             'to_purchased',
