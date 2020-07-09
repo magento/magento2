@@ -119,7 +119,7 @@ class Collection
      * Retrieve child products from for passed in parent id.
      *
      * @param int $id
-     * @param ContextInterface $context|null
+     * @param ContextInterface|null $context
      * @return array
      */
     public function getChildProductsByParentId(int $id, ContextInterface $context = null) : array
@@ -136,7 +136,7 @@ class Collection
     /**
      * Fetch all children products from parent id's.
      *
-     * @param ContextInterface $context|null
+     * @param ContextInterface|null $context
      * @return array
      */
     private function fetch(ContextInterface $context = null) : array
