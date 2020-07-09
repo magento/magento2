@@ -26,6 +26,7 @@ use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterfaceFactory;
 use Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataForUserInterface;
 use Magento\LoginAsCustomerApi\Api\SaveAuthenticationDataInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Store\Model\StoreSwitcher\ManageStoreCookie;
 
 /**
  * Login as customer action
@@ -88,6 +89,11 @@ class Login extends Action implements HttpGetActionInterface
     private $share;
 
     /**
+     * @var ManageStoreCookie
+     */
+    private $manageStoreCookie;
+
+    /**
      * @param Context $context
      * @param Session $authSession
      * @param StoreManagerInterface $storeManager
@@ -98,6 +104,8 @@ class Login extends Action implements HttpGetActionInterface
      * @param DeleteAuthenticationDataForUserInterface $deleteAuthenticationDataForUser
      * @param Url $url
      * @param Share $share
+     * @param ManageStoreCookie $manageStoreCookie
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Context $context,
@@ -109,7 +117,8 @@ class Login extends Action implements HttpGetActionInterface
         SaveAuthenticationDataInterface $saveAuthenticationData,
         DeleteAuthenticationDataForUserInterface $deleteAuthenticationDataForUser,
         Url $url,
-        Share $share = null
+        ?Share $share = null,
+        ?ManageStoreCookie $manageStoreCookie = null
     ) {
         parent::__construct($context);
 
@@ -122,6 +131,7 @@ class Login extends Action implements HttpGetActionInterface
         $this->deleteAuthenticationDataForUser = $deleteAuthenticationDataForUser;
         $this->url = $url;
         $this->share = $share ?? ObjectManager::getInstance()->get(Share::class);
+        $this->manageStoreCookie = $manageStoreCookie ?? ObjectManager::getInstance()->get(ManageStoreCookie::class);
     }
 
     /**
@@ -195,10 +205,17 @@ class Login extends Action implements HttpGetActionInterface
      */
     private function getLoginProceedRedirectUrl(string $secret, int $storeId): string
     {
-        $store = $this->storeManager->getStore($storeId);
+        $targetStore = $this->storeManager->getStore($storeId);
 
-        return $this->url
-            ->setScope($store)
+        $redirectUrl = $this->url
+            ->setScope($targetStore)
             ->getUrl('loginascustomer/login/index', ['secret' => $secret, '_nosid' => true]);
+
+        if (!$targetStore->isUseStoreInUrl()) {
+            $fromStore = $this->storeManager->getStore();
+            $redirectUrl = $this->manageStoreCookie->switch($fromStore, $targetStore, $redirectUrl);
+        }
+
+        return $redirectUrl;
     }
 }
