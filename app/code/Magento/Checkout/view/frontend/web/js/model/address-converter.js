@@ -16,6 +16,37 @@ define([
 
     var countryData = customerData.get('directory-data');
 
+    /**
+     * Find region by code
+     *
+     * @param {Int} countryId
+     * @param {String} regionCode
+     * @returns {Object}
+     */
+    function findCountryRegionByCode(countryId, regionCode) {
+        var data = countryData()[countryId] || {},
+            id,
+            region;
+
+        if (data.regions) {
+            for (id in data.regions) {
+                // eslint-disable-next-line max-depth
+                if (data.regions[id].code === regionCode) {
+                    region = $.extend(
+                        true,
+                        {
+                            id: id
+                        },
+                        data.regions[id]
+                    );
+                    break;
+                }
+            }
+        }
+
+        return region;
+    }
+
     return {
         /**
          * Convert address form data to Address object
@@ -27,10 +58,22 @@ define([
             // clone address form data to new object
             var addressData = $.extend(true, {}, formData),
                 region,
-                regionName = addressData.region;
+                regionName = addressData.region,
+                field,
+                mappings = {
+                    'country_id': 'countryId',
+                    'region_id': 'regionId',
+                    'region_code': 'regionCode'
+                };
 
             if (mageUtils.isObject(addressData.street)) {
                 addressData.street = this.objectToArray(addressData.street);
+            }
+
+            for (field in mappings) {
+                if (!addressData[field] && addressData[mappings[field]]) {
+                    addressData[field] = addressData[mappings[field]];
+                }
             }
 
             addressData.region = {
@@ -50,6 +93,14 @@ define([
                     addressData.region['region_code'] = region.code;
                     addressData.region.region = region.name;
                 }
+            } else if (
+                addressData['country_id'] &&
+                addressData['region_code'] &&
+                (region = findCountryRegionByCode(addressData['country_id'], addressData['region_code']))
+            ) {
+                addressData.region['region_id'] = region.id;
+                addressData.region['region_code'] = region.code;
+                addressData.region.region = region.name;
             } else if (
                 !addressData['region_id'] &&
                 countryData()[addressData['country_id']] &&
