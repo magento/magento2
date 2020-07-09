@@ -56,8 +56,12 @@ class StoreSwitcherTest extends TestCase
     public function testStoreSwitcherDisplayed(): void
     {
         $html = $this->getBlockHtml('admin.customer.view.edit.cart');
-        $this->assertEquals(1, Xpath::getElementsCountForXpath(self::WEBSITE_FILTER_XPATH, $html));
-        $this->checkFilterOptions($html, [ $this->storeManager->getWebsite('base')->getName()]);
+        $this->assertEquals(
+            1,
+            Xpath::getElementsCountForXpath(self::WEBSITE_FILTER_XPATH, $html),
+            'Website Filter was not found on the page'
+        );
+        $this->checkFilterOptions($html, [$this->storeManager->getWebsite('base')->getName()]);
     }
 
     /**
