@@ -104,6 +104,7 @@ class StaticField implements FieldProviderInterface
      * @param array $context
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getFields(array $context = []): array
     {
