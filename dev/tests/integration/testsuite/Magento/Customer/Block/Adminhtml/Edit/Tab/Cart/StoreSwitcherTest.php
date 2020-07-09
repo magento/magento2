@@ -47,7 +47,7 @@ class StoreSwitcherTest extends TestCase
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->pageFactory = $this->objectManager->get(PageFactory::class);
-        $this->storeManager = $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
     }
 
     /**
