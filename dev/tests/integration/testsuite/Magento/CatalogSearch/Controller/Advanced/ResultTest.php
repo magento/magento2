@@ -76,10 +76,9 @@ class ResultTest extends AbstractController
      * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search_with_hyphen_in_sku.php
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
      *
-     * @param array $searchParams
      * @return void
      */
-    public function testExecuteSkuWithHyphen(array $searchParams): void
+    public function testExecuteSkuWithHyphen(): void
     {
         $this->getRequest()->setQuery(
             $this->_objectManager->create(

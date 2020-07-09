@@ -84,7 +84,8 @@ class Builder implements BuilderInterface
     /**
      * Setter for storeId property
      *
-     * @inheritdoc
+     * @param int $storeId
+     * @return void
      */
     public function setStoreId($storeId)
     {
