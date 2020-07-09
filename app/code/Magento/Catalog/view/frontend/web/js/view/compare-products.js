@@ -35,14 +35,20 @@ define([
 
             initSidebar();
         },
+
+        /**
+         * Get counter label
+         *
+         * @returns {String}
+         */
         getCounterLabel: function () {
             var counter = this.compareProducts().count;
 
             if (counter === 1) {
                 return counter + ' ' + $t('item');
-            } else {
-                return $t('%1 items').replace('%1', counter);
             }
-        },
+
+            return $t('%1 items').replace('%1', counter);
+        }
     });
 });

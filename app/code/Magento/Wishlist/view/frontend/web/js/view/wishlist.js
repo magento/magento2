@@ -17,14 +17,20 @@ define([
 
             this.wishlist = customerData.get('wishlist');
         },
+
+        /**
+         * Get counter label
+         *
+         * @returns {String}
+         */
         getCounterLabel: function () {
             var counter = this.wishlist().counter;
 
             if (counter === 1) {
                 return counter + ' ' + $t('item');
-            } else {
-                return $t('%1 items').replace('%1', counter);
             }
-        },
+
+            return $t('%1 items').replace('%1', counter);
+        }
     });
 });
