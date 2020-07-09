@@ -40,6 +40,7 @@
                 <field id="default_group" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Default Group</label>
                     <source_model>Magento\Customer\Model\Config\Source\Group</source_model>
+                    <validate>required-entry</validate>
                 </field>
                 <field id="viv_domestic_group" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Group for Valid VAT ID - Domestic</label>
@@ -47,6 +48,7 @@
                     <depends>
                         <field id="auto_group_assign">1</field>
                     </depends>
+                    <validate>required-entry</validate>
                 </field>
                 <field id="viv_intra_union_group" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Group for Valid VAT ID - Intra-Union</label>
@@ -54,6 +56,7 @@
                     <depends>
                         <field id="auto_group_assign">1</field>
                     </depends>
+                    <validate>required-entry</validate>
                 </field>
                 <field id="viv_invalid_group" translate="label" type="select" sortOrder="50" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Group for Invalid VAT ID</label>
@@ -61,6 +64,7 @@
                     <depends>
                         <field id="auto_group_assign">1</field>
                     </depends>
+                    <validate>required-entry</validate>
                 </field>
                 <field id="viv_error_group" translate="label" type="select" sortOrder="55" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Validation Error Group</label>
@@ -68,6 +72,7 @@
                     <depends>
                         <field id="auto_group_assign">1</field>
                     </depends>
+                    <validate>required-entry</validate>
                 </field>
                 <field id="viv_on_each_transaction" translate="label" type="select" sortOrder="56" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Validate on Each Transaction</label>
