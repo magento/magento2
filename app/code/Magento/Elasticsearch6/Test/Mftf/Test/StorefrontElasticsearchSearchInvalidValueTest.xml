@@ -44,8 +44,7 @@
             <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
             <waitForPageLoad stepKey="waitForAttributePageLoad"/>
             <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
-            <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductCatalog"/>
-            <waitForPageLoad stepKey="waitForProductIndexPage"/>
+            <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="goToProductCatalog"/>
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteProduct"/>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetFiltersIfExist"/>
             <magentoCLI command="indexer:reindex catalogsearch_fulltext" stepKey="reindex"/>
