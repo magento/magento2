@@ -145,7 +145,7 @@ class InvoiceItems implements ResolverInterface
             $discounts [] = [
                 'label' => $associatedOrder->getDiscountDescription() ?? _('Discount'),
                 'amount' => [
-                    'value' => $invoiceItem->getDiscountAmount() ?? 0,
+                    'value' => abs($invoiceItem->getDiscountAmount()) ?? 0,
                     'currency' => $associatedOrder->getOrderCurrencyCode()
                 ]
             ];

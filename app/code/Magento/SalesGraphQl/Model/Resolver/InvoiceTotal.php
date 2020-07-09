@@ -14,7 +14,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Tax\Api\OrderTaxManagementInterface;
-use Magento\SalesGraphQl\Model\SalesItem\ShippingTaxHelper;
+use Magento\SalesGraphQl\Model\SalesItem\ShippingTaxCalculator;
 use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
@@ -33,23 +33,23 @@ class InvoiceTotal implements ResolverInterface
     private $orderTaxManagement;
 
     /**
-     * @var ShippingTaxHelper
+     * @var ShippingTaxCalculator
      */
-    private $shippingTaxHelper;
+    private $shippingTaxCalculator;
 
     /**
      * @param OrderTaxManagementInterface $orderTaxManagement
      * @param TaxHelper $taxHelper
-     * @param ShippingTaxHelper $shippingTaxHelper
+     * @param ShippingTaxCalculator $shippingTaxCalculator
      */
     public function __construct(
         OrderTaxManagementInterface $orderTaxManagement,
         TaxHelper $taxHelper,
-        ShippingTaxHelper $shippingTaxHelper
+        ShippingTaxCalculator $shippingTaxCalculator
     ) {
         $this->taxHelper = $taxHelper;
         $this->orderTaxManagement = $orderTaxManagement;
-        $this->shippingTaxHelper = $shippingTaxHelper;
+        $this->shippingTaxCalculator = $shippingTaxCalculator;
     }
 
     /**
@@ -102,7 +102,7 @@ class InvoiceTotal implements ResolverInterface
                 'discounts' => $this->getShippingDiscountDetails($invoiceModel),
                 'taxes' => $this->formatTaxes(
                     $orderModel,
-                    $this->shippingTaxHelper->calculateShippingTaxes($orderModel, $invoiceModel),
+                    $this->shippingTaxCalculator->calculateShippingTaxes($orderModel, $invoiceModel),
                 )
             ]
         ];

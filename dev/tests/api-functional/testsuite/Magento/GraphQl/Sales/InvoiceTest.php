@@ -38,9 +38,8 @@ class InvoiceTest extends GraphQlAbstract
      */
     public function testSingleInvoiceForLoggedInCustomerQuery()
     {
-        $response = $this->getCustomerInvoice();
+        $response = $this->getCustomerInvoices();
         $expectedOrdersData = [
-            'order_number' => '100000001',
             'status' => 'Processing',
             'grand_total' => 100.00
         ];
@@ -103,9 +102,8 @@ class InvoiceTest extends GraphQlAbstract
      */
     public function testMultipleInvoiceForLoggedInCustomerQuery()
     {
-        $response = $this->getCustomerInvoice();
+        $response = $this->getCustomerInvoices();
         $expectedOrdersData = [
-            'order_number' => '100000002',
             'status' => 'Processing',
             'grand_total' => 50.00
         ];
@@ -200,12 +198,11 @@ class InvoiceTest extends GraphQlAbstract
     {
         $query =
             <<<QUERY
-query {
+{
   customer
   {
   orders {
     items {
-      order_number
       grand_total
       status
       invoices {
@@ -248,7 +245,6 @@ QUERY;
             $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
         );
         $expectedOrdersData = [
-            'order_number' => '100000001',
             'status' => 'Processing',
             'grand_total' => 100.00
         ];
@@ -308,7 +304,7 @@ QUERY;
 
         $orderNumber = $this->placeOrder($cartId);
         $this->prepareInvoice($orderNumber, 2);
-        $customerOrderResponse = $this->getCustomerOrderQuery($orderNumber);
+        $customerOrderResponse = $this->getCustomerInvoicesBasedOnOrderNumber($orderNumber);
         $customerOrderItem = $customerOrderResponse[0];
         $invoice = $customerOrderItem['invoices'][0];
         $this->assertEquals(3, $invoice['total']['discounts'][0]['amount']['value']);
@@ -342,9 +338,13 @@ QUERY;
 
         $orderNumber = $this->placeOrder($cartId);
         $this->prepareInvoice($orderNumber, 1);
-        $customerOrderResponse = $this->getCustomerOrderQuery($orderNumber);
+        $customerOrderResponse = $this->getCustomerInvoicesBasedOnOrderNumber($orderNumber);
         $customerOrderItem = $customerOrderResponse[0];
         $invoice = $customerOrderItem['invoices'][0];
+        $invoiceItem = $invoice['items'][0];
+        $this->assertEquals(1, $invoiceItem['discounts'][0]['amount']['value']);
+        $this->assertEquals('USD', $invoiceItem['discounts'][0]['amount']['currency']);
+        $this->assertEquals('Discount Label for 10% off', $invoiceItem['discounts'][0]['label']);
         $this->assertEquals(2, $invoice['total']['discounts'][0]['amount']['value']);
         $this->assertEquals('USD', $invoice['total']['discounts'][0]['amount']['currency']);
         $this->assertEquals(
@@ -356,6 +356,8 @@ QUERY;
     }
 
     /**
+     * Prepare invoice for the order
+     *
      * @param string $orderNumber
      * @param int|null $qty
      */
@@ -737,7 +739,7 @@ QUERY;
      * @param string $orderNumber
      * @return array
      */
-    private function getCustomerOrderQuery($orderNumber): array
+    private function getCustomerInvoicesBasedOnOrderNumber($orderNumber): array
     {
         $query =
             <<<QUERY
@@ -747,29 +749,8 @@ QUERY;
        orders(filter:{number:{eq:"{$orderNumber}"}}) {
          total_count
          items {
-           id
-           number
-           order_date
-           status
-           items{product_name product_sku quantity_ordered discounts {amount{value currency} label}}
-           total {
-             base_grand_total{value currency}
-             grand_total{value currency}
-             total_tax{value currency}
-             subtotal { value currency }
-             taxes {amount{value currency} title rate}
-             discounts {amount{value currency} label}
-             total_shipping{value currency}
-             shipping_handling
-             {
-               amount_including_tax{value}
-               amount_excluding_tax{value}
-               total_amount{value currency}
-               taxes {amount{value} title rate}
-               discounts {amount{value currency} label}
-             }
-           }
            invoices {
+              items{product_sale_price{value currency} quantity_invoiced discounts {amount{value currency} label}}
               total {
              base_grand_total{value currency}
              grand_total{value currency}
@@ -811,32 +792,32 @@ QUERY;
     {
         $actualData = $response['customer']['orders']['items'][0];
         $this->assertEquals(
-            $expectedOrdersData['order_number'],
-            $actualData['order_number'],
-            "order_number is different than the expected for order - " . $expectedOrdersData['order_number']
-        );
-        $this->assertEquals(
             $expectedOrdersData['grand_total'],
             $actualData['grand_total'],
-            "grand_total is different than the expected for order - " . $expectedOrdersData['order_number']
+            "grand_total is different than the expected for order"
         );
         $this->assertEquals(
             $expectedOrdersData['status'],
             $actualData['status'],
-            "status is different than the expected for order - " . $expectedOrdersData['order_number']
+            "status is different than the expected for order"
         );
     }
 
-    private function getCustomerInvoice(): array
+    /**
+     * Get invoices for the customer
+     *
+     * @return array
+     * @throws \Magento\Framework\Exception\AuthenticationException
+     */
+    private function getCustomerInvoices(): array
     {
         $query =
             <<<QUERY
-query {
+{
   customer
   {
   orders {
     items {
-      order_number
       grand_total
       status
       invoices {

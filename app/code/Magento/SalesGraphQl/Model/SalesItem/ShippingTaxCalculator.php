@@ -7,7 +7,7 @@ use Magento\Sales\Model\EntityInterface;
 use Magento\Tax\Api\Data\OrderTaxDetailsItemInterface;
 use Magento\Tax\Api\OrderTaxManagementInterface;
 
-class ShippingTaxHelper
+class ShippingTaxCalculator
 {
     /**
      * @var OrderTaxManagementInterface
