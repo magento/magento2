@@ -3062,7 +3062,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         $stockItemDo = $this->stockRegistry->getStockItem($row['product_id'], $row['website_id']);
         $existStockData = $stockItemDo->getData();
 
-        if (isset($rowData['qty']) && $rowData['qty'] == 0 && !isset($rowData['is_in_stock'])) {
+        if (isset($rowData['qty']) && $rowData['qty'] == 0) {
             $rowData['is_in_stock'] = 0;
         }
 
