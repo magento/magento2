@@ -10,7 +10,6 @@ use Magento\Framework\Filesystem\Directory\WriteInterface;
 
 /**
  * Writes reports in files in csv format
- * @inheritdoc
  */
 class ReportWriter implements ReportWriterInterface
 {
@@ -54,7 +53,7 @@ class ReportWriter implements ReportWriterInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function write(WriteInterface $directory, $path)
     {
@@ -81,7 +80,7 @@ class ReportWriter implements ReportWriterInterface
                     $headers = array_keys($row);
                     $stream->writeCsv($headers);
                 }
-                $stream->writeCsv($row);
+                $stream->writeCsv($this->prepareRow($row));
             }
             $stream->unlock();
             $stream->close();
@@ -97,5 +96,19 @@ class ReportWriter implements ReportWriterInterface
         }
 
         return true;
+    }
+
+    /**
+     * Replace wrong symbols in row
+     *
+     * @param array $row
+     * @return array
+     */
+    private function prepareRow(array $row): array
+    {
+        $row = preg_replace('/(?<!\\\\)"/', '\\"', $row);
+        $row = preg_replace('/[\\\\]+/', '\\', $row);
+
+        return $row;
     }
 }
