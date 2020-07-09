@@ -21,6 +21,7 @@ class GetAssetIdByCategoryStore implements GetAssetIdByContentFieldInterface
 {
     private const TABLE_CONTENT_ASSET = 'media_content_asset';
     private const TABLE_CATALOG_CATEGORY = 'catalog_category_entity';
+    private const ENTITY_TYPE = 'catalog_category';
 
     /**
      * @var ResourceConnection
@@ -38,11 +39,6 @@ class GetAssetIdByCategoryStore implements GetAssetIdByContentFieldInterface
     private $storeGroupRepository;
 
     /**
-     * @var string
-     */
-    private $entityType;
-
-    /**
      * GetAssetIdByProductStore constructor.
      *
      * @param ResourceConnection $resource
@@ -57,7 +53,6 @@ class GetAssetIdByCategoryStore implements GetAssetIdByContentFieldInterface
         $this->connection = $resource;
         $this->storeRepository = $storeRepository;
         $this->storeGroupRepository = $storeGroupRepository;
-        $this->entityType = 'catalog_category';
     }
 
     /**
@@ -75,7 +70,7 @@ class GetAssetIdByCategoryStore implements GetAssetIdByContentFieldInterface
             ['asset_id']
         )->where(
             'entity_type = ?',
-            $this->entityType
+            self::ENTITY_TYPE
         )->where(
             'entity_id IN (?)',
             $categoryIds
@@ -126,7 +121,7 @@ class GetAssetIdByCategoryStore implements GetAssetIdByContentFieldInterface
             ['entity_id']
         )->where(
             'entity_type = ?',
-            $this->entityType
+            self::ENTITY_TYPE
         )->joinInner(
             ['category_table' => $this->connection->getTableName(self::TABLE_CATALOG_CATEGORY)],
             'asset_content_table.entity_id = category_table.entity_id',

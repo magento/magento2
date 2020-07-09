@@ -18,6 +18,10 @@ use Magento\Store\Api\StoreRepositoryInterface;
 class GetAssetIdByProductStore implements GetAssetIdByContentFieldInterface
 {
     private const TABLE_CONTENT_ASSET = 'media_content_asset';
+    private const ENTITY_TYPE = 'catalog_product';
+    private const FIELD_TABLE = 'catalog_product_website';
+    private const ID_COLUMN = 'product_id';
+    private const FIELD_COLUMN = 'website_id';
 
     /**
      * @var ResourceConnection
@@ -28,26 +32,6 @@ class GetAssetIdByProductStore implements GetAssetIdByContentFieldInterface
      * @var StoreRepositoryInterface
      */
     private $storeRepository;
-
-    /**
-     * @var string
-     */
-    private $entityType;
-
-    /**
-     * @var string
-     */
-    private $fieldTable;
-
-    /**
-     * @var string
-     */
-    private $fieldColumn;
-
-    /**
-     * @var string
-     */
-    private $idColumn;
 
     /**
      * GetAssetIdByProductStore constructor.
@@ -61,10 +45,6 @@ class GetAssetIdByProductStore implements GetAssetIdByContentFieldInterface
     ) {
         $this->connection = $resource;
         $this->storeRepository = $storeRepository;
-        $this->entityType = 'catalog_product';
-        $this->fieldTable = 'catalog_product_website';
-        $this->idColumn = 'product_id';
-        $this->fieldColumn = 'website_id';
     }
 
     /**
@@ -80,13 +60,13 @@ class GetAssetIdByProductStore implements GetAssetIdByContentFieldInterface
             ['asset_id']
         )->where(
             'entity_type = ?',
-            $this->entityType
+            self::ENTITY_TYPE
         )->joinInner(
-            ['field_table' => $this->connection->getTableName($this->fieldTable)],
-            'asset_content_table.entity_id = field_table.' . $this->idColumn,
+            ['field_table' => $this->connection->getTableName(self::FIELD_TABLE)],
+            'asset_content_table.entity_id = field_table.' . self::ID_COLUMN,
             []
         )->where(
-            'field_table.' . $this->fieldColumn . ' = ?',
+            'field_table.' . self::FIELD_COLUMN . ' = ?',
             $store->getWebsiteId()
         );
 
