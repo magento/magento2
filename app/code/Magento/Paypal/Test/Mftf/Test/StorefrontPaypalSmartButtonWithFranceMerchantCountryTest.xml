@@ -18,7 +18,7 @@
             <testCaseId value="MC-33274"/>
             <group value="paypalExpress"/>
             <skip>
-                <issueId value="MC-35754"/>
+                <issueId value="MC-35722"/>
             </skip>
         </annotations>
         <before>
