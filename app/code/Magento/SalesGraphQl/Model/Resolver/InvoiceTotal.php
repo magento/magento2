@@ -88,15 +88,15 @@ class InvoiceTotal implements ResolverInterface
             ),
             'shipping_handling' => [
                 'amount_excluding_tax' => [
-                    'value' => $invoiceModel->getShippingAmount(),
+                    'value' => $invoiceModel->getShippingAmount() ?? 0,
                     'currency' => $currency
                 ],
                 'amount_including_tax' => [
-                    'value' => $invoiceModel->getShippingInclTax(),
+                    'value' => $invoiceModel->getShippingInclTax() ?? 0,
                     'currency' => $currency
                 ],
                 'total_amount' => [
-                    'value' => $invoiceModel->getShippingAmount(),
+                    'value' => $invoiceModel->getShippingAmount() ?? 0,
                     'currency' => $currency
                 ],
                 'discounts' => $this->getShippingDiscountDetails($invoiceModel),

@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 namespace Magento\SalesGraphQl\Model\SalesItem;
 
@@ -6,6 +10,7 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\EntityInterface;
 use Magento\Tax\Api\Data\OrderTaxDetailsItemInterface;
 use Magento\Tax\Api\OrderTaxManagementInterface;
+use \Magento\Quote\Model\Quote\Address;
 
 class ShippingTaxCalculator
 {
@@ -36,7 +41,7 @@ class ShippingTaxCalculator
         EntityInterface $salesItem
     ) {
         $orderTaxDetails = $this->orderTaxManagement->getOrderTaxDetails($order->getId());
-        $taxClassAmount = [];
+        $taxClassBreakdown = [];
         // Apply any taxes for shipping
         $shippingTaxAmount = $salesItem->getShippingTaxAmount();
         $originalShippingTaxAmount = $order->getShippingTaxAmount();
@@ -48,13 +53,12 @@ class ShippingTaxCalculator
             $itemTaxDetails = $orderTaxDetails->getItems();
             foreach ($itemTaxDetails as $itemTaxDetail) {
                 //Aggregate taxable items associated with shipping
-                if ($itemTaxDetail->getType() == \Magento\Quote\Model\Quote\Address::TYPE_SHIPPING) {
-                    $taxClassAmount = $this->_aggregateTaxes($taxClassAmount, $itemTaxDetail, $shippingRatio);
+                if ($itemTaxDetail->getType() == Address::TYPE_SHIPPING) {
+                    $taxClassBreakdown = $this->aggregateTaxes($taxClassBreakdown, $itemTaxDetail, $shippingRatio);
                 }
             }
         }
-
-        return $taxClassAmount;
+        return $taxClassBreakdown;
     }
 
     /**
@@ -70,31 +74,31 @@ class ShippingTaxCalculator
      *  )
      * )
      *
-     * @param  array                        $taxClassAmount
+     * @param  array                        $taxClassBreakdown
      * @param  OrderTaxDetailsItemInterface $itemTaxDetail
-     * @param  float                        $ratio
+     * @param  float                        $taxRatio
      * @return array
      */
-    private function _aggregateTaxes($taxClassAmount, OrderTaxDetailsItemInterface $itemTaxDetail, $ratio)
+    private function aggregateTaxes($taxClassBreakdown, OrderTaxDetailsItemInterface $itemTaxDetail, $taxRatio)
     {
         $itemAppliedTaxes = $itemTaxDetail->getAppliedTaxes();
         foreach ($itemAppliedTaxes as $itemAppliedTax) {
-            $taxAmount = $itemAppliedTax->getAmount() * $ratio;
-            $baseTaxAmount = $itemAppliedTax->getBaseAmount() * $ratio;
+            $taxAmount = $itemAppliedTax->getAmount() * $taxRatio;
+            $baseTaxAmount = $itemAppliedTax->getBaseAmount() * $taxRatio;
             if (0 == $taxAmount && 0 == $baseTaxAmount) {
                 continue;
             }
             $taxCode = $itemAppliedTax->getCode();
-            if (!isset($taxClassAmount[$taxCode])) {
-                $taxClassAmount[$taxCode]['title'] = $itemAppliedTax->getTitle();
-                $taxClassAmount[$taxCode]['percent'] = $itemAppliedTax->getPercent();
-                $taxClassAmount[$taxCode]['tax_amount'] = $taxAmount;
-                $taxClassAmount[$taxCode]['base_tax_amount'] = $baseTaxAmount;
+            if (!isset($taxClassBreakdown[$taxCode])) {
+                $taxClassBreakdown[$taxCode]['title'] = $itemAppliedTax->getTitle();
+                $taxClassBreakdown[$taxCode]['percent'] = $itemAppliedTax->getPercent();
+                $taxClassBreakdown[$taxCode]['tax_amount'] = $taxAmount;
+                $taxClassBreakdown[$taxCode]['base_tax_amount'] = $baseTaxAmount;
             } else {
-                $taxClassAmount[$taxCode]['tax_amount'] += $taxAmount;
-                $taxClassAmount[$taxCode]['base_tax_amount'] += $baseTaxAmount;
+                $taxClassBreakdown[$taxCode]['tax_amount'] += $taxAmount;
+                $taxClassBreakdown[$taxCode]['base_tax_amount'] += $baseTaxAmount;
             }
         }
-        return $taxClassAmount;
+        return $taxClassBreakdown;
     }
 }

@@ -38,7 +38,7 @@ class InvoiceTest extends GraphQlAbstract
      */
     public function testSingleInvoiceForLoggedInCustomerQuery()
     {
-        $response = $this->getCustomerInvoices();
+        $response = $this->getCustomerInvoicesBasedOnOrderNumber('100000001');
         $expectedOrdersData = [
             'status' => 'Processing',
             'grand_total' => 100.00
@@ -50,25 +50,31 @@ class InvoiceTest extends GraphQlAbstract
                         'product_name' => 'Simple Related Product',
                         'product_sku' => 'simple',
                         'product_sale_price' => [
-                            'value' => 10
+                            'value' => 10,
+                            'currency' => 'USD'
                         ],
-                        'quantity_invoiced' => 1
+                        'quantity_invoiced' => 1,
+                        'discounts' => []
                     ],
                     [
                         'product_name' => 'Simple Product With Related Product',
                         'product_sku' => 'simple_with_cross',
                         'product_sale_price' => [
-                            'value' => 10
+                            'value' => 10,
+                            'currency' => 'USD'
                         ],
-                        'quantity_invoiced' => 1
+                        'quantity_invoiced' => 1,
+                        'discounts' => []
                     ]
                 ],
                 'total' => [
                     'subtotal' => [
-                        'value' => 100
+                        'value' => 100,
+                        'currency' => 'USD'
                     ],
                     'grand_total' => [
-                        'value' => 100
+                        'value' => 100,
+                        'currency' => 'USD'
                     ],
                     'total_shipping' => [
                         'value' => 0,
@@ -86,13 +92,25 @@ class InvoiceTest extends GraphQlAbstract
                         'amount_excluding_tax' => [
                             'value' => 0,
                             'currency' => 'USD'
-                        ]
-                    ]
+                        ],
+                        'taxes' => [],
+                        'discounts' => []
+                    ],
+                    'taxes' => [],
+                    'discounts' => [],
+                    'base_grand_total' => [
+                        'value' => 100,
+                        'currency' => 'USD'
+                    ],
+                    'total_tax' => [
+                        'value' => 0,
+                        'currency' => 'USD'
+                    ],
                 ]
             ]
         ];
         $this->assertOrdersData($response, $expectedOrdersData);
-        $invoices = $response['customer']['orders']['items'][0]['invoices'];
+        $invoices = $response[0]['invoices'];
         $this->assertResponseFields($invoices, $expectedInvoiceData);
     }
 
@@ -102,10 +120,10 @@ class InvoiceTest extends GraphQlAbstract
      */
     public function testMultipleInvoiceForLoggedInCustomerQuery()
     {
-        $response = $this->getCustomerInvoices();
+        $response = $this->getCustomerInvoicesBasedOnOrderNumber('100000002');
         $expectedOrdersData = [
             'status' => 'Processing',
-            'grand_total' => 50.00
+            'grand_total' => 60.00
         ];
         $expectedInvoiceData = [
             [
@@ -114,20 +132,32 @@ class InvoiceTest extends GraphQlAbstract
                         'product_name' => 'Simple Related Product',
                         'product_sku' => 'simple',
                         'product_sale_price' => [
-                            'value' => 10
+                            'value' => 10,
+                            'currency' => 'USD'
                         ],
-                        'quantity_invoiced' => 3
+                        'quantity_invoiced' => 3,
+                        'discounts'=> []
                     ]
                 ],
                 'total' => [
                     'subtotal' => [
-                        'value' => 30
+                        'value' => 30,
+                        'currency' => 'USD'
                     ],
                     'grand_total' => [
-                        'value' => 50
+                        'value' => 50,
+                        'currency' => 'USD'
                     ],
                     'total_shipping' => [
                         'value' => 20,
+                        'currency' => 'USD'
+                    ],
+                    'base_grand_total' => [
+                        'value' => 50,
+                        'currency' => 'USD'
+                    ],
+                    'total_tax' => [
+                        'value' => 0,
                         'currency' => 'USD'
                     ],
                     'shipping_handling' => [
@@ -142,8 +172,12 @@ class InvoiceTest extends GraphQlAbstract
                         'amount_excluding_tax' => [
                             'value' => 20,
                             'currency' => 'USD'
-                        ]
-                    ]
+                        ],
+                        'taxes' => [],
+                        'discounts' => [],
+                    ],
+                    'taxes' => [],
+                    'discounts' => [],
                 ]
             ],
             [
@@ -152,17 +186,29 @@ class InvoiceTest extends GraphQlAbstract
                         'product_name' => 'Simple Product With Related Product',
                         'product_sku' => 'simple_with_cross',
                         'product_sale_price' => [
-                            'value' => 10
+                            'value' => 10,
+                            'currency' => 'USD'
                         ],
-                        'quantity_invoiced' => 1
+                        'quantity_invoiced' => 1,
+                        'discounts' => []
                     ]
                 ],
                 'total' => [
                     'subtotal' => [
-                        'value' => 10
+                        'value' => 10,
+                        'currency' => 'USD'
                     ],
                     'grand_total' => [
-                        'value' => 10
+                        'value' => 10,
+                        'currency' => 'USD'
+                    ],
+                    'base_grand_total' => [
+                        'value' => 0,
+                        'currency' => 'USD'
+                    ],
+                    'total_tax' => [
+                        'value' => 0,
+                        'currency' => 'USD'
                     ],
                     'total_shipping' => [
                         'value' => 0,
@@ -180,13 +226,17 @@ class InvoiceTest extends GraphQlAbstract
                         'amount_excluding_tax' => [
                             'value' => 0,
                             'currency' => 'USD'
-                        ]
-                    ]
+                        ],
+                        'taxes' => [],
+                        'discounts' => [],
+                    ],
+                    'taxes' => [],
+                    'discounts' => [],
                 ]
             ]
         ];
         $this->assertOrdersData($response, $expectedOrdersData);
-        $invoices = $response['customer']['orders']['items'][0]['invoices'];
+        $invoices = $response[0]['invoices'];
         $this->assertResponseFields($invoices, $expectedInvoiceData);
     }
 
@@ -203,8 +253,13 @@ class InvoiceTest extends GraphQlAbstract
   {
   orders {
     items {
-      grand_total
       status
+      total {
+        grand_total {
+          value
+          currency
+        }
+      }
       invoices {
           items{
             product_name
@@ -278,7 +333,7 @@ QUERY;
                 ]
             ]
         ];
-        $this->assertOrdersData($response, $expectedOrdersData);
+        $this->assertOrdersData($response['customer']['orders']['items'], $expectedOrdersData);
         $invoices = $response['customer']['orders']['items'][0]['invoices'];
         $this->assertResponseFields($invoices, $expectedInvoiceData);
     }
@@ -401,8 +456,8 @@ QUERY;
             'subtotal' => ['value' => 20, 'currency' =>'USD'],
             'total_shipping' => ['value' => 10, 'currency' =>'USD'],
             'shipping_handling' => [
-                'amount_including_tax' => ['value' => 10.75],
-                'amount_excluding_tax' => ['value' => 10],
+                'amount_including_tax' => ['value' => 10.75, 'currency' =>'USD'],
+                'amount_excluding_tax' => ['value' => 10, 'currency' =>'USD'],
                 'total_amount' => ['value' => 10, 'currency' =>'USD'],
                 'taxes'=> [
                     0 => [
@@ -444,8 +499,8 @@ QUERY;
             'subtotal' => ['value' => 10, 'currency' =>'USD'],
             'total_shipping' => ['value' => 10, 'currency' =>'USD'],
             'shipping_handling' => [
-                'amount_including_tax' => ['value' => 10.75],
-                'amount_excluding_tax' => ['value' => 10],
+                'amount_including_tax' => ['value' => 10.75, 'currency' =>'USD'],
+                'amount_excluding_tax' => ['value' => 10, 'currency' =>'USD'],
                 'total_amount' => ['value' => 10, 'currency' =>'USD'],
                 'taxes'=> [
                     0 => [
@@ -739,7 +794,7 @@ QUERY;
      * @param string $orderNumber
      * @return array
      */
-    private function getCustomerInvoicesBasedOnOrderNumber($orderNumber): array
+    private function getCustomerInvoicesBasedOnOrderNumber($orderNumber = null): array
     {
         $query =
             <<<QUERY
@@ -749,8 +804,15 @@ QUERY;
        orders(filter:{number:{eq:"{$orderNumber}"}}) {
          total_count
          items {
+           status
+           total {
+           grand_total{value currency}
+           }
            invoices {
-              items{product_sale_price{value currency} quantity_invoiced discounts {amount{value currency} label}}
+              items{
+              product_name product_sku product_sale_price{value currency}quantity_invoiced
+              discounts {amount{value currency} label}
+              }
               total {
              base_grand_total{value currency}
              grand_total{value currency}
@@ -761,8 +823,8 @@ QUERY;
              total_shipping{value currency}
              shipping_handling
              {
-               amount_including_tax{value}
-               amount_excluding_tax{value}
+               amount_including_tax{value currency}
+               amount_excluding_tax{value currency}
                total_amount{value currency}
                taxes {amount{value} title rate}
                discounts {amount{value currency} label}
@@ -790,84 +852,16 @@ QUERY;
 
     private function assertOrdersData($response, $expectedOrdersData): void
     {
-        $actualData = $response['customer']['orders']['items'][0];
+        $actualData = $response[0];
         $this->assertEquals(
             $expectedOrdersData['grand_total'],
-            $actualData['grand_total'],
+            $actualData['total']['grand_total']['value'],
             "grand_total is different than the expected for order"
         );
         $this->assertEquals(
             $expectedOrdersData['status'],
             $actualData['status'],
             "status is different than the expected for order"
-        );
-    }
-
-    /**
-     * Get invoices for the customer
-     *
-     * @return array
-     * @throws \Magento\Framework\Exception\AuthenticationException
-     */
-    private function getCustomerInvoices(): array
-    {
-        $query =
-            <<<QUERY
-{
-  customer
-  {
-  orders {
-    items {
-      grand_total
-      status
-      invoices {
-          items{
-            product_name
-            product_sku
-            product_sale_price {
-              value
-            }
-            quantity_invoiced
-          }
-          total {
-            subtotal {
-              value
-            }
-            grand_total {
-              value
-            }
-            total_shipping {
-              value
-              currency
-            }
-      			shipping_handling {
-              total_amount {
-                value
-                currency
-              }
-              amount_including_tax {
-                value
-                currency
-              }
-              amount_excluding_tax {
-                value
-                currency
-              }
-            }
-          }
-        }
-    }
-  }
- }
-}
-QUERY;
-        $currentEmail = 'customer@example.com';
-        $currentPassword = 'password';
-        return $this->graphQlQuery(
-            $query,
-            [],
-            '',
-            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
         );
     }
 
