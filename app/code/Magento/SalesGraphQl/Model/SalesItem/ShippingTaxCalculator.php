@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\SalesItem;
 
@@ -10,8 +11,12 @@ use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Model\EntityInterface;
 use Magento\Tax\Api\Data\OrderTaxDetailsItemInterface;
 use Magento\Tax\Api\OrderTaxManagementInterface;
-use \Magento\Quote\Model\Quote\Address;
+use Magento\Quote\Model\Quote\Address;
+use Magento\Framework\Exception\NoSuchEntityException;
 
+/**
+ * Calculates shipping taxes for sales items (Invoices, Credit memo)
+ */
 class ShippingTaxCalculator
 {
     /**
@@ -34,12 +39,12 @@ class ShippingTaxCalculator
      * @param OrderInterface $order
      * @param EntityInterface $salesItem
      * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function calculateShippingTaxes(
         OrderInterface $order,
         EntityInterface $salesItem
-    ) {
+    ): array {
         $orderTaxDetails = $this->orderTaxManagement->getOrderTaxDetails($order->getId());
         $taxClassBreakdown = [];
         // Apply any taxes for shipping
@@ -64,7 +69,7 @@ class ShippingTaxCalculator
     /**
      * Accumulates the pre-calculated taxes for each tax class
      *
-     * This method accepts and returns the 'taxClassAmount' array with format:
+     * This method accepts and returns the '$taxClassBreakdown' array with format:
      * array(
      *  $index => array(
      *      'tax_amount'        => $taxAmount,
@@ -74,13 +79,16 @@ class ShippingTaxCalculator
      *  )
      * )
      *
-     * @param  array                        $taxClassBreakdown
+     * @param  array $taxClassBreakdown
      * @param  OrderTaxDetailsItemInterface $itemTaxDetail
-     * @param  float                        $taxRatio
+     * @param  float $taxRatio
      * @return array
      */
-    private function aggregateTaxes($taxClassBreakdown, OrderTaxDetailsItemInterface $itemTaxDetail, $taxRatio)
-    {
+    private function aggregateTaxes(
+        array $taxClassBreakdown,
+        OrderTaxDetailsItemInterface $itemTaxDetail,
+        float $taxRatio
+    ): array {
         $itemAppliedTaxes = $itemTaxDetail->getAppliedTaxes();
         foreach ($itemAppliedTaxes as $itemAppliedTax) {
             $taxAmount = $itemAppliedTax->getAmount() * $taxRatio;

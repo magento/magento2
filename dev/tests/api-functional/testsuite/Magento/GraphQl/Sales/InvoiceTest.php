@@ -794,7 +794,7 @@ QUERY;
      * @param string $orderNumber
      * @return array
      */
-    private function getCustomerInvoicesBasedOnOrderNumber($orderNumber = null): array
+    private function getCustomerInvoicesBasedOnOrderNumber($orderNumber): array
     {
         $query =
             <<<QUERY
