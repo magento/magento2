@@ -234,6 +234,7 @@
         "magento/module-reports": "*",
         "magento/module-require-js": "*",
         "magento/module-review": "*",
+        "magento/module-review-graph-ql": "*",
         "magento/module-review-analytics": "*",
         "magento/module-robots": "*",
         "magento/module-rss": "*",
