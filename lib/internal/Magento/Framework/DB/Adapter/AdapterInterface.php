@@ -1128,14 +1128,6 @@ interface AdapterInterface
     public function getTables($likeCondition = null);
 
     /**
-     * Retrieve triggers list
-     *
-     * @param null|string $likeCondition
-     * @return array
-     */
-    public function getTriggers($likeCondition = null);
-
-    /**
      * Generates case SQL fragment
      *
      * Generate fragment of SQL, that check value against multiple condition cases

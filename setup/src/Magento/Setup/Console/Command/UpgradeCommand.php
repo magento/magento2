@@ -10,9 +10,13 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\App\State as AppState;
-use Magento\Framework\DB\Ddl\Trigger;
+use Magento\Framework\Console\Cli;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Mview\View\CollectionFactory as ViewCollectionFactory;
 use Magento\Framework\Mview\View\StateInterface;
+use Magento\Framework\Mview\View\SubscriptionFactory;
+use Magento\Framework\Mview\View\SubscriptionInterface;
+use Magento\Framework\Mview\ViewInterface;
 use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\Declaration\Schema\OperationsExecutor;
@@ -56,10 +60,20 @@ class UpgradeCommand extends AbstractSetupCommand
      */
     private $searchConfigFactory;
 
-    /*
+    /**
      * @var ViewCollectionFactory
      */
     private $viewCollectionFactory;
+
+    /**
+     * @var SubscriptionFactory
+     */
+    private $subscriptionFactory;
+
+    /**
+     * @var ResourceConnection
+     */
+    private $resource;
 
     /**
      * @param InstallerFactory $installerFactory
@@ -67,19 +81,27 @@ class UpgradeCommand extends AbstractSetupCommand
      * @param DeploymentConfig $deploymentConfig
      * @param AppState|null $appState
      * @param ViewCollectionFactory|null $viewCollectionFactory
+     * @param SubscriptionFactory|null $subscriptionFactory
+     * @param ResourceConnection|null $resource
      */
     public function __construct(
         InstallerFactory $installerFactory,
         SearchConfigFactory $searchConfigFactory,
         DeploymentConfig $deploymentConfig = null,
         AppState $appState = null,
-        ViewCollectionFactory $viewCollectionFactory = null
+        ViewCollectionFactory $viewCollectionFactory = null,
+        SubscriptionFactory $subscriptionFactory = null,
+        ResourceConnection $resource = null
     ) {
         $this->installerFactory = $installerFactory;
         $this->searchConfigFactory = $searchConfigFactory;
         $this->deploymentConfig = $deploymentConfig ?: ObjectManager::getInstance()->get(DeploymentConfig::class);
         $this->appState = $appState ?: ObjectManager::getInstance()->get(AppState::class);
-        $this->viewCollectionFactory = $viewCollectionFactory ?: ObjectManager::getInstance()->get(ViewCollectionFactory::class);
+        $this->viewCollectionFactory = $viewCollectionFactory
+            ?: ObjectManager::getInstance()->get(ViewCollectionFactory::class);
+        $this->subscriptionFactory = $subscriptionFactory
+            ?: ObjectManager::getInstance()->get(SubscriptionFactory::class);
+        $this->resource = $resource ?: ObjectManager::getInstance()->get(ResourceConnection::class);
         parent::__construct();
     }
 
@@ -142,9 +164,7 @@ class UpgradeCommand extends AbstractSetupCommand
             $installer->updateModulesSequence($keepGenerated);
             $searchConfig = $this->searchConfigFactory->create();
             $searchConfig->validateSearchEngine();
-
             $this->removeUnusedTriggers();
-
             $installer->installSchema($request);
             $installer->installDataFixtures($request);
 
@@ -153,8 +173,8 @@ class UpgradeCommand extends AbstractSetupCommand
                 $arrayInput = new ArrayInput([]);
                 $arrayInput->setInteractive($input->isInteractive());
                 $result = $importConfigCommand->run($arrayInput, $output);
-                if ($result === \Magento\Framework\Console\Cli::RETURN_FAILURE) {
-                    throw new \Magento\Framework\Exception\RuntimeException(
+                if ($result === Cli::RETURN_FAILURE) {
+                    throw new RuntimeException(
                         __('%1 failed. See previous output.', ConfigImportCommand::COMMAND_NAME)
                     );
                 }
@@ -167,10 +187,10 @@ class UpgradeCommand extends AbstractSetupCommand
             }
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+            return Cli::RETURN_FAILURE;
         }
 
-        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+        return Cli::RETURN_SUCCESS;
     }
 
     /**
@@ -178,38 +198,59 @@ class UpgradeCommand extends AbstractSetupCommand
      */
     private function removeUnusedTriggers()
     {
-        // unsubscribe mview
         $viewCollection = $this->viewCollectionFactory->create();
         $viewList = $viewCollection->getViewsByStateMode(StateInterface::MODE_ENABLED);
+
+        // Unsubscribe mviews
         foreach ($viewList as $view) {
-            /** @var \Magento\Framework\Mview\ViewInterface $view */
+            /** @var ViewInterface $view */
             $view->unsubscribe();
         }
 
-        // remove extra triggers that have correct naming structure
-        /** @var ResourceConnection $resource */
-        $resource = ObjectManager::getInstance()->get(ResourceConnection::class);
-        $connection = $resource->getConnection();
-        $triggers = $connection->getTriggers();
+        // Remove extra triggers that have correct naming structure
+        $triggers = $this->getTriggers();
         foreach ($triggers as $trigger) {
-            $triggerNames = [];
-            foreach (Trigger::getListOfEvents() as $event) {
-                $triggerName = $resource->getTriggerName(
-                    $resource->getTableName($trigger['Table']),
-                    Trigger::TIME_AFTER,
-                    $event
-                );
-                $triggerNames[] = strtolower($triggerName);
-            }
-            if (in_array($trigger['Trigger'], $triggerNames)) {
-                $connection->dropTrigger($trigger['Trigger']);
-            }
+            $this->initSubscriptionInstance($trigger['Table'])->remove();
         }
 
-        // subscribe mview
+        // Subscribe mviews
         foreach ($viewList as $view) {
-            /** @var \Magento\Framework\Mview\ViewInterface $view */
+            /** @var ViewInterface $view */
             $view->subscribe();
         }
+    }
+
+    /**
+     * Retrieve triggers list
+     *
+     * @return array
+     */
+    private function getTriggers(): array
+    {
+        $connection = $this->resource->getConnection();
+        $result = $connection->query('SHOW TRIGGERS');
+        return $result->fetchAll();
+    }
+
+    /**
+     * Initializes subscription instance
+     *
+     * @param string $tablename
+     * @return SubscriptionInterface
+     */
+    private function initSubscriptionInstance(string $tablename): SubscriptionInterface
+    {
+        /** @var ViewInterface $view */
+        $view = ObjectManager::getInstance()->create(ViewInterface::class);
+        $view->setId('0');
+
+        return $this->subscriptionFactory->create(
+            [
+                'view' => $view,
+                'tableName' => $tablename,
+                'columnName' => '',
+                'subscriptionModel' => SubscriptionFactory::INSTANCE_NAME,
+            ]
+        );
     }
 }

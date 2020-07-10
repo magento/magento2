@@ -4039,19 +4039,6 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     }
 
     /**
-     * Retrieve triggers list
-     *
-     * @param null|string $likeCondition
-     * @return array
-     */
-    public function getTriggers($likeCondition = null)
-    {
-        $sql = ($likeCondition === null) ? 'SHOW TRIGGERS' : sprintf("SHOW TRIGGERS LIKE '%s'", $likeCondition);
-        $result = $this->query($sql);
-        return $result->fetchAll();
-    }
-
-    /**
      * Returns auto increment field if exists
      *
      * @param string $tableName
