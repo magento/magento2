@@ -16,6 +16,8 @@ $_fullInfo  = $block->getFullTaxInfo();
 
 /** @var \Magento\Tax\Helper\Data $taxHelper */
 $taxHelper = $block->getData('taxHelper');
+/** @var \Magento\Framework\Math\Random $randomHelper */
+$randomHelper = $block->getData('randomHelper');
 ?>
 
 <?php if ($block->displayFullSummary() && $_fullInfo): ?>
@@ -86,7 +88,7 @@ $taxHelper = $block->getData('taxHelper');
             $amount     = $info['tax_amount'];
             $baseAmount = $info['base_tax_amount'];
             $isFirst    = 1;
-            $infoTitle = sha1($info['title']);
+            $infoTitle = $randomHelper->getRandomString(20);
             ?>
             <tr id="info-<?= /* @noEscape */ $infoTitle ?>"
                 class="summary-details<?= ($isTop ? ' summary-details-first' : '') ?>">
