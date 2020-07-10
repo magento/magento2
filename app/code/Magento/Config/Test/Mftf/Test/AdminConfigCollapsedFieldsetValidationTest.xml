@@ -15,6 +15,7 @@
             <title value="Verify that form validation triggered on element inside hidden fieldset opens the fieldset in case of error"/>
             <description value="Verify that form validation triggered on element inside hidden fieldset opens the fieldset in case of error"/>
             <severity value="AVERAGE"/>
+            <testCaseId value="MC-35785"/>
             <group value="configuration"/>
         </annotations>
         <before>
