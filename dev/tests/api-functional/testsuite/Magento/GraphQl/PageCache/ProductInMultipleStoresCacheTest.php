@@ -319,5 +319,4 @@ QUERY;
         );
         $this->graphQlQuery($query, [], '', $headerMap);
     }
-
 }
