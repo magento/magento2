@@ -86,7 +86,7 @@ $taxHelper = $block->getData('taxHelper');
             $amount     = $info['tax_amount'];
             $baseAmount = $info['base_tax_amount'];
             $isFirst    = 1;
-            $infoTitle = preg_replace('/[^A-Za-z0-9\-]/', '', $info['title']);
+            $infoTitle = sha1($info['title']);
             ?>
             <tr id="info-<?= /* @noEscape */ $infoTitle ?>"
                 class="summary-details<?= ($isTop ? ' summary-details-first' : '') ?>">
