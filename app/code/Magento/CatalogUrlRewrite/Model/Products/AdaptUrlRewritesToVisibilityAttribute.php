@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Model\Products;
@@ -18,7 +19,9 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 
 /**
- *  Save/Delete UrlRewrites by Product ID's and visibility
+ * Save/Delete UrlRewrites by Product ID's and visibility
+ *
+ * @deprecated Url rewrites will be created for products with all visibility types.
  */
 class AdaptUrlRewritesToVisibilityAttribute
 {

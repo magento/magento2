@@ -3,61 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Category\Collection;
-use Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory;
-use Magento\CatalogUrlRewrite\Model\Product\AnchorUrlRewriteGenerator;
-use Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator;
-use Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator;
-use Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator;
 use Magento\CatalogUrlRewrite\Model\ProductScopeRewriteGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\CatalogUrlRewrite\Service\V1\StoreViewService;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * Test for \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator.
  */
 class ProductUrlRewriteGeneratorTest extends TestCase
 {
-    /** @var MockObject */
-    protected $canonicalUrlRewriteGenerator;
+    private const STUB_URLS = ['dummy-url.html'];
 
-    /** @var MockObject */
-    protected $currentUrlRewritesRegenerator;
+    /**
+     * @var ProductUrlRewriteGenerator
+     */
+    private $model;
 
-    /** @var MockObject */
-    protected $categoriesUrlRewriteGenerator;
-
-    /** @var MockObject */
-    protected $anchorUrlRewriteGenerator;
-
-    /** @var ProductUrlRewriteGenerator */
-    protected $productUrlRewriteGenerator;
-
-    /** @var StoreViewService|MockObject */
-    protected $storeViewService;
-
-    /** @var Product|MockObject */
-    protected $product;
-
-    /** @var ObjectRegistryFactory|MockObject */
-    protected $objectRegistryFactory;
-
-    /** @var StoreManagerInterface|MockObject */
-    protected $storeManager;
-
-    /** @var Collection|MockObject */
-    protected $categoriesCollection;
-
-    /** @var MockObject  */
+    /**
+     * @var ProductScopeRewriteGenerator|MockObject
+     */
     private $productScopeRewriteGenerator;
 
     /**
@@ -65,79 +39,44 @@ class ProductUrlRewriteGeneratorTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->product = $this->createMock(Product::class);
-        $this->categoriesCollection = $this->getMockBuilder(
-            Collection::class
-        )
+        $objectManager = new ObjectManager($this);
+
+        $categoriesCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->product->expects($this->any())->method('getCategoryCollection')
-            ->willReturn($this->categoriesCollection);
-        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
+        $product = $this->createMock(Product::class);
+        $product->expects($this->any())
+            ->method('getCategoryCollection')
+            ->willReturn($categoriesCollection);
+        $storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->currentUrlRewritesRegenerator = $this->getMockBuilder(
-            CurrentUrlRewritesRegenerator::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->canonicalUrlRewriteGenerator = $this->getMockBuilder(
-            CanonicalUrlRewriteGenerator::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->categoriesUrlRewriteGenerator = $this->getMockBuilder(
-            CategoriesUrlRewriteGenerator::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->anchorUrlRewriteGenerator = $this->getMockBuilder(
-            AnchorUrlRewriteGenerator::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->objectRegistryFactory = $this->getMockBuilder(
-            ObjectRegistryFactory::class
-        )->disableOriginalConstructor()
-            ->setMethods(['create'])->getMock();
-        $this->storeViewService = $this->getMockBuilder(StoreViewService::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->productScopeRewriteGenerator = $this->getMockBuilder(
-            ProductScopeRewriteGenerator::class
-        )->disableOriginalConstructor()
-            ->getMock();
-        $this->productUrlRewriteGenerator = (new ObjectManager($this))->getObject(
+        $this->productScopeRewriteGenerator = $this->createMock(ProductScopeRewriteGenerator::class);
+
+        $this->model = $objectManager->getObject(
             ProductUrlRewriteGenerator::class,
-            [
-                'canonicalUrlRewriteGenerator' => $this->canonicalUrlRewriteGenerator,
-                'categoriesUrlRewriteGenerator' => $this->categoriesUrlRewriteGenerator,
-                'currentUrlRewritesRegenerator' => $this->currentUrlRewritesRegenerator,
-                'objectRegistryFactory' => $this->objectRegistryFactory,
-                'storeViewService' => $this->storeViewService,
-                'storeManager' => $this->storeManager,
-            ]
+            ['storeManager' => $storeManager]
         );
 
-        $reflection = new \ReflectionClass(get_class($this->productUrlRewriteGenerator));
+        $reflection = new \ReflectionClass(get_class($this->model));
         $reflectionProperty = $reflection->getProperty('productScopeRewriteGenerator');
         $reflectionProperty->setAccessible(true);
-        $reflectionProperty->setValue($this->productUrlRewriteGenerator, $this->productScopeRewriteGenerator);
+        $reflectionProperty->setValue($this->model, $this->productScopeRewriteGenerator);
     }
 
-    public function testGenerate()
+    /**
+     * Test generate product url rewrites
+     *
+     * @return void
+     */
+    public function testGenerate(): void
     {
-        $productMock = $this->getMockBuilder(Product::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $storeId = 1;
-        $urls = ['dummy-url.html'];
+        $productMock = $this->createMock(Product::class);
 
         $productMock->expects($this->once())
-            ->method('getVisibility')
-            ->willReturn(2);
-        $productMock->expects($this->once())
             ->method('getStoreId')
-            ->willReturn($storeId);
-        $productCategoriesMock = $this->getMockBuilder(Collection::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+            ->willReturn(1);
+        $productCategoriesMock = $this->createMock(Collection::class);
         $productCategoriesMock->expects($this->exactly(2))
             ->method('addAttributeToSelect')
             ->withConsecutive(['url_key'], ['url_path'])
@@ -147,7 +86,10 @@ class ProductUrlRewriteGeneratorTest extends TestCase
             ->willReturn($productCategoriesMock);
         $this->productScopeRewriteGenerator->expects($this->once())
             ->method('generateForSpecificStoreView')
-            ->willReturn($urls);
-        $this->assertEquals($urls, $this->productUrlRewriteGenerator->generate($productMock, 1));
+            ->willReturn(self::STUB_URLS);
+
+        $result = $this->model->generate($productMock, 1);
+
+        $this->assertEquals(self::STUB_URLS, $result);
     }
 }

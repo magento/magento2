@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Observer;
@@ -15,6 +16,8 @@ use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 
 /**
  * Consider URL rewrites on change product visibility via mass action
+ *
+ * @deprecated Url rewrites will be created for products with all visibility types.
  */
 class ProcessUrlRewriteOnChangeProductVisibilityObserver implements ObserverInterface
 {

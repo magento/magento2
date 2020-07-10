@@ -3,59 +3,96 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\CatalogUrlRewrite\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Test for \Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator.
+ *
  * @magentoAppArea adminhtml
  */
 class ProductUrlRewriteGeneratorTest extends TestCase
 {
     /**
-     * @var ObjectManager
+     * @var ProductUrlRewriteGenerator
      */
-    private $objectManager;
+    private $model;
+
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
 
     /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->objectManager = Bootstrap::getObjectManager();
+        $objectManager = Bootstrap::getObjectManager();
+
+        $this->model = $objectManager->get(ProductUrlRewriteGenerator::class);
+        $this->productRepository = $objectManager->get(ProductRepositoryInterface::class);
     }
 
     /**
+     * Test generate url rewrite with specific category url key
+     *
      * @magentoDataFixture Magento/CatalogUrlRewrite/_files/product_with_category.php
      * @magentoConfigFixture default/catalog/seo/generate_category_product_rewrites 1
      * @magentoDbIsolation disabled
      * @magentoAppIsolation enabled
+     *
+     * @return void
      */
-    public function testGenerateWithSpecificCategoryUrlKey()
+    public function testGenerateWithSpecificCategoryUrlKey(): void
     {
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        $product = $productRepository->get('p002');
-        // set global store
+        $product = $this->productRepository->get('p002');
         $product->setStoreId(0);
 
-        /** @var ProductUrlRewriteGenerator $generator */
-        $generator = $this->objectManager->get(ProductUrlRewriteGenerator::class);
-        $urls = $generator->generate($product);
+        $result = $this->getGeneratedUrls($product);
 
-        $actualUrls = array_map(
+        $this->assertTrue(in_array('p002.html', $result));
+        $this->assertTrue(in_array('cat-1/p002.html', $result));
+        $this->assertTrue(in_array('cat-1-2/p002.html', $result));
+    }
+
+    /**
+     * Test generate url rewrite for product not visible individually
+     *
+     * @magentoDataFixture Magento/Catalog/_files/simple_products_not_visible_individually.php
+     *
+     * @return void
+     */
+    public function testGenerateForProductNotVisibleIndividually(): void
+    {
+        $product = $this->productRepository->get('simple_not_visible_1');
+        $result = $this->getGeneratedUrls($product);
+
+        $this->assertTrue(in_array('simple-product-not-visible-1.html', $result));
+    }
+
+    /**
+     * Returns prepared urls by product
+     *
+     * @param ProductInterface $product
+     * @return array
+     */
+    private function getGeneratedUrls(ProductInterface $product): array
+    {
+        $urls = $this->model->generate($product);
+
+        return array_map(
             function ($url) {
-                /** @var \Magento\UrlRewrite\Service\V1\Data\UrlRewrite $url */
                 return $url->getRequestPath();
             },
             $urls
         );
-
-        self::assertTrue(in_array('p002.html', $actualUrls));
-        self::assertTrue(in_array('cat-1/p002.html', $actualUrls));
-        self::assertTrue(in_array('cat-1-2/p002.html', $actualUrls));
     }
 }

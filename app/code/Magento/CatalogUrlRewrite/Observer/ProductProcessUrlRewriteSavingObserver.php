@@ -3,12 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\CatalogUrlRewrite\Observer;
 
 use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Event\Observer;
+use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\Framework\Event\ObserverInterface;
 
@@ -44,18 +49,18 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
     ) {
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
-        $this->productUrlPathGenerator = $productUrlPathGenerator ?: ObjectManager::getInstance()
-            ->get(ProductUrlPathGenerator::class);
+        $this->productUrlPathGenerator = $productUrlPathGenerator
+            ?: ObjectManager::getInstance()->get(ProductUrlPathGenerator::class);
     }
 
     /**
      * Generate urls for UrlRewrite and save it in storage
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return void
-     * @throws \Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException
+     * @throws UrlAlreadyExistsException
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer): void
     {
         /** @var Product $product */
         $product = $observer->getEvent()->getProduct();
@@ -63,13 +68,10 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
         if ($product->dataHasChangedFor('url_key')
             || $product->getIsChangedCategories()
             || $product->getIsChangedWebsites()
-            || $product->dataHasChangedFor('visibility')
         ) {
-            if ($product->isVisibleInSiteVisibility()) {
-                $product->unsUrlPath();
-                $product->setUrlPath($this->productUrlPathGenerator->getUrlPath($product));
-                $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
-            }
+            $product->unsUrlPath();
+            $product->setUrlPath($this->productUrlPathGenerator->getUrlPath($product));
+            $this->urlPersist->replace($this->productUrlRewriteGenerator->generate($product));
         }
     }
 }
