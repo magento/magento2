@@ -18,7 +18,7 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
- * Class ProductProcessUrlRewriteSavingObserver
+ * Generate urls for product and save
  */
 class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
 {

@@ -189,6 +189,8 @@ class ProductUrlRewriteGenerator
     }
 
     /**
+     * Is a proper category for generating
+     *
      * @deprecated 100.1.4
      * @param Category $category
      * @param int $storeId
