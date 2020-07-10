@@ -36,7 +36,7 @@ interface AdapterInterface
     const INSERT_ON_DUPLICATE = 1;
 
     const INSERT_IGNORE = 2;
-
+    
     /** Strategy for updating data in table. See https://dev.mysql.com/doc/refman/5.7/en/replace.html */
     const REPLACE = 4;
 
