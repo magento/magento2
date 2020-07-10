@@ -8,9 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaContentCms\Model;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaContentApi\Model\GetAssetIdByContentFieldInterface;
-use Magento\Store\Api\StoreRepositoryInterface;
 
 /**
  * Class responsible to return Asset id by content field
@@ -43,7 +41,6 @@ class GetAssetIdByContentField implements GetAssetIdByContentFieldInterface
      * @var string
      */
     private $idColumn;
-
 
     /**
      * GetAssetIdByContentField constructor.
@@ -88,10 +85,6 @@ class GetAssetIdByContentField implements GetAssetIdByContentFieldInterface
             $value
         );
 
-        $result = $this->connection->getConnection()->fetchAll($sql);
-
-        return array_map(function ($item) {
-            return $item['asset_id'];
-        }, $result);
+        return $this->connection->getConnection()->fetchCol($sql);
     }
 }

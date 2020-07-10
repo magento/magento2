@@ -68,7 +68,6 @@ class GetAssetIdByEavContentField implements GetAssetIdByContentFieldInterface
 
     /**
      * @inheritDoc
-     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function execute(string $value): array
     {
@@ -91,11 +90,7 @@ class GetAssetIdByEavContentField implements GetAssetIdByContentFieldInterface
             $this->getValueFromMap($value)
         );
 
-        $result = $this->connection->getConnection()->fetchAll($sql);
-
-        return array_map(function ($item) {
-            return $item['asset_id'];
-        }, $result);
+        return $this->connection->getConnection()->fetchCol($sql);
     }
 
     /**

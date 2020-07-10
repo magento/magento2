@@ -66,20 +66,24 @@
             <argument name="fieldColumn" xsi:type="string">is_active</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\MediaContent\Model\GetAssetIdByContentStatusComposite">
+    <type name="Magento\MediaContentApi\Api\GetAssetIdByContentFieldInterface">
         <arguments>
             <argument name="getAssetIdByContentFieldArray" xsi:type="array">
-                <item name="getAssetIdByPageStatus" xsi:type="object">Magento\MediaContentCms\Model\GetAssetIdByPageStatus</item>
-                <item name="getAssetIdByBlockStatus" xsi:type="object">Magento\MediaContentCms\Model\GetAssetIdByBlockStatus</item>
+                <item name="content_status" xsi:type="array">
+                    <item name="getAssetIdByPageStatus" xsi:type="object">Magento\MediaContentCms\Model\GetAssetIdByPageStatus</item>
+                    <item name="getAssetIdByBlockStatus" xsi:type="object">Magento\MediaContentCms\Model\GetAssetIdByBlockStatus</item>
+                </item>
             </argument>
         </arguments>
-    </virtualType>
-    <virtualType name="Magento\MediaContent\Model\GetAssetIdByContentStoreComposite">
+    </type>
+    <type name="Magento\MediaContentApi\Api\GetAssetIdByContentFieldInterface">
         <arguments>
             <argument name="getAssetIdByContentFieldArray" xsi:type="array">
-                <item name="getAssetIdByPageStore" xsi:type="object">Magento\MediaContentCms\Model\GetAssetIdByPageStore</item>
-                <item name="getAssetIdByBlockStore" xsi:type="object">Magento\MediaContentCms\Model\GetAssetIdByBlockStore</item>
+                <item name="store_id" xsi:type="array">
+                    <item name="getAssetIdByPageStore" xsi:type="object">Magento\MediaContentCms\Model\GetAssetIdByPageStore</item>
+                    <item name="getAssetIdByBlockStore" xsi:type="object">Magento\MediaContentCms\Model\GetAssetIdByBlockStore</item>
+                </item>
             </argument>
         </arguments>
-    </virtualType>
+    </type>
 </config>

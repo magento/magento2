@@ -62,20 +62,24 @@
             <argument name="entityType" xsi:type="string">catalog_category</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\MediaContent\Model\GetAssetIdByContentStatusComposite">
+    <type name="Magento\MediaContentApi\Api\GetAssetIdByContentFieldInterface">
         <arguments>
             <argument name="getAssetIdByContentFieldArray" xsi:type="array">
-                <item name="getAssetIdByProductStatus" xsi:type="object">Magento\MediaContentCatalog\Model\GetAssetIdByProductStatus</item>
-                <item name="getAssetIdByCategoryStatus" xsi:type="object">Magento\MediaContentCatalog\Model\GetAssetIdByCategoryStatus</item>
+                <item name="content_status" xsi:type="array">
+                    <item name="getAssetIdByProductStatus" xsi:type="object">Magento\MediaContentCatalog\Model\GetAssetIdByProductStatus</item>
+                    <item name="getAssetIdByCategoryStatus" xsi:type="object">Magento\MediaContentCatalog\Model\GetAssetIdByCategoryStatus</item>
+                </item>
             </argument>
         </arguments>
-    </virtualType>
-    <virtualType name="Magento\MediaContent\Model\GetAssetIdByContentStoreComposite">
+    </type>
+    <type name="Magento\MediaContentApi\Api\GetAssetIdByContentFieldInterface">
         <arguments>
             <argument name="getAssetIdByContentFieldArray" xsi:type="array">
-                <item name="getAssetIdByProductStore" xsi:type="object">Magento\MediaContentCatalog\Model\GetAssetIdByProductStore</item>
-                <item name="getAssetIdByCategoryStore" xsi:type="object">Magento\MediaContentCatalog\Model\GetAssetIdByCategoryStore</item>
+                <item name="store_id" xsi:type="array">
+                    <item name="getAssetIdByProductStore" xsi:type="object">Magento\MediaContentCatalog\Model\GetAssetIdByProductStore</item>
+                    <item name="getAssetIdByCategoryStore" xsi:type="object">Magento\MediaContentCatalog\Model\GetAssetIdByCategoryStore</item>
+                </item>
             </argument>
         </arguments>
-    </virtualType>
+    </type>
 </config>

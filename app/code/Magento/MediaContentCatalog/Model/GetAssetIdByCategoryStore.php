@@ -57,8 +57,6 @@ class GetAssetIdByCategoryStore implements GetAssetIdByContentFieldInterface
 
     /**
      * @inheritDoc
-     * @throws LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute(string $value): array
     {
@@ -76,11 +74,7 @@ class GetAssetIdByCategoryStore implements GetAssetIdByContentFieldInterface
             $categoryIds
         );
 
-        $result = $this->connection->getConnection()->fetchAll($sql);
-
-        return array_map(function ($item) {
-            return $item['asset_id'];
-        }, $result);
+        return $this->connection->getConnection()->fetchCol($sql);
     }
 
     /**
