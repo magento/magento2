@@ -42,7 +42,7 @@ class AvailableStoresResolver implements ResolverInterface
         array $args = null
     ) {
         return $this->storeConfigDataProvider->getAvailableStoreConfig(
-            $context->getExtensionAttributes()->getStore()->getWebsiteId()
+            (int)$context->getExtensionAttributes()->getStore()->getWebsiteId()
         );
     }
 }

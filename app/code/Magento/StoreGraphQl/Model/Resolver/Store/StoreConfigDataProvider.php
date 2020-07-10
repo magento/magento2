@@ -72,10 +72,10 @@ class StoreConfigDataProvider
     /**
      * Get available website stores
      *
-     * @param string $websiteId
+     * @param int $websiteId
      * @return array
      */
-    public function getAvailableStoreConfig(string $websiteId): array
+    public function getAvailableStoreConfig(int $websiteId): array
     {
         $websiteStores = $this->storeWebsiteRelation->getWebsiteStores($websiteId, true);
         $storeCodes = array_column($websiteStores, 'code');

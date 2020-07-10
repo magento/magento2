@@ -166,6 +166,6 @@ QUERY;
         $this->assertEquals($storeConfig->getSecureBaseLinkUrl(), $responseConfig['secure_base_link_url']);
         $this->assertEquals($storeConfig->getSecureBaseStaticUrl(), $responseConfig['secure_base_static_url']);
         $this->assertEquals($storeConfig->getSecureBaseMediaUrl(), $responseConfig['secure_base_media_url']);
-        $this->assertEquals($storeConfig->getName(), $responseConfig['store_name']);
+        $this->assertEquals($store->getName(), $responseConfig['store_name']);
     }
 }

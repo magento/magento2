@@ -47,11 +47,11 @@ class StoreWebsiteRelation
     /**
      * Get website store data
      *
-     * @param string $websiteId
+     * @param int $websiteId
      * @param bool $available
      * @return array
      */
-    public function getWebsiteStores(string $websiteId, bool $available = false): array
+    public function getWebsiteStores(int $websiteId, bool $available = false): array
     {
         $connection = $this->resource->getConnection();
         $storeTable = $this->resource->getTableName('store');
