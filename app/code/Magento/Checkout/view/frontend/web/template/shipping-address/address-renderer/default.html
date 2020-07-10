@@ -10,6 +10,9 @@
     <if args="address().company">
         <text args="address().company"/><br/>
     </if>
+    <if args="address().vatId">
+        <text args="address().vatId"/><br/>
+    </if>
     <text args="_.values(address().street).join(', ')"/><br/>
     <text args="address().city "/>, <span text="address().region"></span> <text args="address().postcode"/><br/>
     <text args="getCountryName(address().countryId)"/><br/>
