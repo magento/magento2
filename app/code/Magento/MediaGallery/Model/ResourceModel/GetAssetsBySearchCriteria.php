@@ -8,8 +8,6 @@ declare(strict_types=1);
 namespace Magento\MediaGallery\Model\ResourceModel;
 
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
-use Magento\MediaGalleryApi\Api\SearchAssetsInterface;
 use Magento\Framework\App\ResourceConnection;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\Api\Search\SearchResultInterface;
@@ -19,9 +17,9 @@ use Magento\Framework\DB\Select;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 
 /**
- * Get media assets by searchCriteria
+ * Get assets data  by searchCriteria
  */
-class SearchAssets implements SearchAssetsInterface
+class GetAssetsBySearchCriteria
 {
     private const TABLE_MEDIA_GALLERY_ASSET = 'media_gallery_asset';
 
@@ -29,11 +27,6 @@ class SearchAssets implements SearchAssetsInterface
      * @var ResourceConnection
      */
     private $resourceConnection;
-
-    /**
-     * @var AssetInterfaceFactory
-     */
-    private $mediaAssetFactory;
 
     /**
      * @var SearchResultFactory
@@ -48,51 +41,16 @@ class SearchAssets implements SearchAssetsInterface
     /**
      * @param SearchResultFactory $searchResultFactory
      * @param ResourceConnection $resourceConnection
-     * @param AssetInterfaceFactory $mediaAssetFactory
      * @param LoggerInterface $logger
      */
     public function __construct(
         SearchResultFactory $searchResultFactory,
         ResourceConnection $resourceConnection,
-        AssetInterfaceFactory $mediaAssetFactory,
         LoggerInterface $logger
     ) {
         $this->searchResultFactory = $searchResultFactory;
         $this->resourceConnection = $resourceConnection;
-        $this->mediaAssetFactory = $mediaAssetFactory;
         $this->logger = $logger;
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function execute(SearchCriteriaInterface $searchCriteria): array
-    {
-        $assets = [];
-        try {
-            foreach ($this->getAssetsData($searchCriteria)->getItems() as $assetData) {
-                $assets[] = $this->mediaAssetFactory->create(
-                    [
-                        'id' => $assetData['id'],
-                        'path' => $assetData['path'],
-                        'title' => $assetData['title'],
-                        'description' => $assetData['description'],
-                        'source' => $assetData['source'],
-                        'hash' => $assetData['hash'],
-                        'contentType' => $assetData['content_type'],
-                        'width' => $assetData['width'],
-                        'height' => $assetData['height'],
-                        'size' => $assetData['size'],
-                        'createdAt' => $assetData['created_at'],
-                        'updatedAt' => $assetData['updated_at'],
-                    ]
-                );
-            }
-        } catch (\Exception $exception) {
-            $this->logger->critical($exception);
-            throw new LocalizedException(__('Could not retrieve media assets'), $exception->getMessage());
-        }
-        return $assets;
     }
 
     /**
@@ -101,7 +59,7 @@ class SearchAssets implements SearchAssetsInterface
      * @param SearchCriteriaInterface $searchCriteria
      * @return SearchResultInterface
      */
-    private function getAssetsData(SearchCriteriaInterface $searchCriteria): SearchResultInterface
+    public function execute(SearchCriteriaInterface $searchCriteria): SearchResultInterface
     {
         $searchResult = $this->searchResultFactory->create();
         $fields = [];
@@ -164,7 +122,7 @@ class SearchAssets implements SearchAssetsInterface
             $resultCondition = '(' . implode(') ' . Select::SQL_OR . ' (', $conditions) . ')';
         } else {
             $resultCondition = $resourceConnection->prepareSqlCondition(
-                $resourceConnection->quoteIdentifier($value),
+                $resourceConnection->quoteIdentifier($field),
                 $condition
             );
         }

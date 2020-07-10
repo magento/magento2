@@ -10,11 +10,9 @@ namespace Magento\MediaGalleryApi\Api;
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 
 /**
  * Search media gallery assets by search criteria
- * @api
  */
 interface SearchAssetsInterface
 {
@@ -22,7 +20,7 @@ interface SearchAssetsInterface
      * Search media gallery assets
      *
      * @param SearchCriteriaInterface $searchCriteria
-     * @return AssetInterface[]
+     * @return AssetsSearchResultInterface[]
      * @throws LocalizedException
      */
     public function execute(SearchCriteriaInterface $searchCriteria): array;
