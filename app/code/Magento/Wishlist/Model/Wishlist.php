@@ -756,9 +756,9 @@ class Wishlist extends AbstractModel implements IdentityInterface
             $isForceSetQuantity = true;
             foreach ($items as $_item) {
                 /* @var $_item Item */
-                if ($_item->getProductId() == $product->getId() && $_item->representProduct(
-                    $product
-                ) && $_item->getId() != $item->getId()
+                if ($_item->getProductId() == $product->getId()
+                    && $_item->getId() != $item->getId()
+                    && $_item->representProduct($product)
                 ) {
                     // We do not add new wishlist item, but updating the existing one
                     $isForceSetQuantity = false;

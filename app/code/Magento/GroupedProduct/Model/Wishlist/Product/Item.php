@@ -83,8 +83,7 @@ class Item
 
         if (!$diff) {
             foreach (array_keys($options1) as $key) {
-                if (
-                    preg_match('/associated_product_\d+/', $key)
+                if (preg_match('/associated_product_\d+/', $key)
                     && $this->isAddAction($productOptions['info_buyRequest'])
                 ) {
                     unset($options1[$key]);
