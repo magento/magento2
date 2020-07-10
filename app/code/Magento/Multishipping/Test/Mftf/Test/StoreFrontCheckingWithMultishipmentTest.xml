@@ -14,7 +14,7 @@
             <stories value="Checking multi shipment with multiple shipment adresses on front end order page"/>
             <title value="Checking multi shipment with multiple shipment adresses on front end order page"/>
             <description value="Shipping price shows 0 when you return from multiple checkout to cart"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-18519"/>
             <group value="Multishipment"/>
         </annotations>
@@ -31,7 +31,7 @@
             <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
             <createData entity="FlatRateShippingMethodConfig" stepKey="enableFlatRateShipping"/>
             <magentoCLI command="config:set {{EnableCheckMoneyOrderPaymentMethod.path}} {{EnableCheckMoneyOrderPaymentMethod.value}}" stepKey="enableCheckMoneyOrderPaymentMethod"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
                 <argument name="Customer" value="$$customer$$"/>
             </actionGroup>

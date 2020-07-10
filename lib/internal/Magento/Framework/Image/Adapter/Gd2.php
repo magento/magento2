@@ -11,7 +11,7 @@ namespace Magento\Framework\Image\Adapter;
  *
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
-class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
+class Gd2 extends AbstractAdapter
 {
     /**
      * Required extensions
@@ -401,7 +401,6 @@ class Gd2 extends \Magento\Framework\Image\Adapter\AbstractAdapter
      *
      * @param int $angle
      * @return void
-     * @deprecated unused
      */
     public function rotate($angle)
     {

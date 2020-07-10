@@ -27,7 +27,7 @@
             <createData entity="DisableFlatRateShippingMethodConfig" stepKey="disableFlatRate"/>
             <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShippingMethod"/>
             <createData entity="setFreeShippingSubtotal" stepKey="setFreeShippingSubtotal"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>

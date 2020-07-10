@@ -1,61 +1,64 @@
-<?php
+<?php declare(strict_types=1);
+
+use Magento\Customer\Api\CustomerRepositoryInterface;
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 return [
-    'services' => [\Magento\Customer\Api\CustomerRepositoryInterface::class => [
-            'V1' => [
-                'methods' => [
-                    'getById' => [
-                        'resources' => [
-                            'Magento_Customer::customer_self',
-                            'Magento_Customer::read',
-                        ],
-                        'secure' => false,
-                        'realMethod' => 'getById',
-                        'parameters' => []
+    'services' => [CustomerRepositoryInterface::class => [
+        'V1' => [
+            'methods' => [
+                'getById' => [
+                    'resources' => [
+                        'Magento_Customer::customer_self',
+                        'Magento_Customer::read',
                     ],
-                    'save' => [
-                        'resources' => [
-                            'Magento_Customer::manage'
-                        ],
-                        'secure' => false,
-                        'realMethod' => 'save',
-                        'parameters' => []
+                    'secure' => false,
+                    'realMethod' => 'getById',
+                    'parameters' => []
+                ],
+                'save' => [
+                    'resources' => [
+                        'Magento_Customer::manage'
                     ],
-                    'saveSelf' => [
-                        'resources' => [
-                            'Magento_Customer::customer_self'
-                        ],
-                        'secure' => true,
-                        'realMethod' => 'save',
-                        'parameters' => [
-                            'id' => [
-                                'force' => false,
-                                'value' => null,
-                            ],
+                    'secure' => false,
+                    'realMethod' => 'save',
+                    'parameters' => []
+                ],
+                'saveSelf' => [
+                    'resources' => [
+                        'Magento_Customer::customer_self'
+                    ],
+                    'secure' => true,
+                    'realMethod' => 'save',
+                    'parameters' => [
+                        'id' => [
+                            'force' => false,
+                            'value' => null,
                         ],
                     ],
-                    'deleteById' => [
-                        'resources' => [
-                            'Magento_Customer::manage',
-                            'Magento_Customer::delete',
-                        ],
-                        'secure' => false,
-                        'realMethod' => 'deleteById',
-                        'parameters' => []
+                ],
+                'deleteById' => [
+                    'resources' => [
+                        'Magento_Customer::manage',
+                        'Magento_Customer::delete',
                     ],
+                    'secure' => false,
+                    'realMethod' => 'deleteById',
+                    'parameters' => []
                 ],
             ],
         ],
+    ],
     ],
     'routes' => [
         '/V1/customers/me/session' => [
             'GET' => [
                 'secure' => false,
                 'service' => [
-                    'class' => \Magento\Customer\Api\CustomerRepositoryInterface::class,
+                    'class' => CustomerRepositoryInterface::class,
                     'method' => 'getById',
                 ],
                 'resources' => [
@@ -73,7 +76,7 @@ return [
             'GET' => [
                 'secure' => false,
                 'service' => [
-                    'class' => \Magento\Customer\Api\CustomerRepositoryInterface::class,
+                    'class' => CustomerRepositoryInterface::class,
                     'method' => 'getById',
                 ],
                 'resources' => [
@@ -89,7 +92,7 @@ return [
             'PUT' => [
                 'secure' => true,
                 'service' => [
-                    'class' => \Magento\Customer\Api\CustomerRepositoryInterface::class,
+                    'class' => CustomerRepositoryInterface::class,
                     'method' => 'save',
                 ],
                 'resources' => [
@@ -107,7 +110,7 @@ return [
             'POST' => [
                 'secure' => false,
                 'service' => [
-                    'class' => \Magento\Customer\Api\CustomerRepositoryInterface::class,
+                    'class' => CustomerRepositoryInterface::class,
                     'method' => 'save',
                 ],
                 'resources' => [
@@ -121,7 +124,7 @@ return [
             'GET' => [
                 'secure' => false,
                 'service' => [
-                    'class' => \Magento\Customer\Api\CustomerRepositoryInterface::class,
+                    'class' => CustomerRepositoryInterface::class,
                     'method' => 'getById',
                 ],
                 'resources' => [
@@ -133,7 +136,7 @@ return [
             'DELETE' => [
                 'secure' => false,
                 'service' => [
-                    'class' => \Magento\Customer\Api\CustomerRepositoryInterface::class,
+                    'class' => CustomerRepositoryInterface::class,
                     'method' => 'deleteById',
                 ],
                 'resources' => [

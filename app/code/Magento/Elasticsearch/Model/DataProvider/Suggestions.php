@@ -18,24 +18,27 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface as StoreManager;
 
 /**
- * Elasticsearch Suggestions Data Provider
+ * The implementation to provide suggestions mechanism for Elasticsearch5
+ *
+ * @deprecated because of EOL for Elasticsearch5
+ * @see \Magento\Elasticsearch\Model\DataProvider\Base\Suggestions
  */
 class Suggestions implements SuggestedQueriesInterface
 {
     /**
-     * @deprecated this constant is no longer used
+     * @deprecated moved to interface
      * @see SuggestedQueriesInterface::SEARCH_SUGGESTION_COUNT
      */
     const CONFIG_SUGGESTION_COUNT = 'catalog/search/search_suggestion_count';
 
     /**
-     * @deprecated this constant is no longer used
+     * @deprecated moved to interface
      * @see SuggestedQueriesInterface::SEARCH_SUGGESTION_COUNT_RESULTS_ENABLED
      */
     const CONFIG_SUGGESTION_COUNT_RESULTS_ENABLED = 'catalog/search/search_suggestion_count_results_enabled';
 
     /**
-     * @deprecated this constant is no longer used
+     * @deprecated moved to interface
      * @see SuggestedQueriesInterface::SEARCH_SUGGESTION_ENABLED
      */
     const CONFIG_SUGGESTION_ENABLED = 'catalog/search/search_suggestion_enabled';

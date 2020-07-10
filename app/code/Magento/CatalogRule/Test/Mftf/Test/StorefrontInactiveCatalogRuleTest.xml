@@ -24,7 +24,7 @@
             <createData entity="ApiSimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
 
             <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="startCreatingFirstPriceRule"/>
             <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForFirstPriceRule">
@@ -60,7 +60,7 @@
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="openCartPage" />
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCartPage" />
         <waitForElementVisible selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="waitForSubtotalAppears"/>
         <see selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$createProduct.price$" stepKey="seeProductPriceOnCartPage"/>
     </test>

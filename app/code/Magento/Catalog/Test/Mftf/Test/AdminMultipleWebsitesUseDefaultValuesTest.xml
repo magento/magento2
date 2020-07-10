@@ -14,7 +14,7 @@
             <stories value="Create websites"/>
             <title value="Use Default Value checkboxes should be checked for new website scope"/>
             <description value="Use Default Value checkboxes for product attribute should be checked for new website scope"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-92454"/>
             <group value="Catalog"/>
         </annotations>

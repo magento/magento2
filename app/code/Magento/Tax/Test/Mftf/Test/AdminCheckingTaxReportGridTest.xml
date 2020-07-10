@@ -1,0 +1,207 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckingTaxReportGridTest">
+        <annotations>
+            <features value="Tax"/>
+            <stories value="Tax Report Grid"/>
+            <title value="Checking Tax Report grid"/>
+            <description value="Tax Report Grid displays Tax amount in rows 'Total' and 'Subtotal' is a sum of all tax amounts"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-25815"/>
+            <useCaseId value="MAGETWO-91521"/>
+            <group value="Tax"/>
+        </annotations>
+        <before>
+            <!-- Create category and product -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createFirstProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="_defaultProduct" stepKey="createSecondProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create Tax Rule and Tax Rate -->
+            <createData entity="SimpleTaxRule" stepKey="createTaxRule"/>
+            <createData entity="SimpleTaxRule" stepKey="createSecondTaxRule"/>
+            <createData entity="TaxRateTexas" stepKey="createTaxRate"/>
+            <createData entity="SecondTaxRateTexas" stepKey="createSecondTaxRate"/>
+
+            <!-- Create product tax class -->
+            <createData entity="productTaxClass" stepKey="createProductTaxClass"/>
+            <getData entity="productTaxClass" stepKey="productTaxClass">
+                <requiredEntity createDataKey="createProductTaxClass"/>
+            </getData>
+            <createData entity="productTaxClass" stepKey="createSecondProductTaxClass"/>
+            <getData entity="productTaxClass" stepKey="productSecondTaxClass">
+                <requiredEntity createDataKey="createSecondProductTaxClass"/>
+            </getData>
+
+            <!-- Login to Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Go to Tax Rule page, add Tax Rate, unassign Default Tax Rate -->
+            <amOnPage url="{{AdminEditTaxRulePage.url($createTaxRule.id$)}}" stepKey="goToTaxRulePage"/>
+            <waitForPageLoad stepKey="waitForTaxRulePage"/>
+            <actionGroup ref="AdminSelectTaxRateActionGroup" stepKey="assignTaxRate">
+                <argument name="taxRate" value="$createTaxRate.code$"/>
+            </actionGroup>
+
+            <!-- Assign Product Tax Class and Unassign Default Product Tax Class -->
+            <actionGroup ref="AdminSelectProductTaxClassActionGroup" stepKey="assignProductTaxClass">
+                <argument name="taxClass" value="$productTaxClass.class_name$"/>
+            </actionGroup>
+            <actionGroup ref="AdminUnassignProductTaxClassActionGroup" stepKey="unSelectTaxRuleDefaultProductTax">
+                <argument name="taxClass" value="{{taxableGoodsTaxClass.class_name}}"/>
+            </actionGroup>
+
+            <!-- Save Tax Rule -->
+            <actionGroup ref="ClickSaveButtonActionGroup" stepKey="saveTaxRule">
+                <argument name="message" value="You saved the tax rule."/>
+            </actionGroup>
+
+            <!-- Go to Tax Rule page to create second Tax Rule, add Tax Rate, unassign Default Tax Rate -->
+            <amOnPage url="{{AdminEditTaxRulePage.url($createSecondTaxRule.id$)}}" stepKey="goToSecondTaxRulePage"/>
+            <waitForPageLoad stepKey="waitForSecondTaxRatePage"/>
+            <actionGroup ref="AdminSelectTaxRateActionGroup" stepKey="assignSecondTaxRate">
+                <argument name="taxRate" value="$createSecondTaxRate.code$"/>
+            </actionGroup>
+            <!-- Assign Product Tax Class and Unassign Default Product Tax Class -->
+            <actionGroup ref="AdminSelectProductTaxClassActionGroup" stepKey="assignSecondProductTaxClass">
+                <argument name="taxClass" value="$productSecondTaxClass.class_name$"/>
+            </actionGroup>
+            <actionGroup ref="AdminUnassignProductTaxClassActionGroup" stepKey="unaSelectTaxRuleDefaultSecondProductTaxClass">
+                <argument name="taxClass" value="{{taxableGoodsTaxClass.class_name}}"/>
+            </actionGroup>
+
+            <!-- Save Tax Rule -->
+            <actionGroup ref="ClickSaveButtonActionGroup" stepKey="saveSecondTaxRule">
+                <argument name="message" value="You saved the tax rule."/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete product and category -->
+            <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+             <!--Delete Tax Rule -->
+            <deleteData createDataKey="createTaxRule" stepKey="deleteRule"/>
+            <deleteData createDataKey="createSecondTaxRule" stepKey="deleteSecondRule"/>
+
+            <!-- Delete Tax Rate -->
+            <deleteData createDataKey="createTaxRate" stepKey="deleteTaxRate"/>
+            <deleteData createDataKey="createSecondTaxRate" stepKey="deleteSecondTaxRate"/>
+
+            <!-- Delete Product Tax Class -->
+            <deleteData createDataKey="createProductTaxClass" stepKey="deleteProductTaxClass"/>
+            <deleteData createDataKey="createSecondProductTaxClass" stepKey="deleteSecondProductTaxClass"/>
+
+            <!-- Clear filter Product -->
+            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterProduct"/>
+
+            <!-- Delete Customer and clear filter -->
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{Simple_US_Customer.email}}"/>
+            </actionGroup>
+            <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
+                <argument name="message" value="A total of 1 record(s) were deleted."/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterCustomer"/>
+
+            <!-- Logout Admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <!--Open Created product. In Tax Class select new created Product Tax class.-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductForEdit">
+            <argument name="productId" value="$createFirstProduct.id$"/>
+        </actionGroup>
+        <selectOption selector="{{AdminProductFormSection.productTaxClass}}" userInput="$productTaxClass.class_name$" stepKey="selectTexClassForProduct"/>
+        <!-- Save the second product -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+        <!--Open Created Second Product. In Tax Class select new created Product Tax class.-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openSecondProductForEdit">
+            <argument name="productId" value="$createSecondProduct.id$"/>
+        </actionGroup>
+
+        <selectOption selector="{{AdminProductFormSection.productTaxClass}}" userInput="$productSecondTaxClass.class_name$" stepKey="selectTexClassForSecondProduct"/>
+
+        <!-- Save the second product -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondProduct"/>
+
+        <!--Create an order with these 2 products in that zip code.-->
+        <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrder"/>
+        <!--Check if order can be submitted without the required fields including email address-->
+        <scrollToTopOfPage stepKey="scrollToTopOfOrderFormPage"/>
+        <waitForElementVisible selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="waitForAddProductButton"/>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addFirstProductToOrder">
+            <argument name="product" value="$createFirstProduct$"/>
+        </actionGroup>
+        <waitForElementVisible selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="waitForAddProductButtonAfterOneProductIsAdded"/>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSecondProductToOrder">
+            <argument name="product" value="$createSecondProduct$"/>
+        </actionGroup>
+
+        <!--Fill customer group and customer email-->
+        <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="{{GeneralCustomerGroup.code}}" stepKey="selectCustomerGroup"/>
+        <fillField selector="{{AdminOrderFormAccountSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillCustomerEmail"/>
+
+        <!--Fill customer address information-->
+        <actionGroup ref="FillOrderCustomerInformationActionGroup" stepKey="fillCustomerAddress">
+            <argument name="customer" value="Simple_US_Customer"/>
+            <argument name="address" value="US_Address_TX"/>
+        </actionGroup>
+
+        <!-- Select shipping -->
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="selectFlatRateShipping"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="SelectCheckMoneyPaymentMethodActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <!--Submit Order and verify information-->
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+
+        <!-- Grab tax amounts -->
+        <!-- need check selector -->
+        <grabTextFrom selector="{{AdminOrderItemsOrderedSection.itemTaxAmountByProductName($createFirstProduct.name$)}}" stepKey="amountOfTaxOnFirstProduct"/>
+        <grabTextFrom selector="{{AdminOrderItemsOrderedSection.itemTaxAmountByProductName($createSecondProduct.name$)}}" stepKey="amountOfTaxOnSecondProduct"/>
+        <grabTextFrom selector="{{AdminOrderFormTotalSection.totalTax}}" stepKey="amountOfTotalTax"/>
+
+        <!--Create Invoice and Shipment for this Order.-->
+        <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startCreatingInvoice"/>
+
+        <actionGroup ref="SubmitInvoiceActionGroup" stepKey="clickSubmitInvoice"/>
+
+        <actionGroup ref="GoToShipmentIntoOrderActionGroup" stepKey="seeShipmentOrderPage"/>
+        <!--Submit Shipment-->
+        <actionGroup ref="SubmitShipmentIntoOrderActionGroup" stepKey="clickSubmitShipment"/>
+        <!--Go to "Reports" -> "Sales" -> "Tax"-->
+        <amOnPage url="{{AdminSalesTaxReportPage.url}}" stepKey="navigateToReportsTaxPage"/>
+        <waitForPageLoad stepKey="waitForReportsTaxPageLoad"/>
+
+        <!--click "here" to refresh last day's statistics -->
+        <click selector="{{AdminTaxReportsSection.refreshStatistics}}" stepKey="clickRefreshStatistics"/>
+        <waitForPageLoad time="30" stepKey="waitForRefresh"/>
+
+        <!--Select Dates-->
+        <generateDate date="+0 day" format="m/d/Y" stepKey="today"/>
+        <fillField selector="{{AdminTaxReportsSection.fromDate}}" userInput="{$today}" stepKey="fillDateFrom"/>
+        <fillField selector="{{AdminTaxReportsSection.toDateInput}}" userInput="{$today}" stepKey="fillDateTo"/>
+        <!--Click "Show report" in the upper right corner.-->
+        <click selector="{{AdminTaxReportsSection.showReportButton}}" stepKey="clickShowReportButton"/>
+        <waitForPageLoad time="60" stepKey="waitForReload"/>
+        <!--Tax Report Grid displays Tax amount in rows. "Total" and "Subtotal" is a sum of all tax amounts-->
+        <see selector="{{AdminTaxReportsSection.taxRuleAmount(TaxRateTexas.code)}}" userInput="$amountOfTaxOnFirstProduct" stepKey="assertSubtotalFirstField"/>
+        <see selector="{{AdminTaxReportsSection.taxRuleAmount(SecondTaxRateTexas.code)}}" userInput="$amountOfTaxOnSecondProduct" stepKey="assertSubtotalSecondField"/>
+        <see selector="{{AdminTaxReportsSection.taxRuleAmount('Subtotal')}}" userInput="$amountOfTotalTax" stepKey="assertSubtotalField"/>
+    </test>
+</tests>

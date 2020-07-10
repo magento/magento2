@@ -3,43 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\App\Config\Source;
 
+use ArrayIterator;
 use Magento\Config\App\Config\Source\RuntimeConfigSource;
+use Magento\Config\Model\ResourceModel\Config\Data\Collection;
 use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory;
 use Magento\Framework\App\Config\Scope\Converter;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Config\Value;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\DB\Adapter\TableNotFoundException;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test Class for retrieving runtime configuration from database.
- * @package Magento\Config\Test\Unit\App\Config\Source
  */
-class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
+class RuntimeConfigSourceTest extends TestCase
 {
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     private $collectionFactory;
 
     /**
-     * @var ScopeCodeResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeCodeResolver|MockObject
      */
     private $scopeCodeResolver;
 
     /**
-     * @var Converter|\PHPUnit_Framework_MockObject_MockObject
+     * @var Converter|MockObject
      */
     private $converter;
 
     /**
-     * @var Value|\PHPUnit_Framework_MockObject_MockObject
+     * @var Value|MockObject
      */
     private $configItem;
 
     /**
-     * @var Value|\PHPUnit_Framework_MockObject_MockObject
+     * @var Value|MockObject
      */
     private $configItemTwo;
 
@@ -47,8 +54,12 @@ class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
      * @var RuntimeConfigSource
      */
     private $configSource;
+    /**
+     * @var DeploymentConfig|MockObject
+     */
+    private $deploymentConfig;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
             ->disableOriginalConstructor()
@@ -68,20 +79,29 @@ class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['getScope', 'getPath', 'getValue', 'getScopeId'])
             ->getMock();
+        $this->deploymentConfig = $this->createPartialMock(DeploymentConfig::class, ['isDbAvailable']);
         $this->configSource = new RuntimeConfigSource(
             $this->collectionFactory,
             $this->scopeCodeResolver,
-            $this->converter
+            $this->converter,
+            $this->deploymentConfig
         );
     }
 
     public function testGet()
     {
+        $this->deploymentConfig->method('isDbAvailable')
+            ->willReturn(true);
+        $collection = $this->createPartialMock(Collection::class, ['load', 'getIterator']);
+        $collection->method('load')
+            ->willReturn($collection);
+        $collection->method('getIterator')
+            ->willReturn(new ArrayIterator([$this->configItem, $this->configItemTwo]));
         $scope = 'websites';
         $scopeCode = 'myWebsites';
         $this->collectionFactory->expects($this->once())
             ->method('create')
-            ->willReturn([$this->configItem, $this->configItemTwo]);
+            ->willReturn($collection);
         $this->configItem->expects($this->exactly(2))
             ->method('getScope')
             ->willReturn(ScopeConfigInterface::SCOPE_TYPE_DEFAULT);
@@ -132,5 +152,23 @@ class RuntimeConfigSourceTest extends \PHPUnit\Framework\TestCase
             ],
             $this->configSource->get()
         );
+    }
+
+    public function testGetWhenDbIsNotAvailable()
+    {
+        $this->deploymentConfig->method('isDbAvailable')->willReturn(false);
+        $this->assertEquals([], $this->configSource->get());
+    }
+
+    public function testGetWhenDbIsEmpty()
+    {
+        $this->deploymentConfig->method('isDbAvailable')
+            ->willReturn(true);
+        $collection = $this->createPartialMock(Collection::class, ['load']);
+        $collection->method('load')
+            ->willThrowException($this->createMock(TableNotFoundException::class));
+        $this->collectionFactory->method('create')
+            ->willReturn($collection);
+        $this->assertEquals([], $this->configSource->get());
     }
 }

@@ -3,26 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Console\Command;
 
-use Magento\Setup\Console\Command\DeployStaticContentCommand;
-use Magento\Setup\Model\ObjectManagerProvider;
-
 use Magento\Deploy\Console\ConsoleLogger;
-use Magento\Deploy\Console\InputValidator;
 use Magento\Deploy\Console\ConsoleLoggerFactory;
 use Magento\Deploy\Console\DeployStaticOptions;
-use Magento\Deploy\Service\DeployStaticContent;
 
+use Magento\Deploy\Console\InputValidator;
+use Magento\Deploy\Service\DeployStaticContent;
 use Magento\Framework\App\State;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
+use Magento\Setup\Console\Command\DeployStaticContentCommand;
+use Magento\Setup\Model\ObjectManagerProvider;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+
+use PHPUnit\Framework\TestCase;
+
 use Symfony\Component\Console\Tester\CommandTester;
 
-use PHPUnit_Framework_MockObject_MockObject as Mock;
-
-class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
+class DeployStaticContentCommandTest extends TestCase
 {
     /**
      * @var DeployStaticContentCommand
@@ -65,7 +68,7 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->inputValidator = $this->createMock(InputValidator::class);
         $this->consoleLoggerFactory = $this->createMock(ConsoleLoggerFactory::class);
@@ -129,11 +132,11 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $mode
      * @return void
-     * @expectedException  \Magento\Framework\Exception\LocalizedException
      * @dataProvider executionInNonProductionModeDataProvider
      */
     public function testExecuteInNonProductionMode($mode)
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->appState->expects($this->any())->method('getMode')->willReturn($mode);
         $this->objectManager->expects($this->never())->method('create');
 

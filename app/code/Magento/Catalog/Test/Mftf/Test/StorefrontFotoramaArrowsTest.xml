@@ -13,7 +13,7 @@
             <features value="Catalog"/>
             <title value="Storefront Fotorama arrows test"/>
             <description value="Check arrows next to the thumbs are not visible than there is room for all pictures."/>
-            <severity value="MINOR"/>
+            <severity value="BLOCKER"/>
             <group value="Catalog"/>
         </annotations>
         <before>
@@ -21,7 +21,7 @@
             <createData entity="_defaultProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

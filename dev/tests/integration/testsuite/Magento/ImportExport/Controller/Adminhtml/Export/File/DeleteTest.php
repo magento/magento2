@@ -16,6 +16,8 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
  * Test for \Magento\ImportExport\Controller\Adminhtml\Export\File\Delete class.
+ *
+ * @magentoAppArea adminhtml
  */
 class DeleteTest extends AbstractBackendController
 {
@@ -42,7 +44,7 @@ class DeleteTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -106,7 +108,7 @@ class DeleteTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         $filesystem = Bootstrap::getObjectManager()->get(Filesystem::class);
         /** @var WriteInterface $directory */

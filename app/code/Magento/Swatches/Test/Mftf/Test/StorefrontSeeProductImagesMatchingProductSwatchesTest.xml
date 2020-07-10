@@ -21,7 +21,7 @@
 
         <before>
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
@@ -38,7 +38,7 @@
         </after>
 
         <!-- Begin creating a new product attribute -->
-        <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="goToNewProductAttributePage"/>
 
         <actionGroup ref="AdminFillProductAttributePropertiesActionGroup" stepKey="fillProductAttributeProperties">
             <argument name="attributeName" value="{{VisualSwatchProductAttribute.attribute_code}}"/>
@@ -63,7 +63,7 @@
         </actionGroup>
 
         <!-- Edit configurable product -->
-        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="openProductEditPage">
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
             <argument name="productId" value="$$createSimpleProduct.id$$"/>
         </actionGroup>
 

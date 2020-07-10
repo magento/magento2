@@ -26,8 +26,8 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
      *
      * @param string $currentDateTime
      * @param string $paypalExpDate
-     * @param string $expectedCcMonth
-     * @param string $expectedCcYear
+     * @param int $expectedCcMonth
+     * @param int $expectedCcYear
      * @throws NoSuchEntityException
      *
      * @magentoConfigFixture current_store payment/payflowpro/active 1
@@ -37,8 +37,8 @@ class ResponseTest extends \Magento\TestFramework\TestCase\AbstractController
     public function testPaymentCcExpirationDate(
         string $currentDateTime,
         string $paypalExpDate,
-        string $expectedCcMonth,
-        string $expectedCcYear
+        int $expectedCcMonth,
+        int $expectedCcYear
     ) {
         $reservedOrderId = 'test01';
         $postData = [

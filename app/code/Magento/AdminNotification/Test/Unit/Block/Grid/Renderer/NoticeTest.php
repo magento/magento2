@@ -12,9 +12,10 @@ declare(strict_types=1);
 namespace Magento\AdminNotification\Test\Unit\Block\Grid\Renderer;
 
 use Magento\AdminNotification\Block\Grid\Renderer\Notice;
+use Magento\Backend\Block\Context;
 use Magento\Framework\DataObject;
 use Magento\Framework\Escaper;
-use Magento\Backend\Block\Context;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class NoticeTest extends TestCase
@@ -26,16 +27,16 @@ class NoticeTest extends TestCase
      */
     private $sut;
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         parent::setUp();
 
-        /** @var Escaper | \PHPUnit_Framework_MockObject_MockObject $escaperMock */
-        $escaperMock = $this->getMockBuilder(Escaper::class)->disableOriginalConstructor()->getMock();
+        /** @var Escaper|MockObject $escaperMock */
+        $escaperMock = $this->createMock(Escaper::class);
         $escaperMock->expects($this->exactly(2))->method('escapeHtml')->willReturn('<div>Some random html</div>');
 
-        /** @var Context | \PHPUnit_Framework_MockObject_MockObject $contextMock */
-        $contextMock = $this->getMockBuilder(Context::class)->disableOriginalConstructor()->getMock();
+        /** @var Context|MockObject $contextMock */
+        $contextMock = $this->createMock(Context::class);
         $contextMock->expects($this->once())->method('getEscaper')->willReturn($escaperMock);
 
         $this->sut = new Notice($contextMock);

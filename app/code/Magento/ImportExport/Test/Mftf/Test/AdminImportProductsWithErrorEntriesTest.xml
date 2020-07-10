@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <!--Login to Admin Page-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Clear products grid filters-->

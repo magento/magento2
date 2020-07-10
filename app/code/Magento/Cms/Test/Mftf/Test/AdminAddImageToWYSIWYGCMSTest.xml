@@ -14,7 +14,7 @@
             <group value="Cms"/>
             <title value="Admin should be able to add image to WYSIWYG content of CMS Page"/>
             <description value="Admin should be able to add image to WYSIWYG content of CMS Page"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-85825"/>
         </annotations>
         <before>
