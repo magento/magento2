@@ -88,9 +88,9 @@ $randomHelper = $block->getData('randomHelper');
             $amount     = $info['tax_amount'];
             $baseAmount = $info['base_tax_amount'];
             $isFirst    = 1;
-            $infoTitle = $randomHelper->getRandomString(20);
+            $infoId = $randomHelper->getRandomString(20);
             ?>
-            <tr id="info-<?= /* @noEscape */ $infoTitle ?>"
+            <tr id="info-<?= /* @noEscape */ $infoId ?>"
                 class="summary-details<?= ($isTop ? ' summary-details-first' : '') ?>">
                 <?php if ($info['percent'] !== null): ?>
                     <td class="admin__total-mark">
@@ -101,7 +101,7 @@ $randomHelper = $block->getData('randomHelper');
                 <?php endif; ?>
                     <td><?= /* @noEscape */ $block->displayAmount($amount, $baseAmount) ?></td>
             </tr>
-            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display:none;", 'tr#info-' . $infoTitle) ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display:none;", 'tr#info-' . $infoId) ?>
             <?php
             $isFirst = 0;
             $isTop = 0;
