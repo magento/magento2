@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
-use Magento\PageCache\Model\Cache\Type as PageCache;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
@@ -77,8 +76,6 @@ QUERY;
             'Product name in fixture store is invalid.'
         );
 
-        $this->flushPageCache();
-
         //use case for default storeCode
         $nameInDefaultStore = 'Simple Product';
         $headerMapDefault = ['Store' => 'default'];
@@ -89,8 +86,6 @@ QUERY;
             'Product name in default store is invalid.'
         );
 
-        $this->flushPageCache();
-
         //use case for empty storeCode
         $headerMapEmpty = ['Store' => ''];
         $response = $this->graphQlQuery($query, [], '', $headerMapEmpty);
@@ -100,20 +95,11 @@ QUERY;
             'Product in the default store should be returned'
         );
 
-        $this->flushPageCache();
-
         // use case for invalid storeCode
         $nonExistingStoreCode = "non_existent_store";
         $headerMapInvalidStoreCode = ['Store' => $nonExistingStoreCode];
         $this->expectException(\Exception::class);
         $this->expectExceptionMessage('Requested store is not found');
         $this->graphQlQuery($query, [], '', $headerMapInvalidStoreCode);
-    }
-
-    protected function flushPageCache(): void
-    {
-        /** @var PageCache $fullPageCache */
-        $fullPageCache = ObjectManager::getInstance()->get(PageCache::class);
-        $fullPageCache->clean();
     }
 }
