@@ -13,18 +13,15 @@ use Magento\Framework\App\Utility\AggregateInvoker;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\Test\Integrity\Dependency\DeclarativeSchemaDependencyProvider;
+use Magento\Test\Integrity\Dependency\GraphQlSchemaDependencyProvider;
 use Magento\TestFramework\Inspection\Exception as InspectionException;
+use PHPUnit\Framework\AssertionFailedError;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class DeclarativeDependencyTest
- * Test for undeclared dependencies in declarative schema
- */
-class DeclarativeDependencyTest extends TestCase
+class GraphQlDependencyTest extends TestCase
 {
     /**
-     * @var DeclarativeSchemaDependencyProvider
+     * @var GraphQlSchemaDependencyProvider
      */
     private $dependencyProvider;
 
@@ -44,7 +41,7 @@ class DeclarativeDependencyTest extends TestCase
             );
         }
         $objectManager = ObjectManager::getInstance();
-        $this->dependencyProvider = $objectManager->create(DeclarativeSchemaDependencyProvider::class);
+        $this->dependencyProvider = $objectManager->create(GraphQlSchemaDependencyProvider::class);
     }
 
     /**
@@ -54,12 +51,15 @@ class DeclarativeDependencyTest extends TestCase
     {
         $invoker = new AggregateInvoker($this);
         $invoker(
-            /**
-             * Check undeclared modules dependencies for specified file
-             *
-             * @param string $fileType
-             * @param string $file
-             */
+        /**
+         * Check undeclared modules dependencies for specified file
+         *
+         * @param string $fileType
+         * @param string $file
+         * @throws LocalizedException
+         * @throws InspectionException
+         * @throws AssertionFailedError
+         */
             function ($file) {
                 $componentRegistrar = new ComponentRegistrar();
                 $foundModuleName = '';
@@ -86,7 +86,7 @@ class DeclarativeDependencyTest extends TestCase
                     );
                 }
             },
-            $this->prepareFiles(Files::init()->getDbSchemaFiles())
+            $this->prepareFiles(Files::init()->getDbSchemaFiles('schema.graphqls'))
         );
     }
 
@@ -114,23 +114,7 @@ class DeclarativeDependencyTest extends TestCase
      */
     private function getErrorMessage(string $id): string
     {
-        $decodedId = DeclarativeSchemaDependencyProvider::decodeDependencyId($id);
-        $entityType = $decodedId['entityType'];
-        if ($entityType === DeclarativeSchemaDependencyProvider::SCHEMA_ENTITY_TABLE) {
-            $message = sprintf(
-                'Table %s has undeclared dependency on one of the following modules:',
-                $decodedId['tableName']
-            );
-        } else {
-            $message = sprintf(
-                '%s %s from %s table has undeclared dependency on one of the following modules:',
-                ucfirst($entityType),
-                $decodedId['entityName'],
-                $decodedId['tableName']
-            );
-        }
-
-        return $message;
+        return sprintf('%s has undeclared dependency on one of the following modules:', $id);
     }
 
     /**
