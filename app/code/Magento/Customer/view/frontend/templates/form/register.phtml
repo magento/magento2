@@ -12,7 +12,7 @@ use Magento\Customer\Helper\Address;
 /** @var \Magento\Framework\Escaper $escaper */
 $formData = $block->getFormData();
 $showAddressFileds = false;
-if ($block->getShowAddressFields() || $block->getConfig('customer/address/show_address_fields')){
+if ($block->getShowAddressFields() || $block->getConfig('customer/address/show_address_fields')) {
     $showAddressFileds = true;
 }
 
