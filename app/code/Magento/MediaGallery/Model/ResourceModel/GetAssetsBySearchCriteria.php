@@ -96,7 +96,6 @@ class GetAssetsBySearchCriteria
         
         $searchResult->setSearchCriteria($searchCriteria);
         $searchResult->setItems($data);
-        
        
         return $searchResult;
     }

@@ -30,6 +30,11 @@ class SearchAssets implements SearchAssetsInterface
     private $logger;
 
     /**
+     * @var AssetInterfaceFactory
+     */
+    private $mediaAssetFactory;
+
+    /**
      * @param GetAssetsBySearchCriteria $getAssetsBySearchCriteria
      * @param AssetInterfaceFactory $mediaAssetFactory
      * @param LoggerInterface $logger
