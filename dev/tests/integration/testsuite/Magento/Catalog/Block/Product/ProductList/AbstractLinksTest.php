@@ -66,6 +66,12 @@ abstract class AbstractLinksTest extends TestCase
     /** @var string */
     protected $linkType;
 
+    /** @var string */
+    protected $titleName;
+
+    /** @var string */
+    protected $titleXpath = "//strong[@id = 'block-%s-heading'][contains(text(), '%s')]";
+
     /**
      * @inheritdoc
      */
