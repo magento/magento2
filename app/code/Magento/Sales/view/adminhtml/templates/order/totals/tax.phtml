@@ -86,8 +86,9 @@ $taxHelper = $block->getData('taxHelper');
             $amount     = $info['tax_amount'];
             $baseAmount = $info['base_tax_amount'];
             $isFirst    = 1;
+            $infoTitle = preg_replace('/[^A-Za-z0-9\-]/', '', $info['title']);
             ?>
-            <tr id="info-<?= /* @noEscape */ $info->getCode() ?>"
+            <tr id="info-<?= /* @noEscape */ $infoTitle ?>"
                 class="summary-details<?= ($isTop ? ' summary-details-first' : '') ?>">
                 <?php if ($info['percent'] !== null): ?>
                     <td class="admin__total-mark">
@@ -98,7 +99,7 @@ $taxHelper = $block->getData('taxHelper');
                 <?php endif; ?>
                     <td><?= /* @noEscape */ $block->displayAmount($amount, $baseAmount) ?></td>
             </tr>
-            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display:none;", 'tr#info-' . $info->getCode()) ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display:none;", 'tr#info-' . $infoTitle) ?>
             <?php
             $isFirst = 0;
             $isTop = 0;
