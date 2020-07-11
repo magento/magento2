@@ -13,8 +13,8 @@ use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Customer\Model\GroupManagement;
 use Magento\Catalog\Api\Data\ProductTierPriceInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool as PriceProviderPool;
-use Magento\Catalog\Model\Product\Type\Price;
-use Magento\CatalogCustomerGraphQl\Pricing\Price\TierPriceFactory;
+use Magento\Catalog\Pricing\Price\TierPriceFactory;
+use Magento\Catalog\Model\Product\Price\TierPriceBuilder;
 
 /**
  * Get product tier price information
@@ -57,37 +57,37 @@ class Tiers
     private $products = [];
 
     /**
-     * @var Price
-     */
-    private $price;
-
-    /**
      * @var TierPriceFactory
      */
     private $tierPriceFactory;
+
+    /**
+     * @var TierPriceBuilder
+     */
+    private $tierPriceBuilder;
 
     /**
      * @param CollectionFactory $collectionFactory
      * @param ProductResource $productResource
      * @param PriceProviderPool $priceProviderPool
      * @param int $customerGroupId
-     * @param Price $price
      * @param TierPriceFactory $tierPriceFactory
+     * @param TierPriceBuilder $tierPriceBuilder
      */
     public function __construct(
         CollectionFactory $collectionFactory,
         ProductResource $productResource,
         PriceProviderPool $priceProviderPool,
         $customerGroupId,
-        Price $price,
-        TierPriceFactory $tierPriceFactory
+        TierPriceFactory $tierPriceFactory,
+        TierPriceBuilder $tierPriceBuilder
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->productResource = $productResource;
         $this->priceProviderPool = $priceProviderPool;
         $this->customerGroupId = $customerGroupId;
-        $this->price = $price;
         $this->tierPriceFactory = $tierPriceFactory;
+        $this->tierPriceBuilder = $tierPriceBuilder;
     }
 
     /**
@@ -121,7 +121,7 @@ class Tiers
             [
                 'saleableItem' => $this->products[$productId],
                 'quantity' => 1,
-                'customerGroupId' => $this->customerGroupId
+                'customerGroup' => $this->customerGroupId
             ]
         );
 
@@ -129,7 +129,7 @@ class Tiers
         $tierPricesRaw = $tierPrice->getTierPriceList();
 
         /** @var ProductTierPriceInterface[] $tierPrices */
-        $tierPrices = $this->price->transformTierPrices($tierPricesRaw);
+        $tierPrices = $this->tierPriceBuilder->buildTierPriceObjects($tierPricesRaw);
 
         return $tierPrices;
     }

@@ -70,6 +70,7 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
      * @param Session $customerSession
      * @param GroupManagementInterface $groupManagement
      * @param CustomerGroupRetrieverInterface|null $customerGroupRetriever
+     * @param int|null $customerGroup
      */
     public function __construct(
         Product $saleableItem,
@@ -78,7 +79,8 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
         \Magento\Framework\Pricing\PriceCurrencyInterface $priceCurrency,
         Session $customerSession,
         GroupManagementInterface $groupManagement,
-        CustomerGroupRetrieverInterface $customerGroupRetriever = null
+        CustomerGroupRetrieverInterface $customerGroupRetriever = null,
+        $customerGroup = null
     ) {
         $quantity = (float)$quantity ? $quantity : 1;
         parent::__construct($saleableItem, $quantity, $calculator, $priceCurrency);
@@ -86,7 +88,9 @@ class TierPrice extends AbstractPrice implements TierPriceInterface, BasePricePr
         $this->groupManagement = $groupManagement;
         $this->customerGroupRetriever = $customerGroupRetriever
             ?? \Magento\Framework\App\ObjectManager::getInstance()->get(CustomerGroupRetrieverInterface::class);
-        if ($saleableItem->hasCustomerGroupId()) {
+        if ($customerGroup) {
+            $this->customerGroup = $customerGroup;
+        } elseif ($saleableItem->hasCustomerGroupId()) {
             $this->customerGroup = (int) $saleableItem->getCustomerGroupId();
         } else {
             $this->customerGroup = (int) $this->customerGroupRetriever->getCustomerGroupId();

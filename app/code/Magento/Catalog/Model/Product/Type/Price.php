@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Price\TierPriceBuilder;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\Store;
@@ -94,6 +95,11 @@ class Price
     private $tierPriceExtensionFactory;
 
     /**
+     * @var TierPriceBuilder
+     */
+    private $tierPriceBuilder;
+
+    /**
      * Constructor
      *
      * @param \Magento\CatalogRule\Model\ResourceModel\RuleFactory $ruleFactory
@@ -103,9 +109,10 @@ class Price
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param GroupManagementInterface $groupManagement
-     * @param \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory
+     * @param \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory  @deprecated obsolete dependency
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param ProductTierPriceExtensionFactory|null $tierPriceExtensionFactory
+     * @param ProductTierPriceExtensionFactory|null $tierPriceExtensionFactory  @deprecated obsolete dependency
+     * @param TierPriceBuilder $tierPriceBuilder
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -118,7 +125,8 @@ class Price
         GroupManagementInterface $groupManagement,
         \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory,
         \Magento\Framework\App\Config\ScopeConfigInterface $config,
-        ProductTierPriceExtensionFactory $tierPriceExtensionFactory = null
+        ProductTierPriceExtensionFactory $tierPriceExtensionFactory = null,
+        ?TierPriceBuilder $tierPriceBuilder = null
     ) {
         $this->_ruleFactory = $ruleFactory;
         $this->_storeManager = $storeManager;
@@ -131,6 +139,8 @@ class Price
         $this->config = $config;
         $this->tierPriceExtensionFactory = $tierPriceExtensionFactory ?: ObjectManager::getInstance()
             ->get(ProductTierPriceExtensionFactory::class);
+        $this->tierPriceBuilder = $tierPriceBuilder ?: ObjectManager::getInstance()
+            ->get(TierPriceBuilder::class);
     }
 
     /**
@@ -371,49 +381,7 @@ class Price
     {
         $tierPricesRaw = $this->getExistingPrices($product, 'tier_price');
 
-        return $this->buildProductTierPriceInterfaceObjects($tierPricesRaw);
-    }
-
-    /**
-     * Return ProductTierPriceInterface[] given raw tier prices array
-     *
-     * @param array $tierPricesRaw
-     * @return \Magento\Catalog\Api\Data\ProductTierPriceInterface[]
-     */
-    public function transformTierPrices($tierPricesRaw)
-    {
-        return $this->buildProductTierPriceInterfaceObjects($tierPricesRaw);
-    }
-
-    /**
-     * Return ProductTierPriceInterface[] given raw tier prices array
-     *
-     * @param array $tierPricesRaw
-     * @return \Magento\Catalog\Api\Data\ProductTierPriceInterface[]
-     */
-    private function buildProductTierPriceInterfaceObjects($tierPricesRaw)
-    {
-        $prices = [];
-        foreach ($tierPricesRaw as $price) {
-            /** @var \Magento\Catalog\Api\Data\ProductTierPriceInterface $tierPrice */
-            $tierPrice = $this->tierPriceFactory->create()
-                ->setExtensionAttributes($this->tierPriceExtensionFactory->create());
-            $tierPrice->setCustomerGroupId($price['cust_group']);
-            if (array_key_exists('website_price', $price)) {
-                $value = $price['website_price'];
-            } else {
-                $value = $price['price'];
-            }
-            $tierPrice->setValue($value);
-            $tierPrice->setQty($price['price_qty']);
-            if (isset($price['percentage_value'])) {
-                $tierPrice->getExtensionAttributes()->setPercentageValue($price['percentage_value']);
-            }
-            $websiteId = isset($price['website_id']) ? $price['website_id'] : $this->getWebsiteForPriceScope();
-            $tierPrice->getExtensionAttributes()->setWebsiteId($websiteId);
-            $prices[] = $tierPrice;
-        }
-        return $prices;
+        return $this->tierPriceBuilder->buildTierPriceObjects($tierPricesRaw);
     }
 
     /**

@@ -10,6 +10,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Product;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Pricing\Price\SpecialPrice as PricingSpecialPrice;
 
 /**
@@ -22,7 +23,7 @@ class SpecialPrice implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        /** @var \Magento\Catalog\Model\Product $product */
+        /** @var ProductInterface $product */
         $product = $value['model'];
         /** @var PricingSpecialPrice $specialPrice */
         $specialPrice = $product->getPriceInfo()->getPrice(PricingSpecialPrice::PRICE_CODE);
