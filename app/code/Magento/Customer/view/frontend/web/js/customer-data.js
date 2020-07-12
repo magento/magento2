@@ -86,7 +86,7 @@ define([
             var parameters;
 
             sectionNames = sectionConfig.filterClientSideSections(sectionNames);
-            parameters = _.isArray(sectionNames) ? {
+            parameters = _.isArray(sectionNames) && sectionNames.indexOf('*') < 0 ? {
                 sections: sectionNames.join(',')
             } : [];
             parameters['force_new_section_timestamp'] = forceNewSectionTimestamp;
