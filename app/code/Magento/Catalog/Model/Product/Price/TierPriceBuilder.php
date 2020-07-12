@@ -10,10 +10,12 @@ namespace Magento\Catalog\Model\Product\Price;
 use Magento\Catalog\Api\Data\ProductTierPriceInterface;
 use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
-use Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator;
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
 
 /**
  * Builds ProductTierPriceInterface objects
@@ -23,12 +25,12 @@ class TierPriceBuilder
     /**
      * @var int
      */
-    private $websiteId = 0;
+    private $websiteId;
 
     /**
      * @var ProductTierPriceInterfaceFactory
      */
-    protected $tierPriceFactory;
+    private $tierPriceFactory;
 
     /**
      * @var ProductTierPriceExtensionFactory
@@ -46,30 +48,79 @@ class TierPriceBuilder
     private $storeManager;
 
     /**
+     * @var PriceCurrencyInterface
+     */
+    private $priceCurrency;
+
+    /**
      * @param ProductTierPriceInterfaceFactory $tierPriceFactory
      * @param ProductTierPriceExtensionFactory $tierPriceExtensionFactory
      * @param ScopeConfigInterface $config
      * @param StoreManagerInterface $storeManager
+     * @param PriceCurrencyInterface $priceCurrency
      */
     public function __construct(
         ProductTierPriceInterfaceFactory $tierPriceFactory,
         ProductTierPriceExtensionFactory $tierPriceExtensionFactory,
         ScopeConfigInterface $config,
-        StoreManagerInterface $storeManager
+        StoreManagerInterface $storeManager,
+        PriceCurrencyInterface $priceCurrency
     ) {
         $this->tierPriceFactory = $tierPriceFactory;
         $this->tierPriceExtensionFactory = $tierPriceExtensionFactory;
         $this->config = $config;
         $this->storeManager = $storeManager;
+        $this->priceCurrency = $priceCurrency;
+
+        $this->setWebsiteId();
     }
 
     /**
-     * Transform the raw tier prices of the product into array of ProductTierPriceInterface objects
+     * Gets list of product tier prices
+     *
+     * @param ProductInterface $product
+     * @return ProductTierPriceInterface[]
+     */
+    public function getTierPrices($product)
+    {
+        /** @var array $tierPricesRaw */
+        $tierPricesRaw = $this->loadData($product);
+
+        return $this->buildTierPriceObjects($tierPricesRaw);
+    }
+
+    /**
+     * Get tier data for a product
+     *
+     * @param ProductInterface $product
+     * @return array
+     */
+    private function loadData(ProductInterface $product): array
+    {
+        $tierData = $product->getData(ProductAttributeInterface::CODE_TIER_PRICE);
+
+        if ($tierData === null) {
+            $attribute = $product->getResource()->getAttribute(ProductAttributeInterface::CODE_TIER_PRICE);
+            if ($attribute) {
+                $attribute->getBackend()->afterLoad($product);
+                $tierData = $product->getData(ProductAttributeInterface::CODE_TIER_PRICE);
+            }
+        }
+
+        if ($tierData === null || !is_array($tierData)) {
+            return [];
+        }
+
+        return $tierData;
+    }
+
+    /**
+     * Transform the raw tier data into array of ProductTierPriceInterface objects
      *
      * @param array $tierPricesRaw
      * @return ProductTierPriceInterface[]
      */
-    public function buildTierPriceObjects(array $tierPricesRaw): array
+    private function buildTierPriceObjects(array $tierPricesRaw): array
     {
         $prices = [];
 
@@ -88,9 +139,6 @@ class TierPriceBuilder
      */
     private function createTierPriceObjectFromRawData(array $tierPriceRaw): ProductTierPriceInterface
     {
-        //Find and set the website id that would be used as a fallback if the raw data does not bear it itself
-        $this->setWebsiteForPriceScope();
-
         /** @var ProductTierPriceInterface $tierPrice */
         $tierPrice = $this->tierPriceFactory->create()
             ->setExtensionAttributes($this->tierPriceExtensionFactory->create());
@@ -99,36 +147,63 @@ class TierPriceBuilder
             isset($tierPriceRaw['cust_group']) ? $tierPriceRaw['cust_group'] : ''
         );
         $tierPrice->setValue(
-            isset($tierPriceRaw['website_price']) ? $tierPriceRaw['website_price'] : $tierPriceRaw['price']
+            $this->getPriceValue($tierPriceRaw)
         );
         $tierPrice->setQty(
             isset($tierPriceRaw['price_qty']) ? $tierPriceRaw['price_qty'] : ''
         );
         $tierPrice->getExtensionAttributes()->setWebsiteId(
-            isset($tierPriceRaw['website_id']) ? (int)$tierPriceRaw['website_id'] : $this->websiteId
+            isset($tierPriceRaw['website_id']) ? $tierPriceRaw['website_id'] : $this->websiteId
         );
         if (isset($tierPriceRaw['percentage_value'])) {
-            $tierPrice->getExtensionAttributes()->setPercentageValue($tierPriceRaw['percentage_value']);
+            $tierPrice->getExtensionAttributes()->setPercentageValue(
+                $tierPriceRaw['percentage_value']
+            );
         }
 
         return $tierPrice;
     }
 
     /**
-     * Find and set the website id, based on the catalog price scope setting
+     * Get price value
+     *
+     * @param array $tierPriceRaw
+     * @return float
      */
-    private function setWebsiteForPriceScope()
+    private function getPriceValue(array $tierPriceRaw): float
     {
-        if ($this->websiteId != 0) {
-            return;
+        $valueInDefaultCurrency = $this->extractPriceValue($tierPriceRaw);
+        $valueInStoreCurrency = $this->priceCurrency->convertAndRound($valueInDefaultCurrency);
+
+        return $valueInStoreCurrency;
+    }
+
+    /**
+     * Extract float price value from raw data
+     *
+     * @param array $tierPriceRaw
+     * @return float
+     */
+    private function extractPriceValue(array $tierPriceRaw): float
+    {
+        if (isset($tierPriceRaw['website_price'])) {
+            return (float)$tierPriceRaw['website_price'];
         }
 
+        return (float)$tierPriceRaw['price'];
+    }
+
+    /**
+     * Find and set the website id
+     */
+    private function setWebsiteId()
+    {
         $websiteId = 0;
         $value = $this->config->getValue('catalog/price/scope', ScopeInterface::SCOPE_WEBSITE);
         if ($value != 0) {
             $websiteId = $this->storeManager->getWebsite()->getId();
         }
 
-        $this->websiteId = (int)$websiteId;
+        $this->websiteId = $websiteId;
     }
 }

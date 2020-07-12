@@ -13,8 +13,6 @@ use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Customer\Model\GroupManagement;
 use Magento\Catalog\Api\Data\ProductTierPriceInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool as PriceProviderPool;
-use Magento\Catalog\Pricing\Price\TierPriceFactory;
-use Magento\Catalog\Model\Product\Price\TierPriceBuilder;
 
 /**
  * Get product tier price information
@@ -57,37 +55,21 @@ class Tiers
     private $products = [];
 
     /**
-     * @var TierPriceFactory
-     */
-    private $tierPriceFactory;
-
-    /**
-     * @var TierPriceBuilder
-     */
-    private $tierPriceBuilder;
-
-    /**
      * @param CollectionFactory $collectionFactory
      * @param ProductResource $productResource
      * @param PriceProviderPool $priceProviderPool
      * @param int $customerGroupId
-     * @param TierPriceFactory $tierPriceFactory
-     * @param TierPriceBuilder $tierPriceBuilder
      */
     public function __construct(
         CollectionFactory $collectionFactory,
         ProductResource $productResource,
         PriceProviderPool $priceProviderPool,
-        $customerGroupId,
-        TierPriceFactory $tierPriceFactory,
-        TierPriceBuilder $tierPriceBuilder
+        $customerGroupId
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->productResource = $productResource;
         $this->priceProviderPool = $priceProviderPool;
         $this->customerGroupId = $customerGroupId;
-        $this->tierPriceFactory = $tierPriceFactory;
-        $this->tierPriceBuilder = $tierPriceBuilder;
     }
 
     /**
@@ -115,23 +97,7 @@ class Tiers
         if (empty($this->products[$productId])) {
             return null;
         }
-
-        /** @var TierPrice $tierPrice */
-        $tierPrice = $this->tierPriceFactory->create(
-            [
-                'saleableItem' => $this->products[$productId],
-                'quantity' => 1,
-                'customerGroup' => $this->customerGroupId
-            ]
-        );
-
-        /** @var array $tierPricesRaw */
-        $tierPricesRaw = $tierPrice->getTierPriceList();
-
-        /** @var ProductTierPriceInterface[] $tierPrices */
-        $tierPrices = $this->tierPriceBuilder->buildTierPriceObjects($tierPricesRaw);
-
-        return $tierPrices;
+        return $this->products[$productId]->getTierPrices();
     }
 
     /**

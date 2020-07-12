@@ -109,9 +109,9 @@ class Price
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param PriceCurrencyInterface $priceCurrency
      * @param GroupManagementInterface $groupManagement
-     * @param \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory  @deprecated obsolete dependency
+     * @param \Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory $tierPriceFactory @deprecated
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
-     * @param ProductTierPriceExtensionFactory|null $tierPriceExtensionFactory  @deprecated obsolete dependency
+     * @param ProductTierPriceExtensionFactory|null $tierPriceExtensionFactory @deprecated
      * @param TierPriceBuilder $tierPriceBuilder
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -379,9 +379,7 @@ class Price
      */
     public function getTierPrices($product)
     {
-        $tierPricesRaw = $this->getExistingPrices($product, 'tier_price');
-
-        return $this->tierPriceBuilder->buildTierPriceObjects($tierPricesRaw);
+        return $this->tierPriceBuilder->getTierPrices($product);
     }
 
     /**
