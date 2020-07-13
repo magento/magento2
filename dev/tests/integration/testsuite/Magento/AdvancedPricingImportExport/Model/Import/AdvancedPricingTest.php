@@ -46,25 +46,25 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             'AdvancedPricingSimple 1' => [
                 [
                     'customer_group_id' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
-                    'value'             => '300.000000',
+                    'value'             => 300.00,
                     'qty'               => '10.0000',
                     'percentage_value'  => null
                 ],
                 [
                     'customer_group_id' => '1',
-                    'value'             => '11.000000',
+                    'value'             => 11.00,
                     'qty'               => '11.0000',
                     'percentage_value'  => null
                 ],
                 [
                     'customer_group_id' => '3',
-                    'value'             => '14.000000',
+                    'value'             => 14.00,
                     'qty'               => '14.0000',
                     'percentage_value'  => null
                 ],
                 [
                     'customer_group_id' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
-                    'value'             => 160.5,
+                    'value'             => 160.50,
                     'qty'               => '20.0000',
                     'percentage_value'  => '50.00'
                 ]
@@ -72,25 +72,25 @@ class AdvancedPricingTest extends \PHPUnit\Framework\TestCase
             'AdvancedPricingSimple 2' => [
                 [
                     'customer_group_id' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
-                    'value'             => '1000000.000000',
+                    'value'             => 1000000.00,
                     'qty'               => '100.0000',
                     'percentage_value'  => null
                 ],
                 [
                     'customer_group_id' => '0',
-                    'value'             => '12.000000',
+                    'value'             => 12.00,
                     'qty'               => '12.0000',
                     'percentage_value'  => null
                 ],
                 [
                     'customer_group_id' => '2',
-                    'value'             => '13.000000',
+                    'value'             => 13.00,
                     'qty'               => '13.0000',
                     'percentage_value'  => null
                 ],
                 [
                     'customer_group_id' => \Magento\Customer\Model\Group::CUST_GROUP_ALL,
-                    'value'             => 327.0,
+                    'value'             => 327.00,
                     'qty'               => '200.0000',
                     'percentage_value'  => '50.00'
                 ]

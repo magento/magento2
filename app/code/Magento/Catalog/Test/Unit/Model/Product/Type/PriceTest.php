@@ -12,11 +12,13 @@ use Magento\Catalog\Api\Data\ProductTierPriceExtensionInterface;
 use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\TierPrice;
+use Magento\Catalog\Model\Product\Price\TierPriceBuilder;
 use Magento\Catalog\Model\Product\Type\Price;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Model\Data\Group;
 use Magento\Customer\Model\GroupManagement;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\Website;
@@ -69,6 +71,8 @@ class PriceTest extends TestCase
 
     private $tierPriceExtensionFactoryMock;
 
+    private $priceCurrencyMock;
+
     protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
@@ -113,6 +117,18 @@ class PriceTest extends TestCase
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
+        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
+            ->getMockForAbstractClass();
+        $tierPriceBuilder = $this->objectManagerHelper->getObject(
+            TierPriceBuilder::class,
+            [
+                'tierPriceFactory' => $this->tpFactory,
+                'tierPriceExtensionFactory' => $this->tierPriceExtensionFactoryMock,
+                'config' => $this->scopeConfigMock,
+                'storeManager' => $storeMangerMock,
+                'priceCurrency' => $this->priceCurrencyMock,
+            ]
+        );
         $this->model = $this->objectManagerHelper->getObject(
             Price::class,
             [
@@ -120,7 +136,8 @@ class PriceTest extends TestCase
                 'config' => $this->scopeConfigMock,
                 'storeManager' => $storeMangerMock,
                 'groupManagement' => $this->groupManagementMock,
-                'tierPriceExtensionFactory' => $this->tierPriceExtensionFactoryMock
+                'tierPriceExtensionFactory' => $this->tierPriceExtensionFactoryMock,
+                'tierPriceBuilder' => $tierPriceBuilder
             ]
         );
     }
@@ -234,6 +251,10 @@ class PriceTest extends TestCase
         $this->tierPriceExtensionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($tierPriceExtensionMock);
+        $this->priceCurrencyMock->expects($this->any())->method('convertAndRound')
+            ->will(
+                $this->onConsecutiveCalls(10, 20)
+            );
 
         // test with the data retrieved as a REST object
         $tpRests = $this->model->getTierPrices($this->product);
