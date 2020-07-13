@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\Framework\Db\Test\Unit\Adapter;
+namespace Magento\Framework\DB\Test\Unit\Adapter;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\ConnectionException;
