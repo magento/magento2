@@ -6,14 +6,13 @@
 
 declare(strict_types=1);
 
-namespace Magento\Framework\Test\Unit\DB\Adapter;
+namespace Magento\Framework\Db\Test\Unit\Adapter;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\ConnectionException;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\DB\Adapter\SqlVersionProvider;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\MockObject\MockBuilder;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -28,7 +27,7 @@ class SqlVersionProviderTest extends TestCase
     private $sqlVersionProvider;
 
     /**
-     * @var MockBuilder|ResourceConnection
+     * @var MockObject|ResourceConnection
      */
     private $resourceConnection;
 
