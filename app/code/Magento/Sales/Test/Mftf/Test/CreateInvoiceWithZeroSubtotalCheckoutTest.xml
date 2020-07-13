@@ -86,8 +86,7 @@
         <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
 
         <!-- Open created order -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrdersPage"/>
-        <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrdersPage"/>
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrdersGridById">
             <argument name="orderId" value="$getOrderId"/>
         </actionGroup>
