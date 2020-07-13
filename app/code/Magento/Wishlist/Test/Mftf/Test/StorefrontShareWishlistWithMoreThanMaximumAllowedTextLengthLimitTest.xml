@@ -15,6 +15,7 @@
             <title value="Sharing wishlist with more than Maximum Allowed Text Length Limit"/>
             <description value="Customer should not have a possibility share wishlist with more than maximum allowed Email Text Length Limit"/>
             <testCaseId value="MC-35647"/>
+            <severity value="AVERAGE"/>
             <group value="wishlist"/>
             <group value="configuration"/>
         </annotations>
