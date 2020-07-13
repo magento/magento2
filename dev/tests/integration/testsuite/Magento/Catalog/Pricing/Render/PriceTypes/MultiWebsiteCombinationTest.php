@@ -7,7 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Pricing\Render\PriceTypes;
 
-use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
+use Magento\TestFramework\Store\ExecuteInStoreContext;
 
 /**
  * Assertions related to check product price rendering with combination of different price types on second website.
@@ -17,6 +18,20 @@ use Magento\Framework\View\Result\Page;
  */
 class MultiWebsiteCombinationTest extends CombinationAbstract
 {
+    /**
+     * @var ExecuteInStoreContext
+     */
+    private $executeInStoreContext;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp()
+    {
+        parent::setUp();
+        $this->executeInStoreContext = $this->objectManager->get(ExecuteInStoreContext::class);
+    }
+
     /**
      * Assert that product price rendered with expected special and regular prices if
      * product has special price which lower than regular and tier prices on second website.
@@ -34,20 +49,16 @@ class MultiWebsiteCombinationTest extends CombinationAbstract
         float $regularPrice,
         array $tierData
     ): void {
-        try {
-            $this->storeManager->setCurrentStore('fixture_second_store');
-            $this->assertRenderedPrices(
-                'second-website-price-product',
-                $specialPrice,
-                $regularPrice,
-                $tierData,
-                (int)$this->storeManager->getStore()->getWebsiteId()
-            );
-            $this->storeManager->setCurrentStore('default');
-            $this->assertRenderedPricesOnDefaultStore('second-website-price-product');
-        } finally {
-            $this->storeManager->setCurrentStore('default');
-        }
+        $this->executeInStoreContext->execute(
+            'fixture_second_store',
+            [$this, 'assertRenderedPrices'],
+            'second-website-price-product',
+            $specialPrice,
+            $regularPrice,
+            $tierData,
+            (int)$this->storeManager->getStore('fixture_second_store')->getWebsiteId()
+        );
+        $this->assertRenderedPricesOnDefaultStore('second-website-price-product');
     }
 
     /**
@@ -73,19 +84,18 @@ class MultiWebsiteCombinationTest extends CombinationAbstract
     ): void {
         try {
             $this->customerSession->setCustomerId(1);
-            $this->storeManager->setCurrentStore('fixture_second_store');
-            $this->assertRenderedPrices(
+            $this->executeInStoreContext->execute(
+                'fixture_second_store',
+                [$this, 'assertRenderedPrices'],
                 'second-website-price-product',
                 $specialPrice,
                 $regularPrice,
                 $tierData,
-                (int)$this->storeManager->getStore()->getWebsiteId()
+                (int)$this->storeManager->getStore('fixture_second_store')->getWebsiteId()
             );
-            $this->storeManager->setCurrentStore('default');
             $this->assertRenderedPricesOnDefaultStore('second-website-price-product');
         } finally {
             $this->customerSession->setCustomerId(null);
-            $this->storeManager->setCurrentStore('default');
         }
     }
 
@@ -110,22 +120,18 @@ class MultiWebsiteCombinationTest extends CombinationAbstract
         array $catalogRules,
         array $tierData
     ): void {
-        try {
-            $this->createCatalogRulesForProduct($catalogRules, 'test');
-            $this->indexBuilder->reindexFull();
-            $this->storeManager->setCurrentStore('fixture_second_store');
-            $this->assertRenderedPrices(
-                'second-website-price-product',
-                $specialPrice,
-                $regularPrice,
-                $tierData,
-                (int)$this->storeManager->getStore()->getWebsiteId()
-            );
-            $this->storeManager->setCurrentStore('default');
-            $this->assertRenderedPricesOnDefaultStore('second-website-price-product');
-        } finally {
-            $this->storeManager->setCurrentStore('default');
-        }
+        $this->createCatalogRulesForProduct($catalogRules, 'test');
+        $this->indexBuilder->reindexFull();
+        $this->executeInStoreContext->execute(
+            'fixture_second_store',
+            [$this, 'assertRenderedPrices'],
+            'second-website-price-product',
+            $specialPrice,
+            $regularPrice,
+            $tierData,
+            (int)$this->storeManager->getStore('fixture_second_store')->getWebsiteId()
+        );
+        $this->assertRenderedPricesOnDefaultStore('second-website-price-product');
     }
 
     /**
@@ -143,18 +149,18 @@ class MultiWebsiteCombinationTest extends CombinationAbstract
         float $optionPrice,
         array $productPrices
     ): void {
-        try {
-            $this->storeManager->setCurrentStore('fixture_second_store');
-            $this->assertRenderedCustomOptionPrices('second-website-price-product', $optionPrice, $productPrices);
-            $this->storeManager->setCurrentStore('default');
-            $this->assertRenderedCustomOptionPricesOnDefaultStore('second-website-price-product');
-        } finally {
-            $this->storeManager->setCurrentStore('default');
-        }
+        $this->executeInStoreContext->execute(
+            'fixture_second_store',
+            [$this, 'assertRenderedCustomOptionPrices'],
+            'second-website-price-product',
+            $optionPrice,
+            $productPrices
+        );
+        $this->assertRenderedCustomOptionPricesOnDefaultStore('second-website-price-product');
     }
 
     /**
-     * Checks price data dor product on default store.
+     * Checks price data for product on default store.
      *
      * @param string $sku
      * @return void
@@ -162,13 +168,13 @@ class MultiWebsiteCombinationTest extends CombinationAbstract
     private function assertRenderedPricesOnDefaultStore(string $sku): void
     {
         //Reset layout page to get new block html
-        $this->page = $this->objectManager->create(Page::class);
+        $this->page = $this->objectManager->get(PageFactory::class)->create();
         $defaultStoreTierData = ['prices' => [], 'message_config' => null];
         $this->assertRenderedPrices($sku, 15, 20, $defaultStoreTierData);
     }
 
     /**
-     * Checks custom option price data dor product on default store.
+     * Checks custom option price data for product on default store.
      *
      * @param string $sku
      * @return void
@@ -176,7 +182,7 @@ class MultiWebsiteCombinationTest extends CombinationAbstract
     private function assertRenderedCustomOptionPricesOnDefaultStore(string $sku): void
     {
         //Reset layout page to get new block html
-        $this->page = $this->objectManager->create(Page::class);
+        $this->page = $this->objectManager->get(PageFactory::class)->create();
         $this->assertRenderedCustomOptionPrices($sku, 7.5, []);
     }
 }

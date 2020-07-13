@@ -24,7 +24,7 @@ $configResource->deleteConfig(Data::XML_PATH_PRICE_SCOPE, 'default', 0);
 $observer = $objectManager->get(Observer::class);
 $objectManager->get(SwitchPriceAttributeScopeOnConfigChange::class)->execute($observer);
 /** @var ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
 try {
     $productRepository->deleteById('second-website-price-product');
 } catch (NoSuchEntityException $e) {

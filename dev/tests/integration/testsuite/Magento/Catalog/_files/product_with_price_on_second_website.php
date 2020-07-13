@@ -9,6 +9,7 @@ use Magento\Catalog\Api\Data\ProductInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\Data;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Observer\SwitchPriceAttributeScopeOnConfigChange;
 use Magento\Config\Model\ResourceModel\Config;
@@ -34,16 +35,15 @@ $productFactory = $objectManager->get(ProductInterfaceFactory::class);
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 /** @var WebsiteRepositoryInterface $websiteRepository */
-$websiteRepository = $objectManager->create(WebsiteRepositoryInterface::class);
+$websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 $websiteId = $websiteRepository->get('test')->getId();
 $defaultWebsiteId = $websiteRepository->get('base')->getId();
 /** @var StoreManagerInterface $storeManager */
 $storeManager = $objectManager->get(StoreManagerInterface::class);
 $secondStoreId = $storeManager->getStore('fixture_second_store')->getId();
-$currentStoreCode = $storeManager->getStore()->getCode();
 /** @var $product \Magento\Catalog\Model\Product */
 $product = $productFactory->create();
-$product->setTypeId('simple')
+$product->setTypeId(Type::TYPE_SIMPLE)
     ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([$defaultWebsiteId, $websiteId])
     ->setName('Second website price product')
@@ -65,9 +65,13 @@ $product->setTypeId('simple')
     );
 $productRepository->save($product);
 
-$storeManager->setCurrentStore('fixture_second_store');
-$product = $productRepository->get('second-website-price-product', false, $secondStoreId, true);
-$product->setPrice(10)
-    ->setSpecialPrice(5.99);
-$productRepository->save($product);
-$storeManager->setCurrentStore($currentStoreCode);
+try {
+    $currentStoreCode = $storeManager->getStore()->getCode();
+    $storeManager->setCurrentStore('fixture_second_store');
+    $product = $productRepository->get('second-website-price-product', false, $secondStoreId, true);
+    $product->setPrice(10)
+        ->setSpecialPrice(5.99);
+    $productRepository->save($product);
+} finally {
+    $storeManager->setCurrentStore($currentStoreCode);
+}

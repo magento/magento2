@@ -23,13 +23,13 @@ use Magento\Customer\Model\Group;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\Page;
+use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Api\WebsiteRepositoryInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
-use const null;
 
 /**
  * Base class for combination of different price types tests.
@@ -49,11 +49,6 @@ abstract class CombinationAbstract extends TestCase
     protected $page;
 
     /**
-     * @var Registry
-     */
-    protected $registry;
-
-    /**
      * @var IndexBuilder
      */
     protected $indexBuilder;
@@ -64,39 +59,44 @@ abstract class CombinationAbstract extends TestCase
     protected $customerSession;
 
     /**
-     * @var WebsiteRepositoryInterface
-     */
-    protected $websiteRepository;
-
-    /**
      * @var StoreManagerInterface
      */
     protected $storeManager;
 
     /**
+     * @var Registry
+     */
+    private $registry;
+
+    /**
+     * @var WebsiteRepositoryInterface
+     */
+    private $websiteRepository;
+
+    /**
      * @var ProductRepositoryInterface
      */
-    protected $productRepository;
+    private $productRepository;
 
     /**
      * @var RuleInterfaceFactory
      */
-    protected $catalogRuleFactory;
+    private $catalogRuleFactory;
 
     /**
      * @var CatalogRuleRepositoryInterface
      */
-    protected $catalogRuleRepository;
+    private $catalogRuleRepository;
 
     /**
      * @var ProductTierPriceInterfaceFactory
      */
-    protected $productTierPriceFactory;
+    private $productTierPriceFactory;
 
     /**
      * @var ProductTierPriceExtensionFactory
      */
-    protected $productTierPriceExtensionFactory;
+    private $productTierPriceExtensionFactory;
 
     /**
      * @var ProductCustomOptionInterfaceFactory
@@ -110,7 +110,7 @@ abstract class CombinationAbstract extends TestCase
     {
         parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->page = $this->objectManager->create(Page::class);
+        $this->page = $this->objectManager->get(PageFactory::class)->create();
         $this->registry = $this->objectManager->get(Registry::class);
         $this->indexBuilder = $this->objectManager->get(IndexBuilder::class);
         $this->customerSession = $this->objectManager->get(Session::class);
@@ -310,11 +310,11 @@ abstract class CombinationAbstract extends TestCase
         return [
             'percent_option_for_product_without_special_price' => [
                 'option_price' => 5,
-                'product_prices' => ['special_price' => null,],
+                'product_prices' => ['special_price' => null],
             ],
             'percent_option_for_product_with_special_price' => [
                 'option_price' => 3,
-                'product_prices' => ['special_price' => 5.99,],
+                'product_prices' => ['special_price' => 5.99],
             ],
         ];
     }
@@ -511,7 +511,7 @@ abstract class CombinationAbstract extends TestCase
             "//div[contains(@class, 'price-box') and contains(@class, 'price-final_price')]",
             "//span[contains(@class, 'old-price')]",
             "//span[contains(@class, 'price-container')]",
-            "//span[text()='Regular Price']",
+            sprintf("//span[normalize-space(text())='%s']", __('Regular Price')),
         ];
 
         return implode('', $pathsForSearch);
@@ -548,7 +548,7 @@ abstract class CombinationAbstract extends TestCase
      * @param int $websiteId
      * @return void
      */
-    protected function assertRenderedPrices(
+    public function assertRenderedPrices(
         string $sku,
         float $specialPrice,
         float $regularPrice,
@@ -572,7 +572,7 @@ abstract class CombinationAbstract extends TestCase
      * @param array $productPrices
      * @return void
      */
-    protected function assertRenderedCustomOptionPrices(
+    public function assertRenderedCustomOptionPrices(
         string $sku,
         float $optionPrice,
         array $productPrices
