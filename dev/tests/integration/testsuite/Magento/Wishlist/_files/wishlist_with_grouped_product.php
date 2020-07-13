@@ -19,13 +19,13 @@ Resolver::getInstance()->requireDataFixture(
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var CustomerRegistry $customerRegistry */
-$customerRegistry = $objectManager->create(CustomerRegistry::class);
+$customerRegistry = $objectManager->get(CustomerRegistry::class);
 $customer = $customerRegistry->retrieve(1);
 $wishlistFactory = $objectManager->get(WishlistFactory::class);
 $wishlist = $wishlistFactory->create();
 $wishlist->loadByCustomerId($customer->getId(), true);
 /** @var ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $product = $productRepository->get('grouped');
 $simple1 = $productRepository->get('simple_11');
 $simple2 = $productRepository->get('simple_22');

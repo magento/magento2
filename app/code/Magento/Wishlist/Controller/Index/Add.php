@@ -112,7 +112,6 @@ class Add extends \Magento\Wishlist\Controller\AbstractIndex implements HttpPost
 
         try {
             $buyRequest = new \Magento\Framework\DataObject($requestParams);
-            $buyRequest->setData('action', 'add');
 
             $result = $wishlist->addNewItem($product, $buyRequest);
             if (is_string($result)) {

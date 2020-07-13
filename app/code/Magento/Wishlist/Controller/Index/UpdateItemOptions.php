@@ -104,7 +104,6 @@ class UpdateItemOptions extends \Magento\Wishlist\Controller\AbstractIndex imple
             }
 
             $buyRequest = new \Magento\Framework\DataObject($this->getRequest()->getParams());
-            $buyRequest->setData('action', 'updateItem');
 
             $wishlist->updateItem($id, $buyRequest)->save();
 

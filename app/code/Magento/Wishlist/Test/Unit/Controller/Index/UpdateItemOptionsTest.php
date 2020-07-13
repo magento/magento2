@@ -380,7 +380,7 @@ class UpdateItemOptionsTest extends TestCase
         $wishlist
             ->expects($this->once())
             ->method('updateItem')
-            ->with(3, new DataObject(['action' => 'updateItem']))
+            ->with(3, new DataObject([]))
             ->willReturnSelf();
         $wishlist
             ->expects($this->once())
@@ -509,7 +509,7 @@ class UpdateItemOptionsTest extends TestCase
         $wishlist
             ->expects($this->once())
             ->method('updateItem')
-            ->with(3, new DataObject(['action' => 'updateItem']))
+            ->with(3, new DataObject([]))
             ->willReturnSelf();
         $wishlist
             ->expects($this->once())
