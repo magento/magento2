@@ -84,7 +84,8 @@ define([
         quoteAddressToFormAddressData: function (addrs) {
             var self = this,
                 output = {},
-                streetObject;
+                streetObject,
+                customAttributesObject;
 
             $.each(addrs, function (key) {
                 if (addrs.hasOwnProperty(key) && !$.isFunction(addrs[key])) {
@@ -98,6 +99,14 @@ define([
                     streetObject[index] = value;
                 });
                 output.street = streetObject;
+            }
+
+            if ($.isArray(addrs.customAttributes)) {
+                customAttributesObject = {};
+                addrs.customAttributes.forEach(function (value, index) {
+                    customAttributesObject[value.attribute_code] = value.value;
+                });
+                output.custom_attributes = customAttributesObject;
             }
 
             return output;
