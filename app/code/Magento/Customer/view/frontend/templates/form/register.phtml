@@ -11,9 +11,9 @@ use Magento\Customer\Helper\Address;
 /** @var \Magento\Customer\Block\Form\Register $block */
 /** @var \Magento\Framework\Escaper $escaper */
 $formData = $block->getFormData();
-$showAddressFileds = false;
+$showAddressFields = false;
 if ($block->getShowAddressFields() || $block->getConfig('customer/address/show_address_fields')) {
-    $showAddressFileds = true;
+    $showAddressFields = true;
 }
 
 ?>
@@ -69,7 +69,7 @@ if ($block->getShowAddressFields() || $block->getConfig('customer/address/show_a
             <?= $_gender->setGender($formData->getGender())->toHtml() ?>
         <?php endif ?>
     </fieldset>
-    <?php if ($showAddressFileds): ?>
+    <?php if ($showAddressFields): ?>
         <?php $cityValidationClass = $this->helper(Address::class)->getAttributeValidationClass('city'); ?>
         <?php $postcodeValidationClass = $this->helper(Address::class)->getAttributeValidationClass('postcode'); ?>
         <?php $regionValidationClass = $this->helper(Address::class)->getAttributeValidationClass('region'); ?>
@@ -308,7 +308,7 @@ require([
     }).find('input:text').attr('autocomplete', 'off');
 });
 </script>
-<?php if ($showAddressFileds): ?>
+<?php if ($showAddressFields): ?>
 <script type="text/x-magento-init">
     {
         "#country": {
