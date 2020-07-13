@@ -80,7 +80,7 @@ class GetAssetIdsByCategoryStore implements GetAssetIdsByContentFieldInterface
     /**
      * This function returns an array of category ids that have content and are under the root parameter
      *
-     * @param $rootCategoryId
+     * @param int $rootCategoryId
      * @return array
      */
     private function getCategoryIdsByRootCategory(int $rootCategoryId): array
