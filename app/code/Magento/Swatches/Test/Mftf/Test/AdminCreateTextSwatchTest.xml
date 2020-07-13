@@ -25,8 +25,7 @@
         </after>
 
         <!-- Create a new product attribute of type "Text Swatch" -->
-        <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
-        <waitForPageLoad stepKey="waitForNewProductAttributePage"/>
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="goToNewProductAttributePage"/>
         <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
         <selectOption selector="{{AttributePropertiesSection.InputType}}" userInput="swatch_text" stepKey="selectInputType"/>
         <click selector="{{AdminManageSwatchSection.addSwatchText}}" stepKey="clickAddSwatch0"/>

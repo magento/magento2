@@ -32,7 +32,7 @@
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteGroupedProduct">
                 <argument name="sku" value="{{GroupedProduct.sku}}"/>
             </actionGroup>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="createProductOne" stepKey="deleteProductOne"/>
             <deleteData createDataKey="createProductTwo" stepKey="deleteProductTwo"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>

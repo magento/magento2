@@ -81,7 +81,7 @@
             </createData>
         </before>
         <after>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simple1Handle" stepKey="deleteSimple1"/>
             <deleteData createDataKey="simple2Handle" stepKey="deleteSimple2"/>
             <deleteData createDataKey="childProductHandle1" stepKey="deleteChild1"/>
