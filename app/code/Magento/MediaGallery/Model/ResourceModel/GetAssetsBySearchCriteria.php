@@ -31,7 +31,7 @@ class GetAssetsBySearchCriteria
     /**
      * @var SearchResultFactory
      */
-    protected $searchResultFactory;
+    private $searchResultFactory;
 
     /**
      * @var LoggerInterface
