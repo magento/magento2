@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentCms\Model\ResourceModel;
 
-use Magento\MediaContentApi\Api\GetAssetIdByContentFieldInterface;
+use Magento\MediaContentApi\Api\GetAssetIdsByContentFieldInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -16,7 +16,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test for GetAssetIdByContentFieldTest
  */
-class GetAssetIdByContentFieldTest extends TestCase
+class GetAssetIdsByContentFieldTest extends TestCase
 {
     private const STORE_FIELD = 'store_id';
     private const STATUS_FIELD = 'content_status';
@@ -24,9 +24,9 @@ class GetAssetIdByContentFieldTest extends TestCase
     private const STATUS_DISABLED = '0';
 
     /**
-     * @var GetAssetIdByContentFieldInterface
+     * @var GetAssetIdsByContentFieldInterface
      */
-    private $getAssetIdByContentField;
+    private $getAssetIdsByContentField;
 
     /**
      * @var int
@@ -40,7 +40,7 @@ class GetAssetIdByContentFieldTest extends TestCase
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->storeId = $objectManager->get(StoreManagerInterface::class)->getStore()->getId();
-        $this->getAssetIdByContentField = $objectManager->get(GetAssetIdByContentFieldInterface::class);
+        $this->getAssetIdsByContentField = $objectManager->get(GetAssetIdsByContentFieldInterface::class);
     }
 
     /**
@@ -53,7 +53,7 @@ class GetAssetIdByContentFieldTest extends TestCase
     {
         $this->assertEquals(
             [2020],
-            $this->getAssetIdByContentField->execute(self::STORE_FIELD, (string)$this->storeId)
+            $this->getAssetIdsByContentField->execute(self::STORE_FIELD, (string)$this->storeId)
         );
     }
 
@@ -67,7 +67,7 @@ class GetAssetIdByContentFieldTest extends TestCase
     {
         $this->assertEquals(
             [2020],
-            $this->getAssetIdByContentField->execute(self::STATUS_FIELD, self::STATUS_ENABLED)
+            $this->getAssetIdsByContentField->execute(self::STATUS_FIELD, self::STATUS_ENABLED)
         );
     }
 
@@ -81,7 +81,7 @@ class GetAssetIdByContentFieldTest extends TestCase
     {
         $this->assertEquals(
             [],
-            $this->getAssetIdByContentField->execute(self::STATUS_FIELD, self::STATUS_DISABLED)
+            $this->getAssetIdsByContentField->execute(self::STATUS_FIELD, self::STATUS_DISABLED)
         );
     }
 }
