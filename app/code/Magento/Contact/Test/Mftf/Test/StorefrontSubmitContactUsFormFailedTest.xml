@@ -15,6 +15,7 @@
             <title value="Submitting Contact Us Form on Storefront with invalid user input"/>
             <description value="User should have no possibility submit Contact Form if input data is not valid"/>
             <group value="contact"/>
+            <testCaseId value="MC-35813"/>
         </annotations>
 
         <actionGroup ref="StorefrontOpenContactUsPageActionGroup" stepKey="navigateContactUsPage"/>

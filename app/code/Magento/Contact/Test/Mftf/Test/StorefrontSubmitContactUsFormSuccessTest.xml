@@ -15,6 +15,7 @@
             <title value="Submitting Contact Us Form on Storefront"/>
             <description value="User should be able successfully submit Contact Us form, if input data is valid"/>
             <group value="contact"/>
+            <testCaseId value="MC-35815"/>
         </annotations>
 
         <actionGroup ref="StorefrontOpenContactUsPageActionGroup" stepKey="navigateContactUsPage"/>
