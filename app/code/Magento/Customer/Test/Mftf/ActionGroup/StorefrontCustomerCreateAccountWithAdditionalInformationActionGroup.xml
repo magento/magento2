@@ -23,8 +23,7 @@
         <selectOption selector="{{StorefrontCustomerCreateFormSection.genderField}}" userInput="{{customerGender}}" after="fillTaxvat" stepKey="fillGender"/>
         <fillField selector="{{StorefrontCustomerCreateFormSection.companyField}}" userInput="{{address.company}}" after="fillGender" stepKey="fillCompany"/>
         <fillField selector="{{StorefrontCustomerCreateFormSection.telephoneField}}" userInput="{{address.telephone}}" after="fillCompany" stepKey="fillPhoneNumber"/>
-        <fillField selector="{{StorefrontCustomerCreateFormSection.faxField}}" userInput="{{address.fax}}" after="fillPhoneNumber" stepKey="fillFax"/>
-        <fillField selector="{{StorefrontCustomerCreateFormSection.streetField}}" userInput="{{address.street[0]}}" after="fillFax" stepKey="fillStreetAddress"/>
+        <fillField selector="{{StorefrontCustomerCreateFormSection.streetField}}" userInput="{{address.street[0]}}" after="fillPhoneNumber" stepKey="fillStreetAddress"/>
         <selectOption selector="{{StorefrontCustomerCreateFormSection.countryField}}" userInput="{{address.country_id}}" after="fillStreetAddress" stepKey="selectCounty"/>
         <selectOption selector="{{StorefrontCustomerCreateFormSection.regionField}}" userInput="{{address.state}}" after="selectCounty" stepKey="selectRegion" />
         <fillField selector="{{StorefrontCustomerCreateFormSection.cityField}}" userInput="{{address.city}}" after="selectRegion" stepKey="fillCityName"/>

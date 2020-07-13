@@ -28,7 +28,6 @@
             <magentoCLI command="config:set customer/address/gender_show opt" stepKey="setShowGender"/>
             <magentoCLI command="config:set customer/address/telephone_show opt" stepKey="setShowTelephone"/>
             <magentoCLI command="config:set customer/address/company_show opt" stepKey="setShowCompany"/>
-            <magentoCLI command="config:set customer/address/fax_show opt" stepKey="setShowFax"/>
         </before>
         <after>
             <magentoCLI command="config:set customer/address/show_address_fields 0" stepKey="setShowAddressInformation"/>
@@ -40,7 +39,6 @@
             <magentoCLI command="config:set customer/address/gender_show ''" stepKey="setShowGender"/>
             <magentoCLI command="config:set customer/address/telephone_show ''" stepKey="setShowTelephone"/>
             <magentoCLI command="config:set customer/address/company_show ''" stepKey="setShowCompany"/>
-            <magentoCLI command="config:set customer/address/fax_show ''" stepKey="setShowFax"/>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
 
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
