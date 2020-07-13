@@ -8,13 +8,13 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentCms\Model\ResourceModel;
 
+use Magento\Framework\Exception\InvalidArgumentException;
 use Magento\MediaContentApi\Api\GetAssetIdsByContentFieldInterface;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for GetAssetIdByContentFieldTest
+ * Test for GetAssetIdsByContentFieldTest
  */
 class GetAssetIdsByContentFieldTest extends TestCase
 {
@@ -22,6 +22,9 @@ class GetAssetIdsByContentFieldTest extends TestCase
     private const STATUS_FIELD = 'content_status';
     private const STATUS_ENABLED = '1';
     private const STATUS_DISABLED = '0';
+    private const FIXTURE_ASSET_ID = 2020;
+    private const DEFAULT_STORE_ID = '1';
+    private const ADMIN_STORE_ID = '0';
 
     /**
      * @var GetAssetIdsByContentFieldInterface
@@ -29,59 +32,79 @@ class GetAssetIdsByContentFieldTest extends TestCase
     private $getAssetIdsByContentField;
 
     /**
-     * @var int
-     */
-    private $storeId;
-
-    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
-        $this->storeId = $objectManager->get(StoreManagerInterface::class)->getStore()->getId();
         $this->getAssetIdsByContentField = $objectManager->get(GetAssetIdsByContentFieldInterface::class);
     }
 
     /**
-     * Test for getting asset id by store view of a block
+     * Test for getting asset id by block field
      *
+     * @dataProvider testBlockDataProvider
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
      * @magentoDataFixture Magento/MediaContentCms/_files/block_with_asset.php
+     *
+     * @param string $field
+     * @param string $value
+     * @param array $expectedAssetIds
+     * @throws InvalidArgumentException
      */
-    public function testBlockStoreView(): void
+    public function testBlockFields(string $field, string $value, array $expectedAssetIds): void
     {
         $this->assertEquals(
-            [2020],
-            $this->getAssetIdsByContentField->execute(self::STORE_FIELD, (string)$this->storeId)
+            $expectedAssetIds,
+            $this->getAssetIdsByContentField->execute($field, $value)
         );
     }
 
     /**
-     * Test for getting asset id by enabled status of a page
+     * Test for getting asset id by page field
      *
+     * @dataProvider testPageDataProvider
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
      * @magentoDataFixture Magento/MediaContentCms/_files/page_with_asset.php
+     *
+     * @param string $field
+     * @param string $value
+     * @param array $expectedAssetIds
+     * @throws InvalidArgumentException
      */
-    public function testPageStatusEnabled(): void
+    public function testPageFields(string $field, string $value, array $expectedAssetIds): void
     {
         $this->assertEquals(
-            [2020],
-            $this->getAssetIdsByContentField->execute(self::STATUS_FIELD, self::STATUS_ENABLED)
+            $expectedAssetIds,
+            $this->getAssetIdsByContentField->execute($field, $value)
         );
     }
 
     /**
-     * Test for getting asset id by disabled status of a page
+     * Data provider for block tests
      *
-     * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
-     * @magentoDataFixture Magento/MediaContentCms/_files/page_with_asset.php
+     * @return array
      */
-    public function testPageStatusDisabled(): void
+    public static function testBlockDataProvider(): array
     {
-        $this->assertEquals(
-            [],
-            $this->getAssetIdsByContentField->execute(self::STATUS_FIELD, self::STATUS_DISABLED)
-        );
+        return [
+            [self::STATUS_FIELD, self::STATUS_ENABLED, [self::FIXTURE_ASSET_ID]],
+            [self::STATUS_FIELD, self::STATUS_DISABLED, []],
+            [self::STORE_FIELD, self::DEFAULT_STORE_ID, [self::FIXTURE_ASSET_ID]],
+        ];
+    }
+
+    /**
+     * Data provider for page tests
+     *
+     * @return array
+     */
+    public static function testPageDataProvider(): array
+    {
+        return [
+            [self::STATUS_FIELD, self::STATUS_ENABLED, [self::FIXTURE_ASSET_ID]],
+            [self::STATUS_FIELD, self::STATUS_DISABLED, []],
+            [self::STORE_FIELD, self::ADMIN_STORE_ID, [self::FIXTURE_ASSET_ID]],
+        ];
     }
 }
