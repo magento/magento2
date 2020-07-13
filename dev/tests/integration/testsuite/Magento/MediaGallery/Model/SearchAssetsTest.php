@@ -27,6 +27,21 @@ class SearchAssetsTest extends TestCase
     private $searchAssets;
 
     /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
+
+    /**
+     * @var FilterGroupBuilder
+     */
+    private $filterGroupBuilder;
+
+    /**
+     * @var FilterBuilder
+     */
+    private $filterBuilder;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
