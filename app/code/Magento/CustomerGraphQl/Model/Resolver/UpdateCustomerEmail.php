@@ -12,6 +12,7 @@ use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
 use Magento\CustomerGraphQl\Model\Customer\UpdateCustomerAccount;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\GraphQl\Model\Query\ContextInterface;
@@ -52,7 +53,16 @@ class UpdateCustomerEmail implements ResolverInterface
     }
 
     /**
-     * Resolves customer email update mutation
+     * Resolve customer email update mutation
+     *
+     * @param \Magento\Framework\GraphQl\Config\Element\Field $field
+     * @param \Magento\Framework\GraphQl\Query\Resolver\ContextInterface $context
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
+     * @return array|Value
+     * @throws \Exception
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function resolve(
         Field $field,
