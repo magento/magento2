@@ -5,19 +5,19 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaContentCatalog\Model;
+namespace Magento\MediaContentCatalog\Model\ResourceModel;
 
 use Magento\Catalog\Api\CategoryManagementInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaContentApi\Model\GetAssetIdByContentFieldInterface;
+use Magento\MediaContentApi\Model\GetAssetIdsByContentFieldInterface;
 use Magento\Store\Api\GroupRepositoryInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 
 /**
  * Class responsible to return Asset id by category store
  */
-class GetAssetIdByCategoryStore implements GetAssetIdByContentFieldInterface
+class GetAssetIdsByCategoryStore implements GetAssetIdsByContentFieldInterface
 {
     private const TABLE_CONTENT_ASSET = 'media_content_asset';
     private const TABLE_CATALOG_CATEGORY = 'catalog_category_entity';
@@ -39,7 +39,7 @@ class GetAssetIdByCategoryStore implements GetAssetIdByContentFieldInterface
     private $storeGroupRepository;
 
     /**
-     * GetAssetIdByProductStore constructor.
+     * GetAssetIdsByCategoryStore constructor.
      *
      * @param ResourceConnection $resource
      * @param StoreRepositoryInterface $storeRepository
@@ -88,7 +88,7 @@ class GetAssetIdByCategoryStore implements GetAssetIdByContentFieldInterface
         $result = $this->getCategoryIdsAndPath();
 
         $result = array_filter($result, function ($item) use ($rootCategoryId) {
-            $pathArray = explode("/", $item['path']);
+            $pathArray = explode('/', $item['path']);
             $isInPath = false;
             foreach ($pathArray as $id) {
                 if ($id == $rootCategoryId) {

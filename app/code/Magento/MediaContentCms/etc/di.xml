@@ -34,7 +34,7 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\MediaContentCms\Model\GetAssetIdByBlockStore" type="Magento\MediaContentCms\Model\GetAssetIdByContentField">
+    <virtualType name="Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByBlockStore" type="Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByContentField">
         <arguments>
             <argument name="entityType" xsi:type="string">cms_block</argument>
             <argument name="fieldTable" xsi:type="string">cms_block_store</argument>
@@ -42,7 +42,7 @@
             <argument name="fieldColumn" xsi:type="string">store_id</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\MediaContentCms\Model\GetAssetIdByPageStore" type="Magento\MediaContentCms\Model\GetAssetIdByContentField">
+    <virtualType name="Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByPageStore" type="Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByContentField">
         <arguments>
             <argument name="entityType" xsi:type="string">cms_page</argument>
             <argument name="fieldTable" xsi:type="string">cms_page_store</argument>
@@ -50,7 +50,7 @@
             <argument name="fieldColumn" xsi:type="string">store_id</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\MediaContentCms\Model\GetAssetIdByPageStatus" type="Magento\MediaContentCms\Model\GetAssetIdByContentField">
+    <virtualType name="Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByPageStatus" type="Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByContentField">
         <arguments>
             <argument name="entityType" xsi:type="string">cms_page</argument>
             <argument name="fieldTable" xsi:type="string">cms_page</argument>
@@ -58,7 +58,7 @@
             <argument name="fieldColumn" xsi:type="string">is_active</argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\MediaContentCms\Model\GetAssetIdByBlockStatus" type="Magento\MediaContentCms\Model\GetAssetIdByContentField">
+    <virtualType name="Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByBlockStatus" type="Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByContentField">
         <arguments>
             <argument name="entityType" xsi:type="string">cms_block</argument>
             <argument name="fieldTable" xsi:type="string">cms_block</argument>
@@ -66,22 +66,22 @@
             <argument name="fieldColumn" xsi:type="string">is_active</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\MediaContentApi\Api\GetAssetIdByContentFieldInterface">
+    <type name="Magento\MediaContentApi\Model\Composite\GetAssetIdsByContentField">
         <arguments>
-            <argument name="getAssetIdByContentFieldArray" xsi:type="array">
+            <argument name="fieldHandlers" xsi:type="array">
                 <item name="content_status" xsi:type="array">
-                    <item name="getAssetIdByPageStatus" xsi:type="object">Magento\MediaContentCms\Model\GetAssetIdByPageStatus</item>
-                    <item name="getAssetIdByBlockStatus" xsi:type="object">Magento\MediaContentCms\Model\GetAssetIdByBlockStatus</item>
+                    <item name="getAssetIdsByPageStatus" xsi:type="object">Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByPageStatus</item>
+                    <item name="getAssetIdsByBlockStatus" xsi:type="object">Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByBlockStatus</item>
                 </item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaContentApi\Api\GetAssetIdByContentFieldInterface">
+    <type name="Magento\MediaContentApi\Model\Composite\GetAssetIdsByContentField">
         <arguments>
-            <argument name="getAssetIdByContentFieldArray" xsi:type="array">
+            <argument name="fieldHandlers" xsi:type="array">
                 <item name="store_id" xsi:type="array">
-                    <item name="getAssetIdByPageStore" xsi:type="object">Magento\MediaContentCms\Model\GetAssetIdByPageStore</item>
-                    <item name="getAssetIdByBlockStore" xsi:type="object">Magento\MediaContentCms\Model\GetAssetIdByBlockStore</item>
+                    <item name="getAssetIdsByPageStore" xsi:type="object">Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByPageStore</item>
+                    <item name="getAssetIdsByBlockStore" xsi:type="object">Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByBlockStore</item>
                 </item>
             </argument>
         </arguments>

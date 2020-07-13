@@ -5,15 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaContentCms\Model;
+namespace Magento\MediaContentCms\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\MediaContentApi\Model\GetAssetIdByContentFieldInterface;
+use Magento\MediaContentApi\Model\GetAssetIdsByContentFieldInterface;
 
 /**
  * Class responsible to return Asset id by content field
  */
-class GetAssetIdByContentField implements GetAssetIdByContentFieldInterface
+class GetAssetIdsByContentField implements GetAssetIdsByContentFieldInterface
 {
     private const TABLE_CONTENT_ASSET = 'media_content_asset';
 
@@ -43,7 +43,7 @@ class GetAssetIdByContentField implements GetAssetIdByContentFieldInterface
     private $idColumn;
 
     /**
-     * GetAssetIdByContentField constructor.
+     * GetAssetIdsByContentField constructor.
      *
      * @param ResourceConnection $resource
      * @param string $entityType

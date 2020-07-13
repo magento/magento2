@@ -46,7 +46,7 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\MediaContentCatalog\Model\GetAssetIdByProductStatus" type="Magento\MediaContentCatalog\Model\GetAssetIdByEavContentField">
+    <virtualType name="Magento\MediaContentCatalog\Model\ResourceModel\GetAssetIdsByProductStatus" type="Magento\MediaContentCatalog\Model\ResourceModel\GetAssetIdsByEavContentField">
         <arguments>
             <argument name="attributeCode" xsi:type="string">status</argument>
             <argument name="entityType" xsi:type="string">catalog_product</argument>
@@ -56,28 +56,28 @@
             </argument>
         </arguments>
     </virtualType>
-    <virtualType name="Magento\MediaContentCatalog\Model\GetAssetIdByCategoryStatus" type="Magento\MediaContentCatalog\Model\GetAssetIdByEavContentField">
+    <virtualType name="Magento\MediaContentCatalog\Model\ResourceModel\GetAssetIdsByCategoryStatus" type="Magento\MediaContentCatalog\Model\ResourceModel\GetAssetIdsByEavContentField">
         <arguments>
             <argument name="attributeCode" xsi:type="string">is_active</argument>
             <argument name="entityType" xsi:type="string">catalog_category</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\MediaContentApi\Api\GetAssetIdByContentFieldInterface">
+    <type name="Magento\MediaContentApi\Model\Composite\GetAssetIdsByContentField">
         <arguments>
-            <argument name="getAssetIdByContentFieldArray" xsi:type="array">
+            <argument name="fieldHandlers" xsi:type="array">
                 <item name="content_status" xsi:type="array">
-                    <item name="getAssetIdByProductStatus" xsi:type="object">Magento\MediaContentCatalog\Model\GetAssetIdByProductStatus</item>
-                    <item name="getAssetIdByCategoryStatus" xsi:type="object">Magento\MediaContentCatalog\Model\GetAssetIdByCategoryStatus</item>
+                    <item name="getAssetIdsByProductStatus" xsi:type="object">Magento\MediaContentCatalog\Model\ResourceModel\GetAssetIdsByProductStatus</item>
+                    <item name="getAssetIdsByCategoryStatus" xsi:type="object">Magento\MediaContentCatalog\Model\ResourceModel\GetAssetIdsByCategoryStatus</item>
                 </item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaContentApi\Api\GetAssetIdByContentFieldInterface">
+    <type name="Magento\MediaContentApi\Model\Composite\GetAssetIdsByContentField">
         <arguments>
-            <argument name="getAssetIdByContentFieldArray" xsi:type="array">
+            <argument name="fieldHandlers" xsi:type="array">
                 <item name="store_id" xsi:type="array">
-                    <item name="getAssetIdByProductStore" xsi:type="object">Magento\MediaContentCatalog\Model\GetAssetIdByProductStore</item>
-                    <item name="getAssetIdByCategoryStore" xsi:type="object">Magento\MediaContentCatalog\Model\GetAssetIdByCategoryStore</item>
+                    <item name="getAssetIdsByProductStore" xsi:type="object">Magento\MediaContentCatalog\Model\ResourceModel\GetAssetIdsByProductStore</item>
+                    <item name="getAssetIdsByCategoryStore" xsi:type="object">Magento\MediaContentCatalog\Model\ResourceModel\GetAssetIdsByCategoryStore</item>
                 </item>
             </argument>
         </arguments>

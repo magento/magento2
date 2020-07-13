@@ -5,23 +5,23 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaContentApi\Api;
+namespace Magento\MediaContentApi\Model;
 
-use Magento\Framework\Exception\InvalidArgumentException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
- * @api
  * Interface used to return Asset id by content field.
  */
-interface GetAssetIdByContentFieldInterface
+interface GetAssetIdsByContentFieldInterface
 {
     /**
      * This function returns asset ids by content field
      *
-     * @param string $field
      * @param string $value
-     * @throws InvalidArgumentException
      * @return int[]
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
-    public function execute(string $field, string $value): array;
+    public function execute(string $value): array;
 }

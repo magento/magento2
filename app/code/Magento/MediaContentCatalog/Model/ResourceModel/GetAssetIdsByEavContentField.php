@@ -5,16 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaContentCatalog\Model;
+namespace Magento\MediaContentCatalog\Model\ResourceModel;
 
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\ResourceConnection;
-use Magento\MediaContentApi\Model\GetAssetIdByContentFieldInterface;
+use Magento\MediaContentApi\Model\GetAssetIdsByContentFieldInterface;
 
 /**
  * Class responsible to return Asset id by eav content field
  */
-class GetAssetIdByEavContentField implements GetAssetIdByContentFieldInterface
+class GetAssetIdsByEavContentField implements GetAssetIdsByContentFieldInterface
 {
     private const TABLE_CONTENT_ASSET = 'media_content_asset';
 
@@ -44,7 +44,7 @@ class GetAssetIdByEavContentField implements GetAssetIdByContentFieldInterface
     private $valueMap;
 
     /**
-     * GetAssetIdByEavContentStatus constructor.
+     * GetAssetIdsByEavContentField constructor.
      *
      * @param ResourceConnection $resource
      * @param Config $config
@@ -71,7 +71,7 @@ class GetAssetIdByEavContentField implements GetAssetIdByContentFieldInterface
      */
     public function execute(string $value): array
     {
-        $statusAttribute = $this->config->getAttribute($this->entityType, $this->attributeCode);
+        $attribute = $this->config->getAttribute($this->entityType, $this->attributeCode);
 
         $sql = $this->connection->getConnection()->select()->from(
             ['asset_content_table' => $this->connection->getTableName(self::TABLE_CONTENT_ASSET)],
@@ -80,10 +80,10 @@ class GetAssetIdByEavContentField implements GetAssetIdByContentFieldInterface
             'entity_type = ?',
             $this->entityType
         )->joinInner(
-            ['entity_eav_type' => $statusAttribute->getBackendTable()],
-            'asset_content_table.entity_id = entity_eav_type.' . $statusAttribute->getEntityIdField() .
+            ['entity_eav_type' => $attribute->getBackendTable()],
+            'asset_content_table.entity_id = entity_eav_type.' . $attribute->getEntityIdField() .
             ' AND entity_eav_type.attribute_id = ' .
-            $statusAttribute->getAttributeId(),
+            $attribute->getAttributeId(),
             []
         )->where(
             'entity_eav_type.value = ?',
@@ -101,9 +101,6 @@ class GetAssetIdByEavContentField implements GetAssetIdByContentFieldInterface
      */
     private function getValueFromMap(string $value): string
     {
-        if (count($this->valueMap) > 0 && array_key_exists($value, $this->valueMap)) {
-            return $this->valueMap[$value];
-        }
-        return $value;
+        return $this->valueMap[$value] ?? $value;
     }
 }

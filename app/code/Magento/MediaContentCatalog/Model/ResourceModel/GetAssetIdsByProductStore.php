@@ -5,17 +5,17 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaContentCatalog\Model;
+namespace Magento\MediaContentCatalog\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\MediaContentApi\Model\GetAssetIdByContentFieldInterface;
+use Magento\MediaContentApi\Model\GetAssetIdsByContentFieldInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
 
 /**
  * Class responsible to return Asset ids by product store
  */
-class GetAssetIdByProductStore implements GetAssetIdByContentFieldInterface
+class GetAssetIdsByProductStore implements GetAssetIdsByContentFieldInterface
 {
     private const TABLE_CONTENT_ASSET = 'media_content_asset';
     private const ENTITY_TYPE = 'catalog_product';
@@ -34,7 +34,7 @@ class GetAssetIdByProductStore implements GetAssetIdByContentFieldInterface
     private $storeRepository;
 
     /**
-     * GetAssetIdByProductStore constructor.
+     * GetAssetIdsByProductStore constructor.
      *
      * @param ResourceConnection $resource
      * @param StoreRepositoryInterface $storeRepository
