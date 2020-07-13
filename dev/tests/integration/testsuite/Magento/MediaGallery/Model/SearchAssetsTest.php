@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGallery\Model\ResourceModel;
+namespace Magento\MediaGallery\Model;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Api\Search\FilterGroupBuilder;
