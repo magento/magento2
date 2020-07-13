@@ -8,7 +8,8 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="VerifyRegistredLinkDisplayedForGuestSubscriptionNoTest">
+    <test name="VerifyRegistredLinkDisplayedForGuestSubscriptionNoTest" deprecated="Use StorefrontNewsletterGuestSubscriptionWithDisallowedOptionTest">
+        <!-- Deprecated Due to inconsistency with the best practices -->
         <annotations>
             <features value="Newsletter"/>
             <stories value="Configure guest newsletter subscription to 'No'"/>
