@@ -101,13 +101,15 @@ define([
                 output.street = streetObject;
             }
 
+            //jscs:disable requireCamelCaseOrUpperCaseIdentifiers
             if ($.isArray(addrs.customAttributes)) {
                 customAttributesObject = {};
-                addrs.customAttributes.forEach(function (value, index) {
+                addrs.customAttributes.forEach(function (value) {
                     customAttributesObject[value.attribute_code] = value.value;
                 });
                 output.custom_attributes = customAttributesObject;
             }
+            //jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 
             return output;
         },
