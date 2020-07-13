@@ -4,9 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-/** Create multiselect attribute */
-require __DIR__ . '/multiselect_attribute.php';
-
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
@@ -20,7 +17,9 @@ use Magento\Indexer\Model\Indexer;
 use Magento\Indexer\Model\Indexer\Collection as IndexerCollection;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/multiselect_attribute.php');
 /** Create product with options and multiselect attribute */
 
 $objectManager = Bootstrap::getObjectManager();
