@@ -69,12 +69,6 @@
                     <item name="getAssetIdsByProductStatus" xsi:type="object">Magento\MediaContentCatalog\Model\ResourceModel\GetAssetIdsByProductStatus</item>
                     <item name="getAssetIdsByCategoryStatus" xsi:type="object">Magento\MediaContentCatalog\Model\ResourceModel\GetAssetIdsByCategoryStatus</item>
                 </item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\MediaContentApi\Model\Composite\GetAssetIdsByContentField">
-        <arguments>
-            <argument name="fieldHandlers" xsi:type="array">
                 <item name="store_id" xsi:type="array">
                     <item name="getAssetIdsByProductStore" xsi:type="object">Magento\MediaContentCatalog\Model\ResourceModel\GetAssetIdsByProductStore</item>
                     <item name="getAssetIdsByCategoryStore" xsi:type="object">Magento\MediaContentCatalog\Model\ResourceModel\GetAssetIdsByCategoryStore</item>

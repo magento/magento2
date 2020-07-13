@@ -73,12 +73,6 @@
                     <item name="getAssetIdsByPageStatus" xsi:type="object">Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByPageStatus</item>
                     <item name="getAssetIdsByBlockStatus" xsi:type="object">Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByBlockStatus</item>
                 </item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\MediaContentApi\Model\Composite\GetAssetIdsByContentField">
-        <arguments>
-            <argument name="fieldHandlers" xsi:type="array">
                 <item name="store_id" xsi:type="array">
                     <item name="getAssetIdsByPageStore" xsi:type="object">Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByPageStore</item>
                     <item name="getAssetIdsByBlockStore" xsi:type="object">Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByBlockStore</item>
