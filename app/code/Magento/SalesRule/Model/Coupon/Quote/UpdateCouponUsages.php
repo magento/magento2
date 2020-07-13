@@ -5,15 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\SalesRule\Model\Coupon;
+namespace Magento\SalesRule\Model\Coupon\Quote;
 
-use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\SalesRule\Model\Coupon\Usage\Processor as CouponUsageProcessor;
 use Magento\SalesRule\Model\Coupon\Usage\UpdateInfo;
 use Magento\SalesRule\Model\Coupon\Usage\UpdateInfoFactory;
 
 /**
- * Updates the coupon usages
+ * Updates the coupon usages from quote
  */
 class UpdateCouponUsages
 {
@@ -42,25 +42,23 @@ class UpdateCouponUsages
     /**
      * Executes the current command
      *
-     * @param OrderInterface $subject
+     * @param CartInterface $quote
      * @param bool $increment
-     * @return OrderInterface
+     * @return void
      */
-    public function execute(OrderInterface $subject, bool $increment): OrderInterface
+    public function execute(CartInterface $quote, bool $increment): void
     {
-        if (!$subject || !$subject->getAppliedRuleIds()) {
-            return $subject;
+        if (!$quote->getAppliedRuleIds()) {
+            return;
         }
 
         /** @var UpdateInfo $updateInfo */
         $updateInfo = $this->updateInfoFactory->create();
-        $updateInfo->setAppliedRuleIds(explode(',', $subject->getAppliedRuleIds()));
-        $updateInfo->setCouponCode((string)$subject->getCouponCode());
-        $updateInfo->setCustomerId((int)$subject->getCustomerId());
+        $updateInfo->setAppliedRuleIds(explode(',', $quote->getAppliedRuleIds()));
+        $updateInfo->setCouponCode((string)$quote->getCouponCode());
+        $updateInfo->setCustomerId((int)$quote->getCustomerId());
         $updateInfo->setIsIncrement($increment);
 
         $this->couponUsageProcessor->process($updateInfo);
-
-        return $subject;
     }
 }

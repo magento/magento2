@@ -35,6 +35,7 @@
     <preference for="Magento\Catalog\Api\Data\ProductAttributeTypeInterface" type="Magento\Catalog\Model\Product\Attribute\Type" />
     <preference for="Magento\Catalog\Api\ProductAttributeGroupRepositoryInterface" type="Magento\Catalog\Model\ProductAttributeGroupRepository" />
     <preference for="Magento\Catalog\Api\ProductAttributeOptionManagementInterface" type="Magento\Catalog\Model\Product\Attribute\OptionManagement" />
+    <preference for="Magento\Catalog\Api\ProductAttributeOptionUpdateInterface" type="Magento\Catalog\Model\Product\Attribute\OptionManagement" />
     <preference for="Magento\Catalog\Api\ProductLinkRepositoryInterface" type="Magento\Catalog\Model\ProductLink\Repository" />
     <preference for="Magento\Catalog\Api\Data\ProductAttributeSearchResultsInterface" type="Magento\Catalog\Model\ProductAttributeSearchResults" />
     <preference for="Magento\Catalog\Api\Data\CategoryAttributeSearchResultsInterface" type="Magento\Catalog\Model\CategoryAttributeSearchResults" />
