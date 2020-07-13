@@ -3,17 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GroupedProduct\Test\Unit\Model\Sales\AdminOrder\Product\Quote\Plugin;
 
-use Magento\GroupedProduct\Model\Sales\AdminOrder\Product\Quote\Plugin\Initializer as QuoteInitializerPlugin;
-use Magento\Sales\Model\AdminOrder\Product\Quote\Initializer as QuoteInitializer;
-use Magento\Quote\Model\Quote;
 use Magento\Catalog\Model\Product;
-use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\GroupedProduct\Model\Sales\AdminOrder\Product\Quote\Plugin\Initializer as QuoteInitializerPlugin;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\Quote\Item as QuoteItem;
+use Magento\Sales\Model\AdminOrder\Product\Quote\Initializer as QuoteInitializer;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class InitializerTest extends \PHPUnit\Framework\TestCase
+class InitializerTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -21,36 +25,36 @@ class InitializerTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var QuoteInitializerPlugin|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteInitializerPlugin|MockObject
      */
     private $plugin;
 
     /**
-     * @var QuoteInitializer|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteInitializer|MockObject
      */
     private $initializer;
 
     /**
-     * @var Quote|\PHPUnit_Framework_MockObject_MockObject
+     * @var Quote|MockObject
      */
     private $quote;
 
     /**
-     * @var QuoteItem|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteItem|MockObject
      */
     private $quoteItem;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     private $product;
 
     /**
-     * @var DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataObject|MockObject
      */
     private $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 

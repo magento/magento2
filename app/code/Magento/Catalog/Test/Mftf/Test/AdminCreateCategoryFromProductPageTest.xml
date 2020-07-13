@@ -21,13 +21,13 @@
         <before>
             <!-- Login as admin -->
             <createData entity="SimpleTwo" stepKey="simpleProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
             <!-- Delete the created category -->
             <actionGroup ref="DeleteMostRecentCategoryActionGroup" stepKey="getRidOfCreatedCategory"/>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
         </after>
 

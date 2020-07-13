@@ -174,17 +174,7 @@
                 <label translate="true">Company</label>
             </settings>
         </field>
-        <field name="city" sortOrder="80" formElement="input">
-            <settings>
-                <dataType>text</dataType>
-                <label translate="true">City</label>
-                <visible>true</visible>
-                <validation>
-                    <rule name="required-entry" xsi:type="boolean">true</rule>
-                </validation>
-            </settings>
-        </field>
-        <field name="country_id" component="Magento_Customer/js/form/element/country" sortOrder="90" formElement="select">
+        <field name="country_id" component="Magento_Customer/js/form/element/country" sortOrder="80" formElement="select">
             <settings>
                 <validation>
                     <rule name="required-entry" xsi:type="boolean">true</rule>
@@ -211,6 +201,16 @@
                     </settings>
                 </select>
             </formElements>
+        </field>
+        <field name="city" sortOrder="100" formElement="input">
+            <settings>
+                <dataType>text</dataType>
+                <label translate="true">City</label>
+                <visible>true</visible>
+                <validation>
+                    <rule name="required-entry" xsi:type="boolean">true</rule>
+                </validation>
+            </settings>
         </field>
         <field name="postcode" component="Magento_Ui/js/form/element/post-code" sortOrder="120" formElement="input">
             <settings>

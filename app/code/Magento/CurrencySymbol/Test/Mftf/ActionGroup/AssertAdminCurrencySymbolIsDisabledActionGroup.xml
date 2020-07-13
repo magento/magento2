@@ -14,6 +14,9 @@
         </arguments>
 
         <grabAttributeFrom selector="{{AdminCurrencySymbolsGridSection.currencyElement(currency)}}" userInput="disabled" stepKey="grabDisabledAttribute"/>
-        <assertEquals expected='true' expectedType="string" actual="$grabDisabledAttribute" stepKey="assertInputIsDisabled"/>
+        <assertEquals stepKey="assertInputIsDisabled">
+			<actualResult type="const">$grabDisabledAttribute</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
     </actionGroup>
 </actionGroups>

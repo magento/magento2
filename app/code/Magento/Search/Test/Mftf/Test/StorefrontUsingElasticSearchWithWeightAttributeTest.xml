@@ -22,7 +22,7 @@
             <!--Create Simple Product with weight-->
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct"/>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete create product -->
@@ -37,7 +37,7 @@
             <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveAttributeChanges"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
             <!-- Logout from admin -->
-            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <!-- Step 2 -->
         <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openWeightProductAttribute">
@@ -47,7 +47,7 @@
         <actionGroup ref="AdminSetUseInSearchValueForProductAttributeActionGroup" stepKey="makeAttributeSearchableInAQuickSearch"/>
         <actionGroup ref="SaveProductAttributeActionGroup" stepKey="saveAttribute"/>
         <!-- Step 3 -->
-        <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+        <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         <!-- Step 4 -->
         <magentoCLI command="cache:clean" arguments="full_page" stepKey="clearFPC"/>
         <!-- Step 5 -->

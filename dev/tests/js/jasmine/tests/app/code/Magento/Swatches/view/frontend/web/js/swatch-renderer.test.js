@@ -65,13 +65,13 @@ define([
         });
 
         it('check swatch thumbnail image height attribute', function () {
-            expect(html.hasAttribute('thumb-height')).toBe(true);
-            expect(html.getAttribute('thumb-height')).toEqual(swathThumbImageHeight);
+            expect(html.hasAttribute('data-thumb-height')).toBe(true);
+            expect(html.getAttribute('data-thumb-height')).toEqual(swathThumbImageHeight);
         });
 
         it('check swatch thumbnail image width attribute', function () {
-            expect(html.hasAttribute('thumb-width')).toBe(true);
-            expect(html.getAttribute('thumb-width')).toEqual(swathThumbImageWidth);
+            expect(html.hasAttribute('data-thumb-width')).toBe(true);
+            expect(html.getAttribute('data-thumb-width')).toEqual(swathThumbImageWidth);
         });
 
         it('check swatch image styles', function () {
@@ -100,7 +100,7 @@ define([
         });
 
         it('check getSelectedOptionPriceIndex', function () {
-            var optionMock = '<div class="swatch-attribute" attribute-id="2" option-selected="4"></div>',
+            var optionMock = '<div class="swatch-attribute" data-attribute-id="2" data-option-selected="4"></div>',
                 element = $('<div class="' + widget.options.tooltipClass +
                     '"><div class="image"></div><div class="title"></div><div class="corner"></div>' +
                     optionMock + '</div>'

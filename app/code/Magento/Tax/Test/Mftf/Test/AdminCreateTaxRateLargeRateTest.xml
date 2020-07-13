@@ -19,7 +19,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRateIndex"/>
@@ -57,7 +57,7 @@
         <seeInField selector="{{AdminTaxRateFormSection.zipCode}}" userInput="*" stepKey="seeZipCode"/>
         <seeOptionIsSelected selector="{{AdminTaxRateFormSection.country}}" userInput="France" stepKey="seeCountry2"/>
         <seeOptionIsSelected selector="{{AdminTaxRateFormSection.state}}" userInput="Val-d'Oise" stepKey="seeState"/>
-        <seeInField selector="{{AdminTaxRateFormSection.rate}}" userInput="999" stepKey="seeRate"/>
+        <seeInField selector="{{AdminTaxRateFormSection.rate}}" userInput="999.0000" stepKey="seeRate"/>
 
         <!-- Verify we see expected values on the tax rule form page -->
         <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleIndex1"/>

@@ -23,7 +23,7 @@ class StoreConfigResolverTest extends GraphQlAbstract
     /** @var  ObjectManager */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -91,6 +91,6 @@ QUERY;
             $response['storeConfig']['secure_base_static_url']
         );
         $this->assertEquals($storeConfig->getSecureBaseMediaUrl(), $response['storeConfig']['secure_base_media_url']);
-        $this->assertEquals('Test Store', $response['storeConfig']['store_name']);
+        $this->assertEquals($store->getName(), $response['storeConfig']['store_name']);
     }
 }

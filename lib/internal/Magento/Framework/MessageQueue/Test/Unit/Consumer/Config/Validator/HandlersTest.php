@@ -3,15 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\MessageQueue\Test\Unit\Consumer\Config\Validator;
 
 use Magento\Framework\MessageQueue\Consumer\Config\Validator\Handlers as HandlersValidator;
 use Magento\Framework\Reflection\MethodsMap;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class HandlersTest extends \PHPUnit\Framework\TestCase
+class HandlersTest extends TestCase
 {
     /**
-     * @var MethodsMap|\PHPUnit_Framework_MockObject_MockObject
+     * @var MethodsMap|MockObject
      */
     private $methodsMap;
 
@@ -23,10 +28,12 @@ class HandlersTest extends \PHPUnit\Framework\TestCase
     /**
      * Initialize parameters
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->methodsMap = $this->getMockBuilder(MethodsMap::class)->disableOriginalConstructor()->getMock();
+        $objectManager = new ObjectManager($this);
+        $this->methodsMap = $this->getMockBuilder(MethodsMap::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->validator = $objectManager->getObject(HandlersValidator::class, ['methodsMap' => $this->methodsMap]);
     }
 

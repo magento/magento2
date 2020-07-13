@@ -24,7 +24,7 @@ class TemplateTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->model = new Template(

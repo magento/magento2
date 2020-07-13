@@ -8,7 +8,7 @@
 <!--@vars {
 "var formattedBillingAddress|raw":"Billing Address",
 "var order_data.email_customer_note|escape|nl2br":"Email Order Note",
-"var order.billing_address.name":"Guest Customer Name",
+"var order_data.customer_name":"Guest Customer Name",
 "var created_at_formatted":"Order Created At (datetime)",
 "var order.increment_id":"Order Id",
 "layout handle=\"sales_email_order_items\" order=$order":"Order Items Grid",
@@ -19,6 +19,7 @@
 "var store.frontend_name":"Store Frontend Name",
 "var store_email":"Store Email",
 "var order":"Order",
+"var order_id": "Order DB Id",
 "var order_data.is_not_virtual":"Order Type"
 } @-->
 {{template config_path="design/email/header_template"}}
@@ -26,7 +27,7 @@
 <table>
     <tr class="email-intro">
         <td>
-            <p class="greeting">{{trans "%name," name=$order.billing_address.name}}</p>
+            <p class="greeting">{{trans "%name," name=$order_data.customer_name}}</p>
             <p>
                 {{trans "Thank you for your order from %store_name." store_name=$store.frontend_name}}
                 {{trans "Once your package ships we will send you a tracking number."}}
@@ -82,7 +83,7 @@
                     {{/depend}}
                 </tr>
             </table>
-            {{layout handle="sales_email_order_items" order=$order}}
+            {{layout handle="sales_email_order_items" order_id=$order_id}}
         </td>
     </tr>
 </table>

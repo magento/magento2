@@ -10,6 +10,8 @@ use Magento\AdvancedSearch\Model\Client\ClientInterface;
 
 /**
  * Elasticsearch client
+ *
+ * @deprecated the Elasticsearch 5 doesn't supported due to EOL
  */
 class Elasticsearch implements ClientInterface
 {
@@ -274,7 +276,7 @@ class Elasticsearch implements ClientInterface
                                 'match' => 'price_*',
                                 'match_mapping_type' => 'string',
                                 'mapping' => [
-                                    'type' => 'float',
+                                    'type' => 'double',
                                     'store' => true,
                                 ],
                             ],

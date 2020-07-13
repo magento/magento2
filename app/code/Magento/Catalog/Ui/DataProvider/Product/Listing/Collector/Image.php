@@ -118,14 +118,18 @@ class Image implements ProductRenderCollectorInterface
                     [$product, $imageCode, (int) $productRender->getStoreId(), $image]
                 );
 
+            try {
+                $resizedInfo = $helper->getResizedImageInfo();
+            } catch (NotLoadInfoImageException $exception) {
+                $resizedInfo = [$helper->getWidth(), $helper->getHeight()];
+            }
+
             $image->setCode($imageCode);
-            $height = $helper->getHeight();
-            $image->setHeight($height);
-            $width = $helper->getWidth();
-            $image->setWidth($width);
+            $image->setHeight($helper->getHeight());
+            $image->setWidth($helper->getWidth());
             $image->setLabel($helper->getLabel());
-            $image->setResizedHeight($height);
-            $image->setResizedWidth($width);
+            $image->setResizedHeight($resizedInfo[1]);
+            $image->setResizedWidth($resizedInfo[0]);
 
             $images[] = $image;
         }

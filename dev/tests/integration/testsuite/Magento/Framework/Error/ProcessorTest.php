@@ -19,7 +19,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->processor = $this->createProcessor();
     }
@@ -28,7 +28,7 @@ class ProcessorTest extends \PHPUnit\Framework\TestCase
      * {@inheritdoc}
      * @throws \Exception
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $reportDir = $this->processor->_reportDir;
         $this->removeDirRecursively($reportDir);

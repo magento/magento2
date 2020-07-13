@@ -14,7 +14,7 @@
             <stories value="View swatches in product listing"/>
             <title value="Customers can filter products using image swatches"/>
             <description value="Customers can filter products using image swatches"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-3461"/>
             <group value="Swatches"/>
         </annotations>
@@ -24,18 +24,17 @@
             <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Begin creating a new product attribute -->
-        <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
-        <waitForPageLoad stepKey="waitForNewProductAttributePage"/>
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="goToNewProductAttributePage"/>
         <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
 
         <!-- Select visual swatch -->
@@ -55,6 +54,7 @@
         <click selector="{{AdminManageSwatchSection.nthUploadFile('1')}}" stepKey="clickUploadFile1"/>
         <attachFile selector="input[name='datafile']" userInput="adobe-thumb.jpg" stepKey="attachFile1"/>
         <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('0')}}" userInput="adobe-thumb" stepKey="fillAdmin1"/>
+        <click selector="{{AdminManageSwatchSection.swatchWindow('0')}}" stepKey="clicksWatchWindow1"/>
 
         <!-- Set swatch #2 image using the file upload -->
         <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch2"/>
@@ -115,14 +115,14 @@
         <click selector="{{StorefrontCategorySidebarSection.filterOptionTitle(ProductAttributeFrontendLabel.label)}}" stepKey="expandAttribute"/>
         <grabAttributeFrom selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '1')}}" userInput="style" stepKey="grabSwatch1"/>
         <grabAttributeFrom selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '2')}}" userInput="style" stepKey="grabSwatch2"/>
-        <assertContains stepKey="assertSwatch1">
+        <assertStringContainsString stepKey="assertSwatch1">
             <expectedResult type="string">adobe-thumb</expectedResult>
             <actualResult type="string">{$grabSwatch1}</actualResult>
-        </assertContains>
-        <assertContains stepKey="assertSwatch2">
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="assertSwatch2">
             <expectedResult type="string">adobe-small</expectedResult>
             <actualResult type="string">{$grabSwatch2}</actualResult>
-        </assertContains>
+        </assertStringContainsString>
 
         <!-- Click a swatch and expect to see the configurable product, not see the simple product -->
         <click selector="{{StorefrontCategorySidebarSection.attributeNthOption(ProductAttributeFrontendLabel.label, '1')}}" stepKey="filterBySwatch1"/>

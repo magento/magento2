@@ -5,16 +5,22 @@
  */
 declare(strict_types=1);
 
-require 'searchable_attribute.php';
-
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Eav\Model\Config;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/CatalogSearch/_files/searchable_attribute.php');
 
 $objectManager = Bootstrap::getObjectManager();
+/** @var Config $eavConfig */
+$eavConfig = $objectManager->get(Config::class);
+$attribute = $eavConfig->getAttribute(Product::ENTITY, 'test_searchable_attribute');
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 /** @var ProductFactory $productFactory */
@@ -23,8 +29,9 @@ $product = $productFactory->create();
 $product->setTypeId(Type::TYPE_SIMPLE)
     ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([1])
-    ->setName('Simple')
-    ->setSku('1234-1234-1234-1234')
+    ->setName('Xbox')
+    ->setSku('nintendo-wii')
+    ->setUrlKey('not-related')
     ->setPrice(10)
     ->setTaxClassId(0)
     ->setVisibility(Visibility::VISIBILITY_BOTH)
@@ -43,8 +50,9 @@ $product = $productFactory->create();
 $product->setTypeId(Type::TYPE_SIMPLE)
     ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([1])
-    ->setName('1234-1234-1234-1234')
-    ->setSku('Simple')
+    ->setName('Nintendo Wii')
+    ->setSku('xbox')
+    ->setUrlKey('something-random')
     ->setPrice(10)
     ->setTaxClassId(0)
     ->setVisibility(Visibility::VISIBILITY_BOTH)
@@ -63,9 +71,10 @@ $product = $productFactory->create();
 $product->setTypeId(Type::TYPE_SIMPLE)
     ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([1])
-    ->setName('Product with description')
-    ->setSku('product_with_description')
-    ->setDescription('Simple')
+    ->setName('Console description')
+    ->setSku('console_description')
+    ->setUrlKey('console-description')
+    ->setDescription('xbox')
     ->setPrice(10)
     ->setTaxClassId(0)
     ->setVisibility(Visibility::VISIBILITY_BOTH)
@@ -84,13 +93,14 @@ $product = $productFactory->create();
 $product->setTypeId(Type::TYPE_SIMPLE)
     ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([1])
-    ->setName('Product with attribute')
-    ->setSku('product_with_attribute')
+    ->setName('Gamecube attribute')
+    ->setSku('gamecube_attribute')
+    ->setUrlKey('gamecube-attribute')
     ->setPrice(10)
     ->setTaxClassId(0)
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
-    ->setTestSearchableAttribute($attribute->getSource()->getOptionId('Simple'))
+    ->setTestSearchableAttribute($attribute->getSource()->getOptionId('xbox'))
     ->setStockData(
         [
             'use_config_manage_stock' => 1,

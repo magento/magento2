@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-require __DIR__ . '/../../Customer/_files/customer.php';
-require __DIR__ . '/../../Customer/_files/customer_two_addresses.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer.php');
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer_two_addresses.php');
 
 \Magento\TestFramework\Helper\Bootstrap::getInstance()->loadArea('adminhtml');
 

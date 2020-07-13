@@ -157,12 +157,12 @@ class Config
 
     /**
      * @param \Magento\Framework\App\CacheInterface $cache
-     * @param \Magento\Eav\Model\Entity\TypeFactory $entityTypeFactory
-     * @param \Magento\Eav\Model\ResourceModel\Entity\Type\CollectionFactory $entityTypeCollectionFactory
+     * @param Entity\TypeFactory $entityTypeFactory
+     * @param ResourceModel\Entity\Type\CollectionFactory $entityTypeCollectionFactory
      * @param \Magento\Framework\App\Cache\StateInterface $cacheState
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
-     * @param SerializerInterface $serializer
-     * @param ScopeConfigInterface $scopeConfig
+     * @param SerializerInterface|null $serializer
+     * @param ScopeConfigInterface|null $scopeConfig
      * @param array $attributesForPreload
      * @codeCoverageIgnore
      */
@@ -374,7 +374,9 @@ class Config
         }
         \Magento\Framework\Profiler::start('EAV: ' . __METHOD__, ['group' => 'EAV', 'method' => __METHOD__]);
 
-        if ($this->isCacheEnabled() && ($cache = $this->_cache->load(self::ENTITIES_CACHE_ID))) {
+        if ($this->isCacheEnabled() &&
+            ($cache = $this->_cache->load(self::ENTITIES_CACHE_ID))
+        ) {
             $this->_entityTypeData = $this->serializer->unserialize($cache);
             foreach ($this->_entityTypeData as $typeCode => $data) {
                 $typeId = $data['entity_type_id'];
