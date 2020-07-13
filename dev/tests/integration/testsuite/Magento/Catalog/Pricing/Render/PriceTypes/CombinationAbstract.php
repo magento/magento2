@@ -5,12 +5,16 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Catalog\Pricing\Render;
+namespace Magento\Catalog\Pricing\Render\PriceTypes;
 
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use Magento\Catalog\Api\Data\ProductCustomOptionInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductTierPriceExtensionFactory;
 use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
+use Magento\Catalog\Model\Product\Option;
 use Magento\CatalogRule\Api\CatalogRuleRepositoryInterface;
 use Magento\CatalogRule\Api\Data\RuleInterface;
 use Magento\CatalogRule\Api\Data\RuleInterfaceFactory;
@@ -20,74 +24,84 @@ use Magento\Customer\Model\Session;
 use Magento\Framework\Registry;
 use Magento\Framework\View\Result\Page;
 use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use const null;
 
 /**
- * Assertions related to check product price rendering with combination of different price types.
+ * Base class for combination of different price types tests.
  *
- * @magentoDbIsolation disabled
- * @magentoAppArea frontend
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CombinationWithDifferentTypePricesTest extends TestCase
+abstract class CombinationAbstract extends TestCase
 {
     /**
      * @var ObjectManager
      */
-    private $objectManager;
+    protected $objectManager;
 
     /**
      * @var Page
      */
-    private $page;
+    protected $page;
 
     /**
      * @var Registry
      */
-    private $registry;
+    protected $registry;
 
     /**
      * @var IndexBuilder
      */
-    private $indexBuilder;
+    protected $indexBuilder;
 
     /**
      * @var Session
      */
-    private $customerSession;
+    protected $customerSession;
 
     /**
      * @var WebsiteRepositoryInterface
      */
-    private $websiteRepository;
+    protected $websiteRepository;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
 
     /**
      * @var ProductRepositoryInterface
      */
-    private $productRepository;
+    protected $productRepository;
 
     /**
      * @var RuleInterfaceFactory
      */
-    private $catalogRuleFactory;
+    protected $catalogRuleFactory;
 
     /**
      * @var CatalogRuleRepositoryInterface
      */
-    private $catalogRuleRepository;
+    protected $catalogRuleRepository;
 
     /**
      * @var ProductTierPriceInterfaceFactory
      */
-    private $productTierPriceFactory;
+    protected $productTierPriceFactory;
 
     /**
      * @var ProductTierPriceExtensionFactory
      */
-    private $productTierPriceExtensionFactory;
+    protected $productTierPriceExtensionFactory;
+
+    /**
+     * @var ProductCustomOptionInterfaceFactory
+     */
+    private $productCustomOptionFactory;
 
     /**
      * @inheritdoc
@@ -101,12 +115,14 @@ class CombinationWithDifferentTypePricesTest extends TestCase
         $this->indexBuilder = $this->objectManager->get(IndexBuilder::class);
         $this->customerSession = $this->objectManager->get(Session::class);
         $this->websiteRepository = $this->objectManager->get(WebsiteRepositoryInterface::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
         $this->catalogRuleFactory = $this->objectManager->get(RuleInterfaceFactory::class);
         $this->catalogRuleRepository = $this->objectManager->get(CatalogRuleRepositoryInterface::class);
         $this->productTierPriceFactory = $this->objectManager->get(ProductTierPriceInterfaceFactory::class);
         $this->productTierPriceExtensionFactory = $this->objectManager->get(ProductTierPriceExtensionFactory::class);
-        $this->productRepository->cleanCache();
+        $this->productCustomOptionFactory = $this->objectManager->get(ProductCustomOptionInterfaceFactory::class);
     }
 
     /**
@@ -116,29 +132,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     {
         parent::tearDown();
         $this->registry->unregister('product');
-    }
-
-    /**
-     * Assert that product price rendered with expected special and regular prices if
-     * product has special price which lower than regular and tier prices.
-     *
-     * @magentoDataFixture Magento/Catalog/_files/product_special_price.php
-     *
-     * @dataProvider tierPricesForAllCustomerGroupsDataProvider
-     *
-     * @param float $specialPrice
-     * @param float $regularPrice
-     * @param array $tierPrices
-     * @param array|null $tierMessageConfig
-     * @return void
-     */
-    public function testRenderSpecialPriceInCombinationWithTierPrice(
-        float $specialPrice,
-        float $regularPrice,
-        array $tierPrices,
-        ?array $tierMessageConfig
-    ): void {
-        $this->assertRenderedPrices($specialPrice, $regularPrice, $tierPrices, $tierMessageConfig);
+        $this->registry->unregister('current_product');
     }
 
     /**
@@ -150,77 +144,46 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     {
         return [
             'fixed_tier_price_with_qty_1' => [
-                5.99,
-                10,
-                [
-                    ['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 1, 'value' => 9],
+                'special_price' => 5.99,
+                'regular_price' => 10,
+                'tier_data' => [
+                    'prices' => [['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 1, 'value' => 9]],
+                    'message_config' => null,
                 ],
-                null
             ],
             'fixed_tier_price_with_qty_2' => [
-                5.99,
-                10,
-                [
-                    ['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 2, 'value' => 5],
+                'special_price' => 5.99,
+                'regular_price' => 10,
+                'tier_data' => [
+                    'prices' => [['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 2, 'value' => 5]],
+                    'message_config' => ['qty' => 2, 'price' => 5.00, 'percent' => 17],
                 ],
-                ['qty' => 2, 'price' => 5.00, 'percent' => 17],
             ],
             'percent_tier_price_with_qty_2' => [
-                5.99,
-                10,
-                [
-                    ['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 2, 'percent_value' => 70],
+                'special_price' => 5.99,
+                'regular_price' => 10,
+                'tier_data' => [
+                    'prices' => [['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 2, 'percent_value' => 70]],
+                    'message_config' => ['qty' => 2, 'price' => 3.00, 'percent' => 70],
                 ],
-                ['qty' => 2, 'price' => 3.00, 'percent' => 70],
             ],
             'fixed_tier_price_with_qty_1_is_lower_than_special' => [
-                5,
-                10,
-                [
-                    ['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 1, 'value' => 5],
+                'special_price' => 5,
+                'regular_price' => 10,
+                'tier_data' => [
+                    'prices' => [['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 1, 'value' => 5]],
+                    'message_config' => null,
                 ],
-                null
             ],
             'percent_tier_price_with_qty_1_is_lower_than_special' => [
-                3,
-                10,
-                [
-                    ['customer_group_id' => Group::NOT_LOGGED_IN_ID, 'qty' => 1, 'percent_value' => 70],
+                'special_price' => 3,
+                'regular_price' => 10,
+                'tier_data' => [
+                    'prices' => [['customer_group_id' => Group::NOT_LOGGED_IN_ID, 'qty' => 1, 'percent_value' => 70]],
+                    'message_config' => null,
                 ],
-                null
             ],
         ];
-    }
-
-    /**
-     * Assert that product price rendered with expected special and regular prices if
-     * product has special price which lower than regular and tier prices and customer is logged.
-     *
-     * @magentoDataFixture Magento/Catalog/_files/product_special_price.php
-     * @magentoDataFixture Magento/Customer/_files/customer.php
-     *
-     * @magentoAppIsolation enabled
-     *
-     * @dataProvider tierPricesForLoggedCustomerGroupDataProvider
-     *
-     * @param float $specialPrice
-     * @param float $regularPrice
-     * @param array $tierPrices
-     * @param array|null $tierMessageConfig
-     * @return void
-     */
-    public function testRenderSpecialPriceInCombinationWithTierPriceForLoggedInUser(
-        float $specialPrice,
-        float $regularPrice,
-        array $tierPrices,
-        ?array $tierMessageConfig
-    ): void {
-        try {
-            $this->customerSession->setCustomerId(1);
-            $this->assertRenderedPrices($specialPrice, $regularPrice, $tierPrices, $tierMessageConfig);
-        } finally {
-            $this->customerSession->setCustomerId(null);
-        }
     }
 
     /**
@@ -232,50 +195,22 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     {
         return [
             'fixed_tier_price_with_qty_1' => [
-                5.99,
-                10,
-                [
-                    ['customer_group_id' => 1, 'qty' => 1, 'value' => 9],
+                'special_price' => 5.99,
+                'regular_price' => 10,
+                'tier_data' => [
+                    'prices' => [['customer_group_id' => 1, 'qty' => 1, 'value' => 9]],
+                    'message_config' => null,
                 ],
-                null
             ],
             'percent_tier_price_with_qty_1' => [
-                5.99,
-                10,
-                [
-                    ['customer_group_id' => 1, 'qty' => 1, 'percent_value' => 30],
+                'special_price' => 5.99,
+                'regular_price' => 10,
+                'tier_data' => [
+                    'prices' => [['customer_group_id' => 1, 'qty' => 1, 'percent_value' => 30]],
+                    'message_config' => null,
                 ],
-                null
             ],
         ];
-    }
-
-    /**
-     * Assert that product price rendered with expected special and regular prices if
-     * product has catalog rule price with different type of prices.
-     *
-     * @magentoDataFixture Magento/Catalog/_files/product_special_price.php
-     * @magentoDataFixture Magento/CatalogRule/_files/delete_catalog_rule_data.php
-     *
-     * @dataProvider catalogRulesDataProvider
-     *
-     * @param float $specialPrice
-     * @param float $regularPrice
-     * @param array $catalogRules
-     * @param array $tierPrices
-     * @param array|null $tierMessageConfig
-     * @return void
-     */
-    public function testRenderCatalogRulePriceInCombinationWithDifferentPriceTypes(
-        float $specialPrice,
-        float $regularPrice,
-        array $catalogRules,
-        array $tierPrices,
-        ?array $tierMessageConfig
-    ): void {
-        $this->createCatalogRulesForProduct($catalogRules);
-        $this->indexBuilder->reindexFull();
-        $this->assertRenderedPrices($specialPrice, $regularPrice, $tierPrices, $tierMessageConfig);
     }
 
     /**
@@ -287,84 +222,99 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     {
         return [
             'fixed_catalog_rule_price_more_than_special_price' => [
-                5.99,
-                10,
-                [
+                'special_price' => 5.99,
+                'regular_price' => 10,
+                'catalog_rules' => [
                     [RuleInterface::DISCOUNT_AMOUNT => 2],
                 ],
-                [],
-                null
+                'tier_data' => ['prices' => [], 'message_config' => null],
             ],
             'fixed_catalog_rule_price_lower_than_special_price' => [
-                2,
-                10,
-                [
+                'special_price' => 2,
+                'regular_price' => 10,
+                'catalog_rules' => [
                     [RuleInterface::DISCOUNT_AMOUNT => 8],
                 ],
-                [],
-                null
+                'tier_data' => ['prices' => [], 'message_config' => null],
             ],
             'fixed_catalog_rule_price_more_than_tier_price' => [
-                4,
-                10,
-                [
+                'special_price' => 4,
+                'regular_price' => 10,
+                'catalog_rules' => [
                     [RuleInterface::DISCOUNT_AMOUNT => 6],
                 ],
-                [
-                    ['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 2, 'percent_value' => 70],
+                'tier_data' => [
+                    'prices' => [['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 2, 'percent_value' => 70]],
+                    'message_config' => ['qty' => 2, 'price' => 3.00, 'percent' => 70],
                 ],
-                ['qty' => 2, 'price' => 3.00, 'percent' => 70],
             ],
             'fixed_catalog_rule_price_lower_than_tier_price' => [
-                2,
-                10,
-                [
+                'special_price' => 2,
+                'regular_price' => 10,
+                'catalog_rules' => [
                     [RuleInterface::DISCOUNT_AMOUNT => 7],
                 ],
-                [
-                    ['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 1, 'value' => 2],
+                'tier_data' => [
+                    'prices' => [['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 1, 'value' => 2]],
+                    'message_config' => null,
                 ],
-                null
             ],
             'adjust_percent_catalog_rule_price_lower_than_special_price' => [
-                4.50,
-                10,
-                [
+                'special_price' => 4.50,
+                'regular_price' => 10,
+                'catalog_rules' => [
                     [RuleInterface::DISCOUNT_AMOUNT => 45, RuleInterface::SIMPLE_ACTION => 'to_percent'],
                 ],
-                [],
-                null
+                'tier_data' => ['prices' => [], 'message_config' => null],
             ],
             'adjust_percent_catalog_rule_price_lower_than_tier_price' => [
-                3,
-                10,
-                [
+                'special_price' => 3,
+                'regular_price' => 10,
+                'catalog_rules' => [
                     [RuleInterface::DISCOUNT_AMOUNT => 30, RuleInterface::SIMPLE_ACTION => 'to_percent'],
                 ],
-                [
-                    ['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 1, 'value' => 3.50],
+                'tier_data' => [
+                    'prices' => [['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 1, 'value' => 3.50]],
+                    'message_config' => null,
                 ],
-                null
             ],
             'percent_catalog_rule_price_lower_than_special_price' => [
-                2,
-                10,
-                [
+                'special_price' => 2,
+                'regular_price' => 10,
+                'catalog_rules' => [
                     [RuleInterface::DISCOUNT_AMOUNT => 2, RuleInterface::SIMPLE_ACTION => 'to_fixed'],
                 ],
-                [],
-                null
+                'tier_data' => ['prices' => [], 'message_config' => null],
             ],
             'percent_catalog_rule_price_lower_than_tier_price' => [
-                1,
-                10,
-                [
+                'special_price' => 1,
+                'regular_price' => 10,
+                'catalog_rules' => [
                     [RuleInterface::DISCOUNT_AMOUNT => 1, RuleInterface::SIMPLE_ACTION => 'to_fixed'],
                 ],
-                [
-                    ['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 1, 'value' => 3],
+                'tier_data' => [
+                    'prices' => [['customer_group_id' => Group::CUST_GROUP_ALL, 'qty' => 1, 'value' => 3]],
+                    'message_config' => null,
                 ],
-                null
+            ],
+        ];
+    }
+
+    /**
+     * Data provider with percent customizable option prices.
+     *
+     * @return array
+     */
+    public function percentCustomOptionsDataProvider(): array
+    {
+        return [
+            'percent_option_for_product_without_special_price' => [
+                'option_price' => 5,
+                'product_prices' => ['special_price' => null,],
+            ],
+            'percent_option_for_product_with_special_price' => [
+                'option_price' => 3,
+                'product_prices' => ['special_price' => 5.99,],
             ],
         ];
     }
@@ -377,7 +327,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
      * @param float $regularPrice
      * @return void
      */
-    private function checkPrices(string $priceHtml, float $specialPrice, float $regularPrice): void
+    protected function checkPrices(string $priceHtml, float $specialPrice, float $regularPrice): void
     {
         $this->assertEquals(
             1,
@@ -403,7 +353,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
      * @param array $tierMessageConfig
      * @return void
      */
-    private function checkTierPriceMessage(string $priceHtml, array $tierMessageConfig): void
+    protected function checkTierPriceMessage(string $priceHtml, array $tierMessageConfig): void
     {
         $this->assertEquals(
             1,
@@ -418,26 +368,26 @@ class CombinationWithDifferentTypePricesTest extends TestCase
      * @param ProductInterface $product
      * @return string
      */
-    private function getPriceHtml(ProductInterface $product): string
+    protected function getPriceHtml(ProductInterface $product): string
     {
-        $this->registerProduct($product);
-        $this->page->addHandle([
-            'default',
-            'catalog_product_view',
-        ]);
-        $this->page->getLayout()->generateXml();
-        $priceHtml = '';
-        $availableChildNames = [
-            'product.info.price',
-            'product.price.tier'
-        ];
-        foreach ($this->page->getLayout()->getChildNames('product.info.main') as $childName) {
-            if (in_array($childName, $availableChildNames, true)) {
-                $priceHtml .= $this->page->getLayout()->renderElement($childName, false);
-            }
-        }
+        $this->preparePageLayout($product);
+        $priceHtml = $this->page->getLayout()->renderElement('product.info.price', false);
+        $priceHtml .= $this->page->getLayout()->renderElement('product.price.tier', false);
 
         return $priceHtml;
+    }
+
+    /**
+     * Render custom options price render template with product.
+     *
+     * @param ProductInterface $product
+     * @return string
+     */
+    protected function getCustomOptionsPriceHtml(ProductInterface $product): string
+    {
+        $this->preparePageLayout($product);
+
+        return  $this->page->getLayout()->renderElement('product.info.options', false);
     }
 
     /**
@@ -446,10 +396,12 @@ class CombinationWithDifferentTypePricesTest extends TestCase
      * @param ProductInterface $product
      * @return void
      */
-    private function registerProduct(ProductInterface $product): void
+    protected function registerProduct(ProductInterface $product): void
     {
         $this->registry->unregister('product');
         $this->registry->register('product', $product);
+        $this->registry->unregister('current_product');
+        $this->registry->register('current_product', $product);
     }
 
     /**
@@ -457,10 +409,14 @@ class CombinationWithDifferentTypePricesTest extends TestCase
      *
      * @param ProductInterface $product
      * @param array $tierPrices
+     * @param int $websiteId
      * @return ProductInterface
      */
-    private function createTierPricesForProduct(ProductInterface $product, array $tierPrices): ProductInterface
-    {
+    protected function createTierPricesForProduct(
+        ProductInterface $product,
+        array $tierPrices,
+        int $websiteId
+    ): ProductInterface {
         if (empty($tierPrices)) {
             return $product;
         }
@@ -468,7 +424,7 @@ class CombinationWithDifferentTypePricesTest extends TestCase
         $createdTierPrices = [];
         foreach ($tierPrices as $tierPrice) {
             $tierPriceExtensionAttribute = $this->productTierPriceExtensionFactory->create();
-            $tierPriceExtensionAttribute->setWebsiteId(0);
+            $tierPriceExtensionAttribute->setWebsiteId($websiteId);
 
             if (isset($tierPrice['percent_value'])) {
                 $tierPriceExtensionAttribute->setPercentageValue($tierPrice['percent_value']);
@@ -487,10 +443,35 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     }
 
     /**
+     * Add custom option to product with data.
+     *
+     * @param ProductInterface $product
+     * @return void
+     */
+    protected function addOptionToProduct(ProductInterface $product): void
+    {
+        $optionData = [
+            Option::KEY_PRODUCT_SKU => $product->getSku(),
+            Option::KEY_TITLE => 'Test option field title',
+            Option::KEY_TYPE => ProductCustomOptionInterface::OPTION_TYPE_FIELD,
+            Option::KEY_IS_REQUIRE => 0,
+            Option::KEY_PRICE => 50,
+            Option::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_PERCENT,
+            Option::KEY_SKU => 'test-option-field-title',
+        ];
+        $option = $this->productCustomOptionFactory->create(['data' => $optionData]);
+        $option->setProductSku($product->getSku());
+        $product->setOptions([$option]);
+        $product->setHasOptions(true);
+    }
+
+    /**
+     * Returns xpath for special price.
+     *
      * @param float $specialPrice
      * @return string
      */
-    private function getSpecialPriceXpath(float $specialPrice): string
+    protected function getSpecialPriceXpath(float $specialPrice): string
     {
         $pathsForSearch = [
             "//div[contains(@class, 'price-box') and contains(@class, 'price-final_price')]",
@@ -502,10 +483,12 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     }
 
     /**
+     * Returns xpath for regular price.
+     *
      * @param float $regularPrice
      * @return string
      */
-    private function getRegularPriceXpath(float $regularPrice): string
+    protected function getRegularPriceXpath(float $regularPrice): string
     {
         $pathsForSearch = [
             "//div[contains(@class, 'price-box') and contains(@class, 'price-final_price')]",
@@ -518,9 +501,11 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     }
 
     /**
+     * Returns xpath for regular price label.
+     *
      * @return string
      */
-    private function getRegularPriceLabelXpath(): string
+    protected function getRegularPriceLabelXpath(): string
     {
         $pathsForSearch = [
             "//div[contains(@class, 'price-box') and contains(@class, 'price-final_price')]",
@@ -533,13 +518,12 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     }
 
     /**
-     * Return tier price message xpath. Message must contain expected quantity,
-     * price and discount percent.
+     * Return tier price message xpath. Message must contain expected quantity, price and discount percent.
      *
      * @param array $expectedMessage
      * @return string
      */
-    private function getTierPriceMessageXpath(array $expectedMessage): string
+    protected function getTierPriceMessageXpath(array $expectedMessage): string
     {
         [$qty, $price, $percent] = array_values($expectedMessage);
         $liPaths = [
@@ -557,36 +541,60 @@ class CombinationWithDifferentTypePricesTest extends TestCase
     /**
      * Process test with combination of special and tier price.
      *
+     * @param string $sku
      * @param float $specialPrice
      * @param float $regularPrice
-     * @param array $tierPrices
-     * @param array|null $tierMessageConfig
+     * @param array $tierData
+     * @param int $websiteId
      * @return void
      */
-    private function assertRenderedPrices(
+    protected function assertRenderedPrices(
+        string $sku,
         float $specialPrice,
         float $regularPrice,
-        array $tierPrices,
-        ?array $tierMessageConfig
+        array $tierData,
+        int $websiteId = 0
     ): void {
-        $product = $this->productRepository->get('simple', false, null, true);
-        $product = $this->createTierPricesForProduct($product, $tierPrices);
+        $product = $this->getProduct($sku);
+        $product = $this->createTierPricesForProduct($product, $tierData['prices'], $websiteId);
         $priceHtml = $this->getPriceHtml($product);
         $this->checkPrices($priceHtml, $specialPrice, $regularPrice);
-        if (null !== $tierMessageConfig) {
-            $this->checkTierPriceMessage($priceHtml, $tierMessageConfig);
+        if (null !== $tierData['message_config']) {
+            $this->checkTierPriceMessage($priceHtml, $tierData['message_config']);
         }
+    }
+
+    /**
+     * Process test with combination of special and custom option price.
+     *
+     * @param string $sku
+     * @param float $optionPrice
+     * @param array $productPrices
+     * @return void
+     */
+    protected function assertRenderedCustomOptionPrices(
+        string $sku,
+        float $optionPrice,
+        array $productPrices
+    ): void {
+        $product = $this->getProduct($sku);
+        $product->addData($productPrices);
+        $this->addOptionToProduct($product);
+        $this->productRepository->save($product);
+        $priceHtml = $this->getCustomOptionsPriceHtml($this->getProduct($sku));
+        $this->assertContains(sprintf('data-price-amount="%s"', $optionPrice), $priceHtml);
     }
 
     /**
      * Create provided catalog rules.
      *
      * @param array $catalogRules
+     * @param string $websiteCode
      * @return void
      */
-    private function createCatalogRulesForProduct(array $catalogRules): void
+    protected function createCatalogRulesForProduct(array $catalogRules, string $websiteCode): void
     {
-        $baseWebsite = $this->websiteRepository->get('base');
+        $baseWebsite = $this->websiteRepository->get($websiteCode);
         $staticRuleData = [
             RuleInterface::IS_ACTIVE => 1,
             RuleInterface::NAME => 'Test rule name.',
@@ -604,5 +612,37 @@ class CombinationWithDifferentTypePricesTest extends TestCase
             $catalogRule = $this->catalogRuleFactory->create(['data' => $catalogRule]);
             $this->catalogRuleRepository->save($catalogRule);
         }
+    }
+
+    /**
+     * Loads product by sku.
+     *
+     * @param string $sku
+     * @return ProductInterface
+     */
+    protected function getProduct(string $sku): ProductInterface
+    {
+        return $this->productRepository->get(
+            $sku,
+            false,
+            null,
+            true
+        );
+    }
+
+    /**
+     * Prepares product page layout.
+     *
+     * @param ProductInterface $product
+     * @return void
+     */
+    private function preparePageLayout(ProductInterface $product): void
+    {
+        $this->registerProduct($product);
+        $this->page->addHandle([
+            'default',
+            'catalog_product_view',
+        ]);
+        $this->page->getLayout()->generateXml();
     }
 }
