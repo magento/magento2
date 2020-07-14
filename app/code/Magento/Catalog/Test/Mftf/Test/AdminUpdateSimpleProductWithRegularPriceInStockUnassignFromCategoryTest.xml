@@ -55,8 +55,7 @@
 
         <!--Search default simple product in the grid page -->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="OpenCategoryCatalogPage"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickExpandTree"/>
-        <waitForPageLoad stepKey="waitForCategoryToLoad"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$initialCategoryEntity.name$$)}}" stepKey="selectCategory"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <click selector="{{AdminCategoryProductsSection.sectionHeader}}" stepKey="clickAdminCategoryProductSection"/>
