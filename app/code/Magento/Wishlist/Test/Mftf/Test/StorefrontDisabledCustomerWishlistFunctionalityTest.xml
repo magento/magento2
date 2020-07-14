@@ -15,6 +15,7 @@
             <title value="Wishlist Functionality is disabled in system configurations and not visible on FE"/>
             <description value="Customer should not see wishlist functionality if it's disabled"/>
             <testCaseId value="MC-35200"/>
+            <severity value="AVERAGE"/>
             <group value="wishlist"/>
             <group value="configuration"/>
         </annotations>
