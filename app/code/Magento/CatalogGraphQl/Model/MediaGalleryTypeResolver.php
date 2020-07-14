@@ -23,11 +23,10 @@ class MediaGalleryTypeResolver implements TypeResolverInterface
     public function resolveType(array $data) : string
     {
         // resolve type based on the data
-        if (isset($data['media_type']) && $data['media_type'] == 'image') {
-            return 'ProductImage';
-        }
-        if (isset($data['media_type']) && $data['media_type'] == 'external-video') {
+        if (!empty($data['video_content'])) {
             return 'ProductVideo';
         }
+
+        return 'ProductImage';
     }
 }
