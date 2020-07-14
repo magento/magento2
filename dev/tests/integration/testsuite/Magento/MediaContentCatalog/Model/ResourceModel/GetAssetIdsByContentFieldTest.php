@@ -42,9 +42,10 @@ class GetAssetIdsByContentFieldTest extends TestCase
     /**
      * Test for getting asset id by category fields
      *
-     * @dataProvider testProvider
+     * @dataProvider dataProvider
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
      * @magentoDataFixture Magento/MediaContentCatalog/_files/category_with_asset.php
+     *
      * @param string $field
      * @param string $value
      * @param array $expectedAssetIds
@@ -61,9 +62,10 @@ class GetAssetIdsByContentFieldTest extends TestCase
     /**
      * Test for getting asset id by product fields
      *
-     * @dataProvider testProvider
+     * @dataProvider dataProvider
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
      * @magentoDataFixture Magento/MediaContentCatalog/_files/product_with_asset.php
+     *
      * @param string $field
      * @param string $value
      * @param array $expectedAssetIds
@@ -82,7 +84,7 @@ class GetAssetIdsByContentFieldTest extends TestCase
      *
      * @return array
      */
-    public static function testProvider(): array
+    public static function dataProvider(): array
     {
         return [
             [self::STATUS_FIELD, self::STATUS_ENABLED, [self::FIXTURE_ASSET_ID]],

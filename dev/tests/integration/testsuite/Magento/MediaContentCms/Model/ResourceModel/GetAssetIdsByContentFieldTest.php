@@ -43,7 +43,7 @@ class GetAssetIdsByContentFieldTest extends TestCase
     /**
      * Test for getting asset id by block field
      *
-     * @dataProvider testBlockDataProvider
+     * @dataProvider blockDataProvider
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
      * @magentoDataFixture Magento/MediaContentCms/_files/block_with_asset.php
      *
@@ -63,7 +63,7 @@ class GetAssetIdsByContentFieldTest extends TestCase
     /**
      * Test for getting asset id by page field
      *
-     * @dataProvider testPageDataProvider
+     * @dataProvider pageDataProvider
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
      * @magentoDataFixture Magento/MediaContentCms/_files/page_with_asset.php
      *
@@ -85,7 +85,7 @@ class GetAssetIdsByContentFieldTest extends TestCase
      *
      * @return array
      */
-    public static function testBlockDataProvider(): array
+    public static function blockDataProvider(): array
     {
         return [
             [self::STATUS_FIELD, self::STATUS_ENABLED, [self::FIXTURE_ASSET_ID]],
@@ -99,7 +99,7 @@ class GetAssetIdsByContentFieldTest extends TestCase
      *
      * @return array
      */
-    public static function testPageDataProvider(): array
+    public static function pageDataProvider(): array
     {
         return [
             [self::STATUS_FIELD, self::STATUS_ENABLED, [self::FIXTURE_ASSET_ID]],
