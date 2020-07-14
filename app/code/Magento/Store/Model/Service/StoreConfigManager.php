@@ -5,6 +5,9 @@
  */
 namespace Magento\Store\Model\Service;
 
+/**
+ * Allows to get store config
+ */
 class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterface
 {
     /**
@@ -53,6 +56,8 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
     }
 
     /**
+     * Get store configs
+     *
      * @param string[] $storeCodes list of stores by store codes, will return all if storeCodes is not set
      * @return \Magento\Store\Api\Data\StoreConfigInterface[]
      */
@@ -71,6 +76,8 @@ class StoreConfigManager implements \Magento\Store\Api\StoreConfigManagerInterfa
     }
 
     /**
+     * Get store config
+     *
      * @param \Magento\Store\Model\Store $store
      * @return \Magento\Store\Api\Data\StoreConfigInterface
      */
