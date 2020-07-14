@@ -8,5 +8,10 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="deleteBackup" extends="AdminBackupDeleteActionGroup" deprecated="Use DeleteBackupActionGroup"/>
+    <actionGroup name="AssertAdminCategoryIsListedInCategoriesTreeActionGroup">
+        <arguments>
+            <argument name="categoryName" type="string"/>
+        </arguments>
+        <seeElement selector="{{AdminCategorySidebarTreeSection.categoryInTree(categoryName)}}" stepKey="seeCategoryInTree"/>
+    </actionGroup>
 </actionGroups>
