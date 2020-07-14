@@ -88,7 +88,10 @@ class GetAssetsBySearchCriteria
                 ->where($resultCondition, null, Select::TYPE_CONDITION);
 
             if ($searchCriteria->getPageSize() || $searchCriteria->getCurrentPage()) {
-                $select->limit($searchCriteria->getPageSize(), $searchCriteria->getCurrentPage());
+                $select->limit(
+                    $searchCriteria->getPageSize(),
+                    $searchCriteria->getCurrentPage() * $searchCriteria->getPageSize()
+                );
             }
         
             $data = $this->resourceConnection->getConnection()->fetchAll($select);
