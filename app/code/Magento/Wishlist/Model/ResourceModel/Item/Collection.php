@@ -575,10 +575,15 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             $storeId = $this->_storeManager->getStore(\Magento\Store\Model\Store::ADMIN_CODE)->getId();
 
             $entityMetadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+            $linkField = $entityMetadata->getLinkField();
 
             $this->getSelect()->join(
+                ['product_entity' => $this->getTable('catalog_product_entity')],
+                'product_entity.entity_id = main_table.product_id',
+                []
+            )->join(
                 ['product_name_table' => $attribute->getBackendTable()],
-                'product_name_table.' . $entityMetadata->getLinkField() . ' = main_table.product_id' .
+                'product_name_table.' . $linkField . ' = product_entity.' . $linkField .
                 ' AND product_name_table.store_id = ' .
                 $storeId .
                 ' AND product_name_table.attribute_id = ' .
@@ -588,6 +593,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
             $this->_isProductNameJoined = true;
         }
+
         return $this;
     }
 
