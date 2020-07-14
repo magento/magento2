@@ -115,7 +115,7 @@ class UiComponentFactoryTest extends \PHPUnit\Framework\TestCase
         $name = "fieldset";
         $context = $this->createMock(\Magento\Framework\View\Element\UiComponent\ContextInterface::class);
         $arguments = ['context' => $context];
-        $defintionArguments = [
+        $definitionArguments = [
             'componentType' => 'select',
             'attributes' => [
                 'class' => '\Some\Class',
@@ -132,7 +132,7 @@ class UiComponentFactoryTest extends \PHPUnit\Framework\TestCase
         $this->dataMock->expects($this->once())
             ->method('get')
             ->with($name)
-            ->willReturn($defintionArguments);
+            ->willReturn($definitionArguments);
         $this->objectManagerMock->expects($this->once())
             ->method('create')
             ->with('\Some\Class', $expectedArguments);

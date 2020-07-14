@@ -3,18 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\Order\Email\Sender;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\Event\ManagerInterface;
 use Magento\Payment\Helper\Data as PaymentHelper;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Address\Renderer;
 use Magento\Sales\Model\Order\Email\Container\InvoiceIdentity;
 use Magento\Sales\Model\Order\Email\Container\Template;
 use Magento\Sales\Model\Order\Email\Sender;
 use Magento\Sales\Model\Order\Invoice;
 use Magento\Sales\Model\ResourceModel\Order\Invoice as InvoiceResource;
-use Magento\Sales\Model\Order\Address\Renderer;
-use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\DataObject;
 
 /**
  * Sends order invoice email to the customer.
@@ -106,6 +108,12 @@ class InvoiceSender extends Sender
             $order = $invoice->getOrder();
             $this->identityContainer->setStore($order->getStore());
 
+            if ($this->checkIfPartialInvoice($order, $invoice)) {
+                $order->setBaseSubtotal((float) $invoice->getBaseSubtotal());
+                $order->setBaseTaxAmount((float) $invoice->getBaseTaxAmount());
+                $order->setBaseShippingAmount((float) $invoice->getBaseShippingAmount());
+            }
+
             $transport = [
                 'order' => $order,
                 'order_id' => $order->getId(),
@@ -164,5 +172,19 @@ class InvoiceSender extends Sender
             $order->getPayment(),
             $this->identityContainer->getStore()->getStoreId()
         );
+    }
+
+    /**
+     * Check if the order contains partial invoice
+     *
+     * @param Order $order
+     * @param Invoice $invoice
+     * @return bool
+     */
+    private function checkIfPartialInvoice(Order $order, Invoice $invoice): bool
+    {
+        $totalQtyOrdered = (float) $order->getTotalQtyOrdered();
+        $totalQtyInvoiced = (float) $invoice->getTotalQty();
+        return $totalQtyOrdered !== $totalQtyInvoiced;
     }
 }
