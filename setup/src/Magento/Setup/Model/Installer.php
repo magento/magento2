@@ -25,6 +25,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
+use Magento\Framework\Mview\OldViews;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\FilePermissions;
 use Magento\Framework\Setup\InstallDataInterface;
@@ -248,6 +249,11 @@ class Installer
     private $patchApplierFactory;
 
     /**
+     * @var OldViews
+     */
+    private $oldViews;
+
+    /**
      * Constructor
      *
      * @param FilePermissions $filePermissions
@@ -320,6 +326,7 @@ class Installer
         $this->componentRegistrar = $componentRegistrar;
         $this->phpReadinessCheck = $phpReadinessCheck;
         $this->schemaPersistor = $this->objectManagerProvider->get()->get(SchemaPersistor::class);
+        $this->oldViews = $this->objectManagerProvider->get()->get(OldViews::class);
     }
 
     /**
@@ -1645,5 +1652,13 @@ class Installer
                 $typeName
             );
         }
+    }
+
+    /**
+     * Remove unused triggers from db
+     */
+    public function removeUnusedTriggers(): void
+    {
+        $this->oldViews->unsubscribe();
     }
 }
