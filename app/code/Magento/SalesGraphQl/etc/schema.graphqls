@@ -221,7 +221,7 @@ type CreditMemoItem implements CreditMemoItemInterface {
 }
 
 type BundleCreditMemoItem implements CreditMemoIntemInterface {
-    bundle_options: [ItemSelectedBundleOption]
+    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product")
 }
 
 type CreditMemoTotal @doc(description: "Credit memo price details") {
