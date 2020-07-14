@@ -276,7 +276,7 @@ class PageRepository implements PageRepositoryInterface
      */
     private function validateRoutesDuplication($page): void
     {
-        if ($this->routeConfig->getRouteByFrontName($page->getIdentifier())) {
+        if ($this->routeConfig->getRouteByFrontName($page->getIdentifier(), 'frontend')) {
             throw new CouldNotSaveException(
                 __('The value specified in the URL Key field would generate a URL that already exists.')
             );
