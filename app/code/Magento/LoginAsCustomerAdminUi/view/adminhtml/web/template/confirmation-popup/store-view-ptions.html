@@ -19,7 +19,6 @@
                     <optgroup label="<%= website.label %>"></optgroup>
                     <% _.each(website.value, function(group) { %>
                     <option
-                    <% if(group.disabled){ %>disabled <% } %>
                     <% if(group.selected){ %>selected <% } %>
                     value="<%= group.value %>"><%= group.label %></option>
                     <% }); %>

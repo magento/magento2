@@ -8,11 +8,14 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomerAdminUi\Ui\Customer\Component\ConfirmationPopup;
 
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Config\Share;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\Escaper;
+use Magento\Store\Model\Group;
 use Magento\Store\Model\System\Store as SystemStore;
+use Magento\Store\Model\Website;
 
 /**
  * Store group options for Login As Customer confirmation pop-up.
@@ -116,27 +119,10 @@ class Options implements OptionSourceInterface
         $options = [];
         if ($customerId) {
             $customer = $this->customerRepository->getById($customerId);
-            $customerWebsiteId = $customer->getWebsiteId();
-            $customerStoreId = $customer->getStoreId();
-            $isGlobalScope = $this->share->isGlobalScope();
             $websiteCollection = $this->systemStore->getWebsiteCollection();
-            $groupCollection = $this->systemStore->getGroupCollection();
-            /** @var \Magento\Store\Model\Website $website */
+            /** @var Website $website */
             foreach ($websiteCollection as $website) {
-                $groups = [];
-                /** @var \Magento\Store\Model\Group $group */
-                foreach ($groupCollection as $group) {
-                    if ($group->getWebsiteId() == $website->getId()) {
-                        $storeViewIds = $group->getStoreIds();
-                        if (!empty($storeViewIds)) {
-                            $name = $this->sanitizeName($group->getName());
-                            $groups[$name]['label'] = str_repeat(' ', 4) . $name;
-                            $groups[$name]['value'] = array_values($storeViewIds)[0];
-                            $groups[$name]['disabled'] = !$isGlobalScope && $customerWebsiteId !== $website->getId();
-                            $groups[$name]['selected'] = in_array($customerStoreId, $storeViewIds) ? true : false;
-                        }
-                    }
-                }
+                $groups = $this->fillStoreGroupOptions($website, $customer);
                 if (!empty($groups)) {
                     $name = $this->sanitizeName($website->getName());
                     $options[$name]['label'] = $name;
@@ -146,5 +132,37 @@ class Options implements OptionSourceInterface
         }
 
         return $options;
+    }
+
+    /**
+     * Fill Store Group options array.
+     *
+     * @param Website $website
+     * @param CustomerInterface $customer
+     * @return array
+     */
+    private function fillStoreGroupOptions(Website $website, CustomerInterface $customer): array
+    {
+        $groups = [];
+        $groupCollection = $this->systemStore->getGroupCollection();
+        $isGlobalScope = $this->share->isGlobalScope();
+        $customerWebsiteId = $customer->getWebsiteId();
+        $customerStoreId = $customer->getStoreId();
+        /** @var Group $group */
+        foreach ($groupCollection as $group) {
+            if ($group->getWebsiteId() == $website->getId()) {
+                $storeViewIds = $group->getStoreIds();
+                if (!empty($storeViewIds)
+                    && ($customerWebsiteId === $website->getId() || $isGlobalScope)
+                ) {
+                    $name = $this->sanitizeName($group->getName());
+                    $groups[$name]['label'] = str_repeat(' ', 4) . $name;
+                    $groups[$name]['value'] = array_values($storeViewIds)[0];
+                    $groups[$name]['selected'] = in_array($customerStoreId, $storeViewIds) ? true : false;
+                }
+            }
+        }
+
+        return $groups;
     }
 }
