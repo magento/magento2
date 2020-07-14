@@ -31,12 +31,12 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
     /**
      * @var array
      */
-    private static $keywordsBlacklist = ["String", "Array", "Boolean", "Element"];
+    private static $excludeKeywords = ["String", "Array", "Boolean", "Element"];
 
     /**
      * @var array|null
      */
-    private $referenceBlackList = null;
+    private $excludeReference = null;
 
     /**
      * Set Up
@@ -307,7 +307,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
     public function testClassReferences()
     {
         $this->markTestSkipped("To be fixed in MC-33329. The test is not working properly "
-            . "after blacklisting logic was fixed. Previously it was ignoring all files.");
+            . "after excluded logic was fixed. Previously it was ignoring all files.");
         $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
         $invoker(
             /**
@@ -373,7 +373,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
                 );
 
                 $vendorClasses = array_filter($vendorClasses, 'strlen');
-                $vendorClasses = $this->referenceBlacklistFilter($vendorClasses);
+                $vendorClasses = $this->excludedReferenceFilter($vendorClasses);
                 if (!empty($vendorClasses)) {
                     $this->assertClassesExist($vendorClasses, $file);
                 }
@@ -392,7 +392,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
                     $badClasses = $this->handleAliasClasses($aliasClasses, $badClasses);
                 }
 
-                $badClasses = $this->referenceBlacklistFilter($badClasses);
+                $badClasses = $this->excludedReferenceFilter($badClasses);
                 $badClasses = $this->removeSpecialCases($badClasses, $file, $contents, $namespacePath);
                 $this->assertClassReferences($badClasses, $file);
             },
@@ -426,12 +426,12 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
      * @param array $classes
      * @return array
      */
-    private function referenceBlacklistFilter(array $classes): array
+    private function excludedReferenceFilter(array $classes): array
     {
-        // exceptions made for the files from the blacklist
-        $blacklistClasses = $this->getReferenceBlacklist();
+        // exceptions made for the files from the exclusion
+        $excludeClasses = $this->getExcludedReferences();
         foreach ($classes as $class) {
-            if (in_array($class, $blacklistClasses)) {
+            if (in_array($class, $excludeClasses)) {
                 unset($classes[array_search($class, $classes)]);
             }
         }
@@ -444,16 +444,16 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
      *
      * @return array
      */
-    private function getReferenceBlacklist(): array
+    private function getExcludedReferences(): array
     {
-        if (!isset($this->referenceBlackList)) {
-            $this->referenceBlackList = file(
+        if (!isset($this->excludeReference)) {
+            $this->excludeReference = file(
                 __DIR__ . '/_files/blacklist/reference.txt',
                 FILE_IGNORE_NEW_LINES
             );
         }
 
-        return $this->referenceBlackList;
+        return $this->excludeReference;
     }
 
     /**
@@ -479,7 +479,7 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
             }
 
             // Remove usage of key words such as "Array", "String", and "Boolean"
-            if (in_array($badClass, self::$keywordsBlacklist)) {
+            if (in_array($badClass, self::$excludeKeywords)) {
                 unset($badClasses[array_search($badClass, $badClasses)]);
                 continue;
             }
