@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Mview;
 
 use Magento\Framework\App\ResourceConnection;
@@ -45,9 +47,9 @@ class OldViews
     }
 
     /**
-     * Remove unused triggers
+     * Unsubscribe old views by existing triggers
      */
-    public function unsubscribe()
+    public function unsubscribe(): void
     {
         $viewCollection = $this->viewCollectionFactory->create();
         $viewList = $viewCollection->getViewsByStateMode(StateInterface::MODE_ENABLED);
