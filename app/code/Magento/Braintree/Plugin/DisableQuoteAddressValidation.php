@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\Braintree\Plugin;
 
 use Magento\Quote\Model\QuoteManagement;
-use Magento\Quote\Api\CartManagementInterface;
 use Magento\Quote\Model\Quote;
 
 /**
@@ -36,7 +35,8 @@ class DisableQuoteAddressValidation
         $orderData = []
     ) {
         if ($quote->getPayment()->getMethod() == 'braintree_paypal' &&
-            $quote->getCheckoutMethod() == CartManagementInterface::METHOD_GUEST) {
+            (!$quote->getCustomer() || !$quote->getCustomer()->getAddresses())
+        ) {
             $billingAddress = $quote->getBillingAddress();
             $billingAddress->setShouldIgnoreValidation(true);
             $quote->setBillingAddress($billingAddress);
