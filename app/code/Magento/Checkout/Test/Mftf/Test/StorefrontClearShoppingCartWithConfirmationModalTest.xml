@@ -56,7 +56,7 @@
         <!-- Flush cache -->
         <magentoCLI command="cache:flush" stepKey="cacheFlush"/>
 
-        <!-- Back to the Cart page and refresh the page -->
+        <!-- Switch back to the Cart page tab and refresh the page -->
         <switchToPreviousTab stepKey="switchToPreviousTab"/>
         <reloadPage stepKey="refreshPage"/>
         <waitForPageLoad stepKey="waitForPageReload"/>
