@@ -75,6 +75,8 @@ class GetAssetIdsByBlockStore implements GetAssetIdsByContentFieldInterface
     }
 
     /**
+     * Get block ids by store
+     *
      * @param int $storeId
      * @return array
      * @throws LocalizedException

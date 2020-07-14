@@ -76,6 +76,8 @@ class GetAssetIdsByPageStore implements GetAssetIdsByContentFieldInterface
     }
 
     /**
+     * Get page ids by store
+     *
      * @param int $storeId
      * @return array
      * @throws LocalizedException
