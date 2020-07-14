@@ -50,6 +50,7 @@
         <arguments>
             <argument name="attributeCode" xsi:type="string">status</argument>
             <argument name="entityType" xsi:type="string">catalog_product</argument>
+            <argument name="entityTable" xsi:type="string">catalog_product_entity</argument>
             <argument name="valueMap" xsi:type="array">
                 <item name="1" xsi:type="string">1</item>
                 <item name="0" xsi:type="string">2</item>
@@ -60,6 +61,7 @@
         <arguments>
             <argument name="attributeCode" xsi:type="string">is_active</argument>
             <argument name="entityType" xsi:type="string">catalog_category</argument>
+            <argument name="entityTable" xsi:type="string">catalog_category_entity</argument>
         </arguments>
     </virtualType>
     <type name="Magento\MediaContentApi\Model\Composite\GetAssetIdsByContentField">

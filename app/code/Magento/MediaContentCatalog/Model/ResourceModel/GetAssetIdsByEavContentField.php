@@ -39,6 +39,11 @@ class GetAssetIdsByEavContentField implements GetAssetIdsByContentFieldInterface
     private $entityType;
 
     /**
+     * @var string
+     */
+    private $entityTable;
+
+    /**
      * @var array
      */
     private $valueMap;
@@ -50,6 +55,7 @@ class GetAssetIdsByEavContentField implements GetAssetIdsByContentFieldInterface
      * @param Config $config
      * @param string $attributeCode
      * @param string $entityType
+     * @param string $entityTable
      * @param array $valueMap
      */
     public function __construct(
@@ -57,12 +63,14 @@ class GetAssetIdsByEavContentField implements GetAssetIdsByContentFieldInterface
         Config $config,
         string $attributeCode,
         string $entityType,
+        string $entityTable,
         array $valueMap = []
     ) {
         $this->connection = $resource;
         $this->config = $config;
         $this->attributeCode = $attributeCode;
         $this->entityType = $entityType;
+        $this->entityTable = $entityTable;
         $this->valueMap = $valueMap;
     }
 
@@ -80,10 +88,13 @@ class GetAssetIdsByEavContentField implements GetAssetIdsByContentFieldInterface
             'entity_type = ?',
             $this->entityType
         )->joinInner(
-            ['entity_eav_type' => $attribute->getBackendTable()],
-            'asset_content_table.entity_id = entity_eav_type.' . $attribute->getEntityIdField() .
-            ' AND entity_eav_type.attribute_id = ' .
-            $attribute->getAttributeId(),
+            ['entity_table' => $this->connection->getTableName($this->entityTable)],
+            'asset_content_table.entity_id = entity_table.entity_id',
+            []
+        )->joinInner(
+            ['entity_eav_type' => $this->connection->getTableName($attribute->getBackendTable())],
+            'entity_table.' . $attribute->getEntityIdField() . ' = entity_eav_type.' . $attribute->getEntityIdField() .
+            ' AND entity_eav_type.attribute_id = ' . $attribute->getAttributeId(),
             []
         )->where(
             'entity_eav_type.value = ?',

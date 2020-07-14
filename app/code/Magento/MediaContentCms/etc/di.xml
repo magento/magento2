@@ -34,22 +34,6 @@
             </argument>
         </arguments>
     </type>
-    <virtualType name="Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByBlockStore" type="Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByContentField">
-        <arguments>
-            <argument name="entityType" xsi:type="string">cms_block</argument>
-            <argument name="fieldTable" xsi:type="string">cms_block_store</argument>
-            <argument name="idColumn" xsi:type="string">block_id</argument>
-            <argument name="fieldColumn" xsi:type="string">store_id</argument>
-        </arguments>
-    </virtualType>
-    <virtualType name="Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByPageStore" type="Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByContentField">
-        <arguments>
-            <argument name="entityType" xsi:type="string">cms_page</argument>
-            <argument name="fieldTable" xsi:type="string">cms_page_store</argument>
-            <argument name="idColumn" xsi:type="string">page_id</argument>
-            <argument name="fieldColumn" xsi:type="string">store_id</argument>
-        </arguments>
-    </virtualType>
     <virtualType name="Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByPageStatus" type="Magento\MediaContentCms\Model\ResourceModel\GetAssetIdsByContentField">
         <arguments>
             <argument name="entityType" xsi:type="string">cms_page</argument>
