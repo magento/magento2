@@ -51,7 +51,7 @@ input PaymentMethodInput {
     payflow_link: PayflowLinkInput @doc(description:"Required input for PayPal Payflow Link and Payments Advanced payments")
     payflowpro: PayflowProInput @doc(description: "Required input type for PayPal Payflow Pro and Payment Pro payments")
     hosted_pro: HostedProInput @doc(description:"Required input for PayPal Hosted pro payments")
-    payflowpro_cc_vault: VaultTokenInput
+    payflowpro_cc_vault: VaultTokenInput @doc(description:"Required input for payment methods with Vault support.")
 }
 
 input HostedProInput @doc(description:"A set of relative URLs that PayPal will use in response to various actions during the authorization process. Magento prepends the base URL to this value to create a full URL. For example, if the full URL is https://www.example.com/path/to/page.html, the relative URL is path/to/page.html. Use this input for Payments Pro Hosted Solution payment method.") {
@@ -103,7 +103,7 @@ input PayflowProTokenInput @doc(description:"Input required to fetch payment tok
 
 input PayflowProInput @doc(description:"Required input for Payflow Pro and Payments Pro payment methods.") {
     cc_details: CreditCardDetailsInput! @doc(description: "Required input for credit card related information")
-    is_active_payment_token_enabler: Boolean @doc(description:"States whether an entered by a customer credit/debit card should be tokenized for later usage. Required only if Vault is enabled for PayPal Payflow Pro payment integration.")
+    is_active_payment_token_enabler: Boolean @doc(description:"States whether details about the customer's credit/debit card should be tokenized for later usage. Required only if Vault is enabled for PayPal Payflow Pro payment integration.")
 }
 
 input CreditCardDetailsInput @doc(description:"Required fields for Payflow Pro and Payments Pro credit card payments") {
