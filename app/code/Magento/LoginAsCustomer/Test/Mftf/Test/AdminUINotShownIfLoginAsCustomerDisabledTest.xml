@@ -33,8 +33,6 @@
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <!-- Verify Login As Customer Login action is absent in Customer grid page -->
-        <actionGroup ref="AdminLoginAsCustomerAbsentOnCustomerGridPageActionGroup" stepKey="verifyLoginAsCustomerAbsentOnCustomerGridPage"/>
 
         <!-- Verify Login As Customer Login action is absent on Customer page -->
         <actionGroup ref="AdminLoginAsCustomerAbsentOnCustomerPageActionGroup" stepKey="verifyLoginAsCustomerAbsentOnCustomerPage">
@@ -47,9 +45,6 @@
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
         <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderId"/>
-
-        <!-- Verify Login As Customer Login action is absent on Order grid page -->
-        <actionGroup ref="AdminLoginAsCustomerAbsentOnOrderGridPageActionGroup" stepKey="verifyLoginAsCustomerAbsentOnOrderGridPage"/>
 
         <!-- Verify Login As Customer Login action is absent on Order page -->
         <actionGroup ref="AdminLoginAsCustomerAbsentOnOrderPageActionGroup" stepKey="verifyLoginAsCustomerAbsentOnOrderPage">
