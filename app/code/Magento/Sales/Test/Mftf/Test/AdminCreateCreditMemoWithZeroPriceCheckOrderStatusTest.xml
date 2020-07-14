@@ -13,6 +13,7 @@
             <title value="Create Credit Memo with zero total."/>
             <description value="Assert order status after create CreditMemo with zero total."/>
             <group value="sales"/>
+            <testCaseId value="MC-35848"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
