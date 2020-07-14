@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontClearShoppingCartWithConfirmationModalTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Shopping Cart"/>
+            <title value="Show clear shopping cart button with confirmation modal"/>
+            <description value="Show clear shopping cart button on shopping cart page based on checkout shopping cart stores configuration"/>
+            <group value="shoppingCart"/>
+        </annotations>
+        <before>
+            <!-- Create simple product and category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+
+            <!-- Disable clear shopping cart -->
+            <magentoCLI command="config:set {{DisableClearShoppingCart.path}} {{DisableClearShoppingCart.value}}" stepKey="disableClearShoppingCart"/>
+        </after>
+
+        <!-- Add the newly created product to the shopping cart -->
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!-- Go to the shopping cart -->
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnPageShoppingCart"/>
+
+        <!-- Assert that clear shopping cart button is not rendered on the cart page -->
+        <dontSeeElement selector="{{CheckoutCartProductSection.emptyCartButton}}" stepKey="dontSeeClearShoppingCartButton"/>
+
+        <!-- Open new tab and login as Admin -->
+        <openNewTab stepKey="openNewTab"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <!-- Navigate to sales checkout cart configuration -->
+        <actionGroup ref="AdminOpenSalesCheckoutConfigPageActionGroup" stepKey="openCheckoutCartConfig">
+            <argument name="tabGroupAnchor" value="#checkout_cart-link"/>
+        </actionGroup>
+
+        <!-- Enable clear shopping cart button -->
+        <actionGroup ref="AdminCheckoutClearShoppingCartEnabledActionGroup" stepKey="enableClearShoppingCartButton"/>
+
+        <!-- Flush cache -->
+        <magentoCLI command="cache:flush" stepKey="cacheFlush"/>
+
+        <!-- Back to the Cart page and refresh the page -->
+        <switchToPreviousTab stepKey="switchToPreviousTab"/>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForPageReload"/>
+
+        <!-- Assert that empty cart button is rendered on the cart page -->
+        <waitForElementVisible selector="{{CheckoutCartProductSection.emptyCartButton}}" stepKey="waitForClearShoppingCartButton"/>
+        <seeElement selector="{{CheckoutCartProductSection.emptyCartButton}}" stepKey="SeeClearShoppingCartButton"/>
+
+        <!-- Click clear shopping cart button -->
+        <click selector="{{CheckoutCartProductSection.emptyCartButton}}" stepKey="clickClearShoppingCartButton"/>
+
+        <!-- Show confirmation modal -->
+        <waitForElementVisible selector=".modal-popup.confirm" stepKey="waitForRequisitionConfirmationModal"/>
+        <seeElement selector=".modal-popup.confirm" stepKey="seeRequisitionConfirmationModal"/>
+
+        <!-- Confirm modal -->
+        <click selector="{{StorefrontCheckoutRequisitionConfirmationModalSection.confirm}}" stepKey="clickOkRequisitionConfirmationModal"/>
+        <waitForPageLoad stepKey="waitForEmptyShoppingCartPageLoad"/>
+        <waitForText userInput="You have no items in your shopping cart." stepKey="waitForEmptyShoppingCartText"/>
+        <see userInput="You have no items in your shopping cart." stepKey="seeEmptyCartMessage"/>
+    </test>
+</tests>
