@@ -11,7 +11,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Block\Product\ProductList\AbstractLinksTest;
 use Magento\Catalog\ViewModel\Product\Listing\PreparePostData;
 use Magento\Checkout\Model\Session;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
@@ -22,15 +21,13 @@ use Magento\TestFramework\Store\ExecuteInStoreContext;
  *
  * @see \Magento\Checkout\Block\Cart\Crosssell
  * @magentoDbIsolation disabled
+ * @magentoAppIsolation enabled
  * @magentoAppArea frontend
  */
 class CrosssellTest extends AbstractLinksTest
 {
     /** @var Crosssell */
     protected $block;
-
-    /** @var MetadataPool */
-    private $metadataPool;
 
     /** @var Session */
     private $checkoutSession;
@@ -61,7 +58,6 @@ class CrosssellTest extends AbstractLinksTest
         $this->block = $this->layout->createBlock(Crosssell::class);
         $this->linkType = 'crosssell';
         $this->titleName = (string)__('More Choices:');
-        $this->metadataPool = $this->objectManager->get(MetadataPool::class);
         $this->checkoutSession = $this->objectManager->get(Session::class);
         $this->executeInStoreContext = $this->objectManager->get(ExecuteInStoreContext::class);
     }
