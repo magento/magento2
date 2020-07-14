@@ -73,7 +73,6 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
         /** @var Store $currentStore */
         $currentStore = $this->storeRepository->getById($this->storeResolver->getCurrentStoreId());
         $targetStoreCode = $this->_request->getParam(StoreResolver::PARAM_NAME);
-        $fromStoreCode = $this->_request->getParam('___from_store');
         $error = null;
 
         if ($targetStoreCode === null) {
@@ -81,8 +80,8 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
         }
 
         try {
-            /** @var Store $fromStore */
-            $fromStore = $this->storeRepository->get($fromStoreCode);
+            /** @var Store $targetStore */
+            $targetStore = $this->storeRepository->get($targetStoreCode);
         } catch (NoSuchEntityException $e) {
             $error = __('Requested store is not found');
         }
@@ -94,19 +93,20 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
             $encodedUrl = $this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED);
 
             $query = [
-                '___from_store' => $fromStore->getCode(),
+                '___from_store' => $currentStore->getCode(),
                 StoreResolverInterface::PARAM_NAME => $targetStoreCode,
                 \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl,
             ];
 
-            $customerHash = $this->hashGenerator->generateHash($fromStore);
+            $customerHash = $this->hashGenerator->generateHash($currentStore);
             $query = array_merge($query, $customerHash);
 
             $arguments = [
                 '_nosid' => true,
                 '_query' => $query
             ];
-            $this->_redirect->redirect($this->_response, 'stores/store/switch', $arguments);
+            $targetUrl = $targetStore->getUrl('stores/store/switch', $arguments);
+            $this->_redirect->redirect($this->_response, $targetUrl);
         }
         // phpstan:ignore "Method Magento\Store\Controller\Store\Redirect::execute() should return *"
     }
