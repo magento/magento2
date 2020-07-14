@@ -29,8 +29,7 @@
         <!-- Generate the datetime default value -->
         <generateDate date="now" format="n/j/y g:i A" stepKey="generateDefaultValue"/>
         <!-- Create new datetime product attribute -->
-        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
-        <waitForPageLoad stepKey="waitForPageLoadAttributes"/>
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
         <actionGroup ref="CreateProductAttributeWithDatetimeFieldActionGroup" stepKey="createAttribute">
             <argument name="attribute" value="DatetimeProductAttribute"/>
             <argument name="date" value="{$generateDefaultValue}"/>
