@@ -16,6 +16,7 @@
             <description value="Add product to cart through ajax in Product List widget on Cms page"/>
             <severity value="MAJOR"/>
             <testCaseId value="MC-35111"/>
+            <group value="WYSIWYGDisabled"/>
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
