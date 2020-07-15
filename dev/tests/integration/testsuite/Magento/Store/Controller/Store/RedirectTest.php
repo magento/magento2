@@ -53,7 +53,9 @@ class RedirectTest extends AbstractController
 
         $this->dispatch('/stores/store/redirect');
 
-        $result = (string) $this->getResponse()->getHeader('location');
-        $this->assertContains('http://second_store.test/', $result);
+        $header = $this->getResponse()->getHeader('Location');
+        $this->assertNotEmpty($header);
+        $result = $header->getFieldValue();
+        $this->assertStringStartsWith('http://second_store.test/', $result);
     }
 }
