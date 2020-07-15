@@ -55,6 +55,8 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
     const DDL_CREATE            = 2;
     const DDL_INDEX             = 3;
     const DDL_FOREIGN_KEY       = 4;
+    const DDL_EXISTS            = 5;
+    
     const DDL_CACHE_PREFIX      = 'DB_PDO_MYSQL_DDL';
     const DDL_CACHE_TAG         = 'DB_PDO_MYSQL_DDL';
 
@@ -1630,7 +1632,13 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         } else {
             $cacheKey = $this->_getTableName($tableName, $schemaName);
 
-            $ddlTypes = [self::DDL_DESCRIBE, self::DDL_CREATE, self::DDL_INDEX, self::DDL_FOREIGN_KEY];
+            $ddlTypes = [
+                self::DDL_DESCRIBE,
+                self::DDL_CREATE,
+                self::DDL_INDEX,
+                self::DDL_FOREIGN_KEY,
+                self::DDL_EXISTS
+            ];
             foreach ($ddlTypes as $ddlType) {
                 unset($this->_ddlCache[$ddlType][$cacheKey]);
             }
@@ -2657,7 +2665,31 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
      */
     public function isTableExists($tableName, $schemaName = null)
     {
+        $cacheKey = $this->_getTableName($tableName, $schemaName);
+
+        $ddl = $this->loadDdlCache($cacheKey, self::DDL_EXISTS);
+        if ($ddl !== false) {
+            return true;
+        }
+
+        $fromDbName = 'DATABASE()';
+        if ($schemaName !== null) {
+            $fromDbName = $this->quote($schemaName);
+        }
+
+        $sql = sprintf(
+            'SELECT COUNT(1) AS tbl_exists FROM INFORMATION_SCHEMA.TABLES WHERE TABLE_NAME = %s AND TABLE_SCHEMA = %s',
+            $this->quote($tableName),
+            $fromDbName
+        );
+        $ddl = $this->rawFetchRow($sql, 'tbl_exists');
+        if ($ddl) {
+            $this->saveDdlCache($cacheKey, self::DDL_EXISTS, $ddl);
+            return true;
+        }
+
         return $this->showTableStatus($tableName, $schemaName) !== false;
+
     }
 
     /**
