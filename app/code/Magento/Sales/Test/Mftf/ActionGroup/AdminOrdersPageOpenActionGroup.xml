@@ -8,5 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="deleteBackup" extends="AdminBackupDeleteActionGroup" deprecated="Use DeleteBackupActionGroup"/>
+    <actionGroup name="AdminOrdersPageOpenActionGroup">
+        <annotations>
+            <description>Goes to the Admin Orders page.</description>
+        </annotations>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="openOrdersGridPage"/>
+        <waitForPageLoad stepKey="waitForLoadingPage"/>
+    </actionGroup>
 </actionGroups>
