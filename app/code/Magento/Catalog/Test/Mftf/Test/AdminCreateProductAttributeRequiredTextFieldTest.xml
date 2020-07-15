@@ -74,8 +74,7 @@
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <click selector="{{AdminCreateNewProductAttributeSection.saveAttribute}}" stepKey="clickOnSaveAttribute"/>
         <waitForPageLoad stepKey="waitForAttributeToSave"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="saveTheProduct"/>
-        <waitForPageLoad stepKey="waitForProductToSave"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="saveTheProduct"/>
 
         <!--Verify product attribute added in product form and Is Required message displayed-->
         <scrollTo selector="{{AdminProductFormSection.contentTab}}" stepKey="scrollToContentTab"/>
@@ -85,8 +84,7 @@
         <!--Fill the Required field and save the product -->
         <fillField selector="{{AdminProductFormSection.attributeRequiredInput(newProductAttribute.attribute_code)}}" userInput="attribute" stepKey="fillTheAttributeRequiredInputField"/>
         <scrollToTopOfPage stepKey="scrollToTopOfProductFormPage"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="saveTheProduct1"/>
-        <waitForPageLoad stepKey="waitForProductToSave1"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="saveTheProduct1"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
     </test>
 </tests>
