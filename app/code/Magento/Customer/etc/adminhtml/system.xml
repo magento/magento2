@@ -246,7 +246,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Nooptreq</source_model>
                     <backend_model>Magento\Customer\Model\Config\Backend\Show\Customer</backend_model>
                 </field>
-                <field id="show_address_fields" translate="label" type="select" sortOrder="95" showInDefault="1" showInWebsite="1" showInStore="0">
+                <field id="show_address_fields" translate="label comment" type="select" sortOrder="95" showInDefault="1" showInWebsite="1" showInStore="0">
                     <label>Show Address Information</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>

@@ -542,3 +542,5 @@ Addresses,Addresses
 "The store view is not in the associated website.","The store view is not in the associated website."
 "The Store View selected for sending Welcome email from is not related to the customer's associated website.","The Store View selected for sending Welcome email from is not related to the customer's associated website."
 "Add/Update Address","Add/Update Address"
+"Show Address Information","Show Address Information"
+"Enable this for adding address information fields on the registration form.","Enable this for adding address information fields on the registration form."
