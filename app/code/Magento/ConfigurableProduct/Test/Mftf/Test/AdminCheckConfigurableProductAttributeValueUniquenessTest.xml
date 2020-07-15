@@ -46,8 +46,7 @@
         </createData>
         <!--Go to created product page-->
         <comment userInput="Go to created product page" stepKey="goToProdPage"/>
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="goToProductGrid"/>
-        <waitForPageLoad stepKey="waitForProductPage1"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="goToProductGrid"/>
         <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterByName">
             <argument name="name" value="$$createConfigProduct.name$$"/>
         </actionGroup>
