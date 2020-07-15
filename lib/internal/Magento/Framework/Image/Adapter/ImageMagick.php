@@ -615,7 +615,7 @@ class ImageMagick extends AbstractAdapter
     {
         if ($this->colorspace === \Imagick::COLORSPACE_CMYK || $this->colorspace === \Imagick::COLORSPACE_UNDEFINED) {
             $this->_imageHandler->transformImageColorspace(\Imagick::COLORSPACE_SRGB);
-            $this->colorspace = \Imagick::COLORSPACE_SRGB;
+            $this->colorspace = $this->_imageHandler->getImageColorspace();
         }
     }
 }
