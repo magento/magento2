@@ -82,7 +82,11 @@
             <argument name="keyword" value="SimpleProduct.name"/>
         </actionGroup>
         <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" userInput="1" stepKey="seeOnlyOneProductInGrid"/>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="{{SimpleProduct.name}}" stepKey="seeOnlySimpleProductInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeOnlySimpleProductInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Name"/>
+            <argument name="value" value="{{SimpleProduct.name}}"/>
+        </actionGroup>
 
         <!--Paging works-->
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="setProductGridToDefaultPagination"/>
@@ -108,7 +112,11 @@
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
         <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" userInput="1" stepKey="seeOneMatchingSkuInProductGrid"/>
-        <see selector="{{AdminProductGridSection.productGridCell('1','SKU')}}" userInput="{{GroupedProduct.sku}}" stepKey="seeProductInFilteredGridSku"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeProductInFilteredGridSku">
+            <argument name="row" value="1"/>
+            <argument name="column" value="SKU"/>
+            <argument name="value" value="{{GroupedProduct.sku}}"/>
+        </actionGroup>
         <!--Filter by price-->
         <actionGroup ref="FilterProductGridByPriceRangeActionGroup" stepKey="filterProductGridByPrice">
             <argument name="filter" value="PriceFilterRange"/>
@@ -197,7 +205,11 @@
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridToCheckWeightColumn">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1','Weight')}}" userInput="{{SimpleProduct.weight}}" stepKey="seeCorrectProductWeightInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeCorrectProductWeightInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Weight"/>
+            <argument name="value" value="{{SimpleProduct.weight}}"/>
+        </actionGroup>
         <!--END Admin uses product grid-->
 
         <!--Admin creates category-->
