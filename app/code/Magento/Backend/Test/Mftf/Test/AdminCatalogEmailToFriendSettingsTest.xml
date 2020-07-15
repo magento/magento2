@@ -15,6 +15,7 @@
             <title value="Admin should be able to manage settings of Email To A Friend Functionality"/>
             <description value="Admin should be able to enable Email To A Friend functionality in Magento Admin backend and see additional options"/>
             <group value="backend"/>
+            <testCaseId value="MC-35895"/>
         </annotations>
 
         <before>
