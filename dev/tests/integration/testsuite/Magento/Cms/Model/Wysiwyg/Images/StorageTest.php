@@ -296,6 +296,58 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Verify thumbnail generation for diferent sizes
+     *
+     * @param array $sizes
+     * @param bool $resized
+     * @dataProvider getThumbnailsSizes
+     */
+    public function testResizeFile(array $sizes, bool $resized): void
+    {
+        $root = $this->storage->getCmsWysiwygImages()->getStorageRoot();
+        $path = $root . '/' . 'testfile.png';
+        $this->generateImage($path, $sizes['width'], $sizes['height']);
+        $this->storage->resizeFile($path);
+
+        $thumbPath =   $this->storage->getThumbnailPath($path);
+        list($imageWidth, $imageHeight) = getimagesize($thumbPath);
+
+        $this->assertEquals(
+            $resized ? $this->storage->getResizeWidth() : $sizes['width'],
+            $imageWidth
+        );
+        $this->assertLessThanOrEqual(
+            $resized ? $this->storage->getResizeHeight() : $sizes['height'],
+            $imageHeight
+        );
+
+        $this->storage->deleteFile($path);
+    }
+
+    /**
+     * Provide sizes for resizeFile test
+     */
+    public function getThumbnailsSizes(): array
+    {
+        return [
+            [
+                [
+                    'width' => 1024,
+                    'height' => 768,
+                ],
+               true
+            ],
+            [
+                [
+                    'width' => 20,
+                    'height' => 20,
+                ],
+                false
+            ]
+        ];
+    }
+
+    /**
      * Provide scenarios for testing getThumbnailUrl()
      *
      * @return array
