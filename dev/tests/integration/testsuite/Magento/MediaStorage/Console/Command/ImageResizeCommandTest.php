@@ -65,6 +65,20 @@ class ImageResizeCommandTest extends \PHPUnit\Framework\TestCase
         $this->filesystem = $this->objectManager->get(Filesystem::class);
         $this->mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
     }
+    
+    
+    /**
+     * Test that catalog:image:resize command executes successfully in database storage mode
+     * with file missing from local folder
+     *
+     * @magentoDataFixture Magento/MediaStorage/_files/database_mode.php
+     * @magentoDataFixture Magento/MediaStorage/_files/product_with_missed_image.php
+     */
+    public function testDatabaseStorageMissingFile()
+    {
+        $this->tester->execute([]);
+        $this->assertStringContainsString('Product images resized successfully', $this->tester->getDisplay());
+    }
 
     /**
      * Test that catalog:image:resize command executed successfully with missing image file
@@ -108,18 +122,5 @@ class ImageResizeCommandTest extends \PHPUnit\Framework\TestCase
         $this->tester->execute([]);
         $this->assertStringContainsString('Wrong file', $this->tester->getDisplay());
         $this->mediaDirectory->getDriver()->deleteFile($this->mediaDirectory->getAbsolutePath($this->fileName));
-    }
-
-    /**
-     * Test that catalog:image:resize command executes successfully in database storage mode
-     * with file missing from local folder
-     *
-     * @magentoDataFixture Magento/MediaStorage/_files/database_mode.php
-     * @magentoDataFixture Magento/MediaStorage/_files/product_with_missed_image.php
-     */
-    public function testDatabaseStorageMissingFile()
-    {
-        $this->tester->execute([]);
-        $this->assertStringContainsString('Product images resized successfully', $this->tester->getDisplay());
     }
 }
