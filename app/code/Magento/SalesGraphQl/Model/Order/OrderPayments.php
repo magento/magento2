@@ -5,20 +5,20 @@
  */
 declare(strict_types=1);
 
-namespace Magento\SalesGraphQl\Model\SalesItem;
+namespace Magento\SalesGraphQl\Model\Order;
 
 use Magento\Sales\Api\Data\OrderInterface;
 
 /**
  * Class to extract the order payment details
  */
-class ExtractOrderPaymentDetails
+class OrderPayments
 {
     /**
      * @param OrderInterface $orderModel
      * @return array
      */
-    public function getOrderPaymentMethodDetails(OrderInterface $orderModel): array
+    public function getOrderPaymentMethod(OrderInterface $orderModel): array
     {
         $orderPayment = $orderModel->getPayment();
         $additionalInformationCcType = $orderPayment->getCcType();

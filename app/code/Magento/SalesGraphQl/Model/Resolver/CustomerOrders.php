@@ -16,9 +16,9 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\SalesGraphQl\Model\Order\OrderAddress;
+use Magento\SalesGraphQl\Model\Order\OrderPayments;
 use Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query\OrderFilter;
-use Magento\SalesGraphQl\Model\SalesItem\ExtractOrderAddressDetails;
-use Magento\SalesGraphQl\Model\SalesItem\ExtractOrderPaymentDetails;
 use Magento\Store\Api\Data\StoreInterface;
 
 /**
@@ -32,14 +32,14 @@ class CustomerOrders implements ResolverInterface
     private $searchCriteriaBuilder;
 
     /**
-     * @var ExtractOrderAddressDetails
+     * @var OrderAddress
      */
-    private $extractOrderAddressDetails;
+    private $orderAddress;
 
     /**
-     * @var ExtractOrderPaymentDetails
+     * @var OrderPayments
      */
-    private $extractOrderPaymentDetails;
+    private $orderPayments;
 
     /**
      * @var OrderRepositoryInterface
@@ -53,21 +53,21 @@ class CustomerOrders implements ResolverInterface
 
     /**
      * @param OrderRepositoryInterface $orderRepository
-     * @param ExtractOrderAddressDetails $extractOrderAddressDetails
-     * @param ExtractOrderPaymentDetails $extractOrderPaymentDetails
+     * @param OrderAddress $orderAddress
+     * @param OrderPayments $orderPayments
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param OrderFilter $orderFilter
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
-        ExtractOrderAddressDetails $extractOrderAddressDetails,
-        ExtractOrderPaymentDetails $extractOrderPaymentDetails,
+        OrderAddress $orderAddress,
+        OrderPayments $orderPayments,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         OrderFilter $orderFilter
     ) {
         $this->orderRepository = $orderRepository;
-        $this->extractOrderAddressDetails = $extractOrderAddressDetails;
-        $this->extractOrderPaymentDetails = $extractOrderPaymentDetails;
+        $this->orderAddress = $orderAddress;
+        $this->orderPayments = $orderPayments;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->orderFilter = $orderFilter;
     }
@@ -96,13 +96,9 @@ class CustomerOrders implements ResolverInterface
         $store = $context->getExtensionAttributes()->getStore();
         $customerModel = $value['model'];
         $address = $customerModel->getAddresses();
-        $addressArrayData = [];
-        foreach ($address as $key => $addressArray) {
-            $addressArrayData[$key] = $addressArray;
-            foreach ($addressArray as $addressData) {
-                $shipping = $addressData->isDefaultshipping();
-                $billing = $addressData->isDefaultBilling();
-            }
+        $addressIds = [];
+        foreach ($address as $key => $addressData) {
+            $addressIds[$key] = (int)$addressData->getId();
         }
 
         try {
@@ -114,7 +110,7 @@ class CustomerOrders implements ResolverInterface
 
         return [
             'total_count' => $searchResult->getTotalCount(),
-            'items' => $this->formatOrdersArray($searchResult->getItems(), $address),
+            'items' => $this->formatOrdersArray($searchResult->getItems(), $addressIds),
             'page_info' => [
                 'page_size' => $searchResult->getPageSize(),
                 'current_page' => $searchResult->getCurPage(),
@@ -127,14 +123,15 @@ class CustomerOrders implements ResolverInterface
      * Format order models for graphql schema
      *
      * @param OrderInterface[] $orderModels
-     * @param array $address
+     * @param array $addressIds
      * @return array
      */
-    private function formatOrdersArray(array $orderModels, array $address)
+    private function formatOrdersArray(array $orderModels, array $addressIds)
     {
         $ordersArray = [];
 
         foreach ($orderModels as $orderModel) {
+
             $ordersArray[] = [
                 'created_at' => $orderModel->getCreatedAt(),
                 'grand_total' => $orderModel->getGrandTotal(),
@@ -145,9 +142,9 @@ class CustomerOrders implements ResolverInterface
                 'order_number' => $orderModel->getIncrementId(),
                 'status' => $orderModel->getStatusLabel(),
                 'shipping_method' => $orderModel->getShippingDescription(),
-                'billing_address' => $this->extractOrderAddressDetails->getBillingAddressDetails($orderModel),
-                'shipping_address' => $this->extractOrderAddressDetails->getShippingAddressDetails($orderModel),
-                'payment_methods' => $this->extractOrderPaymentDetails->getOrderPaymentMethodDetails($orderModel),
+                'shipping_address' => $this->orderAddress->getShippingAddress($orderModel, $addressIds),
+                'billing_address' => $this->orderAddress->getBillingAddress($orderModel, $addressIds),
+                'payment_methods' => $this->orderPayments->getOrderPaymentMethod($orderModel),
                 'model' => $orderModel,
             ];
         }
@@ -176,4 +173,3 @@ class CustomerOrders implements ResolverInterface
         return $this->orderRepository->getList($this->searchCriteriaBuilder->create());
     }
 }
-

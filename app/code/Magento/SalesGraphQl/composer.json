@@ -8,6 +8,7 @@
         "magento/module-sales": "*",
         "magento/module-store": "*",
         "magento/module-catalog": "*",
+        "magento/module-customer-graphql": "*",
         "magento/module-graph-ql": "*"
     },
     "suggest": {
