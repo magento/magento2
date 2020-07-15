@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCatalogPriceRuleWithUndefinedProductYesnoAttributeConditionTest" extends="AdminCatalogPriceRuleWithUndefinedProductDropdownAttributeConditionTest">
+        <annotations>
+            <title value="Enable 'is undefined' condition to Scope Catalog Price rules by custom 'YesNo' product attribute"/>
+            <description value="Checks discount will applies with Catalog Price Rule with 'is undefined' of 'YesNo' Product Attribute condition"/>
+        </annotations>
+        <before>
+            <createData entity="productYesNoAttribute" stepKey="createProductAttribute"/>
+        </before>
+    </test>
+</tests>
