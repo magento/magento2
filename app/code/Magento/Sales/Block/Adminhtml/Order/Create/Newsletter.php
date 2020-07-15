@@ -5,8 +5,6 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
-use Magento\Framework\Phrase;
-
 /**
  * Adminhtml sales order create newsletter block
  *
@@ -30,7 +28,7 @@ class Newsletter extends AbstractCreate
     /**
      * Get header text
      *
-     * @return Phrase
+     * @return \Magento\Framework\Phrase
      */
     public function getHeaderText()
     {
