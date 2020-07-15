@@ -129,7 +129,7 @@
         <see selector="{{AdminInvoiceTotalSection.grandTotal}}" userInput="$113.00" stepKey="seeCorrectGrandTotal"/>
         <grabTextFrom selector="{{AdminInvoiceTotalSection.grandTotal}}" stepKey="grabInvoiceGrandTotal" after="seeCorrectGrandTotal"/>
 
-        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage1"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeOrderProcessing"/>
 
