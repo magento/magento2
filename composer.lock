@@ -4,7 +4,7 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#installing-dependencies",
         "This file is @generated automatically"
     ],
-    "content-hash": "4abc523fda743ab847f07f9905bb2731",
+    "content-hash": "68246e4c5ac6555ff2d3d013c81c3537",
     "packages": [
         {
             "name": "colinmollenhour/cache-backend-file",
@@ -7083,16 +7083,16 @@
         },
         {
             "name": "magento/magento2-functional-testing-framework",
-            "version": "3.0.0-RC4",
+            "version": "3.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/magento/magento2-functional-testing-framework.git",
-                "reference": "34781ccc7385993b1e5bc9182e6ddddde7f2769f"
+                "reference": "8d98efa7434a30ab9e82ef128c430ef8e3a50699"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/34781ccc7385993b1e5bc9182e6ddddde7f2769f",
-                "reference": "34781ccc7385993b1e5bc9182e6ddddde7f2769f",
+                "url": "https://api.github.com/repos/magento/magento2-functional-testing-framework/zipball/8d98efa7434a30ab9e82ef128c430ef8e3a50699",
+                "reference": "8d98efa7434a30ab9e82ef128c430ef8e3a50699",
                 "shasum": ""
             },
             "require": {
@@ -7117,6 +7117,7 @@
                 "spomky-labs/otphp": "^10.0",
                 "symfony/console": "^4.4",
                 "symfony/finder": "^5.0",
+                "symfony/http-foundation": "^5.0",
                 "symfony/mime": "^5.0",
                 "symfony/process": "^4.4",
                 "vlucas/phpdotenv": "^2.4",
@@ -7168,7 +7169,7 @@
                 "magento",
                 "testing"
             ],
-            "time": "2020-06-08T18:17:54+00:00"
+            "time": "2020-07-09T21:26:19+00:00"
         },
         {
             "name": "mikey179/vfsstream",
@@ -10513,8 +10514,7 @@
     "aliases": [],
     "minimum-stability": "stable",
     "stability-flags": {
-        "magento/composer": 20,
-        "magento/magento2-functional-testing-framework": 5
+        "magento/composer": 20
     },
     "prefer-stable": true,
     "prefer-lowest": false,

@@ -16,7 +16,8 @@
             <argument name="selector" type="string"/>
             <argument name="userInput" type="string"/>
         </arguments>
-        
+
+        <waitForElementVisible selector="{{selector}}" time="60" stepKey="waitForElementVisible"/>
         <see selector="{{selector}}" userInput="{{userInput}}" stepKey="assertElement"/>
     </actionGroup>
 </actionGroups>
