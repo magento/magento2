@@ -631,17 +631,7 @@ class Storage extends \Magento\Framework\DataObject
 
         $image->keepAspectRatio($keepRatio);
 
-        list($imageWidth, $imageHeight) = @getimagesize($source);
-        
-        if ($imageWidth && $imageHeight) {
-            $configWidth = $this->_resizeParameters['width'];
-            $configHeight = $this->_resizeParameters['height'];
-            $imageWidth = $configWidth > $imageWidth ? $imageWidth : $configWidth;
-            $imageHeight = $configHeight > $imageHeight ? $imageHeight : $configHeight;
-        } else {
-            $imageWidth = $this->_resizeParameters['width'];
-            $imageHeight = $this->_resizeParameters['height'];
-        }
+        list($imageWidth, $imageHeight) = $this->getResizedParams($source);
         
         $image->resize($imageWidth, $imageHeight);
         $dest = $targetDir . '/' . $this->ioFile->getPathInfo($source)['basename'];
@@ -652,6 +642,29 @@ class Storage extends \Magento\Framework\DataObject
         return false;
     }
 
+    /**
+     * Return width height for the image resizing.
+     *
+     * @param string $source
+     */
+    private function getResizedParams(string $source): array
+    {
+        $configWidth = $this->_resizeParameters['width'];
+        $configHeight = $this->_resizeParameters['height'];
+
+        //phpcs:ignore Generic.PHP.NoSilencedErrors
+        list($imageWidth, $imageHeight) = @getimagesize($source);
+     
+        if ($imageWidth && $imageHeight) {
+            $imageWidth = $configWidth > $imageWidth ? $imageWidth : $configWidth;
+            $imageHeight = $configHeight > $imageHeight ? $imageHeight : $configHeight;
+        } else {
+            return [$configWidth, $configHeight];
+        }
+
+        return  [$imageWidth, $imageHeight];
+    }
+    
     /**
      * Resize images on the fly in controller action
      *

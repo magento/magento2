@@ -167,7 +167,9 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     public function testUploadFileWithExcludedDirPath(): void
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('We can\'t upload the file to current folder right now. Please try another folder.');
+        $this->expectExceptionMessage(
+            'We can\'t upload the file to current folder right now. Please try another folder.'
+        );
 
         $fileName = 'magento_small_image.jpg';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
@@ -335,7 +337,7 @@ class StorageTest extends \PHPUnit\Framework\TestCase
                     'width' => 1024,
                     'height' => 768,
                 ],
-               true
+                true
             ],
             [
                 [
