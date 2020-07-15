@@ -628,13 +628,22 @@ class Storage extends \Magento\Framework\DataObject
         }
         $image = $this->_imageFactory->create();
         $image->open($source);
+
         $image->keepAspectRatio($keepRatio);
-        list($imageWidth, $imageHeight) = getimagesize($source);
+
+        list($imageWidth, $imageHeight) = @getimagesize($source);
         
-        $image->resize(
-            $this->_resizeParameters['width'] > $imageWidth ? $imageWidth : $this->_resizeParameters['width'],
-            $this->_resizeParameters['height'] > $imageHeight ? $imageHeight : $this->_resizeParameters['height']
-        );
+        if ($imageWidth && $imageHeight) {
+            $configWidth = $this->_resizeParameters['width'];
+            $configHeight = $this->_resizeParameters['height'];
+            $imageWidth = $configWidth > $imageWidth ? $imageWidth : $this->_resizeParameters['width'];
+            $imageHeight = $configHeight > $imageHeight ? $imageHeight : $this->_resizeParameters['height'];
+        } else {
+            $imageWidth = $this->_resizeParameters['width'];
+            $imageHeight = $this->_resizeParameters['height'];
+        }
+        
+        $image->resize($imageWidth, $imageHeight);
         $dest = $targetDir . '/' . $this->ioFile->getPathInfo($source)['basename'];
         $image->save($dest);
         if ($this->_directory->isFile($this->_directory->getRelativePath($dest))) {
