@@ -103,7 +103,10 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
             $targetUrl = $this->getCurrentStoreBaseUrl();
         }
 
-        return $this->_redirect($targetUrl);
+        $response = $this->getResponse();
+        $response->setRedirect($targetUrl);
+
+        return $response;
     }
 
     /**
