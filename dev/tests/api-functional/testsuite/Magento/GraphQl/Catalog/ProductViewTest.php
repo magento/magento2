@@ -15,6 +15,7 @@ use Magento\Catalog\Model\Category;
 use Magento\Framework\DataObject;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\TestFramework\Workaround\ConsumerInvoker;
 
 /**
  * Test products query output
@@ -29,6 +30,8 @@ class ProductViewTest extends GraphQlAbstract
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $consumerInvoker = $this->objectManager->create(ConsumerInvoker::class);
+        $consumerInvoker->invoke();
     }
 
     /**
@@ -232,7 +235,7 @@ class ProductViewTest extends GraphQlAbstract
             special_from_date
             special_price
             special_to_date
-            swatch_image            
+            swatch_image
             tier_price
             tier_prices
             {
@@ -707,7 +710,7 @@ QUERY;
         $customAttribute = null;
         $this->assertEquals($customAttribute, $actualResponse['attribute_code_custom']);
     }
-    
+
     /**
      * @param ProductInterface $product
      * @param $actualResponse
@@ -1054,7 +1057,7 @@ QUERY;
 
         $query = <<<QUERY
 {
-    products(filter: 
+    products(filter:
              {
              sku: {in:["12345"]}
              }
