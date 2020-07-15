@@ -11,6 +11,7 @@ use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\Data\PageInterfaceFactory;
 use Magento\Cms\Api\Data\PageSearchResultsInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
+use Magento\Cms\Model\Api\SearchCriteria\PageCollectionProcessor;
 use Magento\Cms\Model\Page\IdentityMap;
 use Magento\Cms\Model\ResourceModel\Page as ResourcePage;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
@@ -261,7 +262,7 @@ class PageRepository implements PageRepositoryInterface
     private function getCollectionProcessor()
     {
         if (!$this->collectionProcessor) {
-            // phpstan:ignore "Class Magento\Cms\Model\PageCollectionProcessor not found."
+            // phpstan:ignore "Class Magento\Cms\Model\Api\SearchCriteria\PageCollectionProcessor not found."
             $this->collectionProcessor = ObjectManager::getInstance()
                 ->get(PageCollectionProcessor::class);
         }
