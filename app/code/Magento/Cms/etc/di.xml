@@ -243,4 +243,10 @@
         </arguments>
     </type>
     <preference for="Magento\Cms\Model\Page\CustomLayoutRepositoryInterface" type="Magento\Cms\Model\Page\CustomLayout\CustomLayoutRepository" />
+    <type name="Magento\Cms\Model\Wysiwyg\Validator">
+        <arguments>
+            <argument name="validator" xsi:type="object">DefaultWYSIWYGValidator</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface" type="Magento\Cms\Model\Wysiwyg\Validator" />
 </config>
