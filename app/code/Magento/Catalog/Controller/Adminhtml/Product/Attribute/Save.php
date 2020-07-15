@@ -261,6 +261,10 @@ class Save extends Attribute implements HttpPostActionInterface
                 unset($data['apply_to']);
             }
 
+            if ($model->getBackendType() == 'static' && !$model->getIsUserDefined()) {
+                $data['frontend_class'] = $model->getFrontendClass();
+            }
+
             $model->addData($data);
 
             if (!$attributeId) {

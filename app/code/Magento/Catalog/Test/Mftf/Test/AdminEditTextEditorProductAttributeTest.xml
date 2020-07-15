@@ -50,8 +50,7 @@
         <amOnPage url="{{_defaultProduct.name}}.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad5"/>
         <see userInput="Text Area" stepKey="seeText2" />
-        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid2"/>
-        <waitForPageLoad stepKey="waitForPageLoad6"/>
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttributeGrid2"/>
         <click selector="{{AdminProductAttributeGridSection.AttributeCode($$myProductAttributeCreation.attribute_code$$)}}" stepKey="navigateToAttributeEditPage2" />
         <waitForPageLoad stepKey="waitForPageLoad7" />
         <seeOptionIsSelected selector="{{AttributePropertiesSection.InputType}}" userInput="Text Area" stepKey="seeTextAreaSelected" />
