@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\WishlistGraphQl\Model\Resolver;
 
+use Magento\Catalog\Model\Product;
 use Magento\CatalogGraphQl\Model\ProductDataProvider;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -45,9 +46,9 @@ class ProductResolver implements ResolverInterface
         if (!isset($value['model'])) {
             throw new LocalizedException(__('Missing key "model" in Wishlist Item value data'));
         }
-        /** @var Item $wishlistItem */
-        $wishlistItem = $value['model'];
+        /** @var Product $product */
+        $product = $value['model'];
 
-        return $this->productDataProvider->getProductDataById((int)$wishlistItem->getProductId());
+        return $this->productDataProvider->getProductDataById((int) $product->getId());
     }
 }

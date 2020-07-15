@@ -16,11 +16,12 @@ use Magento\Wishlist\Model\Wishlist;
 use Magento\Wishlist\Model\Wishlist\Config as WishlistConfig;
 use Magento\Wishlist\Model\WishlistFactory;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
+use Magento\WishlistGraphQl\Mapper\WishlistDataMapper;
 
 /**
- * Fetches the Wishlist data according to the GraphQL schema
+ * Fetches the Wishlist data by ID according to the GraphQL schema
  */
-class WishlistResolver implements ResolverInterface
+class WishlistById implements ResolverInterface
 {
     /**
      * @var WishlistResourceModel
@@ -33,6 +34,11 @@ class WishlistResolver implements ResolverInterface
     private $wishlistFactory;
 
     /**
+     * @var WishlistDataMapper
+     */
+    private $wishlistDataMapper;
+
+    /**
      * @var WishlistConfig
      */
     private $wishlistConfig;
@@ -40,15 +46,18 @@ class WishlistResolver implements ResolverInterface
     /**
      * @param WishlistResourceModel $wishlistResource
      * @param WishlistFactory $wishlistFactory
+     * @param WishlistDataMapper $wishlistDataMapper
      * @param WishlistConfig $wishlistConfig
      */
     public function __construct(
         WishlistResourceModel $wishlistResource,
         WishlistFactory $wishlistFactory,
+        WishlistDataMapper $wishlistDataMapper,
         WishlistConfig $wishlistConfig
     ) {
         $this->wishlistResource = $wishlistResource;
         $this->wishlistFactory = $wishlistFactory;
+        $this->wishlistDataMapper = $wishlistDataMapper;
         $this->wishlistConfig = $wishlistConfig;
     }
 
@@ -68,24 +77,39 @@ class WishlistResolver implements ResolverInterface
 
         $customerId = $context->getUserId();
 
-        /* Guest checking */
-        if (!$customerId && 0 === $customerId) {
-            throw new GraphQlAuthorizationException(__('The current user cannot perform operations on wishlist'));
+        if (null === $customerId || 0 === $customerId) {
+            throw new GraphQlAuthorizationException(
+                __('The current user cannot perform operations on wishlist')
+            );
         }
-        /** @var Wishlist $wishlist */
-        $wishlist = $this->wishlistFactory->create();
-        $this->wishlistResource->load($wishlist, $customerId, 'customer_id');
 
-        if (null === $wishlist->getId()) {
+        $wishlist = $this->getWishlist((int) $args['id'], $customerId);
+
+        if (null === $wishlist->getId() || (int) $wishlist->getCustomerId() !== $customerId) {
             return [];
         }
 
-        return [
-            'sharing_code' => $wishlist->getSharingCode(),
-            'updated_at' => $wishlist->getUpdatedAt(),
-            'items_count' => $wishlist->getItemsCount(),
-            'name' => $wishlist->getName(),
-            'model' => $wishlist,
-        ];
+        return $this->wishlistDataMapper->map($wishlist);
+    }
+
+    /**
+     * Get wishlist
+     *
+     * @param int $wishlistId
+     * @param int $customerId
+     *
+     * @return Wishlist
+     */
+    private function getWishlist(int $wishlistId, int $customerId): Wishlist
+    {
+        $wishlist = $this->wishlistFactory->create();
+
+        if ($wishlistId > 0) {
+            $this->wishlistResource->load($wishlist, $wishlistId);
+        } else {
+            $this->wishlistResource->load($wishlist, $customerId, 'customer_id');
+        }
+
+        return $wishlist;
     }
 }

@@ -21,7 +21,7 @@ use Magento\Wishlist\Model\Wishlist;
 /**
  * Fetches the Wishlist Items data according to the GraphQL schema
  */
-class WishlistItemsResolver implements ResolverInterface
+class WishlistItems implements ResolverInterface
 {
     /**
      * @var WishlistItemCollectionFactory
@@ -67,10 +67,11 @@ class WishlistItemsResolver implements ResolverInterface
         foreach ($wishlistItems as $wishlistItem) {
             $data[] = [
                 'id' => $wishlistItem->getId(),
-                'qty' => $wishlistItem->getData('qty'),
+                'quantity' => $wishlistItem->getData('qty'),
                 'description' => $wishlistItem->getDescription(),
                 'added_at' => $wishlistItem->getAddedAt(),
                 'model' => $wishlistItem->getProduct(),
+                'wishlistItemModel' => $wishlistItem,
             ];
         }
         return $data;

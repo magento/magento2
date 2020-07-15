@@ -42,17 +42,17 @@ class DeleteProductsFromWishlistTest extends GraphQlAbstract
         $wishlist = $this->getWishlist();
         $wishlistId = $wishlist['customer']['wishlist']['id'];
         $wishlist = $wishlist['customer']['wishlist'];
-        $wishlistItems = $wishlist['items'];
-        self::assertEquals(1, $wishlist['items_count']);
+        $wishlistItems = $wishlist['items_v2'];
+        $this->assertEquals(1, $wishlist['items_count']);
 
         $query = $this->getQuery((int) $wishlistId, (int) $wishlistItems[0]['id']);
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
-        self::assertArrayHasKey('removeProductsFromWishlist', $response);
-        self::assertArrayHasKey('wishlist', $response['removeProductsFromWishlist']);
+        $this->assertArrayHasKey('removeProductsFromWishlist', $response);
+        $this->assertArrayHasKey('wishlist', $response['removeProductsFromWishlist']);
         $wishlistResponse = $response['removeProductsFromWishlist']['wishlist'];
-        self::assertEquals(0, $wishlistResponse['items_count']);
-        self::assertEmpty($wishlistResponse['items']);
+        $this->assertEquals(0, $wishlistResponse['items_count']);
+        $this->assertEmpty($wishlistResponse['items_v2']);
     }
 
     /**
@@ -98,10 +98,10 @@ mutation {
       id
       sharing_code
       items_count
-      items {
+      items_v2 {
         id
         description
-        qty
+        quantity
       }
     }
   }
@@ -134,9 +134,9 @@ query {
     wishlist {
       id
       items_count
-      items {
+      items_v2 {
         id
-        qty
+        quantity
         description
       }
     }

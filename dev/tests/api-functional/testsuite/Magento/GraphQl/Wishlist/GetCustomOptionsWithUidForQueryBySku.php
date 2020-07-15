@@ -12,7 +12,7 @@ use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 /**
  * Generate an array with test values for customizable options with encoded id_v2 value
  */
-class GetCustomOptionsWithIDV2ForQueryBySku
+class GetCustomOptionsWithUidForQueryBySku
 {
     /**
      * @var ProductCustomOptionRepositoryInterface
@@ -71,7 +71,7 @@ class GetCustomOptionsWithIDV2ForQueryBySku
     }
 
     /**
-     * Returns id_v2 of the selected custom option
+     * Returns uid of the selected custom option
      *
      * @param int $optionId
      * @param int $optionValueId
@@ -84,7 +84,7 @@ class GetCustomOptionsWithIDV2ForQueryBySku
     }
 
     /**
-     * Returns id_v2 of the entered custom option
+     * Returns uid of the entered custom option
      *
      * @param int $optionId
      *
