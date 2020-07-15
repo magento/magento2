@@ -61,9 +61,11 @@ class OldViews
         }
 
         // Unsubscribe old views that still have triggers in db
-        $triggerTableNames = $this->getTriggerTableNames();
+        $triggerTableNames = $this->getTableNamesWithTriggers();
         foreach ($triggerTableNames as $tableName) {
-            $this->createViewByTableName($tableName)->unsubscribe();
+            $view = $this->createViewByTableName($tableName);
+            $view->unsubscribe();
+            $view->getState()->delete();
         }
 
         // Re-subscribe mviews
@@ -74,11 +76,11 @@ class OldViews
     }
 
     /**
-      * Retrieve trigger table name list
-      *
-      * @return array
-      */
-    private function getTriggerTableNames(): array
+     * Retrieve list of table names that have triggers
+     *
+     * @return array
+     */
+    private function getTableNamesWithTriggers(): array
     {
         $connection = $this->resource->getConnection();
         $dbName = $this->resource->getSchemaName(ResourceConnection::DEFAULT_CONNECTION);
@@ -106,11 +108,11 @@ class OldViews
             'subscription_model' => null
         ];
         $data['data'] = [
-            'id' => '0',
             'subscriptions' => $subscription,
         ];
 
         $view = $this->viewFactory->create($data);
+        $view->setId('old_view');
         $view->getState()->setMode(StateInterface::MODE_ENABLED);
 
         return $view;
