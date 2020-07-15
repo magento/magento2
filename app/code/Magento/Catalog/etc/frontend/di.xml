@@ -13,11 +13,6 @@
             </argument>
         </arguments>
     </virtualType>
-    <type name="Magento\Catalog\Model\ResourceModel\Category\Collection">
-        <arguments>
-            <argument name="fetchStrategy" xsi:type="object">Magento\Catalog\Model\ResourceModel\Category\Collection\FetchStrategy</argument>
-        </arguments>
-    </type>
     <type name="Magento\Catalog\Model\Indexer\AbstractFlatState">
         <arguments>
             <argument name="isAvailable" xsi:type="boolean">true</argument>
