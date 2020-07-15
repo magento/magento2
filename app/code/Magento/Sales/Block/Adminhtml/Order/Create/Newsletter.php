@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\Create;
 
+use Magento\Framework\Phrase;
+
 /**
  * Adminhtml sales order create newsletter block
  *
@@ -12,7 +14,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @since 100.0.2
  */
-class Newsletter extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCreate
+class Newsletter extends AbstractCreate
 {
     /**
      * Constructor
@@ -28,7 +30,7 @@ class Newsletter extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCre
     /**
      * Get header text
      *
-     * @return \Magento\Framework\Phrase
+     * @return Phrase
      */
     public function getHeaderText()
     {
@@ -43,13 +45,5 @@ class Newsletter extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCre
     public function getHeaderCssClass()
     {
         return 'head-newsletter-list';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
-    protected function _toHtml()
-    {
-        return parent::_toHtml();
     }
 }
