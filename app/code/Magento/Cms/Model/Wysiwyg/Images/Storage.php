@@ -636,8 +636,8 @@ class Storage extends \Magento\Framework\DataObject
         if ($imageWidth && $imageHeight) {
             $configWidth = $this->_resizeParameters['width'];
             $configHeight = $this->_resizeParameters['height'];
-            $imageWidth = $configWidth > $imageWidth ? $imageWidth : $this->_resizeParameters['width'];
-            $imageHeight = $configHeight > $imageHeight ? $imageHeight : $this->_resizeParameters['height'];
+            $imageWidth = $configWidth > $imageWidth ? $imageWidth : $configWidth;
+            $imageHeight = $configHeight > $imageHeight ? $imageHeight : $configHeight;
         } else {
             $imageWidth = $this->_resizeParameters['width'];
             $imageHeight = $this->_resizeParameters['height'];
