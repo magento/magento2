@@ -88,15 +88,13 @@
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice('Radio Option', '2')}}" userInput="7" stepKey="fillOptionValuePrice3"/>
 
         <!--Save the product with custom options -->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
-        <waitForLoadingMaskToDisappear stepKey="waitProductPageSave"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeProductSavedMessage"/>
 
         <!-- Add this product to second website -->
         <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openProductInWebsitesSection1"/>
         <click selector="{{ProductInWebsitesSection.website('Second Website')}}" stepKey="selectSecondWebsite"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForProductPagetoSaveAgain"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageAgain"/>
 
         <click selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" stepKey="openCustomOptionsSection2"/>

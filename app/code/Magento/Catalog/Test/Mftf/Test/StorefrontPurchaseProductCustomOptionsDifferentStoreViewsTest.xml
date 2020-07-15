@@ -103,7 +103,7 @@
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Custom Options 1', '1')}}" userInput="option2" stepKey="fillOptionValueTitle2"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice('Custom Options 1', '1')}}" userInput="50" stepKey="fillOptionValuePrice2"/>
         <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType('Custom Options 1', '1')}}" userInput="percent" stepKey="clickSelectPriceType"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton1"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton1"/>
 
         <!-- Switcher to Store FR-->
         <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToStoreFR">
@@ -127,7 +127,7 @@
         <click selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('1')}}" stepKey="clickHiddenRequireMessage"/>
         <uncheckOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('1')}}" stepKey="uncheckUseDefaultOptionValueTitle2"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('FR Custom Options 1', '1')}}" userInput="FR option2" stepKey="fillOptionValueTitle4"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton2"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton2"/>
 
         <!-- Login Customer Storefront -->
 
@@ -304,7 +304,7 @@
 
         <waitForPageLoad time="30" stepKey="waitForPageLoad19"/>
         <checkOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('1')}}" stepKey="checkUseDefaultOptionValueTitle2"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton3"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton3"/>
 
         <!--Go to Product Page-->
 

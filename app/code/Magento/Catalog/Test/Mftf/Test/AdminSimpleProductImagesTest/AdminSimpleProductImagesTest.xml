@@ -106,7 +106,7 @@
         <dontSeeElement selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="dontSeeErrorPng"/>
 
         <!-- Save the first product and go to the storefront -->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
         <amOnPage url="$$firstProduct.name$$.html" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForStorefront"/>
 
@@ -142,7 +142,7 @@
         <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="$$secondProduct.name$$" stepKey="fillUrlKey2"/>
 
         <!-- Save the second product -->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct2"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct2"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <magentoCLI command="cache:flush" stepKey="flushCache"/>
 

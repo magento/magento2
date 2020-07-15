@@ -42,8 +42,7 @@
             <argument name="product" value="$$createConfigProduct$$"/>
         </actionGroup>
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="100" stepKey="changeProductQuantity"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveChanges"/>
-        <waitForPageLoad stepKey="waitProductGridToBeLoaded"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveChanges"/>
 
         <amOnPage url="$$createConfigProduct.sku$$.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPage"/>

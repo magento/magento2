@@ -105,7 +105,7 @@
 
         <!-- Edit the quantity of the simple first product as 0 -->
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="0" stepKey="fillProductQuantity"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveProduct"/>
 
         <!-- Check to make sure that the configurable product shows up as in stock -->
         <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage2"/>
@@ -125,7 +125,7 @@
 
         <!-- Edit the quantity of the second simple product as 0 -->
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="0" stepKey="fillProductQuantity2"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct2"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveProduct2"/>
 
         <!-- Check to make sure that the configurable product shows up as out of stock -->
         <amOnPage url="/{{ApiConfigurableProduct.urlKey}}2.html" stepKey="goToConfigProductPage3"/>

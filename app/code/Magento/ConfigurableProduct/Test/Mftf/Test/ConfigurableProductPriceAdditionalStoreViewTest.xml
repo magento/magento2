@@ -113,8 +113,7 @@
         </actionGroup>
         <waitForPageLoad stepKey="waitEditPage"/>
         <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="disableProductForAllStoreView"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton2"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForProductPageSave1" />
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton2"/>
         <dontSeeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="dontSeeCheckboxEnableProductIsChecked"/>
 
         <!-- Disable each of the child products for All Store views -->
@@ -127,8 +126,7 @@
         <!-- Add product to second website -->
         <click selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="openProductInWebsitesSection1"/>
         <click selector="{{ProductInWebsitesSection.website('Second Website')}}" stepKey="selectSecondWebsite"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForProductPageSave"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessage"/>
 
         <!-- switch to the second store view -->
