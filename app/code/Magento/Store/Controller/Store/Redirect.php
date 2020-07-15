@@ -70,35 +70,27 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
      */
     public function execute()
     {
-        /** @var Store $currentStore */
-        $currentStore = $this->storeRepository->getById($this->storeResolver->getCurrentStoreId());
         $targetStoreCode = $this->_request->getParam(StoreResolver::PARAM_NAME);
-        $error = null;
+        $fromStoreCode = $this->_request->getParam('___from_store');
 
         if ($targetStoreCode === null) {
-            return $this->_redirect($currentStore->getBaseUrl());
+            return $this->_redirect($this->getCurrentStoreBaseUrl());
         }
 
         try {
+            /** @var Store $fromStore */
+            $fromStore = $this->storeRepository->get($fromStoreCode);
             /** @var Store $targetStore */
             $targetStore = $this->storeRepository->get($targetStoreCode);
-        } catch (NoSuchEntityException $e) {
-            $error = __('Requested store is not found');
-        }
 
-        if ($error !== null) {
-            $this->messageManager->addErrorMessage($error);
-            $this->_redirect->redirect($this->_response, $currentStore->getBaseUrl());
-        } else {
             $encodedUrl = $this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED);
-
             $query = [
-                '___from_store' => $currentStore->getCode(),
+                '___from_store' => $fromStore->getCode(),
                 StoreResolverInterface::PARAM_NAME => $targetStoreCode,
                 \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl,
             ];
 
-            $customerHash = $this->hashGenerator->generateHash($currentStore);
+            $customerHash = $this->hashGenerator->generateHash($fromStore);
             $query = array_merge($query, $customerHash);
 
             $arguments = [
@@ -106,8 +98,24 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
                 '_query' => $query
             ];
             $targetUrl = $targetStore->getUrl('stores/store/switch', $arguments);
-            $this->_redirect->redirect($this->_response, $targetUrl);
+        } catch (NoSuchEntityException $e) {
+            $this->messageManager->addErrorMessage(__('Requested store is not found'));
+            $targetUrl = $this->getCurrentStoreBaseUrl();
         }
-        // phpstan:ignore "Method Magento\Store\Controller\Store\Redirect::execute() should return *"
+
+        return $this->_redirect($targetUrl);
+    }
+
+    /**
+     * Get base url for current store
+     *
+     * @return string
+     */
+    private function getCurrentStoreBaseUrl(): string
+    {
+        /** @var Store $currentStore */
+        $currentStore = $this->storeRepository->getById($this->storeResolver->getCurrentStoreId());
+
+        return $currentStore->getBaseUrl();
     }
 }
