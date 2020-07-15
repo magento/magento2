@@ -7,11 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Checkout\Block\Cart;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Block\Product\ProductList\AbstractLinksTest;
 use Magento\Catalog\ViewModel\Product\Listing\PreparePostData;
 use Magento\Checkout\Model\Session;
-use Magento\Quote\Api\Data\CartInterface;
 use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use Magento\TestFramework\Store\ExecuteInStoreContext;
@@ -26,8 +24,7 @@ use Magento\TestFramework\Store\ExecuteInStoreContext;
  */
 class CrosssellTest extends AbstractLinksTest
 {
-    /** @var Crosssell */
-    protected $block;
+    private const MAX_ITEM_COUNT = 4;
 
     /** @var Session */
     private $checkoutSession;
@@ -41,9 +38,6 @@ class CrosssellTest extends AbstractLinksTest
 
     /** @var string */
     private $addToLinksXpath = "//div[contains(@class, 'actions-secondary')]";
-
-    /** @var int */
-    private $maxItemCount = 4;
 
     /** @var ExecuteInStoreContext */
     private $executeInStoreContext;
@@ -71,7 +65,6 @@ class CrosssellTest extends AbstractLinksTest
      */
     public function testSimpleCrosssellProduct(): void
     {
-        /** @var ProductInterface $relatedProduct */
         $relatedProduct = $this->productRepository->get('simple-1');
         $this->linkProducts('simple', ['simple-1' => ['position' => 2]]);
         $this->setCheckoutSessionQuote('test_order_with_simple_product_without_address');
@@ -166,7 +159,7 @@ class CrosssellTest extends AbstractLinksTest
         $items = $this->getBlockItems('test_order_with_simple_product_without_address');
 
         $this->assertCount(
-            $this->maxItemCount,
+            self::MAX_ITEM_COUNT,
             $items,
             'Expected quantity of cross-sell products do not match the actual quantity!'
         );
@@ -201,7 +194,7 @@ class CrosssellTest extends AbstractLinksTest
         $items = $this->getBlockItems('tableRate');
 
         $this->assertCount(
-            $this->maxItemCount,
+            self::MAX_ITEM_COUNT,
             $items,
             'Expected quantity of cross-sell products do not match the actual quantity!'
         );
@@ -273,7 +266,7 @@ class CrosssellTest extends AbstractLinksTest
      */
     public function testMultipleWebsitesCrosssellProducts(array $data): void
     {
-        $this->updateProducts($this->prepareWebsiteIdsProducts());
+        $this->updateProducts($this->prepareProductsWebsiteIds());
         $productLinks = array_merge($this->existingProducts, $data['productLinks']);
         $this->linkProducts('simple-tableRate-1', $productLinks);
         $items = $this->executeInStoreContext->execute($data['storeCode'], [$this, 'getBlockItems'], 'tableRate');
@@ -334,13 +327,13 @@ class CrosssellTest extends AbstractLinksTest
     /**
      * @inheritdoc
      */
-    protected function prepareWebsiteIdsProducts(): array
+    protected function prepareProductsWebsiteIds(): array
     {
-        $websiteIdsProducts = parent::prepareWebsiteIdsProducts();
-        $simple = $websiteIdsProducts['simple-1'];
-        unset($websiteIdsProducts['simple-1']);
+        $productsWebsiteIds = parent::prepareProductsWebsiteIds();
+        $simple = $productsWebsiteIds['simple-1'];
+        unset($productsWebsiteIds['simple-1']);
 
-        return array_merge($websiteIdsProducts, ['simple-tableRate-1' => $simple]);
+        return array_merge($productsWebsiteIds, ['simple-tableRate-1' => $simple]);
     }
 
     /**
@@ -352,9 +345,8 @@ class CrosssellTest extends AbstractLinksTest
     private function setCheckoutSessionQuote(string $reservedOrderId): void
     {
         $this->checkoutSession->clearQuote();
-        /** @var CartInterface $quote */
         $quote = $this->objectManager->get(GetQuoteByReservedOrderId::class)->execute($reservedOrderId);
-        if ($quote) {
+        if ($quote !== null) {
             $this->checkoutSession->setQuoteId($quote->getId());
         }
     }

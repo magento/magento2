@@ -10,8 +10,8 @@ namespace Magento\Catalog\Block\Product;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Pricing\Price\FinalPrice;
-use Magento\Framework\App\State;
 use Magento\Framework\Pricing\Render;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\DesignInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -64,6 +64,11 @@ class AbstractTest extends TestCase
     private $layout;
 
     /**
+     * @var SerializerInterface
+     */
+    private $json;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -78,11 +83,12 @@ class AbstractTest extends TestCase
             self::$isStubClass = true;
         }
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->objectManager->get(State::class)->setAreaCode('frontend');
         $this->objectManager->get(DesignInterface::class)->setDefaultDesignTheme();
         $this->layout = $this->objectManager->get(LayoutInterface::class);
         $this->block = $this->layout->createBlock(self::STUB_CLASS);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
+        $this->json = $this->objectManager->get(SerializerInterface::class);
     }
 
     /**
@@ -129,7 +135,7 @@ class AbstractTest extends TestCase
     {
         $this->product = $this->productRepository->get('simple');
         $json = $this->block->getAddToWishlistParams($this->product);
-        $params = (array)json_decode($json);
+        $params = (array)$this->json->unserialize($json);
         $data = (array)$params['data'];
         $this->assertEquals($this->product->getId(), $data['product']);
         $this->assertArrayHasKey('uenc', $data);
@@ -162,7 +168,6 @@ class AbstractTest extends TestCase
     public function testGetReviewsSummaryHtml(): void
     {
         $this->product = $this->productRepository->get('simple');
-        $this->block->setLayout($this->layout);
         $html = $this->block->getReviewsSummaryHtml($this->product, false, true);
         $this->assertNotEmpty($html);
         $this->assertContains('review', $html);

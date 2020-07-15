@@ -303,7 +303,7 @@ abstract class AbstractLinksTest extends TestCase
      *
      * @return array
      */
-    protected function prepareWebsiteIdsProducts(): array
+    protected function prepareProductsWebsiteIds(): array
     {
         $websiteId = $this->storeManager->getWebsite('test')->getId();
         $defaultWebsiteId = $this->storeManager->getWebsite('base')->getId();

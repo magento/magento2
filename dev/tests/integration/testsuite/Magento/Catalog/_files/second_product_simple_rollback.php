@@ -5,28 +5,26 @@
  */
 declare(strict_types=1);
 
-use Magento\Catalog\Model\Product;
-use Magento\CatalogInventory\Model\StockRegistryStorage;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var Registry $registry */
 $registry = $objectManager->get(Registry::class);
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
+$productRepository->cleanCache();
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/** @var Product $product */
-$product = $objectManager->create(Product::class);
-$product->load(6);
-/** @var StockRegistryStorage $stockRegistryStorage */
-$stockRegistryStorage = $objectManager->get(StockRegistryStorage::class);
-
-if ($product->getId()) {
-    $product->delete();
+try {
+    $productRepository->deleteById('simple2');
+} catch (NoSuchEntityException $e) {
+    //Product already removed
 }
 
-$stockRegistryStorage->clean();
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
