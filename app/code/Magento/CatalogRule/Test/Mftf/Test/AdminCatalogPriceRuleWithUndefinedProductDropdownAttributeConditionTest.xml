@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCatalogPriceRuleWithUndefinedProductDropdownAttributeConditionTest">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Create catalog price rule"/>
+            <title value="Enable 'is undefined' condition to Scope Catalog Price rules by custom 'Dropdown' product attribute"/>
+            <description value="Checks discount will applies with Catalog Price Rule with 'is undefined' of 'Dropdown' Product Attribute condition"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-13654"/>
+            <useCaseId value="MC-10971"/>
+            <group value="CatalogRule"/>
+        </annotations>
+        <before>
+            <!-- Create Category, two Products in it and "Yesno" Product attribute -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSecondProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productDropDownAttribute" stepKey="createProductAttribute">
+                <field key="scope">website</field>
+            </createData>
+            <!-- Add Product Attribute to Default Set -->
+            <createData entity="AddToDefaultSet" stepKey="addProductAttributeToDefaultSet">
+                <requiredEntity createDataKey="createProductAttribute"/>
+            </createData>
+
+            <!--Create Catalog Price Rule-->
+            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenNewCatalogPriceRuleFormPageActionGroup" stepKey="startCreatingCatalogPriceRule"/>
+            <actionGroup ref="AdminCatalogPriceRuleFillMainInfoActionGroup" stepKey="fillMainInfoForCatalogPriceRule">
+                <argument name="name" value="{{_defaultCatalogRule.name}}"/>
+            </actionGroup>
+            <actionGroup ref="CreateCatalogPriceRuleConditionWithAttribute" stepKey="createCatalogPriceRuleCondition">
+                <argument name="attributeName" value="$createProductAttribute.attribute[frontend_labels][0][label]$"/>
+                <argument name="targetValue" value="is"/>
+                <argument name="targetSelectValue" value="is undefined"/>
+            </actionGroup>
+            <actionGroup ref="AdminCatalogPriceRuleFillActionsActionGroup" stepKey="fillActionsForCatalogPriceRule"/>
+            <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
+            <!-- Reindex after Catalog Price Rule creation -->
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="runIndexerUsingCronAfterCatalogPriceRuleCreated"/>
+            <wait time="1" stepKey="waitForReindex"/>
+        </before>
+        <after>
+            <!-- Delete created via API data -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteFirstCategory"/>
+            <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
+            <!-- Delete Catalog Price Rule -->
+            <actionGroup ref="RemoveCatalogPriceRule" stepKey="deleteCatalogPriceRule">
+                <argument name="ruleName" value="{{_defaultCatalogRule.name}}"/>
+            </actionGroup>
+            <actionGroup ref="logout" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="runIndexerUsingCronAfterAttributesWasDeleted"/>
+        </after>
+
+        <!-- Check Catalog Price Rule has been affected on Product prices -->
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProduct">
+            <argument name="productUrlKey" value="$createProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertProductPrices">
+            <argument name="productPrice" value="$123.00"/>
+            <argument name="productFinalPrice" value="$110.70"/>
+        </actionGroup>
+        <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openSecondProduct">
+            <argument name="productUrlKey" value="$createSecondProduct.custom_attributes[url_key]$"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertSecondProductPrices">
+            <argument name="productPrice" value="$123.00"/>
+            <argument name="productFinalPrice" value="$110.70"/>
+        </actionGroup>
+    </test>
+</tests>
