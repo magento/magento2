@@ -94,8 +94,7 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="productIndexPage"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="productIndexPage"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGrid">
             <argument name="product" value="$$baseConfigProductHandle$$"/>
