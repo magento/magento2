@@ -11,7 +11,6 @@ use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\Data\PageInterfaceFactory;
 use Magento\Cms\Api\Data\PageSearchResultsInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
-use Magento\Cms\Model\Api\SearchCriteria\PageCollectionProcessor;
 use Magento\Cms\Model\Page\IdentityMap;
 use Magento\Cms\Model\ResourceModel\Page as ResourcePage;
 use Magento\Cms\Model\ResourceModel\Page\CollectionFactory as PageCollectionFactory;
@@ -123,8 +122,10 @@ class PageRepository implements PageRepositoryInterface
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->storeManager = $storeManager;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
-        $this->identityMap = $identityMap ?? ObjectManager::getInstance()->get(IdentityMap::class);
-        $this->routeConfig = $routeConfig ?? ObjectManager::getInstance()->get(Config::class);
+        $this->identityMap = $identityMap ?? ObjectManager::getInstance()
+                ->get(IdentityMap::class);
+        $this->routeConfig = $routeConfig ?? ObjectManager::getInstance()
+                ->get(Config::class);
     }
 
     /**
@@ -260,9 +261,9 @@ class PageRepository implements PageRepositoryInterface
     private function getCollectionProcessor()
     {
         if (!$this->collectionProcessor) {
-            $this->collectionProcessor = ObjectManager::getInstance()->get(
-                PageCollectionProcessor::class
-            );
+            // phpstan:ignore "Class Magento\Cms\Model\PageCollectionProcessor not found."
+            $this->collectionProcessor = ObjectManager::getInstance()
+                ->get(PageCollectionProcessor::class);
         }
         return $this->collectionProcessor;
     }
