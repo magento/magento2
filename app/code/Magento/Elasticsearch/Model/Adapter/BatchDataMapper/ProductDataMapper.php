@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Elasticsearch\Model\Adapter\BatchDataMapper;
 
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider;
@@ -74,7 +75,7 @@ class ProductDataMapper implements BatchDataMapperInterface
     private $attributesExcludedFromMerge = [
         'status',
         'visibility',
-        'tax_class_id'
+        'tax_class_id',
     ];
 
     /**
@@ -85,8 +86,11 @@ class ProductDataMapper implements BatchDataMapperInterface
     ];
 
     /**
-     * Construction for DocumentDataMapper
-     *
+     * @var string[]
+     */
+    private $filterableAttributeTypes;
+
+    /**
      * @param Builder $builder
      * @param FieldMapperInterface $fieldMapper
      * @param DateFieldType $dateFieldType
@@ -94,6 +98,7 @@ class ProductDataMapper implements BatchDataMapperInterface
      * @param DataProvider $dataProvider
      * @param array $excludedAttributes
      * @param array $sortableAttributesValuesToImplode
+     * @param array $filterableAttributeTypes
      */
     public function __construct(
         Builder $builder,
@@ -102,7 +107,8 @@ class ProductDataMapper implements BatchDataMapperInterface
         AdditionalFieldsProviderInterface $additionalFieldsProvider,
         DataProvider $dataProvider,
         array $excludedAttributes = [],
-        array $sortableAttributesValuesToImplode = []
+        array $sortableAttributesValuesToImplode = [],
+        array $filterableAttributeTypes = []
     ) {
         $this->builder = $builder;
         $this->fieldMapper = $fieldMapper;
@@ -115,6 +121,7 @@ class ProductDataMapper implements BatchDataMapperInterface
         $this->additionalFieldsProvider = $additionalFieldsProvider;
         $this->dataProvider = $dataProvider;
         $this->attributeOptionsCache = [];
+        $this->filterableAttributeTypes = $filterableAttributeTypes;
     }
 
     /**
@@ -212,7 +219,7 @@ class ProductDataMapper implements BatchDataMapperInterface
         if ($retrievedValue !== null) {
             $productAttributes[$attribute->getAttributeCode()] = $retrievedValue;
 
-            if ($attribute->getIsSearchable()) {
+            if ($this->isAttributeLabelsShouldBeMapped($attribute)) {
                 $attributeLabels = $this->getValuesLabels($attribute, $attributeValues, $storeId);
                 $retrievedLabel = $this->retrieveFieldValue($attributeLabels);
                 if ($retrievedLabel) {
@@ -222,6 +229,26 @@ class ProductDataMapper implements BatchDataMapperInterface
         }
 
         return $productAttributes;
+    }
+
+    /**
+     * Check if an attribute has one of the next storefront properties enabled for mapping labels:
+     * - "Use in Search" (is_searchable)
+     * - "Visible in Advanced Search" (is_visible_in_advanced_search)
+     * - "Use in Layered Navigation" (is_filterable)
+     * - "Use in Search Results Layered Navigation" (is_filterable_in_search)
+     *
+     * @param Attribute $attribute
+     * @return bool
+     */
+    private function isAttributeLabelsShouldBeMapped(Attribute $attribute): bool
+    {
+        return (
+            $attribute->getIsSearchable()
+            || $attribute->getIsVisibleInAdvancedSearch()
+            || $attribute->getIsFilterable()
+            || $attribute->getIsFilterableInSearch()
+        );
     }
 
     /**
@@ -247,6 +274,15 @@ class ProductDataMapper implements BatchDataMapperInterface
 
         if ($attribute->getFrontendInput() === 'multiselect') {
             $attributeValues = $this->prepareMultiselectValues($attributeValues);
+        }
+
+        if (in_array($attribute->getFrontendInput(), $this->filterableAttributeTypes)) {
+            $attributeValues = array_map(
+                function (string $valueId) {
+                    return (int)$valueId;
+                },
+                $attributeValues
+            );
         }
 
         if ($this->isAttributeDate($attribute)) {
