@@ -1832,4 +1832,21 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="DefaultWYSIWYGValidator" type="Magento\Framework\Validator\HTML\ConfigurableWYSIWYGValidator">
+        <arguments>
+            <argument name="allowedTags" xsi:type="array">
+                <item name="div" xsi:type="string">div</item>
+                <item name="a" xsi:type="string">a</item>
+            </argument>
+            <argument name="allowedAttributes" xsi:type="array">
+                <item name="class" xsi:type="string">class</item>
+            </argument>
+            <argument name="attributesAllowedByTags" xsi:type="array">
+                <item name="a" xsi:type="array">
+                    <item name="href" xsi:type="string">href</item>
+                </item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <preference for="Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface" type="DefaultWYSIWYGValidator" />
 </config>
