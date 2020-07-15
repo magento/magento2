@@ -31,3 +31,5 @@ $categoryChild->setName('Child Image Category')
     ->setIsActive(true)
     ->setPosition(2)
     ->save();
+
+$categoryParent->save();
