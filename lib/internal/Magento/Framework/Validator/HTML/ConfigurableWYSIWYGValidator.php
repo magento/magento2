@@ -56,6 +56,9 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
      */
     public function validate(string $content): void
     {
+        if (mb_strlen($content) === 0) {
+            return;
+        }
         $dom = $this->loadHtml($content);
         $xpath = new \DOMXPath($dom);
 

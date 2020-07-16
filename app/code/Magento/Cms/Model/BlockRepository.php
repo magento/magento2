@@ -12,10 +12,13 @@ use Magento\Cms\Model\ResourceModel\Block as ResourceBlock;
 use Magento\Cms\Model\ResourceModel\Block\CollectionFactory as BlockCollectionFactory;
 use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Framework\Validation\ValidationException;
+use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -70,6 +73,11 @@ class BlockRepository implements BlockRepositoryInterface
     private $collectionProcessor;
 
     /**
+     * @var WYSIWYGValidatorInterface
+     */
+    private $wysiwygValidator;
+
+    /**
      * @param ResourceBlock $resource
      * @param BlockFactory $blockFactory
      * @param Data\BlockInterfaceFactory $dataBlockFactory
@@ -79,6 +87,7 @@ class BlockRepository implements BlockRepositoryInterface
      * @param DataObjectProcessor $dataObjectProcessor
      * @param StoreManagerInterface $storeManager
      * @param CollectionProcessorInterface $collectionProcessor
+     * @param WYSIWYGValidatorInterface|null $wysiwygValidator
      */
     public function __construct(
         ResourceBlock $resource,
@@ -89,7 +98,8 @@ class BlockRepository implements BlockRepositoryInterface
         DataObjectHelper $dataObjectHelper,
         DataObjectProcessor $dataObjectProcessor,
         StoreManagerInterface $storeManager,
-        CollectionProcessorInterface $collectionProcessor = null
+        CollectionProcessorInterface $collectionProcessor = null,
+        ?WYSIWYGValidatorInterface $wysiwygValidator = null
     ) {
         $this->resource = $resource;
         $this->blockFactory = $blockFactory;
@@ -100,13 +110,46 @@ class BlockRepository implements BlockRepositoryInterface
         $this->dataObjectProcessor = $dataObjectProcessor;
         $this->storeManager = $storeManager;
         $this->collectionProcessor = $collectionProcessor ?: $this->getCollectionProcessor();
+        $this->wysiwygValidator = $wysiwygValidator
+            ?? ObjectManager::getInstance()->get(WYSIWYGValidatorInterface::class);
+    }
+
+    /**
+     * Validate block's content.
+     *
+     * @param Data\BlockInterface|Block $block
+     * @throws CouldNotSaveException
+     * @return void
+     */
+    private function validateHtml(Data\BlockInterface $block): void
+    {
+        $oldContent = null;
+        if ($block->getId()) {
+            if ($block instanceof Block && $block->getOrigData()) {
+                $oldContent = $block->getOrigData(Data\BlockInterface::CONTENT);
+            } else {
+                $oldBlock = $this->getById($block->getId());
+                $oldContent = $oldBlock->getContent();
+            }
+        }
+        if ($block->getContent() && $block->getContent() !== $oldContent) {
+            //Validate HTML content.
+            try {
+                $this->wysiwygValidator->validate($block->getContent());
+            } catch (ValidationException $exception) {
+                throw new CouldNotSaveException(
+                    __('Content HTML has restricted elements. %1', $exception->getMessage()),
+                    $exception
+                );
+            }
+        }
     }
 
     /**
      * Save Block data
      *
      * @param \Magento\Cms\Api\Data\BlockInterface $block
-     * @return Block
+     * @return Block|Data\BlockInterface
      * @throws CouldNotSaveException
      */
     public function save(Data\BlockInterface $block)
@@ -114,6 +157,8 @@ class BlockRepository implements BlockRepositoryInterface
         if (empty($block->getStoreId())) {
             $block->setStoreId($this->storeManager->getStore()->getId());
         }
+
+        $this->validateHtml($block);
 
         try {
             $this->resource->save($block);
