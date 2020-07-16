@@ -5,13 +5,15 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenProductIndexPageActionGroup">
+    <actionGroup name="AdminInvoiceClickSubmitActionGroup">
         <annotations>
-            <description>Go to products grid page.</description>
+            <description>Click submit invoice button for creating invoice.</description>
         </annotations>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndexPage"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
+
+        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <waitForPageLoad stepKey="waitForInvoiceToBeCreated"/>
     </actionGroup>
 </actionGroups>
