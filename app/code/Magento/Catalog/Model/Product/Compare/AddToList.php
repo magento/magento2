@@ -81,13 +81,30 @@ class AddToList
     }
 
     /**
+     * Set customer from visitor
+     */
+    public function setCustomerFromVisitor()
+    {
+        $customerId = $this->customerSession->getCustomerId();
+
+        if (!$customerId) {
+            return $this;
+        }
+
+        $visitorId = $this->customerVisitor->getId();
+        $compareListModel = $this->compareListFactory->create();
+        $this->compareListResource->load($compareListModel, $visitorId, 'visitor_id');
+        $compareListModel->setCustomerId($customerId);
+        $compareListModel->save();
+    }
+
+    /**
      * Get list_id for visitor
      *
      * @return int
      */
     private function getListIdByVisitorId()
     {
-
         $visitorId = $this->customerVisitor->getId();
         $compareListModel = $this->compareListFactory->create();
         $this->compareListResource->load($compareListModel, $visitorId, 'visitor_id');

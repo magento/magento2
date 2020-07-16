@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Product\Compare;
 
+use Magento\Catalog\Model\Product\Compare\AddToList;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+
 /**
  * Catalog compare item resource model
  *
@@ -13,6 +16,11 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Compare;
 class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
+     * @var AddToList
+     */
+    private $compareList;
+
+    /**
      * Initialize connection
      *
      * @return void
@@ -20,6 +28,20 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _construct()
     {
         $this->_init('catalog_compare_item', 'catalog_compare_item_id');
+    }
+
+    /**
+     * @param AddToList $addToList
+     * @param Context $context
+     * @param null $connectionName
+     */
+    public function __construct(
+        AddToList $addToList,
+        Context $context,
+        $connectionName = null
+    ) {
+        $this->compareList = $addToList;
+        parent::__construct($context, $connectionName);
     }
 
     /**
@@ -213,6 +235,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
                     $this->getConnection()->quoteInto($this->getIdFieldName() . '=?', $itemId)
                 );
             }
+            $this->compareList->setCustomerFromVisitor();
         }
 
         return $this;
