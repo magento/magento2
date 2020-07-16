@@ -121,9 +121,7 @@ class CustomerOrders implements ResolverInterface
     private function formatOrdersArray(array $orderModels)
     {
         $ordersArray = [];
-
         foreach ($orderModels as $orderModel) {
-
             $ordersArray[] = [
                 'created_at' => $orderModel->getCreatedAt(),
                 'grand_total' => $orderModel->getGrandTotal(),

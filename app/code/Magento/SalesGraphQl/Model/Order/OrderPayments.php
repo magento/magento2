@@ -10,7 +10,7 @@ namespace Magento\SalesGraphQl\Model\Order;
 use Magento\Sales\Api\Data\OrderInterface;
 
 /**
- * Class to extract the order payment details
+ * Class to fetch the order payment details
  */
 class OrderPayments
 {
