@@ -21,6 +21,7 @@ use Psr\Log\LoggerInterface;
 class SaveAssetsKeywords implements SaveAssetsKeywordsInterface
 {
     private const TABLE_KEYWORD = 'media_gallery_keyword';
+    private const TABLE_ASSET_KEYWORD = 'media_gallery_asset_keyword';
     private const ID = 'id';
     private const KEYWORD = 'keyword';
 
@@ -70,6 +71,8 @@ class SaveAssetsKeywords implements SaveAssetsKeywordsInterface
                 $failedAssetIds[] = $assetKeyword->getAssetId();
             }
         }
+
+        $this->deleteObsoleteKeywords();
 
         if (!empty($failedAssetIds)) {
             throw new CouldNotSaveException(
@@ -124,5 +127,61 @@ class SaveAssetsKeywords implements SaveAssetsKeywordsInterface
             ->where('k.' . self::KEYWORD . ' in (?)', $keywords);
 
         return $connection->fetchCol($select);
+    }
+
+    /**
+     * Delete keywords which has
+     * no relation to any asset
+     *
+     * @return void
+     */
+    private function deleteObsoleteKeywords(): void
+    {
+        $connection = $this->resourceConnection->getConnection();
+        $select = $connection->select()
+            ->from(
+                ['k' => self::TABLE_KEYWORD],
+                ['k.id']
+            )
+            ->joinLeft(
+                ['ak' => self::TABLE_ASSET_KEYWORD],
+                'k.id = ak.keyword_id'
+            )
+            ->where('ak.asset_id IS NULL');
+
+        $obsoleteKeywords = $connection->fetchCol($select);
+
+        if (!empty($obsoleteKeywords)) {
+            try {
+                $this->deleteKeywordsByIds($obsoleteKeywords);
+            } catch (\Exception $exception) {
+                $this->logger->critical($exception);
+            }
+        }
+    }
+
+    /**
+     * Delete keywords by ids
+     *
+     * @param array $keywordIds
+     * @return  void
+     */
+    private function deleteKeywordsByIds(array $keywordIds): void
+    {
+        $connection  = $this->resourceConnection->getConnection();
+
+        $whereConditions = [
+            $connection->prepareSqlCondition(
+                self::ID,
+                ['in' => [$keywordIds]]
+            ),
+        ];
+
+        $connection->delete(
+            $connection->getTableName(
+                self::TABLE_KEYWORD
+            ),
+            $whereConditions
+        );
     }
 }
