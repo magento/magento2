@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CmsUrlRewrite\Plugin\Cms\Model\Store;
 
+use Magento\Cms\Api\Data\PageInterface;
 use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\CmsUrlRewrite\Model\CmsPageUrlRewriteGenerator;
 use Magento\Framework\Api\SearchCriteriaBuilder;
@@ -21,6 +22,8 @@ use Magento\UrlRewrite\Model\UrlPersistInterface;
  */
 class View
 {
+    private const ALL_STORE_VIEWS = '0';
+
     /**
      * @var UrlPersistInterface
      */
@@ -89,14 +92,27 @@ class View
     {
         $rewrites = [];
         $urls = [];
-        $searchCriteria = $this->searchCriteriaBuilder->create();
-        $cmsPagesCollection = $this->pageRepository->getList($searchCriteria)->getItems();
-        foreach ($cmsPagesCollection as $page) {
+
+        foreach ($this->getCmsPageItems() as $page) {
             $page->setStoreId($storeId);
             $rewrites[] = $this->cmsPageUrlRewriteGenerator->generate($page);
         }
         $urls = array_merge($urls, ...$rewrites);
 
         return $urls;
+    }
+
+    /**
+     * Return cms page items for all store view
+     *
+     * @return PageInterface[]
+     */
+    private function getCmsPageItems(): array
+    {
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter('store_id', self::ALL_STORE_VIEWS)
+            ->create();
+        $list = $this->pageRepository->getList($searchCriteria);
+
+        return $list->getItems();
     }
 }
