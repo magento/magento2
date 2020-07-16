@@ -34,13 +34,8 @@ class CustomerRepositoryTest extends WebapiAbstract
     const SERVICE_VERSION = 'V1';
     const SERVICE_NAME = 'customerCustomerRepositoryV1';
     const RESOURCE_PATH = '/V1/customers';
-    const RESOURCE_PATH_CUSTOMER_TOKEN = "/V1/integration/customer/token";
 
-    /**
-     * Sample values for testing
-     */
-    const ATTRIBUTE_CODE = 'attribute_code';
-    const ATTRIBUTE_VALUE = 'attribute_value';
+    private const STUB_INVALID_CUSTOMER_GROUP_ID = 777;
 
     /**
      * @var CustomerRepositoryInterface
@@ -409,6 +404,89 @@ class CustomerRepositoryTest extends WebapiAbstract
             $this->assertEquals($expectedMessage, $errorObj['message']);
             $this->assertEquals(['fieldName' => 'customerId', 'fieldValue' => -1], $errorObj['parameters']);
             $this->assertEquals(HTTPExceptionCodes::HTTP_NOT_FOUND, $e->getCode());
+        }
+    }
+
+    /**
+     * Test customer update with invalid customer group id
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     *
+     * @return void
+     */
+    public function testUpdateCustomerWithInvalidGroupId(): void
+    {
+        $customerId = 1;
+        $customerData = $this->dataObjectProcessor->buildOutputDataArray(
+            $this->getCustomerData($customerId),
+            Customer::class
+        );
+        $customerData[Customer::GROUP_ID] = self::STUB_INVALID_CUSTOMER_GROUP_ID;
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '/' . $customerId,
+                'httpMethod' => Request::HTTP_METHOD_PUT,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+
+        $requestData['customer'] = $customerData;
+        $expectedMessage = 'The specified customer group id does not exist.';
+
+        try {
+            $this->_webApiCall($serviceInfo, $requestData);
+            $this->fail('Expected exception was not raised');
+        } catch (\SoapFault $e) {
+            $this->assertStringContainsString($expectedMessage, $e->getMessage());
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+            $this->assertEquals($expectedMessage, $errorObj['message']);
+        }
+    }
+
+    /**
+     * Test customer create with invalid customer group id
+     *
+     * @return void
+     */
+    public function testCreateCustomerWithInvalidGroupId(): void
+    {
+        $customerData = $this->dataObjectProcessor->buildOutputDataArray(
+            $this->customerHelper->createSampleCustomerDataObject(),
+            Customer::class
+        );
+        $customerData[Customer::GROUP_ID] = self::STUB_INVALID_CUSTOMER_GROUP_ID;
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH,
+                'httpMethod' => Request::HTTP_METHOD_POST,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'serviceVersion' => self::SERVICE_VERSION,
+                'operation' => self::SERVICE_NAME . 'Save',
+            ],
+        ];
+
+        $requestData = ['customer' => $customerData];
+        $expectedMessage = 'The specified customer group id does not exist.';
+
+        try {
+            $this->_webApiCall($serviceInfo, $requestData);
+            $this->fail('Expected exception was not raised');
+        } catch (\SoapFault $e) {
+            $this->assertStringContainsString($expectedMessage, $e->getMessage());
+        } catch (\Exception $e) {
+            $errorObj = $this->processRestExceptionResult($e);
+            $this->assertEquals(HTTPExceptionCodes::HTTP_BAD_REQUEST, $e->getCode());
+            $this->assertEquals($expectedMessage, $errorObj['message']);
         }
     }
 
