@@ -646,6 +646,7 @@ class Storage extends \Magento\Framework\DataObject
      * Return width height for the image resizing.
      *
      * @param string $source
+     * @return array
      */
     private function getResizedParams(string $source): array
     {
@@ -658,11 +659,10 @@ class Storage extends \Magento\Framework\DataObject
         if ($imageWidth && $imageHeight) {
             $imageWidth = $configWidth > $imageWidth ? $imageWidth : $configWidth;
             $imageHeight = $configHeight > $imageHeight ? $imageHeight : $configHeight;
-        } else {
-            return [$configWidth, $configHeight];
-        }
 
-        return  [$imageWidth, $imageHeight];
+            return  [$imageWidth, $imageHeight];
+        }
+        return [$configWidth, $configHeight];
     }
     
     /**
