@@ -148,8 +148,7 @@
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigChildProduct3.price$$" stepKey="seeChildProduct3PriceInStoreFront"/>
 
         <!-- Open Product Index Page and Filter First Child product  -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
             <argument name="product" value="ApiSimpleOne"/>
         </actionGroup>
