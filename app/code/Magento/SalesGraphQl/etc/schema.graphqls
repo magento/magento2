@@ -59,22 +59,22 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     grand_total: Float  @deprecated(reason: "Use the totals.grand_total attribute instead")
 }
 
-type OrderAddress @doc(description: "OrderAddress contains detailed information about the order billing and shipping addresses"){
-    firstname: String! @doc(description: "The first name of the person associated with the shipping/billing address on the order")
-    lastname: String! @doc(description: "The family name of the person associated with the shipping/billing address on the order")
-    middlename: String @doc(description: "The middle name of the person associated with the shipping/billing address on the order")
-    region: String @doc(description: "The state or province name on the order")
-    region_id: ID @doc(description: "The unique ID for a pre-defined region on the order")
-    country_code: CountryCodeEnum @doc(description: "The customer's country on the order")
-    street: [String]! @doc(description: "An array of strings that define the street number and name on the order")
-    company: String @doc(description: "The customer's company on the order")
-    telephone: String! @doc(description: "The telephone number on the order")
-    fax: String @doc(description: "The fax number on the order")
-    postcode: String @doc(description: "The customer's order ZIP or postal code on the order")
-    city: String! @doc(description: "The city or town on the order")
-    prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs. on the order")
-    suffix: String @doc(description: "A value such as Sr., Jr., or III on the order")
-    vat_id: String @doc(description: "The customer's Value-added tax (VAT) number (for corporate customers) on the order")
+type OrderAddress @doc(description: "OrderAddress contains detailed information about an order's billing and shipping addresses"){
+    firstname: String! @doc(description: "The first name of the person associated with the shipping/billing address")
+    lastname: String! @doc(description: "The family name of the person associated with the shipping/billing address")
+    middlename: String @doc(description: "The middle name of the person associated with the shipping/billing address")
+    region: String @doc(description: "The state or province name")
+    region_id: ID @doc(description: "The unique ID for a pre-defined region")
+    country_code: CountryCodeEnum @doc(description: "The customer's country")
+    street: [String!]! @doc(description: "An array of strings that define the street number and name")
+    company: String @doc(description: "The customer's company")
+    telephone: String! @doc(description: "The telephone number")
+    fax: String @doc(description: "The fax number")
+    postcode: String @doc(description: "The customer's order ZIP or postal code")
+    city: String! @doc(description: "The city or town")
+    prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
+    suffix: String @doc(description: "A value such as Sr., Jr., or III")
+    vat_id: String @doc(description: "The customer's Value-added tax (VAT) number (for corporate customers)")
 }
 
 interface OrderItemInterface @doc(description: "Order item details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\OrderItemTypeResolver") {

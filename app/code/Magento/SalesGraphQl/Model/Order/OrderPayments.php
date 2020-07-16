@@ -21,9 +21,18 @@ class OrderPayments
     public function getOrderPaymentMethod(OrderInterface $orderModel): array
     {
         $orderPayment = $orderModel->getPayment();
+        $paymentAdditionalInfo =  $orderModel->getExtensionAttributes()->getPaymentAdditionalInfo();
+        $paymentAdditionalData = [];
+        foreach ($paymentAdditionalInfo as $key => $paymentAdditionalInfoDetails) {
+            $paymentAdditionalData[$key]['name'] = $paymentAdditionalInfoDetails->getKey();
+            $paymentAdditionalData[$key]['value'] = $paymentAdditionalInfoDetails->getValue();
+        }
         $additionalInformationCcType = $orderPayment->getCcType();
         $additionalInformationCcNumber = $orderPayment->getCcLast4();
-        if ($orderPayment->getMethod() === 'checkmo' || $orderPayment->getMethod() === 'free') {
+        if ($orderPayment->getMethod() === 'checkmo' || $orderPayment->getMethod() === 'free' ||
+            $orderPayment->getMethod() === 'purchaseorder' ||$orderPayment->getMethod() === 'cashondelivery' ||
+            $orderPayment->getMethod() === 'banktransfer'
+        ) {
             $additionalData = [];
         } else {
             $additionalData = [
@@ -40,11 +49,10 @@ class OrderPayments
 
         return [
             [
-                'name' => $orderPayment->getAdditionalInformation()['method_title'],
-                'type' => $orderPayment->getMethod(),
+                'name' => $orderPayment->getAdditionalInformation()['method_title'] ?? null,
+                'type' => $orderPayment->getMethod() ?? null,
                 'additional_data' => $additionalData
             ]
         ];
     }
 }
-
