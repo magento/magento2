@@ -148,16 +148,16 @@ class Options implements OptionSourceInterface
         $isGlobalScope = $this->share->isGlobalScope();
         $customerWebsiteId = $customer->getWebsiteId();
         $customerStoreId = $customer->getStoreId();
+        $websiteId = $website->getId();
         /** @var Group $group */
         foreach ($groupCollection as $group) {
-            if ($group->getWebsiteId() == $website->getId()) {
+            if ($group->getWebsiteId() == $websiteId) {
                 $storeViewIds = $group->getStoreIds();
-                if (!empty($storeViewIds)
-                    && ($customerWebsiteId === $website->getId() || $isGlobalScope)
-                ) {
+                if (!empty($storeViewIds)) {
                     $name = $this->sanitizeName($group->getName());
                     $groups[$name]['label'] = str_repeat(' ', 4) . $name;
                     $groups[$name]['value'] = array_values($storeViewIds)[0];
+                    $groups[$name]['disabled'] = !$isGlobalScope && $customerWebsiteId !== $websiteId;
                     $groups[$name]['selected'] = in_array($customerStoreId, $storeViewIds) ? true : false;
                 }
             }
