@@ -145,6 +145,11 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
             'bundle-product-two-dropdown-options-simple1-simple2',
             $bundledItemInTheOrder['product_sku']
         );
+        $this->assertEquals(6, $bundledItemInTheOrder['discounts'][0]['amount']['value']);
+        $this->assertEquals(
+            'Discount Label for 10% off',
+            $bundledItemInTheOrder["discounts"][0]['label']
+        );
         $this->assertArrayHasKey('bundle_options', $bundledItemInTheOrder);
         $childItemsInTheOrder = $bundledItemInTheOrder['bundle_options'];
         $this->assertNotEmpty($childItemsInTheOrder);
@@ -163,20 +168,13 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
      */
     private function assertTotalsOnBundleProductWithTaxesAndDiscounts(array $customerOrderItemTotal): void
     {
-        $this->assertCount(2, $customerOrderItemTotal['taxes']);
-        $expectedProductAndShippingTaxes = [4.05, 1.35];
-        $totalTaxes = [];
-        foreach ($customerOrderItemTotal['taxes'] as $totalTaxFromResponse) {
-            array_push($totalTaxes, $totalTaxFromResponse['amount']['value']);
-        }
-        foreach ($totalTaxes as $value) {
-            $this->assertTrue(in_array($value, $expectedProductAndShippingTaxes));
-        }
-        foreach ($customerOrderItemTotal['taxes'] as $taxData) {
-            $this->assertEquals('USD', $taxData['amount']['currency']);
-            $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
-            $this->assertEquals(7.5, $taxData['rate']);
-        }
+        $this->assertCount(1, $customerOrderItemTotal['taxes']);
+        $taxData = $customerOrderItemTotal['taxes'][0];
+        $this->assertEquals('USD', $taxData['amount']['currency']);
+        $this->assertEquals(5.4, $taxData['amount']['value']);
+        $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
+        $this->assertEquals(7.5, $taxData['rate']);
+
         unset($customerOrderItemTotal['taxes']);
         $assertionMap = [
             'base_grand_total' => ['value' => 77.4, 'currency' =>'USD'],
@@ -189,8 +187,8 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
                 'amount_excluding_tax' => ['value' => 20],
                 'total_amount' => ['value' => 20],
                 'discounts' => [
-                    0 => ['amount'=>['value'=>2],
-                        'label' => 'Discount'
+                    0 => ['amount'=>['value'=> 2],
+                        'label' => 'Discount Label for 10% off'
                     ]
                 ],
                 'taxes'=> [
@@ -202,8 +200,8 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
                 ]
             ],
             'discounts' => [
-                0 => ['amount' => [ 'value' => -8, 'currency' =>'USD'],
-                    'label' => 'Discount'
+                0 => ['amount' => [ 'value' => 8, 'currency' =>'USD'],
+                    'label' => 'Discount Label for 10% off'
                 ]
             ]
         ];
