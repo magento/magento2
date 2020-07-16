@@ -77,8 +77,7 @@
         <waitForPageLoad stepKey="waitForSubCategory"/>
         <click selector="{{AdminProductFormSection.selectCategory(SimpleSubCategory.name)}}" stepKey="selectSub1Category"/>
         <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickDone"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSave"/>
-        <waitForPageLoad stepKey="waitForSavingChanges"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSave"/>
 
         <!-- Enable `Use Categories Path for Product URLs` on Stores -> Configuration -> Catalog -> Catalog -> Search Engine Optimization -->
         <amOnPage url="{{AdminCatalogSearchConfigurationPage.url}}" stepKey="onConfigPage"/>
@@ -107,8 +106,7 @@
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="openDropDown"/>
         <checkOption selector="{{AdminProductFormSection.selectCategory($$createSecondCategory.name$$)}}" stepKey="selectCategory"/>
         <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="pressButtonDone"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="pushButtonSave"/>
-        <waitForPageLoad stepKey="waitForSavingProduct"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="pushButtonSave"/>
 
         <!--Product is saved -->
         <see userInput="You saved the product." selector="{{CatalogProductsSection.messageSuccessSavedProduct}}" stepKey="seeSuccessMessage"/>
@@ -178,8 +176,7 @@
         <waitForPageLoad stepKey="waitForSearchSubCategory"/>
         <click selector="{{AdminProductFormSection.selectCategory({$grabNameSubCategory})}}" stepKey="selectSubCategory"/>
         <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickButtonDone"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickButtonSave"/>
-        <waitForPageLoad stepKey="waitForSaveChanges"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickButtonSave"/>
 
         <!-- Product is saved successfully -->
         <see userInput="You saved the product." selector="{{CatalogProductsSection.messageSuccessSavedProduct}}" stepKey="seeSaveMessage"/>
