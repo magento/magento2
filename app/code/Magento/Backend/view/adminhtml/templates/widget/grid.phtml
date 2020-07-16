@@ -101,7 +101,8 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()): 0;
                                     'onclick',
                                     /* @noEscape */ $block->getJsObjectName() . '.setPage(\'' .
                                         /* @noEscape */ ($_curPage - 1) . '\');event.preventDefault();',
-                                    'button.action-previous'
+                                    'div#' . $block->escapeJs($block->getId()) .
+                                    ' .admin__data-grid-pager button.action-previous:not(.disabled)'
                                 ) ?>
                             <?php else: ?>
                                 <button type="button" class="action-previous disabled">
@@ -137,7 +138,8 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()): 0;
                                     'onclick',
                                     /* @noEscape */ $block->getJsObjectName() . '.setPage(\'' .
                                     /* @noEscape */ ($_curPage + 1) . '\');event.preventDefault();',
-                                    'button.action-next'
+                                    'div#' . $block->escapeJs($block->getId()) .
+                                    ' .admin__data-grid-pager button.action-next:not(.disabled)'
                                 ) ?>
                             <?php else: ?>
                                 <button type="button" class="action-next disabled">
@@ -186,8 +188,8 @@ $numColumns = $block->getColumns() !== null ? count($block->getColumns()): 0;
         $scriptString .= 'deps.push(\'mage/adminhtml/grid\');' . PHP_EOL;
 
         $scriptString .= '
-require(deps, function('. ($block->getDependencyJsObject() ? 'registry' : '') .'){' . PHP_EOL .'
-        //TODO: getJsObjectName and getRowClickCallback has unexpected behavior. Should be removed' . PHP_EOL;
+require(deps, function('. ($block->getDependencyJsObject() ? 'registry' : '') .'){' . PHP_EOL;
+        //TODO: getJsObjectName and getRowClickCallback has unexpected behavior. Should be removed
         if ($block->getDependencyJsObject()) {
             $scriptString .= 'registry.get(\'' . $block->escapeJs($block->getDependencyJsObject()) .
                 '\', function ('. $block->escapeJs($block->getDependencyJsObject()) . ') {' . PHP_EOL;

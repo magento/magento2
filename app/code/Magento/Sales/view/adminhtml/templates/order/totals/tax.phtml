@@ -16,6 +16,8 @@ $_fullInfo  = $block->getFullTaxInfo();
 
 /** @var \Magento\Tax\Helper\Data $taxHelper */
 $taxHelper = $block->getData('taxHelper');
+/** @var \Magento\Framework\Math\Random $randomHelper */
+$randomHelper = $block->getData('randomHelper');
 ?>
 
 <?php if ($block->displayFullSummary() && $_fullInfo): ?>
@@ -86,8 +88,9 @@ $taxHelper = $block->getData('taxHelper');
             $amount     = $info['tax_amount'];
             $baseAmount = $info['base_tax_amount'];
             $isFirst    = 1;
+            $infoId = $randomHelper->getRandomString(20);
             ?>
-            <tr id="info-<?= /* @noEscape */ $info->getCode() ?>"
+            <tr id="info-<?= /* @noEscape */ $infoId ?>"
                 class="summary-details<?= ($isTop ? ' summary-details-first' : '') ?>">
                 <?php if ($info['percent'] !== null): ?>
                     <td class="admin__total-mark">
@@ -98,7 +101,7 @@ $taxHelper = $block->getData('taxHelper');
                 <?php endif; ?>
                     <td><?= /* @noEscape */ $block->displayAmount($amount, $baseAmount) ?></td>
             </tr>
-            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display:none;", 'tr#info-' . $info->getCode()) ?>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display:none;", 'tr#info-' . $infoId) ?>
             <?php
             $isFirst = 0;
             $isTop = 0;
