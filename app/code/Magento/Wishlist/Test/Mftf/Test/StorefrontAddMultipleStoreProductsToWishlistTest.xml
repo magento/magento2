@@ -45,7 +45,7 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearWebsitesGridFilter"/>
 
             <!--Clear products filter-->
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsFilters"/>
             <!--Logout everywhere-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>

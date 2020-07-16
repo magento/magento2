@@ -77,7 +77,7 @@
 
         <!--Go to order page submit invoice-->
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrdersPage"/>
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
