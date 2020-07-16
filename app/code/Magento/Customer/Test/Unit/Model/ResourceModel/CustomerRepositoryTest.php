@@ -249,7 +249,8 @@ class CustomerRepositoryTest extends TestCase
                 'getEmail',
                 'getWebsiteId',
                 'getAddresses',
-                'setAddresses'
+                'setAddresses',
+                'getGroupId',
             ]
         );
         $customerSecureData = $this->getMockBuilder(CustomerSecure::class)
@@ -433,7 +434,8 @@ class CustomerRepositoryTest extends TestCase
                 'getEmail',
                 'getWebsiteId',
                 'getAddresses',
-                'setAddresses'
+                'setAddresses',
+                'getGroupId'
             ]
         );
         $customerModel->expects($this->atLeastOnce())

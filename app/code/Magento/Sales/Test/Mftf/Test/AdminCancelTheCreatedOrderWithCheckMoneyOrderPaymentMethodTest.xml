@@ -215,8 +215,7 @@
         </actionGroup>
         <!-- Open Order Index Page -->
         <comment userInput="Open Order Index Page" stepKey="openOrderIndexPageComemnt"/>
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForPageLoad5"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
         <!-- Filter order using orderId -->
         <comment userInput="Filter order using orderId" stepKey="filterOrderUsingOrderIdComment"/>
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
