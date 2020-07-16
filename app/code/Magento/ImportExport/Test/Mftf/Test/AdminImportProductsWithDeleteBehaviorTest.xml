@@ -34,7 +34,7 @@
                 <field key="name">Api Downloadable Product for Test</field>
                 <field key="sku">Api Downloadable Product for Test</field>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>

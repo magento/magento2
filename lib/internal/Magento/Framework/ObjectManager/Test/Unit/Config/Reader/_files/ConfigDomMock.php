@@ -1,13 +1,15 @@
-<?php
+<?php declare(strict_types=1);
+
+use PHPUnit\Framework\TestCase;
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 /**
  * @codingStandardsIgnoreStart
  */
-class ConfigDomMock extends \PHPUnit\Framework\TestCase
+class ConfigDomMock extends TestCase
 {
     /**
      * @param null|string $initialContents

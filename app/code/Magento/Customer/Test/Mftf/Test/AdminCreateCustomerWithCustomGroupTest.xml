@@ -20,7 +20,7 @@
 
         <before>
             <createData entity="CustomCustomerGroup" stepKey="customerGroup" />
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">

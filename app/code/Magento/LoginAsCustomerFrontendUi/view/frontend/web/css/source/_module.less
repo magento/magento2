@@ -1,0 +1,77 @@
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+//
+//  Variables
+//  ---------------------------------------------
+
+@lac-notification-background-color: #373330;
+@lac-notification-color: #fff;
+@lac-notification-links-color: #fff;
+
+//
+//  Common
+//  ---------------------------------------------
+
+& when (@media-common = true) {
+    .lac-notification {
+        background-color: @lac-notification-background-color;
+        color: @lac-notification-color;
+        font-size: 16px;
+
+        .lac-notification-icon {
+            float: left;
+            margin: 10px 25px 10px 10px;
+
+            .logo-img {
+                display: block
+            }
+        }
+
+        .lac-notification-text {
+            float: left;
+            padding: 15px 0;
+        }
+
+        .lac-notification-links {
+            float: right;
+            padding: 15px 0;
+
+            a {
+                color: @lac-notification-links-color;
+                font-size: 14px;
+            }
+
+            .lac-notification-close-link {
+                &:after {
+                    background: url('../Magento_LoginAsCustomerFrontendUi/images/close.svg');
+                    content: ' ';
+                    display: inline-block;
+                    height: 12px;
+                    margin-left: 5px;
+                    vertical-align: middle;
+                    width: 12px;
+                }
+            }
+        }
+    }
+}
+
+.media-width(@extremum, @break) when (@extremum = 'max') and (@break = @screen__m) {
+    .lac-notification {
+        padding: 5px 0;
+
+        .lac-notification-icon {
+            display: none;
+        }
+
+        .lac-notification-text,
+        .lac-notification-links {
+            float: none;
+            padding: 5px 0;
+            text-align: center;
+        }
+    }
+}

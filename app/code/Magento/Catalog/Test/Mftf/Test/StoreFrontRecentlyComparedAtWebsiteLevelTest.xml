@@ -1,0 +1,108 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StoreFrontRecentlyComparedAtWebsiteLevelTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Recently Compared Product"/>
+            <title value="Recently Compared Product at website level"/>
+            <description value="Recently Compared Products widget appears on a page immediately after adding product to compare"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-33099"/>
+            <useCaseId value="MC-32763"/>
+            <group value="catalog"/>
+            <group value="widget"/>
+            <skip>
+                <issueId value="MC-34091"/>
+            </skip>
+        </annotations>
+        <before>
+            <!--  Set Stores > Configurations > Catalog > Recently Viewed/Compared Products > Show for Current = Website -->
+            <magentoCLI command="config:set {{RecentlyViewedProductScopeWebsite.path}} {{RecentlyViewedProductScopeWebsite.value}}" stepKey="setRecentlyViewedComparedProductsScopeToWebsite"/>
+            <!--Create Simple Products and Category -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProductToCompareFirst">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProductToCompareSecond">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProductNotVisibleFirst">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="SimpleProduct" stepKey="createSimpleProductNotVisibleSecond">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create product widget -->
+            <actionGroup ref="AdminCreateRecentlyProductsWidgetActionGroup" stepKey="createRecentlyComparedProductsWidget">
+                <argument name="widget" value="RecentlyComparedProductsWidget"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Reset Stores > Configurations > Catalog > Recently Viewed/Compared Products > Show for Current = Website-->
+            <magentoCLI command="config:set {{RecentlyViewedProductScopeWebsite.path}} {{RecentlyViewedProductScopeWebsite.value}}" stepKey="setRecentlyViewedComparedProductsScopeToDefault"/>
+            <!-- Delete Products and Category -->
+            <deleteData createDataKey="createSimpleProductToCompareFirst" stepKey="deleteSimpleProductToCompareFirst"/>
+            <deleteData createDataKey="createSimpleProductToCompareSecond" stepKey="deleteSimpleProductToCompareSecond"/>
+            <deleteData createDataKey="createSimpleProductNotVisibleFirst" stepKey="deleteSimpleProductNotVisibleFirst"/>
+            <deleteData createDataKey="createSimpleProductNotVisibleSecond" stepKey="deleteSimpleProductNotVisibleSecond"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Customer Logout -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutFromCustomer"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Delete product widget -->
+            <actionGroup ref="AdminDeleteWidgetActionGroup" stepKey="deleteRecentlyComparedProductsWidget">
+                <argument name="widget" value="RecentlyComparedProductsWidget"/>
+            </actionGroup>
+            <!-- Logout Admin -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <!--Login to storefront from customer-->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginCustomer">
+            <argument name="Customer" value="$createCustomer$"/>
+        </actionGroup>
+        <see userInput="Welcome, $createCustomer.firstname$ $createCustomer.lastname$!" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="checkWelcomeMessage"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="openCategoryPage"/>
+        <!--Add to compare Simple Product and Simple Product 2-->
+        <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="addSimpleProduct1ToCompare" >
+            <argument name="productVar" value="$createSimpleProductToCompareFirst$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="addSimpleProduct2ToCompare" >
+            <argument name="productVar" value="$createSimpleProductToCompareSecond$"/>
+        </actionGroup>
+        <!--The Compare Products widget displays Simple Product 1 and Simple Product 2-->
+        <actionGroup ref="StorefrontCheckCompareSidebarProductActionGroup" stepKey="checkSimpleProduct1InCompareSidebar">
+            <argument name="productVar" value="$createSimpleProductToCompareFirst$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckCompareSidebarProductActionGroup" stepKey="checkSimpleProduct2InCompareSidebar">
+            <argument name="productVar" value="$createSimpleProductToCompareSecond$"/>
+        </actionGroup>
+
+        <!--Click Clear all in the Compare Products widget-->
+        <actionGroup ref="StorefrontClearCompareActionGroup" stepKey="clearCompareList"/>
+        <!--The Recently Compared widget displays Simple Product 1 and Simple Product 2-->
+        <waitForPageLoad stepKey="waitForRecentlyComparedWidgetLoad"/>
+        <actionGroup ref="StorefrontAssertProductInRecentlyComparedWidgetActionGroup" stepKey="checkSimpleProduct1ExistInRecentlyComparedWidget">
+            <argument name="product" value="$createSimpleProductToCompareFirst$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductInRecentlyComparedWidgetActionGroup" stepKey="checkSimpleProduct2ExistInRecentlyComparedWidget">
+            <argument name="product" value="$createSimpleProductToCompareSecond$"/>
+        </actionGroup>
+        <!--The Recently Compared widget not displays Simple Product 3 and Simple Product 4-->
+        <actionGroup ref="StorefrontAssertNotExistProductInRecentlyComparedWidgetActionGroup" stepKey="checkSimpleProduct3NotExistInRecentlyComparedWidget">
+            <argument name="product" value="$createSimpleProductNotVisibleFirst$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertNotExistProductInRecentlyComparedWidgetActionGroup" stepKey="checkSimpleProduct4NotExistInRecentlyComparedWidget">
+            <argument name="product" value="$createSimpleProductNotVisibleSecond$"/>
+        </actionGroup>
+    </test>
+</tests>

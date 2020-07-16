@@ -20,7 +20,7 @@
 
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create a configurable product via the UI -->
             <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">

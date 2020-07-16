@@ -35,7 +35,7 @@
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
             <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext" stepKey="reindexCatalogSearch"/>
             <!-- Login to Admin page -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete created entities -->
@@ -75,8 +75,7 @@
         <seeOptionIsSelected selector="{{AdminProductAttributesSection.attributeDropdownByCode($createMultiSelectProductAttribute.attribute_code$)}}" userInput="$addThirdOptionToAttribute.option[store_labels][0][label]$" stepKey="assertThirdOptionIsSelected"/>
 
         <!-- Search for the product on Storefront -->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
-        <waitForPageLoad stepKey="waitForHomePageLoad"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
         <actionGroup ref="StorefrontCheckQuickSearchActionGroup" stepKey="searchProductOnStorefront">
             <argument name="phrase" value="$createSimpleProduct.name$"/>
         </actionGroup>

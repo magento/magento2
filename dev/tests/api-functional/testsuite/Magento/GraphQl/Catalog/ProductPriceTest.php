@@ -27,7 +27,7 @@ class ProductPriceTest extends GraphQlAbstract
     /** @var ProductRepositoryInterface $productRepository */
     private $productRepository;
 
-    protected function setUp() :void
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         /** @var ProductRepositoryInterface $productRepository */

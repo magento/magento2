@@ -1,30 +1,38 @@
 <?php
-declare(strict_types=1);
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Security\Test\Unit\Model\Plugin;
+
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Validator\DataObject;
+use Magento\Security\Model\Plugin\UserValidationRules;
+use Magento\Security\Model\UserExpiration\Validator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for expiration date user validation rule.
  */
-class UserValidationRulesTest extends \PHPUnit\Framework\TestCase
+class UserValidationRulesTest extends TestCase
 {
 
     /**
-     * @var \Magento\Security\Model\Plugin\UserValidationRules|\PHPUnit\Framework\MockObject\MockObject
+     * @var UserValidationRules|MockObject
      */
     private $plugin;
 
     /**
-     * @var \Magento\User\Model\UserValidationRules|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\User\Model\UserValidationRules|MockObject
      */
     private $userValidationRules;
 
     /**
-     * @var \Magento\Framework\Validator\DataObject|\PHPUnit\Framework\MockObject\MockObject
+     * @var DataObject|MockObject
      */
     private $validator;
 
@@ -33,16 +41,16 @@ class UserValidationRulesTest extends \PHPUnit\Framework\TestCase
      */
     private $rules;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $userExpirationValidator = $this->createMock(\Magento\Security\Model\UserExpiration\Validator::class);
+        $objectManager = new ObjectManager($this);
+        $userExpirationValidator = $this->createMock(Validator::class);
         $this->userValidationRules = $this->createMock(\Magento\User\Model\UserValidationRules::class);
         $this->rules = $objectManager->getObject(\Magento\User\Model\UserValidationRules::class);
-        $this->validator = $this->createMock(\Magento\Framework\Validator\DataObject::class);
+        $this->validator = $this->createMock(DataObject::class);
         $this->plugin =
             $objectManager->getObject(
-                \Magento\Security\Model\Plugin\UserValidationRules::class,
+                UserValidationRules::class,
                 ['validator' => $userExpirationValidator]
             );
     }

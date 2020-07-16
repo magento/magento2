@@ -3,17 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\ObjectManager\Test\Unit\Factory;
 
-use Magento\Framework\ObjectManager\FactoryInterface;
 use Magento\Framework\ObjectManager\Config\Config;
+use Magento\Framework\ObjectManager\DefinitionInterface;
 use Magento\Framework\ObjectManager\Factory\Dynamic\Developer;
+use Magento\Framework\ObjectManager\FactoryInterface;
 use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar;
+use Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Polymorphous;
+use Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\SemiVariadic;
+use Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Two;
+use Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Variadic;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class FactoryTest
- */
-class FactoryTest extends \PHPUnit\Framework\TestCase
+class FactoryTest extends TestCase
 {
     /**
      * @var FactoryInterface
@@ -33,7 +39,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     /**
      * Setup tests
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = new Config();
         $this->factory = new Developer($this->config);
@@ -49,34 +55,28 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->assertInstanceOf('StdClass', $this->factory->create(\StdClass::class));
     }
 
-    /**
-     * @expectedException        \UnexpectedValueException
-     * @expectedExceptionMessage Invalid parameter configuration provided for $firstParam argument
-     */
     public function testResolveArgumentsException()
     {
-        $configMock = $this->createMock(\Magento\Framework\ObjectManager\Config\Config::class);
-        $configMock->expects($this->once())->method('getArguments')->will(
-            $this->returnValue(
-                [
-                    'firstParam' => 1,
-                ]
-            )
+        $this->expectException('UnexpectedValueException');
+        $this->expectExceptionMessage('Invalid parameter configuration provided for $firstParam argument');
+        $configMock = $this->createMock(Config::class);
+        $configMock->expects($this->once())->method('getArguments')->willReturn(
+            [
+                'firstParam' => 1,
+            ]
         );
 
-        $definitionsMock = $this->createMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
-        $definitionsMock->expects($this->once())->method('getParameters')->will(
-            $this->returnValue(
+        $definitionsMock = $this->getMockForAbstractClass(DefinitionInterface::class);
+        $definitionsMock->expects($this->once())->method('getParameters')->willReturn(
+            [
                 [
-                    [
-                        'firstParam',
-                        'string',
-                        true,
-                        'default_val',
-                        false
-                    ]
+                    'firstParam',
+                    'string',
+                    true,
+                    'default_val',
+                    false
                 ]
-            )
+            ]
         );
 
         $this->factory = new Developer(
@@ -87,7 +87,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $this->objectManager = new ObjectManager($this->factory, $this->config);
         $this->factory->setObjectManager($this->objectManager);
         $this->factory->create(
-            \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class,
+            OneScalar::class,
             ['foo' => 'bar']
         );
     }
@@ -98,13 +98,13 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     public function testCreateOneArg()
     {
         /**
-         * @var \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar $result
+         * @var OneScalar $result
          */
         $result = $this->factory->create(
-            \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class,
+            OneScalar::class,
             ['foo' => 'bar']
         );
-        $this->assertInstanceOf(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class, $result);
+        $this->assertInstanceOf(OneScalar::class, $result);
         $this->assertEquals('bar', $result->getFoo());
     }
 
@@ -116,18 +116,18 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         // let's imitate that One is injectable by providing DI configuration for it
         $this->config->extend(
             [
-                \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class => [
+                OneScalar::class => [
                     'arguments' => ['foo' => 'bar'],
                 ],
             ]
         );
         /**
-         * @var \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Two $result
+         * @var Two $result
          */
-        $result = $this->factory->create(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Two::class);
-        $this->assertInstanceOf(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Two::class, $result);
+        $result = $this->factory->create(Two::class);
+        $this->assertInstanceOf(Two::class, $result);
         $this->assertInstanceOf(
-            \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class,
+            OneScalar::class,
             $result->getOne()
         );
         $this->assertEquals('bar', $result->getOne()->getFoo());
@@ -166,24 +166,22 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateUsingReflection()
     {
-        $type = \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Polymorphous::class;
-        $definitions = $this->createMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
+        $type = Polymorphous::class;
+        $definitions = $this->getMockForAbstractClass(DefinitionInterface::class);
         // should be more than defined in "switch" of create() method
-        $definitions->expects($this->once())->method('getParameters')->with($type)->will(
-            $this->returnValue(
-                [
-                    ['one', null, false, null, false],
-                    ['two', null, false, null, false],
-                    ['three', null, false, null, false],
-                    ['four', null, false, null, false],
-                    ['five', null, false, null, false],
-                    ['six', null, false, null, false],
-                    ['seven', null, false, null, false],
-                    ['eight', null, false, null, false],
-                    ['nine', null, false, null, false],
-                    ['ten', null, false, null, false],
-                ]
-            )
+        $definitions->expects($this->once())->method('getParameters')->with($type)->willReturn(
+            [
+                ['one', null, false, null, false],
+                ['two', null, false, null, false],
+                ['three', null, false, null, false],
+                ['four', null, false, null, false],
+                ['five', null, false, null, false],
+                ['six', null, false, null, false],
+                ['seven', null, false, null, false],
+                ['eight', null, false, null, false],
+                ['nine', null, false, null, false],
+                ['ten', null, false, null, false],
+            ]
         );
         $factory = new Developer($this->config, null, $definitions);
         $result = $factory->create(
@@ -217,21 +215,19 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $expectedArg0,
         $expectedArg1
     ) {
-        $type = \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Variadic::class;
-        $definitions = $this->createMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
+        $type = Variadic::class;
+        $definitions = $this->getMockForAbstractClass(DefinitionInterface::class);
 
-        $definitions->expects($this->once())->method('getParameters')->with($type)->will(
-            $this->returnValue(
+        $definitions->expects($this->once())->method('getParameters')->with($type)->willReturn(
+            [
                 [
-                    [
-                'oneScalars',
-                \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class,
-                false,
-                [],
-                true
-                    ],
-                ]
-            )
+                    'oneScalars',
+                    OneScalar::class,
+                    false,
+                    [],
+                    true
+                ],
+            ]
         );
         $factory = new Developer($this->config, null, $definitions);
 
@@ -251,8 +247,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateUsingVariadicDataProvider()
     {
-        $oneScalar1 = $this->createMock(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class);
-        $oneScalar2 = $this->createMock(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class);
+        $oneScalar1 = $this->createMock(OneScalar::class);
+        $oneScalar2 = $this->createMock(OneScalar::class);
 
         return [
             'without_args'    => [
@@ -297,13 +293,13 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateVariadicFromDiConfig()
     {
-        $oneScalar1 = $this->createMock(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class);
-        $oneScalar2 = $this->createMock(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class);
+        $oneScalar1 = $this->createMock(OneScalar::class);
+        $oneScalar2 = $this->createMock(OneScalar::class);
 
         // let's imitate that Variadic is configured by providing DI configuration for it
         $this->config->extend(
             [
-                \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Variadic::class => [
+                Variadic::class => [
                     'arguments' => [
                         'oneScalars' => [
                             $oneScalar1,
@@ -316,7 +312,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         /**
          * @var \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Variadic $variadic
          */
-        $variadic = $this->factory->create(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\Variadic::class);
+        $variadic = $this->factory->create(Variadic::class);
 
         $this->assertSame($oneScalar1, $variadic->getOneScalarByKey(0));
         $this->assertSame($oneScalar2, $variadic->getOneScalarByKey(1));
@@ -337,28 +333,26 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $expectedArg0,
         $expectedArg1
     ) {
-        $type = \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\SemiVariadic::class;
-        $definitions = $this->createMock(\Magento\Framework\ObjectManager\DefinitionInterface::class);
+        $type = SemiVariadic::class;
+        $definitions = $this->getMockForAbstractClass(DefinitionInterface::class);
 
-        $definitions->expects($this->once())->method('getParameters')->with($type)->will(
-            $this->returnValue(
+        $definitions->expects($this->once())->method('getParameters')->with($type)->willReturn(
+            [
                 [
-                    [
-                        'foo',
-                        null,
-                        false,
-                        \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\SemiVariadic::DEFAULT_FOO_VALUE,
-                        false
-                    ],
-                    [
-                        'oneScalars',
-                        \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class,
-                        false,
-                        [],
-                        true
-                    ],
-                ]
-            )
+                    'foo',
+                    null,
+                    false,
+                    SemiVariadic::DEFAULT_FOO_VALUE,
+                    false
+                ],
+                [
+                    'oneScalars',
+                    OneScalar::class,
+                    false,
+                    [],
+                    true
+                ],
+            ]
         );
         $factory = new Developer($this->config, null, $definitions);
 
@@ -379,19 +373,19 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
      */
     public function testCreateUsingSemiVariadicDataProvider()
     {
-        $oneScalar1 = $this->createMock(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class);
-        $oneScalar2 = $this->createMock(\Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\OneScalar::class);
+        $oneScalar1 = $this->createMock(OneScalar::class);
+        $oneScalar2 = $this->createMock(OneScalar::class);
 
         return [
             'without_args'    => [
                 null,
-                \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\SemiVariadic::DEFAULT_FOO_VALUE,
+                SemiVariadic::DEFAULT_FOO_VALUE,
                 null,
                 null,
             ],
             'with_empty_args' => [
                 [],
-                \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\SemiVariadic::DEFAULT_FOO_VALUE,
+                SemiVariadic::DEFAULT_FOO_VALUE,
                 null,
                 null,
             ],
@@ -407,7 +401,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                 [
                     'oneScalars' => []
                 ],
-                \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\SemiVariadic::DEFAULT_FOO_VALUE,
+                SemiVariadic::DEFAULT_FOO_VALUE,
                 null,
                 null,
             ],
@@ -415,7 +409,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                 [
                     'oneScalars' => $oneScalar1
                 ],
-                \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\SemiVariadic::DEFAULT_FOO_VALUE,
+                SemiVariadic::DEFAULT_FOO_VALUE,
                 $oneScalar1,
                 null,
             ],
@@ -426,7 +420,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
                         $oneScalar2,
                     ]
                 ],
-                \Magento\Framework\ObjectManager\Test\Unit\Factory\Fixture\SemiVariadic::DEFAULT_FOO_VALUE,
+                SemiVariadic::DEFAULT_FOO_VALUE,
                 $oneScalar1,
                 $oneScalar2,
             ],

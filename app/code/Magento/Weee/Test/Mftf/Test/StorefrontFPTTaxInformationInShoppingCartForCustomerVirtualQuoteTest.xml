@@ -40,7 +40,7 @@
             <!-- Customer is created with default addresses: -->
             <createData entity="Simple_US_Customer_NY" stepKey="createCustomer"/>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
         </before>
 

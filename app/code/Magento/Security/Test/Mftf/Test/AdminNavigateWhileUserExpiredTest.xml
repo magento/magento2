@@ -20,10 +20,10 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Create user -->
@@ -37,12 +37,12 @@
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <click selector="{{AdminNewUserFormSection.userInfoTab}}" stepKey="openUserInfoTab"/>
         <actionGroup ref="AdminSaveUserSuccessActionGroup" stepKey="saveNewUserWithValidExpirationSuccess"/>
-        <actionGroup ref="logout" stepKey="logout"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
         <!-- Login as that user -->
-        <actionGroup ref="LoginAdminWithCredentialsActionGroup" stepKey="loginAsNewAdmin">
-            <argument name="adminUser" value="{$grabUsername}"/>
-            <argument name="adminPassword" value="{$grabPassword}"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewAdmin">
+            <argument name="username" value="{$grabUsername}"/>
+            <argument name="password" value="{$grabPassword}"/>
         </actionGroup>
         <actionGroup ref="AssertAdminDashboardPageIsVisibleActionGroup" stepKey="seeDashboardPage"/>
         <wait time="120" stepKey="waitForUserToExpire"/>
@@ -51,7 +51,7 @@
         <seeInCurrentUrl url="{{AdminLoginPage.url}}" stepKey="seeAdminLoginUrl"/>
 
         <!-- Delete created user -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteUser">
             <argument name="user" value="NewAdminUser"/>
         </actionGroup>

@@ -33,7 +33,7 @@
         </after>
 
         <!--check admin for valid Enable Status label-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditPage">
             <argument name="productId" value="$$createSimpleProduct.id$$"/>
         </actionGroup>

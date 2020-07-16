@@ -21,7 +21,7 @@
         </annotations>
         <before>
             <!--Login as admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create new website, store and store view-->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
                 <argument name="newWebsiteName" value="{{NewWebSiteData.name}}"/>
@@ -180,19 +180,19 @@
         <amOnPage url="{{StorefrontCategoryPage.url($$createSubCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad0"/>
         <grabAttributeFrom userInput="src" selector="{{StorefrontCategoryMainSection.mediaDescription($$createProduct.name$$)}}" stepKey="grabAttributeFromImage"/>
-        <assertContains stepKey="assertProductImageAbsence">
+        <assertStringContainsString stepKey="assertProductImageAbsence">
 			<actualResult type="const">$grabAttributeFromImage</actualResult>
 			<expectedResult type="string">{{ProductImage.filename}}</expectedResult>
-        </assertContains>
+        </assertStringContainsString>
         <!--Open Storefront on newly created store view and assert image absence-->
         <amOnPage url="$grabStoreViewCode" stepKey="navigateToHomePageOfSpecificStore"/>
         <waitForPageLoad stepKey="waitForHomePageLoad"/>
         <click selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createSubCategory.name$$)}}" stepKey="clickCategory"/>
         <waitForPageLoad stepKey="waitForCategoryPageLoad1"/>
         <grabAttributeFrom userInput="src" selector="{{StorefrontCategoryMainSection.mediaDescription($$createProduct.name$$)}}" stepKey="grabAttributeFromImage2"/>
-        <assertContains stepKey="assertProductImageAbsence2">
+        <assertStringContainsString stepKey="assertProductImageAbsence2">
 			<actualResult type="const">$grabAttributeFromImage2</actualResult>
 			<expectedResult type="string">small_image</expectedResult>
-        </assertContains>
+        </assertStringContainsString>
     </test>
 </tests>
