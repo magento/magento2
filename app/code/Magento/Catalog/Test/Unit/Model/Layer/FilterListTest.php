@@ -8,38 +8,41 @@ declare(strict_types=1);
 namespace Magento\Catalog\Test\Unit\Model\Layer;
 
 use Magento\Catalog\Model\Config\LayerCategoryConfig;
-use \Magento\Catalog\Model\Layer\FilterList;
+use Magento\Catalog\Model\Layer;
+use Magento\Catalog\Model\Layer\Category\FilterableAttributeList;
+use Magento\Catalog\Model\Layer\FilterList;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Framework\ObjectManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Filter List Test
- *
  * Check whenever the given filters list matches the expected result
  */
-class FilterListTest extends \PHPUnit\Framework\TestCase
+class FilterListTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $attributeListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $attributeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $layerMock;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\FilterList
+     * @var FilterList
      */
     protected $model;
 
@@ -51,13 +54,13 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
     /**
      * Set Up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->attributeListMock = $this->createMock(
-            \Magento\Catalog\Model\Layer\Category\FilterableAttributeList::class
+            FilterableAttributeList::class
         );
-        $this->attributeMock = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
+        $this->attributeMock = $this->createMock(Attribute::class);
         $filters = [
             FilterList::CATEGORY_FILTER => 'CategoryFilterClass',
             FilterList::PRICE_FILTER => 'PriceFilterClass',
@@ -65,7 +68,7 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
             FilterList::ATTRIBUTE_FILTER => 'AttributeFilterClass',
 
         ];
-        $this->layerMock = $this->createMock(\Magento\Catalog\Model\Layer::class);
+        $this->layerMock = $this->createMock(Layer::class);
         $this->layerCategoryConfigMock = $this->createMock(LayerCategoryConfig::class);
 
         $this->model = new FilterList(
@@ -90,22 +93,22 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
     {
         $this->objectManagerMock->expects($this->at(0))
             ->method('create')
-            ->will($this->returnValue('filter'));
+            ->willReturn('filter');
 
         $this->objectManagerMock->expects($this->at(1))
             ->method('create')
             ->with($expectedClass, [
                 'data' => ['attribute_model' => $this->attributeMock],
                 'layer' => $this->layerMock])
-            ->will($this->returnValue('filter'));
+            ->willReturn('filter');
 
         $this->attributeMock->expects($this->once())
             ->method($method)
-            ->will($this->returnValue($value));
+            ->willReturn($value);
 
         $this->attributeListMock->expects($this->once())
             ->method('getList')
-            ->will($this->returnValue([$this->attributeMock]));
+            ->willReturn([$this->attributeMock]);
 
         $this->layerCategoryConfigMock->expects($this->once())
             ->method('isCategoryFilterVisibleInLayerNavigation')
@@ -141,15 +144,15 @@ class FilterListTest extends \PHPUnit\Framework\TestCase
                     'layer' => $this->layerMock
                 ]
             )
-            ->will($this->returnValue('filter'));
+            ->willReturn('filter');
 
         $this->attributeMock->expects($this->once())
             ->method($method)
-            ->will($this->returnValue($value));
+            ->willReturn($value);
 
         $this->attributeListMock->expects($this->once())
             ->method('getList')
-            ->will($this->returnValue([$this->attributeMock]));
+            ->willReturn([$this->attributeMock]);
 
         $this->layerCategoryConfigMock->expects($this->once())
             ->method('isCategoryFilterVisibleInLayerNavigation')

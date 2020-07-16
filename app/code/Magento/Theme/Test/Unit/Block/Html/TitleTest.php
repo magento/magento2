@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Block\Html;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
@@ -54,7 +56,7 @@ class TitleTest extends TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->pageConfigMock = $this->createMock(Config::class);
@@ -115,7 +117,7 @@ class TitleTest extends TestCase
         if ($shouldTranslateTitle) {
             $this->assertInstanceOf(Phrase::class, $result);
         } else {
-            $this->assertInternalType('string', $result);
+            $this->assertIsString($result);
         }
 
         $this->assertEquals($title, $result);
@@ -144,7 +146,7 @@ class TitleTest extends TestCase
         if ($shouldTranslateTitle) {
             $this->assertInstanceOf(Phrase::class, $result);
         } else {
-            $this->assertInternalType('string', $result);
+            $this->assertIsString($result);
         }
 
         $this->assertEquals($title, $result);
@@ -176,7 +178,7 @@ class TitleTest extends TestCase
         if ($shouldTranslateTitle) {
             $this->assertInstanceOf(Phrase::class, $result);
         } else {
-            $this->assertInternalType('string', $result);
+            $this->assertIsString($result);
         }
 
         $this->assertEquals($title, $result);

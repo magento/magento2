@@ -3,17 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Ui\Test\Unit\Component;
 
-use Magento\Ui\Component\MassAction;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
+use Magento\Framework\View\Element\UiComponent\Processor;
+use Magento\Ui\Component\MassAction;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class MassAction test for Component
- */
-class MassActionTest extends \PHPUnit\Framework\TestCase
+class MassActionTest extends TestCase
 {
     /**
      * @var ContextInterface|MockObject
@@ -28,11 +29,11 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->contextMock = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\ContextInterface::class)
+        $this->contextMock = $this->getMockBuilder(ContextInterface::class)
             ->getMockForAbstractClass();
     }
 
@@ -46,14 +47,14 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
         $this->contextMock->expects($this->never())->method('getProcessor');
         /** @var MassAction $massAction */
         $massAction = $this->objectManager->getObject(
-            \Magento\Ui\Component\MassAction::class,
+            MassAction::class,
             [
                 'context' => $this->contextMock,
                 'data' => []
             ]
         );
 
-        $this->assertTrue($massAction->getComponentName() === MassAction::NAME);
+        $this->assertSame(MassAction::NAME, $massAction->getComponentName());
     }
 
     /**
@@ -66,13 +67,13 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
      */
     public function testPrepare($componentName, $componentData)
     {
-        $processor = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponent\Processor::class)
+        $processor = $this->getMockBuilder(Processor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->contextMock->expects($this->atLeastOnce())->method('getProcessor')->willReturn($processor);
         /** @var \Magento\Ui\Component\Action $action */
         $action = $this->objectManager->getObject(
-            \Magento\Ui\Component\MassAction::class,
+            MassAction::class,
             [
                 'context' => $this->contextMock,
                 'data' => [
@@ -83,7 +84,7 @@ class MassActionTest extends \PHPUnit\Framework\TestCase
         );
         /** @var MassAction $massAction */
         $massAction = $this->objectManager->getObject(
-            \Magento\Ui\Component\MassAction::class,
+            MassAction::class,
             [
                 'context' => $this->contextMock,
                 'data' => []

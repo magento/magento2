@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model;
 
@@ -52,7 +53,7 @@ class VisitorTest extends TestCase
      */
     private $httpRequestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->registryMock = $this->createMock(Registry::class);
         $this->sessionMock = $this->getMockBuilder(Session::class)
@@ -73,7 +74,8 @@ class VisitorTest extends TestCase
                 'addCommitCallback',
                 'commit',
                 'clean',
-            ])->disableOriginalConstructor()->getMock();
+            ])->disableOriginalConstructor()
+            ->getMock();
         $this->visitorResourceModelMock->expects($this->any())->method('getIdFieldName')->willReturn('visitor_id');
         $this->visitorResourceModelMock->expects($this->any())->method('addCommitCallback')->willReturnSelf();
 
@@ -103,7 +105,7 @@ class VisitorTest extends TestCase
 
     public function testSaveByRequest()
     {
-        $this->sessionMock->expects($this->once())->method('setVisitorData')->will($this->returnSelf());
+        $this->sessionMock->expects($this->once())->method('setVisitorData')->willReturnSelf();
         $this->assertSame($this->visitor, $this->visitor->saveByRequest(null));
     }
 

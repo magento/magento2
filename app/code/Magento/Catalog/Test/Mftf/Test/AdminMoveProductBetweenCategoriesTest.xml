@@ -78,8 +78,7 @@
         <click selector="{{AdminProductFormSection.selectCategory(SimpleSubCategory.name)}}" stepKey="selectSub1Category"/>
         <click selector="{{AdminProductFormSection.done}}" stepKey="clickDone"/>
         <waitForPageLoad stepKey="waitForApplyCategory"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSave"/>
-        <waitForPageLoad stepKey="waitForSavingChanges"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSave"/>
 
         <!-- Enable `Use Categories Path for Product URLs` on Stores -> Configuration -> Catalog -> Catalog -> Search Engine Optimization -->
         <amOnPage url="{{AdminCatalogSearchConfigurationPage.url}}" stepKey="onConfigPage"/>
@@ -109,14 +108,13 @@
         <checkOption selector="{{AdminProductFormSection.selectCategory($$createSecondCategory.name$$)}}" stepKey="selectCategory"/>
         <click selector="{{AdminProductFormSection.done}}" stepKey="pressButtonDone"/>
         <waitForPageLoad stepKey="waitForApplyCategory2"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="pushButtonSave"/>
-        <waitForPageLoad stepKey="waitForSavingProduct"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="pushButtonSave"/>
 
         <!--Product is saved -->
         <see userInput="You saved the product." selector="{{CatalogProductsSection.messageSuccessSavedProduct}}" stepKey="seeSuccessMessage"/>
 
         <!-- Run cron -->
-        <magentoCLI command="cron:run" stepKey="runCron"/>
+        <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
 
         <!-- Clear invalidated cache on System>Tools>Cache Management page  -->
         <amOnPage url="{{AdminCacheManagementPage.url}}" stepKey="onCachePage"/>
@@ -181,14 +179,13 @@
         <click selector="{{AdminProductFormSection.selectCategory({$grabNameSubCategory})}}" stepKey="selectSubCategory"/>
         <click selector="{{AdminProductFormSection.done}}" stepKey="clickButtonDone"/>
         <waitForPageLoad stepKey="waitForCategoryApply"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickButtonSave"/>
-        <waitForPageLoad stepKey="waitForSaveChanges"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickButtonSave"/>
 
         <!-- Product is saved successfully -->
         <see userInput="You saved the product." selector="{{CatalogProductsSection.messageSuccessSavedProduct}}" stepKey="seeSaveMessage"/>
 
         <!-- Run cron -->
-        <magentoCLI command="cron:run" stepKey="runCron2"/>
+        <magentoCLI command="cron:run --group=index" stepKey="runCron2"/>
 
         <!-- Open frontend -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="onFrontendPage"/>

@@ -89,7 +89,7 @@
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
 
         <!-- Assert Empty Mini Cart -->
-        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
+        <seeElement selector="{{StorefrontMinicartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="orderId"/>
 
         <!-- Register customer after checkout -->
@@ -108,8 +108,7 @@
         <see selector="{{StorefrontCustomerAddressesSection.shippingAddress}}" userInput="T: {{updateCustomerUKAddress.telephone}}" stepKey="seeTelephoneInShippingAddress"/>
 
         <!--Open Order Index Page -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForOrderIndexPageToLoad"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
 
         <!-- Filter Order using orderId and assert order-->
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">

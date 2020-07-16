@@ -15,7 +15,7 @@ class SubscriberTest extends \PHPUnit\Framework\TestCase
      */
     protected $_resourceModel;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_resourceModel = Bootstrap::getObjectManager()
             ->create(\Magento\Newsletter\Model\ResourceModel\Subscriber::class);

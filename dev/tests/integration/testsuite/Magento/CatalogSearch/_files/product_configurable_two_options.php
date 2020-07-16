@@ -4,9 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/../../../Magento/ConfigurableProduct/_files/configurable_attribute.php';
-require __DIR__ . '/../../../Magento/ConfigurableProduct/_files/configurable_attribute_2.php';
-
 use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
@@ -22,6 +19,10 @@ use Magento\Eav\Api\Data\AttributeOptionInterface;
 use Magento\Framework\Search\Request\Config;
 use Magento\Framework\Search\Request\Config\Converter;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/configurable_attribute.php');
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/configurable_attribute_2.php');
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var AttributeRepositoryInterface $attributeRepository */
@@ -45,7 +46,8 @@ $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 
 /** @var $installer CategorySetup */
 $installer = $objectManager->create(CategorySetup::class);
-
+$attribute = $eavConfig->getAttribute(Product::ENTITY, 'test_configurable');
+$attribute2 = $eavConfig->getAttribute(Product::ENTITY, 'test_configurable_2');
 /** @var AttributeOptionInterface[] $options */
 $options = $attribute->getOptions();
 

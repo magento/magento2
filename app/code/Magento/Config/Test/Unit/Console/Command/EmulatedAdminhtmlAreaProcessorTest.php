@@ -3,15 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Config\Test\Unit\Console\Command;
 
 use Magento\Config\Console\Command\EmulatedAdminhtmlAreaProcessor;
 use Magento\Framework\App\Area;
 use Magento\Framework\App\State;
 use Magento\Framework\Config\ScopeInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class EmulatedAdminhtmlAreaProcessorTest extends \PHPUnit\Framework\TestCase
+class EmulatedAdminhtmlAreaProcessorTest extends TestCase
 {
     /**
      * The application scope manager.
@@ -34,7 +37,7 @@ class EmulatedAdminhtmlAreaProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $emulatedAdminhtmlProcessorArea;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeMock = $this->getMockBuilder(ScopeInterface::class)
             ->getMockForAbstractClass();
@@ -70,12 +73,10 @@ class EmulatedAdminhtmlAreaProcessorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('result', $this->emulatedAdminhtmlProcessorArea->process($callback));
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Some Message
-     */
     public function testProcessWithException()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Some Message');
         $currentScope = 'currentScope';
         $this->scopeMock->expects($this->once())
             ->method('getCurrentScope')

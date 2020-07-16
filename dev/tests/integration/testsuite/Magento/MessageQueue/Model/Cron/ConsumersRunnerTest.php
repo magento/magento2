@@ -5,6 +5,9 @@
  */
 namespace Magento\MessageQueue\Model\Cron;
 
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Lock\Backend\Database;
 use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfigInterface;
 use Magento\Framework\Lock\LockManagerInterface;
 use Magento\Framework\App\DeploymentConfig\FileReader;
@@ -66,7 +69,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     private $appConfig;
 
     /**
-     * @var ShellInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShellInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $shellMock;
 
@@ -78,12 +81,15 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->shellMock = $this->getMockBuilder(ShellInterface::class)
             ->getMockForAbstractClass();
-        $this->lockManager = $this->objectManager->get(LockManagerInterface::class);
+        $resourceConnection = $this->objectManager->create(ResourceConnection::class);
+        $deploymentConfig = $this->objectManager->create(DeploymentConfig::class);
+        // create object with new otherwise dummy locker is created because of di.xml preference for integration tests
+        $this->lockManager = new Database($resourceConnection, $deploymentConfig);
         $this->consumerConfig = $this->objectManager->get(ConsumerConfigInterface::class);
         $this->reader = $this->objectManager->get(FileReader::class);
         $this->filesystem = $this->objectManager->get(Filesystem::class);
@@ -191,7 +197,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         foreach ($this->consumerConfig->getConsumers() as $consumer) {
             foreach ($this->getConsumerProcessIds($consumer->getName()) as $consumerProcessId) {

@@ -23,7 +23,7 @@ class IsSaleableTest extends \PHPUnit\Framework\TestCase
      */
     protected $productRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);

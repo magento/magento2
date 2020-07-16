@@ -3,8 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/Sales/_files/order.php';
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
 
 // refresh report statistics
 /** @var \Magento\Sales\Model\ResourceModel\Report\Order $reportResource */

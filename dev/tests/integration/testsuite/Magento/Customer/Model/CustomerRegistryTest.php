@@ -49,7 +49,7 @@ class CustomerRegistryTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -110,6 +110,7 @@ class CustomerRegistryTest extends TestCase
         $customerId = 1;
         $this->expectException(NoSuchEntityException::class);
         $this->expectExceptionMessage(sprintf('No such entity with customerId = %s', $customerId));
+
         $this->model->retrieve($customerId);
     }
 
@@ -133,12 +134,12 @@ class CustomerRegistryTest extends TestCase
      */
     public function testRemove(): void
     {
+        $this->expectException(NoSuchEntityException::class);
         $customerId = 1;
         $customer = $this->model->retrieve($customerId);
         $this->assertInstanceOf(Customer::class, $customer);
         $this->customerResourceModel->delete($customer);
         $this->model->remove($customerId);
-        $this->expectException(NoSuchEntityException::class);
         $this->model->retrieve($customerId);
     }
 
@@ -150,12 +151,12 @@ class CustomerRegistryTest extends TestCase
      */
     public function testRemoveByEmail(): void
     {
+        $this->expectException(NoSuchEntityException::class);
         $email = 'customer@example.com';
         $customer = $this->model->retrieve(1);
         $this->assertInstanceOf(Customer::class, $customer);
         $this->customerResourceModel->delete($customer);
         $this->model->removeByEmail($email, $this->defaultWebsiteId);
-        $this->expectException(NoSuchEntityException::class);
         $this->model->retrieveByEmail($email, $customer->getWebsiteId());
     }
 

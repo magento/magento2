@@ -3,42 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model;
 
+use Magento\Eav\Model\Entity\Type;
+use Magento\Framework\Api\SearchCriteria;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\Data\InvoiceSearchResultInterfaceFactory;
+use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order\InvoiceRepository;
+use Magento\Sales\Model\ResourceModel\Metadata;
+use Magento\Sales\Model\ResourceModel\Order\Invoice\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class InvoiceRepositoryTest
- */
-class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
+class InvoiceRepositoryTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\InvoiceRepository
+     * @var InvoiceRepository
      */
     protected $invoice;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $invoiceMetadata;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $searchResultFactory;
 
     /**
-     * @var CollectionProcessorInterface |\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionProcessorInterface|MockObject
      */
     private $collectionProcessorMock;
-    
-    protected function setUp()
+
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->invoiceMetadata = $this->createMock(\Magento\Sales\Model\ResourceModel\Metadata::class);
+        $objectManager = new ObjectManager($this);
+        $this->invoiceMetadata = $this->createMock(Metadata::class);
         $this->searchResultFactory = $this->getMockBuilder(
-            \Magento\Sales\Api\Data\InvoiceSearchResultInterfaceFactory::class
+            InvoiceSearchResultInterfaceFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -46,21 +54,21 @@ class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->collectionProcessorMock = $this->getMockBuilder(CollectionProcessorInterface::class)
             ->getMock();
         $this->invoice = $objectManager->getObject(
-            \Magento\Sales\Model\Order\InvoiceRepository::class,
+            InvoiceRepository::class,
             [
                 'invoiceMetadata' => $this->invoiceMetadata,
                 'searchResultFactory' => $this->searchResultFactory,
                 'collectionProcessor' => $this->collectionProcessorMock,
             ]
         );
-        $this->type = $this->createPartialMock(\Magento\Eav\Model\Entity\Type::class, ['fetchNewIncrementId']);
+        $this->type = $this->createPartialMock(Type::class, ['fetchNewIncrementId']);
     }
 
     public function testGet()
     {
         $id = 1;
 
-        $entity = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
+        $entity = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
@@ -78,24 +86,20 @@ class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($entity, $this->invoice->get($id));
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage An ID is needed. Set the ID and try again.
-     */
     public function testGetNoId()
     {
+        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectExceptionMessage('An ID is needed. Set the ID and try again.');
         $this->invoice->get(null);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     * @expectedExceptionMessage The entity that was requested doesn't exist. Verify the entity and try again.
-     */
     public function testGetEntityNoId()
     {
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
+        $this->expectExceptionMessage('The entity that was requested doesn\'t exist. Verify the entity and try again.');
         $id = 1;
 
-        $entity = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
+        $entity = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
@@ -115,7 +119,7 @@ class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreate()
     {
-        $entity = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
+        $entity = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->invoiceMetadata->expects($this->once())
@@ -126,10 +130,10 @@ class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetList()
     {
-        $searchCriteria = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteria::class)
+        $searchCriteria = $this->getMockBuilder(SearchCriteria::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $collection = $this->getMockBuilder(\Magento\Sales\Model\ResourceModel\Order\Invoice\Collection::class)
+        $collection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->collectionProcessorMock->expects($this->once())
@@ -144,7 +148,7 @@ class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testDelete()
     {
-        $entity = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
+        $entity = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
@@ -169,7 +173,7 @@ class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $id = 1;
 
-        $entity = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
+        $entity = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->once())
@@ -200,7 +204,7 @@ class InvoiceRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testSave()
     {
-        $entity = $this->getMockBuilder(\Magento\Sales\Model\Order\Invoice::class)
+        $entity = $this->getMockBuilder(Invoice::class)
             ->disableOriginalConstructor()
             ->getMock();
         $entity->expects($this->any())

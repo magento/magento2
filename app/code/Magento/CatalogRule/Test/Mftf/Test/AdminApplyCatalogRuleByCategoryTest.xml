@@ -26,7 +26,7 @@
             <createData entity="ApiSimpleProduct" stepKey="createSimpleProductTwo">
                 <requiredEntity createDataKey="createCategoryTwo"/>
             </createData>
-
+            <magentoCron stepKey="runCronIndex" groups="index"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -42,7 +42,7 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
 
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- 1. Begin creating a new catalog price rule -->

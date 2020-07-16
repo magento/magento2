@@ -27,12 +27,11 @@
                 <argument name="product" value="DownloadableProduct"/>
             </actionGroup>
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Create product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageAdd"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="adminProductIndexPageAdd"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>

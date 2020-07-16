@@ -32,7 +32,7 @@ class DeleteAssetsByPaths implements DeleteAssetsByPathsInterface
     private $logger;
 
     /**
-     * DeleteById constructor.
+     * DeleteAssetsByPaths constructor.
      *
      * @param ResourceConnection $resourceConnection
      * @param LoggerInterface $logger

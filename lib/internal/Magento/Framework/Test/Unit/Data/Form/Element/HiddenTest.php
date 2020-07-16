@@ -1,31 +1,36 @@
-<?php declare(strict_types=1);
+<?php
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Test\Unit\Data\Form\Element;
 
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\Hidden;
+use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Framework\Data\Form\Element\Hidden.
  */
-class HiddenTest extends \PHPUnit\Framework\TestCase
+class HiddenTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Data\Form\Element\Hidden
+     * @var Hidden
      */
     private $element;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $escaper = $objectManager->getObject(
-            \Magento\Framework\Escaper::class
+            Escaper::class
         );
         $this->element = $objectManager->getObject(
-            \Magento\Framework\Data\Form\Element\Hidden::class,
+            Hidden::class,
             [
                 'escaper' => $escaper
             ]
@@ -39,18 +44,18 @@ class HiddenTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetElementHtml($value)
     {
-        $form = $this->createMock(\Magento\Framework\Data\Form::class);
+        $form = $this->createMock(Form::class);
         $this->element->setForm($form);
         $this->element->setValue($value);
         $html = $this->element->getElementHtml();
 
         if (is_array($value)) {
             foreach ($value as $item) {
-                $this->assertContains($item, $html);
+                $this->assertStringContainsString($item, $html);
             }
             return;
         }
-        $this->assertContains($value, $html);
+        $this->assertStringContainsString($value, $html);
     }
 
     /**
