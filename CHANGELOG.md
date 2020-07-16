@@ -1223,7 +1223,7 @@
     * [magento/magento2#23917](https://github.com/magento/magento2/pull/23917) -- Resolve Missing Validation at some Payment Method Settings issue 23916 (by @edenduong)
     * [magento/magento2#23919](https://github.com/magento/magento2/pull/23919) -- class ApplyAttributesUpdate  should use \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE instead of fixing "bundle" (by @edenduong)
     * [magento/magento2#23933](https://github.com/magento/magento2/pull/23933) -- Fix display of decimal quantities for wishlist items (by @mfickers)
-    
+
 2.3.2
 =============
 * GitHub issues:
