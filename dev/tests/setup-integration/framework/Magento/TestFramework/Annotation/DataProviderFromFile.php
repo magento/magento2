@@ -94,11 +94,11 @@ class DataProviderFromFile
         $pathWithoutExtension = $this->removeFileExtension($path);
 
         foreach (glob($pathWithoutExtension . '.*') as $file) {
-            preg_match('/\.([\D]*[\d]*(?:\.[\d]+){0,2})/', $file, $spittledParts);
+            preg_match('/\.([\D]*[\d]*(?:\.[\d]+){0,2})/', $file, $splitParts);
             $dbKey = self::FALLBACK_VALUE;
 
-            if (count($spittledParts) > 1) {
-                $database = array_pop($spittledParts);
+            if (count($splitParts) > 1) {
+                $database = array_pop($splitParts);
 
                 if ($this->isValidDatabaseSuffix($database)) {
                     $dbKey = $database;
