@@ -792,6 +792,25 @@
     * [magento/magento2#27955](https://github.com/magento/magento2/pull/27955) -- compliance to StorefrontMinicartSection (by @engcom-Echo)
     * [magento/magento2#27515](https://github.com/magento/magento2/pull/27515) -- #27503 : MFTF: Acceptance tests break the naming convention (Indexer + Backup) (by @konarshankar07)
     * [magento/magento2#26886](https://github.com/magento/magento2/pull/26886) -- comments & validation added in cookie configuration (by @ajithkumar-maragathavel)
+    * [magento/magento2-login-as-customer#23](https://github.com/magento/magento2-login-as-customer/pull/23) -- Removed "Login As Customer" action from Orders & Customers grid (by @ihorvansach)
+    * [magento/magento2-login-as-customer#49](https://github.com/magento/magento2-login-as-customer/pull/49) -- 34 remove option to merge guest cart v2 (by @ihorvansach)
+    * [magento/magento2-login-as-customer#123](https://github.com/magento/magento2-login-as-customer/pull/123) -- Added spinner/loader while Admin is logging in as Customer (by @ihorvansach)
+    * [magento/magento2-login-as-customer#164](https://github.com/magento/magento2-login-as-customer/pull/164) -- Magento2 login as customer/issues/159 (by @ihorvansach)
+    * [magento/magento2-login-as-customer#148](https://github.com/magento/magento2-login-as-customer/pull/148) -- magento2-login-as-customer/issues/102 (by @ihorvansach)
+    * [magento/magento2-login-as-customer#68](https://github.com/magento/magento2-login-as-customer/pull/68) -- login-as-customer/issues/59: Customer data not invalidated private content after logged in (by @nntoan)
+    * [magento/magento2-login-as-customer#64](https://github.com/magento/magento2-login-as-customer/pull/64) -- Update readme installation instructions (by @barryvdh)
+    * [magento/magento2-login-as-customer#75](https://github.com/magento/magento2-login-as-customer/pull/75) -- Resolved login-as-customer/issues/60 (by @erfanimani)
+    * [magento/magento2-login-as-customer#92](https://github.com/magento/magento2-login-as-customer/pull/92) -- Page title is empty when admin login as customer (by @konarshankar07)
+    * [magento/magento2-login-as-customer#69](https://github.com/magento/magento2-login-as-customer/pull/69) -- Need to update/change titles for ACL resource tree related to Login as Customer (by @konarshankar07)
+    * [magento/magento2-login-as-customer#7](https://github.com/magento/magento2-login-as-customer/pull/7) -- Merge module code improvements (by @ihorvansach)
+    * [magento/magento2-login-as-customer#123](https://github.com/magento/magento2-login-as-customer/pull/123) -- Added spinner/loader while Admin is logging in as Customer (by @ihorvansach)
+    * [magento/magento2-login-as-customer#121](https://github.com/magento/magento2-login-as-customer/pull/121) -- Login As Customer functionality is available when Login As Customer is disabled [fixed] (by @ihorvansach)
+    * [magento/magento2-login-as-customer#120](https://github.com/magento/magento2-login-as-customer/pull/120) -- All System Configuration settings should be on Global level (by @ihorvansach)
+    * [magento/magento2-login-as-customer#119](https://github.com/magento/magento2-login-as-customer/pull/119) -- Confirmation pop-up window for "Login as Customer" (New Request) (by @ihorvansach)
+    * [magento/magento2-login-as-customer#101](https://github.com/magento/magento2-login-as-customer/pull/101) -- Moved all UI from LoginAsCustomer to new LoginAsCustomerUi module (by @ihorvansach)
+    * [magento/magento2-login-as-customer#99](https://github.com/magento/magento2-login-as-customer/pull/99) -- Moved code related to the shopping cart from LoginAsCustomer to LogiAsCustomerSales extension (by @ihorvansach)
+    * [magento/magento2-login-as-customer#87](https://github.com/magento/magento2-login-as-customer/pull/87) -- 17 Notification banner on storefront [fixed: The banner is not showing] (by @ihorvansach)
+    * [magento/magento2-login-as-customer#21](https://github.com/magento/magento2-login-as-customer/pull/21) -- Login As Customer Controllers refactoring (by @ihorvansach)
 
 2.3.3
 =============
@@ -1204,26 +1223,7 @@
     * [magento/magento2#23917](https://github.com/magento/magento2/pull/23917) -- Resolve Missing Validation at some Payment Method Settings issue 23916 (by @edenduong)
     * [magento/magento2#23919](https://github.com/magento/magento2/pull/23919) -- class ApplyAttributesUpdate  should use \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE instead of fixing "bundle" (by @edenduong)
     * [magento/magento2#23933](https://github.com/magento/magento2/pull/23933) -- Fix display of decimal quantities for wishlist items (by @mfickers)
-    * [magento/magento2-login-as-customer#23](https://github.com/magento/magento2-login-as-customer/pull/23) -- Removed "Login As Customer" action from Orders & Customers grid (by @ihorvansach)
-    * [magento/magento2-login-as-customer#49](https://github.com/magento/magento2-login-as-customer/pull/49) -- 34 remove option to merge guest cart v2 (by @ihorvansach)
-    * [magento/magento2-login-as-customer#123](https://github.com/magento/magento2-login-as-customer/pull/123) -- Added spinner/loader while Admin is logging in as Customer (by @ihorvansach)
-    * [magento/magento2-login-as-customer#164](https://github.com/magento/magento2-login-as-customer/pull/164) -- Magento2 login as customer/issues/159 (by @ihorvansach)
-    * [magento/magento2-login-as-customer#148](https://github.com/magento/magento2-login-as-customer/pull/148) -- magento2-login-as-customer/issues/102 (by @ihorvansach)
-    * [magento/magento2-login-as-customer#68](https://github.com/magento/magento2-login-as-customer/pull/68) -- login-as-customer/issues/59: Customer data not invalidated private content after logged in (by @nntoan)
-    * [magento/magento2-login-as-customer#64](https://github.com/magento/magento2-login-as-customer/pull/64) -- Update readme installation instructions (by @barryvdh)
-    * [magento/magento2-login-as-customer#75](https://github.com/magento/magento2-login-as-customer/pull/75) -- Resolved login-as-customer/issues/60 (by @erfanimani)
-    * [magento/magento2-login-as-customer#92](https://github.com/magento/magento2-login-as-customer/pull/92) -- Page title is empty when admin login as customer (by @konarshankar07)
-    * [magento/magento2-login-as-customer#69](https://github.com/magento/magento2-login-as-customer/pull/69) -- Need to update/change titles for ACL resource tree related to Login as Customer (by @konarshankar07)
-    * [magento/magento2-login-as-customer#7](https://github.com/magento/magento2-login-as-customer/pull/7) -- Merge module code improvements (by @ihorvansach)
-    * [magento/magento2-login-as-customer#123](https://github.com/magento/magento2-login-as-customer/pull/123) -- Added spinner/loader while Admin is logging in as Customer (by @ihorvansach)
-    * [magento/magento2-login-as-customer#121](https://github.com/magento/magento2-login-as-customer/pull/121) -- Login As Customer functionality is available when Login As Customer is disabled [fixed] (by @ihorvansach)
-    * [magento/magento2-login-as-customer#120](https://github.com/magento/magento2-login-as-customer/pull/120) -- All System Configuration settings should be on Global level (by @ihorvansach)
-    * [magento/magento2-login-as-customer#119](https://github.com/magento/magento2-login-as-customer/pull/119) -- Confirmation pop-up window for "Login as Customer" (New Request) (by @ihorvansach)
-    * [magento/magento2-login-as-customer#101](https://github.com/magento/magento2-login-as-customer/pull/101) -- Moved all UI from LoginAsCustomer to new LoginAsCustomerUi module (by @ihorvansach)
-    * [magento/magento2-login-as-customer#99](https://github.com/magento/magento2-login-as-customer/pull/99) -- Moved code related to the shopping cart from LoginAsCustomer to LogiAsCustomerSales extension (by @ihorvansach)
-    * [magento/magento2-login-as-customer#87](https://github.com/magento/magento2-login-as-customer/pull/87) -- 17 Notification banner on storefront [fixed: The banner is not showing] (by @ihorvansach)
-    * [magento/magento2-login-as-customer#21](https://github.com/magento/magento2-login-as-customer/pull/21) -- Login As Customer Controllers refactoring (by @ihorvansach)
-
+    
 2.3.2
 =============
 * GitHub issues:
