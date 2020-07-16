@@ -245,7 +245,7 @@ class Cli extends Console\Application
     {
         $params = [];
         $deploymentConfig = $this->serviceManager->get(DeploymentConfig::class);
-        if ((bool)$deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DOCUMENT_ROOT_IS_PUB)) {
+        if ((bool)$deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DOCUMENT_ROOT_IS_PUB, true)) {
             $params[Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS] = [
                 DirectoryList::PUB => [DirectoryList::URL_PATH => ''],
                 DirectoryList::MEDIA => [DirectoryList::URL_PATH => 'media'],

@@ -54,6 +54,6 @@ class DocumentRoot
      */
     public function isPub()
     {
-        return (bool)$this->config->get(ConfigOptionsListConstants::CONFIG_PATH_DOCUMENT_ROOT_IS_PUB);
+        return (bool)$this->config->get(ConfigOptionsListConstants::CONFIG_PATH_DOCUMENT_ROOT_IS_PUB, true);
     }
 }

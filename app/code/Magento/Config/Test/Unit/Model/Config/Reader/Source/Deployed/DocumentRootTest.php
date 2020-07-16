@@ -67,7 +67,7 @@ class DocumentRootTest extends TestCase
             ->willReturnMap([
                 [
                     ConfigOptionsListConstants::CONFIG_PATH_DOCUMENT_ROOT_IS_PUB,
-                    null,
+                    true,
                     true
                 ],
             ]);
