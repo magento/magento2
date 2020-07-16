@@ -105,7 +105,7 @@
         </actionGroup>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
         <!--Open created order in admin-->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrdersPage"/>
         <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchOrder">
             <argument name="keyword" value="$grabOrderNumber"/>
         </actionGroup>
