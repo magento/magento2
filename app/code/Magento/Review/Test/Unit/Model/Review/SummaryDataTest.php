@@ -38,7 +38,7 @@ class SummaryDataTest extends TestCase
      */
     private $reviewResourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->reviewSummaryCollectionFactoryMock = $this->createPartialMock(
             CollectionFactory::class,
@@ -72,11 +72,11 @@ class SummaryDataTest extends TestCase
             Product::class,
             ['getId', 'addData', '__wakeup']
         );
-        $product->expects($this->once())->method('getId')->willReturn($productId);
-        $product->expects($this->once())
+        $product->expects(self::once())->method('getId')->willReturn($productId);
+        $product->expects(self::once())
             ->method('addData')
             ->with($testSummaryData)
-            ->will($this->returnSelf());
+            ->willReturnSelf();
 
         $summaryData = $this->createPartialMock(
             Summary::class,
@@ -92,21 +92,21 @@ class SummaryDataTest extends TestCase
             Collection::class,
             ['addEntityFilter', 'addStoreFilter', 'getFirstItem', '__wakeup']
         );
-        $summaryCollection->expects($this->once())
+        $summaryCollection->expects(self::once())
             ->method('addEntityFilter')
             ->willReturnSelf();
-        $summaryCollection->expects($this->once())
+        $summaryCollection->expects(self::once())
             ->method('addStoreFilter')
             ->willReturnSelf();
-        $summaryCollection->expects($this->once())
+        $summaryCollection->expects(self::once())
             ->method('getFirstItem')
             ->willReturn($summaryData);
 
-        $this->reviewResourceMock->expects($this->once())
+        $this->reviewResourceMock->expects(self::once())
             ->method('getEntityIdByCode')
             ->with(Review::ENTITY_PRODUCT_CODE)
             ->willReturn(1);
-        $this->reviewSummaryCollectionFactoryMock->expects($this->once())
+        $this->reviewSummaryCollectionFactoryMock->expects(self::once())
             ->method('create')
             ->willReturn($summaryCollection);
 
