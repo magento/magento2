@@ -13,9 +13,9 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test for create customer functionality
+ * Tests for create customer (V2)
  */
-class CreateCustomerTest extends GraphQlAbstract
+class CreateCustomerV2Test extends GraphQlAbstract
 {
     /**
      * @var Registry
@@ -47,7 +47,7 @@ class CreateCustomerTest extends GraphQlAbstract
 
         $query = <<<QUERY
 mutation {
-    createCustomer(
+    createCustomerV2(
         input: {
             firstname: "{$newFirstname}"
             lastname: "{$newLastname}"
@@ -68,11 +68,11 @@ mutation {
 QUERY;
         $response = $this->graphQlMutation($query);
 
-        $this->assertNull($response['createCustomer']['customer']['id']);
-        $this->assertEquals($newFirstname, $response['createCustomer']['customer']['firstname']);
-        $this->assertEquals($newLastname, $response['createCustomer']['customer']['lastname']);
-        $this->assertEquals($newEmail, $response['createCustomer']['customer']['email']);
-        $this->assertTrue($response['createCustomer']['customer']['is_subscribed']);
+        $this->assertNull($response['createCustomerV2']['customer']['id']);
+        $this->assertEquals($newFirstname, $response['createCustomerV2']['customer']['firstname']);
+        $this->assertEquals($newLastname, $response['createCustomerV2']['customer']['lastname']);
+        $this->assertEquals($newEmail, $response['createCustomerV2']['customer']['email']);
+        $this->assertTrue($response['createCustomerV2']['customer']['is_subscribed']);
     }
 
     /**
@@ -86,7 +86,7 @@ QUERY;
 
         $query = <<<QUERY
 mutation {
-    createCustomer(
+    createCustomerV2(
         input: {
             firstname: "{$newFirstname}"
             lastname: "{$newLastname}"
@@ -106,10 +106,10 @@ mutation {
 QUERY;
         $response = $this->graphQlMutation($query);
 
-        $this->assertEquals($newFirstname, $response['createCustomer']['customer']['firstname']);
-        $this->assertEquals($newLastname, $response['createCustomer']['customer']['lastname']);
-        $this->assertEquals($newEmail, $response['createCustomer']['customer']['email']);
-        $this->assertTrue($response['createCustomer']['customer']['is_subscribed']);
+        $this->assertEquals($newFirstname, $response['createCustomerV2']['customer']['firstname']);
+        $this->assertEquals($newLastname, $response['createCustomerV2']['customer']['lastname']);
+        $this->assertEquals($newEmail, $response['createCustomerV2']['customer']['email']);
+        $this->assertTrue($response['createCustomerV2']['customer']['is_subscribed']);
     }
 
     /**
@@ -117,11 +117,13 @@ QUERY;
     public function testCreateCustomerIfInputDataIsEmpty()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('"input" value should be specified');
+        $this->expectExceptionMessage('CustomerCreateInput.email of required type String! was not provided.');
+        $this->expectExceptionMessage('CustomerCreateInput.firstname of required type String! was not provided.');
+        $this->expectExceptionMessage('CustomerCreateInput.lastname of required type String! was not provided.');
 
         $query = <<<QUERY
 mutation {
-    createCustomer(
+    createCustomerV2(
         input: {
 
         }
@@ -144,7 +146,7 @@ QUERY;
     public function testCreateCustomerIfEmailMissed()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Required parameters are missing: Email');
+        $this->expectExceptionMessage('Field CustomerCreateInput.email of required type String! was not provided');
 
         $newFirstname = 'Richard';
         $newLastname = 'Rowe';
@@ -152,7 +154,7 @@ QUERY;
 
         $query = <<<QUERY
 mutation {
-    createCustomer(
+    createCustomerV2(
         input: {
             firstname: "{$newFirstname}"
             lastname: "{$newLastname}"
@@ -187,7 +189,7 @@ QUERY;
 
         $query = <<<QUERY
 mutation {
-    createCustomer(
+    createCustomerV2(
         input: {
             firstname: "{$firstname}"
             lastname: "{$lastname}"
@@ -234,7 +236,7 @@ QUERY;
     public function testCreateCustomerIfPassedAttributeDosNotExistsInCustomerInput()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('Field "test123" is not defined by type CustomerInput.');
+        $this->expectExceptionMessage('Field "test123" is not defined by type CustomerCreateInput.');
 
         $newFirstname = 'Richard';
         $newLastname = 'Rowe';
@@ -243,7 +245,7 @@ QUERY;
 
         $query = <<<QUERY
 mutation {
-    createCustomer(
+    createCustomerV2(
         input: {
             firstname: "{$newFirstname}"
             lastname: "{$newLastname}"
@@ -279,7 +281,7 @@ QUERY;
         $currentPassword = 'test123#';
         $query = <<<QUERY
 mutation {
-    createCustomer(
+    createCustomerV2(
         input: {
             email: "{$newEmail}"
             firstname: "{$newFirstname}"
@@ -312,7 +314,7 @@ QUERY;
 
         $query = <<<QUERY
 mutation {
-    createCustomer(
+    createCustomerV2(
         input: {
             firstname: "{$newFirstname}"
             lastname: "{$newLastname}"
@@ -330,7 +332,7 @@ QUERY;
 
         $response = $this->graphQlMutation($query);
 
-        $this->assertFalse($response['createCustomer']['customer']['is_subscribed']);
+        $this->assertFalse($response['createCustomerV2']['customer']['is_subscribed']);
     }
 
     /**
@@ -350,7 +352,7 @@ QUERY;
 
         $query = <<<QUERY
 mutation {
-    createCustomer(
+    createCustomerV2(
         input: {
             email: "{$existedEmail}"
             password: "{$password}"
