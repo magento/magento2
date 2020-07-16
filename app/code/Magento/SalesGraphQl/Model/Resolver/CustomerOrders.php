@@ -94,13 +94,6 @@ class CustomerOrders implements ResolverInterface
         $userId = $context->getUserId();
         /** @var StoreInterface $store */
         $store = $context->getExtensionAttributes()->getStore();
-        $customerModel = $value['model'];
-        $address = $customerModel->getAddresses();
-        $addressIds = [];
-        foreach ($address as $key => $addressData) {
-            $addressIds[$key] = (int)$addressData->getId();
-        }
-
         try {
             $searchResult = $this->getSearchResult($args, (int)$userId, (int)$store->getId());
             $maxPages = (int)ceil($searchResult->getTotalCount() / $searchResult->getPageSize());
@@ -110,7 +103,7 @@ class CustomerOrders implements ResolverInterface
 
         return [
             'total_count' => $searchResult->getTotalCount(),
-            'items' => $this->formatOrdersArray($searchResult->getItems(), $addressIds),
+            'items' => $this->formatOrdersArray($searchResult->getItems()),
             'page_info' => [
                 'page_size' => $searchResult->getPageSize(),
                 'current_page' => $searchResult->getCurPage(),
@@ -123,10 +116,9 @@ class CustomerOrders implements ResolverInterface
      * Format order models for graphql schema
      *
      * @param OrderInterface[] $orderModels
-     * @param array $addressIds
      * @return array
      */
-    private function formatOrdersArray(array $orderModels, array $addressIds)
+    private function formatOrdersArray(array $orderModels)
     {
         $ordersArray = [];
 
@@ -142,8 +134,8 @@ class CustomerOrders implements ResolverInterface
                 'order_number' => $orderModel->getIncrementId(),
                 'status' => $orderModel->getStatusLabel(),
                 'shipping_method' => $orderModel->getShippingDescription(),
-                'shipping_address' => $this->orderAddress->getShippingAddress($orderModel, $addressIds),
-                'billing_address' => $this->orderAddress->getBillingAddress($orderModel, $addressIds),
+                'shipping_address' => $this->orderAddress->getOrderShippingAddress($orderModel),
+                'billing_address' => $this->orderAddress->getOrderBillingAddress($orderModel),
                 'payment_methods' => $this->orderPayments->getOrderPaymentMethod($orderModel),
                 'model' => $orderModel,
             ];
