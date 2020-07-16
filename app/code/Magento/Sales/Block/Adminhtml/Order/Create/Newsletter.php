@@ -15,8 +15,6 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create;
 class Newsletter extends AbstractCreate
 {
     /**
-     * Constructor
-     *
      * @return void
      */
     protected function _construct()

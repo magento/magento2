@@ -31,8 +31,6 @@ class Index extends Action
     private $menuId;
 
     /**
-     * Details constructor.
-     *
      * @param Context $context
      * @param PageFactory $resultPageFactory
      * @param string $menuId
