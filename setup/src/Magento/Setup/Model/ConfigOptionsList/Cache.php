@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\Setup\Model\ConfigOptionsList;
 
-use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\File\ConfigFilePool;
-use Magento\Framework\Setup\Option\FlagConfigOption;
+use Magento\Framework\Setup\ConfigOptionsListInterface;
+use Magento\Framework\Setup\Option\BooleanConfigOption;
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Validator\RedisConnectionValidator;
@@ -95,7 +95,7 @@ class Cache implements ConfigOptionsListInterface
     /**
      * @inheritdoc
      */
-    public function getOptions()
+    public function getOptions(): array
     {
         return [
             new SelectConfigOption(
@@ -147,7 +147,7 @@ class Cache implements ConfigOptionsListInterface
                 self::CONFIG_PATH_CACHE_ID_PREFIX,
                 'ID prefix for cache keys'
             ),
-            new FlagConfigOption(
+            new BooleanConfigOption(
                 self::INPUT_KEY_CACHE_ALLOW_PARALLEL_CACHE_GENERATION,
                 self::CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION,
                 'Allow generate cache in non-blocking way'
@@ -158,7 +158,7 @@ class Cache implements ConfigOptionsListInterface
     /**
      * @inheritdoc
      */
-    public function createConfig(array $options, DeploymentConfig $deploymentConfig)
+    public function createConfig(array $options, DeploymentConfig $deploymentConfig): ConfigData
     {
         $configData = new ConfigData(ConfigFilePool::APP_ENV);
         if (isset($options[self::INPUT_KEY_CACHE_ID_PREFIX])) {
@@ -187,7 +187,7 @@ class Cache implements ConfigOptionsListInterface
     /**
      * @inheritdoc
      */
-    public function validate(array $options, DeploymentConfig $deploymentConfig)
+    public function validate(array $options, DeploymentConfig $deploymentConfig): array
     {
         $errors = [];
 
@@ -220,7 +220,7 @@ class Cache implements ConfigOptionsListInterface
      * @param DeploymentConfig $deploymentConfig
      * @return bool
      */
-    private function validateRedisConfig(array $options, DeploymentConfig $deploymentConfig)
+    private function validateRedisConfig(array $options, DeploymentConfig $deploymentConfig): bool
     {
         $config = [];
 
@@ -262,7 +262,7 @@ class Cache implements ConfigOptionsListInterface
      * @param ConfigData $configData
      * @return ConfigData
      */
-    private function setDefaultRedisConfig(DeploymentConfig $deploymentConfig, ConfigData $configData)
+    private function setDefaultRedisConfig(DeploymentConfig $deploymentConfig, ConfigData $configData): ConfigData
     {
         foreach ($this->inputKeyToConfigPathMap as $inputKey => $configPath) {
             $configData->set($configPath, $deploymentConfig->get($configPath, $this->getDefaultConfigValue($inputKey)));
@@ -277,7 +277,7 @@ class Cache implements ConfigOptionsListInterface
      * @param string $inputKey
      * @return string
      */
-    private function getDefaultConfigValue($inputKey)
+    private function getDefaultConfigValue($inputKey): string
     {
         if (isset($this->defaultConfigValues[$inputKey])) {
             return $this->defaultConfigValues[$inputKey];

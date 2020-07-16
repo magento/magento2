@@ -11,6 +11,7 @@ use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Encryption\KeyValidator;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
+use Magento\Framework\Setup\Option\BooleanConfigOption;
 use Magento\Framework\Setup\Option\FlagConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
@@ -53,6 +54,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         \Magento\Setup\Model\ConfigOptionsList\Cache::class,
         \Magento\Setup\Model\ConfigOptionsList\PageCache::class,
         \Magento\Setup\Model\ConfigOptionsList\Lock::class,
+        \Magento\Setup\Model\ConfigOptionsList\Directory::class,
     ];
 
     /**
@@ -196,7 +198,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 'Full path of server certificate file in order to establish db connection through SSL',
                 ''
             ),
-            new FlagConfigOption(
+            new BooleanConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_SSL_VERIFY,
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS .
                 '/' . ConfigOptionsListConstants::KEY_MYSQL_SSL_VERIFY,
