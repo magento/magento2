@@ -37,7 +37,7 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="{{_defaultProduct.name}}"/>
         </actionGroup>

@@ -89,12 +89,11 @@
         <waitForPageLoad stepKey="waitForInvoicePageToLoad"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seeNewInvoiceInPageTitle" after="clickInvoiceButton"/>
         <see selector="{{AdminInvoiceTotalSection.total('Subtotal')}}" userInput="$150.00" stepKey="seeCorrectGrandTotal"/>
-        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessInvoiceMessage"/>
         <!--Create Shipment for the order-->
         <comment userInput="Create Shipment for the order" stepKey="createShipmentForOrder"/>
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage2"/>
-        <waitForPageLoad time="30" stepKey="waitForOrderListPageLoading"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrdersPage2"/>
         <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="openOrderPageForShip"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
         <waitForPageLoad stepKey="waitForShipmentPagePage"/>
