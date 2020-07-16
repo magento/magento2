@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\Query;
 
+use Magento\Catalog\Model\Product;
 use Magento\CatalogGraphQl\DataProvider\Product\SearchCriteriaBuilder;
 use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
@@ -106,10 +107,13 @@ class Search implements ProductQueryInterface
         $totalPages = $realPageSize ? ((int)ceil($searchResults->getTotalCount() / $realPageSize)) : 0;
 
         $productArray = [];
-        /** @var \Magento\Catalog\Model\Product $product */
+        /** @var Product $product */
         foreach ($searchResults->getItems() as $product) {
             $productArray[$product->getId()] = $product->getData();
             $productArray[$product->getId()]['model'] = $product;
+            foreach ($queryFields as $field) {
+                $productArray[$product->getId()][$field] = $this->getAttributeLabel($product, $field);
+            }
         }
 
         return $this->searchResultFactory->create(
@@ -138,5 +142,18 @@ class Search implements ProductQueryInterface
         $searchCriteria = $this->searchCriteriaBuilder->build($args, $includeAggregations);
 
         return $searchCriteria;
+    }
+
+    /**
+     * Get frontend label of product attribute
+     *
+     * @param Product $product
+     * @param $field
+     *
+     * @return mixed
+     */
+    private function getAttributeLabel(Product $product, $field)
+    {
+        return $product->getResource()->getAttribute($field)->getFrontend()->getValue($product);
     }
 }
