@@ -31,8 +31,7 @@
             <actionGroup ref="NavigateToAndResetProductGridToDefaultViewActionGroup" stepKey="NavigateToAndResetProductGridToDefaultView"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductList"/>
-        <waitForPageLoad stepKey="waitForProductList"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductList"/>
         <!--Create Default Product-->
         <click selector="{{AdminProductGridActionSection.addProductBtn}}" stepKey="clickAddDefaultProduct"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="fillDefaultProductName"/>
@@ -45,8 +44,7 @@
         <waitForPageLoad stepKey="waitForPDefaultProductSaved"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="successMessageYouSavedTheProductIsShown"/>
         <!--Create product with grid filter Not Visible Individually-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="ProductList"/>
-        <waitForPageLoad stepKey="waitForProductPage"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="ProductList"/>
         <click selector="{{AdminProductGridActionSection.addProductBtn}}" stepKey="clickAddFilterProduct"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{defaultSimpleProduct.name}}" stepKey="fillProductName"/>
         <fillField selector="{{AdminProductFormSection.productSku}}" userInput="{{defaultSimpleProduct.sku}}" stepKey="fillProductSku"/>
