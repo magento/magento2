@@ -61,9 +61,8 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
         $filePath = $resultAsset->getPath();
         $tmpFilePath = $filePath . $this->mathRandom->getUniqueHash('_');
         $staticDir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
-        $tmpDir = $this->filesystem->getDirectoryWrite(DirectoryList::TMP);
-        $tmpDir->writeFile($tmpFilePath, $mergedContent);
-        $tmpDir->renameFile($tmpFilePath, $filePath, $staticDir);
+        $staticDir->writeFile($tmpFilePath, $mergedContent);
+        $staticDir->renameFile($tmpFilePath, $filePath, $staticDir);
     }
 
     /**
