@@ -14,7 +14,7 @@ use Magento\Framework\Mview\View\StateInterface;
 /**
  * Class for removing old triggers that were created by mview
  */
-class OldViews
+class TriggerCleaner implements TriggerCleanerInterface
 {
     /**
      * @var CollectionFactory
@@ -47,16 +47,16 @@ class OldViews
     }
 
     /**
-     * Unsubscribe old views by existing triggers
+     * @inheritDoc
+     * @throws \Exception
      */
-    public function unsubscribe(): void
+    public function unsubscribe(): bool
     {
         $viewCollection = $this->viewCollectionFactory->create();
         $viewList = $viewCollection->getViewsByStateMode(StateInterface::MODE_ENABLED);
 
         // Unsubscribe mviews
         foreach ($viewList as $view) {
-            /** @var ViewInterface $view */
             $view->unsubscribe();
         }
 
@@ -70,9 +70,10 @@ class OldViews
 
         // Re-subscribe mviews
         foreach ($viewList as $view) {
-            /** @var ViewInterface $view */
             $view->subscribe();
         }
+
+        return true;
     }
 
     /**
