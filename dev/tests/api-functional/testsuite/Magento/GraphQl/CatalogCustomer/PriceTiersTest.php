@@ -7,25 +7,28 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\CatalogCustomer;
 
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\Data\ProductTierPriceInterfaceFactory;
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product;
-use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\GraphQl\GetCustomerAuthenticationHeader;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 
 class PriceTiersTest extends GraphQlAbstract
 {
     /**
-     * @var \Magento\TestFramework\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
+
+    /**
+     * @var GetCustomerAuthenticationHeader
+     */
+    private $getCustomerAuthenticationHeader;
 
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
+        $this->getCustomerAuthenticationHeader = $this->objectManager->get(GetCustomerAuthenticationHeader::class);
     }
 
     /**
@@ -33,7 +36,6 @@ class PriceTiersTest extends GraphQlAbstract
      */
     public function testAllGroups()
     {
-        /** @var string $productSku */
         $productSku = 'simple';
         /** @var string $query */
         $query = $this->getProductSearchQuery($productSku);
@@ -41,89 +43,51 @@ class PriceTiersTest extends GraphQlAbstract
         $response = $this->graphQlQuery($query);
 
         $itemTiers = $response['products']['items'][0]['price_tiers'];
-        $this->assertEquals(5, sizeof($itemTiers));
+        $this->assertCount(5, $itemTiers);
         $this->assertEquals(8, $this->getValueForQuantity(2, $itemTiers));
         $this->assertEquals(5, $this->getValueForQuantity(3, $itemTiers));
         $this->assertEquals(6, $this->getValueForQuantity(3.2, $itemTiers));
     }
 
     /**
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/simple_product_with_tier_prices_for_multiple_groups.php
      */
     public function testLoggedInCustomer()
     {
-        /** @var string $productSku */
         $productSku = 'simple';
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        /** @var Product $product */
-        $product = $productRepository->get($productSku, false, null, true);
-        $tierPriceData =[
-            [
-                'customer_group_id' => 1,
-                'percentage_value'=> null,
-                'qty'=> 2,
-                'value'=> 9
-            ],
-            [
-                'customer_group_id' => 1,
-                'percentage_value'=> null,
-                'qty'=> 3,
-                'value'=> 8.25
-            ],
-            [
-                'customer_group_id' => 1,
-                'percentage_value'=> null,
-                'qty'=> 5,
-                'value'=> 7
-            ],
-            [
-                'customer_group_id' => 2,
-                'percentage_value'=> null,
-                'qty'=> 3,
-                'value'=> 8
-            ]
-        ];
-
-        $this->saveTierPrices($product, $tierPriceData);
         /** @var string $query */
-
         $query = $this->getProductSearchQuery($productSku);
         $response = $this->graphQlQuery(
             $query,
             [],
             '',
-            $this->getHeaderAuthorization('customer@example.com', 'password')
+            $this->getCustomerAuthenticationHeader->execute('customer@example.com', 'password')
         );
 
         $itemTiers = $response['products']['items'][0]['price_tiers'];
-        $this->assertEquals(3, sizeof($itemTiers));
-        $this->assertEquals(9, $this->getValueForQuantity(2, $itemTiers));
+        $this->assertCount(3, $itemTiers);
+        $this->assertEquals(9.25, $this->getValueForQuantity(2, $itemTiers));
         $this->assertEquals(8.25, $this->getValueForQuantity(3, $itemTiers));
-        $this->assertEquals(7, $this->getValueForQuantity(5, $itemTiers));
+        $this->assertEquals(7.25, $this->getValueForQuantity(5, $itemTiers));
     }
 
     /**
      * @magentoApiDataFixture Magento/Store/_files/second_store_with_second_currency.php
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Catalog/_files/product_simple.php
+     * @magentoApiDataFixture Magento/Catalog/_files/simple_product_with_tier_prices_for_multiple_groups.php
      */
     public function testSecondStoreViewWithCurrencyRate()
     {
-        /** @var string $storeViewCode */
         $storeViewCode = 'fixture_second_store';
-        /** @var StoreRepositoryInterface $storeRepository */
         $storeRepository = $this->objectManager->get(StoreRepositoryInterface::class);
-        /** @var float $rate */
         $rate = $storeRepository->get($storeViewCode)->getCurrentCurrencyRate();
-        /** @var string $productSku */
         $productSku = 'simple';
         /** @var string $query */
         $query = $this->getProductSearchQuery($productSku);
         /** @var array $headers */
         $headers = array_merge(
-            $this->getHeaderAuthorization('customer@example.com', 'password'),
+            $this->getCustomerAuthenticationHeader->execute('customer@example.com', 'password'),
             $this->getHeaderStore($storeViewCode)
         );
 
@@ -135,17 +99,20 @@ class PriceTiersTest extends GraphQlAbstract
         );
 
         $itemTiers = $response['products']['items'][0]['price_tiers'];
-        $this->assertEquals(2, sizeof($itemTiers));
-        $this->assertEquals(round(8 * $rate, 2), $this->getValueForQuantity(2, $itemTiers));
-        $this->assertEquals(round(5 * $rate, 2), $this->getValueForQuantity(5, $itemTiers));
+        $this->assertCount(3, $itemTiers);
+        $this->assertEquals(round(9.25 * $rate, 2), $this->getValueForQuantity(2, $itemTiers));
+        $this->assertEquals(round(8.25 * $rate, 2), $this->getValueForQuantity(3, $itemTiers));
+        $this->assertEquals(round(7.25 * $rate, 2), $this->getValueForQuantity(5, $itemTiers));
     }
 
     /**
+     * Get the tier price value for the given product quantity
+     *
      * @param float $quantity
      * @param array $tiers
      * @return float
      */
-    private function getValueForQuantity(float $quantity, array $tiers)
+    private function getValueForQuantity(float $quantity, array $tiers): float
     {
         $filteredResult = array_values(array_filter($tiers, function ($tier) use ($quantity) {
             if ((float)$tier['quantity'] == $quantity) {
@@ -157,29 +124,8 @@ class PriceTiersTest extends GraphQlAbstract
     }
 
     /**
-     * @param ProductInterface $product
-     * @param array $tierPriceData
-     */
-    private function saveTierPrices(ProductInterface $product, array $tierPriceData)
-    {
-        /** @var array $tierPrices */
-        $tierPrices = [];
-        /** @var ProductTierPriceInterfaceFactory $tierPriceFactory */
-        $tierPriceFactory = $this->objectManager->get(ProductTierPriceInterfaceFactory::class);
-
-        foreach ($tierPriceData as $tierPrice) {
-            $tierPrices[] = $tierPriceFactory->create(
-                [
-                    'data' => $tierPrice
-                ]
-            );
-        }
-
-        $product->setTierPrices($tierPrices);
-        $product->save();
-    }
-
-    /**
+     * Get a query which user filter for product sku and returns price_tiers
+     *
      * @param string $productSku
      * @return string
      */
@@ -187,7 +133,7 @@ class PriceTiersTest extends GraphQlAbstract
     {
         return <<<QUERY
 {
-  products(search: "{$productSku}") {
+  products(filter: {sku: {eq: "{$productSku}"}}) {
     items {
       price_tiers {
      	final_price {
@@ -207,19 +153,8 @@ QUERY;
     }
 
     /**
-     * @param string $username
-     * @param string $password
-     * @return array
-     */
-    private function getHeaderAuthorization(string $username, string $password): array
-    {
-        $customerToken = $this->objectManager->get(CustomerTokenServiceInterface::class)
-            ->createCustomerAccessToken($username, $password);
-
-        return ['Authorization' => 'Bearer ' . $customerToken];
-    }
-
-    /**
+     * Get array that would be used in request header
+     *
      * @param string $storeViewCode
      * @return array
      */
