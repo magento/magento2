@@ -137,11 +137,17 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
     {
         $filename = 'image.jpg';
         $path = '/sales/store/logo/';
+        $storeId = 1;
 
-        $this->appEmulation->expects($this->any())
+        $this->appEmulation->expects($this->once())
             ->method('startEnvironmentEmulation')
+            ->with(
+                $storeId,
+                \Magento\Framework\App\Area::AREA_FRONTEND,
+                true
+            )
             ->willReturnSelf();
-        $this->appEmulation->expects($this->any())
+        $this->appEmulation->expects($this->once())
             ->method('stopEnvironmentEmulation')
             ->willReturnSelf();
         $this->_pdfConfigMock->expects($this->once())
@@ -187,6 +193,9 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $orderMock->expects($this->any())
             ->method('getPayment')
             ->willReturn($infoMock);
+        $invoiceMock->expects($this->any())
+            ->method('getStoreId')
+            ->willReturn($storeId);
         $invoiceMock->expects($this->any())
             ->method('getOrder')
             ->willReturn($orderMock);

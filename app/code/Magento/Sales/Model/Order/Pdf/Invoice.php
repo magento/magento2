@@ -19,11 +19,6 @@ class Invoice extends AbstractPdf
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\Locale\ResolverInterface
-     */
-    protected $_localeResolver;
-
-    /**
      * @var \Magento\Store\Model\App\Emulation
      */
     private $appEmulation;
@@ -40,9 +35,8 @@ class Invoice extends AbstractPdf
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
-     * @param array $data
      * @param \Magento\Store\Model\App\Emulation|null $appEmulation
+     * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -58,14 +52,11 @@ class Invoice extends AbstractPdf
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver,
-        array $data = [],
-        \Magento\Store\Model\App\Emulation $appEmulation = null
+        \Magento\Store\Model\App\Emulation $appEmulation,
+        array $data = []
     ) {
         $this->_storeManager = $storeManager;
-        $this->_localeResolver = $localeResolver;
-        $this->appEmulation = $appEmulation ?? \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Store\Model\App\Emulation::class);
+        $this->appEmulation = $appEmulation;
         parent::__construct(
             $paymentData,
             $string,
