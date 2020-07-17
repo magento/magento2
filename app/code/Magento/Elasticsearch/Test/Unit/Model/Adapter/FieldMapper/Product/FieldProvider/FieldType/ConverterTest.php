@@ -54,7 +54,7 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['string', 'string'],
-            ['float', 'float'],
+            ['float', 'double'],
             ['integer', 'integer'],
         ];
     }

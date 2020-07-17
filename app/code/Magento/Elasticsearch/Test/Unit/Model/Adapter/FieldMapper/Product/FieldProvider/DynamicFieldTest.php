@@ -251,7 +251,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                         if ($type === 'string') {
                             return 'string';
                         } elseif ($type === 'float') {
-                            return 'float';
+                            return 'double';
                         } elseif ($type === 'integer') {
                             return 'integer';
                         } else {
@@ -287,7 +287,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                         'index' => 'no_index'
                     ],
                     'price_1_1' => [
-                        'type' => 'float',
+                        'type' => 'double',
                         'store' => true
                     ]
                 ]
@@ -306,7 +306,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                         'index' => 'no_index'
                     ],
                     'price_1_1' => [
-                        'type' => 'float',
+                        'type' => 'double',
                         'store' => true
                     ]
                 ],
@@ -325,7 +325,7 @@ class DynamicFieldTest extends \PHPUnit\Framework\TestCase
                         'index' => 'no_index'
                     ],
                     'price_1_1' => [
-                        'type' => 'float',
+                        'type' => 'double',
                         'store' => true
                     ]
                 ]

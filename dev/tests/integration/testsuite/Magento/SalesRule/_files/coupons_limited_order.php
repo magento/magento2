@@ -3,13 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-use Magento\Sales\Model\Order;
+use Magento\Quote\Model\Quote;
 use Magento\TestFramework\Helper\Bootstrap;
 
 // phpcs:disable Magento2.Security.IncludeFile
 require 'coupons_limited.php';
-require __DIR__ . '/../../../Magento/Sales/_files/order.php';
+require __DIR__ . '/../../../Magento/Sales/_files/quote_with_customer.php';
 // phpcs:enable
 
 $collection = Bootstrap::getObjectManager()->create(
@@ -17,12 +16,16 @@ $collection = Bootstrap::getObjectManager()->create(
 );
 $items = array_values($collection->getItems());
 
-/** @var Order $order */
-$order = Bootstrap::getObjectManager()->create(Order::class);
+/** @var Quote $quote */
+$quote = Bootstrap::getObjectManager()->create(Quote::class);
+$quote->load('test01', 'reserved_order_id');
+$quote->getShippingAddress()
+    ->setShippingMethod('flatrate_flatrate')
+    ->setShippingDescription('Flat Rate - Fixed')
+    ->setCollectShippingRates(true)
+    ->collectShippingRates()
+    ->save();
 
-$order->loadByIncrementId('100000001')
-    ->setCouponCode('one_usage')
+$quote->setCouponCode('one_usage')
     ->setAppliedRuleIds("{$items[0]->getId()}")
-    ->setCreatedAt('2014-10-25 10:10:10')
-    ->setCustomerId(1)
     ->save();
