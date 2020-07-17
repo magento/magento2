@@ -16,6 +16,8 @@ define([
 ], function ($, _, mageTemplate, registry) {
     'use strict';
 
+    var dragging = true;
+
     /**
      * Formats incoming bytes value to a readable format.
      *
@@ -374,6 +376,11 @@ define([
             }, this));
 
             this._contentUpdated();
+
+            setTimeout(function(){
+                dragging = false;
+            }, 1500);
+            dragging = true;
         },
 
         /**
