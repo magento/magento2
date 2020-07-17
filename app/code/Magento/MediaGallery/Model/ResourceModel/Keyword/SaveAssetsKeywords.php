@@ -11,7 +11,9 @@ use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\CouldNotDeleteException;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
+use Magento\MediaGalleryApi\Api\GetAssetsKeywordsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
 use Psr\Log\LoggerInterface;
 
@@ -36,6 +38,11 @@ class SaveAssetsKeywords implements SaveAssetsKeywordsInterface
     private $saveAssetLinks;
 
     /**
+     * @var GetAssetsKeywordsInterface
+     */
+    private $getAssetsKeywordsInterface;
+
+    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -45,15 +52,18 @@ class SaveAssetsKeywords implements SaveAssetsKeywordsInterface
      *
      * @param ResourceConnection $resourceConnection
      * @param SaveAssetLinks $saveAssetLinks
+     * @param GetAssetsKeywordsInterface $getAssetsKeywordsInterface
      * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
         SaveAssetLinks $saveAssetLinks,
+        GetAssetsKeywordsInterface $getAssetsKeywordsInterface,
         LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
         $this->saveAssetLinks = $saveAssetLinks;
+        $this->getAssetsKeywordsInterface = $getAssetsKeywordsInterface;
         $this->logger = $logger;
     }
 
@@ -72,8 +82,6 @@ class SaveAssetsKeywords implements SaveAssetsKeywordsInterface
             }
         }
 
-        $this->deleteObsoleteKeywords();
-
         if (!empty($failedAssetIds)) {
             throw new CouldNotSaveException(
                 __('Could not save keywords for asset ids: %ids', ['ids' => implode(' ,', $failedAssetIds)])
@@ -86,6 +94,7 @@ class SaveAssetsKeywords implements SaveAssetsKeywordsInterface
      *
      * @param KeywordInterface[] $keywords
      * @param int $assetId
+     * @throws CouldNotDeleteException
      * @throws CouldNotSaveException
      * @throws \Zend_Db_Exception
      */
@@ -99,6 +108,8 @@ class SaveAssetsKeywords implements SaveAssetsKeywordsInterface
         if (empty($data)) {
             return;
         }
+
+        $this->deleteObsoleteAssetKeywords($data, $assetId);
 
         /** @var Mysql $connection */
         $connection = $this->resourceConnection->getConnection();
@@ -130,58 +141,56 @@ class SaveAssetsKeywords implements SaveAssetsKeywordsInterface
     }
 
     /**
-     * Delete keywords which has
-     * no relation to any asset
+     * Deletes obsolete asset keywords links
      *
-     * @return void
+     * @param array $newKeywords
+     * @param int $assetId
+     * @throws CouldNotDeleteException
      */
-    private function deleteObsoleteKeywords(): void
+    private function deleteObsoleteAssetKeywords(array $newKeywords, int $assetId): void
     {
-        $connection = $this->resourceConnection->getConnection();
-        $select = $connection->select()
-            ->from(
-                ['k' => self::TABLE_KEYWORD],
-                ['k.id']
-            )
-            ->joinLeft(
-                ['ak' => self::TABLE_ASSET_KEYWORD],
-                'k.id = ak.keyword_id'
-            )
-            ->where('ak.asset_id IS NULL');
+        $oldKeywordData = $this->getAssetsKeywordsInterface->execute([$assetId]);
 
-        $obsoleteKeywords = $connection->fetchCol($select);
+        if (empty($newKeywords) || empty($oldKeywordData)) {
+            return;
+        }
 
-        if (!empty($obsoleteKeywords)) {
-            try {
-                $this->deleteKeywordsByIds($obsoleteKeywords);
-            } catch (\Exception $exception) {
-                $this->logger->critical($exception);
+        $oldKeywordData = $this->getAssetsKeywordsInterface->execute([$assetId]);
+        $oldKeywords = $oldKeywordData[$assetId]->getKeywords();
+
+        foreach ($oldKeywords as $oldKeyword) {
+            if (!in_array($oldKeyword->getKeyword(), $newKeywords)) {
+                $obsoleteKeywords[] = $oldKeyword->getKeyword();
             }
         }
-    }
 
-    /**
-     * Delete keywords by ids
-     *
-     * @param array $keywordIds
-     * @return  void
-     */
-    private function deleteKeywordsByIds(array $keywordIds): void
-    {
-        $connection  = $this->resourceConnection->getConnection();
+        if (empty($obsoleteKeywords)) {
+            return;
+        }
 
-        $whereConditions = [
-            $connection->prepareSqlCondition(
-                self::ID,
-                ['in' => [$keywordIds]]
-            ),
-        ];
+        $obsoleteKeywordIds = $this->getKeywordIds($obsoleteKeywords);
 
-        $connection->delete(
-            $connection->getTableName(
-                self::TABLE_KEYWORD
-            ),
-            $whereConditions
-        );
+        try {
+            /** @var Mysql $connection */
+            $connection  = $this->resourceConnection->getConnection();
+            $connection->delete(
+                $connection->getTableName(
+                    self::TABLE_ASSET_KEYWORD
+                ),
+                [
+                    'keyword_id in (?)' => $obsoleteKeywordIds,
+                    'asset_id = ?' => $assetId
+                ]
+            );
+        } catch (\Exception $exception) {
+            $this->logger->critical($exception);
+            $failedAssetId = $assetId;
+        }
+
+        if (!empty($failedAssetId)) {
+            throw new CouldNotDeleteException(
+                __('Could not delete obsolete keyword relation for asset id: %id', ['id' => $assetId])
+            );
+        }
     }
 }
