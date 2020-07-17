@@ -300,6 +300,18 @@ define([
         },
 
         /**
+         * Clears select value and error.
+         *
+         * @returns {Abstract} Chainable.
+         */
+        reset: function () {
+            this.clear();
+            this.error(false);
+
+            return this;
+        },
+
+        /**
          * Initializes observable properties of instance
          *
          * @returns {Object} Chainable.

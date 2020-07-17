@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSynonymsNewGroupFormResetTest">
+        <annotations>
+            <features value="Search"/>
+            <stories value="Reset synonym group form"/>
+            <title value="Admin reset synonym group form"/>
+            <description value="When admin uses reset button on new synonym group form all fields should be set to default values"/>
+            <severity value="AVERAGE"/>
+            <group value="Search"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{AdminSearchSynonymsNewPage.url}}" stepKey="openAdminSearchSynonymsNewPage"/>
+        <waitForPageLoad stepKey="waitForAdminSearchSynonymsNewPageLoad"/>
+
+        <selectOption selector="{{AdminSearchSynonymsNewSection.scope}}" userInput="1:1" stepKey="selectScope"/>
+        <fillField selector="{{AdminSearchSynonymsNewSection.synonyms}}" userInput="Synonym Example" stepKey="fillSynonyms"/>
+        <click selector="{{AdminSearchSynonymsNewSection.resetButton}}" stepKey="clickResetButton"/>
+
+        <grabValueFrom selector="{{AdminSearchSynonymsNewSection.scope}}" stepKey="grabScopeValue"/>
+        <assertEquals stepKey="assertScopeDefaultValue">
+            <expectedResult type="string">0:0</expectedResult>
+            <actualResult type="string">$grabScopeValue</actualResult>
+        </assertEquals>
+
+        <grabValueFrom selector="{{AdminSearchSynonymsNewSection.synonyms}}" stepKey="grabSynonymsValue"/>
+        <assertEmpty stepKey="assertSynonymsDefaultValue">
+            <actualResult type="string">$grabSynonymsValue</actualResult>
+        </assertEmpty>
+    </test>
+</tests>
