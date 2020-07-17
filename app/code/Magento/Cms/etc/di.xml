@@ -233,8 +233,8 @@
             <argument name="repository" xsi:type="object">Magento\Cms\Model\PageRepository</argument>
             <argument name="validators" xsi:type="array">
                 <item name="layout_update" xsi:type="object">Magento\Cms\Model\PageRepository\Validator\LayoutUpdateValidator</item>
-                <item name="content" xsi:type="object">Magento\Cms\Model\PageRepository\Validator\ContentValidator</item>
             </argument>
+            <argument name="hydrator" xsi:type="object">Magento\Framework\EntityManager\AbstractModelHydrator</argument>
         </arguments>
     </type>
     <preference for="Magento\Cms\Model\Page\CustomLayoutManagerInterface" type="Magento\Cms\Model\Page\CustomLayout\CustomLayoutManager" />
@@ -255,11 +255,6 @@
             <argument name="commands" xsi:type="array">
                 <item name="cms_wysiwyg_restrict" xsi:type="object">Magento\Cms\Command\WysiwygRestrictCommand</item>
             </argument>
-        </arguments>
-    </type>
-    <type name="Magento\Cms\Model\PageRepository\Validator\ContentValidator">
-        <arguments>
-            <argument name="hydrator" xsi:type="object">Magento\Framework\EntityManager\AbstractModelHydrator</argument>
         </arguments>
     </type>
 </config>

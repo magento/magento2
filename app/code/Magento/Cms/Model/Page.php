@@ -13,6 +13,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject\IdentityInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Validation\ValidationException;
+use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
 
 /**
  * Cms Page Model
@@ -65,12 +67,18 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     private $customLayoutRepository;
 
     /**
+     * @var WYSIWYGValidatorInterface
+     */
+    private $wysiwygValidator;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource|null $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param CustomLayoutRepository|null $customLayoutRepository
+     * @param WYSIWYGValidatorInterface|null $wysiwygValidator
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -78,11 +86,14 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        ?CustomLayoutRepository $customLayoutRepository = null
+        ?CustomLayoutRepository $customLayoutRepository = null,
+        ?WYSIWYGValidatorInterface $wysiwygValidator = null
     ) {
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
         $this->customLayoutRepository = $customLayoutRepository
             ?? ObjectManager::getInstance()->get(CustomLayoutRepository::class);
+        $this->wysiwygValidator = $wysiwygValidator
+            ?? ObjectManager::getInstance()->get(WYSIWYGValidatorInterface::class);
     }
 
     /**
@@ -614,6 +625,26 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
         }
         $this->setData('layout_update_selected', $layoutUpdate);
         $this->customLayoutRepository->validateLayoutSelectedFor($this);
+
+        //Validating Content HTML.
+        $oldValue = null;
+        if ($this->getId()) {
+            if ($this->getOrigData()) {
+                $oldValue = $this->getOrigData(self::CONTENT);
+            } elseif (array_key_exists(self::CONTENT, $this->getStoredData())) {
+                $oldValue = $this->getStoredData()[self::CONTENT];
+            }
+        }
+        if ($this->getContent() && $this->getContent() !== $oldValue) {
+            try {
+                $this->wysiwygValidator->validate($this->getContent());
+            } catch (ValidationException $exception) {
+                throw new ValidationException(
+                    __('Content HTML contains restricted elements. %1', $exception->getMessage()),
+                    $exception
+                );
+            }
+        }
 
         return parent::beforeSave();
     }
