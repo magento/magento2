@@ -284,6 +284,10 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
     </entity>
+    <entity name="ApiSimpleProductWithCategory" type="product2" extends="ApiSimpleOne">
+        <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+        <requiredEntity type="custom_attribute">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
     <entity name="ApiSimpleProductWithShortSKU" type="product2" extends="ApiSimpleOne">
         <data key="sku" unique="suffix">pr</data>
     </entity>
