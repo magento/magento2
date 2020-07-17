@@ -7,12 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model\Order;
 
-use Magento\Quote\Model\Quote\Address;
 use Magento\Sales\Api\Data\OrderAddressInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 
 /**
- * Class to fetch the order address details
+ * Class to get the order address details
  */
 class OrderAddress
 {
@@ -26,11 +25,8 @@ class OrderAddress
         OrderInterface $order
     ) {
         $shippingAddress = null;
-        $orderShippingAddress = $order->getShippingAddress() ?? null;
-        if ($orderShippingAddress) {
-            if ($orderShippingAddress->getAddressType()  === ADDRESS::TYPE_SHIPPING) {
-                $shippingAddress = $this->OrderAddressDataFormatter($orderShippingAddress);
-            }
+        if ($order->getShippingAddress()) {
+            $shippingAddress = $this->OrderAddressDataFormatter($order->getShippingAddress());
         }
         return $shippingAddress;
     }
@@ -45,11 +41,8 @@ class OrderAddress
         OrderInterface $order
     ) {
         $billingAddress = null;
-        $orderBillingAddress = $order->getBillingAddress() ?? null;
-        if ($orderBillingAddress) {
-            if ($orderBillingAddress->getAddressType() === ADDRESS::TYPE_BILLING) {
-                $billingAddress = $this->OrderAddressDataFormatter($orderBillingAddress);
-            }
+        if ($order->getBillingAddress()) {
+            $billingAddress = $this->OrderAddressDataFormatter($order->getBillingAddress());
         }
         return $billingAddress;
     }

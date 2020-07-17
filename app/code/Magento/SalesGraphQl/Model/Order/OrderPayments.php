@@ -10,7 +10,7 @@ namespace Magento\SalesGraphQl\Model\Order;
 use Magento\Sales\Api\Data\OrderInterface;
 
 /**
- * Class to fetch the order payment details
+ * Class to get the order payment details
  */
 class OrderPayments
 {
@@ -21,37 +21,11 @@ class OrderPayments
     public function getOrderPaymentMethod(OrderInterface $orderModel): array
     {
         $orderPayment = $orderModel->getPayment();
-        $paymentAdditionalInfo =  $orderModel->getExtensionAttributes()->getPaymentAdditionalInfo();
-        $paymentAdditionalData = [];
-        foreach ($paymentAdditionalInfo as $key => $paymentAdditionalInfoDetails) {
-            $paymentAdditionalData[$key]['name'] = $paymentAdditionalInfoDetails->getKey();
-            $paymentAdditionalData[$key]['value'] = $paymentAdditionalInfoDetails->getValue();
-        }
-        $additionalInformationCcType = $orderPayment->getCcType();
-        $additionalInformationCcNumber = $orderPayment->getCcLast4();
-        if ($orderPayment->getMethod() === 'checkmo' || $orderPayment->getMethod() === 'free' ||
-            $orderPayment->getMethod() === 'purchaseorder' ||$orderPayment->getMethod() === 'cashondelivery' ||
-            $orderPayment->getMethod() === 'banktransfer'
-        ) {
-            $additionalData = [];
-        } else {
-            $additionalData = [
-                [
-                    'name' => 'Credit Card Type',
-                    'value' => $additionalInformationCcType ?? null
-                ],
-                [
-                    'name' => 'Credit Card Number',
-                    'value' => $additionalInformationCcNumber ?? null
-                ]
-            ];
-        }
-
         return [
             [
-                'name' => $orderPayment->getAdditionalInformation()['method_title'] ?? null,
+                'name' => $orderPayment->getAdditionalInformation()['method_title'] ?? 'method_title',
                 'type' => $orderPayment->getMethod() ?? null,
-                'additional_data' => $additionalData
+                'additional_data' => []
             ]
         ];
     }

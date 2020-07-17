@@ -63,6 +63,11 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
       number
       status
       order_date
+      payment_methods{name type additional_data{ name value}}
+      shipping_address{firstname lastname city company country_code fax middlename postcode prefix street region
+      region_id suffix telephone vat_id}
+      billing_address{firstname lastname city company country_code fax middlename postcode prefix street region
+      region_id suffix telephone vat_id}
       items{
         quantity_ordered
         product_sku
@@ -105,6 +110,9 @@ QUERY;
         $customerOrderItemsInResponse = $response['customer']['orders']['items'][0];
         $this->assertArrayHasKey('items', $customerOrderItemsInResponse);
         $this->assertNotEmpty($customerOrderItemsInResponse['items']);
+        $this->assertNotEmpty($response["customer"]["orders"]["items"][0]["billing_address"]);
+        $this->assertNotEmpty($response["customer"]["orders"]["items"][0]["shipping_address"]);
+        $this->assertNotEmpty($response["customer"]["orders"]["items"][0]["payment_methods"]);
 
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', '100000002')
             ->create();
@@ -154,6 +162,9 @@ QUERY;
         $this->setPaymentMethod($cartId, $paymentMethod);
         $orderNumber = $this->placeOrder($cartId);
         $customerOrderResponse = $this->getCustomerOrderQuery($orderNumber);
+        $this->assertOrderBillingAddress($customerOrderResponse[0]["billing_address"]);
+        $this->assertOrderShippingAddress($customerOrderResponse[0]["shipping_address"]);
+        $this->assertOrderPaymentMethod($customerOrderResponse[0]["payment_methods"]);
         // Asserting discounts on order item level
         $this->assertEquals(4, $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']);
         $this->assertEquals('USD', $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']);
@@ -164,6 +175,77 @@ QUERY;
         $customerOrderItem = $customerOrderResponse[0];
         $this->assertTotalsWithTaxesAndDiscounts($customerOrderItem['total']);
         $this->deleteOrder();
+    }
+
+    /**
+     * Check order billing address
+     *
+     * @param array $customerOrderBillingAddress
+     */
+    private function assertOrderBillingAddress(array $customerOrderBillingAddress): void
+    {
+        $assertionMap = [
+            'firstname' => 'John',
+            'lastname' => 'Smith',
+            'city' => 'Texas City',
+            'company' => 'Test company',
+            'country_code' => 'US',
+            'postcode' => '78717',
+            'prefix' => 'John',
+            'region' => 'Texas',
+            'region_id' => '57',
+            'street' => [
+                0 => 'test street 1',
+                1 => 'test street 2',
+            ],
+            'suffix' => 'John',
+            'telephone' => '5123456677'
+        ];
+        $this->assertResponseFields($customerOrderBillingAddress, $assertionMap);
+    }
+
+    /**
+     * Check order shipping address
+     *
+     * @param array $customerOrderShippingAddress
+     */
+    private function assertOrderShippingAddress(array $customerOrderShippingAddress): void
+    {
+        $assertionMap = [
+            'firstname' => 'test shipFirst',
+            'lastname' => 'test shipLast',
+            'city' => 'Montgomery',
+            'company' => 'test company',
+            'country_code' => 'US',
+            'postcode' => '36013',
+            'prefix' => 'test shipFirst',
+            'street' => [
+                0 => 'test street 1',
+                1 => 'test street 2',
+            ],
+            'region_id' => '1',
+            'region' => 'Alabama',
+            'suffix' => 'test shipFirst',
+            'telephone' => '3347665522'
+        ];
+        $this->assertResponseFields($customerOrderShippingAddress, $assertionMap);
+    }
+
+    /**
+     * Check order payment method
+     *
+     * @param array $customerOrderPaymentMethod
+     */
+    private function assertOrderPaymentMethod(array $customerOrderPaymentMethod): void
+    {
+        $assertionMap = [
+            [
+                'name' => 'Check / Money order',
+                'type' => 'checkmo',
+                'additional_data' => []
+            ]
+        ];
+        $this->assertResponseFields($customerOrderPaymentMethod, $assertionMap);
     }
 
     /**
@@ -1218,6 +1300,11 @@ QUERY;
            number
            order_date
            status
+           payment_methods{name type additional_data{ name value}}
+           shipping_address{firstname lastname city company country_code fax middlename postcode prefix street region
+           region_id suffix telephone vat_id}
+           billing_address{firstname lastname city company country_code fax middlename postcode prefix street region
+           region_id suffix telephone vat_id}
            items{product_name product_sku quantity_ordered discounts {amount{value currency} label}}
            total {
              base_grand_total{value currency}
