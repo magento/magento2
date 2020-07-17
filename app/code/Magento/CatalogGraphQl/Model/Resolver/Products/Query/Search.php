@@ -14,6 +14,7 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\Phrase;
 use Magento\Search\Api\SearchInterface;
 use Magento\Search\Model\Search\PageSizeProvider;
 
@@ -112,7 +113,11 @@ class Search implements ProductQueryInterface
             $productArray[$product->getId()] = $product->getData();
             $productArray[$product->getId()]['model'] = $product;
             foreach ($queryFields as $field) {
-                $productArray[$product->getId()][$field] = $this->getAttributeLabel($product, $field);
+                $productArray[$product->getId()][$field] = $this->getAttributeValue(
+                    $product,
+                    $productArray,
+                    $field
+                );
             }
         }
 
@@ -144,19 +149,25 @@ class Search implements ProductQueryInterface
         return $searchCriteria;
     }
 
+
     /**
-     * Get frontend label of product attribute
+     * Get product attribute value
      *
      * @param Product $product
+     * @param $productArray
      * @param $field
      *
-     * @return mixed
+     * @return string|null
      */
-    private function getAttributeLabel(Product $product, $field)
+    private function getAttributeValue(Product $product, $productArray, $field)
     {
-        $attribute = $product->getResource()->getAttribute($field);
-        if ($attribute) {
-            return $attribute->getFrontend()->getValue($product);
+        if ($attribute = $product->getResource()->getAttribute($field)) {
+            $attributeValue =  $attribute->getFrontend()->getValue($product);
+            if ($attributeValue && !($attributeValue instanceof Phrase) ) {
+               return $attributeValue;
+            } else {
+                return isset($productArray[$product->getId()][$field])? $productArray[$product->getId()][$field] : null;
+            }
         }
     }
 }
