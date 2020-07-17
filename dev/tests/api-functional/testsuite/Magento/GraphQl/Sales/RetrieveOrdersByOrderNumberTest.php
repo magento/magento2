@@ -63,11 +63,51 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
       number
       status
       order_date
-      payment_methods{name type additional_data{ name value}}
-      shipping_address{firstname lastname city company country_code fax middlename postcode prefix street region
-      region_id suffix telephone vat_id}
-      billing_address{firstname lastname city company country_code fax middlename postcode prefix street region
-      region_id suffix telephone vat_id}
+      payment_methods
+      {
+        name
+        type
+        additional_data
+        {
+         name
+         value
+         }
+      }
+      shipping_address {
+          firstname
+          lastname
+          city
+          company
+          country_code
+          fax
+          middlename
+          postcode
+          prefix
+          street
+          region
+          region_id
+          suffix
+          telephone
+          vat_id
+        }
+        billing_address
+        {
+          firstname
+          lastname
+          city
+          company
+          country_code
+          fax
+          middlename
+          postcode
+          prefix
+          region
+          region_id
+          street
+          suffix
+          telephone
+          vat_id
+        }
       items{
         quantity_ordered
         product_sku
@@ -1300,12 +1340,52 @@ QUERY;
            number
            order_date
            status
-           payment_methods{name type additional_data{ name value}}
-           shipping_address{firstname lastname city company country_code fax middlename postcode prefix street region
-           region_id suffix telephone vat_id}
-           billing_address{firstname lastname city company country_code fax middlename postcode prefix street region
-           region_id suffix telephone vat_id}
-           items{product_name product_sku quantity_ordered discounts {amount{value currency} label}}
+           payment_methods
+           {
+            name
+            type
+            additional_data
+            {
+            name
+            value
+            }
+            }
+         shipping_address {
+          firstname
+          lastname
+          city
+          company
+          country_code
+          fax
+          middlename
+          postcode
+          prefix
+          street
+          region
+          region_id
+          suffix
+          telephone
+          vat_id
+        }
+        billing_address
+        {
+          firstname
+          lastname
+          city
+          company
+          country_code
+          fax
+          middlename
+          postcode
+          prefix
+          region
+          region_id
+          street
+          suffix
+          telephone
+          vat_id
+        }
+        items{product_name product_sku quantity_ordered discounts {amount{value currency} label}}
            total {
              base_grand_total{value currency}
              grand_total{value currency}

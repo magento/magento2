@@ -25,8 +25,8 @@ class OrderPayments
         $orderPayment = $orderModel->getPayment();
         return [
             [
-                'name' => $orderPayment->getAdditionalInformation()['method_title'] ?? 'method_title',
-                'type' => $orderPayment->getMethod() ?? null,
+                'name' => $orderPayment->getAdditionalInformation()['method_title'] ?? ' ',
+                'type' => $orderPayment->getMethod(),
                 'additional_data' => []
             ]
         ];

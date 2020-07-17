@@ -23,7 +23,7 @@ class OrderAddress
      */
     public function getOrderShippingAddress(
         OrderInterface $order
-    ) {
+    ): ?array {
         $shippingAddress = null;
         if ($order->getShippingAddress()) {
             $shippingAddress = $this->orderAddressDataFormatter($order->getShippingAddress());
@@ -39,7 +39,7 @@ class OrderAddress
      */
     public function getOrderBillingAddress(
         OrderInterface $order
-    ) {
+    ): ?array {
         $billingAddress = null;
         if ($order->getBillingAddress()) {
             $billingAddress = $this->orderAddressDataFormatter($order->getBillingAddress());
