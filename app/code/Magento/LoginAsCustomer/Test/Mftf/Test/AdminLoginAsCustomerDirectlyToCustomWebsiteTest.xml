@@ -10,8 +10,8 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminLoginAsCustomerDirectlyToCustomWebsiteTest">
         <annotations>
-            <features value="Login As Customer"/>
-            <stories value="Login As Customer into additional website"/>
+            <features value="Login as Customer"/>
+            <stories value="Login as Customer into additional website"/>
             <title value="Admin user directly login into customer account on custom website"/>
             <description
                 value="Verify admin user can directly login into customer account on custom website using 'Login as customer' functionality"/>
@@ -63,7 +63,7 @@
             <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
         </after>
 
-        <!-- Login As Customer from Customer page -->
+        <!-- Login as Customer from Customer page -->
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="OpenEditCustomerFrom">
             <argument name="customer" value="Simple_US_Customer"/>
         </actionGroup>

@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminNoAccessToLoginAsCustomerButtonTest">
         <annotations>
-            <features value="Login As Customer"/>
+            <features value="Login as Customer"/>
             <stories value="Permissions and ACl"/>
             <title value="User does not have access to 'Login as customer' button"/>
             <description value="Login into Magento Admin panel as user that does not have access to 'Login as customer' button"/>
@@ -77,7 +77,7 @@
             <argument name="password" value="{{NewAdminUser.password}}"/>
         </actionGroup>
 
-        <!-- Verify Login As Customer Login action is absent on Customer page -->
+        <!-- Verify Login as Customer Login action is absent on Customer page -->
         <actionGroup ref="AdminLoginAsCustomerAbsentOnCustomerPageActionGroup" stepKey="verifyLoginAsCustomerAbsentOnCustomerPage">
             <argument name="customerId" value="$createCustomer.id$"/>
         </actionGroup>
@@ -89,7 +89,7 @@
         </actionGroup>
         <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderId"/>
 
-        <!-- Verify Login As Customer Login action is absent on Order page -->
+        <!-- Verify Login as Customer Login action is absent on Order page -->
         <actionGroup ref="AdminLoginAsCustomerAbsentOnOrderPageActionGroup" stepKey="verifyLoginAsCustomerAbsentOnOrderPage">
             <argument name="orderId" value="{$grabOrderId}"/>
         </actionGroup>

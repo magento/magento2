@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminLoginAsCustomerLogPageNotAvailableActionGroup">
         <annotations>
-            <description>Verify Login As Customer is not available by direct url.</description>
+            <description>Verify Login as Customer is not available by direct url.</description>
         </annotations>
 
         <amOnPage url="{{AdminLoginAsCustomerLogPage.url}}" stepKey="openAdminLoginAsCustomerLogPage"/>

@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminLoginAsCustomerAbsentOnCustomerPageActionGroup">
         <annotations>
-            <description>Verify Login As Customer Login action is absent on Customer page.</description>
+            <description>Verify Login as Customer Login action is absent on Customer page.</description>
         </annotations>
         <arguments>
             <argument name="customerId" type="string"/>
@@ -18,6 +18,6 @@
 
         <amOnPage url="{{AdminEditCustomerPage.url(customerId)}}" stepKey="gotoCustomerPage"/>
         <waitForPageLoad stepKey="waitForCustomerPageLoad"/>
-        <dontSee userInput="Login As Customer" stepKey="dontSeeLoginAsCustomer"/>
+        <dontSee userInput="Login as Customer" stepKey="dontSeeLoginAsCustomer"/>
     </actionGroup>
 </actionGroups>

@@ -10,10 +10,10 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminLoginAsCustomerLoggingTest">
         <annotations>
-            <features value="Login As Customer"/>
+            <features value="Login as Customer"/>
             <!-- TODO: change "stories" value -->
             <stories value="Place order and reorder"/>
-            <title value="Using 'Login As Customer' is logged properly"/>
+            <title value="Using 'Login as Customer' is logged properly"/>
             <description
                 value="Verify that 'Login as customer Log' record information about using 'Login as Customer' functionality properly"/>
             <severity value="MAJOR"/>
@@ -80,7 +80,7 @@
         </actionGroup>
         <actionGroup ref="StorefrontSignOutAndCloseTabActionGroup" stepKey="signOutSecondCustomerNewAdmin"/>
 
-        <!-- Navigate to Login As Customer Log page -->
+        <!-- Navigate to Login as Customer Log page -->
         <actionGroup ref="AdminOpenLoginAsCustomerLogActionGroup" stepKey="gotoLoginAsCustomerLog"/>
 
         <!-- Perform assertions -->

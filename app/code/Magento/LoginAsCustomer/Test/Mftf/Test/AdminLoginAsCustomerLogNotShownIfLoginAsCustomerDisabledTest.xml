@@ -10,10 +10,10 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminLoginAsCustomerLogNotShownIfLoginAsCustomerDisabledTest">
         <annotations>
-            <features value="Login As Customer"/>
+            <features value="Login as Customer"/>
             <stories value="Availability of UI elements if module enable/disable"/>
-            <title value="'Login As Customer Log' not shown if 'Login as customer' functionality is disabled"/>
-            <description value="Verify that 'Login As Customer Log' not shown if 'Login as customer' functionality is disabled"/>
+            <title value="'Login as Customer Log' not shown if 'Login as customer' functionality is disabled"/>
+            <description value="Verify that 'Login as Customer Log' not shown if 'Login as customer' functionality is disabled"/>
             <severity value="CRITICAL"/>
             <group value="login_as_customer"/>
         </annotations>
@@ -25,10 +25,10 @@
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <!-- Verify Login As Customer Log is absent in admin menu -->
+        <!-- Verify Login as Customer Log is absent in admin menu -->
         <actionGroup ref="AdminLoginAsCustomerLogAbsentInMenuActionGroup" stepKey="verifyLoginAsCustomerLogAbsentInMenu"/>
 
-        <!-- Verify Login As Customer Log is not available by direct url -->
+        <!-- Verify Login as Customer Log is not available by direct url -->
         <actionGroup ref="AdminLoginAsCustomerLogPageNotAvailableActionGroup" stepKey="verifyLoginAsCustomerLogNotAvailable"/>
     </test>
 </tests>

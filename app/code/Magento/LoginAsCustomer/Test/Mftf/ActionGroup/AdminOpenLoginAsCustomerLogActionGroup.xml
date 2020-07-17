@@ -10,11 +10,11 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOpenLoginAsCustomerLogActionGroup">
         <annotations>
-            <description>Navigate to Login As Customer Log page.</description>
+            <description>Navigate to Login as Customer Log page.</description>
         </annotations>
 
         <amOnPage url="{{AdminLoginAsCustomerLogPage.url}}" stepKey="gotoLoginAsCustomerLogPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <see userInput="Login As Customer Log" stepKey="titleIsVisible"/>
+        <see userInput="Login as Customer Log" stepKey="titleIsVisible"/>
     </actionGroup>
 </actionGroups>

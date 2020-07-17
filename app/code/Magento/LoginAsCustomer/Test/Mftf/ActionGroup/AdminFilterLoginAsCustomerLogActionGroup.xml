@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminFilterLoginAsCustomerLogActionGroup">
         <annotations>
-            <description>Filter Login As Customer Log records.</description>
+            <description>Filter Login as Customer Log records.</description>
         </annotations>
         <arguments>
             <argument name="adminId" type="string"/>

@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminLoginAsCustomerLoginFromOrderPageActionGroup">
         <annotations>
-            <description>Verify Login As Customer Login action is works properly from Order grid page.</description>
+            <description>Verify Login as Customer Login action is works properly from Order grid page.</description>
         </annotations>
         <arguments>
             <argument name="orderId" type="string"/>

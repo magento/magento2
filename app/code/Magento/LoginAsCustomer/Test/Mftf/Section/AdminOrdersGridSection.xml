@@ -9,6 +9,6 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminOrdersGridSection">
-        <element name="loginAsCustomerLink" type="text" selector="//td/div[contains(.,'{{orderId}}')]/../..//a[@class='action-menu-item'][text() = 'Login As Customer']" parameterized="true"/>
+        <element name="loginAsCustomerLink" type="text" selector="//td/div[contains(.,'{{orderId}}')]/../..//a[@class='action-menu-item'][text() = 'Login as Customer']" parameterized="true"/>
     </section>
 </sections>

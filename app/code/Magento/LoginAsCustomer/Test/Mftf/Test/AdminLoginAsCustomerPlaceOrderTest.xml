@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminLoginAsCustomerPlaceOrderTest">
         <annotations>
-            <features value="Login As Customer"/>
+            <features value="Login as Customer"/>
             <stories value="Place order and reorder"/>
             <title value="Admin user login as customer and place order"/>
             <description
@@ -62,7 +62,7 @@
             <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
         </after>
 
-        <!-- Login As Customer from Customer page -->
+        <!-- Login as Customer from Customer page -->
         <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
                      stepKey="loginAsCustomerFromCustomerPage">
             <argument name="customerId" value="$$createCustomer.id$$"/>

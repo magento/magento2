@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminUINotShownIfLoginAsCustomerDisabledTest">
         <annotations>
-            <features value="Login As Customer"/>
+            <features value="Login as Customer"/>
             <stories value="Availability of UI elements if module enable/disable"/>
             <title value="UI elements are not shown if 'Login as customer' functionality is disabled"/>
             <description value="Verify that UI elements are not shown if 'Login as customer' functionality is disabled"/>
@@ -34,7 +34,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <!-- Verify Login As Customer Login action is absent on Customer page -->
+        <!-- Verify Login as Customer Login action is absent on Customer page -->
         <actionGroup ref="AdminLoginAsCustomerAbsentOnCustomerPageActionGroup" stepKey="verifyLoginAsCustomerAbsentOnCustomerPage">
             <argument name="customerId" value="$createCustomer.id$"/>
         </actionGroup>
@@ -46,7 +46,7 @@
         </actionGroup>
         <grabTextFrom selector="{{AdminOrderDetailsInformationSection.orderId}}" stepKey="grabOrderId"/>
 
-        <!-- Verify Login As Customer Login action is absent on Order page -->
+        <!-- Verify Login as Customer Login action is absent on Order page -->
         <actionGroup ref="AdminLoginAsCustomerAbsentOnOrderPageActionGroup" stepKey="verifyLoginAsCustomerAbsentOnOrderPage">
             <argument name="orderId" value="{$grabOrderId}"/>
         </actionGroup>
