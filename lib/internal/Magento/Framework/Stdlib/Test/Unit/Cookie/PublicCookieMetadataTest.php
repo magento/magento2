@@ -53,6 +53,7 @@ class PublicCookieMetadataTest extends TestCase
             "getHttpOnly" => ["setHttpOnly", 'getHttpOnly', true],
             "getSecure" => ["setSecure", 'getSecure', true],
             "getDurationOneYear" => ["setDurationOneYear", 'getDuration', (3600*24*365)],
+            "getSameSite" => ["setSameSite", 'getSameSite', 'Strict']
         ];
     }
 }

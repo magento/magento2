@@ -141,11 +141,14 @@ class PhpCookieManager implements CookieManagerInterface
         $phpSetcookieSuccess = setcookie(
             $name,
             $value,
-            $expire,
-            $this->extractValue(CookieMetadata::KEY_PATH, $metadataArray, ''),
-            $this->extractValue(CookieMetadata::KEY_DOMAIN, $metadataArray, ''),
-            $this->extractValue(CookieMetadata::KEY_SECURE, $metadataArray, false),
-            $this->extractValue(CookieMetadata::KEY_HTTP_ONLY, $metadataArray, false)
+            [
+                'expires' => $expire,
+                'path' => $this->extractValue(CookieMetadata::KEY_PATH, $metadataArray, ''),
+                'domain' => $this->extractValue(CookieMetadata::KEY_DOMAIN, $metadataArray, ''),
+                'secure' => $this->extractValue(CookieMetadata::KEY_SECURE, $metadataArray, false),
+                'httponly' => $this->extractValue(CookieMetadata::KEY_HTTP_ONLY, $metadataArray, false),
+                'samesite' => $this->extractValue(CookieMetadata::KEY_SAME_SITE, $metadataArray, 'None')
+            ]
         );
 
         if (!$phpSetcookieSuccess) {
@@ -164,6 +167,7 @@ class PhpCookieManager implements CookieManagerInterface
 
     /**
      * Retrieve the size of a cookie.
+     *
      * The size of a cookie is determined by the length of 'name=value' portion of the cookie.
      *
      * @param string $name
@@ -177,8 +181,7 @@ class PhpCookieManager implements CookieManagerInterface
     }
 
     /**
-     * Determines whether or not it is possible to send the cookie, based on the number of cookies that already
-     * exist and the size of the cookie.
+     * Determines ability to send cookies, based on the number of existing cookies and cookie size
      *
      * @param string $name
      * @param string|null $value
@@ -249,6 +252,7 @@ class PhpCookieManager implements CookieManagerInterface
 
     /**
      * Determines the value to be used as a $parameter.
+     *
      * If $metadataArray[$parameter] is not set, returns the $defaultValue.
      *
      * @param string $parameter

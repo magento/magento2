@@ -6,7 +6,7 @@
 namespace Magento\Framework\Stdlib\Cookie;
 
 /**
- * Class CookieMetadata
+ * Cookie Attributes
  * @api
  */
 class CookieMetadata
@@ -19,6 +19,12 @@ class CookieMetadata
     const KEY_SECURE = 'secure';
     const KEY_HTTP_ONLY = 'http_only';
     const KEY_DURATION = 'duration';
+    const KEY_SAME_SITE = 'samesite';
+    const SAME_SITE_ALLOWED_VALUES = [
+        'strict' => 'Strict',
+        'lax' => 'Lax',
+        'none' => 'None',
+    ];
     /**#@-*/
 
     /**#@-*/
@@ -134,5 +140,31 @@ class CookieMetadata
     public function getSecure()
     {
         return $this->get(self::KEY_SECURE);
+    }
+
+    /**
+     * Setter for Cookie SameSite attribute
+     *
+     * @param  string|null $sameSite
+     * @return $this
+     */
+    public function setSameSite($sameSite)
+    {
+        if (! array_key_exists(strtolower($sameSite), self::SAME_SITE_ALLOWED_VALUES)) {
+            throw new \InvalidArgumentException(
+                'Invalid argument provided for SameSite directive expected one of: Strict, Lax or None'
+            );
+        }
+        return $this->set(self::KEY_SAME_SITE, $sameSite);
+    }
+
+    /**
+     * Get Same Site Flag
+     *
+     * @return bool|null
+     */
+    public function getSameSite()
+    {
+        return $this->get(self::KEY_SAME_SITE);
     }
 }
