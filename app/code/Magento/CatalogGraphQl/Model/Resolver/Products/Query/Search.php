@@ -154,6 +154,9 @@ class Search implements ProductQueryInterface
      */
     private function getAttributeLabel(Product $product, $field)
     {
-        return $product->getResource()->getAttribute($field)->getFrontend()->getValue($product);
+        $attribute = $product->getResource()->getAttribute($field);
+        if ($attribute) {
+            return $attribute->getFrontend()->getValue($product);
+        }
     }
 }
