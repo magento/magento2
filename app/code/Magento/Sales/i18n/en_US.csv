@@ -117,6 +117,7 @@ Capture,Capture
 "Total Paid","Total Paid"
 "Total Refunded","Total Refunded"
 "Total Due","Total Due"
+"Total Canceled","Total Canceled"
 Edit,Edit
 "Are you sure you want to send an order email to customer?","Are you sure you want to send an order email to customer?"
 "This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you want to continue?","This will create an offline refund. To create an online refund, open an invoice and create credit memo for it. Do you want to continue?"
