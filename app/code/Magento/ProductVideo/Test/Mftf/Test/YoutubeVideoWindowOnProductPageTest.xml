@@ -37,8 +37,7 @@
         </before>
 
         <!--Open simple product-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
             <argument name="product" value="$$createProduct$$"/>
