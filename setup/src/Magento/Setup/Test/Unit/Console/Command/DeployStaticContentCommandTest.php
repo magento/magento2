@@ -24,6 +24,9 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 use PHPUnit_Framework_MockObject_MockObject as Mock;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
 {
     /**

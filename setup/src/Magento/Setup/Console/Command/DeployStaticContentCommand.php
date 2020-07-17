@@ -63,20 +63,17 @@ class DeployStaticContentCommand extends Command
      * @param ConsoleLoggerFactory $consoleLoggerFactory
      * @param Options $options
      * @param ObjectManagerProvider $objectManagerProvider
-     * @param State $appState
      */
     public function __construct(
         InputValidator $inputValidator,
         ConsoleLoggerFactory $consoleLoggerFactory,
         Options $options,
-        ObjectManagerProvider $objectManagerProvider,
-        State $appState
+        ObjectManagerProvider $objectManagerProvider
     ) {
         $this->inputValidator = $inputValidator;
         $this->consoleLoggerFactory = $consoleLoggerFactory;
         $this->options = $options;
         $this->objectManager = $objectManagerProvider->get();
-        $this->appState = $appState;
 
         parent::__construct();
     }
@@ -149,7 +146,7 @@ class DeployStaticContentCommand extends Command
      */
     private function checkAppMode(InputInterface $input): void
     {
-        if (!$input->getOption(Options::FORCE_RUN) && $this->appState->getMode() !== State::MODE_PRODUCTION) {
+        if (!$input->getOption(Options::FORCE_RUN) && $this->getAppState()->getMode() !== State::MODE_PRODUCTION) {
             throw new LocalizedException(
                 __(
                     'NOTE: Manual static content deployment is not required in "default" and "developer" modes.'
@@ -174,5 +171,18 @@ class DeployStaticContentCommand extends Command
                 Cache::class => DummyCache::class
             ]
         ]);
+    }
+
+    /**
+     * Get application state
+     *
+     * @return State
+     */
+    private function getAppState()
+    {
+        if (null === $this->appState) {
+            $this->appState = $this->objectManager->get(State::class);
+        }
+        return $this->appState;
     }
 }
