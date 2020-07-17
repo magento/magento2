@@ -6,9 +6,6 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Event/etc/events.xsd">
-    <event name="catalog_product_delete_before">
-        <observer name="sales_quote_observer" instance="Magento\Sales\Observer\Backend\SubtractQtyFromQuotesObserver" />
-    </event>
     <event name="catalogrule_before_apply">
         <observer name="sales_quote_observer" instance="Magento\Sales\Observer\Backend\CatalogPriceRule" />
     </event>

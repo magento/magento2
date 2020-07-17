@@ -9,4 +9,7 @@
     <event name="sales_model_service_quote_submit_success">
         <observer name="sendEmail" instance="Magento\Quote\Observer\SubmitObserver" />
     </event>
+    <event name="controller_action_predispatch">
+        <observer name="refresh_customer_data_on_trigger_recollect" instance="Magento\Quote\Observer\Frontend\Quote\RefreshCustomerDataObserver" />
+    </event>
 </config>

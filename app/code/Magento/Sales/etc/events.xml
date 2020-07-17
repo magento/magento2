@@ -56,4 +56,7 @@
                 name="sales_assign_order_to_customer"
                 instance="Magento\Sales\Observer\AssignOrderToCustomerObserver" />
     </event>
+    <event name="catalog_product_delete_before">
+        <observer name="sales_quote_observer" instance="Magento\Sales\Observer\Backend\SubtractQtyFromQuotesObserver" />
+    </event>
 </config>

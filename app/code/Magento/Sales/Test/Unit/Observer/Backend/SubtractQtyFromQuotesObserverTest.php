@@ -49,14 +49,19 @@ class SubtractQtyFromQuotesObserverTest extends TestCase
         $this->_model = new SubtractQtyFromQuotesObserver($this->_quoteMock);
     }
 
+    /**
+     * Test subtract qty from quotes method.
+     */
     public function testSubtractQtyFromQuotes()
     {
         $productMock = $this->createPartialMock(
             Product::class,
             ['getId', 'getStatus']
         );
+        $productMock->expects($this->exactly(2))->method('getId')->willReturn(1);
         $this->_eventMock->expects($this->once())->method('getProduct')->willReturn($productMock);
         $this->_quoteMock->expects($this->once())->method('subtractProductFromQuotes')->with($productMock);
+        $this->_quoteMock->expects($this->once())->method('markQuotesRecollect')->with([$productMock->getId()]);
         $this->_model->execute($this->_observerMock);
     }
 }
