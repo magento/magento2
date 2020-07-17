@@ -37,7 +37,6 @@ class PriceTiersTest extends GraphQlAbstract
     public function testAllGroups()
     {
         $productSku = 'simple';
-        /** @var string $query */
         $query = $this->getProductSearchQuery($productSku);
 
         $response = $this->graphQlQuery($query);
@@ -56,7 +55,6 @@ class PriceTiersTest extends GraphQlAbstract
     public function testLoggedInCustomer()
     {
         $productSku = 'simple';
-        /** @var string $query */
         $query = $this->getProductSearchQuery($productSku);
         $response = $this->graphQlQuery(
             $query,
@@ -83,9 +81,7 @@ class PriceTiersTest extends GraphQlAbstract
         $storeRepository = $this->objectManager->get(StoreRepositoryInterface::class);
         $rate = $storeRepository->get($storeViewCode)->getCurrentCurrencyRate();
         $productSku = 'simple';
-        /** @var string $query */
         $query = $this->getProductSearchQuery($productSku);
-        /** @var array $headers */
         $headers = array_merge(
             $this->getCustomerAuthenticationHeader->execute('customer@example.com', 'password'),
             $this->getHeaderStore($storeViewCode)
