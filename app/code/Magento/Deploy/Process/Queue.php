@@ -157,6 +157,7 @@ class Queue
      * Process jobs
      *
      * @return int
+     * @throws TimeoutException
      */
     public function process()
     {
@@ -192,6 +193,10 @@ class Queue
         }
 
         $this->awaitForAllProcesses();
+
+        if (!empty($packages) || !empty($this->inProgress)) {
+            throw new TimeoutException('Not all packages are deployed.');
+        }
 
         return $returnStatus;
     }

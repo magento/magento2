@@ -9,6 +9,8 @@ use Magento\Deploy\Console\InputValidator;
 use Magento\Deploy\Console\ConsoleLoggerFactory;
 use Magento\Deploy\Console\DeployStaticOptions as Options;
 use Magento\Framework\App\State;
+use Magento\Framework\Console\Cli;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -137,13 +139,20 @@ class DeployStaticContentCommand extends Command
             'logger' => $logger
         ]);
 
-        $deployService->deploy($options);
-
-        if (!$refreshOnly) {
-            $logger->notice(PHP_EOL . "Execution time: " . (microtime(true) - $time));
+        $exitCode = Cli::RETURN_SUCCESS;
+        try {
+            $deployService->deploy($options);
+        } catch (\Throwable $e) {
+            $logger->error('Error happened during deploy process: ' . $e->getMessage());
+            $exitCode = Cli::RETURN_FAILURE;
         }
 
-        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+        if (!$refreshOnly) {
+            $logLevel = $exitCode === Cli::RETURN_SUCCESS ? LogLevel::NOTICE : LogLevel::WARNING;
+            $logger->log($logLevel, PHP_EOL . "Execution time: " . (microtime(true) - $time));
+        }
+
+        return $exitCode;
     }
 
     /**
