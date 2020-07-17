@@ -97,6 +97,11 @@ class Queue
     private $lastJobStarted = 0;
 
     /**
+     * @var int
+     */
+    private $logDelay;
+
+    /**
      * @param AppState $appState
      * @param LocaleResolver $localeResolver
      * @param ResourceConnection $resourceConnection
@@ -162,7 +167,7 @@ class Queue
     public function process()
     {
         $returnStatus = 0;
-        $logDelay = 10;
+        $this->logDelay = 10;
         $this->start = $this->lastJobStarted = time();
         $packages = $this->packages;
         while (count($packages) && $this->checkTimeout()) {
@@ -171,13 +176,7 @@ class Queue
                 $this->assertAndExecute($name, $packages, $packageJob);
             }
 
-            // refresh current status in console once in 10 iterations (once in 5 sec)
-            if ($logDelay >= 10) {
-                $this->logger->info('.');
-                $logDelay = 0;
-            } else {
-                $logDelay++;
-            }
+            $this->refreshStatus();
 
             if ($this->isCanBeParalleled()) {
                 // in parallel mode sleep before trying to check status and run new jobs
@@ -199,6 +198,21 @@ class Queue
         }
 
         return $returnStatus;
+    }
+
+    /**
+     * Refresh current status in console once in 10 iterations (once in 5 sec)
+     *
+     * @return void
+     */
+    private function refreshStatus(): void
+    {
+        if ($this->logDelay >= 10) {
+            $this->logger->info('.');
+            $this->logDelay = 0;
+        } else {
+            $this->logDelay++;
+        }
     }
 
     /**
