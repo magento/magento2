@@ -10,11 +10,12 @@ namespace Magento\GraphQl\CatalogCustomer;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 
 class SpecialPriceTest extends GraphQlAbstract
 {
     /**
-     * @var \Magento\TestFramework\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
@@ -28,14 +29,11 @@ class SpecialPriceTest extends GraphQlAbstract
      */
     public function testSpecialPrice()
     {
-        /** @var string $productSku */
         $productSku = 'simple';
-        /** @var string $query */
         $query = $this->getProductSearchQuery($productSku);
 
         $response = $this->graphQlQuery($query);
 
-        /** @var float $specialPrice */
         $specialPrice = (float)$response['products']['items'][0]['special_price'];
         $this->assertEquals(5.99, $specialPrice);
     }
@@ -46,17 +44,11 @@ class SpecialPriceTest extends GraphQlAbstract
      */
     public function testSpecialPriceWithCurrencyRate()
     {
-        /** @var string $storeViewCode */
         $storeViewCode = 'fixture_second_store';
-        /** @var StoreRepositoryInterface $storeRepository */
         $storeRepository = $this->objectManager->get(StoreRepositoryInterface::class);
-        /** @var float $rate */
         $rate = $storeRepository->get($storeViewCode)->getCurrentCurrencyRate();
-        /** @var string $productSku */
         $productSku = 'simple';
-        /** @var string $query */
         $query = $this->getProductSearchQuery($productSku);
-        /** @var array $headers */
         $headers = $this->getHeaderStore($storeViewCode);
 
         $response = $this->graphQlQuery(
@@ -66,12 +58,13 @@ class SpecialPriceTest extends GraphQlAbstract
             $headers
         );
 
-        /** @var float $specialPrice */
         $specialPrice = (float)$response['products']['items'][0]['special_price'];
         $this->assertEquals(round(5.99 * $rate, 2), $specialPrice);
     }
 
     /**
+     * Get a query which user filter for product sku and returns special_price
+     *
      * @param string $productSku
      * @return string
      */
@@ -79,7 +72,7 @@ class SpecialPriceTest extends GraphQlAbstract
     {
         return <<<QUERY
 {
-  products(search: "{$productSku}") {
+  products(filter: {sku: {eq: "{$productSku}"}}) {
     items {
       special_price
     }
@@ -89,6 +82,8 @@ QUERY;
     }
 
     /**
+     * Get array that would be used in request header
+     *
      * @param string $storeViewCode
      * @return array
      */
