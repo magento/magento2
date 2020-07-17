@@ -37,8 +37,7 @@
         </after>
 
         <!-- Go to the first product edit page -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
             <argument name="product" value="$$firstProduct$$"/>
@@ -123,8 +122,7 @@
         <seeElement selector=".products-grid img[src*='placeholder/small_image.jpg']" stepKey="seePlaceholder"/>
 
         <!-- Go to the second product edit page -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex2"/>
-        <waitForPageLoad stepKey="wait2"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex2"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid2"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku2">
             <argument name="product" value="$$secondProduct$$"/>
@@ -147,8 +145,7 @@
         <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
         <!-- Go to the admin grid and see the uploaded image -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex3"/>
-        <waitForPageLoad stepKey="wait3"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex3"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid3"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku3">
             <argument name="product" value="$$secondProduct$$"/>
