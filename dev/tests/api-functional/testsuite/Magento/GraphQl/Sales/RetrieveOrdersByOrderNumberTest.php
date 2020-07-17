@@ -74,40 +74,11 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
          }
       }
       shipping_address {
-          firstname
-          lastname
-          city
-          company
-          country_code
-          fax
-          middlename
-          postcode
-          prefix
-          street
-          region
-          region_id
-          suffix
-          telephone
-          vat_id
-        }
-        billing_address
-        {
-          firstname
-          lastname
-          city
-          company
-          country_code
-          fax
-          middlename
-          postcode
-          prefix
-          region
-          region_id
-          street
-          suffix
-          telephone
-          vat_id
-        }
+         ... address
+      }
+      billing_address {
+      ... address
+      }
       items{
         quantity_ordered
         product_sku
@@ -133,6 +104,24 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
    }
  }
 }
+
+fragment address on OrderAddress {
+          firstname
+          lastname
+          city
+          company
+          country_code
+          fax
+          middlename
+          postcode
+          prefix
+          street
+          region
+          region_id
+          suffix
+          telephone
+          vat_id
+        }
 QUERY;
 
         $currentEmail = 'customer@example.com';
@@ -202,29 +191,7 @@ QUERY;
         $this->setPaymentMethod($cartId, $paymentMethod);
         $orderNumber = $this->placeOrder($cartId);
         $customerOrderResponse = $this->getCustomerOrderQuery($orderNumber);
-        $this->assertOrderBillingAddress($customerOrderResponse[0]["billing_address"]);
-        $this->assertOrderShippingAddress($customerOrderResponse[0]["shipping_address"]);
-        $this->assertOrderPaymentMethod($customerOrderResponse[0]["payment_methods"]);
-        // Asserting discounts on order item level
-        $this->assertEquals(4, $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']);
-        $this->assertEquals('USD', $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']);
-        $this->assertEquals(
-            'Discount Label for 10% off',
-            $customerOrderResponse[0]['items'][0]['discounts'][0]['label']
-        );
-        $customerOrderItem = $customerOrderResponse[0];
-        $this->assertTotalsWithTaxesAndDiscounts($customerOrderItem['total']);
-        $this->deleteOrder();
-    }
-
-    /**
-     * Check order billing address
-     *
-     * @param array $customerOrderBillingAddress
-     */
-    private function assertOrderBillingAddress(array $customerOrderBillingAddress): void
-    {
-        $assertionMap = [
+        $billingAssertionMap = [
             'firstname' => 'John',
             'lastname' => 'Smith',
             'city' => 'Texas City',
@@ -241,17 +208,8 @@ QUERY;
             'suffix' => 'John',
             'telephone' => '5123456677'
         ];
-        $this->assertResponseFields($customerOrderBillingAddress, $assertionMap);
-    }
-
-    /**
-     * Check order shipping address
-     *
-     * @param array $customerOrderShippingAddress
-     */
-    private function assertOrderShippingAddress(array $customerOrderShippingAddress): void
-    {
-        $assertionMap = [
+        $this->assertResponseFields($customerOrderResponse[0]["billing_address"], $billingAssertionMap);
+        $shippingAssertionMap = [
             'firstname' => 'test shipFirst',
             'lastname' => 'test shipLast',
             'city' => 'Montgomery',
@@ -268,24 +226,25 @@ QUERY;
             'suffix' => 'test shipFirst',
             'telephone' => '3347665522'
         ];
-        $this->assertResponseFields($customerOrderShippingAddress, $assertionMap);
-    }
-
-    /**
-     * Check order payment method
-     *
-     * @param array $customerOrderPaymentMethod
-     */
-    private function assertOrderPaymentMethod(array $customerOrderPaymentMethod): void
-    {
-        $assertionMap = [
+        $this->assertResponseFields($customerOrderResponse[0]["shipping_address"], $shippingAssertionMap);
+        $paymentMethodAssertionMap = [
             [
                 'name' => 'Check / Money order',
                 'type' => 'checkmo',
                 'additional_data' => []
             ]
         ];
-        $this->assertResponseFields($customerOrderPaymentMethod, $assertionMap);
+        $this->assertResponseFields($customerOrderResponse[0]["payment_methods"], $paymentMethodAssertionMap);
+        // Asserting discounts on order item level
+        $this->assertEquals(4, $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']);
+        $this->assertEquals('USD', $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']);
+        $this->assertEquals(
+            'Discount Label for 10% off',
+            $customerOrderResponse[0]['items'][0]['discounts'][0]['label']
+        );
+        $customerOrderItem = $customerOrderResponse[0];
+        $this->assertTotalsWithTaxesAndDiscounts($customerOrderItem['total']);
+        $this->deleteOrder();
     }
 
     /**
@@ -1342,50 +1301,21 @@ QUERY;
            status
            payment_methods
            {
-            name
-            type
-            additional_data
-            {
-            name
-            value
-            }
-            }
-         shipping_address {
-          firstname
-          lastname
-          city
-          company
-          country_code
-          fax
-          middlename
-          postcode
-          prefix
-          street
-          region
-          region_id
-          suffix
-          telephone
-          vat_id
-        }
-        billing_address
-        {
-          firstname
-          lastname
-          city
-          company
-          country_code
-          fax
-          middlename
-          postcode
-          prefix
-          region
-          region_id
-          street
-          suffix
-          telephone
-          vat_id
-        }
-        items{product_name product_sku quantity_ordered discounts {amount{value currency} label}}
+             name
+             type
+             additional_data
+             {
+              name
+              value
+              }
+           }
+           shipping_address {
+           ... address
+           }
+           billing_address {
+           ... address
+           }
+           items{product_name product_sku quantity_ordered discounts {amount{value currency} label}}
            total {
              base_grand_total{value currency}
              grand_total{value currency}
@@ -1408,6 +1338,24 @@ QUERY;
        }
      }
    }
+
+   fragment address on OrderAddress {
+          firstname
+          lastname
+          city
+          company
+          country_code
+          fax
+          middlename
+          postcode
+          prefix
+          street
+          region
+          region_id
+          suffix
+          telephone
+          vat_id
+        }
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
