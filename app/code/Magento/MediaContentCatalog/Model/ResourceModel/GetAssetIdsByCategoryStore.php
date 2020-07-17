@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaContentCatalog\Model\ResourceModel;
 
 use Magento\Catalog\Api\CategoryManagementInterface;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaContentApi\Model\GetAssetIdsByContentFieldInterface;
@@ -22,6 +23,7 @@ class GetAssetIdsByCategoryStore implements GetAssetIdsByContentFieldInterface
     private const TABLE_CONTENT_ASSET = 'media_content_asset';
     private const TABLE_CATALOG_CATEGORY = 'catalog_category_entity';
     private const ENTITY_TYPE = 'catalog_category';
+    private const ID_COLUMN = 'entity_id';
 
     /**
      * @var ResourceConnection
@@ -39,20 +41,28 @@ class GetAssetIdsByCategoryStore implements GetAssetIdsByContentFieldInterface
     private $storeGroupRepository;
 
     /**
+     * @var CategoryRepositoryInterface
+     */
+    private $categoryRepository;
+
+    /**
      * GetAssetIdsByCategoryStore constructor.
      *
      * @param ResourceConnection $resource
      * @param StoreRepositoryInterface $storeRepository
      * @param GroupRepositoryInterface $storeGroupRepository
+     * @param CategoryRepositoryInterface $categoryRepository
      */
     public function __construct(
         ResourceConnection $resource,
         StoreRepositoryInterface $storeRepository,
-        GroupRepositoryInterface $storeGroupRepository
+        GroupRepositoryInterface $storeGroupRepository,
+        CategoryRepositoryInterface $categoryRepository
     ) {
         $this->connection = $resource;
         $this->storeRepository = $storeRepository;
         $this->storeGroupRepository = $storeGroupRepository;
+        $this->categoryRepository = $categoryRepository;
     }
 
     /**
@@ -62,66 +72,23 @@ class GetAssetIdsByCategoryStore implements GetAssetIdsByContentFieldInterface
     {
         $storeView = $this->storeRepository->getById($value);
         $storeGroup = $this->storeGroupRepository->get($storeView->getStoreGroupId());
-        $categoryIds = $this->getCategoryIdsByRootCategory((int) $storeGroup->getRootCategoryId());
+        $rootCategory = $this->categoryRepository->get($storeGroup->getRootCategoryId());
+
         $sql = $this->connection->getConnection()->select()->from(
             ['asset_content_table' => $this->connection->getTableName(self::TABLE_CONTENT_ASSET)],
             ['asset_id']
+        )->joinInner(
+            ['category_table' => $this->connection->getTableName(self::TABLE_CATALOG_CATEGORY)],
+            'asset_content_table.entity_id = category_table.' . self::ID_COLUMN,
+            []
         )->where(
             'entity_type = ?',
             self::ENTITY_TYPE
         )->where(
-            'entity_id IN (?)',
-            $categoryIds
+            'path LIKE ?',
+            $rootCategory->getPath() . '%'
         );
 
         return $this->connection->getConnection()->fetchCol($sql);
-    }
-
-    /**
-     * This function returns an array of category ids that have content and are under the root parameter
-     *
-     * @param int $rootCategoryId
-     * @return array
-     */
-    private function getCategoryIdsByRootCategory(int $rootCategoryId): array
-    {
-        $result = $this->getCategoryIdsAndPath();
-
-        $result = array_filter($result, function ($item) use ($rootCategoryId) {
-            $pathArray = explode('/', $item['path']);
-            $isInPath = false;
-            foreach ($pathArray as $id) {
-                if ($id == $rootCategoryId) {
-                    $isInPath = true;
-                }
-            }
-            return  $isInPath;
-        });
-
-        return array_map(function ($item) {
-            return $item['entity_id'];
-        }, $result);
-    }
-
-    /**
-     * This function returns an array of category_id and path of categories that have content
-     *
-     * @return array
-     */
-    private function getCategoryIdsAndPath(): array
-    {
-        $contentCategoriesSql = $this->connection->getConnection()->select()->from(
-            ['asset_content_table' => $this->connection->getTableName(self::TABLE_CONTENT_ASSET)],
-            ['entity_id']
-        )->where(
-            'entity_type = ?',
-            self::ENTITY_TYPE
-        )->joinInner(
-            ['category_table' => $this->connection->getTableName(self::TABLE_CATALOG_CATEGORY)],
-            'asset_content_table.entity_id = category_table.entity_id',
-            ['path']
-        );
-
-        return $this->connection->getConnection()->fetchAll($contentCategoriesSql);
     }
 }

@@ -17,7 +17,7 @@ use Magento\MediaContentApi\Model\GetAssetIdsByContentFieldInterface;
 class GetAssetIdsByContentField implements GetAssetIdsByContentFieldApiInterface
 {
     /**
-     * @var GetAssetIdsByContentFieldInterface[]
+     * @var array
      */
     private $fieldHandlers;
 
@@ -26,7 +26,7 @@ class GetAssetIdsByContentField implements GetAssetIdsByContentFieldApiInterface
      *
      * @param array $fieldHandlers
      */
-    public function __construct($fieldHandlers = [])
+    public function __construct(array $fieldHandlers = [])
     {
         $this->fieldHandlers = $fieldHandlers;
     }
@@ -40,10 +40,10 @@ class GetAssetIdsByContentField implements GetAssetIdsByContentFieldApiInterface
             throw new InvalidArgumentException(__('The field argument is invalid.'));
         }
         $ids = [];
-        /** @var GetAssetIdsByContentFieldInterface $fieldHandlers */
-        foreach ($this->fieldHandlers[$field] as $fieldHandlers) {
+        /** @var GetAssetIdsByContentFieldInterface $fieldHandler */
+        foreach ($this->fieldHandlers[$field] as $fieldHandler) {
             // phpcs:ignore Magento2.Performance.ForeachArrayMerge
-            $ids = array_merge($ids, $fieldHandlers->execute($value));
+            $ids = array_merge($ids, $fieldHandler->execute($value));
         }
         return array_unique($ids);
     }
