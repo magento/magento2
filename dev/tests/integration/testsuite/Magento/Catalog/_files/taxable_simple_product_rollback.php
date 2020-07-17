@@ -11,24 +11,19 @@ use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 
 $objectManager = Bootstrap::getObjectManager();
+/** @var Registry $registry */
+$registry = $objectManager->get(Registry::class);
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $productRepository->cleanCache();
-/** @var Registry $registry */
-$registry = $objectManager->get(Registry::class);
-
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 try {
-    foreach (['simple-2', 'simple-1'] as $sku) {
-        $productRepository->deleteById($sku);
-    }
-} catch (NoSuchEntityException $exception) {
-    //Product already removed
+    $productRepository->deleteById('taxable_product');
+} catch (NoSuchEntityException $e) {
+    // product already deleted
 }
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
-
-require __DIR__ . '/../../Store/_files/second_website_with_two_stores_rollback.php';

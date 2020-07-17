@@ -3,39 +3,58 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Helper\DefaultCategory;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Store\Api\WebsiteRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/../../Store/_files/second_website_with_two_stores.php';
 
-$website = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Website::class);
-/** @var $website \Magento\Store\Model\Website */
-$websiteId = $website->load('test', 'code')->getId();
+$objectManager = Bootstrap::getObjectManager();
+/** @var ProductFactory $productFactory */
+$productFactory = $objectManager->get(ProductFactory::class);
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
+$productRepository->cleanCache();
+/** @var WebsiteRepositoryInterface $websiteRepository */
+$websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
+$baseWebsiteId = $websiteRepository->get('base')->getId();
+$secondWebsiteId = $websiteRepository->get('test')->getId();
+$defaultCategoryId = $objectManager->get(DefaultCategory::class)->getId();
+$stockData = ['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1];
 
-/** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
-$product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
-    ->setAttributeSetId(4)
-    ->setWebsiteIds([$websiteId])
+$product = $productFactory->create();
+$attributeSetId = $product->getDefaultAttributeSetId();
+$product->setTypeId(Type::TYPE_SIMPLE)
+    ->setAttributeSetId($attributeSetId)
+    ->setWebsiteIds([$secondWebsiteId])
     ->setName('Simple Product on second website')
     ->setSku('simple-2')
     ->setPrice(10)
     ->setDescription('Description with <b>html tag</b>')
-    ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setCategoryIds([2])
-    ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
-    ->save();
+    ->setVisibility(Visibility::VISIBILITY_BOTH)
+    ->setStatus(Status::STATUS_ENABLED)
+    ->setCategoryIds([$defaultCategoryId])
+    ->setStockData($stockData);
+$productRepository->save($product);
 
-/** @var $product \Magento\Catalog\Model\Product */
-$product = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);
-$product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
-    ->setAttributeSetId(4)
-    ->setWebsiteIds([1])
+$secondProduct = $productFactory->create();
+$secondProduct->setTypeId(Type::TYPE_SIMPLE)
+    ->setAttributeSetId($attributeSetId)
+    ->setWebsiteIds([$baseWebsiteId])
     ->setName('Simple Product')
     ->setSku('simple-1')
+    ->setUrlKey('simple_product_uniq_key_1')
     ->setPrice(10)
     ->setDescription('Description with <b>html tag</b>')
-    ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setCategoryIds([2])
-    ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
-    ->save();
+    ->setVisibility(Visibility::VISIBILITY_BOTH)
+    ->setStatus(Status::STATUS_ENABLED)
+    ->setCategoryIds([$defaultCategoryId])
+    ->setStockData($stockData);
+$productRepository->save($secondProduct);
