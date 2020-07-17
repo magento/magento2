@@ -8,11 +8,10 @@ declare(strict_types=1);
 namespace Magento\Config\Setup;
 
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\Config\Data\ConfigData;
 use Magento\Framework\Config\Data\ConfigDataFactory;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
-use Magento\Framework\Setup\Option\SelectConfigOption;
+use Magento\Framework\Setup\Option\BooleanConfigOption;
 
 /**
  * Deployment configuration options required for the Config module.
@@ -58,17 +57,13 @@ class ConfigOptionsList implements ConfigOptionsListInterface
     public function getOptions()
     {
         return [
-            new SelectConfigOption(
+            new BooleanConfigOption(
                 self::INPUT_KEY_DEBUG_LOGGING,
-                SelectConfigOption::FRONTEND_WIZARD_RADIO,
-                [true, false, 1, 0],
                 self::CONFIG_PATH_DEBUG_LOGGING,
                 'Enable debug logging'
             ),
-            new SelectConfigOption(
+            new BooleanConfigOption(
                 self::INPUT_KEY_SYSLOG_LOGGING,
-                SelectConfigOption::FRONTEND_WIZARD_RADIO,
-                [true, false, 1, 0],
                 self::CONFIG_PATH_SYSLOG_LOGGING,
                 'Enable syslog logging'
             ),
@@ -87,42 +82,16 @@ class ConfigOptionsList implements ConfigOptionsListInterface
 
         $config = [];
         foreach ($deploymentOption as $inputKey => $configPath) {
-            $configValue = $this->processBooleanConfigValue(
-                $inputKey,
-                $configPath,
-                $options
-            );
-            if ($configValue) {
-                $config[] = $configValue;
+            if (!isset($options[$inputKey]) || $options[$inputKey] === '') {
+                continue;
             }
+            $value = BooleanConfigOption::boolVal($options[$inputKey]);
+            $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
+            $configData->set($configPath, $value);
+            $config[] = $configData;
         }
 
         return $config;
-    }
-
-    /**
-     * Provide config value from input.
-     *
-     * @param string $inputKey
-     * @param string $configPath
-     * @param array $options
-     * @return ConfigData|null
-     */
-    private function processBooleanConfigValue(string $inputKey, string $configPath, array &$options): ?ConfigData
-    {
-        $configData = null;
-        if (isset($options[$inputKey])) {
-            $configData = $this->configDataFactory->create(ConfigFilePool::APP_ENV);
-            if ($options[$inputKey] === 'true'
-                || $options[$inputKey] === '1') {
-                $value = 1;
-            } else {
-                $value = 0;
-            }
-            $configData->set($configPath, $value);
-        }
-
-        return $configData;
     }
 
     /**

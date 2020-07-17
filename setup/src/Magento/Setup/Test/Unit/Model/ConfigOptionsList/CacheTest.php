@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Setup\Test\Unit\Model\ConfigOptionsList;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Setup\Option\BooleanConfigOption;
 use Magento\Framework\Setup\Option\FlagConfigOption;
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
@@ -84,7 +85,7 @@ class CacheTest extends TestCase
         $this->assertEquals('cache-id-prefix', $options[7]->getName());
 
         $this->assertArrayHasKey(8, $options);
-        $this->assertInstanceOf(FlagConfigOption::class, $options[8]);
+        $this->assertInstanceOf(BooleanConfigOption::class, $options[8]);
         $this->assertEquals('allow-parallel-generation', $options[8]->getName());
     }
 
