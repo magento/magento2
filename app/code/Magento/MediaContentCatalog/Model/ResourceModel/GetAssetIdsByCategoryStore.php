@@ -11,6 +11,7 @@ use Magento\Catalog\Api\CategoryManagementInterface;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\MediaContentApi\Model\GetAssetIdsByContentFieldInterface;
 use Magento\Store\Api\GroupRepositoryInterface;
 use Magento\Store\Api\StoreRepositoryInterface;
@@ -70,9 +71,13 @@ class GetAssetIdsByCategoryStore implements GetAssetIdsByContentFieldInterface
      */
     public function execute(string $value): array
     {
-        $storeView = $this->storeRepository->getById($value);
-        $storeGroup = $this->storeGroupRepository->get($storeView->getStoreGroupId());
-        $rootCategory = $this->categoryRepository->get($storeGroup->getRootCategoryId());
+        try {
+            $storeView = $this->storeRepository->getById($value);
+            $storeGroup = $this->storeGroupRepository->get($storeView->getStoreGroupId());
+            $rootCategory = $this->categoryRepository->get($storeGroup->getRootCategoryId());
+        } catch (NoSuchEntityException $exception) {
+            return [];
+        }
 
         $sql = $this->connection->getConnection()->select()->from(
             ['asset_content_table' => $this->connection->getTableName(self::TABLE_CONTENT_ASSET)],
