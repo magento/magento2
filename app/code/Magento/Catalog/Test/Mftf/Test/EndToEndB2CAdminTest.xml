@@ -29,8 +29,7 @@
 
         <!--Admin creates product-->
         <!--Create Simple Product-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageSimple"/>
-        <waitForPageLoad time="30" stepKey="waitForProductPageLoadSimple"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPageSimple"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateSimpleProduct">
                 <argument name="product" value="SimpleProduct"/>
@@ -57,8 +56,7 @@
         </actionGroup>
 
         <!--Create Virtual Product-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageVirtual"/>
-        <waitForPageLoad time="30" stepKey="waitForProductPageLoadVirtual"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPageVirtual"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateVirtualProduct">
             <argument name="product" value="VirtualProduct"/>
         </actionGroup>
@@ -73,8 +71,7 @@
 
         <!--Admin uses product grid-->
         <!--Start with default view-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageGrid"/>
-        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPageGrid"/>
 
         <!--Search by keyword-->
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
