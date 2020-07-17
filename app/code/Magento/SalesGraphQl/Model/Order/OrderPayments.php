@@ -15,6 +15,8 @@ use Magento\Sales\Api\Data\OrderInterface;
 class OrderPayments
 {
     /**
+     * Get the order payment method
+     *
      * @param OrderInterface $orderModel
      * @return array
      */
