@@ -47,11 +47,6 @@ class CategoryTest extends GraphQlAbstract
 
     protected function setUp(): void
     {
-        //In case any error handler in case any hidden error is happening here
-        set_error_handler(function($errno, $errstr, $errfile, $errline) {
-            throw new \Exception("Error handler by Sereban: " . $errstr . PHP_EOL . $errfile . ":" . $errline);
-        });
-
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->categoryRepository = $this->objectManager->get(CategoryRepository::class);
         $this->store = $this->objectManager->get(Store::class);
