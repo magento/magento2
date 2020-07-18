@@ -107,6 +107,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      */
     public static function setUpBeforeClass(): void
     {
+        die("Marking tests as skipped to speedup tests");
         //phpcs:enable
         parent::setUpBeforeClass();
         self::_setFixtureNamespace();
