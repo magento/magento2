@@ -52,6 +52,11 @@ abstract class GraphQlAbstract extends WebapiAbstract
         );
     }
 
+    protected function setUp(): void
+    {
+       //Avoid skipping tests here
+    }
+
     /**
      * Perform GraphQL mutations call via POST to the system under test.
      *
