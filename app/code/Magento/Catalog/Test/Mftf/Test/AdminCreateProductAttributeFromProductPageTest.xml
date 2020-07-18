@@ -43,8 +43,7 @@
         </after>
 
         <!-- Open Product Index Page-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
 
         <!-- Select Created Product-->
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
@@ -86,8 +85,7 @@
         <scrollToTopOfPage stepKey="scrollToTopOfPage"/>
         <click selector="{{AdminCreateNewProductAttributeSection.saveAttribute}}" stepKey="clickOnSaveAttribute"/>
         <waitForPageLoad stepKey="waitForAttributeToSave"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="saveTheProduct"/>
-        <waitForPageLoad stepKey="waitForProductToSave"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="saveTheProduct"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
 
         <!--Run Re-Index task -->
@@ -100,7 +98,7 @@
         <seeElement selector="{{AdminProductFormSection.attributeLabelByText(ProductAttributeFrontendLabel.label)}}" stepKey="seeAttributeLabelInProductForm"/>
 
         <!--Verify Product Attribute in Attribute Form -->
-        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid"/>
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttributeGrid"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{newProductAttribute.attribute_code}}" stepKey="setAttributeCode"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
         <waitForPageLoad stepKey="waitForPageLoad" />
