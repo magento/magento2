@@ -167,7 +167,9 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     public function testUploadFileWithExcludedDirPath(): void
     {
         $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('We can\'t upload the file to current folder right now. Please try another folder.');
+        $this->expectExceptionMessage(
+            'We can\'t upload the file to current folder right now. Please try another folder.'
+        );
 
         $fileName = 'magento_small_image.jpg';
         $tmpDirectory = $this->filesystem->getDirectoryWrite(\Magento\Framework\App\Filesystem\DirectoryList::SYS_TMP);
@@ -293,6 +295,58 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         }
         $this->assertEquals([$expectedUrl], $paths);
         $this->storage->deleteFile($path);
+    }
+
+    /**
+     * Verify thumbnail generation for diferent sizes
+     *
+     * @param array $sizes
+     * @param bool $resized
+     * @dataProvider getThumbnailsSizes
+     */
+    public function testResizeFile(array $sizes, bool $resized): void
+    {
+        $root = $this->storage->getCmsWysiwygImages()->getStorageRoot();
+        $path = $root . '/' . 'testfile.png';
+        $this->generateImage($path, $sizes['width'], $sizes['height']);
+        $this->storage->resizeFile($path);
+
+        $thumbPath =   $this->storage->getThumbnailPath($path);
+        list($imageWidth, $imageHeight) = getimagesize($thumbPath);
+
+        $this->assertEquals(
+            $resized ? $this->storage->getResizeWidth() : $sizes['width'],
+            $imageWidth
+        );
+        $this->assertLessThanOrEqual(
+            $resized ? $this->storage->getResizeHeight() : $sizes['height'],
+            $imageHeight
+        );
+
+        $this->storage->deleteFile($path);
+    }
+
+    /**
+     * Provide sizes for resizeFile test
+     */
+    public function getThumbnailsSizes(): array
+    {
+        return [
+            [
+                [
+                    'width' => 1024,
+                    'height' => 768,
+                ],
+                true
+            ],
+            [
+                [
+                    'width' => 20,
+                    'height' => 20,
+                ],
+                false
+            ]
+        ];
     }
 
     /**
