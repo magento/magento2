@@ -3,7 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Stdlib\Cookie;
+
+// phpcs:ignore Magento2.Functions.MethodDoubleUnderscore
 
 /**
  * Cookie Attributes
@@ -59,7 +63,7 @@ class CookieMetadata
      * @param string $domain
      * @return $this
      */
-    public function setDomain($domain)
+    public function setDomain($domain): CookieMetadata
     {
         return $this->set(self::KEY_DOMAIN, $domain);
     }
@@ -148,7 +152,7 @@ class CookieMetadata
      * @param  string|null $sameSite
      * @return $this
      */
-    public function setSameSite($sameSite)
+    public function setSameSite($sameSite): CookieMetadata
     {
         if (! array_key_exists(strtolower($sameSite), self::SAME_SITE_ALLOWED_VALUES)) {
             throw new \InvalidArgumentException(

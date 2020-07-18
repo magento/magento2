@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Stdlib\Cookie;
 
@@ -21,6 +22,7 @@ use Psr\Log\LoggerInterface;
  * stores the cookie.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class PhpCookieManager implements CookieManagerInterface
 {
@@ -147,7 +149,7 @@ class PhpCookieManager implements CookieManagerInterface
                 'domain' => $this->extractValue(CookieMetadata::KEY_DOMAIN, $metadataArray, ''),
                 'secure' => $this->extractValue(CookieMetadata::KEY_SECURE, $metadataArray, false),
                 'httponly' => $this->extractValue(CookieMetadata::KEY_HTTP_ONLY, $metadataArray, false),
-                'samesite' => $this->extractValue(CookieMetadata::KEY_SAME_SITE, $metadataArray, 'None')
+                'samesite' => $this->extractValue(CookieMetadata::KEY_SAME_SITE, $metadataArray, 'Lax')
             ]
         );
 
