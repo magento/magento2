@@ -85,6 +85,14 @@ class ProcessorTest extends TestCase
 
         $this->configMock->expects($this->once())->method('getIndexers')->willReturn($indexers);
 
+        $this->configMock->expects($this->exactly(2))
+            ->method('getIndexer')
+            ->willReturn(
+                [
+                    'shared_index' => null
+                ]
+            );
+
         $state1Mock = $this->createPartialMock(State::class, ['getStatus', '__wakeup']);
         $state1Mock->expects(
             $this->once()
