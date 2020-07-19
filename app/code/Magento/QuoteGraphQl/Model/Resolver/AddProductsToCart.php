@@ -83,7 +83,7 @@ class AddProductsToCart implements ResolverInterface
                     return [
                         'code' => $error->getCode(),
                         'message' => $error->getMessage(),
-                        'path' => $error->getCartItemPosition()
+                        'path' => [$error->getCartItemPosition()]
                     ];
                 },
                 $addProductsToCartOutput->getErrors()

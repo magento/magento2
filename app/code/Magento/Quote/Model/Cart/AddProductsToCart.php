@@ -36,6 +36,7 @@ class AddProductsToCart
      * List of error messages and codes.
      */
     private const MESSAGE_CODES = [
+        'Could not find a product with SKU' => self::ERROR_PRODUCT_NOT_FOUND,
         'The required options you selected are not available' => self::ERROR_NOT_SALABLE,
         'Product that you are trying to add is not available' => self::ERROR_NOT_SALABLE,
         'This product is out of stock' => self::ERROR_NOT_SALABLE,
@@ -128,13 +129,18 @@ class AddProductsToCart
     {
         $sku = $cartItem->getSku();
 
+        if ($cartItem->getQuantity() <= 0) {
+            $this->addError(__('The product quantity should be greater than 0')->render());
+
+            return;
+        }
+
         try {
             $product = $this->productRepository->get($sku, false, null, true);
         } catch (NoSuchEntityException $e) {
             $this->addError(
                 __('Could not find a product with SKU "%sku"', ['sku' => $sku])->render(),
-                $cartItemPosition,
-                self::ERROR_PRODUCT_NOT_FOUND
+                $cartItemPosition
             );
 
             return;
@@ -144,10 +150,7 @@ class AddProductsToCart
             $result = $cart->addProduct($product, $this->requestBuilder->build($cartItem));
         } catch (\Throwable $e) {
             $this->addError(
-                __(
-                    'Could not add the product with SKU %sku to the shopping cart: %message',
-                    ['sku' => $sku, 'message' => $e->getMessage()]
-                )->render(),
+                __($e->getMessage())->render(),
                 $cartItemPosition
             );
             return;
@@ -166,14 +169,13 @@ class AddProductsToCart
      *
      * @param string $message
      * @param int $cartItemPosition
-     * @param string|null $code
      * @return void
      */
-    private function addError(string $message, int $cartItemPosition = 0, string $code = ''): void
+    private function addError(string $message, int $cartItemPosition = 0): void
     {
         $this->errors[] = new Data\Error(
             $message,
-            $code ?? $this->getErrorCode($message),
+            $this->getErrorCode($message),
             $cartItemPosition
         );
     }
