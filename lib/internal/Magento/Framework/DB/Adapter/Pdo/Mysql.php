@@ -2691,7 +2691,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
         else
         {
             $connection = $this->_transactionLevel ? $this->createConnection() : $this;
-            $ddl = $connection->query($sql)->fetch(\PDO::FETCH_ASSOC);
+            $ddl = $connection->query($sql)->fetch(\PDO::FETCH_ASSOC)['tbl_exists'];
         }
         if ($ddl) {
             $this->saveDdlCache($cacheKey, self::DDL_EXISTS, $ddl);
