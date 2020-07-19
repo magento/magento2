@@ -100,7 +100,7 @@ class PhpCookieManager implements CookieManagerInterface
     public function setSensitiveCookie($name, $value, SensitiveCookieMetadata $metadata = null)
     {
         $metadataArray = $this->scope->getSensitiveCookieMetadata($metadata)->__toArray();
-        $this->setCookie($name, $value, $metadataArray);
+        $this->setCookie((string)$name, (string)$value, $metadataArray);
     }
 
     /**
@@ -120,7 +120,7 @@ class PhpCookieManager implements CookieManagerInterface
     public function setPublicCookie($name, $value, PublicCookieMetadata $metadata = null)
     {
         $metadataArray = $this->scope->getPublicCookieMetadata($metadata)->__toArray();
-        $this->setCookie($name, $value, $metadataArray);
+        $this->setCookie((string)$name, (string)$value, $metadataArray);
     }
 
     /**
