@@ -25,7 +25,7 @@
         </after>
 
         <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="openNewUserPage" />
-        <generateDate date="+5 day" format="M j, Y g:i:s A" stepKey="expiresDateTime"/>
+        <generateDate date="+5 day" format="M j, Y g:i:s A" timezone="America/Chicago" stepKey="expiresDateTime"/>
         <actionGroup ref="AdminFillInUserWithExpirationActionGroup" stepKey="fillInNewUserWithValidExpiration">
             <argument name="expires_at" value="{$expiresDateTime}"/>
         </actionGroup>

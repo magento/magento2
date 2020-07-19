@@ -166,11 +166,12 @@ class Timezone implements TimezoneInterface
             ? $this->getConfigTimezone()
             : date_default_timezone_get();
 
+        $dateTimeZone = new \DateTimeZone($timezone);
         switch (true) {
             case (empty($date)):
-                return new \DateTime('now', new \DateTimeZone($timezone));
+                return new \DateTime('now', $dateTimeZone);
             case ($date instanceof \DateTime):
-                return $date->setTimezone(new \DateTimeZone($timezone));
+                return $date->setTimezone($dateTimeZone);
             case ($date instanceof \DateTimeImmutable):
                 return new \DateTime($date->format('Y-m-d H:i:s'), $date->getTimezone());
             case (!is_numeric($date)):
@@ -179,15 +180,15 @@ class Timezone implements TimezoneInterface
                     $locale,
                     \IntlDateFormatter::MEDIUM,
                     $timeType,
-                    new \DateTimeZone($timezone)
+                    $dateTimeZone
                 );
 
                 $date = $this->appendTimeIfNeeded($date, $includeTime, $timezone, $locale);
-                $date = $formatter->parse($date) ?: (new \DateTime($date))->getTimestamp();
+                $date = $formatter->parse($date) ?: (new \DateTime($date, $dateTimeZone))->getTimestamp();
                 break;
         }
 
-        return (new \DateTime(null, new \DateTimeZone($timezone)))->setTimestamp($date);
+        return (new \DateTime(null, $dateTimeZone))->setTimestamp($date);
     }
 
     /**

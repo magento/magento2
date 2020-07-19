@@ -23,7 +23,7 @@ class AfterAdminUserSaveTest extends \PHPUnit\Framework\TestCase
     public function testSaveNewUserExpiration()
     {
         $adminUserNameFromFixture = 'dummy_username';
-        $testDate = $this->getFutureDateInStoreTime();
+        $testDate = $this->getFutureDateTimestamp();
         $user = Bootstrap::getObjectManager()->create(\Magento\User\Model\User::class);
         $user->loadByUsername($adminUserNameFromFixture);
         $user->setExpiresAt($testDate);
@@ -46,7 +46,7 @@ class AfterAdminUserSaveTest extends \PHPUnit\Framework\TestCase
     public function testSaveNewUserExpirationInMinutes()
     {
         $adminUserNameFromFixture = 'dummy_username';
-        $testDate = $this->getFutureDateInStoreTime('+2 minutes');
+        $testDate = $this->getFutureDateTimestamp('+2 minutes');
         $user = Bootstrap::getObjectManager()->create(\Magento\User\Model\User::class);
         $user->loadByUsername($adminUserNameFromFixture);
         $user->setExpiresAt($testDate);
@@ -90,7 +90,7 @@ class AfterAdminUserSaveTest extends \PHPUnit\Framework\TestCase
     public function testChangeUserExpiration()
     {
         $adminUserNameFromFixture = 'adminUserNotExpired';
-        $testDate = $this->getFutureDateInStoreTime();
+        $testDate = $this->getFutureDateTimestamp();
         $user = Bootstrap::getObjectManager()->create(\Magento\User\Model\User::class);
         $user->loadByUsername($adminUserNameFromFixture);
 
@@ -114,13 +114,10 @@ class AfterAdminUserSaveTest extends \PHPUnit\Framework\TestCase
      * @return string
      * @throws \Exception
      */
-    private function getFutureDateInStoreTime($timeToAdd = '+20 days')
+    private function getFutureDateTimestamp($timeToAdd = '+20 days')
     {
-        /** @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface $locale */
-        $locale = Bootstrap::getObjectManager()->get(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class);
         $testDate = new \DateTime();
         $testDate->modify($timeToAdd);
-        $storeDate = $locale->date($testDate);
-        return $storeDate->format('Y-m-d H:i:s');
+        return $testDate->format('Y-m-d H:i:s');
     }
 }

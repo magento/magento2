@@ -98,7 +98,6 @@ class TimezoneTest extends TestCase
         /** @var Timezone $timezone */
         $timezone = $this->objectManager->getObject(Timezone::class, ['scopeConfig' => $this->scopeConfig]);
 
-        /** @var \DateTime $dateTime */
         $dateTime = $timezone->date($date, $locale, true, $includeTime);
         $this->assertEquals($expectedTimestamp, $dateTime->getTimestamp());
     }
@@ -150,6 +149,12 @@ class TimezoneTest extends TestCase
                 'el_GR', // locale
                 false, // include time
                 1635570000 // expected timestamp
+            ],
+            'Non parsable date format with time' => [
+                '19th July 2020 09:30:05',
+                'en_US',
+                'true',
+                1595169005
             ]
         ];
     }
