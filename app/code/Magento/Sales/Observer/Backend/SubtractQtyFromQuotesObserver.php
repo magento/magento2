@@ -6,18 +6,20 @@
 namespace Magento\Sales\Observer\Backend;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Quote\Model\ResourceModel\Quote;
+use Magento\Framework\Event\Observer;
 
 class SubtractQtyFromQuotesObserver implements ObserverInterface
 {
     /**
-     * @var \Magento\Quote\Model\ResourceModel\Quote
+     * @var Quote
      */
     protected $_quote;
 
     /**
-     * @param \Magento\Quote\Model\ResourceModel\Quote $quote
+     * @param Quote $quote
      */
-    public function __construct(\Magento\Quote\Model\ResourceModel\Quote $quote)
+    public function __construct(Quote $quote)
     {
         $this->_quote = $quote;
     }
@@ -25,10 +27,10 @@ class SubtractQtyFromQuotesObserver implements ObserverInterface
     /**
      * When deleting product, subtract it from all quotes quantities
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $product = $observer->getEvent()->getProduct();
         $this->_quote->subtractProductFromQuotes($product);

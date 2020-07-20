@@ -16,6 +16,8 @@ use Magento\Quote\Observer\Frontend\Quote\RefreshCustomerDataObserver;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 use Magento\Quote\Model\Quote;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 class RefreshCustomerDataObserverTest extends TestCase
 {
@@ -65,7 +67,11 @@ class RefreshCustomerDataObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->observer = new RefreshCustomerDataObserver($this->checkoutSession, $this->cookieManager, $this->metadataFactory);
+        $this->observer = new RefreshCustomerDataObserver(
+            $this->checkoutSession,
+            $this->cookieManager,
+            $this->metadataFactory
+        );
     }
 
     /**
@@ -75,8 +81,8 @@ class RefreshCustomerDataObserverTest extends TestCase
      * @param bool $result
      * @param string $callCount
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
      */
     public function testExecute($result, $callCount)
     {

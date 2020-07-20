@@ -8,13 +8,17 @@ declare(strict_types=1);
 namespace Magento\Quote\Observer\Frontend\Quote;
 
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 use Magento\Checkout\Model\Session;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 
 /**
  * Class responsible for refreshing customer data when trigger recollect flag was set to the quote
  * by some actions in admin.
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class RefreshCustomerDataObserver implements ObserverInterface
 {
@@ -54,12 +58,13 @@ class RefreshCustomerDataObserver implements ObserverInterface
     /**
      * Check and clear session data if persistent session expired
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return void
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws LocalizedException
+     * @throws NoSuchEntityException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         $quote = $this->checkoutSession->getQuote();
         /* Check if original quote object loaded from the database had trigger_recollect flag */

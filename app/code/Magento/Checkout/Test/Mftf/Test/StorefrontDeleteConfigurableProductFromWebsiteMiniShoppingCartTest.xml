@@ -36,35 +36,54 @@
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </getData>
 
-            <!-- Create Configurable product -->
+            <!-- Create Configurable products -->
             <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct1">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
 
-            <!-- Create a simple product and give it the attribute with the first option -->
+            <!-- Create simple products and give them the attribute with the first option -->
             <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption1"/>
                 <field key="price">10.00</field>
             </createData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <field key="price">15.00</field>
+            </createData>
 
-            <!-- Create the configurable product -->
+            <!-- Create the configurable product options-->
             <createData entity="ConfigurableProductThreeOptions" stepKey="createConfigProductOption">
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
                 <requiredEntity createDataKey="getConfigAttributeOption1"/>
             </createData>
+            <createData entity="ConfigurableProductThreeOptions" stepKey="createConfigProductOption1">
+                <requiredEntity createDataKey="createConfigProduct1"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
 
-            <!-- Add the first simple product to the configurable product -->
+            <!-- Add simple products to configurable products -->
             <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct1"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
             <magentoCLI command="indexer:reindex" stepKey="reindex"/>
             <magentoCLI command="cache:flush" stepKey="flushCache"/>
         </before>
         <after>
             <deleteData  createDataKey="createConfigChildProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData  createDataKey="createConfigChildProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData  createDataKey="createConfigProduct1" stepKey="deleteConfigProduct1"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteProductAttribute"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -80,6 +99,12 @@
             <argument name="productOption" value="$$getConfigAttributeOption1.label$$"/>
             <argument name="qty" value="1"/>
         </actionGroup>
+        <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart1">
+            <argument name="urlKey" value="$$createConfigProduct1.custom_attributes[url_key]$$" />
+            <argument name="productAttribute" value="$$createConfigProductAttribute.default_value$$"/>
+            <argument name="productOption" value="$$getConfigAttributeOption1.label$$"/>
+            <argument name="qty" value="2"/>
+        </actionGroup>
 
         <!-- Delete Configurable Product from admin -->
         <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
@@ -87,8 +112,20 @@
         <!-- Go to the shopping cart -->
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCart"/>
 
-        <!-- Check the minicart is empty and verify AssertProductAbsentInMiniShoppingCart-->
-        <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="miniCartEnpty"/>
-        <dontSee selector="{{StorefrontMinicartSection.productLinkByName($$createConfigProduct.name$$)}}" stepKey="verifyAssertProductAbsentInMiniShoppingCart"/>
+        <!-- Open Mini Cart -->
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniCart"/>
+
+        <!-- Check that minicart does not contain the product which WAS deleted -->
+        <actionGroup ref="AssertStorefrontMinicartItemNotPresentActionGroup" stepKey="minicartItemNotPresent">
+            <argument name="productName" value="$$createConfigProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Check that minicart contains the product which WAS NOT deleted -->
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="miniCartNotEmpty">
+            <argument name="productName" value="$$createConfigProduct1.name$$"/>
+            <argument name="productPrice" value="$$createConfigProduct.price$$"/>
+            <argument name="cartSubtotal" value="30"/>
+            <argument name="qty" value="2"/>
+        </actionGroup>
     </test>
 </tests>
