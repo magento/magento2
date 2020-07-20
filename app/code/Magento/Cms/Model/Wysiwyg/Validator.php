@@ -72,7 +72,10 @@ class Validator implements WYSIWYGValidatorInterface
                 throw $exception;
             } else {
                 $this->messages->addWarningMessage(
-                    __('Temporarily allowed to save restricted HTML value. %1', $exception->getMessage())
+                    __(
+                        'Temporarily allowed to save HTML value that contains restricted elements. %1',
+                        $exception->getMessage()
+                    )
                 );
             }
         } catch (\Throwable $exception) {
