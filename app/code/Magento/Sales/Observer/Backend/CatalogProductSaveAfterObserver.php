@@ -54,8 +54,6 @@ class CatalogProductSaveAfterObserver implements ObserverInterface
         if ($product->dataHasChangedFor(ProductInterface::STATUS) && $isProductDisabled) {
             $this->quote->subtractProductFromQuotes($product);
             $this->quoteItemsCleaner->execute($product);
-
-            $this->quote->markQuotesRecollect($product->getId());
         }
     }
 }
