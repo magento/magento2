@@ -10,6 +10,7 @@ use Magento\Framework\Filesystem;
 use Magento\Framework\Webapi\Exception as WebapiException;
 use Magento\Webapi\Model\Soap\Fault;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestResult;
 
 /**
  * Test case for Web API functional tests for REST and SOAP.
@@ -112,12 +113,6 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
         self::_setFixtureNamespace();
     }
 
-    protected function setUp(): void
-    {
-        $this->markTestSkipped('debug GraphQL');
-        parent::setUp();
-    }
-
     /**
      * Run garbage collector for cleaning memory
      *
@@ -208,6 +203,15 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
         if (TESTS_WEB_API_ADAPTER != self::ADAPTER_REST) {
             $this->markTestSkipped($message ? $message : "The test is intended to be executed for REST adapter only.");
         }
+    }
+
+    public function run(TestResult $result = null): TestResult
+    {
+        if ($this instanceof GraphQlAbstract) {
+            return parent::run($result);
+        }
+
+        return $result;
     }
 
     /**
