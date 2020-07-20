@@ -32,6 +32,7 @@ class CatalogProductSaveAfterObserver implements ObserverInterface
 
     /**
      * @param Quote $quote
+     * @param QuoteItemsCleanerInterface $quoteItemsCleaner
      */
     public function __construct(Quote $quote, QuoteItemsCleanerInterface $quoteItemsCleaner)
     {
