@@ -8,7 +8,9 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Plugin\Webapi\Controller\Rest;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Plugin\Webapi\Controller\Rest\InputParamsResolver as InputParamsResolverPlugin;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -74,6 +76,10 @@ class InputParamsResolverTest extends TestCase
     protected function setUp(): void
     {
         $this->saveRewritesHistory = 'save_rewrites_history';
+    }
+
+    public function testAfterResolveWithProduct()
+    {
         $this->requestBodyParams = [
             'product' => [
                 'sku' => 'test',
@@ -99,10 +105,7 @@ class InputParamsResolverTest extends TestCase
                 'request' => $this->request
             ]
         );
-    }
 
-    public function testAfterResolve()
-    {
         $this->route->expects($this->once())
             ->method('getServiceClass')
             ->willReturn(ProductRepositoryInterface::class);
@@ -110,6 +113,49 @@ class InputParamsResolverTest extends TestCase
             ->method('getServiceMethod')
             ->willReturn('save');
         $this->product->expects($this->once())
+            ->method('setData')
+            ->with($this->saveRewritesHistory, true);
+
+        $this->plugin->afterResolve($this->subject, $this->result);
+    }
+
+
+    public function testAfterResolveWithCategory()
+    {
+        $this->requestBodyParams = [
+            'category' => [
+                'name' => 'new name',
+                'custom_attributes' => [
+                    ['attribute_code' => $this->saveRewritesHistory, 'value' => 1],
+                    ['attribute_code' => 'url_key', 'value' => 'new name']
+                ]
+            ]
+        ];
+
+        $this->route = $this->createPartialMock(Route::class, ['getServiceMethod', 'getServiceClass']);
+        $this->request = $this->createPartialMock(RestRequest::class, ['getBodyParams']);
+        $this->request->expects($this->any())->method('getBodyParams')->willReturn($this->requestBodyParams);
+        $this->subject = $this->createPartialMock(InputParamsResolver::class, ['getRoute']);
+        $this->subject->expects($this->any())->method('getRoute')->willReturn($this->route);
+        $this->category = $this->createPartialMock(Category::class, ['setData']);
+
+        $this->result = [false, $this->category, 'test'];
+
+        $this->objectManager = new ObjectManager($this);
+        $this->plugin = $this->objectManager->getObject(
+            InputParamsResolverPlugin::class,
+            [
+                'request' => $this->request
+            ]
+        );
+
+        $this->route->expects($this->once())
+            ->method('getServiceClass')
+            ->willReturn(CategoryRepositoryInterface::class);
+        $this->route->expects($this->once())
+            ->method('getServiceMethod')
+            ->willReturn('save');
+        $this->category->expects($this->once())
             ->method('setData')
             ->with($this->saveRewritesHistory, true);
 

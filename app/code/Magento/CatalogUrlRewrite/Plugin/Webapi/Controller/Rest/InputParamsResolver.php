@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Plugin\Webapi\Controller\Rest;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Framework\Webapi\Rest\Request as RestRequest;
 
@@ -18,6 +19,8 @@ use Magento\Framework\Webapi\Rest\Request as RestRequest;
  */
 class InputParamsResolver
 {
+    const SAVE_REWRITES_HISTORY = 'save_rewrites_history';
+
     /**
      * @var RestRequest
      */
@@ -32,7 +35,7 @@ class InputParamsResolver
     }
 
     /**
-     * Add 'save_rewrites_history' param to the product data
+     * Add 'save_rewrites_history' param to the product and category data
      *
      * @see \Magento\CatalogUrlRewrite\Plugin\Catalog\Controller\Adminhtml\Product\Initialization\Helper
      * @param \Magento\Webapi\Controller\Rest\InputParamsResolver $subject
@@ -47,12 +50,27 @@ class InputParamsResolver
         $requestBodyParams = $this->request->getBodyParams();
 
         if ($this->isProductSaveCalled($serviceClassName, $serviceMethodName)
-            && $this->isCustomAttributesExists($requestBodyParams)) {
+            && $this->isCustomAttributesExists($requestBodyParams, 'product')) {
             foreach ($requestBodyParams['product']['custom_attributes'] as $attribute) {
-                if ($attribute['attribute_code'] === 'save_rewrites_history') {
+                if ($attribute['attribute_code'] === self::SAVE_REWRITES_HISTORY) {
                     foreach ($result as $resultItem) {
                         if ($resultItem instanceof \Magento\Catalog\Model\Product) {
-                            $resultItem->setData('save_rewrites_history', (bool)$attribute['value']);
+                            $resultItem->setData(self::SAVE_REWRITES_HISTORY, (bool)$attribute['value']);
+                            break 2;
+                        }
+                    }
+                    break;
+                }
+            }
+        }
+
+        if ($this->isCategorySaveCalled($serviceClassName, $serviceMethodName)
+            && $this->isCustomAttributesExists($requestBodyParams, 'category')) {
+            foreach ($requestBodyParams['category']['custom_attributes'] as $attribute) {
+                if ($attribute['attribute_code'] === self::SAVE_REWRITES_HISTORY) {
+                    foreach ($result as $resultItem) {
+                        if ($resultItem instanceof \Magento\Catalog\Model\Category) {
+                            $resultItem->setData(self::SAVE_REWRITES_HISTORY, (bool)$attribute['value']);
                             break 2;
                         }
                     }
@@ -76,13 +94,26 @@ class InputParamsResolver
     }
 
     /**
+     * Check that category save method called
+     *
+     * @param string $serviceClassName
+     * @param string $serviceMethodName
+     * @return bool
+     */
+    private function isCategorySaveCalled(string $serviceClassName, string $serviceMethodName): bool
+    {
+        return $serviceClassName === CategoryRepositoryInterface::class && $serviceMethodName === 'save';
+    }
+
+    /**
      * Check is any custom options exists in product data
      *
      * @param array $requestBodyParams
+     * @param string $entityCode
      * @return bool
      */
-    private function isCustomAttributesExists(array $requestBodyParams): bool
+    private function isCustomAttributesExists(array $requestBodyParams, string $entityCode): bool
     {
-        return !empty($requestBodyParams['product']['custom_attributes']);
+        return !empty($requestBodyParams[$entityCode]['custom_attributes']);
     }
 }
