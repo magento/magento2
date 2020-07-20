@@ -76,8 +76,7 @@
         <seeElement stepKey="LookingForNameOfProduct" selector="{{StorefrontBundledSection.bundleProductName}}"/>
 
         <!--Testing disabled view-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="GoToProductCatalog"/>
-        <waitForPageLoad stepKey="WaitForCatalogProductPageToLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="GoToProductCatalog"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="FindProductEditPage">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>

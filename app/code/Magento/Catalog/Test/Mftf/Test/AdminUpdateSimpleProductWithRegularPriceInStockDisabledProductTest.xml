@@ -34,8 +34,7 @@
         </after>
 
         <!-- Search default simple product in the grid page -->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGrid">
             <argument name="sku" value="$$initialSimpleProduct.sku$$"/>
         </actionGroup>
@@ -53,15 +52,13 @@
         <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{simpleProductDisabled.urlKey}}" stepKey="fillUrlKey"/>
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
         <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="clickEnableProductLabelToDisableProduct"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForSimpleProductSave"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
 
         <!-- Verify customer see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertSimpleProductSaveSuccessMessage"/>
 
         <!-- Search updated simple product(from above step) in the grid -->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPageToSearchUpdatedSimpleProduct"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPageToLoad"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPageToSearchUpdatedSimpleProduct"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>
         <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{simpleProductDisabled.name}}" stepKey="fillSimpleProductNameInNameFilter"/>
