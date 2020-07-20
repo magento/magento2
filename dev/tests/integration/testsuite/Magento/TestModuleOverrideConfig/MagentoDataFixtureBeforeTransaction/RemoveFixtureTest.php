@@ -39,6 +39,6 @@ class RemoveFixtureTest extends AbstractOverridesTest
      */
     public function testRemoveFixture(): void
     {
-        $this->assertFalse($this->fixtureCallStorage->getFixturePosition('fixture1_first_module.php'));
+        $this->assertNull($this->fixtureCallStorage->getFixturePosition('fixture1_first_module.php'));
     }
 }
