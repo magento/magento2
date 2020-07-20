@@ -14,6 +14,7 @@
             <title value="Admin system notification toolbar block acl test"/>
             <description value="Admin should not see system notification toolbar block if acl not restricted"/>
             <severity value="MAJOR"/>
+            <testCaseId value="MC-36011"/>
             <group value="menu"/>
         </annotations>
         <before>
