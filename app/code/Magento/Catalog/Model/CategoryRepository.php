@@ -82,6 +82,10 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
         $existingData = array_diff_key($existingData, array_flip(['path', 'level', 'parent_id']));
         $existingData['store_id'] = $storeId;
 
+        if ($category->getData('save_rewrites_history', null) !== null) {
+            $existingData['save_rewrites_history'] = $category->getData('save_rewrites_history');
+        }
+
         if ($category->getId()) {
             $metadata = $this->getMetadataPool()->getMetadata(
                 CategoryInterface::class
