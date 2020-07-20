@@ -14,10 +14,12 @@
         <arguments>
             <argument name="columnName" defaultValue="Email" type="string"/>
         </arguments>
+        <waitForElementVisible selector="{{AdminGridColumnsControls.columns}}" stepKey="waitForAdminGridColumnControlsColumn"/>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="clickAdminGridColumnControlsColumn"/>
         <waitForElementVisible selector="{{AdminDataGridHeaderSection.columnCheckbox(columnName)}}" stepKey="verifyAdminGridColumnControlsForSelectedColumnVisible"/>
         <click selector="{{AdminDataGridHeaderSection.columnCheckbox(columnName)}}" stepKey="clickForAdminGridControlForSelectedColumn"/>
         <waitForElementVisible selector="{{AdminGridHeaders.headerByName(columnName)}}" stepKey="waitForAdminGridColumnHeaderForSelectedColumn"/>
-        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="reOpenAdminGridColumnControlsColumn"/>
+        <click selector="{{AdminGridColumnsControls.columns}}" stepKey="closeAdminGridColumnControls"/>
         <waitForElementNotVisible selector="{{AdminGridColumnsControls.columnName(columnName)}}" stepKey="verifyAdminGridColumnControlsForSelectedColumnNotVisible"/>
     </actionGroup>
 </actionGroups>
