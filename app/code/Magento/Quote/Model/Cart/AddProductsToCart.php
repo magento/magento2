@@ -38,7 +38,7 @@ class AddProductsToCart
     private const MESSAGE_CODES = [
         'Could not find a product with SKU' => self::ERROR_PRODUCT_NOT_FOUND,
         'The required options you selected are not available' => self::ERROR_NOT_SALABLE,
-        'Product that you are trying to add is not available' => self::ERROR_NOT_SALABLE,
+        'Product that you are trying to add is not available.' => self::ERROR_NOT_SALABLE,
         'This product is out of stock' => self::ERROR_NOT_SALABLE,
         'There are no source items' => self::ERROR_NOT_SALABLE,
         'The fewest you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
@@ -102,8 +102,8 @@ class AddProductsToCart
         $cartId = $this->maskedQuoteIdToQuoteId->execute($maskedCartId);
         $cart = $this->cartRepository->get($cartId);
 
-        foreach ($cartItems as $n => $cartItem) {
-            $this->addItemToCart($cart, $cartItem, $n);
+        foreach ($cartItems as $cartItemPosition => $cartItem) {
+            $this->addItemToCart($cart, $cartItem, $cartItemPosition);
         }
         if ($cart->getData('has_error')) {
             $errors = $cart->getErrors();
@@ -190,21 +190,14 @@ class AddProductsToCart
      */
     private function getErrorCode(string $message): string
     {
-        $code = self::ERROR_UNDEFINED;
-
-        $matchedCodes = array_filter(
-            self::MESSAGE_CODES,
-            function ($key) use ($message) {
-                return false !== strpos($message, $key);
-            },
-            ARRAY_FILTER_USE_KEY
-        );
-
-        if (!empty($matchedCodes)) {
-            $code = current($matchedCodes);
+        foreach (self::MESSAGE_CODES as $codeMessage => $code) {
+            if (false !== stripos($codeMessage, $message)) {
+                return $code;
+            }
         }
 
-        return $code;
+        /* If no code was matched, return the default one */
+        return self::ERROR_UNDEFINED;
     }
 
     /**
