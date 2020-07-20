@@ -33,7 +33,7 @@ class SaveAssetLinks
     /**
      * @var GetAssetsKeywordsInterface
      */
-    private $getAssetsKeywordsInterface;
+    private $getAssetsKeywords;
 
     /**
      * @var LoggerInterface
@@ -41,16 +41,16 @@ class SaveAssetLinks
     private $logger;
 
     /**
-     * @param GetAssetsKeywordsInterface $getAssetsKeywordsInterface
+     * @param GetAssetsKeywordsInterface $getAssetsKeywords
      * @param ResourceConnection $resourceConnection
      * @param LoggerInterface $logger
      */
     public function __construct(
-        GetAssetsKeywordsInterface $getAssetsKeywordsInterface,
+        GetAssetsKeywordsInterface $getAssetsKeywords,
         ResourceConnection $resourceConnection,
         LoggerInterface $logger
     ) {
-        $this->getAssetsKeywordsInterface = $getAssetsKeywordsInterface;
+        $this->getAssetsKeywords = $getAssetsKeywords;
         $this->resourceConnection = $resourceConnection;
         $this->logger = $logger;
     }
@@ -66,8 +66,14 @@ class SaveAssetLinks
     public function execute(int $assetId, array $keywordIds): void
     {
         try {
-            $this->deleteAssetKeywords($assetId, $keywordIds);
-            $this->insertAssetKeywords($assetId, $keywordIds);
+            $currentKeywordIds = $this->getCurrentKeywordIds($assetId);
+
+            $obsoleteKeywordIds = array_diff($currentKeywordIds, $keywordIds);
+            $newKeywordIds = array_diff($keywordIds, $currentKeywordIds);
+
+            $this->deleteAssetKeywords($assetId, $obsoleteKeywordIds);
+            $this->insertAssetKeywords($assetId, $newKeywordIds);
+
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             throw new CouldNotSaveException(
@@ -81,7 +87,7 @@ class SaveAssetLinks
      * Save new asset keyword links
      *
      * @param int $assetId
-     * @param array $keywordIds
+     * @param int[] $keywordIds
      * @throws CouldNotSaveException
      */
     private function insertAssetKeywords(int $assetId, array $keywordIds): void
@@ -89,9 +95,8 @@ class SaveAssetLinks
         try {
             if (!empty($keywordIds)) {
                 $values = [];
-                $keywordsToInsert = array_diff($keywordIds, $this->getCurrentKeywords($assetId));
 
-                foreach ($keywordsToInsert as $keywordId) {
+                foreach ($keywordIds as $keywordId) {
                     $values[] = [$assetId, $keywordId];
                 }
 
@@ -119,14 +124,12 @@ class SaveAssetLinks
      * Delete obsolete asset keyword links
      *
      * @param int $assetId
-     * @param array $keywords
+     * @param int[] $obsoleteKeywordIds
      * @throws CouldNotDeleteException
      */
-    private function deleteAssetKeywords(int $assetId, array $keywords): void
+    private function deleteAssetKeywords(int $assetId, array $obsoleteKeywordIds): void
     {
         try {
-            $obsoleteKeywordIds = array_diff($this->getCurrentKeywords($assetId), $keywords);
-
             if (!empty($obsoleteKeywordIds)) {
                 /** @var Mysql $connection */
                 $connection = $this->resourceConnection->getConnection();
@@ -150,31 +153,29 @@ class SaveAssetLinks
     }
 
     /**
-     * Get current keyword data of an asset
+     * Get current keyword ids of an asset
      *
      * @param int $assetId
-     * @return array
+     * @return int[]
      */
-    private function getCurrentKeywords(int $assetId): array
+    private function getCurrentKeywordIds(int $assetId): array
     {
-        $currentKeywordsData = $this->getAssetsKeywordsInterface->execute([$assetId]);
+        $currentKeywordsData = $this->getAssetsKeywords->execute([$assetId]);
 
-        if (!empty($currentKeywordsData)) {
-            $currentKeywords = $this->getKeywordIdsFromKeywordData(
-                $currentKeywordsData[$assetId]->getKeywords()
-            );
-
-            return $currentKeywords;
+        if (empty($currentKeywordsData)) {
+            return [];
         }
 
-        return [];
+        return $this->getKeywordIdsFromKeywordData(
+            $currentKeywordsData[$assetId]->getKeywords()
+        );
     }
 
     /**
      * Get keyword ids from keyword data
      *
-     * @param array $keywordsData
-     * @return array
+     * @param KeywordInterface[] $keywordsData
+     * @return int[]
      */
     private function getKeywordIdsFromKeywordData(array $keywordsData): array
     {

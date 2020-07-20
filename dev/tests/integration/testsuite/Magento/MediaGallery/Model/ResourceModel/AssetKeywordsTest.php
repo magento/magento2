@@ -72,6 +72,7 @@ class AssetKeywordsTest extends TestCase
     public function testSaveAndGetKeywords(array $keywords): void
     {
         $keywords = ['pear', 'plum'];
+        $updatedKeywords = ['pear', 'apple','orange'];
 
         $loadedAssets = $this->getAssetsByPath->execute([self::FIXTURE_ASSET_PATH]);
         $this->assertCount(1, $loadedAssets);
@@ -105,6 +106,34 @@ class AssetKeywordsTest extends TestCase
         sort($keywords);
 
         $this->assertEquals($keywords, $loadedKeywordStrings);
+
+        $updatedAssetKeywords = $this->assetsKeywordsFactory->create(
+            [
+                'assetId' => $loadedAsset->getId(),
+                'keywords' => $this->getKeywords($updatedKeywords)
+            ]
+        );
+        $this->saveAssetsKeywords->execute([$updatedAssetKeywords]);
+        $updatedLoadedAssetKeywords = $this->getAssetsKeywords->execute([$loadedAsset->getId()]);
+
+        $this->assertCount(1, $updatedLoadedAssetKeywords);
+
+        /** @var AssetKeywordsInterface $updatedLoadedAssetKeywords */
+        $updatedLoadedAssetKeywords = current($updatedLoadedAssetKeywords);
+
+        $updatedLoadedKeywords = $updatedLoadedAssetKeywords->getKeywords();
+
+        $this->assertEquals(count($updatedKeywords), count($updatedLoadedKeywords));
+
+        $updatedLoadedKeywordStrings = [];
+        foreach ($updatedLoadedKeywords as $updatedLoadedKeywordObject) {
+            $updatedLoadedKeywordStrings[] = $updatedLoadedKeywordObject->getKeyword();
+        }
+
+        sort($updatedLoadedKeywordStrings);
+        sort($updatedKeywords);
+
+        $this->assertEquals($updatedKeywords, $updatedLoadedKeywordStrings);
     }
 
     /**
