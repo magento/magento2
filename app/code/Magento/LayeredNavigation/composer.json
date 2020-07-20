@@ -6,9 +6,9 @@
     },
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-catalog": "*",
-        "magento/module-config": "*"
+        "magento/framework": "103.0.*",
+        "magento/module-catalog": "104.0.*",
+        "magento/module-config": "101.2.*"
     },
     "type": "magento2-module",
     "license": [
@@ -22,5 +22,6 @@
         "psr-4": {
             "Magento\\LayeredNavigation\\": ""
         }
-    }
+    },
+    "version": "100.4.0"
 }

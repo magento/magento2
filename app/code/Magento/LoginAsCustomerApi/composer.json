@@ -3,7 +3,7 @@
     "description": "Allow for admin to enter a customer account",
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*"
+        "magento/framework": "103.0.*"
     },
     "type": "magento2-module",
     "license": [
@@ -11,9 +11,12 @@
         "AFL-3.0"
     ],
     "autoload": {
-        "files": [ "registration.php" ],
+        "files": [
+            "registration.php"
+        ],
         "psr-4": {
             "Magento\\LoginAsCustomerApi\\": ""
         }
-    }
+    },
+    "version": "100.4.0"
 }

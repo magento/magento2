@@ -3,9 +3,9 @@
     "description": "N/A",
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-customer": "*",
-        "magento/module-analytics": "*"
+        "magento/framework": "103.0.*",
+        "magento/module-customer": "103.0.*",
+        "magento/module-analytics": "100.4.*"
     },
     "type": "magento2-module",
     "license": [
@@ -19,5 +19,6 @@
         "psr-4": {
             "Magento\\CustomerAnalytics\\": ""
         }
-    }
+    },
+    "version": "100.4.0"
 }

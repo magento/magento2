@@ -4,14 +4,14 @@
     "type": "magento2-module",
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/module-catalog": "*",
-        "magento/module-downloadable": "*",
-        "magento/module-quote": "*",
-        "magento/module-quote-graph-ql": "*",
-        "magento/framework": "*"
+        "magento/module-catalog": "104.0.*",
+        "magento/module-downloadable": "100.4.*",
+        "magento/module-quote": "101.2.*",
+        "magento/module-quote-graph-ql": "100.4.*",
+        "magento/framework": "103.0.*"
     },
     "suggest": {
-        "magento/module-catalog-graph-ql": "*"
+        "magento/module-catalog-graph-ql": "100.4.*"
     },
     "license": [
         "OSL-3.0",
@@ -24,5 +24,6 @@
         "psr-4": {
             "Magento\\DownloadableGraphQl\\": ""
         }
-    }
+    },
+    "version": "100.4.0"
 }

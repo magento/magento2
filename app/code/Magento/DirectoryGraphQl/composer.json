@@ -4,10 +4,10 @@
     "type": "magento2-module",
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/module-directory": "*",
-        "magento/module-store": "*",
-        "magento/module-graph-ql": "*",
-        "magento/framework": "*"
+        "magento/module-directory": "100.4.*",
+        "magento/module-store": "101.1.*",
+        "magento/module-graph-ql": "100.4.*",
+        "magento/framework": "103.0.*"
     },
     "license": [
         "OSL-3.0",
@@ -20,5 +20,6 @@
         "psr-4": {
             "Magento\\DirectoryGraphQl\\": ""
         }
-    }
+    },
+    "version": "100.4.0"
 }

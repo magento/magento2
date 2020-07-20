@@ -4,14 +4,14 @@
     "type": "magento2-module",
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-catalog": "*",
-        "magento/module-cms-graph-ql": "*"
+        "magento/framework": "103.0.*",
+        "magento/module-catalog": "104.0.*",
+        "magento/module-cms-graph-ql": "100.4.*"
     },
     "suggest": {
-        "magento/module-graph-ql": "*",
-        "magento/module-cms": "*",
-        "magento/module-catalog-graph-ql": "*"
+        "magento/module-graph-ql": "100.4.*",
+        "magento/module-cms": "104.0.*",
+        "magento/module-catalog-graph-ql": "100.4.*"
     },
     "license": [
         "OSL-3.0",
@@ -24,5 +24,6 @@
         "psr-4": {
             "Magento\\CatalogCmsGraphQl\\": ""
         }
-    }
+    },
+    "version": "100.4.0"
 }

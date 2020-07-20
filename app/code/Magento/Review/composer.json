@@ -6,19 +6,19 @@
     },
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-backend": "*",
-        "magento/module-catalog": "*",
-        "magento/module-customer": "*",
-        "magento/module-eav": "*",
-        "magento/module-newsletter": "*",
-        "magento/module-store": "*",
-        "magento/module-theme": "*",
-        "magento/module-ui": "*"
+        "magento/framework": "103.0.*",
+        "magento/module-backend": "102.0.*",
+        "magento/module-catalog": "104.0.*",
+        "magento/module-customer": "103.0.*",
+        "magento/module-eav": "102.1.*",
+        "magento/module-newsletter": "100.4.*",
+        "magento/module-store": "101.1.*",
+        "magento/module-theme": "101.1.*",
+        "magento/module-ui": "101.2.*"
     },
     "suggest": {
-        "magento/module-cookie": "*",
-        "magento/module-review-sample-data": "*"
+        "magento/module-cookie": "100.4.*",
+        "magento/module-review-sample-data": "Sample Data version: 100.4.*"
     },
     "type": "magento2-module",
     "license": [
@@ -32,5 +32,6 @@
         "psr-4": {
             "Magento\\Review\\": ""
         }
-    }
+    },
+    "version": "100.4.0"
 }

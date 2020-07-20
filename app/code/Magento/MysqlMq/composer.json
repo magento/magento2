@@ -5,10 +5,10 @@
         "sort-packages": true
     },
     "require": {
-        "magento/framework": "*",
-        "magento/framework-message-queue": "*",
+        "magento/framework": "103.0.*",
+        "magento/framework-message-queue": "100.4.*",
         "magento/magento-composer-installer": "*",
-        "magento/module-store": "*",
+        "magento/module-store": "101.1.*",
         "php": "~7.3.0||~7.4.0"
     },
     "type": "magento2-module",
@@ -23,5 +23,6 @@
         "psr-4": {
             "Magento\\MysqlMq\\": ""
         }
-    }
+    },
+    "version": "100.4.0"
 }

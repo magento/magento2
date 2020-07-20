@@ -6,10 +6,10 @@
     },
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-catalog": "*",
-        "magento/module-msrp": "*",
-        "magento/module-configurable-product": "*"
+        "magento/framework": "103.0.*",
+        "magento/module-catalog": "104.0.*",
+        "magento/module-msrp": "100.4.*",
+        "magento/module-configurable-product": "100.4.*"
     },
     "type": "magento2-module",
     "license": [
@@ -23,5 +23,6 @@
         "psr-4": {
             "Magento\\MsrpConfigurableProduct\\": ""
         }
-    }
+    },
+    "version": "100.4.0"
 }

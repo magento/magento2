@@ -3,9 +3,9 @@
     "description": "Magento module provides the implementation for managing relations between content and media files used in that content",
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-media-content-api": "*",
-        "magento/module-media-gallery-api": "*"
+        "magento/framework": "103.0.*",
+        "magento/module-media-content-api": "100.4.*",
+        "magento/module-media-gallery-api": "101.0.*"
     },
     "type": "magento2-module",
     "license": [
@@ -19,5 +19,6 @@
         "psr-4": {
             "Magento\\MediaContent\\": ""
         }
-    }
+    },
+    "version": "100.4.0"
 }

@@ -3,14 +3,14 @@
     "description": "N/A",
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-backend": "*",
-        "magento/module-ui": "*",
-        "magento/module-variable": "*",
-        "magento/module-widget": "*"
+        "magento/framework": "103.0.*",
+        "magento/module-backend": "102.0.*",
+        "magento/module-ui": "101.2.*",
+        "magento/module-variable": "100.4.*",
+        "magento/module-widget": "101.2.*"
     },
     "suggest": {
-        "magento/module-cms": "*"
+        "magento/module-cms": "104.0.*"
     },
     "type": "magento2-module",
     "license": [
@@ -24,5 +24,6 @@
         "psr-4": {
             "Magento\\Tinymce3\\": ""
         }
-    }
+    },
+    "version": "100.4.0"
 }

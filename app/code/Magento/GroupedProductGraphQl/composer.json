@@ -4,10 +4,10 @@
     "type": "magento2-module",
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/module-grouped-product": "*",
-        "magento/module-catalog": "*",
-        "magento/module-catalog-graph-ql": "*",
-        "magento/framework": "*"
+        "magento/module-grouped-product": "100.4.*",
+        "magento/module-catalog": "104.0.*",
+        "magento/module-catalog-graph-ql": "100.4.*",
+        "magento/framework": "103.0.*"
     },
     "license": [
         "OSL-3.0",
@@ -20,5 +20,6 @@
         "psr-4": {
             "Magento\\GroupedProductGraphQl\\": ""
         }
-    }
+    },
+    "version": "100.4.0"
 }

@@ -6,11 +6,11 @@
     },
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-swagger": "*"
+        "magento/framework": "103.0.*",
+        "magento/module-swagger": "100.4.*"
     },
     "suggest": {
-        "magento/module-config": "*"
+        "magento/module-config": "101.2.*"
     },
     "type": "magento2-module",
     "license": [
@@ -24,5 +24,6 @@
         "psr-4": {
             "Magento\\SwaggerWebapiAsync\\": ""
         }
-    }
+    },
+    "version": "100.4.0"
 }

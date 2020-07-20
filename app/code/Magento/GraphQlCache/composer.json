@@ -4,9 +4,9 @@
     "type": "magento2-module",
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "*",
-        "magento/module-page-cache": "*",
-        "magento/module-graph-ql": "*"
+        "magento/framework": "103.0.*",
+        "magento/module-page-cache": "100.4.*",
+        "magento/module-graph-ql": "100.4.*"
     },
     "license": [
         "OSL-3.0",
@@ -19,5 +19,6 @@
         "psr-4": {
             "Magento\\GraphQlCache\\": ""
         }
-    }
+    },
+    "version": "100.4.0"
 }
