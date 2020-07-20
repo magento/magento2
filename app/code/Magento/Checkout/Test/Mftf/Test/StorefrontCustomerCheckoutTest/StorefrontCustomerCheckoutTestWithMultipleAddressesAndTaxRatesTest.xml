@@ -27,8 +27,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Go to tax rule page -->
-            <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulePage"/>
-            <waitForPageLoad stepKey="waitForTaxRatePage"/>
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulePage"/>
             <click stepKey="addNewTaxRate" selector="{{AdminGridMainControls.add}}"/>
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
 
@@ -49,8 +48,7 @@
         </before>
         <after>
             <!-- Go to the tax rule page and delete the row we created-->
-            <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulesPage"/>
-            <waitForPageLoad stepKey="waitForRulesPage"/>
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPage"/>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
                 <argument name="name" value="SampleRule"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
