@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminLoginAsCustomerUserSingleSessionTest">
         <annotations>
-            <features value="Login фs Customer"/>
+            <features value="Login as Customer"/>
             <stories value="Destroy impersonated customer sessions on admin logout"/>
             <title value="Admin users can have only one 'Login as Customer' session at a time"/>
             <description
