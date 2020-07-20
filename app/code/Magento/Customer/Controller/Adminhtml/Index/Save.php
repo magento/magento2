@@ -243,7 +243,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
     /**
      * Saves default_billing and default_shipping flags for customer address
      *
-     * @deprecated must be removed because addresses are save separately for now
+     * @deprecated 102.0.1 must be removed because addresses are save separately for now
      * @param array $addressIdList
      * @param array $extractedCustomerData
      * @return array
@@ -286,7 +286,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
     /**
      * Reformat customer addresses data to be compatible with customer service interface
      *
-     * @deprecated addresses are saved separately for now
+     * @deprecated 102.0.1 addresses are saved separately for now
      * @param array $extractedCustomerData
      * @return array
      */

@@ -21,7 +21,7 @@ use Magento\Framework\Encryption\Helper\Security;
 /**
  * Generic backend controller
  *
- * @deprecated Use \Magento\Framework\App\ActionInterface
+ * @deprecated 102.0.0 Use \Magento\Framework\App\ActionInterface
  *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api

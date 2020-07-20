@@ -19,6 +19,7 @@ use Magento\Framework\View\Element\Template\Context;
  * @method string getTitle()
  *
  * @api
+ * @since 100.0.2
  */
 class Link extends \Magento\Framework\View\Element\Template
 {

@@ -118,7 +118,7 @@ class CartFixed extends AbstractDiscount
     /**
      * Set information about usage cart fixed rule by quote address
      *
-     * @deprecated should be removed as it is not longer used
+     * @deprecated 101.2.0 should be removed as it is not longer used
      * @param int $ruleId
      * @param int $itemId
      * @return void
@@ -131,7 +131,7 @@ class CartFixed extends AbstractDiscount
     /**
      * Retrieve information about usage cart fixed rule by quote address
      *
-     * @deprecated should be removed as it is not longer used
+     * @deprecated 101.2.0 should be removed as it is not longer used
      * @param int $ruleId
      * @return int|null
      */
