@@ -207,7 +207,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
 
     public function run(TestResult $result = null): TestResult
     {
-        if ($this instanceof GraphQlAbstract) {
+        if ($this instanceof \Magento\GraphQl\Catalog\CategoryTest) {
             return parent::run($result);
         }
 

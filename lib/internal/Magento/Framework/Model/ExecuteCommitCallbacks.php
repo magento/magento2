@@ -43,7 +43,8 @@ class ExecuteCommitCallbacks
                 try {
                     call_user_func($callback);
                 } catch (\Throwable $e) {
-                    $this->logger->critical($e);
+                    //Temporary fix in order to see real problems during save process
+                    throw $e;
                 }
             }
         }
