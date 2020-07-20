@@ -7,8 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Stdlib\Cookie;
 
-// phpcs:ignore Magento2.Functions.MethodDoubleUnderscore
-
 /**
  * Cookie Attributes
  * @api
@@ -48,11 +46,11 @@ class CookieMetadata
     /**
      * Returns an array representation of this metadata.
      *
-     * If a value has not yet been set then the key will not show up in the array.
+     * If a value has not yet been set then the key will not show up in the array
      *
      * @return array
      */
-    public function __toArray()
+    public function __toArray() //phpcs:ignore PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames
     {
         return $this->metadata;
     }
@@ -63,7 +61,7 @@ class CookieMetadata
      * @param string $domain
      * @return $this
      */
-    public function setDomain($domain): CookieMetadata
+    public function setDomain($domain)
     {
         return $this->set(self::KEY_DOMAIN, $domain);
     }

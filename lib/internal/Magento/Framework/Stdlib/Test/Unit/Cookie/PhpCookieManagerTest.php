@@ -645,7 +645,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             self::assertFalse($httpOnly);
             self::assertEquals('', $domain);
             self::assertEquals('', $path);
-            self::assertEquals('Lax', $sameSite);
+            self::assertEquals('', $sameSite);
         }
 
         /**
@@ -671,7 +671,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             self::assertTrue($httpOnly);
             self::assertEquals('', $domain);
             self::assertEquals('', $path);
-            self::assertEquals('Lax', $sameSite);
+            self::assertEquals('', $sameSite);
         }
 
         /**
@@ -697,7 +697,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             self::assertTrue($httpOnly);
             self::assertEquals('', $domain);
             self::assertEquals('', $path);
-            self::assertEquals('Lax', $sameSite);
+            self::assertEquals('', $sameSite);
         }
 
         /**
@@ -723,7 +723,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             self::assertTrue($httpOnly);
             self::assertEquals('', $domain);
             self::assertEquals('', $path);
-            self::assertEquals('Lax', $sameSite);
+            self::assertEquals('', $sameSite);
         }
 
         /**
@@ -775,7 +775,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             self::assertFalse($httpOnly);
             self::assertEquals('', $domain);
             self::assertEquals('', $path);
-            self::assertEquals('Lax', $sameSite);
+            self::assertEquals('', $sameSite);
         }
 
         /**
@@ -880,7 +880,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             self::assertFalse($httpOnly);
             self::assertEquals('', $domain);
             self::assertEquals('', $path);
-            self::assertEquals('Lax', $sameSite);
+            self::assertEquals('', $sameSite);
         }
 
         /**
