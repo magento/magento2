@@ -43,7 +43,7 @@ class Cart implements ArgumentInterface
     {
         return (bool) $this->_scopeConfig->getValue(
             self::XPATH_CONFIG_ENABLE_CLEAR_SHOPPING_CART,
-            ScopeInterface::SCOPE_STORE
+            ScopeInterface::SCOPE_WEBSITE
         );
     }
 }
