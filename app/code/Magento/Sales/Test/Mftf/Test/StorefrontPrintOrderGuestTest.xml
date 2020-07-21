@@ -13,14 +13,14 @@
             <stories value="Print Order"/>
             <title value="Print Order from Guest on Frontend"/>
             <description value="Print Order from Guest on Frontend"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-16225"/>
             <group value="sales"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
             <magentoCLI command="downloadable:domains:add" arguments="example.com static.magento.com" stepKey="addDownloadableDomain"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
 
             <!-- Create downloadable Product -->
@@ -44,8 +44,8 @@
             <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOption"/>
             <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
             <grabValueFrom selector="{{AdminProductDownloadableSection.addLinkTitleInput('0')}}" stepKey="grabLink"/>
-            <click selector="{{AdminProductFormSection.save}}" stepKey="clickSave"/>
-            <waitForLoadingMaskToDisappear stepKey="waitForSave"/>
+
+            <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSave"/>
 
             <!-- Create configurable Product -->
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
@@ -116,7 +116,9 @@
                 <argument name="product" value="$$createConfigProduct$$"/>
             </actionGroup>
             <grabTextFrom selector="{{AdminConfigurableProductFormSection.currentAttribute}}" stepKey="grabAttribute"/>
-            <assertNotEmpty actual="$grabAttribute" stepKey="assertNotEmpty"/>
+            <assertNotEmpty stepKey="assertNotEmpty">
+    			<actualResult type="const">$grabAttribute</actualResult>
+            </assertNotEmpty>
 
             <!-- Create bundle Product -->
             <createData entity="SimpleSubCategory" stepKey="createSubCategory"/>
@@ -149,7 +151,9 @@
                 <argument name="product" value="$$createBundleProduct$$"/>
             </actionGroup>
             <grabTextFrom selector="{{AdminProductFormBundleSection.currentBundleOption}}" stepKey="grabBundleOption"/>
-            <assertNotEmpty actual="$grabBundleOption" stepKey="assertBundleOptionNotEmpty"/>
+            <assertNotEmpty stepKey="assertBundleOptionNotEmpty">
+        		<actualResult type="const">$grabBundleOption</actualResult>
+            </assertNotEmpty>
 
             <!-- Create sales rule -->
             <createData entity="ActiveSalesRuleCoupon50" stepKey="createCartPriceRule"/>
@@ -225,13 +229,18 @@
 
             <deleteData createDataKey="createCartPriceRule" stepKey="deleteCartPriceRule"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
 
         <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
-        <assertNotEmpty actual="$getOrderId" stepKey="assertOrderIdIsNotEmpty" />
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty">
+			<actualResult type="const">$getOrderId</actualResult>
+        </assertNotEmpty>
 
         <!-- Find the Order on frontend > Navigate to: Orders and Returns -->
         <amOnPage url="{{StorefrontGuestOrderSearchPage.url}}" stepKey="amOnOrdersAndReturns"/>

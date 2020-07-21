@@ -21,7 +21,9 @@
 "var store_email":"Store Email",
 "var order_data.is_not_virtual": "Order Type",
 "var shipment": "Shipment",
-"var order": "Order"
+"var order": "Order",
+"var order_id": "Order DB Id",
+"var shipment_id": "Shipment DB Id"
 } @-->
 {{template config_path="design/email/header_template"}}
 
@@ -55,7 +57,7 @@
                 </tr>
             </table>
             {{/depend}}
-            {{layout handle="sales_email_order_shipment_track" shipment=$shipment order=$order}}
+            {{layout handle="sales_email_order_shipment_track" shipment_id=$shipment_id order_id=$order_id}}
             <table class="order-details">
                 <tr>
                     <td class="address-details">
@@ -82,7 +84,7 @@
                     {{/depend}}
                 </tr>
             </table>
-            {{layout handle="sales_email_order_shipment_items" shipment=$shipment order=$order}}
+            {{layout handle="sales_email_order_shipment_items" shipment_id=$shipment_id order_id=$order_id}}
         </td>
     </tr>
 </table>

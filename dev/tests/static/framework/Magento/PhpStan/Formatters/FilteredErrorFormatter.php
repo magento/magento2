@@ -61,6 +61,7 @@ class FilteredErrorFormatter extends TableErrorFormatter
         $clearedAnalysisResult = new AnalysisResult(
             $fileSpecificErrorsWithoutIgnoredErrors,
             $analysisResult->getNotFileSpecificErrors(),
+            $analysisResult->getWarnings(),
             $analysisResult->isDefaultLevelUsed(),
             $analysisResult->hasInferrablePropertyTypesFromConstructor(),
             $analysisResult->getProjectConfigFile()

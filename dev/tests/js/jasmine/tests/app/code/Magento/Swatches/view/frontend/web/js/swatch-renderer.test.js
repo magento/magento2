@@ -65,13 +65,13 @@ define([
         });
 
         it('check swatch thumbnail image height attribute', function () {
-            expect(html.hasAttribute('thumb-height')).toBe(true);
-            expect(html.getAttribute('thumb-height')).toEqual(swathThumbImageHeight);
+            expect(html.hasAttribute('data-thumb-height')).toBe(true);
+            expect(html.getAttribute('data-thumb-height')).toEqual(swathThumbImageHeight);
         });
 
         it('check swatch thumbnail image width attribute', function () {
-            expect(html.hasAttribute('thumb-width')).toBe(true);
-            expect(html.getAttribute('thumb-width')).toEqual(swathThumbImageWidth);
+            expect(html.hasAttribute('data-thumb-width')).toBe(true);
+            expect(html.getAttribute('data-thumb-width')).toEqual(swathThumbImageWidth);
         });
 
         it('check swatch image styles', function () {
@@ -97,6 +97,38 @@ define([
             widget._getNewPrices  = jasmine.createSpy().and.returnValue(undefined);
             widget._UpdatePrice();
             expect(productPriceMock.find().find.calls.count()).toBe(1);
+        });
+
+        it('check getSelectedOptionPriceIndex', function () {
+            var optionMock = '<div class="swatch-attribute" data-attribute-id="2" data-option-selected="4"></div>',
+                element = $('<div class="' + widget.options.tooltipClass +
+                    '"><div class="image"></div><div class="title"></div><div class="corner"></div>' +
+                    optionMock + '</div>'
+                ),
+                optionPricesMock = {
+                    optionPrices: {
+                        p: {
+                            finalPrice: {
+                                amount: 12
+                            }
+                        }
+                    }
+                };
+
+            widget.element = element;
+            widget.options.classes.attributeClass = 'swatch-attribute';
+            widget.options.jsonConfig = optionPricesMock;
+            widget.optionsMap = {
+                2: {
+                    4: {
+                        products: 'p'
+                    },
+                    hasOwnProperty: jasmine.createSpy().and.returnValue(true)
+                },
+                hasOwnProperty: jasmine.createSpy().and.returnValue(true)
+            };
+
+            expect(widget._getSelectedOptionPriceIndex()).toBe('p');
         });
     });
 });

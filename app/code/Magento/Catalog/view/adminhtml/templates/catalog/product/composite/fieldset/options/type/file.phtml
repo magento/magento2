@@ -22,7 +22,7 @@ require(['prototype'], function(){
         initializeFile: function(inputBox) {
             this.inputFile = inputBox.select('input[name="<?= /* @noEscape */ $_fileName ?>"]')[0];
             this.inputFileAction = inputBox.select('input[name="<?= /* @noEscape */ $_fieldNameAction ?>"]')[0];
-            this.fileNameBox = inputBox.up('dd').select('.<?= /* @noEscape */ $_fileNamed ?>')[0];
+            this.fileNameBox = inputBox.up('div').select('.<?= /* @noEscape */ $_fileNamed ?>')[0];
         },
 
         toggleFileChange: function(inputBox) {

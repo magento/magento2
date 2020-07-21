@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateCustomerCart" dataType="CustomerCart" type="create"
+               auth="adminOauth" url="/V1/carts/mine" method="POST" >
+        <contentType>application/json</contentType>
+        <field key="customer_id">string</field>
+    </operation>
+
+    <operation name="AddAddressInfoToCustomerCart" dataType="CustomerAddressInformation" type="create" auth="adminOauth" url="/V1/carts/mine/shipping-information" method="POST">
+        <contentType>application/json</contentType>
+        <field key="cart_id">string</field>
+        <object key="addressInformation" dataType="CustomerAddressInformation">
+            <object key="shipping_address" dataType="shipping_address">
+                <field key="city">string</field>
+                <field key="region">string</field>
+                <field key="region_code">string</field>
+                <field key="region_id">integer</field>
+                <field key="country_id">string</field>
+                <array key="street">
+                    <value>string</value>
+                </array>
+                <field key="postcode">string</field>
+                <field key="firstname">string</field>
+                <field key="lastname">string</field>
+                <field key="email">string</field>
+                <field key="telephone">string</field>
+            </object>
+            <object key="billing_address" dataType="billing_address">
+                <field key="city">string</field>
+                <field key="region">string</field>
+                <field key="region_code">string</field>
+                <field key="region_id">integer</field>
+                <field key="country_id">string</field>
+                <array key="street">
+                    <value>string</value>
+                </array>
+                <field key="postcode">string</field>
+                <field key="firstname">string</field>
+                <field key="lastname">string</field>
+                <field key="email">string</field>
+                <field key="telephone">string</field>
+            </object>
+            <field key="shipping_method_code">string</field>
+            <field key="shipping_carrier_code">string</field>
+        </object>
+    </operation>
+
+    <operation name="SendCustomerPaymentInformation" dataType="CustomerPaymentInformation" type="update" auth="adminOauth" url="/V1/carts/mine/payment-information" method="POST">
+        <contentType>application/json</contentType>
+        <field key="cart_id">string</field>
+        <object key="paymentMethod" dataType="payment_method">
+            <field key="method">string</field>
+        </object>
+    </operation>
+</operations>

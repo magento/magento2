@@ -16,7 +16,8 @@ use Symfony\Component\Console\Tester\CommandTester;
 
 /**
  * Class GenerateFixturesCommandCommandTest
- * @package Magento\Setup\Console\Command
+ *
+ * @magentoDbIsolation disabled
  */
 class GenerateFixturesCommandTest extends \Magento\TestFramework\Indexer\TestCase
 {
@@ -38,7 +39,7 @@ class GenerateFixturesCommandTest extends \Magento\TestFramework\Indexer\TestCas
     /**
      * Setup
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
@@ -90,14 +91,14 @@ class GenerateFixturesCommandTest extends \Magento\TestFramework\Indexer\TestCas
     /**
      * teardown
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->setIncrement(1);
 
         parent::tearDown();
     }
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $db = Bootstrap::getInstance()->getBootstrap()
             ->getApplication()

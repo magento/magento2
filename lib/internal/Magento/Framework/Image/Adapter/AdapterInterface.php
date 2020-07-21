@@ -28,6 +28,8 @@ interface AdapterInterface
     public function getColorAt($x, $y);
 
     /**
+     * Render image and return its binary contents
+     *
      * @see \Magento\Framework\Image\Adapter\AbstractAdapter::getImage
      * @return string
      */
@@ -99,6 +101,7 @@ interface AdapterInterface
 
     /**
      * Save image to specific path.
+     *
      * If some folders of path does not exist they will be created
      *
      * @param null|string $destination

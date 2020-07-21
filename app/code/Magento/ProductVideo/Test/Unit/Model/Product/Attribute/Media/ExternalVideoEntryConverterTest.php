@@ -3,115 +3,126 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\ProductVideo\Test\Unit\Model\Product\Attribute\Media;
 
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtension;
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory;
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
+use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Api\Data\VideoContentInterface;
+use Magento\Framework\Api\Data\VideoContentInterfaceFactory;
+use Magento\Framework\Api\DataObjectHelper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter;
+use Magento\ProductVideo\Model\Product\Attribute\Media\VideoEntry;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ExternalVideoEntryConverterTest extends \PHPUnit\Framework\TestCase
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class ExternalVideoEntryConverterTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     * |\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory
+     * @var MockObject|ProductAttributeMediaGalleryEntryInterfaceFactory
      */
     protected $mediaGalleryEntryFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     * |\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface
+     * @var MockObject|ProductAttributeMediaGalleryEntryInterface
      */
     protected $mediaGalleryEntryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\DataObjectHelper */
+    /** @var MockObject|DataObjectHelper */
     protected $dataObjectHelperMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\Data\VideoContentInterfaceFactory */
+    /** @var MockObject|VideoContentInterfaceFactory */
     protected $videoEntryFactoryMock;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Api\Data\VideoContentInterface */
+    /** @var MockObject|VideoContentInterface */
     protected $videoEntryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     * |\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory
+     * @var MockObject|ProductAttributeMediaGalleryEntryExtensionFactory
      */
     protected $mediaGalleryEntryExtensionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     * |\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory
+     * @var MockObject|ProductAttributeMediaGalleryEntryExtensionFactory
      */
     protected $mediaGalleryEntryExtensionMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
-     * |\Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter
+     * @var ObjectManager|ExternalVideoEntryConverter
      */
     protected $modelObject;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mediaGalleryEntryFactoryMock =
             $this->createPartialMock(
-                \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterfaceFactory::class,
+                ProductAttributeMediaGalleryEntryInterfaceFactory::class,
                 ['create']
             );
 
         $this->mediaGalleryEntryMock =
-            $this->createPartialMock(\Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface::class, [
-                    'getId',
-                    'setId',
-                    'getMediaType',
-                    'setMediaType',
-                    'getLabel',
-                    'setLabel',
-                    'getPosition',
-                    'setPosition',
-                    'isDisabled',
-                    'setDisabled',
-                    'getTypes',
-                    'setTypes',
-                    'getFile',
-                    'setFile',
-                    'getContent',
-                    'setContent',
-                    'getExtensionAttributes',
-                    'setExtensionAttributes'
-                ]);
+            $this->createPartialMock(ProductAttributeMediaGalleryEntryInterface::class, [
+                'getId',
+                'setId',
+                'getMediaType',
+                'setMediaType',
+                'getLabel',
+                'setLabel',
+                'getPosition',
+                'setPosition',
+                'isDisabled',
+                'setDisabled',
+                'getTypes',
+                'setTypes',
+                'getFile',
+                'setFile',
+                'getContent',
+                'setContent',
+                'getExtensionAttributes',
+                'setExtensionAttributes'
+            ]);
 
         $this->mediaGalleryEntryFactoryMock->expects($this->any())->method('create')->willReturn(
             $this->mediaGalleryEntryMock
         );
 
-        $this->dataObjectHelperMock = $this->createMock(\Magento\Framework\Api\DataObjectHelper::class);
+        $this->dataObjectHelperMock = $this->createMock(DataObjectHelper::class);
 
         $this->videoEntryFactoryMock =
-            $this->createPartialMock(\Magento\Framework\Api\Data\VideoContentInterfaceFactory::class, ['create']);
+            $this->createPartialMock(VideoContentInterfaceFactory::class, ['create']);
 
-        $this->videoEntryMock = $this->createMock(\Magento\Framework\Api\Data\VideoContentInterface::class);
+        $this->videoEntryMock = $this->getMockForAbstractClass(VideoContentInterface::class);
 
         $this->videoEntryFactoryMock->expects($this->any())->method('create')->willReturn($this->videoEntryMock);
 
         $this->mediaGalleryEntryExtensionFactoryMock =
             $this->createPartialMock(
-                \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtensionFactory::class,
+                ProductAttributeMediaGalleryEntryExtensionFactory::class,
                 ['create']
             );
 
-        $this->mediaGalleryEntryExtensionMock = $this->createPartialMock(
-            \Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryExtension::class,
-            ['setVideoContent', 'getVideoContent', 'getVideoProvider']
-        );
+        $this->mediaGalleryEntryExtensionMock = $this->getMockBuilder(ProductAttributeMediaGalleryEntryExtension::class)
+             ->addMethods(['getVideoProvider', 'setVideoContent', 'getVideoContent'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->mediaGalleryEntryExtensionMock->expects($this->any())->method('setVideoContent')->willReturn(null);
         $this->mediaGalleryEntryExtensionFactoryMock->expects($this->any())->method('create')->willReturn(
             $this->mediaGalleryEntryExtensionMock
         );
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $this->modelObject = $objectManager->getObject(
-            \Magento\ProductVideo\Model\Product\Attribute\Media\ExternalVideoEntryConverter::class,
+            ExternalVideoEntryConverter::class,
             [
                 'mediaGalleryEntryFactory' => $this->mediaGalleryEntryFactoryMock,
                 'dataObjectHelper' => $this->dataObjectHelperMock,
@@ -128,8 +139,8 @@ class ExternalVideoEntryConverterTest extends \PHPUnit\Framework\TestCase
 
     public function testConvertTo()
     {
-        /** @var  $product \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product */
-        $product = $this->createMock(\Magento\Catalog\Model\Product::class);
+        /** @var  MockObject|Product $product */
+        $product = $this->createMock(Product::class);
 
         $rowData = [
             'value_id' => '4',
@@ -158,9 +169,7 @@ class ExternalVideoEntryConverterTest extends \PHPUnit\Framework\TestCase
 
         $product->expects($this->once())->method('getMediaAttributeValues')->willReturn($productImages);
 
-        $this->mediaGalleryEntryMock->expects($this->once())->method('setExtensionAttributes')->will(
-            $this->returnSelf()
-        );
+        $this->mediaGalleryEntryMock->expects($this->once())->method('setExtensionAttributes')->willReturnSelf();
 
         $this->modelObject->convertTo($product, $rowData);
     }
@@ -180,7 +189,7 @@ class ExternalVideoEntryConverterTest extends \PHPUnit\Framework\TestCase
         );
 
         $videoContentMock =
-            $this->createMock(\Magento\ProductVideo\Model\Product\Attribute\Media\VideoEntry::class);
+            $this->createMock(VideoEntry::class);
 
         $videoContentMock->expects($this->once())->method('getVideoProvider')->willReturn('youtube');
         $videoContentMock->expects($this->once())->method('getVideoUrl')->willReturn(

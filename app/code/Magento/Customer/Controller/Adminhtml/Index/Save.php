@@ -248,7 +248,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
      * @param array $extractedCustomerData
      * @return array
      */
-    protected function saveDefaultFlags(array $addressIdList, array & $extractedCustomerData)
+    protected function saveDefaultFlags(array $addressIdList, array &$extractedCustomerData)
     {
         $result = [];
         $extractedCustomerData[CustomerInterface::DEFAULT_BILLING] = null;
@@ -290,7 +290,7 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
      * @param array $extractedCustomerData
      * @return array
      */
-    protected function _extractCustomerAddressData(array & $extractedCustomerData)
+    protected function _extractCustomerAddressData(array &$extractedCustomerData)
     {
         $addresses = $this->getRequest()->getPost('address');
         $result = [];
@@ -348,8 +348,14 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                     ['customer' => $customer, 'request' => $this->getRequest()]
                 );
 
-                if (isset($customerData['sendemail_store_id'])) {
+                if (isset($customerData['sendemail_store_id']) && $customerData['sendemail_store_id'] !== false) {
                     $customer->setStoreId($customerData['sendemail_store_id']);
+                    try {
+                        $this->customerAccountManagement->validateCustomerStoreIdByWebsiteId($customer);
+                    } catch (LocalizedException $exception) {
+                        throw new LocalizedException(__("The Store View selected for sending Welcome email from".
+                            " is not related to the customer's associated website."));
+                    }
                 }
 
                 // Save customer
@@ -374,6 +380,12 @@ class Save extends \Magento\Customer\Controller\Adminhtml\Index implements HttpP
                 $this->_coreRegistry->register(RegistryConstants::CURRENT_CUSTOMER_ID, $customerId);
                 $this->messageManager->addSuccessMessage(__('You saved the customer.'));
                 $returnToEdit = (bool)$this->getRequest()->getParam('back', false);
+            } catch (NoSuchEntityException $exception) {
+                $this->messageManager->addExceptionMessage(
+                    $exception,
+                    __('Something went wrong while saving the customer.')
+                );
+                $returnToEdit = false;
             } catch (\Magento\Framework\Validator\Exception $exception) {
                 $messages = $exception->getMessages();
                 if (empty($messages)) {

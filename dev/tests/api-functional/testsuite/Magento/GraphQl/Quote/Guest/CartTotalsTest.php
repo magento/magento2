@@ -24,7 +24,7 @@ class CartTotalsTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -62,6 +62,94 @@ class CartTotalsTest extends GraphQlAbstract
         self::assertEquals('US-TEST-*-Rate-1', $appliedTaxesResponse[0]['label']);
         self::assertEquals(1.5, $appliedTaxesResponse[0]['amount']['value']);
         self::assertEquals('USD', $appliedTaxesResponse[0]['amount']['currency']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/CatalogRule/_files/catalog_rule_10_off_not_logged.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     */
+    public function testGetCartTotalsWithCatalogRuleApplied()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query);
+
+        $cartItem = $response['cart']['items'][0];
+        self::assertEquals(9, $cartItem['prices']['price']['value']);
+        self::assertEquals(18, $cartItem['prices']['row_total']['value']);
+        self::assertEquals(18, $cartItem['prices']['row_total_including_tax']['value']);
+
+        self::assertArrayHasKey('prices', $response['cart']);
+        $pricesResponse = $response['cart']['prices'];
+        self::assertEquals(18, $pricesResponse['grand_total']['value']);
+        self::assertEquals(18, $pricesResponse['subtotal_including_tax']['value']);
+        self::assertEquals(18, $pricesResponse['subtotal_excluding_tax']['value']);
+        self::assertEquals(18, $pricesResponse['subtotal_with_discount_excluding_tax']['value']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/CatalogRule/_files/catalog_rule_10_off_not_logged.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     */
+    public function testGetCartTotalsWithCatalogRuleAndTaxApplied()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query);
+
+        $cartItem = $response['cart']['items'][0];
+        self::assertEquals(9, $cartItem['prices']['price']['value']);
+        self::assertEquals(18, $cartItem['prices']['row_total']['value']);
+        self::assertEquals(19.35, $cartItem['prices']['row_total_including_tax']['value']);
+
+        self::assertArrayHasKey('prices', $response['cart']);
+        $pricesResponse = $response['cart']['prices'];
+        self::assertEquals(19.35, $pricesResponse['grand_total']['value']);
+        self::assertEquals(19.35, $pricesResponse['subtotal_including_tax']['value']);
+        self::assertEquals(18, $pricesResponse['subtotal_excluding_tax']['value']);
+        self::assertEquals(18, $pricesResponse['subtotal_with_discount_excluding_tax']['value']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/cart_rule_discount_no_coupon.php
+     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoApiDataFixture Magento/CatalogRule/_files/catalog_rule_10_off_not_logged.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     */
+    public function testGetCartTotalsWithCatalogRuleAndCartRuleApplied()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $query = $this->getQuery($maskedQuoteId);
+        $response = $this->graphQlQuery($query);
+
+        $cartItem = $response['cart']['items'][0];
+        self::assertEquals(9, $cartItem['prices']['price']['value']);
+        self::assertEquals(18, $cartItem['prices']['row_total']['value']);
+        self::assertEquals(18, $cartItem['prices']['row_total_including_tax']['value']);
+        self::assertEquals(9, $cartItem['prices']['total_item_discount']['value']);
+
+        $discount = $cartItem['prices']['discounts'][0];
+        self::assertEquals("50% Off for all orders", $discount['label']);
+        self::assertEquals(9, $discount['amount']['value']);
+
+        self::assertArrayHasKey('prices', $response['cart']);
+        $pricesResponse = $response['cart']['prices'];
+        self::assertEquals(9, $pricesResponse['grand_total']['value']);
+        self::assertEquals(18, $pricesResponse['subtotal_including_tax']['value']);
+        self::assertEquals(18, $pricesResponse['subtotal_excluding_tax']['value']);
+        self::assertEquals(9, $pricesResponse['subtotal_with_discount_excluding_tax']['value']);
     }
 
     /**
@@ -189,6 +277,15 @@ class CartTotalsTest extends GraphQlAbstract
         row_total_including_tax {
           value
           currency
+        }
+        total_item_discount {
+            value
+        }
+        discounts {
+            label
+            amount {
+                value
+            }
         }
       }
     }

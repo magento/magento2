@@ -55,13 +55,13 @@ class AsyncMultipleHandlersTest extends QueueTestCaseAbstract
             if (is_array($data)) {
                 foreach ($data as $key => $value) {
                     /** @var AsyncTestData $testObject */
-                    $testObject = $this->objectManager->create(AsyncTestData::class);
+                    $testObject = $this->objectManager->create(AsyncTestData::class); // @phpstan-ignore-line
                     $testObject->setValue($value);
                     $testObject->setTextFilePath($this->logFilePath);
                     $message[$key] = $testObject;
                 }
             } else {
-                $testObject = $this->objectManager->create(AsyncTestData::class);
+                $testObject = $this->objectManager->create(AsyncTestData::class); // @phpstan-ignore-line
                 $testObject->setValue($data);
                 $testObject->setTextFilePath($this->logFilePath);
                 $message = $testObject;
@@ -73,7 +73,7 @@ class AsyncMultipleHandlersTest extends QueueTestCaseAbstract
 
         //assertions
         foreach ($this->expectedValues as $item) {
-            $this->assertContains($item, file_get_contents($this->logFilePath));
+            $this->assertStringContainsString($item, file_get_contents($this->logFilePath));
         }
     }
 }

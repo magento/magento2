@@ -872,7 +872,6 @@ class AccountManagement implements AccountManagementInterface
         if ($customer->getId()) {
             $customer = $this->customerRepository->get($customer->getEmail());
             $websiteId = $customer->getWebsiteId();
-
             if ($this->isCustomerInStore($websiteId, $customer->getStoreId())) {
                 throw new InputException(__('This customer already exists in this store.'));
             }
@@ -896,13 +895,10 @@ class AccountManagement implements AccountManagementInterface
             $customer->setWebsiteId($websiteId);
         }
 
+        $this->validateCustomerStoreIdByWebsiteId($customer);
+
         // Update 'created_in' value with actual store name
         if ($customer->getId() === null) {
-            $websiteId = $customer->getWebsiteId();
-            if ($websiteId && !$this->isCustomerInStore($websiteId, $customer->getStoreId())) {
-                throw new LocalizedException(__('The store view is not in the associated website.'));
-            }
-
             $storeName = $this->storeManager->getStore($customer->getStoreId())->getName();
             $customer->setCreatedIn($storeName);
         }
@@ -1049,10 +1045,10 @@ class AccountManagement implements AccountManagementInterface
         }
         $customerEmail = $customer->getEmail();
         $this->credentialsValidator->checkPasswordDifferentFromEmail($customerEmail, $newPassword);
+        $this->checkPasswordStrength($newPassword);
         $customerSecure = $this->customerRegistry->retrieveSecureData($customer->getId());
         $customerSecure->setRpToken(null);
         $customerSecure->setRpTokenCreatedAt(null);
-        $this->checkPasswordStrength($newPassword);
         $customerSecure->setPasswordHash($this->createPasswordHash($newPassword));
         $this->destroyCustomerSessions($customer->getId());
         $this->disableAddressValidation($customer);
@@ -1142,6 +1138,22 @@ class AccountManagement implements AccountManagementInterface
         }
 
         return in_array($storeId, $ids);
+    }
+
+    /**
+     * Validate customer store id by customer website id.
+     *
+     * @param CustomerInterface $customer
+     * @return bool
+     * @throws LocalizedException
+     */
+    public function validateCustomerStoreIdByWebsiteId(CustomerInterface $customer)
+    {
+        if (!$this->isCustomerInStore($customer->getWebsiteId(), $customer->getStoreId())) {
+            throw new LocalizedException(__('The store view is not in the associated website.'));
+        }
+
+        return true;
     }
 
     /**
@@ -1618,6 +1630,7 @@ class AccountManagement implements AccountManagementInterface
      */
     private function destroyCustomerSessions($customerId)
     {
+        $this->sessionManager->regenerateId();
         $sessionLifetime = $this->scopeConfig->getValue(
             \Magento\Framework\Session\Config::XML_PATH_COOKIE_LIFETIME,
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE

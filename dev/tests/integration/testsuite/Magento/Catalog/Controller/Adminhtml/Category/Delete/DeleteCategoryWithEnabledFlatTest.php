@@ -24,6 +24,8 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  */
 class DeleteCategoryWithEnabledFlatTest extends AbstractBackendController
 {
+    const STUB_CATEGORY_ID = 333;
+
     /**
      * @var IndexerRegistry
      */
@@ -47,7 +49,7 @@ class DeleteCategoryWithEnabledFlatTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->indexerRegistry = $this->_objectManager->get(IndexerRegistry::class);
@@ -59,7 +61,7 @@ class DeleteCategoryWithEnabledFlatTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $categoryFlatIndexer = $this->indexerRegistry->get(State::INDEXER_ID);
@@ -79,13 +81,16 @@ class DeleteCategoryWithEnabledFlatTest extends AbstractBackendController
      */
     public function testDeleteCategory(): void
     {
-        $this->assertEquals(1, $this->getFlatCategoryCollectionSizeByCategoryId(333));
-        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
-        $this->getRequest()->setPostValue(['id' => 333]);
-        $this->dispatch('backend/catalog/category/delete');
+        // Given
+        $this->assertEquals(1, $this->getFlatCategoryCollectionSizeByCategoryId(self::STUB_CATEGORY_ID));
+
+        // When
+        $this->sendDeleteCategoryRequest(self::STUB_CATEGORY_ID);
+
+        // Then
         $this->assertSessionMessages($this->equalTo([(string)__('You deleted the category.')]));
-        $this->assertEquals(0, $this->getFlatCategoryCollectionSizeByCategoryId(333));
-        $this->checkCategoryIsDeleted(333);
+        $this->assertEquals(0, $this->getFlatCategoryCollectionSizeByCategoryId(self::STUB_CATEGORY_ID));
+        $this->checkCategoryIsDeleted(self::STUB_CATEGORY_ID);
     }
 
     /**
@@ -106,10 +111,26 @@ class DeleteCategoryWithEnabledFlatTest extends AbstractBackendController
      * Assert that category is deleted.
      *
      * @param int $categoryId
+     * @return void
      */
     private function checkCategoryIsDeleted(int $categoryId): void
     {
-        $this->expectExceptionObject(new NoSuchEntityException(__("No such entity with id = {$categoryId}")));
+        $this->expectExceptionObject(
+            new NoSuchEntityException(__("No such entity with id = %entityId", ['entityId' => $categoryId]))
+        );
         $this->categoryRepository->get($categoryId);
+    }
+
+    /**
+     * Method passes the request to Backend to remove given category.
+     *
+     * @param int $categoryId
+     * @return void
+     */
+    private function sendDeleteCategoryRequest(int $categoryId): void
+    {
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue(['id' => $categoryId]);
+        $this->dispatch('backend/catalog/category/delete');
     }
 }

@@ -18,12 +18,14 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\Stdlib\ArrayManager;
 use Magento\Framework\AuthorizationInterface;
+use Magento\Backend\Model\Auth\Session;
 
 /**
  * Data provider for categories field of product page
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 101.0.0
  */
 class Categories extends AbstractModifier
@@ -87,6 +89,11 @@ class Categories extends AbstractModifier
     private $authorization;
 
     /**
+     * @var Session
+     */
+    private $session;
+
+    /**
      * @param LocatorInterface $locator
      * @param CategoryCollectionFactory $categoryCollectionFactory
      * @param DbHelper $dbHelper
@@ -94,6 +101,7 @@ class Categories extends AbstractModifier
      * @param ArrayManager $arrayManager
      * @param SerializerInterface $serializer
      * @param AuthorizationInterface $authorization
+     * @param Session $session
      */
     public function __construct(
         LocatorInterface $locator,
@@ -102,7 +110,8 @@ class Categories extends AbstractModifier
         UrlInterface $urlBuilder,
         ArrayManager $arrayManager,
         SerializerInterface $serializer = null,
-        AuthorizationInterface $authorization = null
+        AuthorizationInterface $authorization = null,
+        Session $session = null
     ) {
         $this->locator = $locator;
         $this->categoryCollectionFactory = $categoryCollectionFactory;
@@ -111,6 +120,7 @@ class Categories extends AbstractModifier
         $this->arrayManager = $arrayManager;
         $this->serializer = $serializer ?: ObjectManager::getInstance()->get(SerializerInterface::class);
         $this->authorization = $authorization ?: ObjectManager::getInstance()->get(AuthorizationInterface::class);
+        $this->session = $session ?: ObjectManager::getInstance()->get(Session::class);
     }
 
     /**
@@ -210,6 +220,7 @@ class Categories extends AbstractModifier
                                     'ns' => 'new_category_form',
                                     'externalProvider' => 'new_category_form.new_category_form_data_source',
                                     'toolbarContainer' => '${ $.parentName }',
+                                    '__disableTmpl' => ['toolbarContainer' => false],
                                     'formSubmitType' => 'ajax',
                                 ],
                             ],
@@ -369,10 +380,16 @@ class Categories extends AbstractModifier
      * @param string $filter
      * @return string
      */
-    private function getCategoriesTreeCacheId(int $storeId, string $filter = '') : string
+    private function getCategoriesTreeCacheId(int $storeId, string $filter = ''): string
     {
+        if ($this->session->getUser() !== null) {
+            return self::CATEGORY_TREE_ID
+                . '_' . (string)$storeId
+                . '_' . $this->session->getUser()->getAclRole()
+                . '_' . $filter;
+        }
         return self::CATEGORY_TREE_ID
-            . '_' . (string) $storeId
+            . '_' . (string)$storeId
             . '_' . $filter;
     }
 

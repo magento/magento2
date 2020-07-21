@@ -3,21 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Tests for \Magento\Framework\Data\Form\Field\Image
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 
-class ImageTest extends \PHPUnit\Framework\TestCase
+use Magento\Config\Block\System\Config\Form\Field\Image;
+use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Url;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ImageTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Url|\PHPUnit_Framework_MockObject_MockObject
+     * @var Url|MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var \Magento\Config\Block\System\Config\Form\Field\Image
+     * @var Image
      */
     protected $image;
 
@@ -26,15 +35,15 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     protected $testData;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->urlBuilderMock = $this->createMock(\Magento\Framework\Url::class);
+        $objectManager = new ObjectManager($this);
+        $this->urlBuilderMock = $this->createMock(Url::class);
         $this->image = $objectManager->getObject(
-            \Magento\Config\Block\System\Config\Form\Field\Image::class,
+            Image::class,
             [
                 'urlBuilder' => $this->urlBuilderMock,
-                '_escaper' => $objectManager->getObject(\Magento\Framework\Escaper::class)
+                '_escaper' => $objectManager->getObject(Escaper::class)
             ]
         );
 
@@ -46,7 +55,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             'value'          => 'test_value',
         ];
 
-        $formMock = new \Magento\Framework\DataObject();
+        $formMock = new DataObject();
         $formMock->setHtmlIdPrefix($this->testData['html_id_prefix']);
         $formMock->setHtmlIdSuffix($this->testData['html_id_suffix']);
         $this->image->setForm($formMock);
@@ -60,7 +69,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $type = 'media';
         $url = 'http://test.example.com/media/';
         $this->urlBuilderMock->expects($this->once())->method('getBaseUrl')
-            ->with(['_type' => $type])->will($this->returnValue($url));
+            ->with(['_type' => $type])->willReturn($url);
 
         $this->image->setValue($this->testData['value']);
         $this->image->setHtmlId($this->testData['html_id']);
@@ -94,11 +103,11 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             . $this->testData['html_id_suffix'];
 
         $html = $this->image->getElementHtml();
-        $this->assertContains('class="input-file"', $html);
-        $this->assertContains('<input', $html);
-        $this->assertContains('type="file"', $html);
-        $this->assertContains('value="test_value"', $html);
-        $this->assertContains(
+        $this->assertStringContainsString('class="input-file"', $html);
+        $this->assertStringContainsString('<input', $html);
+        $this->assertStringContainsString('type="file"', $html);
+        $this->assertStringContainsString('value="test_value"', $html);
+        $this->assertStringContainsString(
             '<a href="'
             . $url
             . $this->testData['path']
@@ -107,6 +116,6 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             . '" onclick="imagePreview(\'' . $expectedHtmlId . '_image\'); return false;"',
             $html
         );
-        $this->assertContains('<input type="checkbox"', $html);
+        $this->assertStringContainsString('<input type="checkbox"', $html);
     }
 }

@@ -25,10 +25,16 @@
     <type name="Magento\Sitemap\Model\ItemProvider\Composite">
         <arguments>
             <argument name="itemProviders" xsi:type="array">
+                <item name="storeUrlProvider" xsi:type="object">Magento\Sitemap\Model\ItemProvider\StoreUrl</item>
                 <item name="categoryProvider" xsi:type="object">Magento\Sitemap\Model\ItemProvider\Category</item>
                 <item name="cmsPageProvider" xsi:type="object">Magento\Sitemap\Model\ItemProvider\CmsPage</item>
                 <item name="productProvider" xsi:type="object">Magento\Sitemap\Model\ItemProvider\Product</item>
             </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Sitemap\Model\ItemProvider\StoreUrl">
+        <arguments>
+            <argument name="configReader" xsi:type="object">Magento\Sitemap\Model\ItemProvider\StoreUrlConfigReader</argument>
         </arguments>
     </type>
     <type name="Magento\Sitemap\Model\ItemProvider\Category">

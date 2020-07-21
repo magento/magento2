@@ -40,18 +40,28 @@ class MethodList
     private $paymentMethodInstanceFactory;
 
     /**
+     * @var array
+     */
+    private $additionalChecks;
+
+    /**
      * @param \Magento\Payment\Helper\Data $paymentHelper
-     * @param Checks\SpecificationFactory $specificationFactory
+     * @param Checks\SpecificationFactory  $specificationFactory
+     * @param array                        $additionalChecks
      */
     public function __construct(
         \Magento\Payment\Helper\Data $paymentHelper,
-        \Magento\Payment\Model\Checks\SpecificationFactory $specificationFactory
+        \Magento\Payment\Model\Checks\SpecificationFactory $specificationFactory,
+        array $additionalChecks = []
     ) {
         $this->paymentHelper = $paymentHelper;
         $this->methodSpecificationFactory = $specificationFactory;
+        $this->additionalChecks = $additionalChecks;
     }
 
     /**
+     * Returns all available payment methods for the given quote.
+     *
      * @param \Magento\Quote\Api\Data\CartInterface $quote
      * @return \Magento\Payment\Model\MethodInterface[]
      */
@@ -80,12 +90,15 @@ class MethodList
     protected function _canUseMethod($method, \Magento\Quote\Api\Data\CartInterface $quote)
     {
         return $this->methodSpecificationFactory->create(
-            [
-                AbstractMethod::CHECK_USE_CHECKOUT,
-                AbstractMethod::CHECK_USE_FOR_COUNTRY,
-                AbstractMethod::CHECK_USE_FOR_CURRENCY,
-                AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
-            ]
+            array_merge(
+                [
+                    AbstractMethod::CHECK_USE_CHECKOUT,
+                    AbstractMethod::CHECK_USE_FOR_COUNTRY,
+                    AbstractMethod::CHECK_USE_FOR_CURRENCY,
+                    AbstractMethod::CHECK_ORDER_TOTAL_MIN_MAX,
+                ],
+                $this->additionalChecks
+            )
         )->isApplicable(
             $method,
             $quote

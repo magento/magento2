@@ -94,7 +94,7 @@ class AnnotationFormatValidator
             && $tokens[$shortPtr]['line'] + 1 === $tokens[$shortPtrEnd]['line']
             && $tokens[$shortPtrEnd]['code'] !== T_DOC_COMMENT_TAG
         ) {
-            $error = 'There must be exactly one blank line between lines';
+            $error = 'There must be exactly one blank line between lines short and long descriptions';
             $phpcsFile->addFixableError($error, $shortPtrEnd + 1, 'MethodAnnotation');
         }
         if ($shortPtrEnd != $shortPtr) {

@@ -1,23 +1,27 @@
-<?php
+<?php declare(strict_types=1);
+
+use Magento\Customer\Model\Attribute\Data\Postcode;
+use Magento\Customer\Model\Customer;
+use Magento\Framework\Module\Setup\Migration;
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 return [
     '$replaceRules' => [
         [
             'table',
             'field',
-            \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL,
-            \Magento\Framework\Module\Setup\Migration::FIELD_CONTENT_TYPE_PLAIN,
+            Migration::ENTITY_TYPE_MODEL,
+            Migration::FIELD_CONTENT_TYPE_PLAIN,
         ],
     ],
     '$tableData' => [
         ['field' => 'customer/customer'],
         ['field' => 'customer/attribute_data_postcode'],
         ['field' => 'customer/attribute_data_postcode::someMethod'],
-        ['field' => \Magento\Customer\Model\Customer::class],
+        ['field' => Customer::class],
     ],
     '$expected' => [
         'updates' => [
@@ -30,7 +34,7 @@ return [
             [
                 'table' => 'table',
                 'field' => 'field',
-                'to' => \Magento\Customer\Model\Attribute\Data\Postcode::class,
+                'to' => Postcode::class,
                 'from' => ['`field` = ?' => 'customer/attribute_data_postcode']
             ],
             [
@@ -41,14 +45,14 @@ return [
             ],
         ],
         'aliases_map' => [
-            \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL => [
+            Migration::ENTITY_TYPE_MODEL => [
                 'customer/customer' => \Magento\Customer\Model\Customer_FROM_MAP::class,
-                'customer/attribute_data_postcode' => \Magento\Customer\Model\Attribute\Data\Postcode::class,
+                'customer/attribute_data_postcode' => Postcode::class,
             ],
         ],
     ],
     '$aliasesMap' => [
-        \Magento\Framework\Module\Setup\Migration::ENTITY_TYPE_MODEL => [
+        Migration::ENTITY_TYPE_MODEL => [
             'customer/customer' => \Magento\Customer\Model\Customer_FROM_MAP::class,
         ],
     ]

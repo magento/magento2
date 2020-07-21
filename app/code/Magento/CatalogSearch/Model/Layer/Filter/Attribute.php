@@ -67,7 +67,8 @@ class Attribute extends AbstractFilter
 
         $labels = [];
         foreach ((array) $attributeValue as $value) {
-            $labels[] = (array) $this->getOptionText($value);
+            $label = $this->getOptionText($value);
+            $labels[] = is_array($label) ? $label : [$label];
         }
         $label = implode(',', array_unique(array_merge(...$labels)));
         $this->getLayer()

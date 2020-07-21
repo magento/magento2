@@ -20,6 +20,9 @@
         <!--Make sure that shipping and billing addresses are different-->
         <see userInput="Shipping Address" stepKey="seeShippingAddress"/>
         <see userInput="Billing Address" stepKey="seeBillingAddress"/>
-        <assertEquals stepKey="assert" actual="$billingAddr" expected="$shippingAddr"/>
+        <assertEquals stepKey="assert">
+			<actualResult type="const">$billingAddr</actualResult>
+			<expectedResult type="const">$shippingAddr</expectedResult>
+        </assertEquals>
     </actionGroup>
 </actionGroups>
