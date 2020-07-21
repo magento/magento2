@@ -61,8 +61,7 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
         <!-- 2. Navigate Go to "Catalog"->"Products" -->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="onCatalogProductPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="onCatalogProductPage"/>
 
         <!-- 3. Open separate tab with Storefront -->
         <openNewTab stepKey="openNewTab"/>
