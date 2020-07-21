@@ -39,7 +39,7 @@ class AddProductsToCart
         'Could not find a product with SKU' => self::ERROR_PRODUCT_NOT_FOUND,
         'The required options you selected are not available' => self::ERROR_NOT_SALABLE,
         'Product that you are trying to add is not available.' => self::ERROR_NOT_SALABLE,
-        'This product is out of stock' => self::ERROR_NOT_SALABLE,
+        'This product is out of stock' => self::ERROR_INSUFFICIENT_STOCK,
         'There are no source items' => self::ERROR_NOT_SALABLE,
         'The fewest you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
         'The most you may purchase is' => self::ERROR_INSUFFICIENT_STOCK,
@@ -153,6 +153,8 @@ class AddProductsToCart
                 __($e->getMessage())->render(),
                 $cartItemPosition
             );
+            $cart->setHasError(false);
+
             return;
         }
 

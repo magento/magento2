@@ -320,7 +320,7 @@ type SetGuestEmailOnCartOutput {
 }
 
 input EnteredOptionInput {
-    id: String! @doc(description: "base64 encoded option ID")
+    id: ID! @doc(description: "base64 encoded option ID")
     value: String!
 }
 
