@@ -95,8 +95,7 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
         <!-- Search for Order in the order grid -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
-        <waitForPageLoad time="30" stepKey="waitForOrderListPageLoad"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrdersPage"/>
         <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilter"/>
         <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="searchOrderNum"/>
         <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearch"/>
@@ -129,7 +128,7 @@
         <see selector="{{AdminInvoiceTotalSection.grandTotal}}" userInput="$113.00" stepKey="seeCorrectGrandTotal"/>
         <grabTextFrom selector="{{AdminInvoiceTotalSection.grandTotal}}" stepKey="grabInvoiceGrandTotal" after="seeCorrectGrandTotal"/>
 
-        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage1"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Processing" stepKey="seeOrderProcessing"/>
 
