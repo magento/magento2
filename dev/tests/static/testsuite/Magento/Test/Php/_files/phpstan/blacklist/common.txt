@@ -3,9 +3,10 @@
 # Example:
 # app/code/Magento/Catalog
 # dev/tests/static/framework/bootstrap.php
-lib/internal/Magento/Framework/Interception/Test/Unit/Config/ConfigTest.php
 lib/internal/Magento/Framework/Cache/Backend/Eaccelerator.php
 lib/internal/Magento/Framework/Image/Adapter/ImageMagick.php
+lib/internal/Magento/Framework/Interception/Test/Unit/Code/Generator/InterceptorTest.php
+lib/internal/Magento/Framework/Interception/Test/Unit/Config/ConfigTest.php
 dev/tests/integration/framework/deployTestModules.php
 dev/tests/integration/testsuite/Magento/Framework/Filter/DirectiveProcessor/SimpleDirectiveTest.php
 dev/tests/integration/testsuite/Magento/Framework/Session/ConfigTest.php
@@ -18,6 +19,3 @@ dev/tests/api-functional/testsuite/Magento/Integration/Model/AdminTokenServiceTe
 dev/tests/api-functional/testsuite/Magento/Integration/Model/CustomerTokenServiceTest.php
 app/code/Magento/Developer/Test/Unit/Console/Command/DevTestsRunCommandTest.php
 app/code/Magento/OfflineShipping/Test/Unit/Model/ResourceModel/Carrier/Tablerate/CSV/ColumnResolverTest.php
-app/code/Magento/Staging/Test/Unit/Model/Entity/Action/UpdateVersionTest.php
-app/code/Magento/Staging/Test/Unit/Model/Operation/DeleteTest.php
-app/code/Magento/Staging/Test/Unit/Model/Operation/Update/DefaultTemporaryUpdateProcessorTest.php

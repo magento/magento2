@@ -13,7 +13,6 @@
             <description>Filters the Admin Catalog Product page based on the provided Store Group and Custom Store.</description>
         </annotations>
         <arguments>
-            <argument name="StoreGroup" defaultValue="_defaultStoreGroup"/>
             <argument name="customStore" defaultValue="customStore.name"/>
         </arguments>
 

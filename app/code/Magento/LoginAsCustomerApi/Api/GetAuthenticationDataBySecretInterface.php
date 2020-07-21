@@ -18,11 +18,11 @@ use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
 interface GetAuthenticationDataBySecretInterface
 {
     /**
-     * Load login details based on secret key
+     * Get authentication data by secret
      *
-     * @param string $secretKey
+     * @param string $secret
      * @return AuthenticationDataInterface
      * @throws LocalizedException
      */
-    public function execute(string $secretKey): AuthenticationDataInterface;
+    public function execute(string $secret): AuthenticationDataInterface;
 }

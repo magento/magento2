@@ -59,4 +59,29 @@ QUERY;
         $this->assertEquals($block->getIdentifier(), $actualBlock['identifier']);
         $this->assertEquals($renderedContent, $actualBlock['content']);
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category_tree.php
+     */
+    public function testCategoryWithNoCmsBlock()
+    {
+        $query = <<<QUERY
+{
+    category(id: 401){
+        name
+        cms_block{
+            identifier
+            title
+            content
+        }
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertNotEmpty($response['category']);
+        $this->assertArrayHasKey('cms_block', $response['category']);
+        $this->assertEquals(null, $response['category']['cms_block']);
+    }
 }
