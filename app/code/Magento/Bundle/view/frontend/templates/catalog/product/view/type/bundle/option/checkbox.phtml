@@ -36,7 +36,7 @@
                                type="checkbox"
                                <?php if ($_option->getRequired()): ?>
                                     <?= /* @noEscape */ $dataValidation ?>
-                               <?php endif; ?>
+                                <?php endif; ?>
                                name="<?= /* @noEscape */ $inputName . '[' . $block->escapeHtmlAttr($sectionId) ?>]"
                                data-selector="<?= /* @noEscape */ $inputName.'['.$block->escapeHtmlAttr($sectionId)?>]"
                                <?php if ($block->isSelected($selection)) { echo ' checked="checked"'; } ?>
