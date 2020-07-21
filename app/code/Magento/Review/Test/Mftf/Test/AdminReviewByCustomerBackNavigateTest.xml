@@ -25,9 +25,6 @@
             <createData stepKey="createProduct1" entity="SimpleProduct">
                 <requiredEntity createDataKey="category"/>
             </createData>
-            <createData stepKey="createProduct2" entity="SimpleProduct">
-                <requiredEntity createDataKey="category"/>
-            </createData>
         </before>
 
         <after>
@@ -41,7 +38,6 @@
             </actionGroup>
             <!--delete Category and Products -->
             <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
-            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <!--Logout-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

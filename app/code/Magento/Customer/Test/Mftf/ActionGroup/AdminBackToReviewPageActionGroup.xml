@@ -10,6 +10,6 @@
     <actionGroup name="AdminBackToReviewPageActionGroup">
         <click selector="{{AdminEditCustomerGroupSection.backButton}}" stepKey="clickBackButton"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <see userInput="Edit Review" selector="{{AdminEditReviewSection.pageTitle}}" stepKey="verifyThatOnReviewPage"/>
+        <see userInput="Pending Reviews" selector="{{AdminEditReviewSection.pageTitle}}" stepKey="verifyThatOnReviewsPage"/>
     </actionGroup>
 </actionGroups>
