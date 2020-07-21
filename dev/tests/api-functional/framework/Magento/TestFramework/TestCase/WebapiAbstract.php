@@ -193,6 +193,17 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
         }
     }
 
+    public function run(TestResult $result = null): TestResult
+    {
+        $class = get_class($this);
+        if ($this instanceof GraphQlAbstract && preg_match('/Category/', $class)) {
+            return parent::run($result);
+        }
+
+        return $result;
+    }
+
+
     /**
      * Mark test to be executed for REST adapter only.
      *
