@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\SalesGraphQl\Model\Resolver\OrderItem;
+namespace Magento\SalesGraphQl\Model\OrderItem;
 
 use Magento\Sales\Api\Data\OrderItemInterface;
 

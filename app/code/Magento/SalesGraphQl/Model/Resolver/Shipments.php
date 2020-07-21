@@ -18,7 +18,7 @@ use Magento\Sales\Model\Order\Shipment;
 /**
  * Resolve shipment information for order
  */
-class OrderShipments implements ResolverInterface
+class Shipments implements ResolverInterface
 {
     /**
      * @inheritDoc

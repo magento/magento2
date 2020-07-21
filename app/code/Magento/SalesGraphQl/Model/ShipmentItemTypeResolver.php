@@ -7,20 +7,23 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model;
 
-use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**
- * Resolve concrete type for InvoiceItemInterface
+ * Resolve concrete type of ShipmentItemInterface
  */
-class InvoiceItemTypeResolver implements TypeResolverInterface
+class ShipmentItemTypeResolver implements TypeResolverInterface
 {
     /**
      * @var array
      */
     private $productTypeMap;
 
-    public function __construct($productTypeMap = [])
+    /**
+     * @param array $productTypeMap
+     */
+    public function __construct(array $productTypeMap = [])
     {
         $this->productTypeMap = $productTypeMap;
     }
@@ -31,13 +34,12 @@ class InvoiceItemTypeResolver implements TypeResolverInterface
     public function resolveType(array $data): string
     {
         if (!isset($data['product_type'])) {
-            throw new GraphQlInputException(
-                __('Missing key %1 in sales item data', ['product_type'])
-            );
+            throw new GraphQlInputException(__('Missing key %1 in sales item data', ['product_type']));
         }
         if (isset($this->productTypeMap[$data['product_type']])) {
             return $this->productTypeMap[$data['product_type']];
         }
+
         return $this->productTypeMap['default'];
     }
 }
