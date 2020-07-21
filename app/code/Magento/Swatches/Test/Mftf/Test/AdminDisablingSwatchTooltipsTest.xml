@@ -81,8 +81,7 @@
         </actionGroup>
 
         <!-- Create a configurable product to verify the storefront with -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad stepKey="waitForProductGridPage"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>
         <click selector="{{AdminProductGridActionSection.addConfigurableProduct}}"
                stepKey="clickOnAddConfigurableProduct"/>
