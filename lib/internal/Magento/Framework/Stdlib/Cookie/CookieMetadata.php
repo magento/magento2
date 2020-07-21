@@ -16,13 +16,13 @@ class CookieMetadata
     /**#@+
      * Constant for metadata value key.
      */
-    const KEY_DOMAIN = 'domain';
-    const KEY_PATH = 'path';
-    const KEY_SECURE = 'secure';
-    const KEY_HTTP_ONLY = 'http_only';
-    const KEY_DURATION = 'duration';
-    const KEY_SAME_SITE = 'samesite';
-    const SAME_SITE_ALLOWED_VALUES = [
+    public const KEY_DOMAIN = 'domain';
+    public const KEY_PATH = 'path';
+    public const KEY_SECURE = 'secure';
+    public const KEY_HTTP_ONLY = 'http_only';
+    public const KEY_DURATION = 'duration';
+    public const KEY_SAME_SITE = 'samesite';
+    private const SAME_SITE_ALLOWED_VALUES = [
         'strict' => 'Strict',
         'lax' => 'Lax',
         'none' => 'None',
@@ -150,22 +150,23 @@ class CookieMetadata
      * @param  string|null $sameSite
      * @return $this
      */
-    public function setSameSite($sameSite): CookieMetadata
+    public function setSameSite(?string $sameSite): CookieMetadata
     {
-        if (! array_key_exists(strtolower($sameSite), self::SAME_SITE_ALLOWED_VALUES)) {
+        if (!array_key_exists(strtolower($sameSite), self::SAME_SITE_ALLOWED_VALUES)) {
             throw new \InvalidArgumentException(
                 'Invalid argument provided for SameSite directive expected one of: Strict, Lax or None'
             );
         }
+        $sameSite = self::SAME_SITE_ALLOWED_VALUES[strtolower($sameSite)];
         return $this->set(self::KEY_SAME_SITE, $sameSite);
     }
 
     /**
      * Get Same Site Flag
      *
-     * @return bool|null
+     * @return string|null
      */
-    public function getSameSite()
+    public function getSameSite(): ?string
     {
         return $this->get(self::KEY_SAME_SITE);
     }

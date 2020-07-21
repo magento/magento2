@@ -149,7 +149,7 @@ class PhpCookieManager implements CookieManagerInterface
                 'domain' => $this->extractValue(CookieMetadata::KEY_DOMAIN, $metadataArray, ''),
                 'secure' => $this->extractValue(CookieMetadata::KEY_SECURE, $metadataArray, false),
                 'httponly' => $this->extractValue(CookieMetadata::KEY_HTTP_ONLY, $metadataArray, false),
-                'samesite' => $this->extractValue(CookieMetadata::KEY_SAME_SITE, $metadataArray, '')
+                'samesite' => $this->extractValue(CookieMetadata::KEY_SAME_SITE, $metadataArray, 'Lax')
             ]
         );
 

@@ -7,12 +7,23 @@
 namespace Magento\Framework\Stdlib\Cookie;
 
 /**
- * Class PublicCookieMetadata
+ * Public Cookie Attributes
  *
  * @api
  */
 class PublicCookieMetadata extends CookieMetadata
 {
+    /**
+     * @param array $metadata
+     */
+    public function __construct($metadata = [])
+    {
+        if (!isset($metadata[self::KEY_SAME_SITE])) {
+            $metadata[self::KEY_SAME_SITE] = 'Lax';
+        }
+        parent::__construct($metadata);
+    }
+
     /**
      * Set the number of seconds until the cookie expires
      *

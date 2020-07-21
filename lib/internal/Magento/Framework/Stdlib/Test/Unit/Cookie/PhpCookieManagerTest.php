@@ -345,7 +345,6 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
                         ],
                     ]
                 );
-            $sensitiveCookieMetadata->setSameSite('Strict');
 
             $this->scopeMock->expects($this->once())
                 ->method('getSensitiveCookieMetadata')
@@ -402,7 +401,6 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
                     ],
                 ]
             );
-            $publicCookieMetadata->setSameSite('Lax');
 
             $this->scopeMock->expects($this->once())
                 ->method('getPublicCookieMetadata')
@@ -645,7 +643,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             self::assertFalse($httpOnly);
             self::assertEquals('', $domain);
             self::assertEquals('', $path);
-            self::assertEquals('', $sameSite);
+            self::assertEquals('Lax', $sameSite);
         }
 
         /**
@@ -671,7 +669,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             self::assertTrue($httpOnly);
             self::assertEquals('', $domain);
             self::assertEquals('', $path);
-            self::assertEquals('', $sameSite);
+            self::assertEquals('Strict', $sameSite);
         }
 
         /**
@@ -697,7 +695,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             self::assertTrue($httpOnly);
             self::assertEquals('', $domain);
             self::assertEquals('', $path);
-            self::assertEquals('', $sameSite);
+            self::assertEquals('Strict', $sameSite);
         }
 
         /**
@@ -723,7 +721,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             self::assertTrue($httpOnly);
             self::assertEquals('', $domain);
             self::assertEquals('', $path);
-            self::assertEquals('', $sameSite);
+            self::assertEquals('Strict', $sameSite);
         }
 
         /**
@@ -775,7 +773,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             self::assertFalse($httpOnly);
             self::assertEquals('', $domain);
             self::assertEquals('', $path);
-            self::assertEquals('', $sameSite);
+            self::assertEquals('Lax', $sameSite);
         }
 
         /**
@@ -880,7 +878,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             self::assertFalse($httpOnly);
             self::assertEquals('', $domain);
             self::assertEquals('', $path);
-            self::assertEquals('', $sameSite);
+            self::assertEquals('Lax', $sameSite);
         }
 
         /**
@@ -896,7 +894,12 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
                 ->willReturn($return);
         }
 
-        public function testSetCookieInvalidSameSiteValue()
+        /**
+         * Test Set Invalid Same Site Cookie
+         *
+         * @return void
+         */
+        public function testSetCookieInvalidSameSiteValue(): void
         {
             /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata $cookieMetadata */
             $cookieMetadata = $this->objectManager->getObject(

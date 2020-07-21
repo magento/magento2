@@ -189,6 +189,7 @@ class SensitiveCookieMetadataTest extends TestCase
                     SensitiveCookieMetadata::KEY_DOMAIN => 'domain',
                     SensitiveCookieMetadata::KEY_PATH => 'path',
                     SensitiveCookieMetadata::KEY_HTTP_ONLY => 1,
+                    SensitiveCookieMetadata::KEY_SAME_SITE => 'Strict',
                 ],
                 0,
             ],
@@ -203,6 +204,7 @@ class SensitiveCookieMetadataTest extends TestCase
                     SensitiveCookieMetadata::KEY_DOMAIN => 'domain',
                     SensitiveCookieMetadata::KEY_PATH => 'path',
                     SensitiveCookieMetadata::KEY_HTTP_ONLY => 1,
+                    SensitiveCookieMetadata::KEY_SAME_SITE => 'Strict',
                 ],
             ],
             'without secure 2' => [
@@ -216,6 +218,7 @@ class SensitiveCookieMetadataTest extends TestCase
                     SensitiveCookieMetadata::KEY_DOMAIN => 'domain',
                     SensitiveCookieMetadata::KEY_PATH => 'path',
                     SensitiveCookieMetadata::KEY_HTTP_ONLY => 1,
+                    SensitiveCookieMetadata::KEY_SAME_SITE => 'Strict',
                 ],
             ],
         ];

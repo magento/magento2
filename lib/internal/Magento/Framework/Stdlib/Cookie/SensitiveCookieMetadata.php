@@ -9,7 +9,7 @@ namespace Magento\Framework\Stdlib\Cookie;
 use Magento\Framework\App\RequestInterface;
 
 /**
- * Class SensitiveCookieMetadata
+ * Sensitive Cookie Attributes
  *
  * The class has only methods extended from CookieMetadata
  * as path and domain are only data to be exposed by SensitiveCookieMetadata
@@ -32,12 +32,15 @@ class SensitiveCookieMetadata extends CookieMetadata
         if (!isset($metadata[self::KEY_HTTP_ONLY])) {
             $metadata[self::KEY_HTTP_ONLY] = true;
         }
+        if (!isset($metadata[self::KEY_SAME_SITE])) {
+            $metadata[self::KEY_SAME_SITE] = 'Strict';
+        }
         $this->request = $request;
         parent::__construct($metadata);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getSecure()
     {
@@ -46,7 +49,7 @@ class SensitiveCookieMetadata extends CookieMetadata
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function __toArray()
     {
