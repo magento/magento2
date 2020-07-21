@@ -64,6 +64,7 @@
 
         <!-- Create simple product with categories created in create data -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductsGrid"/>
+
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
