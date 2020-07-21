@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\MediaGallery\Model\ResourceModel;
 
 use Behat\Gherkin\Keywords\KeywordsInterface;
-use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
-use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterfaceFactory;
 use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterface;
+use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterfaceFactory;
+use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsKeywordsInterface;
 use Magento\MediaGalleryApi\Api\SaveAssetsKeywordsInterface;
@@ -66,8 +66,8 @@ class AssetKeywordsTest extends TestCase
      *
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
      * @dataProvider keywordsProvider
-     * @param array|null $keywords
-     * @param array|null $updatedKeywords
+     * @param string[] $keywords
+     * @param string[] $updatedKeywords
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testSaveAndGetKeywords(array $keywords = [], array $updatedKeywords = []): void
@@ -77,16 +77,17 @@ class AssetKeywordsTest extends TestCase
         $loadedAsset = current($loadedAssets);
 
         $this->updateAssetKeywords($loadedAsset->getId(), $keywords);
-        $this->updateAssetKeywords($loadedAsset->getId(), $updatedKeywords);
+        $this->updateAssetKeywords($loadedAsset->getId(), $updatedKeywords, $keywords);
     }
 
     /**
      * Update Asset keywords
      *
      * @param int $assetId
-     * @param array|null $keywords
+     * @param string[] $keywords
+     * @param string[] $currentKeywords
      */
-    private function updateAssetKeywords(int $assetId, array $keywords = []): void
+    private function updateAssetKeywords(int $assetId, array $keywords = [], array $currentKeywords = []): void
     {
         $assetKeywords = $this->assetsKeywordsFactory->create(
             [
@@ -98,25 +99,28 @@ class AssetKeywordsTest extends TestCase
         $this->saveAssetsKeywords->execute([$assetKeywords]);
         $loadedAssetKeywords = $this->getAssetsKeywords->execute([$assetId]);
 
-        if (!empty($keywords)) {
-            $this->assertCount(1, $loadedAssetKeywords);
-            /** @var AssetKeywordsInterface $loadedAssetKeyword */
-            $loadedAssetKeyword = current($loadedAssetKeywords);
+        $currentKeywords = empty($keywords) ? $currentKeywords : $keywords;
+        $expectedCount = !empty($currentKeywords) ? 1 : 0;
 
-            $loadedKeywords = $loadedAssetKeyword->getKeywords();
+        $this->assertCount($expectedCount, $loadedAssetKeywords);
+        /** @var AssetKeywordsInterface $loadedAssetKeyword */
+        $loadedAssetKeyword = current($loadedAssetKeywords);
 
-            $this->assertEquals(count($keywords), count($loadedKeywords));
+        $loadedKeywords = !empty($loadedAssetKeyword) ? $loadedAssetKeyword->getKeywords() : [];
 
-            $loadedKeywordStrings = [];
+        $this->assertEquals(count($currentKeywords), count($loadedKeywords));
+
+        $loadedKeywordStrings = [];
+        if (!empty($loadedKeywords)) {
             foreach ($loadedKeywords as $loadedKeywordObject) {
                 $loadedKeywordStrings[] = $loadedKeywordObject->getKeyword();
             }
-
-            sort($loadedKeywordStrings);
-            sort($keywords);
-
-            $this->assertEquals($keywords, $loadedKeywordStrings);
         }
+
+        sort($loadedKeywordStrings);
+        sort($currentKeywords);
+
+        $this->assertEquals($currentKeywords, $loadedKeywordStrings);
     }
 
     /**

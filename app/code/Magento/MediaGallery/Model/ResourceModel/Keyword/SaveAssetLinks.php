@@ -88,35 +88,29 @@ class SaveAssetLinks
      *
      * @param int $assetId
      * @param int[] $keywordIds
-     * @throws CouldNotSaveException
      */
     private function insertAssetKeywords(int $assetId, array $keywordIds): void
     {
+        if (empty($keywordIds)) {
+            return;
+        }
         try {
-            if (!empty($keywordIds)) {
-                $values = [];
+            $values = [];
 
-                foreach ($keywordIds as $keywordId) {
-                    $values[] = [$assetId, $keywordId];
-                }
-
-                if (!empty($values)) {
-                    /** @var Mysql $connection */
-                    $connection = $this->resourceConnection->getConnection();
-                    $connection->insertArray(
-                        $this->resourceConnection->getTableName(self::TABLE_ASSET_KEYWORD),
-                        [self::FIELD_ASSET_ID, self::FIELD_KEYWORD_ID],
-                        $values,
-                        AdapterInterface::INSERT_IGNORE
-                    );
-                }
+            foreach ($keywordIds as $keywordId) {
+                $values[] = [$assetId, $keywordId];
             }
+
+            /** @var Mysql $connection */
+            $connection = $this->resourceConnection->getConnection();
+            $connection->insertArray(
+                $this->resourceConnection->getTableName(self::TABLE_ASSET_KEYWORD),
+                [self::FIELD_ASSET_ID, self::FIELD_KEYWORD_ID],
+                $values,
+                AdapterInterface::INSERT_IGNORE
+            );
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
-            throw new CouldNotSaveException(
-                __('Could not save asset keyword links'),
-                $exception
-            );
         }
     }
 
@@ -129,20 +123,21 @@ class SaveAssetLinks
      */
     private function deleteAssetKeywords(int $assetId, array $obsoleteKeywordIds): void
     {
+        if (empty($obsoleteKeywordIds)) {
+            return;
+        }
         try {
-            if (!empty($obsoleteKeywordIds)) {
-                /** @var Mysql $connection */
-                $connection = $this->resourceConnection->getConnection();
-                $connection->delete(
-                    $connection->getTableName(
-                        self::TABLE_ASSET_KEYWORD
-                    ),
-                    [
-                        self::FIELD_KEYWORD_ID . ' in (?)' => $obsoleteKeywordIds,
-                        self::FIELD_ASSET_ID . ' = ?' => $assetId
-                    ]
-                );
-            }
+            /** @var Mysql $connection */
+            $connection = $this->resourceConnection->getConnection();
+            $connection->delete(
+                $connection->getTableName(
+                    self::TABLE_ASSET_KEYWORD
+                ),
+                [
+                    self::FIELD_KEYWORD_ID . ' in (?)' => $obsoleteKeywordIds,
+                    self::FIELD_ASSET_ID . ' = ?' => $assetId
+                ]
+            );
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             throw new CouldNotDeleteException(
