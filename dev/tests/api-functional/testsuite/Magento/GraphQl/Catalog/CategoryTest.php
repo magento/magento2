@@ -19,6 +19,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQl\ResponseContainsErrorsException;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\TestFramework\Workaround\ConsumerInvoker;
 
 /**
  * Test loading of category tree
@@ -51,6 +52,8 @@ class CategoryTest extends GraphQlAbstract
         $this->categoryRepository = $this->objectManager->get(CategoryRepository::class);
         $this->store = $this->objectManager->get(Store::class);
         $this->metadataPool = $this->objectManager->get(MetadataPool::class);
+        $consumerInvoker = $this->objectManager->create(ConsumerInvoker::class);
+        $consumerInvoker->invoke();
     }
 
     /**
