@@ -11,7 +11,6 @@ namespace Magento\CatalogUrlRewrite\Observer;
 use Magento\Catalog\Model\Product;
 use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\Observer;
 use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 use Magento\UrlRewrite\Model\UrlPersistInterface;
@@ -40,17 +39,16 @@ class ProductProcessUrlRewriteSavingObserver implements ObserverInterface
     /**
      * @param ProductUrlRewriteGenerator $productUrlRewriteGenerator
      * @param UrlPersistInterface $urlPersist
-     * @param ProductUrlPathGenerator|null $productUrlPathGenerator
+     * @param ProductUrlPathGenerator $productUrlPathGenerator
      */
     public function __construct(
         ProductUrlRewriteGenerator $productUrlRewriteGenerator,
         UrlPersistInterface $urlPersist,
-        ProductUrlPathGenerator $productUrlPathGenerator = null
+        ProductUrlPathGenerator $productUrlPathGenerator
     ) {
         $this->productUrlRewriteGenerator = $productUrlRewriteGenerator;
         $this->urlPersist = $urlPersist;
-        $this->productUrlPathGenerator = $productUrlPathGenerator
-            ?: ObjectManager::getInstance()->get(ProductUrlPathGenerator::class);
+        $this->productUrlPathGenerator = $productUrlPathGenerator;
     }
 
     /**

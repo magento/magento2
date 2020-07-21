@@ -17,7 +17,8 @@ use Magento\UrlRewrite\Model\Exception\UrlAlreadyExistsException;
 /**
  * Consider URL rewrites on change product visibility via mass action
  *
- * @deprecated Url rewrites will be created for products with all visibility types.
+ * @deprecated Class isn't used anymore. Url rewrites will be created for products with all visibility types.
+ * @see \Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteSavingObserver
  */
 class ProcessUrlRewriteOnChangeProductVisibilityObserver implements ObserverInterface
 {

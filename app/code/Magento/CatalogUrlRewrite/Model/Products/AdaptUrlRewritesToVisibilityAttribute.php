@@ -21,7 +21,8 @@ use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 /**
  * Save/Delete UrlRewrites by Product ID's and visibility
  *
- * @deprecated Url rewrites will be created for products with all visibility types.
+ * @deprecated Class isn't used anymore. Url rewrites will be created for products with all visibility types.
+ * @see \Magento\CatalogUrlRewrite\Observer\ProductProcessUrlRewriteSavingObserver
  */
 class AdaptUrlRewritesToVisibilityAttribute
 {

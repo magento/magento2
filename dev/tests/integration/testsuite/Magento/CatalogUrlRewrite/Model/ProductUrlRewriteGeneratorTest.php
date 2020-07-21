@@ -11,6 +11,7 @@ namespace Magento\CatalogUrlRewrite\Model;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -89,7 +90,7 @@ class ProductUrlRewriteGeneratorTest extends TestCase
         $urls = $this->model->generate($product);
 
         return array_map(
-            function ($url) {
+            function (UrlRewrite $url) {
                 return $url->getRequestPath();
             },
             $urls
