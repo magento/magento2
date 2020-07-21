@@ -35,7 +35,7 @@ class Invoice extends AbstractPdf
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Store\Model\App\Emulation|null $appEmulation
+     * @param \Magento\Store\Model\App\Emulation $appEmulation
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
