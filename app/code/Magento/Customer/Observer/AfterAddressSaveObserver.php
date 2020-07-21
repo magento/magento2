@@ -136,6 +136,7 @@ class AfterAddressSaveObserver implements ObserverInterface
 
             if ($customerAddress->getVatId() == ''
                 || !$this->_customerVat->isCountryInEU($customerAddress->getCountry())
+                || $customerAddress->getShouldIgnoreValidation()
             ) {
                 $defaultGroupId = $this->_groupManagement->getDefaultGroup($customer->getStore())->getId();
                 if (!$customer->getDisableAutoGroupChange() && $customer->getGroupId() != $defaultGroupId) {
