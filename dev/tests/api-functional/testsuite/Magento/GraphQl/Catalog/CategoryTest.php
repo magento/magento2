@@ -53,7 +53,7 @@ class CategoryTest extends GraphQlAbstract
         $this->store = $this->objectManager->get(Store::class);
         $this->metadataPool = $this->objectManager->get(MetadataPool::class);
         $consumerInvoker = $this->objectManager->create(ConsumerInvoker::class);
-        $consumerInvoker->invoke();
+        $consumerInvoker->invokeSpecificSize(10000);
     }
 
     /**
