@@ -236,7 +236,6 @@ class CategoryRepositoryTest extends WebapiAbstract
         $result = $this->updateCategory($categoryId, $categoryData);
         $this->assertEquals($categoryId, $result['id']);
 
-
         $categoryData = [
             'name' => 'Update Category Test New Name',
             'custom_attributes' => [
@@ -256,9 +255,8 @@ class CategoryRepositoryTest extends WebapiAbstract
         $model = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\Category::class);
         $category = $model->load($categoryId);
         $this->assertEquals("Update Category Test New Name", $category->getName());
-        // delete category to clean up auto-generated url rewrites
 
-
+        // check for the url rewrite for the new name
         $storage = Bootstrap::getObjectManager()->get(\Magento\UrlRewrite\Model\Storage\DbStorage::class);
         $data = [
             UrlRewrite::ENTITY_ID => $categoryId,
@@ -276,7 +274,7 @@ class CategoryRepositoryTest extends WebapiAbstract
         $this->assertEquals('update-category-test-new-name.html', $urlRewrite->getRequestPath());
 
 
-        // check for the forward
+        // check for the forward from the old name to the new name
         $storage = Bootstrap::getObjectManager()->get(\Magento\UrlRewrite\Model\Storage\DbStorage::class);
         $data = [
             UrlRewrite::ENTITY_ID => $categoryId,
