@@ -29,6 +29,11 @@ use Magento\Deploy\Service\DeployStaticContent;
 class DeployStaticContentCommand extends Command
 {
     /**
+     * Default value for language
+     */
+    const DEFAULT_LANGUAGE_VALUE = 'en_US';
+
+    /**
      * @var InputValidator
      */
     private $inputValidator;
