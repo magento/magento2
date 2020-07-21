@@ -377,7 +377,7 @@ define([
 
             this._contentUpdated();
 
-            setTimeout(function(){
+            setTimeout(function () {
                 dragging = false;
             }, 1500);
             dragging = true;
