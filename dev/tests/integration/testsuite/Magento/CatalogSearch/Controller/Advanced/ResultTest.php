@@ -69,6 +69,41 @@ class ResultTest extends AbstractController
     }
 
     /**
+     * Advanced search test by difference product attributes.
+     *
+     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
+     * @magentoAppArea frontend
+     * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search_with_hyphen_in_sku.php
+     * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
+     *
+     * @return void
+     */
+    public function testExecuteSkuWithHyphen(): void
+    {
+        $this->getRequest()->setQuery(
+            $this->_objectManager->create(
+                Parameters::class,
+                [
+                    'values' => [
+                        'name' => '',
+                        'sku' => '24-mb01',
+                        'description' => '',
+                        'short_description' => '',
+                        'price' => [
+                            'from' => '',
+                            'to' => '',
+                        ],
+                        'test_searchable_attribute' => '',
+                    ]
+                ]
+            )
+        );
+        $this->dispatch('catalogsearch/advanced/result');
+        $responseBody = $this->getResponse()->getBody();
+        $this->assertContains('Simple product name', $responseBody);
+    }
+
+    /**
      * Data provider with strings for quick search.
      *
      * @return array
