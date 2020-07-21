@@ -50,89 +50,8 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
      */
     public function testGetCustomerOrdersSimpleProductQuery()
     {
-        $query =
-            <<<QUERY
-{
-  customer
-  {
-   orders(filter:{number:{eq:"100000002"}}){
-    total_count
-    items
-    {
-      id
-      number
-      status
-      order_date
-      payment_methods
-      {
-        name
-        type
-        additional_data
-        {
-         name
-         value
-         }
-      }
-      shipping_address {
-         ... address
-      }
-      billing_address {
-      ... address
-      }
-      items{
-        quantity_ordered
-        product_sku
-        product_name
-        product_sale_price{currency value}
-      }
-      total {
-                    base_grand_total {
-                        value
-                        currency
-                    }
-                    grand_total {
-                        value
-                        currency
-                    }
-                    subtotal {
-                        value
-                        currency
-                    }
-
-                }
-    }
-   }
- }
-}
-
-fragment address on OrderAddress {
-          firstname
-          lastname
-          city
-          company
-          country_code
-          fax
-          middlename
-          postcode
-          prefix
-          street
-          region
-          region_id
-          suffix
-          telephone
-          vat_id
-        }
-QUERY;
-
-        $currentEmail = 'customer@example.com';
-        $currentPassword = 'password';
-        $response = $this->graphQlQuery(
-            $query,
-            [],
-            '',
-            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
-        );
-
+        $orderNumber = '100000002';
+        $response = $this->getCustomerOrderQueryOnSimpleProducts($orderNumber);
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $this->assertNotEmpty($response['customer']['orders']['items']);
@@ -198,14 +117,12 @@ QUERY;
             'company' => 'Test company',
             'country_code' => 'US',
             'postcode' => '78717',
-            'prefix' => 'John',
             'region' => 'Texas',
             'region_id' => '57',
             'street' => [
                 0 => 'test street 1',
                 1 => 'test street 2',
             ],
-            'suffix' => 'John',
             'telephone' => '5123456677'
         ];
         $this->assertResponseFields($customerOrderResponse[0]["billing_address"], $billingAssertionMap);
@@ -216,14 +133,12 @@ QUERY;
             'company' => 'test company',
             'country_code' => 'US',
             'postcode' => '36013',
-            'prefix' => 'test shipFirst',
             'street' => [
                 0 => 'test street 1',
                 1 => 'test street 2',
             ],
             'region_id' => '1',
             'region' => 'Alabama',
-            'suffix' => 'test shipFirst',
             'telephone' => '3347665522'
         ];
         $this->assertResponseFields($customerOrderResponse[0]["shipping_address"], $shippingAssertionMap);
@@ -1348,11 +1263,9 @@ QUERY;
           fax
           middlename
           postcode
-          prefix
           street
           region
           region_id
-          suffix
           telephone
           vat_id
         }
@@ -1369,6 +1282,98 @@ QUERY;
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         return $response['customer']['orders']['items'];
+    }
+
+    /**
+     * Get customer order query
+     *
+     * @param string $orderNumber
+     * @return array
+     */
+    private function getCustomerOrderQueryOnSimpleProducts($orderNumber): array
+    {
+        $query =
+            <<<QUERY
+{
+  customer
+  {
+   orders(filter:{number:{eq:"{$orderNumber}"}}) {
+    total_count
+    items
+    {
+      id
+      number
+      status
+      order_date
+      payment_methods
+      {
+        name
+        type
+        additional_data
+        {
+         name
+         value
+         }
+      }
+      shipping_address {
+         ... address
+      }
+      billing_address {
+      ... address
+      }
+      items{
+        quantity_ordered
+        product_sku
+        product_name
+        product_sale_price{currency value}
+      }
+      total {
+             base_grand_total {
+                        value
+                        currency
+                    }
+                    grand_total {
+                        value
+                        currency
+                    }
+                    subtotal {
+                        value
+                        currency
+                    }
+                }
+    }
+   }
+ }
+}
+
+fragment address on OrderAddress {
+          firstname
+          lastname
+          city
+          company
+          country_code
+          fax
+          middlename
+          postcode
+          street
+          region
+          region_id
+          telephone
+          vat_id
+        }
+QUERY;
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
+
+        $this->assertArrayHasKey('orders', $response['customer']);
+        $this->assertArrayHasKey('items', $response['customer']['orders']);
+        return $response;
     }
 
     /**
