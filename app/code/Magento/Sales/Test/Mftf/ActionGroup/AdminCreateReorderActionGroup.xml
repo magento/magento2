@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateReorderActionGroup">
+        <annotations>
+            <description>Goto on the Admin Order view page. Clicks on 'Reorder'. Clicks on 'Submit order'.</description>
+        </annotations>
+        <arguments>
+            <argument name="entityId" type="string"/>
+        </arguments>
+        <amOnPage url="{{AdminOrderPage.url(entityId)}}" stepKey="openOrder"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickReorder"/>
+        <click selector="{{OrdersGridSection.submitOrder}}" stepKey="submitOrder"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see stepKey="seeSuccessMessageForOrder" userInput="You created the order."/>
+    </actionGroup>
+</actionGroups>

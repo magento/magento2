@@ -518,7 +518,10 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $session->setCustomerId($order->getCustomerId() ?: false);
         $session->setStoreId($order->getStoreId());
         if ($session->getData('reordered')) {
-            $this->getQuote()->setCustomerGroupId($order->getCustomerGroupId());
+            $customerGroupId = $this->verifyCustomerGroup($order) ?
+                $order->getCustomerGroupId() :
+                $this->getQuote()->getCustomerGroupId();
+            $this->getQuote()->setCustomerGroupId($customerGroupId);
         }
 
         /* Initialize catalog rule data with new session values */
@@ -567,6 +570,10 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
 
         $this->_objectCopyService->copyFieldsetToTarget('sales_copy_order', 'to_edit', $order, $quote);
 
+        if ($session->getData('reordered')) {
+            $this->getQuote()->setCustomerGroupId($customerGroupId);
+        }
+
         $this->_eventManager->dispatch('sales_convert_order_to_quote', ['order' => $order, 'quote' => $quote]);
 
         if (!$order->getCustomerId()) {
@@ -595,6 +602,22 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $this->quoteRepository->save($quote);
 
         return $this;
+    }
+
+    /**
+     * Verify exist customer group
+     *
+     * @param Order $order
+     * @return bool
+     */
+    private function verifyCustomerGroup(Order $order): bool
+    {
+        try {
+            $this->groupRepository->getById($order->getCustomerGroupId());
+            return true;
+        } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            return false;
+        }
     }
 
     /**

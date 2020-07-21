@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminReorderAfterDeleteCustomerGroupTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Github issue: #29059 Error at reorder for order with no longer existing customer group id."/>
+            <title value="Unable to create 'Reorder'."/>
+            <description value="Unable to create 'Reorder' after deleting customer group."/>
+            <severity value="CRITICAL"/>
+            <group value="sales"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProductApi"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createSimpleProductApi" stepKey="deleteSimpleProductApi"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+
+        <actionGroup ref="AdminCreateCustomerGroupActionGroup" stepKey="createCustomerGroup">
+            <argument name="groupName" value="{{CustomCustomerGroup.code}}"/>
+            <argument name="taxClass" value="{{CustomCustomerGroup.tax_class_name}}"/>
+        </actionGroup>
+
+        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+
+        <actionGroup ref="NavigateToAllCustomerPage" stepKey="navigateToCustomersPage"/>
+        <actionGroup ref="AdminFilterCustomerGridByEmail" stepKey="filterCustomer">
+            <argument name="email" value="$$createCustomer.email$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSelectCustomerByEmail" stepKey="selectCustomer">
+            <argument name="customerEmail" value="$$createCustomer.email$$"/>
+        </actionGroup>
+        <actionGroup ref="SetCustomerGroupForSelectedCustomersViaGrid" stepKey="setCustomerGroup">
+            <argument name="groupName" value="{{CustomCustomerGroup.code}}"/>
+        </actionGroup>
+
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$$createSimpleProductApi$$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId"/>
+
+        <actionGroup ref="AdminDeleteCustomerGroupActionGroup" stepKey="deleteCustomerGroup">
+            <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
+        </actionGroup>
+
+        <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
+        <magentoCLI command="cache:flush" stepKey="flushCache1"/>
+
+        <actionGroup ref="AdminCreateReorderActionGroup" stepKey="createReorder">
+            <argument name="entityId" value="{$getOrderId}" />
+        </actionGroup>
+    </test>
+</tests>

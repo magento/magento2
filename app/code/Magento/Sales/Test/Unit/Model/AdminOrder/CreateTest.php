@@ -451,7 +451,7 @@ class CreateTest extends TestCase
         $this->orderMock->method('getCouponCode')
             ->willReturn(true);
 
-        $quote->expects($this->once())
+        $quote->expects($this->atLeastOnce())
             ->method('setCustomerGroupId');
 
         $this->adminOrderCreate->initFromOrder($this->orderMock);
