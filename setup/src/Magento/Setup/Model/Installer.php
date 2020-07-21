@@ -1660,5 +1660,6 @@ class Installer
     public function removeUnusedTriggers(): void
     {
         $this->triggerCleaner->unsubscribe();
+        $this->cleanCaches();
     }
 }
