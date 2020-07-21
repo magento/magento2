@@ -19,7 +19,7 @@ use Magento\Framework\Webapi\Rest\Request as RestRequest;
  */
 class InputParamsResolver
 {
-    const SAVE_REWRITES_HISTORY = 'save_rewrites_history';
+    private const SAVE_REWRITES_HISTORY = 'save_rewrites_history';
 
     /**
      * @var RestRequest
