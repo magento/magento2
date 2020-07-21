@@ -28,11 +28,6 @@ class DependencyCheckerTest extends TestCase
     private $packageInfoMock;
 
     /**
-     * @var PackageInfoFactory|MockObject
-     */
-    private $packageInfoFactoryMock;
-
-    /**
      * @var ModuleList|MockObject
      */
     private $listMock;
