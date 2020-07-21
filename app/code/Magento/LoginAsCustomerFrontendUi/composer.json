@@ -3,10 +3,10 @@
     "description": "",
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "103.0.*",
-        "magento/module-login-as-customer-api": "100.4.*",
-        "magento/module-customer": "103.0.*",
-        "magento/module-store": "101.1.*"
+        "magento/framework": "*",
+        "magento/module-login-as-customer-api": "*",
+        "magento/module-customer": "*",
+        "magento/module-store": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -14,12 +14,9 @@
         "AFL-3.0"
     ],
     "autoload": {
-        "files": [
-            "registration.php"
-        ],
+        "files": [ "registration.php" ],
         "psr-4": {
             "Magento\\LoginAsCustomerFrontendUi\\": ""
         }
-    },
-    "version": "100.4.0"
+    }
 }

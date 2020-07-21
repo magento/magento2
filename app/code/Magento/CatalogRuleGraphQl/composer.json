@@ -4,10 +4,10 @@
     "type": "magento2-module",
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "103.0.*"
+        "magento/framework": "*"
     },
     "suggest": {
-        "magento/module-catalog-rule": "101.2.*"
+        "magento/module-catalog-rule": "*"
     },
     "license": [
         "OSL-3.0",
@@ -20,6 +20,5 @@
         "psr-4": {
             "Magento\\CatalogRuleGraphQl\\": ""
         }
-    },
-    "version": "100.4.0"
+    }
 }

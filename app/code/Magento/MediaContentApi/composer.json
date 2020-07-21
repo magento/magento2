@@ -3,8 +3,8 @@
     "description": "Magento module provides the API interfaces for managing relations between content and media files used in that content",
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/module-media-gallery-api": "101.0.*",
-        "magento/framework": "103.0.*"
+        "magento/module-media-gallery-api": "*",
+        "magento/framework": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -18,6 +18,5 @@
         "psr-4": {
             "Magento\\MediaContentApi\\": ""
         }
-    },
-    "version": "100.4.0"
+    }
 }

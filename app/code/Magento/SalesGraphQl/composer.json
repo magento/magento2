@@ -4,9 +4,9 @@
     "type": "magento2-module",
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "103.0.*",
-        "magento/module-sales": "103.0.*",
-        "magento/module-graph-ql": "100.4.*"
+        "magento/framework": "*",
+        "magento/module-sales": "*",
+        "magento/module-graph-ql": "*"
     },
     "license": [
         "OSL-3.0",
@@ -19,6 +19,5 @@
         "psr-4": {
             "Magento\\SalesGraphQl\\": ""
         }
-    },
-    "version": "100.4.0"
+    }
 }

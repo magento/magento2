@@ -4,12 +4,12 @@
     "type": "magento2-module",
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/module-catalog": "104.0.*",
-        "magento/module-configurable-product": "100.4.*",
-        "magento/module-catalog-graph-ql": "100.4.*",
-        "magento/module-quote": "101.2.*",
-        "magento/module-quote-graph-ql": "100.4.*",
-        "magento/framework": "103.0.*"
+        "magento/module-catalog": "*",
+        "magento/module-configurable-product": "*",
+        "magento/module-catalog-graph-ql": "*",
+        "magento/module-quote": "*",
+        "magento/module-quote-graph-ql": "*",
+        "magento/framework": "*"
     },
     "license": [
         "OSL-3.0",
@@ -22,6 +22,5 @@
         "psr-4": {
             "Magento\\ConfigurableProductGraphQl\\": ""
         }
-    },
-    "version": "100.4.0"
+    }
 }
