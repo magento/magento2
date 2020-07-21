@@ -52,11 +52,11 @@ class CategoryTest extends GraphQlAbstract
         $this->categoryRepository = $this->objectManager->get(CategoryRepository::class);
         $this->store = $this->objectManager->get(Store::class);
         $this->metadataPool = $this->objectManager->get(MetadataPool::class);
-        $consumerInvoker = $this->objectManager->create(ConsumerInvoker::class);
-        $consumerInvoker->invokeSpecificSize(10000);
     }
 
     /**
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -132,6 +132,8 @@ QUERY;
     }
 
     /**
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -206,6 +208,8 @@ QUERY;
     }
 
     /**
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      */
     public function testCategoriesTreeWithDisabledCategory()
@@ -242,6 +246,8 @@ QUERY;
     }
 
     /**
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      */
     public function testGetCategoryById()
@@ -281,6 +287,8 @@ QUERY;
     }
 
     /**
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      */
     public function testGetCategoryIdZero()
