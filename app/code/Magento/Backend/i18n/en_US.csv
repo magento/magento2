@@ -408,6 +408,9 @@ Web,Web
                     ","
                         <strong class=""colorRed">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third-party services (e.g. PayPal etc.).
                     "
+"<strong style=""color:red"">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third-party services (e.g. PayPal etc.).","<strong style=""color:red"">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third-party services (e.g. PayPal etc.)."
+"Enable Frontend Resize","Enable Frontend Resize"
+"Resize performed via javascript before file upload.","Resize performed via javascript before file upload."
 "Auto-redirect to Base URL","Auto-redirect to Base URL"
 "Search Engine Optimization","Search Engine Optimization"
 "Use Web Server Rewrites","Use Web Server Rewrites"

@@ -93,9 +93,31 @@ class Current extends Template
      */
     public function isCurrent()
     {
+        $urlByPath = preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getUrl($this->getPath()));
         return $this->getCurrent() ||
-            preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getUrl($this->getPath()))
-            == preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getUrl($this->getMca()));
+            ($urlByPath == preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getUrl($this->getMca()))) ||
+            $this->isCurrentCmsUrl($urlByPath);
+    }
+
+    /**
+     * Get Current displayed page url
+     *
+     * @return string
+     */
+    private function getCurrentUrl()
+    {
+        return $this->getUrl('*/*/*', ['_current' => false, '_use_rewrite' => true]);
+    }
+
+    /**
+     * Check if link URL equivalent to URL of currently displayed CMS page
+     *
+     * @param string $urlByPath
+     * @return bool
+     */
+    private function isCurrentCmsUrl($urlByPath)
+    {
+        return ($urlByPath == preg_replace(self::REGEX_INDEX_URL_PATTERN, '', $this->getCurrentUrl()));
     }
 
     /**

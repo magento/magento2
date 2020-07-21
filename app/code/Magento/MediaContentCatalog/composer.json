@@ -6,6 +6,7 @@
         "magento/module-media-content-api": "*",
         "magento/module-catalog": "*",
         "magento/module-eav": "*",
+        "magento/module-store": "*",
         "magento/framework": "*"
     },
     "type": "magento2-module",

@@ -232,9 +232,8 @@
         <see userInput="You saved the rule." selector="{{ContentManagementSection.StoreConfigurationPageSuccessMessage}}" stepKey="seeMessage"/>
         <see userInput="Updated rules applied." selector="{{ContentManagementSection.StoreConfigurationPageSuccessMessage}}" stepKey="seeSuccessMessage"/>
 
-        <!-- Run cron twice -->
-        <magentoCLI command="cron:run" stepKey="runCron1"/>
-        <magentoCLI command="cron:run" stepKey="runCron2"/>
+        <!-- Run cron -->
+        <magentoCron stepKey="runAllCronJobs"/>
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
             <argument name="tags" value=""/>
         </actionGroup>

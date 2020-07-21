@@ -5,12 +5,16 @@
  */
 namespace Magento\Framework\View\Layout;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State;
 use Magento\Framework\View\Layout\Condition\ConditionFactory;
+use Psr\Log\LoggerInterface;
 
 /**
  * Pool of generators for structural elements
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GeneratorPool
 {
@@ -25,31 +29,39 @@ class GeneratorPool
     protected $generators = [];
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
     /**
-     * @var \Magento\Framework\View\Layout\Condition\ConditionFactory
+     * @var ConditionFactory
      */
     private $conditionFactory;
 
     /**
+     * @var State
+     */
+    private $state;
+
+    /**
      * @param ScheduledStructure\Helper $helper
      * @param ConditionFactory $conditionFactory
-     * @param \Psr\Log\LoggerInterface $logger
+     * @param LoggerInterface $logger
      * @param array|null $generators
+     * @param State|null $state
      */
     public function __construct(
         ScheduledStructure\Helper $helper,
         ConditionFactory $conditionFactory,
-        \Psr\Log\LoggerInterface $logger,
-        array $generators = null
+        LoggerInterface $logger,
+        array $generators = null,
+        ?State $state = null
     ) {
         $this->helper = $helper;
         $this->conditionFactory = $conditionFactory;
         $this->logger = $logger;
         $this->addGenerators($generators);
+        $this->state = $state ?? ObjectManager::getInstance()->get(State::class);
     }
 
     /**
@@ -227,7 +239,9 @@ class GeneratorPool
             $structure->setAsChild($element, $destination, $alias);
             $structure->reorderChildElement($destination, $element, $siblingName, $isAfter);
         } catch (\OutOfBoundsException $e) {
-            $this->logger->warning('Broken reference: ' . $e->getMessage());
+            if ($this->state->getMode() === State::MODE_DEVELOPER) {
+                $this->logger->warning('Broken reference: ' . $e->getMessage());
+            }
         }
         $scheduledStructure->unsetElementFromBrokenParentList($element);
         return $this;

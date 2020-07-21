@@ -9,6 +9,8 @@ use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 use Magento\Store\Model\Store;
+use Magento\TestFramework\Annotation\DataFixture;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 /**
  * Abstract class for testing product export and import scenarios
@@ -253,6 +255,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      */
     protected function executeFixtures(array $fixtures, bool $rollback = false)
     {
+        Resolver::getInstance()->setCurrentFixtureType(DataFixture::ANNOTATION);
         foreach ($fixtures as $fixture) {
             $fixturePath = $this->resolveFixturePath($fixture, $rollback);
             include $fixturePath;

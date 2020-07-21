@@ -6,6 +6,8 @@
 
 use Magento\Framework\App\TemplateTypesInterface;
 
+// phpcs:disable Generic.Files.LineLength.TooLong
+
 /** @var $block \Magento\Email\Block\Adminhtml\Template\Edit */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
@@ -127,6 +129,8 @@ require([
         },
 
         stripTags: function () {
+            var self = this;
+
             confirm({
                 content: "{$block->escapeJs(__('Are you sure you want to strip tags?'))}",
                 actions: {
@@ -138,7 +142,7 @@ require([
                         ).stripTags().strip();
                         $('convert_button_back').show();
                         $('field_template_styles').hide();
-                        this.typeChange = true;
+                        self.typeChange = true;
                         return false;
                     }
                 }
