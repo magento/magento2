@@ -46,7 +46,7 @@ class CookieMetadata
     /**
      * Returns an array representation of this metadata.
      *
-     * If a value has not yet been set then the key will not show up in the array
+     * If a value has not yet been set then the key will not show up in the array.
      *
      * @return array
      */
