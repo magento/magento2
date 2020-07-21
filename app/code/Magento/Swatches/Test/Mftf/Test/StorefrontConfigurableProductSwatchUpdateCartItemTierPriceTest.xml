@@ -14,6 +14,7 @@
             <title value="Swatch option should show the tier price on product page when Cart Item edited."/>
             <description value="Configurable product with swatch attribute should show the tier price on product page when added Cart Item."/>
             <severity value="CRITICAL"/>
+            <testCaseId value="MC-36047"/>
             <group value="Swatches"/>
         </annotations>
         <before>
