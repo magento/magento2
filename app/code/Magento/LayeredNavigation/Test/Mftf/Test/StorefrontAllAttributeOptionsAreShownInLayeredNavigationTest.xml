@@ -10,17 +10,19 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontAllAttributeOptionsAreShownInLayeredNavigationTest">
         <annotations>
-            <features value="Layered Navigation"/>
+            <features value="LayeredNavigation"/>
             <stories value="Product attributes in Layered Navigation"/>
             <title value="Limitation of displayed attribute options number in layered navigation with ElasticSearch"/>
             <description value="All attribute options are shown in Layered navigation"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-28963"/>
-            <group value="LayeredNavigation"/>
+            <group value="layeredNavigation"/>
+            <group value="catalog"/>
             <group value="SearchEngineElasticsearch"/>
         </annotations>
 
         <before>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
             <magentoCLI command="config:set {{DisplayProductCountDefaultValue.path}} {{DisplayProductCountDefaultValue.value}}" stepKey="enableDisplayProductCount"/>
             <magentoCLI command="config:set {{PriceNavigationStepCalculationDefaultValue.path}} {{PriceNavigationStepCalculationDefaultValue.value}}" stepKey="setPriceNavigationStepCalculationDefaultValue"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -72,7 +74,7 @@
             <createData entity="productAttributeOption" stepKey="createConfigProductAttributeOption15">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </createData>
-            <!--Cet Created options data-->
+            <!--Get Created options data-->
             <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </getData>
@@ -309,9 +311,7 @@
             <deleteData createDataKey="createConfigChildProduct14" stepKey="deleteConfigChildProduct14"/>
             <deleteData createDataKey="createConfigChildProduct15" stepKey="deleteConfigChildProduct15"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
-            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
-                <argument name="indices" value="catalogsearch_fulltext"/>
-            </actionGroup>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategory">
