@@ -7,6 +7,7 @@
 namespace Magento\Setup\Model;
 
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
+use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\App\Cache\Type\Block as BlockCache;
 use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
 use Magento\Framework\App\DeploymentConfig\Reader;
@@ -21,11 +22,13 @@ use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Adapter\Pdo\Mysql;
 use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
-use Magento\Framework\Mview\TriggerCleanerInterface;
+use Magento\Framework\Mview\TriggerCleaner;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\FilePermissions;
 use Magento\Framework\Setup\InstallDataInterface;
@@ -34,20 +37,22 @@ use Magento\Framework\Setup\LoggerInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\PatchApplier;
 use Magento\Framework\Setup\Patch\PatchApplierFactory;
+use Magento\Framework\Setup\SampleData\State;
 use Magento\Framework\Setup\SchemaPersistor;
 use Magento\Framework\Setup\SchemaSetupInterface;
 use Magento\Framework\Setup\UpgradeDataInterface;
 use Magento\Framework\Setup\UpgradeSchemaInterface;
+use Magento\Framework\Validation\ValidationException;
 use Magento\PageCache\Model\Cache\Type as PageCache;
 use Magento\Setup\Console\Command\InstallCommand;
 use Magento\Setup\Controller\ResponseTypeInterface;
+use Magento\Setup\Exception;
 use Magento\Setup\Model\ConfigModel as SetupConfigModel;
 use Magento\Setup\Module\ConnectionFactory;
 use Magento\Setup\Module\DataSetupFactory;
 use Magento\Setup\Module\SetupFactory;
 use Magento\Setup\Validator\DbValidator;
 use Magento\Store\Model\Store;
-use Magento\Framework\App\Cache\Manager;
 
 /**
  * Class Installer contains the logic to install Magento application.
@@ -217,7 +222,7 @@ class Installer
     private $dataSetupFactory;
 
     /**
-     * @var \Magento\Framework\Setup\SampleData\State
+     * @var State
      */
     protected $sampleDataState;
 
@@ -249,7 +254,7 @@ class Installer
     private $patchApplierFactory;
 
     /**
-     * @var TriggerCleanerInterface
+     * @var TriggerCleaner
      */
     private $triggerCleaner;
 
@@ -274,10 +279,10 @@ class Installer
      * @param DbValidator $dbValidator
      * @param SetupFactory $setupFactory
      * @param DataSetupFactory $dataSetupFactory
-     * @param \Magento\Framework\Setup\SampleData\State $sampleDataState
+     * @param State $sampleDataState
      * @param ComponentRegistrar $componentRegistrar
      * @param PhpReadinessCheck $phpReadinessCheck
-     * @throws \Magento\Setup\Exception
+     * @throws Exception
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -299,7 +304,7 @@ class Installer
         DbValidator $dbValidator,
         SetupFactory $setupFactory,
         DataSetupFactory $dataSetupFactory,
-        \Magento\Framework\Setup\SampleData\State $sampleDataState,
+        State $sampleDataState,
         ComponentRegistrar $componentRegistrar,
         PhpReadinessCheck $phpReadinessCheck
     ) {
@@ -326,7 +331,7 @@ class Installer
         $this->componentRegistrar = $componentRegistrar;
         $this->phpReadinessCheck = $phpReadinessCheck;
         $this->schemaPersistor = $this->objectManagerProvider->get()->get(SchemaPersistor::class);
-        $this->triggerCleaner = $this->objectManagerProvider->get()->get(TriggerCleanerInterface::class);
+        $this->triggerCleaner = $this->objectManagerProvider->get()->get(TriggerCleaner::class);
     }
 
     /**
@@ -334,7 +339,9 @@ class Installer
      *
      * @param \ArrayObject|array $request
      * @return void
-     * @throws \LogicException
+     * @throws FileSystemException
+     * @throws LocalizedException
+     * @throws RuntimeException
      */
     public function install($request)
     {
@@ -398,6 +405,7 @@ class Installer
      * Get declaration installer. For upgrade process it must be created after deployment config update.
      *
      * @return DeclarationInstaller
+     * @throws Exception
      */
     private function getDeclarationInstaller()
     {
@@ -414,6 +422,7 @@ class Installer
      *
      * @return void
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
+     * @throws FileSystemException
      */
     private function writeInstallationDate()
     {
@@ -429,7 +438,9 @@ class Installer
      * @param \ArrayObject|array $request
      * @param bool $dryRun
      * @return array
-     * @throws \LogicException
+     * @throws FileSystemException
+     * @throws LocalizedException
+     * @throws RuntimeException
      */
     private function createModulesConfig($request, $dryRun = false)
     {
@@ -555,6 +566,9 @@ class Installer
      *
      * @param \ArrayObject|array $data
      * @return void
+     * @throws FileSystemException
+     * @throws LocalizedException
+     * @throws RuntimeException
      */
     public function installDeploymentConfig($data)
     {
@@ -575,6 +589,7 @@ class Installer
      *
      * @param SchemaSetupInterface $setup
      * @return void
+     * @throws \Zend_Db_Exception
      */
     private function setupModuleRegistry(SchemaSetupInterface $setup)
     {
@@ -673,6 +688,7 @@ class Installer
      * @param SchemaSetupInterface $setup
      * @param AdapterInterface $connection
      * @return void
+     * @throws \Zend_Db_Exception
      */
     private function setupCacheTable(
         SchemaSetupInterface $setup,
@@ -727,6 +743,7 @@ class Installer
      * @param SchemaSetupInterface $setup
      * @param AdapterInterface $connection
      * @return void
+     * @throws \Zend_Db_Exception
      */
     private function setupCacheTagTable(
         SchemaSetupInterface $setup,
@@ -763,6 +780,7 @@ class Installer
      * @param SchemaSetupInterface $setup
      * @param AdapterInterface $connection
      * @return void
+     * @throws \Zend_Db_Exception
      */
     private function setupFlagTable(
         SchemaSetupInterface $setup,
@@ -819,6 +837,7 @@ class Installer
      *
      * @param array $request
      * @return void
+     * @throws Exception
      */
     public function declarativeInstallSchema(array $request)
     {
@@ -852,6 +871,9 @@ class Installer
      *
      * @param array $request
      * @return void
+     * @throws Exception
+     * @throws \Magento\Framework\Setup\Exception
+     * @throws \Zend_Db_Exception
      */
     public function installSchema(array $request)
     {
@@ -898,6 +920,8 @@ class Installer
      *
      * @param array $request
      * @return void
+     * @throws Exception
+     * @throws \Magento\Framework\Setup\Exception
      */
     public function installDataFixtures(array $request = [])
     {
@@ -963,7 +987,7 @@ class Installer
      * @param array $request
      * @return void
      * @throws \Magento\Framework\Setup\Exception
-     * @throws \Magento\Setup\Exception
+     * @throws Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -971,7 +995,7 @@ class Installer
     private function handleDBSchemaData($setup, $type, array $request)
     {
         if (!($type === 'schema' || $type === 'data')) {
-            throw  new \Magento\Setup\Exception("Unsupported operation type $type is requested");
+            throw  new Exception("Unsupported operation type $type is requested");
         }
         $resource = new \Magento\Framework\Module\ModuleResource($this->context);
         $verType = $type . '-version';
@@ -1085,13 +1109,15 @@ class Installer
      * Assert DbConfigExists
      *
      * @return void
-     * @throws \Magento\Setup\Exception
+     * @throws Exception
+     * @throws FileSystemException
+     * @throws RuntimeException
      */
     private function assertDbConfigExists()
     {
         $config = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT);
         if (!$config) {
-            throw new \Magento\Setup\Exception(
+            throw new Exception(
                 "Can't run this operation: configuration for DB connection is absent."
             );
         }
@@ -1114,6 +1140,8 @@ class Installer
      *
      * @param \ArrayObject|array $data
      * @return void
+     * @throws Exception
+     * @throws LocalizedException
      */
     public function installUserConfig($data)
     {
@@ -1143,8 +1171,8 @@ class Installer
      *
      * @param \ArrayObject|array $data
      * @return void
-     * @throws \Magento\Framework\Validation\ValidationException
-     * @throws \Magento\Setup\Exception
+     * @throws ValidationException
+     * @throws Exception
      */
     public function installSearchConfiguration($data)
     {
@@ -1159,13 +1187,13 @@ class Installer
      * @param string $className
      * @param string $interfaceName
      * @return mixed|null
-     * @throws \Magento\Setup\Exception
+     * @throws Exception
      */
     protected function createSchemaDataHandler($className, $interfaceName)
     {
         if (class_exists($className)) {
             if (!is_subclass_of($className, $interfaceName) && $className !== $interfaceName) {
-                throw  new \Magento\Setup\Exception($className . ' must implement \\' . $interfaceName);
+                throw  new Exception($className . ' must implement \\' . $interfaceName);
             } else {
                 return $this->objectManagerProvider->get()->create($className);
             }
@@ -1222,6 +1250,9 @@ class Installer
      *
      * @param \ArrayObject|array $data
      * @return void
+     * @throws Exception
+     * @throws FileSystemException
+     * @throws RuntimeException
      */
     public function installAdminUser($data)
     {
@@ -1245,13 +1276,13 @@ class Installer
      *
      * @param bool $keepGeneratedFiles Cleanup generated classes and view files and reset ObjectManager
      * @return void
-     * @throws \Magento\Setup\Exception
+     * @throws Exception
      */
     public function updateModulesSequence($keepGeneratedFiles = false)
     {
         $config = $this->deploymentConfig->get(ConfigOptionsListConstants::KEY_MODULES);
         if (!$config) {
-            throw new \Magento\Setup\Exception(
+            throw new Exception(
                 "Can't run this operation: deployment configuration is absent."
                 . " Run 'magento setup:config:set --help' for options."
             );
@@ -1316,6 +1347,7 @@ class Installer
      * @param bool $isEnabled
      * @param array $types
      * @return void
+     * @throws Exception
      */
     private function updateCaches($isEnabled, $types = [])
     {
@@ -1350,6 +1382,7 @@ class Installer
      * @return void
      *
      * @SuppressWarnings(PHPMD.UnusedPrivateMethod) Called by install() via callback.
+     * @throws Exception
      */
     private function cleanCaches()
     {
@@ -1425,6 +1458,7 @@ class Installer
      * Removes deployment configuration
      *
      * @return void
+     * @throws FileSystemException
      */
     private function deleteDeploymentConfig()
     {
@@ -1449,6 +1483,9 @@ class Installer
      * Validates that MySQL is accessible and MySQL version is supported
      *
      * @return void
+     * @throws Exception
+     * @throws FileSystemException
+     * @throws RuntimeException
      */
     private function assertDbAccessible()
     {
@@ -1511,7 +1548,7 @@ class Installer
      * @param string $moduleName
      * @param string $type
      * @return InstallSchemaInterface | UpgradeSchemaInterface | InstallDataInterface | UpgradeDataInterface | null
-     * @throws \Magento\Setup\Exception
+     * @throws Exception
      */
     private function getSchemaDataHandler($moduleName, $type)
     {
@@ -1542,7 +1579,7 @@ class Installer
                 $interface = self::DATA_INSTALL;
                 break;
             default:
-                throw new \Magento\Setup\Exception("$className does not exist");
+                throw new Exception("$className does not exist");
         }
 
         return $this->createSchemaDataHandler($className, $interface);
@@ -1554,7 +1591,7 @@ class Installer
      * @param \Magento\Framework\Module\ModuleResource $resource
      * @param string $type
      * @return ModuleContext[]
-     * @throws \Magento\Setup\Exception
+     * @throws Exception
      */
     private function generateListOfModuleContext($resource, $type)
     {
@@ -1565,7 +1602,7 @@ class Installer
             } elseif ($type === 'data-version') {
                 $dbVer = $resource->getDataVersion($moduleName);
             } else {
-                throw  new \Magento\Setup\Exception("Unsupported version type $type is requested");
+                throw  new Exception("Unsupported version type $type is requested");
             }
             if ($dbVer !== false) {
                 $moduleContextList[$moduleName] = new ModuleContext($dbVer);
@@ -1656,10 +1693,12 @@ class Installer
 
     /**
      * Remove unused triggers from db
+     *
+     * @throws \Exception
      */
     public function removeUnusedTriggers(): void
     {
-        $this->triggerCleaner->unsubscribe();
+        $this->triggerCleaner->removeTriggers();
         $this->cleanCaches();
     }
 }

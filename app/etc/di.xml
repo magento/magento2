@@ -209,9 +209,6 @@
     <preference for="Magento\Framework\MessageQueue\QueueFactoryInterface" type="Magento\Framework\MessageQueue\QueueFactory" />
     <preference for="Magento\Framework\Search\Request\IndexScopeResolverInterface" type="Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver"/>
     <preference for="Magento\Framework\HTTP\ClientInterface" type="Magento\Framework\HTTP\Client\Curl" />
-    <preference for="Magento\Framework\Mview\TriggerCleanerInterface" type="\Magento\Framework\Mview\TriggerCleaner"/>
-    <preference for="Magento\Framework\Indexer\ConfigInterface" type="\Magento\Framework\Indexer\Config"/>
-    <preference for="Magento\Framework\Mview\View\State\CollectionInterface" type="Magento\Framework\Mview\View\State\Collection" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>

@@ -14,8 +14,6 @@ use Magento\Framework\DB\LoggerInterface;
 use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Locale\Config;
 use Magento\Framework\Locale\ConfigInterface;
-use Magento\Framework\Mview\TriggerCleaner;
-use Magento\Framework\Mview\TriggerCleanerInterface;
 use Magento\Framework\Setup\Declaration\Schema\SchemaConfig;
 
 return [
@@ -28,7 +26,6 @@ return [
                 ConfigInterface::class => Config::class,
                 DriverInterface::class => \Magento\Framework\Filesystem\Driver\File::class,
                 ComponentRegistrarInterface::class => ComponentRegistrar::class,
-                TriggerCleanerInterface::class => TriggerCleaner::class,
             ],
             SchemaConfig::class => [
                 'parameters' => [
