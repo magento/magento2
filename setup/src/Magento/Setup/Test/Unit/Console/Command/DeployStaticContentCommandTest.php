@@ -107,8 +107,7 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
 
         $this->consoleLoggerFactory->expects($this->once())
             ->method('getLogger')->willReturn($this->logger);
-        $this->logger->expects($this->once())->method('notice');
-        $this->logger->expects($this->once())->method('log');
+        $this->logger->expects($this->exactly(2))->method('notice');
 
         $this->objectManager->expects($this->once())->method('create')->willReturn($this->deployService);
         $this->deployService->expects($this->once())->method('deploy');
@@ -150,8 +149,6 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->logger);
         $this->logger->expects($this->once())
             ->method('error');
-        $this->logger->expects($this->once())
-            ->method('log');
 
         $this->objectManager->expects($this->once())
             ->method('create')

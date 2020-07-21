@@ -29,7 +29,7 @@ class Queue
     /**
      * Default max execution time
      */
-    const DEFAULT_MAX_EXEC_TIME = 400;
+    const DEFAULT_MAX_EXEC_TIME = 900;
 
     /**
      * @var array
@@ -193,7 +193,7 @@ class Queue
 
         $this->awaitForAllProcesses();
 
-        if (!empty($packages) || !empty($this->inProgress)) {
+        if (!empty($packages)) {
             throw new TimeoutException('Not all packages are deployed.');
         }
 
@@ -275,7 +275,6 @@ class Queue
      */
     private function awaitForAllProcesses()
     {
-        $logDelay = 10;
         while ($this->inProgress && $this->checkTimeout()) {
             foreach ($this->inProgress as $name => $package) {
                 if ($this->isDeployed($package)) {
@@ -283,13 +282,7 @@ class Queue
                 }
             }
 
-            // refresh current status in console once in 10 iterations (once in 5 sec)
-            if ($logDelay >= 10) {
-                $this->logger->info('.');
-                $logDelay = 0;
-            } else {
-                $logDelay++;
-            }
+            $this->refreshStatus();
 
             // sleep before checking parallel jobs status
             // phpcs:ignore Magento2.Functions.DiscouragedFunction

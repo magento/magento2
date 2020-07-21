@@ -131,8 +131,7 @@ class DeployStaticContentCommand extends Command
         }
 
         if (!$refreshOnly) {
-            $logLevel = $exitCode === Cli::RETURN_SUCCESS ? LogLevel::NOTICE : LogLevel::WARNING;
-            $logger->log($logLevel, PHP_EOL . 'Execution time: ' . (microtime(true) - $time));
+            $logger->notice(PHP_EOL . "Execution time: " . (microtime(true) - $time));
         }
 
         return $exitCode;
