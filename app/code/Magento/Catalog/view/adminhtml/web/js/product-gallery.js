@@ -456,7 +456,7 @@ define([
             events['click ' + this.options.imageSelector] = function (event) {
                 var imageData, $imageContainer;
 
-                if (!$(event.currentTarget).is('.ui-sortable-helper')) {
+                if (!$(event.currentTarget).is('.ui-sortable-helper') && dragging == false) {
                     $(event.currentTarget).addClass('active');
                     imageData = $(event.currentTarget).data('imageData');
                     $imageContainer = this.findElement(imageData);
