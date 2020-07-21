@@ -16,7 +16,7 @@ class Cart implements ArgumentInterface
     /**
      * Config settings path to enable clear shopping cart button
      */
-    private const XPATH_CONFIG_ENABLE_CLEAR_SHOPPING_CART = 'checkout/cart/enable_clear_shopping_cart';
+    public const XPATH_CONFIG_ENABLE_CLEAR_SHOPPING_CART = 'checkout/cart/enable_clear_shopping_cart';
 
     /**
      * @var ScopeConfigInterface
@@ -41,7 +41,7 @@ class Cart implements ArgumentInterface
      */
     public function isClearShoppingCartEnabled()
     {
-        return (bool) $this->_scopeConfig->getValue(
+        return (bool)$this->_scopeConfig->getValue(
             self::XPATH_CONFIG_ENABLE_CLEAR_SHOPPING_CART,
             ScopeInterface::SCOPE_WEBSITE
         );
