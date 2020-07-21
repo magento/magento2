@@ -34,8 +34,7 @@
             <createData entity="defaultTaxRule" stepKey="initialTaxRule"/>
             <createData entity="defaultTaxRate" stepKey="initialTaxRate"/>
             <!-- Go to tax rule page -->
-            <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulePage"/>
-            <waitForPageLoad stepKey="waitForTaxRatePage"/>
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulePage"/>
             <click stepKey="addNewTaxRate" selector="{{AdminGridMainControls.add}}"/>
             <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
             <!-- Add tax rule with 20% tax rate -->
@@ -62,8 +61,7 @@
         </before>
         <after>
             <!-- Removed created Data -->
-            <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRulesPage"/>
-            <waitForPageLoad stepKey="waitForRulesPage"/>
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPage"/>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
                 <argument name="name" value="SampleRule"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
