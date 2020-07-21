@@ -101,12 +101,11 @@ class Options
         $result = [];
         $options = explode(';', $options);
         foreach ($options as $value) {
-            $value = $this->escaper->escapeHtml(trim($value)) ?: ' ';
-            $result[$value] = $value;
+            $result[] = $this->escaper->escapeHtml(trim($value)) ?: ' ';
         }
 
         if ($isOptional && trim(current($options))) {
-            $result = array_merge([' ' => ' '], $result);
+            $result = array_merge([' '], $result);
         }
 
         return $result;

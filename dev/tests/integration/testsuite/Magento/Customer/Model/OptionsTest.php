@@ -102,9 +102,11 @@ class OptionsTest extends TestCase
         $optionPrefixName = 'prefix';
         $optionSuffixName = 'suffix';
         $optionValues = 'v1;v2';
+        $expectedValues = ['v1', 'v2'];
         $optionValuesWithBlank = ';v1;v2';
-        $expectedValuesWithBlank = [' ' => ' ', 'v1' => 'v1', 'v2' => 'v2'];
-        $expectedValues = ['v1' => 'v1', 'v2' => 'v2'];
+        $expectedValuesWithBlank = [' ', 'v1', 'v2'];
+        $optionValuesWithTwoBlank = ';v1;v2;';
+        $expectedValuesTwoBlank = [' ', 'v1', 'v2', ' '];
 
         return [
             'prefix_required_with_blank_option' => [
@@ -118,6 +120,12 @@ class OptionsTest extends TestCase
                 [self::XML_PATH_PREFIX_SHOW => Nooptreq::VALUE_REQUIRED],
                 [self::XML_PATH_PREFIX_OPTIONS => $optionValues],
                 $expectedValues,
+            ],
+            'prefix_required_with_two_blank_option' => [
+                $optionPrefixName,
+                [self::XML_PATH_PREFIX_SHOW => Nooptreq::VALUE_REQUIRED],
+                [self::XML_PATH_PREFIX_OPTIONS => $optionValuesWithTwoBlank],
+                $expectedValuesTwoBlank,
             ],
             'prefix_optional' => [
                 $optionPrefixName,
