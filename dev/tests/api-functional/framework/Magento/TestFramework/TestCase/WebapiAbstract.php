@@ -196,7 +196,22 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
     public function run(TestResult $result = null): TestResult
     {
         $class = get_class($this);
-        if ($this instanceof GraphQlAbstract && preg_match('/Category/', $class)) {
+        $allowedTests = [
+            'CategoryProductsCountTest',
+            'CategoryTest',
+            'CategoryListTest'
+        ];
+
+        $match = false;
+
+        foreach ($allowedTests as $testToMatch) {
+            if (preg_match('/' . $testToMatch . '/', $class)) {
+                $match = true;
+                break;
+            }
+        }
+
+        if ($this instanceof GraphQlAbstract && $match) {
             return parent::run($result);
         }
 
