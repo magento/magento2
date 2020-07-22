@@ -15,6 +15,7 @@
             <title value="Customer should be able to create an account with additional information via the storefront"/>
             <description value="Customer should be able to create an account with additional information such like Company, VAT number, Phone via the storefront"/>
             <severity value="MAJOR"/>
+            <testCaseId value="MC-36076"/>
             <group value="customer"/>
             <group value="create"/>
         </annotations>
