@@ -12,6 +12,8 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\CategoryRepository;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Magento\CatalogDataExporter\Model\Indexer\CategoryFeedIndexer;
+use Magento\CatalogMessageBroker\Model\MessageBus\CategoriesConsumer;
 use Magento\Framework\DataObject;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Store\Model\Store;
@@ -62,6 +64,10 @@ class CategoryTest extends GraphQlAbstract
      */
     public function testCategoriesTree()
     {
+        $categoriesFeed = $this->objectManager->create(CategoryFeedIndexer::class);
+        $categoriesFeed->executeFull();
+        $categoriesConsumer = $this->objectManager->create(CategoriesConsumer::class);
+        $categoriesConsumer->processMessage(json_encode([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]));
         $rootCategoryId = 2;
         $query = <<<QUERY
 {
