@@ -46,6 +46,9 @@ query {
     orders {
         items {
             credit_memos {
+                comments {
+                    message
+                }
                 items {
                     product_name
                     product_sku
@@ -86,6 +89,10 @@ QUERY;
 
         $expectedCreditMemoData = [
             [
+                'comments' => [
+                    ['message' => 'some_comment'],
+                    ['message' => 'some_other_comment']
+                ],
                 'items' => [
                     [
                         'product_name' => 'Simple Related Product',
@@ -121,9 +128,9 @@ QUERY;
             ]
         ];
 
-        $actualData = $response['customer']['orders']['items'][1];
+        $firstOrderItem = current($response['customer']['orders']['items'] ?? []);
 
-        $creditMemos = $actualData['credit_memos'];
+        $creditMemos = $firstOrderItem['credit_memos'] ?? [];
         $this->assertResponseFields($creditMemos, $expectedCreditMemoData);
     }
 }

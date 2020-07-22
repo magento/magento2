@@ -6,21 +6,30 @@
  */
 
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
+use Magento\Sales\Model\Order\CreditmemoFactory;
+use Magento\Sales\Model\Service\CreditmemoService;
+use Magento\Sales\Model\Order;
+use Magento\TestFramework\Helper\Bootstrap;
 
 Resolver::getInstance()->requireDataFixture(
     'Magento/Sales/_files/customer_invoice_with_two_products_and_custom_options.php'
 );
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$objectManager = Bootstrap::getObjectManager();
 
-/** @var \Magento\Sales\Model\Order\CreditmemoFactory $creditMemoFactory */
-$creditMemoFactory = $objectManager->create(\Magento\Sales\Model\Order\CreditmemoFactory::class);
-/** @var \Magento\Sales\Model\Service\CreditmemoService $creditMemoService */
-$creditMemoService = $objectManager->create(\Magento\Sales\Model\Service\CreditmemoService::class);
-/** @var \Magento\Sales\Api\OrderRepositoryInterface $orderRepository */
-$orderRepository = $objectManager->create(\Magento\Sales\Api\OrderRepositoryInterface::class);
+/** @var CreditmemoFactory $creditMemoFactory */
+$creditMemoFactory = $objectManager->create(CreditmemoFactory::class);
+/** @var CreditmemoService $creditMemoService */
+$creditMemoService = $objectManager->create(CreditmemoService::class);
 
-$creditMemo = $creditMemoFactory->createByOrder($orderRepository->get(2));
+/** @var Order $order */
+$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
+
+$creditMemo = $creditMemoFactory->createByOrder($order);
 $creditMemo->setAdjustment(1.23);
+$creditMemo->addComment('some_comment', false, true);
+$creditMemo->addComment('some_other_comment', false, true);
+$creditMemo->addComment('not_visible', false, false);
 
 $creditMemoService->refund($creditMemo);
