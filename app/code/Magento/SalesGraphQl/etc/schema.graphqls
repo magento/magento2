@@ -47,7 +47,7 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     total: OrderTotal @doc(description: "Contains details about the calculated totals for this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderTotal")
     invoices: [Invoice]! @doc(description: "A list of invoices for the order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Invoices")
     shipments: [OrderShipment] @doc(description: "A list of shipments for the order")
-    credit_memos: [CreditMemo  ] @doc(description: "A list of credit memos") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemos")
+    credit_memos: [CreditMemo] @doc(description: "A list of credit memos") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemos")
     payment_methods: [PaymentMethod] @doc(description: "Payment details for the order")
     shipping_address: CustomerAddress @doc(description: "The shipping address for the order")
     billing_address: CustomerAddress @doc(description: "The billing address for the order")
@@ -203,7 +203,7 @@ type PaymentMethod @doc(description: "Contains details about the payment method 
 type CreditMemo @doc(description: "Credit memo details") {
     id: ID! @doc(description: "The unique ID of the credit memo, used for API purposes")
     number: String! @doc(description: "The sequential credit memo number")
-    items: [CreditMemoItem] @doc(description: "An array containing details about refunded items") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemo\\CreditMemoItems")
+    items: [CreditMemoItemInterface] @doc(description: "An array containing details about refunded items") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemo\\CreditMemoItems")
     total: CreditMemoTotal @doc(description: "Contains details about the total refunded amount") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemo\\CreditMemoTotal")
     comments: [CommentItem] @doc(description: "Comments on the credit memo") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemo\\CreditMemoComments")
 }
