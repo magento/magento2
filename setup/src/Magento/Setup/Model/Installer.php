@@ -995,6 +995,7 @@ class Installer
     private function handleDBSchemaData($setup, $type, array $request)
     {
         if (!($type === 'schema' || $type === 'data')) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw  new Exception("Unsupported operation type $type is requested");
         }
         $resource = new \Magento\Framework\Module\ModuleResource($this->context);
@@ -1117,6 +1118,7 @@ class Installer
     {
         $config = $this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT);
         if (!$config) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new Exception(
                 "Can't run this operation: configuration for DB connection is absent."
             );
@@ -1193,6 +1195,7 @@ class Installer
     {
         if (class_exists($className)) {
             if (!is_subclass_of($className, $interfaceName) && $className !== $interfaceName) {
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw  new Exception($className . ' must implement \\' . $interfaceName);
             } else {
                 return $this->objectManagerProvider->get()->create($className);
@@ -1282,6 +1285,7 @@ class Installer
     {
         $config = $this->deploymentConfig->get(ConfigOptionsListConstants::KEY_MODULES);
         if (!$config) {
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new Exception(
                 "Can't run this operation: deployment configuration is absent."
                 . " Run 'magento setup:config:set --help' for options."
@@ -1579,6 +1583,7 @@ class Installer
                 $interface = self::DATA_INSTALL;
                 break;
             default:
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new Exception("$className does not exist");
         }
 
@@ -1602,6 +1607,7 @@ class Installer
             } elseif ($type === 'data-version') {
                 $dbVer = $resource->getDataVersion($moduleName);
             } else {
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw  new Exception("Unsupported version type $type is requested");
             }
             if ($dbVer !== false) {

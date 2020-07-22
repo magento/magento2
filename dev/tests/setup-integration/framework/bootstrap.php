@@ -102,6 +102,8 @@ try {
     /* Unset declared global variables to release the PHPUnit from maintaining their values between tests */
     unset($testsBaseDir, $logWriter, $settings, $shell, $application, $bootstrap);
 } catch (\Exception $e) {
+    // phpcs:disable Magento2.Security.LanguageConstruct
     echo $e . PHP_EOL;
     exit(1);
+    // phpcs:enable Magento2.Security.LanguageConstruct
 }
