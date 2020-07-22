@@ -176,7 +176,11 @@ class ConsumersRunner
             return false;
         }
 
-        if ($consumerConfig->getOnlySpawnWhenMessageAvailable()) {
+        $onlySpawnWhenMessageAvailable = (bool)$this->deploymentConfig->get(
+            'queue/only_spawn_when_message_available',
+            0
+        );
+        if ($onlySpawnWhenMessageAvailable || $consumerConfig->getOnlySpawnWhenMessageAvailable()) {
             try {
                 return $this->checkIsAvailableMessages->execute(
                     $connectionName,
