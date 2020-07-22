@@ -41,7 +41,10 @@ class DiscountTest extends TestCase
      */
     protected $invoice;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(Discount::class);
@@ -63,6 +66,7 @@ class DiscountTest extends TestCase
     /**
      * Test for collect invoice
      *
+     * @param array $invoiceData
      * @dataProvider collectInvoiceData
      * @return void
      */
