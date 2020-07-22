@@ -11,10 +11,10 @@
         "magento/module-store": "*",
         "magento/module-eav-graph-ql": "*",
         "magento/module-catalog-search": "*",
-        "magento/framework": "*"
+        "magento/framework": "*",
+        "magento/module-graph-ql": "*"
     },
     "suggest": {
-        "magento/module-graph-ql": "*",
         "magento/module-graph-ql-cache": "*",
         "magento/module-store-graph-ql": "*"
     },
