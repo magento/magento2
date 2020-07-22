@@ -61,26 +61,18 @@ class SaveAssetLinks
      * @param int $assetId
      * @param KeywordInterface[] $keywordIds
      *
+     * @throws CouldNotDeleteException
      * @throws CouldNotSaveException
      */
     public function execute(int $assetId, array $keywordIds): void
     {
-        try {
-            $currentKeywordIds = $this->getCurrentKeywordIds($assetId);
+        $currentKeywordIds = $this->getCurrentKeywordIds($assetId);
 
-            $obsoleteKeywordIds = array_diff($currentKeywordIds, $keywordIds);
-            $newKeywordIds = array_diff($keywordIds, $currentKeywordIds);
+        $obsoleteKeywordIds = array_diff($currentKeywordIds, $keywordIds);
+        $newKeywordIds = array_diff($keywordIds, $currentKeywordIds);
 
-            $this->deleteAssetKeywords($assetId, $obsoleteKeywordIds);
-            $this->insertAssetKeywords($assetId, $newKeywordIds);
-
-        } catch (\Exception $exception) {
-            $this->logger->critical($exception);
-            throw new CouldNotSaveException(
-                __('Could not process asset keyword links'),
-                $exception
-            );
-        }
+        $this->deleteAssetKeywords($assetId, $obsoleteKeywordIds);
+        $this->insertAssetKeywords($assetId, $newKeywordIds);
     }
 
     /**
@@ -88,6 +80,8 @@ class SaveAssetLinks
      *
      * @param int $assetId
      * @param int[] $keywordIds
+     *
+     * @throws CouldNotSaveException
      */
     private function insertAssetKeywords(int $assetId, array $keywordIds): void
     {
@@ -111,6 +105,10 @@ class SaveAssetLinks
             );
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
+            throw new CouldNotSaveException(
+                __('Could not save asset keyword links'),
+                $exception
+            );
         }
     }
 
