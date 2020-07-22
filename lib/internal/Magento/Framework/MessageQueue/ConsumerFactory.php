@@ -109,6 +109,10 @@ class ConsumerFactory
             ConsumerConfigurationInterface::QUEUE_NAME => $consumerConfigItem->getQueue(),
             ConsumerConfigurationInterface::TOPICS => $topics,
             ConsumerConfigurationInterface::MAX_MESSAGES => $consumerConfigItem->getMaxMessages(),
+            ConsumerConfigurationInterface::MAX_IDLE_TIME => $consumerConfigItem->getMaxIdleTime(),
+            ConsumerConfigurationInterface::SLEEP => $consumerConfigItem->getSleep(),
+            ConsumerConfigurationInterface::ONLY_SPAWN_WHEN_MESSAGE_AVAILABLE =>
+                $consumerConfigItem->getOnlySpawnWhenMessageAvailable()
         ];
 
         return $this->objectManager->create(

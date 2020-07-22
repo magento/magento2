@@ -5,8 +5,6 @@
  */
 declare(strict_types=1);
 
-declare(strict_types=1);
-
 namespace Magento\CatalogImportExport\Test\Unit\Model\Import\Product\Validator;
 
 use Magento\CatalogImportExport\Model\Import\Product\StoreResolver;
@@ -43,9 +41,10 @@ class TierPriceTest extends TestCase
         $this->groupRepositoryInterface = $this->createMock(
             GroupRepository::class
         );
-        $this->searchCriteriaSearch = $this->createMock(SearchCriteria::class);
+        $searchCriteriaSearch = $this->createMock(SearchCriteria::class);
         $this->searchCriteriaBuilder = $this->createMock(SearchCriteriaBuilder::class);
-        $this->searchCriteriaBuilder->expects($this->any())->method('create')->willReturn($this->searchCriteriaSearch);
+        $this->searchCriteriaBuilder->expects($this->any())->method('create')
+            ->willReturn($searchCriteriaSearch);
         $this->storeResolver = $this->createMock(
             StoreResolver::class
         );

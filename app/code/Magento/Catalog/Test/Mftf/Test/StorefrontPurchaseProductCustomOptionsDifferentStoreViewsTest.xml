@@ -67,7 +67,7 @@
 
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFilter"/>
 
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
@@ -75,8 +75,7 @@
 
         <!-- Open Product Grid, Filter product and open -->
 
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="filterGroupedProductOptions">
             <argument name="product" value="_defaultProduct"/>
@@ -272,8 +271,7 @@
 
         <!-- Open Product Grid, Filter product and open -->
 
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad15"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage1"/>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="filterGroupedProductOptions1">
             <argument name="product" value="_defaultProduct"/>

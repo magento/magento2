@@ -80,10 +80,10 @@ class Match implements QueryInterface
         $minimumShouldMatch = $this->config->getElasticsearchConfigData('minimum_should_match');
         foreach ($queries as $query) {
             $queryBody = $query['body'];
-            $matchKey = isset($queryBody['match_phrase']) ? 'match_phrase' : 'match';
+            $matchKey = array_keys($queryBody)[0];
             foreach ($queryBody[$matchKey] as $field => $matchQuery) {
                 $matchQuery['boost'] = $requestQueryBoost + $matchQuery['boost'];
-                if ($minimumShouldMatch) {
+                if ($minimumShouldMatch && $matchKey != 'match_phrase_prefix') {
                     $matchQuery['minimum_should_match'] = $minimumShouldMatch;
                 }
                 $queryBody[$matchKey][$field] = $matchQuery;
@@ -153,11 +153,11 @@ class Match implements QueryInterface
                 //Value is incompatible with this field type.
                 continue;
             }
-
+            $matchCondition = $match['matchCondition'] ?? $condition;
             $conditions[] = [
                 'condition' => $queryValue['condition'],
                 'body' => [
-                    $condition => [
+                    $matchCondition => [
                         $resolvedField => [
                             'query' => $transformedValue,
                             'boost' => $match['boost'] ?? 1,
