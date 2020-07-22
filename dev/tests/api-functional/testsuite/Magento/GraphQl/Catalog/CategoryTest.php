@@ -57,17 +57,11 @@ class CategoryTest extends GraphQlAbstract
     }
 
     /**
-     * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCategoriesTree()
     {
-        $categoriesFeed = $this->objectManager->create(CategoryFeedIndexer::class);
-        $categoriesFeed->executeFull();
-        $categoriesConsumer = $this->objectManager->create(CategoriesConsumer::class);
-        $categoriesConsumer->processMessage(json_encode([2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12]));
         $rootCategoryId = 2;
         $query = <<<QUERY
 {
