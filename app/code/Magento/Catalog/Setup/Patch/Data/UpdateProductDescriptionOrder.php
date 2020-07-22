@@ -8,17 +8,15 @@ namespace Magento\Catalog\Setup\Patch\Data;
 
 use Magento\Catalog\Setup\CategorySetup;
 use Magento\Catalog\Setup\CategorySetupFactory;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
-use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
  * Class UpdateProductDescriptionOrder
  *
  * @package Magento\Catalog\Setup\Patch
  */
-class UpdateProductDescriptionOrder implements DataPatchInterface, PatchVersionInterface
+class UpdateProductDescriptionOrder implements DataPatchInterface
 {
     /**
      * @var ModuleDataSetupInterface
