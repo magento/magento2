@@ -47,34 +47,21 @@ class UpdateProductDescriptionOrder implements DataPatchInterface
     {
         /** @var CategorySetup $categorySetup */
         $categorySetup = $this->categorySetupFactory->create(['setup' => $this->moduleDataSetup]);
-        $attributeSetId = $categorySetup->getDefaultAttributeSetId(\Magento\Catalog\Model\Product::ENTITY);
+        $entityTypeId = $categorySetup->getEntityTypeId(\Magento\Catalog\Model\Product::ENTITY);
 
         // Content
-        $categorySetup->addAttributeGroup(
-            \Magento\Catalog\Model\Product::ENTITY,
-            $attributeSetId,
-            'Content',
-            15
-        );
-        $categorySetup->updateAttributeGroup(
-            \Magento\Catalog\Model\Product::ENTITY,
-            $attributeSetId,
-            'Content',
-            'tab_group_code',
-            'basic'
-        );
-        $categorySetup->addAttributeToGroup(
-            \Magento\Catalog\Model\Product::ENTITY,
-            $attributeSetId,
-            'Content',
+        $categorySetup->updateAttribute(
+            $entityTypeId,
             'short_description',
+            'frontend_label',
+            'Short Description',
             100
         );
-        $categorySetup->addAttributeToGroup(
-            \Magento\Catalog\Model\Product::ENTITY,
-            $attributeSetId,
-            'Content',
+        $categorySetup->updateAttribute(
+            $entityTypeId,
             'description',
+            'frontend_label',
+            'Description',
             110
         );
     }
