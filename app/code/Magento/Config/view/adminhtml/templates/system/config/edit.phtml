@@ -255,6 +255,24 @@ require([
         }
     });
 
+    window.configForm.on('invalid-form.validate', function (event, validation) {
+        if (validation.errorList.length === 0) {
+            return;
+        }
+
+        jQuery.each(validation.errorList, function () {
+            var element = jQuery(this.element || []);
+
+            if (element.length) {
+                jQuery(element.parents('.section-config')).each(function () {
+                    if (!jQuery(this).hasClass('active')) {
+                        Fieldset.toggleCollapse(jQuery(this).children('.config.admin__collapsible-block').attr('id'));
+                    }
+                });
+            }
+        });
+    })
+
     $$('.shared').each(function(element){
         Event.observe(element, 'change', adminSystemConfig.onchangeSharedElement);
 
