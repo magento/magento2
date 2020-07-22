@@ -11,7 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Paypal\Model\Api\ProcessableException as ApiProcessableException;
 
 /**
- * Class PlaceOrder
+ * Creates order on backend and prepares session to show appropriate next step in flow
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PlaceOrder extends \Magento\Paypal\Controller\Express\AbstractExpress
