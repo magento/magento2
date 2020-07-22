@@ -113,14 +113,15 @@ class UpdateProductAttributes implements DataPatchInterface, PatchVersionInterfa
             \Magento\Catalog\Model\Product::ENTITY,
             $attributeSetId,
             'Content',
-            'description'
+            'short_description',
+            100
         );
         $categorySetup->addAttributeToGroup(
             \Magento\Catalog\Model\Product::ENTITY,
             $attributeSetId,
             'Content',
-            'short_description',
-            100
+            'description',
+            110
         );
 
         //Images tab
