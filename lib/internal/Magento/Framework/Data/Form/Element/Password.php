@@ -13,6 +13,11 @@ namespace Magento\Framework\Data\Form\Element;
 
 use Magento\Framework\Escaper;
 
+/**
+ * Class Password
+ *
+ * Password input type
+ */
 class Password extends AbstractElement
 {
     /**
@@ -33,11 +38,14 @@ class Password extends AbstractElement
     }
 
     /**
+     * Get field html
+     *
      * @return mixed
      */
     public function getHtml()
     {
-        $this->addClass('input-text');
+        $this->addClass('input-text admin__control-text');
+
         return parent::getHtml();
     }
 }

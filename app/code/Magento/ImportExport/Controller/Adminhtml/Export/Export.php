@@ -3,15 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Controller\Adminhtml\Export;
 
-use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
-use Magento\Framework\Controller\ResultFactory;
-use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
 use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Framework\App\Response\Http\FileFactory;
-use Magento\ImportExport\Model\Export as ExportModel;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\MessageQueue\PublisherInterface;
+use Magento\ImportExport\Controller\Adminhtml\Export as ExportController;
+use Magento\ImportExport\Model\Export as ExportModel;
 use Magento\ImportExport\Model\Export\Entity\ExportInfoFactory;
 
 /**
@@ -76,16 +78,24 @@ class Export extends ExportController implements HttpPostActionInterface
             try {
                 $params = $this->getRequest()->getParams();
 
+                if (!array_key_exists('skip_attr', $params)) {
+                    $params['skip_attr'] = [];
+                }
+
                 /** @var ExportInfoFactory $dataObject */
                 $dataObject = $this->exportInfoFactory->create(
                     $params['file_format'],
                     $params['entity'],
-                    $params['export_filter']
+                    $params['export_filter'],
+                    $params['skip_attr']
                 );
 
                 $this->messagePublisher->publish('import_export.export', $dataObject);
                 $this->messageManager->addSuccessMessage(
-                    __('Message is added to queue, wait to get your file soon')
+                    __(
+                        'Message is added to queue, wait to get your file soon.'
+                        . ' Make sure your cron job is running to export the file'
+                    )
                 );
             } catch (\Exception $e) {
                 $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);

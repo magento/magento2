@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Unit test for Magento\Framework\ValidatorFactory
  *
@@ -8,29 +8,35 @@
 
 namespace Magento\Framework\Test\Unit;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Validator;
+use Magento\Framework\ValidatorFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ValidatorFactoryTest extends \PHPUnit\Framework\TestCase
+class ValidatorFactoryTest extends TestCase
 {
-    /** @var  \Magento\Framework\ValidatorFactory */
+    /** @var  ValidatorFactory */
     private $model;
 
-    /** @var \Magento\Framework\ObjectManagerInterface | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var ObjectManagerInterface|MockObject */
     private $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->model = $objectManager->getObject(
-            \Magento\Framework\ValidatorFactory::class,
+            ValidatorFactory::class,
             ['objectManager' => $this->objectManagerMock]
         );
     }
 
     public function testCreateWithInstanceName()
     {
-        $setName = \Magento\Framework\DataObject::class;
+        $setName = DataObject::class;
         $returnMock = $this->createMock($setName);
         $this->objectManagerMock->expects($this->once())->method('create')
             ->willReturn($returnMock);
@@ -40,7 +46,7 @@ class ValidatorFactoryTest extends \PHPUnit\Framework\TestCase
 
     public function testCreateDefault()
     {
-        $default = \Magento\Framework\Validator::class;
+        $default = Validator::class;
         $returnMock = $this->createMock($default);
         $this->objectManagerMock->expects($this->once())->method('create')
             ->willReturn($returnMock);

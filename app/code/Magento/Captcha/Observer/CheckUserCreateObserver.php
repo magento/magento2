@@ -7,6 +7,11 @@ namespace Magento\Captcha\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class CheckUserCreateObserver
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class CheckUserCreateObserver implements ObserverInterface
 {
     /**
@@ -86,7 +91,7 @@ class CheckUserCreateObserver implements ObserverInterface
             /** @var \Magento\Framework\App\Action\Action $controller */
             $controller = $observer->getControllerAction();
             if (!$captchaModel->isCorrect($this->captchaStringResolver->resolve($controller->getRequest(), $formId))) {
-                $this->messageManager->addError(__('Incorrect CAPTCHA'));
+                $this->messageManager->addErrorMessage(__('Incorrect CAPTCHA'));
                 $this->_actionFlag->set('', \Magento\Framework\App\Action\Action::FLAG_NO_DISPATCH, true);
                 $this->_session->setCustomerFormData($controller->getRequest()->getPostValue());
                 $url = $this->_urlManager->getUrl('*/*/create', ['_nosecret' => true]);

@@ -155,7 +155,7 @@ define([
         updateExternalValueByEditableData: function () {
             var updatedExtValue;
 
-            if (!this.behaviourType === 'edit' || _.isEmpty(this.editableData) || _.isEmpty(this.externalValue())) {
+            if (!(this.behaviourType === 'edit') || _.isEmpty(this.editableData) || _.isEmpty(this.externalValue())) {
                 return;
             }
 

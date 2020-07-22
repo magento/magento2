@@ -9,7 +9,7 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Framework\Api\ArrayObjectSearch;
 
 /**
- * Class Dob
+ * Customer date of birth attribute block
  *
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  */
@@ -267,6 +267,10 @@ class Dob extends AbstractWidget
         $validators['validate-date'] = [
             'dateFormat' => $this->getDateFormat()
         ];
+        $validators['validate-dob'] = [
+            'dateFormat' => $this->getDateFormat()
+        ];
+
         return 'data-validate="' . $this->_escaper->escapeHtml(json_encode($validators)) . '"';
     }
 
@@ -277,7 +281,11 @@ class Dob extends AbstractWidget
      */
     public function getDateFormat()
     {
-        return $this->_localeDate->getDateFormatWithLongYear();
+        $dateFormat = $this->_localeDate->getDateFormatWithLongYear();
+        /** Escape RTL characters which are present in some locales and corrupt formatting */
+        $escapedDateFormat = preg_replace('/[^MmDdYy\/\.\-]/', '', $dateFormat);
+
+        return $escapedDateFormat;
     }
 
     /**

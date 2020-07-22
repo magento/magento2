@@ -19,5 +19,7 @@
         <section name="AdminOrderFormTotalSection"/>
         <section name="AdminOrderFormStoreSelectorSection"/>
         <section name="AdminOrderFormDiscountSection"/>
+        <section name="AdminOrderFormMessagesSection"/>
+        <section name="AdminOrderFormCustomOptionsSection"/>
     </page>
 </pages>

@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminDefaultCookieSettingsSection">
+        <element name="DefaultCookieSettingsTab" type="button" selector="#web_cookie-head"/>
+        <element name="DefaultCookieLifetime" type="input" selector="#web_cookie_cookie_lifetime"/>
+    </section>
+</sections>

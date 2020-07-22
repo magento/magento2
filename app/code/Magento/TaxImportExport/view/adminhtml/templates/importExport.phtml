@@ -31,7 +31,7 @@
         </form>
         <?php endif; ?>
         <script>
-require(['jquery', "mage/mage", "loadingPopup"], function(jQuery){
+require(['jquery', 'Magento_Ui/js/modal/alert', "mage/mage", "loadingPopup", 'mage/translate'], function(jQuery, uiAlert){
 
     jQuery('#import-form').mage('form').mage('validation');
     (function ($) {
@@ -42,6 +42,10 @@ require(['jquery', "mage/mage", "loadingPopup"], function(jQuery){
                 });
 
                 $(this.form).submit();
+            } else {
+                uiAlert({
+                    content: $.mage.__('Please select a file to import!')
+                });
             }
         });
     })(jQuery);

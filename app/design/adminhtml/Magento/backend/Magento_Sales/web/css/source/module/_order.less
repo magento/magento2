@@ -308,4 +308,62 @@
     }
 }
 
+//
+//  Create Order - Add Product Grid
+//  ---------------------------------------------
+
+#sales_order_create_search_grid {
+    .col-in_products {
+        .data-grid-checkbox-cell-inner {
+            position: relative;
+        }
+        .checkbox {
+            width: 1.6rem;
+            height: 1.6rem;
+            left: 0;
+            right: 0;
+            margin: auto;
+        }
+    }
+}
+
+//
+//  Create Order - Add Product with Custom Options Modal
+//  ----------------------------------------------------
+
+#product_composite_configure_form_fields {
+    .admin__field {
+        &.required {
+            .admin__field-label {
+                &:after {
+                    color: #e22626;
+                    content: '*';
+                    display: inline-block;
+                    font-size: 1.6rem;
+                    font-weight: 500;
+                    line-height: 1;
+                    margin-left: 10px;
+                    margin-top: .2rem;
+                    position: absolute;
+                    z-index: 1;
+                }
+            }
+            .price-container, .price-notice, .price-wrapper {
+                &:after {
+                    color: unset;
+                    content: unset;
+                    display: unset;
+                    font-size: unset;
+                    font-weight: unset;
+                    line-height: unset;
+                    margin-left: unset;
+                    margin-top: unset;
+                    position: unset;
+                    z-index: unset;
+                }
+            }
+        }
+    }
+}
+
 //  ToDo: MAGETWO-32299 UI: review the collapsible block

@@ -106,7 +106,10 @@ class ObjectManagerFactory
     public function create(array $arguments)
     {
         $writeFactory = new \Magento\Framework\Filesystem\Directory\WriteFactory($this->driverPool);
-        $generatedFiles = new GeneratedFiles($this->directoryList, $writeFactory);
+        /** @var \Magento\Framework\Filesystem\Driver\File $fileDriver */
+        $fileDriver = $this->driverPool->getDriver(DriverPool::FILE);
+        $lockManager = new \Magento\Framework\Lock\Backend\FileLock($fileDriver, BP);
+        $generatedFiles = new GeneratedFiles($this->directoryList, $writeFactory, $lockManager);
         $generatedFiles->cleanGeneratedFiles();
 
         $deploymentConfig = $this->createDeploymentConfig($this->directoryList, $this->configFilePool, $arguments);

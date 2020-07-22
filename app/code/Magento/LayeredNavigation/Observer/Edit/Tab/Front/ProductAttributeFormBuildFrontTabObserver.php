@@ -8,7 +8,7 @@
 namespace Magento\LayeredNavigation\Observer\Edit\Tab\Front;
 
 use Magento\Config\Model\Config\Source;
-use Magento\Framework\Module\ModuleManagerInterface;
+use Magento\Framework\Module\Manager;
 use Magento\Framework\Event\ObserverInterface;
 
 /**
@@ -22,15 +22,15 @@ class ProductAttributeFormBuildFrontTabObserver implements ObserverInterface
     protected $optionList;
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager;
 
     /**
-     * @param ModuleManagerInterface $moduleManager
+     * @param Manager $moduleManager
      * @param Source\Yesno $optionList
      */
-    public function __construct(ModuleManagerInterface $moduleManager, Source\Yesno $optionList)
+    public function __construct(Manager $moduleManager, Source\Yesno $optionList)
     {
         $this->optionList = $optionList;
         $this->moduleManager = $moduleManager;

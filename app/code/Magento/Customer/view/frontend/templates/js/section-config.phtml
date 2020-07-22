@@ -15,7 +15,9 @@
                 "baseUrls": <?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)->jsonEncode(array_unique([
                     $block->getUrl(null, ['_secure' => true]),
                     $block->getUrl(null, ['_secure' => false]),
-                ])) ?>
+                ])) ?>,
+                "sectionNames": <?= /* @noEscape */ $this->helper(\Magento\Framework\Json\Helper\Data::class)
+                    ->jsonEncode($block->getData('sectionNamesProvider')->getSectionNames()) ?>
             }
         }
     }

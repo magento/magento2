@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="GoToAttributeSetByNameActionGroup">
+        <annotations>
+            <description>Searches for the provided Attribute Sets Name. Clicks on the 1st row.</description>
+        </annotations>
+        <arguments>
+            <argument name="name" type="string"/>
+        </arguments>
+
+        <click selector="{{AdminProductAttributeSetGridSection.resetFilter}}" stepKey="clickResetButton"/>
+        <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="{{name}}" stepKey="filterByName"/>
+        <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickSearch"/>
+        <click selector="{{AdminProductAttributeSetGridSection.nthRow('1')}}" stepKey="clickFirstRow"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+    </actionGroup>
+</actionGroups>

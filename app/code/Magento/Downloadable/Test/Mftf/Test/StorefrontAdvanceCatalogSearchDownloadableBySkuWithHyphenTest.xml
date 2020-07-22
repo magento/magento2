@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+ <!--
+  /**
+   * Copyright © Magento, Inc. All rights reserved.
+   * See COPYING.txt for license details.
+   */
+ -->
+
+ <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+     <test name="StorefrontAdvanceCatalogSearchDownloadableBySkuWithHyphenTest" extends="AdvanceCatalogSearchSimpleProductBySkuTest">
+         <annotations>
+             <features value="Downloadable"/>
+             <stories value="Advanced Catalog Product Search for all product types"/>
+             <title value="Guest customer should be able to advance search Downloadable product with product sku that contains hyphen"/>
+             <description value="Guest customer should be able to advance search Downloadable product with product that contains hyphen"/>
+             <severity value="MAJOR"/>
+             <testCaseId value="MC-252"/>
+             <group value="Downloadable"/>
+             <group value="SearchEngineElasticsearch"/>
+             <skip>
+                 <issueId value="MC-34217"/>
+             </skip>
+         </annotations>
+         <before>
+             <magentoCLI command="downloadable:domains:add example.com static.magento.com" before="product" stepKey="addDownloadableDomain"/>
+             <createData entity="ApiDownloadableProduct" stepKey="product"/>
+             <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
+                 <requiredEntity createDataKey="product"/>
+             </createData>
+             <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink2">
+                 <requiredEntity createDataKey="product"/>
+             </createData>
+         </before>
+         <after>
+             <magentoCLI command="downloadable:domains:remove example.com static.magento.com" stepKey="removeDownloadableDomain"/>
+         </after>
+     </test>
+ </tests>

@@ -5,6 +5,9 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Eav;
 
+/**
+ * Test for \Magento\Catalog\Model\ResourceModel\Eav\Attribute.
+ */
 class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -12,13 +15,18 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
         );
     }
 
+    /**
+     * Test Create -> Read -> Update -> Delete attribute operations.
+     *
+     * @return void
+     */
     public function testCRUD()
     {
         $this->_model->setAttributeCode(
@@ -31,7 +39,7 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
             )->getId()
         )->setFrontendLabel(
             'test'
-        );
+        )->setIsUserDefined(1);
         $crud = new \Magento\TestFramework\Entity($this->_model, ['frontend_label' => uniqid()]);
         $crud->testCrud();
     }

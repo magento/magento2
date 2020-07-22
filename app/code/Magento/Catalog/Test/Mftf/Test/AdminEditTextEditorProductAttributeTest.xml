@@ -14,19 +14,19 @@
             <group value="Catalog"/>
             <title value="Admin are able to change Input Type of Text Editor product attribute"/>
             <description value="Admin are able to change Input Type of Text Editor product attribute"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-6215"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
-            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
             <createData stepKey="myProductAttributeCreation" entity="productAttributeWysiwyg"/>
             <createData stepKey="myProductAttributeSetAssign" entity="AddToDefaultSet">
                 <requiredEntity createDataKey="myProductAttributeCreation"/>
             </createData>
         </before>
-        <actionGroup ref="navigateToCreatedProductAttribute" stepKey="navigateToAttribute">
+        <actionGroup ref="NavigateToCreatedProductAttributeActionGroup" stepKey="navigateToAttribute">
             <argument name="ProductAttribute" value="productAttributeWysiwyg"/>
         </actionGroup>
         <seeOptionIsSelected selector="{{AttributePropertiesSection.InputType}}" userInput="Text Editor" stepKey="seeTextEditorSelected" />
@@ -50,8 +50,7 @@
         <amOnPage url="{{_defaultProduct.name}}.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad5"/>
         <see userInput="Text Area" stepKey="seeText2" />
-        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttributeGrid2"/>
-        <waitForPageLoad stepKey="waitForPageLoad6"/>
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttributeGrid2"/>
         <click selector="{{AdminProductAttributeGridSection.AttributeCode($$myProductAttributeCreation.attribute_code$$)}}" stepKey="navigateToAttributeEditPage2" />
         <waitForPageLoad stepKey="waitForPageLoad7" />
         <seeOptionIsSelected selector="{{AttributePropertiesSection.InputType}}" userInput="Text Area" stepKey="seeTextAreaSelected" />
@@ -62,8 +61,7 @@
         <dontSeeElement selector="{{StorefrontPropertiesSection.EnableWYSIWYG}}" stepKey="dontSeeWYSIWYGEnableField2" />
         <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute8" />
         <waitForPageLoad stepKey="waitForPageLoad8"/>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGrid" />
-        <waitForPageLoad stepKey="waitForPageLoad9"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGrid"/>
         <actionGroup ref="SortByIdDescendingActionGroup" stepKey="sortByIdDescending" />
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.enabledFilters}}" visible="true" stepKey="clearAllExistingFilter"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingAfterFilterIsCleared"/>
@@ -75,8 +73,8 @@
         <seeElement selector="{{ProductAttributeWYSIWYGSection.TinyMCE4($$myProductAttributeCreation.attribute_code$$)}}" stepKey="seePoweredBy"/>
         <after>
             <deleteData createDataKey="myProductAttributeCreation" stepKey="deletePreReqProductAttribute" />
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

@@ -43,6 +43,7 @@ Disallow: /*SID=
             </search_engine_robots>
             <header translate="welcome">
                 <welcome>Default welcome msg!</welcome>
+                <translate_title>1</translate_title>
             </header>
             <footer translate="copyright">
                 <copyright>Copyright &#169; 2013-present Magento, Inc. All rights reserved.</copyright>

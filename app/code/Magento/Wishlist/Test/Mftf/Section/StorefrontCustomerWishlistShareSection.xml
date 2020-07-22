@@ -12,5 +12,6 @@
         <element name="ProductShareWishlistEmail" type="input" selector="#email_address"/>
         <element name="ProductShareWishlistTextMessage" type="input" selector="#message"/>
         <element name="ProductShareWishlistButton" type="button" selector=".action.submit.primary" timeout="30"/>
+        <element name="errorEmailMessage" type="input" selector="#email_address-error"/>
     </section>
 </sections>

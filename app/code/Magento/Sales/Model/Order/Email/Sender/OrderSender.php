@@ -16,7 +16,8 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\DataObject;
 
 /**
- * Class OrderSender
+ * Sends order email to the customer.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderSender extends Sender
@@ -125,11 +126,19 @@ class OrderSender extends Sender
     {
         $transport = [
             'order' => $order,
+            'order_id' => $order->getId(),
             'billing' => $order->getBillingAddress(),
             'payment_html' => $this->getPaymentHtml($order),
             'store' => $order->getStore(),
             'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
             'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
+            'created_at_formatted' => $order->getCreatedAtFormatted(2),
+            'order_data' => [
+                'customer_name' => $order->getCustomerName(),
+                'is_not_virtual' => $order->getIsNotVirtual(),
+                'email_customer_note' => $order->getEmailCustomerNote(),
+                'frontend_status_label' => $order->getFrontendStatusLabel()
+            ]
         ];
         $transportObject = new DataObject($transport);
 

@@ -15,8 +15,8 @@
         <arguments>
             <argument name="image"/>
         </arguments>
-
-        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggleState('closed')}}" dependentSelector="{{AdminProductImagesSection.productImagesToggleState('open')}}" visible="false" stepKey="clickSectionImage"/>
+        <conditionalClick selector="{{AdminProductImagesSection.productImagesToggle}}" dependentSelector="{{AdminProductImagesSection.imageFile(image.fileName)}}" visible="false" stepKey="expandImages"/>
+        <waitForElementVisible selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="seeProductImageName"/>
         <click selector="{{AdminProductImagesSection.imageFile(image.fileName)}}" stepKey="clickProductImage"/>
         <waitForElementVisible selector="{{AdminProductImagesSection.altText}}" stepKey="seeAltTextSection"/>
         <checkOption selector="{{AdminProductImagesSection.roleBase}}" stepKey="checkRoleBase"/>

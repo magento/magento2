@@ -62,7 +62,7 @@ class LockerProcess implements LockerProcessInterface
      */
     public function lockProcess($lockName)
     {
-        if ($this->getState()->getMode() == State::MODE_PRODUCTION) {
+        if ($this->getState()->getMode() === State::MODE_PRODUCTION || PHP_SAPI === 'cli') {
             return;
         }
 
@@ -78,11 +78,12 @@ class LockerProcess implements LockerProcessInterface
 
     /**
      * @inheritdoc
+     *
      * @throws FileSystemException
      */
     public function unlockProcess()
     {
-        if ($this->getState()->getMode() == State::MODE_PRODUCTION) {
+        if ($this->getState()->getMode() === State::MODE_PRODUCTION || PHP_SAPI === 'cli') {
             return;
         }
 
@@ -115,9 +116,10 @@ class LockerProcess implements LockerProcessInterface
     }
 
     /**
-     * Get name of lock file
+     * Get path to lock file
      *
      * @param string $name
+     *
      * @return string
      */
     private function getFilePath($name)
@@ -126,7 +128,10 @@ class LockerProcess implements LockerProcessInterface
     }
 
     /**
+     * Get State object
+     *
      * @return State
+     *
      * @deprecated 100.1.1
      */
     private function getState()

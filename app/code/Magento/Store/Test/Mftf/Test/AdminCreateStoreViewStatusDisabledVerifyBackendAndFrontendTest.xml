@@ -17,24 +17,24 @@
                 <group value="mtf_migrated"/>
             </annotations>
             <before>
-                <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
+                <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             </before>
             <after>
                 <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
                     <argument name="customStore" value="storeViewDataDisabled"/>
                 </actionGroup>
-                <actionGroup ref="logout" stepKey="logout"/>
+                <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             </after>
 
             <!--Create store view-->
-            <actionGroup ref="CreateStoreView" stepKey="createStoreView">
+            <actionGroup ref="CreateStoreViewActionGroup" stepKey="createStoreView">
                 <argument name="storeView" value="storeViewDataDisabled"/>
                 <argument name="storeGroupName" value="_defaultStoreGroup.name"/>
                 <argument name="storeViewStatus" value="storeViewDataDisabled.is_active"/>
             </actionGroup>
 
             <!--Save the above store view and verify AssertStoreViewSuccessSaveMessage-->
-            <actionGroup ref="AdminCreateStoreViewActionSaveGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>
+            <actionGroup ref="AdminCreateStoreViewSaveActionGroup" stepKey="verifyAssertStoreViewSuccessSaveMessage"/>
 
             <!--Go to store configuration page and verify AssertStoreBackend-->
             <actionGroup ref="AssertStoreConfigurationBackendActionGroup" stepKey="verifyValuesOnStoreBackend">

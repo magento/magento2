@@ -9,6 +9,9 @@
     <tr class="totals shipping excl">
         <th class="mark" scope="row">
             <span class="label" data-bind="text: title + ' ' + excludingTaxMessage"></span>
+            <!-- ko if: haveToShowCoupon() -->
+                <span class="label description" data-bind="text: getCouponDescription()"></span>
+            <!-- /ko -->
             <span class="value" data-bind="text: getShippingMethodTitle()"></span>
         </th>
         <td class="amount">
@@ -19,6 +22,9 @@
     <tr class="totals shipping incl">
         <th class="mark" scope="row">
             <span class="label" data-bind="text: title + ' ' + includingTaxMessage"></span>
+            <!-- ko if: haveToShowCoupon() -->
+                <span class="label description" data-bind="text: getCouponDescription()"></span>
+            <!-- /ko -->
             <span class="value" data-bind="text: getShippingMethodTitle()"></span>
         </th>
         <td class="amount">
@@ -31,6 +37,9 @@
     <tr class="totals shipping incl">
         <th class="mark" scope="row">
             <span class="label" data-bind="i18n: title"></span>
+            <!-- ko if: haveToShowCoupon() -->
+                <span class="label description" data-bind="text: getCouponDescription()"></span>
+            <!-- /ko -->
             <span class="value" data-bind="text: getShippingMethodTitle()"></span>
         </th>
         <td class="amount">
@@ -43,6 +52,9 @@
     <tr class="totals shipping excl">
         <th class="mark" scope="row">
             <span class="label" data-bind="i18n: title"></span>
+            <!-- ko if: haveToShowCoupon() -->
+                <span class="label description" data-bind="text: getCouponDescription()"></span>
+            <!-- /ko -->
             <span class="value" data-bind="text: getShippingMethodTitle()"></span>
         </th>
         <td class="amount">

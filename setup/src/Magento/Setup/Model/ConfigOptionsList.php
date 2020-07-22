@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Model;
 
@@ -11,7 +12,6 @@ use Magento\Framework\Config\ConfigOptionsListConstants;
 use Magento\Framework\Encryption\KeyValidator;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
 use Magento\Framework\Setup\Option\FlagConfigOption;
-use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 use Magento\Setup\Validator\DbValidator;
@@ -178,7 +178,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS .
                 '/' . ConfigOptionsListConstants::KEY_MYSQL_SSL_KEY,
                 'Full path of client key file in order to establish db connection through SSL',
-                null
+                ''
             ),
             new TextConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_SSL_CERT,
@@ -186,7 +186,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS .
                 '/' . ConfigOptionsListConstants::KEY_MYSQL_SSL_CERT,
                 'Full path of client certificate file in order to establish db connection through SSL',
-                null
+                ''
             ),
             new TextConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_SSL_CA,
@@ -194,7 +194,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
                 ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTION_DEFAULT_DRIVER_OPTIONS .
                 '/' . ConfigOptionsListConstants::KEY_MYSQL_SSL_CA,
                 'Full path of server certificate file in order to establish db connection through SSL',
-                null
+                ''
             ),
             new FlagConfigOption(
                 ConfigOptionsListConstants::INPUT_KEY_DB_SSL_VERIFY,
@@ -205,6 +205,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         ];
 
         foreach ($this->configOptionsCollection as $configOptionsList) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $options = array_merge($options, $configOptionsList->getOptions());
         }
 
@@ -261,6 +262,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         }
 
         foreach ($this->configOptionsCollection as $configOptionsList) {
+            // phpcs:ignore Magento2.Performance.ForeachArrayMerge
             $errors = array_merge($errors, $configOptionsList->validate($options, $deploymentConfig));
         }
 

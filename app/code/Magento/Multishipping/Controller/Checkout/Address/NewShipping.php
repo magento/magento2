@@ -1,12 +1,19 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Multishipping\Controller\Checkout\Address;
 
-class NewShipping extends \Magento\Multishipping\Controller\Checkout\Address
+use Magento\Framework\App\Action\HttpGetActionInterface as HttpGetActionInterface;
+use Magento\Multishipping\Controller\Checkout\Address;
+
+/**
+ * Class NewShipping
+ *
+ * @package Address
+ */
+class NewShipping extends Address implements HttpGetActionInterface
 {
     /**
      * Create New Shipping address Form
@@ -35,7 +42,7 @@ class NewShipping extends \Magento\Multishipping\Controller\Checkout\Address
             if ($this->_getCheckout()->getCustomerDefaultShippingAddress()) {
                 $addressForm->setBackUrl($this->_url->getUrl('*/checkout/addresses'));
             } else {
-                $addressForm->setBackUrl($this->_url->getUrl('*/cart/'));
+                $addressForm->setBackUrl($this->_url->getUrl('checkout/cart/'));
             }
         }
         $this->_view->renderLayout();

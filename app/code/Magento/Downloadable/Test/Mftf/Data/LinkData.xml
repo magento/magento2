@@ -63,6 +63,12 @@
         <data key="file_type">URL</data>
         <data key="file">https://static.magento.com/sites/all/themes/mag_redesign/images/magento-logo.svg</data>
     </entity>
+    <entity name="DownloadableSample" type="downloadable_sample">
+        <data key="title" unique="suffix">downloadableSampleUrl</data>
+        <data key="sort_order">1</data>
+        <data key="sample_type">url</data>
+        <data key="sample_url">http://example.com</data>
+    </entity>
     <entity name="ApiDownloadableLink" type="downloadable_link">
         <data key="title" unique="suffix">Api Downloadable Link</data>
         <data key="price">2.00</data>

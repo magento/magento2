@@ -84,7 +84,7 @@ class AccountManagementTest extends WebapiAbstract
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->accountManagement = Bootstrap::getObjectManager()->get(
             \Magento\Customer\Api\AccountManagementInterface::class
@@ -125,7 +125,7 @@ class AccountManagementTest extends WebapiAbstract
         }
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         if (!empty($this->currentCustomerId)) {
             foreach ($this->currentCustomerId as $customerId) {
@@ -249,7 +249,15 @@ class AccountManagementTest extends WebapiAbstract
     public function testActivateCustomer()
     {
         $customerData = $this->_createCustomer();
-        $this->assertNotNull($customerData[Customer::CONFIRMATION], 'Customer activation is not required');
+
+        // Update the customer's confirmation key to a known value
+        $customerData = $this->customerHelper->updateSampleCustomer(
+            $customerData[Customer::ID],
+            [
+                'id' => $customerData[Customer::ID],
+                'confirmation' => CustomerHelper::CONFIRMATION
+            ]
+        );
 
         $serviceInfo = [
             'rest' => [
@@ -265,16 +273,15 @@ class AccountManagementTest extends WebapiAbstract
 
         $requestData = [
             'email' => $customerData[Customer::EMAIL],
-            'confirmationKey' => $customerData[Customer::CONFIRMATION],
+            'confirmationKey' => CustomerHelper::CONFIRMATION
         ];
 
-        $result = $this->_webApiCall($serviceInfo, $requestData);
-
-        $this->assertEquals($customerData[Customer::ID], $result[Customer::ID], 'Wrong customer!');
-        $this->assertTrue(
-            !isset($result[Customer::CONFIRMATION]) || $result[Customer::CONFIRMATION] === null,
-            'Customer is not activated!'
-        );
+        try {
+            $result = $this->_webApiCall($serviceInfo, $requestData);
+            $this->assertEquals($customerData[Customer::ID], $result[Customer::ID], 'Wrong customer!');
+        } catch (\Exception $e) {
+            $this->fail('Customer is not activated.');
+        }
     }
 
     public function testGetCustomerActivateCustomer()
@@ -294,14 +301,15 @@ class AccountManagementTest extends WebapiAbstract
         ];
         $requestData = [
             'email' => $customerData[Customer::EMAIL],
-            'confirmationKey' => $customerData[Customer::CONFIRMATION],
+            'confirmationKey' => CustomerHelper::CONFIRMATION
         ];
 
-        $customerResponseData = $this->_webApiCall($serviceInfo, $requestData);
-
-        $this->assertEquals($customerData[Customer::ID], $customerResponseData[Customer::ID]);
-        // Confirmation key is removed after confirmation
-        $this->assertFalse(isset($customerResponseData[Customer::CONFIRMATION]));
+        try {
+            $customerResponseData = $this->_webApiCall($serviceInfo, $requestData);
+            $this->assertEquals($customerData[Customer::ID], $customerResponseData[Customer::ID]);
+        } catch (\Exception $e) {
+            $this->fail('Customer is not activated.');
+        }
     }
 
     public function testValidateResetPasswordLinkToken()
@@ -364,7 +372,7 @@ class AccountManagementTest extends WebapiAbstract
             }
             $this->fail("Expected exception to be thrown.");
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 "Exception message does not match"

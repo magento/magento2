@@ -24,7 +24,7 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -54,10 +54,6 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
                 'value' => 10,
                 'currency' => 'USD',
             ],
-            'base_amount' => [
-                'value' => 10,
-                'currency' => 'USD',
-            ],
             'carrier_code' => 'flatrate',
             'carrier_title' => 'Flat Rate',
             'error_message' => '',
@@ -71,10 +67,68 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
                 'value' => 10,
                 'currency' => 'USD',
             ],
+            'base_amount' => null,
         ];
         self::assertEquals(
             $expectedAddressData,
             $response['cart']['shipping_addresses'][0]['available_shipping_methods'][0]
+        );
+        self::assertCount(1, $response['cart']['shipping_addresses'][0]['cart_items']);
+        self::assertCount(1, $response['cart']['shipping_addresses'][0]['cart_items_v2']);
+        self::assertEquals(
+            'simple_product',
+            $response['cart']['shipping_addresses'][0]['cart_items_v2'][0]['product']['sku']
+        );
+    }
+
+    /**
+     * Test case: get available shipping methods from current customer quote with configurable product
+     *
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
+     * @magentoApiDataFixture Magento/CatalogRule/_files/configurable_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_configurable_product.php
+     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     */
+    public function testGetAvailableShippingMethodsWithConfigurableProduct()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
+        $response = $this->graphQlQuery($this->getQuery($maskedQuoteId));
+
+        self::assertArrayHasKey('cart', $response);
+        self::assertArrayHasKey('shipping_addresses', $response['cart']);
+        self::assertCount(1, $response['cart']['shipping_addresses']);
+        self::assertArrayHasKey('available_shipping_methods', $response['cart']['shipping_addresses'][0]);
+        self::assertCount(1, $response['cart']['shipping_addresses'][0]['available_shipping_methods']);
+
+        $expectedAddressData = [
+            'amount' => [
+                'value' => 5,
+                'currency' => 'USD',
+            ],
+            'carrier_code' => 'flatrate',
+            'carrier_title' => 'Flat Rate',
+            'error_message' => '',
+            'method_code' => 'flatrate',
+            'method_title' => 'Fixed',
+            'price_incl_tax' => [
+                'value' => 5,
+                'currency' => 'USD',
+            ],
+            'price_excl_tax' => [
+                'value' => 5,
+                'currency' => 'USD',
+            ],
+            'base_amount' => null,
+        ];
+        self::assertEquals(
+            $expectedAddressData,
+            $response['cart']['shipping_addresses'][0]['available_shipping_methods'][0]
+        );
+        self::assertCount(2, $response['cart']['shipping_addresses'][0]['cart_items']);
+        self::assertCount(2, $response['cart']['shipping_addresses'][0]['cart_items_v2']);
+        self::assertEquals(
+            'configurable',
+            $response['cart']['shipping_addresses'][0]['cart_items_v2'][0]['product']['sku']
         );
     }
 
@@ -118,11 +172,12 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
     /**
      * Test case: get available shipping methods from non-existent cart
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testGetAvailableShippingMethodsOfNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "non_existent_masked_id"');
+
         $maskedQuoteId = 'non_existent_masked_id';
         $query = $this->getQuery($maskedQuoteId);
 
@@ -139,29 +194,53 @@ class GetAvailableShippingMethodsTest extends GraphQlAbstract
 query {
   cart (cart_id: "{$maskedQuoteId}") {
     shipping_addresses {
-        available_shipping_methods {
-          amount {
-            value
-            currency
-          }
-          base_amount {
-            value
-            currency
-          }
-          carrier_code
-          carrier_title
-          error_message
-          method_code
-          method_title
-          price_excl_tax {
-            value
-            currency
-          }
-          price_incl_tax {
-            value
-            currency
-          }
+      cart_items {
+        cart_item_id
+        quantity
+      }
+      cart_items_v2 {
+        id
+        quantity
+        product {
+          sku
         }
+      }
+      available_shipping_methods {
+        amount {
+          value
+          currency
+        }
+        carrier_code
+        carrier_title
+        error_message
+        method_code
+        method_title
+        price_excl_tax {
+          value
+          currency
+        }
+        price_incl_tax {
+          value
+          currency
+        }
+        base_amount {
+          value
+          currency
+        }
+        carrier_code
+        carrier_title
+        error_message
+        method_code
+        method_title
+        price_excl_tax {
+          value
+          currency
+        }
+        price_incl_tax {
+          value
+          currency
+        }
+      }
     }
   }
 }

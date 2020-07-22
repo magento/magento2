@@ -15,7 +15,7 @@
             <title value="Check updating shopping cart while updating qty of items with custom options"/>
             <description value="Check updating shopping cart while updating qty of items with custom options"/>
             <testCaseId value="MC-14732" />
-            <severity value="AVERAGE"/>
+            <severity value="BLOCKER"/>
             <group value="shoppingCart"/>
             <group value="mtf_migrated"/>
         </annotations>
@@ -43,8 +43,7 @@
         </after>
 
         <!-- Go to the shopping cart -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
-        <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnPageShoppingCart"/>
 
         <!-- Change the product QTY -->
         <fillField selector="{{CheckoutCartProductSection.ProductQuantityByName($$createProduct.name$$)}}"  userInput="{{quoteQty11Subtotal1320.qty}}" stepKey="changeCartQty"/>
@@ -61,7 +60,7 @@
         <see userInput="{{quoteQty11Subtotal1320.currency}}{{quoteQty11Subtotal1320.subtotal}}" selector="{{CheckoutCartSummarySection.subtotal}}" stepKey="assertSubtotal"/>
 
         <!-- Minicart product price and subtotal should be updated -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="openMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="openMinicart"/>
         <grabValueFrom selector="{{StorefrontMinicartSection.itemQuantity($$createProduct.name$$)}}" stepKey="grabProductQtyInMinicart"/>
         <assertEquals stepKey="assertProductQtyInMinicart">
             <expectedResult type="string">{{quoteQty11Subtotal1320.qty}}</expectedResult>

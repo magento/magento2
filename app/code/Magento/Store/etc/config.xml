@@ -83,7 +83,7 @@
                 <use_http_via>0</use_http_via>
                 <use_http_x_forwarded_for>0</use_http_x_forwarded_for>
                 <use_http_user_agent>0</use_http_user_agent>
-                <use_frontend_sid>1</use_frontend_sid>
+                <use_frontend_sid>0</use_frontend_sid>
             </session>
             <browser_capabilities>
                 <cookies>1</cookies>
@@ -135,14 +135,14 @@
                 </protected_extensions>
                 <public_files_valid_paths>
                     <protected>
-                        <app>/app/*/*</app>
-                        <bin>/bin/*/*</bin>
-                        <dev>/dev/*/*</dev>
-                        <generated>/generated/*/*</generated>
-                        <lib>/lib/*/*</lib>
-                        <setup>/setup/*/*</setup>
-                        <update>/update/*/*</update>
-                        <vendor>/vendor/*/*</vendor>
+                        <app>*/app/*/*</app>
+                        <bin>*/bin/*/*</bin>
+                        <dev>*/dev/*/*</dev>
+                        <generated>*/generated/*/*</generated>
+                        <lib>*/lib/*/*</lib>
+                        <setup>*/setup/*/*</setup>
+                        <update>*/update/*/*</update>
+                        <vendor>*/vendor/*/*</vendor>
                     </protected>
                 </public_files_valid_paths>
             </file>

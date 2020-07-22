@@ -7,7 +7,10 @@ namespace Magento\CatalogImportExport\Model;
 
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\ImportExport\Model\Export\Adapter\AbstractAdapter;
 use Magento\Store\Model\Store;
+use Magento\TestFramework\Annotation\DataFixture;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 /**
  * Abstract class for testing product export and import scenarios
@@ -63,9 +66,14 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     ];
 
     /**
+     * @var AbstractAdapter
+     */
+    private $writer;
+
+    /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->fileSystem = $this->objectManager->get(\Magento\Framework\Filesystem::class);
@@ -78,7 +86,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->executeFixtures($this->fixtures, true);
     }
@@ -236,6 +244,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      */
     protected function executeFixtures(array $fixtures, bool $rollback = false)
     {
+        Resolver::getInstance()->setCurrentFixtureType(DataFixture::ANNOTATION);
         foreach ($fixtures as $fixture) {
             $fixturePath = $this->resolveFixturePath($fixture, $rollback);
             include $fixturePath;
@@ -367,7 +376,7 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
      * Export products in the system.
      *
      * @param \Magento\CatalogImportExport\Model\Export\Product|null $exportProduct
-     * @return string Return exported file name
+     * @return string Return exported file
      */
     private function exportProducts(\Magento\CatalogImportExport\Model\Export\Product $exportProduct = null)
     {
@@ -376,12 +385,11 @@ abstract class AbstractProductExportImportTestCase extends \PHPUnit\Framework\Te
         $exportProduct = $exportProduct ?: $this->objectManager->create(
             \Magento\CatalogImportExport\Model\Export\Product::class
         );
-        $exportProduct->setWriter(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-                \Magento\ImportExport\Model\Export\Adapter\Csv::class,
-                ['fileSystem' => $this->fileSystem, 'destination' => $csvfile]
-            )
+        $this->writer = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\ImportExport\Model\Export\Adapter\Csv::class,
+            ['fileSystem' => $this->fileSystem, 'destination' => $csvfile]
         );
+        $exportProduct->setWriter($this->writer);
         $this->assertNotEmpty($exportProduct->export());
 
         return $csvfile;

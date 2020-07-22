@@ -3,31 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Observer;
 
+use Magento\Checkout\Model\Session;
+use Magento\Checkout\Observer\LoadCustomerQuoteObserver;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class LoadCustomerQuoteObserverTest extends \PHPUnit\Framework\TestCase
+class LoadCustomerQuoteObserverTest extends TestCase
 {
-    /** @var \Magento\Checkout\Observer\LoadCustomerQuoteObserver */
+    /** @var LoadCustomerQuoteObserver */
     protected $object;
 
-    /** @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager */
+    /** @var ObjectManager */
     protected $objectManager;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject */
+    /** @var MockObject */
     protected $checkoutSession;
 
-    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ManagerInterface|MockObject */
     protected $messageManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->checkoutSession = $this->createMock(\Magento\Checkout\Model\Session::class);
-        $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->checkoutSession = $this->createMock(Session::class);
+        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->object = $this->objectManager->getObject(
-            \Magento\Checkout\Observer\LoadCustomerQuoteObserver::class,
+            LoadCustomerQuoteObserver::class,
             [
                 'checkoutSession' => $this->checkoutSession,
                 'messageManager' => $this->messageManager
@@ -38,11 +47,11 @@ class LoadCustomerQuoteObserverTest extends \PHPUnit\Framework\TestCase
     public function testLoadCustomerQuoteThrowingCoreException()
     {
         $this->checkoutSession->expects($this->once())->method('loadCustomerQuote')->willThrowException(
-            new \Magento\Framework\Exception\LocalizedException(__('Message'))
+            new LocalizedException(__('Message'))
         );
         $this->messageManager->expects($this->once())->method('addErrorMessage')->with('Message');
 
-        $observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        $observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -52,13 +61,13 @@ class LoadCustomerQuoteObserverTest extends \PHPUnit\Framework\TestCase
     public function testLoadCustomerQuoteThrowingException()
     {
         $exception = new \Exception('Message');
-        $this->checkoutSession->expects($this->once())->method('loadCustomerQuote')->will(
-            $this->throwException($exception)
+        $this->checkoutSession->expects($this->once())->method('loadCustomerQuote')->willThrowException(
+            $exception
         );
         $this->messageManager->expects($this->once())->method('addExceptionMessage')
             ->with($exception, 'Load customer quote error');
 
-        $observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        $observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->getMock();
 

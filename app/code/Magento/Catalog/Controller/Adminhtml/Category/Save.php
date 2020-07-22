@@ -8,6 +8,7 @@ namespace Magento\Catalog\Controller\Adminhtml\Category;
 
 use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterface;
 use Magento\Catalog\Api\Data\CategoryAttributeInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -57,6 +58,11 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
     private $eavConfig;
 
     /**
+     * @var \Psr\Log\LoggerInterface
+     */
+    private $logger;
+
+    /**
      * Constructor
      *
      * @param \Magento\Backend\App\Action\Context $context
@@ -66,6 +72,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
      * @param \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter
      * @param StoreManagerInterface $storeManager
      * @param \Magento\Eav\Model\Config $eavConfig
+     * @param \Psr\Log\LoggerInterface $logger
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
@@ -74,15 +81,18 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
         \Magento\Framework\View\LayoutFactory $layoutFactory,
         \Magento\Framework\Stdlib\DateTime\Filter\Date $dateFilter,
         StoreManagerInterface $storeManager,
-        \Magento\Eav\Model\Config $eavConfig = null
+        \Magento\Eav\Model\Config $eavConfig = null,
+        \Psr\Log\LoggerInterface $logger = null
     ) {
         parent::__construct($context, $dateFilter);
         $this->resultRawFactory = $resultRawFactory;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->layoutFactory = $layoutFactory;
         $this->storeManager = $storeManager;
-        $this->eavConfig = $eavConfig
-            ?: \Magento\Framework\App\ObjectManager::getInstance()->get(\Magento\Eav\Model\Config::class);
+        $this->eavConfig = $eavConfig ?: ObjectManager::getInstance()
+            ->get(\Magento\Eav\Model\Config::class);
+        $this->logger = $logger ?: ObjectManager::getInstance()
+            ->get(\Psr\Log\LoggerInterface::class);
     }
 
     /**
@@ -173,29 +183,29 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
                 $products = json_decode($categoryPostData['category_products'], true);
                 $category->setPostedProducts($products);
             }
-            $this->_eventManager->dispatch(
-                'catalog_category_prepare_save',
-                ['category' => $category, 'request' => $this->getRequest()]
-            );
-
-            /**
-             * Check "Use Default Value" checkboxes values
-             */
-            if (isset($categoryPostData['use_default']) && !empty($categoryPostData['use_default'])) {
-                foreach ($categoryPostData['use_default'] as $attributeCode => $attributeValue) {
-                    if ($attributeValue) {
-                        $category->setData($attributeCode, null);
-                    }
-                }
-            }
-
-            /**
-             * Proceed with $_POST['use_config']
-             * set into category model for processing through validation
-             */
-            $category->setData('use_post_data_config', $useConfig);
 
             try {
+                $this->_eventManager->dispatch(
+                    'catalog_category_prepare_save',
+                    ['category' => $category, 'request' => $this->getRequest()]
+                );
+                /**
+                 * Check "Use Default Value" checkboxes values
+                 */
+                if (isset($categoryPostData['use_default']) && !empty($categoryPostData['use_default'])) {
+                    foreach ($categoryPostData['use_default'] as $attributeCode => $attributeValue) {
+                        if ($attributeValue) {
+                            $category->setData($attributeCode, null);
+                        }
+                    }
+                }
+
+                /**
+                 * Proceed with $_POST['use_config']
+                 * set into category model for processing through validation
+                 */
+                $category->setData('use_post_data_config', $useConfig);
+
                 $categoryResource = $category->getResource();
                 if ($category->hasCustomDesignTo()) {
                     $categoryResource->getAttribute('custom_design_from')->setMaxValue($category->getCustomDesignTo());
@@ -210,7 +220,9 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
                                 __('The "%1" attribute is required. Enter and try again.', $attribute)
                             );
                         } else {
-                            throw new \Exception($error);
+                            $this->messageManager->addErrorMessage(__('Something went wrong while saving the category.'));
+                            $this->logger->critical('Something went wrong while saving the category.');
+                            $this->_getSession()->setCategoryData($categoryPostData);
                         }
                     }
                 }
@@ -219,13 +231,15 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
 
                 $category->save();
                 $this->messageManager->addSuccessMessage(__('You saved the category.'));
+                // phpcs:disable Magento2.Exceptions.ThrowCatch
             } catch (\Magento\Framework\Exception\LocalizedException $e) {
                 $this->messageManager->addExceptionMessage($e);
-                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+                $this->logger->critical($e);
                 $this->_getSession()->setCategoryData($categoryPostData);
-            } catch (\Exception $e) {
+                // phpcs:disable Magento2.Exceptions.ThrowCatch
+            } catch (\Throwable $e) {
                 $this->messageManager->addErrorMessage(__('Something went wrong while saving the category.'));
-                $this->_objectManager->get(\Psr\Log\LoggerInterface::class)->critical($e);
+                $this->logger->critical($e);
                 $this->_getSession()->setCategoryData($categoryPostData);
             }
         }
@@ -332,11 +346,7 @@ class Save extends \Magento\Catalog\Controller\Adminhtml\Category implements Htt
     {
         if (!$parentId) {
             if ($storeId) {
-                $parentId = $this->_objectManager->get(
-                    \Magento\Store\Model\StoreManagerInterface::class
-                )->getStore(
-                    $storeId
-                )->getRootCategoryId();
+                $parentId = $this->storeManager->getStore($storeId)->getRootCategoryId();
             } else {
                 $parentId = \Magento\Catalog\Model\Category::TREE_ROOT_ID;
             }

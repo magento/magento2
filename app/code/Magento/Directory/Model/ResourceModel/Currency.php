@@ -138,7 +138,7 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function saveRates($rates)
     {
-        if (is_array($rates) && sizeof($rates) > 0) {
+        if (is_array($rates) && count($rates) > 0) {
             $connection = $this->getConnection();
             $data = [];
             foreach ($rates as $currencyCode => $rate) {
@@ -176,7 +176,7 @@ class Currency extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $result = [];
         $rowSet = $connection->fetchAll($select, $bind);
         foreach ($rowSet as $row) {
-            $result = array_merge($result, explode(',', $row['value']));
+            $result[] = explode(',', $row['value']);
         }
         sort($result);
 

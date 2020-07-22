@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Check simple product on the category page -->
+    <actionGroup name="AssertStorefrontCategorySimpleProductShownActionGroup">
+        <annotations>
+            <description>Validate that the provided Simple Product is present and correct on a Category page.</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" type="string" defaultValue="{{ApiSimpleOne.name}}"/>
+            <argument name="productPrice" type="string" defaultValue="{{ApiSimpleOne.price}}"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{StorefrontCategoryProductSection.ProductTitleByName(productName)}}" stepKey="waitForProduct"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName(productName)}}" stepKey="assertProductName"/>
+        <see userInput="${{productPrice}}" selector="{{StorefrontCategoryProductSection.ProductPriceByName(productName)}}" stepKey="assertProductPrice"/>
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(productName)}}" stepKey="moveMouseOverProduct"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(productName)}}" stepKey="assertAddToCartButton"/>
+    </actionGroup>
+</actionGroups>

@@ -3,10 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Multishipping\Block\Checkout;
 
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Quote\Model\Quote\Address;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * Mustishipping checkout shipping
@@ -67,6 +70,8 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
+     * Add page title and prepare layout
+     *
      * @return $this
      */
     protected function _prepareLayout()
@@ -78,6 +83,8 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
+     * Retrieves addresses
+     *
      * @return Address[]
      */
     public function getAddresses()
@@ -86,6 +93,8 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
+     * Returns count of addresses
+     *
      * @return mixed
      */
     public function getAddressCount()
@@ -99,6 +108,8 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
+     * Retrieves the address items
+     *
      * @param Address $address
      * @return \Magento\Framework\DataObject[]
      */
@@ -106,7 +117,7 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     {
         $items = [];
         foreach ($address->getAllItems() as $item) {
-            if ($item->getParentItemId()) {
+            if ($item->getParentItemId() || !$item->getQuoteItemId()) {
                 continue;
             }
             $item->setQuoteItem($this->getCheckout()->getQuote()->getItemById($item->getQuoteItemId()));
@@ -118,6 +129,8 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
+     * Retrieves the address shipping method
+     *
      * @param Address $address
      * @return mixed
      */
@@ -127,6 +140,8 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
+     * Retrieves address shipping rates
+     *
      * @param Address $address
      * @return mixed
      */
@@ -137,22 +152,20 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
+     * Retrieves the carrier name by the code
+     *
      * @param string $carrierCode
      * @return string
      */
     public function getCarrierName($carrierCode)
     {
-        if ($name = $this->_scopeConfig->getValue(
-            'carriers/' . $carrierCode . '/title',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )
-        ) {
-            return $name;
-        }
-        return $carrierCode;
+        $name = $this->_scopeConfig->getValue('carriers/' . $carrierCode . '/title', ScopeInterface::SCOPE_STORE);
+        return $name ?: $carrierCode;
     }
 
     /**
+     * Retrieves the address edit url
+     *
      * @param Address $address
      * @return string
      */
@@ -162,6 +175,8 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
+     * Retrieves the url for items edition
+     *
      * @return string
      */
     public function getItemsEditUrl()
@@ -170,6 +185,8 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
+     * Retrieves the url for the post action
+     *
      * @return string
      */
     public function getPostActionUrl()
@@ -178,6 +195,8 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
+     * Retrieves the back url
+     *
      * @return string
      */
     public function getBackUrl()
@@ -186,6 +205,8 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
+     * Returns converted and formatted price
+     *
      * @param Address $address
      * @param float $price
      * @param bool $flag
@@ -202,7 +223,7 @@ class Shipping extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
-     * Retrieve text for items box
+     * Retrieves text for items box
      *
      * @param \Magento\Framework\DataObject $addressEntity
      * @return string

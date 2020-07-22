@@ -154,7 +154,7 @@ class RouteMapper
      * @param string $routeId
      * @param string $controllerName
      * @param string $actionName
-     * @return array
+     * @return string[]
      * @throws NoSuchActionException
      * @throws \Exception
      */
@@ -174,6 +174,7 @@ class RouteMapper
         $dependencies = [];
         foreach ($this->getRouterTypes() as $routerId) {
             if (isset($this->getActionsMap()[$routerId][$routeId][$controllerName][$actionName])) {
+                //phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $dependencies = array_merge(
                     $dependencies,
                     $this->getActionsMap()[$routerId][$routeId][$controllerName][$actionName]

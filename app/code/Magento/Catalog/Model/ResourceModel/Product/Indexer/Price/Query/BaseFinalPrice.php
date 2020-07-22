@@ -37,7 +37,7 @@ class BaseFinalPrice
     private $joinAttributeProcessor;
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     private $moduleManager;
 
@@ -69,7 +69,7 @@ class BaseFinalPrice
     /**
      * @param \Magento\Framework\App\ResourceConnection $resource
      * @param JoinAttributeProcessor $joinAttributeProcessor
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Framework\Event\ManagerInterface $eventManager
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
      * @param string $connectionName
@@ -77,7 +77,7 @@ class BaseFinalPrice
     public function __construct(
         \Magento\Framework\App\ResourceConnection $resource,
         JoinAttributeProcessor $joinAttributeProcessor,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Framework\Event\ManagerInterface $eventManager,
         \Magento\Framework\EntityManager\MetadataPool $metadataPool,
         $connectionName = 'indexer'

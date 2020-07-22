@@ -15,7 +15,7 @@
         <arguments>
             <argument name="Category"/>
         </arguments>
-        
+
         <amOnPage url="{{StorefrontCategoryPage.url(Category.name)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
@@ -33,14 +33,5 @@
         <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
         <click selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="clickOrderLink"/>
         <click selector="{{StorefrontCustomerOrderViewSection.printOrderLink}}" stepKey="clickPrintOrderLink"/>
-    </actionGroup>
-    
-    <actionGroup name="CreateOrderToPrintPageWithSelectedPaymentMethodActionGroup" extends="CreateOrderToPrintPageActionGroup">
-        <annotations>
-            <description>EXTENDS: CreateOrderToPrintPageActionGroup. Clicks on 'Check / Money Order'.</description>
-        </annotations>
-
-        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" after="clickNext" stepKey="waitForPaymentSectionLoaded"/>
-        <conditionalClick selector="{{CheckoutPaymentSection.checkMoneyOrderPayment}}" dependentSelector="{{CheckoutPaymentSection.billingAddress}}" visible="false" before="waitForPlaceOrderButton" stepKey="clickCheckMoneyOrderPayment"/>
     </actionGroup>
 </actionGroups>

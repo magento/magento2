@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="MerchantUnitedStates">
+        <data key="path">paypal/general/merchant_country</data>
+        <data key="scope_id">1</data>
+        <data key="label">United States</data>
+        <data key="value">us</data>
+    </entity>
+    <entity name="MerchantUnitedKingdom">
+        <data key="path">paypal/general/merchant_country</data>
+        <data key="scope_id">1</data>
+        <data key="label">United Kingdon</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="MerchantCanada">
+        <data key="path">paypal/general/merchant_country</data>
+        <data key="scope_id">1</data>
+        <data key="label">Canada</data>
+        <data key="value">CA</data>
+    </entity>
+    <entity name="MerchantAustralia">
+        <data key="path">paypal/general/merchant_country</data>
+        <data key="scope_id">1</data>
+        <data key="label">Australia</data>
+        <data key="value">AU</data>
+    </entity>
+    <entity name="MerchantJapan">
+        <data key="path">paypal/general/merchant_country</data>
+        <data key="scope_id">1</data>
+        <data key="label">Japan</data>
+        <data key="value">JP</data>
+    </entity>
+    <entity name="MerchantFrance">
+        <data key="path">paypal/general/merchant_country</data>
+        <data key="scope_id">1</data>
+        <data key="label">France</data>
+        <data key="value">FR</data>
+    </entity>
+    <entity name="MerchantHongKong">
+        <data key="path">paypal/general/merchant_country</data>
+        <data key="scope_id">1</data>
+        <data key="label">HongKong</data>
+        <data key="value">HK</data>
+    </entity>
+    <entity name="MerchantNewZealand">
+        <data key="path">paypal/general/merchant_country</data>
+        <data key="scope_id">1</data>
+        <data key="label">New Zealand</data>
+        <data key="value">NZ</data>
+    </entity>
+</entities>

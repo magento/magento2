@@ -20,14 +20,17 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     private $publisherConsumerController;
     private $consumers = ['product_action_attribute.update'];
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->publisherConsumerController = Bootstrap::getObjectManager()->create(PublisherConsumerController::class, [
-            'consumers' => $this->consumers,
-            'logFilePath' => TESTS_TEMP_DIR . "/MessageQueueTestLog.txt",
-            'maxMessages' => null,
-            'appInitParams' => Bootstrap::getInstance()->getAppInitParams()
-        ]);
+        $this->publisherConsumerController = Bootstrap::getObjectManager()->create(
+            PublisherConsumerController::class,
+            [
+                'consumers' => $this->consumers,
+                'logFilePath' => TESTS_TEMP_DIR . "/MessageQueueTestLog.txt",
+                'maxMessages' => null,
+                'appInitParams' => Bootstrap::getInstance()->getAppInitParams()
+            ]
+        );
 
         try {
             $this->publisherConsumerController->startConsumers();
@@ -42,7 +45,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
         parent::setUp();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->publisherConsumerController->stopConsumers();
         parent::tearDown();
@@ -124,7 +127,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
 
         $this->publisherConsumerController->waitForAsynchronousResult(
             function () use ($repository) {
-                sleep(3);
+                sleep(10); // Should be refactored in the scope of MC-22947
                 return $repository->get(
                     'simple',
                     false,

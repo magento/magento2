@@ -11,5 +11,6 @@
     <section name="AdminOrderCommentsTabSection">
         <element name="orderNotesList" type="text" selector="#Order_History .edit-order-comments .note-list"/>
         <element name="orderComments" type="text" selector="#Order_History .edit-order-comments-block"/>
+        <element name="orderComment" type="text" selector="#Order_History .comments-block-item-comment"/>
     </section>
 </sections>

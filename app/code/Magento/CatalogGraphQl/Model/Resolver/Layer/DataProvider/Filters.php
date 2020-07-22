@@ -9,6 +9,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Layer\DataProvider;
 
 use Magento\Catalog\Model\Layer\Filter\AbstractFilter;
 use Magento\CatalogGraphQl\Model\Resolver\Layer\FiltersProvider;
+use Magento\Catalog\Model\Layer\Filter\Item;
 
 /**
  * Layered navigation filters data provider.
@@ -21,6 +22,11 @@ class Filters
     private $filtersProvider;
 
     /**
+     * @var array
+     */
+    private $mappings;
+
+    /**
      * Filters constructor.
      * @param FiltersProvider $filtersProvider
      */
@@ -28,26 +34,31 @@ class Filters
         FiltersProvider $filtersProvider
     ) {
         $this->filtersProvider = $filtersProvider;
+        $this->mappings = [
+            'Category' => 'category'
+        ];
     }
 
     /**
      * Get layered navigation filters data
      *
      * @param string $layerType
+     * @param array|null $attributesToFilter
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function getData(string $layerType) : array
+    public function getData(string $layerType, array $attributesToFilter = null) : array
     {
         $filtersData = [];
         /** @var AbstractFilter $filter */
         foreach ($this->filtersProvider->getFilters($layerType) as $filter) {
-            if ($filter->getItemsCount()) {
+            if ($this->isNeedToAddFilter($filter, $attributesToFilter)) {
                 $filterGroup = [
                     'name' => (string)$filter->getName(),
                     'filter_items_count' => $filter->getItemsCount(),
                     'request_var' => $filter->getRequestVar(),
                 ];
-                /** @var \Magento\Catalog\Model\Layer\Filter\Item $filterItem */
+                /** @var Item $filterItem */
                 foreach ($filter->getItems() as $filterItem) {
                     $filterGroup['filter_items'][] = [
                         'label' => (string)$filterItem->getLabel(),
@@ -59,5 +70,33 @@ class Filters
             }
         }
         return $filtersData;
+    }
+
+    /**
+     * Check for adding filter to the list
+     *
+     * @param AbstractFilter $filter
+     * @param array $attributesToFilter
+     * @return bool
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function isNeedToAddFilter(AbstractFilter $filter, array $attributesToFilter): bool
+    {
+        if ($attributesToFilter === null) {
+            $result = (bool)$filter->getItemsCount();
+        } else {
+            if ($filter->hasAttributeModel()) {
+                $filterAttribute = $filter->getAttributeModel();
+                $result = in_array($filterAttribute->getAttributeCode(), $attributesToFilter);
+            } else {
+                $name = (string)$filter->getName();
+                if (array_key_exists($name, $this->mappings)) {
+                    $result = in_array($this->mappings[$name], $attributesToFilter);
+                } else {
+                    $result = true;
+                }
+            }
+        }
+        return $result;
     }
 }

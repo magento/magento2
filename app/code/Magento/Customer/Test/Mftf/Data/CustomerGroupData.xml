@@ -30,7 +30,7 @@
         </array>
     </entity>
     <entity name="CustomCustomerGroup" type="customerGroup">
-        <data key="code" unique="suffix">Group </data>
+        <data key="code" unique="suffix">Group-</data>
         <data key="tax_class_id">3</data>
         <data key="tax_class_name">Retail Customer</data>
     </entity>

@@ -58,8 +58,7 @@
         </actionGroup>
 
         <!-- Remove products from cart -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCart"/>
-        <waitForPageLoad stepKey="waitForCartPageLoad"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCart"/>
         <click selector="{{CheckoutCartProductSection.removeProductByName($$createFirstSimpleProduct.name$$)}}" stepKey="deleteFirstProductFromCheckoutCart"/>
         <click selector="{{CheckoutCartProductSection.removeProductByName($$createSecondSimpleProduct.name$$)}}" stepKey="deleteSecondProductFromCheckoutCart"/>
         <click selector="{{CheckoutCartProductSection.removeProductByName($$createThirdSimpleProduct.name$$)}}" stepKey="deleteThirdProductFromCheckoutCart"/>

@@ -41,7 +41,7 @@ class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
     /** @var Http */
     private $request;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $db = Bootstrap::getInstance()->getBootstrap()
             ->getApplication()
@@ -54,7 +54,7 @@ class GraphQlControllerTest extends \Magento\TestFramework\Indexer\TestCase
         parent::setUpBeforeClass();
     }
 
-    protected function setUp() : void
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->graphql = $this->objectManager->get(\Magento\GraphQl\Controller\GraphQl::class);
@@ -98,7 +98,7 @@ QUERY;
         $this->request->setPathInfo('/graphql');
         $this->request->setMethod('POST');
         $this->request->setContent(json_encode($postData));
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
+        $headers = $this->objectManager->create(\Laminas\Http\Headers::class)
             ->addHeaders(['Content-Type' => 'application/json']);
         $this->request->setHeaders($headers);
         $response = $this->graphql->dispatch($this->request);
@@ -167,7 +167,7 @@ QUERY;
         /** @var ProductInterface $product */
         $product = $productRepository->get('simple1');
         $query = <<<QUERY
-query GetProducts(\$filterInput:ProductFilterInput){
+query GetProducts(\$filterInput:ProductAttributeFilterInput){
     products(
         filter:\$filterInput
     ){
@@ -241,7 +241,7 @@ QUERY;
         $this->request->setPathInfo('/graphql');
         $this->request->setMethod('POST');
         $this->request->setContent(json_encode($postData));
-        $headers = $this->objectManager->create(\Zend\Http\Headers::class)
+        $headers = $this->objectManager->create(\Laminas\Http\Headers::class)
             ->addHeaders(['Content-Type' => 'application/json']);
         $this->request->setHeaders($headers);
         $response = $this->graphql->dispatch($this->request);
@@ -251,7 +251,7 @@ QUERY;
                 foreach ($outputResponse['errors'] as $error) {
                     $this->assertEquals(
                         \Magento\Framework\GraphQl\Exception\GraphQlInputException::EXCEPTION_CATEGORY,
-                        $error['category']
+                        $error['extensions']['category']
                     );
                     if (isset($error['message'])) {
                         $this->assertEquals($error['message'], 'Invalid entity_type specified: invalid');

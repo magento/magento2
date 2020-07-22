@@ -13,7 +13,7 @@
             <title value="Create a simple products with all types of oprtions and add it to the cart"/>
             <description value="Create a simple products with all types of oprtions and add it to the cart"/>
             <testCaseId value="MC-14726"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
         </annotations>
 
@@ -30,7 +30,7 @@
             <deleteData  createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
         <!-- Open Product page in StoreFront -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct1PageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProduct1PageAndVerifyProduct">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
@@ -48,7 +48,10 @@
         <actionGroup ref="StorefrontAttachOptionFileActionGroup" stepKey="selectAndAttachFile"/>
 
         <!--Select Option From DropDown option -->
-        <actionGroup ref="StorefrontSelectOptionDropDownActionGroup" stepKey="selectDropDownOption"/>
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectFirstOption">
+            <argument name="attributeLabel" value="{{ProductOptionDropDown.title}}"/>
+            <argument name="optionLabel" value="{{ProductOptionValueDropdown2.title}}"/>
+        </actionGroup>
         <scrollTo selector="{{StorefrontProductInfoMainSection.customOptionLabel(ProductOptionMultiSelect.title)}}" stepKey="scrollToMultiSelect"/>
 
         <!-- Select CheckBox From CheckBox option -->

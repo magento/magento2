@@ -40,7 +40,7 @@ abstract class AbstractElement implements StructureElementInterface
     protected $_storeManager;
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager;
 
@@ -50,15 +50,11 @@ abstract class AbstractElement implements StructureElementInterface
     private $elementVisibility;
 
     /**
-     * Construct.
-     *
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      */
-    public function __construct(
-        StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager
-    ) {
+    public function __construct(StoreManagerInterface $storeManager, \Magento\Framework\Module\Manager $moduleManager)
+    {
         $this->_storeManager = $storeManager;
         $this->moduleManager = $moduleManager;
     }
@@ -107,7 +103,7 @@ abstract class AbstractElement implements StructureElementInterface
      */
     public function getId()
     {
-        return isset($this->_data['id']) ? $this->_data['id'] : '';
+        return $this->_data['id'] ?? '';
     }
 
     /**
@@ -137,7 +133,7 @@ abstract class AbstractElement implements StructureElementInterface
      */
     public function getFrontendModel()
     {
-        return isset($this->_data['frontend_model']) ? $this->_data['frontend_model'] : '';
+        return $this->_data['frontend_model'] ?? '';
     }
 
     /**
@@ -198,7 +194,7 @@ abstract class AbstractElement implements StructureElementInterface
      */
     public function getClass()
     {
-        return isset($this->_data['class']) ? $this->_data['class'] : '';
+        return $this->_data['class'] ?? '';
     }
 
     /**

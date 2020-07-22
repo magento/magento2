@@ -111,13 +111,16 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             ]
         );
 
-        foreach ($this->systemStore->getStoreCollection() as $store) {
-            $this->getFieldset('rating_form')->addField(
-                'rating_code_' . $store->getId(),
-                'text',
-                ['label' => $store->getName(), 'name' => 'rating_codes[' . $store->getId() . ']']
-            );
+        if (!$this->_storeManager->isSingleStoreMode()) {
+            foreach ($this->systemStore->getStoreCollection() as $store) {
+                $this->getFieldset('rating_form')->addField(
+                    'rating_code_' . $store->getId(),
+                    'text',
+                    ['label' => $store->getName(), 'name' => 'rating_codes[' . $store->getId() . ']']
+                );
+            }
         }
+
         $this->setRatingData();
     }
 

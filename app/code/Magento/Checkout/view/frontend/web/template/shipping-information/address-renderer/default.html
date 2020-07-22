@@ -13,18 +13,7 @@
     <a if="address().telephone" attr="'href': 'tel:' + address().telephone" text="address().telephone"></a><br/>
 
     <each args="data: address().customAttributes, as: 'element'">
-        <if args="typeof element === 'object'">
-            <if args="element.label">
-                <text args="element.label"/>
-            </if>
-            <ifnot args="element.label">
-                <if args="element.value">
-                    <text args="element.value"/>
-                </if>
-            </ifnot>
-        </if>
-        <if args="typeof element === 'string'">
-            <text args="element"/>
-        </if><br/>
+        <text args="$parent.getCustomAttributeLabel(element)"/>
+        <br/>
     </each>
 </if>
