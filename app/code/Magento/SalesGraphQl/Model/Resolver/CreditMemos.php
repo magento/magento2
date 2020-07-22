@@ -43,8 +43,7 @@ class CreditMemos implements ResolverInterface
                 'id' => base64_encode($creditMemo->getEntityId()),
                 'number' => $creditMemo->getIncrementId(),
                 'order' => $orderModel,
-                'model' => $creditMemo,
-                //'product_type' => $orderItem['product_type'],
+                'model' => $creditMemo
             ];
         }
         return $creditMemos;
