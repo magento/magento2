@@ -5,12 +5,11 @@
  */
 declare(strict_types=1);
 
-use Magento\Eav\Api\AttributeRepositoryInterface;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\Helper\CacheCleaner;
-use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
-
 Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/configurable_products.php');
+
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\TestFramework\Helper\CacheCleaner;
 
 $eavConfig = Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
 
@@ -28,11 +27,11 @@ $attribute->setIsSearchable(1)
 /** @var AttributeRepositoryInterface $attributeRepository */
 $attributeRepository = Bootstrap::getObjectManager()->create(AttributeRepositoryInterface::class);
 $attributeRepository->save($attribute);
+
 CacheCleaner::cleanAll();
-/** @var \Magento\Indexer\Model\Indexer\Collection $indexerCollection */
-$indexerCollection = Bootstrap::getObjectManager()->get(\Magento\Indexer\Model\Indexer\Collection::class);
-$indexerCollection->load();
-/** @var \Magento\Indexer\Model\Indexer $indexer */
-foreach ($indexerCollection->getItems() as $indexer) {
-    $indexer->reindexAll();
-}
+
+// Run from CLI due to some classes involved in reindex process have state which do not allow to reindex
+$appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
+$out = '';
+// phpcs:ignore Magento2.Security.InsecureFunction
+exec("php -f {$appDir}/bin/magento indexer:reindex catalogsearch_fulltext", $out);
