@@ -7,7 +7,6 @@ namespace Magento\Framework\Module;
 
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\Config\ConfigOptionsListConstants;
-use Magento\Framework\Module\ModuleList\Loader;
 
 /**
  * A list of modules in the Magento application
@@ -27,7 +26,7 @@ class ModuleList implements ModuleListInterface
     /**
      * Loader of module information from source code
      *
-     * @var Loader
+     * @var ModuleList\Loader
      */
     private $loader;
 
@@ -51,9 +50,9 @@ class ModuleList implements ModuleListInterface
      * Constructor
      *
      * @param DeploymentConfig $config
-     * @param Loader $loader
+     * @param ModuleList\Loader $loader
      */
-    public function __construct(DeploymentConfig $config, Loader $loader)
+    public function __construct(DeploymentConfig $config, ModuleList\Loader $loader)
     {
         $this->config = $config;
         $this->loader = $loader;
@@ -99,17 +98,10 @@ class ModuleList implements ModuleListInterface
     public function getNames()
     {
         $this->loadConfigData();
-
-        $modulesList = array_keys($this->loader->load());
-
         if (!$this->configData) {
             return [];
         }
-
-        $modulesInConfig = array_keys(array_filter($this->configData));
-
-        $result = array_intersect($modulesInConfig, $modulesList);
-
+        $result = array_keys(array_filter($this->configData));
         return $result;
     }
 
