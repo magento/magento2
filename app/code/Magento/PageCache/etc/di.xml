@@ -49,4 +49,5 @@
     </type>
     <preference for="Magento\PageCache\Model\VclGeneratorInterface" type="Magento\PageCache\Model\Varnish\VclGenerator"/>
     <preference for="Magento\PageCache\Model\VclTemplateLocatorInterface" type="Magento\PageCache\Model\Varnish\VclTemplateLocator"/>
+    <preference for="Magento\PageCache\Model\Spi\PageCacheTagsPreprocessorInterface" type="Magento\PageCache\Model\PageCacheTagsPreprocessorComposite"/>
 </config>

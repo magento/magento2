@@ -66,8 +66,7 @@
         <waitForElementVisible selector="{{AdminProductMessagesSection.successMessage}}" stepKey="waitForSuccess"/>
 
         <!-- Create a configurable product to verify the storefront with -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad stepKey="waitForProductGrid"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateConfigurableProduct">
             <argument name="product" value="BaseConfigurableProduct"/>
         </actionGroup>
