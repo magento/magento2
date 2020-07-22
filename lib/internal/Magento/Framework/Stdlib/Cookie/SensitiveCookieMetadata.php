@@ -51,7 +51,7 @@ class SensitiveCookieMetadata extends CookieMetadata
     /**
      * @inheritdoc
      */
-    public function __toArray()
+    public function __toArray() //phpcs:ignore PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames
     {
         $this->updateSecureValue();
         return parent::__toArray();
