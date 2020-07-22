@@ -199,7 +199,10 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
         $allowedTests = [
             'CategoryProductsCountTest',
             'CategoryTest',
-            'CategoryListTest'
+            'CategoryListTest',
+            'CategoryTreeTest',
+            'CategoryAnchorTest',
+            'CategoryCanonicalUrlTest'
         ];
 
         $match = false;
