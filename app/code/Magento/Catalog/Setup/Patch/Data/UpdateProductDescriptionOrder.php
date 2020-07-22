@@ -92,14 +92,6 @@ class UpdateProductDescriptionOrder implements DataPatchInterface
     /**
      * {@inheritdoc}
      */
-    public static function getVersion()
-    {
-        return '2.3.5';
-    }
-
-    /**
-     * {@inheritdoc}
-     */
     public function getAliases()
     {
         return [];
