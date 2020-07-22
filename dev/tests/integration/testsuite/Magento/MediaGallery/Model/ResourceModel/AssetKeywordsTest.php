@@ -70,14 +70,14 @@ class AssetKeywordsTest extends TestCase
      * @param string[] $updatedKeywords
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function testSaveAndGetKeywords(array $keywords = [], array $updatedKeywords = []): void
+    public function testSaveAndGetKeywords(array $keywords, array $updatedKeywords): void
     {
         $loadedAssets = $this->getAssetsByPath->execute([self::FIXTURE_ASSET_PATH]);
         $this->assertCount(1, $loadedAssets);
         $loadedAsset = current($loadedAssets);
 
         $this->updateAssetKeywords($loadedAsset->getId(), $keywords);
-        $this->updateAssetKeywords($loadedAsset->getId(), $updatedKeywords, $keywords);
+        $this->updateAssetKeywords($loadedAsset->getId(), $updatedKeywords);
     }
 
     /**
@@ -85,9 +85,8 @@ class AssetKeywordsTest extends TestCase
      *
      * @param int $assetId
      * @param string[] $keywords
-     * @param string[] $currentKeywords
      */
-    private function updateAssetKeywords(int $assetId, array $keywords = [], array $currentKeywords = []): void
+    private function updateAssetKeywords(int $assetId, array $keywords): void
     {
         $assetKeywords = $this->assetsKeywordsFactory->create(
             [
@@ -99,28 +98,28 @@ class AssetKeywordsTest extends TestCase
         $this->saveAssetsKeywords->execute([$assetKeywords]);
         $loadedAssetKeywords = $this->getAssetsKeywords->execute([$assetId]);
 
-        $currentKeywords = empty($keywords) ? $currentKeywords : $keywords;
-        $expectedCount = !empty($currentKeywords) ? 1 : 0;
+        if (empty($keywords)) {
+            $this->assertEmpty($loadedAssetKeywords);
+            return;
+        }
 
-        $this->assertCount($expectedCount, $loadedAssetKeywords);
+        $this->assertCount(1, $loadedAssetKeywords);
         /** @var AssetKeywordsInterface $loadedAssetKeyword */
         $loadedAssetKeyword = current($loadedAssetKeywords);
 
-        $loadedKeywords = !empty($loadedAssetKeyword) ? $loadedAssetKeyword->getKeywords() : [];
+        $loadedKeywords = $loadedAssetKeyword->getKeywords();
 
-        $this->assertEquals(count($currentKeywords), count($loadedKeywords));
+        $this->assertEquals(count($keywords), count($loadedKeywords));
 
         $loadedKeywordStrings = [];
-        if (!empty($loadedKeywords)) {
-            foreach ($loadedKeywords as $loadedKeywordObject) {
-                $loadedKeywordStrings[] = $loadedKeywordObject->getKeyword();
-            }
+        foreach ($loadedKeywords as $loadedKeywordObject) {
+            $loadedKeywordStrings[] = $loadedKeywordObject->getKeyword();
         }
 
         sort($loadedKeywordStrings);
-        sort($currentKeywords);
+        sort($keywords);
 
-        $this->assertEquals($currentKeywords, $loadedKeywordStrings);
+        $this->assertEquals($keywords, $loadedKeywordStrings);
     }
 
     /**
