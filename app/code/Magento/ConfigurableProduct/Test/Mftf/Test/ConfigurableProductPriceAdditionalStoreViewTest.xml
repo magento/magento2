@@ -94,7 +94,7 @@
         </actionGroup>
 
         <!--Create Store view -->
-        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="amOnAdminSystemStorePage"/>
         <click selector="{{AdminStoresMainActionsSection.createStoreViewButton}}" stepKey="createStoreViewButton"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <selectOption userInput="Second Store" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
