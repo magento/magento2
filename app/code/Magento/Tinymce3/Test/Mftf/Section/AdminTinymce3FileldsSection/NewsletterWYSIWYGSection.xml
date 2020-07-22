@@ -7,7 +7,7 @@
 -->
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
-    <section name="NewsletterWYSIWYGSection">
+    <section name="NewsletterWYSIWYGSection" deprecated="This version of TinyMCE is no longer supported">
         <element name="TinyMCE3" type="text" selector="#cms_page_form_content_tbl"/>
     </section>
 </sections>

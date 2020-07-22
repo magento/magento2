@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminSwitchWYSIWYGOptionsTest">
+    <test name="AdminSwitchWYSIWYGOptionsTest" deprecated="TinyMCE3 is no longer supported">
         <annotations>
             <features value="Cms"/>
             <stories value="MAGETWO-51829-Extensible list of WYSIWYG editors available in Magento"/>
@@ -17,6 +17,9 @@
             <description value="Admin should able to switch between versions of TinyMCE"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-6114"/>
+            <skip>
+                <issueId value="DEPRECATED">TinyMCE3 is no longer supported</issueId>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>

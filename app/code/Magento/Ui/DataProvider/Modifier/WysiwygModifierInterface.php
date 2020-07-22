@@ -12,7 +12,7 @@ interface WysiwygModifierInterface
 {
     /**
      * Provide editor name
-     * For example tmce3 or tmce4
+     * For example tmce4
      *
      * @return array
      */
