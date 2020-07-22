@@ -31,12 +31,22 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
     private $attributesAllowedByTags;
 
     /**
-     * @param array $allowedTags
-     * @param array $allowedAttributes
-     * @param array $attributesAllowedByTags
+     * @var AttributeValidatorInterface[]
      */
-    public function __construct(array $allowedTags, array $allowedAttributes = [], array $attributesAllowedByTags = [])
-    {
+    private $attributeValidators;
+
+    /**
+     * @param string[] $allowedTags
+     * @param string[] $allowedAttributes
+     * @param string[] $attributesAllowedByTags
+     * @param AttributeValidatorInterface[] $attributeValidators
+     */
+    public function __construct(
+        array $allowedTags,
+        array $allowedAttributes = [],
+        array $attributesAllowedByTags = [],
+        array $attributeValidators = []
+    ) {
         if (empty(array_filter($allowedTags))) {
             throw new \InvalidArgumentException('List of allowed HTML tags cannot be empty');
         }
@@ -49,6 +59,7 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
             },
             ARRAY_FILTER_USE_KEY
         );
+        $this->attributeValidators = $attributeValidators;
     }
 
     /**
@@ -132,6 +143,17 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
                 );
             }
         }
+
+        //Validating allowed attributes.
+        if ($this->attributeValidators) {
+            foreach ($this->attributeValidators as $attr => $validator) {
+                $found = $xpath->query("//@*[name() = '$attr']");
+                foreach ($found as $attribute) {
+                    $validator->validate($attribute->parentNode->tagName, $attribute->name, $attribute->value);
+                }
+            }
+        }
+
     }
 
     /**
