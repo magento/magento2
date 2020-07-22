@@ -17,7 +17,6 @@ use PHPUnit\Framework\TestCase;
 /**
  * Test for clear shopping cart config
  *
- * @package Magento\Checkout\ViewModel
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CartTest extends TestCase

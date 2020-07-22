@@ -14,6 +14,7 @@
             <title value="Enable and Disable Clear Shopping Cart Configuration"/>
             <description value="Verify that disabling the clear shopping cart store configuration will remove the clear shopping cart configuration button from the storefront's shopping cart page. Verify that enabling the configuration will add the button to the page and that the button functions as expected"/>
             <group value="shoppingCart"/>
+            <severity value="MAJOR"/>
         </annotations>
         <before>
             <!-- Create simple products and category -->
@@ -45,9 +46,6 @@
         <!-- Enable clear shopping cart button -->
         <actionGroup ref="AdminSelectClearShoppingCartConfigurationActionGroup" stepKey="enableClearShoppingCartButton"/>
         <actionGroup ref="SaveStoreConfigurationActionGroup" stepKey="saveStoreConfiguration1"/>
-        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cliCacheClean1">
-            <argument name="tags" value=""/>
-        </actionGroup>
 
         <!-- Open product 1 and add to cart -->
         <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProduct1Page1">
@@ -74,9 +72,6 @@
             <argument name="value" value="{{DisableClearShoppingCart.textValue}}"/>
         </actionGroup>
         <actionGroup ref="SaveStoreConfigurationActionGroup" stepKey="saveStoreConfiguration2"/>
-        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cliCacheClean2">
-            <argument name="tags" value=""/>
-        </actionGroup>
 
         <!-- Open product 1 page and add to cart -->
         <actionGroup ref="StorefrontOpenProductEntityPageActionGroup" stepKey="openProduct1Page2">
