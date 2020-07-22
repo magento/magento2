@@ -284,9 +284,9 @@ define([
                     this._resetChildren(element.nextSetting);
                 } else {
                     if (!!document.documentMode) { //eslint-disable-line
-                        this.inputSimpleProduct.val(element.options[element.selectedIndex].config.allowedProducts[0]);
+                        this.inputSimpleProduct.val(element.options[element.selectedIndex].config.allowedProducts[0]).trigger("change");
                     } else {
-                        this.inputSimpleProduct.val(element.selectedOptions[0].config.allowedProducts[0]);
+                        this.inputSimpleProduct.val(element.selectedOptions[0].config.allowedProducts[0]).trigger("change");
                     }
                 }
             } else {
