@@ -54,15 +54,16 @@ class TriggerCleaner
      */
     public function removeTriggers(): bool
     {
+        // Get list of views that are enabled
         $viewCollection = $this->viewCollectionFactory->create();
         $viewList = $viewCollection->getViewsByStateMode(StateInterface::MODE_ENABLED);
 
-        // Unsubscribe mviews
+        // Unsubscribe existing view to remove triggers from db
         foreach ($viewList as $view) {
             $view->unsubscribe();
         }
 
-        // Unsubscribe old views that still have triggers in db
+        // Remove any remaining triggers from db that are not linked to a view
         $triggerTableNames = $this->getTableNamesWithTriggers();
         foreach ($triggerTableNames as $tableName) {
             $view = $this->createViewByTableName($tableName);
@@ -70,7 +71,7 @@ class TriggerCleaner
             $view->getState()->delete();
         }
 
-        // Re-subscribe mviews
+        // Restore the previous state of the views to add triggers back to db
         foreach ($viewList as $view) {
             $view->subscribe();
         }
@@ -99,6 +100,9 @@ class TriggerCleaner
 
     /**
      * Create view by db table name
+     *
+     * Create a view that has the table name so that unsubscribe can be used to
+     * remove triggers with the correct naming structure from the db
      *
      * @param string $tableName
      * @return ViewInterface
