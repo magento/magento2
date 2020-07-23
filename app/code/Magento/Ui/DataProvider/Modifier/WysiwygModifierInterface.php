@@ -19,6 +19,7 @@ interface WysiwygModifierInterface
 
     /**
      * Modifies the meta
+     *
      * @param array $meta
      *
      * @return array
