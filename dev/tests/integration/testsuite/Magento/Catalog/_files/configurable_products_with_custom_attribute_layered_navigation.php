@@ -5,6 +5,8 @@
  */
 declare(strict_types=1);
 
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
 Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/configurable_products.php');
 
 use Magento\TestFramework\Helper\Bootstrap;
