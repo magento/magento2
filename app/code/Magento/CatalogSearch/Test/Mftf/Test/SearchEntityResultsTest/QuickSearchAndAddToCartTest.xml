@@ -31,7 +31,7 @@
             <deleteData stepKey="deleteProduct" createDataKey="createSimpleProduct"/>
             <deleteData stepKey="deleteCategory" createDataKey="createCategory"/>
         </after>
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createSimpleProduct.name$"/>
         </actionGroup>
