@@ -67,7 +67,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <comment userInput="$simpleProduct1.name$" stepKey="asdf"/>
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToFrontPage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createBundleProduct.name$"/>
         </actionGroup>

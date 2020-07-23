@@ -34,8 +34,7 @@
             </actionGroup>
 
             <!--Create Store view -->
-            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
-            <waitForPageLoad stepKey="waitForAdminSystemStorePage"/>
+            <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="amOnAdminSystemStorePage"/>
             <click selector="{{AdminStoresMainActionsSection.createStoreViewButton}}" stepKey="createStoreViewButton"/>
             <waitForPageLoad stepKey="waitForProductPageLoad"/>
             <selectOption userInput="Second Store" selector="{{AdminNewStoreSection.storeGrpDropdown}}" stepKey="selectStoreGroup"/>
@@ -58,8 +57,7 @@
 
         <actionGroup ref="EnableWebUrlOptionsActionGroup" stepKey="addStoreCodeToUrls"/>
         <!--Create a Simple Product with Custom Options -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToCatalogProductGrid"/>
-        <waitForPageLoad stepKey="waitForCatalogProductGrid"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToCatalogProductGrid"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
         <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
         <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
