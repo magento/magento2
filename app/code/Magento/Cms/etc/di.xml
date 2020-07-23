@@ -282,6 +282,8 @@
                 <item name="th" xsi:type="string">th</item>
                 <item name="tfoot" xsi:type="string">tfoot</item>
                 <item name="img" xsi:type="string">img</item>
+                <item name="hr" xsi:type="string">hr</item>
+                <item name="figure" xsi:type="string">figure</item>
             </argument>
             <argument name="allowedAttributes" xsi:type="array">
                 <item name="class" xsi:type="string">class</item>

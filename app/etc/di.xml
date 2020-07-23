@@ -1875,7 +1875,9 @@
                 </item>
             </argument>
             <argument name="attributeValidators" xsi:type="array">
-                <item name="style" xsi:type="object">Magento\Framework\Validator\HTML\StyleAttributeValidator</item>
+                <item name="style" xsi:type="array">
+                    <item name="style" xsi:type="object">Magento\Framework\Validator\HTML\StyleAttributeValidator</item>
+                </item>
             </argument>
         </arguments>
     </virtualType>

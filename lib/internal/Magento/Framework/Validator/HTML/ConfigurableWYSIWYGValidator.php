@@ -31,21 +31,28 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
     private $attributesAllowedByTags;
 
     /**
-     * @var AttributeValidatorInterface[]
+     * @var AttributeValidatorInterface[][]
      */
     private $attributeValidators;
 
     /**
+     * @var TagValidatorInterface[][]
+     */
+    private $tagValidators;
+
+    /**
      * @param string[] $allowedTags
      * @param string[] $allowedAttributes
-     * @param string[] $attributesAllowedByTags
-     * @param AttributeValidatorInterface[] $attributeValidators
+     * @param string[][] $attributesAllowedByTags
+     * @param AttributeValidatorInterface[][] $attributeValidators
+     * @param TagValidatorInterface[][] $tagValidators
      */
     public function __construct(
         array $allowedTags,
         array $allowedAttributes = [],
         array $attributesAllowedByTags = [],
-        array $attributeValidators = []
+        array $attributeValidators = [],
+        array $tagValidators = []
     ) {
         if (empty(array_filter($allowedTags))) {
             throw new \InvalidArgumentException('List of allowed HTML tags cannot be empty');
@@ -60,6 +67,7 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
             ARRAY_FILTER_USE_KEY
         );
         $this->attributeValidators = $attributeValidators;
+        $this->tagValidators = $tagValidators;
     }
 
     /**
@@ -73,19 +81,32 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
         $dom = $this->loadHtml($content);
         $xpath = new \DOMXPath($dom);
 
+        $this->validateConfigured($xpath);
+        $this->callDynamicValidators($xpath);
+    }
+
+    /**
+     * Check declarative restrictions
+     *
+     * @param \DOMXPath $xpath
+     * @return void
+     * @throws ValidationException
+     */
+    private function validateConfigured(\DOMXPath $xpath): void
+    {
         //Validating tags
         $found = $xpath->query(
             $query='//*['
-            . implode(
-                ' and ',
-                array_map(
-                    function (string $tag): string {
-                        return "name() != '$tag'";
-                    },
-                    array_merge($this->allowedTags, ['body', 'html'])
+                . implode(
+                    ' and ',
+                    array_map(
+                        function (string $tag): string {
+                            return "name() != '$tag'";
+                        },
+                        array_merge($this->allowedTags, ['body', 'html'])
+                    )
                 )
-            )
-            .']'
+                .']'
         );
         if (count($found)) {
             throw new ValidationException(
@@ -143,17 +164,48 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
                 );
             }
         }
+    }
 
+    /**
+     * Cycle dynamic validators.
+     *
+     * @param \DOMXPath $xpath
+     * @return void
+     * @throws ValidationException
+     */
+    private function callDynamicValidators(\DOMXPath $xpath): void
+    {
         //Validating allowed attributes.
         if ($this->attributeValidators) {
-            foreach ($this->attributeValidators as $attr => $validator) {
+            foreach ($this->attributeValidators as $attr => $validators) {
                 $found = $xpath->query("//@*[name() = '$attr']");
                 foreach ($found as $attribute) {
-                    $validator->validate($attribute->parentNode->tagName, $attribute->name, $attribute->value);
+                    foreach ($validators as $validator) {
+                        $validator->validate($attribute->parentNode->tagName, $attribute->name, $attribute->value);
+                    }
                 }
             }
         }
 
+        //Validating allowed tags
+        if ($this->tagValidators) {
+            foreach ($this->tagValidators as $tag => $validators) {
+                $found = $xpath->query("//*[name() = '$tag']");
+                /** @var \DOMElement $tagNode */
+                foreach ($found as $tagNode) {
+                    $attributes = [];
+                    if ($tagNode->hasAttributes()) {
+                        /** @var \DOMAttr $attributeNode */
+                        foreach ($tagNode->attributes as $attributeNode) {
+                            $attributes[$attributeNode->name] = $attributeNode->value;
+                        }
+                    }
+                    foreach ($validators as $validator) {
+                        $validator->validate($tagNode->tagName, $attributes, $tagNode->textContent, $this);
+                    }
+                }
+            }
+        }
     }
 
     /**
@@ -166,7 +218,6 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
     private function loadHtml(string $content): \DOMDocument
     {
         $dom = new \DOMDocument('1.0', 'UTF-8');
-        $loaded = true;
         set_error_handler(
             function () use (&$loaded) {
                 $loaded = false;
