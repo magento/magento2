@@ -6,57 +6,57 @@
 /* eslint max-nested-callbacks: 0 */
 
 define([
-    'squire'
-], function (Squire) {
+    'squire',
+    'jquery',
+    'jquery/jquery-storageapi'
+], function (Squire, $) {
     'use strict';
 
     var injector = new Squire(),
-        originalGetJSON,
-        storage,
-        storageInvalidation = {},
+        sectionConfig,
         obj;
-
-    beforeEach(function (done) {
-        injector.require(['Magento_Customer/js/customer-data'], function (Constr) {
-            originalGetJSON = $.getJSON;
-            obj = Constr;
-            done();
-        });
-    });
-
-    afterEach(function () {
-        try {
-            injector.clean();
-            injector.remove();
-            $.getJSON = originalGetJSON;
-        } catch (e) {
-        }
-    });
 
     describe('Magento_Customer/js/customer-data', function () {
 
-        describe('"init" method', function () {
-            beforeEach(function () {
-                spyOn(obj, "reload").and.returnValue(true);
+        beforeEach(function (done) {
+            injector.require([
+                'Magento_Customer/js/customer-data',
+                'Magento_Customer/js/section-config'
+            ], function (Constr, sectionConfiguration) {
+                obj = Constr;
+                sectionConfig = sectionConfiguration;
+                done();
+            });
+        });
 
-                storageInvalidation = {
+        afterEach(function () {
+            try {
+                injector.clean();
+                injector.remove();
+            } catch (e) {
+            }
+        });
+
+        describe('"init" method', function () {
+            var storageInvalidation = {
                     keys: function () {
                         return ['section'];
                     }
-                }
-
-                var dataProvider = {
-                    getFromStorage: function (sections) {
+                },
+                dataProvider = {
+                    getFromStorage: function () {
                         return ['section'];
                     }
-                };
-
+                },
                 storage = {
                     keys: function () {
                         return ['section'];
                     }
                 };
 
+            beforeEach(function () {
+                spyOn(obj, "reload").and.returnValue(true);
+                spyOn($, 'initNamespaceStorage').and.returnValue(true);
                 spyOn(dataProvider, "getFromStorage");
                 spyOn(storage, "keys").and.returnValue(['section']);
                 spyOn(storageInvalidation, "keys").and.returnValue(['section']);
@@ -124,15 +124,17 @@ define([
             });
 
             it('Does not throw before component is initialized', function () {
+                _.each = jasmine.createSpy().and.returnValue(true);
+
                 expect(function () {
-                    obj.set('cart', {});
+                    obj.set();
                 }).not.toThrow();
             });
         });
 
         describe('"reload" method', function () {
             beforeEach(function () {
-                $.getJSON = jasmine.createSpy().and.callFake(function (url, parameters) {
+                jQuery.getJSON = jasmine.createSpy().and.callFake(function (url, parameters) {
                     var deferred = $.Deferred();
 
                     deferred.promise().done = function () {
@@ -160,7 +162,9 @@ define([
             it('Returns proper sections object when passed array with a single section name', function () {
                 var result;
 
-                $.getJSON = jasmine.createSpy().and.callFake(function (url, parameters) {
+                spyOn(sectionConfig, 'filterClientSideSections').and.returnValue(['section']);
+
+                jQuery.getJSON = jasmine.createSpy().and.callFake(function (url, parameters) {
                     var deferred = $.Deferred();
 
                     deferred.promise().done = function () {
@@ -190,7 +194,9 @@ define([
             it('Returns proper sections object when passed array with a multiple section names', function () {
                 var result;
 
-                $.getJSON = jasmine.createSpy().and.callFake(function (url, parameters) {
+                spyOn(sectionConfig, 'filterClientSideSections').and.returnValue(['cart,customer,messages']);
+
+                jQuery.getJSON = jasmine.createSpy().and.callFake(function (url, parameters) {
                     var deferred = $.Deferred();
 
                     expect(parameters).toEqual(jasmine.objectContaining({
@@ -224,7 +230,7 @@ define([
             it('Returns all sections when passed wildcard string', function () {
                 var result;
 
-                $.getJSON = jasmine.createSpy().and.callFake(function (url, parameters) {
+                jQuery.getJSON = jasmine.createSpy().and.callFake(function (url, parameters) {
                     var deferred = $.Deferred();
 
                     expect(parameters).toEqual(jasmine.objectContaining({
@@ -246,7 +252,7 @@ define([
 
                 result = obj.reload('*', true);
 
-                expect($.getJSON).toHaveBeenCalled();
+                expect(jQuery.getJSON).toHaveBeenCalled();
                 expect(result).toEqual(jasmine.objectContaining({
                     responseJSON: {
                         cart: {},
@@ -260,6 +266,12 @@ define([
         describe('"invalidate" method', function () {
             it('Should be defined', function () {
                 expect(obj.hasOwnProperty('invalidate')).toBeDefined();
+            });
+
+            it('Does not throw before component is initialized', function () {
+                expect(function () {
+                    obj.invalidate();
+                }).not.toThrow();
             });
         });
 
