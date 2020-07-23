@@ -6,20 +6,20 @@
 namespace Magento\Sales\Test\Unit\Model\Order\Pdf;
 
 use Magento\MediaStorage\Helper\File\Storage\Database;
-use Magento\Sales\Model\Order\Invoice;
+use Magento\Sales\Model\Order\Creditmemo;
 use Magento\Sales\Model\Order;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\Address\Renderer;
 
 /**
- * Class InvoiceTest
+ * Class CreditmemoTest
  *
- * Tests Sales Order Invoice PDF model
+ * Tests Sales Order Creditmemo PDF model
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InvoiceTest extends \PHPUnit\Framework\TestCase
+class CreditmemoTest extends \PHPUnit\Framework\TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Pdf\Invoice
@@ -90,7 +90,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
 
         $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_model = $helper->getObject(
-            \Magento\Sales\Model\Order\Pdf\Invoice::class,
+            \Magento\Sales\Model\Order\Pdf\Creditmemo::class,
             [
                 'filesystem' => $filesystemMock,
                 'pdfConfig' => $this->_pdfConfigMock,
@@ -101,35 +101,6 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
                 'paymentData' => $this->paymentDataMock,
                 'appEmulation' => $this->appEmulation
             ]
-        );
-    }
-
-    public function testGetPdfInitRenderer()
-    {
-        $this->_pdfConfigMock->expects(
-            $this->once()
-        )->method(
-            'getRenderersPerProduct'
-        )->with(
-            'invoice'
-        )->will(
-            $this->returnValue(
-                [
-                    'product_type_one' => 'Renderer_Type_One_Product_One',
-                    'product_type_two' => 'Renderer_Type_One_Product_Two',
-                ]
-            )
-        );
-
-        $this->_model->getPdf([]);
-        $renderers = new \ReflectionProperty($this->_model, '_renderers');
-        $renderers->setAccessible(true);
-        $this->assertSame(
-            [
-                'product_type_one' => ['model' => 'Renderer_Type_One_Product_One', 'renderer' => null],
-                'product_type_two' => ['model' => 'Renderer_Type_One_Product_Two', 'renderer' => null],
-            ],
-            $renderers->getValue($this->_model)
         );
     }
 
@@ -152,7 +123,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->_pdfConfigMock->expects($this->once())
             ->method('getRenderersPerProduct')
-            ->with('invoice')
+            ->with('creditmemo')
             ->will($this->returnValue(['product_type_one' => 'Renderer_Type_One_Product_One']));
         $this->_pdfConfigMock->expects($this->any())
             ->method('getTotals')
@@ -180,7 +151,7 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
             ->method('checkDbUsage')
             ->will($this->returnValue(true));
 
-        $invoiceMock = $this->createMock(Invoice::class);
+        $creditmemoMock = $this->createMock(Creditmemo::class);
         $orderMock = $this->createMock(Order::class);
         $addressMock = $this->createMock(Address::class);
         $orderMock->expects($this->any())
@@ -193,13 +164,13 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
         $orderMock->expects($this->any())
             ->method('getPayment')
             ->willReturn($infoMock);
-        $invoiceMock->expects($this->any())
+        $creditmemoMock->expects($this->any())
             ->method('getStoreId')
             ->willReturn($storeId);
-        $invoiceMock->expects($this->any())
+        $creditmemoMock->expects($this->any())
             ->method('getOrder')
             ->willReturn($orderMock);
-        $invoiceMock->expects($this->any())
+        $creditmemoMock->expects($this->any())
             ->method('getAllItems')
             ->willReturn([]);
 
@@ -224,6 +195,6 @@ class InvoiceTest extends \PHPUnit\Framework\TestCase
             ->method('saveFileToFilesystem')
             ->with($path . $filename);
 
-        $this->_model->getPdf([$invoiceMock]);
+        $this->_model->getPdf([$creditmemoMock]);
     }
 }
