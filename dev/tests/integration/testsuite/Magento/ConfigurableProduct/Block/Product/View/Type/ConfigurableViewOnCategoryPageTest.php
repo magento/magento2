@@ -68,7 +68,6 @@ class ConfigurableViewOnCategoryPageTest extends TestCase
         $this->registry = $this->objectManager->get(Registry::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $this->executeInStoreContext = $this->objectManager->get(ExecuteInStoreContext::class);
-
     }
 
     /**
