@@ -169,7 +169,7 @@ type InvoiceTotal @doc(description: "Contains price details from an invoice"){
     subtotal: Money! @doc(description: "The subtotal of the invoice, excluding shipping, discounts, and taxes")
     discounts: [Discount] @doc(description: "The applied discounts to the invoice")
     total_tax: Money! @doc(description: "The amount of tax applied to the invoice")
-    taxes: [TaxItem] @doc(description: "The order tax details")
+    taxes: [TaxItem] @doc(description: "The invoice tax details")
     grand_total: Money! @doc(description: "The final total amount, including shipping, discounts, and taxes")
     base_grand_total: Money! @doc(description: "The final base grand total amount in the base currency")
     total_shipping: Money! @doc(description: "The shipping amount for the invoice")
@@ -243,11 +243,14 @@ type BundleCreditMemoItem implements CreditMemoItemInterface {
 }
 
 type CreditMemoTotal @doc(description: "Credit memo price details") {
-    subtotal: Money! @doc(description: "The subtotal amount, excluding shipping, discounts, and tax")
-    total_tax: Money! @doc(description: "The total tax amount")
-    grand_total: Money! @doc(description: "The final total amount, including shipping and taxes")
-    base_grand_total: Money! @doc(description: "The final total amount in the base currency")
-    shipping_amount: Money! @doc(description: "The refunded shipping fees")
+    subtotal: Money! @doc(description: "The subtotal of the invoice, excluding shipping, discounts, and taxes")
+    discounts: [Discount] @doc(description: "The applied discounts to the credit memo")
+    total_tax: Money! @doc(description: "The amount of tax applied to the credit memo")
+    taxes: [TaxItem] @doc(description: "The credit memo tax details")
+    grand_total: Money! @doc(description: "The final total amount, including shipping, discounts, and taxes")
+    base_grand_total: Money! @doc(description: "The final base grand total amount in the base currency")
+    total_shipping: Money! @doc(description: "The shipping amount for the credit memo")
+    shipping_handling: ShippingHandling @doc(description: "Contains details about the shipping and handling costs for the credit memo")
     adjustment: Money! @doc(description: "An adjustment manually applied to the order")
 }
 

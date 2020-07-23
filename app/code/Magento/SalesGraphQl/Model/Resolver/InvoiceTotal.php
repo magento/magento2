@@ -75,8 +75,9 @@ class InvoiceTotal implements ResolverInterface
         /** @var InvoiceInterface $invoiceModel */
         $invoiceModel = $value['model'];
         $currency = $orderModel->getOrderCurrencyCode();
+        $baseCurrency = $orderModel->getBaseCurrencyCode();
         return [
-            'base_grand_total' => ['value' => $invoiceModel->getBaseGrandTotal(), 'currency' => $currency],
+            'base_grand_total' => ['value' => $invoiceModel->getBaseGrandTotal(), 'currency' => $baseCurrency],
             'grand_total' => ['value' =>  $invoiceModel->getGrandTotal(), 'currency' => $currency],
             'subtotal' => ['value' =>  $invoiceModel->getSubtotal(), 'currency' => $currency],
             'total_tax' => ['value' =>  $invoiceModel->getTaxAmount(), 'currency' => $currency],
