@@ -48,8 +48,6 @@ $extensionAttributesFactory = $objectManager->get(ProductExtensionFactory::class
 $configResource = $objectManager->get(Config::class);
 /** @var SwitchPriceAttributeScopeOnConfigChange $observer */
 $observer = $objectManager->get(Observer::class);
-/** @var CategoryLinkManagementInterface $categoryLinkManagement */
-$categoryLinkManagement = $objectManager->create(CategoryLinkManagementInterface::class);
 /** @var DefaultCategory $categoryHelper */
 $categoryHelper = $objectManager->get(DefaultCategory::class);
 
@@ -59,7 +57,6 @@ $baseWebsite = $websiteRepository->get('base');
 $secondWebsite = $websiteRepository->get('test');
 $attributeValues = [];
 $associatedProductIds = [];
-$rootCategoryId = $baseWebsite->getDefaultStore()->getRootCategoryId();
 array_shift($options);
 
 foreach ($options as $option) {
@@ -73,7 +70,7 @@ foreach ($options as $option) {
         ->setVisibility(Visibility::VISIBILITY_NOT_VISIBLE)
         ->setStatus(Status::STATUS_ENABLED)
         ->setPrice(150)
-        ->setCategoryIds([$rootCategoryId])
+        ->setCategoryIds([$categoryHelper->getId(), 333])
         ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1]);
     $product = $productRepository->save($product);
     $associatedProductIds[] = $product->getId();
@@ -103,7 +100,7 @@ $product->setTypeId(Configurable::TYPE_CODE)
     ->setAttributeSetId($product->getDefaultAttributeSetId())
     ->setWebsiteIds([$baseWebsite->getId(), $secondWebsite->getId()])
     ->setStatus(Status::STATUS_ENABLED)
-    ->setCategoryIds([$rootCategoryId])
+    ->setCategoryIds([$categoryHelper->getId(), 333])
     ->setSku('configurable')
     ->setName('Configurable Product')
     ->setVisibility(Visibility::VISIBILITY_BOTH)
@@ -116,10 +113,6 @@ $objectManager->get(SwitchPriceAttributeScopeOnConfigChange::class)->execute($ob
 /** @var StoreManagerInterface $storeManager */
 $storeManager = $objectManager->get(StoreManagerInterface::class);
 $secondStoreId = $storeManager->getStore('fixture_second_store')->getId();
-
-foreach (['simple_option_1', 'simple_option_2', 'configurable'] as $sku) {
-    $categoryLinkManagement->assignProductToCategories($sku, [$categoryHelper->getId(), 333]);
-}
 
 try {
     $currentStoreCode = $storeManager->getStore()->getCode();

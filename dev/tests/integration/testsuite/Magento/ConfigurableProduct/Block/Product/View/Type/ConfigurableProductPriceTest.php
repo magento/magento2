@@ -188,6 +188,8 @@ class ConfigurableProductPriceTest extends TestCase
 
     /**
      * Reset layout page to get new block html.
+     *
+     * @return void
      */
     private function resetPageLayout(): void
     {

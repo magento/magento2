@@ -7,11 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Block\Product\View\Type;
 
+use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Block\Product\ListProduct;
 use Magento\Eav\Model\Entity\Collection\AbstractCollection;
 use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Registry;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -35,8 +37,14 @@ class ConfigurableViewOnCategoryPageTest extends TestCase
     /** @var ProductRepositoryInterface */
     private $productRepository;
 
+    /** @var CategoryRepositoryInterface */
+    private $categoryRepository;
+
     /** @var Page */
     private $page;
+
+    /** @var Registry */
+    private $registry;
 
     /** @var StoreManagerInterface */
     private $storeManager;
@@ -54,9 +62,21 @@ class ConfigurableViewOnCategoryPageTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
+        $this->categoryRepository = $this->objectManager->get(CategoryRepositoryInterface::class);
         $this->page = $this->objectManager->get(PageFactory::class)->create();
+        $this->registry = $this->objectManager->get(Registry::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $this->executeInStoreContext = $this->objectManager->get(ExecuteInStoreContext::class);
+
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function tearDown()
+    {
+        $this->registry->unregister('current_category');
+        parent::tearDown();
     }
 
     /**
@@ -102,10 +122,10 @@ class ConfigurableViewOnCategoryPageTest extends TestCase
             'fixture_second_store',
             [$this, 'assertProductPrice'],
             'configurable',
-            'As low as $10.00'
+            __('As low as') . ' $10.00'
         );
         $this->resetPageLayout();
-        $this->assertProductPrice('configurable', 'As low as $150.00');
+        $this->assertProductPrice('configurable', __('As low as') . ' $150.00');
     }
 
     /**
@@ -143,12 +163,19 @@ class ConfigurableViewOnCategoryPageTest extends TestCase
      */
     private function preparePageLayout(): void
     {
+        $this->registry->unregister('current_category');
+        $this->registry->register(
+            'current_category',
+            $this->categoryRepository->get(333, $this->storeManager->getStore()->getId())
+        );
         $this->page->addHandle(['default', 'catalog_category_view']);
         $this->page->getLayout()->generateXml();
     }
 
     /**
      * Reset layout page to get new block html.
+     *
+     * @return void
      */
     private function resetPageLayout(): void
     {
@@ -169,11 +196,13 @@ class ConfigurableViewOnCategoryPageTest extends TestCase
     /**
      * Returns product list block.
      *
-     * @return bool|ListProduct
+     * @return null|ListProduct
      */
-    private function getListingBlock(): ListProduct
+    private function getListingBlock(): ?ListProduct
     {
-        return $this->page->getLayout()->getBlock('category.products.list');
+        $block = $this->page->getLayout()->getBlock('category.products.list');
+
+        return $block ? $block : null;
     }
 
     /**
