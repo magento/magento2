@@ -13,6 +13,9 @@ use Magento\Framework\ObjectManagerInterface;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
+/**
+ * Provides the ability to inject additional DI configuration to call a CLI command
+ */
 class CliProxy implements \Magento\Framework\ObjectManager\NoninterceptableInterface
 {
     /**
