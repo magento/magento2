@@ -267,4 +267,44 @@ class IndexerHandlerTest extends TestCase
 
         $this->assertEquals($model, $result);
     }
+
+    /**
+     * Test mapping data is updated for index.
+     *
+     * @return void
+     */
+    public function testUpdateIndex(): void
+    {
+        $dimensionValue = 'SomeDimension';
+        $indexMapping = 'some_index_mapping';
+
+        $dimension = $this->getMockBuilder(Dimension::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $dimension->expects($this->once())
+            ->method('getValue')
+            ->willReturn($dimensionValue);
+
+        $this->scopeResolver->expects($this->once())
+            ->method('getScope')
+            ->with($dimensionValue)
+            ->willReturn($this->scopeInterface);
+
+        $this->scopeInterface->expects($this->once())
+            ->method('getId')
+            ->willReturn(1);
+
+        $this->indexNameResolver->expects($this->once())
+            ->method('getIndexMapping')
+            ->with('catalogsearch_fulltext')
+            ->willReturn($indexMapping);
+
+        $this->adapter->expects($this->once())
+            ->method('updateIndexMapping')
+            ->with(1, $indexMapping)
+            ->willReturnSelf();
+
+        $this->model->updateIndex([$dimension]);
+    }
 }

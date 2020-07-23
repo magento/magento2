@@ -6,6 +6,9 @@
 
 namespace Magento\Elasticsearch\Model\Adapter;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Stdlib\ArrayManager;
+
 /**
  * Elasticsearch adapter
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -70,6 +73,11 @@ class Elasticsearch
     private $batchDocumentDataMapper;
 
     /**
+     * @var ArrayManager
+     */
+    private $arrayManager;
+
+    /**
      * @param \Magento\Elasticsearch\SearchAdapter\ConnectionManager $connectionManager
      * @param FieldMapperInterface $fieldMapper
      * @param \Magento\Elasticsearch\Model\Config $clientConfig
@@ -78,6 +86,7 @@ class Elasticsearch
      * @param Index\IndexNameResolver $indexNameResolver
      * @param BatchDataMapperInterface $batchDocumentDataMapper
      * @param array $options
+     * @param ArrayManager|null $arrayManager
      * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function __construct(
@@ -88,7 +97,8 @@ class Elasticsearch
         \Psr\Log\LoggerInterface $logger,
         \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver $indexNameResolver,
         BatchDataMapperInterface $batchDocumentDataMapper,
-        $options = []
+        $options = [],
+        ArrayManager $arrayManager = null
     ) {
         $this->connectionManager = $connectionManager;
         $this->fieldMapper = $fieldMapper;
@@ -97,6 +107,8 @@ class Elasticsearch
         $this->logger = $logger;
         $this->indexNameResolver = $indexNameResolver;
         $this->batchDocumentDataMapper = $batchDocumentDataMapper;
+        $this->arrayManager = $arrayManager ?:
+            ObjectManager::getInstance()->get(ArrayManager::class);
 
         try {
             $this->client = $this->connectionManager->getConnection($options);
@@ -322,6 +334,44 @@ class Elasticsearch
         // remove obsolete index
         if ($oldIndex) {
             $this->client->deleteIndex($oldIndex);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Update Elasticsearch mapping for index.
+     *
+     * @param int $storeId
+     * @param string $mappedIndexerId
+     *
+     * @return $this
+     */
+    public function updateIndexMapping(int $storeId, string $mappedIndexerId): self
+    {
+        $indexName = $this->indexNameResolver->getIndexFromAlias($storeId, $mappedIndexerId);
+        if (empty($indexName)) {
+            return $this;
+        }
+
+        $allAttributeTypes = $this->fieldMapper->getAllAttributesTypes([
+            'entityType' => $mappedIndexerId,
+            'websiteId' => $storeId,
+        ]);
+
+        $mappedAttributes = $this->client->getMapping(['index' => $indexName]);
+        $pathField = $this->arrayManager->findPath('properties', $mappedAttributes);
+        $mappedAttributes = $this->arrayManager->get($pathField, $mappedAttributes, $allAttributeTypes);
+
+        $settings['index']['mapping']['total_fields']['limit'] = $this->getMappingTotalFieldsLimit($allAttributeTypes);
+        $this->client->putIndexSettings($indexName, ['settings' => $settings]);
+        $attrToUpdate = array_diff_key($allAttributeTypes, $mappedAttributes);
+        if (!empty($attrToUpdate)) {
+            $this->client->addFieldsMapping(
+                $attrToUpdate,
+                $indexName,
+                $this->clientConfig->getEntityType()
+            );
         }
 
         return $this;

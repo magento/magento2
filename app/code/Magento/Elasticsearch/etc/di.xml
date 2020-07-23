@@ -550,4 +550,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Category\Product\Attribute">
+        <arguments>
+            <argument name="dimensionProvider" xsi:type="object" shared="false">Magento\Store\Model\StoreDimensionProvider</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Attribute">
+        <plugin name="updateElasticsearchIndexerMapping" type="Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Category\Product\Attribute" sortOrder="20"/>
+    </type>
 </config>
