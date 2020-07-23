@@ -1816,7 +1816,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $total = $this->priceCurrency->round($total);
         return max($total, 0);
     }
-
+    
     /**
      * Retrieve order total due value
      *
