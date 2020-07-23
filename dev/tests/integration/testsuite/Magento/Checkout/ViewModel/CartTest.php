@@ -107,7 +107,7 @@ class CartTest extends TestCase
     }
 
     /**
-     * Set purchase order enabled status.
+     * Set clear shopping cart enabled.
      *
      * @param bool $isActive
      * @param string $scope
