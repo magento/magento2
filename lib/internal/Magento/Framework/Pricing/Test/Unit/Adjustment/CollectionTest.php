@@ -50,6 +50,7 @@ class CollectionTest extends TestCase
             'adj3' => $adj3,
             'adj4' => $adj4,
         ];
+        $this->adjustmentsData = $adjustmentsData;
 
         /** @var Pool|MockObject $adjustmentPool */
         $adjustmentPool = $this->getMockBuilder(Pool::class)
@@ -64,14 +65,13 @@ class CollectionTest extends TestCase
                 return $adjustmentsData[$code];
             }
         );
-
         $this->adjustmentPool = $adjustmentPool;
-        $this->adjustmentsData = $adjustmentsData;
     }
 
     /**
      * @param string[] $adjustments
      * @param string[] $expectedResult
+     *
      * @dataProvider getItemsDataProvider
      */
     public function testGetItems($adjustments, $expectedResult)
@@ -92,7 +92,7 @@ class CollectionTest extends TestCase
             [['adj1'], ['adj1']],
             [['adj4'], ['adj4']],
             [['adj1', 'adj4'], ['adj1', 'adj4']],
-            [['adj1', 'adj2', 'adj3', 'adj4'], ['adj3', 'adj1', 'adj2', 'adj4']]
+            [['adj1', 'adj2', 'adj3', 'adj4'], ['adj3', 'adj1', 'adj2', 'adj4']],
         ];
     }
 
@@ -100,6 +100,7 @@ class CollectionTest extends TestCase
      * @param string[] $adjustments
      * @param string $code
      * @param $expectedResult
+     *
      * @dataProvider getItemByCodeDataProvider
      */
     public function testGetItemByCode($adjustments, $code, $expectedResult)
@@ -108,7 +109,7 @@ class CollectionTest extends TestCase
 
         $item = $collection->getItemByCode($code);
 
-        $this->assertEquals($expectedResult, $item->getAdjustmentCode());
+        $this->assertEquals($expectedResult, $item->getSortOrder());
     }
 
     /**
@@ -117,11 +118,11 @@ class CollectionTest extends TestCase
     public function getItemByCodeDataProvider()
     {
         return [
-            [['adj1'], 'adj1', $this->adjustmentsData['adj1']],
-            [['adj1', 'adj2', 'adj3', 'adj4'], 'adj1', $this->adjustmentsData['adj1']],
-            [['adj1', 'adj2', 'adj3', 'adj4'], 'adj2', $this->adjustmentsData['adj2']],
-            [['adj1', 'adj2', 'adj3', 'adj4'], 'adj3', $this->adjustmentsData['adj3']],
-            [['adj1', 'adj2', 'adj3', 'adj4'], 'adj4', $this->adjustmentsData['adj4']],
+            [['adj1'], 'adj1', 10],
+            [['adj1', 'adj2', 'adj3', 'adj4'], 'adj1', 10],
+            [['adj1', 'adj2', 'adj3', 'adj4'], 'adj2', 20],
+            [['adj1', 'adj2', 'adj3', 'adj4'], 'adj3', 5],
+            [['adj1', 'adj2', 'adj3', 'adj4'], 'adj4', Pool::DEFAULT_SORT_ORDER],
         ];
     }
 
