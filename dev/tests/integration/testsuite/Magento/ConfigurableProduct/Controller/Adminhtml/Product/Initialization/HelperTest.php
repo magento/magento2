@@ -114,6 +114,7 @@ class HelperTest extends TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_image.php
      * @magentoDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
      * @dataProvider initializeDataProvider
+     * @magentoAppIsolation enabled
      * @param array $childProducts
      * @param array $expectedImages
      * @return void

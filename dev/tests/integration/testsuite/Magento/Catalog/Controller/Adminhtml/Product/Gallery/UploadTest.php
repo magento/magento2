@@ -71,6 +71,7 @@ class UploadTest extends AbstractBackendController
      *
      * @dataProvider uploadActionDataProvider
      * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      * @param array $file
      * @param array $expectation
      * @return void
@@ -148,6 +149,7 @@ class UploadTest extends AbstractBackendController
      *
      * @dataProvider uploadActionWithErrorsDataProvider
      * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
      * @param array $file
      * @param array $expectation
      * @return void
