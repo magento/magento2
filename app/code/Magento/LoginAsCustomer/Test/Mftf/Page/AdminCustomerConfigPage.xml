@@ -6,6 +6,7 @@
   */
 -->
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
-    <page name="AdminLoginAsCustomerConfigPage" url="admin/system_config/edit/section/mfloginascustomer" area="admin" module="Magento_LoginAsCustomer">
+    <page name="AdminLoginAsCustomerConfigPage" url="admin/system_config/edit/section/login_as_customer" area="admin" module="Magento_LoginAsCustomer">
+        <section name="AdminCustomerConfigSection"/>
     </page>
 </pages>
