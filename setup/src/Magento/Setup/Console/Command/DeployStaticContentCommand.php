@@ -20,14 +20,14 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Deploy\Service\DeployStaticContent;
 
 /**
- * Deploy static content command
+ * Command to Deploy Static Content
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeployStaticContentCommand extends Command
 {
     /**
-     * Default language value
+     * Default language value. Always used for adminhtml, fallback if no frontend locale is supplied.
      */
     const DEFAULT_LANGUAGE_VALUE = 'en_US';
 
@@ -82,7 +82,7 @@ class DeployStaticContentCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -96,7 +96,10 @@ class DeployStaticContentCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     *
      * @throws \InvalidArgumentException
      * @throws LocalizedException
      */
@@ -119,7 +122,8 @@ class DeployStaticContentCommand extends Command
         $this->inputValidator->validate($input);
 
         $options = $input->getOptions();
-        $options[Options::LANGUAGE] = $input->getArgument(Options::LANGUAGES_ARGUMENT) ?: ['all'];
+        $languageOption = $options[Options::LANGUAGE] ?: ['all'];
+        $options[Options::LANGUAGE] = $input->getArgument(Options::LANGUAGES_ARGUMENT) ?: $languageOption;
         $refreshOnly = isset($options[Options::REFRESH_CONTENT_VERSION_ONLY])
             && $options[Options::REFRESH_CONTENT_VERSION_ONLY];
 
@@ -161,6 +165,8 @@ class DeployStaticContentCommand extends Command
     }
 
     /**
+     * Retrieve application state
+     *
      * @return State
      */
     private function getAppState()
