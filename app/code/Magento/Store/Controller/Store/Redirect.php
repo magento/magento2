@@ -70,29 +70,20 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
      */
     public function execute()
     {
-        /** @var Store $currentStore */
-        $currentStore = $this->storeRepository->getById($this->storeResolver->getCurrentStoreId());
         $targetStoreCode = $this->_request->getParam(StoreResolver::PARAM_NAME);
         $fromStoreCode = $this->_request->getParam('___from_store');
-        $error = null;
 
         if ($targetStoreCode === null) {
-            return $this->_redirect($currentStore->getBaseUrl());
+            return $this->_redirect($this->getCurrentStoreBaseUrl());
         }
 
         try {
             /** @var Store $fromStore */
             $fromStore = $this->storeRepository->get($fromStoreCode);
-        } catch (NoSuchEntityException $e) {
-            $error = __('Requested store is not found');
-        }
+            /** @var Store $targetStore */
+            $targetStore = $this->storeRepository->get($targetStoreCode);
 
-        if ($error !== null) {
-            $this->messageManager->addErrorMessage($error);
-            $this->_redirect->redirect($this->_response, $currentStore->getBaseUrl());
-        } else {
             $encodedUrl = $this->_request->getParam(\Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED);
-
             $query = [
                 '___from_store' => $fromStore->getCode(),
                 StoreResolverInterface::PARAM_NAME => $targetStoreCode,
@@ -106,8 +97,28 @@ class Redirect extends Action implements HttpGetActionInterface, HttpPostActionI
                 '_nosid' => true,
                 '_query' => $query
             ];
-            $this->_redirect->redirect($this->_response, 'stores/store/switch', $arguments);
+            $targetUrl = $targetStore->getUrl('stores/store/switch', $arguments);
+        } catch (NoSuchEntityException $e) {
+            $this->messageManager->addErrorMessage(__('Requested store is not found'));
+            $targetUrl = $this->getCurrentStoreBaseUrl();
         }
-        // phpstan:ignore "Method Magento\Store\Controller\Store\Redirect::execute() should return *"
+
+        $response = $this->getResponse();
+        $response->setRedirect($targetUrl);
+
+        return $response;
+    }
+
+    /**
+     * Get base url for current store
+     *
+     * @return string
+     */
+    private function getCurrentStoreBaseUrl(): string
+    {
+        /** @var Store $currentStore */
+        $currentStore = $this->storeRepository->getById($this->storeResolver->getCurrentStoreId());
+
+        return $currentStore->getBaseUrl();
     }
 }

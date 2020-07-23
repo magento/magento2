@@ -233,6 +233,11 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
                     ? date('Y-m-d\TH:i:s\Z', strtotime($value['to']))
                     : '';
             }
+
+            if ($attribute->getAttributeCode() === 'sku') {
+                $value = mb_strtolower($value);
+            }
+
             $condition = $this->_getResource()->prepareCondition(
                 $attribute,
                 $value,
