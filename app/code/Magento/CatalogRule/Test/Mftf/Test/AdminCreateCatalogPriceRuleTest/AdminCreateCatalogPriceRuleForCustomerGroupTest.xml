@@ -43,7 +43,10 @@
         <!-- Create a catalog rule for the NOT LOGGED IN customer group -->
         <actionGroup ref="NewCatalogPriceRuleByUIActionGroup" stepKey="createNewPriceRule"/>
         <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+        <conditionalClick selector="{{AdminNewCatalogPriceRule.active}}" dependentSelector="{{AdminNewCatalogPriceRule.activeIsEnabled}}" visible="false" stepKey="enableActiveBtn"/>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
+
+        <!--<click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>-->
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule." stepKey="assertSuccess"/>
 
         <!-- Perform reindex and flush cache -->
