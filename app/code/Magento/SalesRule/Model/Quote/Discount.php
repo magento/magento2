@@ -5,6 +5,8 @@
  */
 namespace Magento\SalesRule\Model\Quote;
 
+use Magento\Bundle\Model\Product\Type as TypeBundle;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\ObjectManager;
 use Magento\SalesRule\Api\Data\RuleDiscountInterfaceFactory;
 use Magento\SalesRule\Api\Data\DiscountDataInterfaceFactory;
@@ -137,8 +139,15 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
                 }
                 continue;
             }
-            // to determine the child item discount, we calculate the parent
-            if ($item->getParentItem()) {
+
+            /**
+             * There are two kinds of parent products: Bundle and Configurable (Grouped does not present in the quote)
+             * For the Configurable product - we should calculate discount for the parent.
+             * For the Bundle product - we should calculate children and ignore the Parent.
+             */
+            if ($item->getProductType() === TypeBundle::TYPE_CODE
+                || ($item->getParentItem() && $item->getParentItem()->getProductType() === Configurable::TYPE_CODE)
+            ) {
                 continue;
             }
 
