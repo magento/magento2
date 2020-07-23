@@ -34,8 +34,7 @@
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetFiltersIfPresent"/>
         <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchProductGrid">
             <argument name="keyword" value="_defaultProduct.name"/>
@@ -46,8 +45,7 @@
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex1"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageLoad1"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex1"/>
         <click selector="{{AdminProductGridSection.selectRowBasedOnName(colorProductAttribute1.name)}}" stepKey="selectProductToAddImage1"/>
         <waitForPageLoad stepKey="waitForProductEditPageLoad1"/>
         <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForChildProduct">
