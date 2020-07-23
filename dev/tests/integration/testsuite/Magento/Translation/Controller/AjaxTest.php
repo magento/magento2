@@ -65,7 +65,7 @@ class AjaxTest extends \Magento\TestFramework\TestCase\AbstractController
                         'custom' => 'phrase with &',
                     ],
                 ],
-                '[]',
+                '{"phrase with &":"phrase with &"}',
             ],
         ];
     }
