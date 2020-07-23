@@ -169,8 +169,8 @@ $optionsFactory = Bootstrap::getObjectManager()->create(Factory::class);
 $configurableAttributesData = [
     [
         'attribute_id' => $attribute->getId(),
-        'code' => $firstAttribute->getAttributeCode(),
-        'label' => $firstAttribute->getStoreLabel(),
+        'code' => $attribute->getAttributeCode(),
+        'label' => $attribute->getStoreLabel(),
         'position' => '0',
         'values' => $attributeValues,
     ],
