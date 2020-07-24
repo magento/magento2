@@ -29,8 +29,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
-        <waitForPageLoad stepKey="waitForSystemStorePage"/>
+        <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="amOnAdminSystemStorePage"/>
         <click selector="{{AdminStoresMainActionsSection.createStoreButton}}" stepKey="selectCreateStore"/>
         <fillField userInput="{{customStore.name}}" selector="{{AdminNewStoreGroupSection.storeGrpNameTextField}}" stepKey="fillStoreName"/>
         <fillField userInput="{{customStore.code}}" selector="{{AdminNewStoreGroupSection.storeGrpCodeTextField}}" stepKey="fillStoreCode"/>
