@@ -11,12 +11,13 @@
     <test name="StorefrontFilterableProductAttributeInLayeredNavigationWithoutReindexTest">
         <annotations>
             <features value="LayeredNavigation"/>
-            <stories value="Magento_LayeredNavigation"/>
+            <stories value="Product attributes in Layered Navigation"/>
             <title value="Create and add new dropdown product attribute to existing set, assign it to existing product with that set and see it on layered navigation"/>
             <description value="Verify that new dropdown attribute in existing attribute set shows on layered navigation on storefront without reindex"/>
-            <severity value="AVERAGE"/>
+            <severity value="MAJOR"/>
             <testCaseId value="MC-35954"/>
             <group value="layeredNavigation"/>
+            <group value="SearchEngineElasticsearch"/>
         </annotations>
 
         <before>
