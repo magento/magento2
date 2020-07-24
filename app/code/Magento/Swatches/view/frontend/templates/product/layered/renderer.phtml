@@ -8,6 +8,8 @@
 // phpcs:disable Generic.WhiteSpace.ScopeIndent
 
 /** @var $block \Magento\Swatches\Block\LayeredNavigation\RenderLayered */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+/** @var \Magento\Framework\Escaper $escaper */
 ?>
 <?php $swatchData = $block->getSwatchData(); ?>
 <div class="swatch-attribute swatch-layered <?= $block->escapeHtmlAttr($swatchData['attribute_code']) ?>"
@@ -49,11 +51,18 @@
                                  data-option-id="<?= $block->escapeHtmlAttr($option) ?>"
                                  data-option-label="<?= $block->escapeHtmlAttr($label['label']) ?>"
                                  data-option-tooltip-thumb="<?= $block->escapeUrl($swatchThumbPath) ?>"
-                                 data-option-tooltip-value=""
-                                 style="background: url(<?=
-                                 /*  @noEscape */ $escapedUrl
-                                                        ?>) no-repeat center; background-size: initial;">
+                                 data-option-tooltip-value="">
                             </div>
+                            <?php
+                            $element = 'swatchImageOption' .$escaper->escapeJs($option);
+                            $script = 'var ' .$element
+                                .' = document.querySelector(\'div[data-option-id="' .$escaper->escapeJs($option)
+                                .'"]\');' .PHP_EOL;
+                            $script .= $element .'.style.background = "url(\''
+                                .$escapedUrl .'\') no-repeat center";' .PHP_EOL;
+                            $script .= $element .'.style.backgroundSize = "initial";';
+                            ?>
+                            <?= /* @noEscape*/ $secureRenderer->renderTag('script', [], $script, false); ?>
                             <?php break;
                         case '1':
                             ?>
@@ -65,11 +74,21 @@
                                  data-option-tooltip-thumb=""
                                  data-option-tooltip-value="<?= $block->escapeHtmlAttr(
                                      $swatchData['swatches'][$option]['value']
-                                 ) ?>"
-                                 style="background: <?= $block->escapeHtmlAttr(
-                                     $swatchData['swatches'][$option]['value']
-                                 ) ?> no-repeat center; background-size: initial;">
+                                 ) ?>">
                             </div>
+                            <?php
+                            $element = 'swatchImageOption' .$escaper->escapeJs($option);
+                            $backgroundValue = $escaper->escapeJs(
+                                str_replace('\'', '\\\'', $swatchData['swatches'][$option]['value'])
+                            );
+                            $script = 'var ' .$element
+                                .' = document.querySelector(\'div[data-option-id="' .$escaper->escapeJs($option)
+                                .'"]\');' .PHP_EOL;
+                            $script .= $element .'.style.background = "' .$backgroundValue
+                                .' no-repeat center";' .PHP_EOL;
+                            $script .= $element .'.style.backgroundSize = "initial";';
+                            ?>
+                            <?= /* @noEscape*/ $secureRenderer->renderTag('script', [], $script, false); ?>
                             <?php break;
                         case '0':
                         default:
@@ -89,11 +108,14 @@
         <?php endforeach; ?>
     </div>
 </div>
+<?php $scriptString = <<<script
 
-<script>
     require(["jquery", "Magento_Swatches/js/swatch-renderer"], function ($) {
-        $('.swatch-layered.<?= $block->escapeJs($swatchData['attribute_code']) ?>')
+        $('.swatch-layered.{$block->escapeJs($swatchData['attribute_code'])}')
             .find('[data-option-type="1"], [data-option-type="2"], [data-option-type="0"], [data-option-type="3"]')
             .SwatchRendererTooltip();
     });
-</script>
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
