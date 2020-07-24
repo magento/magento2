@@ -16,7 +16,7 @@
                 <arguments>
                     <argument name="path" xsi:type="string">paypal/billing_agreement</argument>
                     <argument name="label" xsi:type="string" translate="true">Billing Agreements</argument>
-                    <argument name="sortOrder" xsi:type="number">140</argument>
+                    <argument name="sortOrder" xsi:type="number">80</argument>
                 </arguments>
             </block>
         </referenceBlock>

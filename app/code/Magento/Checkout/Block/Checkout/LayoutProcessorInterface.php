@@ -13,6 +13,7 @@ namespace Magento\Checkout\Block\Checkout;
  * @see \Magento\Checkout\Block\Onepage
  *
  * @api
+ * @since 100.0.2
  */
 interface LayoutProcessorInterface
 {
