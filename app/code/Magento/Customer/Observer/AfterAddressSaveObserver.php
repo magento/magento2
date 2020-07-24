@@ -127,6 +127,7 @@ class AfterAddressSaveObserver implements ObserverInterface
         if (!$this->_customerAddress->isVatValidationEnabled($customer->getStore())
             || $this->_coreRegistry->registry(self::VIV_PROCESSED_FLAG)
             || !$this->_canProcessAddress($customerAddress)
+            || $customerAddress->getShouldIgnoreValidation()
         ) {
             return;
         }
@@ -136,7 +137,6 @@ class AfterAddressSaveObserver implements ObserverInterface
 
             if ($customerAddress->getVatId() == ''
                 || !$this->_customerVat->isCountryInEU($customerAddress->getCountry())
-                || $customerAddress->getShouldIgnoreValidation()
             ) {
                 $defaultGroupId = $this->_groupManagement->getDefaultGroup($customer->getStore())->getId();
                 if (!$customer->getDisableAutoGroupChange() && $customer->getGroupId() != $defaultGroupId) {

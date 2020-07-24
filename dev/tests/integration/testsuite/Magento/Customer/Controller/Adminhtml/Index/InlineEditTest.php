@@ -144,8 +144,7 @@ class InlineEditTest extends AbstractBackendController
      */
     public function testInlineEditActionWithAddress(): void
     {
-        $customer = $this->customerRepository->get('customer_one_address@test.com');
-        $this->changeCustomerAddress((int)$customer->getDefaultShipping());
+        $customer = $this->getCustomer();
         $params = [
             'items' => [
                 $customer->getId() => []
@@ -166,17 +165,19 @@ class InlineEditTest extends AbstractBackendController
     /**
      * Change customer address with setting country from EU and setting VAT number
      *
-     * @param int $customerAddressId
-     * @return void
+     * @return CustomerInterface
      */
-    private function changeCustomerAddress(int $customerAddressId): void
+    private function getCustomer(): CustomerInterface
     {
-        $address = $this->addressRepository->getById($customerAddressId);
+        $customer = $this->customerRepository->get('customer_one_address@test.com');
+        $address = $this->addressRepository->getById((int)$customer->getDefaultShipping());
         $address->setVatId(12345);
         $address->setCountryId('DE');
         $address->setRegionId(0);
         $this->addressRepository->save($address);
         $this->coreRegistry->unregister(AfterAddressSaveObserver::VIV_PROCESSED_FLAG);
+        //return customer after address repository save
+        return $this->customerRepository->get('customer_one_address@test.com');
     }
 
     /**
