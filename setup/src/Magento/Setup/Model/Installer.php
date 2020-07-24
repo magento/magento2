@@ -9,6 +9,7 @@ namespace Magento\Setup\Model;
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Framework\App\Cache\Manager;
 use Magento\Framework\App\Cache\Type\Block as BlockCache;
+use Magento\Framework\App\Cache\Type\Config as ConfigCache;
 use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
 use Magento\Framework\App\DeploymentConfig\Reader;
 use Magento\Framework\App\DeploymentConfig\Writer;
@@ -1291,6 +1292,7 @@ class Installer
                 . " Run 'magento setup:config:set --help' for options."
             );
         }
+        $this->flushCaches([ConfigCache::TYPE_IDENTIFIER]);
         $this->cleanCaches();
         if (!$keepGeneratedFiles) {
             $this->cleanupGeneratedFiles();
@@ -1395,6 +1397,25 @@ class Installer
         $types = $cacheManager->getAvailableTypes();
         $cacheManager->clean($types);
         $this->log->log('Cache cleared successfully');
+    }
+
+    /**
+     * Flush caches for specific types or all available types
+     *
+     * @param array $types
+     * @return void
+     *
+     * @throws Exception
+     */
+    private function flushCaches($types = [])
+    {
+        /** @var Manager $cacheManager */
+        $cacheManager = $this->objectManagerProvider->get()->get(Manager::class);
+        if (empty($types)) {
+            $types = $cacheManager->getAvailableTypes();
+        }
+        $cacheManager->flush($types);
+        $this->log->log('Cache types ' . implode(',', $types) . ' flushed successfully');
     }
 
     /**
