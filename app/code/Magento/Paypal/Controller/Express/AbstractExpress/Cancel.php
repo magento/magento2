@@ -31,11 +31,11 @@ class Cancel extends \Magento\Paypal\Controller\Express\AbstractExpress
                     ->unsLastSuccessQuoteId()
                     ->unsLastOrderId()
                     ->unsLastRealOrderId();
-                $this->messageManager->addSuccessMessage(
+                $this->messageManager->addWarningMessage(
                     __('Express Checkout and Order have been canceled.')
                 );
             } else {
-                $this->messageManager->addSuccessMessage(
+                $this->messageManager->addWarningMessage(
                     __('Express Checkout has been canceled.')
                 );
             }
