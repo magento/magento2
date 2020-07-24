@@ -74,8 +74,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Grab new store view code-->
-        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="navigateToNewWebsitePage"/>
-        <waitForPageLoad stepKey="waitForStoresPageLoad"/>
+        <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="navigateToNewWebsitePage"/>
         <fillField userInput="{{NewWebSiteData.name}}" selector="{{AdminStoresGridSection.websiteFilterTextField}}" stepKey="fillSearchWebsiteField"/>
         <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
         <click selector="{{AdminStoresGridSection.storeNameInFirstRow}}" stepKey="clickFirstRow"/>
