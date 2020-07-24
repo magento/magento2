@@ -3079,6 +3079,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         );
 
         if ($this->stockConfiguration->isQty($this->skuProcessor->getNewSku($sku)['type_id'])) {
+            if (isset($rowData['qty']) && $rowData['qty'] == 0) {
+                $row['is_in_stock'] = 0;
+            }
             $stockItemDo->setData($row);
             $row['is_in_stock'] = $row['is_in_stock'] ?? $this->stockStateProvider->verifyStock($stockItemDo);
             if ($this->stockStateProvider->verifyNotification($stockItemDo)) {
