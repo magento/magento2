@@ -126,12 +126,14 @@ class EntityUrl implements ResolverInterface
      * @param int $storeId
      * @param bool $findCustom
      * @return UrlRewrite|null
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     private function findFinalUrl(string $requestPath, int $storeId, bool $findCustom = false): ?UrlRewrite
     {
         $urlRewrite = $this->findUrlFromRequestPath($requestPath, $storeId);
         if (empty($urlRewrite) && strpos($requestPath, '/') !== false) {
             //CMS hierarchy doesn't have their parents written into the url rewrites as they appear in hierarchy
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $urlRewrite = $this->findUrlFromRequestPath(basename($requestPath), $storeId);
         }
         if ($urlRewrite) {
