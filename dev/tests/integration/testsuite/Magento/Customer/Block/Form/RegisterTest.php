@@ -6,15 +6,20 @@
 namespace Magento\Customer\Block\Form;
 
 use Magento\Customer\Block\DataProviders\AddressAttributeData;
+use Magento\Customer\Block\Widget\Company;
+use Magento\Customer\Model\Attribute;
+use Magento\Customer\ViewModel\Address;
+use Magento\Eav\Model\Config;
 use Magento\Framework\View\Element\Template;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Customer\Block\Form\Register
  *
  * @magentoAppArea frontend
  */
-class RegisterTest extends \PHPUnit\Framework\TestCase
+class RegisterTest extends TestCase
 {
     /**
      * @magentoAppIsolation enabled
@@ -23,10 +28,12 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testCompanyDefault(): void
     {
-        /** @var \Magento\Customer\Block\Widget\Company $block */
-        $block = Bootstrap::getObjectManager()->create(Register::class)
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var Company $block */
+        $block = $objectManager->create(Register::class)
             ->setTemplate('Magento_Customer::form/register.phtml')
-            ->setShowAddressFields(true);
+            ->setShowAddressFields(true)
+            ->setViewModel($objectManager->get(Address::class));
         $this->setAttributeDataProvider($block);
 
         $this->assertStringContainsString('title="Company"', $block->toHtml());
@@ -39,11 +46,12 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testTelephoneDefault(): void
     {
-        /** @var \Magento\Customer\Block\Widget\Company $block */
-        $block = Bootstrap::getObjectManager()->create(
-            Register::class
-        )->setTemplate('Magento_Customer::form/register.phtml')
-        ->setShowAddressFields(true);
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var Company $block */
+        $block = $objectManager->create(Register::class)
+            ->setTemplate('Magento_Customer::form/register.phtml')
+            ->setShowAddressFields(true)
+            ->setViewModel($objectManager->get(Address::class));
         $this->setAttributeDataProvider($block);
 
         $this->assertStringContainsString('title="Phone&#x20;Number"', $block->toHtml());
@@ -56,11 +64,12 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testFaxDefault(): void
     {
-        /** @var \Magento\Customer\Block\Widget\Company $block */
-        $block = Bootstrap::getObjectManager()->create(
-            Register::class
-        )->setTemplate('Magento_Customer::form/register.phtml')
-        ->setShowAddressFields(true);
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var Company $block */
+        $block = $objectManager->create(Register::class)
+            ->setTemplate('Magento_Customer::form/register.phtml')
+            ->setShowAddressFields(true)
+            ->setViewModel($objectManager->get(Address::class));
         $this->setAttributeDataProvider($block);
 
         $this->assertStringNotContainsString('title="Fax"', $block->toHtml());
@@ -73,18 +82,19 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testCompanyDisabled(): void
     {
-        /** @var \Magento\Customer\Model\Attribute $model */
-        $model = Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Model\Attribute::class
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var Attribute $model */
+        $model = $objectManager->create(
+            Attribute::class
         );
         $model->loadByCode('customer_address', 'company')->setIsVisible('0');
         $model->save();
 
-        /** @var \Magento\Customer\Block\Widget\Company $block */
-        $block = Bootstrap::getObjectManager()->create(
-            Register::class
-        )->setTemplate('Magento_Customer::form/register.phtml')
-        ->setShowAddressFields(true);
+        /** @var Company $block */
+        $block = $objectManager->create(Register::class)
+            ->setTemplate('Magento_Customer::form/register.phtml')
+            ->setShowAddressFields(true)
+            ->setViewModel($objectManager->get(Address::class));
         $this->setAttributeDataProvider($block);
 
         $this->assertStringNotContainsString('title="Company"', $block->toHtml());
@@ -97,18 +107,19 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testTelephoneDisabled(): void
     {
-        /** @var \Magento\Customer\Model\Attribute $model */
-        $model = Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Model\Attribute::class
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var Attribute $model */
+        $model = $objectManager->create(
+            Attribute::class
         );
         $model->loadByCode('customer_address', 'telephone')->setIsVisible('0');
         $model->save();
 
-        /** @var \Magento\Customer\Block\Widget\Company $block */
-        $block = Bootstrap::getObjectManager()->create(
-            Register::class
-        )->setTemplate('Magento_Customer::form/register.phtml')
-        ->setShowAddressFields(true);
+        /** @var Company $block */
+        $block = $objectManager->create(Register::class)
+            ->setTemplate('Magento_Customer::form/register.phtml')
+            ->setShowAddressFields(true)
+            ->setViewModel($objectManager->get(Address::class));
         $this->setAttributeDataProvider($block);
 
         $this->assertStringNotContainsString('title="Phone&#x20;Number"', $block->toHtml());
@@ -121,18 +132,19 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      */
     public function testFaxEnabled(): void
     {
-        /** @var \Magento\Customer\Model\Attribute $model */
-        $model = Bootstrap::getObjectManager()->create(
-            \Magento\Customer\Model\Attribute::class
+        $objectManager = Bootstrap::getObjectManager();
+        /** @var Attribute $model */
+        $model = $objectManager->create(
+            Attribute::class
         );
         $model->loadByCode('customer_address', 'fax')->setIsVisible('1');
         $model->save();
 
-        /** @var \Magento\Customer\Block\Widget\Company $block */
-        $block = Bootstrap::getObjectManager()->create(
-            Register::class
-        )->setTemplate('Magento_Customer::form/register.phtml')
-        ->setShowAddressFields(true);
+        /** @var Company $block */
+        $block = $objectManager->create(Register::class)
+            ->setTemplate('Magento_Customer::form/register.phtml')
+            ->setShowAddressFields(true)
+            ->setViewModel($objectManager->get(Address::class));
         $this->setAttributeDataProvider($block);
 
         $this->assertStringContainsString('title="Fax"', $block->toHtml());
@@ -159,8 +171,8 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
      */
     protected function tearDown(): void
     {
-        /** @var \Magento\Eav\Model\Config $eavConfig */
-        $eavConfig = Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
+        /** @var Config $eavConfig */
+        $eavConfig = Bootstrap::getObjectManager()->get(Config::class);
         $eavConfig->clear();
     }
 

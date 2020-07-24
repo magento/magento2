@@ -219,6 +219,7 @@ $viewModel = $block->getViewModel();
                 "postcodeId": "#zip",
                 "form": "#form-validate",
                 "regionJson": <?= /* @noEscape */ $viewModel->dataGetRegionJson() ?>,
+                "currentRegionValue": "<?= /* @noEscape */ $block->getRegion() ?>",
                 "defaultRegion": "<?= (int) $block->getRegionId() ?>",
                 "countriesWithOptionalZip": <?= /* @noEscape */ $viewModel->dataGetCountriesWithOptionalZip(true) ?>
             }
