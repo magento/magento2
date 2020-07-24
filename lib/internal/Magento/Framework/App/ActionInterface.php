@@ -9,6 +9,7 @@ namespace Magento\Framework\App;
  * Magento application action controller type. Every action controller in Application should implement this interface.
  *
  * @api
+ * @since 100.0.2
  */
 interface ActionInterface
 {

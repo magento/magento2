@@ -53,7 +53,9 @@
             </actionGroup>
 
             <!-- Reindex -->
-            <magentoCLI command="indexer:reindex" stepKey="reindexAllIndexes"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAllIndexes">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
 
         <after>
