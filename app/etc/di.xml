@@ -1809,4 +1809,12 @@
             <argument name="cache" xsi:type="object">configured_block_cache</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\DB\Adapter\SqlVersionProvider">
+        <arguments>
+            <argument name="supportedVersionPatterns" xsi:type="array">
+                <item name="MySQL-(5.6,5.7)" xsi:type="string">^5\.[67]\.</item>
+                <item name="MariaDB-(10.0-10.2)" xsi:type="string">^10\.[0-2]\.</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
