@@ -12,7 +12,7 @@
                 <arguments>
                     <argument name="path" xsi:type="string">review/customer</argument>
                     <argument name="label" xsi:type="string" translate="true">My Product Reviews</argument>
-                    <argument name="sortOrder" xsi:type="number">50</argument>
+                    <argument name="sortOrder" xsi:type="number">100</argument>
                 </arguments>
             </block>
         </referenceBlock>

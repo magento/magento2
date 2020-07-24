@@ -9,7 +9,6 @@ namespace Magento\SalesGraphQl\Model\Resolver;
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -17,6 +16,8 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\SalesGraphQl\Model\Order\OrderAddress;
+use Magento\SalesGraphQl\Model\Order\OrderPayments;
 use Magento\SalesGraphQl\Model\Resolver\CustomerOrders\Query\OrderFilter;
 use Magento\Store\Api\Data\StoreInterface;
 
@@ -31,6 +32,16 @@ class CustomerOrders implements ResolverInterface
     private $searchCriteriaBuilder;
 
     /**
+     * @var OrderAddress
+     */
+    private $orderAddress;
+
+    /**
+     * @var OrderPayments
+     */
+    private $orderPayments;
+
+    /**
      * @var OrderRepositoryInterface
      */
     private $orderRepository;
@@ -42,15 +53,21 @@ class CustomerOrders implements ResolverInterface
 
     /**
      * @param OrderRepositoryInterface $orderRepository
+     * @param OrderAddress $orderAddress
+     * @param OrderPayments $orderPayments
      * @param SearchCriteriaBuilder $searchCriteriaBuilder
      * @param OrderFilter $orderFilter
      */
     public function __construct(
         OrderRepositoryInterface $orderRepository,
+        OrderAddress $orderAddress,
+        OrderPayments $orderPayments,
         SearchCriteriaBuilder $searchCriteriaBuilder,
         OrderFilter $orderFilter
     ) {
         $this->orderRepository = $orderRepository;
+        $this->orderAddress = $orderAddress;
+        $this->orderPayments = $orderPayments;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->orderFilter = $orderFilter;
     }
@@ -77,9 +94,8 @@ class CustomerOrders implements ResolverInterface
         $userId = $context->getUserId();
         /** @var StoreInterface $store */
         $store = $context->getExtensionAttributes()->getStore();
-
         try {
-            $searchResult = $this->getSearchResult($args, (int) $userId, (int)$store->getId());
+            $searchResult = $this->getSearchResult($args, (int)$userId, (int)$store->getId());
             $maxPages = (int)ceil($searchResult->getTotalCount() / $searchResult->getPageSize());
         } catch (InputException $e) {
             throw new GraphQlInputException(__($e->getMessage()));
@@ -88,8 +104,8 @@ class CustomerOrders implements ResolverInterface
         return [
             'total_count' => $searchResult->getTotalCount(),
             'items' => $this->formatOrdersArray($searchResult->getItems()),
-            'page_info'   => [
-                'page_size'    => $searchResult->getPageSize(),
+            'page_info' => [
+                'page_size' => $searchResult->getPageSize(),
                 'current_page' => $searchResult->getCurPage(),
                 'total_pages' => $maxPages,
             ]
@@ -116,6 +132,9 @@ class CustomerOrders implements ResolverInterface
                 'order_number' => $orderModel->getIncrementId(),
                 'status' => $orderModel->getStatusLabel(),
                 'shipping_method' => $orderModel->getShippingDescription(),
+                'shipping_address' => $this->orderAddress->getOrderShippingAddress($orderModel),
+                'billing_address' => $this->orderAddress->getOrderBillingAddress($orderModel),
+                'payment_methods' => $this->orderPayments->getOrderPaymentMethod($orderModel),
                 'model' => $orderModel,
             ];
         }
