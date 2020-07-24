@@ -1411,9 +1411,7 @@ class Installer
     {
         /** @var Manager $cacheManager */
         $cacheManager = $this->objectManagerProvider->get()->get(Manager::class);
-        if (empty($types)) {
-            $types = $cacheManager->getAvailableTypes();
-        }
+        $types = empty($types) ? $cacheManager->getAvailableTypes() : $types;
         $cacheManager->flush($types);
         $this->log->log('Cache types ' . implode(',', $types) . ' flushed successfully');
     }
