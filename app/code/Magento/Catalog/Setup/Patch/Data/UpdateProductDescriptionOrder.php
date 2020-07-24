@@ -12,9 +12,7 @@ use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 
 /**
- * Class UpdateProductDescriptionOrder
- *
- * @package Magento\Catalog\Setup\Patch
+ * Reorder Short Description/Description Product Attributes
  */
 class UpdateProductDescriptionOrder implements DataPatchInterface
 {
@@ -41,7 +39,7 @@ class UpdateProductDescriptionOrder implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -67,7 +65,7 @@ class UpdateProductDescriptionOrder implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -77,7 +75,7 @@ class UpdateProductDescriptionOrder implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
