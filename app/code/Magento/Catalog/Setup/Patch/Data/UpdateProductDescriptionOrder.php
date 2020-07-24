@@ -62,6 +62,8 @@ class UpdateProductDescriptionOrder implements DataPatchInterface
             'Description',
             110
         );
+
+        return $this;
     }
 
     /**
