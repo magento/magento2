@@ -7,11 +7,11 @@ declare(strict_types=1);
 
 namespace Magento\UrlRewriteGraphQl\Model\Resolver;
 
+use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
 use Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite\CustomUrlLocatorInterface;
@@ -130,6 +130,10 @@ class EntityUrl implements ResolverInterface
     private function findFinalUrl(string $requestPath, int $storeId, bool $findCustom = false): ?UrlRewrite
     {
         $urlRewrite = $this->findUrlFromRequestPath($requestPath, $storeId);
+        if (empty($urlRewrite) && strpos($requestPath, '/') !== false) {
+            //CMS hierarchy doesn't have their parents written into the url rewrites as they appear in hierarchy
+            $urlRewrite = $this->findUrlFromRequestPath(basename($requestPath), $storeId);
+        }
         if ($urlRewrite) {
             $this->redirectType = $urlRewrite->getRedirectType();
             while ($urlRewrite && $urlRewrite->getRedirectType() > 0) {
