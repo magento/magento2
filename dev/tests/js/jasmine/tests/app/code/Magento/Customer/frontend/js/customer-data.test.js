@@ -3,8 +3,8 @@
  * See COPYING.txt for license details.
  */
 
+/* global _ */
 /* eslint max-nested-callbacks: 0 */
-
 define([
     'squire',
     'jquery',
@@ -14,6 +14,10 @@ define([
 
     var injector = new Squire(),
         sectionConfig,
+        originalGetJSON,
+        originalReload,
+        originalInitNamespaceStorage,
+        originalEach,
         obj;
 
     describe('Magento_Customer/js/customer-data', function () {
@@ -39,27 +43,46 @@ define([
 
         describe('"init" method', function () {
             var storageInvalidation = {
+                    /**
+                     * Mock Keys Method
+                     * @returns array
+                     */
                     keys: function () {
                         return ['section'];
                     }
                 },
                 dataProvider = {
+                    /**
+                     * Mock getFromStorage Method
+                     * @returns array
+                     */
                     getFromStorage: function () {
                         return ['section'];
                     }
                 },
                 storage = {
+                    /**
+                     * Mock Keys Method
+                     * @returns array
+                     */
                     keys: function () {
                         return ['section'];
                     }
                 };
 
             beforeEach(function () {
-                spyOn(obj, "reload").and.returnValue(true);
+                originalReload = obj.reload;
+                originalInitNamespaceStorage = $.initNamespaceStorage;
+                spyOn(obj, 'reload').and.returnValue(true);
                 spyOn($, 'initNamespaceStorage').and.returnValue(true);
-                spyOn(dataProvider, "getFromStorage");
-                spyOn(storage, "keys").and.returnValue(['section']);
-                spyOn(storageInvalidation, "keys").and.returnValue(['section']);
+                spyOn(dataProvider, 'getFromStorage');
+                spyOn(storage, 'keys').and.returnValue(['section']);
+                spyOn(storageInvalidation, 'keys').and.returnValue(['section']);
+            });
+
+            afterEach(function () {
+                obj.reload = originalReload;
+                $.initNameSpaceStorage = originalInitNamespaceStorage;
             });
 
             it('Should be defined', function () {
@@ -73,19 +96,19 @@ define([
             });
 
             it('Calls "getExpiredSectionNames" method', function () {
-                spyOn(obj, "getExpiredSectionNames").and.returnValue([]);
+                spyOn(obj, 'getExpiredSectionNames').and.returnValue([]);
                 obj.init();
                 expect(obj.getExpiredSectionNames).toHaveBeenCalled();
             });
 
             it('Calls "reload" method when expired sections exist', function () {
-                spyOn(obj, "getExpiredSectionNames").and.returnValue(['section']);
+                spyOn(obj, 'getExpiredSectionNames').and.returnValue(['section']);
                 obj.init();
                 expect(obj.reload).toHaveBeenCalled();
             });
 
             it('Calls "reload" method when expired sections do not exist', function () {
-                spyOn(obj, "getExpiredSectionNames").and.returnValue([]);
+                spyOn(obj, 'getExpiredSectionNames').and.returnValue([]);
 
                 _.isEmpty = jasmine.createSpy().and.returnValue(false);
 
@@ -119,6 +142,14 @@ define([
         });
 
         describe('"set" method', function () {
+            beforeEach(function () {
+                originalEach = _.each;
+            });
+
+            afterEach(function () {
+                _.each = originalEach;
+            });
+
             it('Should be defined', function () {
                 expect(obj.hasOwnProperty('set')).toBeDefined();
             });
@@ -134,9 +165,14 @@ define([
 
         describe('"reload" method', function () {
             beforeEach(function () {
-                jQuery.getJSON = jasmine.createSpy().and.callFake(function (url, parameters) {
+                originalGetJSON = jQuery.getJSON;
+                jQuery.getJSON = jasmine.createSpy().and.callFake(function () {
                     var deferred = $.Deferred();
 
+                    /**
+                     * Mock Done Method for getJSON
+                     * @returns object
+                     */
                     deferred.promise().done = function () {
                         return {
                             responseJSON: {
@@ -147,6 +183,10 @@ define([
 
                     return deferred.promise();
                 });
+            });
+
+            afterEach(function () {
+                jQuery.getJSON = originalGetJSON;
             });
 
             it('Should be defined', function () {
@@ -167,6 +207,10 @@ define([
                 jQuery.getJSON = jasmine.createSpy().and.callFake(function (url, parameters) {
                     var deferred = $.Deferred();
 
+                    /**
+                     * Mock Done Method for getJSON
+                     * @returns object
+                     */
                     deferred.promise().done = function () {
                         return {
                             responseJSON: {
@@ -176,7 +220,7 @@ define([
                     };
 
                     expect(parameters).toEqual(jasmine.objectContaining({
-                        "sections": "section"
+                        sections: 'section'
                     }));
 
                     return deferred.promise();
@@ -200,9 +244,13 @@ define([
                     var deferred = $.Deferred();
 
                     expect(parameters).toEqual(jasmine.objectContaining({
-                        "sections": "cart,customer,messages"
+                        sections: 'cart,customer,messages'
                     }));
 
+                    /**
+                     * Mock Done Method for getJSON
+                     * @returns object
+                     */
                     deferred.promise().done = function () {
                         return {
                             responseJSON: {
@@ -234,9 +282,13 @@ define([
                     var deferred = $.Deferred();
 
                     expect(parameters).toEqual(jasmine.objectContaining({
-                        "force_new_section_timestamp": true
+                        'force_new_section_timestamp': true
                     }));
 
+                    /**
+                     * Mock Done Method for getJSON
+                     * @returns object
+                     */
                     deferred.promise().done = function () {
                         return {
                             responseJSON: {
