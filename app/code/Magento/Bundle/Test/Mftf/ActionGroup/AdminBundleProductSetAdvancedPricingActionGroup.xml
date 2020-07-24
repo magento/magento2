@@ -16,6 +16,6 @@
             <argument name="priceView" type="string" defaultValue="Price Range"/>
         </arguments>
         <remove keyForRemoval="selectProductCustomGroupValue"/>
-        <selectOption selector="{{AdminBundleProductFormAdvancedPricingSection.bundleAdvancedPriceView}}" userInput="{{priceView}}" stepKey="selectPriceView" before="clickDoneButton"/>
+        <selectOption selector="{{AdminProductFormAdvancedPricingSection.bundleAdvancedPriceView}}" userInput="{{priceView}}" stepKey="selectPriceView" before="clickDoneButton"/>
     </actionGroup>
 </actionGroups>

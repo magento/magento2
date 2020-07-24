@@ -16,14 +16,14 @@
         </annotations>
 
         <before>
-            <createData entity="VirtualProduct" stepKey="simpleProduct1">
+            <createData entity="VirtualProduct" stepKey="createProductForBundleItem1">
                 <field key="price">50.00</field>
             </createData>
-            <createData entity="SimpleProduct2" stepKey="simpleProduct2">
+            <createData entity="SimpleProduct2" stepKey="createProductForBundleItem2">
                 <field key="price">100.00</field>
             </createData>
-            <createData entity="tierProductPrice50PercentDiscount" stepKey="addTierPrice">
-                <requiredEntity createDataKey="simpleProduct2"/>
+            <createData entity="TierProductPrice50PercentDiscount" stepKey="addTierPrice">
+                <requiredEntity createDataKey="createProductForBundleItem2"/>
             </createData>
         </before>
 

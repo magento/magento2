@@ -72,7 +72,7 @@
         <data key="quantity">3</data>
         <var key="sku" entityType="product" entityKey="sku" />
     </entity>
-    <entity name="tierProductPrice50PercentDiscount" type="catalogTierPrice">
+    <entity name="TierProductPrice50PercentDiscount" type="catalogTierPrice">
         <data key="price">50</data>
         <data key="price_type">discount</data>
         <data key="website_id">0</data>

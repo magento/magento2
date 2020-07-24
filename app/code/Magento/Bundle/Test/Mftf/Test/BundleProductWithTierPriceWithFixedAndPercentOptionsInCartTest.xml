@@ -19,10 +19,10 @@
         </annotations>
 
         <before>
-            <createData entity="SimpleProduct2" stepKey="simpleProduct1">
+            <createData entity="SimpleProduct2" stepKey="createProductForBundleItem1">
                 <field key="price">100.00</field>
             </createData>
-            <createData entity="SimpleProduct2" stepKey="simpleProduct2">
+            <createData entity="SimpleProduct2" stepKey="createProductForBundleItem2">
                 <field key="price">100.00</field>
             </createData>
             <magentoCron groups="index" stepKey="runCronIndex"/>
@@ -30,8 +30,8 @@
         </before>
 
         <after>
-            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
-            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createProductForBundleItem1" stepKey="deleteProductForBundleItem1"/>
+            <deleteData createDataKey="createProductForBundleItem2" stepKey="deleteProductForBundleItem2"/>
             <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteBundle">
                 <argument name="product" value="BundleProduct"/>
             </actionGroup>
@@ -48,25 +48,23 @@
         <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOption1">
             <argument name="x" value="0"/>
             <argument name="n" value="1"/>
-            <argument name="prodOneSku" value="$simpleProduct1.sku$"/>
+            <argument name="prodOneSku" value="$createProductForBundleItem1.sku$"/>
             <argument name="prodTwoSku" value=""/>
             <argument name="optionTitle" value="Option1"/>
             <argument name="inputType" value="checkbox"/>
         </actionGroup>
-        <wait time="5" stepKey="vcbcvvc2"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYPrice('0', '0')}}" userInput="100" stepKey="fillBundleOption1Price"/>
         <selectOption selector="{{AdminProductFormBundleSection.bundlePriceType}}" userInput="Percent" stepKey="selectPercentPrice"/>
         <actionGroup ref="AddBundleOptionWithOneProductActionGroup" stepKey="addBundleOption2">
             <argument name="x" value="1"/>
             <argument name="n" value="2"/>
-            <argument name="prodOneSku" value="$simpleProduct2.sku$"/>
+            <argument name="prodOneSku" value="$createProductForBundleItem2.sku$"/>
             <argument name="prodTwoSku" value=""/>
             <argument name="optionTitle" value="Option2"/>
             <argument name="inputType" value="checkbox"/>
         </actionGroup>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXProductYPrice('1', '0')}}" userInput="100" stepKey="fillBundleOption2Price"/>
         <scrollToTopOfPage stepKey="scrollToTopOfTheProductPage"/>
-        <wait time="5" stepKey="vcbcvvc"/>
         <actionGroup ref="AdminBundleProductSetAdvancedPricingActionGroup" stepKey="addProductTierPrice">
             <argument name="quantity" value="1"/>
             <argument name="price" value="Discount"/>
