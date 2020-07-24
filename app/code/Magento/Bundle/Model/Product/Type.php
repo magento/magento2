@@ -6,6 +6,8 @@
 
 namespace Magento\Bundle\Model\Product;
 
+use Magento\Bundle\Model\Option;
+use Magento\Bundle\Model\ResourceModel\Option\Collection;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection as Selections;
 use Magento\Bundle\Model\ResourceModel\Selection\Collection\FilterApplier as SelectionCollectionFilterApplier;
 use Magento\Catalog\Api\ProductRepositoryInterface;
@@ -459,12 +461,12 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Retrieve bundle option collection
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
+     * @return Collection
      */
     public function getOptionsCollection($product)
     {
         if (!$product->hasData($this->_keyOptionsCollection)) {
-            /** @var \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection */
+            /** @var Collection $optionsCollection */
             $optionsCollection = $this->_bundleOption->create()
                 ->getResourceCollection();
             $optionsCollection->setProductIdFilter($product->getEntityId());
@@ -682,6 +684,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
                     $options
                 );
 
+                $this->validateRadioAndSelectOptions(
+                    $optionsCollection,
+                    $options
+                );
+
                 $selectionIds = array_values($this->arrayUtility->flatten($options));
                 // If product has not been configured yet then $selections array should be empty
                 if (!empty($selectionIds)) {
@@ -887,7 +894,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param array $optionIds
      * @param \Magento\Catalog\Model\Product $product
-     * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
+     * @return Collection
      */
     public function getOptionsByIds($optionIds, $product)
     {
@@ -1254,7 +1261,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param bool $isStrictProcessMode
-     * @param \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection
+     * @param Collection $optionsCollection
      * @param int[] $options
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -1273,11 +1280,58 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
     }
 
     /**
+     * Validate Options for Radio and Select input types
+     *
+     * @param Collection $optionsCollection
+     * @param int[] $options
+     * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
+     */
+    private function validateRadioAndSelectOptions($optionsCollection, $options): void
+    {
+        $errorTypes = [];
+
+        if (is_array($optionsCollection->getItems())) {
+            foreach ($optionsCollection->getItems() as $option) {
+                if ($this->isSelectedOptionValid($option, $options)) {
+                    $errorTypes[] = $option->getType();
+                }
+            }
+        }
+
+        if (!empty($errorTypes)) {
+            throw new \Magento\Framework\Exception\LocalizedException(
+                __(
+                    'Option type (%types) should have only one element.',
+                    ['types' => implode(", ", $errorTypes)]
+                )
+            );
+        }
+    }
+
+    /**
+     * Check if selected option is valid
+     *
+     * @param Option $option
+     * @param array $options
+     * @return bool
+     */
+    private function isSelectedOptionValid($option, $options): bool
+    {
+        return (
+            ($option->getType() == 'radio' || $option->getType() == 'select') &&
+            isset($options[$option->getOptionId()]) &&
+            is_array($options[$option->getOptionId()]) &&
+            count($options[$option->getOptionId()]) > 1
+        );
+    }
+
+    /**
      * Check if selection is salable
      *
      * @param \Magento\Bundle\Model\ResourceModel\Selection\Collection $selections
      * @param bool $skipSaleableCheck
-     * @param \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection
+     * @param Collection $optionsCollection
      * @param int[] $options
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
