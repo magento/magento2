@@ -9,6 +9,8 @@ namespace Magento\Backend\Block\Widget\Grid;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
+ * Class Export for exporting grid data as CSV file or MS Excel 2003 XML Document file
+ *
  * @api
  * @deprecated 100.2.0 in favour of UI component implementation
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -69,6 +71,8 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     }
 
     /**
+     * Internal constructor, that is called from real constructor
+     *
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -242,6 +246,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
 
     /**
      * Iterate collection and call callback method per item
+     *
      * For callback method first argument always is item object
      *
      * @param string $callback
@@ -307,7 +312,7 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      */
     public function getCsvFile()
     {
-        $name = md5(microtime());
+        $name = hash('sha256',microtime());
         $file = $this->_path . '/' . $name . '.csv';
 
         $this->_directory->create($this->_path);
@@ -432,11 +437,11 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
      */
     public function getExcelFile($sheetName = '')
     {
-        $collection = $this->_getRowCollection();
+        $collection = $this->_getPreparedCollection();
 
         $convert = new \Magento\Framework\Convert\Excel($collection->getIterator(), [$this, 'getRowRecord']);
 
-        $name = md5(microtime());
+        $name = hash('sha256',microtime());
         $file = $this->_path . '/' . $name . '.xml';
 
         $this->_directory->create($this->_path);
@@ -551,6 +556,8 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
     }
 
     /**
+     * Get export page size
+     *
      * @return int
      */
     public function getExportPageSize()
