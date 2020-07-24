@@ -278,7 +278,12 @@ class Export extends \Magento\Backend\Block\Widget implements \Magento\Backend\B
 
             $collection = $this->_getRowCollection($originalCollection);
             foreach ($collection as $item) {
-                call_user_func_array([$this, $callback], array_merge([$item], $args));
+                //phpcs:ignore Magento2.Functions.DiscouragedFunction
+                call_user_func_array(
+                    [$this, $callback],
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                    array_merge([$item], $args)
+                );
             }
         }
     }
