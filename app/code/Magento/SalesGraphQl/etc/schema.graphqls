@@ -47,10 +47,10 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     total: OrderTotal @doc(description: "Contains details about the calculated totals for this order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderTotal")
     invoices: [Invoice]! @doc(description: "A list of invoices for the order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Invoices")
     shipments: [OrderShipment] @doc(description: "A list of shipments for the order")
-    credit_memos: [CreditMemo  ] @doc(description: "A list of credit memos") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemos")
+    credit_memos: [CreditMemo] @doc(description: "A list of credit memos") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemos")
     payment_methods: [PaymentMethod] @doc(description: "Payment details for the order")
-    shipping_address: CustomerAddress @doc(description: "The shipping address for the order")
-    billing_address: CustomerAddress @doc(description: "The billing address for the order")
+    shipping_address: OrderAddress @doc(description: "The shipping address for the order")
+    billing_address: OrderAddress @doc(description: "The billing address for the order")
     carrier: String @doc(description: "The shipping carrier for the order delivery")
     shipping_method: String @doc(description: "The delivery method for the order")
     comments: [CommentItem] @doc(description: "Comments about the order")
@@ -58,6 +58,24 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     order_number: String! @deprecated(reason: "Use the number attribute instead")
     created_at: String @deprecated(reason: "Use the order_date attribute instead")
     grand_total: Float  @deprecated(reason: "Use the totals.grand_total attribute instead")
+}
+
+type OrderAddress @doc(description: "OrderAddress contains detailed information about an order's billing and shipping addresses"){
+    firstname: String! @doc(description: "The first name of the person associated with the shipping/billing address")
+    lastname: String! @doc(description: "The family name of the person associated with the shipping/billing address")
+    middlename: String @doc(description: "The middle name of the person associated with the shipping/billing address")
+    region: String @doc(description: "The state or province name")
+    region_id: ID @doc(description: "The unique ID for a pre-defined region")
+    country_code: CountryCodeEnum @doc(description: "The customer's country")
+    street: [String!]! @doc(description: "An array of strings that define the street number and name")
+    company: String @doc(description: "The customer's company")
+    telephone: String! @doc(description: "The telephone number")
+    fax: String @doc(description: "The fax number")
+    postcode: String @doc(description: "The customer's order ZIP or postal code")
+    city: String! @doc(description: "The city or town")
+    prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
+    suffix: String @doc(description: "A value such as Sr., Jr., or III")
+    vat_id: String @doc(description: "The customer's Value-added tax (VAT) number (for corporate customers)")
 }
 
 interface OrderItemInterface @doc(description: "Order item details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\OrderItemTypeResolver") {
@@ -151,7 +169,7 @@ type InvoiceTotal @doc(description: "Contains price details from an invoice"){
     subtotal: Money! @doc(description: "The subtotal of the invoice, excluding shipping, discounts, and taxes")
     discounts: [Discount] @doc(description: "The applied discounts to the invoice")
     total_tax: Money! @doc(description: "The amount of tax applied to the invoice")
-    taxes: [TaxItem] @doc(description: "The order tax details")
+    taxes: [TaxItem] @doc(description: "The invoice tax details")
     grand_total: Money! @doc(description: "The final total amount, including shipping, discounts, and taxes")
     base_grand_total: Money! @doc(description: "The final base grand total amount in the base currency")
     total_shipping: Money! @doc(description: "The shipping amount for the invoice")
@@ -203,7 +221,7 @@ type PaymentMethod @doc(description: "Contains details about the payment method 
 type CreditMemo @doc(description: "Credit memo details") {
     id: ID! @doc(description: "The unique ID of the credit memo, used for API purposes")
     number: String! @doc(description: "The sequential credit memo number")
-    items: [CreditMemoItem] @doc(description: "An array containing details about refunded items") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemo\\CreditMemoItems")
+    items: [CreditMemoItemInterface] @doc(description: "An array containing details about refunded items") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemo\\CreditMemoItems")
     total: CreditMemoTotal @doc(description: "Contains details about the total refunded amount") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemo\\CreditMemoTotal")
     comments: [CommentItem] @doc(description: "Comments on the credit memo") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\CreditMemo\\CreditMemoComments")
 }
@@ -225,11 +243,14 @@ type BundleCreditMemoItem implements CreditMemoItemInterface {
 }
 
 type CreditMemoTotal @doc(description: "Credit memo price details") {
-    subtotal: Money! @doc(description: "The subtotal amount, excluding shipping, discounts, and tax")
-    total_tax: Money! @doc(description: "The total tax amount")
-    grand_total: Money! @doc(description: "The final total amount, including shipping and taxes")
-    base_grand_total: Money! @doc(description: "The final total amount in the base currency")
-    shipping_amount: Money! @doc(description: "The refunded shipping fees")
+    subtotal: Money! @doc(description: "The subtotal of the invoice, excluding shipping, discounts, and taxes")
+    discounts: [Discount] @doc(description: "The applied discounts to the credit memo")
+    total_tax: Money! @doc(description: "The amount of tax applied to the credit memo")
+    taxes: [TaxItem] @doc(description: "The credit memo tax details")
+    grand_total: Money! @doc(description: "The final total amount, including shipping, discounts, and taxes")
+    base_grand_total: Money! @doc(description: "The final base grand total amount in the base currency")
+    total_shipping: Money! @doc(description: "The shipping amount for the credit memo")
+    shipping_handling: ShippingHandling @doc(description: "Contains details about the shipping and handling costs for the credit memo")
     adjustment: Money! @doc(description: "An adjustment manually applied to the order")
 }
 

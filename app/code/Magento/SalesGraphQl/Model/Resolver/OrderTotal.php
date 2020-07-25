@@ -35,10 +35,11 @@ class OrderTotal implements ResolverInterface
         /** @var OrderInterface $order */
         $order = $value['model'];
         $currency = $order->getOrderCurrencyCode();
+        $baseCurrency = $order->getBaseCurrencyCode();
 
         return [
             'base_grand_total' => ['value' => $order->getBaseGrandTotal(), 'currency' => $currency],
-            'grand_total' => ['value' => $order->getGrandTotal(), 'currency' => $currency],
+            'grand_total' => ['value' => $order->getGrandTotal(), 'currency' => $baseCurrency],
             'subtotal' => ['value' => $order->getSubtotal(), 'currency' => $currency],
             'total_tax' => ['value' => $order->getTaxAmount(), 'currency' => $currency],
             'taxes' => $this->getAppliedTaxesDetails($order),

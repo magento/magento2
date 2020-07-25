@@ -33,10 +33,6 @@ class CreditMemoComments implements ResolverInterface
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
-        if (!(($value['order'] ?? null) instanceof OrderInterface)) {
-            throw new LocalizedException(__('"order" value should be specified'));
-        }
-
         /** @var CreditmemoInterface $creditMemo */
         $creditMemo = $value['model'];
 

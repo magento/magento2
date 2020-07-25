@@ -116,8 +116,24 @@ class CreditmemoTest extends GraphQlAbstract
                     'grand_total' => [
                         'value' => 20
                     ],
-                    'shipping_amount' => [
+                    'base_grand_total' => [
+                        'value' => 10
+                    ],
+                    'total_shipping' => [
                         'value' => 0
+                    ],
+                    'shipping_handling' => [
+                        'amount_including_tax' => [
+                            'value' => 0
+                        ],
+                        'amount_excluding_tax' => [
+                            'value' => 0
+                        ],
+                        'total_amount' => [
+                            'value' => 0
+                        ],
+                        'taxes' => [],
+                        'discounts' => [],
                     ],
                     'adjustment' => [
                         'value' => 1.23
@@ -593,11 +609,21 @@ query {
                     subtotal {
                         value
                     }
+                    base_grand_total  {
+                        value
+                    }
                     grand_total {
                         value
                     }
-                    shipping_amount {
+                    total_shipping {
                         value
+                    }
+                    shipping_handling {
+                         amount_including_tax{value}
+                         amount_excluding_tax{value}
+                         total_amount{value}
+                         taxes {amount{value} title rate}
+                         discounts {amount{value} label}
                     }
                     adjustment {
                         value
