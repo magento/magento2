@@ -42,7 +42,7 @@ class AddBundleProductToCartSingleMutationTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->quoteResource = $objectManager->get(QuoteResource::class);
@@ -83,8 +83,8 @@ class AddBundleProductToCartSingleMutationTest extends GraphQlAbstract
         $query = <<<QUERY
 mutation {
     addProductsToCart(
-        cart_id: "{$maskedQuoteId}",
-        cart_items: [
+        cartId: "{$maskedQuoteId}",
+        cartItems: [
             {
                 sku: "{$sku}"
                 quantity: 1
@@ -175,8 +175,8 @@ QUERY;
         $query = <<<QUERY
 mutation {
       addProductsToCart(
-            cart_id: "{$maskedQuoteId}",
-            cart_items: [
+            cartId: "{$maskedQuoteId}",
+            cartItems: [
                 {
                     sku: "bundle-product"
                     quantity: 1

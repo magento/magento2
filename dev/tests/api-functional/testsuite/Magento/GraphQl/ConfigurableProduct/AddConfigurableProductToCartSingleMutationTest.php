@@ -25,7 +25,7 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -131,7 +131,7 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
 
         self::assertEquals(
-            'Could not add the product with SKU configurable to the shopping cart: The requested qty is not available',
+            'The requested qty is not available',
             $response['addProductsToCart']['userInputErrors'][0]['message']
         );
     }
@@ -183,8 +183,7 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
 
         $response = $this->graphQlMutation($query);
 
-        $expectedErrorMessage = 'Could not add the product with SKU configurable to the shopping cart: ' .
-            'There are no source items with the in stock status';
+        $expectedErrorMessage = 'This product is out of stock.';
         self::assertEquals($expectedErrorMessage, $response['addProductsToCart']['userInputErrors'][0]['message']);
     }
 
@@ -204,8 +203,8 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
         return <<<QUERY
 mutation {
     addProductsToCart(
-        cart_id:"{$maskedQuoteId}"
-        cart_items: [
+        cartId:"{$maskedQuoteId}"
+        cartItems: [
             {
                 sku: "{$parentSku}"
                 quantity: $quantity

@@ -35,7 +35,7 @@ class AddDownloadableProductToCartSingleMutationTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -175,8 +175,8 @@ class AddDownloadableProductToCartSingleMutationTest extends GraphQlAbstract
         return <<<MUTATION
 mutation {
     addProductsToCart(
-        cart_id: "{$maskedQuoteId}",
-        cart_items: [
+        cartId: "{$maskedQuoteId}",
+        cartItems: [
             {
                 sku: "{$sku}"
                 quantity: {$qty}
