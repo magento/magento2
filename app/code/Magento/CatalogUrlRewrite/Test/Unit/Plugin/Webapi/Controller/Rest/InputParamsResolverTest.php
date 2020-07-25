@@ -137,9 +137,9 @@ class InputParamsResolverTest extends TestCase
         $this->request->expects($this->any())->method('getBodyParams')->willReturn($this->requestBodyParams);
         $this->subject = $this->createPartialMock(InputParamsResolver::class, ['getRoute']);
         $this->subject->expects($this->any())->method('getRoute')->willReturn($this->route);
-        $this->category = $this->createPartialMock(Category::class, ['setData']);
+        $category = $this->createPartialMock(Category::class, ['setData']);
 
-        $this->result = [false, $this->category, 'test'];
+        $this->result = [false, $category, 'test'];
 
         $this->objectManager = new ObjectManager($this);
         $this->plugin = $this->objectManager->getObject(
@@ -155,7 +155,7 @@ class InputParamsResolverTest extends TestCase
         $this->route->expects($this->once())
             ->method('getServiceMethod')
             ->willReturn('save');
-        $this->category->expects($this->once())
+        $category->expects($this->once())
             ->method('setData')
             ->with($this->saveRewritesHistory, true);
 
