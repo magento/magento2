@@ -8,6 +8,7 @@ namespace Magento\Framework\TestFramework\Unit\Helper;
 /**
  * Helper class for basic object retrieving, such as blocks, models etc...
  *
+ * @deprecated Class under test should be instantiated with `new` keyword with explicit dependencies declaration
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ObjectManager
