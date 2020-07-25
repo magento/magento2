@@ -12,7 +12,7 @@ use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 /**
  * Generate an array with test values for customizable options with encoded id_v2 value
  */
-class GetCustomOptionsWithIDV2ForQueryBySku
+class GetCustomOptionsWithUIDForQueryBySku
 {
     /**
      * @var ProductCustomOptionRepositoryInterface
@@ -42,24 +42,37 @@ class GetCustomOptionsWithIDV2ForQueryBySku
         foreach ($customOptions as $customOption) {
             $optionType = $customOption->getType();
 
-            if ($optionType === 'field' || $optionType === 'area' || $optionType === 'date') {
-                $enteredOptions[] = [
-                    'id' => $this->encodeEnteredOption((int) $customOption->getOptionId()),
-                    'value' => '2012-12-12'
-                ];
-            } elseif ($optionType === 'drop_down') {
-                $optionSelectValues = $customOption->getValues();
-                $selectedOptions[] = $this->encodeSelectedOption(
-                    (int) $customOption->getOptionId(),
-                    (int) reset($optionSelectValues)->getOptionTypeId()
-                );
-            } elseif ($optionType === 'multiple') {
-                foreach ($customOption->getValues() as $optionValue) {
+            switch ($optionType) {
+                case 'field':
+                case 'area':
+                    $enteredOptions[] = [
+                        'type' => 'field',
+                        'id' => $this->encodeEnteredOption((int) $customOption->getOptionId()),
+                        'value' => 'test'
+                    ];
+                    break;
+                case 'date':
+                    $enteredOptions[] = [
+                        'type' => 'date',
+                        'id' => $this->encodeEnteredOption((int) $customOption->getOptionId()),
+                        'value' => '2012-12-12 00:00:00'
+                    ];
+                    break;
+                case 'drop_down':
+                    $optionSelectValues = $customOption->getValues();
                     $selectedOptions[] = $this->encodeSelectedOption(
                         (int) $customOption->getOptionId(),
-                        (int) $optionValue->getOptionTypeId()
+                        (int) reset($optionSelectValues)->getOptionTypeId()
                     );
-                }
+                    break;
+                case 'multiple':
+                    foreach ($customOption->getValues() as $optionValue) {
+                        $selectedOptions[] = $this->encodeSelectedOption(
+                            (int) $customOption->getOptionId(),
+                            (int) $optionValue->getOptionTypeId()
+                        );
+                    }
+                    break;
             }
         }
 

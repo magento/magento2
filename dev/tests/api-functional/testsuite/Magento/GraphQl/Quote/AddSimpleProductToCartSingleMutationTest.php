@@ -7,30 +7,23 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Framework\ObjectManager\ObjectManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Test cases for adding downloadable product with custom options to cart using the single add to cart mutation.
+ * Add simple product with custom options to cart using the unified mutation for adding different product types
  */
-class AddDownloadableProductToCartSingleMutationTest extends GraphQlAbstract
+class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
 {
-    /**
-     * @var GetMaskedQuoteIdByReservedOrderId
-     */
-    private $getMaskedQuoteIdByReservedOrderId;
-
-    /**
-     * @var ObjectManager
-     */
-    private $objectManager;
-
     /**
      * @var GetCustomOptionsWithUIDForQueryBySku
      */
     private $getCustomOptionsWithIDV2ForQueryBySku;
+
+    /**
+     * @var GetMaskedQuoteIdByReservedOrderId
+     */
+    private $getMaskedQuoteIdByReservedOrderId;
 
     /**
      * @var GetCartItemOptionsFromUID
@@ -42,25 +35,27 @@ class AddDownloadableProductToCartSingleMutationTest extends GraphQlAbstract
      */
     protected function setUp(): void
     {
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->getMaskedQuoteIdByReservedOrderId = $this->objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
-        $this->getCartItemOptionsFromUID = $this->objectManager->get(GetCartItemOptionsFromUID::class);
-        $this->getCustomOptionsWithIDV2ForQueryBySku =
-            $this->objectManager->get(GetCustomOptionsWithUIDForQueryBySku::class);
+        $objectManager = Bootstrap::getObjectManager();
+        $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
+        $this->getCartItemOptionsFromUID = $objectManager->get(GetCartItemOptionsFromUID::class);
+        $this->getCustomOptionsWithIDV2ForQueryBySku = $objectManager->get(
+            GetCustomOptionsWithUIDForQueryBySku::class
+        );
     }
 
     /**
-     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_custom_options.php
+     * Test adding a simple product to the shopping cart with all supported
+     * customizable options assigned
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_options.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
-    public function testAddDownloadableProductWithOptions()
+    public function testAddSimpleProductWithOptions()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
-        $sku = 'downloadable-product-with-purchased-separately-links';
+        $sku = 'simple';
         $qty = 1;
-        $links = $this->getProductsLinks($sku);
-        $linkId = key($links);
 
         $itemOptions = $this->getCustomOptionsWithIDV2ForQueryBySku->execute($sku);
         $decodedItemOptions = $this->getCartItemOptionsFromUID->execute($itemOptions);
@@ -71,9 +66,6 @@ class AddDownloadableProductToCartSingleMutationTest extends GraphQlAbstract
                 unset($enteredOption['type']);
             }
         }
-
-        /* Add downloadable product link data to the "selected_options" */
-        $itemOptions['selected_options'][] = $this->generateProductLinkSelectedOptions($linkId);
 
         $productOptionsQuery = preg_replace(
             '/"([^"]+)"\s*:\s*/',
@@ -86,8 +78,6 @@ class AddDownloadableProductToCartSingleMutationTest extends GraphQlAbstract
 
         self::assertArrayHasKey('items', $response['addProductsToCart']['cart']);
         self::assertCount($qty, $response['addProductsToCart']['cart']);
-        self::assertEquals($linkId, $response['addProductsToCart']['cart']['items'][0]['links'][0]['id']);
-
         $customizableOptionsOutput =
             $response['addProductsToCart']['cart']['items'][0]['customizable_options'];
 
@@ -105,41 +95,6 @@ class AddDownloadableProductToCartSingleMutationTest extends GraphQlAbstract
                 $customizableOptionOutputValues
             );
         }
-    }
-
-    /**
-     * Function returns array of all product's links
-     *
-     * @param string $sku
-     * @return array
-     */
-    private function getProductsLinks(string $sku) : array
-    {
-        $result = [];
-        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-
-        $product = $productRepository->get($sku, false, null, true);
-
-        foreach ($product->getDownloadableLinks() as $linkObject) {
-            $result[$linkObject->getLinkId()] = [
-                'title' => $linkObject->getTitle(),
-                'link_type' => null, //deprecated field
-                'price' => $linkObject->getPrice(),
-            ];
-        }
-
-        return $result;
-    }
-
-    /**
-     * Generates Id_v2 for downloadable links
-     *
-     * @param int $linkId
-     * @return string
-     */
-    private function generateProductLinkSelectedOptions(int $linkId): string
-    {
-        return base64_encode("downloadable/$linkId");
     }
 
     /**
@@ -172,10 +127,7 @@ mutation {
         cart {
             items {
                 quantity
-                ... on DownloadableCartItem {
-                    links {
-                        id
-                    }
+                ... on SimpleCartItem {
                     customizable_options {
                         label
                         id
