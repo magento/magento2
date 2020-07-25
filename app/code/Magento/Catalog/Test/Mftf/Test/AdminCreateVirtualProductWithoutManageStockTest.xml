@@ -60,7 +60,9 @@
         <amOnPage url="{{StorefrontProductPage.url(virtualProductWithoutManageStock.urlKey)}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForStoreFrontPageToLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{virtualProductWithoutManageStock.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{virtualProductWithoutManageStock.sku}}" stepKey="seeVirtualProductSku"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeVirtualProductSku">
+            <argument name="productSku" value="{{virtualProductWithoutManageStock.sku}}"/>
+        </actionGroup>
 
         <!-- Verify customer see product special price on the storefront page -->
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.specialPriceAmount}}" stepKey="specialPriceAmount"/>
