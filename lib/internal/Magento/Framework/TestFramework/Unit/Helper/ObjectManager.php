@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\TestFramework\Unit\Helper;
 
+use PHPUnit\Framework\MockObject\MockObject;
+
 /**
  * Helper class for basic object retrieving, such as blocks, models etc...
  *
@@ -45,7 +47,7 @@ class ObjectManager
      *
      * @param string $argClassName
      * @param array $originalArguments
-     * @return null|object|\PHPUnit_Framework_MockObject_MockObject
+     * @return null|object|MockObject
      */
     protected function _createArgumentMock($argClassName, array $originalArguments)
     {
@@ -83,7 +85,7 @@ class ObjectManager
     /**
      * Retrieve specific mock of core resource model
      *
-     * @return \Magento\Framework\Module\ResourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\Module\ResourceInterface|MockObject
      */
     protected function _getResourceModelMock()
     {
@@ -109,7 +111,7 @@ class ObjectManager
      * Retrieve mock of core translator model
      *
      * @param string $className
-     * @return \Magento\Framework\TranslateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Framework\TranslateInterface|MockObject
      */
     protected function _getTranslatorMock($className)
     {
@@ -131,7 +133,7 @@ class ObjectManager
      * Get mock without call of original constructor
      *
      * @param string $className
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function _getMockWithoutConstructorCall($className)
     {
@@ -293,7 +295,7 @@ class ObjectManager
      *
      * @param string $className
      * @param array $data
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      * @throws \InvalidArgumentException
      */
     public function getCollectionMock($className, array $data)
@@ -327,7 +329,7 @@ class ObjectManager
      *
      * @param string $argClassName
      * @param array $arguments
-     * @return null|object|\PHPUnit_Framework_MockObject_MockObject
+     * @return null|object|MockObject
      */
     private function _getMockObject($argClassName, array $arguments)
     {
