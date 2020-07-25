@@ -7,10 +7,10 @@
 
 namespace Magento\Catalog\Model;
 
+use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\StateException;
-use Magento\Catalog\Api\Data\CategoryInterface;
 
 /**
  * Repository for categories.
@@ -82,7 +82,9 @@ class CategoryRepository implements \Magento\Catalog\Api\CategoryRepositoryInter
         $existingData = array_diff_key($existingData, array_flip(['path', 'level', 'parent_id']));
         $existingData['store_id'] = $storeId;
 
-        $existingData = array_replace($existingData, $category->getData());
+        if (is_array($category->getData())) {
+            $existingData = array_replace($existingData, $category->getData());
+        }
 
         if ($category->getId()) {
             $metadata = $this->getMetadataPool()->getMetadata(
