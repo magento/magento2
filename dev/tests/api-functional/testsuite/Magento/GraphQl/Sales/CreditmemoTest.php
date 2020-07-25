@@ -193,7 +193,6 @@ class CreditmemoTest extends GraphQlAbstract
             [
                 'comments' => [
                     ['message' => 'Test comment for partial refund']
-
                 ],
                 'items' => [
                     [
@@ -213,11 +212,27 @@ class CreditmemoTest extends GraphQlAbstract
                     'grand_total' => [
                         'value' => 23
                     ],
-                    'shipping_amount' => [
+                    'base_grand_total' => [
+                        'value' => 23
+                    ],
+                    'total_shipping' => [
                         'value' => 10
                     ],
+                    'shipping_handling' => [
+                        'amount_including_tax' => [
+                            'value' => 10
+                        ],
+                        'amount_excluding_tax' => [
+                            'value' => 10
+                        ],
+                        'total_amount' => [
+                            'value' => 10
+                        ],
+                        'taxes' => [],
+                        'discounts' => [],
+                    ],
                     'adjustment' => [
-                        'value' => -2
+                        'value' => 2
                     ]
                 ]
             ]
