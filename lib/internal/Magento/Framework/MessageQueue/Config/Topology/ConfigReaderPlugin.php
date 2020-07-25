@@ -47,6 +47,7 @@ class ConfigReaderPlugin
         $topologyConfigDataFromQueueConfig = $this->getTopologyConfigDataFromQueueConfig();
         foreach ($topologyConfigDataFromQueueConfig as $exchangeKey => $exchangeConfig) {
             if (isset($result[$exchangeKey])) {
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $result[$exchangeKey]['bindings'] = array_merge(
                     $exchangeConfig['bindings'],
                     $result[$exchangeKey]['bindings']
@@ -80,7 +81,7 @@ class ConfigReaderPlugin
                 'arguments' => []
             ];
 
-            $exchangeName = $queueConfigBinding['exchange'];
+            $exchangeName = $this->queueConfig->getExchangeByTopic($topic);
             $connection = $this->queueConfig->getConnectionByTopic($topic);
             if (isset($result[$exchangeName . '--' . $connection])) {
                 $result[$exchangeName . '--' . $connection]['bindings'][$bindingId] = $bindingData;

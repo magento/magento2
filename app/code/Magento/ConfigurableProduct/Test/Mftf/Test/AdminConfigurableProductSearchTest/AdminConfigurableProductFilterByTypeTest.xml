@@ -77,8 +77,7 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" stepKey="clearAll" visible="true"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickShowFilters"/>
         <selectOption selector="{{AdminProductGridFilterSection.typeFilter}}" userInput="{{ApiConfigurableProduct.type_id}}" stepKey="selectConfigurableType"/>
