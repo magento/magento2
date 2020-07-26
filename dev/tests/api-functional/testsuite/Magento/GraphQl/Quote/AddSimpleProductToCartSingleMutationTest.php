@@ -98,13 +98,16 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     }
 
     /**
+     * @param string $sku
+     * @param string $message
+     *
+     * @dataProvider wrongSkuDataProvider
+     *
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @group wip
      */
-    public function testAddProductWithWrongSku()
+    public function testAddProductWithWrongSku(string $sku, string $message)
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
-        $sku = 'non-existent';
 
         $query = $this->getQuery($maskedQuoteId, 1, $sku, '');
         $response = $this->graphQlMutation($query);
@@ -112,9 +115,68 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
         self::assertArrayHasKey('userInputErrors', $response['addProductsToCart']);
         self::assertCount(1, $response['addProductsToCart']['userInputErrors']);
         self::assertEquals(
-            'Could not find a product with SKU "' . $sku .'"',
+            $message,
             $response['addProductsToCart']['userInputErrors'][0]['message']
         );
+    }
+
+    /**
+     * @param int $quantity
+     * @param string $message
+     *
+     * @dataProvider wrongQuantityDataProvider
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_without_custom_options.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testAddProductWithWrongQuantity(int $quantity, string $message)
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $sku = 'simple-2';
+
+        $query = $this->getQuery($maskedQuoteId, $quantity, $sku, '');
+        $response = $this->graphQlMutation($query);
+        self::assertArrayHasKey('userInputErrors', $response['addProductsToCart']);
+        self::assertCount(1, $response['addProductsToCart']['userInputErrors']);
+
+        self::assertEquals(
+            $message,
+            $response['addProductsToCart']['userInputErrors'][0]['message']
+        );
+    }
+
+    /**
+     * @return array
+     */
+    public function wrongSkuDataProvider(): array
+    {
+        return [
+            'Non-existent SKU' => [
+                'non-existent',
+                'Could not find a product with SKU "non-existent"'
+            ],
+            'Empty SKU' => [
+                '',
+                'Could not find a product with SKU ""'
+            ]
+        ];
+    }
+
+    /**
+     * @return array
+     */
+    public function wrongQuantityDataProvider(): array
+    {
+        return [
+            'More quantity than in stock' => [
+                101,
+                'The requested qty is not available'
+            ],
+            'Quantity equals zero' => [
+                0,
+                'The product quantity should be greater than 0'
+            ]
+        ];
     }
 
     /**
