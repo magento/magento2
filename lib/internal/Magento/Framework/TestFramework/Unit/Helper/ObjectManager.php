@@ -155,6 +155,7 @@ class ObjectManager
      */
     public function getObject($className, array $arguments = [])
     {
+        // phpstan:ignore
         if (is_subclass_of($className, \Magento\Framework\Api\AbstractSimpleObjectBuilder::class)
             || is_subclass_of($className, \Magento\Framework\Api\Builder::class)
         ) {
@@ -333,13 +334,12 @@ class ObjectManager
      */
     private function _getMockObject($argClassName, array $arguments)
     {
+        // phpstan:ignore
         if (is_subclass_of($argClassName, \Magento\Framework\Api\ExtensibleObjectBuilder::class)) {
-            $object = $this->getBuilder($argClassName, $arguments);
-            return $object;
-        } else {
-            $object = $this->_createArgumentMock($argClassName, $arguments);
-            return $object;
+            return $this->getBuilder($argClassName, $arguments);
         }
+
+        return $this->_createArgumentMock($argClassName, $arguments);
     }
 
     /**
