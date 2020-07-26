@@ -98,6 +98,26 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     }
 
     /**
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     * @group wip
+     */
+    public function testAddProductWithWrongSku()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $sku = 'non-existent';
+
+        $query = $this->getQuery($maskedQuoteId, 1, $sku, '');
+        $response = $this->graphQlMutation($query);
+
+        self::assertArrayHasKey('userInputErrors', $response['addProductsToCart']);
+        self::assertCount(1, $response['addProductsToCart']['userInputErrors']);
+        self::assertEquals(
+            'Could not find a product with SKU "' . $sku .'"',
+            $response['addProductsToCart']['userInputErrors'][0]['message']
+        );
+    }
+
+    /**
      * Returns GraphQl query string
      *
      * @param string $maskedQuoteId
