@@ -122,6 +122,7 @@ class CreditmemoTest extends GraphQlAbstract
                     'total_shipping' => [
                         'value' => 0
                     ],
+                    'total_tax' => [],
                     'shipping_handling' => [
                         'amount_including_tax' => [
                             'value' => 0
@@ -167,6 +168,7 @@ class CreditmemoTest extends GraphQlAbstract
         $this->setPaymentMethod($cartId, $paymentMethod);
         $orderNumber = $this->placeOrder($cartId);
         $this->prepareInvoice($orderNumber, 2);
+        // Create a credit memo
         $order = $this->order->loadByIncrementId($orderNumber);
         /** @var Order\Item $orderItem */
         $orderItem = current($order->getAllItems());
@@ -188,7 +190,6 @@ class CreditmemoTest extends GraphQlAbstract
 
         $this->creditMemoService->refund($creditMemo, true);
         $response = $this->getCustomerOrderWithCreditMemoQuery();
-        $i = 0;
         $expectedCreditMemoData = [
             [
                 'comments' => [
@@ -218,6 +219,7 @@ class CreditmemoTest extends GraphQlAbstract
                     'total_shipping' => [
                         'value' => 10
                     ],
+                    'total_tax' => [],
                     'shipping_handling' => [
                         'amount_including_tax' => [
                             'value' => 10
@@ -233,6 +235,129 @@ class CreditmemoTest extends GraphQlAbstract
                     ],
                     'adjustment' => [
                         'value' => 2
+                    ]
+                ]
+            ]
+        ];
+        $firstOrderItem = current($response['customer']['orders']['items'] ?? []);
+
+        $creditMemos = $firstOrderItem['credit_memos'] ?? [];
+        $this->assertResponseFields($creditMemos, $expectedCreditMemoData);
+        $this->deleteOrder();
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', $orderNumber)
+            ->create();
+        $creditmemoRepository = Bootstrap::getObjectManager()->get(CreditmemoRepositoryInterface::class);
+        $creditmemos = $creditmemoRepository->getList($searchCriteria)->getItems();
+        foreach ($creditmemos as $creditmemo) {
+            $creditmemoRepository->delete($creditmemo);
+        }
+    }
+
+    /**
+     * Test customer order with credit memo details for bundle products with taxes and discounts
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_two_dropdown_options.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_10_percent_off_with_discount_on_shipping.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_shipping_excludeTax_order_display_settings.php
+     */
+    public function testCreditMemoForBundleProductWithTaxesAndDiscounts()
+    {
+        $quantity = 2;
+        $bundleSku = 'bundle-product-two-dropdown-options';
+        $optionsAndSelectionData = $this->getBundleOptionAndSelectionData($bundleSku);
+
+        $cartId = $this->createEmptyCart();
+        $this->addBundleProductQuery($cartId, $quantity, $bundleSku, $optionsAndSelectionData);
+        $this->setBillingAddress($cartId);
+        $shippingMethod = $this->setShippingAddress($cartId);
+        $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
+        $this->setPaymentMethod($cartId, $paymentMethod);
+        $orderNumber = $this->placeOrder($cartId);
+        $this->prepareInvoice($orderNumber, 2);
+
+        $order = $this->order->loadByIncrementId($orderNumber);
+        /** @var Order\Item $orderItem */
+        $orderItem = current($order->getAllItems());
+        $orderItem->setQtyRefunded(1);
+        $order->addItem($orderItem);
+        $order->save();
+
+        $creditMemo = $this->creditMemoFactory->createByOrder($order, $order->getData());
+        $creditMemo->setOrder($order);
+        $creditMemo->setState(1);
+        $creditMemo->setSubtotal(15);
+        $creditMemo->setBaseSubTotal(15);
+        $creditMemo->setShippingAmount(10);
+        $creditMemo->setTaxAmount(1.69);
+        $creditMemo->setBaseGrandTotal(24.19);
+        $creditMemo->setGrandTotal(24.19);
+        $creditMemo->setAdjustment(0.00);
+        $creditMemo->setDiscountAmount(-2.5);
+        $creditMemo->setDiscountDescription('Discount Label for 10% off');
+        $creditMemo->addComment("Test comment for refund with taxes and discount", false, true);
+        $creditMemo->save();
+
+        $this->creditMemoService->refund($creditMemo, true);
+        //$this->prepareCreditmemoAndRefund($orderNumber);
+        $response = $this->getCustomerOrderWithCreditMemoQuery();
+        $expectedCreditMemoData = [
+            [
+                'comments' => [
+                    ['message' => 'Test comment for refund with taxes and discount']
+                ],
+                'items' => [
+                    [
+                        'product_name' => 'Bundle Product With Two dropdown options',
+                        'product_sku' => 'bundle-product-two-dropdown-options-simple1-simple2',
+                        'product_sale_price' => [
+                            'value' => 15
+                        ],
+                        'quantity_refunded' => 1
+                    ],
+
+                ],
+                'total' => [
+                    'subtotal' => [
+                        'value' => 15
+                    ],
+                    'grand_total' => [
+                        'value' => 24.19
+                    ],
+                    'base_grand_total' => [
+                        'value' => 24.19
+                    ],
+                    'total_shipping' => [
+                        'value' => 10
+                    ],
+                    'total_tax' => [
+                        'value'=> 1.69
+                    ],
+                    'shipping_handling' => [
+                        'amount_including_tax' => [
+                            'value' => 10.75
+                        ],
+                        'amount_excluding_tax' => [
+                            'value' => 10
+                        ],
+                        'total_amount' => [
+                            'value' => 10
+                        ],
+                        'taxes'=> [
+                            0 => [
+                                'amount'=>['value' => 1.69],
+                                'title' => 'US-TEST-*-Rate-1',
+                                'rate' => 7.5
+                            ]
+                        ],
+                        'discounts' => [
+                            0 => ['amount'=>['value'=> 2.5],
+                                'label' => 'Discount Label for 10% off'
+                            ]
+                        ],
+                    ],
+                    'adjustment' => [
+                        'value' => 0
                     ]
                 ]
             ]
@@ -631,6 +756,9 @@ query {
                         value
                     }
                     total_shipping {
+                        value
+                    }
+                    total_tax {
                         value
                     }
                     shipping_handling {
