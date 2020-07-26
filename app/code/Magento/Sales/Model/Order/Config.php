@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\Order;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -125,9 +127,10 @@ class Config
      *
      * @param string|null $code
      * @param string $area
+     * @param int|null $storeId
      * @return string|null
      */
-    private function getStatusLabelForArea(?string $code, string $area): ?string
+    private function getStatusLabelForArea(?string $code, string $area, int $storeId = null): ?string
     {
         $code = $this->maskStatusForArea($area, $code);
         $status = $this->orderStatusFactory->create()->load($code);
@@ -136,7 +139,7 @@ class Config
             return $status->getLabel();
         }
 
-        return $status->getStoreLabel();
+        return $status->getStoreLabel($storeId);
     }
 
     /**
@@ -156,11 +159,12 @@ class Config
      * Retrieve status label for area
      *
      * @param string|null $code
+     * @param int|null $storeId
      * @return string|null
      */
-    public function getStatusFrontendLabel(?string $code): ?string
+    public function getStatusFrontendLabel(?string $code, int $storeId = null): ?string
     {
-        return $this->getStatusLabelForArea($code, \Magento\Framework\App\Area::AREA_FRONTEND);
+        return $this->getStatusLabelForArea($code, \Magento\Framework\App\Area::AREA_FRONTEND, $storeId);
     }
 
     /**

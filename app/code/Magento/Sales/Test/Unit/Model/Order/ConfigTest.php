@@ -25,6 +25,21 @@ use PHPUnit\Framework\TestCase;
 class ConfigTest extends TestCase
 {
     /**
+     * Pending status stub
+     */
+    const STUB_PENDING_STATUS_CODE = 'pending';
+
+    /**
+     * Store view with id 2
+     */
+    const STUB_STORE_VIEW_WITH_ID_2 = 2;
+
+    /**
+     * Pending label in store view 2
+     */
+    const STUB_STORE_VIEW_LABEL_WITH_ID_2 = 'Pending-2';
+
+    /**
      * @var  Config
      */
     protected $salesConfig;
@@ -271,5 +286,33 @@ class ConfigTest extends TestCase
                 ],
             ],
         ];
+    }
+
+    /**
+     * Test get status frontend label with store view id = 2
+     */
+    public function testGetStatusFrontendLabelWithStoreViewId2()
+    {
+        $this->statusFactoryMock->method('create')
+            ->willReturnSelf();
+
+        $orderStatusMock = $this->getMockBuilder(Status::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->statusFactoryMock->method('load')
+            ->with(self::STUB_PENDING_STATUS_CODE)
+            ->willReturn($orderStatusMock);
+
+        $orderStatusMock->method('getStoreLabel')
+            ->with(self::STUB_STORE_VIEW_WITH_ID_2)
+            ->willReturn(self::STUB_STORE_VIEW_LABEL_WITH_ID_2);
+
+        $result = $this->salesConfig->getStatusFrontendLabel(
+            self::STUB_PENDING_STATUS_CODE,
+            self::STUB_STORE_VIEW_WITH_ID_2
+        );
+
+        $this->assertSame(self::STUB_STORE_VIEW_LABEL_WITH_ID_2, $result);
     }
 }

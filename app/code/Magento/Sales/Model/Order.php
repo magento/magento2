@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model;
 
 use Magento\Config\Model\Config\Source\Nooptreq;
@@ -1079,7 +1081,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getFrontendStatusLabel()
     {
-        return $this->getConfig()->getStatusFrontendLabel($this->getStatus());
+        return $this->getConfig()->getStatusFrontendLabel($this->getStatus(), $this->getStoreId());
     }
 
     /**
@@ -1816,7 +1818,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $total = $this->priceCurrency->round($total);
         return max($total, 0);
     }
-    
+
     /**
      * Retrieve order total due value
      *
