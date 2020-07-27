@@ -364,7 +364,7 @@ class Installer
         $total = count($script) + 4 * count(array_filter($estimatedModules));
         $this->progress = new Installer\Progress($total, 0);
 
-        $this->log->log('Starting Magento installation:');
+        $this->log->logMeta('Starting Magento installation:');
 
         foreach ($script as $item) {
             list($message, $method, $params) = $item;
@@ -859,7 +859,7 @@ class Installer
         $this->setupModuleRegistry($setup);
         $this->setupCoreTables($setup);
         $this->cleanMemoryTables($setup);
-        $this->log->log('Schema creation/updates:');
+        $this->log->logMeta('Schema creation/updates:');
         $this->declarativeInstallSchema($request);
         $this->handleDBSchemaData($setup, 'schema', $request);
         /** @var Mysql $adapter */
@@ -909,11 +909,11 @@ class Installer
         $this->assertDbAccessible();
         $setup = $this->dataSetupFactory->create();
         $this->checkFilePermissionsForDbUpgrade();
-        $this->log->log('Data install/update:');
-        $this->log->log('Disabling caches:');
+        $this->log->logMeta('Data install/update:');
+        $this->log->logMeta('Disabling caches:');
         $this->updateCaches(false, $frontendCaches);
         $this->handleDBSchemaData($setup, 'data', $request);
-        $this->log->log('Enabling caches:');
+        $this->log->logMeta('Enabling caches:');
         $this->updateCaches(true, $frontendCaches);
 
         $registry->unregister('setup-mode-enabled');
@@ -1009,7 +1009,7 @@ class Installer
                 if ($status == \Magento\Framework\Setup\ModuleDataSetupInterface::VERSION_COMPARE_GREATER) {
                     $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
                     if ($upgrader) {
-                        $this->log->logInline("Upgrading $type.. ");
+                        $this->log->logMetaInline("Upgrading $type.. ");
                         $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
                         if ($type === 'schema') {
                             $resource->setDbVersion($moduleName, $configVer);
@@ -1021,12 +1021,12 @@ class Installer
             } elseif ($configVer) {
                 $installer = $this->getSchemaDataHandler($moduleName, $installType);
                 if ($installer) {
-                    $this->log->logInline("Installing $type... ");
+                    $this->log->logMetaInline("Installing $type... ");
                     $installer->install($setup, $moduleContextList[$moduleName]);
                 }
                 $upgrader = $this->getSchemaDataHandler($moduleName, $upgradeType);
                 if ($upgrader) {
-                    $this->log->logInline("Upgrading $type... ");
+                    $this->log->logMetaInline("Upgrading $type... ");
                     $upgrader->upgrade($setup, $moduleContextList[$moduleName]);
                 }
             }
@@ -1052,10 +1052,10 @@ class Installer
         }
 
         if ($type === 'schema') {
-            $this->log->log('Schema post-updates:');
+            $this->log->logMeta('Schema post-updates:');
             $handlerType = 'schema-recurring';
         } elseif ($type === 'data') {
-            $this->log->log('Data post-updates:');
+            $this->log->logMeta('Data post-updates:');
             $handlerType = 'data-recurring';
         }
         foreach ($moduleNames as $moduleName) {
@@ -1067,7 +1067,7 @@ class Installer
             $this->log->log("Module '{$moduleName}':");
             $modulePostUpdater = $this->getSchemaDataHandler($moduleName, $handlerType);
             if ($modulePostUpdater) {
-                $this->log->logInline('Running ' . str_replace('-', ' ', $handlerType) . '...');
+                $this->log->logMetaInline('Running ' . str_replace('-', ' ', $handlerType) . '...');
                 $modulePostUpdater->install($setup, $moduleContextList[$moduleName]);
             }
             $this->logProgress();
@@ -1253,7 +1253,7 @@ class Installer
         if (!$keepGeneratedFiles) {
             $this->cleanupGeneratedFiles();
         }
-        $this->log->log('Updating modules:');
+        $this->log->logMeta('Updating modules:');
         $this->createModulesConfig([]);
     }
 
@@ -1275,7 +1275,7 @@ class Installer
      */
     public function uninstall()
     {
-        $this->log->log('Starting Magento uninstallation:');
+        $this->log->logMeta('Starting Magento uninstallation:');
 
         try {
             $this->cleanCaches();
@@ -1289,7 +1289,7 @@ class Installer
 
         $this->cleanupDb();
 
-        $this->log->log('File system cleanup:');
+        $this->log->logMeta('File system cleanup:');
         $messages = $this->cleanupFiles->clearAllFiles();
         foreach ($messages as $message) {
             $this->log->log($message);
@@ -1350,7 +1350,7 @@ class Installer
         $cacheManager = $this->objectManagerProvider->get()->get(Manager::class);
         $types = $cacheManager->getAvailableTypes();
         $cacheManager->clean($types);
-        $this->log->log('Cache cleared successfully');
+        $this->log->logSuccess('Cache cleared successfully');
     }
 
     /**
@@ -1576,7 +1576,7 @@ class Installer
      */
     private function cleanupGeneratedFiles()
     {
-        $this->log->log('File system cleanup:');
+        $this->log->logMeta('File system cleanup:');
         $messages = $this->cleanupFiles->clearCodeGeneratedFiles();
 
         // unload Magento autoloader because it may be using compiled definition
