@@ -171,7 +171,7 @@ define([
             // Populate state/province dropdown list if available or use input box
             if (this.options.regionJson[country]) {
                 this._removeSelectOptions(regionList);
-                regionsEntries = Object.entries(this.options.regionJson[country]);
+                regionsEntries = _.pairs(this.options.regionJson[country]);
                 regionsEntries.sort(function (a, b) {
                     return a[1].name > b[1].name ? 1 : -1;
                 });
@@ -202,7 +202,7 @@ define([
                         regionList.hide();
                         container.hide();
                     } else {
-                        regionList.show();
+                        regionList.removeAttr('disabled').show();
                     }
                 }
 
