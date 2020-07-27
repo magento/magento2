@@ -35,6 +35,9 @@
         <waitForPageLoad stepKey="waitForPageLoad" />
         <actionGroup ref="ClickBrowseBtnOnUploadPopupActionGroup" stepKey="clickBrowserBtn"/>
         <actionGroup ref="VerifyMediaGalleryStorageActionsActionGroup" stepKey="VerifyMediaGalleryStorageBtn"/>
+         <actionGroup ref="NavigateToMediaFolderActionGroup" stepKey="navigateToFolder">
+             <argument name="FolderName" value="Storage Root"/>
+        </actionGroup>
         <actionGroup ref="CreateImageFolderActionGroup" stepKey="CreateImageFolder">
             <argument name="ImageFolder" value="ImageFolder"/>
         </actionGroup>
@@ -58,8 +61,8 @@
         <closeTab stepKey="closeTab"/>
         <after>
              <actionGroup ref="NavigateToMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
-             <actionGroup ref="NavigateToMediaFolderActionGroup" stepKey="navigateToFolder">
-                <argument name="FolderName" value="Storage Root"/>
+             <actionGroup ref="DeleteFolderActionGroup" stepKey="DeleteCreatedFolder">
+                <argument name="ImageFolder" value="ImageFolder"/>
             </actionGroup>
             <actionGroup ref="DeleteImageFromStorageActionGroup" stepKey="deleteImageFromStorage">
                <argument name="Image" value="ImageUpload3"/>
