@@ -33,7 +33,7 @@ try {
 try {
     $handler = new \Magento\Framework\App\ErrorHandler();
     set_error_handler([$handler, 'handler']);
-    if ($_SERVER['INTEGRATION_TESTS_CLI_AUTOLOADER']) {
+    if (isset($_SERVER['INTEGRATION_TESTS_CLI_AUTOLOADER'])) {
         $application = new CliProxy('Magento CLI');
     } else {
         $application = new Cli('Magento CLI');
