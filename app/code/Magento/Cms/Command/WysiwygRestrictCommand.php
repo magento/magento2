@@ -66,5 +66,7 @@ class WysiwygRestrictCommand extends Command
         $this->cache->cleanType('config');
 
         $output->writeln('HTML user content validation is now ' .($restrictArg === 'y' ? 'enforced' : 'suggested'));
+
+        return 0;
     }
 }

@@ -21,7 +21,7 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\EntityManager\HydratorInterface;
 
 /**
- * Class BlockRepository
+ * Default block repo impl.
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class BlockRepository implements BlockRepositoryInterface
@@ -87,6 +87,8 @@ class BlockRepository implements BlockRepositoryInterface
      * @param StoreManagerInterface $storeManager
      * @param CollectionProcessorInterface $collectionProcessor
      * @param HydratorInterface|null $hydrator
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ResourceBlock $resource,
@@ -217,7 +219,7 @@ class BlockRepository implements BlockRepositoryInterface
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                'Magento\Cms\Model\Api\SearchCriteria\BlockCollectionProcessor'
+                \Magento\Cms\Model\Api\SearchCriteria\BlockCollectionProcessor::class
             );
         }
         return $this->collectionProcessor;

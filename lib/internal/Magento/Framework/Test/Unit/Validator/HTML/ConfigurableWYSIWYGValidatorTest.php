@@ -20,6 +20,8 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
      * Configurations to test.
      *
      * @return array
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function getConfigurations(): array
     {
@@ -178,7 +180,9 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
      * @param bool[] $attributeValidityMap
      * @param bool[][] $tagValidators
      * @return void
+     *
      * @dataProvider getConfigurations
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function testConfigurations(
         array $allowedTags,
@@ -192,7 +196,7 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
         $attributeValidator = $this->getMockForAbstractClass(AttributeValidatorInterface::class);
         $attributeValidator->method('validate')
             ->willReturnCallback(
-                function (string $tag, string $attribute, string $content) use ($attributeValidityMap): void {
+                function (string $tag, string $attribute) use ($attributeValidityMap): void {
                     if (array_key_exists($attribute, $attributeValidityMap) && !$attributeValidityMap[$attribute]) {
                         throw new ValidationException(__('Invalid attribute for %1', $tag));
                     }
@@ -207,7 +211,7 @@ class ConfigurableWYSIWYGValidatorTest extends TestCase
             $mock = $this->getMockForAbstractClass(TagValidatorInterface::class);
             $mock->method('validate')
                 ->willReturnCallback(
-                    function (string $givenTag, array $attrs, string $value) use($tag, $allowedAttributes): void {
+                    function (string $givenTag, array $attrs) use ($tag, $allowedAttributes): void {
                         if ($givenTag !== $tag) {
                             throw new \RuntimeException();
                         }

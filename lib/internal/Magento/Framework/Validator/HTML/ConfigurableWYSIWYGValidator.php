@@ -82,7 +82,8 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
         $xpath = new \DOMXPath($dom);
 
         $this->validateConfigured($xpath);
-        $this->callDynamicValidators($xpath);
+        $this->callAttributeValidators($xpath);
+        $this->callTagValidators($xpath);
     }
 
     /**
@@ -96,7 +97,7 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
     {
         //Validating tags
         $found = $xpath->query(
-            $query='//*['
+            '//*['
                 . implode(
                     ' and ',
                     array_map(
@@ -117,10 +118,11 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
         //Validating attributes
         if ($this->attributesAllowedByTags) {
             foreach ($this->allowedTags as $tag) {
-                $allowed = $this->allowedAttributes;
+                $allowed = [$this->allowedAttributes];
                 if (!empty($this->attributesAllowedByTags[$tag])) {
-                    $allowed = array_unique(array_merge($allowed, $this->attributesAllowedByTags[$tag]));
+                    $allowed[] = $this->attributesAllowedByTags[$tag];
                 }
+                $allowed = array_unique(array_merge(...$allowed));
                 $allowedQuery = '';
                 if ($allowed) {
                     $allowedQuery = '['
@@ -167,15 +169,14 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
     }
 
     /**
-     * Cycle dynamic validators.
+     * Validate allowed HTML attributes' content.
      *
      * @param \DOMXPath $xpath
-     * @return void
      * @throws ValidationException
+     * @return void
      */
-    private function callDynamicValidators(\DOMXPath $xpath): void
+    private function callAttributeValidators(\DOMXPath $xpath): void
     {
-        //Validating allowed attributes.
         if ($this->attributeValidators) {
             foreach ($this->attributeValidators as $attr => $validators) {
                 $found = $xpath->query("//@*[name() = '$attr']");
@@ -186,8 +187,17 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
                 }
             }
         }
+    }
 
-        //Validating allowed tags
+    /**
+     * Validate allowed tags.
+     *
+     * @param \DOMXPath $xpath
+     * @return void
+     * @throws ValidationException
+     */
+    private function callTagValidators(\DOMXPath $xpath): void
+    {
         if ($this->tagValidators) {
             foreach ($this->tagValidators as $tag => $validators) {
                 $found = $xpath->query("//*[name() = '$tag']");

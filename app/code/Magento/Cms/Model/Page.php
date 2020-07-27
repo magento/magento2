@@ -23,12 +23,13 @@ use Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface;
  * @method Page setStoreId(int $storeId)
  * @method int getStoreId()
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
  */
 class Page extends AbstractModel implements PageInterface, IdentityInterface
 {
     /**
-     * No route page id
+     * Page ID for the 404 page.
      */
     const NOROUTE_PAGE_ID = 'no-route';
 
@@ -605,6 +606,8 @@ class Page extends AbstractModel implements PageInterface, IdentityInterface
     /**
      * @inheritdoc
      * @since 101.0.0
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
      */
     public function beforeSave()
     {
