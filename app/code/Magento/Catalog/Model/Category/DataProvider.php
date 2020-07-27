@@ -659,13 +659,30 @@ class DataProvider extends ModifierPoolDataProvider
             ->create(['componentName' => $referenceName])
             ->get($referenceName);
 
+        if (empty($config)) {
+            return [];
+        }
+
         $fieldsMap = [];
 
-        if (isset($config['children']) && !empty($config['children'])) {
-            foreach ($config['children'] as $name => $child) {
-                if (isset($child['children']) && !empty($child['children'])) {
-                    $fieldsMap[$name] = array_keys($child['children']);
+        foreach ($config['children'] as $group => $node) {
+            $fieldsMap[$group] = [];
+
+            foreach ($node['children'] as $childName => $childNode) {
+                if (!empty($childNode['children'])) {
+                    // <container/> nodes need special handling
+                    $fieldsMap[$group] = array_merge(
+                        $fieldsMap[$group],
+                        array_keys($childNode['children'])
+                    );
+                } else {
+                    $fieldsMap[$group][] = $childName;
                 }
+            }
+
+            // Remove empty groups
+            if (empty($fieldsMap[$group])) {
+                unset($fieldsMap[$group]);
             }
         }
 
