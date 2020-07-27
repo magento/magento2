@@ -38,7 +38,7 @@
         <actionGroup ref="ClickBrowseBtnOnUploadPopupActionGroup" stepKey="clickBrowserBtn"/>
         <actionGroup ref="VerifyMediaGalleryStorageActionsActionGroup" stepKey="VerifyMediaGalleryStorageBtn"/>
         <actionGroup ref="NavigateToMediaFolderActionGroup" stepKey="navigateToFolder">
-             <argument name="FolderName" value="Storage Root"/>
+            <argument name="FolderName" value="Storage Root"/>
         </actionGroup>
         <actionGroup ref="CreateImageFolderActionGroup" stepKey="CreateImageFolder">
             <argument name="ImageFolder" value="ImageFolder"/>
