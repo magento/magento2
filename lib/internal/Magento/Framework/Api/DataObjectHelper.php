@@ -213,7 +213,6 @@ class DataObjectHelper
             $object = $this->extensionFactory->create(get_class($dataObject), ['data' => $value]);
         } else {
             $object = $this->objectFactory->create($returnType, $value);
-            $this->populateWithArray($object, $value, $returnType);
         }
         $dataObject->$methodName($object);
         return $this;
