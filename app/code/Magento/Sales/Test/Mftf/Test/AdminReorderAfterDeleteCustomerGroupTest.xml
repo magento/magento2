@@ -34,8 +34,8 @@
             <argument name="taxClass" value="{{CustomCustomerGroup.tax_class_name}}"/>
         </actionGroup>
 
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <magentoCron groups="index" stepKey="reindexInvalidatedIndicesAfterCreate"/>
+        <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
 
         <actionGroup ref="NavigateToAllCustomerPage" stepKey="navigateToCustomersPage"/>
         <actionGroup ref="AdminFilterCustomerGridByEmail" stepKey="filterCustomer">
@@ -64,8 +64,8 @@
             <argument name="customerGroupName" value="{{CustomCustomerGroup.code}}"/>
         </actionGroup>
 
-        <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache1"/>
+        <magentoCron groups="index" stepKey="reindexInvalidatedIndicesAfterDelete"/>
+        <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches1"/>
 
         <actionGroup ref="AdminCreateReorderActionGroup" stepKey="createReorder">
             <argument name="entityId" value="{$getOrderId}" />
