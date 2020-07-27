@@ -153,8 +153,8 @@ define([
             showPath: true,
             labelsDecoration: false,
             disableLabel: false,
-            filterRateLimit: 1000,
-            filterRateLimitMethod: 'notifyWhenChangesStop',
+            filterRateLimit: 500,
+            filterRateLimitMethod: 'notifyAtFixedRate',
             closeBtnLabel: $t('Done'),
             optgroupTmpl: 'ui/grid/filters/elements/ui-select-optgroup',
             quantityPlaceholder: $t('options'),
@@ -1167,7 +1167,7 @@ define([
                 return;
             }
 
-            if (searchKey !== this.lastSearchKey || currentPage === 1) {
+            if (currentPage === 1) {
                 this.options([]);
             }
             this.processRequest(searchKey, currentPage);
