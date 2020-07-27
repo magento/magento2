@@ -7,17 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Test\Unit\Model;
 
-use Magento\AdvancedSearch\Model\Client\ClientResolver;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Elasticsearch config model tests.
- */
 class ConfigTest extends TestCase
 {
     /**
@@ -28,17 +23,7 @@ class ConfigTest extends TestCase
     /**
      * @var ScopeConfigInterface|MockObject
      */
-    protected $scopeConfigMock;
-
-    /**
-     * @var ClientResolver|MockObject
-     */
-    private $clientResolverMock;
-
-    /**
-     * @var ObjectManagerHelper
-     */
-    private $objectManager;
+    protected $scopeConfig;
 
     /**
      * Setup
@@ -47,17 +32,15 @@ class ConfigTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
+        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->clientResolverMock = $this->createMock(ClientResolver::class);
 
-        $this->objectManager = new ObjectManagerHelper($this);
-        $this->model = $this->objectManager->getObject(
+        $objectManager = new ObjectManagerHelper($this);
+        $this->model = $objectManager->getObject(
             Config::class,
             [
-                'scopeConfig' => $this->scopeConfigMock,
-                'clientResolver' => $this->clientResolverMock,
+                'scopeConfig' => $this->scopeConfig
             ]
         );
     }
@@ -67,7 +50,7 @@ class ConfigTest extends TestCase
      */
     public function testPrepareClientOptions()
     {
-        $this->scopeConfigMock->expects($this->any())
+        $this->scopeConfig->expects($this->any())
             ->method('getValue')
             ->willReturn('');
         $options = [
@@ -87,7 +70,7 @@ class ConfigTest extends TestCase
      */
     public function testGetIndexPrefix()
     {
-        $this->scopeConfigMock->expects($this->any())
+        $this->scopeConfig->expects($this->any())
             ->method('getValue')
             ->willReturn('indexPrefix');
         $this->assertEquals('indexPrefix', $this->model->getIndexPrefix());
@@ -107,52 +90,5 @@ class ConfigTest extends TestCase
     public function testIsElasticsearchEnabled()
     {
         $this->assertFalse($this->model->isElasticsearchEnabled());
-    }
-
-    /**
-     * Test retrieve search engine configuration information.
-     *
-     * @return void
-     */
-    public function testGetElasticsearchConfigData(): void
-    {
-        $fieldName = 'server_hostname';
-
-        $this->clientResolverMock->expects($this->once())
-            ->method('getCurrentEngine')
-            ->willReturn(Config::ENGINE_NAME);
-
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with('catalog/search/' . Config::ENGINE_NAME . '_' . $fieldName, ScopeInterface::SCOPE_STORE, 1);
-
-        $this->model->getElasticsearchConfigData($fieldName, 1);
-    }
-
-    /**
-     * Test retrieve search engine configuration information with predefined prefix.
-     *
-     * @return void
-     */
-    public function testGetElasticsearchConfigDataWithPredefinedPrefix(): void
-    {
-        $fieldName = 'server_hostname';
-        $model = $this->objectManager->getObject(
-            Config::class,
-            [
-                'scopeConfig' => $this->scopeConfigMock,
-                'clientResolver' => $this->clientResolverMock,
-                'prefix' => Config::ENGINE_NAME,
-            ]
-        );
-
-        $this->clientResolverMock->expects($this->never())
-            ->method('getCurrentEngine');
-
-        $this->scopeConfigMock->expects($this->once())
-            ->method('getValue')
-            ->with('catalog/search/' . Config::ENGINE_NAME . '_' . $fieldName, ScopeInterface::SCOPE_STORE, 1);
-
-        $model->getElasticsearchConfigData($fieldName, 1);
     }
 }
