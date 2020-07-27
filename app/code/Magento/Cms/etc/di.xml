@@ -293,6 +293,7 @@
                 <item name="alt" xsi:type="string">alt</item>
                 <item name="title" xsi:type="string">title</item>
                 <item name="border" xsi:type="string">border</item>
+                <item name="id" xsi:type="string">id</item>
             </argument>
             <argument name="attributesAllowedByTags" xsi:type="array">
                 <item name="a" xsi:type="array">

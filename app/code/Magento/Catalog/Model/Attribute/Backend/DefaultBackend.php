@@ -47,7 +47,9 @@ class DefaultBackend extends ParentBackend
         $attribute = $this->getAttribute();
         $code = $attribute->getAttributeCode();
         if ($attribute instanceof Attribute && $attribute->getIsHtmlAllowedOnFront()) {
-            if ($object->getData($code)
+            $value = $object->getData($code);
+            if ($value
+                && is_string($value)
                 && (!($object instanceof AbstractModel) || $object->getData($code) !== $object->getOrigData($code))
             ) {
                 try {

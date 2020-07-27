@@ -1856,6 +1856,8 @@
                 <item name="th" xsi:type="string">th</item>
                 <item name="tfoot" xsi:type="string">tfoot</item>
                 <item name="img" xsi:type="string">img</item>
+                <item name="hr" xsi:type="string">hr</item>
+                <item name="figure" xsi:type="string">figure</item>
             </argument>
             <argument name="allowedAttributes" xsi:type="array">
                 <item name="class" xsi:type="string">class</item>
@@ -1865,6 +1867,7 @@
                 <item name="alt" xsi:type="string">alt</item>
                 <item name="title" xsi:type="string">title</item>
                 <item name="border" xsi:type="string">border</item>
+                <item name="id" xsi:type="string">id</item>
             </argument>
             <argument name="attributesAllowedByTags" xsi:type="array">
                 <item name="a" xsi:type="array">
@@ -1875,9 +1878,7 @@
                 </item>
             </argument>
             <argument name="attributeValidators" xsi:type="array">
-                <item name="style" xsi:type="array">
-                    <item name="style" xsi:type="object">Magento\Framework\Validator\HTML\StyleAttributeValidator</item>
-                </item>
+                <item name="style" xsi:type="object">Magento\Framework\Validator\HTML\StyleAttributeValidator</item>
             </argument>
         </arguments>
     </virtualType>
