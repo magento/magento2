@@ -676,10 +676,9 @@ class DataProvider extends ModifierPoolDataProvider
             foreach ($node['children'] as $childName => $childNode) {
                 if (!empty($childNode['children'])) {
                     // <container/> nodes need special handling
-                    $fieldsMap[$group] = array_merge(
-                        $fieldsMap[$group],
-                        array_keys($childNode['children'])
-                    );
+                    foreach ($childNode['children'] as $grandchildName => $grandchildNode) {
+                        $fieldsMap[$group][] = $grandchildName;
+                    }
                 } else {
                     $fieldsMap[$group][] = $childName;
                 }
