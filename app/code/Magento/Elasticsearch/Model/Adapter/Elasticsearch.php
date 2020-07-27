@@ -361,7 +361,7 @@ class Elasticsearch
 
         $mappedAttributes = $this->client->getMapping(['index' => $indexName]);
         $pathField = $this->arrayManager->findPath('properties', $mappedAttributes);
-        $mappedAttributes = $this->arrayManager->get($pathField, $mappedAttributes, $allAttributeTypes);
+        $mappedAttributes = $this->arrayManager->get($pathField, $mappedAttributes, []);
 
         $settings['index']['mapping']['total_fields']['limit'] = $this->getMappingTotalFieldsLimit($allAttributeTypes);
         $this->client->putIndexSettings($indexName, ['settings' => $settings]);

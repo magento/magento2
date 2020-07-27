@@ -45,7 +45,7 @@ class Config implements ClientOptionsInterface
     protected $scopeConfig;
 
     /**
-     * @var string|null
+     * @var string
      */
     private $prefix;
 
@@ -83,7 +83,7 @@ class Config implements ClientOptionsInterface
         $this->scopeConfig = $scopeConfig;
         $this->clientResolver = $clientResolver;
         $this->engineResolver = $engineResolver;
-        $this->prefix = $prefix;
+        $this->prefix = $prefix ?: $this->clientResolver->getCurrentEngine();
         $this->engineList = $engineList;
     }
 
@@ -101,7 +101,7 @@ class Config implements ClientOptionsInterface
             'enableAuth' => $this->getElasticsearchConfigData('enable_auth'),
             'username' => $this->getElasticsearchConfigData('username'),
             'password' => $this->getElasticsearchConfigData('password'),
-            'timeout' => $this->getElasticsearchConfigData('server_timeout') ?: self::ELASTICSEARCH_DEFAULT_TIMEOUT,
+            'timeout' => $this->getElasticsearchConfigData('server_timeout') ? : self::ELASTICSEARCH_DEFAULT_TIMEOUT,
         ];
         $options = array_merge($defaultOptions, $options);
         $allowedOptions = array_merge(array_keys($defaultOptions), ['engine']);
@@ -125,9 +125,7 @@ class Config implements ClientOptionsInterface
      */
     public function getElasticsearchConfigData($field, $storeId = null)
     {
-        $searchEngine = $this->prefix ?: $this->clientResolver->getCurrentEngine();
-
-        return $this->getSearchConfigData($searchEngine . '_' . $field, $storeId);
+        return $this->getSearchConfigData($this->prefix . '_' . $field, $storeId);
     }
 
     /**

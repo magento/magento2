@@ -142,7 +142,7 @@ class IndexerHandler implements IndexerInterface
     public function updateIndex(array $dimensions): IndexerInterface
     {
         $dimension = current($dimensions);
-        $scopeId = $this->scopeResolver->getScope($dimension->getValue())->getId();
+        $scopeId = (int)$this->scopeResolver->getScope($dimension->getValue())->getId();
         $this->adapter->updateIndexMapping($scopeId, $this->getIndexerId());
 
         return $this;
