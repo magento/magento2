@@ -234,7 +234,9 @@
 
         <!-- Run cron -->
         <magentoCron stepKey="runAllCronJobs"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!-- Go to Frontend and open the simple product -->
         <amOnPage url="{{StorefrontProductPage.url($$createFirstProduct.sku$$)}}" stepKey="amOnSimpleProductPage"/>
