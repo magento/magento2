@@ -5,6 +5,8 @@
  */
 namespace Magento\Framework\Interception;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
+
 /**
  * Class GeneralTest
  *
@@ -81,6 +83,10 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
         $cacheManager->method('load')->willReturn(null);
         $definitions = new \Magento\Framework\ObjectManager\Definition\Runtime();
         $relations = new \Magento\Framework\ObjectManager\Relations\Runtime();
+        $configLoader = $this->createMock(ConfigLoaderInterface::class);
+        $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $directoryList = $this->createMock(DirectoryList::class);
+        $configWriter = $this->createMock(PluginListGenerator::class);
         $interceptionConfig = new Config\Config(
             $this->_configReader,
             $configScope,
@@ -104,6 +110,10 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
             \Magento\Framework\ObjectManager\DefinitionInterface::class          => $definitions,
             \Magento\Framework\Interception\DefinitionInterface::class           => $interceptionDefinitions,
             \Magento\Framework\Serialize\SerializerInterface::class              => $json,
+            \Magento\Framework\Interception\ConfigLoaderInterface::class         => $configLoader,
+            \Psr\Log\LoggerInterface::class                                      => $logger,
+            \Magento\Framework\App\Filesystem\DirectoryList::class               => $directoryList,
+            \Magento\Framework\App\ObjectManager\ConfigWriterInterface::class    => $configWriter
         ];
         $this->_objectManager = new \Magento\Framework\ObjectManager\ObjectManager(
             $factory,
@@ -118,8 +128,8 @@ abstract class AbstractPlugin extends \PHPUnit\Framework\TestCase
                 'preferences' => [
                     \Magento\Framework\Interception\PluginListInterface::class =>
                         \Magento\Framework\Interception\PluginList\PluginList::class,
-                    \Magento\Framework\Interception\ChainInterface::class =>
-                        \Magento\Framework\Interception\Chain\Chain::class,
+                    \Magento\Framework\Interception\ConfigWriterInterface::class =>
+                        \Magento\Framework\Interception\PluginListGenerator::class
                 ],
             ]
         );

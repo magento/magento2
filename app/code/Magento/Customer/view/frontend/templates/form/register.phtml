@@ -303,14 +303,7 @@ require([
     <?php else: ?>
         ignore: ignore ? ':hidden:not(' + ignore + ')' : ':hidden'
     <?php endif ?>
-    });
-    dataForm.submit(function () {
-        $(this).find(':submit').attr('disabled', 'disabled');
-    });
-    dataForm.bind("invalid-form.validate", function () {
-        $(this).find(':submit').prop('disabled', false);
-    });
-
+    }).find('input:text').attr('autocomplete', 'off');
 });
 </script>
 <?php if ($block->getShowAddressFields()): ?>
@@ -339,6 +332,11 @@ require([
         ".field.password": {
             "passwordStrengthIndicator": {
                 "formSelector": "form.form-create-account"
+            }
+        },
+        "*": {
+            "Magento_Customer/js/block-submit-on-send": {
+                "formId": "form-validate"
             }
         }
     }

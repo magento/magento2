@@ -7,14 +7,14 @@
 namespace Magento\Catalog\Api;
 
 use Magento\Authorization\Model\Role;
+use Magento\Authorization\Model\RoleFactory;
 use Magento\Authorization\Model\Rules;
+use Magento\Authorization\Model\RulesFactory;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
 use Magento\Integration\Api\AdminTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\CatalogUrlRewrite\Model\CategoryUrlRewriteGenerator;
-use Magento\Authorization\Model\RoleFactory;
-use Magento\Authorization\Model\RulesFactory;
 
 /**
  * Test repository web API.
@@ -214,6 +214,35 @@ class CategoryRepositoryTest extends WebapiAbstract
         $this->assertFalse((bool)$category->getIsActive(), 'Category "is_active" must equal to false');
         $this->assertEquals("Update Category Test", $category->getName());
         $this->assertEquals("Update Category Description Test", $category->getDescription());
+        // delete category to clean up auto-generated url rewrites
+        $this->deleteCategory($categoryId);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     */
+    public function testUpdateWithDefaultSortByAttribute()
+    {
+        $categoryId = 333;
+        $categoryData = [
+            'name' => 'Update Category Test With default_sort_by Attribute',
+            'is_active' => true,
+            "available_sort_by" => [],
+            'custom_attributes' => [
+                [
+                    'attribute_code' => 'default_sort_by',
+                    'value' => ["name"],
+                ],
+            ],
+        ];
+        $result = $this->updateCategory($categoryId, $categoryData);
+        $this->assertEquals($categoryId, $result['id']);
+        /** @var \Magento\Catalog\Model\Category $model */
+        $model = Bootstrap::getObjectManager()->get(\Magento\Catalog\Model\Category::class);
+        $category = $model->load($categoryId);
+        $this->assertTrue((bool)$category->getIsActive(), 'Category "is_active" must equal to true');
+        $this->assertEquals("Update Category Test With default_sort_by Attribute", $category->getName());
+        $this->assertEquals("name", $category->getDefaultSortBy());
         // delete category to clean up auto-generated url rewrites
         $this->deleteCategory($categoryId);
     }

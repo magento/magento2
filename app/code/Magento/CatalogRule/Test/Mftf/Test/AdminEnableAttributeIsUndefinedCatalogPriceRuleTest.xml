@@ -44,12 +44,12 @@
             <createData entity="productDropDownAttribute" stepKey="createSecondProductAttribute">
                 <field key="scope">website</field>
             </createData>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
         </before>
         <after>
 
             <!--Delete created data-->
-            <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToCatalogPriceRulePage"/>
+            <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToCatalogPriceRulePage"/>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
                 <argument name="name" value="{{CatalogRuleWithAllCustomerGroups.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
@@ -64,12 +64,11 @@
             <deleteData createDataKey="createSecondProductAttribute" stepKey="deleteSecondProductAttribute"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
         </after>
 
         <!--Create catalog price rule-->
-        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
-        <waitForPageLoad stepKey="waitForPriceRulePage"/>
+        <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage"/>
         <actionGroup ref="CreateCatalogPriceRuleActionGroup" stepKey="createCatalogPriceRule">
             <argument name="catalogRule" value="CatalogRuleWithAllCustomerGroups"/>
         </actionGroup>
@@ -80,7 +79,6 @@
             <argument name="targetSelectValue" value="is undefined"/>
         </actionGroup>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules"/>
-        <wait time="60" stepKey="waitMinute"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex"/>
         <magentoCLI command="cache:flush" stepKey="flushCache"/>
         <magentoCLI command="cache:flush" stepKey="flushCache3"/>
@@ -105,7 +103,7 @@
 
         <!--Delete previous attribute and Catalog Price Rule-->
         <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
-        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToCatalogPriceRulePage"/>
+        <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToCatalogPriceRulePage"/>
         <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
             <argument name="name" value="{{CatalogRuleWithAllCustomerGroups.name}}"/>
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
@@ -117,8 +115,7 @@
         </createData>
 
         <!--Create new Catalog Price Rule-->
-        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage1"/>
-        <waitForPageLoad stepKey="waitForPriceRulePage1"/>
+        <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage1"/>
         <actionGroup ref="CreateCatalogPriceRuleActionGroup" stepKey="createCatalogPriceRule1">
             <argument name="catalogRule" value="CatalogRuleWithAllCustomerGroups"/>
         </actionGroup>
@@ -129,7 +126,6 @@
             <argument name="targetSelectValue" value="is undefined"/>
         </actionGroup>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="clickSaveAndApplyRules1"/>
-        <wait time="60" stepKey="waitForMinute"/>
         <magentoCLI command="indexer:reindex" stepKey="reindex1"/>
         <magentoCLI command="cache:flush" stepKey="flushCache1"/>
         <magentoCLI command="cache:flush" stepKey="flushCache2"/>
