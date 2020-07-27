@@ -25,7 +25,9 @@
             <createData entity="_defaultProduct" stepKey="product">
                 <requiredEntity createDataKey="category"/>
             </createData>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
 
         <after>
