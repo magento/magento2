@@ -105,8 +105,7 @@
         </after>
 
         <!-- Delete the simple product and catalog price rule -->
-        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage1"/>
-        <waitForPageLoad stepKey="waitForPriceRulePage"/>
+        <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage1"/>
         <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule1">
             <argument name="name" value="{{DeleteActiveCatalogPriceRuleWithConditions.name}}"/>
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
@@ -131,9 +130,7 @@
 
         <!-- Assert that the rule isn't present in the Shopping Cart -->
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="option1" stepKey="selectOption1"/>
-        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad4"/>
-        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
         <see selector="{{StorefrontMessagesSection.success}}" userInput="You added $$createConfigProduct1.name$ to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniShoppingCart1"/>
         <see selector="{{StorefrontMinicartSection.productPriceByName($$createConfigProduct1.name$$)}}" userInput="$$createConfigProduct1.price$$" stepKey="seeCorrectProductPrice1"/>
