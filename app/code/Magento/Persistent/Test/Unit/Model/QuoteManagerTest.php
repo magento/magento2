@@ -230,7 +230,6 @@ class QuoteManagerTest extends TestCase
         $this->quoteMock->expects($this->once())->method('getItemsQty')->willReturn(1);
         $extensionAttributes = $this->getMockBuilder(CartExtensionInterface::class)
             ->addMethods(['getShippingAssignments', 'setShippingAssignments'])
-            ->disableArgumentCloning()
             ->getMockForAbstractClass();
         $shippingAssignment = $this->createMock(ShippingAssignmentInterface::class);
         $extensionAttributes->expects($this->once())

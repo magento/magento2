@@ -112,9 +112,6 @@ class SubtotalTest extends TestCase
         /** @var Address|MockObject $address */
         $address = $this->getMockBuilder(Address::class)
             ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
             ->onlyMethods(['removeItem', 'getQuote'])
             ->addMethods(['setTotalQty', 'getTotalQty'])
             ->getMock();
@@ -167,9 +164,6 @@ class SubtotalTest extends TestCase
 
         $total = $this->getMockBuilder(Total::class)
             ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
             ->addMethods(['setVirtualAmount', 'setBaseVirtualAmount'])
             ->getMock();
         $total->expects($this->once())->method('setBaseVirtualAmount')->willReturnSelf();
@@ -194,7 +188,6 @@ class SubtotalTest extends TestCase
         $quoteMock = $this->createMock(Quote::class);
         $totalMock = $this->getMockBuilder(Total::class)
             ->addMethods(['getSubtotal'])
-            ->disableArgumentCloning()
             ->getMockForAbstractClass();
         $totalMock->expects($this->once())->method('getSubtotal')->willReturn(100);
 
@@ -241,9 +234,6 @@ class SubtotalTest extends TestCase
             ->with($addressItemId);
         $addressItem = $this->getMockBuilder(AddressItem::class)
             ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
             ->onlyMethods(['getId'])
             ->addMethods(['getQuoteItemId'])
             ->getMock();

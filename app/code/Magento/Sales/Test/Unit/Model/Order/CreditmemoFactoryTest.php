@@ -51,9 +51,6 @@ class CreditmemoFactoryTest extends TestCase
     {
         $this->orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
-            ->disableOriginalClone()
-            ->disableArgumentCloning()
-            ->disallowMockingUnknownTypes()
             ->onlyMethods(['getChildrenItems', 'isDummy', 'getId', 'getParentItemId'])
             ->addMethods(['getHasChildren'])
             ->getMock();

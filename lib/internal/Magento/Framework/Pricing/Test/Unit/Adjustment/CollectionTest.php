@@ -71,7 +71,6 @@ class CollectionTest extends TestCase
     /**
      * @param string[] $adjustments
      * @param string[] $expectedResult
-     *
      * @dataProvider getItemsDataProvider
      */
     public function testGetItems($adjustments, $expectedResult)
@@ -92,7 +91,7 @@ class CollectionTest extends TestCase
             [['adj1'], ['adj1']],
             [['adj4'], ['adj4']],
             [['adj1', 'adj4'], ['adj1', 'adj4']],
-            [['adj1', 'adj2', 'adj3', 'adj4'], ['adj3', 'adj1', 'adj2', 'adj4']],
+            [['adj1', 'adj2', 'adj3', 'adj4'], ['adj3', 'adj1', 'adj2', 'adj4']]
         ];
     }
 
@@ -100,7 +99,6 @@ class CollectionTest extends TestCase
      * @param string[] $adjustments
      * @param string $code
      * @param $expectedResult
-     *
      * @dataProvider getItemByCodeDataProvider
      */
     public function testGetItemByCode($adjustments, $code, $expectedResult)
