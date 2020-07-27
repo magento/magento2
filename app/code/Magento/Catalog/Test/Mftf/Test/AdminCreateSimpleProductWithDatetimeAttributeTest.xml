@@ -58,7 +58,7 @@
         <waitForElementVisible selector="{{AdminProductAttributesSection.attributeTextInputByCode($createDatetimeAttribute.attribute_code$)}}" stepKey="waitForSlideOutAttributes"/>
         <seeInField selector="{{AdminProductAttributesSection.attributeTextInputByCode($createDatetimeAttribute.attribute_code$)}}" userInput="$generateDefaultValue" stepKey="checkDefaultValue"/>
         <!-- Check datetime grid filter -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToAdminProductIndexPage"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToAdminProductIndexPage"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openProductFilters"/>
         <fillField selector="{{AdminProductGridFilterSection.inputByCodeRangeFrom($createDatetimeAttribute.attribute_code$)}}" userInput="{$generateDefaultValue}" stepKey="fillProductDatetimeFromFilter"/>

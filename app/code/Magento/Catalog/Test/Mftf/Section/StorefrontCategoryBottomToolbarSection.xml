@@ -12,6 +12,6 @@
         <element name="previousPage" type="button" selector=".//*[@class='toolbar toolbar-products'][2]//a[contains(@class, 'previous')]" timeout="30"/>
         <element name="pageNumber" type="text" selector="//*[@class='toolbar toolbar-products'][2]//a[contains(@class, 'page')]//span[2][contains(text() ,'{{var1}}')]" parameterized="true"/>
         <element name="perPage" type="select" selector="//*[@class='toolbar toolbar-products'][2]//select[@id='limiter']"/>
-        <element name="currentPage" type="text" selector=".products.wrapper + .toolbar-products .pages .current span:nth-of-type(2)"/>
+        <element name="currentPage" type="text" selector=".//*[@class='toolbar toolbar-products'][2]//li[contains(@class, 'current')]//span[2]" timeout="30"/>
     </section>
 </sections>
