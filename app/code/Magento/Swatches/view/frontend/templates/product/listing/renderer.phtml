@@ -3,12 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+use Magento\Catalog\Model\Product;
+use Magento\Swatches\Block\Product\Renderer\Listing\Configurable;
+use Magento\Swatches\ViewModel\Product\Renderer\Configurable as ConfigurableViewModel;
+
+/** @var Configurable $block */
+/** @var Product $product */
+$product = $block->getProduct()
 ?>
-<?php /** @var $block \Magento\Swatches\Block\Product\Renderer\Listing\Configurable */ ?>
-<?php $product = $block->getProduct() ?>
-<?php if ($product && $product->isAvailable()) : ?>
+<?php if ($product && $product->isAvailable()): ?>
     <?php $productId = $product->getId() ?>
-    <?php /** @var \Magento\Swatches\ViewModel\Product\Renderer\Configurable $configurableViewModel */ ?>
+    <?php /** @var ConfigurableViewModel $configurableViewModel */ ?>
     <?php $configurableViewModel = $block->getConfigurableViewModel() ?>
     <div class="swatch-opt-<?= $block->escapeHtmlAttr($productId) ?>"
          data-role="swatch-option-<?= $block->escapeHtmlAttr($productId) ?>"></div>
