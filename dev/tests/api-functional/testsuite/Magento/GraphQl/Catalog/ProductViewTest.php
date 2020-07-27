@@ -232,7 +232,7 @@ class ProductViewTest extends GraphQlAbstract
             special_from_date
             special_price
             special_to_date
-            swatch_image            
+            swatch_image
             tier_price
             tier_prices
             {
@@ -279,11 +279,11 @@ QUERY;
         $this->assertArrayHasKey('websites', $response['products']['items'][0]);
         $this->assertWebsites($product, $response['products']['items'][0]['websites']);
         self::assertEquals(
-            'Movable Position 2',
+            'Filter category',
             $responseObject->getData('products/items/0/categories/0/name')
         );
         self::assertEquals(
-            'Filter category',
+            'Movable Position 2',
             $responseObject->getData('products/items/0/categories/1/name')
         );
         //canonical_url will be null unless the admin setting catalog/seo/product_canonical_tag is turned ON
@@ -1054,7 +1054,7 @@ QUERY;
 
         $query = <<<QUERY
 {
-    products(filter: 
+    products(filter:
              {
              sku: {in:["12345"]}
              }

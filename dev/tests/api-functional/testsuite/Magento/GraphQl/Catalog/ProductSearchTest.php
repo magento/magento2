@@ -332,7 +332,7 @@ QUERY;
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 [ 'name' => $filteredProducts[$itemIndex]->getName(),
-                  'sku' => $filteredProducts[$itemIndex]->getSku()
+                    'sku' => $filteredProducts[$itemIndex]->getSku()
                 ]
             );
         }
@@ -350,10 +350,10 @@ QUERY;
                 'options' => [
                     [
                         'label' => 'Option 3',
-                         'count' => 3,
-                         'value' => $optionValue
-                     ],
-                 ],
+                        'count' => 3,
+                        'value' => $optionValue
+                    ],
+                ],
             ]
         );
     }
@@ -535,10 +535,10 @@ QUERY;
         $expectedFilterLayers =
             [
                 ['name' => 'Category',
-                 'request_var'=> 'cat'
+                    'request_var'=> 'cat'
                 ],
                 ['name' => 'Second Test Configurable',
-                 'request_var'=> 'second_test_configurable'
+                    'request_var'=> 'second_test_configurable'
                 ]
             ];
         $layers = array_map(null, $expectedFilterLayers, $response['products']['filters']);
@@ -571,14 +571,14 @@ QUERY;
                         'label' => '10-20',
                         'value' => '10_20',
 
-                     ],
+                    ],
                     [
                         'count' => 1,
                         'label' => '40-50',
                         'value' => '40_50',
 
                     ],
-                 ],
+                ],
             ]
         );
         // Validate the custom attribute layer of aggregations from the response
@@ -605,9 +605,9 @@ QUERY;
         $this->assertResponseFields(
             $response['products']['aggregations'][1],
             [
-                 'attribute_code' => 'category_id',
-                 'count'=> 7,
-                 'label'=> 'Category'
+                'attribute_code' => 'category_id',
+                'count'=> 7,
+                'label'=> 'Category'
             ]
         );
     }
@@ -676,7 +676,7 @@ QUERY;
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product1 = $productRepository->get('simple');
         $product2 = $productRepository->get('simple-4');
-        $filteredProducts = [$product2, $product1];
+        $filteredProducts = [$product1, $product2];
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
         for ($itemIndex = 0; $itemIndex < count($filteredProducts); $itemIndex++) {
@@ -702,9 +702,9 @@ QUERY;
         $expectedCategoryInAggregations =
             [
                 [
-                  'count' =>  2,
-                  'label' => 'Category 1',
-                  'value'=> '3'
+                    'count' =>  2,
+                    'label' => 'Category 1',
+                    'value'=> '3'
                 ],
                 [
                     'count'=> 1,
@@ -965,8 +965,8 @@ QUERY;
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
                 [ 'name' => $filteredProducts[$itemIndex]->getName(),
-                  'sku' => $filteredProducts[$itemIndex]->getSku(),
-                  'url_key'=> $filteredProducts[$itemIndex]->getUrlKey()
+                    'sku' => $filteredProducts[$itemIndex]->getSku(),
+                    'url_key'=> $filteredProducts[$itemIndex]->getUrlKey()
                 ]
             );
         }
@@ -1541,7 +1541,7 @@ QUERY;
 QUERY;
 
         $response = $this->graphQlQuery($query);
-         $this->assertEquals(2, $response['products']['total_count'], 'Incorrect count of products returned');
+        $this->assertEquals(2, $response['products']['total_count'], 'Incorrect count of products returned');
         /** @var CategoryLinkManagement $productLinks */
         $productLinks = ObjectManager::getInstance()->get(CategoryLinkManagement::class);
         /** @var CategoryRepositoryInterface $categoryRepository */
@@ -1560,32 +1560,30 @@ QUERY;
             $this->assertEquals($response['products']['items'][$itemIndex]['type_id'], $product->getTypeId());
             $this->assertNotEmpty($response['products']['items'][$itemIndex]['categories']);
 
-            // uncomment after fix test. DON'T forget to remove UnusedLocalVariables skip in doc block
-
-            // $categoryIds  = $product->getCategoryIds();
-            // foreach ($categoryIds as $index => $value) {
-            //     $categoryIds[$index] = (int)$value;
-            // }
-            // $categoryInResponse = array_map(
-            //     null,
-            //     $categoryIds,
-            //     $response['products']['items'][$itemIndex]['categories']
-            // );
-            // foreach ($categoryInResponse as $key => $categoryData) {
-            //     $this->assertNotEmpty($categoryData);
-            //     /** @var CategoryInterface | Category $category */
-            //     $category = $categoryRepository->get($categoryInResponse[$key][0]);
-            //     $this->assertResponseFields(
-            //         $categoryInResponse[$key][1],
-            //         [
-            //             'name' => $category->getName(),
-            //            'id' => $category->getId(),
-            //             'path' => $category->getPath(),
-            //             'children_count' => $category->getChildrenCount(),
-            //             'product_count' => $category->getProductCount(),
-            //         ]
-            //    );
-            // }
+            $categoryIds  = $product->getCategoryIds();
+            foreach ($categoryIds as $index => $value) {
+                $categoryIds[$index] = (int)$value;
+            }
+            $categoryInResponse = array_map(
+                null,
+                $categoryIds,
+                $response['products']['items'][$itemIndex]['categories']
+            );
+            foreach ($categoryInResponse as $key => $categoryData) {
+                $this->assertNotEmpty($categoryData);
+                /** @var CategoryInterface | Category $category */
+                $category = $categoryRepository->get($categoryInResponse[$key][0]);
+                $this->assertResponseFields(
+                    $categoryInResponse[$key][1],
+                    [
+                        'name' => $category->getName(),
+                        'id' => $category->getId(),
+                        'path' => $category->getPath(),
+                        'children_count' => $category->getChildrenCount(),
+                        'product_count' => $category->getProductCount(),
+                    ]
+                );
+            }
         }
         $this->markTestIncomplete(
             'Sort order is incorrect. Fix: https://github.com/magento/catalog-storefront/issues/104'
@@ -2513,12 +2511,12 @@ QUERY;
                                 'currency' => 'USD'
                             ]
                         ],
-                            'regularPrice' => [
-                                'amount' => [
-                                    'value' => $filteredProducts[$itemIndex]->getPrice(),
-                                    'currency' => 'USD'
-                                ]
+                        'regularPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getPrice(),
+                                'currency' => 'USD'
                             ]
+                        ]
 
                     ],
                     'type_id' =>$filteredProducts[$itemIndex]->getTypeId(),
