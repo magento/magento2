@@ -117,7 +117,7 @@ class GenerateFixturesCommandTest extends \Magento\TestFramework\Indexer\TestCas
      */
     public function testExecute()
     {
-        $profile = realpath(__DIR__ . "./_files/min_profile.xml");
+        $profile = realpath(__DIR__ . "/_files/min_profile.xml");
         $this->commandTester->execute(
             [
                 GenerateFixturesCommand::PROFILE_ARGUMENT => $profile,
