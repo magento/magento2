@@ -150,7 +150,6 @@ class CollectTotalsObserverTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-
         $this->groupManagementMock = $this->getMockForAbstractClass(
             GroupManagementInterface::class,
             [],
@@ -272,11 +271,6 @@ class CollectTotalsObserverTest extends TestCase
             ->method('getCustomerGroupId')
             ->willReturn('customerGroupId');
         $this->customerMock->expects($this->once())->method('getId')->willReturn('1');
-        $this->groupManagementMock->expects($this->once())
-            ->method('getDefaultGroup')
-            ->willReturn($this->groupInterfaceMock);
-        $this->groupInterfaceMock->expects($this->once())
-            ->method('getId')->willReturn('defaultCustomerGroupId');
 
         /** Assertions */
         $this->quoteAddressMock->expects($this->once())
