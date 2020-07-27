@@ -50,6 +50,13 @@
         <seeElement selector="{{StorefrontCategoryMainSection.mediaDescription(ImageUpload3.content)}}" stepKey="assertMediaDescription"/>
         <seeElementInDOM selector="{{StorefrontCategoryMainSection.imageSource(ImageUpload3.fileName)}}" stepKey="assertMediaSource"/>
         <after>
+             <actionGroup ref="NavigateToMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
+             <actionGroup ref="NavigateToMediaFolderActionGroup" stepKey="navigateToFolder">
+                <argument name="FolderName" value="Storage Root"/>
+            </actionGroup>
+            <actionGroup ref="DeleteImageFromStorageActionGroup" stepKey="deleteImageFromStorage">
+                <argument name="Image" value="ImageUpload3"/>
+            </actionGroup>
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="DeleteCategory">
                 <argument name="categoryEntity" value="SimpleSubCategory"/>
             </actionGroup>

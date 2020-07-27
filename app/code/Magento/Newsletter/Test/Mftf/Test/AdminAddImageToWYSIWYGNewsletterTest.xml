@@ -57,6 +57,13 @@
         <seeElementInDOM selector="{{StorefrontNewsletterSection.imageSource(ImageUpload3.fileName)}}" stepKey="assertMediaSource"/>
         <closeTab stepKey="closeTab"/>
         <after>
+             <actionGroup ref="NavigateToMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
+             <actionGroup ref="NavigateToMediaFolderActionGroup" stepKey="navigateToFolder">
+                <argument name="FolderName" value="Storage Root"/>
+            </actionGroup>
+            <actionGroup ref="DeleteImageFromStorageActionGroup" stepKey="deleteImageFromStorage">
+               <argument name="Image" value="ImageUpload3"/>
+            </actionGroup>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
