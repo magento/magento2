@@ -37,4 +37,8 @@
             <argument name="filePath" xsi:type="string">css/critical.css</argument>
         </arguments>
     </type>
+
+    <type name="Magento\Framework\Data\Collection">
+        <plugin name="currentPageDetection" type="Magento\Theme\Plugin\Data\Collection" />
+    </type>
 </config>
