@@ -5,13 +5,17 @@
  */
 declare(strict_types=1);
 
+use Magento\Framework\DB\Transaction;
+use Magento\Framework\Registry;
 use Magento\GraphQl\GetCustomerAuthenticationHeader;
+use Magento\GraphQl\Sales\Fixtures\CustomerPlaceOrder;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Shipment;
+use Magento\Sales\Model\Order\ShipmentFactory;
+use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
-use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
 
 class OrderShipmentsTest extends GraphQlAbstract
 {
@@ -20,29 +24,20 @@ class OrderShipmentsTest extends GraphQlAbstract
      */
     private $getCustomerAuthHeader;
 
+    /**
+     * @var OrderRepositoryInterface
+     */
     private $orderRepository;
-
-    private $registry;
 
     protected function setUp(): void
     {
         $this->getCustomerAuthHeader = Bootstrap::getObjectManager()->get(GetCustomerAuthenticationHeader::class);
         $this->orderRepository = Bootstrap::getObjectManager()->get(OrderRepositoryInterface::class);
-        $this->registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
     }
 
     protected function tearDown(): void
     {
-        $this->registry->unregister('isSecureArea');
-        $this->registry->register('isSecureArea', true);
-
-        /** @var $order \Magento\Sales\Model\Order */
-        $orderCollection = Bootstrap::getObjectManager()->create(OrderCollection::class);
-        foreach ($orderCollection as $order) {
-            $this->orderRepository->delete($order);
-        }
-        $this->registry->unregister('isSecureArea');
-        $this->registry->register('isSecureArea', false);
+        $this->cleanupOrders();
     }
 
     /**
@@ -142,30 +137,81 @@ class OrderShipmentsTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_two_dropdown_options.php
      */
-    public function testOrderShipmentDifferentProductTypes()
+    public function testOrderShipmentWithBundleProduct()
     {
         //Place order with bundled product
-        require __DIR__ . '/../_files/customer_place_order_with_bundle_product.php';
+        /** @var CustomerPlaceOrder $bundleProductOrderFixture */
+        $bundleProductOrderFixture = Bootstrap::getObjectManager()->create(CustomerPlaceOrder::class);
+        $placeOrderResponse = $bundleProductOrderFixture->placeOrderWithBundleProduct(
+            ['email' => 'customer@example.com', 'password' => 'password'],
+            ['sku' => 'bundle-product-two-dropdown-options']
+        );
+        $orderNumber = $placeOrderResponse['placeOrder']['order']['order_number'];
+        $this->shipOrder($orderNumber);
+
         $result = $this->graphQlQuery(
             $this->getQuery(),
             [],
             '',
             $this->getCustomerAuthHeader->execute('customer@example.com', 'password')
         );
-
         $this->assertArrayNotHasKey('errors', $result);
 
         $shipments = $result['customer']['orders']['items'][0]['shipments'];
+        $shipmentBundleItem = $shipments[0]['items'][0];
+
+        $shipmentItemAssertionMap = [
+            'order_item' => [
+                'product_sku' => 'bundle-product-two-dropdown-options-simple1-simple2'
+            ],
+            'product_name' => 'Bundle Product With Two dropdown options',
+            'product_sku' => 'bundle-product-two-dropdown-options-simple1-simple2',
+            'product_sale_price' => [
+                'value' => 15,
+                'currency' => 'USD'
+            ],
+            'bundle_options' => [
+                [
+                    'label' => 'Drop Down Option 1',
+                    'values' => [
+                        [
+                            'product_name' => 'Simple Product1',
+                            'product_sku' => 'simple1',
+                            'quantity' => 1,
+                            'price' => ['value' => 1]
+                        ]
+                    ]
+                ],
+                [
+                    'label' => 'Drop Down Option 2',
+                    'values' => [
+                        [
+                            'product_name' => 'Simple Product2',
+                            'product_sku' => 'simple2',
+                            'quantity' => 2,
+                            'price' => ['value' => 2]
+                        ]
+                    ]
+                ]
+            ]
+        ];
+
+        $this->assertResponseFields($shipmentBundleItem, $shipmentItemAssertionMap);
     }
 
-
+    /**
+     * Get query that fetch orders and shipment information
+     *
+     * @param string|null $orderId
+     * @return string
+     */
     private function getQuery(string $orderId = null)
     {
         $filter = $orderId ? "(filter:{number:{eq:\"$orderId\"}})" : "";
-        $query = <<<QUERY
+        return <<<QUERY
 {
-  customer $filter{
-    orders {
+  customer {
+    orders {$filter}{
       items {
         number
         status
@@ -185,7 +231,6 @@ class OrderShipmentsTest extends GraphQlAbstract
           items {
             id
             order_item {
-              id
               product_sku
             }
             product_name
@@ -196,10 +241,8 @@ class OrderShipmentsTest extends GraphQlAbstract
             }
             ... on BundleShipmentItem {
                 bundle_options {
-                    id
                     label
                     values {
-                        id
                         product_name
                         product_sku
                         quantity
@@ -221,15 +264,59 @@ class OrderShipmentsTest extends GraphQlAbstract
   }
 }
 QUERY;
-
-        return $query;
     }
 
+    /**
+     * Get model instance for order by number
+     *
+     * @param string $orderNumber
+     * @return Order
+     */
     private function fetchOrderModel(string $orderNumber): Order
     {
         /** @var Order $order */
         $order = Bootstrap::getObjectManager()->get(Order::class);
         $order->loadByIncrementId($orderNumber);
         return $order;
+    }
+
+    /**
+     * Create shipment for order
+     *
+     * @param string $orderNumber
+     */
+    private function shipOrder(string $orderNumber): void
+    {
+        $order = $this->fetchOrderModel($orderNumber);
+        $order->setIsInProcess(true);
+        /** @var Transaction $transaction */
+        $transaction = Bootstrap::getObjectManager()->create(Transaction::class);
+
+        $items = [];
+        foreach ($order->getItems() as $orderItem) {
+            $items[$orderItem->getId()] = $orderItem->getQtyOrdered();
+        }
+
+        $shipment = Bootstrap::getObjectManager()->get(ShipmentFactory::class)->create($order, $items);
+        $shipment->register();
+        $transaction->addObject($shipment)->addObject($order)->save();
+    }
+
+    /**
+     * Clean up orders
+     */
+    private function cleanupOrders()
+    {
+        $registry = Bootstrap::getObjectManager()->get(Registry::class);
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
+
+        /** @var $order \Magento\Sales\Model\Order */
+        $orderCollection = Bootstrap::getObjectManager()->create(OrderCollection::class);
+        foreach ($orderCollection as $order) {
+            $this->orderRepository->delete($order);
+        }
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
     }
 }
