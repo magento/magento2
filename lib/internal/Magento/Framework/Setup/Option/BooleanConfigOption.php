@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Option;
 
 /**
@@ -41,7 +43,7 @@ class BooleanConfigOption extends AbstractConfigOption
         parent::__construct(
             $name,
             self::FRONTEND_WIZARD_RADIO,
-            self::VALUE_REQUIRED,
+            self::VALUE_OPTIONAL,
             $configPath,
             $description,
             $defaultValue,
@@ -54,7 +56,7 @@ class BooleanConfigOption extends AbstractConfigOption
      *
      * @return array
      */
-    public function getSelectOptions()
+    public function getSelectOptions(): array
     {
         return self::SELECT_OPTIONS;
     }
@@ -66,9 +68,9 @@ class BooleanConfigOption extends AbstractConfigOption
      * @return void
      * @throws \InvalidArgumentException
      */
-    public function validate($data)
+    public function validate($data): void
     {
-        if (!in_array(strtolower($data), self::INPUT_OPTIONS)) {
+        if (!in_array(strtolower((string)$data), self::INPUT_OPTIONS)) {
             throw new \InvalidArgumentException("Value specified for '{$this->getName()}' is not supported: '{$data}'");
         }
         parent::validate($data);
