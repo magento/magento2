@@ -122,7 +122,34 @@ class InvoiceItems implements ResolverInterface
             ],
             'quantity_invoiced' => $invoiceItem->getQty(),
             'model' => $invoiceItem,
-            'product_type' => $orderItem['product_type']
+            'product_type' => $orderItem['product_type'],
+            'order_item' => $orderItem,
+            'discounts' => $this->getDiscountDetails($order, $invoiceItem)
         ];
+    }
+
+    /**
+     * Returns information about an applied discount
+     *
+     * @param OrderInterface $associatedOrder
+     * @param InvoiceItemInterface $invoiceItem
+     * @return array
+     */
+    private function getDiscountDetails(OrderInterface $associatedOrder, InvoiceItemInterface $invoiceItem) : array
+    {
+        if ($associatedOrder->getDiscountDescription() === null && $invoiceItem->getDiscountAmount() == 0
+            && $associatedOrder->getDiscountAmount() == 0
+        ) {
+            $discounts = [];
+        } else {
+            $discounts [] = [
+                'label' => $associatedOrder->getDiscountDescription() ?? _('Discount'),
+                'amount' => [
+                    'value' => abs($invoiceItem->getDiscountAmount()) ?? 0,
+                    'currency' => $associatedOrder->getOrderCurrencyCode()
+                ]
+            ];
+        }
+        return $discounts;
     }
 }

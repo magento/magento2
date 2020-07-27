@@ -13,12 +13,45 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\OrderInterface;
+use Magento\Tax\Api\OrderTaxManagementInterface;
+use Magento\SalesGraphQl\Model\SalesItem\ShippingTaxCalculator;
+use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
  * Resolver for Invoice total
  */
 class InvoiceTotal implements ResolverInterface
 {
+    /**
+     * @var TaxHelper
+     */
+    private $taxHelper;
+
+    /**
+     * @var OrderTaxManagementInterface
+     */
+    private $orderTaxManagement;
+
+    /**
+     * @var ShippingTaxCalculator
+     */
+    private $shippingTaxCalculator;
+
+    /**
+     * @param OrderTaxManagementInterface $orderTaxManagement
+     * @param TaxHelper $taxHelper
+     * @param ShippingTaxCalculator $shippingTaxCalculator
+     */
+    public function __construct(
+        OrderTaxManagementInterface $orderTaxManagement,
+        TaxHelper $taxHelper,
+        ShippingTaxCalculator $shippingTaxCalculator
+    ) {
+        $this->taxHelper = $taxHelper;
+        $this->orderTaxManagement = $orderTaxManagement;
+        $this->shippingTaxCalculator = $shippingTaxCalculator;
+    }
+
     /**
      * @inheritDoc
      */
@@ -48,20 +81,98 @@ class InvoiceTotal implements ResolverInterface
             'subtotal' => ['value' =>  $invoiceModel->getSubtotal(), 'currency' => $currency],
             'total_tax' => ['value' =>  $invoiceModel->getTaxAmount(), 'currency' => $currency],
             'total_shipping' => ['value' => $invoiceModel->getShippingAmount(), 'currency' => $currency],
+            'discounts' => $this->getDiscountDetails($invoiceModel),
+            'taxes' => $this->formatTaxes(
+                $orderModel,
+                $this->taxHelper->getCalculatedTaxes($invoiceModel),
+            ),
             'shipping_handling' => [
                 'amount_excluding_tax' => [
-                    'value' => $invoiceModel->getShippingAmount(),
+                    'value' => $invoiceModel->getShippingAmount() ?? 0,
                     'currency' => $currency
                 ],
                 'amount_including_tax' => [
-                    'value' => $invoiceModel->getShippingInclTax(),
+                    'value' => $invoiceModel->getShippingInclTax() ?? 0,
                     'currency' => $currency
                 ],
                 'total_amount' => [
-                    'value' => $invoiceModel->getShippingAmount(),
+                    'value' => $invoiceModel->getShippingAmount() ?? 0,
                     'currency' => $currency
                 ],
+                'discounts' => $this->getShippingDiscountDetails($invoiceModel),
+                'taxes' => $this->formatTaxes(
+                    $orderModel,
+                    $this->shippingTaxCalculator->calculateShippingTaxes($orderModel, $invoiceModel),
+                )
             ]
         ];
+    }
+
+    /**
+     * Return information about an applied discount on shipping
+     *
+     * @param InvoiceInterface $invoice
+     * @return array
+     */
+    private function getShippingDiscountDetails(InvoiceInterface $invoice)
+    {
+        $shippingDiscounts = [];
+        if (!($invoice->getDiscountDescription() === null
+             && $invoice->getShippingDiscountTaxCompensationAmount() == 0)) {
+            $shippingDiscounts[] =
+                [
+                    'label' => $invoice->getDiscountDescription() ?? __('Discount'),
+                    'amount' => [
+                        'value' => abs($invoice->getShippingDiscountTaxCompensationAmount()),
+                        'currency' => $invoice->getOrderCurrencyCode()
+                    ]
+                ];
+        }
+        return $shippingDiscounts;
+    }
+
+    /**
+     * Return information about an applied discount
+     *
+     * @param InvoiceInterface $invoice
+     * @return array
+     */
+    private function getDiscountDetails(InvoiceInterface $invoice)
+    {
+        $discounts = [];
+        if (!($invoice->getDiscountDescription() === null && $invoice->getDiscountAmount() == 0)) {
+            $discounts[] = [
+                'label' => $invoice->getDiscountDescription() ?? __('Discount'),
+                'amount' => [
+                    'value' => abs($invoice->getDiscountAmount()),
+                    'currency' => $invoice->getOrderCurrencyCode()
+                ]
+            ];
+        }
+        return $discounts;
+    }
+
+    /**
+     * Format applied taxes
+     *
+     * @param OrderInterface $order
+     * @param array $appliedTaxes
+     * @return array
+     */
+    private function formatTaxes(OrderInterface $order, array $appliedTaxes)
+    {
+        $taxes = [];
+        foreach ($appliedTaxes as $appliedTax) {
+            $appliedTaxesArray = [
+                'rate' => $appliedTax['percent'] ?? 0,
+                'title' => $appliedTax['title'] ?? null,
+                'amount' => [
+                    'value' => $appliedTax['tax_amount'] ?? 0,
+                    'currency' => $order->getOrderCurrencyCode()
+                ]
+            ];
+            $taxes[] = $appliedTaxesArray;
+        }
+        return $taxes;
     }
 }

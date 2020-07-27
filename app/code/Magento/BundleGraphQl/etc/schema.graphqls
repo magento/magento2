@@ -66,6 +66,7 @@ type BundleItemOption @doc(description: "BundleItemOption defines characteristic
     price_type: PriceTypeEnum @doc(description: "One of FIXED, PERCENT, or DYNAMIC.")
     can_change_quantity: Boolean @doc(description: "Indicates whether the customer can change the number of items for this option.")
     product: ProductInterface @doc(description: "Contains details about this product option.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product")
+    uid: ID! @doc(description: "A string that encodes option details.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Options\\BundleItemOptionUid") # A Base64 string that encodes option details.
 }
 
 type BundleProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "BundleProduct defines basic features of a bundle product and contains multiple BundleItems.") {
