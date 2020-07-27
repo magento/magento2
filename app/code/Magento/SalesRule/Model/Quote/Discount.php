@@ -5,6 +5,7 @@
  */
 namespace Magento\SalesRule\Model\Quote;
 
+use Magento\Bundle\Model\Product\Price;
 use Magento\Bundle\Model\Product\Type as TypeBundle;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Framework\App\ObjectManager;
@@ -13,6 +14,7 @@ use Magento\SalesRule\Api\Data\DiscountDataInterfaceFactory;
 
 /**
  * Discount totals calculation model.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 {
@@ -142,12 +144,23 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
 
             /**
              * There are two kinds of parent products: Bundle and Configurable (Grouped does not present in the quote)
-             * For the Configurable product - we should calculate discount for the parent.
-             * For the Bundle product - we should calculate children and ignore the Parent.
+             * For the Bundle product - we have two options:
              */
             if ($item->getProductType() === TypeBundle::TYPE_CODE
-                || ($item->getParentItem() && $item->getParentItem()->getProductType() === Configurable::TYPE_CODE)
+                && (int) $item->getProduct()->getPriceType() === Price::PRICE_TYPE_DYNAMIC
             ) {
+                // #1 Price type = Dynamic | Calculate for [X] Children , [ ] Parent
+                continue;
+            }
+            if ($item->getParentItem()
+                && $item->getParentItem()->getProductType() === TypeBundle::TYPE_CODE
+                && (int) $item->getParentItem()->getProduct()->getPriceType() === Price::PRICE_TYPE_FIXED
+            ) {
+                // #2 Price type = Fixed   | Calculate for [ ] Children , [X] Parent
+                continue;
+            }
+            if ($item->getParentItem() && $item->getParentItem()->getProductType() === Configurable::TYPE_CODE) {
+                // For the Configurable product - we should calculate discount for the parent.
                 continue;
             }
 
