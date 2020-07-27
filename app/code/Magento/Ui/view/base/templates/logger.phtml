@@ -5,11 +5,13 @@
  */
 
 /** @var $block \Magento\Ui\Block\Logger */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<?php if ($block->isLoggingEnabled()) : ?>
-    <script>
+<?php if ($block->isLoggingEnabled()): ?>
+    <?php $scriptString = <<<script
+
         window.onerror = function(msg, url, line) {
-            var key = "<?= $block->escapeJs($block->getSessionStorageKey()) ?>";
+            var key = "{$block->escapeJs($block->getSessionStorageKey())}";
             var errors = {};
             if (sessionStorage.getItem(key)) {
                 errors = JSON.parse(sessionStorage.getItem(key));
@@ -20,5 +22,7 @@
             errors[window.location.href].push("error: \'" + msg + "\' " + "file: " + url + " " + "line: " + line);
             sessionStorage.setItem(key, JSON.stringify(errors));
         };
-    </script>
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php endif; ?>

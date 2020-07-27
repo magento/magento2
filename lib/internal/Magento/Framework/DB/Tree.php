@@ -18,7 +18,7 @@ use Magento\Framework\Phrase;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * phpcs:ignoreFile
  *
- * @deprecated Not used anymore.
+ * @deprecated 102.0.0 Not used anymore.
  */
 class Tree
 {
@@ -82,7 +82,7 @@ class Tree
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function __construct($config = [])
     {
@@ -156,7 +156,7 @@ class Tree
      * @param string $name
      * @return $this
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function setIdField($name)
     {
@@ -170,7 +170,7 @@ class Tree
      * @param string $name
      * @return $this
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function setLeftField($name)
     {
@@ -184,7 +184,7 @@ class Tree
      * @param string $name
      * @return $this
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function setRightField($name)
     {
@@ -198,7 +198,7 @@ class Tree
      * @param string $name
      * @return $this
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function setLevelField($name)
     {
@@ -212,7 +212,7 @@ class Tree
      * @param string $name
      * @return $this
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function setPidField($name)
     {
@@ -226,7 +226,7 @@ class Tree
      * @param string $name
      * @return $this
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function setTable($name)
     {
@@ -237,7 +237,7 @@ class Tree
     /**
      * @return array
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function getKeys()
     {
@@ -256,7 +256,7 @@ class Tree
      * @param array $data
      * @return string
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function clear($data = [])
     {
@@ -283,7 +283,7 @@ class Tree
      * @param string|int $nodeId
      * @return array
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function getNodeInfo($nodeId)
     {
@@ -303,7 +303,7 @@ class Tree
      * @param array $data
      * @return false|string
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function appendChild($nodeId, $data)
     {
@@ -371,7 +371,7 @@ class Tree
     /**
      * @return array
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function checkNodes()
     {
@@ -403,7 +403,7 @@ class Tree
      * @param string|int $nodeId
      * @return bool|Node|void
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function removeNode($nodeId)
     {
@@ -479,7 +479,7 @@ class Tree
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function moveNode($eId, $pId, $aId = 0)
     {
@@ -815,7 +815,7 @@ class Tree
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function moveNodes($eId, $pId, $aId = 0)
     {
@@ -1015,7 +1015,7 @@ class Tree
      * @param string $fields
      * @return void
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function addTable($tableName, $joinCondition, $fields = '*')
     {
@@ -1026,7 +1026,7 @@ class Tree
      * @param Select $select
      * @return void
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     protected function _addExtTablesToSelect(Select &$select)
     {
@@ -1041,7 +1041,7 @@ class Tree
      * @param int $endLevel
      * @return NodeSet
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function getChildren($nodeId, $startLevel = 0, $endLevel = 0)
     {
@@ -1088,7 +1088,7 @@ class Tree
      * @param string|int $nodeId
      * @return Node
      *
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.0 Not used anymore.
      */
     public function getNode($nodeId)
     {
