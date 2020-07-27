@@ -49,6 +49,8 @@ class ItemProvider
     }
 
     /**
+     * Format individual shipment item
+     *
      * @param ShipmentInterface $shipment
      * @param ShipmentItemInterface $shipmentItem
      * @return array|null

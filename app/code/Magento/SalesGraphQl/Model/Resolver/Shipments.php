@@ -13,7 +13,6 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Model\Order;
-use Magento\Sales\Model\Order\Shipment;
 
 /**
  * Resolve shipment information for order

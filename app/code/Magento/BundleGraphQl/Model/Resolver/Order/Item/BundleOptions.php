@@ -61,7 +61,7 @@ class BundleOptions implements ResolverInterface
                 return $this->getBundleOptions($item, $value);
             }
             if ($value['model'] instanceof InvoiceItemInterface || $value['model'] instanceof ShipmentItemInterface) {
-                /** @var InvoiceItemInterface $item */
+                /** @var InvoiceItemInterface|ShipmentItemInterface $item */
                 $item = $value['model'];
                 // Have to pass down order and item to map to avoid refetching all data
                 return $this->getBundleOptions($item->getOrderItem(), $value);

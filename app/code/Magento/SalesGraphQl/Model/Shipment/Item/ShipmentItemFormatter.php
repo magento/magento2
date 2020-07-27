@@ -10,6 +10,9 @@ namespace Magento\SalesGraphQl\Model\Shipment\Item;
 use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\Data\ShipmentItemInterface;
 
+/**
+ * Format shipment item for GraphQl output
+ */
 class ShipmentItemFormatter implements FormatterInterface
 {
     /**

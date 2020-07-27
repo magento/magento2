@@ -20,6 +20,9 @@ class InvoiceItemTypeResolver implements TypeResolverInterface
      */
     private $productTypeMap;
 
+    /**
+     * @param array $productTypeMap
+     */
     public function __construct($productTypeMap = [])
     {
         $this->productTypeMap = $productTypeMap;
@@ -31,9 +34,7 @@ class InvoiceItemTypeResolver implements TypeResolverInterface
     public function resolveType(array $data): string
     {
         if (!isset($data['product_type'])) {
-            throw new GraphQlInputException(
-                __('Missing key %1 in sales item data', ['product_type'])
-            );
+            throw new GraphQlInputException(__('Missing key %1 in sales item data', ['product_type']));
         }
         if (isset($this->productTypeMap[$data['product_type']])) {
             return $this->productTypeMap[$data['product_type']];

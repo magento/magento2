@@ -10,17 +10,34 @@ namespace Magento\BundleGraphQl\Model\Order\Shipment;
 use Magento\Catalog\Model\Product\Type\AbstractType;
 use Magento\Sales\Api\Data\ShipmentInterface;
 use Magento\Sales\Api\Data\ShipmentItemInterface;
+use Magento\SalesGraphQl\Model\Shipment\Item\ShipmentItemFormatter;
 use Magento\SalesGraphQl\Model\Shipment\Item\FormatterInterface;
 
+/**
+ * Format Bundle shipment items for GraphQl output
+ */
 class BundleShipmentItemFormatter implements FormatterInterface
 {
+    /**
+     * @var ShipmentItemFormatter
+     */
     private $itemFormatter;
 
-    public function __construct(FormatterInterface $itemFormatter)
+    /**
+     * @param ShipmentItemFormatter $itemFormatter
+     */
+    public function __construct(ShipmentItemFormatter $itemFormatter)
     {
         $this->itemFormatter = $itemFormatter;
     }
 
+    /**
+     * Format bundle product shipment item
+     *
+     * @param ShipmentInterface $shipment
+     * @param ShipmentItemInterface $item
+     * @return array|null
+     */
     public function formatShipmentItem(ShipmentInterface $shipment, ShipmentItemInterface $item): ?array
     {
         $orderItem = $item->getOrderItem();
