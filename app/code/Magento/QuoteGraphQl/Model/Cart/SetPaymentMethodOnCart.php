@@ -11,6 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Api\Data\PaymentInterfaceFactory;
 use Magento\Quote\Api\PaymentMethodManagementInterface;
@@ -57,10 +58,12 @@ class SetPaymentMethodOnCart
      *
      * @param Quote $cart
      * @param array $paymentData
+     * @param ContextInterface $context
      * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function execute(Quote $cart, array $paymentData): void
+    public function execute(Quote $cart, array $paymentData, ContextInterface $context): void
     {
         if (!isset($paymentData['code']) || empty($paymentData['code'])) {
             throw new GraphQlInputException(__('Required parameter "code" for "payment_method" is missing.'));

@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\PaypalGraphQl\Model\Plugin\Cart\HostedPro;
+namespace Magento\PaypalGraphQl\Model\Plugin\Cart\PayflowPro;
 
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -13,9 +13,10 @@ use Magento\Paypal\Model\Config;
 use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderPool;
 use Magento\Sales\Model\Order\Payment\Repository as PaymentRepository;
+use Magento\PaypalGraphQl\Observer\PayflowProSetCcData;
 
 /**
- * Set additionalInformation on payment for Hosted Pro method
+ * Set additionalInformation on payment for PayflowPro method
  */
 class SetPaymentMethodOnCart
 {
@@ -48,7 +49,6 @@ class SetPaymentMethodOnCart
      * @param mixed $result
      * @param Quote $cart
      * @param array $paymentData
-     * @param ContextInterface $context
      * @return void
      * @throws GraphQlInputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -60,16 +60,12 @@ class SetPaymentMethodOnCart
         array $paymentData,
         ContextInterface $context
     ): void {
-        $paymentData = $this->additionalDataProviderPool->getData(Config::METHOD_HOSTEDPRO, $paymentData);
+        $paymentData = $this->additionalDataProviderPool->getData(Config::METHOD_PAYFLOWPRO, $paymentData);
 
-        if (!empty($paymentData)) {
-            $urlKeys = ['cancel_url', 'return_url'];
+        if (!$context->getExtensionAttributes()->getIsCustomer()
+            && array_key_exists(PayflowProSetCcData::IS_ACTIVE_PAYMENT_TOKEN_ENABLER, $paymentData)) {
             $payment = $cart->getPayment();
-            foreach ($urlKeys as $urlKey) {
-                if (isset($paymentData[$urlKey])) {
-                    $payment->setAdditionalInformation($urlKey, $paymentData[$urlKey]);
-                }
-            }
+            $payment->unsAdditionalInformation(PayflowProSetCcData::IS_ACTIVE_PAYMENT_TOKEN_ENABLER);
             $payment->save();
         }
     }
