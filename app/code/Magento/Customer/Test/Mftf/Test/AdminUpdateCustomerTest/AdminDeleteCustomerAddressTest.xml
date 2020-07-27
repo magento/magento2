@@ -20,7 +20,9 @@
         </annotations>
         <before>
             <createData stepKey="customer" entity="Simple_US_Customer_Multiple_Addresses"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>

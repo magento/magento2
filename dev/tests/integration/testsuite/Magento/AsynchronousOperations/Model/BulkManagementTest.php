@@ -94,9 +94,6 @@ class BulkManagementTest extends \PHPUnit\Framework\TestCase
             ->create()
             ->addFieldToFilter('bulk_uuid', ['eq' => $bulkUuid])
             ->getItems();
-        foreach ($operations as $operation) {
-            $operation->setId(null);
-        }
         $this->publisherMock->expects($this->once())
             ->method('publish')
             ->with($topicName, array_values($operations));
