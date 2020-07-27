@@ -41,9 +41,9 @@
         </after>
 
         <!-- Add product to cart on storefront -->
-        <amOnPage url="{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage"/>
-        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProductToCart">
+        <amOnPage url="{{StorefrontProductPage.url($createProduct.custom_attributes[url_key]$)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
 
