@@ -73,6 +73,11 @@ class DataProviderTest extends TestCase
     private $categoryFactory;
 
     /**
+     * @var DataInterfaceFactory|MockObject
+     */
+    private $uiConfigFactory;
+
+    /**
      * @var Collection|MockObject
      */
     private $collection;
