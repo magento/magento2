@@ -53,4 +53,12 @@ interface LoggerInterface
      * @return void
      */
     public function logMeta($message);
+
+    /**
+     * Logs meta information in the current line
+     *
+     * @param string $message
+     * @return void
+     */
+    public function logMetaInline($message);
 }

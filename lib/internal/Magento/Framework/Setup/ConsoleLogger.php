@@ -89,6 +89,15 @@ class ConsoleLogger implements LoggerInterface
     }
 
     /**
+     * {@inheritdoc}
+     */
+    public function logMetaInline($message)
+    {
+        $this->isInline = true;
+        $this->console->write('<metadata>' . $message . '</metadata>');
+    }
+
+    /**
      * Terminates line if the inline logging is started
      *
      * @return void
