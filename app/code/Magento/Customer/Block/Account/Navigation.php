@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Block\Account;
 
-use \Magento\Framework\View\Element\Html\Links;
-use \Magento\Customer\Block\Account\SortLinkInterface;
+use Magento\Framework\View\Element\Html\Links;
+use Magento\Customer\Block\Account\SortLinkInterface;
 
 /**
  * Class for sorting links in navigation panels.
@@ -19,7 +19,7 @@ use \Magento\Customer\Block\Account\SortLinkInterface;
 class Navigation extends Links
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @since 100.2.0
      */
     public function getLinks()
@@ -47,6 +47,6 @@ class Navigation extends Links
      */
     private function compare(SortLinkInterface $firstLink, SortLinkInterface $secondLink): int
     {
-        return  $secondLink->getSortOrder() <=> $firstLink->getSortOrder();
+        return $firstLink->getSortOrder() <=> $secondLink->getSortOrder();
     }
 }

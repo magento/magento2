@@ -130,7 +130,9 @@
 
         <!-- Verify we see created virtual product with custom options suite and import options on the storefront page -->
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{virtualProductCustomImportOptions.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{virtualProductCustomImportOptions.sku}}" stepKey="seeVirtualProductSku"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeVirtualProductSku">
+            <argument name="productSku" value="{{virtualProductCustomImportOptions.sku}}"/>
+        </actionGroup>
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="productStockAvailableStatus"/>
         <assertEquals stepKey="assertStockAvailableOnProductPage">
             <expectedResult type="string">{{virtualProductCustomImportOptions.storefrontStatus}}</expectedResult>
