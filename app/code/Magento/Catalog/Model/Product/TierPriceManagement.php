@@ -224,9 +224,9 @@ class TierPriceManagement implements \Magento\Catalog\Api\ProductTierPriceManage
     /**
      * Returns current Price Scope configuration value
      *
-     * @return string
+     * @return int
      */
-    private function getPriceScopeConfig(): string
+    private function getPriceScopeConfig(): int
     {
         return (int)$this->config->getValue('catalog/price/scope', ScopeInterface::SCOPE_WEBSITE);
     }
