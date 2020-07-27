@@ -1084,7 +1084,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param string $request
      * @return string
-     * @deprecated Use asynchronous client.
+     * @deprecated 100.3.3 Use asynchronous client.
      * @see _getQuotes()
      */
     protected function _getQuotesFromServer($request)
@@ -1396,7 +1396,7 @@ class Carrier extends \Magento\Dhl\Model\AbstractDhl implements \Magento\Shippin
      *
      * @param \Magento\Framework\DataObject $request
      * @return $this|\Magento\Framework\DataObject|boolean
-     * @deprecated
+     * @deprecated 100.2.3
      */
     public function proccessAdditionalValidation(\Magento\Framework\DataObject $request)
     {

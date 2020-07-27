@@ -99,6 +99,7 @@
                                 <item name="caption" xsi:type="string" translate="true">Delete</item>
                                 <item name="url" xsi:type="string">#</item>
                                 <item name="onclick" xsi:type="string">return wishlistControl.removeItem($wishlist_item_id);</item>
+                                <item name="class" xsi:type="string">wishlist-remove-button</item>
                             </item>
                         </argument>
                     </arguments>
