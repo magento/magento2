@@ -48,6 +48,12 @@ class DataProviderTest extends TestCase
     protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
+        $objectManager->configure([
+            'preferences' => [
+                \Magento\Cms\Model\Page\CustomLayoutManagerInterface::class =>
+                    \Magento\TestFramework\Cms\Model\CustomLayoutManager::class
+            ]
+        ]);
         $this->repo = $objectManager->get(GetPageByIdentifierInterface::class);
         $this->filesFaker = $objectManager->get(CustomLayoutManager::class);
         $this->request = $objectManager->get(HttpRequest::class);

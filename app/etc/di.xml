@@ -1882,4 +1882,12 @@
         </arguments>
     </virtualType>
     <preference for="Magento\Framework\Validator\HTML\WYSIWYGValidatorInterface" type="DefaultWYSIWYGValidator" />
+    <type name="Magento\Framework\View\TemplateEngine\Php">
+        <arguments>
+            <argument name="blockVariables" xsi:type="array">
+                <item name="secureRenderer" xsi:type="object">Magento\Framework\View\Helper\SecureHtmlRenderer\Proxy</item>
+                <item name="escaper" xsi:type="object">Magento\Framework\Escaper</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
