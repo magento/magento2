@@ -12,7 +12,7 @@
                 <arguments>
                     <argument name="path" xsi:type="string">wishlist</argument>
                     <argument name="label" xsi:type="string" translate="true">My Wish List</argument>
-                    <argument name="sortOrder" xsi:type="number">210</argument>
+                    <argument name="sortOrder" xsi:type="number">30</argument>
                 </arguments>
             </block>
         </referenceBlock>
