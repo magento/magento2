@@ -83,7 +83,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontPage"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
             <argument name="phrase" value="$createConfigurableProduct.name$"/>
         </actionGroup>
@@ -98,7 +98,7 @@
         <actionGroup ref="ToggleProductEnabledActionGroup" stepKey="disableProduct"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePageAgain"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePageAgain"/>
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefrontAgain">
             <argument name="phrase" value="$createConfigurableProduct.name$"/>
         </actionGroup>

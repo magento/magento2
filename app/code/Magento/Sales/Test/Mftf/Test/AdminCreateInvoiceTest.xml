@@ -71,8 +71,7 @@
         <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
         <waitForPageLoad stepKey="waitForNewInvoicePageToLoad"/>
-        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
-        <waitForPageLoad stepKey="waitForInvoiceToBeCreated"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="The invoice has been created." stepKey="seeSuccessMessage"/>
         <click selector="{{AdminOrderDetailsOrderViewSection.invoices}}" stepKey="clickInvoices"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask5" />

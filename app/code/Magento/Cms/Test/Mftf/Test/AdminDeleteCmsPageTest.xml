@@ -14,6 +14,7 @@
             <stories value="Delete a CMS Page via the Admin"/>
             <title value="Admin should be able to delete CMS Pages"/>
             <description value="Admin should be able to delete CMS Pages"/>
+            <severity value="CRITICAL"/>
             <group value="Cms"/>
             <group value="WYSIWYGDisabled"/>
         </annotations>

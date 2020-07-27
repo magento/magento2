@@ -395,6 +395,11 @@
     position: absolute;
     top: 0;
     width: @fotorama-arw-size;
+
+    ._block-content-loading & {
+        opacity: 0;
+    }
+
     .fotorama__arr__arr {
         &:extend(.fotorama-sprite);
         .fotorama-abs-center();

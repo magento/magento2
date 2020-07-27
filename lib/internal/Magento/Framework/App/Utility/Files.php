@@ -1116,7 +1116,7 @@ class Files
         } else {
             $frontendPaths = [BP . "/lib/web/mage"];
             /* current structure of /lib/web/mage directory contains frontend javascript in the root,
-               backend javascript in subdirectories. That's why script shouldn't go recursive throught subdirectories
+               backend javascript in subdirectories. That's why script shouldn't go recursive through subdirectories
                to get js files for frontend */
             $files = array_merge($files, self::getFiles($frontendPaths, '*.js', false));
         }
@@ -1410,9 +1410,6 @@ class Files
             '/dev/tests/integration/testsuite/Magento/Test/Integrity',
             '/dev/tests/static/framework',
             '/dev/tests/static/testsuite',
-            '/dev/tests/functional/tests/app',
-            '/dev/tests/functional/lib',
-            '/dev/tests/functional/vendor/magento/mtf',
             '/setup/src'
         ];
         foreach ($directories as $key => $dir) {
