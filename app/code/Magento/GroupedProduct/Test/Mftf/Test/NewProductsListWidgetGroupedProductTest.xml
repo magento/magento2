@@ -40,8 +40,7 @@
 
         <!-- Create a grouped product to appear in the widget -->
 
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductList"/>
-        <waitForPageLoad stepKey="waitForProductList"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductList"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="toggleAddProductButton"/>
         <click selector="{{AdminProductGridActionSection.addGroupedProduct}}" stepKey="clickAddGroupedProduct"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{_defaultProduct.name}}" stepKey="fillProductName"/>

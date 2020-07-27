@@ -34,8 +34,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Open Product Index Page and filter the product-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
@@ -74,13 +73,13 @@
         <waitForPageLoad stepKey="waitForProductFrontPageToLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductNameInStoreFront"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{SimpleProduct.price}}" stepKey="seeProductPriceInStoreFront"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{SimpleProduct.sku}}" stepKey="seeProductSkuInStoreFront"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeProductSkuInStoreFront">
+            <argument name="productSku" value="{{SimpleProduct.sku}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductStatusInStoreFront"/>
         <!--Add Product to the cart-->
         <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="1" stepKey="fillProductQuantity"/>
-        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="clickOnAddToCartButton"/>
-        <waitForPageLoad stepKey="waitForProductToAddInCart"/>
-        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
         <seeElement selector="{{StorefrontProductPageSection.successMsg}}" stepKey="seeSuccessSaveMessage"/>
         <seeElement selector="{{StorefrontMinicartSection.quantity(1)}}" stepKey="seeAddedProductQuantityInCart"/>
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>

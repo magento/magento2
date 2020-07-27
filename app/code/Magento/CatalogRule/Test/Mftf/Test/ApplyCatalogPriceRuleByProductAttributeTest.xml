@@ -97,7 +97,7 @@
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
 
-            <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToCatalogPriceRulePage"/>
+            <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToCatalogPriceRulePage"/>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule">
                 <argument name="name" value="{{SimpleCatalogPriceRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
@@ -232,9 +232,8 @@
         <see userInput="You saved the rule." selector="{{ContentManagementSection.StoreConfigurationPageSuccessMessage}}" stepKey="seeMessage"/>
         <see userInput="Updated rules applied." selector="{{ContentManagementSection.StoreConfigurationPageSuccessMessage}}" stepKey="seeSuccessMessage"/>
 
-        <!-- Run cron twice -->
-        <magentoCLI command="cron:run" stepKey="runCron1"/>
-        <magentoCLI command="cron:run" stepKey="runCron2"/>
+        <!-- Run cron -->
+        <magentoCron stepKey="runAllCronJobs"/>
         <magentoCLI command="cache:flush" stepKey="flushCache"/>
 
         <!-- Go to Frontend and open the simple product -->
