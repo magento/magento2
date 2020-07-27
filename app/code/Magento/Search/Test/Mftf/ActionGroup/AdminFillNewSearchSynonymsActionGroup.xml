@@ -15,7 +15,6 @@
         <arguments>
             <argument name="scope_id" type="string"/>
             <argument name="synonyms" type="string"/>
-            <argument name="merge" type="string"/>
         </arguments>
 
         <selectOption selector="{{AdminSearchSynonymsNewSection.scope}}" userInput="{{scope_id}}" stepKey="selectScope"/>

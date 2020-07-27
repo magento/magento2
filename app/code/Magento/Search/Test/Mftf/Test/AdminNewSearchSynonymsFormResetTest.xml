@@ -24,7 +24,6 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <!--TEST BODY -->
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToSearchSynonymsPage">
             <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
             <argument name="submenuUiId" value="{{AdminSearchSynonyms.dataUiId}}"/>
@@ -35,7 +34,6 @@
         <actionGroup ref="AdminFillNewSearchSynonymsActionGroup" stepKey="fillNewSearchSynonyms">
             <argument name="scope_id" value="1:1"/>
             <argument name="synonyms" value="Test Synonyms"/>
-            <argument name="merge" value="true"/>
         </actionGroup>
 
         <click selector="{{AdminSearchSynonymsNewSection.resetButton}}" stepKey="clickResetButton"/>
@@ -56,6 +54,5 @@
             <expectedResult type="string">false</expectedResult>
             <actualResult type="string">$grabMergeValue</actualResult>
         </assertEquals>
-        <!--END TEST BODY -->
     </test>
 </tests>
