@@ -666,6 +666,11 @@ class DataProvider extends ModifierPoolDataProvider
         $fieldsMap = [];
 
         foreach ($config['children'] as $group => $node) {
+            // Skip disabled components (required for Commerce Edition)
+            if ($node['arguments']['data']['config']['componentDisabled'] ?? false) {
+                continue;
+            }
+
             $fieldsMap[$group] = [];
 
             foreach ($node['children'] as $childName => $childNode) {
