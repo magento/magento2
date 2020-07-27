@@ -19,7 +19,7 @@ use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderPool;
 
 /**
- * Set payment method on cart
+ * Set payment method for cart
  */
 class SetPaymentMethodOnCart
 {

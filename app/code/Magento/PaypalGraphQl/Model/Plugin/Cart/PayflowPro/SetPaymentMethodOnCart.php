@@ -49,6 +49,7 @@ class SetPaymentMethodOnCart
      * @param mixed $result
      * @param Quote $cart
      * @param array $paymentData
+     * @param ContextInterface $context
      * @return void
      * @throws GraphQlInputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

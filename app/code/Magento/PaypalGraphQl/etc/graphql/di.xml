@@ -11,8 +11,6 @@
     </type>
     <type name="Magento\QuoteGraphQl\Model\Cart\SetPaymentMethodOnCart">
         <plugin name="hosted_pro_payment_method" type="Magento\PaypalGraphQl\Model\Plugin\Cart\HostedPro\SetPaymentMethodOnCart"/>
-    </type>
-    <type name="Magento\QuoteGraphQl\Model\Cart\SetPaymentMethodOnCart">
         <plugin name="payflowpro_payment_method" type="Magento\PaypalGraphQl\Model\Plugin\Cart\PayflowPro\SetPaymentMethodOnCart"/>
     </type>
     <type name="Magento\Paypal\Model\Payflowlink">
