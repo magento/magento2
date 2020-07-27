@@ -9,7 +9,6 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup">
         <arguments>
-            <argument name="payerName" defaultValue="MPI" type="string"/>
             <argument name="credentials" defaultValue="_CREDS"/>
         </arguments>
         <!--Check in-context-->
@@ -25,6 +24,5 @@
         <fillField selector="{{PayPalPaymentSection.password}}" userInput="{{credentials.magento/paypal_sandbox_login_password}}" stepKey="fillPassword"/>
         <click selector="{{PayPalPaymentSection.loginBtn}}" stepKey="login"/>
         <waitForPageLoad stepKey="wait"/>
-        <see userInput="{{payerName}}" selector="{{PayPalPaymentSection.reviewUserInfo}}" stepKey="seePayerName"/>
     </actionGroup>
 </actionGroups>

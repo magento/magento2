@@ -12,6 +12,7 @@ use Magento\Framework\App\State;
  * An associative data structure, that features "nested set" parent-child relations
  *
  * @api
+ * @since 100.0.2
  */
 class Structure extends DataStructure
 {

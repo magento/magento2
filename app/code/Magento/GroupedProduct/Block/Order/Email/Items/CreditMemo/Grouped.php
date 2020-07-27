@@ -13,6 +13,7 @@ use Magento\Sales\Block\Order\Email\Items\DefaultItems;
  * Class renders grouped product(s) in the CreditMemo email
  *
  * @api
+ * @since 100.4.0
  */
 class Grouped extends DefaultItems
 {
@@ -22,6 +23,7 @@ class Grouped extends DefaultItems
      * This method uses renderer for real product type
      *
      * @return string
+     * @since 100.4.0
      */
     protected function _toHtml()
     {

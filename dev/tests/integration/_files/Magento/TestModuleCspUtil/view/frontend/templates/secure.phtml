@@ -1,0 +1,9 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+<?= /* @NoEscape */ $secureRenderer->renderTag('script', ['type' => 'text/javascript'], 'let var = 1; console.log("var = " + var);', false) ?>
