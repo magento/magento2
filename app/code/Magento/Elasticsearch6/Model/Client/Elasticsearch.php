@@ -11,6 +11,8 @@ use Magento\AdvancedSearch\Model\Client\ClientInterface;
 
 /**
  * Elasticsearch client
+ *
+ * @deprecated in favor of Elasticsearch 7.
  */
 class Elasticsearch implements ClientInterface
 {
