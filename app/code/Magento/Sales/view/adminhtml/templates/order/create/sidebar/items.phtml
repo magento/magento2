@@ -21,7 +21,7 @@
         'onclick',
         "order.loadArea('sidebar_" . $block->escapeJs($block->getDataId()) .
         "', 'sidebar_data_" . $block->escapeJs($block->getDataId()) . "');event.preventDefault();",
-        'div.head.sidebar-title-block'
+        'div#sidebar_data_'. $block->escapeJs($block->getDataId()) . ' div.head.sidebar-title-block'
     ) ?>
     <div class="content">
         <div class="auto-scroll">
