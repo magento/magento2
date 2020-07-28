@@ -7,17 +7,21 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Model\Resolver\Customer;
 
+use Magento\Integration\Model\Oauth\Token;
 use Magento\PaypalGraphQl\PaypalPayflowProAbstractTest;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Quote\Model\QuoteIdToMaskedQuoteId;
 use Magento\Framework\DataObject;
+use Magento\Vault\Api\Data\PaymentTokenInterface;
+use Magento\Vault\Model\PaymentTokenManagement;
+use Magento\Vault\Model\PaymentTokenRepository;
 
 /**
  * End to end place order test using payflowpro via graphql endpoint for customer
  *
  * @magentoAppArea graphql
  */
-class PlaceOrderWithPayflowProTest extends PaypalPayflowProAbstractTest
+class SaveCartDataWithPayflowProTest extends PaypalPayflowProAbstractTest
 {
     /**
      * @var SerializerInterface
@@ -38,9 +42,9 @@ class PlaceOrderWithPayflowProTest extends PaypalPayflowProAbstractTest
     }
 
     /**
-     * Test end to end test to process a paypal payflow pro order
+     * Place order use payflowpro method and save cart data to future
      *
-     * @return void
+     * @magentoDataFixture Magento/Sales/_files/default_rollback.php
      * @magentoDataFixture Magento/Sales/_files/default_rollback.php
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
@@ -49,12 +53,56 @@ class PlaceOrderWithPayflowProTest extends PaypalPayflowProAbstractTest
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     *
+     * @return void
+     *
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    public function testResolveCustomer(): void
+    public function testPlaceOrderAndSaveDataForFuturePayflowPro(): void
+    {
+        $responseData = $this->placeOrderPayflowPro('is_active_payment_token_enabler: true');
+        $this->assertArrayHasKey('data', $responseData);
+        $this->assertArrayHasKey('createPayflowProToken', $responseData['data']);
+        $this->assertTrue($this->getVaultCartData()->getIsActive());
+        $this->assertTrue($this->getVaultCartData()->getIsVisible());
+    }
+
+    /**
+     * Place order use payflowpro method and not save cart data to future
+     *
+     * @magentoDataFixture Magento/Sales/_files/default_rollback.php
+     * @magentoDataFixture Magento/Sales/_files/default_rollback.php
+     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_shipping_address.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/set_new_billing_address.php
+     * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
+     *
+     * @return void
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    public function testPlaceOrderAndNotSaveDataForFuturePayflowPro(): void
+    {
+        $responseData = $this->placeOrderPayflowPro('is_active_payment_token_enabler: false');
+        $this->assertArrayHasKey('data', $responseData);
+        $this->assertArrayHasKey('createPayflowProToken', $responseData['data']);
+        $this->assertTrue($this->getVaultCartData()->getIsActive());
+        $this->assertFalse($this->getVaultCartData()->getIsVisible());
+    }
+
+    /**
+     * @param $isActivePaymentTokenEnabler
+     *
+     * @return array
+     */
+    private function placeOrderPayflowPro($isActivePaymentTokenEnabler)
     {
         $paymentMethod = 'payflowpro';
         $this->enablePaymentMethod($paymentMethod);
+        $this->enablePaymentMethod('payflowpro_cc_vault');
         $reservedQuoteId = 'test_quote';
 
         $payload = 'BILLTOCITY=CityM&AMT=0.00&BILLTOSTREET=Green+str,+67&VISACARDLEVEL=12&SHIPTOCITY=CityM'
@@ -77,6 +125,7 @@ mutation {
         payment_method: {
           code: "{$paymentMethod}",
             payflowpro: {
+              {$isActivePaymentTokenEnabler}
               cc_details: {
                  cc_exp_month: 12,
                  cc_exp_year: 2030,
@@ -128,8 +177,8 @@ mutation {
 }
 QUERY;
 
-        /** @var \Magento\Integration\Model\Oauth\Token $tokenModel */
-        $tokenModel = $this->objectManager->create(\Magento\Integration\Model\Oauth\Token::class);
+        /** @var Token $tokenModel */
+        $tokenModel = $this->objectManager->create(Token::class);
         $customerToken = $tokenModel->createCustomerToken(1)->getToken();
 
         $requestHeaders = [
@@ -148,12 +197,10 @@ QUERY;
         );
 
         $this->gatewayMock
-            ->expects($this->at(0))
             ->method('postRequest')
             ->willReturn($paypalResponse);
 
         $this->gatewayMock
-            ->expects($this->at(1))
             ->method('postRequest')
             ->willReturn(
                 new DataObject(
@@ -181,37 +228,22 @@ QUERY;
             );
 
         $response = $this->graphQlRequest->send($query, [], '', $requestHeaders);
-        $responseData = $this->json->unserialize($response->getContent());
 
-        $this->assertArrayHasKey('data', $responseData);
-        $this->assertArrayHasKey('createPayflowProToken', $responseData['data']);
-        $createTokenData = $responseData['data']['createPayflowProToken'];
-        $this->assertArrayNotHasKey('errors', $responseData);
-        $this->assertEquals($paypalResponse->getData('securetoken'), $createTokenData['secure_token']);
-        $this->assertEquals($paypalResponse->getData('securetokenid'), $createTokenData['secure_token_id']);
+        return $this->json->unserialize($response->getContent());
+    }
 
-        $this->assertTrue(
-            isset($responseData['data']['setPaymentMethodOnCart']['cart']['selected_payment_method']['code'])
-        );
-        $this->assertEquals(
-            $paymentMethod,
-            $responseData['data']['setPaymentMethodOnCart']['cart']['selected_payment_method']['code']
-        );
-
-        $this->assertTrue(
-            isset($responseData['data']['handlePayflowProResponse']['cart']['selected_payment_method']['code'])
-        );
-        $this->assertEquals(
-            $paymentMethod,
-            $responseData['data']['handlePayflowProResponse']['cart']['selected_payment_method']['code']
-        );
-
-        $this->assertTrue(
-            isset($responseData['data']['placeOrder']['order']['order_number'])
-        );
-        $this->assertEquals(
-            'test_quote',
-            $responseData['data']['placeOrder']['order']['order_number']
-        );
+    /**
+     * Get saved cart data
+     *
+     * @return PaymentTokenInterface
+     */
+    private function getVaultCartData()
+    {
+        /** @var PaymentTokenManagement $tokenManagement */
+        $tokenManagement = $this->objectManager->get(PaymentTokenManagement::class);
+        $token = $tokenManagement->getByGatewayToken('B70CCC236815', 'payflowpro',1);
+        /** @var PaymentTokenRepository $tokenRepository */
+        $tokenRepository = $this->objectManager->get(PaymentTokenRepository::class);
+        return $tokenRepository->getById($token->getEntityId());
     }
 }
