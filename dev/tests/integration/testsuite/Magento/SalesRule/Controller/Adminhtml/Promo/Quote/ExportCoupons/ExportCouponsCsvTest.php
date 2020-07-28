@@ -1,0 +1,37 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+declare(strict_types=1);
+
+namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
+
+use Magento\SalesRule\Controller\Adminhtml\Promo\Quote\ExportCoupons\ExportCouponsController;
+
+/**
+ * Test export coupon csv
+ *
+ * Verify export csv
+ * @magentoAppArea adminhtml
+ * @magentoDataFixture Magento/SalesRule/_files/cart_rule_with_coupon_list.php
+ */
+class ExportCouponsCsvTest extends ExportCouponsController
+{
+    /**
+     * @var string
+     */
+    protected $uri = 'backend/sales_rule/promo_quote/exportCouponsCsv';
+
+    /**
+     * Test export csv
+     *
+     * @return void
+     */
+    public function testExportCsv(): void
+    {
+        $this->prepareRequest();
+        $this->dispatch($this->uri);
+        $this->assertStringNotContainsString('404 Error', $this->getResponse()->getBody());
+    }
+}
