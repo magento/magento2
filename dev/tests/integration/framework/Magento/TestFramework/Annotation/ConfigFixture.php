@@ -69,7 +69,7 @@ class ConfigFixture
      * @param string $configPath
      * @param string $scopeType
      * @param string|null $scopeCode
-     * @return string|null
+     * @return mixed|null
      */
     protected function getScopeConfigValue(string $configPath, string $scopeType, string $scopeCode = null)
     {
