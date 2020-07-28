@@ -6,13 +6,16 @@
 namespace Magento\Eav\Model\Attribute\Data;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Filesystem\Io\File as FileIo;
 
 /**
  * EAV Entity Attribute File Data Model
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
 {
@@ -39,12 +42,18 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
     protected $_directory;
 
     /**
+     * @var FileIo
+     */
+    private $fileIo;
+
+    /**
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
      * @param \Magento\Framework\Url\EncoderInterface $urlEncoder
      * @param \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator
      * @param \Magento\Framework\Filesystem $filesystem
+     * @param FileIo|null $fileIo
      * @codeCoverageIgnore
      */
     public function __construct(
@@ -53,12 +62,14 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
         \Magento\Framework\Locale\ResolverInterface $localeResolver,
         \Magento\Framework\Url\EncoderInterface $urlEncoder,
         \Magento\MediaStorage\Model\File\Validator\NotProtectedExtension $fileValidator,
-        \Magento\Framework\Filesystem $filesystem
+        \Magento\Framework\Filesystem $filesystem,
+        FileIo $fileIo = null
     ) {
         parent::__construct($localeDate, $logger, $localeResolver);
         $this->urlEncoder = $urlEncoder;
         $this->_fileValidator = $fileValidator;
         $this->_directory = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
+        $this->fileIo = $fileIo ?? ObjectManager::getInstance()->get(FileIo::class);
     }
 
     /**
@@ -86,7 +97,7 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
                 $mainScope = $this->_requestScope;
                 $scopes = [];
             }
-
+            // phpcs:disable Magento2.Security.Superglobal
             if (!empty($_FILES[$mainScope])) {
                 foreach ($_FILES[$mainScope] as $fileKey => $scopeData) {
                     foreach ($scopes as $scopeName) {
@@ -104,12 +115,15 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
             } else {
                 $value = [];
             }
+            // phpcs:enable Magento2.Security.Superglobal
         } else {
+            // phpcs:disable Magento2.Security.Superglobal
             if (isset($_FILES[$attrCode])) {
                 $value = $_FILES[$attrCode];
             } else {
                 $value = [];
             }
+            // phpcs:enable Magento2.Security.Superglobal
         }
 
         if (!empty($extend['delete'])) {
@@ -129,7 +143,7 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
     {
         $label = $this->getAttribute()->getStoreLabel();
         $rules = $this->getAttribute()->getValidateRules();
-        $extension = pathinfo($value['name'], PATHINFO_EXTENSION);
+        $extension = $this->fileIo->getPathInfo($value['name'])['extension'];
 
         if (!empty($rules['file_extensions'])) {
             $extensions = explode(',', $rules['file_extensions']);
@@ -146,7 +160,9 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
             return $this->_fileValidator->getMessages();
         }
 
-        if (!empty($value['tmp_name']) && !file_exists($value['tmp_name'])) {
+        if (!empty($value['tmp_name'])
+            && !$this->_directory->getDriver()->isExists($value['tmp_name'])
+        ) {
             return [__('"%1" is not a valid file.', $label)];
         }
 
@@ -177,8 +193,9 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
 
         if (is_string($value) && !empty($value)) {
             $dir = $this->_directory->getAbsolutePath($this->getAttribute()->getEntityType()->getEntityTypeCode());
+            $stat = $this->_directory->getDriver()->stat($dir . $value);
             $fileData = [
-                'size' => filesize($dir . $value),
+                'size' => $stat['size'],
                 'name' => $value,
                 'tmp_name' => $dir . $value
             ];
@@ -209,8 +226,6 @@ class File extends \Magento\Eav\Model\Attribute\Data\AbstractData
 
         if (count($errors) == 0) {
             return true;
-        } elseif (is_string($value) && !empty($value)) {
-            $this->_directory->delete($dir . $value);
         }
 
         return $errors;

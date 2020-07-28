@@ -6,10 +6,10 @@
     },
     "require": {
         "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/framework": "*",
-        "magento/module-cms": "*",
-        "magento/module-store": "*",
-        "magento/module-url-rewrite": "*"
+        "magento/framework": "102.0.*",
+        "magento/module-cms": "103.0.*",
+        "magento/module-store": "101.0.*",
+        "magento/module-url-rewrite": "101.1.*"
     },
     "type": "magento2-module",
     "license": [
@@ -23,5 +23,6 @@
         "psr-4": {
             "Magento\\CmsUrlRewrite\\": ""
         }
-    }
+    },
+    "version": "100.3.4"
 }

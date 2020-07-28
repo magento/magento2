@@ -10,15 +10,16 @@ use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 
 Bootstrap::getInstance()->getInstance()->reinitialize();
+$objectManager = Bootstrap::getObjectManager();
 
 /** @var Registry $registry */
-$registry = Bootstrap::getObjectManager()->get(Registry::class);
+$registry = $objectManager->get(Registry::class);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 /** @var ProductRepositoryInterface $productRepository */
-$productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
 
 $productSkus = ['search_product_1', 'search_product_2', 'search_product_3', 'search_product_4', 'search_product_5'];
 foreach ($productSkus as $sku) {

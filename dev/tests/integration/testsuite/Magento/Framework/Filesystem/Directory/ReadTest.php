@@ -73,17 +73,17 @@ class ReadTest extends \PHPUnit\Framework\TestCase
         $exceptions = 0;
         $dir = $this->getDirectoryInstance('foo');
         try {
-            $dir->getRelativePath(__DIR__ .'/ReadTest.php');
+            $dir->getRelativePath(__DIR__ . '/ReadTest.php');
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
         try {
-            $dir->getRelativePath(__DIR__ .'//./..////Directory/ReadTest.php');
+            $dir->getRelativePath(__DIR__ . '//./..////Directory/ReadTest.php');
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
         try {
-            $dir->getRelativePath(__DIR__ .'\..\Directory\ReadTest.php');
+            $dir->getRelativePath(__DIR__ . '\..\Directory\ReadTest.php');
         } catch (ValidatorException $exception) {
             $exceptions++;
         }
@@ -222,7 +222,13 @@ class ReadTest extends \PHPUnit\Framework\TestCase
      */
     public function existsProvider()
     {
-        return [['foo', 'bar', true], ['foo', 'bar/baz/', true], ['foo', 'bar/notexists', false]];
+        return [
+            ['foo', 'bar', true],
+            ['foo', 'bar/baz/', true],
+            ['foo', 'bar/notexists', false],
+            ['foo', 'foo/../bar/', true],
+            ['foo', 'foo/../notexists/', false]
+        ];
     }
 
     public function testIsExistOutside()

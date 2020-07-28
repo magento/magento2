@@ -11,7 +11,7 @@ use Exception;
 /**
  * Debugger writes information about request, response and possible exception to standard system log.
  *
- * @deprecated Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * @deprecated 100.3.5 Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
  * official Signifyd integration available on the marketplace
  */
 class Log implements DebuggerInterface

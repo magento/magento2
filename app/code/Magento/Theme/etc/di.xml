@@ -53,6 +53,7 @@
     <type name="Magento\Theme\Model\Wysiwyg\Storage">
         <arguments>
             <argument name="helper" xsi:type="object">Magento\Theme\Helper\Storage\Proxy</argument>
+            <argument name="filesystemDriver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
         </arguments>
     </type>
     <type name="Magento\Framework\Url\ScopeInterface">
@@ -303,6 +304,11 @@
     <type name="Magento\Theme\Model\Theme\ThemeProvider">
         <arguments>
             <argument name="cache" xsi:type="object">configured_design_cache</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Theme\Helper\Storage">
+        <arguments>
+            <argument name="filesystemDriver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
         </arguments>
     </type>
 </config>

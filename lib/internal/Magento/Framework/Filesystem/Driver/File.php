@@ -13,9 +13,8 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\Glob;
 
 /**
- * Class File
+ * Class for filesystem driver file
  *
- * @package Magento\Framework\Filesystem\Driver
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class File implements DriverInterface
@@ -593,7 +592,12 @@ class File implements DriverInterface
      */
     public function fileReadLine($resource, $length, $ending = null)
     {
-        $result = @stream_get_line($resource, $length, $ending);
+        try {
+            $result = @stream_get_line($resource, $length, $ending);
+        } catch (\Exception $e) {
+            $result = false;
+        }
+
         if (false === $result) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase('File cannot be read %1', [$this->getWarningMessage()])
@@ -970,7 +974,7 @@ class File implements DriverInterface
      */
     public function getRealPathSafety($path)
     {
-        if (strpos($path, DIRECTORY_SEPARATOR . '..' . DIRECTORY_SEPARATOR) === false) {
+        if (strpos($path, DIRECTORY_SEPARATOR . '.') === false) {
             return $path;
         }
 
@@ -981,6 +985,9 @@ class File implements DriverInterface
             $path
         );
         $pathParts = explode(DIRECTORY_SEPARATOR, $path);
+        if (end($pathParts) == '.') {
+            $pathParts[count($pathParts) - 1] = '';
+        }
         $realPath = [];
         foreach ($pathParts as $pathPart) {
             if ($pathPart == '.') {

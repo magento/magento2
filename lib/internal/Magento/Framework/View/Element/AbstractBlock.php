@@ -55,7 +55,7 @@ abstract class AbstractBlock extends \Magento\Framework\DataObject implements Bl
      * SID Resolver
      *
      * @var \Magento\Framework\Session\SidResolverInterface
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.5 Not used anymore.
      */
     protected $_sidResolver;
 
