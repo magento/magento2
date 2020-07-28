@@ -14,7 +14,8 @@
         "magento/module-email": "*",
         "magento/module-require-js": "*",
         "magento/module-store": "*",
-        "magento/module-widget": "*"
+        "magento/module-widget": "*",
+        "magento/module-ui": "*"
     },
     "type": "magento2-module",
     "license": [
