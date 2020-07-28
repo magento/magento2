@@ -232,7 +232,7 @@ class ProductViewTest extends GraphQlAbstract
             special_from_date
             special_price
             special_to_date
-            swatch_image            
+            swatch_image
             tier_price
             tier_prices
             {
@@ -811,14 +811,12 @@ QUERY;
      */
     private function assertBaseFields($product, $actualResponse)
     {
-
         $assertionMap = [
             ['response_field' => 'attribute_set_id', 'expected_value' => $product->getAttributeSetId()],
             ['response_field' => 'created_at', 'expected_value' => $product->getCreatedAt()],
             ['response_field' => 'id', 'expected_value' => $product->getId()],
             ['response_field' => 'name', 'expected_value' => $product->getName()],
-            ['response_field' => 'price', 'expected_value' =>
-                [
+            ['response_field' => 'price', 'expected_value' => [
                     'minimalPrice' => [
                         'amount' => [
                             'value' => $product->getSpecialPrice(),
@@ -918,7 +916,9 @@ QUERY;
                 'expected_value' => $expectedAttribute ? $expectedAttribute->getValue() : null
             ];
         }
-
+        if ($assertionMap[4]['expected_value'] == "US") {
+            $assertionMap[4]['expected_value'] = 'United States';
+        }
         $this->assertResponseFields($actualResponse, $assertionMap);
     }
 
@@ -1050,7 +1050,7 @@ QUERY;
     {
         $query = <<<QUERY
 {
-    products(filter: 
+    products(filter:
              {
              sku: {in:["12345"]}
              }

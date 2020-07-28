@@ -13,6 +13,7 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\ProductSearch;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Phrase;
 use Magento\GraphQl\Model\Query\ContextInterface;
@@ -21,6 +22,8 @@ use Magento\Search\Model\Search\PageSizeProvider;
 
 /**
  * Full text search for catalog using given search criteria.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Search implements ProductQueryInterface
 {
@@ -115,11 +118,15 @@ class Search implements ProductQueryInterface
             $productArray[$product->getId()] = $product->getData();
             $productArray[$product->getId()]['model'] = $product;
             foreach ($queryFields as $field) {
-                $productArray[$product->getId()][$field] = $this->getAttributeValue(
-                    $product,
-                    $productArray,
-                    $field
-                );
+                try {
+                    $productArray[$product->getId()][$field] = $this->getAttributeValue(
+                        $product,
+                        $productArray,
+                        $field
+                    );
+                } catch (LocalizedException $e) {
+                    continue;
+                }
             }
         }
 
@@ -151,7 +158,6 @@ class Search implements ProductQueryInterface
         return $searchCriteria;
     }
 
-
     /**
      * Get product attribute value
      *
@@ -161,15 +167,18 @@ class Search implements ProductQueryInterface
      *
      * @return string|null
      */
-    private function getAttributeValue(Product $product, $productArray, $field)
+    private function getAttributeValue(Product $product, $productArray, $field) :?string
     {
         if ($attribute = $product->getResource()->getAttribute($field)) {
             $attributeValue =  $attribute->getFrontend()->getValue($product);
-            if ($attributeValue && !($attributeValue instanceof Phrase) ) {
-               return $attributeValue;
+            if ($attributeValue && !($attributeValue instanceof Phrase)) {
+                return $attributeValue;
             } else {
-                return isset($productArray[$product->getId()][$field])? $productArray[$product->getId()][$field] : null;
+                return isset($productArray[$product->getId()][$field]) ?
+                    $productArray[$product->getId()][$field] : null;
             }
+        } else {
+            return "";
         }
     }
 }
