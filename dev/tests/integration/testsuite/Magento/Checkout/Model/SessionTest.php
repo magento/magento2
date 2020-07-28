@@ -44,9 +44,9 @@ class SessionTest extends TestCase
     private $customerSession;
 
     /**
-     * @var SessionFactory
+     * @var Session
      */
-    private $checkoutSessionFactory;
+    private $checkoutSession;
 
     /**
      * @var GetQuoteByReservedOrderId
@@ -78,7 +78,7 @@ class SessionTest extends TestCase
         $this->objectManager = Bootstrap::getObjectManager();
         $this->customerRepository = $this->objectManager->create(CustomerRepositoryInterface::class);
         $this->customerSession = $this->objectManager->get(CustomerSession::class);
-        $this->checkoutSessionFactory = $this->objectManager->get(SessionFactory::class);
+        $this->checkoutSession = $this->objectManager->get(Session::class);
         $this->getQuoteByReservedOrderId = $this->objectManager->get(GetQuoteByReservedOrderId::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
@@ -90,10 +90,12 @@ class SessionTest extends TestCase
      */
     protected function tearDown()
     {
-        if ($this->quote) {
+        if ($this->quote instanceof CartInterface) {
             $this->quoteRepository->delete($this->quote);
         }
         $this->customerSession->setCustomerId(null);
+        $this->checkoutSession->clearQuote();
+        $this->checkoutSession->setCustomerData(null);
 
         parent::tearDown();
     }
@@ -117,9 +119,8 @@ class SessionTest extends TestCase
         $product = $this->productRepository->get('simple');
         $product->setStatus(Status::STATUS_DISABLED);
         $this->productRepository->save($product);
-        $session = $this->checkoutSessionFactory->create();
-        $session->setQuoteId($quote->getId());
-        $quote = $session->getQuote();
+        $this->checkoutSession->setQuoteId($quote->getId());
+        $quote = $this->checkoutSession->getQuote();
         $this->assertEquals(0, $quote->getItemsCount());
         $this->assertEmpty($quote->getItems());
         $this->assertEquals(0, $quote->getShippingAddress()->getBaseGrandTotal());
@@ -137,9 +138,8 @@ class SessionTest extends TestCase
     public function testGetQuoteNotInitializedCustomerSet(): void
     {
         $customer = $this->customerRepository->getById(1);
-        $session = $this->checkoutSessionFactory->create();
-        $session->setCustomerData($customer);
-        $quote = $session->getQuote();
+        $this->checkoutSession->setCustomerData($customer);
+        $quote = $this->checkoutSession->getQuote();
         $this->validateCustomerDataInQuote($quote);
     }
 
@@ -156,7 +156,7 @@ class SessionTest extends TestCase
     {
         $customer = $this->customerRepository->getById(1);
         $this->customerSession->setCustomerDataObject($customer);
-        $quote = $this->checkoutSessionFactory->create()->getQuote();
+        $quote = $this->checkoutSession->getQuote();
         $this->validateCustomerDataInQuote($quote);
     }
 
@@ -168,9 +168,8 @@ class SessionTest extends TestCase
     public function testGetQuoteWithMismatchingSession(): void
     {
         $quote = $this->getQuoteByReservedOrderId->execute('test01');
-        $session = $this->checkoutSessionFactory->create();
-        $session->setQuoteId($quote->getId());
-        $this->quote = $session->getQuote();
+        $this->checkoutSession->setQuoteId($quote->getId());
+        $this->quote = $this->checkoutSession->getQuote();
         $this->assertEmpty($this->quote->getCustomerId());
         $this->assertNotEquals($quote->getId(), $this->quote->getId());
     }
@@ -191,8 +190,7 @@ class SessionTest extends TestCase
      */
     public function testLoadCustomerQuoteCustomerWithoutQuote(): void
     {
-        $session = $this->checkoutSessionFactory->create();
-        $this->quote = $session->getQuote();
+        $this->quote = $this->checkoutSession->getQuote();
         $this->assertEmpty(
             $this->quote->getCustomerId(),
             'Precondition failed: Customer data must not be set to quote'
@@ -203,13 +201,13 @@ class SessionTest extends TestCase
         );
         $customer = $this->customerRepository->getById(1);
         $this->customerSession->setCustomerDataObject($customer);
-        $this->quote = $session->getQuote();
+        $this->quote = $this->checkoutSession->getQuote();
         $this->assertEmpty(
             $this->quote->getCustomerEmail(),
             'Precondition failed: Customer data must not be set to quote'
         );
-        $session->loadCustomerQuote();
-        $this->quote = $session->getQuote();
+        $this->checkoutSession->loadCustomerQuote();
+        $this->quote = $this->checkoutSession->getQuote();
         $this->validateCustomerDataInQuote($this->quote);
     }
 
@@ -232,16 +230,15 @@ class SessionTest extends TestCase
             ->setValue($tierPriceValue);
         $product->setTierPrices([$tierPrice]);
         $this->productRepository->save($product);
-        $session = $this->checkoutSessionFactory->create();
         $quote = $this->getQuoteByReservedOrderId->execute($reservedOrderId);
-        $session->setQuoteId($quote->getId());
-        $quote = $session->getQuote();
+        $this->checkoutSession->setQuoteId($quote->getId());
+        $quote = $this->checkoutSession->getQuote();
         $item = $quote->getItems()[0];
         $quoteProduct = $item->getProduct();
         $this->assertEquals(10, $quoteProduct->getTierPrice($tierPriceQty));
         $customer = $this->customerRepository->getById(1);
         $this->customerSession->setCustomerDataAsLoggedIn($customer);
-        $quote = $session->getQuote();
+        $quote = $this->checkoutSession->getQuote();
         $item = $quote->getItems()[0];
         $quoteProduct = $item->getProduct();
         $this->assertEquals($tierPriceValue, $quoteProduct->getTierPrice(1));
@@ -257,10 +254,9 @@ class SessionTest extends TestCase
     {
         $guestQuote = $this->getQuoteByReservedOrderId->execute('test_order_with_simple_product_without_address');
         $customerQuote = $this->getQuoteByReservedOrderId->execute('test_order_with_customer_without_address');
-        $checkoutSession = $this->checkoutSessionFactory->create();
-        $checkoutSession->setQuoteId($guestQuote->getId());
+        $this->checkoutSession->setQuoteId($guestQuote->getId());
         $this->customerSession->setCustomerId(1);
-        $updatedQuote = $checkoutSession->loadCustomerQuote()->getQuote();
+        $updatedQuote = $this->checkoutSession->loadCustomerQuote()->getQuote();
         $this->assertNull($this->getQuoteByReservedOrderId->execute('test_order_with_simple_product_without_address'));
         $this->assertEquals($customerQuote->getId(), $updatedQuote->getId());
         $this->assertCount(2, $updatedQuote->getItems());

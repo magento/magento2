@@ -215,7 +215,7 @@ class QuoteManagementTest extends TestCase
         $customer = $this->customerRepository->get('customer_uk_address@test.com');
         $quote = $this->getQuoteByReservedOrderId->execute('test_order_with_customer_without_address');
         $this->expectExceptionObject(
-            new StateException(__("The customer can't be assigned to the cart because the cart isn't anonymous."))
+            new StateException(__('The customer can\'t be assigned to the cart because the cart isn\'t anonymous.'))
         );
         $this->cartManagement->assignCustomer($quote->getId(), $customer->getId(), $quote->getStoreId());
     }

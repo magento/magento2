@@ -16,12 +16,12 @@ use Magento\Customer\Model\GroupFactory;
 use Magento\Customer\Model\GroupManagement;
 use Magento\Customer\Model\ResourceModel\Customer as CustomerResourceModel;
 use Magento\Framework\Api\DataObjectHelper;
-use Magento\Framework\Api\ExtensibleDataInterface;
 use Magento\Framework\Api\ExtensibleDataObjectConverter;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Api\Data\AddressInterface;
 use Magento\Quote\Api\Data\AddressInterfaceFactory;
+use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Api\Data\CartItemInterface;
 use Magento\Quote\Api\Data\CartItemInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -77,6 +77,9 @@ class QuoteTest extends TestCase
     /** @var GroupFactory */
     private $groupFactory;
 
+    /** @var ExtensibleDataObjectConverter */
+    private $extensibleDataObjectConverter;
+
     /**
      * @inheritdoc
      */
@@ -97,6 +100,7 @@ class QuoteTest extends TestCase
         $this->itemFactory = $this->objectManager->get(CartItemInterfaceFactory::class);
         $this->customerResourceModel = $this->objectManager->get(CustomerResourceModel::class);
         $this->groupFactory = $this->objectManager->get(GroupFactory::class);
+        $this->extensibleDataObjectConverter = $this->objectManager->get(ExtensibleDataObjectConverter::class);
     }
 
     /**
@@ -172,10 +176,10 @@ class QuoteTest extends TestCase
         $expected = $this->getCustomerDataArray();
         $customer = $this->customerDataFactory->create();
         $this->dataObjectHelper->populateWithArray($customer, $expected, CustomerInterfaceFactory::class);
-        $this->assertEquals($expected, $this->convertToArray($customer));
+        $this->assertEquals($expected, $this->extensibleDataObjectConverter->toFlatArray($customer));
         $quote->setCustomer($customer);
         $customer = $quote->getCustomer();
-        $this->assertEquals($expected, $this->convertToArray($customer));
+        $this->assertEquals($expected, $this->extensibleDataObjectConverter->toFlatArray($customer));
         $this->assertEquals($expected[CustomerInterface::EMAIL], $quote->getCustomerEmail());
         $this->assertEquals($expected[CustomerInterface::FIRSTNAME], $quote->getCustomerFirstname());
         $this->assertEquals($expected[CustomerInterface::LASTNAME], $quote->getCustomerLastname());
@@ -194,7 +198,7 @@ class QuoteTest extends TestCase
         unset($expected[CustomerInterface::ID]);
         $customerDataSet = $this->customerDataFactory->create();
         $this->dataObjectHelper->populateWithArray($customerDataSet, $expected, CustomerInterface::class);
-        $this->assertEquals($expected, $this->convertToArray($customerDataSet));
+        $this->assertEquals($expected, $this->extensibleDataObjectConverter->toFlatArray($customerDataSet));
         $customer = $this->customerRepository->save($customerDataSet);
         $this->customerIdToDelete = $customer->getId();
         $quote->setCustomer($customerDataSet);
@@ -204,7 +208,7 @@ class QuoteTest extends TestCase
         $this->dataObjectHelper->populateWithArray($customerDataUpdated, $expected, CustomerInterface::class);
         $quote->updateCustomerData($customerDataUpdated);
         $customer = $quote->getCustomer();
-        $actual = $this->convertToArray($customer);
+        $actual = $this->extensibleDataObjectConverter->toFlatArray($customer);
         foreach ($expected as $item) {
             $this->assertContains($item, $actual);
         }
@@ -399,8 +403,7 @@ class QuoteTest extends TestCase
      */
     public function testAddedProductToQuoteIsSalable(): void
     {
-        $productId = 99;
-        $product = $this->productRepository->getById($productId, false, null, true);
+        $product = $this->productRepository->getById(99, false, null, true);
         $this->expectException(LocalizedException::class);
         $this->expectExceptionMessage((string)__('Product that you are trying to add is not available.'));
         $this->quoteFactory->create()->addProduct($product);
@@ -681,31 +684,21 @@ class QuoteTest extends TestCase
     }
 
     /**
-     * Convert entity to array.
-     *
-     * @param ExtensibleDataInterface $entity
-     * @return array
-     */
-    private function convertToArray(ExtensibleDataInterface $entity): array
-    {
-        return $this->objectManager->get(ExtensibleDataObjectConverter::class)->toFlatArray($entity);
-    }
-
-    /**
      * Prepare quote for testing assignCustomerWithAddressChange method.
      * Customer with two addresses created. First address is default billing, second is default shipping.
      *
-     * @param Quote $quote
+     * @param CartInterface $quote
      * @return CustomerInterface
      */
-    private function prepareQuoteForTestAssignCustomerWithAddressChange(Quote $quote): CustomerInterface
+    private function prepareQuoteForTestAssignCustomerWithAddressChange(CartInterface $quote): CustomerInterface
     {
         $fixtureCustomerId = 1;
         $fixtureSecondAddressId = 2;
         $customer = $this->customerFactory->create();
-        $customer->load($fixtureCustomerId)->setDefaultShipping($fixtureSecondAddressId);
+        $this->customerResourceModel->load($customer, $fixtureCustomerId);
+        $customer->setDefaultShipping($fixtureSecondAddressId);
         $this->customerResourceModel->save($customer);
-        $customerData = $this->customerRepository->getById($fixtureCustomerId);
+        $customerData = $customer->getDataModel();
         $this->assertEmpty(
             $quote->getBillingAddress()->getId(),
             "Precondition failed: billing address should be empty."

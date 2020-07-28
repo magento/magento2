@@ -109,7 +109,7 @@ class QuoteRepositoryTest extends TestCase
      */
     protected function tearDown()
     {
-        if ($this->quote) {
+        if ($this->quote instanceof CartInterface) {
             $this->quoteRepository->delete($this->quote);
         }
 
@@ -260,10 +260,10 @@ class QuoteRepositoryTest extends TestCase
     /**
      * Perform assertions
      *
-     * @param SearchResults|CartSearchResultsInterface $searchResult
+     * @param CartSearchResultsInterface $searchResult
      * @return void
      */
-    private function performAssertions($searchResult): void
+    private function performAssertions(CartSearchResultsInterface $searchResult): void
     {
         $expectedExtensionAttributes = [
             'firstname' => 'firstname',

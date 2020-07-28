@@ -54,7 +54,6 @@ class AddTest extends AbstractController
         $this->productRepository->cleanCache();
         $this->executeInStoreContext = $this->_objectManager->get(ExecuteInStoreContext::class);
         $this->escaper = $this->_objectManager->get(Escaper::class);
-        $this->prepareReferer();
     }
 
     /**
@@ -67,6 +66,7 @@ class AddTest extends AbstractController
      */
     public function testMessageAtAddToCartWithRedirect(): void
     {
+        $this->prepareReferer();
         $checkoutSession = $this->checkoutSessionFactory->create();
         $postData = [
             'qty' => '1',
@@ -96,6 +96,7 @@ class AddTest extends AbstractController
      */
     public function testMessageAtAddToCartWithoutRedirect(): void
     {
+        $this->prepareReferer();
         $checkoutSession = $this->checkoutSessionFactory->create();
         $postData = [
             'qty' => '1',
@@ -106,11 +107,13 @@ class AddTest extends AbstractController
         $this->dispatchAddToCartRequest($postData);
         $this->assertFalse($this->getResponse()->isRedirect());
         $this->assertEquals('[]', $this->getResponse()->getBody());
+        $message = (string)__(
+            'You added %1 to your <a href="%2">shopping cart</a>.',
+            'Simple Product',
+            'http://localhost/checkout/cart/'
+        );
         $this->assertSessionMessages(
-            $this->contains(
-                (string)__("\n" . 'You added %1 to your ' .
-                    '<a href="http://localhost/checkout/cart/">shopping cart</a>.', 'Simple Product')
-            ),
+            $this->contains("\n" . $message),
             MessageInterface::TYPE_SUCCESS
         );
         $this->assertCount(1, $checkoutSession->getQuote()->getItemsCollection());
@@ -124,6 +127,7 @@ class AddTest extends AbstractController
      */
     public function testWithWrongParams(array $params): void
     {
+        $this->prepareReferer();
         $this->dispatchAddToCartRequest($params);
         $this->assertRedirect($this->stringContains('http://localhost/test'));
     }
@@ -147,6 +151,7 @@ class AddTest extends AbstractController
      */
     public function testAddProductFromUnavailableWebsite(): void
     {
+        $this->prepareReferer();
         $product = $this->productRepository->get('simple-1');
         $postData = ['product' => $product->getId()];
         $this->executeInStoreContext->execute('fixture_second_store', [$this, 'dispatchAddToCartRequest'], $postData);
@@ -173,118 +178,13 @@ class AddTest extends AbstractController
     }
 
     /**
-     * @magentoConfigFixture current_store cataloginventory/item_options/max_sale_qty 20
-     * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
-     *
-     * @return void
-     */
-    public function testAddProductWithSetConfigMaxSaleQty(): void
-    {
-        $product = $this->productRepository->get('simple-1');
-        $postData = ['product' => $product->getId(), 'qty' => 21];
-        $this->dispatchAddToCartRequest($postData);
-        $this->assertRedirect($this->stringContains($product->getProductUrl()));
-        $expectedMessages = [
-            (string)__('The most you may purchase is %1.', 20),
-            (string)__('The requested qty exceeds the maximum qty allowed in shopping cart'),
-        ];
-        $this->assertErrorMessage($expectedMessages);
-    }
-
-    /**
-     * @magentoConfigFixture current_store cataloginventory/item_options/min_sale_qty 5
-     * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
-     *
-     * @return void
-     */
-    public function testAddProductWithSetConfigMinSaleQty(): void
-    {
-        $product = $this->productRepository->get('simple-1');
-        $postData = ['product' => $product->getId(), 'qty' => 2];
-        $this->dispatchAddToCartRequest($postData);
-        $this->assertRedirect($this->stringContains($product->getProductUrl()));
-        $expectedMessages = [
-            (string)__('The fewest you may purchase is %1.', 5),
-            (string)__('The fewest you may purchase is %1', 5),
-        ];
-        $this->assertErrorMessage($expectedMessages);
-    }
-
-    /**
-     * @magentoConfigFixture current_store cataloginventory/item_options/enable_qty_increments 1
-     * @magentoConfigFixture current_store cataloginventory/item_options/qty_increments 3
-     * @magentoDataFixture Magento/Catalog/_files/product_simple_duplicated.php
-     *
-     * @return void
-     */
-    public function testAddProductWithSetConfigQtyIncrements(): void
-    {
-        $product = $this->productRepository->get('simple-1');
-        $postData = ['product' => $product->getId(), 'qty' => 2];
-        $this->dispatchAddToCartRequest($postData);
-        $this->assertRedirect($this->stringContains($product->getProductUrl()));
-        $message = (string)__('You can buy this product only in quantities of %1 at a time.', 3);
-        $this->assertSessionMessages($this->contains($message), MessageInterface::TYPE_ERROR);
-    }
-
-    /**
-     * @magentoDataFixture Magento/Catalog/_files/simple_product_min_max_sale_qty.php
-     *
-     * @return void
-     */
-    public function testAddProductWithMinSaleQty(): void
-    {
-        $product = $this->productRepository->get('simple_product_min_max_sale_qty');
-        $postData = ['product' => $product->getId(), 'qty' => 2];
-        $this->dispatchAddToCartRequest($postData);
-        $this->assertRedirect($this->stringContains($product->getProductUrl()));
-        $expectedMessages = [
-            (string)__('The fewest you may purchase is %1.', 5),
-            (string)__('The fewest you may purchase is %1', 5),
-            ];
-        $this->assertErrorMessage($expectedMessages);
-    }
-
-    /**
-     * @magentoDataFixture Magento/Catalog/_files/simple_product_min_max_sale_qty.php
-     *
-     * @return void
-     */
-    public function testAddProductWithMaxSaleQty(): void
-    {
-        $product = $this->productRepository->get('simple_product_min_max_sale_qty');
-        $postData = ['product' => $product->getId(), 'qty' => 25];
-        $this->dispatchAddToCartRequest($postData);
-        $this->assertRedirect($this->stringContains($product->getProductUrl()));
-        $expectedMessages = [
-            (string)__('The most you may purchase is %1.', 20),
-            (string)__('The requested qty exceeds the maximum qty allowed in shopping cart'),
-        ];
-        $this->assertErrorMessage($expectedMessages);
-    }
-
-    /**
-     * @magentoDataFixture Magento/Catalog/_files/simple_product_with_qty_increments.php
-     *
-     * @return void
-     */
-    public function testAddProductWithQtyIncrements(): void
-    {
-        $product = $this->productRepository->get('simple_product_with_qty_increments');
-        $postData = ['product' => $product->getId(), 'qty' => 2];
-        $this->dispatchAddToCartRequest($postData);
-        $this->assertRedirect($this->stringContains($product->getProductUrl()));
-        $message = (string)__('You can buy this product only in quantities of 3 at a time.');
-        $this->assertSessionMessages($this->contains($message), MessageInterface::TYPE_ERROR);
-    }
-
-    /**
      * @magentoDataFixture Magento/Catalog/_files/products_related_multiple.php
      *
      * @return void
      */
     public function testAddProductWithRelated(): void
     {
+        $this->prepareReferer();
         $checkoutSession = $this->checkoutSessionFactory->create();
         $product = $this->productRepository->get('simple_with_cross');
         $params = [
@@ -293,23 +193,15 @@ class AddTest extends AbstractController
         ];
         $this->dispatchAddToCartRequest($params);
         $this->assertCount(3, $checkoutSession->getQuote()->getItemsCollection());
-        $message = "\n" . 'You added %1 to your <a href="http://localhost/checkout/cart/">shopping cart</a>.';
+        $message = (string)__(
+            'You added %1 to your <a href="%2">shopping cart</a>.',
+            $product->getName(),
+            'http://localhost/checkout/cart/'
+        );
         $this->assertSessionMessages(
-            $this->contains((string)__($message, $product->getName())),
+            $this->contains("\n" . $message),
             MessageInterface::TYPE_SUCCESS
         );
-    }
-
-    /**
-     * Assert error message.
-     *
-     * @param array $expectedMessages
-     * @return void
-     */
-    public function assertErrorMessage(array $expectedMessages): void
-    {
-        $actualMessage = current($this->getMessages(MessageInterface::TYPE_ERROR));
-        $this->assertRegExp('/' . implode('|', $expectedMessages) . '/', $actualMessage);
     }
 
     /**

@@ -74,7 +74,7 @@ class CartTest extends TestCase
      */
     protected function tearDown()
     {
-        if ($this->quote) {
+        if ($this->quote instanceof CartInterface) {
             $this->quoteRepository->delete($this->quote);
         }
 
@@ -118,7 +118,7 @@ class CartTest extends TestCase
     {
         $product = $this->productFactory->create();
         $this->expectExceptionObject(
-            new LocalizedException(__("The product wasn't found. Verify the product and try again."))
+            new LocalizedException(__('The product wasn\'t found. Verify the product and try again.'))
         );
         $this->cartFactory->create()->addProduct($product);
     }
@@ -129,7 +129,7 @@ class CartTest extends TestCase
     public function testAddNotExistingProductId(): void
     {
         $this->expectExceptionObject(
-            new LocalizedException(__("The product wasn't found. Verify the product and try again."))
+            new LocalizedException(__('The product wasn\'t found. Verify the product and try again.'))
         );
         $this->cartFactory->create()->addProduct(989);
     }
@@ -144,10 +144,10 @@ class CartTest extends TestCase
     {
         $product = $this->productRepository->get('simple');
         $this->expectExceptionObject(
-            new LocalizedException(__("The product wasn't found. Verify the product and try again."))
+            new LocalizedException(__('The product wasn\'t found. Verify the product and try again.'))
         );
         $this->executeInStoreContext
-            ->execute('fixture_second_store', [$this->cartFactory->create(), 'addProduct'], $product->getId(), []);
+            ->execute('fixture_second_store', [$this->cartFactory->create(), 'addProduct'], $product->getId());
     }
 
     /**
