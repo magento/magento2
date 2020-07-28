@@ -285,6 +285,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             foreach ($value as &$attribute) {
                 $attribute = is_array($attribute) ? $attribute : $attribute->__toArray();
                 $attribute = $this->processCustomAttribute($attribute);
+                $attribute = $attribute['value'] ?? null;
             }
         }
 
