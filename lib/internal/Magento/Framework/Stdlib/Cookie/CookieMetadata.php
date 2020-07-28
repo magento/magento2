@@ -41,6 +41,9 @@ class CookieMetadata
             $metadata = [];
         }
         $this->metadata = $metadata;
+        if (isset($metadata[self::KEY_SAME_SITE])) {
+            $this->setSameSite($metadata[self::KEY_SAME_SITE]);
+        }
     }
 
     /**
@@ -155,6 +158,11 @@ class CookieMetadata
         if (!array_key_exists(strtolower($sameSite), self::SAME_SITE_ALLOWED_VALUES)) {
             throw new \InvalidArgumentException(
                 'Invalid argument provided for SameSite directive expected one of: Strict, Lax or None'
+            );
+        }
+        if (!$this->getSecure() && strtolower($sameSite) === 'none') {
+            throw new \InvalidArgumentException(
+                'Cookie must be secure in order to use the Same Site None directive.'
             );
         }
         $sameSite = self::SAME_SITE_ALLOWED_VALUES[strtolower($sameSite)];

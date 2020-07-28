@@ -243,7 +243,8 @@ class SensitiveCookieMetadataTest extends TestCase
     {
         return [
             "getDomain" => ["setDomain", 'getDomain', "example.com"],
-            "getPath" => ["setPath", 'getPath', "path"]
+            "getPath" => ["setPath", 'getPath', "path"],
+            "getSameSite" => ["setSameSite", 'getSameSite', 'Strict']
         ];
     }
 }
