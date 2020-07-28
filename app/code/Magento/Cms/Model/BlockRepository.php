@@ -219,7 +219,7 @@ class BlockRepository implements BlockRepositoryInterface
     {
         if (!$this->collectionProcessor) {
             $this->collectionProcessor = \Magento\Framework\App\ObjectManager::getInstance()->get(
-                \Magento\Cms\Model\Api\SearchCriteria\BlockCollectionProcessor::class
+                'Magento\Cms\Model\Api\SearchCriteria\BlockCollectionProcessor'
             );
         }
         return $this->collectionProcessor;

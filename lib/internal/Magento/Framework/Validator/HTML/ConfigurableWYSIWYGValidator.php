@@ -122,6 +122,7 @@ class ConfigurableWYSIWYGValidator implements WYSIWYGValidatorInterface
                 if (!empty($this->attributesAllowedByTags[$tag])) {
                     $allowed[] = $this->attributesAllowedByTags[$tag];
                 }
+                // phpcs:ignore Magento2.Performance.ForeachArrayMerge
                 $allowed = array_unique(array_merge(...$allowed));
                 $allowedQuery = '';
                 if ($allowed) {
