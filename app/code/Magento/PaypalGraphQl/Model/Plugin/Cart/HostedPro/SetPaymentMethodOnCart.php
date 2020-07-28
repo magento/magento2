@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\PaypalGraphQl\Model\Plugin\Cart\HostedPro;
 
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Paypal\Model\Config;
 use Magento\Quote\Model\Quote;
 use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderPool;
@@ -48,7 +47,6 @@ class SetPaymentMethodOnCart
      * @param mixed $result
      * @param Quote $cart
      * @param array $paymentData
-     * @param ContextInterface $context
      * @return void
      * @throws GraphQlInputException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -57,8 +55,7 @@ class SetPaymentMethodOnCart
         \Magento\QuoteGraphQl\Model\Cart\SetPaymentMethodOnCart $subject,
         $result,
         Quote $cart,
-        array $paymentData,
-        ContextInterface $context
+        array $paymentData
     ): void {
         $paymentData = $this->additionalDataProviderPool->getData(Config::METHOD_HOSTEDPRO, $paymentData);
 
