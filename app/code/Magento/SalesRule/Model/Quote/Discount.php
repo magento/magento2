@@ -149,19 +149,16 @@ class Discount extends \Magento\Quote\Model\Quote\Address\Total\AbstractTotal
             if ($item->getProductType() === TypeBundle::TYPE_CODE
                 && (int) $item->getProduct()->getPriceType() === Price::PRICE_TYPE_DYNAMIC
             ) {
-                // #1 Price type = Dynamic | Calculate for [X] Children , [ ] Parent
-                continue;
+                continue; // #1 Price type = Dynamic | Calculate for [X] Children , [ ] Parent
             }
             if ($item->getParentItem()
                 && $item->getParentItem()->getProductType() === TypeBundle::TYPE_CODE
                 && (int) $item->getParentItem()->getProduct()->getPriceType() === Price::PRICE_TYPE_FIXED
             ) {
-                // #2 Price type = Fixed   | Calculate for [ ] Children , [X] Parent
-                continue;
+                continue; // #2 Price type = Fixed   | Calculate for [ ] Children , [X] Parent
             }
             if ($item->getParentItem() && $item->getParentItem()->getProductType() === Configurable::TYPE_CODE) {
-                // For the Configurable product - we should calculate discount for the parent.
-                continue;
+                continue; // For the Configurable product - we should calculate discount for the parent.
             }
 
             $eventArgs['item'] = $item;
