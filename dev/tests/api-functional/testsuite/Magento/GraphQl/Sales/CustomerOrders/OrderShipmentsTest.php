@@ -129,9 +129,13 @@ class OrderShipmentsTest extends GraphQlAbstract
         $this->assertArrayNotHasKey('errors', $result);
         $this->assertEquals('UPS Next Day Air', $result['customer']['orders']['items'][0]['shipping_method']);
         $this->assertEquals('United Parcel Service', $result['customer']['orders']['items'][0]['carrier']);
-
         $shipments = $result['customer']['orders']['items'][0]['shipments'];
-        $this->assertCount(2, $shipments);
+        $expectedTracking = [
+            'title' => 'United Parcel Service',
+            'carrier' => 'ups',
+            'number' => '987654321'
+        ];
+        $this->assertEquals($expectedTracking, $shipments[0]['tracking'][0]);
     }
 
     /**
