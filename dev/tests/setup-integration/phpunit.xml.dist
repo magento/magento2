@@ -16,7 +16,7 @@
     <!-- Test suites definition -->
     <testsuites>
         <testsuite name="Magento Setup/Upgrade Tests">
-            <directory suffix="Test.php">testsuite</directory>
+            <directory>testsuite</directory>
         </testsuite>
     </testsuites>
     <!-- Code coverage filters -->
