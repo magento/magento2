@@ -106,11 +106,8 @@ class Discount extends AbstractTotal
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
-    public function collect(
-        Quote $quote,
-        ShippingAssignmentInterface $shippingAssignment,
-        Total $total
-    ) {
+    public function collect(Quote $quote, ShippingAssignmentInterface $shippingAssignment, Total $total)
+    {
         parent::collect($quote, $shippingAssignment, $total);
 
         $store = $this->storeManager->getStore($quote->getStoreId());
