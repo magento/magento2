@@ -7,6 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Model\Address;
 
+use Magento\Customer\Api\AddressMetadataInterface;
+use Magento\Customer\Api\Data\AddressInterfaceFactory;
+use Magento\Customer\Api\Data\RegionInterfaceFactory;
 use Magento\Customer\Model\Address\AbstractAddress;
 use Magento\Customer\Model\Address\CompositeValidator;
 use Magento\Customer\Model\ResourceModel\Customer;
@@ -17,6 +20,7 @@ use Magento\Directory\Model\Region;
 use Magento\Directory\Model\RegionFactory;
 use Magento\Directory\Model\ResourceModel\Region\Collection;
 use Magento\Eav\Model\Config;
+use Magento\Framework\Api\DataObjectHelper;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DataObject;
 use Magento\Framework\Model\Context;
@@ -407,6 +411,76 @@ class AbstractAddressTest extends TestCase
             ['single line', ['single line']],
             ['single line', 'single line'],
         ];
+    }
+
+    /**
+     * Test set custom attributes
+     * @return void
+     */
+    public function testSetCustomerAttributes()
+    {
+        $customAttributeForFactory = $this->objectManager->getObject(
+            \Magento\Framework\Api\AttributeValue::class
+        );
+        $customAttributeFactory = $this->createMock(
+            \Magento\Framework\Api\AttributeValueFactory::class
+        );
+        $customAttributeFactory
+            ->expects($this->any())
+            ->method('create')
+            ->willReturn($customAttributeForFactory);
+
+        $extensionFactory = $this->createMock(\Magento\Framework\Api\ExtensionAttributesFactory::class);
+
+        /** @var AbstractAddress $model */
+        $model = $this->getMockBuilder(AbstractAddress::class)
+            ->setConstructorArgs([
+                'context' => $this->contextMock,
+                'registry' => $this->registryMock,
+                'extensionFactory' => $extensionFactory,
+                'customAttributeFactory' => $customAttributeFactory,
+                'directoryData' => $this->directoryDataMock,
+                'eavConfig' => $this->eavConfigMock,
+                'addressConfig' => $this->addressConfigMock,
+                'regionFactory' => $this->regionFactoryMock,
+                'countryFactory' => $this->countryFactoryMock,
+                'metadataService' => $this->createMock(AddressMetadataInterface::class),
+                'addressDataFactory' => $this->createMock(AddressInterfaceFactory::class),
+                'regionDataFactory' => $this->createMock(RegionInterfaceFactory::class),
+                'dataObjectHelper' => $this->createMock(DataObjectHelper::class),
+                'resource' => $this->resourceMock,
+                'resourceCollection' => $this->resourceCollectionMock,
+                'data' => [],
+                'compositeValidator' => $this->compositeValidatorMock,
+            ])
+            ->disableOriginalClone()
+            ->disableArgumentCloning()
+            ->disallowMockingUnknownTypes()
+            ->onlyMethods(['getCustomAttributesCodes'])
+            ->getMock();
+
+        $model->expects($this->any())->method('getCustomAttributesCodes')->willReturn([
+            'test_custom_attribute'
+        ]);
+
+        $customAttribute = $this->objectManager->getObject(\Magento\Framework\Api\AttributeValue::class, [
+            'data' => [
+                'attribute_code' => 'test_custom_attribute',
+                'value' => 'custom_value'
+            ]
+        ]);
+
+        $model->setData(
+            AbstractAddress::CUSTOM_ATTRIBUTES,
+            [
+                'test_custom_attribute' => $customAttribute
+            ]
+        );
+
+        $customAttributes = $model->getCustomAttributes();
+
+        $this->assertEquals('custom_value', $customAttributes[0]->getValue());
+        $this->assertEquals('test_custom_attribute', $customAttributes[0]->getAttributeCode());
     }
 
     protected function tearDown(): void

@@ -690,6 +690,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
         ) {
             $attribute['value'] = $this->_implodeArrayValues($attribute['value']);
         }
+        $attribute = $attribute['value'] ?? null;
 
         return $attribute;
     }
