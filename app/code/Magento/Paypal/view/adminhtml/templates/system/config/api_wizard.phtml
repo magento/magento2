@@ -7,11 +7,12 @@
 /**
  * @see \Magento\Paypal\Block\Adminhtml\System\Config\ApiWizard
  * @var \Magento\Paypal\Block\Adminhtml\System\Config\ApiWizard $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
 <div class="pp-buttons-container">
-    <div dir="ltr" style="text-align: left;" trbidi="on">
-        <script>
+    <div id="paypal_api_config" dir="ltr" trbidi="on">
+        <?php $scriptString = <<<script
             (function(d, s, id){
                 var js, ref = d.getElementsByTagName(s)[0];
                 if (!d.getElementById(id)){
@@ -19,7 +20,9 @@
                     js.src = "https://www.paypal.com/webapps/merchantboarding/js/lib/lightbox/partner.js";
                     ref.parentNode.insertBefore(js, ref); }
             }(document, "script", "paypal-js"));
-        </script>
+script;
+        ?>
+        <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 
         <a class="action-default"
            data-paypal-button="true"
@@ -32,3 +35,4 @@
            target="PPFrame"><?= $block->escapeHtml($block->getSandboxButtonLabel()) ?></a>
     </div>
 </div>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag("text-align: left;", 'div#paypal_api_config') ?>

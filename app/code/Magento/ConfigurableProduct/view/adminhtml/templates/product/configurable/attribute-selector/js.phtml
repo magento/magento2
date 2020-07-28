@@ -3,12 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
+
 /** @var $block \Magento\ConfigurableProduct\Block\Product\Configurable\AttributeSelector */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<script>
+
+<?php
+/** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper');
+$suggestWidgetOptions = /* @noEscape */ $jsonHelper->jsonEncode($block->getSuggestWidgetOptions());
+$scriptString = <<<script
 require(["jquery","mage/mage","mage/backend/suggest"], function($){
-    var options = <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getSuggestWidgetOptions()) ?>;
+    var options = {$suggestWidgetOptions};
     $('#configurable-attribute-selector')
         .mage('suggest', options)
         .on('suggestselect', function (event, ui) {
@@ -29,4 +35,6 @@ require(["jquery","mage/mage","mage/backend/suggest"], function($){
             return false;
         })
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

@@ -11,7 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * @SuppressWarnings(PHPMD.UnusedPrivateField)
  *
- * @deprecated Not used anymore.
+ * @deprecated 102.0.0 Not used anymore.
  */
 class Node
 {
@@ -53,14 +53,14 @@ class Node
     /**
      * @var bool
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public $hasChild = false;
 
     /**
      * @var float|int
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public $numChild = 0;
 
@@ -69,7 +69,7 @@ class Node
      * @param array $keys
      * @throws LocalizedException
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function __construct($nodeData, $keys)
     {
@@ -103,7 +103,7 @@ class Node
      * @param string $name
      * @return null|array
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function getData($name)
     {
@@ -117,7 +117,7 @@ class Node
     /**
      * @return int
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function getLevel()
     {
@@ -127,7 +127,7 @@ class Node
     /**
      * @return int
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function getLeft()
     {
@@ -137,7 +137,7 @@ class Node
     /**
      * @return int
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function getRight()
     {
@@ -147,7 +147,7 @@ class Node
     /**
      * @return string|int
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function getPid()
     {
@@ -157,7 +157,7 @@ class Node
     /**
      * @return string|int
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function getId()
     {
@@ -169,7 +169,7 @@ class Node
      *
      * @return bool
      *
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function isParent()
     {
