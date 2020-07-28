@@ -125,7 +125,11 @@ class Reader
     {
         $result = [];
         foreach ($this->modulesList->getNames() as $moduleName) {
-            $moduleSubDir = $this->getModuleDir($subDir, $moduleName);
+            try {
+                $moduleSubDir = $this->getModuleDir($subDir, $moduleName);
+            } catch (\InvalidArgumentException $e) {
+                continue;
+            }
             $file = $moduleSubDir . '/' . $filename;
             $directoryRead = $this->readFactory->create($moduleSubDir);
             $path = $directoryRead->getRelativePath($file);
