@@ -380,7 +380,7 @@ class Elasticsearch
                 $indexName,
                 $this->clientConfig->getEntityType()
             );
-            $this->setMappedAttributes($attrToUpdate);
+            $this->setMappedAttributes($indexName, $attrToUpdate);
         }
 
         return $this;
@@ -395,7 +395,7 @@ class Elasticsearch
      */
     private function getIndexFromAlias(int $storeId, string $mappedIndexerId): string
     {
-        $indexCode = $mappedIndexerId . $storeId;
+        $indexCode = $mappedIndexerId . '_' . $storeId;
         if (!isset($this->indexByCode[$indexCode])) {
             $this->indexByCode[$indexCode] = $this->indexNameResolver->getIndexFromAlias($storeId, $mappedIndexerId);
         }
@@ -411,25 +411,26 @@ class Elasticsearch
      */
     private function getMappedAttributes(string $indexName): array
     {
-        if (empty($this->mappedAttributes)) {
+        if (empty($this->mappedAttributes[$indexName])) {
             $mappedAttributes = $this->client->getMapping(['index' => $indexName]);
             $pathField = $this->arrayManager->findPath('properties', $mappedAttributes);
-            $this->mappedAttributes = $this->arrayManager->get($pathField, $mappedAttributes, []);
+            $this->mappedAttributes[$indexName] = $this->arrayManager->get($pathField, $mappedAttributes, []);
         }
 
-        return $this->mappedAttributes;
+        return $this->mappedAttributes[$indexName];
     }
 
     /**
      * Set mapped attributes to cache.
      *
+     * @param string $indexName
      * @param array $mappedAttributes
      * @return $this
      */
-    private function setMappedAttributes(array $mappedAttributes): self
+    private function setMappedAttributes(string $indexName, array $mappedAttributes): self
     {
         foreach ($mappedAttributes as $attributeCode => $attributeParams) {
-            $this->mappedAttributes[$attributeCode] = $attributeParams;
+            $this->mappedAttributes[$indexName][$attributeCode] = $attributeParams;
         }
 
         return $this;
