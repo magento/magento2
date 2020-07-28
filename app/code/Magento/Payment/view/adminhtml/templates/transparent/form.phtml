@@ -5,6 +5,8 @@
  */
 
 /** @var \Magento\Payment\Block\Transparent\Form $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+
 $code = $block->escapeHtml($block->getMethodCode());
 $ccType = $block->getInfoData('cc_type');
 $ccExpYear = $block->getInfoData('cc_exp_year');
@@ -17,8 +19,11 @@ $ccExpMonth = $block->getInfoData('cc_exp_month');
         allowtransparency="true"
         frameborder="0"
         name="iframeTransparent"
-        style="display: none; width: 100%; background-color: transparent;"
         src="<?= $block->escapeUrl($block->getViewFileUrl('blank.html')) ?>"></iframe>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+    "display: none; width: 100%; background-color: transparent;",
+    'iframe#' . /* @noEscape */ $code . '-transparent-iframe'
+) ?>
 <fieldset
     id="payment_form_<?= /* @noEscape */ $code ?>"
     class="admin__fieldset"
@@ -31,9 +36,10 @@ $ccExpMonth = $block->getInfoData('cc_exp_month');
         "orderSaveUrl":"<?= $block->escapeUrl($block->getOrderUrl()) ?>",
         "cgiUrl":"<?= $block->escapeUrl($block->getCgiUrl()) ?>",
         "expireYearLength":"<?= $block->escapeHtml($block->getMethodConfigData('cc_year_length')) ?>",
-        "nativeAction":"<?= $block->escapeUrl($block->getUrl('*/*/save', ['_secure' => $block->getRequest()->isSecure()])) ?>"
-      }, "validation":[]}'
-    style="display: none;">
+        "nativeAction":"<?= $block->escapeUrl(
+            $block->getUrl('*/*/save', ['_secure' => $block->getRequest()->isSecure()])
+        ) ?>"
+      }, "validation":[]}'>
     <div class="admin__field _required">
         <label for="<?= /* @noEscape */ $code ?>_cc_type" class="admin__field-label">
             <span><?= $block->escapeHtml(__('Credit Card Type')) ?></span>
@@ -46,9 +52,10 @@ $ccExpMonth = $block->getInfoData('cc_exp_month');
                     data-validate='{required:true, "validate-cc-type-select":"#<?= /* @noEscape */ $code ?>_cc_number"}'
                     class="admin__control-select">
                 <option value=""><?= $block->escapeHtml(__('Please Select')) ?></option>
-                <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName) : ?>
+                <?php foreach ($block->getCcAvailableTypes() as $typeCode => $typeName): ?>
                     <option
-                        value="<?= $block->escapeHtml($typeCode) ?>"<?php if ($typeCode == $ccType) : ?> selected="selected"<?php endif ?>>
+                        value="<?= $block->escapeHtml($typeCode) ?>"
+                        <?php if ($typeCode == $ccType): ?> selected="selected"<?php endif ?>>
                         <?= $block->escapeHtml($typeName) ?>
                     </option>
                 <?php endforeach ?>
@@ -86,10 +93,10 @@ $ccExpMonth = $block->getInfoData('cc_exp_month');
                     data-container="<?= /* @noEscape */ $code ?>-cc-month"
                     class="admin__control-select admin__control-select-month"
                     data-validate='{required:true, "validate-cc-exp":"#<?= /* @noEscape */ $code ?>_expiration_yr"}'>
-                <?php foreach ($block->getCcMonths() as $k => $v) : ?>
+                <?php foreach ($block->getCcMonths() as $k => $v): ?>
                     <option
                         value="<?= /* @noEscape */ $k ? $block->escapeHtml($k) : '' ?>"
-                        <?php if ($k == $ccExpMonth) : ?> selected="selected"<?php endif; ?>>
+                        <?php if ($k == $ccExpMonth): ?> selected="selected"<?php endif; ?>>
                         <?= $block->escapeHtml($v) ?>
                     </option>
                 <?php endforeach ?>
@@ -98,17 +105,17 @@ $ccExpMonth = $block->getInfoData('cc_exp_month');
             <select id="<?= /* @noEscape */ $code ?>_expiration_yr" name="payment[cc_exp_year]"
                     class="admin__control-select admin__control-select-year"
                     data-container="<?= /* @noEscape */ $code ?>-cc-year" data-validate='{required:true}'>
-                <?php foreach ($block->getCcYears() as $k => $v) : ?>
+                <?php foreach ($block->getCcYears() as $k => $v): ?>
                     <option
                         value="<?= /* @noEscape */ $k ? $block->escapeHtml($k) : '' ?>"
-                        <?php if ($k == $ccExpYear) : ?> selected="selected"<?php endif ?>>
+                        <?php if ($k == $ccExpYear): ?> selected="selected"<?php endif ?>>
                         <?= $block->escapeHtml($v) ?>
                     </option>
                 <?php endforeach ?>
             </select>
         </div>
     </div>
-    <?php if ($block->hasVerification()) : ?>
+    <?php if ($block->hasVerification()): ?>
         <div class="admin__field _required field-cvv" id="<?= /* @noEscape */ $code ?>_cc_type_cvv_div">
             <label for="<?= /* @noEscape */ $code ?>_cc_cid" class="admin__field-label">
                 <span><?= $block->escapeHtml(__('Card Verification Number')) ?></span>
@@ -120,19 +127,24 @@ $ccExpMonth = $block->getInfoData('cc_exp_month');
                        class="admin__control-text cvv"
                        id="<?= /* @noEscape */ $code ?>_cc_cid" name="payment[cc_cid]"
                        value=""
-                       data-validate='{"required-number":true, "validate-cc-cvn":"#<?= /* @noEscape */ $code ?>_cc_type"}'
+                       data-validate='{"required-number":true, "validate-cc-cvn":"#<?=/* @noEscape */ $code?>_cc_type"}'
                        autocomplete="off"/>
             </div>
         </div>
     <?php endif; ?>
     <?= $block->getChildHtml() ?>
 </fieldset>
-
-<script>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+    "display:none",
+    'fieldset#payment_form_' . /* @noEscape */ $code
+) ?>
+<?php $scriptString = <<<script
     /**
      * Disable card server validation in admin
      */
     require(["Magento_Sales/order/create/form"], function () {
-        order.addExcludedPaymentMethod('<?= /* @noEscape */ $code ?>');
+        order.addExcludedPaymentMethod('{$code}');
     });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

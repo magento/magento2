@@ -7,21 +7,24 @@
 /**
  * @deprecated
  * @var $block \Magento\Backend\Block\Page\System\Config\Robots\Reset
- * @var $jsonHelper \Magento\Framework\Json\Helper\Data
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
-$jsonHelper = $this->helper(\Magento\Framework\Json\Helper\Data::class);
-?>
 
-<script>
+/** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper');
+?>
+<?php
+$robotsDefault = /* @noEscape */ $jsonHelper->jsonEncode($block->getRobotsDefaultCustomInstructions());
+$scriptString = <<<script
     require([
         'jquery'
     ], function ($) {
         window.resetRobotsToDefault = function(){
-            $('#design_search_engine_robots_custom_instructions').val(<?=
-                /* @noEscape */ $jsonHelper->jsonEncode($block->getRobotsDefaultCustomInstructions())
-            ?>);
+            $('#design_search_engine_robots_custom_instructions').val({$robotsDefault});
         }
     });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 
 <?= $block->getButtonHtml() ?>

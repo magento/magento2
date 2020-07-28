@@ -5,7 +5,7 @@
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
         "magento/module-elasticsearch": "*",
-        "elasticsearch/elasticsearch": "~7.6",
+        "elasticsearch/elasticsearch": "~7.7.0",
         "magento/module-advanced-search": "*",
         "magento/module-catalog-search": "*"
     },
