@@ -12,7 +12,7 @@
                 <arguments>
                     <argument name="path" xsi:type="string">newsletter/manage</argument>
                     <argument name="label" xsi:type="string" translate="true">Newsletter Subscriptions</argument>
-                    <argument name="sortOrder" xsi:type="number">40</argument>
+                    <argument name="sortOrder" xsi:type="number">110</argument>
                 </arguments>
             </block>
         </referenceBlock>
