@@ -9,11 +9,6 @@ namespace Magento\Framework\Setup;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Formatter\OutputFormatterStyle;
 
-/**
- * Console Logger
- *
- * @package Magento\Setup\Model
- */
 class ConsoleLogger implements LoggerInterface
 {
     /**
@@ -44,7 +39,7 @@ class ConsoleLogger implements LoggerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function logSuccess($message)
     {
@@ -53,7 +48,7 @@ class ConsoleLogger implements LoggerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function logError(\Exception $e)
     {
@@ -62,7 +57,7 @@ class ConsoleLogger implements LoggerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function log($message)
     {
@@ -71,7 +66,7 @@ class ConsoleLogger implements LoggerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function logInline($message)
     {
@@ -80,7 +75,7 @@ class ConsoleLogger implements LoggerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function logMeta($message)
     {
@@ -89,7 +84,7 @@ class ConsoleLogger implements LoggerInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function logMetaInline($message)
     {
