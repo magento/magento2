@@ -52,7 +52,7 @@ class ProductAttributeTypeTest extends GraphQlAbstract
       attribute_type
       entity_type
       input_type
-    } 
+    }
   }
  }
 QUERY;
@@ -125,7 +125,7 @@ QUERY;
       attribute_type
       entity_type
       input_type
-    } 
+    }
   }
  }
 QUERY;
@@ -199,8 +199,8 @@ QUERY;
     {
       attribute_code
       attribute_type
-      entity_type      
-    } 
+      entity_type
+    }
   }
  }
 QUERY;

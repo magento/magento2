@@ -45,7 +45,7 @@
         <see selector="{{AdminTaxRateGridSection.emptyText}}" userInput="We couldn't find any records." stepKey="seeSuccess"/>
 
         <!-- Confirm Deleted TaxIdentifier on the tax rule grid page -->
-        <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleIndex3"/>
+        <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleIndex3"/>
         <click selector="{{AdminTaxRuleGridSection.add}}" stepKey="clickAddNewTaxRuleButton"/>
         <waitForPageLoad stepKey="waitForTaxRuleIndex1"/>
         <fillField selector="{{AdminTaxRuleFormSection.taxRateSearch}}" userInput="$$initialTaxRate.code$$" stepKey="fillTaxRateSearch"/>
