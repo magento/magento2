@@ -181,4 +181,9 @@
             <argument name="localeResolver" xsi:type="object">Magento\Paypal\Model\Express\LocaleResolver</argument>
         </arguments>
     </type>
+    <type name="Magento\Paypal\Observer\OnCheckoutSuccessClearQuote">
+        <arguments>
+            <argument name="checkoutSession" xsi:type="object">Magento\Paypal\Model\Session</argument>
+        </arguments>
+    </type>
 </config>

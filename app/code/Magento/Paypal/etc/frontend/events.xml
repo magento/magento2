@@ -15,4 +15,7 @@
     <event name="shortcut_buttons_container">
         <observer name="paypal_shortcuts" instance="Magento\Paypal\Observer\AddPaypalShortcutsObserver"/>
     </event>
+    <event name="checkout_quote_destroy">
+        <observer name="on_checkout_success_clear_quote" instance="Magento\Paypal\Observer\OnCheckoutSuccessClearQuote"/>
+    </event>
 </config>
