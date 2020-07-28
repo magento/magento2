@@ -43,7 +43,7 @@
         <!-- Add product to cart on storefront -->
         <amOnPage url="{{StorefrontProductPage.url($createProduct.custom_attributes[url_key]$)}}" stepKey="goToProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
-        <seeElement selector="{{StorefrontProductActionSection.addToCartEnabledWithTranslation}}" stepKey="waitForAddToCartButtonEnabled"/>
+        <waitForElementVisible selector="{{StorefrontProductActionSection.addToCartEnabledWithTranslation}}" stepKey="waitForAddToCartButtonEnabled"/>
         <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
