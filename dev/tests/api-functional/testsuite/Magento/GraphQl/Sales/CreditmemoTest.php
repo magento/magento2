@@ -114,15 +114,19 @@ class CreditmemoTest extends GraphQlAbstract
                         'value' => 20
                     ],
                     'grand_total' => [
-                        'value' => 20
+                        'value' => 20,
+                        'currency' => 'USD'
                     ],
                     'base_grand_total' => [
-                        'value' => 10
+                        'value' => 10,
+                        'currency' => 'EUR'
                     ],
                     'total_shipping' => [
                         'value' => 0
                     ],
-                    'total_tax' => [],
+                    'total_tax' => [
+                        'value' => 0
+                    ],
                     'shipping_handling' => [
                         'amount_including_tax' => [
                             'value' => 0
@@ -134,7 +138,7 @@ class CreditmemoTest extends GraphQlAbstract
                             'value' => 0
                         ],
                         'taxes' => [],
-                        'discounts' => [],
+                        // 'discounts' => [],
                     ],
                     'adjustment' => [
                         'value' => 1.23
@@ -211,15 +215,19 @@ class CreditmemoTest extends GraphQlAbstract
                         'value' => 15
                     ],
                     'grand_total' => [
-                        'value' => 23
+                        'value' => 23,
+                        'currency' => 'USD'
                     ],
                     'base_grand_total' => [
-                        'value' => 23
+                        'value' => 23,
+                        'currency' => 'USD'
                     ],
                     'total_shipping' => [
                         'value' => 10
                     ],
-                    'total_tax' => [],
+                    'total_tax' => [
+                        'value' => 0
+                    ],
                     'shipping_handling' => [
                         'amount_including_tax' => [
                             'value' => 10
@@ -231,7 +239,7 @@ class CreditmemoTest extends GraphQlAbstract
                             'value' => 10
                         ],
                         'taxes' => [],
-                        'discounts' => [],
+                        // 'discounts' => [],
                     ],
                     'adjustment' => [
                         'value' => 2
@@ -322,10 +330,12 @@ class CreditmemoTest extends GraphQlAbstract
                         'value' => 15
                     ],
                     'grand_total' => [
-                        'value' => 24.19
+                        'value' => 24.19,
+                        'currency' => 'USD'
                     ],
                     'base_grand_total' => [
-                        'value' => 24.19
+                        'value' => 24.19,
+                        'currency' => 'USD'
                     ],
                     'total_shipping' => [
                         'value' => 10
@@ -345,16 +355,16 @@ class CreditmemoTest extends GraphQlAbstract
                         ],
                         'taxes'=> [
                             0 => [
-                                'amount'=>['value' => 1.69],
+                                'amount'=>['value' => 0.67],
                                 'title' => 'US-TEST-*-Rate-1',
                                 'rate' => 7.5
                             ]
                         ],
-                        'discounts' => [
-                            0 => ['amount'=>['value'=> 2.5],
-                                'label' => 'Discount Label for 10% off'
-                            ]
-                        ],
+                      //  'discounts' => [
+                      //      0 => ['amount'=>['value'=> 1],
+                      //          'label' => 'Discount Label for 10% off'
+                      //      ]
+                      //  ],
                     ],
                     'adjustment' => [
                         'value' => 0
@@ -751,9 +761,11 @@ query {
                     }
                     base_grand_total  {
                         value
+                        currency
                     }
                     grand_total {
                         value
+                        currency
                     }
                     total_shipping {
                         value
@@ -766,7 +778,7 @@ query {
                          amount_excluding_tax{value}
                          total_amount{value}
                          taxes {amount{value} title rate}
-                         discounts {amount{value} label}
+                         # discounts {amount{value} label}
                     }
                     adjustment {
                         value
