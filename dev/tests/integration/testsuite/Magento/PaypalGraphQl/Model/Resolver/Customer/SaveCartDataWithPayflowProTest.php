@@ -81,8 +81,6 @@ class SaveCartDataWithPayflowProTest extends PaypalPayflowProAbstractTest
      * @magentoDataFixture Magento/GraphQl/Quote/_files/set_flatrate_shipping_method.php
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testPlaceOrderAndNotSaveDataForFuturePayflowPro(): void
     {
@@ -97,6 +95,7 @@ class SaveCartDataWithPayflowProTest extends PaypalPayflowProAbstractTest
      * @param $isActivePaymentTokenEnabler
      *
      * @return array
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function placeOrderPayflowPro($isActivePaymentTokenEnabler)
     {
@@ -241,7 +240,11 @@ QUERY;
     {
         /** @var PaymentTokenManagement $tokenManagement */
         $tokenManagement = $this->objectManager->get(PaymentTokenManagement::class);
-        $token = $tokenManagement->getByGatewayToken('B70CCC236815', 'payflowpro',1);
+        $token = $tokenManagement->getByGatewayToken(
+            'B70CCC236815',
+            'payflowpro',
+            1
+        );
         /** @var PaymentTokenRepository $tokenRepository */
         $tokenRepository = $this->objectManager->get(PaymentTokenRepository::class);
         return $tokenRepository->getById($token->getEntityId());
