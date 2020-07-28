@@ -84,7 +84,7 @@ define([
                     }, 10);
                 };
 
-                if (jQuery('#' + this.getAreaId('items')).is(':visible')) {
+                if (jQuery('#order-items').ready()) {
                     this.dataArea.onLoad = this.dataArea.onLoad.wrap(function (proceed) {
                         proceed();
                         this._parent.itemsArea.setNode($(this._parent.getAreaId('items')));
