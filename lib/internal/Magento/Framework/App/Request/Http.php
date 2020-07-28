@@ -199,8 +199,8 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      */
     public function getBasePath()
     {
-        return empty(parent::getBasePath()) ? '/'
-            : str_replace('\\', '/', parent::getBasePath());
+        $path = parent::getBasePath();
+        return empty($path) ? '/' : str_replace('\\', '/', $path);
     }
 
     /**
@@ -306,8 +306,8 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
     public function isAjax()
     {
         return $this->isXmlHttpRequest()
-            || $this->getParam('ajax', null)
-            || $this->getParam('isAjax', null);
+            || $this->getParam('ajax')
+            || $this->getParam('isAjax');
     }
 
     /**
