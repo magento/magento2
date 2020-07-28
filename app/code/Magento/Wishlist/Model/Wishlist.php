@@ -492,6 +492,9 @@ class Wishlist extends AbstractModel implements IdentityInterface
         } else {
             $_buyRequest = new DataObject();
         }
+        if ($_buyRequest->getData('action') !== 'updateItem') {
+            $_buyRequest->setData('action', 'add');
+        }
 
         /* @var $product Product */
         $cartCandidates = $product->getTypeInstance()->processConfiguration($_buyRequest, clone $product);
@@ -750,15 +753,16 @@ class Wishlist extends AbstractModel implements IdentityInterface
             }
             $params->setCurrentConfig($item->getBuyRequest());
             $buyRequest = $this->_catalogProduct->addParamsToBuyRequest($buyRequest, $params);
+            $buyRequest->setData('action', 'updateItem');
 
             $product->setWishlistStoreId($item->getStoreId());
             $items = $this->getItemCollection();
             $isForceSetQuantity = true;
-            foreach ($items as $_item) {
-                /* @var $_item Item */
-                if ($_item->getProductId() == $product->getId() && $_item->representProduct(
-                    $product
-                ) && $_item->getId() != $item->getId()
+            foreach ($items as $wishlistItem) {
+                /* @var $wishlistItem Item */
+                if ($wishlistItem->getProductId() == $product->getId()
+                    && $wishlistItem->getId() != $item->getId()
+                    && $wishlistItem->representProduct($product)
                 ) {
                     // We do not add new wishlist item, but updating the existing one
                     $isForceSetQuantity = false;

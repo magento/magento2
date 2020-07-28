@@ -5,20 +5,29 @@
  */
 
 /** @var \Magento\Newsletter\Block\Adminhtml\Subscriber $block */
-
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <?= $block->getChildHtml('grid') ?>
-<?php if (count($block->getQueueAsOptions())>0 && $block->getShowQueueAdd()) : ?>
+<?php if (count($block->getQueueAsOptions())>0 && $block->getShowQueueAdd()): ?>
 <div class="form-buttons">
     <select id="queueList" name="queue">
-    <?php foreach ($block->getQueueAsOptions() as $_queue) : ?>
-        <option value="<?= $block->escapeHtmlAttr($_queue['value']) ?>"><?= $block->escapeHtml($_queue['label']) ?> #<?= $block->escapeHtml($_queue['value']) ?></option>
+    <?php foreach ($block->getQueueAsOptions() as $_queue): ?>
+        <option value="<?= $block->escapeHtmlAttr($_queue['value']) ?>">
+            <?= $block->escapeHtml($_queue['label']) ?> #<?= $block->escapeHtml($_queue['value']) ?>
+        </option>
     <?php endforeach; ?>
     </select>
-    <button type="button" class="scalable" onclick="subscriberController.addToQueue();"><span><span><span><?= $block->escapeHtml(__('Add to Queue')) ?></span></span></span></button>
+    <button type="button" class="scalable" id="addToQueue">
+        <span><span><span><?= $block->escapeHtml(__('Add to Queue')) ?></span></span></span>
+    </button>
+    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+        'onclick',
+        'subscriberController.addToQueue();',
+        'button#addToQueue'
+    ) ?>
 </div>
 <?php endif ?>
-<script>
+<?php $scriptString= <<<script
 require(["prototype", "mage/adminhtml/events"], function(){
     subscriberController = {
         checkCheckboxes: function(controlCheckbox) {
@@ -53,4 +62,6 @@ require(["prototype", "mage/adminhtml/events"], function(){
 
     varienGlobalEvents.attachEventHandler('gridRowClick', subscriberController.rowClick.bind(subscriberController));
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
