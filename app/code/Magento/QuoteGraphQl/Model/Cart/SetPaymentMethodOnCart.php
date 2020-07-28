@@ -59,7 +59,6 @@ class SetPaymentMethodOnCart
      * @param array $paymentData
      * @throws GraphQlInputException
      * @throws GraphQlNoSuchEntityException
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function execute(Quote $cart, array $paymentData): void
     {

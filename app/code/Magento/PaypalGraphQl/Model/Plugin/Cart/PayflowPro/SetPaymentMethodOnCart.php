@@ -60,7 +60,8 @@ class SetPaymentMethodOnCart
     ): void {
         $paymentData = $this->additionalDataProviderPool->getData(Config::METHOD_PAYFLOWPRO, $paymentData);
         $cartCustomerId = (int)$cart->getCustomerId();
-        if ($cartCustomerId === 0 && array_key_exists(PayflowProSetCcData::IS_ACTIVE_PAYMENT_TOKEN_ENABLER, $paymentData)) {
+        if ($cartCustomerId === 0 &&
+            array_key_exists(PayflowProSetCcData::IS_ACTIVE_PAYMENT_TOKEN_ENABLER, $paymentData)) {
             $payment = $cart->getPayment();
             $payment->unsAdditionalInformation(PayflowProSetCcData::IS_ACTIVE_PAYMENT_TOKEN_ENABLER);
             $payment->save();
