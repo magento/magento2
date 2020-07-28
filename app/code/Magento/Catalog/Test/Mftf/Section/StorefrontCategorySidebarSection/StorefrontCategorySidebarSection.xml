@@ -17,5 +17,7 @@
         <element name="removeFilter" type="button" selector="div.filter-current .remove"/>
         <element name="activeFilterOptions" type="text" selector=".filter-options-item.active .items"/>
         <element name="activeFilterOptionItemByPosition" type="text" selector=".filter-options-item.active .items li:nth-child({{itemPosition}}) a" parameterized="true"/>
+        <element name="enabledFilterOptionItemByLabel" type="text" selector="//div[@class='filter-options']//li[@class='item']//a[contains(text(), '{{optionLabel}}')]" parameterized="true"/>
+        <element name="disabledFilterOptionItemByLabel" type="text" selector="//div[@class='filter-options']//li[@class='item' and contains(text(), '{{optionLabel}}')]" parameterized="true"/>
     </section>
 </sections>
