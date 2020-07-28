@@ -58,8 +58,7 @@
         <seeInField selector="{{AdminTaxRateFormSection.country}}" userInput="Canada" stepKey="seeCountry2"/>
 
         <!-- Verify we see expected values on the tax rule form page -->
-        <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleIndex1"/>
-        <waitForPageLoad stepKey="waitForTaxRateIndex4"/>
+        <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleIndex1"/>
         <click selector="{{AdminTaxRuleGridSection.add}}" stepKey="clickAdd"/>
         <see selector="{{AdminTaxRulesSection.taxRateMultiSelectItems}}" userInput="{{SimpleTaxRate.code}}" stepKey="seeTaxRateOnNewTaxRulePage"/>
     </test>
