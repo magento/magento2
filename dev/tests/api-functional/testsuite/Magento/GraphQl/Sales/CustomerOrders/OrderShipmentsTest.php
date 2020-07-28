@@ -5,6 +5,8 @@
  */
 declare(strict_types=1);
 
+namespace Magento\GraphQl\Sales\CustomerOrders;
+
 use Magento\Framework\DB\Transaction;
 use Magento\Framework\Registry;
 use Magento\GraphQl\GetCustomerAuthenticationHeader;

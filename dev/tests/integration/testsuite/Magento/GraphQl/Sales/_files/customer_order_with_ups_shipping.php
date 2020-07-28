@@ -40,7 +40,7 @@ $track = $objectManager->create(ShipmentTrackCreationInterface::class);
 $track->setCarrierCode('ups');
 $track->setTitle('United Parcel Service');
 $track->setTrackNumber('987654321');
-$shipOrder->execute($order->getEntityId(), $shipmentItems, false, false, null, [$track]);
+$shipOrder->execute($order->getId(), $shipmentItems, false, false, null, [$track]);
 
 //Create second Shipment
 $shipmentItems = [];
@@ -53,4 +53,4 @@ foreach ($order->getItems() as $orderItem) {
         $shipmentItems[] = $shipmentItem;
     }
 }
-$shipOrder->execute($order->getEntityId(), $shipmentItems);
+$shipOrder->execute($order->getId(), $shipmentItems);

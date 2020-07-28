@@ -16,7 +16,7 @@ use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\InvoiceItemInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\SalesGraphQl\Model\Resolver\OrderItem\DataProvider as OrderItemProvider;
+use Magento\SalesGraphQl\Model\OrderItem\DataProvider as OrderItemProvider;
 
 /**
  * Resolver for Invoice Items

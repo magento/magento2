@@ -81,11 +81,11 @@ class CustomerPlaceOrder
     /**
      * Make GraphQl POST request
      *
-     * @param $query
+     * @param string $query
      * @param array $additionalHeaders
      * @return array
      */
-    private function makeRequest($query, $additionalHeaders = []): array
+    private function makeRequest(string $query, array $additionalHeaders = []): array
     {
         $headers = array_merge([$this->getAuthHeader()], $additionalHeaders);
         return $this->gqlClient->post($query, [], '', $headers);

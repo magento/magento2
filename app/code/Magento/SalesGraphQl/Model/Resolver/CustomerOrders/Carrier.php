@@ -60,7 +60,7 @@ class Carrier implements ResolverInterface
     {
         $allCarrierMethods = $this->carrierMethods->toOptionArray();
 
-        foreach ($allCarrierMethods as $carrierCode => $carrierMethods) {
+        foreach ($allCarrierMethods as $carrierMethods) {
             $carrierLabel = $carrierMethods['label'];
             $carrierMethodOptions = $carrierMethods['value'];
             if (is_array($carrierMethodOptions)) {
