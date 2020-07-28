@@ -49,7 +49,7 @@ class LoginAsCustomerUi implements SectionSourceInterface
      */
     public function getSectionData(): array
     {
-        if (!$this->customerSession->getCustomerId()) {
+        if (!$this->customerSession->getCustomerId() || !$this->customerSession->getLoggedAsCustomerAdmindId()) {
             return [];
         }
 

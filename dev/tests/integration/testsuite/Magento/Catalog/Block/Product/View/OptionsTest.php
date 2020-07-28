@@ -3,11 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
-
 namespace Magento\Catalog\Block\Product\View;
-
-use Magento\CatalogRule\Model\Indexer\IndexBuilder;
 
 /**
  * Test class for \Magento\Catalog\Block\Product\View\Options.
@@ -34,18 +30,11 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
      */
     protected $productRepository;
 
-    /**
-     * @var IndexBuilder
-     */
-    private $indexBuilder;
-
     protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
         $this->productRepository = $this->objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-
-        $this->indexBuilder = $this->objectManager->create(IndexBuilder::class);
 
         try {
             $this->product = $this->productRepository->get('simple');
@@ -124,7 +113,9 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     {
         return [
             0 => [
-                'prices' => ['oldPrice' => ['amount' => 10, 'adjustments' => []],
+                'prices' =>
+                    ['oldPrice' =>
+                        ['amount' => 10, 'adjustments' => []],
                         'basePrice' => ['amount' => 10],
                         'finalPrice' => ['amount' => 10]
                     ],
@@ -132,52 +123,11 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
                 'name' => 'drop_down option 1',
             ],
             1 => [
-                'prices' => ['oldPrice' => ['amount' => 40, 'adjustments' => []],
+                'prices' =>
+                    ['oldPrice' =>
+                        ['amount' => 40, 'adjustments' => []],
                         'basePrice' => ['amount' => 40],
                         'finalPrice' => ['amount' => 40],
-                    ],
-                'type' => 'percent',
-                'name' => 'drop_down option 2',
-            ],
-        ];
-    }
-
-    /**
-     * Test option prices with catalog price rules applied.
-     *
-     * @magentoDbIsolation disabled
-     * @magentoDataFixture Magento/CatalogRule/_files/two_rules.php
-     * @magentoDataFixture Magento/Catalog/_files/product_with_dropdown_option.php
-     */
-    public function testGetJsonConfigWithCatalogRules()
-    {
-        $this->indexBuilder->reindexFull();
-        sleep(1);
-        $config = json_decode($this->block->getJsonConfig(), true);
-        $configValues = array_values($config);
-        $this->assertEquals($this->getExpectedJsonConfigWithCatalogRules(), array_values($configValues[0]));
-    }
-
-    /**
-     * Expected data for testGetJsonConfigWithCatalogRules
-     *
-     * @return array
-     */
-    private function getExpectedJsonConfigWithCatalogRules()
-    {
-        return [
-            0 => [
-                'prices' => ['oldPrice' => ['amount' => 10, 'adjustments' => []],
-                        'basePrice' => ['amount' => 9.5],
-                        'finalPrice' => ['amount' => 9.5],
-                    ],
-                'type' => 'fixed',
-                'name' => 'drop_down option 1',
-            ],
-            1 => [
-                'prices' => ['oldPrice' => ['amount' => 40, 'adjustments' => []],
-                        'basePrice' => ['amount' => 38],
-                        'finalPrice' => ['amount' => 38],
                     ],
                 'type' => 'percent',
                 'name' => 'drop_down option 2',
