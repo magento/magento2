@@ -73,6 +73,16 @@ class Elasticsearch
     private $batchDocumentDataMapper;
 
     /**
+     * @var array
+     */
+    private $mappedAttributes = [];
+
+    /**
+     * @var string[]
+     */
+    private $indexByCode = [];
+
+    /**
      * @var ArrayManager
      */
     private $arrayManager;
@@ -349,7 +359,7 @@ class Elasticsearch
      */
     public function updateIndexMapping(int $storeId, string $mappedIndexerId): self
     {
-        $indexName = $this->indexNameResolver->getIndexFromAlias($storeId, $mappedIndexerId);
+        $indexName = $this->getIndexFromAlias($storeId, $mappedIndexerId);
         if (empty($indexName)) {
             return $this;
         }
@@ -359,19 +369,67 @@ class Elasticsearch
             'websiteId' => $storeId,
         ]);
 
-        $mappedAttributes = $this->client->getMapping(['index' => $indexName]);
-        $pathField = $this->arrayManager->findPath('properties', $mappedAttributes);
-        $mappedAttributes = $this->arrayManager->get($pathField, $mappedAttributes, []);
-
-        $settings['index']['mapping']['total_fields']['limit'] = $this->getMappingTotalFieldsLimit($allAttributeTypes);
-        $this->client->putIndexSettings($indexName, ['settings' => $settings]);
-        $attrToUpdate = array_diff_key($allAttributeTypes, $mappedAttributes);
+        $attrToUpdate = array_diff_key($allAttributeTypes, $this->getMappedAttributes($indexName));
         if (!empty($attrToUpdate)) {
+            $settings['index']['mapping']['total_fields']['limit'] = $this
+                ->getMappingTotalFieldsLimit($allAttributeTypes);
+            $this->client->putIndexSettings($indexName, ['settings' => $settings]);
+
             $this->client->addFieldsMapping(
                 $attrToUpdate,
                 $indexName,
                 $this->clientConfig->getEntityType()
             );
+            $this->setMappedAttributes($attrToUpdate);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Retrieve index definition from cache.
+     *
+     * @param int $storeId
+     * @param string $mappedIndexerId
+     * @return string
+     */
+    private function getIndexFromAlias(int $storeId, string $mappedIndexerId): string
+    {
+        $indexCode = $mappedIndexerId . $storeId;
+        if (!isset($this->indexByCode[$indexCode])) {
+            $this->indexByCode[$indexCode] = $this->indexNameResolver->getIndexFromAlias($storeId, $mappedIndexerId);
+        }
+
+        return $this->indexByCode[$indexCode];
+    }
+
+    /**
+     * Retrieve mapped attributes from cache.
+     *
+     * @param string $indexName
+     * @return array
+     */
+    private function getMappedAttributes(string $indexName): array
+    {
+        if (empty($this->mappedAttributes)) {
+            $mappedAttributes = $this->client->getMapping(['index' => $indexName]);
+            $pathField = $this->arrayManager->findPath('properties', $mappedAttributes);
+            $this->mappedAttributes = $this->arrayManager->get($pathField, $mappedAttributes, []);
+        }
+
+        return $this->mappedAttributes;
+    }
+
+    /**
+     * Set mapped attributes to cache.
+     *
+     * @param array $mappedAttributes
+     * @return $this
+     */
+    private function setMappedAttributes(array $mappedAttributes): self
+    {
+        foreach ($mappedAttributes as $attributeCode => $attributeParams) {
+            $this->mappedAttributes[$attributeCode] = $attributeParams;
         }
 
         return $this;
