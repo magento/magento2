@@ -176,11 +176,12 @@ class ConsumersRunner
             return false;
         }
 
-        $onlySpawnWhenMessageAvailable = (bool)$this->deploymentConfig->get(
+        $globalOnlySpawnWhenMessageAvailable = (bool)$this->deploymentConfig->get(
             'queue/only_spawn_when_message_available',
-            0
+            true
         );
-        if ($onlySpawnWhenMessageAvailable || $consumerConfig->getOnlySpawnWhenMessageAvailable()) {
+        if ($consumerConfig->getOnlySpawnWhenMessageAvailable() === true
+            || ($consumerConfig->getOnlySpawnWhenMessageAvailable() === null && $globalOnlySpawnWhenMessageAvailable)) {
             try {
                 return $this->checkIsAvailableMessages->execute(
                     $connectionName,
