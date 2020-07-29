@@ -77,7 +77,6 @@ mutation {
         payment_method: {
           code: "{$paymentMethod}",
             payflowpro: {
-              is_active_payment_token_enabler: true
               cc_details: {
                  cc_exp_month: 12,
                  cc_exp_year: 2030,

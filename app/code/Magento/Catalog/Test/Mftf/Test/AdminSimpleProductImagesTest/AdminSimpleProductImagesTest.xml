@@ -141,8 +141,12 @@
 
         <!-- Save the second product -->
         <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct2"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!-- Go to the admin grid and see the uploaded image -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex3"/>

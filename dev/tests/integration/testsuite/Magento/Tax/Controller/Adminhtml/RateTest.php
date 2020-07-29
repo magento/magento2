@@ -6,6 +6,8 @@
 
 namespace Magento\Tax\Controller\Adminhtml;
 
+use Magento\Framework\App\Request\Http as HttpRequest;
+
 /**
  * @magentoAppArea adminhtml
  */
@@ -282,5 +284,35 @@ class RateTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->assertTrue(!array_key_exists('result', $result));
         $this->assertArrayHasKey('error_message', $result);
         $this->assertTrue(strlen($result['error_message'])>0);
+    }
+
+    /** Test Delete Tax Rate
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @return void
+     */
+    public function testDeleteRate(): void
+    {
+        $rateId = 2;
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue(['rate' => $rateId]);
+        $this->dispatch('backend/tax/rate/delete');
+        $successMessage = (string)__('You deleted the tax rate.');
+        $this->assertSessionMessages($this->equalTo([$successMessage]));
+    }
+
+    /** Test Delete Incorrect Tax Rate
+     * @magentoAppIsolation enabled
+     * @magentoDbIsolation enabled
+     * @return void
+     */
+    public function testDeleteIncorrectRate(): void
+    {
+        $incorrectRateId = 20999;
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue(['rate' => $incorrectRateId]);
+        $this->dispatch('backend/tax/rate/delete');
+        $errorMessage = (string)_("We can't delete this rate because of an incorrect rate ID.");
+        $this->assertSessionMessages($this->equalTo([$errorMessage]));
     }
 }

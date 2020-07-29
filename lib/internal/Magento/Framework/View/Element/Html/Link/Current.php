@@ -20,6 +20,7 @@ use Magento\Framework\View\Element\Template\Context;
  * @method null|array                      getAttributes()
  * @method null|bool                       getCurrent()
  * @method \Magento\Framework\View\Element\Html\Link\Current setCurrent(bool $value)
+ * @since 100.0.2
  */
 class Current extends Template
 {

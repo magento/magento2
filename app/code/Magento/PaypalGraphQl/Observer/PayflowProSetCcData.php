@@ -8,7 +8,6 @@ declare(strict_types=1);
 
 namespace Magento\PaypalGraphQl\Observer;
 
-use Magento\Customer\Model\Session as CustomerModelSession;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Event\Observer;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
@@ -25,11 +24,6 @@ class PayflowProSetCcData extends AbstractDataAssignObserver
     const IS_ACTIVE_PAYMENT_TOKEN_ENABLER = "is_active_payment_token_enabler";
 
     /**
-     * @var CustomerModelSession
-     */
-    private $customerSession;
-
-    /**
      * Core store config
      *
      * @var ScopeConfigInterface
@@ -37,14 +31,11 @@ class PayflowProSetCcData extends AbstractDataAssignObserver
     private $scopeConfig;
 
     /**
-     * @param CustomerModelSession $customerSession
      * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        CustomerModelSession $customerSession,
         ScopeConfigInterface $scopeConfig
     ) {
-        $this->customerSession = $customerSession;
         $this->scopeConfig = $scopeConfig;
     }
 
@@ -65,11 +56,9 @@ class PayflowProSetCcData extends AbstractDataAssignObserver
             return;
         }
 
-        if ($this->customerSession->isLoggedIn() && $this->isPayflowProVaultEnable()) {
+        if ($this->isPayflowProVaultEnable()) {
             if (!isset($additionalData[self::IS_ACTIVE_PAYMENT_TOKEN_ENABLER])) {
-                throw new GraphQlInputException(
-                    __('Required parameter "is_active_payment_token_enabler" is missing.')
-                );
+                $paymentModel->setData(self::IS_ACTIVE_PAYMENT_TOKEN_ENABLER, false);
             }
 
             $paymentModel->setData(
