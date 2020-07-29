@@ -48,7 +48,7 @@ class AddressTest extends AbstractBackendController
     public function testSuccessfulEdit(): void
     {
         $order = $this->orderFactory->create()->loadByIncrementId(100000001);
-        $this->dispatchWithAddressId($order->getBillingAddressId());
+        $this->dispatchWithAddressId((int)$order->getBillingAddressId());
         $this->assertInstanceOf(OrderAddressInterface::class, $this->registry->registry('order_address'));
     }
 
