@@ -114,7 +114,7 @@ class AbstractTest extends TestCase
         $product = $this->productRepository->get('simple-1');
         $url = $this->block->getAddToCartUrl($product);
         $this->assertStringEndsWith(sprintf('product/%s/', $product->getId()), $url);
-        $this->assertContains('checkout/cart/add', $url);
+        $this->assertStringContainsString('checkout/cart/add', $url);
     }
 
     /**
@@ -247,7 +247,7 @@ class AbstractTest extends TestCase
             ]
         );
         $finalPriceHtml = $this->block->getProductPriceHtml($product, FinalPrice::PRICE_CODE);
-        $this->assertContains('price-' . FinalPrice::PRICE_CODE, $finalPriceHtml);
-        $this->assertContains('product-price-' . $product->getId(), $finalPriceHtml);
+        $this->assertStringContainsString('price-' . FinalPrice::PRICE_CODE, $finalPriceHtml);
+        $this->assertStringContainsString('product-price-' . $product->getId(), $finalPriceHtml);
     }
 }
