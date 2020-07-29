@@ -30,7 +30,7 @@
             <click selector="{{AdminCategoryModalSection.ok}}" stepKey="confirmDelete"/>
             <waitForPageLoad time="60" stepKey="waitForDeleteToFinish"/>
             <see selector="You deleted the category." stepKey="seeDeleteSuccess"/>
-            <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandToSeeAllCategories"/>
+            <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandToSeeAllCategories"/>
             <dontSee selector="{{AdminCategorySidebarTreeSection.categoryInTree(FirstLevelSubCat.name)}}" stepKey="dontSeeCategoryInTree"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
