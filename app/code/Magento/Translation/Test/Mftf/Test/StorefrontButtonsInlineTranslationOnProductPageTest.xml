@@ -8,11 +8,11 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontButtonsInlineTranslationTest">
+    <test name="StorefrontButtonsInlineTranslationOnProductPageTest">
         <annotations>
             <features value="Translation"/>
             <stories value="Inline Translation"/>
-            <title value="Buttons inline translation"/>
+            <title value="Buttons inline translation on product page"/>
             <description value="A merchant should be able to translate buttons by an inline translation tool"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-27118"/>
@@ -20,9 +20,6 @@
             <group value="translation"/>
             <group value="catalog"/>
             <group value="developer_mode_only"/>
-            <skip>
-                <issueId value="DEPRECATED">Use StorefrontButtonsInlineTranslationOnProductPageTest instead</issueId>
-            </skip>
         </annotations>
         <before>
             <!-- Enable Translate Inline For Storefront -->
@@ -44,9 +41,10 @@
         </after>
 
         <!-- Add product to cart on storefront -->
-        <amOnPage url="{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage"/>
-        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
-        <actionGroup ref="StorefrontAddProductToCartFromCategoryActionGroup" stepKey="addProductToCart">
+        <amOnPage url="{{StorefrontProductPage.url($createProduct.custom_attributes[url_key]$)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontProductActionSection.addToCartEnabledWithTranslation}}" stepKey="waitForAddToCartButtonEnabled"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProductToCart">
             <argument name="productName" value="$createProduct.name$"/>
         </actionGroup>
 
