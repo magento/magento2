@@ -67,7 +67,6 @@ type DownloadableProductSamples @doc(description: "DownloadableProductSamples de
 
 type DownloadableOrderItem implements OrderItemInterface {
     downloadable_links: [DownloadableItemsLinks] @doc(description: "A list of downloadable links that are ordered from the downloadable product") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\DownloadableOrderItem\\Links")
-    downloadable_links_title: String @doc(description: "The label title for the links for the downloadable products") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\DownloadableOrderItem\\Title")
 }
 
 type DownloadableItemsLinks @doc(description: "DownloadableProductLinks defines characteristics of a downloadable product") {
