@@ -70,7 +70,7 @@ $_helper = $block->getData('outputHelper');
                         <strong class="product name product-item-name">
                             <a class="product-item-link"
                                href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>">
-                                <?=/* @noEscape */ $_helper->productAttribute($_product, $_product->getName(), 'name') ?>
+                                <?=/* @noEscape */ $_helper->productAttribute($_product, $_product->getName(), 'name')?>
                             </a>
                         </strong>
                         <?= $block->getReviewsSummaryHtml($_product, $templateType) ?>
