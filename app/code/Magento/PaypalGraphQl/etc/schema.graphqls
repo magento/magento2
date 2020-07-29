@@ -144,5 +144,5 @@ type PayflowProResponseOutput {
 }
 
 type StoreConfig {
-    payflowpro_vault_enabled: String @doc(description: "Payflowpro vault status.")
+    payment_payflowpro_cc_vault_active: String @doc(description: "Payflow Pro vault status.")
 }
