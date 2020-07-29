@@ -19,6 +19,7 @@ use Magento\Framework\Phrase;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Search\Api\SearchInterface;
 use Magento\Search\Model\Search\PageSizeProvider;
+use Magento\Tests\NamingConvention\true\string;
 
 /**
  * Full text search for catalog using given search criteria.
@@ -162,12 +163,12 @@ class Search implements ProductQueryInterface
      * Get product attribute value
      *
      * @param Product $product
-     * @param $productArray
-     * @param $field
+     * @param array $productArray
+     * @param string $field
      *
      * @return string|null
      */
-    private function getAttributeValue(Product $product, $productArray, $field) :?string
+    private function getAttributeValue(Product $product, $productArray, $field)
     {
         if ($attribute = $product->getResource()->getAttribute($field)) {
             $attributeValue =  $attribute->getFrontend()->getValue($product);
@@ -177,8 +178,6 @@ class Search implements ProductQueryInterface
                 return isset($productArray[$product->getId()][$field]) ?
                     $productArray[$product->getId()][$field] : null;
             }
-        } else {
-            return "";
         }
     }
 }
