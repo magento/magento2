@@ -21,7 +21,7 @@ use PHPUnit\Framework\TestCase;
 class PriceTest extends TestCase
 {
     /** @var RequestInterface|MockObject  */
-    private $_requestMock;
+    private $requestMock;
 
     /** @var Context|MockObject */
     private $context;
@@ -43,10 +43,10 @@ class PriceTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->_requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
 
         $this->context = $this->createMock(Context::class);
-        $this->context->expects($this->any())->method('getRequest')->willReturn($this->_requestMock);
+        $this->context->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
 
         $this->helper = $this->createMock(Helper::class);
 
@@ -80,7 +80,7 @@ class PriceTest extends TestCase
         )->method(
             'getDefaultCurrency'
         )->with(
-            $this->_requestMock
+            $this->requestMock
         )->willReturn(
             'defaultCurrency'
         );

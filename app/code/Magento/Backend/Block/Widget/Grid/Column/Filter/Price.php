@@ -162,7 +162,7 @@ class Price extends \Magento\Backend\Block\Widget\Grid\Column\Filter\AbstractFil
     /**
      * Retrieve filter value
      *
-     * @param null $index
+     * @param string|null $index
      * @return array|null
      */
     public function getValue($index = null)
