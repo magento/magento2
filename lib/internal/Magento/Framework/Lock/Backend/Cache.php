@@ -32,6 +32,20 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
     private $lockSign;
 
     /**
+     * How many microseconds to wait before re-try to acquire a lock
+     *
+     * @var int
+     */
+    private $sleepCycle = 100000;
+
+    /**
+     * Lifetime of lock data in seconds.
+     *
+     * @var int
+     */
+    private $defaultLifetime = 10;
+
+    /**
      * @param FrontendInterface $cache
      */
     public function __construct(FrontendInterface $cache)
@@ -49,14 +63,16 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
             $this->lockSign = $this->generateLockSign();
         }
 
-        $data = $this->cache->load($this->getIdentifier($name));
-
-        if (false !== $data) {
-             return false;
+        $skipDeadline = $timeout < 0;
+        $deadline = microtime(true) + $timeout;
+        while ($this->cache->load($this->getIdentifier($name))) {
+            if (!$skipDeadline && $deadline <= microtime(true)) {
+                return false;
+            }
+            usleep($this->sleepCycle);
         }
 
-        $timeout = $timeout <= 0 ? null : $timeout;
-        $this->cache->save($this->lockSign, $this->getIdentifier($name), [], $timeout);
+        $this->cache->save($this->lockSign, $this->getIdentifier($name), [], $this->defaultLifetime);
 
         $data = $this->cache->load($this->getIdentifier($name));
 
