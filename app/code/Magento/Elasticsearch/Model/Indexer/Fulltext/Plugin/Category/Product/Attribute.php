@@ -13,6 +13,7 @@ use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\Model\Indexer\IndexerHandler as ElasticsearchIndexerHandler;
 use Magento\Framework\Indexer\DimensionProviderInterface;
 use Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory;
+use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
@@ -39,6 +40,11 @@ class Attribute
      * @var IndexerHandlerFactory
      */
     private $indexerHandlerFactory;
+
+    /**
+     * @var bool
+     */
+    private $isNewObject;
 
     /**
      * @param Config $config
@@ -72,7 +78,7 @@ class Attribute
         AttributeResourceModel $result
     ): AttributeResourceModel {
         $indexer = $this->indexerProcessor->getIndexer();
-        if ($indexer->isInvalid()
+        if ($this->isNewObject
             && !$indexer->isScheduled()
             && $this->config->isElasticsearchEnabled()
         ) {
@@ -88,5 +94,20 @@ class Attribute
         }
 
         return $result;
+    }
+
+    /**
+     * Check if mapping needs to be updated (attribute is new).
+     *
+     * @param AttributeResourceModel $subject
+     * @param AbstractModel $attribute
+     * @return void
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function beforeSave(
+        AttributeResourceModel $subject,
+        AbstractModel $attribute
+    ): void {
+        $this->isNewObject = $attribute->isObjectNew();
     }
 }

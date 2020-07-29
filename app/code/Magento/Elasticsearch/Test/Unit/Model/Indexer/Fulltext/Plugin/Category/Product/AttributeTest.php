@@ -9,16 +9,17 @@ namespace Magento\Elasticsearch\Test\Unit\Model\Indexer\Fulltext\Plugin\Category
 
 use ArrayIterator;
 use Magento\Catalog\Model\ResourceModel\Attribute as AttributeResourceModel;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute as AttributeModel;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Processor;
 use Magento\CatalogSearch\Model\Indexer\IndexerHandlerFactory;
 use Magento\Elasticsearch\Model\Config;
-use Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Category\Product\Attribute;
+use Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Category\Product\Attribute as AttributePlugin;
 use Magento\Elasticsearch\Model\Indexer\IndexerHandler;
 use Magento\Framework\Indexer\DimensionProviderInterface;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\MockObject\Rule\InvokedCount as InvokedCountMatcher;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -47,7 +48,7 @@ class AttributeTest extends TestCase
     private $indexerHandlerFactoryMock;
 
     /**
-     * @var Attribute
+     * @var AttributePlugin
      */
     private $attributePlugin;
 
@@ -65,7 +66,7 @@ class AttributeTest extends TestCase
         $this->indexerHandlerFactoryMock = $this->createMock(IndexerHandlerFactory::class);
 
         $this->attributePlugin = (new ObjectManager($this))->getObject(
-            Attribute::class,
+            AttributePlugin::class,
             [
                 'config' => $this->configMock,
                 'indexerProcessor' => $this->indexerProcessorMock,
@@ -78,30 +79,31 @@ class AttributeTest extends TestCase
     /**
      * Test update catalog search indexer process.
      *
-     * @param bool $isInvalid
+     * @param bool $isNewObject
      * @param bool $isElasticsearchEnabled
      * @param array $dimensions
      * @return void
      * @dataProvider afterSaveDataProvider
      *
      */
-    public function testAfterSave(bool $isInvalid, bool $isElasticsearchEnabled, array $dimensions): void
+    public function testAfterSave(bool $isNewObject, bool $isElasticsearchEnabled, array $dimensions): void
     {
-        $indexerData = ['indexer_example_data'];
-
+        /** @var AttributeModel $attribute */
+        $attribute = (new ObjectManager($this))->getObject(AttributeModel::class);
+        $attribute->isObjectNew($isNewObject);
         /** @var AttributeResourceModel|MockObject $subjectMock */
         $subjectMock = $this->createMock(AttributeResourceModel::class);
+        $this->attributePlugin->beforeSave($subjectMock, $attribute);
+
+        $indexerData = ['indexer_example_data'];
+
         /** @var IndexerInterface|MockObject $indexerMock */
         $indexerMock = $this->getMockBuilder(IndexerInterface::class)
-            ->setMethods(['isInvalid', 'getData'])
+            ->setMethods(['getData'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        $indexerMock->expects($this->once())
-            ->method('isInvalid')
-            ->willReturn($isInvalid);
-
-        $indexerMock->expects($this->getExpectsCount($isInvalid, $isElasticsearchEnabled))
+        $indexerMock->expects($this->getExpectsCount($isNewObject, $isElasticsearchEnabled))
             ->method('getData')
             ->willReturn($indexerData);
 
@@ -109,7 +111,7 @@ class AttributeTest extends TestCase
             ->method('getIndexer')
             ->willReturn($indexerMock);
 
-        $this->configMock->expects($isInvalid ? $this->once() : $this->never())
+        $this->configMock->expects($isNewObject ? $this->once() : $this->never())
             ->method('isElasticsearchEnabled')
             ->willReturn($isElasticsearchEnabled);
 
@@ -117,16 +119,16 @@ class AttributeTest extends TestCase
         $indexerHandlerMock = $this->createMock(IndexerHandler::class);
 
         $indexerHandlerMock
-            ->expects(($isInvalid && $isElasticsearchEnabled) ? $this->exactly(count($dimensions)) : $this->never())
+            ->expects(($isNewObject && $isElasticsearchEnabled) ? $this->exactly(count($dimensions)) : $this->never())
             ->method('updateIndex')
             ->willReturnSelf();
 
-        $this->indexerHandlerFactoryMock->expects($this->getExpectsCount($isInvalid, $isElasticsearchEnabled))
+        $this->indexerHandlerFactoryMock->expects($this->getExpectsCount($isNewObject, $isElasticsearchEnabled))
             ->method('create')
             ->with(['data' => $indexerData])
             ->willReturn($indexerHandlerMock);
 
-        $this->dimensionProviderMock->expects($this->getExpectsCount($isInvalid, $isElasticsearchEnabled))
+        $this->dimensionProviderMock->expects($this->getExpectsCount($isNewObject, $isElasticsearchEnabled))
             ->method('getIterator')
             ->willReturn(new ArrayIterator($dimensions));
 
@@ -143,8 +145,8 @@ class AttributeTest extends TestCase
         $dimensions = [['scope' => 1], ['scope' => 2]];
 
         return [
-            'save_without_invalidation' => [false, false, []],
-            'save_with_mysql_search' => [true, false, $dimensions],
+            'save_existing_object' => [false, false, $dimensions],
+            'save_with_another_search_engine' => [true, false, $dimensions],
             'save_with_elasticsearch' => [true, true, []],
             'save_with_elasticsearch_and_dimensions' => [true, true, $dimensions],
         ];
@@ -153,12 +155,12 @@ class AttributeTest extends TestCase
     /**
      * Retrieves how many times method is executed.
      *
-     * @param bool $isInvalid
+     * @param bool $isNewObject
      * @param bool $isElasticsearchEnabled
      * @return InvokedCountMatcher
      */
-    private function getExpectsCount(bool $isInvalid, bool $isElasticsearchEnabled): InvokedCountMatcher
+    private function getExpectsCount(bool $isNewObject, bool $isElasticsearchEnabled): InvokedCountMatcher
     {
-        return ($isInvalid && $isElasticsearchEnabled) ? $this->once() : $this->never();
+        return ($isNewObject && $isElasticsearchEnabled) ? $this->once() : $this->never();
     }
 }
