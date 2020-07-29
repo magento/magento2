@@ -100,4 +100,21 @@ class PublicCookieMetadataTest extends TestCase
         );
         $this->assertEquals($expected, $object->__toArray());
     }
+
+    /**
+     * Test Set SameSite None With Insecure Cookies
+     *
+     * @return void
+     */
+    public function testSetSecureWithSameSiteNone(): void
+    {
+        /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata $publicCookieMetadata */
+        $publicCookieMetadata = $this->objectManager->getObject(
+            PublicCookieMetadata::class
+        );
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Cookie must be secure in order to use the SameSite None directive.');
+        $publicCookieMetadata->setSameSite('None');
+        $publicCookieMetadata->setSecure(false);
+    }
 }

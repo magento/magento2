@@ -151,10 +151,10 @@ class CookieMetadata
     /**
      * Setter for Cookie SameSite attribute
      *
-     * @param  string|null $sameSite
+     * @param  string $sameSite
      * @return $this
      */
-    public function setSameSite(?string $sameSite): CookieMetadata
+    public function setSameSite(string $sameSite): CookieMetadata
     {
         if (!array_key_exists(strtolower($sameSite), self::SAME_SITE_ALLOWED_VALUES)) {
             throw new \InvalidArgumentException(
@@ -163,7 +163,7 @@ class CookieMetadata
         }
         if (!$this->getSecure() && strtolower($sameSite) === 'none') {
             throw new \InvalidArgumentException(
-                'Cookie must be secure in order to use the Same Site None directive.'
+                'Cookie must be secure in order to use the SameSite None directive.'
             );
         }
         $sameSite = self::SAME_SITE_ALLOWED_VALUES[strtolower($sameSite)];

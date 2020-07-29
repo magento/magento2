@@ -79,9 +79,9 @@ class PublicCookieMetadata extends CookieMetadata
      */
     public function setSecure($secure)
     {
-        if (!$secure && strtolower(self::KEY_SAME_SITE) === 'none') {
+        if (!$secure && $this->get(self::KEY_SAME_SITE) === 'None') {
             throw new \InvalidArgumentException(
-                'Cookie must be secure in order to use the Same Site None directive.'
+                'Cookie must be secure in order to use the SameSite None directive.'
             );
         }
         return $this->set(self::KEY_SECURE, $secure);

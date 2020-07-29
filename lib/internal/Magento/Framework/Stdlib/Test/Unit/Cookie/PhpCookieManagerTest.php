@@ -669,7 +669,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             self::assertTrue($httpOnly);
             self::assertEquals('', $domain);
             self::assertEquals('', $path);
-            self::assertEquals('Strict', $sameSite);
+            self::assertEquals('Lax', $sameSite);
         }
 
         /**
@@ -695,7 +695,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             self::assertTrue($httpOnly);
             self::assertEquals('', $domain);
             self::assertEquals('', $path);
-            self::assertEquals('Strict', $sameSite);
+            self::assertEquals('Lax', $sameSite);
         }
 
         /**
@@ -721,7 +721,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             self::assertTrue($httpOnly);
             self::assertEquals('', $domain);
             self::assertEquals('', $path);
-            self::assertEquals('Strict', $sameSite);
+            self::assertEquals('Lax', $sameSite);
         }
 
         /**
@@ -747,7 +747,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
             self::assertTrue($httpOnly);
             self::assertEquals('magento.url', $domain);
             self::assertEquals('/backend', $path);
-            self::assertEquals('Strict', $sameSite);
+            self::assertEquals('Lax', $sameSite);
         }
 
         /**
@@ -901,19 +901,13 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
          */
         public function testSetCookieInvalidSameSiteValue(): void
         {
-            /** @var \Magento\Framework\Stdlib\Cookie\PublicCookieMetadata $cookieMetadata */
+            /** @var \Magento\Framework\Stdlib\Cookie\CookieMetadata $cookieMetadata */
             $cookieMetadata = $this->objectManager->getObject(
                 CookieMetadata::class
             );
-
-            try {
-                $cookieMetadata->setSameSite('default value');
-            } catch (\InvalidArgumentException $e) {
-                $this->assertEquals(
-                    'Invalid argument provided for SameSite directive expected one of: Strict, Lax or None',
-                    $e->getMessage()
-                );
-            }
+            $this->expectException('InvalidArgumentException');
+            $this->expectExceptionMessage('Invalid argument provided for SameSite directive expected one of: Strict, Lax or None');
+            $cookieMetadata->setSameSite('default value');
         }
     }
 }

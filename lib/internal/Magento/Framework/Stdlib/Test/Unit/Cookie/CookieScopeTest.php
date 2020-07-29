@@ -68,7 +68,7 @@ class CookieScopeTest extends TestCase
             [
                 SensitiveCookieMetadata::KEY_HTTP_ONLY => true,
                 SensitiveCookieMetadata::KEY_SECURE => true,
-                SensitiveCookieMetadata::KEY_SAME_SITE => 'Strict',
+                SensitiveCookieMetadata::KEY_SAME_SITE => 'Lax',
             ],
             $cookieScope->getSensitiveCookieMetadata()->__toArray()
         );
@@ -77,21 +77,25 @@ class CookieScopeTest extends TestCase
     /**
      * @covers ::getPublicCookieMetadata
      */
-    public function testGetPublicCookieMetadataNotEmpty()
+    public function testGetPublicCookieDefaultMetadata()
     {
         $cookieScope = $this->createCookieScope();
-
-        $this->assertNotEmpty($cookieScope->getPublicCookieMetadata()->__toArray());
+        $expected = [
+            PublicCookieMetadata::KEY_SAME_SITE => 'Lax'
+        ];
+        $this->assertEquals($expected, $cookieScope->getPublicCookieMetadata()->__toArray());
     }
 
     /**
      * @covers ::getCookieMetadata
      */
-    public function testGetCookieMetadataNotEmpty()
+    public function testGetCookieDefaultMetadata()
     {
         $cookieScope = $this->createCookieScope();
-
-        $this->assertNotEmpty($cookieScope->getPublicCookieMetadata()->__toArray());
+        $expected = [
+            CookieMetadata::KEY_SAME_SITE => 'Lax'
+        ];
+        $this->assertEquals($expected, $cookieScope->getPublicCookieMetadata()->__toArray());
     }
 
     /**
@@ -120,7 +124,7 @@ class CookieScopeTest extends TestCase
                 SensitiveCookieMetadata::KEY_DOMAIN => 'default domain',
                 SensitiveCookieMetadata::KEY_HTTP_ONLY => true,
                 SensitiveCookieMetadata::KEY_SECURE => true,
-                SensitiveCookieMetadata::KEY_SAME_SITE => 'Strict'
+                SensitiveCookieMetadata::KEY_SAME_SITE => 'Lax'
             ],
             $cookieScope->getSensitiveCookieMetadata()->__toArray()
         );
@@ -152,7 +156,7 @@ class CookieScopeTest extends TestCase
             [
                 SensitiveCookieMetadata::KEY_HTTP_ONLY => true,
                 SensitiveCookieMetadata::KEY_SECURE => true,
-                SensitiveCookieMetadata::KEY_SAME_SITE => 'Strict'
+                SensitiveCookieMetadata::KEY_SAME_SITE => 'Lax'
             ],
             $cookieScope->getSensitiveCookieMetadata()->__toArray()
         );
@@ -212,7 +216,7 @@ class CookieScopeTest extends TestCase
                 SensitiveCookieMetadata::KEY_DOMAIN => 'override domain',
                 SensitiveCookieMetadata::KEY_HTTP_ONLY => true,
                 SensitiveCookieMetadata::KEY_SECURE => true,
-                SensitiveCookieMetadata::KEY_SAME_SITE => 'Strict'
+                SensitiveCookieMetadata::KEY_SAME_SITE => 'Lax'
             ],
             $cookieScope->getSensitiveCookieMetadata($override)->__toArray()
         );
@@ -277,7 +281,7 @@ class CookieScopeTest extends TestCase
             [
                 SensitiveCookieMetadata::KEY_HTTP_ONLY => true,
                 SensitiveCookieMetadata::KEY_SECURE => true,
-                SensitiveCookieMetadata::KEY_SAME_SITE => 'Strict'
+                SensitiveCookieMetadata::KEY_SAME_SITE => 'Lax'
             ],
             $cookieScope->getSensitiveCookieMetadata($this->createSensitiveMetadata())->__toArray()
         );

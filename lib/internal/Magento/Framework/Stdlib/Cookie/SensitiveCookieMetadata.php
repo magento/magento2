@@ -34,7 +34,7 @@ class SensitiveCookieMetadata extends CookieMetadata
             $metadata[self::KEY_HTTP_ONLY] = true;
         }
         if (!isset($metadata[self::KEY_SAME_SITE])) {
-            $metadata[self::KEY_SAME_SITE] = 'Strict';
+            $metadata[self::KEY_SAME_SITE] = 'Lax';
         }
         $this->request = $request;
         parent::__construct($metadata);

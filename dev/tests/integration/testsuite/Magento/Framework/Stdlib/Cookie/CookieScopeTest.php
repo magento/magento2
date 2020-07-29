@@ -43,7 +43,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
             [
                 SensitiveCookieMetadata::KEY_HTTP_ONLY => true,
                 SensitiveCookieMetadata::KEY_SECURE => true,
-                SensitiveCookieMetadata::KEY_SAME_SITE => 'Strict'
+                SensitiveCookieMetadata::KEY_SAME_SITE => 'Lax'
             ],
             $cookieScope->getSensitiveCookieMetadata()->__toArray()
         );
@@ -51,11 +51,13 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
         $this->request->setServer(new Parameters($serverVal));
     }
 
-    public function testGetPublicCookieMetadataNotEmpty()
+    public function testGetPublicCookieDefaultMetadata()
     {
         $cookieScope = $this->createCookieScope();
-
-        $this->assertNotEmpty($cookieScope->getPublicCookieMetadata()->__toArray());
+        $expected = [
+            PublicCookieMetadata::KEY_SAME_SITE => 'Lax'
+        ];
+        $this->assertEquals($expected, $cookieScope->getPublicCookieMetadata()->__toArray());
     }
 
     public function testGetSensitiveCookieMetadataDefaults()
@@ -78,7 +80,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
                 SensitiveCookieMetadata::KEY_DOMAIN => 'default domain',
                 SensitiveCookieMetadata::KEY_HTTP_ONLY => true,
                 SensitiveCookieMetadata::KEY_SECURE => false,
-                SensitiveCookieMetadata::KEY_SAME_SITE => 'Strict'
+                SensitiveCookieMetadata::KEY_SAME_SITE => 'Lax'
             ],
             $cookieScope->getSensitiveCookieMetadata()->__toArray()
         );
@@ -142,7 +144,7 @@ class CookieScopeTest extends \PHPUnit\Framework\TestCase
                 SensitiveCookieMetadata::KEY_DOMAIN => 'override domain',
                 SensitiveCookieMetadata::KEY_HTTP_ONLY => true,
                 SensitiveCookieMetadata::KEY_SECURE => false,
-                SensitiveCookieMetadata::KEY_SAME_SITE => 'Strict'
+                SensitiveCookieMetadata::KEY_SAME_SITE => 'Lax'
             ],
             $cookieScope->getSensitiveCookieMetadata($override)->__toArray()
         );
