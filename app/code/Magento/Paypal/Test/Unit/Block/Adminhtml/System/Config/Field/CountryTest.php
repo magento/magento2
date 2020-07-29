@@ -12,12 +12,13 @@ use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\Helper\Js;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 use Magento\Paypal\Block\Adminhtml\System\Config\Field\Country;
 use Magento\Paypal\Model\Config\StructurePlugin;
-use PHPUnit\Framework\Constraint\LogicalAnd;
 use PHPUnit\Framework\Constraint\StringContains;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 
 class CountryTest extends TestCase
 {
@@ -46,6 +47,11 @@ class CountryTest extends TestCase
      */
     protected $_url;
 
+    /**
+     * @var DirectoryHelper
+     */
+    private $helper;
+
     protected function setUp(): void
     {
         $helper = new ObjectManager($this);
@@ -70,9 +76,29 @@ class CountryTest extends TestCase
         $this->_request = $this->getMockForAbstractClass(RequestInterface::class);
         $this->_jsHelper = $this->createMock(Js::class);
         $this->_url = $this->createMock(Url::class);
+        $this->helper = $this->createMock(DirectoryHelper::class);
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $js, string $selector): string {
+                    return "<script>document.querySelector('$selector').$event = function () { $js };</script>";
+                }
+            );
+        $secureRendererMock->method('renderStyleAsTag')
+            ->willReturnCallback(
+                function (string $style, string $selector): string {
+                    return "<style>$selector { $style }</style>";
+                }
+            );
         $this->_model = $helper->getObject(
             Country::class,
-            ['request' => $this->_request, 'jsHelper' => $this->_jsHelper, 'url' => $this->_url]
+            [
+                'request' => $this->_request,
+                'jsHelper' => $this->_jsHelper,
+                'url' => $this->_url,
+                'directoryHelper' => $this->helper,
+                'secureHtmlRenderer' => $secureRendererMock
+            ]
         );
     }
 
@@ -104,15 +130,7 @@ class CountryTest extends TestCase
                 '$("' . $this->_element->getHtmlId() . '").observe("change", function () {'
             ),
         ];
-        if ($canUseDefault && ($requestCountry == 'US') && $requestDefaultCountry) {
-            $constraints[] = new StringContains(
-                '$("' . $this->_element->getHtmlId() . '_inherit").observe("click", function () {'
-            );
-        }
-        $this->_jsHelper->expects($this->once())
-            ->method('getScript')
-            ->with(new LogicalAnd($constraints));
-        $this->_url->expects($this->once())
+        $this->_url->expects($this->at(0))
             ->method('getUrl')
             ->with(
                 '*/*/*',
@@ -123,6 +141,27 @@ class CountryTest extends TestCase
                     StructurePlugin::REQUEST_PARAM_COUNTRY => '__country__'
                 ]
             );
+        if ($canUseDefault && ($requestCountry == 'US') && $requestDefaultCountry) {
+            $this->helper->method('getDefaultCountry')->willReturn($requestDefaultCountry);
+            $constraints[] = new StringContains(
+                '$("' . $this->_element->getHtmlId() . '_inherit").observe("click", function () {'
+            );
+            $this->_url->expects($this->at(1))
+                ->method('getUrl')
+                ->with(
+                    '*/*/*',
+                    [
+                        'section' => 'section',
+                        'website' => 'website',
+                        'store' => 'store',
+                        StructurePlugin::REQUEST_PARAM_COUNTRY => '__country__',
+                        Country::REQUEST_PARAM_DEFAULT_COUNTRY => '__default__'
+                    ]
+                );
+        }
+        $this->_jsHelper->expects($this->once())
+            ->method('getScript')
+            ->with(self::logicalAnd(...$constraints));
         $this->_model->render($this->_element);
     }
 

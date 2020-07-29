@@ -23,8 +23,7 @@
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttribute"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttribute"/>
         <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{newsFromDate.attribute_code}}" stepKey="setAttributeCode"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>

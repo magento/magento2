@@ -114,6 +114,18 @@ class Minifier implements MinifierInterface
     {
         $dir = dirname($file);
         $fileName = basename($file);
+        $content = $this->readFactory->create($dir)->readFile($fileName);
+        //Storing Heredocs
+        $heredocs = [];
+        $content = preg_replace_callback(
+            '/<<<([A-z]+).*?\1;/ims',
+            function ($match) use (&$heredocs) {
+                $heredocs[] = $match[0];
+
+                return '__MINIFIED_HEREDOC__' .(count($heredocs) - 1);
+            },
+            $content
+        );
         $content = preg_replace(
             '#(?<!]]>)\s+</#',
             '</',
@@ -136,13 +148,22 @@ class Minifier implements MinifierInterface
                                 preg_replace(
                                     '#(?<!:)//[^\n\r]*(\<\?php)[^\n\r]*(\s\?\>)[^\n\r]*#',
                                     '',
-                                    $this->readFactory->create($dir)->readFile($fileName)
+                                    $content
                                 )
                             )
                         )
                     )
                 )
             )
+        );
+
+        //Restoring Heredocs
+        $content = preg_replace_callback(
+            '/__MINIFIED_HEREDOC__(\d+)/ims',
+            function ($match) use ($heredocs) {
+                return $heredocs[(int)$match[1]];
+            },
+            $content
         );
 
         if (!$this->htmlDirectory->isExist()) {

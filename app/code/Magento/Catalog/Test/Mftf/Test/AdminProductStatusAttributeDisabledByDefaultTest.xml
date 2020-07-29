@@ -23,8 +23,7 @@
 
         </before>
         <after>
-            <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttribute"/>
-            <waitForPageLoad stepKey="wait1"/>
+            <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttribute"/>
             <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid1"/>
             <fillField selector="{{AdminProductAttributeGridSection.GridFilterFrontEndLabel}}" userInput="Enable Product" stepKey="setAttributeLabel1"/>
             <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid1"/>
@@ -37,8 +36,7 @@
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
-        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttribute"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttribute"/>
         <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
         <fillField selector="{{AdminProductAttributeGridSection.GridFilterFrontEndLabel}}" userInput="Enable Product" stepKey="setAttributeLabel"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
@@ -48,8 +46,7 @@
         <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute"/>
         <waitForPageLoad stepKey="waitForAttributeToSave"/>
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad time="30" stepKey="waitForProductGridPageToLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductDropdown"/>
         <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickOnAddSimpleProduct"/>
         <waitForPageLoad stepKey="waitForProductEditToLoad"/>
