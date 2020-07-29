@@ -168,6 +168,7 @@ class Collection extends AbstractCollection
      * @param int $storeId
      * @param int $maxCountCacheableSearchTerms
      * @return bool
+     * @since 101.1.0
      */
     public function isTopSearchResult(string $term, int $storeId, int $maxCountCacheableSearchTerms):bool
     {

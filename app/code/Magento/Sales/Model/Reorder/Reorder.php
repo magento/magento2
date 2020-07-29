@@ -7,7 +7,6 @@ declare(strict_types=1);
 namespace Magento\Sales\Model\Reorder;
 
 use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Exception\InputException;
@@ -15,7 +14,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Quote\Model\Cart\CustomerCartResolver;
-use Magento\Quote\Model\Quote as Quote;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\GuestCart\GuestCartResolver;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Helper\Reorder as ReorderHelper;
 use Magento\Sales\Model\Order\Item;
@@ -73,11 +73,6 @@ class Reorder
     private $cartRepository;
 
     /**
-     * @var ProductRepositoryInterface
-     */
-    private $productRepository;
-
-    /**
      * @var Data\Error[]
      */
     private $errors = [];
@@ -93,10 +88,15 @@ class Reorder
     private $productCollectionFactory;
 
     /**
+     * @var GuestCartResolver
+     */
+    private $guestCartResolver;
+
+    /**
      * @param OrderFactory $orderFactory
      * @param CustomerCartResolver $customerCartProvider
+     * @param GuestCartResolver $guestCartResolver
      * @param CartRepositoryInterface $cartRepository
-     * @param ProductRepositoryInterface $productRepository
      * @param ReorderHelper $reorderHelper
      * @param \Psr\Log\LoggerInterface $logger
      * @param ProductCollectionFactory $productCollectionFactory
@@ -104,18 +104,18 @@ class Reorder
     public function __construct(
         OrderFactory $orderFactory,
         CustomerCartResolver $customerCartProvider,
+        GuestCartResolver $guestCartResolver,
         CartRepositoryInterface $cartRepository,
-        ProductRepositoryInterface $productRepository,
         ReorderHelper $reorderHelper,
         \Psr\Log\LoggerInterface $logger,
         ProductCollectionFactory $productCollectionFactory
     ) {
         $this->orderFactory = $orderFactory;
         $this->cartRepository = $cartRepository;
-        $this->productRepository = $productRepository;
         $this->reorderHelper = $reorderHelper;
         $this->logger = $logger;
         $this->customerCartProvider = $customerCartProvider;
+        $this->guestCartResolver = $guestCartResolver;
         $this->productCollectionFactory = $productCollectionFactory;
     }
 
@@ -141,7 +141,9 @@ class Reorder
         $customerId = (int)$order->getCustomerId();
         $this->errors = [];
 
-        $cart = $this->customerCartProvider->resolve($customerId);
+        $cart = $customerId === 0
+            ? $this->guestCartResolver->resolve()
+            : $this->customerCartProvider->resolve($customerId);
         if (!$this->reorderHelper->isAllowed($order->getStore())) {
             $this->addError((string)__('Reorders are not allowed.'), self::ERROR_REORDER_NOT_AVAILABLE);
             return $this->prepareOutput($cart);
@@ -225,7 +227,8 @@ class Reorder
             ->addStoreFilter()
             ->addAttributeToSelect('*')
             ->joinAttribute('status', 'catalog_product/status', 'entity_id', null, 'inner')
-            ->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner');
+            ->joinAttribute('visibility', 'catalog_product/visibility', 'entity_id', null, 'inner')
+            ->addOptionsToResult();
 
         return $collection->getItems();
     }

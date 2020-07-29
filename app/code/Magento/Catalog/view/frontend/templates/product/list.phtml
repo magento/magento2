@@ -7,21 +7,18 @@ use Magento\Framework\App\Action\Action;
 
 ?>
 <?php
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
-// phpcs:disable Generic.Files.LineLength.TooLong
-
 /**
  * Product list template
  *
  * @var $block \Magento\Catalog\Block\Product\ListProduct
  * @var \Magento\Framework\Escaper $escaper
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
 <?php
 $_productCollection = $block->getLoadedProductCollection();
 /** @var \Magento\Catalog\Helper\Output $_helper */
-$_helper = $this->helper(Magento\Catalog\Helper\Output::class);
+$_helper = $block->getData('outputHelper');
 ?>
 <?php if (!$_productCollection->count()): ?>
     <div class="message info empty">
@@ -52,12 +49,14 @@ $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
             <?php /** @var $_product \Magento\Catalog\Model\Product */ ?>
             <?php foreach ($_productCollection as $_product): ?>
             <li class="item product product-item">
-                <div class="product-item-info" data-container="product-<?= /* @noEscape */ $viewMode ?>">
+                <div class="product-item-info"
+                     id="product-item-info_<?= /* @noEscape */ $_product->getId() ?>"
+                     data-container="product-<?= /* @noEscape */ $viewMode ?>">
                     <?php
                     $productImage = $block->getImage($_product, $imageDisplayArea);
                     if ($pos != null) {
-                        $position = ' style="left:' . $productImage->getWidth() . 'px;'
-                            . 'top:' . $productImage->getHeight() . 'px;"';
+                        $position = 'left:' . $productImage->getWidth() . 'px;'
+                            . 'top:' . $productImage->getHeight() . 'px;';
                     }
                     ?>
                     <?php // Product Image ?>
@@ -71,21 +70,18 @@ $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
                         <strong class="product name product-item-name">
                             <a class="product-item-link"
                                href="<?= $escaper->escapeUrl($_product->getProductUrl()) ?>">
-                                <?= /* @noEscape */ $_helper->productAttribute(
-                                    $_product,
-                                    $_product->getName(),
-                                    'name'
-                                ) ?>
+                                <?=/* @noEscape */ $_helper->productAttribute($_product, $_product->getName(), 'name') ?>
                             </a>
                         </strong>
                         <?= $block->getReviewsSummaryHtml($_product, $templateType) ?>
                         <?= /* @noEscape */ $block->getProductPrice($_product) ?>
+
                         <?= $block->getProductDetailsHtml($_product) ?>
 
                         <div class="product-item-inner">
-                            <div class="product actions product-item-actions"<?= strpos($pos, $viewMode . '-actions') ? $escaper->escapeHtmlAttr($position) : '' ?>>
-                                <div class="actions-primary"<?= strpos($pos, $viewMode . '-primary') ? $escaper->escapeHtmlAttr($position) : '' ?>>
-                                    <?php if ($_product->isSaleable()): ?>
+                            <div class="product actions product-item-actions">
+                                <div class="actions-primary">
+                                    <?php if ($_product->isSaleable()):?>
                                         <?php $postParams = $block->getAddToCartPostParams($_product); ?>
                                         <form data-role="tocart-form"
                                               data-product-sku="<?= $escaper->escapeHtml($_product->getSku()) ?>"
@@ -96,7 +92,9 @@ $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
                                                    value="<?= /* @noEscape */ $postParams['data']['product'] ?>">
                                             <input type="hidden"
                                                    name="<?= /* @noEscape */ Action::PARAM_NAME_URL_ENCODED ?>"
-                                                   value="<?= /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED] ?>">
+                                                   value="<?=
+                                                   /* @noEscape */ $postParams['data'][Action::PARAM_NAME_URL_ENCODED]
+                                                    ?>">
                                             <?= $block->getBlockHtml('formkey') ?>
                                             <button type="submit"
                                                     title="<?= $escaper->escapeHtmlAttr(__('Add to Cart')) ?>"
@@ -104,23 +102,31 @@ $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
                                                 <span><?= $escaper->escapeHtml(__('Add to Cart')) ?></span>
                                             </button>
                                         </form>
-                                    <?php else: ?>
-                                        <?php if ($_product->isAvailable()): ?>
+                                    <?php else:?>
+                                        <?php if ($_product->isAvailable()):?>
                                             <div class="stock available">
-                                                <span><?= $escaper->escapeHtml(__('In stock')) ?></span>
-                                            </div>
-                                        <?php else: ?>
+                                                <span><?= $escaper->escapeHtml(__('In stock')) ?></span></div>
+                                        <?php else:?>
                                             <div class="stock unavailable">
-                                                <span><?= $escaper->escapeHtml(__('Out of stock')) ?></span>
-                                            </div>
+                                                <span><?= $escaper->escapeHtml(__('Out of stock')) ?></span></div>
                                         <?php endif; ?>
                                     <?php endif; ?>
                                 </div>
-                                <div data-role="add-to-links" class="actions-secondary"<?= strpos($pos, $viewMode . '-secondary') ? $escaper->escapeHtmlAttr($position) : '' ?>>
+                                <?= strpos($pos, $viewMode . '-primary') ?
+                                    /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                        $position,
+                                        'product-item-info_' . $_product->getId() . ' div.actions-primary'
+                                    ) : '' ?>
+                                <div data-role="add-to-links" class="actions-secondary">
                                     <?php if ($addToBlock = $block->getChildBlock('addto')): ?>
                                         <?= $addToBlock->setProduct($_product)->getChildHtml() ?>
                                     <?php endif; ?>
                                 </div>
+                                <?= strpos($pos, $viewMode . '-secondary') ?
+                                    /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                        $position,
+                                        'product-item-info_' . $_product->getId() . ' div.actions-secondary'
+                                    ) : '' ?>
                             </div>
                             <?php if ($showDescription): ?>
                                 <div class="product description product-item-description">
@@ -137,6 +143,11 @@ $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
                         </div>
                     </div>
                 </div>
+                <?= strpos($pos, $viewMode . '-actions') ?
+                /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                    $position,
+                    'product-item-info_' . $_product->getId() . ' div.product-item-actions'
+                ) : '' ?>
             </li>
             <?php endforeach; ?>
         </ol>
