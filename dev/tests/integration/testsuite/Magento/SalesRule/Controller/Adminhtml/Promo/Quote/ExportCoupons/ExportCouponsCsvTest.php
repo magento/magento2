@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote;
+namespace Magento\SalesRule\Controller\Adminhtml\Promo\Quote\ExportCoupons;
 
 use Magento\SalesRule\Controller\Adminhtml\Promo\Quote\ExportCoupons\ExportCouponsController;
 
