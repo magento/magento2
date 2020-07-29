@@ -154,6 +154,33 @@ class UpdateItemOptionsTest extends AbstractController
     }
 
     /**
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist_with_grouped_product.php
+     * @magentoDbIsolation disabled
+     *
+     * @return void
+     */
+    public function testUpdateItemOptionsForGroupedProduct(): void
+    {
+        $this->customerSession->setCustomerId(1);
+        $item = $this->getWishlistByCustomerId->getItemBySku(1, 'grouped');
+        $this->assertNotNull($item);
+        $params = [
+            'id' => $item->getId(),
+            'product' => $item->getProductId(),
+            'super_group' => $this->performGroupedOption(),
+            'qty' => 1,
+        ];
+        $this->performUpdateWishListItemRequest($params);
+        $message = sprintf("%s has been updated in your Wish List.", $item->getProduct()->getName());
+        $this->assertSessionMessages($this->equalTo([(string)__($message)]), MessageInterface::TYPE_SUCCESS);
+        $this->assertRedirect($this->stringContains('wishlist/index/index/wishlist_id/' . $item->getWishlistId()));
+        $this->assertUpdatedItem(
+            $this->getWishlistByCustomerId->getItemBySku(1, 'grouped'),
+            $params
+        );
+    }
+
+    /**
      * Perform request update wish list item.
      *
      * @param array $params
@@ -194,5 +221,21 @@ class UpdateItemOptionsTest extends AbstractController
         $option = reset($configurableOptions[$attributeId]);
 
         return [$attributeId => $option['value_index']];
+    }
+
+    /**
+     * Perform group option to select.
+     *
+     * @return array
+     */
+    private function performGroupedOption(): array
+    {
+        $simple1 = $this->productRepository->get('simple_11');
+        $simple2 = $this->productRepository->get('simple_22');
+
+        return [
+            $simple1->getId() => '3',
+            $simple2->getId() => '3',
+        ];
     }
 }
