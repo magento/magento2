@@ -58,7 +58,7 @@
         <dontSee selector="{{StorefrontHeaderSection.NavigationCategoryByName(CatNotIncludeInMenu.name)}}" stepKey="dontSeeCategoryOnNavigation"/>
         <!-- Select created category and enable Include In Menu option-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(CatNotIncludeInMenu.name)}}" stepKey="selectCreatedCategory"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <click selector="{{AdminCategoryBasicFieldSection.includeInMenuLabel}}" stepKey="enableIncludeInMenuOption"/>
