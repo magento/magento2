@@ -54,4 +54,12 @@
             </argument>
         </arguments>
     </type>
+
+    <type name="Magento\StoreGraphQl\Model\Resolver\Store\StoreConfigDataProvider">
+        <arguments>
+            <argument name="extendedConfigData" xsi:type="array">
+                <item name="payflowpro_vault_enabled" xsi:type="string">payment/payflowpro_cc_vault/active</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

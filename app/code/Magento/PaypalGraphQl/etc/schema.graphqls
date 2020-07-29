@@ -142,3 +142,7 @@ input PayflowProResponseInput @doc(description:"Input required to complete payme
 type PayflowProResponseOutput {
     cart: Cart!
 }
+
+type StoreConfig {
+    payflowpro_vault_enabled: String @doc(description: "Payflowpro vault status.")
+}
