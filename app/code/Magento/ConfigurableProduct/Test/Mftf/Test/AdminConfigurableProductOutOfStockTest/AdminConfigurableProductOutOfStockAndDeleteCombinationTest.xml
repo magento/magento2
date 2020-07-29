@@ -108,8 +108,7 @@
             <argument name="product" value="ApiSimpleTwo"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForFiltersToBeApplied2"/>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage2"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad2"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage2"/>
 
         <!-- Edit the quantity of the second simple product as 0 -->
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="0" stepKey="fillProductQuantity2"/>
