@@ -10,7 +10,7 @@ use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 use Magento\Framework\DB\Transaction;
 use Magento\Sales\Model\Order\ShipmentFactory;
 
-Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order_with_different_types_of_product.php');
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order_with_customer.php');
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var Transaction $transaction */
