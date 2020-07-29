@@ -11,6 +11,7 @@ use Magento\Framework\ObjectManagerInterface;
  * Creates Blocks
  *
  * @api
+ * @since 100.0.2
  */
 class BlockFactory
 {

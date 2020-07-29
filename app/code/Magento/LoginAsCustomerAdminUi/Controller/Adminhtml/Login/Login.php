@@ -167,6 +167,7 @@ class Login extends Action implements HttpGetActionInterface
 
         $this->deleteAuthenticationDataForUser->execute($userId);
         $secret = $this->saveAuthenticationData->execute($authenticationData);
+        $this->authSession->setIsLoggedAsCustomer(true);
 
         $redirectUrl = $this->getLoginProceedRedirectUrl($secret, $storeId);
         $resultRedirect->setUrl($redirectUrl);
