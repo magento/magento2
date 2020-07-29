@@ -118,15 +118,11 @@ class Search implements ProductQueryInterface
             $productArray[$product->getId()] = $product->getData();
             $productArray[$product->getId()]['model'] = $product;
             foreach ($queryFields as $field) {
-                try {
-                    $productArray[$product->getId()][$field] = $this->getAttributeValue(
-                        $product,
-                        $productArray,
-                        $field
-                    );
-                } catch (LocalizedException $e) {
-                    continue;
-                }
+                $productArray[$product->getId()][$field] = $this->getAttributeValue(
+                    $product,
+                    $productArray,
+                    $field
+                );
             }
         }
 
@@ -178,5 +174,7 @@ class Search implements ProductQueryInterface
                     $productArray[$product->getId()][$field] : null;
             }
         }
+
+        return "";
     }
 }
