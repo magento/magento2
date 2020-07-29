@@ -207,16 +207,3 @@ $categoryLinkManagement->assignProductToCategories(
     $product->getSku(),
     [2]
 );
-
-/**
- * We need to remember that automatic reindexation is not working properly in integration tests
- * Reindexation is sitting on top of afterCommit callbacks:
- * \Magento\Catalog\Model\Product::priceReindexCallback
- *
- * However, callbacks are applied only when transaction_level = 0 (when transaction is commited), however
- * integration tests are not committing transactions, so we need to reindex data manually in order to reuse it in tests
- */
-/** @var \Magento\Indexer\Model\Indexer $indexer */
-$indexer = $objectManager->create(\Magento\Indexer\Model\Indexer::class);
-$indexer->load('catalog_product_price');
-$indexer->reindexRow($product->getId());

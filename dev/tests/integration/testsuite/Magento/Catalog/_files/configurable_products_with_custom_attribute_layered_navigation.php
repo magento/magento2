@@ -31,9 +31,3 @@ $attributeRepository = Bootstrap::getObjectManager()->create(AttributeRepository
 $attributeRepository->save($attribute);
 
 CacheCleaner::cleanAll();
-
-// Run from CLI due to some classes involved in reindex process have state which do not allow to reindex
-$appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
-$out = '';
-// phpcs:ignore Magento2.Security.InsecureFunction
-exec("php -f {$appDir}/bin/magento indexer:reindex catalogsearch_fulltext", $out);
