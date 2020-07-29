@@ -11,9 +11,10 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Wishlist\Model\ResourceModel\Wishlist as WishlistResource;
 use Magento\Wishlist\Model\Wishlist;
 use Magento\Wishlist\Model\WishlistFactory;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/simple_product_disabled.php';
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/simple_product_disabled.php');
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var WishlistResource $wishListResource */

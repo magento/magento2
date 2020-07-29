@@ -12,9 +12,10 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Event\Observer;
 use Magento\Reports\Observer\CatalogProductViewObserver;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/Catalog/_files/simple_product_disabled.php';
-require __DIR__ . '/../../Customer/_files/customer.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/simple_product_disabled.php');
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer.php');
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var ProductRepositoryInterface $productRepository */

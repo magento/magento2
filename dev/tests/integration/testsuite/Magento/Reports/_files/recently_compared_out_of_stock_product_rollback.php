@@ -5,5 +5,7 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/../../../Magento/Catalog/_files/out_of_stock_product_with_category.php';
-require __DIR__ . '/../../Customer/_files/customer_rollback.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/out_of_stock_product_with_category.php');
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer_rollback.php');

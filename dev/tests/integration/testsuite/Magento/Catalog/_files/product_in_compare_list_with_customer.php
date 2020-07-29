@@ -10,9 +10,10 @@ use Magento\Catalog\Model\Product\Compare\ListCompareFactory;
 use Magento\Customer\Model\Session;
 use Magento\Customer\Model\Visitor;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/second_product_simple.php';
-require __DIR__ . '/../../Customer/_files/customer.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/second_product_simple.php');
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer.php');
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var Session $session */
