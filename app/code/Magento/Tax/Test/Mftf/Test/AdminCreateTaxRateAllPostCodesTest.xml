@@ -69,8 +69,7 @@
         <seeInField selector="{{AdminTaxRateFormSection.rate}}" userInput="20.0000" stepKey="seeRate"/>
 
         <!-- Go to the tax rule grid page and verify our tax rate can be used in the rule -->
-        <amOnPage url="{{AdminTaxRuleGridPage.url}}" stepKey="goToTaxRuleIndex1"/>
-        <waitForPageLoad stepKey="waitForTaxRuleIndex"/>
+        <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleIndex1"/>
         <click selector="{{AdminGridMainControls.add}}" stepKey="clickAddNewTaxRule"/>
         <see selector="{{AdminTaxRulesSection.taxRateMultiSelectItems}}" userInput="{{SimpleTaxRate.code}}" stepKey="seeTaxRateOnNewTaxRulePage"/>
     </test>

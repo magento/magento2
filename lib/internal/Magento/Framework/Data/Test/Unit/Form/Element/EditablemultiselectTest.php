@@ -11,6 +11,8 @@ use Magento\Framework\Data\Form\Element\Editablemultiselect;
 use Magento\Framework\DataObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 class EditablemultiselectTest extends TestCase
 {
@@ -22,7 +24,30 @@ class EditablemultiselectTest extends TestCase
     protected function setUp(): void
     {
         $testHelper = new ObjectManager($this);
-        $this->_model = $testHelper->getObject(Editablemultiselect::class);
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn('some-rando-string');
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $listener, string $selector): string {
+                    return "<script>document.querySelector('{$selector}').{$event} = () => { {$listener} };</script>";
+                }
+            );
+        $secureRendererMock->method('renderTag')
+            ->willReturnCallback(
+                function (string $tag, array $attrs, ?string $content): string {
+                    $attrs = new DataObject($attrs);
+
+                    return "<$tag {$attrs->serialize()}>$content</$tag>";
+                }
+            );
+        $this->_model = $testHelper->getObject(
+            Editablemultiselect::class,
+            [
+                'random' => $randomMock,
+                'secureRenderer' => $secureRendererMock
+            ]
+        );
         $values = [
             ['value' => 1, 'label' => 'Value1'],
             ['value' => 2, 'label' => 'Value2'],
