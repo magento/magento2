@@ -153,7 +153,7 @@ class ConsumersRunnerTest extends TestCase
                     ['cron_consumers_runner/cron_run', true, true],
                     ['cron_consumers_runner/max_messages', 10000, $maxMessages],
                     ['cron_consumers_runner/consumers', [], $allowedConsumers],
-                    ['queue/only_spawn_when_message_available', 0, 0],
+                    ['queue/only_spawn_when_message_available', null, 0],
                 ]
             );
 
@@ -277,6 +277,7 @@ class ConsumersRunnerTest extends TestCase
      * @param int $shellBackgroundExpects
      * @param boolean $globalOnlySpawnWhenMessageAvailable
      * @param int $getOnlySpawnWhenMessageAvailableCallCount
+     * @param int $isMassagesAvailableInTheQueueCallCount
      * @dataProvider runBasedOnOnlySpawnWhenMessageAvailableConsumerConfigurationDataProvider
      */
     public function testRunBasedOnOnlySpawnWhenMessageAvailableConsumerConfiguration(
@@ -284,7 +285,8 @@ class ConsumersRunnerTest extends TestCase
         $isMassagesAvailableInTheQueue,
         $shellBackgroundExpects,
         $globalOnlySpawnWhenMessageAvailable,
-        $getOnlySpawnWhenMessageAvailableCallCount
+        $getOnlySpawnWhenMessageAvailableCallCount,
+        $isMassagesAvailableInTheQueueCallCount
     ) {
         $consumerName = 'consumerName';
         $connectionName = 'connectionName';
@@ -296,7 +298,7 @@ class ConsumersRunnerTest extends TestCase
                     ['cron_consumers_runner/cron_run', true, true],
                     ['cron_consumers_runner/max_messages', 10000, 1000],
                     ['cron_consumers_runner/consumers', [], []],
-                    ['queue/only_spawn_when_message_available', 0, $globalOnlySpawnWhenMessageAvailable],
+                    ['queue/only_spawn_when_message_available', true, $globalOnlySpawnWhenMessageAvailable],
                 ]
             );
 
@@ -323,7 +325,7 @@ class ConsumersRunnerTest extends TestCase
             ->method('isLocked')
             ->willReturn(false);
 
-        $this->checkIsAvailableMessagesMock->expects($this->exactly((int)$onlySpawnWhenMessageAvailable))
+        $this->checkIsAvailableMessagesMock->expects($this->exactly($isMassagesAvailableInTheQueueCallCount))
             ->method('execute')
             ->willReturn($isMassagesAvailableInTheQueue);
 
@@ -344,42 +346,48 @@ class ConsumersRunnerTest extends TestCase
                 'isMassagesAvailableInTheQueue' => true,
                 'shellBackgroundExpects' => 1,
                 'globalOnlySpawnWhenMessageAvailable' => false,
-                'getOnlySpawnWhenMessageAvailableCallCount' => 1
+                'getOnlySpawnWhenMessageAvailableCallCount' => 1,
+                'isMassagesAvailableInTheQueueCallCount' => 1
             ],
             [
                 'onlySpawnWhenMessageAvailable' => true,
                 'isMassagesAvailableInTheQueue' => false,
                 'shellBackgroundExpects' => 0,
                 'globalOnlySpawnWhenMessageAvailable' => false,
-                'getOnlySpawnWhenMessageAvailableCallCount' => 1
+                'getOnlySpawnWhenMessageAvailableCallCount' => 1,
+                'isMassagesAvailableInTheQueueCallCount' => 1
             ],
             [
                 'onlySpawnWhenMessageAvailable' => false,
                 'isMassagesAvailableInTheQueue' => true,
                 'shellBackgroundExpects' => 1,
                 'globalOnlySpawnWhenMessageAvailable' => false,
-                'getOnlySpawnWhenMessageAvailableCallCount' => 1
+                'getOnlySpawnWhenMessageAvailableCallCount' => 2,
+                'isMassagesAvailableInTheQueueCallCount' => 0
             ],
             [
-                'onlySpawnWhenMessageAvailable' => false,
-                'isMassagesAvailableInTheQueue' => false,
-                'shellBackgroundExpects' => 1,
-                'globalOnlySpawnWhenMessageAvailable' => false,
-                'getOnlySpawnWhenMessageAvailableCallCount' => 1
-            ],
-            [
-                'onlySpawnWhenMessageAvailable' => true,
+                'onlySpawnWhenMessageAvailable' => null,
                 'isMassagesAvailableInTheQueue' => true,
                 'shellBackgroundExpects' => 1,
                 'globalOnlySpawnWhenMessageAvailable' => true,
-                'getOnlySpawnWhenMessageAvailableCallCount' => 0
+                'getOnlySpawnWhenMessageAvailableCallCount' => 2,
+                'isMassagesAvailableInTheQueueCallCount' => 1
             ],
             [
-                'onlySpawnWhenMessageAvailable' => true,
+                'onlySpawnWhenMessageAvailable' => null,
                 'isMassagesAvailableInTheQueue' => true,
                 'shellBackgroundExpects' => 1,
                 'globalOnlySpawnWhenMessageAvailable' => false,
-                'getOnlySpawnWhenMessageAvailableCallCount' => 1
+                'getOnlySpawnWhenMessageAvailableCallCount' => 2,
+                'isMassagesAvailableInTheQueueCallCount' => 0
+            ],
+            [
+                'onlySpawnWhenMessageAvailable' => false,
+                'isMassagesAvailableInTheQueue' => true,
+                'shellBackgroundExpects' => 1,
+                'globalOnlySpawnWhenMessageAvailable' => true,
+                'getOnlySpawnWhenMessageAvailableCallCount' => 2,
+                'isMassagesAvailableInTheQueueCallCount' => 0
             ],
         ];
     }
