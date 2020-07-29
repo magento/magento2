@@ -8,6 +8,7 @@ declare(strict_types=1);
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var CartRepositoryInterface $quoteRepository */
@@ -19,5 +20,5 @@ if ($quote !== null) {
     $quoteRepository->delete($quote);
 }
 
-require __DIR__ . '/../../../Magento/Catalog/_files/second_product_simple_rollback.php';
-require __DIR__ . '/../../Customer/_files/customer_rollback.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/second_product_simple_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer_rollback.php');
