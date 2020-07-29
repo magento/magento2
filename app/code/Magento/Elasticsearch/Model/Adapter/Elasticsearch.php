@@ -344,6 +344,7 @@ class Elasticsearch
         // remove obsolete index
         if ($oldIndex) {
             $this->client->deleteIndex($oldIndex);
+            unset($this->indexByCode[$mappedIndexerId . '_' . $storeId]);
         }
 
         return $this;
