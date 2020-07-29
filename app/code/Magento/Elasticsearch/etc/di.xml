@@ -556,6 +556,6 @@
         </arguments>
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Attribute">
-        <plugin name="updateElasticsearchIndexerMapping" type="Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Category\Product\Attribute" sortOrder="20"/>
+        <plugin name="updateElasticsearchIndexerMapping" type="Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Category\Product\Attribute"/>
     </type>
 </config>

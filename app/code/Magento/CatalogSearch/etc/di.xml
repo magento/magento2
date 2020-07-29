@@ -47,7 +47,7 @@
         <plugin name="catalogsearchFulltextIndexerStoreGroup" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Store\Group"/>
     </type>
     <type name="Magento\Catalog\Model\ResourceModel\Attribute">
-        <plugin name="catalogsearchFulltextIndexerAttribute" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute" sortOrder="10"/>
+        <plugin name="catalogsearchFulltextIndexerAttribute" type="Magento\CatalogSearch\Model\Indexer\Fulltext\Plugin\Attribute"/>
         <plugin name="catalogsearchAttributeSearchWeightCache" type="Magento\CatalogSearch\Model\Attribute\SearchWeight"/>
     </type>
     <type name="Magento\Framework\Search\EntityMetadata" />
