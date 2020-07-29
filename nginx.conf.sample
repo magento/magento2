@@ -3,13 +3,13 @@
 #    # use tcp connection
 #    # server  127.0.0.1:9000;
 #    # or socket
-#    server   unix:/var/run/php/php7.0-fpm.sock;
+#    server   unix:/var/run/php/php7.4-fpm.sock;
 # }
 # server {
 #    listen 80;
 #    server_name mage.dev;
 #    set $MAGE_ROOT /var/www/magento2;
-#    set $MAGE_DEBUG_SHOW_ARGS 1;
+#    set $MAGE_DEBUG_SHOW_ARGS 0;
 #    include /vagrant/magento2/nginx.conf.sample;
 # }
 #
@@ -93,7 +93,7 @@ location / {
 }
 
 location /pub/ {
-    location ~ ^/pub/media/(downloadable|customer|import|theme_customization/.*\.xml) {
+    location ~ ^/pub/media/(downloadable|customer|import|custom_options|theme_customization/.*\.xml) {
         deny all;
     }
     alias $MAGE_ROOT/pub/;
@@ -166,6 +166,11 @@ location /media/downloadable/ {
 location /media/import/ {
     deny all;
 }
+
+location /media/custom_options/ {
+    deny all;
+}
+
 location /errors/ {
     location ~* \.xml$ {
         deny all;
@@ -176,7 +181,8 @@ location /errors/ {
 location ~ ^/(index|get|static|errors/report|errors/404|errors/503|health_check)\.php$ {
     try_files $uri =404;
     fastcgi_pass   fastcgi_backend;
-    fastcgi_buffers 1024 4k;
+    fastcgi_buffers 16 16k;
+    fastcgi_buffer_size 32k;
 
     fastcgi_param  PHP_FLAG  "session.auto_start=off \n suhosin.session.cryptua=off";
     fastcgi_param  PHP_VALUE "memory_limit=756M \n max_execution_time=18000";
