@@ -3,8 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<?php /** @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Options */ ?>
 
 <div class="fieldset-wrapper" id="product-custom-options-wrapper" data-block="product-custom-options">
     <div class="fieldset-wrapper-title">
@@ -12,14 +14,19 @@
             <span><?= $block->escapeHtml(__('Custom Options')) ?></span>
         </strong>
     </div>
-    <div class="fieldset-wrapper-content" id="product-custom-options-content" data-role="product-custom-options-content">
+    <div class="fieldset-wrapper-content" id="product-custom-options-content"
+         data-role="product-custom-options-content">
         <fieldset class="fieldset">
             <div class="messages">
-                <div class="message message-error" id="dynamic-price-warning" style="display: none;">
+                <div class="message message-error" id="dynamic-price-warning">
                     <div class="message-inner">
-                        <div class="message-content"><?= $block->escapeHtml(__('We can\'t save custom-defined options for bundles with dynamic pricing.')) ?></div>
+                        <div class="message-content">
+                            <?= $block->escapeHtml(__(
+                                'We can\'t save custom-defined options for bundles with dynamic pricing.'
+                            )) ?></div>
                     </div>
                 </div>
+                <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display: none;", '#dynamic-price-warning') ?>
             </div>
 
             <div id="product_options_container" class="sortable-wrapper">
@@ -35,7 +42,7 @@
     </div>
 </div>
 
-<script>
+<?php $scriptString = <<<script
 require(['jquery'], function($){
     var priceType = $('#price_type');
     var priceWarning = $('#dynamic-price-warning');
@@ -43,4 +50,6 @@ require(['jquery'], function($){
         priceWarning.show();
     }
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

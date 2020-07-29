@@ -50,8 +50,12 @@
             <magentoCLI command="config:set {{AdminShippingSettingsOriginZipCodeConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.postcode}}" stepKey="setOriginZipCode"/>
             <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddressConfigData.path}} '{{DE_Address_Berlin_Not_Default_Address.street[0]}}'" stepKey="setOriginStreetAddress"/>
             <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddress2ConfigData.path}} '{{US_Address_California.street[0]}}'" stepKey="setOriginStreetAddress2"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!--Reset configs-->
@@ -70,8 +74,12 @@
             <magentoCLI command="config:set {{AdminShippingSettingsOriginZipCodeConfigData.path}} ''" stepKey="setOriginZipCode"/>
             <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddressConfigData.path}} ''" stepKey="setOriginStreetAddress"/>
             <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddress2ConfigData.path}} ''" stepKey="setOriginStreetAddress2"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <!--Delete created data-->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -105,7 +113,7 @@
         </actionGroup>
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
         <!--Open created order in admin-->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrdersPage"/>
         <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchOrder">
             <argument name="keyword" value="$grabOrderNumber"/>
         </actionGroup>

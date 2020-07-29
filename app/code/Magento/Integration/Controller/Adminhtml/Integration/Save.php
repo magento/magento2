@@ -74,7 +74,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration impleme
             $this->_redirectOnSaveError();
         } catch (IntegrationException $e) {
             $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
-            $this->_getSession()->setIntegrationData($integrationData);
+            $this->_getSession()->setIntegrationData($this->getRequest()->getPostValue());
             $this->_redirectOnSaveError();
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
             $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
@@ -115,12 +115,12 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration impleme
         try {
             $integrationData = $this->_integrationService->get($integrationId)->getData();
         } catch (IntegrationException $e) {
-            $this->messageManager->addErrorMessage($this->escaper->escapeHtml($e->getMessage()));
+            $this->messageManager->addError($this->escaper->escapeHtml($e->getMessage()));
             $this->_redirect('*/*/');
             return null;
         } catch (\Exception $e) {
             $this->_logger->critical($e);
-            $this->messageManager->addErrorMessage(__('Internal error. Check exception log for details.'));
+            $this->messageManager->addError(__('Internal error. Check exception log for details.'));
             $this->_redirect('*/*');
             return null;
         }
@@ -180,7 +180,7 @@ class Save extends \Magento\Integration\Controller\Adminhtml\Integration impleme
                 );
             }
         } else {
-            $this->messageManager->addErrorMessage(__('The integration was not saved.'));
+            $this->messageManager->addError(__('The integration was not saved.'));
         }
     }
 }

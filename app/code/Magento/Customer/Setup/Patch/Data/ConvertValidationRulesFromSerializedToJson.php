@@ -3,19 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Setup\Patch\Data;
 
 use Magento\Framework\DB\FieldDataConverterFactory;
 use Magento\Framework\DB\DataConverter\SerializedToJson;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
- * Class ConvertValidationRulesFromSerializedToJson
- * @package Magento\Customer\Setup\Patch
+ * Class convert validation rules from serialized to json for customer
  */
 class ConvertValidationRulesFromSerializedToJson implements DataPatchInterface, PatchVersionInterface
 {
@@ -30,7 +29,6 @@ class ConvertValidationRulesFromSerializedToJson implements DataPatchInterface, 
     private $fieldDataConverterFactory;
 
     /**
-     * ConvertValidationRulesFromSerializedToJson constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param FieldDataConverterFactory $fieldDataConverterFactory
      */
@@ -43,7 +41,7 @@ class ConvertValidationRulesFromSerializedToJson implements DataPatchInterface, 
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -54,10 +52,12 @@ class ConvertValidationRulesFromSerializedToJson implements DataPatchInterface, 
             'attribute_id',
             'validate_rules'
         );
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -67,7 +67,7 @@ class ConvertValidationRulesFromSerializedToJson implements DataPatchInterface, 
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -75,7 +75,7 @@ class ConvertValidationRulesFromSerializedToJson implements DataPatchInterface, 
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

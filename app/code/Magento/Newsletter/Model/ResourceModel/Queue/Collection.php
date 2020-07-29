@@ -213,6 +213,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      *
      * @param int $customerId
      * @return $this
+     * @since 100.4.0
      */
     public function addCustomerFilter(int $customerId): Collection
     {

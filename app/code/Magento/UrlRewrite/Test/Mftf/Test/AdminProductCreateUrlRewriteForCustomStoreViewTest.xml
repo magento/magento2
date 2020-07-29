@@ -31,7 +31,9 @@
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
-            <magentoCLI command="indexer:reindex" stepKey="runReindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="runReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createProduct"  stepKey="deleteProduct" />
