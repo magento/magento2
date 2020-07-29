@@ -88,7 +88,7 @@ class AddressSaveTest extends AbstractBackendController
             ],
             'shipping_address' => [
                 AddressType::TYPE_SHIPPING,
-            ]
+            ],
         ];
     }
 
