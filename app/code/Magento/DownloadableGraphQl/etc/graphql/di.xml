@@ -39,4 +39,18 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\SalesGraphQl\Model\OrderItemInterfaceTypeResolverComposite">
+        <arguments>
+            <argument name="orderItemTypeResolvers" xsi:type="array">
+                <item name="downloadable_order_catalog_item_type_resolver" xsi:type="object">Magento\DownloadableGraphQl\Resolver\DownloadableOrderItem\OrderItemTypeResolver</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesGraphQl\Model\InvoiceItemInterfaceTypeResolverComposite">
+        <arguments>
+            <argument name="invoiceItemTypeResolvers" xsi:type="array">
+                <item name="downloadable_invoice_catalog_item_type_resolver" xsi:type="object">Magento\DownloadableGraphQl\Resolver\DownloadableOrderItem\InvoiceItemTypeResolver</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
