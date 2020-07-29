@@ -11,5 +11,6 @@
     <section name="StorefrontGuestOrderViewSection">
         <element name="orderInformationTab" type="text" selector="//*[@class='nav item current']/strong[contains(text(), 'Order Information')]"/>
         <element name="printOrder" type="button" selector=".order-actions-toolbar .actions .print" timeout="30"/>
+        <element name="reorder" type="button" selector=".order-actions-toolbar .actions .order" timeout="30"/>
     </section>
 </sections>
