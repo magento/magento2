@@ -17,10 +17,9 @@ class Collection
      *
      * @param \Magento\Framework\Data\Collection $subject
      * @param int $result
-     * @param int $displacement
      * @return int
      */
-    public function afterGetCurPage(\Magento\Framework\Data\Collection $subject, int $result, int $displacement = 0)
+    public function afterGetCurPage(\Magento\Framework\Data\Collection $subject, int $result)
     {
         if ($result > $subject->getLastPageNumber()) {
             $result = $subject->getLastPageNumber();
