@@ -73,7 +73,7 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
             json_encode($itemOptions)
         );
 
-        $query = $this->getQuery($maskedQuoteId, $qty, $sku, trim($productOptionsQuery, '{}'));
+        $query = $this->getAddToCartMutation($maskedQuoteId, $qty, $sku, trim($productOptionsQuery, '{}'));
         $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('items', $response['addProductsToCart']['cart']);
@@ -109,7 +109,7 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
-        $query = $this->getQuery($maskedQuoteId, 1, $sku, '');
+        $query = $this->getAddToCartMutation($maskedQuoteId, 1, $sku, '');
         $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('userInputErrors', $response['addProductsToCart']);
@@ -118,6 +118,34 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
             $message,
             $response['addProductsToCart']['userInputErrors'][0]['message']
         );
+    }
+
+    /**
+     * The test covers the case when upon adding available_qty + 1 to the shopping cart, the cart is being
+     * cleared
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_without_custom_options.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testAddToCartWithQtyPlusOne()
+    {
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $sku = 'simple-2';
+
+        $query = $this->getAddToCartMutation($maskedQuoteId, 100, $sku, '');
+        $response = $this->graphQlMutation($query);
+
+        self::assertEquals(100, $response['addProductsToCart']['cart']['total_quantity']);
+
+        $query = $this->getAddToCartMutation($maskedQuoteId, 1, $sku, '');
+        $response = $this->graphQlMutation($query);
+
+        self::assertArrayHasKey('userInputErrors', $response['addProductsToCart']);
+        self::assertEquals(
+            'The requested qty is not available',
+            $response['addProductsToCart']['userInputErrors'][0]['message']
+        );
+        self::assertEquals(100, $response['addProductsToCart']['cart']['total_quantity']);
     }
 
     /**
@@ -134,7 +162,7 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
         $sku = 'simple-2';
 
-        $query = $this->getQuery($maskedQuoteId, $quantity, $sku, '');
+        $query = $this->getAddToCartMutation($maskedQuoteId, $quantity, $sku, '');
         $response = $this->graphQlMutation($query);
         self::assertArrayHasKey('userInputErrors', $response['addProductsToCart']);
         self::assertCount(1, $response['addProductsToCart']['userInputErrors']);
@@ -188,7 +216,7 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
      * @param string $customizableOptions
      * @return string
      */
-    private function getQuery(
+    private function getAddToCartMutation(
         string $maskedQuoteId,
         int $qty,
         string $sku,
@@ -207,6 +235,7 @@ mutation {
         ]
     ) {
         cart {
+            total_quantity
             items {
                 quantity
                 ... on SimpleCartItem {
@@ -226,5 +255,15 @@ mutation {
     }
 }
 MUTATION;
+    }
+
+    private function getCartQuery(string $maskedQuoteId)
+    {
+        return <<<QUERY
+{
+    cart(cart_id: "{$maskedQuoteId}") {
+        total_quantity
+}
+QUERY;
     }
 }
