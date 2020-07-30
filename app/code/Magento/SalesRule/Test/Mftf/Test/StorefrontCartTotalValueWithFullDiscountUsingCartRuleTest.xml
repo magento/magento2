@@ -71,8 +71,7 @@
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
             </actionGroup>
             <!-- Delete the tax rate that were created -->
-            <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRatesPage"/>
-            <waitForPageLoad stepKey="waitForRatesPage"/>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
                 <argument name="name" value="{{SimpleTaxNYRate.state}}-{{SimpleTaxNYRate.rate}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
