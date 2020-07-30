@@ -15,7 +15,7 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 /**
  * BundleService model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
- * @deprecated 100.2.0
+ * @deprecated 101.0.0
  * @see \Magento\Deploy\Service\Bundle
  */
 class Manager

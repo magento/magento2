@@ -39,7 +39,7 @@
 			<expectedResult type="string">rgb(226, 38, 38)</expectedResult>
         </assertEquals>
 
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndexPage"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="addProductDropdown"/>
         <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="addSimpleProduct"/>
 
