@@ -75,6 +75,10 @@ class ImageMagick extends AbstractAdapter
      */
     public function open($filename)
     {
+        if (!empty($filename) && !$this->validateURLScheme($filename)) {
+            throw new \InvalidArgumentException('Wrong file');
+        }
+
         $this->_fileName = $filename;
         $this->_checkCanProcess();
         $this->_getFileAttributes();
@@ -82,6 +86,7 @@ class ImageMagick extends AbstractAdapter
         try {
             $this->_imageHandler = new \Imagick($this->_fileName);
         } catch (\ImagickException $e) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new LocalizedException(
                 __('Unsupported image format. File: %1', $this->_fileName),
                 $e,
@@ -91,6 +96,23 @@ class ImageMagick extends AbstractAdapter
 
         $this->backgroundColor();
         $this->getMimeType();
+    }
+
+    /**
+     * Checks for invalid URL schema if it exists
+     *
+     * @param string $filename
+     * @return bool
+     */
+    private function validateURLScheme(string $filename) : bool
+    {
+        $allowed_schemes = ['ftp', 'ftps', 'http', 'https'];
+        $url = parse_url($filename);
+        if ($url && isset($url['scheme']) && !in_array($url['scheme'], $allowed_schemes)) {
+            return false;
+        }
+
+        return true;
     }
 
     /**
@@ -146,11 +168,12 @@ class ImageMagick extends AbstractAdapter
     }
 
     /**
-     * Change the image size
+     * Change the image size.
      *
      * @param null|int $frameWidth
      * @param null|int $frameHeight
      * @return void
+     * @throws \ImagickException
      */
     public function resize($frameWidth = null, $frameHeight = null)
     {
@@ -308,6 +331,7 @@ class ImageMagick extends AbstractAdapter
                 $this->addSingleWatermark($positionX, $positionY, $watermark, $compositeChannels);
             }
         } catch (\ImagickException $e) {
+            //phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new LocalizedException(
                 __('Unable to create watermark.'),
                 $e,
