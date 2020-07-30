@@ -18,7 +18,6 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\CreditmemoFactory;
 use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
-use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection as CreditMemoCollection;
 use Magento\Sales\Model\Service\CreditmemoService;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -51,9 +50,6 @@ class CreditmemoTest extends GraphQlAbstract
     /** @var OrderRepositoryInterface */
     private $orderRepository;
 
-    /** @var CreditMemoCollection */
-    private $creditMemoCollection;
-
     /** @var SearchCriteriaBuilder */
     private $searchCriteriaBuilder;
 
@@ -74,7 +70,6 @@ class CreditmemoTest extends GraphQlAbstract
         $this->orderCollection = $objectManager->get(OrderCollection::class);
         $this->orderRepository = $objectManager->get(OrderRepositoryInterface::class);
         $this->creditMemoService = $objectManager->get(CreditmemoService::class);
-        $this->creditMemoCollection = $objectManager->get(CreditMemoCollection::class);
     }
 
     /**
@@ -172,14 +167,14 @@ class CreditmemoTest extends GraphQlAbstract
         $this->setPaymentMethod($cartId, $paymentMethod);
         $orderNumber = $this->placeOrder($cartId);
         $this->prepareInvoice($orderNumber, 2);
-        // Create a credit memo
+
         $order = $this->order->loadByIncrementId($orderNumber);
         /** @var Order\Item $orderItem */
         $orderItem = current($order->getAllItems());
         $orderItem->setQtyRefunded(1);
         $order->addItem($orderItem);
         $order->save();
-
+        // Create a credit memo
         $creditMemo = $this->creditMemoFactory->createByOrder($order, $order->getData());
         $creditMemo->setOrder($order);
         $creditMemo->setState(1);
@@ -252,13 +247,7 @@ class CreditmemoTest extends GraphQlAbstract
         $creditMemos = $firstOrderItem['credit_memos'] ?? [];
         $this->assertResponseFields($creditMemos, $expectedCreditMemoData);
         $this->deleteOrder();
-        $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', $orderNumber)
-            ->create();
-        $creditmemoRepository = Bootstrap::getObjectManager()->get(CreditmemoRepositoryInterface::class);
-        $creditmemos = $creditmemoRepository->getList($searchCriteria)->getItems();
-        foreach ($creditmemos as $creditmemo) {
-            $creditmemoRepository->delete($creditmemo);
-        }
+        $this->cleanUpCreditMemos($orderNumber);
     }
 
     /**
@@ -307,7 +296,6 @@ class CreditmemoTest extends GraphQlAbstract
         $creditMemo->save();
 
         $this->creditMemoService->refund($creditMemo, true);
-        //$this->prepareCreditmemoAndRefund($orderNumber);
         $response = $this->getCustomerOrderWithCreditMemoQuery();
         $expectedCreditMemoData = [
             [
@@ -377,13 +365,7 @@ class CreditmemoTest extends GraphQlAbstract
         $creditMemos = $firstOrderItem['credit_memos'] ?? [];
         $this->assertResponseFields($creditMemos, $expectedCreditMemoData);
         $this->deleteOrder();
-        $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', $orderNumber)
-            ->create();
-        $creditmemoRepository = Bootstrap::getObjectManager()->get(CreditmemoRepositoryInterface::class);
-        $creditmemos = $creditmemoRepository->getList($searchCriteria)->getItems();
-        foreach ($creditmemos as $creditmemo) {
-            $creditmemoRepository->delete($creditmemo);
-        }
+        $this->cleanUpCreditMemos($orderNumber);
     }
 
     /**
@@ -727,6 +709,20 @@ QUERY;
         }
         $registry->unregister('isSecureArea');
         $registry->register('isSecureArea', false);
+    }
+
+    /**
+     * @param $orderNumber
+     */
+    private function cleanUpCreditMemos($orderNumber): void
+    {
+        $creditmemoRepository = Bootstrap::getObjectManager()->get(CreditmemoRepositoryInterface::class);
+        $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', $orderNumber)
+            ->create();
+        $creditmemos = $creditmemoRepository->getList($searchCriteria)->getItems();
+        foreach ($creditmemos as $creditmemo) {
+            $creditmemoRepository->delete($creditmemo);
+        }
     }
 
     /**
