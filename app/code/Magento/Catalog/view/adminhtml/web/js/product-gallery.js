@@ -16,7 +16,7 @@ define([
 ], function ($, _, mageTemplate, registry) {
     'use strict';
 
-    var dragging = true;
+    var dragging = 1;
 
     /**
      * Formats incoming bytes value to a readable format.
@@ -378,9 +378,9 @@ define([
             this._contentUpdated();
 
             setTimeout(function () {
-                dragging = false;
+                dragging = 0;
             }, 1500);
-            dragging = true;
+            dragging = 1;
         },
 
         /**
@@ -456,7 +456,7 @@ define([
             events['click ' + this.options.imageSelector] = function (event) {
                 var imageData, $imageContainer;
 
-                if (!$(event.currentTarget).is('.ui-sortable-helper') && dragging === false) {
+                if (!$(event.currentTarget).is('.ui-sortable-helper') && dragging === 0) {
                     $(event.currentTarget).addClass('active');
                     imageData = $(event.currentTarget).data('imageData');
                     $imageContainer = this.findElement(imageData);
