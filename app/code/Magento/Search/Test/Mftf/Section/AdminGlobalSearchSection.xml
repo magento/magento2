@@ -11,5 +11,8 @@
     <section name="AdminGlobalSearchSection">
         <element name="globalSearch" type="button" selector=".search-global-label"/>
         <element name="globalSearchActive" type="block" selector=".search-global-field._active"/>
+        <element name="globalSearchInput" type="input" selector=".search-global-input"/>
+        <element name="globalSearchSuggestedCategoryText" type="text" selector="//span[contains(text(), 'Category')]"/>
+        <element name="globalSearchSuggestedCategoryLink" type="text" selector="//span[contains(text(), 'Category')]/preceding-sibling::a"/>
     </section>
 </sections>
