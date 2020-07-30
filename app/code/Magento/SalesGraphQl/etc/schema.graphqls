@@ -78,7 +78,7 @@ type OrderAddress @doc(description: "OrderAddress contains detailed information 
     vat_id: String @doc(description: "The customer's Value-added tax (VAT) number (for corporate customers)")
 }
 
-interface OrderItemInterface @doc(description: "Order item details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\OrderItemTypeResolver") {
+interface OrderItemInterface @doc(description: "Order item details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\TypeResolver\\OrderItem") {
     id: ID! @doc(description: "The unique identifier of the order item")
     product_name: String @doc(description: "The name of the base product")
     product_sku: String! @doc(description: "The SKU of the base product")
@@ -130,7 +130,7 @@ type Invoice @doc(description: "Invoice details") {
     comments: [CommentItem] @doc(description: "Comments on the invoice")
 }
 
-interface InvoiceItemInterface @doc(description: "Invoice item details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\InvoiceItemTypeResolver")  {
+interface InvoiceItemInterface @doc(description: "Invoice item details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\TypeResolver\\InvoiceItem")  {
     id: ID! @doc(description: "The unique ID of the invoice item")
     order_item: OrderItemInterface @doc(description: "Contains details about an individual order item")
     product_name: String @doc(description: "The name of the base product")
@@ -175,7 +175,7 @@ type CommentItem @doc(description: "Comment item details") {
     message: String! @doc(description: "The text of the message")
 }
 
-interface ShipmentItemInterface @doc(description: "Order shipment item details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\ShipmentItemTypeResolver"){
+interface ShipmentItemInterface @doc(description: "Order shipment item details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\TypeResolver\\ShipmentItem"){
     id: ID! @doc(description: "Shipment item unique identifier")
     order_item: OrderItemInterface @doc(description: "Associated order item") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\OrderItem")
     product_name: String @doc(description: "Name of the base product")

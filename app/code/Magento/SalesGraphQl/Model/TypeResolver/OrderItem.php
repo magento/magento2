@@ -5,15 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\SalesGraphQl\Model;
+namespace Magento\SalesGraphQl\Model\TypeResolver;
 
-use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
+use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**
- * Resolve concrete type for InvoiceItemInterface
+ * Resolve concrete type for OrderItemInterface
  */
-class InvoiceItemTypeResolver implements TypeResolverInterface
+class OrderItem implements TypeResolverInterface
 {
     /**
      * @var array
@@ -23,7 +23,7 @@ class InvoiceItemTypeResolver implements TypeResolverInterface
     /**
      * @param array $productTypeMap
      */
-    public function __construct($productTypeMap = [])
+    public function __construct(array $productTypeMap = [])
     {
         $this->productTypeMap = $productTypeMap;
     }
@@ -39,6 +39,7 @@ class InvoiceItemTypeResolver implements TypeResolverInterface
         if (isset($this->productTypeMap[$data['product_type']])) {
             return $this->productTypeMap[$data['product_type']];
         }
+
         return $this->productTypeMap['default'];
     }
 }

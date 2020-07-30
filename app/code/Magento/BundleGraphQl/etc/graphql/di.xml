@@ -65,21 +65,21 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\SalesGraphQl\Model\OrderItemTypeResolver">
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\OrderItem">
         <arguments>
             <argument name="productTypeMap" xsi:type="array">
                 <item name="bundle" xsi:type="string">BundleOrderItem</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\SalesGraphQl\Model\InvoiceItemTypeResolver">
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\InvoiceItem">
         <arguments>
             <argument name="productTypeMap" xsi:type="array">
                 <item name="bundle" xsi:type="string">BundleInvoiceItem</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\SalesGraphQl\Model\ShipmentItemTypeResolver">
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\ShipmentItem">
         <arguments>
             <argument name="productTypeMap" xsi:type="array">
                 <item name="bundle" xsi:type="string">BundleShipmentItem</item>
