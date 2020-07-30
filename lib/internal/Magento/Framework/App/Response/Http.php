@@ -109,7 +109,9 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
         if ($varyString) {
             $cookieLifeTime = $this->sessionConfig->getCookieLifetime();
             $sensitiveCookMetadata = $this->cookieMetadataFactory->createSensitiveCookieMetadata(
-                [CookieMetadata::KEY_DURATION => $cookieLifeTime]
+                [CookieMetadata::KEY_DURATION => $cookieLifeTime,
+                    CookieMetadata::KEY_SAME_SITE => 'Lax'
+                ]
             )->setPath('/');
             $this->cookieManager->setSensitiveCookie(self::COOKIE_VARY_STRING, $varyString, $sensitiveCookMetadata);
         } elseif ($this->request->get(self::COOKIE_VARY_STRING)) {

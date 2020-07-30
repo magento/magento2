@@ -15,6 +15,7 @@ use \Magento\Sales\Model\Order;
 /**
  * Sales module base helper
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Guest extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -71,7 +72,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
     const COOKIE_NAME = 'guest-view';
 
     /**
-     * Cookie path
+     * Cookie path value
      */
     const COOKIE_PATH = '/';
 
@@ -209,7 +210,8 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
     {
         $metadata = $this->cookieMetadataFactory->createPublicCookieMetadata()
             ->setPath(self::COOKIE_PATH)
-            ->setHttpOnly(true);
+            ->setHttpOnly(true)
+            ->setSameSite('Lax');
         $this->cookieManager->setPublicCookie(self::COOKIE_NAME, $cookieValue, $metadata);
     }
 
@@ -224,6 +226,7 @@ class Guest extends \Magento\Framework\App\Helper\AbstractHelper
      */
     private function loadFromCookie($fromCookie)
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $cookieData = explode(':', base64_decode($fromCookie));
         $protectCode = isset($cookieData[0]) ? $cookieData[0] : null;
         $incrementId = isset($cookieData[1]) ? $cookieData[1] : null;
