@@ -906,7 +906,8 @@ namespace Magento\Framework\Stdlib\Test\Unit\Cookie
                 CookieMetadata::class
             );
             $this->expectException('InvalidArgumentException');
-            $this->expectExceptionMessage('Invalid argument provided for SameSite directive expected one of: Strict, Lax or None');
+            $exceptionMessage = 'Invalid argument provided for SameSite directive expected one of: Strict, Lax or None';
+            $this->expectExceptionMessage($exceptionMessage);
             $cookieMetadata->setSameSite('default value');
         }
     }
