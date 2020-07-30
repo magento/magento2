@@ -40,7 +40,7 @@
         <!--Verify Delete Root Category can not be deleted-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage1"/>
         <scrollToTopOfPage stepKey="scrollToTopOfPage2"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandToSeeAllCategories"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandToSeeAllCategories"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(NewRootCategory.name))}}" stepKey="clickRootCategoryInTree"/>
 
         <!--Verify Delete button is not displayed-->
