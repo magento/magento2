@@ -77,7 +77,7 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('items', $response['addProductsToCart']['cart']);
-        self::assertCount($qty, $response['addProductsToCart']['cart']);
+        self::assertCount($qty, $response['addProductsToCart']['cart']['items']);
         $customizableOptionsOutput =
             $response['addProductsToCart']['cart']['items'][0]['customizable_options'];
 
