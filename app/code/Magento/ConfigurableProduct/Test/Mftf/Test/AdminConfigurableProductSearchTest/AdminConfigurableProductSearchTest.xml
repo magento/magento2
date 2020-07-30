@@ -77,15 +77,18 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductList"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" stepKey="clearAll" visible="true"/>
         <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchForProduct">
             <argument name="keyword" value="ApiConfigurableProduct.name"/>
         </actionGroup>
         <waitForPageLoad stepKey="wait2"/>
         <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" userInput="1" stepKey="seeOneResult"/>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="{{ApiConfigurableProduct.name}}" stepKey="seeInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Name"/>
+            <argument name="value" value="{{ApiConfigurableProduct.name}}"/>
+        </actionGroup>
         <see selector="{{AdminProductGridFilterSection.enabledFilters}}" userInput="{{ApiConfigurableProduct.name}}" stepKey="seeInActiveFilters"/>
     </test>
 </tests>
