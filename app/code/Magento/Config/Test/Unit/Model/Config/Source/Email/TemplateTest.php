@@ -131,8 +131,12 @@ class TemplateTest extends TestCase
             $this->never()
         )->method(
             'getTemplateLabel'
-        )->with('')
-        ->willThrowException(new \UnexpectedValueException("Email template '' is not defined."));
+        )->with(
+            ''
+        )
+        ->willThrowException(
+            new \UnexpectedValueException("Email template '' is not defined.")
+        );
 
         $expectedResult = [
             [
@@ -146,4 +150,5 @@ class TemplateTest extends TestCase
         ];
 
         $this->assertEquals($expectedResult, $this->_model->toOptionArray());
-    }}
+    }
+}
