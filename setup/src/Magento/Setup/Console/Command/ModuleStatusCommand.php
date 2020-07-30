@@ -62,7 +62,7 @@ class ModuleStatusCommand extends AbstractSetupCommand
             foreach ($moduleNames as $moduleName) {
                 $this->showSpecificModule($moduleName, $output);
             }
-            return 0;
+            return Cli::RETURN_SUCCESS;
         }
 
         $onlyEnabled = $input->getOption('enabled');
@@ -83,7 +83,7 @@ class ModuleStatusCommand extends AbstractSetupCommand
         $this->showDisabledModules($output);
         $output->writeln('');
 
-        return 0;
+        return Cli::RETURN_SUCCESS;
     }
 
     /**
