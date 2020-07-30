@@ -475,6 +475,11 @@
             <argument name="fieldTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Elasticsearch\Model\Adapter\Elasticsearch">
+        <arguments>
+            <argument name="staticFieldProvider" xsi:type="object">elasticsearch5StaticFieldProvider</argument>
+        </arguments>
+    </type>
     <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapper">
         <arguments>
             <argument name="fieldProvider" xsi:type="object">elasticsearch5FieldProvider</argument>

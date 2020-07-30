@@ -105,64 +105,12 @@ class StaticField implements FieldProviderInterface
      */
     public function getFields(array $context = []): array
     {
+        /** @var ProductAttributeInterface[] $attributes */
         $attributes = $this->eavConfig->getEntityAttributes(ProductAttributeInterface::ENTITY_TYPE_CODE);
         $allAttributes = [];
 
         foreach ($attributes as $attribute) {
-            if (in_array($attribute->getAttributeCode(), $this->excludedAttributes, true)) {
-                continue;
-            }
-            $attributeAdapter = $this->attributeAdapterProvider->getByAttributeCode($attribute->getAttributeCode());
-            $fieldName = $this->fieldNameResolver->getFieldName($attributeAdapter);
-
-            $allAttributes[$fieldName] = [
-                'type' => $this->fieldTypeResolver->getFieldType($attributeAdapter),
-            ];
-
-            $index = $this->fieldIndexResolver->getFieldIndex($attributeAdapter);
-            if (null !== $index) {
-                $allAttributes[$fieldName]['index'] = $index;
-            }
-
-            if ($attributeAdapter->isSortable()) {
-                $sortFieldName = $this->fieldNameResolver->getFieldName(
-                    $attributeAdapter,
-                    ['type' => FieldMapperInterface::TYPE_SORT]
-                );
-                $allAttributes[$fieldName]['fields'][$sortFieldName] = [
-                    'type' => $this->fieldTypeConverter->convert(
-                        FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD
-                    ),
-                    'index' => $this->indexTypeConverter->convert(
-                        IndexTypeConverterInterface::INTERNAL_NO_ANALYZE_VALUE
-                    )
-                ];
-            }
-
-            if ($attributeAdapter->isTextType()) {
-                $keywordFieldName = FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD;
-                $index = $this->indexTypeConverter->convert(
-                    IndexTypeConverterInterface::INTERNAL_NO_ANALYZE_VALUE
-                );
-                $allAttributes[$fieldName]['fields'][$keywordFieldName] = [
-                    'type' => $this->fieldTypeConverter->convert(
-                        FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD
-                    )
-                ];
-                if ($index) {
-                    $allAttributes[$fieldName]['fields'][$keywordFieldName]['index'] = $index;
-                }
-            }
-
-            if ($attributeAdapter->isComplexType()) {
-                $childFieldName = $this->fieldNameResolver->getFieldName(
-                    $attributeAdapter,
-                    ['type' => FieldMapperInterface::TYPE_QUERY]
-                );
-                $allAttributes[$childFieldName] = [
-                    'type' => $this->fieldTypeConverter->convert(FieldTypeConverterInterface::INTERNAL_DATA_TYPE_STRING)
-                ];
-            }
+            $allAttributes += $this->getField($attribute);
         }
 
         $allAttributes['store_id'] = [
@@ -171,5 +119,73 @@ class StaticField implements FieldProviderInterface
         ];
 
         return $allAttributes;
+    }
+
+    /**
+     * Get field mapping for specific attribute.
+     *
+     * @param ProductAttributeInterface $attribute
+     * @return array
+     */
+    public function getField(ProductAttributeInterface $attribute): array
+    {
+        $fieldMapping = [];
+        if (in_array($attribute->getAttributeCode(), $this->excludedAttributes, true)) {
+            return $fieldMapping;
+        }
+
+        $attributeAdapter = $this->attributeAdapterProvider->getByAttributeCode($attribute->getAttributeCode());
+        $fieldName = $this->fieldNameResolver->getFieldName($attributeAdapter);
+
+        $fieldMapping[$fieldName] = [
+            'type' => $this->fieldTypeResolver->getFieldType($attributeAdapter),
+        ];
+
+        $index = $this->fieldIndexResolver->getFieldIndex($attributeAdapter);
+        if (null !== $index) {
+            $fieldMapping[$fieldName]['index'] = $index;
+        }
+
+        if ($attributeAdapter->isSortable()) {
+            $sortFieldName = $this->fieldNameResolver->getFieldName(
+                $attributeAdapter,
+                ['type' => FieldMapperInterface::TYPE_SORT]
+            );
+            $fieldMapping[$fieldName]['fields'][$sortFieldName] = [
+                'type' => $this->fieldTypeConverter->convert(
+                    FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD
+                ),
+                'index' => $this->indexTypeConverter->convert(
+                    IndexTypeConverterInterface::INTERNAL_NO_ANALYZE_VALUE
+                )
+            ];
+        }
+
+        if ($attributeAdapter->isTextType()) {
+            $keywordFieldName = FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD;
+            $index = $this->indexTypeConverter->convert(
+                IndexTypeConverterInterface::INTERNAL_NO_ANALYZE_VALUE
+            );
+            $fieldMapping[$fieldName]['fields'][$keywordFieldName] = [
+                'type' => $this->fieldTypeConverter->convert(
+                    FieldTypeConverterInterface::INTERNAL_DATA_TYPE_KEYWORD
+                )
+            ];
+            if ($index) {
+                $fieldMapping[$fieldName]['fields'][$keywordFieldName]['index'] = $index;
+            }
+        }
+
+        if ($attributeAdapter->isComplexType()) {
+            $childFieldName = $this->fieldNameResolver->getFieldName(
+                $attributeAdapter,
+                ['type' => FieldMapperInterface::TYPE_QUERY]
+            );
+            $fieldMapping[$childFieldName] = [
+                'type' => $this->fieldTypeConverter->convert(FieldTypeConverterInterface::INTERNAL_DATA_TYPE_STRING)
+            ];
+        }
+
+        return $fieldMapping;
     }
 }

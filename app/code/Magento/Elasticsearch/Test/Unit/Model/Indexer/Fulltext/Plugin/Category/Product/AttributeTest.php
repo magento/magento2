@@ -91,6 +91,7 @@ class AttributeTest extends TestCase
         /** @var AttributeModel $attribute */
         $attribute = (new ObjectManager($this))->getObject(AttributeModel::class);
         $attribute->isObjectNew($isNewObject);
+        $attribute->setAttributeCode('example_attribute_code');
         /** @var AttributeResourceModel|MockObject $subjectMock */
         $subjectMock = $this->createMock(AttributeResourceModel::class);
         $this->attributePlugin->beforeSave($subjectMock, $attribute);

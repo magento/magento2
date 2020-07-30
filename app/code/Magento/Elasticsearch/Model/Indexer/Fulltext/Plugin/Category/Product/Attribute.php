@@ -47,6 +47,11 @@ class Attribute
     private $isNewObject;
 
     /**
+     * @var string
+     */
+    private $attributeCode;
+
+    /**
      * @param Config $config
      * @param Processor $indexerProcessor
      * @param DimensionProviderInterface $dimensionProvider
@@ -89,7 +94,7 @@ class Attribute
                 );
             }
             foreach ($this->dimensionProvider->getIterator() as $dimension) {
-                $indexerHandler->updateIndex($dimension);
+                $indexerHandler->updateIndex($dimension, $this->attributeCode);
             }
         }
 
@@ -109,5 +114,6 @@ class Attribute
         AbstractModel $attribute
     ): void {
         $this->isNewObject = $attribute->isObjectNew();
+        $this->attributeCode = $attribute->getAttributeCode();
     }
 }

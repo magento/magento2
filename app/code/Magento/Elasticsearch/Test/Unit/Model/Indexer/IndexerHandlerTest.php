@@ -277,6 +277,7 @@ class IndexerHandlerTest extends TestCase
     {
         $dimensionValue = 'SomeDimension';
         $indexMapping = 'some_index_mapping';
+        $attributeCode = 'example_attribute_code';
 
         $dimension = $this->getMockBuilder(Dimension::class)
             ->disableOriginalConstructor()
@@ -302,9 +303,9 @@ class IndexerHandlerTest extends TestCase
 
         $this->adapter->expects($this->once())
             ->method('updateIndexMapping')
-            ->with(1, $indexMapping)
+            ->with(1, $indexMapping, $attributeCode)
             ->willReturnSelf();
 
-        $this->model->updateIndex([$dimension]);
+        $this->model->updateIndex([$dimension], $attributeCode);
     }
 }

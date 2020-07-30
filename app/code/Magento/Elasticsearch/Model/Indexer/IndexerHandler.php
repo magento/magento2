@@ -137,13 +137,14 @@ class IndexerHandler implements IndexerInterface
      * Update mapping data for index.
      *
      * @param Dimension[] $dimensions
+     * @param string $attributeCode
      * @return IndexerInterface
      */
-    public function updateIndex(array $dimensions): IndexerInterface
+    public function updateIndex(array $dimensions, string $attributeCode): IndexerInterface
     {
         $dimension = current($dimensions);
         $scopeId = (int)$this->scopeResolver->getScope($dimension->getValue())->getId();
-        $this->adapter->updateIndexMapping($scopeId, $this->getIndexerId());
+        $this->adapter->updateIndexMapping($scopeId, $this->getIndexerId(), $attributeCode);
 
         return $this;
     }
