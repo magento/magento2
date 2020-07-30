@@ -40,6 +40,21 @@ class BundleDataProvider implements BuyRequestDataProviderInterface
             $bundleOptionsData['bundle_option'][$optionId] = $optionValueId;
             $bundleOptionsData['bundle_option_qty'][$optionId] = $optionQuantity;
         }
+        //for bundle options with custom quantity
+        foreach ($cartItem->getEnteredOptions() as $option) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
+            $optionData = \explode('/', base64_decode($option->getId()));
+
+            if ($this->isProviderApplicable($optionData) === false) {
+                continue;
+            }
+            $this->validateInput($optionData);
+
+            [, $optionId, $optionValueId] = $optionData;
+            $optionQuantity = $option->getValue();
+            $bundleOptionsData['bundle_option'][$optionId] = $optionValueId;
+            $bundleOptionsData['bundle_option_qty'][$optionId] = $optionQuantity;
+        }
 
         return $bundleOptionsData;
     }

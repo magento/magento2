@@ -222,4 +222,130 @@ QUERY;
             $response['addProductsToCart']['userInputErrors'][0]['message']
         );
     }
+
+    /**
+     * @magentoApiDataFixture Magento/Bundle/_files/product_with_multiple_options_and_custom_quantity.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testUpdateBundleItemWithCustomOptionQuantity()
+    {
+
+        $this->quoteResource->load(
+            $this->quote,
+            'test_order_1',
+            'reserved_order_id'
+        );
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+        $response = $this->graphQlQuery($this->getProductQuery("bundle-product"));
+        $bundleItem = $response['products']['items'][0];
+        $sku = $bundleItem['sku'];
+        $bundleOptions = $bundleItem['items'];
+
+        $uId0 = $bundleOptions[0]['options'][0]['uid'];
+        $uId1 = $bundleOptions[1]['options'][0]['uid'];
+        $response = $this->graphQlMutation(
+            $this->getMutationsQuery($maskedQuoteId, $uId0, $uId1, $sku)
+        );
+        $bundleOptions = $response['addProductsToCart']['cart']['items'][0]['bundle_options'];
+        $this->assertEquals(5, $bundleOptions[0]['values'][0]['quantity']);
+        $this->assertEquals(1, $bundleOptions[1]['values'][0]['quantity']);
+    }
+
+    /**
+     * Returns GraphQL query for retrieving a product with customizable options
+     *
+     * @param string $sku
+     * @return string
+     */
+    private function getProductQuery(string $sku): string
+    {
+        return <<<QUERY
+{
+  products(search: "{$sku}") {
+    items {
+      sku
+       ... on BundleProduct {
+              items {
+                sku
+                option_id
+                required
+                type
+                title
+                options {
+                  uid
+                  label
+                  product {
+                    sku
+                  }
+                  can_change_quantity
+                  id
+                  price
+
+                  quantity
+                }
+              }
+       }
+    }
+  }
+}
+QUERY;
+    }
+
+    private function getMutationsQuery(
+        string $maskedQuoteId,
+        string $optionUid0,
+        string $optionUid1,
+        string $sku
+    ): string {
+        return <<<QUERY
+mutation {
+      addProductsToCart(
+            cartId: "{$maskedQuoteId}",
+            cartItems: [
+                {
+                    sku: "{$sku}"
+                    quantity: 2
+                    selected_options: [
+                        "{$optionUid1}", "{$optionUid0}"
+                    ],
+                    entered_options: [{
+                        id: "{$optionUid0}"
+                        value: "5"
+                     },
+                     {
+                        id: "{$optionUid1}"
+                        value: "5"
+                     }]
+                }
+            ]
+       ) {
+    cart {
+        items {
+            id
+            quantity
+            product {
+                sku
+            }
+            ... on BundleCartItem {
+                bundle_options {
+                    id
+                    label
+                    type
+                    values {
+                        id
+                        label
+                        price
+                        quantity
+                    }
+                }
+            }
+        }
+    }
+    userInputErrors {
+        message
+    }
+  }
+}
+QUERY;
+    }
 }
