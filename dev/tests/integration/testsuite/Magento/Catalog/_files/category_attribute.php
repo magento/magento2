@@ -5,8 +5,12 @@
  */
 
 /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
-$attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
+
+use Magento\Catalog\Model\Category\Attribute;
+use Magento\TestFramework\Helper\Bootstrap;
+
+$attribute = Bootstrap::getObjectManager()
+    ->create(Attribute::class);
 $attribute->setAttributeCode('test_attribute_code_666')
     ->setEntityTypeId(3)
     ->setIsGlobal(1)

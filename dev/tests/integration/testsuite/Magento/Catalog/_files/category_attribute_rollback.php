@@ -4,15 +4,20 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Framework\Registry $registry */
-$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+/** @var Registry $registry */
+
+use Magento\Catalog\Model\Category\Attribute;
+use Magento\Framework\Registry;
+use Magento\TestFramework\Helper\Bootstrap;
+
+$registry = Bootstrap::getObjectManager()->get(Registry::class);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
-$attribute = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
+/** @var Attribute $attribute */
+$attribute = Bootstrap::getObjectManager()
+    ->create(Attribute::class);
 
 $attribute->loadByCode(3, 'test_attribute_code_666');
 
