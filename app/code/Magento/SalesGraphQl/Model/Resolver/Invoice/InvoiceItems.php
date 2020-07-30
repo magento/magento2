@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\SalesGraphQl\Model\Resolver;
+namespace Magento\SalesGraphQl\Model\Resolver\Invoice;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -16,7 +16,7 @@ use Magento\Sales\Api\Data\InvoiceInterface;
 use Magento\Sales\Api\Data\InvoiceItemInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\SalesGraphQl\Model\Resolver\OrderItem\DataProvider as OrderItemProvider;
+use Magento\SalesGraphQl\Model\OrderItem\DataProvider as OrderItemProvider;
 
 /**
  * Resolver for Invoice Items

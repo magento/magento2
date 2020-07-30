@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\SalesGraphQl\Model\Resolver;
+namespace Magento\SalesGraphQl\Model\Resolver\Invoice;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;

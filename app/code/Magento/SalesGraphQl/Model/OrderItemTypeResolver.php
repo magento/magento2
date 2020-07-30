@@ -7,23 +7,39 @@ declare(strict_types=1);
 
 namespace Magento\SalesGraphQl\Model;
 
+use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**
- * Leaf for composite class to resolve order item type
+ * Resolve concrete type for OrderItemInterface
  */
 class OrderItemTypeResolver implements TypeResolverInterface
 {
+    /**
+     * @var array
+     */
+    private $productTypeMap;
+
+    /**
+     * @param array $productTypeMap
+     */
+    public function __construct(array $productTypeMap = [])
+    {
+        $this->productTypeMap = $productTypeMap;
+    }
+
     /**
      * @inheritDoc
      */
     public function resolveType(array $data): string
     {
-        if (isset($data['product_type'])) {
-            if ($data['product_type'] == 'bundle') {
-                return 'BundleOrderItem';
-            }
+        if (!isset($data['product_type'])) {
+            throw new GraphQlInputException(__('Missing key %1 in sales item data', ['product_type']));
         }
-        return 'OrderItem';
+        if (isset($this->productTypeMap[$data['product_type']])) {
+            return $this->productTypeMap[$data['product_type']];
+        }
+
+        return $this->productTypeMap['default'];
     }
 }

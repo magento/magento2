@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\SalesGraphQl\Model\Resolver;
+namespace Magento\BundleGraphQl\Model\Resolver\Order\Item;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -15,6 +15,7 @@ use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Sales\Api\Data\InvoiceItemInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Api\Data\ShipmentItemInterface;
 
 /**
  * Resolve bundle options items for order item
@@ -59,8 +60,8 @@ class BundleOptions implements ResolverInterface
                 $item = $value['model'];
                 return $this->getBundleOptions($item, $value);
             }
-            if ($value['model'] instanceof InvoiceItemInterface) {
-                /** @var InvoiceItemInterface $item */
+            if ($value['model'] instanceof InvoiceItemInterface || $value['model'] instanceof ShipmentItemInterface) {
+                /** @var InvoiceItemInterface|ShipmentItemInterface $item */
                 $item = $value['model'];
                 // Have to pass down order and item to map to avoid refetching all data
                 return $this->getBundleOptions($item->getOrderItem(), $value);
