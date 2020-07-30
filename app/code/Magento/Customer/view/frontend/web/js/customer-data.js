@@ -215,10 +215,9 @@ define([
                 $.cookieStorage.set('section_data_clean', '');
             }
 
-            var cookieExpires = new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000);
             $.cookieStorage.setConf({
                 path: '/',
-                expires: cookieExpires
+                expires: new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000)
             });
         },
 
