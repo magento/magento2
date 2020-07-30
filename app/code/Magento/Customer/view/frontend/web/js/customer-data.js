@@ -30,12 +30,6 @@ define([
     url.setBaseUrl(window.BASE_URL);
     options.sectionLoadUrl = url.build('customer/section/load');
 
-    //TODO: remove global change, in this case made for initNamespaceStorage
-    $.cookieStorage.setConf({
-        path: '/',
-        expires: 1
-    });
-
     storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
     storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
 
@@ -220,6 +214,12 @@ define([
                 this.reload(sectionConfig.getSectionNames(), true);
                 $.cookieStorage.set('section_data_clean', '');
             }
+
+            var cookieExpires = new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000);
+            $.cookieStorage.setConf({
+                path: '/',
+                expires: cookieExpires
+            });
         },
 
         /**
