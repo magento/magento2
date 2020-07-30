@@ -89,8 +89,7 @@
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForProductFilterLoad"/>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage"/>
 
         <!-- Change the product option title -->
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="BundleOption2" stepKey="fillOptionTitle2"/>
