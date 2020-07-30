@@ -91,7 +91,6 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
         $pidFilePath,
         $singleThread,
         $lockExpects,
-        $isLockedExpects,
         $isLocked,
         $unlockExpects,
         $runProcessExpects,
@@ -129,14 +128,11 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
             ->method('get')->with($consumerName, $batchSize)->willReturn($consumer);
         $consumer->expects($this->exactly($runProcessExpects))->method('process')->with($numberOfMessages);
 
-        $this->lockManagerMock->expects($this->exactly($isLockedExpects))
-            ->method('isLocked')
-            ->with(md5($consumerName)) //phpcs:ignore
-            ->willReturn($isLocked);
-
         $this->lockManagerMock->expects($this->exactly($lockExpects))
             ->method('lock')
-            ->with(md5($consumerName)); //phpcs:ignore
+            ->with(md5($consumerName))//phpcs:ignore
+            ->willReturn($isLocked);
+
         $this->lockManagerMock->expects($this->exactly($unlockExpects))
             ->method('unlock')
             ->with(md5($consumerName)); //phpcs:ignore
@@ -157,8 +153,7 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
                 'pidFilePath' => null,
                 'singleThread' => false,
                 'lockExpects' => 0,
-                'isLockedExpects' => 0,
-                'isLocked' => false,
+                'isLocked' => true,
                 'unlockExpects' => 0,
                 'runProcessExpects' => 1,
                 'expectedReturn' => \Magento\Framework\Console\Cli::RETURN_SUCCESS,
@@ -167,8 +162,7 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
                 'pidFilePath' => '/var/consumer.pid',
                 'singleThread' => true,
                 'lockExpects' => 1,
-                'isLockedExpects' => 1,
-                'isLocked' => false,
+                'isLocked' => true,
                 'unlockExpects' => 1,
                 'runProcessExpects' => 1,
                 'expectedReturn' => \Magento\Framework\Console\Cli::RETURN_SUCCESS,
@@ -176,10 +170,9 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
             [
                 'pidFilePath' => '/var/consumer.pid',
                 'singleThread' => true,
-                'lockExpects' => 0,
-                'isLockedExpects' => 1,
-                'isLocked' => true,
-                'unlockExpects' => 0,
+                'lockExpects' => 1,
+                'isLocked' => false,
+                'unlockExpects' => 1,
                 'runProcessExpects' => 0,
                 'expectedReturn' => \Magento\Framework\Console\Cli::RETURN_FAILURE,
             ],
