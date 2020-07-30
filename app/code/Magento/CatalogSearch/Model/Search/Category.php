@@ -6,60 +6,70 @@
 declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Model\Search;
+
+use Magento\Backend\Helper\Data;
+use Magento\Catalog\Api\CategoryListInterface;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Api\SearchCriteriaBuilderFactory;
+use Magento\Framework\DataObject;
+use Magento\Framework\Stdlib\StringUtils;
+
 /**
  * Search model for backend search
  */
-class Category extends \Magento\Framework\DataObject
+class Category extends DataObject
 {
     /**
-     * Adminhtml data
-     *
-     * @var \Magento\Backend\Helper\Data
+     * @var Data
      */
-    protected $_adminhtmlData = null;
+    private $adminhtmlData = null;
 
     /**
-     * @var \Magento\Catalog\Api\CategoryListInterface
+     * @var CategoryListInterface
      */
-    protected $categoryRepository;
+    private $categoryRepository;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @var SearchCriteriaBuilder
      */
-    protected $searchCriteriaBuilder;
+    private $searchCriteriaBuilder;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder
+     * @var FilterBuilder
      */
-    protected $filterBuilder;
+    private $filterBuilder;
 
     /**
-     * Magento string lib
-     *
-     * @var \Magento\Framework\Stdlib\StringUtils
+     * @var SearchCriteriaBuilderFactory
      */
-    protected $string;
+    private $searchCriteriaBuilderFactory;
 
     /**
-     * Initialize dependencies.
-     *
-     * @param \Magento\Backend\Helper\Data $adminhtmlData
-     * @param \Magento\Catalog\Api\CategoryListInterface $categoryRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Magento\Framework\Api\FilterBuilder $filterBuilder
-     * @param \Magento\Framework\Stdlib\StringUtils $string
+     * @var StringUtils
+     */
+    private $string;
+
+    /**
+     * @param Data $adminhtmlData
+     * @param CategoryListInterface $categoryRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory
+     * @param FilterBuilder $filterBuilder
+     * @param StringUtils $string
      */
     public function __construct(
-        \Magento\Backend\Helper\Data $adminhtmlData,
-        \Magento\Catalog\Api\CategoryListInterface $categoryRepository,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\Framework\Api\FilterBuilder $filterBuilder,
-        \Magento\Framework\Stdlib\StringUtils $string
-    )
-    {
-        $this->_adminhtmlData = $adminhtmlData;
+        Data $adminhtmlData,
+        CategoryListInterface $categoryRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        SearchCriteriaBuilderFactory $searchCriteriaBuilderFactory,
+        FilterBuilder $filterBuilder,
+        StringUtils $string
+    ) {
+        $this->adminhtmlData = $adminhtmlData;
         $this->categoryRepository = $categoryRepository;
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
+        $this->searchCriteriaBuilderFactory = $searchCriteriaBuilderFactory;
         $this->filterBuilder = $filterBuilder;
         $this->string = $string;
     }
@@ -76,7 +86,7 @@ class Category extends \Magento\Framework\DataObject
             $this->setResults($result);
             return $this;
         }
-
+        $this->searchCriteriaBuilder = $this->searchCriteriaBuilderFactory->create();
         $this->searchCriteriaBuilder->setCurrentPage($this->getStart());
         $this->searchCriteriaBuilder->setPageSize($this->getLimit());
         $searchFields = ['name'];
@@ -86,7 +96,7 @@ class Category extends \Magento\Framework\DataObject
             $filters[] = $this->filterBuilder
                 ->setField($field)
                 ->setConditionType('like')
-                ->setValue('%' . $this->getQuery() . '%')
+                ->setValue(sprintf("%%%s%%", $this->getQuery()))
                 ->create();
         }
         $this->searchCriteriaBuilder->addFilters($filters);
@@ -101,7 +111,7 @@ class Category extends \Magento\Framework\DataObject
                 'type' => __('Category'),
                 'name' => $category->getName(),
                 'description' => $this->string->substr($description, 0, 30),
-                'url' => $this->_adminhtmlData->getUrl('catalog/category/edit', ['id' => $category->getId()]),
+                'url' => $this->adminhtmlData->getUrl('catalog/category/edit', ['id' => $category->getId()]),
             ];
         }
         $this->setResults($result);
