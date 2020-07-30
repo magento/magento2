@@ -36,6 +36,7 @@ $options = $attribute->getOptions();
 $attributeValues = [];
 $attributeSetId = $installer->getAttributeSetId('catalog_product', 'Default');
 $associatedProductIds = [];
+$productIds = [10, 20];
 array_shift($options); //remove the first option which is empty
 
 foreach ($options as $option) {

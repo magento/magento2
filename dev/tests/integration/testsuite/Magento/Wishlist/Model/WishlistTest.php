@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests for wish list model.
  *
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @magentoAppIsolation disabled
  */
 class WishlistTest extends TestCase
