@@ -55,7 +55,7 @@ class CategoryLinkManagementTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->tableMaintainer = $this->objectManager->get(TableMaintainer::class);
@@ -70,7 +70,7 @@ class CategoryLinkManagementTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager->removeSharedInstance(CategoryLinkRepository::class);
         $this->objectManager->removeSharedInstance(CategoryRepository::class);

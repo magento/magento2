@@ -124,7 +124,7 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
             $returnTypes = [];
             if ($method->hasReturnType()) {
                 if (!$method->getReturnType()->isBuiltin()) {
-                    $returnTypes = [trim($method->getReturnType()->__toString(), '?[]')];
+                    $returnTypes = [trim($method->getReturnType()->getName(), '?[]')];
                 }
             } else {
                 $returnTypes = $this->getReturnTypesFromDocComment($method->getDocComment());
@@ -279,7 +279,7 @@ class PublicCodeTest extends \PHPUnit\Framework\TestCase
         foreach ($method->getParameters() as $parameter) {
             if ($parameter->hasType()
                 && !$parameter->getType()->isBuiltin()
-                && !$this->isGenerated($parameter->getType()->__toString())
+                && !$this->isGenerated($parameter->getType()->getName())
             ) {
                 $parameterClass = $parameter->getClass();
                 /*

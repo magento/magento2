@@ -8,9 +8,12 @@ namespace Magento\Config\App\Config\Source;
 use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\Config\ScopeCodeResolver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\DataObject;
 use Magento\Config\Model\ResourceModel\Config\Data\CollectionFactory;
 use Magento\Framework\App\Config\Scope\Converter;
+use Magento\Framework\DB\Adapter\TableNotFoundException;
 
 /**
  * Class for retrieving runtime configuration from database.
@@ -34,20 +37,27 @@ class RuntimeConfigSource implements ConfigSourceInterface
      * @var ScopeCodeResolver
      */
     private $scopeCodeResolver;
+    /**
+     * @var DeploymentConfig
+     */
+    private $deploymentConfig;
 
     /**
      * @param CollectionFactory $collectionFactory
      * @param ScopeCodeResolver $scopeCodeResolver
      * @param Converter $converter
+     * @param DeploymentConfig|null $deploymentConfig
      */
     public function __construct(
         CollectionFactory $collectionFactory,
         ScopeCodeResolver $scopeCodeResolver,
-        Converter $converter
+        Converter $converter,
+        ?DeploymentConfig $deploymentConfig = null
     ) {
         $this->collectionFactory = $collectionFactory;
         $this->converter = $converter;
         $this->scopeCodeResolver = $scopeCodeResolver;
+        $this->deploymentConfig = $deploymentConfig ?? ObjectManager::getInstance()->get(DeploymentConfig::class);
     }
 
     /**
@@ -59,8 +69,9 @@ class RuntimeConfigSource implements ConfigSourceInterface
      */
     public function get($path = '')
     {
-        $data = new DataObject($this->loadConfig());
-        return $data->getData($path) ?: [];
+        $data = new DataObject($this->deploymentConfig->isDbAvailable() ? $this->loadConfig() : []);
+
+        return $data->getData($path) !== null ? $data->getData($path) : null;
     }
 
     /**
@@ -75,7 +86,11 @@ class RuntimeConfigSource implements ConfigSourceInterface
     {
         try {
             $collection = $this->collectionFactory->create();
+            $collection->load();
         } catch (\DomainException $e) {
+            $collection = [];
+        } catch (TableNotFoundException $exception) {
+            // database is empty or not setup
             $collection = [];
         }
         $config = [];

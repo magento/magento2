@@ -41,7 +41,7 @@ class WeeeSettingsTest extends TestCase
     /**
      * Prepare environment for test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createMock(Config::class);
         $this->subjectMock = $this->createMock(DataProvider::class);

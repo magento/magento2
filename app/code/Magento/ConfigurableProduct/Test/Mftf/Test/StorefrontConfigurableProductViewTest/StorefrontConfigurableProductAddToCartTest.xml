@@ -42,9 +42,9 @@
         <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="clickAddToCart"/>
         <waitForPageLoad stepKey="wait3"/>
         <grabFromCurrentUrl stepKey="grabUrl"/>
-        <assertContains stepKey="assertUrl">
+        <assertStringContainsString stepKey="assertUrl">
             <expectedResult type="string">{{_defaultProduct.urlKey}}</expectedResult>
             <actualResult type="string">{$grabUrl}</actualResult>
-        </assertContains>
+        </assertStringContainsString>
     </test>
 </tests>

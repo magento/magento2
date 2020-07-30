@@ -64,12 +64,6 @@ class Template extends \Magento\Framework\DataObject implements \Magento\Framewo
         $templateLabel = $this->_emailConfig->getTemplateLabel($templateId);
         $templateLabel = __('%1 (Default)', $templateLabel);
         array_unshift($options, ['value' => $templateId, 'label' => $templateLabel]);
-        array_walk(
-            $options,
-            function (&$item) {
-                $item['__disableTmpl'] = true;
-            }
-        );
         return $options;
     }
 }

@@ -91,7 +91,7 @@ class SalesEventOrderItemToQuoteItemObserverTest extends TestCase
     /**
      * Prepare environment for test
      */
-    public function setUp(): void
+    protected function setUp(): void
     {
         $this->messageFactoryMock = $this->getMockBuilder(MessageFactory::class)
             ->disableOriginalConstructor()
@@ -99,13 +99,23 @@ class SalesEventOrderItemToQuoteItemObserverTest extends TestCase
             ->getMock();
         $this->giftMessageHelperMock = $this->createMock(MessageHelper::class);
         $this->observerMock = $this->createMock(Observer::class);
-        $this->eventMock = $this->createPartialMock(Event::class, ['getOrderItem', 'getQuoteItem']);
-        $this->orderItemMock = $this->createPartialMock(
-            OrderItem::class,
-            ['getOrder', 'getStoreId', 'getGiftMessageId']
-        );
-        $this->quoteItemMock = $this->createPartialMock(QuoteItem::class, ['setGiftMessageId']);
-        $this->orderMock = $this->createPartialMock(Order::class, ['getReordered']);
+        $this->eventMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getOrderItem', 'getQuoteItem'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->orderItemMock = $this->getMockBuilder(OrderItem::class)
+            ->addMethods(['getGiftMessageId'])
+            ->onlyMethods(['getOrder', 'getStoreId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->quoteItemMock = $this->getMockBuilder(QuoteItem::class)
+            ->addMethods(['setGiftMessageId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->orderMock = $this->getMockBuilder(Order::class)
+            ->addMethods(['getReordered'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->storeMock = $this->createMock(Store::class);
         $this->messageMock = $this->createMock(MessageModel::class);
 

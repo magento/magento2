@@ -23,7 +23,7 @@ class CategoryListTest extends GraphQlAbstract
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
     }
@@ -360,11 +360,12 @@ QUERY;
      * Filtering with match value less than minimum query should return empty result
      *
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Invalid match filter. Minimum length is 3.
      */
     public function testMinimumMatchQueryLength()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid match filter. Minimum length is 3.');
+
         $query = <<<QUERY
 {
     categoryList(filters: {name: {match: "mo"}}){
@@ -712,5 +713,61 @@ QUERY;
         foreach ($expectedChildren as $i => $expectedChild) {
             $this->assertResponseFields($category['children'][$i], $expectedChild);
         }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterCategoryInlineFragment()
+    {
+        $query = <<<QUERY
+{
+    categoryList(filters: {ids: {eq: "6"}}){
+        ... on CategoryTree {
+            id
+            name
+            url_key
+            url_path
+            children_count
+            path
+            position
+        }
+    }
+}
+QUERY;
+        $result = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertCount(1, $result['categoryList']);
+        $this->assertEquals($result['categoryList'][0]['name'], 'Category 2');
+        $this->assertEquals($result['categoryList'][0]['url_path'], 'category-2');
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterCategoryNamedFragment()
+    {
+        $query = <<<QUERY
+{
+    categoryList(filters: {ids: {eq: "6"}}){
+        ...Cat
+    }
+}
+
+fragment Cat on CategoryTree {
+    id
+    name
+    url_key
+    url_path
+    children_count
+    path
+    position
+}
+QUERY;
+        $result = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertCount(1, $result['categoryList']);
+        $this->assertEquals($result['categoryList'][0]['name'], 'Category 2');
+        $this->assertEquals($result['categoryList'][0]['url_path'], 'category-2');
     }
 }

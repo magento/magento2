@@ -45,7 +45,7 @@ class NewActionTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -59,7 +59,7 @@ class NewActionTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if ($this->subscriberToDelete) {
             $this->deleteSubscriber($this->subscriberToDelete);
