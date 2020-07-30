@@ -19,9 +19,9 @@ use Magento\Framework\Setup\Option\SelectConfigOption;
 class Directory implements ConfigOptionsListInterface
 {
     /**
-     * Input ket for config command.
+     * Input key for config command.
      */
-    const INPUT_KEY_DOCUMENT_ROOT_IS_PUB = 'document-root-is-pub';
+    private const INPUT_KEY_DOCUMENT_ROOT_IS_PUB = 'document-root-is-pub';
 
     /**
      * Path in in configuration.
