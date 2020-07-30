@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Wishlist\Model\ResourceModel\Wishlist as WishlistResource;
 use Magento\Wishlist\Model\Wishlist;
@@ -24,6 +25,9 @@ $wishList = $objectManager->get(WishlistFactory::class)->create();
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $productRepository->cleanCache();
+/** @var CustomerRepositoryInterface $customerRepository */
+$customerRepository = $objectManager->get(CustomerRepositoryInterface::class);
+$customer = $customerRepository->get('customer@example.com');
 $product = $productRepository->get('simple_not_visible_1');
 $wishList->loadByCustomerId($customer->getId(), true);
 $item = $wishList->addNewItem($product);
