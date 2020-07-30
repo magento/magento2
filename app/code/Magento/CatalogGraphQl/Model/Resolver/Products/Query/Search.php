@@ -103,7 +103,7 @@ class Search implements ProductQueryInterface
         //Address limitations of sort and pagination on search API apply original pagination from GQL query
         $searchCriteria->setPageSize($realPageSize);
         $searchCriteria->setCurrentPage($realCurrentPage);
-        $searchResults = $this->productsProvider->getList($searchCriteria, $itemsResults, $queryFields, $context);
+        $searchResults = $this->productsProvider->getList($searchCriteria, $itemsResults, $args, $queryFields, $context);
 
         $totalPages = $realPageSize ? ((int)ceil($searchResults->getTotalCount() / $realPageSize)) : 0;
 

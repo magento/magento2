@@ -86,6 +86,7 @@ class ProductSearch
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @param SearchResultInterface $searchResult
+     * @param array $args
      * @param array $attributes
      * @param ContextInterface|null $context
      * @return SearchResultsInterface
@@ -93,6 +94,7 @@ class ProductSearch
     public function getList(
         SearchCriteriaInterface $searchCriteria,
         SearchResultInterface $searchResult,
+        array $args,
         array $attributes = [],
         ContextInterface $context = null
     ): SearchResultsInterface {
@@ -105,7 +107,7 @@ class ProductSearch
         $this->getSearchResultsApplier(
             $searchResult,
             $collection,
-            $this->getSortOrderArray($searchCriteriaForCollection)
+            $this->getSortOrderArray($searchCriteriaForCollection, $args)
         )->apply();
 
         $this->collectionPreProcessor->process($collection, $searchCriteriaForCollection, $attributes, $context);
@@ -147,9 +149,10 @@ class ProductSearch
      * E.g. ['field1' => 'DESC', 'field2' => 'ASC", ...]
      *
      * @param SearchCriteriaInterface $searchCriteria
+     * @param array $args
      * @return array
      */
-    private function getSortOrderArray(SearchCriteriaInterface $searchCriteria)
+    private function getSortOrderArray(SearchCriteriaInterface $searchCriteria, $args)
     {
         $ordersArray = [];
         $sortOrders = $searchCriteria->getSortOrders();
@@ -157,7 +160,11 @@ class ProductSearch
             foreach ($sortOrders as $sortOrder) {
                 if ($sortOrder->getField() !== '_id') {
                     if ($sortOrder->getField() == EavAttributeInterface::POSITION) {
-                        $sortOrder->setDirection(SortOrder::SORT_DESC);
+                        if (isset($args['sort'][EavAttributeInterface::POSITION])) {
+                            $sortOrder->setDirection($args['sort'][EavAttributeInterface::POSITION]);
+                        } else {
+                            $sortOrder->setDirection(SortOrder::SORT_DESC);
+                        }
                     }
                     $ordersArray[$sortOrder->getField()] = $sortOrder->getDirection();
                 }
