@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -166,7 +167,7 @@ class ResourceConnection
      *
      * @param string|string[] $modelEntity
      * @param string $connectionName
-     * @return  string
+     * @return string
      * @api
      */
     public function getTableName($modelEntity, $connectionName = self::DEFAULT_CONNECTION)
