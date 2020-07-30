@@ -10,7 +10,7 @@ namespace Magento\GraphQl\Quote;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 
 /**
- * Generate an array with test values for customizable options with encoded id_v2 value
+ * Generate an array with test values for customizable options with UID
  */
 class GetCustomOptionsWithUIDForQueryBySku
 {
@@ -83,7 +83,7 @@ class GetCustomOptionsWithUIDForQueryBySku
     }
 
     /**
-     * Returns id_v2 of the selected custom option
+     * Returns UID of the selected custom option
      *
      * @param int $optionId
      * @param int $optionValueId
@@ -95,7 +95,7 @@ class GetCustomOptionsWithUIDForQueryBySku
     }
 
     /**
-     * Returns id_v2 of the entered custom option
+     * Returns UID of the entered custom option
      *
      * @param int $optionId
      * @return string

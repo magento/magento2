@@ -43,7 +43,7 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
         $attributeId = (int) $product['configurable_options'][0]['attribute_id'];
         $valueIndex = $product['configurable_options'][0]['values'][1]['value_index'];
 
-        $selectedConfigurableOptionsQuery = $this->generateSuperAttributesIdV2Query($attributeId, $valueIndex);
+        $selectedConfigurableOptionsQuery = $this->generateSuperAttributesUIDQuery($attributeId, $valueIndex);
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         $query = $this->getQuery(
@@ -68,13 +68,13 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
     }
 
     /**
-     * Generates Id_v2 for super configurable product super attributes
+     * Generates UID for super configurable product super attributes
      *
      * @param int $attributeId
      * @param int $valueIndex
      * @return string
      */
-    private function generateSuperAttributesIdV2Query(int $attributeId, int $valueIndex): string
+    private function generateSuperAttributesUIDQuery(int $attributeId, int $valueIndex): string
     {
         return 'selected_options: ["' . base64_encode("configurable/$attributeId/$valueIndex") . '"]';
     }
@@ -89,7 +89,7 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
         $quantity = 2;
         $parentSku = $product['sku'];
 
-        $selectedConfigurableOptionsQuery = $this->generateSuperAttributesIdV2Query(0, 0);
+        $selectedConfigurableOptionsQuery = $this->generateSuperAttributesUIDQuery(0, 0);
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         $query = $this->getQuery(
@@ -118,7 +118,7 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
         $attributeId = (int) $product['configurable_options'][0]['attribute_id'];
         $valueIndex = $product['configurable_options'][0]['values'][1]['value_index'];
 
-        $selectedConfigurableOptionsQuery = $this->generateSuperAttributesIdV2Query($attributeId, $valueIndex);
+        $selectedConfigurableOptionsQuery = $this->generateSuperAttributesUIDQuery($attributeId, $valueIndex);
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         $query = $this->getQuery(
@@ -171,7 +171,7 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
         $valueIndex = $product['configurable_options'][0]['values'][0]['value_index'];
         $parentSku = $product['sku'];
 
-        $configurableOptionsQuery = $this->generateSuperAttributesIdV2Query($attributeId, $valueIndex);
+        $configurableOptionsQuery = $this->generateSuperAttributesUIDQuery($attributeId, $valueIndex);
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
 
         $query = $this->getQuery(

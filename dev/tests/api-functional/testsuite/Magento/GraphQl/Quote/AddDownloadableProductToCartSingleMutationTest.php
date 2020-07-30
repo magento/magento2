@@ -132,7 +132,7 @@ class AddDownloadableProductToCartSingleMutationTest extends GraphQlAbstract
     }
 
     /**
-     * Generates Id_v2 for downloadable links
+     * Generates UID for downloadable links
      *
      * @param int $linkId
      * @return string
