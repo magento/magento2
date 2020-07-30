@@ -5,15 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\SalesGraphQl\Model;
+namespace Magento\SalesGraphQl\Model\TypeResolver;
 
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\TypeResolverInterface;
 
 /**
- * Resolve concrete type for OrderItemInterface
+ * Resolve concrete type of ShipmentItemInterface
  */
-class OrderItemTypeResolver implements TypeResolverInterface
+class ShipmentItem implements TypeResolverInterface
 {
     /**
      * @var array
