@@ -104,6 +104,7 @@ class SearchCriteriaBuilder
             $this->addDefaultSortOrder($searchCriteria, $isSearch);
         }
 
+        $this->addEntityIdSort($searchCriteria, $isSearch);
         $this->addVisibilityFilter($searchCriteria, $isSearch, !empty($args['filter']));
 
         $searchCriteria->setCurrentPage($args['currentPage']);
@@ -130,6 +131,25 @@ class SearchCriteriaBuilder
             : $this->visibility->getVisibleInCatalogIds();
 
         $this->addFilter($searchCriteria, 'visibility', $visibilityIds, 'in');
+    }
+
+    /**
+     * Add sort by Entity ID
+     *
+     * @param SearchCriteriaInterface $searchCriteria
+     * @param bool $isSearch
+     */
+    private function addEntityIdSort(SearchCriteriaInterface $searchCriteria, bool $isSearch): void
+    {
+        if ($isSearch) {
+            return;
+        }
+        $sortOrderArray = $searchCriteria->getSortOrders();
+        $sortOrderArray[] = $this->sortOrderBuilder
+            ->setField('_id')
+            ->setDirection(SortOrder::SORT_DESC)
+            ->create();
+        $searchCriteria->setSortOrders($sortOrderArray);
     }
 
     /**

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider;
 
+use Magento\Catalog\Api\Data\EavAttributeInterface;
 use Magento\Catalog\Api\Data\ProductSearchResultsInterfaceFactory;
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
@@ -18,6 +19,7 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultAp
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResultsInterface;
+use Magento\Framework\Api\SortOrder;
 use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
@@ -153,7 +155,12 @@ class ProductSearch
         $sortOrders = $searchCriteria->getSortOrders();
         if (is_array($sortOrders)) {
             foreach ($sortOrders as $sortOrder) {
-                $ordersArray[$sortOrder->getField()] = $sortOrder->getDirection();
+                if ($sortOrder->getField() !== '_id') {
+                    if ($sortOrder->getField() == EavAttributeInterface::POSITION) {
+                        $sortOrder->setDirection(SortOrder::SORT_DESC);
+                    }
+                    $ordersArray[$sortOrder->getField()] = $sortOrder->getDirection();
+                }
             }
         }
 
