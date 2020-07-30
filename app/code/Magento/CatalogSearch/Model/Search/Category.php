@@ -3,22 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Model\Search;
 /**
  * Search model for backend search
- *
- * @method Category setQuery(string $query)
- * @method string|null getQuery()
- * @method bool hasQuery()
- * @method Category setStart(int $startPosition)
- * @method int|null getStart()
- * @method bool hasStart()
- * @method Category setLimit(int $limit)
- * @method int|null getLimit()
- * @method bool hasLimit()
- * @method Category setResults(array $results)
- * @method array getResults()
- * @api
  */
 class Category extends \Magento\Framework\DataObject
 {
@@ -106,7 +95,7 @@ class Category extends \Magento\Framework\DataObject
         $searchResults = $this->categoryRepository->getList($searchCriteria);
 
         foreach ($searchResults->getItems() as $category) {
-            $description = strip_tags($category->getDescription());
+            $description = $category->getDescription() ? strip_tags($category->getDescription()) : '';
             $result[] = [
                 'id' => 'category/1/' . $category->getId(),
                 'type' => __('Category'),
