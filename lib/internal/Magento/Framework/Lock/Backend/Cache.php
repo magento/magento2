@@ -43,7 +43,14 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
      *
      * @var int
      */
-    private $defaultLifetime = 10;
+    private $defaultLifetime = 7200;
+
+    /**
+     * Array for keeping all lock attempt to release them on destruct.
+     *
+     * @var string[]
+     */
+    private $lockArrayState = [];
 
     /**
      * @param FrontendInterface $cache
@@ -77,6 +84,7 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
         $data = $this->cache->load($this->getIdentifier($name));
 
         if ($data === $this->lockSign) {
+            $this->lockArrayState[$name] = 1;
             return true;
         }
 
@@ -101,6 +109,7 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
         $removeResult = false;
         if ($data === $this->lockSign) {
             $removeResult = (bool)$this->cache->remove($this->getIdentifier($name));
+            unset($this->lockArrayState[$name]);
         }
 
         return $removeResult;
@@ -146,5 +155,27 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
         }
 
         return $sign;
+    }
+
+    /**
+     * Destruct method should release all locks that left.
+     *
+     * @return void
+     */
+    public function __destruct()
+    {
+        $this->releaseLocks();
+    }
+
+    /**
+     * Release all locks that were not removed with unlock method.
+     *
+     * @return void
+     */
+    private function releaseLocks()
+    {
+        foreach ($this->lockArrayState as $name => $value) {
+            $this->unlock($name);
+        }
     }
 }
