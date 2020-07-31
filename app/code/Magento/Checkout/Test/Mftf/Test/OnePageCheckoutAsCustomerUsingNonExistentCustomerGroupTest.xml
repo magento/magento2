@@ -15,6 +15,7 @@
             <title value="OnePageCheckout as a customer with non-existent customer group assigned to the quote"/>
             <description value="Checkout as a customer with non-existent customer group assigned to the quote"/>
             <severity value="AVERAGE"/>
+            <testCaseId value="MC-36385"/>
             <group value="checkout"/>
         </annotations>
         <before>
