@@ -59,6 +59,5 @@
         "files": [
             "registration.php"
         ]
-    },
-    "version": "103.0.0"
+    }
 }

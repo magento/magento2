@@ -3,9 +3,9 @@
     "description": "Magento module responsible for media handling",
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "103.0.*",
-        "magento/module-media-gallery-api": "101.0.*",
-        "magento/module-cms": "104.0.*"
+        "magento/framework": "*",
+        "magento/module-media-gallery-api": "*",
+        "magento/module-cms": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -19,6 +19,5 @@
         "psr-4": {
             "Magento\\MediaGallery\\": ""
         }
-    },
-    "version": "100.4.0"
+    }
 }

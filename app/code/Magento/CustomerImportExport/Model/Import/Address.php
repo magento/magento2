@@ -54,6 +54,8 @@ class Address extends AbstractCustomer
 
     /**#@-*/
 
+    const COLUMN_REGION_ID = 'region_id';
+
     /**#@+
      * Particular columns that contains of customer default addresses
      */
@@ -665,14 +667,18 @@ class Address extends AbstractCustomer
                 $defaults[$table][$customerId][$attributeCode] = $addressId;
             }
         }
-        // let's try to find region ID
-        $entityRow['region_id'] = null;
 
-        if (!empty($rowData[self::COLUMN_REGION])
-            && $this->getCountryRegionId($rowData[self::COLUMN_COUNTRY_ID], $rowData[self::COLUMN_REGION]) !== false) {
-            $regionId = $this->getCountryRegionId($rowData[self::COLUMN_COUNTRY_ID], $rowData[self::COLUMN_REGION]);
-            $entityRow[self::COLUMN_REGION] = $this->_regions[$regionId];
-            $entityRow['region_id'] = $regionId;
+        if (!empty($entityRow[self::COLUMN_REGION]) && !empty($entityRow[self::COLUMN_COUNTRY_ID])) {
+            $entityRow[self::COLUMN_REGION_ID] = $this->getCountryRegionId(
+                $entityRow[self::COLUMN_COUNTRY_ID],
+                $entityRow[self::COLUMN_REGION]
+            );
+            // override the region name with its proper name if region ID is found
+            $entityRow[self::COLUMN_REGION] = $entityRow[self::COLUMN_REGION_ID] !== null
+                ? $this->_regions[$entityRow[self::COLUMN_REGION_ID]]
+                : $entityRow[self::COLUMN_REGION];
+        } elseif ($newAddress) {
+            $entityRow[self::COLUMN_REGION_ID] = null;
         }
         if ($newAddress) {
             $entityRowNew = $entityRow;
@@ -833,7 +839,7 @@ class Address extends AbstractCustomer
      * Check if address for import is empty (for customer composite mode)
      *
      * @param array $rowData
-     * @return array
+     * @return bool
      */
     protected function _isOptionalAddressEmpty(array $rowData)
     {
@@ -902,7 +908,7 @@ class Address extends AbstractCustomer
                     }
                 }
 
-                if (isset($rowData[self::COLUMN_COUNTRY_ID])) {
+                if (!empty($rowData[self::COLUMN_COUNTRY_ID])) {
                     if (isset($rowData[self::COLUMN_POSTCODE])
                         && !$this->postcodeValidator->isValid(
                             $rowData[self::COLUMN_COUNTRY_ID],
@@ -912,9 +918,9 @@ class Address extends AbstractCustomer
                         $this->addRowError(self::ERROR_VALUE_IS_REQUIRED, $rowNumber, self::COLUMN_POSTCODE);
                     }
 
-                    if (isset($rowData[self::COLUMN_REGION])
-                        && !empty($rowData[self::COLUMN_REGION])
-                        && false === $this->getCountryRegionId(
+                    if (!empty($rowData[self::COLUMN_REGION])
+                        && count($this->getCountryRegions($rowData[self::COLUMN_COUNTRY_ID])) > 0
+                        && null === $this->getCountryRegionId(
                             $rowData[self::COLUMN_COUNTRY_ID],
                             $rowData[self::COLUMN_REGION]
                         )
@@ -994,18 +1000,22 @@ class Address extends AbstractCustomer
      *
      * @param string $countryId
      * @param string $region
-     * @return bool|int
+     * @return int|null
      */
-    private function getCountryRegionId(string $countryId, string $region)
+    private function getCountryRegionId(string $countryId, string $region): ?int
     {
-        $countryNormalized = strtolower($countryId);
-        $regionNormalized = strtolower($region);
+        $countryRegions = $this->getCountryRegions($countryId);
+        return $countryRegions[strtolower($region)] ?? null;
+    }
 
-        if (isset($this->_countryRegions[$countryNormalized])
-            && isset($this->_countryRegions[$countryNormalized][$regionNormalized])) {
-            return $this->_countryRegions[$countryNormalized][$regionNormalized];
-        }
-
-        return false;
+    /**
+     * Get country regions
+     *
+     * @param string $countryId
+     * @return array
+     */
+    private function getCountryRegions(string $countryId): array
+    {
+        return $this->_countryRegions[strtolower($countryId)] ?? [];
     }
 }

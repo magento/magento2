@@ -3,15 +3,15 @@
     "description": "N/A",
     "require": {
         "php": "~7.3.0||~7.4.0",
-        "magento/framework": "103.0.*",
-        "magento/module-elasticsearch": "101.0.*",
+        "magento/framework": "*",
+        "magento/module-elasticsearch": "*",
         "elasticsearch/elasticsearch": "~7.7.0",
-        "magento/module-advanced-search": "100.4.*",
-        "magento/module-catalog-search": "102.0.*"
+        "magento/module-advanced-search": "*",
+        "magento/module-catalog-search": "*"
     },
     "suggest": {
-        "magento/module-config": "101.2.*",
-        "magento/module-search": "101.1.*"
+        "magento/module-config": "*",
+        "magento/module-search": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -25,6 +25,5 @@
         "psr-4": {
             "Magento\\Elasticsearch7\\": ""
         }
-    },
-    "version": "100.4.0"
+    }
 }

@@ -1423,7 +1423,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
      */
     protected function _deformatNVP($nvpstr)
     {
-        $intial = 0;
+        $initial = 0;
         $nvpArray = [];
 
         $nvpstr = strpos($nvpstr, "\r\n\r\n") !== false ? substr($nvpstr, strpos($nvpstr, "\r\n\r\n") + 4) : $nvpstr;
@@ -1435,7 +1435,7 @@ class Nvp extends \Magento\Paypal\Model\Api\AbstractApi
             $valuepos = strpos($nvpstr, '&') ? strpos($nvpstr, '&') : strlen($nvpstr);
 
             /*getting the Key and Value values and storing in a Associative Array*/
-            $keyval = substr($nvpstr, $intial, $keypos);
+            $keyval = substr($nvpstr, $initial, $keypos);
             $valval = substr($nvpstr, $keypos + 1, $valuepos - $keypos - 1);
             //decoding the response
             $nvpArray[urldecode($keyval)] = urldecode($valval);
