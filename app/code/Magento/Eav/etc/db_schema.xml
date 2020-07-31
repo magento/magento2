@@ -205,7 +205,7 @@
                 default="0" comment="Store ID"/>
         <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Entity ID"/>
-        <column xsi:type="mediumtext" name="value" nullable="false" comment="Attribute Value"/>
+        <column xsi:type="text" name="value" nullable="false" comment="Attribute Value"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="value_id"/>
         </constraint>
