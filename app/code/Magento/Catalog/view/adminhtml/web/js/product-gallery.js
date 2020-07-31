@@ -15,8 +15,13 @@ define([
     'baseImage'
 ], function ($, _, mageTemplate, registry) {
     'use strict';
-
-    var dragging = 1;
+    
+    /**
+     * The boxStatus.
+     *
+     * @type {string}
+     */
+    var boxStatus = "true";
 
     /**
      * Formats incoming bytes value to a readable format.
@@ -378,9 +383,9 @@ define([
             this._contentUpdated();
 
             setTimeout(function () {
-                dragging = 0;
+                boxStatus = "false";
             }, 1500);
-            dragging = 1;
+            boxStatus = "true";
         },
 
         /**
@@ -456,7 +461,7 @@ define([
             events['click ' + this.options.imageSelector] = function (event) {
                 var imageData, $imageContainer;
 
-                if (!$(event.currentTarget).is('.ui-sortable-helper') && dragging === 0) {
+                if ((!$(event.currentTarget).is('.ui-sortable-helper')) && (boxStatus === "false")) {
                     $(event.currentTarget).addClass('active');
                     imageData = $(event.currentTarget).data('imageData');
                     $imageContainer = this.findElement(imageData);
