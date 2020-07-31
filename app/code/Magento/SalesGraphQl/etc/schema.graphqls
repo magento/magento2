@@ -48,8 +48,8 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     invoices: [Invoice]! @doc(description: "A list of invoices for the order") @resolver(class: "Magento\\SalesGraphQl\\Model\\Resolver\\Invoices")
     shipments: [OrderShipment] @doc(description: "A list of shipments for the order")
     payment_methods: [PaymentMethod] @doc(description: "Payment details for the order")
-    shipping_address: CustomerAddress @doc(description: "The shipping address for the order")
-    billing_address: CustomerAddress @doc(description: "The billing address for the order")
+    shipping_address: OrderAddress @doc(description: "The shipping address for the order")
+    billing_address: OrderAddress @doc(description: "The billing address for the order")
     carrier: String @doc(description: "The shipping carrier for the order delivery")
     shipping_method: String @doc(description: "The delivery method for the order")
     comments: [CommentItem] @doc(description: "Comments about the order")
@@ -57,6 +57,24 @@ type CustomerOrder @doc(description: "Contains details about each of the custome
     order_number: String! @deprecated(reason: "Use the number attribute instead")
     created_at: String @deprecated(reason: "Use the order_date attribute instead")
     grand_total: Float  @deprecated(reason: "Use the totals.grand_total attribute instead")
+}
+
+type OrderAddress @doc(description: "OrderAddress contains detailed information about an order's billing and shipping addresses"){
+    firstname: String! @doc(description: "The first name of the person associated with the shipping/billing address")
+    lastname: String! @doc(description: "The family name of the person associated with the shipping/billing address")
+    middlename: String @doc(description: "The middle name of the person associated with the shipping/billing address")
+    region: String @doc(description: "The state or province name")
+    region_id: ID @doc(description: "The unique ID for a pre-defined region")
+    country_code: CountryCodeEnum @doc(description: "The customer's country")
+    street: [String!]! @doc(description: "An array of strings that define the street number and name")
+    company: String @doc(description: "The customer's company")
+    telephone: String! @doc(description: "The telephone number")
+    fax: String @doc(description: "The fax number")
+    postcode: String @doc(description: "The customer's order ZIP or postal code")
+    city: String! @doc(description: "The city or town")
+    prefix: String @doc(description: "An honorific, such as Dr., Mr., or Mrs.")
+    suffix: String @doc(description: "A value such as Sr., Jr., or III")
+    vat_id: String @doc(description: "The customer's Value-added tax (VAT) number (for corporate customers)")
 }
 
 interface OrderItemInterface @doc(description: "Order item details") @typeResolver(class: "Magento\\SalesGraphQl\\Model\\OrderItemTypeResolver") {
