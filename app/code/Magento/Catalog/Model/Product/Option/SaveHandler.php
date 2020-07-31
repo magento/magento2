@@ -39,7 +39,7 @@ class SaveHandler implements ExtensionInterface
      */
     public function execute($entity, $arguments = [])
     {
-        if ($entity->getOptionsSaved()) {
+        if ($entity->getOptionsSaved() || !$entity->getCanSaveCustomOptions()) {
             return $entity;
         }
 
