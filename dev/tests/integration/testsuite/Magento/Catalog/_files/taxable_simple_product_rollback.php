@@ -16,14 +16,13 @@ $registry = $objectManager->get(Registry::class);
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 $productRepository->cleanCache();
-
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
 try {
-    $productRepository->deleteById('simple2');
+    $productRepository->deleteById('taxable_product');
 } catch (NoSuchEntityException $e) {
-    //Product already removed
+    // product already deleted
 }
 
 $registry->unregister('isSecureArea');
