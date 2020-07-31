@@ -102,7 +102,7 @@ class Attribute
     }
 
     /**
-     * Check if mapping needs to be updated (attribute is new).
+     * Set class variables before saving attribute.
      *
      * @param AttributeResourceModel $subject
      * @param AbstractModel $attribute

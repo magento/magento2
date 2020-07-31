@@ -7,8 +7,9 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider;
 
-use Magento\Eav\Model\Config;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface
     as IndexTypeConverterInterface;
@@ -105,7 +106,6 @@ class StaticField implements FieldProviderInterface
      */
     public function getFields(array $context = []): array
     {
-        /** @var ProductAttributeInterface[] $attributes */
         $attributes = $this->eavConfig->getEntityAttributes(ProductAttributeInterface::ENTITY_TYPE_CODE);
         $allAttributes = [];
 
@@ -124,10 +124,10 @@ class StaticField implements FieldProviderInterface
     /**
      * Get field mapping for specific attribute.
      *
-     * @param ProductAttributeInterface $attribute
+     * @param AbstractAttribute $attribute
      * @return array
      */
-    public function getField(ProductAttributeInterface $attribute): array
+    public function getField(AbstractAttribute $attribute): array
     {
         $fieldMapping = [];
         if (in_array($attribute->getAttributeCode(), $this->excludedAttributes, true)) {

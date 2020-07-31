@@ -6,11 +6,12 @@
 
 /** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
 
-use Magento\Catalog\Model\Category\Attribute;
+use Magento\Catalog\Model\Category\AttributeFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 
-$attribute = Bootstrap::getObjectManager()
-    ->create(Attribute::class);
+/** @var AttributeFactory $attributeFactory */
+$attributeFactory = Bootstrap::getObjectManager()->get(AttributeFactory::class);
+$attribute = $attributeFactory->create();
 $attribute->setAttributeCode('test_attribute_code_666')
     ->setEntityTypeId(3)
     ->setIsGlobal(1)

@@ -6,18 +6,20 @@
 
 /** @var Registry $registry */
 
-use Magento\Catalog\Model\Category\Attribute;
+use Magento\Catalog\Model\Category\AttributeFactory;
 use Magento\Framework\Registry;
 use Magento\TestFramework\Helper\Bootstrap;
 
-$registry = Bootstrap::getObjectManager()->get(Registry::class);
+$objectManager = Bootstrap::getObjectManager();
+/** @var Registry $registry */
+$registry = $objectManager->get(Registry::class);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
 
-/** @var Attribute $attribute */
-$attribute = Bootstrap::getObjectManager()
-    ->create(Attribute::class);
+/** @var AttributeFactory $attributeFactory */
+$attributeFactory = $objectManager->get(AttributeFactory::class);
+$attribute = $attributeFactory->create();
 
 $attribute->loadByCode(3, 'test_attribute_code_666');
 

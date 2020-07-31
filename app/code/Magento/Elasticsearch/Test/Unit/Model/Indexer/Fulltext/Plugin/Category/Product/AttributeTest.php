@@ -88,13 +88,19 @@ class AttributeTest extends TestCase
      */
     public function testAfterSave(bool $isNewObject, bool $isElasticsearchEnabled, array $dimensions): void
     {
-        /** @var AttributeModel $attribute */
-        $attribute = (new ObjectManager($this))->getObject(AttributeModel::class);
-        $attribute->isObjectNew($isNewObject);
-        $attribute->setAttributeCode('example_attribute_code');
+        /** @var AttributeModel|MockObject $attributeMock */
+        $attributeMock = $this->createMock(AttributeModel::class);
+        $attributeMock->expects($this->once())
+            ->method('isObjectNew')
+            ->willReturn($isNewObject);
+
+        $attributeMock->expects($this->once())
+            ->method('getAttributeCode')
+            ->willReturn('example_attribute_code');
+
         /** @var AttributeResourceModel|MockObject $subjectMock */
         $subjectMock = $this->createMock(AttributeResourceModel::class);
-        $this->attributePlugin->beforeSave($subjectMock, $attribute);
+        $this->attributePlugin->beforeSave($subjectMock, $attributeMock);
 
         $indexerData = ['indexer_example_data'];
 
@@ -133,7 +139,7 @@ class AttributeTest extends TestCase
             ->method('getIterator')
             ->willReturn(new ArrayIterator($dimensions));
 
-        $this->attributePlugin->afterSave($subjectMock, $subjectMock);
+        $this->assertEquals($subjectMock, $this->attributePlugin->afterSave($subjectMock, $subjectMock));
     }
 
     /**

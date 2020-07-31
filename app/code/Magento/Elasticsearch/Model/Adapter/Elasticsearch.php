@@ -387,7 +387,6 @@ class Elasticsearch
             return $this;
         }
 
-        /** @var ProductAttributeInterface $attribute */
         $attribute = $this->productAttributeRepository->get($attributeCode);
         $newAttributeMapping = $this->staticFieldProvider->getField($attribute);
         $mappedAttributes = $this->getMappedAttributes($indexName);
@@ -410,7 +409,7 @@ class Elasticsearch
     }
 
     /**
-     * Retrieve index definition from cache.
+     * Retrieve index definition from class.
      *
      * @param int $storeId
      * @param string $mappedIndexerId
@@ -427,7 +426,7 @@ class Elasticsearch
     }
 
     /**
-     * Retrieve mapped attributes from cache.
+     * Retrieve mapped attributes from class.
      *
      * @param string $indexName
      * @return array
@@ -444,7 +443,7 @@ class Elasticsearch
     }
 
     /**
-     * Set mapped attributes to cache.
+     * Set mapped attributes to class.
      *
      * @param string $indexName
      * @param array $mappedAttributes

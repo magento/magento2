@@ -7,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\FieldMapper\Product\FieldProvider;
 
-use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeAdapter;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface
@@ -184,7 +184,7 @@ class StaticFieldTest extends TestCase
                 }
             );
 
-        $productAttributeMock = $this->getMockBuilder(ProductAttributeInterface::class)
+        $productAttributeMock = $this->getMockBuilder(AbstractAttribute::class)
             ->setMethods(['getAttributeCode'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
