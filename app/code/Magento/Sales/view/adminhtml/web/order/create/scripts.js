@@ -56,7 +56,7 @@ define([
                 }
             });
 
-            jQuery.async('#order-items .admin__page-section-title', (function () {
+            jQuery.async('#order-items', (function () {
                 this.dataArea = new OrderFormArea('data', $(this.getAreaId('data')), this);
                 this.itemsArea = Object.extend(new OrderFormArea('items', $(this.getAreaId('items')), this), {
                     addControlButton: function (button) {
@@ -84,20 +84,23 @@ define([
                     }, 10);
                 };
 
-                this.dataArea.onLoad = this.dataArea.onLoad.wrap(function (proceed) {
-                    proceed();
-                    this._parent.itemsArea.setNode($(this._parent.getAreaId('items')));
-                    this._parent.itemsArea.onLoad();
-                });
+                jQuery.async('#order-items .admin__page-section-title', (function () {
+                    this.dataArea.onLoad = this.dataArea.onLoad.wrap(function (proceed) {
+                        proceed();
+                        this._parent.itemsArea.setNode($(this._parent.getAreaId('items')));
+                        this._parent.itemsArea.onLoad();
+                    });
 
-                this.itemsArea.onLoad = this.itemsArea.onLoad.wrap(function (proceed) {
-                    proceed();
-                    if ($(searchAreaId) && !jQuery('#' + searchAreaId).is(':visible') && !$(searchButtonId)) {
-                        this.addControlButton(searchButton);
-                    }
-                });
-                this.areasLoaded();
-                this.itemsArea.onLoad();
+                    this.itemsArea.onLoad = this.itemsArea.onLoad.wrap(function (proceed) {
+                        proceed();
+                        if ($(searchAreaId) && !jQuery('#' + searchAreaId).is(':visible') && !$(searchButtonId)) {
+                            this.addControlButton(searchButton);
+                        }
+                    });
+                    this.areasLoaded();
+                    this.itemsArea.onLoad();
+
+                }).bind(this));
 
             }).bind(this));
 
