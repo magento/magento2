@@ -61,13 +61,12 @@ $viewModel = $block->getViewModel();
             </label>
             <div class="control">
                 <textarea name="comment" 
-                          id="comment" 
-                          title="<?= $block->escapeHtmlAttr(__('What’s on your mind?')) ?>" 
-                          class="input-text" 
-                          cols="5" 
-                          rows="3" 
-                          data-validate="{required:true}"><?= $block->escapeHtml($viewModel->getUserComment()) ?>
-                </textarea>
+                     id="comment"
+                     title="<?= $block->escapeHtmlAttr(__('What’s on your mind?')) ?>"
+                     class="input-text"
+                     cols="5"
+                     rows="3"
+                     data-validate="{required:true}"><?= $block->escapeHtml($viewModel->getUserComment()) ?></textarea>
             </div>
         </div>
         <?= $block->getChildHtml('form.additional.info') ?>

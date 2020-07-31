@@ -41,7 +41,7 @@ class ProductSearchTest extends \Magento\TestFramework\TestCase\AbstractBackendC
             ->setPostValue('limit', 50);
         $this->dispatch('backend/catalog/product/search');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertContains(
+        $this->assertStringContainsString(
             '"options":{"1":{"value":"1","label":"Simple Product","is_active":1,"path":"simple","optgroup":false}',
             $responseBody
         );
@@ -64,7 +64,7 @@ class ProductSearchTest extends \Magento\TestFramework\TestCase\AbstractBackendC
             ->setPostValue('limit', 50);
         $this->dispatch('backend/catalog/product/search');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertNotContains(
+        $this->assertStringNotContainsString(
             '"options":{"1":{"value":"1","label":"Simple Product","is_active":1,"path":"simple","optgroup":false}',
             $responseBody
         );

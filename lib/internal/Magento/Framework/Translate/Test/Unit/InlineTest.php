@@ -3,51 +3,63 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Translate\Test\Unit;
 
-use \Magento\Framework\Translate\Inline;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\Translate\Inline;
+use Magento\Framework\Translate\Inline\ConfigInterface;
+use Magento\Framework\Translate\Inline\ParserFactory;
+use Magento\Framework\Translate\Inline\ParserInterface;
+use Magento\Framework\Translate\Inline\StateInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class InlineTest extends \PHPUnit\Framework\TestCase
+class InlineTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\App\ScopeResolverInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeResolverInterface|MockObject
      */
     protected $scopeResolverMock;
 
     /**
-     * @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\ParserFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ParserFactory|MockObject
      */
     protected $parserMock;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\StateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StateInterface|MockObject
      */
     protected $stateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeResolverMock =
-            $this->createMock(\Magento\Framework\App\ScopeResolverInterface::class);
-        $this->urlMock = $this->createMock(\Magento\Framework\UrlInterface::class);
-        $this->layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
-        $this->configMock = $this->createMock(\Magento\Framework\Translate\Inline\ConfigInterface::class);
-        $this->parserMock = $this->createMock(\Magento\Framework\Translate\Inline\ParserInterface::class);
-        $this->stateMock = $this->createMock(\Magento\Framework\Translate\Inline\StateInterface::class);
+            $this->getMockForAbstractClass(ScopeResolverInterface::class);
+        $this->urlMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
+        $this->configMock = $this->getMockForAbstractClass(ConfigInterface::class);
+        $this->parserMock = $this->getMockForAbstractClass(ParserInterface::class);
+        $this->stateMock = $this->getMockForAbstractClass(StateInterface::class);
     }
 
     /**
@@ -137,10 +149,10 @@ class InlineTest extends \PHPUnit\Framework\TestCase
         return [
             ['test', 'test'],
             ['{{{aaaaaa}}{{bbbbb}}{{eeeee}}{{cccccc}}}', 'aaaaaa'],
-            [['test1', 'test2'], ['test1', 'test2'],],
-            [['{{{aaaaaa}}', 'test3'], ['{{{aaaaaa}}', 'test3'],],
-            [['{{{aaaaaa}}{{bbbbb}}', 'test4'], ['{{{aaaaaa}}{{bbbbb}}', 'test4'],],
-            [['{{{aaaaaa}}{{bbbbb}}{{eeeee}}{{cccccc}}}', 'test5'], ['aaaaaa', 'test5'],],
+            [['test1', 'test2'], ['test1', 'test2']],
+            [['{{{aaaaaa}}', 'test3'], ['{{{aaaaaa}}', 'test3']],
+            [['{{{aaaaaa}}{{bbbbb}}', 'test4'], ['{{{aaaaaa}}{{bbbbb}}', 'test4']],
+            [['{{{aaaaaa}}{{bbbbb}}{{eeeee}}{{cccccc}}}', 'test5'], ['aaaaaa', 'test5']],
         ];
     }
 
@@ -156,16 +168,16 @@ class InlineTest extends \PHPUnit\Framework\TestCase
         $isJson = true;
         $this->prepareIsAllowed(true, true, true, $scope);
 
-        $jsonCall = is_array($body) ? 2 * (count($body) + 1)  : 2;
+        $jsonCall = is_array($body) ? 2 * (count($body) + 1) : 2;
         $this->parserMock->expects(
             $this->exactly($jsonCall)
         )->method(
             'setIsJson'
-        )->will(
-            $this->returnValueMap([
+        )->willReturnMap(
+            [
                 [$isJson, $this->returnSelf()],
                 [!$isJson, $this->returnSelf()],
-            ])
+            ]
         );
         $this->parserMock->expects(
             $this->exactly(1)
@@ -178,8 +190,8 @@ class InlineTest extends \PHPUnit\Framework\TestCase
             $this->exactly(2)
         )->method(
             'getContent'
-        )->will(
-            $this->returnValue(is_array($body) ? reset($body) : $body)
+        )->willReturn(
+            is_array($body) ? reset($body) : $body
         );
 
         $model = new Inline(
@@ -221,16 +233,16 @@ class InlineTest extends \PHPUnit\Framework\TestCase
         $isJson = true;
         $this->prepareIsAllowed(true, true, true, $scope);
 
-        $jsonCall = is_array($body) ? 2 * (count($body) + 1)  : 2;
+        $jsonCall = is_array($body) ? 2 * (count($body) + 1) : 2;
         $this->parserMock->expects(
             $this->exactly($jsonCall)
         )->method(
             'setIsJson'
-        )->will(
-            $this->returnValueMap([
+        )->willReturnMap(
+            [
                 [$isJson, $this->returnSelf()],
                 [!$isJson, $this->returnSelf()],
-            ])
+            ]
         );
         $this->parserMock->expects(
             $this->exactly(1)
@@ -243,8 +255,8 @@ class InlineTest extends \PHPUnit\Framework\TestCase
             $this->exactly(2)
         )->method(
             'getContent'
-        )->will(
-            $this->returnValue(is_array($body) ? reset($body) : $body)
+        )->willReturn(
+            is_array($body) ? reset($body) : $body
         );
 
         $model = new Inline(
@@ -282,16 +294,16 @@ class InlineTest extends \PHPUnit\Framework\TestCase
      */
     protected function prepareIsAllowed($isEnabled, $isActive, $isDevAllowed, $scope = null)
     {
-        $scopeMock = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $this->stateMock->expects($this->any())->method('isEnabled')->will($this->returnValue($isEnabled));
+        $scopeMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->stateMock->expects($this->any())->method('isEnabled')->willReturn($isEnabled);
         $this->scopeResolverMock->expects(
             $this->once()
         )->method(
             'getScope'
         )->with(
             $scope
-        )->will(
-            $this->returnValue($scopeMock)
+        )->willReturn(
+            $scopeMock
         );
 
         $this->configMock->expects(
@@ -300,16 +312,16 @@ class InlineTest extends \PHPUnit\Framework\TestCase
             'isActive'
         )->with(
             $scopeMock
-        )->will(
-            $this->returnValue($isActive)
+        )->willReturn(
+            $isActive
         );
 
         $this->configMock->expects(
             $this->exactly((int)$isActive)
         )->method(
             'isDevAllowed'
-        )->will(
-            $this->returnValue($isDevAllowed)
+        )->willReturn(
+            $isDevAllowed
         );
     }
 }

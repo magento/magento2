@@ -1,0 +1,25 @@
+{
+    "name": "magento/module-media-content-catalog",
+    "description": "Magento module provides the implementation of MediaContent functionality for Magento_Catalog module",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/module-media-content-api": "100.4.*",
+        "magento/module-catalog": "104.0.*",
+        "magento/module-eav": "102.1.*",
+        "magento/framework": "103.0.*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\MediaContentCatalog\\": ""
+        }
+    },
+    "version": "100.4.0"
+}

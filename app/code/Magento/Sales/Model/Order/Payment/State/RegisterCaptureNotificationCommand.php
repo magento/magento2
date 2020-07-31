@@ -73,7 +73,7 @@ class RegisterCaptureNotificationCommand implements CommandInterface
     /**
      * Sets the state and status of the order
      *
-     * @deprecated 100.2.0 Replaced by a StatusResolver class call.
+     * @deprecated 100.1.9 Replaced by a StatusResolver class call.
      *
      * @param Order $order
      * @param string $status

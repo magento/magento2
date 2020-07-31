@@ -24,7 +24,7 @@ class ConfigurableProductStockStatusTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stockRegistry = Bootstrap::getObjectManager()->create(StockRegistryInterface::class);
     }
@@ -42,8 +42,8 @@ class ConfigurableProductStockStatusTest extends GraphQlAbstract
         $this->stockRegistry->updateStockItemBySku($childSkuOutOfStock, $stockItem);
         $query = $this->getQuery($parentSku);
         $response = $this->graphQlQuery($query);
-        $this->assertArraySubset(
-            [['product' => ['sku' => $childSkuOutOfStock, 'stock_status' => 'OUT_OF_STOCK']]],
+        $this->assertContainsEquals(
+            ['product' => ['sku' => $childSkuOutOfStock, 'stock_status' => 'OUT_OF_STOCK']],
             $response['products']['items'][0]['variants']
         );
     }

@@ -25,8 +25,12 @@
             </createData>
 
             <!-- Perform reindex and flush cache -->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
 
             <!-- log in and create the price rule -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -63,8 +67,7 @@
         <!-- Add the product to cart and check that the price is correct there -->
         <click stepKey="addToCart" selector="{{StorefrontProductActionSection.addToCart}}"/>
         <waitForPageLoad stepKey="waitForAddedToCart"/>
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForCart"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckout"/>
         <see stepKey="seeNewPriceInCart" selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$110.70"/>
     </test>
 </tests>

@@ -19,12 +19,11 @@
             <group value="CatalogRule"/>
         </annotations>
         <before>
-            <!-- Create a category -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <!-- Create a simple product -->
             <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
             <!-- Login to Admin page -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create a configurable product -->
@@ -80,8 +79,12 @@
 
         <!-- Apply and flush the cache -->
         <click selector="{{AdminCatalogPriceRuleGrid.applyRules}}" stepKey="clickApplyRules"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!-- Verify that category page shows the original prices -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryPage2"/>

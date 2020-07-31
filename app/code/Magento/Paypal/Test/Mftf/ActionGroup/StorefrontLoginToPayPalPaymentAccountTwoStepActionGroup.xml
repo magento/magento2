@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontLoginToPayPalPaymentAccountTwoStepActionGroup">
+        <arguments>
+            <argument name="credentials" defaultValue="_CREDS"/>
+        </arguments>
+        <!--Check in-context-->
+        <switchToNextTab stepKey="switchToInContentTab"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <seeCurrentUrlMatches regex="~\//www.sandbox.paypal.com/~" stepKey="seeCurrentUrlMatchesConfigPath1"/>
+        <conditionalClick selector="{{PayPalPaymentSection.notYouLink}}" dependentSelector="{{PayPalPaymentSection.notYouLink}}" visible="true" stepKey="selectNotYouSection"/>
+        <waitForElement selector="{{PayPalPaymentSection.email}}" stepKey="waitForLoginForm" />
+        <fillField selector="{{PayPalPaymentSection.email}}" userInput="{{credentials.magento/paypal_sandbox_login_email}}" stepKey="fillEmail"/>
+        <click selector="{{PayPalPaymentSection.nextButton}}" stepKey="clickNext"/>
+        <waitForElementVisible selector="{{PayPalPaymentSection.password}}" stepKey="waitForPasswordField"/>
+        <click selector="{{PayPalPaymentSection.password}}" stepKey="focusOnPasswordField"/>
+        <fillField selector="{{PayPalPaymentSection.password}}" userInput="{{credentials.magento/paypal_sandbox_login_password}}" stepKey="fillPassword"/>
+        <click selector="{{PayPalPaymentSection.loginBtn}}" stepKey="login"/>
+        <waitForPageLoad stepKey="wait"/>
+    </actionGroup>
+</actionGroups>

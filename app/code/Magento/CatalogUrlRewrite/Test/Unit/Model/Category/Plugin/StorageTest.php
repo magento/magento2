@@ -3,20 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model\Category\Plugin;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\UrlRewrite\Model\StorageInterface;
 use Magento\CatalogUrlRewrite\Model\Category\Plugin\Storage as CategoryStoragePlugin;
-use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
-use Magento\UrlRewrite\Model\UrlFinderInterface;
 use Magento\CatalogUrlRewrite\Model\Category\Product;
 use Magento\CatalogUrlRewrite\Model\ResourceModel\Category\Product as ProductResourceModel;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\UrlRewrite\Model\StorageInterface;
+use Magento\UrlRewrite\Model\UrlFinderInterface;
+use Magento\UrlRewrite\Service\V1\Data\UrlRewrite;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class StorageTest extends \PHPUnit\Framework\TestCase
+class StorageTest extends TestCase
 {
     /**
      * @var CategoryStoragePlugin
@@ -24,31 +28,31 @@ class StorageTest extends \PHPUnit\Framework\TestCase
     private $plugin;
 
     /**
-     * @var UrlFinderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlFinderInterface|MockObject
      */
     private $urlFinder;
 
     /**
-     * @var StorageInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StorageInterface|MockObject
      */
     private $storage;
 
     /**
-     * @var Product|\PHPUnit_Framework_MockObject_MockObject
+     * @var Product|MockObject
      */
     private $product;
 
     /**
-     * @var ProductResourceModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductResourceModel|MockObject
      */
     private $productResourceModel;
 
     /**
-     * @var UrlRewrite|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlRewrite|MockObject
      */
     private $urlRewrite;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storage = $this->getMockBuilder(StorageInterface::class)
             ->getMockForAbstractClass();

@@ -113,6 +113,7 @@ class Collection extends \Magento\Review\Model\ResourceModel\Review\Collection
      *
      * Additional processing of 'customer_name' field is required, as it is a concat field, which can not be aliased.
      * @see _joinCustomers
+     * @since 100.2.2
      */
     public function addFieldToFilter($field, $condition = null)
     {

@@ -40,8 +40,7 @@
                 <argument name="productAttributeLabel" value="{{visualSwatchAttribute.default_label}}"/>
             </actionGroup>
             <!--delete root category-->
-            <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
-            <waitForPageLoad time="30" stepKey="waitForPageCategoryLoad"/>
+            <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage"/>
             <click selector="{{AdminCategorySidebarTreeSection.categoryInTree('$$createRootCategory.name$$')}}" stepKey="clickOnDefaultRootCategory"/>
             <waitForPageLoad stepKey="waitForPageDefaultCategoryEditLoad" />
             <seeElement selector="{{AdminCategoryMainActionsSection.DeleteButton}}" stepKey="assertDeleteButtonIsPresent1"/>

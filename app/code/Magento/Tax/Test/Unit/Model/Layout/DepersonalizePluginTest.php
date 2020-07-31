@@ -43,19 +43,21 @@ class DepersonalizePluginTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->customerSessionMock = $this->createPartialMock(
-            CustomerSession::class,
-            [
-                'getDefaultTaxBillingAddress',
-                'getDefaultTaxShippingAddress',
-                'getCustomerTaxClassId',
-                'setDefaultTaxBillingAddress',
-                'setDefaultTaxShippingAddress',
-                'setCustomerTaxClassId',
-            ]
-        );
+        $this->customerSessionMock = $this->getMockBuilder(CustomerSession::class)
+            ->addMethods(
+                [
+                    'getDefaultTaxBillingAddress',
+                    'getDefaultTaxShippingAddress',
+                    'getCustomerTaxClassId',
+                    'setDefaultTaxBillingAddress',
+                    'setDefaultTaxShippingAddress',
+                    'setCustomerTaxClassId'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->depersonalizeCheckerMock = $this->createMock(DepersonalizeChecker::class);
         $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
 

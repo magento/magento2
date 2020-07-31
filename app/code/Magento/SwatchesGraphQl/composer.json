@@ -3,13 +3,13 @@
     "description": "N/A",
     "type": "magento2-module",
     "require": {
-        "php": "~7.1.3||~7.2.0||~7.3.0",
-        "magento/framework": "*",
-        "magento/module-swatches": "*",
-        "magento/module-catalog": "*"
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "103.0.*",
+        "magento/module-swatches": "100.4.*",
+        "magento/module-catalog": "104.0.*"
     },
     "suggest": {
-        "magento/module-catalog-graph-ql": "*"
+        "magento/module-catalog-graph-ql": "100.4.*"
     },
     "license": [
         "OSL-3.0",
@@ -22,5 +22,6 @@
         "psr-4": {
             "Magento\\SwatchesGraphQl\\": ""
         }
-    }
+    },
+    "version": "100.4.0"
 }

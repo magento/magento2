@@ -16,7 +16,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     protected $quoteItemCollectionFactory;
 
-    public function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->quoteItemCollectionFactory = $this->_objectManager->get(
@@ -61,7 +61,7 @@ class CartTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $this->getRequest()->setParam('website_id', 1);
         $this->getRequest()->setParam('id', $itemId);
         $this->dispatch('backend/customer/cart_product_composite_cart/configure');
-        $this->assertContains(
+        $this->assertStringContainsString(
             '<input id="product_composite_configure_input_qty" class="input-text admin__control-text qty"'
             . ' type="text" name="qty" value="1">',
             $this->getResponse()->getBody()

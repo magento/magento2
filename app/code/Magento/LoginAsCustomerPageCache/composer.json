@@ -1,0 +1,27 @@
+{
+    "name": "magento/module-login-as-customer-page-cache",
+    "description": "",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "103.0.*",
+        "magento/module-customer": "103.0.*",
+        "magento/module-store": "101.1.*"
+    },
+    "suggest": {
+        "magento/module-page-cache": "100.4.*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\LoginAsCustomerPageCache\\": ""
+        }
+    },
+    "version": "100.4.0"
+}

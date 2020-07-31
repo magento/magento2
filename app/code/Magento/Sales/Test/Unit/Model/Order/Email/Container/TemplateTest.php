@@ -3,18 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Container;
 
-use \Magento\Sales\Model\Order\Email\Container\Template;
+use Magento\Sales\Model\Order\Email\Container\Template;
+use PHPUnit\Framework\TestCase;
 
-class TemplateTest extends \PHPUnit\Framework\TestCase
+class TemplateTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Email\Container\Template
+     * @var Template
      */
     protected $template;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->template = new Template();
     }

@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUrlRewriteMultipleStoreviewsProductImportWithConfigTurnedOffTest">
+        <annotations>
+            <features value="Url Rewrite"/>
+            <stories value="Url Rewrites for Multiple Storeviews"/>
+            <title value="Url Rewrites Correctly Generated for Multiple Storeviews During Product Import With Configuration Turned Off"/>
+            <description value="Check Url Rewrites Correctly Generated for Multiple Storeviews During Product Import."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-6802"/>
+            <group value="urlRewrite"/>
+        </annotations>
+        <before>
+            <!-- Set the configuration for Generate "category/product" URL Rewrites to Yes (default)-->
+            <comment userInput="Enable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentEnableUrlRewriteConfig"/>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
+            <!--Flush cache-->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterEnableConfig">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <createData entity="ApiCategory" stepKey="createCategory">
+                <field key="name">category-admin</field>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create Store View EN -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewEn">
+                <argument name="customStore" value="customStoreENNotUnique"/>
+            </actionGroup>
+            <!-- Create Store View NL -->
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreViewNl">
+                <argument name="customStore" value="customStoreNLNotUnique"/>
+            </actionGroup>
+            <!-- Set the configuration for Generate "category/product" URL Rewrites to No-->
+            <comment userInput="Disable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentDisableUrlRewriteConfig"/>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
+            <!--Flush cache-->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterDisableConfig">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewEn">
+                <argument name="customStore" value="customStoreENNotUnique"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreViewNl">
+                <argument name="customStore" value="customStoreNLNotUnique"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearStoreGridFilters"/>
+            <actionGroup ref="DeleteProductByNameActionGroup" stepKey="deleteImportedProduct">
+                <argument name="sku" value="productformagetwo68980"/>
+                <argument name="name" value="productformagetwo68980"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFiltersIfSet"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="resetConfigurationSetting"/>
+            <!--Flush cache-->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </after>
+        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchToStoreViewEn">
+            <argument name="Store" value="customStoreENNotUnique.name"/>
+            <argument name="CatName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <uncheckOption selector="{{AdminCategoryBasicFieldSection.categoryNameUseDefault}}" stepKey="uncheckUseDefaultValueENStoreView"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="category-english" stepKey="changeNameField"/>
+        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="clickOnSectionHeader"/>
+        <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeSeoUrlKeyENStoreView">
+            <argument name="value" value="category-english"/>
+        </actionGroup>
+        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchToStoreViewNl">
+            <argument name="Store" value="customStoreNLNotUnique.name"/>
+            <argument name="CatName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <uncheckOption selector="{{AdminCategoryBasicFieldSection.categoryNameUseDefault}}" stepKey="uncheckUseDefaultValue1"/>
+        <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="category-dutch" stepKey="changeNameFieldNLStoreView"/>
+        <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="clickOnSectionHeader2"/>
+        <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeSeoUrlKeyNLStoreView">
+            <argument name="value" value="category-dutch"/>
+        </actionGroup>
+        <amOnPage url="{{AdminImportIndexPage.url}}" stepKey="navigateToSystemImport"/>
+        <selectOption selector="{{AdminImportMainSection.entityType}}" userInput="Products" stepKey="selectProductsOption"/>
+        <waitForElementVisible selector="{{AdminImportMainSection.importBehavior}}" stepKey="waitForImportBehaviorElementVisible"/>
+        <selectOption selector="{{AdminImportMainSection.importBehavior}}" userInput="Add/Update" stepKey="selectAddUpdateOption"/>
+        <attachFile selector="{{AdminImportMainSection.selectFileToImport}}" userInput="import_updated.csv" stepKey="attachFileForImport"/>
+        <click selector="{{AdminImportHeaderSection.checkDataButton}}" stepKey="clickCheckDataButton"/>
+        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="Checked rows: 3, checked entities: 1, invalid rows: 0, total errors: 0" stepKey="assertNotice"/>
+        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="File is valid! To start import process press &quot;Import&quot; button" stepKey="assertSuccessMessage"/>
+        <click selector="{{AdminImportMainSection.importButton}}" stepKey="clickImportButton"/>
+        <see selector="{{AdminImportValidationMessagesSection.success}}" userInput="Import successfully done" stepKey="assertSuccessMessage1"/>
+        <see selector="{{AdminImportValidationMessagesSection.notice}}" userInput="Created: 1, Updated: 0, Deleted: 0" stepKey="assertNotice1"/>
+        <actionGroup ref="SearchForProductOnBackendByNameActionGroup" stepKey="searchForProductOnBackend">
+            <argument name="productName" value="productformagetwo68980"/>
+        </actionGroup>
+        <click selector="{{AdminProductGridSection.productRowBySku('productformagetwo68980')}}" stepKey="clickOnProductRow"/>
+        <grabFromCurrentUrl regex="~/id/(\d+)/~" stepKey="grabProductIdFromUrl"/>
+        <amOnPage url="{{AdminUrlRewriteIndexPage.url}}" stepKey="goToUrlRewritesIndexPage"/>
+
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="category-english.html" stepKey="inputCategoryUrlForENStoreView"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'category-english.html')}}" stepKey="seeUrlInRequestPathColumn"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', catalog/category/view/id/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn"/>
+
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters1"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="category-dutch.html" stepKey="inputCategoryUrlForNLStoreView"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters1"/>
+        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'category-dutch.html')}}" stepKey="seeUrlInRequestPathColumn1"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', catalog/category/view/id/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn1"/>
+
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters2"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="productformagetwo68980-english.html" stepKey="inputProductUrlForENStoreView"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters2"/>
+        <waitForPageLoad stepKey="waitForPageToLoad2"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'productformagetwo68980-english.html')}}" stepKey="seeUrlInRequestPathColumn2"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', 'catalog/product/view/id/$grabProductIdFromUrl')}}" stepKey="seeUrlInTargetPathColumn2"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'category-english/productformagetwo68980-english.html')}}" stepKey="seeUrlInRequestPathColumn4"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn4"/>
+
+        <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openUrlRewriteGridFilters3"/>
+        <fillField selector="{{AdminDataGridHeaderSection.filterFieldInput('request_path')}}" userInput="productformagetwo68980-dutch.html" stepKey="inputProductUrlForENStoreView1"/>
+        <click selector="{{AdminDataGridHeaderSection.applyFilters}}" stepKey="clickOrderApplyFilters3"/>
+        <waitForPageLoad stepKey="waitForPageToLoad3"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'productformagetwo68980-dutch.html')}}" stepKey="seeUrlInRequestPathColumn3"/>
+        <seeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', 'catalog/product/view/id/$grabProductIdFromUrl')}}" stepKey="seeUrlInTargetPathColumn3"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Request Path', 'category-dutch/productformagetwo68980-dutch.html')}}" stepKey="seeUrlInRequestPathColumn5"/>
+        <dontSeeElement selector="{{AdminUrlRewriteIndexSection.gridCellByColumnValue('Target Path', catalog/product/view/id/$grabProductIdFromUrl/category/$$createCategory.id$$)}}" stepKey="seeUrlInTargetPathColumn5"/>
+
+        <!-- Switch StoreView -->
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnProduct4Page"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToCustomStoreView">
+            <argument name="storeView" value="customStoreENNotUnique"/>
+        </actionGroup>
+
+        <amOnPage url="/productformagetwo68980-english.html" stepKey="navigateToProductPage"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="productformagetwo68980-english" stepKey="seeProductName"/>
+        <amOnPage url="/category-english/productformagetwo68980-english.html" stepKey="navigateToProductPage2"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="productformagetwo68980-english" stepKey="seeProductName2"/>
+
+        <!-- Switch StoreView -->
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnProduct4Page2"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToCustomStoreView2">
+            <argument name="storeView" value="customStoreNLNotUnique"/>
+        </actionGroup>
+
+        <amOnPage url="/productformagetwo68980-dutch.html" stepKey="navigateToProductPage3"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="productformagetwo68980-dutch" stepKey="seeProductName3"/>
+        <amOnPage url="/category-dutch/productformagetwo68980-dutch.html" stepKey="navigateToProductPage4"/>
+        <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="productformagetwo68980-dutch" stepKey="seeProductName4"/>
+    </test>
+</tests>

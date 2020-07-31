@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <preference for="Magento\MediaContentApi\Api\DeleteContentAssetLinksByAssetIdsInterface" type="Magento\MediaContent\Model\DeleteContentAssetLinksByAssetIds"/>
+    <preference for="Magento\MediaContentApi\Api\GetAssetIdsByContentIdentityInterface" type="Magento\MediaContent\Model\GetAssetIdsByContentIdentity"/>
+    <preference for="Magento\MediaContentApi\Api\GetContentByAssetIdsInterface" type="Magento\MediaContent\Model\GetContentByAssetIds"/>
+    <preference for="Magento\MediaContentApi\Api\ExtractAssetsFromContentInterface" type="Magento\MediaContent\Model\ExtractAssetsFromContent"/>
+    <preference for="Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface" type="Magento\MediaContent\Model\UpdateContentAssetLinks"/>
+    <preference for="Magento\MediaContentApi\Api\DeleteContentAssetLinksInterface" type="Magento\MediaContent\Model\DeleteContentAssetLinks"/>
+    <preference for="Magento\MediaContentApi\Api\SaveContentAssetLinksInterface" type="Magento\MediaContent\Model\SaveContentAssetLinks"/>
+    <preference for="Magento\MediaContentApi\Api\Data\ContentIdentityInterface" type="Magento\MediaContent\Model\ContentIdentity"/>
+    <preference for="Magento\MediaContentApi\Api\Data\ContentAssetLinkInterface" type="Magento\MediaContent\Model\ContentAssetLink"/>
+    <preference for="Magento\MediaContentApi\Model\SearchPatternConfigInterface" type="Magento\MediaContent\Model\Content\SearchPatternConfig"/>
+    <type name="Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface">
+        <plugin name="remove_media_content_after_asset_is_removed_by_path" type="Magento\MediaContent\Plugin\MediaGalleryAssetDeleteByPath" />
+    </type>
+    <type name="Magento\MediaGalleryApi\Api\DeleteDirectoriesByPathsInterface">
+        <plugin name="remove_media_content_after_asset_is_removed_by_directory_path" type="Magento\MediaContent\Plugin\MediaGalleryAssetDeleteByDirectoryPath" />
+    </type>
+    <virtualType name="Magento\MediaContent\Model\Content\Config\Reader" type="Magento\Framework\Config\Reader\Filesystem">
+        <arguments>
+            <argument name="fileName" xsi:type="string">media_content.xml</argument>
+            <argument name="converter" xsi:type="object">Magento\MediaContent\Model\Content\Config\Converter</argument>
+            <argument name="schemaLocator" xsi:type="object">Magento\MediaContent\Model\Content\Config\SchemaLocator</argument>
+            <argument name="idAttributes" xsi:type="array">
+                <item name="/config/search/patterns/pattern" xsi:type="string">name</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaContent\Model\Content\Config\Data" type="Magento\Framework\Config\Data">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\MediaContent\Model\Content\Config\Reader</argument>
+            <argument name="cacheId" xsi:type="string">Media_Content_Patterns_CacheId</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\MediaContent\Model\Content\SearchPatternConfig">
+        <arguments>
+            <argument name="data" xsi:type="object">Magento\MediaContent\Model\Content\Config\Data</argument>
+        </arguments>
+    </type>
+</config>

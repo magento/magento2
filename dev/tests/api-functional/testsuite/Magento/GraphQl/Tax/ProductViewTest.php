@@ -48,7 +48,7 @@ class ProductViewTest extends GraphQlAbstract
      */
     private $storeManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
@@ -89,7 +89,7 @@ class ProductViewTest extends GraphQlAbstract
         $scopeConfig->clean();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         /** @var \Magento\Config\Model\ResourceModel\Config $config */
         $config = $this->objectManager->get(\Magento\Config\Model\ResourceModel\Config::class);
@@ -209,7 +209,7 @@ QUERY;
         $product = $this->productRepository->get($productSku, false, null, true);
         $this->assertArrayHasKey('products', $response);
         $this->assertArrayHasKey('items', $response['products']);
-        $this->assertEquals(1, count($response['products']['items']));
+        $this->assertCount(1, $response['products']['items']);
         $this->assertArrayHasKey(0, $response['products']['items']);
         $this->assertBaseFields($product, $response['products']['items'][0]);
     }

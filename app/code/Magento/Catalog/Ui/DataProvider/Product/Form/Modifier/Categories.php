@@ -48,7 +48,7 @@ class Categories extends AbstractModifier
 
     /**
      * @var array
-     * @deprecated 101.0.3
+     * @deprecated 101.0.0
      * @since 101.0.0
      */
     protected $categoriesTrees = [];
@@ -210,6 +210,7 @@ class Categories extends AbstractModifier
                                     'ns' => 'new_category_form',
                                     'externalProvider' => 'new_category_form.new_category_form_data_source',
                                     'toolbarContainer' => '${ $.parentName }',
+                                    '__disableTmpl' => ['toolbarContainer' => false],
                                     'formSubmitType' => 'ajax',
                                 ],
                             ],
