@@ -16,6 +16,8 @@ use Magento\Vault\Block\AbstractTokenRenderer;
  *
  * @api
  * @since 100.1.3
+ * @deprecated Starting from Magento 2.3.6 Braintree payment method core integration is deprecated
+ * in favor of official payment integration available on the marketplace
  */
 class VaultTokenRenderer extends AbstractTokenRenderer
 {

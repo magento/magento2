@@ -409,11 +409,6 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             }
             $data = $this->getResource()->loadByCustomerData($customerData);
             $this->addData($data);
-            if (!empty($data) && $customerData->getId() && !$this->getCustomerId()) {
-                $this->setCustomerId($customerData->getId());
-                $this->setSubscriberConfirmCode($this->randomSequence());
-                $this->save();
-            }
             // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
         } catch (NoSuchEntityException $e) {
         }
@@ -591,10 +586,6 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
             return $this;
         }
 
-        if (!$this->getId()) {
-            $this->setSubscriberConfirmCode($this->randomSequence());
-        }
-
         $sendInformationEmail = false;
         $status = self::STATUS_SUBSCRIBED;
         $isConfirmNeed = $this->_scopeConfig->getValue(
@@ -624,34 +615,30 @@ class Subscriber extends \Magento\Framework\Model\AbstractModel
         } else {
             $status = self::STATUS_UNSUBSCRIBED;
         }
+
+        $statusChanged = (int)$this->getStatus() !== $status;
         /**
          * If subscription status has been changed then send email to the customer
          */
-        if ($status != self::STATUS_UNCONFIRMED && $status != $this->getStatus()) {
+        if ($statusChanged) {
             $sendInformationEmail = true;
         }
 
-        if ($status != $this->getStatus()) {
-            $this->setStatusChanged(true);
+        if (!$this->getId()) {
+            $this->setSubscriberConfirmCode($this->randomSequence());
         }
-
-        $this->setStatus($status);
 
         $storeId = $customerData->getStoreId();
-        if ((int)$customerData->getStoreId() === 0) {
+        if ((int)$storeId === 0) {
             $storeId = $this->_storeManager->getWebsite($customerData->getWebsiteId())->getDefaultStore()->getId();
         }
+        $this->setStatus($status)
+            ->setStatusChanged($statusChanged)
+            ->setCustomerId($customerData->getId())
+            ->setStoreId($storeId)
+            ->setEmail($customerData->getEmail())
+            ->save();
 
-        if (!$this->getId()) {
-            $this->setStoreId($storeId)
-                ->setCustomerId($customerData->getId())
-                ->setEmail($customerData->getEmail());
-        } else {
-            $this->setStoreId($storeId)
-                ->setEmail($customerData->getEmail());
-        }
-
-        $this->save();
         $sendSubscription = $sendInformationEmail;
         if ($sendSubscription === null xor $sendSubscription && $this->isStatusChanged()) {
             try {

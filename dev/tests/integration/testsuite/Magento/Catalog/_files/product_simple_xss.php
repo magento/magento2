@@ -26,6 +26,8 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_SIMPLE)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
     ->save();
+$indexerProcessor = $objectManager->get(\Magento\Catalog\Model\Indexer\Product\Price\Processor::class);
+$indexerProcessor->reindexRow($product->getId());
 
 $categoryLinkManagement->assignProductToCategories(
     $product->getSku(),

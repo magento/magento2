@@ -430,7 +430,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match' => 'price_*',
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
-                                            'type' => 'float',
+                                            'type' => 'double',
                                             'store' => true,
                                         ],
                                     ],
@@ -452,10 +452,18 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'mapping' => [
                                             'type' => 'text',
                                             'index' => true,
-                                            'copy_to' => '_search'
+                                            'copy_to' => '_search',
                                         ],
                                     ],
-                                ]
+                                ],
+                                [
+                                    'integer_mapping' => [
+                                        'match_mapping_type' => 'long',
+                                        'mapping' => [
+                                            'type' => 'integer',
+                                        ],
+                                    ],
+                                ],
                             ],
                         ],
                     ],
@@ -500,7 +508,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match' => 'price_*',
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
-                                            'type' => 'float',
+                                            'type' => 'double',
                                             'store' => true,
                                         ],
                                     ],
@@ -522,10 +530,18 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'mapping' => [
                                             'type' => 'text',
                                             'index' => true,
-                                            'copy_to' => '_search'
+                                            'copy_to' => '_search',
                                         ],
                                     ],
-                                ]
+                                ],
+                                [
+                                    'integer_mapping' => [
+                                        'match_mapping_type' => 'long',
+                                        'mapping' => [
+                                            'type' => 'integer',
+                                        ],
+                                    ],
+                                ],
                             ],
                         ],
                     ],

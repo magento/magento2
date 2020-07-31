@@ -131,7 +131,7 @@ define([
             this.createPublicHashSelector();
 
             this.$selector.find('[name="payment[public_hash]"]').val(this.publicHash);
-            this.$container.find('#' + this.getNonceSelectorName()).val(nonce);
+            $('#' + this.getNonceSelectorName()).val(nonce);
         },
 
         /**
@@ -140,7 +140,7 @@ define([
         createPublicHashSelector: function () {
             var $input;
 
-            if (this.$container.find('#' + this.getNonceSelectorName()).size() === 0) {
+            if ($('#' + this.getNonceSelectorName()).length === 0) {
                 $input = $('<input>').attr(
                     {
                         type: 'hidden',
@@ -149,7 +149,7 @@ define([
                     }
                 );
 
-                $input.appendTo(this.$container);
+                $input.appendTo($('#edit_form'));
                 $input.prop('disabled', false);
             }
         },

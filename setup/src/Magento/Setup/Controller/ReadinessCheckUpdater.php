@@ -8,6 +8,11 @@ namespace Magento\Setup\Controller;
 use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\ViewModel;
 
+/**
+ * Class ReadinessCheckUpdater
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
+ */
 class ReadinessCheckUpdater extends AbstractActionController
 {
     const UPDATER = 'updater';

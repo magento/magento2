@@ -8,6 +8,8 @@ namespace Magento\Setup\Model;
 /**
  * Class PackagesData returns system packages and available for update versions
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 class PackagesData
 {

@@ -13,6 +13,7 @@ use Magento\Framework\App\DocRootLocator;
  * Plugin class to remove web setup wizard from menu if application root is pub/ and no setup url variable is specified.
  * @api
  * @since 100.1.0
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 class MenuBuilder
 {

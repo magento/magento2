@@ -30,8 +30,6 @@ class DefinitionAggregator implements DbDefinitionProcessorInterface
     private $dbVersion;
 
     /**
-     * Constructor.
-     *
      * @param ResourceConnection $resourceConnection
      * @param DbDefinitionProcessorInterface[] $definitionProcessors
      */

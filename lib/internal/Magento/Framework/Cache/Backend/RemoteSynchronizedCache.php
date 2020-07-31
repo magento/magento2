@@ -205,7 +205,7 @@ class RemoteSynchronizedCache extends \Zend_Cache_Backend implements \Zend_Cache
         $dataToSave = $data;
         $remHash = $this->loadRemoteDataVersion($id);
 
-        if ($remHash !== false) {
+        if ($remHash !== false && $this->getDataVersion($data) === $remHash) {
             $dataToSave = $this->remote->load($id);
         } else {
             $this->remote->save($data, $id, $tags, $specificLifetime);

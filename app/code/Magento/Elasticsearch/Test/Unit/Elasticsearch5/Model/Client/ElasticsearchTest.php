@@ -368,7 +368,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match' => 'price_*',
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
-                                            'type' => 'float',
+                                            'type' => 'double',
                                             'store' => true,
                                         ],
                                     ],
@@ -379,7 +379,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
                                             'type' => 'integer',
-                                            'index' => true
+                                            'index' => true,
                                         ],
                                     ],
                                 ],
@@ -390,6 +390,14 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'mapping' => [
                                             'type' => 'text',
                                             'index' => true,
+                                        ],
+                                    ],
+                                ],
+                                [
+                                    'integer_mapping' => [
+                                        'match_mapping_type' => 'long',
+                                        'mapping' => [
+                                            'type' => 'integer',
                                         ],
                                     ],
                                 ],
@@ -438,7 +446,7 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                         'match' => 'price_*',
                                         'match_mapping_type' => 'string',
                                         'mapping' => [
-                                            'type' => 'float',
+                                            'type' => 'double',
                                             'store' => true,
                                         ],
                                     ],
@@ -462,7 +470,15 @@ class ElasticsearchTest extends \PHPUnit\Framework\TestCase
                                             'index' => true,
                                         ],
                                     ],
-                                ]
+                                ],
+                                [
+                                    'integer_mapping' => [
+                                        'match_mapping_type' => 'long',
+                                        'mapping' => [
+                                            'type' => 'integer',
+                                        ],
+                                    ],
+                                ],
                             ],
                         ],
                     ],

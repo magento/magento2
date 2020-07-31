@@ -13,6 +13,8 @@ use Magento\Vault\Block\AbstractCardRenderer;
 /**
  * @api
  * @since 100.1.0
+ * @deprecated Starting from Magento 2.3.6 Braintree payment method core integration is deprecated
+ * in favor of official payment integration available on the marketplace
  */
 class CardRenderer extends AbstractCardRenderer
 {

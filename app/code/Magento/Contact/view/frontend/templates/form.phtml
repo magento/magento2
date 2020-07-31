@@ -4,6 +4,9 @@
  * See COPYING.txt for license details.
  */
 
+// phpcs:disable Magento2.Templates.ThisInTemplate
+// phpcs:disable Generic.Files.LineLength.TooLong
+
 /** @var \Magento\Contact\Block\ContactForm $block */
 ?>
 <form class="form contact"
@@ -18,19 +21,31 @@
         <div class="field name required">
             <label class="label" for="name"><span><?= $block->escapeHtml(__('Name')) ?></span></label>
             <div class="control">
-                <input name="name" id="name" title="<?= $block->escapeHtmlAttr(__('Name')) ?>" value="<?= $block->escapeHtmlAttr($this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('name') ?: $this->helper(\Magento\Contact\Helper\Data::class)->getUserName()) ?>" class="input-text" type="text" data-validate="{required:true}"/>
+                <input name="name" id="name" title="<?= $block->escapeHtmlAttr(__('Name')) ?>"
+                       value="<?= $block->escapeHtmlAttr($this->helper(\Magento\Contact\Helper\Data::class)
+                           ->getPostValue('name')
+                           ?: $this->helper(\Magento\Contact\Helper\Data::class)->getUserName()) ?>"
+                       class="input-text" type="text" data-validate="{required:true}"/>
             </div>
         </div>
         <div class="field email required">
             <label class="label" for="email"><span><?= $block->escapeHtml(__('Email')) ?></span></label>
             <div class="control">
-                <input name="email" id="email" title="<?= $block->escapeHtmlAttr(__('Email')) ?>" value="<?= $block->escapeHtmlAttr($this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('email') ?: $this->helper(\Magento\Contact\Helper\Data::class)->getUserEmail()) ?>" class="input-text" type="email" data-validate="{required:true, 'validate-email':true}"/>
+                <input name="email" id="email"
+                       title="<?= $block->escapeHtmlAttr(__('Email')) ?>"
+                       value="<?= $block->escapeHtmlAttr($this->helper(\Magento\Contact\Helper\Data::class)
+                           ->getPostValue('email')
+                           ?: $this->helper(\Magento\Contact\Helper\Data::class)->getUserEmail()) ?>"
+                       class="input-text" type="email" data-validate="{required:true, 'validate-email':true}"/>
             </div>
         </div>
         <div class="field telephone">
             <label class="label" for="telephone"><span><?= $block->escapeHtml(__('Phone Number')) ?></span></label>
             <div class="control">
-                <input name="telephone" id="telephone" title="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>" value="<?= $block->escapeHtmlAttr($this->helper(\Magento\Contact\Helper\Data::class)->getPostValue('telephone')) ?>" class="input-text" type="text" />
+                <input name="telephone" id="telephone" title="<?= $block->escapeHtmlAttr(__('Phone Number')) ?>"
+                       value="<?= $block->escapeHtmlAttr($this->helper(\Magento\Contact\Helper\Data::class)
+                           ->getPostValue('telephone')) ?>"
+                       class="input-text" type="text" />
             </div>
         </div>
         <div class="field comment required">
@@ -50,3 +65,12 @@
         </div>
     </div>
 </form>
+<script type="text/x-magento-init">
+    {
+        "*": {
+            "Magento_Customer/js/block-submit-on-send": {
+                "formId": "contact-form"
+            }
+        }
+    }
+</script>

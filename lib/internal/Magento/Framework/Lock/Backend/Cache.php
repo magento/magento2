@@ -25,11 +25,19 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
     private $cache;
 
     /**
+     * Sign for locks, helps to avoid removing a lock that was created by another client
+     *
+     * @string
+     */
+    private $lockSign;
+
+    /**
      * @param FrontendInterface $cache
      */
     public function __construct(FrontendInterface $cache)
     {
         $this->cache = $cache;
+        $this->lockSign = $this->generateLockSign();
     }
 
     /**
@@ -37,11 +45,26 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
      */
     public function lock(string $name, int $timeout = -1): bool
     {
-        if ((bool)$this->cache->test($this->getIdentifier($name))) {
+        if (empty($this->lockSign)) {
+            $this->lockSign = $this->generateLockSign();
+        }
+
+        $data = $this->cache->load($this->getIdentifier($name));
+
+        if (false !== $data) {
              return false;
         }
 
-        return $this->cache->save('1', $this->getIdentifier($name), [], $timeout);
+        $timeout = $timeout <= 0 ? null : $timeout;
+        $this->cache->save($this->lockSign, $this->getIdentifier($name), [], $timeout);
+
+        $data = $this->cache->load($this->getIdentifier($name));
+
+        if ($data === $this->lockSign) {
+            return true;
+        }
+
+        return false;
     }
 
     /**
@@ -49,7 +72,22 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
      */
     public function unlock(string $name): bool
     {
-        return $this->cache->remove($this->getIdentifier($name));
+        if (empty($this->lockSign)) {
+            return false;
+        }
+
+        $data = $this->cache->load($this->getIdentifier($name));
+
+        if (false === $data) {
+            return false;
+        }
+
+        $removeResult = false;
+        if ($data === $this->lockSign) {
+            $removeResult = (bool)$this->cache->remove($this->getIdentifier($name));
+        }
+
+        return $removeResult;
     }
 
     /**
@@ -69,5 +107,28 @@ class Cache implements \Magento\Framework\Lock\LockManagerInterface
     private function getIdentifier(string $cacheIdentifier): string
     {
         return self::LOCK_PREFIX . $cacheIdentifier;
+    }
+
+    /**
+     * Function that generates lock sign that helps to avoid removing a lock that was created by another client.
+     *
+     * @return string
+     */
+    private function generateLockSign()
+    {
+        $sign = implode(
+            '-',
+            [
+                \getmypid(), \crc32(\gethostname())
+            ]
+        );
+
+        try {
+            $sign .= '-' . \bin2hex(\random_bytes(4));
+        } catch (\Exception $e) {
+            $sign .= '-' . \uniqid('-uniqid-');
+        }
+
+        return $sign;
     }
 }

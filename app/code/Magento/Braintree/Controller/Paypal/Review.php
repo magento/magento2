@@ -18,6 +18,9 @@ use Magento\Payment\Model\Method\Logger;
 
 /**
  * Class Review
+ *
+ * @deprecated Starting from Magento 2.3.6 Braintree payment method core integration is deprecated
+ * in favor of official payment integration available on the marketplace
  */
 class Review extends AbstractAction implements HttpPostActionInterface, HttpGetActionInterface
 {
