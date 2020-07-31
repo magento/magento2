@@ -16,6 +16,7 @@
         <element name="nthSwatchOptionText" type="button" selector="div.swatch-option.text:nth-of-type({{n}})" parameterized="true"/>
         <element name="productSwatch" type="button" selector="//div[@class='swatch-option'][@aria-label='{{var1}}']" parameterized="true"/>
         <element name="visualSwatchOption" type="button" selector=".swatch-option[data-option-tooltip-value='#{{visualSwatchOption}}']" parameterized="true"/>
+        <element name="visualSwatchOptionText" type="button" selector=".swatch-option.text[data-option-tooltip-value='{{visualSwatchOptionText}}']" parameterized="true"/>
         <element name="swatchOptionTooltip" type="block" selector="div.swatch-option-tooltip"/>
         <element name="swatchAttributeSelectedOption" type="text" selector="#product-options-wrapper .swatch-option.selected"/>
     </section>
