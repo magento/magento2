@@ -66,7 +66,7 @@ class CollectTotalsObserver extends FrontendCollectTotalsObserver implements Obs
      * @param int|null $groupId
      * @return bool
      */
-    private function assignCustomerGroupConditions($groupId)
+    protected function assignCustomerGroupConditions($groupId)
     {
         if ($groupId !== null
             && !(
