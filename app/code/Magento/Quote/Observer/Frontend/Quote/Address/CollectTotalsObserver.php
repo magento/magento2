@@ -146,7 +146,7 @@ class CollectTotalsObserver implements ObserverInterface
      * @param int|null $groupId
      * @return bool
      */
-    protected function assignCustomerGroupConditions($groupId)
+    private function assignCustomerGroupConditions($groupId)
     {
         return $groupId !== null ? true : false;
     }
