@@ -96,6 +96,14 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
                     . '<td colspan="4">' . $field->toHtml() . '</td></tr>';
             } else {
                 $elements .= $field->toHtml();
+                $styleTag = '';
+                if (!empty($field->getFieldConfig()['depends']['fields'])) {
+                    $styleTag .= $this->secureRenderer->renderStyleAsTag(
+                        'display: none;',
+                        '#row_' . $field->getHtmlId()
+                    );
+                }
+                $elements .= $styleTag;
             }
         }
 
@@ -168,11 +176,19 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
      */
     protected function _getHeaderTitleHtml($element)
     {
+        $styleTag = '';
+        if (!empty($element->getGroup()['depends']['fields'])) {
+            $styleTag .= $this->secureRenderer->renderStyleAsTag(
+                'display: none;',
+                '#' . $element->getHtmlId() . '-head'
+            );
+        }
         return '<a id="' .
             $element->getHtmlId() .
             '-head" href="#' .
             $element->getHtmlId() .
             '-link">' . $element->getLegend() . '</a>' .
+            $styleTag .
             /* @noEscape */ $this->secureRenderer->renderEventListenerAsTag(
                 'onclick',
                 'event.preventDefault();' .
