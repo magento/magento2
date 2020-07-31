@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Test\Legacy\Magento\App\Action;
+namespace Magento\Test\Legacy\Magento\Framework\App\Action;
 
 use Exception;
 use Magento\Framework\App\Action\AbstractAction;
