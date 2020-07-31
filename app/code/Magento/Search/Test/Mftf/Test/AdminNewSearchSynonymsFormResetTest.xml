@@ -14,6 +14,7 @@
             <stories value="Reset new search synonyms group form"/>
             <title value="Admin reset new search synonyms group form"/>
             <description value="When admin users reset button on new search synonyms form all fields should be set to default values"/>
+            <testCaseId value="MC-36382"/>
             <severity value="AVERAGE"/>
             <group value="Search"/>
         </annotations>
