@@ -13,9 +13,10 @@ use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\Model\Order\Payment;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require 'default_rollback.php';
-require __DIR__ . '/../../../Magento/GroupedProduct/_files/product_grouped_with_simple.php';
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/default_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/GroupedProduct/_files/product_grouped_with_simple.php');
 $addressData = include __DIR__ . '/address_data.php';
 
 $objectManager = Bootstrap::getObjectManager();

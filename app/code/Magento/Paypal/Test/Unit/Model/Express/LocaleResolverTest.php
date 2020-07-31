@@ -11,14 +11,16 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\ConfigFactory;
 use Magento\Paypal\Model\Express\LocaleResolver as ExpressLocaleResolver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for PayPal express checkout resolver
  */
-class LocaleResolverTest extends \PHPUnit\Framework\TestCase
+class LocaleResolverTest extends TestCase
 {
     /**
-     * @var \PHPUnit\Framework\MockObject\MockObject|ResolverInterface
+     * @var MockObject|ResolverInterface
      */
     private $resolver;
 
@@ -32,9 +34,9 @@ class LocaleResolverTest extends \PHPUnit\Framework\TestCase
      */
     private $config;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->resolver = $this->createMock(ResolverInterface::class);
+        $this->resolver = $this->getMockForAbstractClass(ResolverInterface::class);
         /** @var Config $config */
         $this->config = $this->createMock(Config::class);
 
@@ -56,13 +58,13 @@ class LocaleResolverTest extends \PHPUnit\Framework\TestCase
     {
         $this->resolver->method('getLocale')
             ->willReturn($locale);
-        $this->config->method('getValue')->will(
-            $this->returnValueMap(
+        $this->config->method('getValue')->willReturnMap(
+            
                 [
                     ['in_context', null, false],
                     ['supported_locales', null, 'zh_CN,zh_HK,zh_TW,fr_FR'],
                 ]
-            )
+            
         );
         $this->assertEquals($expectedLocale, $this->model->getLocale());
     }
@@ -89,13 +91,13 @@ class LocaleResolverTest extends \PHPUnit\Framework\TestCase
     {
         $this->resolver->method('getLocale')
             ->willReturn('zh_Hans_CN');
-        $this->config->method('getValue')->will(
-            $this->returnValueMap(
+        $this->config->method('getValue')->willReturnMap(
+            
                 [
                     ['in_context', null, true],
                     ['smart_buttons_supported_locales', null, 'zh_CN,zh_HK,zh_TW,fr_FR'],
                 ]
-            )
+            
         );
         $this->assertEquals('zh_CN', $this->model->getLocale());
     }

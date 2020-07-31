@@ -13,6 +13,7 @@ use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Reflection\DataObjectProcessor;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\Url as UrlBuilder;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -48,7 +49,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     /** @var  \Magento\Framework\Api\DataObjectHelper */
     protected $dataObjectHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->accountManagement = $this->objectManager
@@ -102,7 +103,7 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * Clean up shared dependencies
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
         $customerRegistry = $this->objectManager->get(\Magento\Customer\Model\CustomerRegistry::class);
@@ -129,20 +130,22 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      *
-     * @expectedException \Magento\Framework\Exception\InvalidEmailOrPasswordException
      */
     public function testLoginWrongPassword()
     {
+        $this->expectException(\Magento\Framework\Exception\InvalidEmailOrPasswordException::class);
+
         // Customer email and password are pulled from the fixture customer.php
         $this->accountManagement->authenticate('customer@example.com', 'wrongPassword');
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InvalidEmailOrPasswordException
-     * @expectedExceptionMessage Invalid login or password.
      */
     public function testLoginWrongUsername()
     {
+        $this->expectException(\Magento\Framework\Exception\InvalidEmailOrPasswordException::class);
+        $this->expectExceptionMessage('Invalid login or password.');
+
         // Customer email and password are pulled from the fixture customer.php
         $this->accountManagement->authenticate('non_existing_user', '_Password123');
     }
@@ -153,7 +156,21 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      */
     public function testChangePassword()
     {
+        /** @var SessionManagerInterface $session */
+        $session = $this->objectManager->get(SessionManagerInterface::class);
+        $oldSessionId = $session->getSessionId();
+        $session->setTestData('test');
         $this->accountManagement->changePassword('customer@example.com', 'password', 'new_Password123');
+
+        $this->assertTrue(
+            $oldSessionId !== $session->getSessionId(),
+            'Customer session id wasn\'t regenerated after change password'
+        );
+
+        $session->destroy();
+        $session->setSessionId($oldSessionId);
+
+        $this->assertNull($session->getTestData(), 'Customer session data wasn\'t cleaned');
 
         $this->accountManagement->authenticate('customer@example.com', 'new_Password123');
     }
@@ -161,20 +178,22 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      *
-     * @expectedException \Magento\Framework\Exception\InvalidEmailOrPasswordException
-     * @expectedExceptionMessage The password doesn't match this account. Verify the password and try again.
      */
     public function testChangePasswordWrongPassword()
     {
+        $this->expectException(\Magento\Framework\Exception\InvalidEmailOrPasswordException::class);
+        $this->expectExceptionMessage('The password doesn\'t match this account. Verify the password and try again.');
+
         $this->accountManagement->changePassword('customer@example.com', 'wrongPassword', 'new_Password123');
     }
 
     /**
-     * @expectedException \Magento\Framework\Exception\InvalidEmailOrPasswordException
-     * @expectedExceptionMessage Invalid login or password.
      */
     public function testChangePasswordWrongUser()
     {
+        $this->expectException(\Magento\Framework\Exception\InvalidEmailOrPasswordException::class);
+        $this->expectExceptionMessage('Invalid login or password.');
+
         $this->accountManagement->changePassword('wrong.email@example.com', '_Password123', 'new_Password123');
     }
 
@@ -199,10 +218,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/inactive_customer.php
-     * @expectedException \Magento\Framework\Exception\State\InputMismatchException
      */
     public function testActivateCustomerConfirmationKeyWrongKey()
     {
+        $this->expectException(\Magento\Framework\Exception\State\InputMismatchException::class);
+
         /** @var \Magento\Customer\Model\Customer $customerModel */
         $customerModel = $this->objectManager->create(\Magento\Customer\Model\Customer::class);
         $customerModel->load(1);
@@ -239,10 +259,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/inactive_customer.php
      * @magentoAppArea frontend
-     * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
      */
     public function testActivateCustomerAlreadyActive()
     {
+        $this->expectException(\Magento\Framework\Exception\State\InvalidTransitionException::class);
+
         /** @var \Magento\Customer\Model\Customer $customerModel */
         $customerModel = $this->objectManager->create(\Magento\Customer\Model\Customer::class);
         $customerModel->load(1);
@@ -263,10 +284,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Magento\Framework\Exception\State\ExpiredException
      */
     public function testValidateResetPasswordLinkTokenExpired()
     {
+        $this->expectException(\Magento\Framework\Exception\State\ExpiredException::class);
+
         $resetToken = 'lsdj579slkj5987slkj595lkj';
         $this->setResetPasswordData($resetToken, '1970-01-01');
         $this->accountManagement->validateResetPasswordLinkToken(1, $resetToken);
@@ -311,10 +333,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
      * Test for resetPassword() method when reset for the second time
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Magento\Framework\Exception\State\InputMismatchException
      */
     public function testResetPasswordTokenSecondTime()
     {
+        $this->expectException(\Magento\Framework\Exception\State\InputMismatchException::class);
+
         $resetToken = 'lsdj579slkj5987slkj595lkj';
         $password = 'new_Password123';
         $email = 'customer@example.com';
@@ -353,10 +376,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
     /**
      * @magentoDataFixture Magento/Customer/_files/two_customers.php
-     * @expectedException \Magento\Framework\Exception\State\ExpiredException
      */
     public function testValidateResetPasswordLinkTokenAmbiguous()
     {
+        $this->expectException(\Magento\Framework\Exception\State\ExpiredException::class);
+
         $token = 'randomStr123';
         $this->setResetPasswordData($token, 'Y-m-d H:i:s', 1);
         $this->setResetPasswordData($token, 'Y-m-d H:i:s', 2);
@@ -465,10 +489,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
     }
     /**
      * @magentoDataFixture Magento/Customer/_files/two_customers.php
-     * @expectedException \Magento\Framework\Exception\State\ExpiredException
      */
     public function testResetPasswordAmbiguousToken()
     {
+        $this->expectException(\Magento\Framework\Exception\State\ExpiredException::class);
+
         $resetToken = 'lsdj579slkj5987slkj595lkj';
         $password = 'new_Password123';
         $this->setResetPasswordData($resetToken, 'Y-m-d H:i:s', 1);
@@ -522,10 +547,11 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
-     * @expectedException \Magento\Framework\Exception\State\InvalidTransitionException
      */
     public function testResendConfirmationNotNeeded()
     {
+        $this->expectException(\Magento\Framework\Exception\State\InvalidTransitionException::class);
+
         $this->accountManagement->resendConfirmation('customer@example.com', 1);
     }
 

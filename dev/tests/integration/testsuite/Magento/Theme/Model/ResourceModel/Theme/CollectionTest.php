@@ -9,7 +9,7 @@ use Magento\Framework\View\Design\ThemeInterface;
 
 class CollectionTest extends \PHPUnit\Framework\TestCase
 {
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->configure(
             ['preferences' => [\Magento\Theme\Model\Theme::class => \Magento\Theme\Model\Theme\Data::class]]

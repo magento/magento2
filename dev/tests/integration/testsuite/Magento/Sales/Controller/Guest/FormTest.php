@@ -28,7 +28,7 @@ class FormTest extends AbstractController
         $this->prepareRequestData();
         $this->dispatch('sales/guest/view/');
         $content = $this->getResponse()->getBody();
-        $this->assertContains('Order # 100000001', $content);
+        $this->assertStringContainsString('Order # 100000001', $content);
     }
 
     /**

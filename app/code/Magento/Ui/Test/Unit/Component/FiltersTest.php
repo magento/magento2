@@ -12,12 +12,14 @@ use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Framework\View\Element\UiComponentInterface;
 use Magento\Ui\Component\Filters;
+use Magento\Ui\Component\Listing\Columns\ColumnInterface;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for \Magento\Ui\Component\Filters class
  */
-class FiltersTest extends \PHPUnit\Framework\TestCase
+class FiltersTest extends TestCase
 {
     /** @var Filters|MockObject */
     private $filters;
@@ -34,18 +36,18 @@ class FiltersTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->uiComponentInterface = $this->getMockBuilder(UiComponentInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->uiComponentFactory = $this->getMockBuilder(UiComponentFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context = $this->getMockBuilder(ContextInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->filters = $objectManager->getObject(
             Filters::class,
             [
@@ -67,7 +69,7 @@ class FiltersTest extends \PHPUnit\Framework\TestCase
     {
         $componentName = 'component_name';
         $componentConfig = [0, 1, 2];
-        $columnInterface = $this->getMockBuilder(\Magento\Ui\Component\Listing\Columns\ColumnInterface::class)
+        $columnInterface = $this->getMockBuilder(ColumnInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getData', 'getName', 'getConfiguration'])
             ->getMockForAbstractClass();
@@ -77,7 +79,7 @@ class FiltersTest extends \PHPUnit\Framework\TestCase
             ->willReturn($filterType);
         $columnInterface->expects($this->atLeastOnce())->method('getName')->willReturn($componentName);
         $columnInterface->expects($this->once())->method('getConfiguration')->willReturn($componentConfig);
-        $filterComponent = $this->getMockBuilder(\Magento\Framework\View\Element\UiComponentInterface::class)
+        $filterComponent = $this->getMockBuilder(UiComponentInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setData', 'prepare'])
             ->getMockForAbstractClass();

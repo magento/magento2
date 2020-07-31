@@ -16,13 +16,15 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
  * Test for \Magento\ImportExport\Controller\Adminhtml\Export\File\Delete class.
+ *
+ * @magentoAppArea adminhtml
  */
 class DeleteTest extends AbstractBackendController
 {
     /**
      * @var WriteInterface
      */
-    private $varDirectory;
+    protected $varDirectory;
 
     /**
      * @var string
@@ -42,7 +44,7 @@ class DeleteTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -83,7 +85,7 @@ class DeleteTest extends AbstractBackendController
      * @param $destinationFilePath
      * @return void
      */
-    private function copyFile($destinationFilePath): void
+    protected function copyFile($destinationFilePath): void
     {
         //Refers to application root directory
         $rootDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::ROOT);
@@ -106,7 +108,7 @@ class DeleteTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         $filesystem = Bootstrap::getObjectManager()->get(Filesystem::class);
         /** @var WriteInterface $directory */

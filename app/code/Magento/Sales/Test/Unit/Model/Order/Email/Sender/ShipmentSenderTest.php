@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Sender;
 
 use Magento\Sales\Api\Data\OrderInterface;
@@ -10,8 +12,8 @@ use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\Email\Container\ShipmentIdentity;
 use Magento\Sales\Model\Order\Email\Sender\ShipmentSender;
 use Magento\Sales\Model\Order\Shipment;
-use Magento\Sales\Model\ResourceModel\Order\Shipment as ShipmentResource;
 use Magento\Sales\Model\ResourceModel\EntityAbstract;
+use Magento\Sales\Model\ResourceModel\Order\Shipment as ShipmentResource;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
@@ -41,7 +43,7 @@ class ShipmentSenderTest extends AbstractSenderTest
      */
     protected $shipmentResourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stepMockSetup();
 
@@ -50,25 +52,17 @@ class ShipmentSenderTest extends AbstractSenderTest
             ['saveAttribute']
         );
 
-        $this->shipmentMock = $this->createPartialMock(
-            Shipment::class,
-            [
-                'getStore',
-                'getId',
-                '__wakeup',
-                'getOrder',
-                'setSendEmail',
-                'setEmailSent',
-                'getCustomerNoteNotify',
-                'getCustomerNote'
-            ]
-        );
+        $this->shipmentMock = $this->getMockBuilder(Shipment::class)
+            ->addMethods(['setSendEmail', 'getCustomerNoteNotify', 'getCustomerNote'])
+            ->onlyMethods(['getStore', 'getId', 'getOrder', 'setEmailSent'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->shipmentMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
         $this->shipmentMock->expects($this->any())
             ->method('getOrder')
-            ->will($this->returnValue($this->orderMock));
+            ->willReturn($this->orderMock);
 
         $this->shipmentMock->method('getId')
             ->willReturn(self::SHIPMENT_ID);
@@ -81,7 +75,7 @@ class ShipmentSenderTest extends AbstractSenderTest
         );
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
 
         $this->sender = new ShipmentSender(
             $this->templateContainerMock,

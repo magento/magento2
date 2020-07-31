@@ -28,7 +28,7 @@ class QuoteInfiniteLoopTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->config = $this->objectManager->get(\Magento\TestModuleQuoteTotalsObserver\Model\Config::class);
@@ -38,7 +38,7 @@ class QuoteInfiniteLoopTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->config->disableObserver();
         $this->objectManager->removeSharedInstance(\Magento\Checkout\Model\Session::class);
@@ -91,13 +91,14 @@ class QuoteInfiniteLoopTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \LogicException
-     * @expectedExceptionMessage Infinite loop detected, review the trace for the looping path
      *
      * @return void
      */
     public function testLoadQuoteWithTriggerRecollectInfiniteLoop(): void
     {
+        $this->expectException(\LogicException::class);
+        $this->expectExceptionMessage('Infinite loop detected, review the trace for the looping path');
+
         $originalQuote = $this->generateQuote();
         $quoteId = $originalQuote->getId();
 

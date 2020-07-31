@@ -3,22 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Module\Di\Definition;
 
-/**
- * Class CollectionTest
- * @package Magento\Setup\Module\Di\Definition
- */
-class CollectionTest extends \PHPUnit\Framework\TestCase
+use Magento\Setup\Module\Di\Definition\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CollectionTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Module\Di\Definition\Collection
+     * @var Collection
      */
     private $model;
 
     /**
-     * @var \Magento\Setup\Module\Di\Definition\Collection | \PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|MockObject
      */
     private $collectionMock;
 
@@ -52,11 +53,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         return [self::INSTANCE_1 => $this->getArgument()];
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->collectionMock = $this->getMockBuilder(\Magento\Setup\Module\Di\Definition\Collection::class)
+        $this->collectionMock = $this->getMockBuilder(Collection::class)
             ->setMethods([])->getMock();
-        $this->model = new \Magento\Setup\Module\Di\Definition\Collection();
+        $this->model = new Collection();
     }
 
     public function testAddDefinition()

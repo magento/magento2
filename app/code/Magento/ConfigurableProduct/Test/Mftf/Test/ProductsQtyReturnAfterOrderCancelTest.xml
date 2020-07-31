@@ -76,7 +76,7 @@
         <fillField selector="{{AdminInvoiceItemsSection.qtyToInvoiceColumn}}" userInput="1" stepKey="ChangeQtyToInvoice"/>
         <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQuantity"/>
         <waitForPageLoad stepKey="waitPageToBeLoaded"/>
-        <click selector="{{AdminInvoiceMainActionsSection.submitInvoice}}" stepKey="clickSubmitInvoice"/>
+        <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
         <waitForPageLoad stepKey="waitOrderDetailToLoad"/>
         <fillField selector="{{AdminShipmentItemsSection.itemQtyToShip('1')}}" userInput="1" stepKey="changeItemQtyToShip"/>
@@ -93,7 +93,11 @@
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySku">
             <argument name="sku" value="$$createConfigProduct.sku$$"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Quantity')}}" userInput="99" stepKey="seeProductSkuInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeProductSkuInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Quantity"/>
+            <argument name="value" value="99"/>
+        </actionGroup>
         <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderFilters"/>
     </test>

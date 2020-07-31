@@ -27,7 +27,7 @@ class SetGuestEmailOnCartTest extends GraphQlAbstract
      */
     private $getMaskedQuoteIdByReservedOrderId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -38,11 +38,12 @@ class SetGuestEmailOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The request is not allowed for logged in customers
      */
     public function testSetGuestEmailOnCartForLoggedInCustomer()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The request is not allowed for logged in customers');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $email = 'some@user.com';
 
@@ -55,11 +56,12 @@ class SetGuestEmailOnCartTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The request is not allowed for logged in customers
      */
     public function testSetGuestEmailOnGuestCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The request is not allowed for logged in customers');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $email = 'some@user.com';
 

@@ -21,6 +21,7 @@
                        data-bind="
                             textInput: email,
                             hasFocus: emailFocused,
+                            afterRender: emailHasChanged,
                             mageInit: {'mage/trim-input':{}}"
                        name="username"
                        data-validate="{required:true, 'validate-email':true}"
