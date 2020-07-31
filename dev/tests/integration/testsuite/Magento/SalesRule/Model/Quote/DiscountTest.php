@@ -17,6 +17,19 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Test discount totals calculation model
+ *
+ * Discount for bundle product with dynamic price for bundle product itself does not make sense.
+ *
+ * There is an options "Dynamic price" for bundle product.
+ *
+ * Dynamic price YES:
+ * Bundle product always have zero price. Price field is blocked. Bundle product is just a container.
+ * Child products take their original price.
+ *
+ * Dynamic price NO:
+ * Bundle product must have price > 0
+ * Child products ignoring their regular price. You must set surcharge for them. If you leave them empty it means that
+ * surcharge equals zero.
  */
 class DiscountTest extends TestCase
 {
@@ -91,10 +104,10 @@ class DiscountTest extends TestCase
                 'bundle_product_with_dynamic_price_coupon_code',
                 [
                     'bundle_product_with_dynamic_price-simple1-simple2' => 0,
-                    'simple1' => 3,
-                    'simple2' => 7.99,
+                    'simple1' => 0,
+                    'simple2' => 0,
                 ],
-                -10.99
+                0
             ],
             [
                 'simple1_coupon_code',
