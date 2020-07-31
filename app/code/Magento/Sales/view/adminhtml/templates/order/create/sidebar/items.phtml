@@ -10,7 +10,7 @@
 $blockDataId = $block->getDataId();
 $jsEscapedBlockDataId = $block->escapeJs($blockDataId);
 ?>
-<div class="create-order-sidebar-block" id="sidebar_data_<?= $block->escapeHtmlAttr($block->getDataId()) ?>">
+<div class="create-order-sidebar-block" id="sidebar_data_<?= $block->escapeHtmlAttr($blockDataId) ?>">
     <div class="head sidebar-title-block">
         <a href="#" class="action-refresh" title="<?= $block->escapeHtml(__('Refresh')) ?>">
             <span><?= $block->escapeHtml(__('Refresh')) ?></span>
@@ -22,8 +22,11 @@ $jsEscapedBlockDataId = $block->escapeJs($blockDataId);
     </div>
     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
         'onclick',
-        "order.loadArea('sidebar_" . $jsEscapedBlockDataId .
-        "', 'sidebar_data_" . $jsEscapedBlockDataId . "');event.preventDefault();",
+        "order.loadArea(
+            'sidebar_" . $jsEscapedBlockDataId ."',
+            'sidebar_data_" . $jsEscapedBlockDataId . "'
+        );
+        event.preventDefault();",
         'div#sidebar_data_'. $jsEscapedBlockDataId . ' a.action-refresh'
     ) ?>
     <div class="content">
@@ -86,7 +89,7 @@ $jsEscapedBlockDataId = $block->escapeJs($blockDataId);
                                            type="checkbox"
                                            class="admin__control-checkbox"
                                            name="sidebar[remove][<?= (int) $block->getItemId($_item) ?>]"
-                                           value="<?= $block->escapeHtmlAttr($block->getDataId()) ?>"
+                                           value="<?= $block->escapeHtmlAttr($blockDataId) ?>"
                                            title="<?= $block->escapeHtml(__('Remove')) ?>" />
                                     <label class="admin__field-label"
                                            for="sidebar-remove-<?=
@@ -100,7 +103,7 @@ $jsEscapedBlockDataId = $block->escapeJs($blockDataId);
                         <td class="col-add">
                             <div class="admin__field-option">
                                 <?php if ($block->isConfigurationRequired($_item->getTypeId()) &&
-                                    $block->getDataId() == 'wishlist'): ?>
+                                    $blockDataId == 'wishlist'): ?>
                                     <a href="#"
                                        class="icon icon-configure"
                                        title="<?= $block->escapeHtml(__('Configure and Add to Order')) ?>">
