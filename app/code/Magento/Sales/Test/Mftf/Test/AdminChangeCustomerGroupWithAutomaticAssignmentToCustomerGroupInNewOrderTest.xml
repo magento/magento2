@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminChangeCustomerGroupWithAutomaticAssignmentToCustomerGroupInNewOrderTest" extends="AdminChangeCustomerGroupInNewOrderTest">
+        <annotations>
+            <title value="Admin Create Order and Select Customer Group"/>
+            <stories value="Admin Create Order and Select Customer Group, when enabled 'Automatic Assignment to Customer Group'"/>
+            <description value="Customer Account Group should be available to select while creating a new customer in order, when enabled 'Automatic Assignment to Customer Group'"/>
+            <severity value="MAJOR"/>
+            <group value="sales"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set customer/create_account/auto_group_assign 1" after="login" stepKey="setConfigSettings"/>
+        </before>
+
+        <after>
+            <magentoCLI command="config:set customer/create_account/auto_group_assign 0" after="logout" stepKey="revertConfigSettings"/>
+        </after>
+
+    </test>
+</tests>
