@@ -13,6 +13,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  * Data interface for login as customer log.
  *
  * @api
+ * @since 100.4.0
  */
 interface LogInterface extends ExtensibleDataInterface
 {
@@ -28,6 +29,7 @@ interface LogInterface extends ExtensibleDataInterface
      *
      * @param int $logId
      * @return void
+     * @since 100.4.0
      */
     public function setLogId(int $logId): void;
 
@@ -35,6 +37,7 @@ interface LogInterface extends ExtensibleDataInterface
      * Retrieve login as customer log id.
      *
      * @return null|int
+     * @since 100.4.0
      */
     public function getLogId(): ?int;
 
@@ -43,6 +46,7 @@ interface LogInterface extends ExtensibleDataInterface
      *
      * @param string $time
      * @return void
+     * @since 100.4.0
      */
     public function setTime(string $time): void;
 
@@ -50,6 +54,7 @@ interface LogInterface extends ExtensibleDataInterface
      * Retrieve login as customer log time.
      *
      * @return null|string
+     * @since 100.4.0
      */
     public function getTime(): ?string;
 
@@ -58,6 +63,7 @@ interface LogInterface extends ExtensibleDataInterface
      *
      * @param int $userId
      * @return void
+     * @since 100.4.0
      */
     public function setUserId(int $userId): void;
 
@@ -65,6 +71,7 @@ interface LogInterface extends ExtensibleDataInterface
      * Retrieve login as customer log user id.
      *
      * @return null|int
+     * @since 100.4.0
      */
     public function getUserId(): ?int;
 
@@ -73,6 +80,7 @@ interface LogInterface extends ExtensibleDataInterface
      *
      * @param string $userName
      * @return void
+     * @since 100.4.0
      */
     public function setUserName(string $userName): void;
 
@@ -80,6 +88,7 @@ interface LogInterface extends ExtensibleDataInterface
      * Retrieve login as customer log user name.
      *
      * @return null|string
+     * @since 100.4.0
      */
     public function getUserName(): ?string;
 
@@ -88,6 +97,7 @@ interface LogInterface extends ExtensibleDataInterface
      *
      * @param int $customerId
      * @return void
+     * @since 100.4.0
      */
     public function setCustomerId(int $customerId): void;
 
@@ -95,6 +105,7 @@ interface LogInterface extends ExtensibleDataInterface
      * Retrieve login as customer log customer id.
      *
      * @return null|int
+     * @since 100.4.0
      */
     public function getCustomerId(): ?int;
 
@@ -103,6 +114,7 @@ interface LogInterface extends ExtensibleDataInterface
      *
      * @param string $customerEmail
      * @return void
+     * @since 100.4.0
      */
     public function setCustomerEmail(string $customerEmail): void;
 
@@ -110,6 +122,7 @@ interface LogInterface extends ExtensibleDataInterface
      * Retrieve login as customer log customer email.
      *
      * @return null|string
+     * @since 100.4.0
      */
     public function getCustomerEmail(): ?string;
 
@@ -118,6 +131,7 @@ interface LogInterface extends ExtensibleDataInterface
      *
      * @param \Magento\LoginAsCustomerLog\Api\Data\LogExtensionInterface $extensionAttributes
      * @return void
+     * @since 100.4.0
      */
     public function setExtensionAttributes(LogExtensionInterface $extensionAttributes): void;
 
@@ -125,6 +139,7 @@ interface LogInterface extends ExtensibleDataInterface
      * Retrieve log extension attributes.
      *
      * @return \Magento\LoginAsCustomerLog\Api\Data\LogExtensionInterface
+     * @since 100.4.0
      */
     public function getExtensionAttributes(): LogExtensionInterface;
 }

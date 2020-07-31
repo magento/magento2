@@ -46,6 +46,8 @@ class StaticProperties
         \Magento\TestFramework\Annotation\AppIsolation::class,
         \Magento\TestFramework\Workaround\Cleanup\StaticProperties::class,
         \Magento\Framework\Phrase::class,
+        \Magento\TestFramework\Workaround\Override\Fixture\ResolverInterface::class,
+        \Magento\TestFramework\Workaround\Override\ConfigInterface::class,
     ];
 
     private const CACHE_NAME = 'integration_test_static_properties';

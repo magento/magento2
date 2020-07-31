@@ -43,7 +43,6 @@ class Converter implements ConverterInterface
                 }
             }
             $policyConfig[$id]['hosts'] = array_unique($policyConfig[$id]['hosts']);
-            $policyConfig[$id]['hashes'] = array_unique($policyConfig[$id]['hashes']);
         }
 
         return $policyConfig;

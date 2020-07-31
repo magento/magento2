@@ -69,7 +69,7 @@ class LoginAsCustomerButton extends GenericButton implements ButtonProviderInter
                 'on_click' => 'window.lacConfirmationPopup("'
                     . $this->escaper->escapeHtml($this->escaper->escapeJs($this->getLoginUrl()))
                     . '")',
-                'sort_order' => 70,
+                'sort_order' => 15,
             ];
         }
 

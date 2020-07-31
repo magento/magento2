@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<script>
+
+<?php $scriptString = <<<script
 require(['jquery'], function($){
     $('[data-tab-panel=product-details]').on('stockbeforedisable', function(e) {
         if (e.productType === 'grouped') {
@@ -13,4 +16,6 @@ require(['jquery'], function($){
         }
     });
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
