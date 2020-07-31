@@ -68,7 +68,7 @@ class ListCustomerTest extends TestCase
     public function testCustomerProductReviewsGrid(): void
     {
         $this->customerSession->setCustomerId(1);
-        $review = $this->collectionFactory->create()->addCustomerFilter(1)->getFirstItem();
+        $review = $this->collectionFactory->create()->addCustomerFilter(1)->addReviewSummary()->getFirstItem();
         $this->assertNotNull($review->getReviewId());
         $blockHtml = $this->block->toHtml();
         $createdDate = $this->block->dateFormat($review->getReviewCreatedAt());
