@@ -63,6 +63,10 @@ class SaveCartDataWithPayflowProTest extends PaypalPayflowProAbstractTest
         $responseData = $this->placeOrderPayflowPro('is_active_payment_token_enabler: true');
         $this->assertArrayHasKey('data', $responseData);
         $this->assertArrayHasKey('createPayflowProToken', $responseData['data']);
+        $this->assertNotEmpty($this->getVaultCartData()->getPublicHash());
+        $this->assertNotEmpty($this->getVaultCartData()->getTokenDetails());
+        $this->assertNotEmpty($this->getVaultCartData()->getGatewayToken());
+        $this->assertNotEmpty($this->getVaultCartData()->getPublicHash());
         $this->assertTrue($this->getVaultCartData()->getIsActive());
         $this->assertTrue($this->getVaultCartData()->getIsVisible());
     }
@@ -87,6 +91,10 @@ class SaveCartDataWithPayflowProTest extends PaypalPayflowProAbstractTest
         $responseData = $this->placeOrderPayflowPro('is_active_payment_token_enabler: false');
         $this->assertArrayHasKey('data', $responseData);
         $this->assertArrayHasKey('createPayflowProToken', $responseData['data']);
+        $this->assertNotEmpty($this->getVaultCartData()->getPublicHash());
+        $this->assertNotEmpty($this->getVaultCartData()->getTokenDetails());
+        $this->assertNotEmpty($this->getVaultCartData()->getGatewayToken());
+        $this->assertNotEmpty($this->getVaultCartData()->getPublicHash());
         $this->assertTrue($this->getVaultCartData()->getIsActive());
         $this->assertFalse($this->getVaultCartData()->getIsVisible());
     }
