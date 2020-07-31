@@ -24,20 +24,14 @@
         <before>
             <!-- Enable Translate Inline For Storefront -->
             <magentoCLI command="config:set {{EnableTranslateInlineForStorefront.path}} {{EnableTranslateInlineForStorefront.value}}" stepKey="enableTranslateInlineForStorefront"/>
-            <!-- Create Category -->
-            <createData entity="ApiCategory" stepKey="createCategory"/>
             <!-- Create Simple Product -->
-            <createData entity="ApiSimpleProduct" stepKey="createProduct">
-                <requiredEntity createDataKey="createCategory"/>
-            </createData>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
         </before>
         <after>
             <!-- Disable Translate Inline For Storefront -->
             <magentoCLI command="config:set {{DisableTranslateInlineForStorefront.path}} {{DisableTranslateInlineForStorefront.value}}" stepKey="disableTranslateInlineForStorefront"/>
             <!-- Delete Simple Product -->
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <!-- Delete Category -->
-            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
 
         <!-- Add product to cart on storefront -->
