@@ -227,7 +227,7 @@ QUERY;
      * @magentoApiDataFixture Magento/Bundle/_files/product_with_multiple_options_and_custom_quantity.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
      */
-    public function testUpdateBundleItemWithCustomOptionQuantity()
+    public function testAddBundleItemWithCustomOptionQuantity()
     {
 
         $this->quoteResource->load(
@@ -309,11 +309,11 @@ mutation {
                         "{$optionUid1}", "{$optionUid0}"
                     ],
                     entered_options: [{
-                        id: "{$optionUid0}"
+                        uid: "{$optionUid0}"
                         value: "5"
                      },
                      {
-                        id: "{$optionUid1}"
+                        uid: "{$optionUid1}"
                         value: "5"
                      }]
                 }
