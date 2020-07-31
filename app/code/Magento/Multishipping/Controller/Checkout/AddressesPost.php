@@ -4,11 +4,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Multishipping\Controller\Checkout;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Multishipping\Controller\Checkout;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 
-class AddressesPost extends \Magento\Multishipping\Controller\Checkout
+class AddressesPost extends Checkout implements HttpPostActionInterface
 {
     /**
      * Multishipping checkout process posted addresses

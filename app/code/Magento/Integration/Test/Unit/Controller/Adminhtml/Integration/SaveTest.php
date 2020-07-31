@@ -62,7 +62,7 @@ class SaveTest extends IntegrationTest
             ->with(self::INTEGRATION_ID)
             ->willThrowException(new LocalizedException(__($exceptionMessage)));
         // Verify error
-        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($exceptionMessage);
+        $this->_messageManager->expects($this->once())->method('addError')->with($exceptionMessage);
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }
@@ -87,7 +87,7 @@ class SaveTest extends IntegrationTest
             ->method('escapeHtml')
             ->willReturnArgument(0);
         // Verify error
-        $this->_messageManager->expects($this->once())->method('addErrorMessage')->with($exceptionMessage);
+        $this->_messageManager->expects($this->once())->method('addError')->with($exceptionMessage);
         $integrationContr = $this->_createIntegrationController('Save');
         $integrationContr->execute();
     }

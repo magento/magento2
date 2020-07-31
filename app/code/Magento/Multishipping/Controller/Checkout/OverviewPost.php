@@ -3,33 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Multishipping\Controller\Checkout;
 
-use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
+use Magento\Checkout\Api\AgreementsValidatorInterface;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\Data\Form\FormKey\Validator;
 use Magento\Framework\Exception\PaymentException;
 use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Multishipping\Controller\Checkout;
+use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
+use Psr\Log\LoggerInterface;
 
 /**
- * Class OverviewPost
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class OverviewPost extends \Magento\Multishipping\Controller\Checkout
+class OverviewPost extends Checkout implements HttpPostActionInterface
 {
     /**
-     * @var \Magento\Framework\Data\Form\FormKey\Validator
+     * @var Validator
      */
     protected $formKeyValidator;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
     /**
-     * @var \Magento\Checkout\Api\AgreementsValidatorInterface
+     * @var AgreementsValidatorInterface
      */
     protected $agreementsValidator;
 
@@ -39,23 +46,23 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
     private $session;
 
     /**
-     * @param \Magento\Framework\App\Action\Context $context
-     * @param \Magento\Customer\Model\Session $customerSession
+     * @param Context $context
+     * @param Session $customerSession
      * @param CustomerRepositoryInterface $customerRepository
      * @param AccountManagementInterface $accountManagement
-     * @param \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator
+     * @param Validator $formKeyValidator
+     * @param LoggerInterface $logger
+     * @param AgreementsValidatorInterface $agreementValidator
      * @param SessionManagerInterface $session
      */
     public function __construct(
-        \Magento\Framework\App\Action\Context $context,
-        \Magento\Customer\Model\Session $customerSession,
+        Context $context,
+        Session $customerSession,
         CustomerRepositoryInterface $customerRepository,
         AccountManagementInterface $accountManagement,
-        \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator,
+        Validator $formKeyValidator,
+        LoggerInterface $logger,
+        AgreementsValidatorInterface $agreementValidator,
         SessionManagerInterface $session
     ) {
         $this->formKeyValidator = $formKeyValidator;
