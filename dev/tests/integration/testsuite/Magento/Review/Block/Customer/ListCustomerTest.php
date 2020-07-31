@@ -10,6 +10,7 @@ namespace Magento\Review\Block\Customer;
 use Magento\Customer\Model\Session;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\View\LayoutInterface;
+use Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use PHPUnit\Framework\TestCase;
@@ -32,6 +33,9 @@ class ListCustomerTest extends TestCase
     /** @var ListCustomer */
     private $block;
 
+    /** @var CollectionFactory */
+    private $collectionFactory;
+
     /**
      * @inheritdoc
      */
@@ -43,6 +47,7 @@ class ListCustomerTest extends TestCase
         $this->customerSession = $this->objectManager->get(Session::class);
         $this->block = $this->objectManager->get(LayoutInterface::class)->createBlock(ListCustomer::class)
             ->setTemplate('Magento_Review::customer/list.phtml');
+        $this->collectionFactory = $this->objectManager->get(CollectionFactory::class);
     }
 
     /**
@@ -63,9 +68,8 @@ class ListCustomerTest extends TestCase
     public function testCustomerProductReviewsGrid(): void
     {
         $this->customerSession->setCustomerId(1);
-        $reviews = $this->block->getReviews();
-        $this->assertCount(1, $reviews);
-        $review = $reviews->getFirstItem();
+        $review = $this->collectionFactory->create()->addCustomerFilter(1)->getFirstItem();
+        $this->assertNotNull($review->getReviewId());
         $blockHtml = $this->block->toHtml();
         $createdDate = $this->block->dateFormat($review->getReviewCreatedAt());
         $this->assertEquals(
