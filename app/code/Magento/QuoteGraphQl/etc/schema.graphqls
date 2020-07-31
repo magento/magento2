@@ -335,6 +335,10 @@ type Discount @doc(description:"Defines an individual discount. A discount can b
     label: String! @doc(description:"A description of the discount")
 }
 
+type ShippingDiscount @doc(description:"Defines an individual shipping discount. This discount can be applied to shipping.") {
+    amount: Money! @doc(description:"The amount of the discount")
+}
+
 type CartItemPrices {
     price: Money!
     row_total: Money!

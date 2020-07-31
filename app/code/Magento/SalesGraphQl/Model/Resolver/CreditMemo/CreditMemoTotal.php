@@ -99,7 +99,7 @@ class CreditMemoTotal implements ResolverInterface
                     'value' => $creditMemo->getShippingAmount() ?? 0,
                     'currency' => $currency
                 ],
-                'discounts' => $this->getShippingDiscountDetails($creditMemo),
+                'discounts' => $this->getShippingDiscountDetails($creditMemo, $orderModel),
                 'taxes' => $this->formatTaxes(
                     $orderModel,
                     $this->shippingTaxCalculator->calculateShippingTaxes($orderModel, $creditMemo),
@@ -115,23 +115,26 @@ class CreditMemoTotal implements ResolverInterface
     /**
      * Return information about an applied discount on shipping
      *
-     * @param CreditmemoInterface $creditmemo
+     * @param CreditmemoInterface $creditmemoModel
+     * @param OrderInterface $orderModel
      * @return array
      */
-    private function getShippingDiscountDetails(CreditmemoInterface $creditmemo)
+    private function getShippingDiscountDetails(CreditmemoInterface $creditmemoModel, $orderModel)
     {
-        $shippingDiscounts = [];
-        if (!($creditmemo->getDiscountDescription() === null
-            && $creditmemo->getShippingDiscountTaxCompensationAmount() == 0)) {
-            $shippingDiscounts[] =
-                [
-                    'label' => $creditmemo->getDiscountDescription() ?? __('Discount'),
-                    'amount' => [
-                        'value' => abs($creditmemo->getShippingDiscountTaxCompensationAmount()),
-                        'currency' => $creditmemo->getOrderCurrencyCode()
-                    ]
-                ];
-        }
+        $creditmemoShippingAmount = (float) $this->taxHelper->applyTaxAfterDiscount() ?
+            $creditmemoModel->getShippingAmount() : $creditmemoModel->getShippingInclTax();
+        $orderShippingAmount = (float)$this->taxHelper->applyTaxAfterDiscount() ?
+            $orderModel->getShippingAmount() : $orderModel->getShippingInclTax();
+        $calculatedShippingRatio = (float)$creditmemoShippingAmount > 0 && $orderShippingAmount > 0 ?
+            ($creditmemoShippingAmount / $orderShippingAmount) : 0;
+        $orderShippingDiscount = (float)$orderModel->getShippingDiscountAmount();
+        $calculatedCreditmemoShippingDiscount = $orderShippingDiscount * $calculatedShippingRatio;
+        $shippingDiscounts[] = [
+            'amount' => [
+                'value' => $calculatedCreditmemoShippingDiscount,
+                'currency' => $creditmemoModel->getOrderCurrencyCode()
+            ]
+        ];
         return $shippingDiscounts;
     }
 

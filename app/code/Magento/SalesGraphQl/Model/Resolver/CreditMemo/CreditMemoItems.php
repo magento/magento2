@@ -16,7 +16,7 @@ use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
-use Magento\SalesGraphQl\Model\Resolver\OrderItem\DataProvider as OrderItemProvider;
+use Magento\SalesGraphQl\Model\OrderItem\DataProvider as OrderItemProvider;
 
 /**
  * Resolve credit memos items data

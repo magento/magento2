@@ -159,7 +159,7 @@ type ShippingHandling @doc(description: "The Shipping handling details") {
     amount_including_tax: Money @doc(description: "The shipping amount, including tax")
     amount_excluding_tax: Money @doc(description: "The shipping amount, excluding tax")
     taxes: [TaxItem] @doc(description: "Contains details about taxes applied for shipping")
-    discounts: [Discount] @doc(description: "The applied discounts to the shipping")
+    discounts: [ShippingDiscount] @doc(description: "The applied discounts to the shipping")
 }
 
 type OrderShipment @doc(description: "Order shipment details") {
