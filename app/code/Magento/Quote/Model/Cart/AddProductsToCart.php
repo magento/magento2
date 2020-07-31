@@ -105,6 +105,7 @@ class AddProductsToCart
         foreach ($cartItems as $cartItemPosition => $cartItem) {
             $this->addItemToCart($cart, $cartItem, $cartItemPosition);
         }
+
         if ($cart->getData('has_error')) {
             $errors = $cart->getErrors();
 
@@ -113,7 +114,10 @@ class AddProductsToCart
                 $this->addError($error->getText());
             }
         }
-        $this->cartRepository->save($cart);
+
+        if (count($this->errors) === 0) {
+            $this->cartRepository->save($cart);
+        }
 
         return $this->prepareErrorOutput($cart);
     }
