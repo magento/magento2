@@ -81,14 +81,6 @@ class GenerateFixturesCommandTest extends \Magento\TestFramework\Indexer\TestCas
     }
 
     /**
-     * @return string
-     */
-    private function getEdition()
-    {
-        return trim(file_get_contents(__DIR__  . '/_files/edition'));
-    }
-
-    /**
      * teardown
      */
     protected function tearDown(): void
