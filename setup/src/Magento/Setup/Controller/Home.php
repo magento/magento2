@@ -11,6 +11,8 @@ use Zend\View\Model\ViewModel;
 
 /**
  * Controller of homepage of setup
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 class Home extends AbstractActionController
 {

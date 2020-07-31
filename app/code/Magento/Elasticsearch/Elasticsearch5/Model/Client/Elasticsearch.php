@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Elasticsearch\Elasticsearch5\Model\Client;
 
 use Magento\Framework\Exception\LocalizedException;
@@ -48,8 +49,10 @@ class Elasticsearch implements ClientInterface
         $options = [],
         $elasticsearchClient = null
     ) {
-        if (empty($options['hostname']) || ((!empty($options['enableAuth']) &&
-                    ($options['enableAuth'] == 1)) && (empty($options['username']) || empty($options['password'])))) {
+        if (empty($options['hostname'])
+            || ((!empty($options['enableAuth']) && ($options['enableAuth'] == 1))
+                && (empty($options['username']) || empty($options['password'])))
+        ) {
             throw new LocalizedException(
                 __('The search failed because of a search engine misconfiguration.')
             );
@@ -276,7 +279,7 @@ class Elasticsearch implements ClientInterface
                                 'match' => 'price_*',
                                 'match_mapping_type' => 'string',
                                 'mapping' => [
-                                    'type' => 'float',
+                                    'type' => 'double',
                                     'store' => true,
                                 ],
                             ],
@@ -302,7 +305,15 @@ class Elasticsearch implements ClientInterface
                                     ]
                                 ),
                             ],
-                        ]
+                        ],
+                        [
+                            'integer_mapping' => [
+                                'match_mapping_type' => 'long',
+                                'mapping' => [
+                                    'type' => 'integer',
+                                ],
+                            ],
+                        ],
                     ],
                 ],
             ],

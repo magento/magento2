@@ -7,6 +7,9 @@ namespace Magento\Braintree\Ui\Component\Report\Filters\Type;
 
 /**
  * Class DateRange
+ *
+ * @deprecated Starting from Magento 2.3.6 Braintree payment method core integration is deprecated
+ * in favor of official payment integration available on the marketplace
  */
 class DateRange extends \Magento\Ui\Component\Filters\Type\Date
 {

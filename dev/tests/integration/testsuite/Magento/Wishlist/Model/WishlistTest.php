@@ -22,6 +22,7 @@ use PHPUnit\Framework\TestCase;
  *
  * @magentoDbIsolation enabled
  * @magentoAppIsolation disabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class WishlistTest extends TestCase
 {
@@ -117,6 +118,7 @@ class WishlistTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Wishlist/_files/wishlist.php
+     * @magentoDbIsolation disabled
      *
      * @return void
      */
@@ -239,6 +241,27 @@ class WishlistTest extends TestCase
         $item->getProduct()->setId(null);
         $this->expectExceptionObject(new LocalizedException(__('The product does not exist.')));
         $wishlist->updateItem($item, []);
+    }
+
+    /**
+     * Test that admin user should be able to update wishlist on second website
+     *
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist_on_second_website.php
+     *
+     * @return void
+     */
+    public function testUpdateWishListItemOnSecondWebsite(): void
+    {
+        $wishlist = $this->getWishlistByCustomerId->execute(1);
+        $item = $this->getWishlistByCustomerId->getItemBySku(1, 'simple-2');
+        $this->assertNotNull($item);
+        $this->assertEquals(1, $item->getQty());
+        $buyRequest = $this->dataObjectFactory->create(['data' => ['qty' => 2]]);
+        $wishlist->updateItem($item->getId(), $buyRequest);
+        $updatedItem = $this->getWishlistByCustomerId->getItemBySku(1, 'simple-2');
+        $this->assertEquals(2, $updatedItem->getQty());
     }
 
     /**

@@ -212,7 +212,7 @@ define([
             );
 
             tmpData = data.slice(this.pageSize * (this.currentPage() - 1),
-                                 this.pageSize * (this.currentPage() - 1) + this.pageSize);
+                                 this.pageSize * (this.currentPage() - 1) + parseInt(this.pageSize, 10));
 
             this.source.set(this.dataScope + '.' + this.index, []);
 

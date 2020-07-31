@@ -10,6 +10,8 @@ use Magento\Framework\Module\Status;
 
 /**
  * Class ModuleStatusFactory creates instance of Status
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 class ModuleStatusFactory
 {

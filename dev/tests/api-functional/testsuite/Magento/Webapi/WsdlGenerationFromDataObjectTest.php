@@ -116,7 +116,7 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
             $responseDom->loadXML($responseContent),
             "Valid XML is always expected as a response for WSDL request."
         );
-        return $responseContent;
+        return $responseDom->saveXML();
     }
 
     /**
@@ -207,7 +207,7 @@ RESPONSE_ELEMENT;
     <xsd:sequence>
         <xsd:element name="id" minOccurs="1" maxOccurs="1" type="xsd:int">
             <xsd:annotation>
-                <xsd:documentation></xsd:documentation>
+                <xsd:documentation/>
                 <xsd:appinfo xmlns:inf="{$this->_soapUrl}">
                     <inf:min/>
                     <inf:max/>
@@ -231,7 +231,7 @@ REQUEST_TYPE;
     <xsd:sequence>
         <xsd:element name="entityId" minOccurs="1" maxOccurs="1" type="xsd:int">
             <xsd:annotation>
-                <xsd:documentation></xsd:documentation>
+                <xsd:documentation/>
                 <xsd:appinfo xmlns:inf="{$this->_soapUrl}">
                     <inf:min/>
                     <inf:max/>
@@ -266,7 +266,7 @@ REQUEST_TYPE;
     <xsd:sequence>
         <xsd:element name="result" minOccurs="1" maxOccurs="1" type="tns:TestModule5V2EntityAllSoapAndRest">
             <xsd:annotation>
-                <xsd:documentation></xsd:documentation>
+                <xsd:documentation/>
                 <xsd:appinfo xmlns:inf="{$this->_soapUrl}">
                     <inf:callInfo>
                         <inf:callName>testModule5AllSoapAndRestV2Item</inf:callName>
@@ -290,7 +290,7 @@ RESPONSE_TYPE;
     <xsd:sequence>
         <xsd:element name="result" minOccurs="1" maxOccurs="1" type="tns:TestModule5V1EntityAllSoapAndRest">
             <xsd:annotation>
-                <xsd:documentation></xsd:documentation>
+                <xsd:documentation/>
                 <xsd:appinfo xmlns:inf="{$this->_soapUrl}">
                     <inf:callInfo>
                         <inf:callName>testModule5AllSoapAndRestV1Item</inf:callName>
@@ -331,7 +331,7 @@ RESPONSE_TYPE;
     <xsd:sequence>
         <xsd:element name="price" minOccurs="1" maxOccurs="1" type="xsd:int">
             <xsd:annotation>
-                <xsd:documentation></xsd:documentation>
+                <xsd:documentation/>
                 <xsd:appinfo xmlns:inf="{$this->_soapUrl}">
                     <inf:min/>
                     <inf:max/>
@@ -835,7 +835,7 @@ GENERIC_FAULT_COMPLEX_TYPE;
     <xsd:sequence>
         <xsd:element name="key" minOccurs="1" maxOccurs="1" type="xsd:string">
             <xsd:annotation>
-                <xsd:documentation></xsd:documentation>
+                <xsd:documentation/>
                 <xsd:appinfo xmlns:inf="{$this->_soapUrl}">
                     <inf:maxLength/>
                 </xsd:appinfo>
@@ -843,7 +843,7 @@ GENERIC_FAULT_COMPLEX_TYPE;
         </xsd:element>
         <xsd:element name="value" minOccurs="1" maxOccurs="1" type="xsd:string">
             <xsd:annotation>
-                <xsd:documentation></xsd:documentation>
+                <xsd:documentation/>
                 <xsd:appinfo xmlns:inf="{$this->_soapUrl}">
                     <inf:maxLength/>
                 </xsd:appinfo>
@@ -865,7 +865,7 @@ PARAM_COMPLEX_TYPE;
     <xsd:sequence>
         <xsd:element name="message" minOccurs="1" maxOccurs="1" type="xsd:string">
             <xsd:annotation>
-                <xsd:documentation></xsd:documentation>
+                <xsd:documentation/>
                 <xsd:appinfo xmlns:inf="{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModule5AllSoapAndRestV2">
                     <inf:maxLength/>
                 </xsd:appinfo>
@@ -888,7 +888,7 @@ WRAPPED_ERROR_COMPLEX_TYPE;
     <xsd:sequence>
         <xsd:element name="message" minOccurs="1" maxOccurs="1" type="xsd:string">
             <xsd:annotation>
-                <xsd:documentation></xsd:documentation>
+                <xsd:documentation/>
                 <xsd:appinfo xmlns:inf="{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2">
                     <inf:maxLength/>
                 </xsd:appinfo>

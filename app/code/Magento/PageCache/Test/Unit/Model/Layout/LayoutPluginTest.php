@@ -14,6 +14,7 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Framework\View\Layout;
 use Magento\PageCache\Model\Config;
 use Magento\PageCache\Model\Layout\LayoutPlugin;
+use Magento\PageCache\Model\Spi\PageCacheTagsPreprocessorInterface;
 use Magento\PageCache\Test\Unit\Block\Controller\StubBlock;
 use PHPUnit\Framework\TestCase;
 use PHPUnit_Framework_MockObject_MockObject;
@@ -51,12 +52,15 @@ class LayoutPluginTest extends TestCase
         $this->layoutMock = $this->createPartialMock(Layout::class, ['isCacheable', 'getAllBlocks']);
         $this->responseMock = $this->createMock(Http::class);
         $this->configMock = $this->createMock(Config::class);
+        $preprocessor = $this->createMock(PageCacheTagsPreprocessorInterface::class);
+        $preprocessor->method('process')->willReturnArgument(0);
 
         $this->model = (new ObjectManagerHelper($this))->getObject(
             LayoutPlugin::class,
             [
                 'response' => $this->responseMock,
                 'config' => $this->configMock,
+                'pageCacheTagsPreprocessor' => $preprocessor
             ]
         );
     }

@@ -10,6 +10,11 @@ use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Input\InputDefinition;
 use Symfony\Component\Console\Input\InputArgument;
 
+/**
+ * Class JobSetCache
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
+ */
 class JobSetCache extends AbstractJob
 {
     /**

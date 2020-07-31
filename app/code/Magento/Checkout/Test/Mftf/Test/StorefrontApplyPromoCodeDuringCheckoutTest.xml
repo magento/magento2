@@ -12,11 +12,14 @@
         <annotations>
             <features value="OnePageCheckout"/>
             <stories value="OnePageCheckout with Promo Code"/>
-            <title value="Storefront apply promo code during checkout test"/>
+            <title value="DEPRECATED Storefront apply promo code during checkout test"/>
             <description value="Apply promo code during checkout for physical product"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13212"/>
             <group value="checkout"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontApplyDiscountCouponDuringCheckoutTest instead</issueId>
+            </skip>
         </annotations>
         <before>
             <!-- Create simple product -->

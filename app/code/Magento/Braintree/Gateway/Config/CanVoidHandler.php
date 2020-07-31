@@ -9,6 +9,12 @@ use Magento\Braintree\Gateway\SubjectReader;
 use Magento\Payment\Gateway\Config\ValueHandlerInterface;
 use Magento\Sales\Model\Order\Payment;
 
+/**
+ * Braintree config can void handler
+ *
+ * @deprecated Starting from Magento 2.3.6 Braintree payment method core integration is deprecated
+ * in favor of official payment integration available on the marketplace
+ */
 class CanVoidHandler implements ValueHandlerInterface
 {
     /**

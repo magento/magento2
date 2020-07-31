@@ -8,12 +8,14 @@ namespace Magento\Swatches\Model;
 use Magento\Catalog\Api\Data\ProductAttributeInterfaceFactory;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeOptionInterfaceFactory;
+use Magento\Swatches\Helper\Data;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test save of swatch attribute
- *
  */
-class AttributeCreateTest extends \PHPUnit\Framework\TestCase
+class AttributeCreateTest extends TestCase
 {
     /**
      * @magentoAppArea adminhtml
@@ -21,7 +23,7 @@ class AttributeCreateTest extends \PHPUnit\Framework\TestCase
      */
     public function testSetScopeDefault()
     {
-        $om = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $om = Bootstrap::getObjectManager();
 
         $data = [
             'is_required' => 1,
@@ -82,7 +84,10 @@ class AttributeCreateTest extends \PHPUnit\Framework\TestCase
         $attribute->setNote('auto');
 
         $attribute = $om->get(ProductAttributeRepositoryInterface::class)->save($attribute);
+        /** @var Data $swatchHelper */
+        $swatchHelper = $om->get(Data::class);
         $this->assertNotEmpty($attribute->getId());
-        $this->assertEquals('swatch_visual', $attribute->getFrontendInput());
+        $this->assertEquals('select', $attribute->getFrontendInput());
+        $this->assertTrue($swatchHelper->isVisualSwatch($attribute));
     }
 }

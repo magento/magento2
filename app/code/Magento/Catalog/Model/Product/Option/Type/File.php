@@ -16,8 +16,9 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Catalog product option file type
  *
- * @author     Magento Core Team <core@magentocommerce.com>
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
 {
@@ -264,7 +265,6 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
                             . "Make sure the options are entered and try again."
                         )
                     );
-                    break;
                 default:
                     $this->setUserValue(null);
                     break;
@@ -332,7 +332,11 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
     public function getFormattedOptionValue($optionValue)
     {
         if ($this->_formattedOptionValue === null) {
-            $value = $this->serializer->unserialize($optionValue);
+            try {
+                $value = $this->serializer->unserialize($optionValue);
+            } catch (\InvalidArgumentException $e) {
+                return $optionValue;
+            }
             if ($value === null) {
                 return $optionValue;
             }
@@ -478,13 +482,13 @@ class File extends \Magento\Catalog\Model\Product\Option\Type\DefaultType
         try {
             $value = $this->serializer->unserialize($quoteOption->getValue());
             if (!isset($value['quote_path'])) {
-                throw new \Exception();
+                return $this;
             }
             $quotePath = $value['quote_path'];
             $orderPath = $value['order_path'];
 
             if (!$this->mediaDirectory->isFile($quotePath) || !$this->mediaDirectory->isReadable($quotePath)) {
-                throw new \Exception();
+                return $this;
             }
 
             if ($this->_coreFileStorageDatabase->checkDbUsage()) {

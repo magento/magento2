@@ -10,6 +10,12 @@ use Magento\Payment\Gateway\Http\TransferFactoryInterface;
 use Magento\Payment\Gateway\Http\TransferInterface;
 use Magento\Payment\Gateway\ConfigInterface;
 
+/**
+ * Class TransferFactory
+ *
+ * @deprecated Starting from Magento 2.3.6 Braintree payment method core integration is deprecated
+ * in favor of official payment integration available on the marketplace
+ */
 class TransferFactory implements TransferFactoryInterface
 {
     /**

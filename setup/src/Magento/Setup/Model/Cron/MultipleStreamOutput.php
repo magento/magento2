@@ -10,6 +10,8 @@ use Symfony\Component\Console\Output\Output;
 
 /**
  * Class to allow output to multiple file streams
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 class MultipleStreamOutput extends Output
 {

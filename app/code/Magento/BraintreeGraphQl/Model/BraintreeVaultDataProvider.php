@@ -12,6 +12,9 @@ use Magento\QuoteGraphQl\Model\Cart\Payment\AdditionalDataProviderInterface;
 
 /**
  * Format Braintree input into value expected when setting payment method
+ *
+ * @deprecated Starting from Magento 2.3.6 Braintree payment method core integration is deprecated
+ * in favor of official payment integration available on the marketplace
  */
 class BraintreeVaultDataProvider implements AdditionalDataProviderInterface
 {

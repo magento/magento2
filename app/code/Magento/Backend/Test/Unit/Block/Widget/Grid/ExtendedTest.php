@@ -32,8 +32,8 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
         $layout->expects($this->any())->method('getBlock')->will($this->returnValue($columnSet));
 
         $collection = $this->createMock(\Magento\Framework\Data\Collection::class);
-        $collection->expects($this->atLeastOnce())->method('isLoaded')->will($this->returnValue(true));
-        $collection->expects($this->atLeastOnce())->method('clear');
+        $collection->expects($this->never())->method('isLoaded');
+        $collection->expects($this->never())->method('clear');
         $collection->expects($this->atLeastOnce())->method('load');
 
         /** @var \Magento\Backend\Block\Widget\Grid\Extended $block */
