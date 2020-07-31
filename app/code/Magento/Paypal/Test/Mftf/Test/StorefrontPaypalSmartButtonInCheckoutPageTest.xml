@@ -17,9 +17,6 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13690"/>
             <group value="paypalExpress"/>
-            <skip>
-                <issueId value="MC-35722"/>
-            </skip>
         </annotations>
         <before>
             <!-- Login -->
