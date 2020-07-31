@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <magentoCLI command="config:set {{DisableCatalogInventoryConfigData.path}} {{DisableCatalogInventoryConfigData.value}}" stepKey="disableDecreaseInQuantityAfterOrder"/>
 
             <!--Set default flat rate shipping method settings-->
@@ -76,8 +76,7 @@
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductStockStatus"/>
 
         <!-- Open Order Index Page -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForPageLoad5"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
 
         <!-- Filter Order using orderId -->
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">
@@ -98,8 +97,7 @@
         <seeInField selector="{{AdminProductFormSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductStockStatusAfterCancelOrder"/>
 
         <!-- Open Order Index Page -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders1"/>
-        <waitForPageLoad stepKey="waitForPageLoad6"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders1"/>
 
         <!-- Filter Order using orderId -->
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById1">

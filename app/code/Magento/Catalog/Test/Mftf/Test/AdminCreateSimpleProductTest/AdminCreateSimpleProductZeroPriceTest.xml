@@ -17,7 +17,7 @@
             <testCaseId value="MAGETWO-89910"/>
             <group value="product"/>
         </annotations>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminProductCreatePage.url(SimpleProduct.visibility, SimpleProduct.type_id)}}" stepKey="goToCreateProduct"/>
         <waitForPageLoad stepKey="wait1"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="fillName"/>

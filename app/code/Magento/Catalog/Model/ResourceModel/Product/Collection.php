@@ -731,6 +731,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Add Store ID to products from collection.
      *
      * @return $this
+     * @since 102.0.8
      */
     protected function prepareStoreId()
     {
@@ -1180,7 +1181,31 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         if ($resetLeftJoins) {
             $countSelect->resetJoinLeft();
         }
+
+        $this->removeEntityIdentifierFromGroupBy($countSelect);
+
         return $countSelect;
+    }
+
+    /**
+     * Using `entity_id` for `GROUP BY` causes COUNT() return {n} rows of value = 1 instead of 1 row of value {n}
+     *
+     * @param Select $select
+     * @throws \Zend_Db_Select_Exception
+     */
+    private function removeEntityIdentifierFromGroupBy(Select $select): void
+    {
+        $originalGroupBy = $select->getPart(Select::GROUP);
+
+        if (!is_array($originalGroupBy)) {
+            return;
+        }
+
+        $groupBy = array_filter($originalGroupBy, function ($field) {
+            return false === strpos($field, $this->getIdFieldName());
+        });
+
+        $select->setPart(Select::GROUP, $groupBy);
     }
 
     /**
@@ -1735,7 +1760,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         if ($attribute == 'price' && $storeId != 0) {
             $this->addPriceData();
             if ($this->_productLimitationFilters->isUsingPriceIndex()) {
-                $this->getSelect()->order("price_index.min_price {$dir}");
+                $this->getSelect()->order(
+                    new \Zend_Db_Expr("price_index.min_price = 0, price_index.min_price {$dir}")
+                );
                 return $this;
             }
         }
@@ -1768,30 +1795,19 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      */
     protected function _prepareProductLimitationFilters()
     {
-        if (isset(
-            $this->_productLimitationFilters['visibility']
-        ) && !isset(
-            $this->_productLimitationFilters['store_id']
-        )
-        ) {
+        if (isset($this->_productLimitationFilters['visibility'])
+            && !isset($this->_productLimitationFilters['store_id'])) {
             $this->_productLimitationFilters['store_id'] = $this->getStoreId();
         }
-        if (isset(
-            $this->_productLimitationFilters['category_id']
-        ) && !isset(
-            $this->_productLimitationFilters['store_id']
-        )
-        ) {
+
+        if (isset($this->_productLimitationFilters['category_id'])
+            && !isset($this->_productLimitationFilters['store_id'])) {
             $this->_productLimitationFilters['store_id'] = $this->getStoreId();
         }
-        if (isset(
-            $this->_productLimitationFilters['store_id']
-        ) && isset(
-            $this->_productLimitationFilters['visibility']
-        ) && !isset(
-            $this->_productLimitationFilters['category_id']
-        )
-        ) {
+
+        if (isset($this->_productLimitationFilters['store_id'])
+            && isset($this->_productLimitationFilters['visibility'])
+            && !isset($this->_productLimitationFilters['category_id'])) {
             $this->_productLimitationFilters['category_id'] = $this->_storeManager->getStore(
                 $this->_productLimitationFilters['store_id']
             )->getRootCategoryId();
@@ -1822,14 +1838,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
                 $filters['website_ids'],
                 'int'
             );
-        } elseif (isset(
-            $filters['store_id']
-        ) && (!isset(
-            $filters['visibility']
-        ) && !isset(
-            $filters['category_id']
-        )) && !$this->isEnabledFlat()
-        ) {
+        } elseif (isset($filters['store_id']) && !$this->isEnabledFlat()
+            && (!isset($filters['visibility']) && !isset($filters['category_id']))) {
             $joinWebsite = true;
             $websiteId = $this->_storeManager->getStore($filters['store_id'])->getWebsiteId();
             $conditions[] = $this->getConnection()->quoteInto('product_website.website_id = ?', $websiteId, 'int');
@@ -1904,9 +1914,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
     /**
      * Join Product Price Table with left-join possibility
      *
-     * @see \Magento\Catalog\Model\ResourceModel\Product\Collection::_productLimitationJoinPrice()
      * @param bool $joinLeft
      * @return $this
+     * @see \Magento\Catalog\Model\ResourceModel\Product\Collection::_productLimitationJoinPrice()
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _productLimitationPrice($joinLeft = false)
@@ -2211,7 +2221,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      *
      * @param int $customerGroupId
      * @return $this
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function addTierPriceDataByGroupId($customerGroupId)
     {
@@ -2391,7 +2401,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
      * Get product entity metadata
      *
      * @return \Magento\Framework\EntityManager\EntityMetadataInterface
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getProductEntityMetadata()
     {

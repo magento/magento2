@@ -3,28 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Test\Unit\Option;
 
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
+use PHPUnit\Framework\TestCase;
 
-class SelectConfigOptionTest extends \PHPUnit\Framework\TestCase
+class SelectConfigOptionTest extends TestCase
 {
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Frontend input type has to be 'select' or 'radio'.
-     */
     public function testConstructInvalidFrontendType()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Frontend input type has to be \'select\' or \'radio\'.');
         new SelectConfigOption('test', TextConfigOption::FRONTEND_WIZARD_TEXT, ['a', 'b'], 'path/to/value');
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Select options can't be empty.
-     */
     public function testConstructNoOptions()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Select options can\'t be empty.');
         new SelectConfigOption('test', SelectConfigOption::FRONTEND_WIZARD_SELECT, [], 'path/to/value');
     }
 
@@ -50,12 +49,10 @@ class SelectConfigOptionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals(['a', 'b'], $option->getSelectOptions());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Value specified for
-     */
     public function testValidateException()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Value specified for');
         $option = new SelectConfigOption(
             'test',
             SelectConfigOption::FRONTEND_WIZARD_SELECT,

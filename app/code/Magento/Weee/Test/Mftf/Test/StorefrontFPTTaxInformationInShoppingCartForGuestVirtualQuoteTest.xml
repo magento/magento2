@@ -38,7 +38,7 @@
                 <field key="price">40.00</field>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
         </before>
 

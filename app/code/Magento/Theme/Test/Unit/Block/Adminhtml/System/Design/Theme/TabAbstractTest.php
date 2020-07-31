@@ -3,24 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Block\Adminhtml\System\Design\Theme;
 
-class TabAbstractTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Block\Template\Context;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Registry;
+use Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab;
+use Magento\Theme\Model\Theme;
+use PHPUnit\Framework\TestCase;
+
+class TabAbstractTest extends TestCase
 {
     /**
-     * @var \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab
+     * @var AbstractTab
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = $this->getMockForAbstractClass(
-            \Magento\Theme\Block\Adminhtml\System\Design\Theme\Edit\AbstractTab::class,
+            AbstractTab::class,
             [
-                $this->createMock(\Magento\Backend\Block\Template\Context::class),
-                $this->createMock(\Magento\Framework\Registry::class),
-                $this->createMock(\Magento\Framework\Data\FormFactory::class),
-                $this->createMock(\Magento\Framework\ObjectManagerInterface::class),
+                $this->createMock(Context::class),
+                $this->createMock(Registry::class),
+                $this->createMock(FormFactory::class),
+                $this->getMockForAbstractClass(ObjectManagerInterface::class),
             ],
             '',
             true,
@@ -30,7 +40,7 @@ class TabAbstractTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }
@@ -38,7 +48,7 @@ class TabAbstractTest extends \PHPUnit\Framework\TestCase
     public function testGetTabTitle()
     {
         $label = 'test label';
-        $this->_model->expects($this->once())->method('getTabLabel')->will($this->returnValue($label));
+        $this->_model->expects($this->once())->method('getTabLabel')->willReturn($label);
         $this->assertEquals($label, $this->_model->getTabTitle());
     }
 
@@ -50,12 +60,12 @@ class TabAbstractTest extends \PHPUnit\Framework\TestCase
      */
     public function testCanShowTab($isVirtual, $themeId, $result)
     {
-        $themeMock = $this->createPartialMock(\Magento\Theme\Model\Theme::class, ['isVirtual', 'getId', '__wakeup']);
-        $themeMock->expects($this->any())->method('isVirtual')->will($this->returnValue($isVirtual));
+        $themeMock = $this->createPartialMock(Theme::class, ['isVirtual', 'getId', '__wakeup']);
+        $themeMock->expects($this->any())->method('isVirtual')->willReturn($isVirtual);
 
-        $themeMock->expects($this->any())->method('getId')->will($this->returnValue($themeId));
+        $themeMock->expects($this->any())->method('getId')->willReturn($themeId);
 
-        $this->_model->expects($this->any())->method('_getCurrentTheme')->will($this->returnValue($themeMock));
+        $this->_model->expects($this->any())->method('_getCurrentTheme')->willReturn($themeMock);
 
         if ($result === true) {
             $this->assertTrue($this->_model->canShowTab());

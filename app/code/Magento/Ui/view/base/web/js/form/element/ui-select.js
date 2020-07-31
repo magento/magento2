@@ -1160,6 +1160,7 @@ define([
 
             if (this.isSearchKeyCached(searchKey)) {
                 cachedSearchResult = this.getCachedSearchResults(searchKey);
+                this.cacheOptions.plain = cachedSearchResult.options;
                 this.options(cachedSearchResult.options);
                 this.afterLoadOptions(searchKey, cachedSearchResult.lastPage, cachedSearchResult.total);
 
@@ -1274,6 +1275,7 @@ define([
             });
 
             this.total = response.total;
+            this.cacheOptions.plain = existingOptions;
             this.options(existingOptions);
         },
 

@@ -59,7 +59,7 @@
             </createData>
 
             <!-- Login As Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete the configurable product created in the before block -->

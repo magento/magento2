@@ -84,7 +84,7 @@
         <closeTab stepKey="closeLinkSampleTab"/>
 
         <!-- Login as admin -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Open Downloadable product from precondition -->
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">

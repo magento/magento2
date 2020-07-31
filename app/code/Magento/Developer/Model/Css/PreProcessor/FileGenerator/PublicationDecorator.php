@@ -3,11 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Developer\Model\Css\PreProcessor\FileGenerator;
 
 use Magento\Developer\Model\Config\Source\WorkflowType;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
 use Magento\Framework\App\View\Asset\Publisher;
 use Magento\Framework\Css\PreProcessor\File\Temporary;
@@ -31,22 +32,21 @@ class PublicationDecorator extends RelatedGenerator
     private $scopeConfig;
 
     /**
-     * @var bool
-     */
-    private $hasRelatedPublishing;
-
-    /**
      * @var State
      */
     private $state;
 
     /**
-     * Constructor
-     *
+     * @var bool
+     */
+    private $hasRelatedPublishing;
+
+    /**
      * @param Repository $assetRepository
      * @param Temporary $temporaryFile
      * @param Publisher $assetPublisher
      * @param ScopeConfigInterface $scopeConfig
+     * @param State $state
      * @param bool $hasRelatedPublishing
      */
     public function __construct(
@@ -54,11 +54,13 @@ class PublicationDecorator extends RelatedGenerator
         Temporary $temporaryFile,
         Publisher $assetPublisher,
         ScopeConfigInterface $scopeConfig,
+        State $state,
         $hasRelatedPublishing = false
     ) {
         parent::__construct($assetRepository, $temporaryFile);
         $this->assetPublisher = $assetPublisher;
         $this->scopeConfig = $scopeConfig;
+        $this->state = $state;
         $this->hasRelatedPublishing = $hasRelatedPublishing;
     }
 
@@ -69,7 +71,7 @@ class PublicationDecorator extends RelatedGenerator
     {
         $relatedAsset = parent::generateRelatedFile($relatedFileId, $asset);
         $isClientSideCompilation =
-            $this->getState()->getMode() !== State::MODE_PRODUCTION
+            $this->state->getMode() !== State::MODE_PRODUCTION
             && WorkflowType::CLIENT_SIDE_COMPILATION === $this->scopeConfig->getValue(WorkflowType::CONFIG_NAME_PATH);
 
         if ($this->hasRelatedPublishing || $isClientSideCompilation) {
@@ -77,18 +79,5 @@ class PublicationDecorator extends RelatedGenerator
         }
 
         return $relatedAsset;
-    }
-
-    /**
-     * @return State
-     * @deprecated 100.2.0
-     */
-    private function getState()
-    {
-        if (null === $this->state) {
-            $this->state = ObjectManager::getInstance()->get(State::class);
-        }
-
-        return $this->state;
     }
 }

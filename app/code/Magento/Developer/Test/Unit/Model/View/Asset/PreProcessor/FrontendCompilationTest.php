@@ -1,28 +1,27 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Developer\Test\Unit\Model\View\Asset\PreProcessor;
 
-use Magento\Framework\View\Asset\File;
-use Magento\Framework\View\Asset\Source;
-use Magento\Framework\View\Asset\LocalInterface;
-use Magento\Framework\View\Asset\PreProcessor\Chain;
-use Magento\Framework\View\Asset\File\FallbackContext;
-use Magento\Framework\View\Asset\LockerProcessInterface;
 use Magento\Developer\Model\View\Asset\PreProcessor\FrontendCompilation;
-use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
+use Magento\Framework\View\Asset\File;
+use Magento\Framework\View\Asset\File\FallbackContext;
+use Magento\Framework\View\Asset\LocalInterface;
+use Magento\Framework\View\Asset\LockerProcessInterface;
 use Magento\Framework\View\Asset\PreProcessor\AlternativeSource\AssetBuilder;
+use Magento\Framework\View\Asset\PreProcessor\AlternativeSourceInterface;
+use Magento\Framework\View\Asset\PreProcessor\Chain;
+use Magento\Framework\View\Asset\Source;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class FrontendCompilationTest
- *
  * @see \Magento\Developer\Model\View\Asset\PreProcessor\FrontendCompilation
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FrontendCompilationTest extends \PHPUnit\Framework\TestCase
+class FrontendCompilationTest extends TestCase
 {
     const AREA = 'test-area';
 
@@ -37,29 +36,26 @@ class FrontendCompilationTest extends \PHPUnit\Framework\TestCase
     const NEW_CONTENT = 'test-new-content';
 
     /**
-     * @var LockerProcessInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LockerProcessInterface|MockObject
      */
     private $lockerProcessMock;
 
     /**
-     * @var AssetBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var AssetBuilder|MockObject
      */
     private $assetBuilderMock;
 
     /**
-     * @var AlternativeSourceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AlternativeSourceInterface|MockObject
      */
     private $alternativeSourceMock;
 
     /**
-     * @var Source|\PHPUnit_Framework_MockObject_MockObject
+     * @var Source|MockObject
      */
     private $assetSourceMock;
 
-    /**
-     * Set up
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->lockerProcessMock = $this->getMockBuilder(LockerProcessInterface::class)
             ->getMockForAbstractClass();
@@ -190,7 +186,7 @@ class FrontendCompilationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Chain|\PHPUnit_Framework_MockObject_MockObject
+     * @return Chain|MockObject
      */
     private function getChainMock()
     {
@@ -206,7 +202,7 @@ class FrontendCompilationTest extends \PHPUnit\Framework\TestCase
      * @param int $contentExactly
      * @param int $pathExactly
      * @param string $newContentType
-     * @return Chain|\PHPUnit_Framework_MockObject_MockObject
+     * @return Chain|MockObject
      */
     private function getChainMockExpects($content = '', $contentExactly = 1, $pathExactly = 1, $newContentType = '')
     {
@@ -229,7 +225,7 @@ class FrontendCompilationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return File|\PHPUnit_Framework_MockObject_MockObject
+     * @return File|MockObject
      */
     private function getAssetNew()
     {
@@ -241,20 +237,20 @@ class FrontendCompilationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return LocalInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return LocalInterface|MockObject
      */
     private function getAssetMock()
     {
         $assetMock = $this->getMockBuilder(LocalInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         return $assetMock;
     }
 
     /**
      * @param int $pathExactly
-     * @return LocalInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return LocalInterface|MockObject
      */
     private function getAssetMockExpects($pathExactly = 1)
     {
@@ -274,7 +270,7 @@ class FrontendCompilationTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return FallbackContext|\PHPUnit_Framework_MockObject_MockObject
+     * @return FallbackContext|MockObject
      */
     private function getContextMock()
     {

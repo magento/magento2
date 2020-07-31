@@ -3,97 +3,117 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Shipping\Test\Unit\Controller\Adminhtml\Order\Shipment;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\Manager;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Sales\Model\Order\Shipment;
+use Magento\Shipping\Controller\Adminhtml\Order\Shipment\CreateLabel;
+use Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader;
+use Magento\Shipping\Model\Shipping\LabelGenerator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
 /**
- * Class CreateLabelTest
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreateLabelTest extends \PHPUnit\Framework\TestCase
+class CreateLabelTest extends TestCase
 {
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader|\PHPUnit_Framework_MockObject_MockObject
+     * @var ShipmentLoader|MockObject
      */
     protected $shipmentLoaderMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Shipment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Shipment|MockObject
      */
     protected $shipmentMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\App\Response\Http|MockObject
      */
     protected $responseMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Message\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|MockObject
      */
     protected $messageManagerMock;
 
     /**
-     * @var \Magento\Shipping\Model\Shipping\LabelGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var LabelGenerator|MockObject
      */
     protected $labelGenerator;
 
     /**
-     * @var \Magento\Shipping\Controller\Adminhtml\Order\Shipment\CreateLabel
+     * @var CreateLabel
      */
     protected $controller;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->shipmentLoaderMock = $this->createPartialMock(
-            \Magento\Shipping\Controller\Adminhtml\Order\ShipmentLoader::class,
-            ['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', 'load', '__wakeup']
-        );
+        $this->shipmentLoaderMock = $this->getMockBuilder(ShipmentLoader::class)
+            ->addMethods(['setOrderId', 'setShipmentId', 'setShipment', 'setTracking', '__wakeup'])
+            ->onlyMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->shipmentMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Shipment::class,
+            Shipment::class,
             ['__wakeup', 'save']
         );
-        $this->requestMock = $this->createPartialMock(
-            \Magento\Framework\App\Request\Http::class,
-            ['getParam', '__wakeup']
-        );
+        $this->requestMock = $this->getMockBuilder(Http::class)
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getParam'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->responseMock = $this->createPartialMock(
             \Magento\Framework\App\Response\Http::class,
             ['representJson', '__wakeup']
         );
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
-        $this->messageManagerMock = $this->createPartialMock(
-            \Magento\Framework\Message\Manager::class,
-            ['addSuccess', 'addError', '__wakeup']
-        );
-        $this->labelGenerator = $this->createPartialMock(
-            \Magento\Shipping\Model\Shipping\LabelGenerator::class,
-            ['create', '__wakeup']
-        );
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
+        $this->messageManagerMock = $this->getMockBuilder(Manager::class)
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['addSuccess', 'addError'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->labelGenerator = $this->getMockBuilder(LabelGenerator::class)
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $contextMock = $this->createPartialMock(
-            \Magento\Backend\App\Action\Context::class,
-            ['getRequest', 'getResponse', 'getMessageManager', 'getActionFlag', 'getObjectManager', '__wakeup']
-        );
+        $contextMock = $this->getMockBuilder(Context::class)
+            ->addMethods(['__wakeup'])
+            ->onlyMethods(['getRequest', 'getResponse', 'getMessageManager', 'getActionFlag', 'getObjectManager'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->loadShipment();
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->responseMock);
         $contextMock->expects($this->any())
             ->method('getObjectManager')
-            ->will($this->returnValue($this->objectManagerMock));
+            ->willReturn($this->objectManagerMock);
         $contextMock->expects($this->any())
             ->method('getMessageManager')
-            ->will($this->returnValue($this->messageManagerMock));
+            ->willReturn($this->messageManagerMock);
 
-        $this->controller = new \Magento\Shipping\Controller\Adminhtml\Order\Shipment\CreateLabel(
+        $this->controller = new CreateLabel(
             $contextMock,
             $this->shipmentLoaderMock,
             $this->labelGenerator
@@ -115,19 +135,19 @@ class CreateLabelTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->at(0))
             ->method('getParam')
             ->with('order_id')
-            ->will($this->returnValue($orderId));
+            ->willReturn($orderId);
         $this->requestMock->expects($this->at(1))
             ->method('getParam')
             ->with('shipment_id')
-            ->will($this->returnValue($shipmentId));
+            ->willReturn($shipmentId);
         $this->requestMock->expects($this->at(2))
             ->method('getParam')
             ->with('shipment')
-            ->will($this->returnValue($shipment));
+            ->willReturn($shipment);
         $this->requestMock->expects($this->at(3))
             ->method('getParam')
             ->with('tracking')
-            ->will($this->returnValue($tracking));
+            ->willReturn($tracking);
         $this->shipmentLoaderMock->expects($this->once())
             ->method('setOrderId')
             ->with($orderId);
@@ -149,12 +169,12 @@ class CreateLabelTest extends \PHPUnit\Framework\TestCase
     {
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->shipmentMock));
+            ->willReturn($this->shipmentMock);
         $this->labelGenerator->expects($this->once())
             ->method('create')
             ->with($this->shipmentMock, $this->requestMock)
-            ->will($this->returnValue(true));
-        $this->shipmentMock->expects($this->once())->method('save')->will($this->returnSelf());
+            ->willReturn(true);
+        $this->shipmentMock->expects($this->once())->method('save')->willReturnSelf();
         $this->messageManagerMock->expects($this->once())->method('addSuccess');
         $this->responseMock->expects($this->once())->method('representJson');
 
@@ -168,7 +188,7 @@ class CreateLabelTest extends \PHPUnit\Framework\TestCase
     {
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('message')));
+            ->willThrowException(new LocalizedException(__('message')));
         $this->responseMock->expects($this->once())->method('representJson');
 
         $this->assertNull($this->controller->execute());
@@ -179,21 +199,21 @@ class CreateLabelTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteSaveException()
     {
-        $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
+        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->shipmentMock));
+            ->willReturn($this->shipmentMock);
         $this->labelGenerator->expects($this->once())
             ->method('create')
             ->with($this->shipmentMock, $this->requestMock)
-            ->will($this->returnValue(true));
-        $this->shipmentMock->expects($this->once())->method('save')->will($this->throwException(new \Exception()));
+            ->willReturn(true);
+        $this->shipmentMock->expects($this->once())->method('save')->willThrowException(new \Exception());
         $loggerMock->expects($this->once())->method('critical');
         $this->objectManagerMock->expects($this->once())
             ->method('get')
-            ->with(\Psr\Log\LoggerInterface::class)
-            ->will($this->returnValue($loggerMock));
+            ->with(LoggerInterface::class)
+            ->willReturn($loggerMock);
         $this->responseMock->expects($this->once())->method('representJson');
 
         $this->assertNull($this->controller->execute());
@@ -206,12 +226,12 @@ class CreateLabelTest extends \PHPUnit\Framework\TestCase
     {
         $this->shipmentLoaderMock->expects($this->once())
             ->method('load')
-            ->will($this->returnValue($this->shipmentMock));
+            ->willReturn($this->shipmentMock);
         $this->labelGenerator->expects($this->once())
             ->method('create')
             ->with($this->shipmentMock, $this->requestMock)
             ->willThrowException(
-                new \Magento\Framework\Exception\LocalizedException(__('message'))
+                new LocalizedException(__('message'))
             );
         $this->responseMock->expects($this->once())->method('representJson');
 

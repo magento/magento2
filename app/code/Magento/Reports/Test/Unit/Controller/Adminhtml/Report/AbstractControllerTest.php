@@ -3,101 +3,113 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Reports\Test\Unit\Controller\Adminhtml\Report;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\Menu;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\App\ViewInterface;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  */
-abstract class AbstractControllerTest extends \PHPUnit\Framework\TestCase
+abstract class AbstractControllerTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileFactory|MockObject
      */
     protected $fileFactoryMock;
 
     /**
-     * @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ViewInterface|MockObject
      */
     protected $viewMock;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Framework\View\Element\BlockInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BlockInterface|MockObject
      */
     protected $breadcrumbsBlockMock;
 
     /**
-     * @var \Magento\Framework\View\Element\BlockInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BlockInterface|MockObject
      */
     protected $menuBlockMock;
 
     /**
-     * @var \Magento\Framework\View\Element\BlockInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BlockInterface|MockObject
      */
     protected $switcherBlockMock;
 
     /**
-     * @var \Magento\Backend\Model\Menu|\PHPUnit_Framework_MockObject_MockObject
+     * @var Menu|MockObject
      */
     protected $menuModelMock;
 
     /**
-     * @var \Magento\Framework\View\Element\AbstractBlock|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractBlock|MockObject
      */
     protected $abstractBlockMock;
 
     /**
      * {@inheritDoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockForAbstractClassBuilder(
-            \Magento\Framework\App\RequestInterface::class,
+            RequestInterface::class,
             ['isDispatched', 'initForward', 'setDispatched', 'isForwarded']
         );
         $this->breadcrumbsBlockMock = $this->getMockForAbstractClassBuilder(
-            \Magento\Framework\View\Element\BlockInterface::class,
+            BlockInterface::class,
             ['addLink']
         );
         $this->menuBlockMock = $this->getMockForAbstractClassBuilder(
-            \Magento\Framework\View\Element\BlockInterface::class,
+            BlockInterface::class,
             ['setActive', 'getMenuModel']
         );
         $this->viewMock = $this->getMockForAbstractClassBuilder(
-            \Magento\Framework\App\ViewInterface::class
+            ViewInterface::class
         );
 
-        $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
+        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->switcherBlockMock = $this->getMockBuilder(BlockInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->switcherBlockMock = $this->getMockBuilder(\Magento\Framework\View\Element\BlockInterface::class)
+        $this->fileFactoryMock = $this->getMockBuilder(FileFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+        $this->menuModelMock = $this->getMockBuilder(Menu::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fileFactoryMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http\FileFactory::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->menuModelMock = $this->getMockBuilder(\Magento\Backend\Model\Menu::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->abstractBlockMock = $this->getMockBuilder(\Magento\Framework\View\Element\AbstractBlock::class)
+        $this->abstractBlockMock = $this->getMockBuilder(AbstractBlock::class)
             ->setMethods(['getCsvFile', 'getExcelFile', 'setSaveParametersInSession', 'getCsv', 'getExcel'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -108,14 +120,12 @@ abstract class AbstractControllerTest extends \PHPUnit\Framework\TestCase
         $this->contextMock->expects($this->any())->method('getRequest')->willReturn($this->requestMock);
         $this->contextMock->expects($this->any())->method('getView')->willReturn($this->viewMock);
 
-        $this->layoutMock->expects($this->any())->method('getBlock')->will(
-            $this->returnValueMap(
-                [
-                    ['breadcrumbs', $this->breadcrumbsBlockMock],
-                    ['menu', $this->menuBlockMock],
-                    ['store_switcher', $this->switcherBlockMock]
-                ]
-            )
+        $this->layoutMock->expects($this->any())->method('getBlock')->willReturnMap(
+            [
+                ['breadcrumbs', $this->breadcrumbsBlockMock],
+                ['menu', $this->menuBlockMock],
+                ['store_switcher', $this->switcherBlockMock]
+            ]
         );
         $this->layoutMock->expects($this->any())->method('getChildBlock')->willReturn($this->abstractBlockMock);
     }
@@ -124,7 +134,7 @@ abstract class AbstractControllerTest extends \PHPUnit\Framework\TestCase
      * Custom mock for abstract class
      * @param string $className
      * @param array $mockedMethods
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return MockObject
      */
     protected function getMockForAbstractClassBuilder($className, $mockedMethods = [])
     {

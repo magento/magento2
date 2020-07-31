@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <!--Login-->
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <!--Create product and Category-->
             <createData stepKey="category" entity="SimpleSubCategory"/>
             <createData stepKey="createProduct1" entity="SimpleProduct">
@@ -43,7 +43,7 @@
             <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <!--Logout-->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Go to frontend and make a user account and login with it -->
         <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="signUpNewUser">

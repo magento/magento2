@@ -15,7 +15,7 @@
                 <arguments>
                     <argument name="path" xsi:type="string">vault/cards/listaction</argument>
                     <argument name="label" xsi:type="string" translate="true">Stored Payment Methods</argument>
-                    <argument name="sortOrder" xsi:type="number">160</argument>
+                    <argument name="sortOrder" xsi:type="number">70</argument>
                 </arguments>
             </block>
         </referenceBlock>

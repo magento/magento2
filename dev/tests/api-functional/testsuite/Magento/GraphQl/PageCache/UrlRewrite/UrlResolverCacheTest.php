@@ -22,7 +22,7 @@ class UrlResolverCacheTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->markTestSkipped(
             'This test will stay skipped until DEVOPS-4924 is resolved'

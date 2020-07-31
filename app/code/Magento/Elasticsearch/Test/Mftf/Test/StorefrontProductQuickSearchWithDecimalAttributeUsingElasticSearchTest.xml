@@ -46,7 +46,7 @@
                 <requiredEntity createDataKey="newCategory"/>
                 <requiredEntity createDataKey="customAttribute"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
@@ -55,9 +55,13 @@
             <!--Delete attribute-->
             <deleteData createDataKey="customAttribute" stepKey="deleteCustomAttribute"/>
             <!--Reindex and clear cache-->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:clean" stepKey="cleanCache"/>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!--Navigate to backend and update value for custom attribute -->
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchForSimpleProduct">
@@ -77,10 +81,13 @@
         </actionGroup>
 
         <!--Reindex and clear cache-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:clean" stepKey="cleanCache"/>
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
-        <waitForPageLoad stepKey="waitForHomePageToLoad"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
 
         <!-- Navigate to Storefront and search -->
         <actionGroup ref="AssertSearchResultActionGroup" stepKey="assertSearchResult0">
