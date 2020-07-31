@@ -21,6 +21,7 @@
         <referenceContainer name="content">
             <uiComponent name="product_listing"/>
             <block class="Magento\Catalog\Block\Adminhtml\Product" name="products_list"/>
+            <block class="Magento\Backend\Block\Template" template="Magento_Catalog::product/grid/url_filter_applier.phtml" name="product_list_url_filter_applier" />
         </referenceContainer>
     </body>
 </page>

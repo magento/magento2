@@ -5,8 +5,10 @@
 
 define([
     'jquery',
-    'jquery-ui-modules/widget'
-], function ($) {
+    'Magento_Ui/js/modal/confirm',
+    'jquery-ui-modules/widget',
+    'mage/translate'
+], function ($, confirm) {
     'use strict';
 
     $.widget('mage.shoppingCart', {
@@ -15,13 +17,7 @@ define([
             var items, i, reload;
 
             $(this.options.emptyCartButton).on('click', $.proxy(function () {
-                $(this.options.emptyCartButton).attr('name', 'update_cart_action_temp');
-                $(this.options.updateCartActionContainer)
-                    .attr('name', 'update_cart_action').attr('value', 'empty_cart');
-
-                if ($(this.options.emptyCartButton).parents('form').length > 0) {
-                    $(this.options.emptyCartButton).parents('form').submit();
-                }
+                this._confirmClearCart();
             }, this));
             items = $.find('[data-role="cart-item-qty"]');
 
@@ -61,6 +57,40 @@ define([
                     $('div.block.block-minicart').off('dropdowndialogclose');
                 }));
             }, this));
+        },
+
+        /**
+         * Display confirmation modal for clearing the cart
+         * @private
+         */
+        _confirmClearCart: function () {
+            var self = this;
+
+            confirm({
+                content: $.mage.__('Are you sure you want to remove all items from your shopping cart?'),
+                actions: {
+                    /**
+                     * Confirmation modal handler to execute clear cart action
+                     */
+                    confirm: function () {
+                        self.clearCart();
+                    }
+                }
+            });
+        },
+
+        /**
+         * Prepares the form and submit to clear the cart
+         * @public
+         */
+        clearCart: function () {
+            $(this.options.emptyCartButton).attr('name', 'update_cart_action_temp');
+            $(this.options.updateCartActionContainer)
+                .attr('name', 'update_cart_action').attr('value', 'empty_cart');
+
+            if ($(this.options.emptyCartButton).parents('form').length > 0) {
+                $(this.options.emptyCartButton).parents('form').submit();
+            }
         }
     });
 
