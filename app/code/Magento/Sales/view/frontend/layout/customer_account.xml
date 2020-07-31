@@ -12,7 +12,7 @@
                 <arguments>
                     <argument name="path" xsi:type="string">sales/order/history</argument>
                     <argument name="label" xsi:type="string" translate="true">My Orders</argument>
-                    <argument name="sortOrder" xsi:type="number">230</argument>
+                    <argument name="sortOrder" xsi:type="number">10</argument>
                 </arguments>
             </block>
         </referenceBlock>

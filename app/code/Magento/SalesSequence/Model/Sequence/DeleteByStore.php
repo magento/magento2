@@ -58,7 +58,7 @@ class DeleteByStore
         $metadataIds = $this->getMetadataIdsByStoreId($storeId);
         $profileIds = $this->getProfileIdsByMetadataIds($metadataIds);
 
-        $this->appResource->getConnection()->delete(
+        $this->appResource->getConnection('sales')->delete(
             $this->appResource->getTableName('sales_sequence_profile'),
             ['profile_id IN (?)' => $profileIds]
         );
@@ -70,7 +70,7 @@ class DeleteByStore
                 continue;
             }
 
-            $this->appResource->getConnection()->dropTable(
+            $this->appResource->getConnection('sales')->dropTable(
                 $metadata->getSequenceTable()
             );
             $this->resourceMetadata->delete($metadata);
@@ -85,7 +85,7 @@ class DeleteByStore
      */
     private function getMetadataIdsByStoreId($storeId)
     {
-        $connection = $this->appResource->getConnection();
+        $connection = $this->appResource->getConnection('sales');
         $bind = ['store_id' => $storeId];
         $select = $connection->select()->from(
             $this->appResource->getTableName('sales_sequence_meta'),
@@ -105,7 +105,7 @@ class DeleteByStore
      */
     private function getProfileIdsByMetadataIds(array $metadataIds)
     {
-        $connection = $this->appResource->getConnection();
+        $connection = $this->appResource->getConnection('sales');
         $select = $connection->select()
             ->from(
                 $this->appResource->getTableName('sales_sequence_profile'),

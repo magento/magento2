@@ -23,9 +23,10 @@ use Magento\Store\Model\WebsiteFactory;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
  *
- * @deprecated 2.3.0 Replaced with Multi Source Inventory
+ * @deprecated 100.3.0 Replaced with Multi Source Inventory
  * @link https://devdocs.magento.com/guides/v2.3/inventory/index.html
  * @link https://devdocs.magento.com/guides/v2.3/inventory/catalog-inventory-replacements.html
+ * @since 100.0.2
  */
 class Status extends AbstractDb
 {
@@ -241,6 +242,7 @@ class Status extends AbstractDb
      * @param \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
      * @param bool $isFilterInStock
      * @return \Magento\Catalog\Model\ResourceModel\Product\Collection $collection
+     * @since 100.0.6
      */
     public function addStockDataToCollection($collection, $isFilterInStock)
     {

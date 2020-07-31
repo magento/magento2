@@ -110,6 +110,7 @@ abstract class AbstractAction
 
     /**
      * @var TableMaintainer
+     * @since 102.0.5
      */
     protected $tableMaintainer;
 
@@ -196,7 +197,7 @@ abstract class AbstractAction
      * The name is switched between 'catalog_category_product_index' and 'catalog_category_product_index_replica'
      *
      * @return string
-     * @deprecated
+     * @deprecated 102.0.5
      */
     protected function getMainTable()
     {
@@ -207,7 +208,7 @@ abstract class AbstractAction
      * Return temporary index table name
      *
      * @return string
-     * @deprecated
+     * @deprecated 102.0.5
      */
     protected function getMainTmpTable()
     {
@@ -221,6 +222,7 @@ abstract class AbstractAction
      *
      * @param int $storeId
      * @return string
+     * @since 102.0.5
      */
     protected function getIndexTable($storeId)
     {
