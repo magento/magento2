@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Test\Legacy\App\Action;
+namespace Magento\Test\Legacy\Magento\App\Action;
 
 use Exception;
 use Magento\Framework\App\Action\AbstractAction;
@@ -41,9 +41,8 @@ class AbstractActionTest extends TestCase
     }
 
     /**
-     * Test new
-     *
-    */
+     * Test newly created controllers do not extend deprecated AbstractAction.
+     */
     public function testNewControllersDoNotExtendAbstractAction(): void
     {
         $files = $this->getTestFiles();
@@ -121,25 +120,21 @@ class AbstractActionTest extends TestCase
         callable $noListCallback
     ): array {
         $filesDefinedInList = [];
-
         $listFiles = glob($listsBaseDir . '/_files/' . $listFilePattern);
         if (!empty($listFiles)) {
             foreach ($listFiles as $listFile) {
                 $filesDefinedInList[] = file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             }
-
-           $filesDefinedInList = array_merge([], ...$filesDefinedInList);
+            $filesDefinedInList = array_merge([], ...$filesDefinedInList);
         } else {
             $filesDefinedInList = call_user_func($noListCallback);
         }
-
         array_walk(
             $filesDefinedInList,
             function (&$file) {
                 $file = BP . '/' . $file;
             }
         );
-
         $filesDefinedInList = array_values(array_unique($filesDefinedInList));
 
         return $filesDefinedInList;
