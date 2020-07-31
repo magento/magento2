@@ -115,7 +115,7 @@ class Select extends \Zend_Db_Select
     {
         if ($value === null && $type === null) {
             $value = '';
-        } elseif ($type == self::TYPE_CONDITION) {
+        } elseif ((string)$type === self::TYPE_CONDITION) {
             $type = null;
         }
         if (is_array($value)) {
