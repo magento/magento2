@@ -125,12 +125,10 @@ class AbstractActionTest extends TestCase
         $listFiles = glob($listsBaseDir . '/_files/' . $listFilePattern);
         if (!empty($listFiles)) {
             foreach ($listFiles as $listFile) {
-                // phpcs:ignore Magento2.Performance.ForeachArrayMerge.ForeachArrayMerge
-                $filesDefinedInList = array_merge(
-                    $filesDefinedInList,
-                    file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES)
-                );
+                $filesDefinedInList[] = file($listFile, FILE_IGNORE_NEW_LINES | FILE_SKIP_EMPTY_LINES);
             }
+
+           $filesDefinedInList = array_merge([], ...$filesDefinedInList);
         } else {
             $filesDefinedInList = call_user_func($noListCallback);
         }
