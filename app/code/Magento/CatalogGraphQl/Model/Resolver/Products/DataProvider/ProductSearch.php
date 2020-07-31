@@ -20,6 +20,7 @@ use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResultsInterface;
 use Magento\Framework\Api\SortOrder;
+use Magento\Framework\Exception\InputException;
 use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
@@ -151,6 +152,7 @@ class ProductSearch
      * @param SearchCriteriaInterface $searchCriteria
      * @param array $args
      * @return array
+     * @throws InputException
      */
     private function getSortOrderArray(SearchCriteriaInterface $searchCriteria, $args)
     {
@@ -158,16 +160,18 @@ class ProductSearch
         $sortOrders = $searchCriteria->getSortOrders();
         if (is_array($sortOrders)) {
             foreach ($sortOrders as $sortOrder) {
-                if ($sortOrder->getField() !== '_id') {
-                    if ($sortOrder->getField() == EavAttributeInterface::POSITION) {
-                        if (isset($args['sort'][EavAttributeInterface::POSITION])) {
-                            $sortOrder->setDirection($args['sort'][EavAttributeInterface::POSITION]);
-                        } else {
-                            $sortOrder->setDirection(SortOrder::SORT_DESC);
-                        }
+                if ($sortOrder->getField() === '_id') {
+                    $sortOrder->setField('entity_id');
+                    $categoryIdFilter = isset($args['filter']['category_id']) ? $args['filter']['category_id'] : false;
+                    if ($categoryIdFilter && count($categoryIdFilter[array_key_first($categoryIdFilter)]) <= 1) {
+                        $sortOrder->setDirection(SortOrder::SORT_ASC);
                     }
-                    $ordersArray[$sortOrder->getField()] = $sortOrder->getDirection();
                 }
+                $ordersArray[$sortOrder->getField()] = $sortOrder->getDirection();
+            }
+            if (isset($ordersArray[EavAttributeInterface::POSITION])) {
+                $ordersArray['entity_id'] = $ordersArray[EavAttributeInterface::POSITION];
+                unset($ordersArray[EavAttributeInterface::POSITION]);
             }
         }
 

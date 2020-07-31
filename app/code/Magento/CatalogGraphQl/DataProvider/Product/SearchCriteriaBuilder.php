@@ -101,7 +101,7 @@ class SearchCriteriaBuilder
         }
 
         if (!$searchCriteria->getSortOrders()) {
-            $this->addDefaultSortOrder($searchCriteria, $isSearch);
+            $this->addDefaultSortOrder($searchCriteria, $args, $isSearch);
         }
 
         $this->addEntityIdSort($searchCriteria, $isSearch);
@@ -199,18 +199,28 @@ class SearchCriteriaBuilder
      * Sort by relevance DESC by default
      *
      * @param SearchCriteriaInterface $searchCriteria
+     * @param array $args
      * @param bool $isSearch
      */
-    private function addDefaultSortOrder(SearchCriteriaInterface $searchCriteria, $isSearch = false): void
+    private function addDefaultSortOrder(SearchCriteriaInterface $searchCriteria, array $args, $isSearch = false): void
     {
-        $sortField = $isSearch ? 'relevance' : EavAttributeInterface::POSITION;
-        $sortDirection = $isSearch ? SortOrder::SORT_DESC : SortOrder::SORT_ASC;
-        $defaultSortOrder = $this->sortOrderBuilder
-            ->setField($sortField)
-            ->setDirection($sortDirection)
-            ->create();
+        $defaultSortOrder = [];
+        if ($isSearch) {
+            $defaultSortOrder[] = $this->sortOrderBuilder
+                ->setField('relevance')
+                ->setDirection(SortOrder::SORT_DESC)
+                ->create();
+        } else {
+            $categoryIdFilter = isset($args['filter']['category_id']) ? $args['filter']['category_id'] : false;
+            if ($categoryIdFilter && count($categoryIdFilter[array_key_first($categoryIdFilter)]) <= 1) {
+                $defaultSortOrder[] = $this->sortOrderBuilder
+                    ->setField(EavAttributeInterface::POSITION)
+                    ->setDirection(SortOrder::SORT_ASC)
+                    ->create();
+            }
+        }
 
-        $searchCriteria->setSortOrders([$defaultSortOrder]);
+        $searchCriteria->setSortOrders($defaultSortOrder);
     }
 
     /**
