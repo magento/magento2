@@ -157,8 +157,7 @@
 
         <!-- Disable the product -->
         <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="disableProduct"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}"  stepKey="clickOnSaveButton"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
 
         <!-- Open Product Store Front Page -->
