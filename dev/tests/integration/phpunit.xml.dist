@@ -18,17 +18,7 @@
     <!-- Test suites definition -->
     <testsuites>
         <testsuite name="Magento Integration Tests">
-            <file>testsuite/Magento/IntegrationTest.php</file>
-        </testsuite>
-        <!-- Memory tests run first to prevent influence of other tests on accuracy of memory measurements -->
-        <testsuite name="Memory Usage Tests">
-            <file>testsuite/Magento/MemoryUsageTest.php</file>
-        </testsuite>
-        <testsuite name="Magento Integration Tests Real Suite">
-            <directory>testsuite</directory>
-            <directory>../../../app/code/*/*/Test/Integration</directory>
-            <exclude>testsuite/Magento/MemoryUsageTest.php</exclude>
-            <exclude>testsuite/Magento/IntegrationTest.php</exclude>
+                <file>testsuite/Magento/MediaStorage/Console/Command/ImageResizeCommandTest.php</file>
         </testsuite>
     </testsuites>
     <!-- Code coverage filters -->
