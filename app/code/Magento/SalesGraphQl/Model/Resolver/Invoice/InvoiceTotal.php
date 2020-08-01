@@ -118,23 +118,22 @@ class InvoiceTotal implements ResolverInterface
      */
     private function getShippingDiscountDetails(InvoiceInterface $invoiceModel, OrderInterface $orderModel)
     {
-        // choose including or excluding depending on setting apply before or after tax;
-        $invoiceShippingAmount = (float) $this->taxHelper->applyTaxAfterDiscount() ?
-            $invoiceModel->getShippingAmount() : $invoiceModel->getShippingInclTax();
-        $orderShippingAmount = (float) $this->taxHelper->applyTaxAfterDiscount() ?
-            $orderModel->getShippingAmount() : $orderModel->getShippingInclTax();
-        $calculatedShippingRatioFromOriginal = $invoiceShippingAmount > 0 && $orderShippingAmount > 0 ?
+        $invoiceShippingAmount = (float)$invoiceModel->getShippingAmount();
+        $orderShippingAmount = (float)$orderModel->getShippingAmount();
+        $calculatedShippingRatioFromOriginal = $invoiceShippingAmount != 0 && $orderShippingAmount != 0 ?
             ( $invoiceShippingAmount / $orderShippingAmount) : 0;
         $orderShippingDiscount = (float)$orderModel->getShippingDiscountAmount();
         $calculatedInvoiceShippingDiscount = $orderShippingDiscount * $calculatedShippingRatioFromOriginal;
-
-        $shippingDiscounts[] =
-            [
-                'amount' => [
-                    'value' => $calculatedInvoiceShippingDiscount,
-                    'currency' => $invoiceModel->getOrderCurrencyCode()
-                ]
-            ];
+        $shippingDiscounts = [];
+        if ($calculatedInvoiceShippingDiscount != 0) {
+            $shippingDiscounts[] =
+                [
+                    'amount' => [
+                        'value' => sprintf('%.2f', abs($calculatedInvoiceShippingDiscount)),
+                        'currency' => $invoiceModel->getOrderCurrencyCode()
+                    ]
+                ];
+        }
         return $shippingDiscounts;
     }
 

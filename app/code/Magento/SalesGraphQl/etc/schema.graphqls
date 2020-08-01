@@ -162,6 +162,10 @@ type ShippingHandling @doc(description: "The Shipping handling details") {
     discounts: [ShippingDiscount] @doc(description: "The applied discounts to the shipping")
 }
 
+type ShippingDiscount @doc(description:"Defines an individual shipping discount. This discount can be applied to shipping.") {
+    amount: Money! @doc(description:"The amount of the discount")
+}
+
 type OrderShipment @doc(description: "Order shipment details") {
     id: ID! @doc(description: "The unique ID of the shipment")
     number: String! @doc(description: "The sequential credit shipment number")

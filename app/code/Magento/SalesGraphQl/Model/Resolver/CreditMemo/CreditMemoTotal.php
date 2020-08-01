@@ -121,20 +121,22 @@ class CreditMemoTotal implements ResolverInterface
      */
     private function getShippingDiscountDetails(CreditmemoInterface $creditmemoModel, $orderModel)
     {
-        $creditmemoShippingAmount = (float) $this->taxHelper->applyTaxAfterDiscount() ?
-            $creditmemoModel->getShippingAmount() : $creditmemoModel->getShippingInclTax();
-        $orderShippingAmount = (float)$this->taxHelper->applyTaxAfterDiscount() ?
-            $orderModel->getShippingAmount() : $orderModel->getShippingInclTax();
-        $calculatedShippingRatio = (float)$creditmemoShippingAmount > 0 && $orderShippingAmount > 0 ?
+        $creditmemoShippingAmount = (float)$creditmemoModel->getShippingAmount();
+        $orderShippingAmount = (float)$orderModel->getShippingAmount();
+        $calculatedShippingRatio = (float)$creditmemoShippingAmount != 0 && $orderShippingAmount != 0 ?
             ($creditmemoShippingAmount / $orderShippingAmount) : 0;
         $orderShippingDiscount = (float)$orderModel->getShippingDiscountAmount();
         $calculatedCreditmemoShippingDiscount = $orderShippingDiscount * $calculatedShippingRatio;
-        $shippingDiscounts[] = [
-            'amount' => [
-                'value' => $calculatedCreditmemoShippingDiscount,
-                'currency' => $creditmemoModel->getOrderCurrencyCode()
-            ]
-        ];
+
+        $shippingDiscounts = [];
+        if ($calculatedCreditmemoShippingDiscount != 0) {
+            $shippingDiscounts[] = [
+                'amount' => [
+                    'value' => sprintf('%.2f', abs($calculatedCreditmemoShippingDiscount)),
+                    'currency' => $creditmemoModel->getOrderCurrencyCode()
+                ]
+            ];
+        }
         return $shippingDiscounts;
     }
 

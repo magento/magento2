@@ -189,9 +189,7 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
                 'amount_excluding_tax' => ['value' => 20],
                 'total_amount' => ['value' => 20],
                 'discounts' => [
-                    0 => ['amount'=>['value'=> 2],
-                        'label' => 'Discount Label for 10% off'
-                    ]
+                    0 => ['amount'=>['value'=> 2]]
                 ],
                 'taxes'=> [
                     0 => [
@@ -266,7 +264,7 @@ class RetrieveOrdersWithBundleProductByOrderNumberTest extends GraphQlAbstract
                amount_including_tax{value}
                amount_excluding_tax{value}
                total_amount{value}
-               discounts{amount{value} label}
+               discounts{amount{value}}
                taxes {amount{value} title rate}
              }
              discounts {amount{value currency} label}
