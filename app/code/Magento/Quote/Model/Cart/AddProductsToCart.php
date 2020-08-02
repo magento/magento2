@@ -117,6 +117,9 @@ class AddProductsToCart
 
         if (count($this->errors) === 0) {
             $this->cartRepository->save($cart);
+        } else {
+            /* Revert changes introduced by add to cart processes in case of an error */
+            $cart->getItemsCollection()->clear();
         }
 
         return $this->prepareErrorOutput($cart);
