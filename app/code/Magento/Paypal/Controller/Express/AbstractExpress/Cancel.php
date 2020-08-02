@@ -31,6 +31,7 @@ class Cancel extends \Magento\Paypal\Controller\Express\AbstractExpress
                     ->unsLastSuccessQuoteId()
                     ->unsLastOrderId()
                     ->unsLastRealOrderId();
+                $this->_getSession()->unsQuoteId(); // clean quote from session that was set in OnAuthorization
                 $this->messageManager->addSuccessMessage(
                     __('Express Checkout and Order have been canceled.')
                 );
