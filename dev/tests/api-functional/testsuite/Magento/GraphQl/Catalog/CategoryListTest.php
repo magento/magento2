@@ -186,9 +186,9 @@ QUERY;
         $this->assertArrayHasKey('products', $baseCategory);
         //Check base category products
         $expectedBaseCategoryProducts = [
+            ['sku' => 'simple', 'name' => 'Simple Product'],
             ['sku' => 'simple-4', 'name' => 'Simple Product Three'],
-            ['sku' => '12345', 'name' => 'Simple Product Two'],
-            ['sku' => 'simple', 'name' => 'Simple Product']
+            ['sku' => '12345', 'name' => 'Simple Product Two']
         ];
         $this->assertCategoryProducts($baseCategory, $expectedBaseCategoryProducts);
         //Check base category children

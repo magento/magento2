@@ -441,7 +441,7 @@ QUERY;
         $this->assertArrayHasKey('products', $response['categories']['items'][0]);
         $baseCategory = $response['categories']['items'][0];
         $this->assertArrayHasKey('total_count', $baseCategory['products']);
-        //$this->assertGreaterThanOrEqual(1, $baseCategory['products']['total_count']);
+        $this->assertGreaterThanOrEqual(1, $baseCategory['products']['total_count']);
         $this->assertEquals(1, $baseCategory['products']['page_info']['current_page']);
         $this->assertEquals(20, $baseCategory['products']['page_info']['page_size']);
         $this->assertArrayHasKey('sku', $baseCategory['products']['items'][0]);

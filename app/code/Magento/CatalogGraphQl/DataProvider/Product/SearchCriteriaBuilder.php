@@ -212,7 +212,10 @@ class SearchCriteriaBuilder
                 ->create();
         } else {
             $categoryIdFilter = isset($args['filter']['category_id']) ? $args['filter']['category_id'] : false;
-            if ($categoryIdFilter && count($categoryIdFilter[array_key_first($categoryIdFilter)]) <= 1) {
+            if ($categoryIdFilter &&
+                !is_array($categoryIdFilter[array_key_first($categoryIdFilter)]) ||
+                count($categoryIdFilter[array_key_first($categoryIdFilter)]) <= 1
+            ) {
                 $defaultSortOrder[] = $this->sortOrderBuilder
                     ->setField(EavAttributeInterface::POSITION)
                     ->setDirection(SortOrder::SORT_ASC)
