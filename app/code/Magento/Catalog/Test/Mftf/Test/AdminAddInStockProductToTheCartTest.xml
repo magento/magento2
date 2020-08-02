@@ -56,12 +56,15 @@
         <selectOption selector="{{AdminProductFormAdvancedInventorySection.advancedInventoryStockStatus}}" userInput="In Stock" stepKey="selectOutOfStock"/>
         <click stepKey="clickOnDoneButton" selector="{{AdminProductFormAdvancedInventorySection.doneButton}}"/>
         <waitForPageLoad stepKey="waitForProductPageToLoad"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}"  stepKey="clickOnSaveButton"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
         <!--Clear cache and reindex-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!--Verify product is visible in category front page -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="openCategoryStoreFrontPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
