@@ -453,7 +453,7 @@ QUERY;
         $this->assertAttributes($firstProduct);
         $this->assertWebsites($firstProductModel, $firstProduct['websites']);
         $this->assertEquals('Category 1', $firstProduct['categories'][0]['name']);
-        $this->assertEquals('movable-position-2', $firstProduct['categories'][1]['url_path']);
+        $this->assertEquals('category-1/category-1-1', $firstProduct['categories'][1]['url_path']);
         $this->assertCount(3, $firstProduct['categories']);
     }
 

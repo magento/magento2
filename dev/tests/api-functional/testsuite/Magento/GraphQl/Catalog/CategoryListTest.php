@@ -214,8 +214,8 @@ QUERY;
         $this->assertEquals('Category 1.2', $secondChildCategory['name']);
         $this->assertEquals('Its a description of Test Category 1.2', $secondChildCategory['description']);
         $firstChildCategoryExpectedProducts = [
-            ['sku' => 'simple-4', 'name' => 'Simple Product Three'],
             ['sku' => 'simple', 'name' => 'Simple Product'],
+            ['sku' => 'simple-4', 'name' => 'Simple Product Three']
         ];
         $this->assertCategoryProducts($secondChildCategory, $firstChildCategoryExpectedProducts);
         $firstChildCategoryChildren = [];
@@ -277,9 +277,9 @@ QUERY;
         $this->assertArrayHasKey('products', $baseCategory);
         //Check base category products
         $expectedBaseCategoryProducts = [
+            ['sku' => 'simple', 'name' => 'Simple Product'],
             ['sku' => 'simple-4', 'name' => 'Simple Product Three'],
-            ['sku' => '12345', 'name' => 'Simple Product Two'],
-            ['sku' => 'simple', 'name' => 'Simple Product']
+            ['sku' => '12345', 'name' => 'Simple Product Two']
         ];
         $this->assertCategoryProducts($baseCategory, $expectedBaseCategoryProducts);
         //Check base category children
@@ -294,8 +294,8 @@ QUERY;
         $this->assertEquals('Its a description of Test Category 1.2', $firstChildCategory['description']);
 
         $firstChildCategoryExpectedProducts = [
-            ['sku' => 'simple-4', 'name' => 'Simple Product Three'],
-            ['sku' => 'simple', 'name' => 'Simple Product']
+            ['sku' => 'simple', 'name' => 'Simple Product'],
+            ['sku' => 'simple-4', 'name' => 'Simple Product Three']
         ];
         $this->assertCategoryProducts($firstChildCategory, $firstChildCategoryExpectedProducts);
         $firstChildCategoryChildren = [];
