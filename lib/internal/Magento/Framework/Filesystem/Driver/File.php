@@ -441,8 +441,10 @@ class File implements DriverInterface
             $result = @unlink($fullPath);
         } else {
             if (PHP_OS === 'Windows') {
+                //phpcs:disable
                 $result = exec(sprintf("rd /s /q %s", escapeshellarg($fullPath)));
             } else {
+                //phpcs:disable
                 $result = exec(sprintf("rm -rf %s", escapeshellarg($fullPath)));
             }
             
