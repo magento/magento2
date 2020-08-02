@@ -453,11 +453,11 @@ class Curl implements \Magento\Framework\HTTP\ClientInterface
             }
 
             if (strlen($name)) {
-                if ("Set-Cookie" == $name) {
-                    if (!isset($this->_responseHeaders[$name])) {
-                        $this->_responseHeaders[$name] = [];
+                if ('set-cookie' === strtolower($name)) {
+                    if (!isset($this->_responseHeaders['Set-Cookie'])) {
+                        $this->_responseHeaders['Set-Cookie'] = [];
                     }
-                    $this->_responseHeaders[$name][] = $value;
+                    $this->_responseHeaders['Set-Cookie'][] = $value;
                 } else {
                     $this->_responseHeaders[$name] = $value;
                 }
