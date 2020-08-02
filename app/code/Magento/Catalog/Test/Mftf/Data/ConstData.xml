@@ -16,5 +16,7 @@
     <entity name="prodNameWithSpecChars">
         <data key="trademark">"Pursuit Lumaflex™ Tone Band"</data>
         <data key="skumark">"x™"</data>
+        <data key="trademark_without_quotes">Pursuit Lumaflex™ Tone Band</data>
+        <data key="skumark_without_quotes">x™</data>
     </entity>
 </entities>

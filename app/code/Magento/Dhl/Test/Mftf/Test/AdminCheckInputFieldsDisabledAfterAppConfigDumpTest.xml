@@ -15,32 +15,74 @@
         <conditionalClick selector="{{AdminShippingMethodDHLSection.carriersDHLTab}}" dependentSelector="{{AdminShippingMethodDHLSection.carriersDHLActive}}" visible="false" stepKey="expandDHLTab"/>
         <waitForElementVisible selector="{{AdminShippingMethodDHLSection.carriersDHLActive}}" stepKey="waitDHLTabOpen"/>
         <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLActive}}" userInput="disabled" stepKey="grabDHLActiveDisabled"/>
-        <assertEquals expected='true' expectedType="string" actual="$grabDHLActiveDisabled" stepKey="assertDHLActiveDisabled"/>
+        <assertEquals stepKey="assertDHLActiveDisabled">
+			<actualResult type="const">$grabDHLActiveDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
         <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLTitle}}" userInput="disabled" stepKey="grabDHLTitleDisabled"/>
-        <assertEquals expected='true' expectedType="string" actual="$grabDHLTitleDisabled" stepKey="assertDHLTitleDisabled"/>
+        <assertEquals stepKey="assertDHLTitleDisabled">
+			<actualResult type="const">$grabDHLTitleDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
         <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLAccessId}}" userInput="disabled" stepKey="grabDHLAccessIdDisabled"/>
-        <assertEquals expected='true' expectedType="string" actual="$grabDHLAccessIdDisabled" stepKey="assertDHLAccessIdDisabled"/>
+        <assertEquals stepKey="assertDHLAccessIdDisabled">
+			<actualResult type="const">$grabDHLAccessIdDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
         <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLPassword}}" userInput="disabled" stepKey="grabDHLPasswordDisabled"/>
-        <assertEquals expected='true' expectedType="string" actual="$grabDHLPasswordDisabled" stepKey="assertDHLPasswordDisabled"/>
+        <assertEquals stepKey="assertDHLPasswordDisabled">
+			<actualResult type="const">$grabDHLPasswordDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
         <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLAccount}}" userInput="disabled" stepKey="grabDHLAccountDisabled"/>
-        <assertEquals expected='true' expectedType="string" actual="$grabDHLAccountDisabled" stepKey="assertDHLAccountDisabled"/>
+        <assertEquals stepKey="assertDHLAccountDisabled">
+			<actualResult type="const">$grabDHLAccountDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
         <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLContentType}}" userInput="disabled" stepKey="grabDHLContentTypeDisabled"/>
-        <assertEquals expected='true' expectedType="string" actual="$grabDHLContentTypeDisabled" stepKey="assertDHLContentTypeDisabled"/>
+        <assertEquals stepKey="assertDHLContentTypeDisabled">
+			<actualResult type="const">$grabDHLContentTypeDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
         <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLHandlingType}}" userInput="disabled" stepKey="grabDHLHandlingTypeDisabled"/>
-        <assertEquals expected='true' expectedType="string" actual="$grabDHLHandlingTypeDisabled" stepKey="assertDHLHandlingTypeDisabled"/>
+        <assertEquals stepKey="assertDHLHandlingTypeDisabled">
+			<actualResult type="const">$grabDHLHandlingTypeDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
         <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLHandlingAction}}" userInput="disabled" stepKey="grabDHLHandlingDisabled"/>
-        <assertEquals expected='true' expectedType="string" actual="$grabDHLHandlingDisabled" stepKey="assertDHLHandlingDisabled"/>
+        <assertEquals stepKey="assertDHLHandlingDisabled">
+			<actualResult type="const">$grabDHLHandlingDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
         <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLDivideOrderWeight}}" userInput="disabled" stepKey="grabDHLDivideOrderWeightDisabled"/>
-        <assertEquals expected='true' expectedType="string" actual="$grabDHLDivideOrderWeightDisabled" stepKey="assertDHLDivideOrderWeightDisabled"/>
+        <assertEquals stepKey="assertDHLDivideOrderWeightDisabled">
+			<actualResult type="const">$grabDHLDivideOrderWeightDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
         <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLUnitOfMeasure}}" userInput="disabled" stepKey="grabDHLUnitOfMeasureDisabled"/>
-        <assertEquals expected='true' expectedType="string" actual="$grabDHLUnitOfMeasureDisabled" stepKey="assertDHLUnitOfMeasureDisabled"/>
+        <assertEquals stepKey="assertDHLUnitOfMeasureDisabled">
+			<actualResult type="const">$grabDHLUnitOfMeasureDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
         <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLSize}}" userInput="disabled" stepKey="grabDHLSizeDisabled"/>
-        <assertEquals expected='true' expectedType="string" actual="$grabDHLSizeDisabled" stepKey="assertDHLSizeDisabled"/>
+        <assertEquals stepKey="assertDHLSizeDisabled">
+			<actualResult type="const">$grabDHLSizeDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
         <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLNonDocAllowedMethod}}" userInput="disabled" stepKey="grabDHLNonDocAllowedMethodDisabled"/>
-        <assertEquals expected='true' expectedType="string" actual="$grabDHLNonDocAllowedMethodDisabled" stepKey="assertDHLNonDocAllowedMethodDisabled"/>
+        <assertEquals stepKey="assertDHLNonDocAllowedMethodDisabled">
+			<actualResult type="const">$grabDHLNonDocAllowedMethodDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
         <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLSmartPostHubId}}" userInput="disabled" stepKey="grabDHLSmartPostHubIdDisabled"/>
-        <assertEquals expected='true' expectedType="string" actual="$grabDHLSmartPostHubIdDisabled" stepKey="assertDHLSmartPostHubIdDisabled"/>
+        <assertEquals stepKey="assertDHLSmartPostHubIdDisabled">
+			<actualResult type="const">$grabDHLSmartPostHubIdDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
         <grabAttributeFrom selector="{{AdminShippingMethodDHLSection.carriersDHLSpecificErrMsg}}" userInput="disabled" stepKey="grabDHLSpecificErrMsgDisabled"/>
-        <assertEquals expected='true' expectedType="string" actual="$grabDHLSpecificErrMsgDisabled" stepKey="assertDHLSpecificErrMsgDisabled"/>
+        <assertEquals stepKey="assertDHLSpecificErrMsgDisabled">
+			<actualResult type="const">$grabDHLSpecificErrMsgDisabled</actualResult>
+			<expectedResult type="string">true</expectedResult>
+        </assertEquals>
     </test>
 </tests>

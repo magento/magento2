@@ -3,9 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-include __DIR__ . '/quote.php';
-include __DIR__ . '/../../../Magento/Customer/_files/customer.php';
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/quote.php');
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer.php');
 
 /** @var $quote \Magento\Quote\Model\Quote */
 $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Quote\Model\Quote::class);

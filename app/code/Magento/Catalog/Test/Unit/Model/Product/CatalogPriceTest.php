@@ -3,38 +3,47 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Product;
 
-class CatalogPriceTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\CatalogPrice;
+use Magento\Catalog\Model\Product\CatalogPriceFactory;
+use Magento\Catalog\Model\Product\CatalogPriceInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CatalogPriceTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product\CatalogPrice
+     * @var CatalogPrice
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $priceFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $catalogPriceInterfaceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->priceFactoryMock = $this->createMock(\Magento\Catalog\Model\Product\CatalogPriceFactory::class);
-        $this->productMock = $this->createMock(\Magento\Catalog\Model\Product::class);
+        $this->priceFactoryMock = $this->createMock(CatalogPriceFactory::class);
+        $this->productMock = $this->createMock(Product::class);
         $this->catalogPriceInterfaceMock = $this->createMock(
-            \Magento\Catalog\Model\Product\CatalogPriceInterface::class
+            CatalogPriceInterface::class
         );
-        $this->model = new \Magento\Catalog\Model\Product\CatalogPrice(
+        $this->model = new CatalogPrice(
             $this->priceFactoryMock,
             ['custom_product_type' => 'CustomProduct/Model/CatalogPrice']
         );
@@ -46,8 +55,8 @@ class CatalogPriceTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getTypeId'
-        )->will(
-            $this->returnValue('custom_product_type')
+        )->willReturn(
+            'custom_product_type'
         );
         $this->priceFactoryMock->expects(
             $this->once()
@@ -55,8 +64,8 @@ class CatalogPriceTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             'CustomProduct/Model/CatalogPrice'
-        )->will(
-            $this->returnValue($this->catalogPriceInterfaceMock)
+        )->willReturn(
+            $this->catalogPriceInterfaceMock
         );
         $this->catalogPriceInterfaceMock->expects($this->once())->method('getCatalogPrice');
         $this->productMock->expects($this->never())->method('getFinalPrice');
@@ -65,7 +74,7 @@ class CatalogPriceTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCatalogPriceWhenPoolDoesNotContainPriceModelForGivenProductType()
     {
-        $this->productMock->expects($this->any())->method('getTypeId')->will($this->returnValue('test'));
+        $this->productMock->expects($this->any())->method('getTypeId')->willReturn('test');
         $this->priceFactoryMock->expects($this->never())->method('create');
         $this->productMock->expects($this->once())->method('getFinalPrice');
         $this->catalogPriceInterfaceMock->expects($this->never())->method('getCatalogPrice');
@@ -74,7 +83,7 @@ class CatalogPriceTest extends \PHPUnit\Framework\TestCase
 
     public function testGetCatalogRegularPriceWhenPoolDoesNotContainPriceModelForGivenProductType()
     {
-        $this->productMock->expects($this->any())->method('getTypeId')->will($this->returnValue('test'));
+        $this->productMock->expects($this->any())->method('getTypeId')->willReturn('test');
         $this->priceFactoryMock->expects($this->never())->method('create');
         $this->catalogPriceInterfaceMock->expects($this->never())->method('getCatalogRegularPrice');
         $this->productMock->expects($this->once())->method('getPrice');
@@ -87,8 +96,8 @@ class CatalogPriceTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getTypeId'
-        )->will(
-            $this->returnValue('custom_product_type')
+        )->willReturn(
+            'custom_product_type'
         );
         $this->priceFactoryMock->expects(
             $this->once()
@@ -96,8 +105,8 @@ class CatalogPriceTest extends \PHPUnit\Framework\TestCase
             'create'
         )->with(
             'CustomProduct/Model/CatalogPrice'
-        )->will(
-            $this->returnValue($this->catalogPriceInterfaceMock)
+        )->willReturn(
+            $this->catalogPriceInterfaceMock
         );
         $this->catalogPriceInterfaceMock->expects($this->once())->method('getCatalogRegularPrice');
         $this->productMock->expects($this->never())->method('getPrice');

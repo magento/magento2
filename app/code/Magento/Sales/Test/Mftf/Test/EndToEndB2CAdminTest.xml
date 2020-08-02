@@ -72,7 +72,9 @@
         <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage" after="seeViewOrderPage"/>
         <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="seeOrderPendingStatus" after="seeSuccessMessage"/>
         <grabTextFrom selector="|Order # (\d+)|" stepKey="getOrderId" after="seeOrderPendingStatus"/>
-        <assertNotEmpty actual="$getOrderId" stepKey="assertOrderIdIsNotEmpty" after="getOrderId"/>
+        <assertNotEmpty stepKey="assertOrderIdIsNotEmpty" after="getOrderId">
+			<actualResult type="const">$getOrderId</actualResult>
+        </assertNotEmpty>
         <actionGroup ref="VerifyBasicOrderInformationActionGroup" stepKey="verifyOrderInformation" after="assertOrderIdIsNotEmpty">
             <argument name="customer" value="Simple_US_Customer"/>
             <argument name="shippingAddress" value="US_Address_TX"/>
@@ -235,7 +237,10 @@
         <click selector="{{AdminDataGridTableSection.columnHeader('Status')}}" stepKey="clickStatusToSortAsc" after="sortOrderGridByStatusComment"/>
         <grabTextFrom selector="{{AdminDataGridTableSection.gridCell('1', 'Status')}}" stepKey="getOrderStatusFirstRow" after="clickStatusToSortAsc"/>
         <grabTextFrom selector="{{AdminDataGridTableSection.gridCell('2', 'Status')}}" stepKey="getOrderStatusSecondRow" after="getOrderStatusFirstRow"/>
-        <assertGreaterThanOrEqual expected="$getOrderStatusFirstRow" actual="$getOrderStatusSecondRow" stepKey="checkStatusSortOrderAsc" after="getOrderStatusSecondRow"/>
+        <assertGreaterThanOrEqual stepKey="checkStatusSortOrderAsc" after="getOrderStatusSecondRow">
+			<actualResult type="const">$getOrderStatusSecondRow</actualResult>
+			<expectedResult type="const">$getOrderStatusFirstRow</expectedResult>
+        </assertGreaterThanOrEqual>
         <!--@TODO improve sort assertion and check price and date column when MQE-690 is resolved-->
 
         <!--Use paging on order grid-->

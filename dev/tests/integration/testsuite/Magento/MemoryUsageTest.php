@@ -17,7 +17,7 @@ class MemoryUsageTest extends \PHPUnit\Framework\TestCase
      */
     protected $_helper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         if (defined('HHVM_VERSION')) {
             $this->markTestSkipped("Test not relevant because no gc in HHVM.");

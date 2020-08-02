@@ -3,33 +3,43 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GroupedProduct\Test\Unit\Block\Product\View\Type;
 
-class GroupedTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Framework\DataObject;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\LayoutInterface;
+use Magento\GroupedProduct\Block\Product\View\Type\Grouped;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class GroupedTest extends TestCase
 {
     /**
-     * @var \Magento\GroupedProduct\Block\Product\View\Type\Grouped
+     * @var Grouped
      */
     protected $groupedView;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $productMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $typeInstanceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $configuredValueMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
         $methodsProduct = [
             'getId',
             'setQty',
@@ -38,19 +48,22 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             'getTypeId',
             '__wakeup',
         ];
-        $this->productMock = $this->createPartialMock(\Magento\Catalog\Model\Product::class, $methodsProduct);
+        $this->productMock = $this->createPartialMock(Product::class, $methodsProduct);
         $this->typeInstanceMock = $this->createMock(\Magento\GroupedProduct\Model\Product\Type\Grouped::class);
         $this->productMock->expects(
             $this->any()
         )->method(
             'getTypeInstance'
-        )->will(
-            $this->returnValue($this->typeInstanceMock)
+        )->willReturn(
+            $this->typeInstanceMock
         );
-        $this->configuredValueMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getSuperGroup']);
-        $layout = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $this->configuredValueMock = $this->getMockBuilder(DataObject::class)
+            ->addMethods(['getSuperGroup'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $layout = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->groupedView = $helper->getObject(
-            \Magento\GroupedProduct\Block\Product\View\Type\Grouped::class,
+            Grouped::class,
             [
                 'data' => ['product' => $this->productMock],
                 'layout' => $layout
@@ -66,8 +79,8 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             'getAssociatedProducts'
         )->with(
             $this->productMock
-        )->will(
-            $this->returnValue('expected')
+        )->willReturn(
+            'expected'
         );
 
         $this->assertEquals('expected', $this->groupedView->getAssociatedProducts());
@@ -85,15 +98,15 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getSuperGroup'
-        )->will(
-            $this->returnValue($configValue)
+        )->willReturn(
+            $configValue
         );
         $this->productMock->expects(
             $this->once()
         )->method(
             'getPreconfiguredValues'
-        )->will(
-            $this->returnValue($this->configuredValueMock)
+        )->willReturn(
+            $this->configuredValueMock
         );
 
         $this->typeInstanceMock->expects(
@@ -102,11 +115,11 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             'getAssociatedProducts'
         )->with(
             $this->productMock
-        )->will(
-            $this->returnValue($associatedProduct)
+        )->willReturn(
+            $associatedProduct
         );
 
-        $this->productMock->expects($this->any())->method('getId')->will($this->returnValue($id));
+        $this->productMock->expects($this->any())->method('getId')->willReturn($id);
         $this->productMock->expects($this->any())->method('setQty')->with(2);
         $this->groupedView->setPreconfiguredValue();
     }
@@ -125,10 +138,10 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getPreconfiguredValues'
-        )->will(
-            $this->returnValue($this->configuredValueMock)
+        )->willReturn(
+            $this->configuredValueMock
         );
-        $this->configuredValueMock->expects($this->once())->method('getSuperGroup')->will($this->returnValue(false));
+        $this->configuredValueMock->expects($this->once())->method('getSuperGroup')->willReturn(false);
         $this->typeInstanceMock->expects($this->never())->method('getAssociatedProducts');
         $this->groupedView->setPreconfiguredValue();
     }

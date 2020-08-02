@@ -5,6 +5,16 @@
  */
 declare(strict_types=1);
 
+/**
+ * Generates expected PayPal SDK url
+ * @param array $params
+ * @return String
+ */
+function generateExpectedPaypalSdkUrl(array $params) : String
+{
+    return 'https://www.paypal.com/sdk/js?' . http_build_query($params);
+}
+
 return [
     'cart' => [
         'cart',
@@ -12,28 +22,37 @@ return [
         true,
         'CREDIT',
         'horizontal',
-        'small',
-        'pillow',
+        'pill',
         'installment',
         'blue',
         'my_label',
         'mx',
+        true,
         [
-            'merchantId' => 'merchant',
-            'environment' => 'sandbox',
-            'locale' => 'es_MX',
-            'allowedFunding' => ['ELV'],
-            'disallowedFunding' => ['CREDIT'],
             'styles' => [
                 'layout' => 'horizontal',
-                'size' => 'small',
+                'size' => null,
                 'color' => 'blue',
-                'shape' => 'pillow',
+                'shape' => 'pill',
                 'label' => 'installment',
-                'installmentperiod' => 0
+                'period' => 0
             ],
             'isVisibleOnProductPage' => false,
-            'isGuestCheckoutAllowed' => true
+            'isGuestCheckoutAllowed' => true,
+            'sdkUrl' => generateExpectedPaypalSdkUrl(
+                [
+                    'client-id' => 'sb',
+                    'commit' => 'false',
+                    'merchant-id' => 'merchant',
+                    'locale' => 'es_MX',
+                    'intent' => 'authorize',
+                    'currency' => 'USD',
+                    'disable-funding' => implode(
+                        ',',
+                        ['credit', 'venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
+                    )
+                ]
+            )
         ]
     ],
     'checkout' => [
@@ -42,48 +61,52 @@ return [
         true,
         null,
         'horizontal',
-        'small',
-        'pillow',
+        'pill',
         'installment',
         'blue',
         'my_label',
         'br',
+        true,
         [
-            'merchantId' => 'merchant',
-            'environment' => 'sandbox',
-            'locale' => 'en_BR',
-            'allowedFunding' => ['CREDIT', 'ELV'],
-            'disallowedFunding' => [],
             'styles' => [
                 'layout' => 'horizontal',
-                'size' => 'small',
+                'size' => null,
                 'color' => 'blue',
-                'shape' => 'pillow',
+                'shape' => 'pill',
                 'label' => 'installment',
-                'installmentperiod' => 0
+                'period' => 0
             ],
             'isVisibleOnProductPage' => false,
-            'isGuestCheckoutAllowed' => true
+            'isGuestCheckoutAllowed' => true,
+            'sdkUrl' => generateExpectedPaypalSdkUrl(
+                [
+                    'client-id' => 'sb',
+                    'commit' => 'false',
+                    'merchant-id' => 'merchant',
+                    'locale' => 'en_BR',
+                    'intent' => 'authorize',
+                    'currency' => 'USD',
+                    'disable-funding' => implode(
+                        ',',
+                        ['venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
+                    )
+                ]
+            )
         ]
     ],
     'mini_cart' => [
         'cart',
-        'en',
+        'en_US',
         false,
         null,
         'horizontal',
-        'small',
-        'pillow',
+        'pill',
         'installment',
         'blue',
         'my_label',
         'br',
+        true,
         [
-            'merchantId' => 'merchant',
-            'environment' => 'sandbox',
-            'locale' => 'en',
-            'allowedFunding' => ['CREDIT', 'ELV'],
-            'disallowedFunding' => [],
             'styles' => [
                 'layout' => 'vertical',
                 'size' => 'responsive',
@@ -92,56 +115,36 @@ return [
                 'label' => 'paypal'
             ],
             'isVisibleOnProductPage' => false,
-            'isGuestCheckoutAllowed' => true
-        ]
-    ],
-    'mini_cart' => [
-        'cart',
-        'en',
-        false,
-        null,
-        'horizontal',
-        'small',
-        'pillow',
-        'installment',
-        'blue',
-        'my_label',
-        'br',
-        [
-            'merchantId' => 'merchant',
-            'environment' => 'sandbox',
-            'locale' => 'en',
-            'allowedFunding' => ['CREDIT', 'ELV'],
-            'disallowedFunding' => [],
-            'styles' => [
-                'layout' => 'vertical',
-                'size' => 'responsive',
-                'color' => 'gold',
-                'shape' => 'rect',
-                'label' => 'paypal'
-            ],
-            'isVisibleOnProductPage' => false,
-            'isGuestCheckoutAllowed' => true
+            'isGuestCheckoutAllowed' => true,
+            'sdkUrl' => generateExpectedPaypalSdkUrl(
+                [
+                    'client-id' => 'sb',
+                    'commit' => 'false',
+                    'merchant-id' => 'merchant',
+                    'locale' => 'en_US',
+                    'intent' => 'authorize',
+                    'currency' => 'USD',
+                    'disable-funding' => implode(
+                        ',',
+                        ['venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
+                    )
+                ]
+            )
         ]
     ],
     'product' => [
         'cart',
-        'en',
+        'en_US',
         false,
         'CREDIT',
         'horizontal',
-        'small',
-        'pillow',
+        'pill',
         'installment',
         'blue',
         'my_label',
         'br',
+        true,
         [
-            'merchantId' => 'merchant',
-            'environment' => 'sandbox',
-            'locale' => 'en',
-            'allowedFunding' => ['ELV'],
-            'disallowedFunding' => ['CREDIT'],
             'styles' => [
                 'layout' => 'vertical',
                 'size' => 'responsive',
@@ -150,7 +153,60 @@ return [
                 'label' => 'paypal',
             ],
             'isVisibleOnProductPage' => false,
-            'isGuestCheckoutAllowed' => true
+            'isGuestCheckoutAllowed' => true,
+            'sdkUrl' => generateExpectedPaypalSdkUrl(
+                [
+                    'client-id' => 'sb',
+                    'commit' => 'false',
+                    'merchant-id' => 'merchant',
+                    'locale' => 'en_US',
+                    'intent' => 'authorize',
+                    'currency' => 'USD',
+                    'disable-funding' => implode(
+                        ',',
+                        ['credit','venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
+                    )
+                ]
+            )
         ]
-    ]
+    ],
+    'checkout_with_paypal_guest_checkout_disabled' => [
+        'cart',
+        'en_BR',
+        true,
+        null,
+        'horizontal',
+        'pill',
+        'installment',
+        'blue',
+        'my_label',
+        'br',
+        false,
+        [
+            'styles' => [
+                'layout' => 'horizontal',
+                'size' => null,
+                'color' => 'blue',
+                'shape' => 'pill',
+                'label' => 'installment',
+                'period' => 0
+            ],
+            'isVisibleOnProductPage' => false,
+            'isGuestCheckoutAllowed' => true,
+            'sdkUrl' => generateExpectedPaypalSdkUrl(
+                [
+                    'client-id' => 'sb',
+                    'commit' => 'false',
+                    'merchant-id' => 'merchant',
+                    'locale' => 'en_BR',
+                    'intent' => 'authorize',
+                    'currency' => 'USD',
+                    'disable-funding' => implode(
+                        ',',
+                        ['card','venmo', 'bancontact', 'eps', 'giropay', 'ideal', 'mybank', 'p24', 'sofort']
+                    )
+                ]
+            )
+        ]
+    ],
 ];

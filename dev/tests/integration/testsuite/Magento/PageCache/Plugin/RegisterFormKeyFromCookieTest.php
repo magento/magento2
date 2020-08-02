@@ -36,7 +36,7 @@ class RegisterFormKeyFromCookieTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->request = $objectManager->get(RequestInterface::class);

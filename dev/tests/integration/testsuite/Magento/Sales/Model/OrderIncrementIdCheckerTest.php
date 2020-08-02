@@ -20,7 +20,7 @@ class OrderIncrementIdCheckerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->checker = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Sales\Model\OrderIncrementIdChecker::class

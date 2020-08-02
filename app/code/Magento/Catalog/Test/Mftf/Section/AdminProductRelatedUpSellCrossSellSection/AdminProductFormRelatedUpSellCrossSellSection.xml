@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminProductFormRelatedUpSellCrossSellSection">
+        <element name="sectionHeader" type="block" selector=".fieldset-wrapper.admin__collapsible-block-wrapper[data-index='related']"/>
+        <element name="AddRelatedProductsButton" type="button" selector="button[data-index='button_related']" timeout="30"/>
+        <element name="AddUpSellProductsButton" type="button" selector="button[data-index='button_upsell']" timeout="30"/>
+        <element name="AddCrossSellProductsButton" type="button" selector="button[data-index='button_crosssell']" timeout="30"/>
+        <element name="relatedProductSectionText" type="text" selector=".fieldset-wrapper.admin__fieldset-section[data-index='related']"/>
+        <element name="upSellProductSectionText" type="text" selector=".fieldset-wrapper.admin__fieldset-section[data-index='upsell']"/>
+        <element name="crossSellProductSectionText" type="text" selector=".fieldset-wrapper.admin__fieldset-section[data-index='crosssell']"/>
+        <element name="relatedDropdown" type="block" selector="//div[@data-index='related']" timeout="30"/>
+        <element name="relatedDependent" type="block" selector="//div[@data-index='related']//div[contains(@class, '_show')]"/>
+        <element name="selectedRelatedProduct" type="block" selector="//span[@data-index='name']"/>
+        <element name="removeRelatedProduct" type="button" selector="//span[text()='Related Products']//..//..//..//span[text()='{{productName}}']//..//..//..//..//..//button[@class='action-delete']" parameterized="true"/>
+        <element name="selectedProductSku" type="text" selector="//div[@data-index='{{section}}']//span[@data-index='sku']" parameterized="true" timeout="30"/>
+    </section>
+</sections>

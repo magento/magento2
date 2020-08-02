@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\TestFramework\Catalog\Block\Product\View\Options;
 
 use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Model\Product\Option\Value;
 
@@ -35,7 +36,7 @@ class SelectGroupDataProvider
                 [
                     Value::KEY_TITLE => 'Test option drop-down title 1 value 1',
                     Value::KEY_PRICE => 10,
-                    Value::KEY_PRICE_TYPE => 'fixed',
+                    Value::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Value::KEY_SKU => 'test-option-drop-down-title-1-value-1',
                 ],
                 [
@@ -58,7 +59,7 @@ class SelectGroupDataProvider
                 [
                     Value::KEY_TITLE => 'Test option drop-down title 2 value 1',
                     Value::KEY_PRICE => 10,
-                    Value::KEY_PRICE_TYPE => 'fixed',
+                    Value::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Value::KEY_SKU => 'test-option-drop-down-title-2-value-1',
                 ],
                 [
@@ -81,7 +82,7 @@ class SelectGroupDataProvider
                 [
                     Value::KEY_TITLE => 'Test option drop-down title 3 value 1',
                     Value::KEY_PRICE => 50,
-                    Value::KEY_PRICE_TYPE => 'fixed',
+                    Value::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Value::KEY_SKU => 'test-option-drop-down-title-3-value-1',
                 ],
                 [
@@ -104,7 +105,7 @@ class SelectGroupDataProvider
                 [
                     Value::KEY_TITLE => 'Test option drop-down title 4 value 1',
                     Value::KEY_PRICE => 50,
-                    Value::KEY_PRICE_TYPE => 'percent',
+                    Value::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_PERCENT,
                     Value::KEY_SKU => 'test-option-drop-down-title-4-value-1',
                 ],
                 [
@@ -127,7 +128,7 @@ class SelectGroupDataProvider
                 [
                     Value::KEY_TITLE => 'Test option radio-button title 1 value 1',
                     Value::KEY_PRICE => 10,
-                    Value::KEY_PRICE_TYPE => 'fixed',
+                    Value::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Value::KEY_SKU => 'test-option-radio-button-title-1-value-1',
                 ],
                 [
@@ -147,7 +148,7 @@ class SelectGroupDataProvider
                 [
                     Value::KEY_TITLE => 'Test option radio-button title 2 value 1',
                     Value::KEY_PRICE => 10,
-                    Value::KEY_PRICE_TYPE => 'fixed',
+                    Value::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Value::KEY_SKU => 'test-option-radio-button-title-2-value-1',
                 ],
                 [
@@ -167,7 +168,7 @@ class SelectGroupDataProvider
                 [
                     Value::KEY_TITLE => 'Test option radio-button title 3 value 1',
                     Value::KEY_PRICE => 50,
-                    Value::KEY_PRICE_TYPE => 'fixed',
+                    Value::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Value::KEY_SKU => 'test-option-radio-button-title-3-value-1',
                 ],
                 [
@@ -187,7 +188,7 @@ class SelectGroupDataProvider
                 [
                     Value::KEY_TITLE => 'Test option radio-button title 4 value 1',
                     Value::KEY_PRICE => 50,
-                    Value::KEY_PRICE_TYPE => 'percent',
+                    Value::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_PERCENT,
                     Value::KEY_SKU => 'test-option-radio-button-title-4-value-1',
                 ],
                 [
@@ -207,7 +208,7 @@ class SelectGroupDataProvider
                 [
                     Value::KEY_TITLE => 'Test option checkbox title 1 value 1',
                     Value::KEY_PRICE => 10,
-                    Value::KEY_PRICE_TYPE => 'fixed',
+                    Value::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Value::KEY_SKU => 'test-option-checkbox-title-1-value-1',
                 ],
                 [
@@ -227,7 +228,7 @@ class SelectGroupDataProvider
                 [
                     Value::KEY_TITLE => 'Test option checkbox title 2 value 1',
                     Value::KEY_PRICE => 10,
-                    Value::KEY_PRICE_TYPE => 'fixed',
+                    Value::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Value::KEY_SKU => 'test-option-checkbox-title-2-value-1',
                 ],
                 [
@@ -247,7 +248,7 @@ class SelectGroupDataProvider
                 [
                     Value::KEY_TITLE => 'Test option checkbox title 3 value 1',
                     Value::KEY_PRICE => 50,
-                    Value::KEY_PRICE_TYPE => 'fixed',
+                    Value::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Value::KEY_SKU => 'test-option-checkbox-title-3-value-1',
                 ],
                 [
@@ -267,7 +268,7 @@ class SelectGroupDataProvider
                 [
                     Value::KEY_TITLE => 'Test option checkbox title 4 value 1',
                     Value::KEY_PRICE => 50,
-                    Value::KEY_PRICE_TYPE => 'percent',
+                    Value::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_PERCENT,
                     Value::KEY_SKU => 'test-option-checkbox-title-4-value-1',
                 ],
                 [
@@ -287,7 +288,7 @@ class SelectGroupDataProvider
                 [
                     Value::KEY_TITLE => 'Test option multiselect title 1 value 1',
                     Value::KEY_PRICE => 10,
-                    Value::KEY_PRICE_TYPE => 'fixed',
+                    Value::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Value::KEY_SKU => 'test-option-multiselect-title-1-value-1',
                 ],
                 [
@@ -307,7 +308,7 @@ class SelectGroupDataProvider
                 [
                     Value::KEY_TITLE => 'Test option multiselect title 2 value 1',
                     Value::KEY_PRICE => 10,
-                    Value::KEY_PRICE_TYPE => 'fixed',
+                    Value::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Value::KEY_SKU => 'test-option-multiselect-title-2-value-1',
                 ],
                 [
@@ -327,7 +328,7 @@ class SelectGroupDataProvider
                 [
                     Value::KEY_TITLE => 'Test option multiselect title 3 value 1',
                     Value::KEY_PRICE => 50,
-                    Value::KEY_PRICE_TYPE => 'fixed',
+                    Value::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_FIXED,
                     Value::KEY_SKU => 'test-option-multiselect-title-3-value-1',
                 ],
                 [
@@ -347,7 +348,7 @@ class SelectGroupDataProvider
                 [
                     Value::KEY_TITLE => 'Test option multiselect title 4 value 1',
                     Value::KEY_PRICE => 50,
-                    Value::KEY_PRICE_TYPE => 'percent',
+                    Value::KEY_PRICE_TYPE => ProductPriceOptionsInterface::VALUE_PERCENT,
                     Value::KEY_SKU => 'test-option-multiselect-title-4-value-1',
                 ],
                 [

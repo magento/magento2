@@ -13,20 +13,20 @@
             <title value="Create custom URL rewrite, permanent"/>
             <description value="Login as Admin and create custom UrlRewrite and add redirect type permenent"/>
             <testCaseId value="MC-5343"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
         </annotations>
 
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteCustomUrlRewrite">
                 <argument name="requestPath" value="{{FirstLevelSubCat.name}}.html"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Open Category Page and Get Category ID -->

@@ -109,10 +109,11 @@ input CartAddressInput {
     street: [String!]!
     city: String!
     region: String
+    region_id: Int
     postcode: String
     country_code: String!
     telephone: String!
-    save_in_address_book: Boolean
+    save_in_address_book: Boolean @doc(description: "Determines whether to save the address in the customer's address book. The default value is true")
 }
 
 input SetShippingMethodsOnCartInput {
@@ -239,8 +240,9 @@ type CartItemQuantity @doc(description:"Deprecated: `cart_items` field of `Shipp
 }
 
 type CartAddressRegion {
-    code: String!
-    label: String!
+    code: String
+    label: String
+    region_id: Int
 }
 
 type CartAddressCountry {

@@ -14,12 +14,14 @@
             <stories value="System Integration"/>
             <title value="Admin system integration"/>
             <description value="Admin Deletes Created Integration"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-28027"/>
             <group value="integration"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
             <!-- Login As Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <!-- Navigate To Integrations Page -->
             <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToIntegrationsPage">
                 <argument name="menuUiId" value="{{AdminMenuSystem.dataUiId}}"/>
@@ -29,34 +31,32 @@
             <actionGroup ref="AdminNavigateToCreateIntegrationPageActionGroup" stepKey="clickAddNewIntegrationButton"/>
             <!-- Create New Integration -->
             <actionGroup ref="AdminCreatesNewIntegrationActionGroup" stepKey="createIntegration">
-                <argument name="name" value="Integration1"/>
+                <argument name="name" value="{{defaultIntegrationData.name}}"/>
                 <argument name="password" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}"/>
             </actionGroup>
-            <!-- Submit The Form -->
             <actionGroup ref="AdminSubmitNewIntegrationFormActionGroup" stepKey="submitTheForm"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-
         <!-- TEST BODY -->
             <!-- Find Created Integration In Grid -->
             <actionGroup ref="AdminSearchIntegrationInGridActionGroup" stepKey="findCreatedIntegration">
-                <argument name="name" value="Integration1"/>
+                <argument name="name" value="{{defaultIntegrationData.name}}"/>
             </actionGroup>
             <!-- Delete Created Integration Entity -->
             <actionGroup ref="AdminDeleteIntegrationEntityActionGroup" stepKey="deleteIntegration"/>
             <!-- Assert Success Message -->
             <actionGroup ref="AssertAdminMessageCreateIntegrationEntityActionGroup" stepKey="seeSuccessMessage">
-                <argument name="message" value="The integration 'Integration1' has been deleted."/>
+                <argument name="message" value="The integration '{{defaultIntegrationData.name}}' has been deleted."/>
                 <argument value="success" name="messageType"/>
             </actionGroup>
             <!-- Assert Deleted Integration Is Not In Grid -->
             <actionGroup ref="AdminSearchIntegrationInGridActionGroup" stepKey="findDeletedIntegration">
-                <argument name="name" value="Integration1"/>
+                <argument name="name" value="{{defaultIntegrationData.name}}"/>
             </actionGroup>
             <actionGroup ref="AssertDeletedIntegrationIsNotInGridActionGroup" stepKey="dontSeeIntegration">
-                <argument name="name" value="Integration1"/>
+                <argument name="name" value="{{defaultIntegrationData.name}}"/>
             </actionGroup>
         <!-- END TEST BODY -->
     </test>
