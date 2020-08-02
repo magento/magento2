@@ -106,9 +106,9 @@ class SubtotalTest extends TestCase
         );
         /** @var Address|MockObject $address */
         $address = $this->getMockBuilder(Address::class)
-            ->addMethods(['setTotalQty', 'getTotalQty'])
-            ->onlyMethods(['removeItem', 'getQuote'])
             ->disableOriginalConstructor()
+            ->onlyMethods(['removeItem', 'getQuote'])
+            ->addMethods(['setTotalQty', 'getTotalQty'])
             ->getMock();
 
         /** @var Product|MockObject $product */
@@ -158,9 +158,9 @@ class SubtotalTest extends TestCase
         $shippingAssignmentMock->expects($this->once())->method('getItems')->willReturn([$quoteItem]);
 
         $total = $this->getMockBuilder(Total::class)
-            ->addMethods(['setBaseVirtualAmount', 'setVirtualAmount'])
+            ->disableOriginalConstructor()
+            ->addMethods(['setVirtualAmount', 'setBaseVirtualAmount'])
             ->getMock();
-
         $total->expects($this->once())->method('setBaseVirtualAmount')->willReturnSelf();
         $total->expects($this->once())->method('setVirtualAmount')->willReturnSelf();
 
@@ -185,6 +185,7 @@ class SubtotalTest extends TestCase
             ->addMethods(['getSubtotal'])
             ->disableOriginalConstructor()
             ->getMock();
+
         $totalMock->expects($this->once())->method('getSubtotal')->willReturn(100);
 
         $this->assertEquals($expectedResult, $this->subtotalModel->fetch($quoteMock, $totalMock));
@@ -229,9 +230,9 @@ class SubtotalTest extends TestCase
             ->method('removeItem')
             ->with($addressItemId);
         $addressItem = $this->getMockBuilder(AddressItem::class)
+            ->disableOriginalConstructor()
             ->onlyMethods(['getId'])
             ->addMethods(['getQuoteItemId'])
-            ->disableOriginalConstructor()
             ->getMock();
         $addressItem->setAddress($address);
         $addressItem->method('getId')
