@@ -440,7 +440,15 @@ class File implements DriverInterface
         if (is_link($fullPath)) {
             $result = @unlink($fullPath);
         } else {
-            $result = @rmdir($fullPath);
+            if (PHP_OS === 'Windows') {
+                $result = exec(sprintf("rd /s /q %s", escapeshellarg($fullPath)));
+            } else {
+                $result = exec(sprintf("rm -rf %s", escapeshellarg($fullPath)));
+            }
+            
+            if ($result === "") {
+                $result = true;
+            }
         }
         if (!$result) {
             throw new FileSystemException(
