@@ -29,7 +29,7 @@ class SaveHandlerTest extends TestCase
     /**
      * @var Option|MockObject
      */
-    protected $optionMock;
+    protected $option;
 
     /**
      * @var Repository|MockObject
@@ -40,8 +40,9 @@ class SaveHandlerTest extends TestCase
     {
         $this->entity = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
+            ->methods(['getOptionsSaved', 'getCanSaveCustomOptions', 'getOptions', 'dataHasChangedFor', 'getSku'])
             ->getMock();
-        $this->optionMock = $this->getMockBuilder(Option::class)
+        $this->option = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->optionRepository = $this->getMockBuilder(Repository::class)
@@ -53,8 +54,10 @@ class SaveHandlerTest extends TestCase
 
     public function testExecute()
     {
-        $this->optionMock->expects($this->any())->method('getOptionId')->willReturn(5);
-        $this->entity->expects($this->once())->method('getOptions')->willReturn([$this->optionMock]);
+        $this->entity->expects($this->once())->method('getOptionsSaved')->willReturn(false);
+        $this->entity->expects($this->once())->method('getCanSaveCustomOptions')->willReturn(true);
+        $this->option->expects($this->any())->method('getOptionId')->willReturn(5);
+        $this->entity->expects($this->once())->method('getOptions')->willReturn([$this->option]);
 
         $secondOptionMock = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
@@ -65,10 +68,10 @@ class SaveHandlerTest extends TestCase
             ->expects($this->once())
             ->method('getProductOptions')
             ->with($this->entity)
-            ->willReturn([$this->optionMock, $secondOptionMock]);
+            ->willReturn([$this->option, $secondOptionMock]);
 
         $this->optionRepository->expects($this->once())->method('delete');
-        $this->optionRepository->expects($this->once())->method('save')->with($this->optionMock);
+        $this->optionRepository->expects($this->once())->method('save')->with($this->option);
 
         $this->assertEquals($this->entity, $this->model->execute($this->entity));
     }
