@@ -79,20 +79,17 @@ class StartConsumerCommand extends Command
 
         $singleThread = $input->getOption(self::OPTION_SINGLE_THREAD);
 
-        try {
-            if ($singleThread && !$this->lockManager->lock(md5($consumerName),0)) { //phpcs:ignore
-                $output->writeln('<error>Consumer with the same name is running</error>');
-                return \Magento\Framework\Console\Cli::RETURN_FAILURE;
-            }
+        if ($singleThread && !$this->lockManager->lock(md5($consumerName),0)) { //phpcs:ignore
+            $output->writeln('<error>Consumer with the same name is running</error>');
+            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+        }
 
-            $this->appState->setAreaCode($areaCode ?? 'global');
+        $this->appState->setAreaCode($areaCode ?? 'global');
 
-            $consumer = $this->consumerFactory->get($consumerName, $batchSize);
-            $consumer->process($numberOfMessages);
-        } finally {
-            if ($singleThread) {
-                $this->lockManager->unlock(md5($consumerName)); //phpcs:ignore
-            }
+        $consumer = $this->consumerFactory->get($consumerName, $batchSize);
+        $consumer->process($numberOfMessages);
+        if ($singleThread) {
+            $this->lockManager->unlock(md5($consumerName)); //phpcs:ignore
         }
 
         return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
