@@ -273,6 +273,27 @@ class WishlistTest extends TestCase
     }
 
     /**
+     * Test that admin user should be able to update wishlist on second website
+     *
+     * @magentoAppArea adminhtml
+     * @magentoDbIsolation disabled
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist_on_second_website.php
+     *
+     * @return void
+     */
+    public function testUpdateWishListItemOnSecondWebsite(): void
+    {
+        $wishlist = $this->getWishlistByCustomerId->execute(1);
+        $item = $this->getWishlistByCustomerId->getItemBySku(1, 'simple-2');
+        $this->assertNotNull($item);
+        $this->assertEquals(1, $item->getQty());
+        $buyRequest = $this->dataObjectFactory->create(['data' => ['qty' => 2]]);
+        $wishlist->updateItem($item->getId(), $buyRequest);
+        $updatedItem = $this->getWishlistByCustomerId->getItemBySku(1, 'simple-2');
+        $this->assertEquals(2, $updatedItem->getQty());
+    }
+
+    /**
      * Assert item in wish list.
      *
      * @param Item $item
