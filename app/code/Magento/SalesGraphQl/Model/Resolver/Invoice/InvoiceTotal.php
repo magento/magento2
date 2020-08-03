@@ -113,7 +113,7 @@ class InvoiceTotal implements ResolverInterface
      * Return information about an applied discount on shipping
      *
      * @param InvoiceInterface $invoiceModel
-     * @param OrderInterface $invoiceModel
+     * @param OrderInterface $orderModel
      * @return array
      */
     private function getShippingDiscountDetails(InvoiceInterface $invoiceModel, OrderInterface $orderModel)

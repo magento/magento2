@@ -24,6 +24,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
  * Test for credit memo functionality
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreditmemoTest extends GraphQlAbstract
 {
