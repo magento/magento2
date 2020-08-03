@@ -66,6 +66,9 @@ define([
                     if (item && item.search(this.filterKey) !== -1) {
                         itemArray = item.split('=');
 
+                        if (itemArray[1].search('\\[') === 0) {
+                            itemArray[1] = itemArray[1].replace(/[\[\]]/g, '').split(',');
+                        }
                         itemArray[0] = itemArray[0].replace(this.filterKey, '')
                                 .replace(/[\[\]]/g, '');
 
