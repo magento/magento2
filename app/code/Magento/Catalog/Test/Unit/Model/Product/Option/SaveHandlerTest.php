@@ -40,7 +40,7 @@ class SaveHandlerTest extends TestCase
     {
         $this->entity = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->methods(['getOptionsSaved', 'getCanSaveCustomOptions', 'getOptions', 'dataHasChangedFor', 'getSku'])
+            ->setMethods(['getOptionsSaved', 'getCanSaveCustomOptions', 'getOptions', 'dataHasChangedFor', 'getSku'])
             ->getMock();
         $this->option = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
