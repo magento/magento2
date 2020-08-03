@@ -61,9 +61,6 @@ class Proxy extends \Magento\Framework\App\AreaList implements
      * Remove links to other objects.
      *
      * @return array
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -74,9 +71,6 @@ class Proxy extends \Magento\Framework\App\AreaList implements
      * Retrieve ObjectManager from global scope
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {

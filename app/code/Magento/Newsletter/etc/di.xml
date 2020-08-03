@@ -25,4 +25,11 @@
         <plugin name="update_newsletter_subscription_on_customer_update"
                 type="Magento\Newsletter\Model\Plugin\CustomerPlugin"/>
     </type>
+    <type name="Magento\Newsletter\Model\Subscriber">
+        <arguments>
+            <argument name="customerSession" xsi:type="object">Magento\Customer\Model\Session\Proxy</argument>
+        </arguments>
+    </type>
+    <preference for="Magento\Newsletter\Model\SubscriptionManagerInterface"
+                type="Magento\Newsletter\Model\SubscriptionManager"/>
 </config>

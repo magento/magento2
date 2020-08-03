@@ -55,7 +55,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
     /** @var Request|MockObject */
     private $payflowRequest;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -80,7 +80,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
         $this->payflowRequest = $this->getMockBuilder(Request::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $requestFactory->expects($this->any())->method('create')->will($this->returnValue($this->payflowRequest));
+        $requestFactory->expects($this->any())->method('create')->willReturn($this->payflowRequest);
 
         $this->objectManager->addSharedInstance($this->gateway, Gateway::class);
     }
@@ -88,7 +88,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager->removeSharedInstance(Gateway::class);
     }
@@ -123,6 +123,7 @@ class PlaceOrderWithPayflowLinkTest extends TestCase
             {
            cancel_url:"paypal/payflow/cancelPayment"
            return_url:"paypal/payflow/returnUrl"
+           error_url:"paypal/payflow/errorUrl"
           }
       }
   }) {    

@@ -33,6 +33,7 @@
                  selector="//table[@id='shopping-cart-table']//tbody//tr[contains(@class,'item-actions')]//a[contains(@class,'action-delete')]"/>
         <element name="removeProductByName" type="text" selector="//*[contains(text(), '{{productName}}')]/ancestor::tbody//a[@class='action action-delete']" parameterized="true" timeout="30"/>
         <element name="productName" type="text" selector="//tbody[@class='cart item']//strong[@class='product-item-name']"/>
+        <element name="moveToWishlistByProductName" type="button" selector="//a[contains(text(), '{{productName}}')]/ancestor::tbody/tr//a[contains(@class, 'towishlist')]" parameterized="true"/>
         <element name="nthItemOption" type="block" selector=".item:nth-of-type({{numElement}}) .item-options" parameterized="true"/>
         <element name="nthEditButton" type="block" selector=".item:nth-of-type({{numElement}}) .action-edit" parameterized="true"/>
         <element name="nthBundleOptionName" type="text" selector=".product-item-details .item-options:nth-of-type({{numOption}}) dt" parameterized="true"/>
@@ -47,6 +48,9 @@
         <element name="checkoutCartProductPrice" type="text" selector="//td[@class='col price']//span[@class='price']"/>
         <element name="checkoutCartSubtotal" type="text" selector="//td[@class='col subtotal']//span[@class='price']"/>
         <element name="emptyCart" selector=".cart-empty" type="text"/>
+        <element name="emptyCartButton" type="button" selector="#empty_cart_button" timeout="30"/>
+        <element name="modalMessage" type="text" selector=".modal-popup.confirm._show .modal-content" timeout="30"/>
+        <element name="modalConfirmButton" type="button" selector=".modal-popup.confirm._show .action-accept" timeout="30"/>
         <!-- Required attention section -->
         <element name="removeProductBySku" type="button" selector="//div[contains(., '{{sku}}')]/ancestor::tbody//button" parameterized="true" timeout="30"/>
         <element name="failedItemBySku" type="block" selector="//div[contains(.,'{{sku}}')]/ancestor::tbody" parameterized="true" timeout="30"/>

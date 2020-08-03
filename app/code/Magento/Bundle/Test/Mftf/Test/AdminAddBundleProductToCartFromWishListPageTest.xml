@@ -21,7 +21,7 @@
         <before>
             <!-- Login as Admin -->
             <comment userInput="Login as Admin" stepKey="commentLoginAsAdmin"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!-- Create customer on Storefront and bundle product -->
             <comment userInput="Create customer on Storefront and bundle product" stepKey="commentCreateData"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -50,17 +50,21 @@
                 <requiredEntity createDataKey="bundleOption"/>
                 <requiredEntity createDataKey="createSimpleProduct2"/>
             </createData>
-            <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="goToProductEditPage"/>
-            <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+                <argument name="productId" value="$$createProduct.id$$"/>
+            </actionGroup>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         </before>
         <after>
             <!-- Delete created data -->
             <comment userInput="Delete created data" stepKey="commentDeleteCreatedData"/>
             <deleteData createDataKey="createCustomerViaTheStorefront" stepKey="deleteCustomerViaTheStorefront"/>
-            <deleteData createDataKey="createProduct" stepKey="deleteProduct" />
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <!-- Log out -->
             <comment userInput="Log out" stepKey="commentLogOut"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!-- Login to the Storefront as created customer -->
         <comment userInput="Login to the Storefront as created customer" stepKey="commentLoginAsCustomer"/>
@@ -74,8 +78,8 @@
         <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addToWishlistProduct">
             <argument name="productVar" value="$$createProduct$$"/>
         </actionGroup>
-        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName($$createProduct.name$$)}}" stepKey="moveMouseOverProduct" />
-        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName($$createProduct.name$$)}}" stepKey="clickAddToCart" />
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName($$createProduct.name$$)}}" stepKey="moveMouseOverProduct"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCartByName($$createProduct.name$$)}}" stepKey="clickAddToCart"/>
         <waitForPageLoad stepKey="waitForProductBundlePage"/>
         <!-- See error message -->
         <comment userInput="See error message" stepKey="commentSeeErrorMessage"/>

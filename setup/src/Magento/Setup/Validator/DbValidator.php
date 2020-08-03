@@ -78,6 +78,27 @@ class DbValidator
      */
     public function checkDatabaseConnection($dbName, $dbHost, $dbUser, $dbPass = '')
     {
+        return $this->checkDatabaseConnectionWithDriverOptions($dbName, $dbHost, $dbUser, $dbPass, []);
+    }
+
+    /**
+     * Checks Database Connection with Driver Options
+     *
+     * @param string $dbName
+     * @param string $dbHost
+     * @param string $dbUser
+     * @param string $dbPass
+     * @param array $driverOptions
+     * @return bool
+     * @throws \Magento\Setup\Exception
+     */
+    public function checkDatabaseConnectionWithDriverOptions(
+        $dbName,
+        $dbHost,
+        $dbUser,
+        $dbPass = '',
+        $driverOptions = []
+    ) {
         // establish connection to information_schema view to retrieve information about user and table privileges
         $connection = $this->connectionFactory->create(
             [
@@ -86,6 +107,7 @@ class DbValidator
                 ConfigOptionsListConstants::KEY_USER => $dbUser,
                 ConfigOptionsListConstants::KEY_PASSWORD => $dbPass,
                 ConfigOptionsListConstants::KEY_ACTIVE => true,
+                ConfigOptionsListConstants::KEY_DRIVER_OPTIONS => $driverOptions,
             ]
         );
 

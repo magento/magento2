@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="DeleteProductTaxClassActionGroup">
+        <annotations>
+            <description>Goes to the Admin Tax Rule creation page. Deletes the provided Tax Class.</description>
+        </annotations>
+        <arguments>
+            <argument name="taxClassName" type="string"/>
+        </arguments>
+
+        <!-- Go to tax rule page -->
+        <amOnPage url="{{AdminNewTaxRulePage.url}}" stepKey="goToNewTaxRulePage"/>
+        <waitForPageLoad stepKey="waitForTaxRatePage"/>
+        <click stepKey="clickAdditionalSettings" selector="{{AdminTaxRulesSection.additionalSettings}}"/>
+        <scrollTo stepKey="scrollToAdditionalSettings" selector="{{AdminTaxRulesSection.additionalSettings}}"/>
+        <moveMouseOver stepKey="hoverDeleteElement" selector="{{AdminTaxRulesSection.deleteTaxClassName(taxClassName)}}"/>
+        <click stepKey="deleteFirstTaxClass" selector="{{AdminTaxRulesSection.deleteTaxClass(taxClassName)}}"/>
+        <waitForElementVisible selector="{{AdminTaxRulesSection.popUpDialogOK}}" stepKey="waitForElementBecomeVisible"/>
+        <click stepKey="acceptPopUpDialog" selector="{{AdminTaxRulesSection.popUpDialogOK}}"/>
+        <waitForPageLoad stepKey="waitForProductTaxClassDeleted"/>
+    </actionGroup>
+</actionGroups>

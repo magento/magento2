@@ -89,11 +89,6 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
                 ['fileId' => 'image']
             );
             $uploader->setAllowedExtensions($this->getAllowedExtensions());
-
-            if (!$uploader->checkMimeType($this->getAllowedMimeTypes())) {
-                throw new LocalizedException(__('Disallowed File Type.'));
-            }
-
             $imageAdapter = $this->adapterFactory->create();
             $uploader->addValidateCallback('catalog_product_image', $imageAdapter, 'validateUploadFile');
             $uploader->setAllowRenameFiles(true);
@@ -132,15 +127,5 @@ class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterf
     private function getAllowedExtensions()
     {
         return array_keys($this->allowedMimeTypes);
-    }
-
-    /**
-     * Get the set of allowed mime types.
-     *
-     * @return array
-     */
-    private function getAllowedMimeTypes()
-    {
-        return array_values($this->allowedMimeTypes);
     }
 }

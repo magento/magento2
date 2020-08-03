@@ -15,6 +15,7 @@ use \Magento\Framework\Data\Collection\AbstractDb;
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @SuppressWarnings(PHPMD.NumberOfChildren)
+ * @since 100.0.2
  */
 abstract class AbstractCollection extends AbstractDb implements SourceProviderInterface
 {
@@ -607,9 +608,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * @inheritdoc
      * @since 100.0.11
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -622,9 +620,6 @@ abstract class AbstractCollection extends AbstractDb implements SourceProviderIn
     /**
      * @inheritdoc
      * @since 100.0.11
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {

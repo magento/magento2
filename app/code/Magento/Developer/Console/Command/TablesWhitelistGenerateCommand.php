@@ -10,6 +10,7 @@ namespace Magento\Developer\Console\Command;
 use Magento\Developer\Model\Setup\Declaration\Schema\WhitelistGenerator;
 use Magento\Framework\Config\FileResolverByModule;
 use Magento\Framework\Exception\ConfigurationMismatchException;
+use Magento\Framework\Console\Cli;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
@@ -80,11 +81,12 @@ class TablesWhitelistGenerateCommand extends Command
             $this->whitelistGenerator->generate($moduleName);
         } catch (ConfigurationMismatchException $e) {
             $output->writeln($e->getMessage());
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+            return Cli::RETURN_FAILURE;
         } catch (\Exception $e) {
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+            $output->writeln($e->getMessage());
+            return Cli::RETURN_FAILURE;
         }
 
-        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+        return Cli::RETURN_SUCCESS;
     }
 }

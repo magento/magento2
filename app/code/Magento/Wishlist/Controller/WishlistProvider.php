@@ -1,13 +1,18 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\Wishlist\Controller;
 
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\RequestInterface;
 
+/**
+ * WishlistProvider Controller
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class WishlistProvider implements WishlistProviderInterface
 {
     /**
@@ -54,7 +59,8 @@ class WishlistProvider implements WishlistProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     *
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getWishlist($wishlistId = null)
@@ -85,10 +91,10 @@ class WishlistProvider implements WishlistProviderInterface
                 );
             }
         } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-            $this->messageManager->addError($e->getMessage());
+            $this->messageManager->addErrorMessage($e->getMessage());
             return false;
         } catch (\Exception $e) {
-            $this->messageManager->addException($e, __('We can\'t create the Wish List right now.'));
+            $this->messageManager->addExceptionMessage($e, __('We can\'t create the Wish List right now.'));
             return false;
         }
         $this->wishlist = $wishlist;

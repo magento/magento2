@@ -15,7 +15,7 @@ $connection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
     ->create(Magento\Framework\App\ResourceConnection::class);
 $adapter = $connection->getConnection();
 $select = $adapter->select()
-    ->from('authorization_role', ['role_id'])
+    ->from($connection->getTableName('authorization_role'), ['role_id'])
     ->where('role_name = ?', 'Administrators')
     ->where('parent_id = ?', 0)
     ->limit(1);

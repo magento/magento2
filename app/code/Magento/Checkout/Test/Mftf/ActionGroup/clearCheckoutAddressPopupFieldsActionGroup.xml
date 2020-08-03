@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="clearCheckoutAddressPopupFieldsActionGroup">
+        <annotations>
+            <description>Clears the fields for the Customer/Address fields on the Storefront Checkout Address sections based on the provided Class Prefix (i.e. '._show', '[aria-hidden=false]').</description>
+        </annotations>
+        <arguments>
+            <argument name="classPrefix" type="string" defaultValue=""/>
+        </arguments>
+
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.firstName}}" stepKey="clearFieldFirstName"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.lastName}}" stepKey="clearFieldLastName"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.company}}" stepKey="clearFieldCompany"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.street}}" stepKey="clearFieldStreetAddress1"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.street2}}" stepKey="clearFieldStreetAddress2"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.city}}" stepKey="clearFieldCityName"/>
+        <selectOption selector="{{classPrefix}} {{CheckoutShippingSection.region}}" userInput="" stepKey="clearFieldRegion"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.postcode}}"  stepKey="clearFieldZip"/>
+        <selectOption selector="{{classPrefix}} {{CheckoutShippingSection.country}}" userInput="" stepKey="clearFieldCounty"/>
+        <clearField selector="{{classPrefix}} {{CheckoutShippingSection.telephone}}" stepKey="clearFieldPhoneNumber"/>
+    </actionGroup>
+</actionGroups>

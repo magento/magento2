@@ -868,13 +868,15 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         }
 
         parent::beforeSave();
+
+        return $this;
     }
 
     /**
      * Loading quote data by customer
      *
      * @param \Magento\Customer\Model\Customer|int $customer
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return $this
      */
     public function loadByCustomer($customer)
@@ -948,9 +950,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             } else {
                 try {
                     $defaultBillingAddress = $this->addressRepository->getById($customer->getDefaultBilling());
-                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                    // no address found
                 }
                 if (isset($defaultBillingAddress)) {
                     /** @var \Magento\Quote\Model\Quote\Address $billingAddress */
@@ -963,9 +964,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             if (null === $shippingAddress) {
                 try {
                     $defaultShippingAddress = $this->addressRepository->getById($customer->getDefaultShipping());
-                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                    // no address found
                 }
                 if (isset($defaultShippingAddress)) {
                     /** @var \Magento\Quote\Model\Quote\Address $shippingAddress */
@@ -1684,12 +1684,14 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
             // collect errors instead of throwing first one
             if ($item->getHasError()) {
+                $this->deleteItem($item);
                 foreach ($item->getMessage(false) as $message) {
                     if (!in_array($message, $errors)) {
                         // filter duplicate messages
                         $errors[] = $message;
                     }
                 }
+                break;
             }
         }
         if (!empty($errors)) {

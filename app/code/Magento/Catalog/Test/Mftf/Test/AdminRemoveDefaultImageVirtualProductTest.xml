@@ -19,44 +19,43 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <!--Create product-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPage"/>
-        <actionGroup ref="resetProductGridToDefaultView" stepKey="resetProductGridColumnsInitial"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProduct">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
             <argument name="product" value="defaultVirtualProduct"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillProductMain">
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillProductMain">
             <argument name="product" value="defaultVirtualProduct"/>
         </actionGroup>
 
         <!-- Add image to product -->
-        <actionGroup ref="addProductImage" stepKey="addImageForProduct">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForProduct">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
 
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!-- Remove image from product -->
-        <actionGroup ref="removeProductImage" stepKey="removeProductImage"/>
+        <actionGroup ref="RemoveProductImageActionGroup" stepKey="removeProductImage"/>
 
-        <actionGroup ref="saveProductForm" stepKey="saveProductFormAfterRemove"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductFormAfterRemove"/>
 
         <!-- Assert product image not in admin product form -->
-        <actionGroup ref="assertProductImageNotInAdminProductPage" stepKey="assertProductImageNotInAdminProductPage"/>
+        <actionGroup ref="AssertProductImageNotInAdminProductPageActionGroup" stepKey="assertProductImageNotInAdminProductPage"/>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPageAfterRemove">
+        <actionGroup ref="AssertProductInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPageAfterRemove">
             <argument name="product" value="defaultVirtualProduct"/>
         </actionGroup>
         <!-- Assert product image not in storefront product page -->
-        <actionGroup ref="assertProductImageNotInStorefrontProductPage" stepKey="assertProductImageNotInStorefrontProductPage">
+        <actionGroup ref="AssertProductImageNotInStorefrontProductPageActionGroup" stepKey="assertProductImageNotInStorefrontProductPage">
             <argument name="product" value="defaultVirtualProduct"/>
         </actionGroup>
     </test>

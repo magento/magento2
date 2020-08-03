@@ -10,6 +10,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="StorefrontProductInfoMainSection">
         <element name="optionByAttributeId" type="input" selector="#attribute{{var1}}" parameterized="true"/>
+        <element name="selectableProductOptions" type="select" selector="#attribute{{var1}} option:not([disabled])" parameterized="true"/>
         <element name="productAttributeTitle1" type="text" selector="#product-options-wrapper div[tabindex='0'] label"/>
         <element name="productPrice" type="text" selector="div.price-box.price-final_price"/>
         <element name="productAttributeOptions1" type="select" selector="#product-options-wrapper div[tabindex='0'] option"/>

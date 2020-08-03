@@ -3,62 +3,80 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Email\Test\Unit\Block\Adminhtml\Template;
+
+use Magento\Backend\Block\Template\Context;
+use Magento\Email\Block\Adminhtml\Template\Preview;
+use Magento\Email\Model\AbstractTemplate;
+use Magento\Email\Model\Template;
+use Magento\Email\Model\TemplateFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\State;
+use Magento\Framework\DataObject;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Filter\Input\MaliciousCode;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\DesignInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PreviewTest extends \PHPUnit\Framework\TestCase
+class PreviewTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManagerHelper;
 
     const MALICIOUS_TEXT = 'test malicious';
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|MockObject
      */
     protected $request;
 
     /**
-     * @var \Magento\Email\Block\Adminhtml\Template\Preview
+     * @var Preview
      */
     protected $preview;
 
     /**
-     * @var \Magento\Framework\Filter\Input\MaliciousCode|\PHPUnit_Framework_MockObject_MockObject
+     * @var MaliciousCode|MockObject
      */
     protected $maliciousCode;
 
     /**
-     * @var \Magento\Email\Model\Template|\PHPUnit_Framework_MockObject_MockObject
+     * @var Template|MockObject
      */
     protected $template;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManager;
 
     /**
      * Init data
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManagerHelper = new ObjectManager($this);
 
         $storeId = 1;
         $designConfigData = [];
 
-        $this->template = $this->getMockBuilder(\Magento\Email\Model\Template::class)
+        $this->template = $this->getMockBuilder(Template::class)
             ->setMethods(
                 [
                     'setDesignConfig',
                     'getDesignConfig',
-                    '__wakeup',
                     'getProcessedTemplate',
                     'getAppState',
                     'revertDesign'
@@ -67,34 +85,34 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $this->request = $this->createMock(\Magento\Framework\App\Request\Http::class);
+        $this->request = $this->createMock(Http::class);
 
         $this->maliciousCode = $this->createPartialMock(
-            \Magento\Framework\Filter\Input\MaliciousCode::class,
+            MaliciousCode::class,
             ['filter']
         );
 
         $this->template->expects($this->once())
             ->method('getProcessedTemplate')
-            ->with($this->equalTo([]))
+            ->with([])
             ->willReturn(self::MALICIOUS_TEXT);
 
         $this->template->method('getDesignConfig')
-            ->willReturn(new \Magento\Framework\DataObject($designConfigData));
+            ->willReturn(new DataObject($designConfigData));
 
-        $emailFactory = $this->createPartialMock(\Magento\Email\Model\TemplateFactory::class, ['create']);
+        $emailFactory = $this->createPartialMock(TemplateFactory::class, ['create']);
         $emailFactory->expects($this->any())
             ->method('create')
             ->willReturn($this->template);
 
-        $eventManage = $this->createMock(\Magento\Framework\Event\ManagerInterface::class);
-        $scopeConfig = $this->createMock(\Magento\Framework\App\Config\ScopeConfigInterface::class);
-        $design = $this->createMock(\Magento\Framework\View\DesignInterface::class);
-        $store = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getId', '__wakeup']);
+        $eventManage = $this->getMockForAbstractClass(ManagerInterface::class);
+        $scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $design = $this->getMockForAbstractClass(DesignInterface::class);
+        $store = $this->createPartialMock(Store::class, ['getId']);
 
         $store->expects($this->any())
             ->method('getId')
@@ -105,7 +123,7 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
 
         $this->storeManager->expects($this->any())->method('getDefaultStoreView')->willReturn(null);
         $this->storeManager->expects($this->any())->method('getStores')->willReturn([$store]);
-        $appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
+        $appState = $this->getMockBuilder(State::class)
             ->setConstructorArgs(
                 [
                     $scopeConfig
@@ -117,13 +135,13 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         $appState->expects($this->any())
             ->method('emulateAreaCode')
             ->with(
-                \Magento\Email\Model\AbstractTemplate::DEFAULT_DESIGN_AREA,
+                AbstractTemplate::DEFAULT_DESIGN_AREA,
                 [$this->template, 'getProcessedTemplate']
             )
             ->willReturn($this->template->getProcessedTemplate());
 
         $context = $this->createPartialMock(
-            \Magento\Backend\Block\Template\Context::class,
+            Context::class,
             ['getRequest', 'getEventManager', 'getScopeConfig', 'getDesignPackage', 'getStoreManager', 'getAppState']
         );
         $context->expects($this->any())->method('getRequest')->willReturn($this->request);
@@ -133,9 +151,9 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
         $context->expects($this->any())->method('getStoreManager')->willReturn($this->storeManager);
         $context->expects($this->once())->method('getAppState')->willReturn($appState);
 
-        /** @var \Magento\Email\Block\Adminhtml\Template\Preview $preview */
+        /** @var Preview $preview */
         $this->preview = $this->objectManagerHelper->getObject(
-            \Magento\Email\Block\Adminhtml\Template\Preview::class,
+            Preview::class,
             [
                 'context' => $context,
                 'maliciousCode' => $this->maliciousCode,
@@ -162,7 +180,7 @@ class PreviewTest extends \PHPUnit\Framework\TestCase
             ->method('getDefaultStoreView');
         $this->maliciousCode->expects($this->once())
             ->method('filter')
-            ->with($this->equalTo($requestParamMap[1][2]))
+            ->with($requestParamMap[1][2])
             ->willReturn(self::MALICIOUS_TEXT);
 
         $this->assertEquals(self::MALICIOUS_TEXT, $this->preview->toHtml());

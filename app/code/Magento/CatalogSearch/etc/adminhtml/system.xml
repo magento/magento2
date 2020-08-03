@@ -18,6 +18,7 @@
                 <label>Catalog Search</label>
                 <field id="engine" canRestore="1">
                     <backend_model>Magento\CatalogSearch\Model\Adminhtml\System\Config\Backend\Engine</backend_model>
+                    <comment>If not specified, Default Search Engine will be used.</comment>
                 </field>
                 <field id="min_query_length" translate="label comment" type="text" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Minimal Query Length</label>
@@ -34,11 +35,11 @@
                     <comment>Number of popular search terms to be cached for faster response. Use “0” to cache all results after a term is searched for the second time.</comment>
                     <validate>validate-digits</validate>
                 </field>
-                <field id="autocomplete_limit" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
+                <field id="autocomplete_limit" translate="label" type="text" sortOrder="19" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
                     <label>Autocomplete Limit</label>
                     <validate>validate-digits</validate>
                 </field>
-                <field id="enable_eav_indexer" translate="label" type="select" sortOrder="18" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="enable_eav_indexer" translate="label" type="select" sortOrder="18" showInDefault="1" canRestore="1">
                     <label>Enable EAV Indexer</label>
                     <comment>Enable/Disable Product EAV indexer to improve indexation speed. Make sure that indexer is not used by 3rd party extensions.</comment>
                     <depends>

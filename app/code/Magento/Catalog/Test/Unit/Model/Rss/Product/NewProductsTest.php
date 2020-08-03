@@ -3,18 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Rss\Product;
 
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\Rss\Product\NewProducts;
+use Magento\Framework\Stdlib\DateTime\Timezone;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class NewProductsTest
- * @package Magento\Catalog\Model\Rss\Product
- */
-class NewProductsTest extends \PHPUnit\Framework\TestCase
+class NewProductsTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Rss\Product\NewProducts
+     * @var NewProducts
      */
     protected $newProducts;
 
@@ -24,36 +31,36 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\ProductFactory
+     * @var MockObject|ProductFactory
      */
     protected $productFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @var MockObject|Product
      */
     protected $product;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Visibility|\PHPUnit_Framework_MockObject_MockObject
+     * @var Visibility|MockObject
      */
     protected $visibility;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TimezoneInterface|MockObject
      */
     protected $timezone;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $this->productFactory = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
-        $this->productFactory->expects($this->any())->method('create')->will($this->returnValue($this->product));
-        $this->visibility = $this->createMock(\Magento\Catalog\Model\Product\Visibility::class);
-        $this->timezone = $this->createMock(\Magento\Framework\Stdlib\DateTime\Timezone::class);
+        $this->product = $this->createMock(Product::class);
+        $this->productFactory = $this->createPartialMock(ProductFactory::class, ['create']);
+        $this->productFactory->expects($this->any())->method('create')->willReturn($this->product);
+        $this->visibility = $this->createMock(Visibility::class);
+        $this->timezone = $this->createMock(Timezone::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->newProducts = $this->objectManagerHelper->getObject(
-            \Magento\Catalog\Model\Rss\Product\NewProducts::class,
+            NewProducts::class,
             [
                 'productFactory' => $this->productFactory,
                 'visibility' => $this->visibility,
@@ -64,38 +71,37 @@ class NewProductsTest extends \PHPUnit\Framework\TestCase
 
     public function testGetProductsCollection()
     {
-        /** @var \DateTime|\PHPUnit_Framework_MockObject_MockObject $dateObject */
+        /** @var \DateTime|MockObject $dateObject */
         $dateObject = $this->createMock(\DateTime::class);
         $dateObject->expects($this->any())
-            ->method('setTime')
-            ->will($this->returnSelf());
+            ->method('setTime')->willReturnSelf();
         $dateObject->expects($this->any())
             ->method('format')
-            ->will($this->returnValue(date(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT)));
+            ->willReturn(date(\Magento\Framework\Stdlib\DateTime::DATETIME_INTERNAL_FORMAT));
 
         $this->timezone->expects($this->exactly(2))
             ->method('date')
-            ->will($this->returnValue($dateObject));
+            ->willReturn($dateObject);
 
-        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
+        /** @var Collection $productCollection */
         $productCollection =
-            $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
-        $this->product->expects($this->once())->method('getResourceCollection')->will(
-            $this->returnValue($productCollection)
+            $this->createMock(Collection::class);
+        $this->product->expects($this->once())->method('getResourceCollection')->willReturn(
+            $productCollection
         );
         $storeId = 1;
         $productCollection->expects($this->once())->method('setStoreId')->with($storeId);
-        $productCollection->expects($this->once())->method('addStoreFilter')->will($this->returnSelf());
-        $productCollection->expects($this->any())->method('addAttributeToFilter')->will($this->returnSelf());
-        $productCollection->expects($this->any())->method('addAttributeToSelect')->will($this->returnSelf());
-        $productCollection->expects($this->once())->method('addAttributeToSort')->will($this->returnSelf());
-        $productCollection->expects($this->once())->method('applyFrontendPriceLimitations')->will($this->returnSelf());
+        $productCollection->expects($this->once())->method('addStoreFilter')->willReturnSelf();
+        $productCollection->expects($this->any())->method('addAttributeToFilter')->willReturnSelf();
+        $productCollection->expects($this->any())->method('addAttributeToSelect')->willReturnSelf();
+        $productCollection->expects($this->once())->method('addAttributeToSort')->willReturnSelf();
+        $productCollection->expects($this->once())->method('applyFrontendPriceLimitations')->willReturnSelf();
         $visibleIds = [1, 3];
-        $this->visibility->expects($this->once())->method('getVisibleInCatalogIds')->will(
-            $this->returnValue($visibleIds)
+        $this->visibility->expects($this->once())->method('getVisibleInCatalogIds')->willReturn(
+            $visibleIds
         );
-        $productCollection->expects($this->once())->method('setVisibility')->with($visibleIds)->will(
-            $this->returnSelf()
+        $productCollection->expects($this->once())->method('setVisibility')->with($visibleIds)->willReturnSelf(
+            
         );
 
         $products = $this->newProducts->getProductsCollection($storeId);

@@ -19,7 +19,7 @@
             <item>Bld D</item>
         </array>
         <data key="company">Magento</data>
-        <data key="telephone">1234568910</data>
+        <data key="telephone">123-456-7890</data>
         <data key="fax">1234568910</data>
         <data key="postcode">78729</data>
         <data key="city">Austin</data>
@@ -172,7 +172,7 @@
         <data key="city">London</data>
         <data key="postcode">SE1 7RW</data>
         <data key="country_id">GB</data>
-        <data key="telephone">444-44-444-44</data>
+        <data key="telephone">444-444-4444</data>
     </entity>
     <entity name="US_Address_Utah" type="address">
         <data key="firstname">John</data>
@@ -227,7 +227,7 @@
         <data key="firstname">John</data>
         <data key="lastname">Doe</data>
         <data key="company">Magento</data>
-        <data key="telephone">0123456789-02134567</data>
+        <data key="telephone">888-777-7890</data>
         <array key="street">
             <item>172, Westminster Bridge Rd</item>
             <item>7700 xyz street</item>
@@ -292,7 +292,7 @@
             <item>Piwowarska 6</item>
         </array>
         <data key="city">Bielsko-Biała</data>
-        <data key="state"> Bielsko</data>
+        <data key="state">śląskie</data>
         <data key="country_id">PL</data>
         <data key="country">Poland</data>
         <data key="postcode">43-310</data>
@@ -305,7 +305,7 @@
         <data key="firstname">Jane</data>
         <data key="lastname">Miller</data>
         <data key="company">Magento</data>
-        <data key="telephone">44 20 7123 1234</data>
+        <data key="telephone">123-456-7899</data>
         <array key="street">
             <item>1 London Bridge Street</item>
         </array>
@@ -327,6 +327,7 @@
         <data key="postcode">10789</data>
         <data key="telephone">333-33-333-33</data>
         <data key="country">Germany</data>
+        <data key="state">Berlin</data>
     </entity>
     <entity name="US_Address_California">
         <data key="firstname">John</data>

@@ -42,9 +42,11 @@ define([
                 return attribute.label;
             }
 
-            resultAttribute = _.findWhere(this.source.get('customAttributes')[attribute['attribute_code']], {
-                value: attribute.value
-            });
+            if (typeof this.source.get('customAttributes') !== 'undefined') {
+                resultAttribute = _.findWhere(this.source.get('customAttributes')[attribute['attribute_code']], {
+                    value: attribute.value
+                });
+            }
 
             return resultAttribute && resultAttribute.label || attribute.value;
         }

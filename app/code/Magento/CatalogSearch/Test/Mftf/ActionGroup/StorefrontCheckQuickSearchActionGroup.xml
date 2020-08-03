@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Quick search the phrase and check if the result page contains correct information -->
+    <actionGroup name="StorefrontCheckQuickSearchActionGroup">
+        <annotations>
+            <description>Submits Form POST for the Storefront Search feature. Validates that the URL is correct. Validates that the Title is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="phrase"/>
+        </arguments>
+
+        <submitForm selector="{{StorefrontQuickSearchSection.searchMiniForm}}" parameterArray="['q' => {{phrase}}]" stepKey="fillQuickSearch"/>
+        <seeInCurrentUrl url="{{StorefrontCatalogSearchPage.url}}" stepKey="checkUrl"/>
+        <dontSeeInCurrentUrl url="form_key=" stepKey="checkUrlFormKey"/>
+        <seeInTitle userInput="Search results for: '{{phrase}}'" stepKey="assertQuickSearchTitle"/>
+        <see userInput="Search results for: '{{phrase}}'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!--Filter order grid by order id field-->
+    <actionGroup name="FilterOrderGridByIdActionGroup">
+        <annotations>
+            <description>Goes to the Admin Orders page. Filters the grid based on the provided Order ID.</description>
+        </annotations>
+        <arguments>
+            <argument name="orderId" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderGridPage"/>
+        <waitForPageLoad stepKey="waitForOrdersPage"/>
+        <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <waitForPageLoad stepKey="waitForClearFilters"/>
+        <click selector="{{AdminOrdersGridSection.filters}}" stepKey="openOrderGridFilters"/>
+        <waitForPageLoad stepKey="waitForClickFilters"/>
+        <fillField selector="{{AdminOrdersGridSection.idFilter}}" userInput="{{orderId}}" stepKey="fillOrderIdFilter"/>
+        <click selector="{{AdminOrdersGridSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
+        <waitForPageLoad stepKey="waitForApplyFilters"/>
+    </actionGroup>
+</actionGroups>

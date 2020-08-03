@@ -3,35 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Analytics\Test\Unit\Model;
 
-use Magento\Integration\Api\IntegrationServiceInterface;
-use Magento\Config\Model\Config;
-use Magento\Integration\Model\Integration;
 use Magento\Analytics\Model\IntegrationManager;
-use Magento\Integration\Api\OauthServiceInterface;
+use Magento\Config\Model\Config;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Integration\Api\IntegrationServiceInterface;
+use Magento\Integration\Api\OauthServiceInterface;
+use Magento\Integration\Model\Integration;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class IntegrationManagerTest extends \PHPUnit\Framework\TestCase
+class IntegrationManagerTest extends TestCase
 {
     /**
-     * @var IntegrationServiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var IntegrationServiceInterface|MockObject
      */
     private $integrationServiceMock;
 
     /**
-     * @var OauthServiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OauthServiceInterface|MockObject
      */
     private $oauthServiceMock;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $configMock;
 
     /**
-     * @var Integration|\PHPUnit_Framework_MockObject_MockObject
+     * @var Integration|MockObject
      */
     private $integrationMock;
 
@@ -40,16 +43,12 @@ class IntegrationManagerTest extends \PHPUnit\Framework\TestCase
      */
     private $integrationManager;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->integrationServiceMock = $this->getMockBuilder(IntegrationServiceInterface::class)
-            ->getMock();
-        $this->configMock = $this->getMockBuilder(Config::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->oauthServiceMock = $this->getMockBuilder(OauthServiceInterface::class)
-            ->getMock();
+        $this->integrationServiceMock = $this->getMockForAbstractClass(IntegrationServiceInterface::class);
+        $this->configMock = $this->createMock(Config::class);
+        $this->oauthServiceMock = $this->getMockForAbstractClass(OauthServiceInterface::class);
         $this->integrationMock = $this->getMockBuilder(Integration::class)
             ->disableOriginalConstructor()
             ->setMethods([
@@ -109,11 +108,9 @@ class IntegrationManagerTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->integrationManager->activateIntegration());
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\NoSuchEntityException
-     */
     public function testActivateIntegrationFailureNoSuchEntity()
     {
+        $this->expectException('Magento\Framework\Exception\NoSuchEntityException');
         $this->integrationServiceMock->expects($this->once())
             ->method('findByName')
             ->with('ma-integration-user')

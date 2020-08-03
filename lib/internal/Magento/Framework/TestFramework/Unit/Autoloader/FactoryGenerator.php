@@ -43,6 +43,9 @@ class FactoryGenerator implements GeneratorInterface
      */
     private function isFactory($className)
     {
+        if (!preg_match('/[\\\A-Z]/', substr(ltrim($className), 0, 1))) {
+            return false;
+        }
         $sourceName = rtrim(substr($className, 0, -strlen('Factory')), '\\');
         return $sourceName . 'Factory' == $className;
     }
