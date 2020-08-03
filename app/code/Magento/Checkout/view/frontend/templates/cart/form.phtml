@@ -20,7 +20,7 @@
           class="form form-cart">
     <?= $block->getBlockHtml('formkey') ?>
     <div class="cart table-wrapper<?= $mergedCells == 2 ? ' detailed' : '' ?>">
-        <?php if ($block->getPagerHtml()) :?>
+        <?php if ($block->getPagerHtml()): ?>
             <div class="cart-products-toolbar cart-products-toolbar-top toolbar"
                  data-attribute="cart-products-toolbar-top"><?= $block->getPagerHtml() ?>
             </div>
@@ -38,32 +38,34 @@
                     <th class="col subtotal" scope="col"><span><?= $block->escapeHtml(__('Subtotal')) ?></span></th>
                 </tr>
             </thead>
-            <?php foreach ($block->getItems() as $_item) :?>
+            <?php foreach ($block->getItems() as $_item): ?>
                 <?= $block->getItemHtml($_item) ?>
             <?php endforeach ?>
         </table>
-        <?php if ($block->getPagerHtml()) :?>
+        <?php if ($block->getPagerHtml()): ?>
             <div class="cart-products-toolbar cart-products-toolbar-bottom toolbar"
                  data-attribute="cart-products-toolbar-bottom"><?= $block->getPagerHtml() ?>
             </div>
         <?php endif ?>
     </div>
     <div class="cart main actions">
-        <?php if ($block->getContinueShoppingUrl()) :?>
+        <?php if ($block->getContinueShoppingUrl()): ?>
             <a class="action continue"
                href="<?= $block->escapeUrl($block->getContinueShoppingUrl()) ?>"
                title="<?= $block->escapeHtml(__('Continue Shopping')) ?>">
                 <span><?= $block->escapeHtml(__('Continue Shopping')) ?></span>
             </a>
         <?php endif; ?>
-        <button type="button"
-                name="update_cart_action"
-                data-cart-empty=""
-                value="empty_cart"
-                title="<?= $block->escapeHtml(__('Clear Shopping Cart')) ?>"
-                class="action clear" id="empty_cart_button">
-            <span><?= $block->escapeHtml(__('Clear Shopping Cart')) ?></span>
-        </button>
+        <?php if ($block->getViewModel()->isClearShoppingCartEnabled()): ?>
+            <button type="button"
+                    name="update_cart_action"
+                    data-cart-empty=""
+                    value="empty_cart"
+                    title="<?= $block->escapeHtml(__('Clear Shopping Cart')) ?>"
+                    class="action clear" id="empty_cart_button">
+                <span><?= $block->escapeHtml(__('Clear Shopping Cart')) ?></span>
+            </button>
+        <?php endif ?>
         <button type="submit"
                 name="update_cart_action"
                 data-cart-item-update=""
@@ -77,4 +79,3 @@
 </form>
 <?= $block->getChildHtml('checkout.cart.order.actions') ?>
 <?= $block->getChildHtml('shopping.cart.table.after') ?>
-
