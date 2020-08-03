@@ -50,8 +50,7 @@
         <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertProductVideoAdminProductPage" after="addProductVideo"/>
 
         <!-- Save the product -->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveFirstProduct"/>
-        <waitForPageLoad stepKey="waitForFirstProductSaved"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveFirstProduct"/>
 
         <!-- Assert product video in storefront product page -->
         <amOnPage url="$$createProduct.name$$.html" stepKey="goToStorefrontCategoryPage"/>
