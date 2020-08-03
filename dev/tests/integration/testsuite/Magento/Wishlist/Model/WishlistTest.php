@@ -143,7 +143,12 @@ class WishlistTest extends TestCase
         $configurableOptions = $configurableProduct->getTypeInstance()->getConfigurableOptions($configurableProduct);
         $attributeId = key($configurableOptions);
         $option = reset($configurableOptions[$attributeId]);
-        $buyRequest = ['super_attribute' => [$attributeId => $option['value_index']]];
+        $buyRequest = [
+            'super_attribute' => [
+                $attributeId => $option['value_index']
+            ],
+            'action' => 'add',
+        ];
         $wishlist = $this->getWishlistByCustomerId->execute(1);
         $wishlist->addNewItem($configurableProduct, $buyRequest);
         $item = $this->getWishlistByCustomerId->getItemBySku(1, 'Configurable product');
@@ -166,7 +171,12 @@ class WishlistTest extends TestCase
         $option = reset($bundleOptions);
         $productLinks = $option->getProductLinks();
         $this->assertNotNull($productLinks[0]);
-        $buyRequest = ['bundle_option' => [$option->getOptionId() => $productLinks[0]->getId()]];
+        $buyRequest = [
+            'bundle_option' => [
+                $option->getOptionId() => $productLinks[0]->getId()
+            ],
+            'action' => 'add',
+        ];
         $skuWithChosenOption = implode('-', [$bundleProduct->getSku(), $productLinks[0]->getSku()]);
         $wishlist = $this->getWishlistByCustomerId->execute(1);
         $wishlist->addNewItem($bundleProduct, $buyRequest);

@@ -62,7 +62,9 @@
         <after>
             <!-- Change "Category Products" and "Product Categories" indexers to "Update on Save" mode -->
             <magentoCLI command="indexer:set-mode" arguments="realtime" stepKey="setRealtimeMode"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
 
             <!-- Delete data -->
             <deleteData createDataKey="productA" stepKey="deleteProductA"/>
@@ -146,7 +148,8 @@
         <!-- Run cron -->
         <wait stepKey="waitBeforeRunMagentoCron" time="60"/>
         <magentoCLI stepKey="runMagentoCron" command="cron:run --group=index"/>
-        <wait stepKey="waitAfterRunMagentoCron" time="120"/>
+
+        <wait stepKey="waitAfterRunMagentoCron" time="90"/>
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assigments are applied -->
         <!-- Category K contains only Products A, C -->
@@ -212,7 +215,8 @@
         <!-- Run Cron once to reindex product changes -->
         <wait stepKey="waitBeforeRunCronIndexAfterProductAssignToCategory" time="60"/>
         <magentoCLI stepKey="runCronIndexAfterProductAssignToCategory" command="cron:run --group=index"/>
-        <wait stepKey="waitAfterRunCronIndexAfterProductAssignToCategory" time="120"/>
+
+        <wait stepKey="waitAfterRunCronIndexAfterProductAssignToCategory" time="90"/>
 
         <!-- Open categories K, L, M, N on Storefront in order to make sure that new assigments are applied -->
 
