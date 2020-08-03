@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCustomerEditProductInWishlistActionGroup">
+        <annotations>
+            <description>Edits the provided Product on the Storefront Wish List page. Fills in the provided Description and Quantity. Validates that the Success Message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+            <argument name="description" type="string"/>
+            <argument name="quantity" type="string"/>
+        </arguments>
+
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductInfoByName(product.name)}}" stepKey="mouseOverOnProduct"/>
+        <fillField selector="{{StorefrontCustomerWishlistProductSection.ProductDescription(product.name)}}" userInput="{{description}}" stepKey="fillDescription"/>
+        <fillField selector="{{StorefrontCustomerWishlistProductSection.ProductQuantity(product.name)}}" userInput="{{quantity}}" stepKey="fillQuantity"/>
+        <moveMouseOver selector="{{StorefrontCustomerWishlistProductSection.ProductAddAllToCart}}" stepKey="mouseOver"/>
+        <click selector="{{StorefrontCustomerWishlistProductSection.ProductUpdateWishList}}" stepKey="submitUpdateWishlist"/>
+        <see selector="{{StorefrontCustomerWishlistProductSection.ProductSuccessUpdateMessage}}" userInput="{{product.name}} has been updated in your Wish List." stepKey="successMessage"/>
+    </actionGroup>
+</actionGroups>

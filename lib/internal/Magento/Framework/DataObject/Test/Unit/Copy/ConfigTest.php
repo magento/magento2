@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * \Magento\Framework\DataObject\Copy\Config
  *
@@ -7,23 +7,28 @@
  */
 namespace Magento\Framework\DataObject\Test\Unit\Copy;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\DataObject\Copy\Config;
+use Magento\Framework\DataObject\Copy\Config\Data;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\DataObject\Copy\Config\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var Data|MockObject
      */
     protected $_storageMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\DataObject\Copy\Config
+     * @var MockObject|Config
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_storageMock = $this->createPartialMock(\Magento\Framework\DataObject\Copy\Config\Data::class, ['get']);
+        $this->_storageMock = $this->createPartialMock(Data::class, ['get']);
 
-        $this->_model = new \Magento\Framework\DataObject\Copy\Config($this->_storageMock);
+        $this->_model = new Config($this->_storageMock);
     }
 
     public function testGetFieldsets()
@@ -35,7 +40,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                 'street' => ['to_customer_address' => '*'],
             ],
         ];
-        $this->_storageMock->expects($this->once())->method('get')->will($this->returnValue($expected));
+        $this->_storageMock->expects($this->once())->method('get')->willReturn($expected);
         $result = $this->_model->getFieldsets('global');
         $this->assertEquals($expected, $result);
     }
@@ -44,7 +49,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     {
         $expectedFieldset = ['aspect' => 'firstAspect'];
         $fieldsets = ['test' => $expectedFieldset, 'test_second' => ['aspect' => 'secondAspect']];
-        $this->_storageMock->expects($this->once())->method('get')->will($this->returnValue($fieldsets));
+        $this->_storageMock->expects($this->once())->method('get')->willReturn($fieldsets);
         $result = $this->_model->getFieldset('test');
         $this->assertEquals($expectedFieldset, $result);
     }
@@ -52,8 +57,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetFieldsetIfFieldsetIsEmpty()
     {
         $this->_storageMock->expects($this->once())->method('get')
-            ->will($this->returnValue([]));
+            ->willReturn([]);
         $result = $this->_model->getFieldset('test');
-        $this->assertEquals(null, $result);
+        $this->assertNull($result);
     }
 }

@@ -3,68 +3,74 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Wishlist\Test\Unit\Helper;
 
 use Magento\Catalog\Model\Product;
+use Magento\Customer\Model\Session;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Helper\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\Helper\PostHelper;
 use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\EncoderInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Wishlist\Controller\WishlistProviderInterface;
+use Magento\Wishlist\Helper\Data;
 use Magento\Wishlist\Model\Item as WishlistItem;
 use Magento\Wishlist\Model\Wishlist;
-use Magento\Customer\Model\Session;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataTest extends \PHPUnit\Framework\TestCase
+class DataTest extends TestCase
 {
-    /** @var  \Magento\Wishlist\Helper\Data */
+    /** @var  Data */
     protected $model;
 
-    /** @var  WishlistProviderInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  WishlistProviderInterface|MockObject */
     protected $wishlistProvider;
 
-    /** @var  Registry |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Registry|MockObject */
     protected $coreRegistry;
 
-    /** @var  PostHelper |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  PostHelper|MockObject */
     protected $postDataHelper;
 
-    /** @var  WishlistItem |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  WishlistItem|MockObject */
     protected $wishlistItem;
 
-    /** @var  Product |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Product|MockObject */
     protected $product;
 
-    /** @var  StoreManagerInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  StoreManagerInterface|MockObject */
     protected $storeManager;
 
-    /** @var  Store |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Store|MockObject */
     protected $store;
 
-    /** @var  UrlInterface |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  UrlInterface|MockObject */
     protected $urlBuilder;
 
-    /** @var  Wishlist |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Wishlist|MockObject */
     protected $wishlist;
 
-    /** @var  EncoderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  EncoderInterface|MockObject */
     protected $urlEncoderMock;
 
-    /** @var  RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  RequestInterface|MockObject */
     protected $requestMock;
 
-    /** @var  Context |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Context|MockObject */
     protected $context;
 
-    /** @var  Session |\PHPUnit_Framework_MockObject_MockObject */
+    /** @var  Session|MockObject */
     protected $customerSession;
 
     /**
@@ -72,33 +78,33 @@ class DataTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->store = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+        $this->store = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->storeManager->expects($this->any())
             ->method('getStore')
             ->willReturn($this->store);
 
-        $this->urlEncoderMock = $this->getMockBuilder(\Magento\Framework\Url\EncoderInterface::class)
+        $this->urlEncoderMock = $this->getMockBuilder(EncoderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getServer'])
             ->getMockForAbstractClass();
 
-        $this->urlBuilder = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+        $this->urlBuilder = $this->getMockBuilder(UrlInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $this->context = $this->getMockBuilder(\Magento\Framework\App\Helper\Context::class)
+        $this->context = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->context->expects($this->once())
@@ -111,19 +117,19 @@ class DataTest extends \PHPUnit\Framework\TestCase
             ->method('getRequest')
             ->willReturn($this->requestMock);
 
-        $this->wishlistProvider = $this->getMockBuilder(\Magento\Wishlist\Controller\WishlistProviderInterface::class)
+        $this->wishlistProvider = $this->getMockBuilder(WishlistProviderInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
+        $this->coreRegistry = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->coreRegistry = $this->getMockBuilder(\Magento\Framework\Registry::class)
+        $this->postDataHelper = $this->getMockBuilder(PostHelper::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->postDataHelper = $this->getMockBuilder(\Magento\Framework\Data\Helper\PostHelper::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->wishlistItem = $this->getMockBuilder(\Magento\Wishlist\Model\Item::class)
+        $this->wishlistItem = $this->getMockBuilder(WishlistItem::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -133,21 +139,21 @@ class DataTest extends \PHPUnit\Framework\TestCase
                 ]
             )->getMock();
 
-        $this->wishlist = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)
+        $this->wishlist = $this->getMockBuilder(Wishlist::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->customerSession = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
+        $this->customerSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->model = $objectManager->getObject(
-            \Magento\Wishlist\Helper\Data::class,
+            Data::class,
             [
                 'context' => $this->context,
                 'customerSession' => $this->customerSession,
@@ -166,12 +172,12 @@ class DataTest extends \PHPUnit\Framework\TestCase
         $this->store->expects($this->once())
             ->method('getUrl')
             ->with('wishlist/index/cart', ['item' => '%item%'])
-            ->will($this->returnValue($url));
+            ->willReturn($url);
 
         $this->urlBuilder->expects($this->any())
             ->method('getUrl')
             ->with('wishlist/index/index', ['_current' => true, '_use_rewrite' => true, '_scope_to_url' => true])
-            ->will($this->returnValue($url));
+            ->willReturn($url);
 
         $this->assertEquals($url, $this->model->getAddToCartUrl('%item%'));
     }
@@ -180,24 +186,24 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $url = 'http://magento2ce/wishlist/index/configure/id/4/product_id/30/';
 
-        /** @var \Magento\Wishlist\Model\Item|\PHPUnit_Framework_MockObject_MockObject $wishlistItem */
-        $wishlistItem = $this->createPartialMock(
-            \Magento\Wishlist\Model\Item::class,
-            ['getWishlistItemId', 'getProductId']
-        );
+        /** @var WishlistItem|MockObject $wishlistItem */
+        $wishlistItem = $this->getMockBuilder(WishlistItem::class)
+            ->addMethods(['getWishlistItemId', 'getProductId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $wishlistItem
             ->expects($this->once())
             ->method('getWishlistItemId')
-            ->will($this->returnValue(4));
+            ->willReturn(4);
         $wishlistItem
             ->expects($this->once())
             ->method('getProductId')
-            ->will($this->returnValue(30));
+            ->willReturn(30);
 
         $this->urlBuilder->expects($this->once())
             ->method('getUrl')
             ->with('wishlist/index/configure', ['id' => 4, 'product_id' => 30])
-            ->will($this->returnValue($url));
+            ->willReturn($url);
 
         $this->assertEquals($url, $this->model->getConfigureUrl($wishlistItem));
     }
@@ -206,7 +212,7 @@ class DataTest extends \PHPUnit\Framework\TestCase
     {
         $this->wishlistProvider->expects($this->once())
             ->method('getWishlist')
-            ->will($this->returnValue($this->wishlist));
+            ->willReturn($this->wishlist);
 
         $this->assertEquals($this->wishlist, $this->model->getWishlist());
     }

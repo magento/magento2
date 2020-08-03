@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="ShippingOriginSetup" dataType="shipping_origin" type="create" auth="adminFormKey" url="/admin/system_config/save/section/shipping/" method="POST" successRegex="/messages-message-success/">
+        <object key="groups" dataType="shipping_origin">
+            <object key="origin" dataType="shipping_origin">
+                <object key="fields" dataType="shipping_origin">
+                    <object key="country_id" dataType="shipping_origin">
+                        <object key="inherit" dataType="inheritCountryFlag">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="region_id" dataType="shipping_origin">
+                        <object key="inherit" dataType="inheritRegionFlag">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                    <object key="postcode" dataType="shipping_origin">
+                        <object key="inherit" dataType="inheritPostcodeFlag">
+                            <field key="value">integer</field>
+                        </object>
+                    </object>
+                </object>
+            </object>
+        </object>
+    </operation>
+</operations>

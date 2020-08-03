@@ -22,7 +22,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = Bootstrap::getObjectManager()->create(Builder::class);
     }
@@ -72,7 +72,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
         $rule->loadPost($ruleConditionArray);
         $this->model->attachConditionToCollection($collection, $rule->getConditions());
 
-        $whereString = "/\(category_id IN \('3'\).+\(IFNULL\(`e`\.`entity_id`,.+\) = '2017-09-15'\)"
+        $whereString = "/\(category_id IN \('3'\).+\(IFNULL\(`e`\.`entity_id`,.+\) = '2017-09-15 00:00:00'\)"
             . ".+ORDER BY \(FIELD\(`e`.`sku`, ':\(', ':\)'\)\)/";
         $this->assertEquals(1, preg_match($whereString, $collection->getSelectSql(true)));
     }

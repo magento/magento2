@@ -3,12 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit;
 
+use Magento\Framework\App\CacheInterface;
 use Magento\Framework\App\ProductMetadata;
+use Magento\Framework\Composer\ComposerInformation;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ProductMetadataTest extends \PHPUnit\Framework\TestCase
+class ProductMetadataTest extends TestCase
 {
     /**
      * @var ProductMetadata
@@ -16,17 +22,26 @@ class ProductMetadataTest extends \PHPUnit\Framework\TestCase
     private $productMetadata;
 
     /**
-     * @var \Magento\Framework\Composer\ComposerInformation|\PHPUnit_Framework_MockObject_MockObject
+     * @var ComposerInformation|MockObject
      */
     private $composerInformationMock;
 
-    protected function setUp()
+    /**
+     * @var CacheInterface|MockObject
+     */
+    private $cacheMock;
+
+    protected function setUp(): void
     {
-        $this->composerInformationMock = $this->getMockBuilder(\Magento\Framework\Composer\ComposerInformation::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->composerInformationMock = $this->getMockBuilder(ComposerInformation::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->cacheMock = $this->getMockBuilder(CacheInterface::class)
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
-        $this->productMetadata = $objectManager->getObject(ProductMetadata::class);
+        $this->productMetadata = $objectManager->getObject(ProductMetadata::class, ['cache' => $this->cacheMock]);
         $reflectionProperty = new \ReflectionProperty($this->productMetadata, 'composerInformation');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($this->productMetadata, $this->composerInformationMock);
@@ -40,8 +55,19 @@ class ProductMetadataTest extends \PHPUnit\Framework\TestCase
     public function testGetVersion($packageList, $expectedVersion)
     {
         $this->composerInformationMock->expects($this->any())->method('getSystemPackages')->willReturn($packageList);
+        $this->cacheMock->expects($this->once())->method('save')->with($expectedVersion);
         $productVersion = $this->productMetadata->getVersion();
         $this->assertNotEmpty($productVersion, 'Empty product version');
+        $this->assertEquals($expectedVersion, $productVersion);
+    }
+
+    public function testGetVersionCached()
+    {
+        $expectedVersion = '1.2.3';
+        $this->composerInformationMock->expects($this->never())->method('getSystemPackages');
+        $this->cacheMock->expects($this->once())->method('load')->willReturn($expectedVersion);
+        $this->cacheMock->expects($this->never())->method('save');
+        $productVersion = $this->productMetadata->getVersion();
         $this->assertEquals($expectedVersion, $productVersion);
     }
 

@@ -7,6 +7,9 @@ namespace Magento\Bundle\Observer;
 
 use Magento\Framework\Event\ObserverInterface;
 
+/**
+ * Class adds bundle products into up-sell products collection
+ */
 class AppendUpsellProductsObserver implements ObserverInterface
 {
     /**
@@ -98,9 +101,15 @@ class AppendUpsellProductsObserver implements ObserverInterface
         }
 
         /* @var $bundleCollection \Magento\Catalog\Model\ResourceModel\Product\Collection */
-        $bundleCollection = $product->getCollection()->addAttributeToSelect(
+        $bundleCollection = $product->getCollection();
+        $bundleCollection->addAttributeToSelect(
             $this->config->getProductAttributes()
-        )->addStoreFilter()->addMinimalPrice()->addFinalPrice()->addTaxPercents()->setVisibility(
+        );
+        $bundleCollection->addStoreFilter();
+        $bundleCollection->addMinimalPrice();
+        $bundleCollection->addFinalPrice();
+        $bundleCollection->addTaxPercents();
+        $bundleCollection->setVisibility(
             $this->productVisibility->getVisibleInCatalogIds()
         );
 

@@ -19,7 +19,7 @@
             <argument name="adjustmentFee" type="string" defaultValue="0"/>
             <argument name="rowNumber" type="string" defaultValue="1"/>
         </arguments>
-        
+
         <!-- Click 'Credit Memo' button -->
         <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreateCreditMemo"/>
         <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeNewCreditMemoPage"/>
@@ -37,14 +37,5 @@
         <waitForElementVisible selector="{{AdminCreditMemoTotalSection.updateTotals}}" stepKey="waitForUpdateTotalsButton"/>
         <click selector="{{AdminCreditMemoTotalSection.updateTotals}}" stepKey="clickUpdateTotals"/>
         <checkOption selector="{{AdminCreditMemoTotalSection.emailCopy}}" stepKey="checkSendEmailCopy"/>
-    </actionGroup>
-    
-    <!-- Open and fill CreditMemo refund with back to stock -->
-    <actionGroup name="AdminOpenAndFillCreditMemoRefundAndBackToStockActionGroup" extends="AdminOpenAndFillCreditMemoRefundActionGroup">
-        <annotations>
-            <description>EXTENDS: AdminOpenAndFillCreditMemoRefundActionGroup. Checks 'Return to Stock'.</description>
-        </annotations>
-
-        <checkOption selector="{{AdminCreditMemoItemsSection.itemReturnToStock(rowNumber)}}" stepKey="backToStock" after="scrollToItemsToRefund"/>
     </actionGroup>
 </actionGroups>

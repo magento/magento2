@@ -3,9 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\OfflinePayments\Observer;
 
+use Magento\Framework\Event\Observer;
 use Magento\Framework\Event\ObserverInterface;
 use Magento\OfflinePayments\Model\Banktransfer;
 use Magento\OfflinePayments\Model\Cashondelivery;
@@ -19,10 +21,10 @@ class BeforeOrderPaymentSaveObserver implements ObserverInterface
     /**
      * Sets current instructions for bank transfer account
      *
-     * @param \Magento\Framework\Event\Observer $observer
+     * @param Observer $observer
      * @return void
      */
-    public function execute(\Magento\Framework\Event\Observer $observer)
+    public function execute(Observer $observer)
     {
         /** @var \Magento\Sales\Model\Order\Payment $payment */
         $payment = $observer->getEvent()->getPayment();
@@ -30,18 +32,26 @@ class BeforeOrderPaymentSaveObserver implements ObserverInterface
             Banktransfer::PAYMENT_METHOD_BANKTRANSFER_CODE,
             Cashondelivery::PAYMENT_METHOD_CASHONDELIVERY_CODE
         ];
-        if (in_array($payment->getMethod(), $instructionMethods)) {
+        if (in_array($payment->getMethod(), $instructionMethods)
+            && empty($payment->getAdditionalInformation('instructions'))) {
             $payment->setAdditionalInformation(
                 'instructions',
-                $payment->getMethodInstance()->getInstructions()
+                $payment->getMethodInstance()->getConfigData(
+                    'instructions',
+                    $payment->getOrder()->getStoreId()
+                )
             );
         } elseif ($payment->getMethod() === Checkmo::PAYMENT_METHOD_CHECKMO_CODE) {
             $methodInstance = $payment->getMethodInstance();
-            if (!empty($methodInstance->getPayableTo())) {
-                $payment->setAdditionalInformation('payable_to', $methodInstance->getPayableTo());
+            $storeId = $payment->getOrder()->getStoreId();
+
+            $payableTo = $methodInstance->getConfigData('payable_to', $storeId);
+            if (!empty($payableTo)) {
+                $payment->setAdditionalInformation('payable_to', $payableTo);
             }
-            if (!empty($methodInstance->getMailingAddress())) {
-                $payment->setAdditionalInformation('mailing_address', $methodInstance->getMailingAddress());
+            $mailingAddress = $methodInstance->getConfigData('mailing_address', $storeId);
+            if (!empty($mailingAddress)) {
+                $payment->setAdditionalInformation('mailing_address', $mailingAddress);
             }
         }
     }

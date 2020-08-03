@@ -16,7 +16,6 @@
  */
 ?>
 <?php
-$start = microtime(true);
 $_productCollection = $block->getLoadedProductCollection();
 $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
 ?>
@@ -98,4 +97,3 @@ $_helper = $this->helper(Magento\Catalog\Helper\Output::class);
     </div>
     <?= $block->getToolbarHtml() ?>
 <?php endif; ?>
-<?= $time_taken = microtime(true) - $start ?>

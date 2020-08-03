@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="DeleteCustomerFromAdminActionGroup">
+        <annotations>
+            <description>Goes to the Admin Customers grid page. Deletes the provided Customer from the grid. Validates that the Success message is present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="customer" defaultValue="CustomerEntityOne"/>
+        </arguments>
+
+        <amOnPage url="{{AdminCustomerPage.url}}" stepKey="navigateToCustomers"/>
+        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickOnButtonToRemoveFiltersIfPresent"/>
+        <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="{{customer.email}}" stepKey="fillSearch"/>
+        <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickSubmit"/>
+        <waitForAjaxLoad stepKey="waitForLoadAjax"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.multicheck}}" stepKey="selectAll"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.actions}}" stepKey="clickActions"/>
+        <click selector="{{AdminCustomerGridMainActionsSection.delete}}" stepKey="clickDelete"/>
+        <waitForAjaxLoad stepKey="waitForLoadConfirmation"/>
+        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="A total of 1 record(s) were deleted" stepKey="seeSuccess"/>
+    </actionGroup>
+</actionGroups>

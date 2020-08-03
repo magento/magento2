@@ -7,15 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Test\Unit\Model\Keyword\Command;
 
-use Magento\MediaGallery\Model\Keyword\Command\GetAssetKeywords;
-use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
-use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\Exception\NotFoundException;
+use Magento\Framework\Exception\IntegrationException;
+use Magento\MediaGallery\Model\Keyword\Command\GetAssetKeywords;
+use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
+use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 class GetAssetKeywordsTest extends TestCase
 {
@@ -34,24 +35,30 @@ class GetAssetKeywordsTest extends TestCase
      */
     private $assetKeywordFactoryStub;
 
+    /**
+     * @var LoggerInterface|MockObject
+     */
+    private $loggerMock;
+
     protected function setUp(): void
     {
         $this->resourceConnectionStub = $this->createMock(ResourceConnection::class);
         $this->assetKeywordFactoryStub = $this->createMock(KeywordInterfaceFactory::class);
+        $this->loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->sut = new GetAssetKeywords(
             $this->resourceConnectionStub,
-            $this->assetKeywordFactoryStub
+            $this->assetKeywordFactoryStub,
+            $this->loggerMock
         );
     }
 
     /**
      * Posive test for the main case
      *
-     * @dataProvider casesProvider()
+     * @dataProvider casesProvider
      * @param array $databaseQueryResult
      * @param int $expectedNumberOfFoundKeywords
-     * @throws NotFoundException
      */
     public function testFind(array $databaseQueryResult, int $expectedNumberOfFoundKeywords): void
     {
@@ -74,15 +81,24 @@ class GetAssetKeywordsTest extends TestCase
     {
         return [
             'not_found' => [[],0],
-            'find_one_keyword' => [['keywordRawData'],1],
-            'find_several_keywords' => [['keywordRawData', 'keywordRawData'],2],
+            'find_one_keyword' => [
+                'result' => [['id' => 1, 'keyword' => 'keywordRawData']],
+                'expectedCount' => 1
+            ],
+            'find_several_keywords' => [
+                'results' => [
+                    ['id' => 1, 'keyword'=> 'keywordRawData'],
+                    ['id' => 2, 'keyword' => 'keywordRawData']
+                ],
+                'expectedCount' => 2
+            ],
         ];
     }
 
     /**
-     * Negative test
+     * Test case when an error occured during get data request.
      *
-     * @throws NotFoundException
+     * @throws IntegrationException
      */
     public function testNotFoundBecauseOfError(): void
     {
@@ -92,7 +108,10 @@ class GetAssetKeywordsTest extends TestCase
             ->method('getConnection')
             ->willThrowException((new \Exception()));
 
-        $this->expectException(NotFoundException::class);
+        $this->expectException(IntegrationException::class);
+        $this->loggerMock->expects($this->once())
+            ->method('critical')
+            ->willReturnSelf();
 
         $this->sut->execute($randomAssetId);
     }
@@ -114,7 +133,8 @@ class GetAssetKeywordsTest extends TestCase
         $selectStub->method('join')->willReturnSelf();
         $selectStub->method('where')->willReturnSelf();
 
-        $connectionMock = $this->getMockBuilder(AdapterInterface::class)->getMock();
+        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
+            ->getMock();
         $connectionMock
             ->method('select')
             ->willReturn($selectStub);
@@ -129,7 +149,8 @@ class GetAssetKeywordsTest extends TestCase
 
     private function configureAssetKeywordFactoryStub(): void
     {
-        $keywordStub = $this->getMockBuilder(KeywordInterface::class)->getMock();
+        $keywordStub = $this->getMockBuilder(KeywordInterface::class)
+            ->getMock();
         $this->assetKeywordFactoryStub
             ->method('create')
             ->willReturn($keywordStub);

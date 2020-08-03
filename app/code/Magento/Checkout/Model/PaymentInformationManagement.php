@@ -9,7 +9,7 @@ namespace Magento\Checkout\Model;
 use Magento\Framework\Exception\CouldNotSaveException;
 
 /**
- * Payment information management
+ * Payment information management service.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -17,7 +17,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
 {
     /**
      * @var \Magento\Quote\Api\BillingAddressManagementInterface
-     * @deprecated 100.2.0 This call was substituted to eliminate extra quote::save call
+     * @deprecated 100.1.0 This call was substituted to eliminate extra quote::save call
      */
     protected $billingAddressManagement;
 
@@ -85,6 +85,9 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
         try {
             $orderId = $this->cartManagement->placeOrder($cartId);
         } catch (\Magento\Framework\Exception\LocalizedException $e) {
+            $this->getLogger()->critical(
+                'Placing an order with quote_id ' . $cartId . ' is failed: ' . $e->getMessage()
+            );
             throw new CouldNotSaveException(
                 __($e->getMessage()),
                 $e
@@ -149,7 +152,7 @@ class PaymentInformationManagement implements \Magento\Checkout\Api\PaymentInfor
      * Get logger instance
      *
      * @return \Psr\Log\LoggerInterface
-     * @deprecated 100.2.0
+     * @deprecated 100.1.8
      */
     private function getLogger()
     {

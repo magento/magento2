@@ -15,11 +15,4 @@
         </arguments>
         <dontSee selector="{{StorefrontCategoryProductSection.ProductTitleByName(productName)}}" stepKey="dontSeeCorrectProductsOnStorefront"/>
     </actionGroup>
-    <actionGroup name="StorefrontCheckProductPositionActionGroup">
-        <arguments>
-            <argument name="position" type="string"/>
-            <argument name="productName" type="string"/>
-        </arguments>
-        <see selector="{{StorefrontCategoryProductSection.ProductInfoByNumber(position)}}" userInput="{{productName}}" stepKey="assertProductPosition"/>
-    </actionGroup>
 </actionGroups>

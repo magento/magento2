@@ -12,5 +12,7 @@
         <element name="taxAmount" type="text" selector="[data-th='Tax']>span"/>
         <element name="taxSummary" type="text" selector=".totals-tax-summary"/>
         <element name="rate" type="text" selector=" tr.totals-tax-details.shown th.mark"/>
+        <element name="subtotalExcludingTax" type="text" selector="#cart-totals .totals.sub.excl span.price"/>
+        <element name="subtotalIncludingTax" type="text" selector="#cart-totals .totals.sub.incl span.price"/>
     </section>
 </sections>
