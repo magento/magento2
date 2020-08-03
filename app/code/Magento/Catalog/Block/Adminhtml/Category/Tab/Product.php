@@ -16,6 +16,7 @@ use Magento\Backend\Block\Widget\Grid\Column;
 use Magento\Backend\Block\Widget\Grid\Extended;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\Product\Type;
 use Magento\Framework\App\ObjectManager;
 
 class Product extends \Magento\Backend\Block\Widget\Grid\Extended
@@ -43,6 +44,11 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     private $visibility;
 
     /**
+     * @var Type
+     */
+    private $type;
+
+    /**
      * @param \Magento\Backend\Block\Template\Context $context
      * @param \Magento\Backend\Helper\Data $backendHelper
      * @param \Magento\Catalog\Model\ProductFactory $productFactory
@@ -50,6 +56,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
      * @param array $data
      * @param Visibility|null $visibility
      * @param Status|null $status
+     * @param Type|null $type
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -58,12 +65,14 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
         \Magento\Framework\Registry $coreRegistry,
         array $data = [],
         Visibility $visibility = null,
-        Status $status = null
+        Status $status = null,
+        Type $type = null
     ) {
         $this->_productFactory = $productFactory;
         $this->_coreRegistry = $coreRegistry;
         $this->visibility = $visibility ?: ObjectManager::getInstance()->get(Visibility::class);
         $this->status = $status ?: ObjectManager::getInstance()->get(Status::class);
+        $this->type = $type ?: ObjectManager::getInstance()->get(Type::class);
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -79,6 +88,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Retrieve current category instance
+     *
      * @return array|null
      */
     public function getCategory()
@@ -184,7 +195,15 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
         );
         $this->addColumn('name', ['header' => __('Name'), 'index' => 'name']);
         $this->addColumn('sku', ['header' => __('SKU'), 'index' => 'sku']);
-        $this->addColumn('type_id', ['header' => __('Type'), 'index' => 'type_id']);
+        $this->addColumn(
+            'type_id',
+            [
+                'header' => __('Type'),
+                'index' => 'type_id',
+                'type' => 'options',
+                'options' => $this->type->getOptionArray()
+            ]
+        );
         $this->addColumn(
             'visibility',
             [
@@ -233,6 +252,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Retrieve grid url
+     *
      * @return string
      */
     public function getGridUrl()
