@@ -50,7 +50,7 @@
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('0')}}" userInput="0.5" stepKey="fillProductTierPriceQty"/>
         <!--Step4. Close *Advanced Pricing* (Click on button *Done*). Save *prod1* (Click on button *Save*)-->
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickOnDoneButton2"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
 
         <!--The code should be uncommented after fix MAGETWO-96016-->
         <!--<click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingLink2"/>-->
@@ -70,7 +70,7 @@
         <fillField selector="{{AdminProductFormAdvancedInventorySection.qtyIncrements}}" userInput=".5" stepKey="fillQtyIncrements"/>
         <!--Step6. Close *Advanced Inventory* (Click on button *Done*). Save *prod1* (Click on button *Save*) -->
         <click selector="{{AdminProductFormAdvancedInventorySection.doneButton}}" stepKey="clickOnDoneButton3"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton2"/>
         <!--Step7. Open *Customer view* (Go to *Store Front*). Open *prod1* page (Find via search and click on product name) -->
         <amOnPage url="{{StorefrontHomePage.url}}$$createPreReqSimpleProduct.custom_attributes[url_key]$$.html" stepKey="amOnProductPage"/>
         <!--Step8. Fill *1.5* in *Qty*. Click on button *Add to Cart*-->
