@@ -7,14 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Test\Legacy\Magento\Framework\App\Action;
 
-use Exception;
 use Magento\Framework\App\Action\AbstractAction;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Exception\LocalizedException;
-use Magento\TestFramework\Utility\ClassNameExtractor;
+use Magento\TestFramework\Utility\ChildrenClassesSearch;
 use PHPUnit\Framework\TestCase;
-use ReflectionClass;
 
 /**
  * Test newly created controllers must do not extend AbstractAction.
@@ -22,9 +20,9 @@ use ReflectionClass;
 class AbstractActionTest extends TestCase
 {
     /**
-     * @var ClassNameExtractor
+     * @var ChildrenClassesSearch
      */
-    private $classNameExtractor;
+    private $childrenClassesSearch;
 
     /**
      * @var Files
@@ -36,32 +34,20 @@ class AbstractActionTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->classNameExtractor = new ClassNameExtractor();
+        $this->childrenClassesSearch = new ChildrenClassesSearch();
         $this->fileUtilities = Files::init();
     }
 
     /**
      * Test newly created controllers do not extend deprecated AbstractAction.
+     *
+     * @throws \ReflectionException
      */
     public function testNewControllersDoNotExtendAbstractAction(): void
     {
         $files = $this->getTestFiles();
-        $found = [];
 
-        foreach ($files as $file) {
-            $class = $this->classNameExtractor->getNameWithNamespace(file_get_contents($file[0]));
-
-            if ($class) {
-                try {
-                    $classReflection = new  ReflectionClass($class);
-                    if ($classReflection->isSubclassOf(AbstractAction::class)) {
-                        $found[] = $class;
-                    }
-                } catch (Exception $exception) {
-                    $this->addWarning('Skipped due to exception: ' . $class);
-                }
-            }
-        }
+        $found = $this->childrenClassesSearch->getClassesWhichAreChildrenOf($files, AbstractAction::class);
 
         $this->assertEmpty(
             $found,
