@@ -94,6 +94,7 @@ class CreditmemoTest extends GraphQlAbstract
                         'product_sale_price' => [
                             'value' => 10
                         ],
+                        'discounts' => [],
                         'quantity_refunded' => 1
                     ],
                     [
@@ -102,6 +103,7 @@ class CreditmemoTest extends GraphQlAbstract
                         'product_sale_price' => [
                             'value' => 10
                         ],
+                        'discounts' => [],
                         'quantity_refunded' => 1
                     ]
                 ],
@@ -202,6 +204,7 @@ class CreditmemoTest extends GraphQlAbstract
                         'product_sale_price' => [
                             'value' => 15
                         ],
+                        'discounts' => [],
                         'quantity_refunded' => 1
                     ],
 
@@ -311,6 +314,15 @@ class CreditmemoTest extends GraphQlAbstract
                         'product_sale_price' => [
                             'value' => 15
                         ],
+                        'discounts' => [
+                            [
+                                'amount' => [
+                                    'value' => 3,
+                                    'currency' => "USD"
+                                ],
+                                'label' => 'Discount Label for 10% off'
+                            ]
+                        ],
                         'quantity_refunded' => 1
                     ],
 
@@ -352,7 +364,7 @@ class CreditmemoTest extends GraphQlAbstract
                         ],
                         'discounts' => [
                             [
-                                'amount'=> ['value'=> 1],
+                                'amount'=> ['value'=> 1]
                             ]
                         ],
                     ],
@@ -750,6 +762,7 @@ query {
                     product_sale_price {
                         value
                     }
+                    discounts { amount{value currency} label }
                     quantity_refunded
                 }
                 total {
