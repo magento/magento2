@@ -66,7 +66,6 @@ class SaveCartDataWithPayflowProTest extends PaypalPayflowProAbstractTest
         $this->assertNotEmpty($this->getVaultCartData()->getPublicHash());
         $this->assertNotEmpty($this->getVaultCartData()->getTokenDetails());
         $this->assertNotEmpty($this->getVaultCartData()->getGatewayToken());
-        $this->assertNotEmpty($this->getVaultCartData()->getPublicHash());
         $this->assertTrue($this->getVaultCartData()->getIsActive());
         $this->assertTrue($this->getVaultCartData()->getIsVisible());
     }
@@ -94,7 +93,6 @@ class SaveCartDataWithPayflowProTest extends PaypalPayflowProAbstractTest
         $this->assertNotEmpty($this->getVaultCartData()->getPublicHash());
         $this->assertNotEmpty($this->getVaultCartData()->getTokenDetails());
         $this->assertNotEmpty($this->getVaultCartData()->getGatewayToken());
-        $this->assertNotEmpty($this->getVaultCartData()->getPublicHash());
         $this->assertTrue($this->getVaultCartData()->getIsActive());
         $this->assertFalse($this->getVaultCartData()->getIsVisible());
     }
