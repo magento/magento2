@@ -1,0 +1,24 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
+    <system>
+        <section id="system">
+            <group id="media_gallery_renditions" translate="label" type="text" sortOrder="1010" showInDefault="1" showInWebsite="0" showInStore="0">
+                <label>Media Gallery Renditions</label>
+                <field id="width" translate="label" type="text" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Width</label>
+                    <validate>validate-zero-or-greater validate-digits</validate>
+                </field>
+                <field id="height" translate="label" type="text" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                    <label>Height</label>
+                    <validate>validate-zero-or-greater validate-digits</validate>
+                </field>
+            </group>
+        </section>
+    </system>
+</config>
