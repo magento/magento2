@@ -35,6 +35,10 @@
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
     </entity>
+    <entity name="ApiSimpleProductWithNoSpace" type="product" extends="ApiSimpleProduct">
+        <data key="name">TestFooBar</data>
+        <data key="sku" unique="suffix">foobar</data>
+    </entity>
     <entity name="ApiSimpleProductWithSpecCharInName" type="product" extends="ApiSimpleProduct">
         <data key="name">Pursuit Lumaflex&#38;trade; Tone Band</data>
         <data key="sku" unique="suffix">x&#38;trade;</data>
@@ -67,6 +71,9 @@
         <data key="weight">1</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute_array">CustomAttributeCategoryIds</requiredEntity>
+    </entity>
+    <entity name="ProductForPartialSearch" extends="SimpleProduct" type="product">
+        <data key="sku">partialTestSku</data>
     </entity>
     <entity name="ProductWithSpecialSymbols" extends="SimpleProduct" type="product">
         <data key="name">SimpleProduct -+~/\\&lt;&gt;\’“:*\$#@()!,.?`=%&amp;^</data>
@@ -276,6 +283,9 @@
         <data key="quantity">100</data>
         <requiredEntity type="product_extension_attribute">EavStockItem</requiredEntity>
         <requiredEntity type="custom_attribute">CustomAttributeProductAttribute</requiredEntity>
+    </entity>
+    <entity name="ApiSimpleProductWithCategory" type="product2" extends="ApiSimpleOne">
+        <requiredEntity type="custom_attribute">CustomAttributeCategoryIds</requiredEntity>
     </entity>
     <entity name="ApiSimpleProductWithShortSKU" type="product2" extends="ApiSimpleOne">
         <data key="sku" unique="suffix">pr</data>

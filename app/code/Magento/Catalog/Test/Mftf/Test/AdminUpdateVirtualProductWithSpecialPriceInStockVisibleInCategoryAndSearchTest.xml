@@ -37,8 +37,7 @@
         </after>
 
         <!-- Search default virtual product in the grid page -->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAllFilter" />
         <fillField selector="{{AdminProductGridFilterSection.keywordSearch}}" userInput="$$initialVirtualProduct.name$$" stepKey="fillVirtualProductNameInKeywordSearch"/>
         <click selector="{{AdminProductGridFilterSection.keywordSearchButton}}" stepKey="clickKeywordSearchButton"/>
@@ -70,14 +69,13 @@
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
         <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{updateVirtualProductSpecialPrice.urlKey}}" stepKey="fillUrlKey"/>
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForVirtualProductSaved"/>
+
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
         <!-- Verify we see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSaveSuccessMessage"/>
 
         <!-- Search updated virtual product(from above step) in the grid page -->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPageToSearchUpdatedVirtualProduct"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPageToLoad"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPageToSearchUpdatedVirtualProduct"/>
         <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="clickClearAll"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="clickFiltersButton"/>
         <fillField selector="{{AdminProductGridFilterSection.nameFilter}}" userInput="{{updateVirtualProductSpecialPrice.name}}" stepKey="fillVirtualProductNameInNameFilter"/>
@@ -125,7 +123,9 @@
         <amOnPage url="{{StorefrontProductPage.url(updateVirtualProductSpecialPrice.urlKey)}}" stepKey="goToProductStorefrontPage"/>
         <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{updateVirtualProductSpecialPrice.name}}" stepKey="seeVirtualProductNameOnStoreFrontPage"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{updateVirtualProductSpecialPrice.sku}}" stepKey="seeVirtualProductSku"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeVirtualProductSku">
+            <argument name="productSku" value="{{updateVirtualProductSpecialPrice.sku}}"/>
+        </actionGroup>
         <!-- Verify customer see virtual product special price on the storefront page -->
         <grabTextFrom selector="{{StorefrontProductInfoMainSection.specialPriceAmount}}" stepKey="specialPriceAmount"/>
         <assertEquals stepKey="assertSpecialPriceTextOnProductPage">
