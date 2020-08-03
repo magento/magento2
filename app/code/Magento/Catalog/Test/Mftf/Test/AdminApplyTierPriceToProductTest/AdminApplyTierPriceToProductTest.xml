@@ -241,7 +241,7 @@
         <click selector="{{AdminProductFormAdvancedPricingSection.advancedPricingCloseButton}}" stepKey="closeAdvancedPricingPopup"/>
         <waitForElementVisible selector="{{AdminProductFormSection.productPrice}}" stepKey="waitForAdminProductFormSectionProductPriceInput"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="200" stepKey="fillProductPrice200"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
         <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage4"/>
         <grabTextFrom selector="{{CheckoutCartProductSection.productSubtotalByName($$createSimpleProduct.name$$)}}" stepKey="grabTextFromSubtotalField7"/>
         <assertEquals message="Shopping cart should contain subtotal $4,000" stepKey="assertSubtotalField7">
