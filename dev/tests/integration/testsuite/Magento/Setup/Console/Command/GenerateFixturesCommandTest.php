@@ -81,14 +81,6 @@ class GenerateFixturesCommandTest extends \Magento\TestFramework\Indexer\TestCas
     }
 
     /**
-     * @return string
-     */
-    private function getEdition()
-    {
-        return trim(file_get_contents(__DIR__  . '/_files/edition'));
-    }
-
-    /**
      * teardown
      */
     protected function tearDown(): void
@@ -117,7 +109,7 @@ class GenerateFixturesCommandTest extends \Magento\TestFramework\Indexer\TestCas
      */
     public function testExecute()
     {
-        $profile = BP . "/setup/performance-toolkit/profiles/{$this->getEdition()}/small.xml";
+        $profile = realpath(__DIR__ . "/_files/min_profile.xml");
         $this->commandTester->execute(
             [
                 GenerateFixturesCommand::PROFILE_ARGUMENT => $profile,
