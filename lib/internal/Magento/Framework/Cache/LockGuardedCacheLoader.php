@@ -91,7 +91,7 @@ class LockGuardedCacheLoader
         callable $dataSaver
     ) {
         $cachedData = $dataLoader(); //optimistic read
-        $deadline = microtime(true) + $this->loadTimeout / 100;
+        $deadline = microtime(true) + $this->loadTimeout / 1000;
 
         while ($cachedData === false) {
             if ($deadline <= microtime(true)) {

@@ -139,43 +139,4 @@ class LockGuardedCacheLoaderTest extends TestCase
             $this->LockGuardedCacheLoader->lockedLoadData($lockName, $dataLoader, $dataCollector, $dataSaver)
         );
     }
-
-    /**
-     * Verify data collected when Parallel Generation is allowed.
-     *
-     * @return void
-     */
-    public function testDataCollectedWithParallelGeneration(): void
-    {
-        $lockName = \uniqid('lock_name_1_', true);
-
-        $dataLoader = function () {
-            return false;
-        };
-
-        $dataCollector = function () {
-            return 'collected_data';
-        };
-
-        $dataSaver = function () {
-            return true;
-        };
-
-        $closure = \Closure::bind(function ($cacheLoader) {
-            return $cacheLoader->allowParallelGenerationConfigValue = true;
-        }, null, $this->LockGuardedCacheLoader);
-        $closure($this->LockGuardedCacheLoader);
-
-        $this->lockManagerInterfaceMock
-            ->expects($this->once())->method('lock')
-            ->with($lockName, 0)
-            ->willReturn(false);
-
-        $this->lockManagerInterfaceMock->expects($this->never())->method('unlock');
-
-        $this->assertEquals(
-            'collected_data',
-            $this->LockGuardedCacheLoader->lockedLoadData($lockName, $dataLoader, $dataCollector, $dataSaver)
-        );
-    }
 }
