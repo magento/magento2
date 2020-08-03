@@ -13,7 +13,7 @@ namespace Magento\Bundle\Model\Product;
  * @magentoIndexerDimensionMode catalog_product_price website_and_customer_group
  * @group indexer_dimension
  */
-class DynamicBundlePriceCalculatorWithDimensionTest extends BundlePriceAbstract
+class DynamicBundlePriceCalculatorWithDimensionTest extends BundlePriceCalculatorAbstract
 {
     /**
      * @param array $strategyModifiers
