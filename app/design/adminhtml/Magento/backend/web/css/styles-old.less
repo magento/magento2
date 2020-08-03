@@ -1827,6 +1827,10 @@
         background-image: url(../images/fam_application_form_delete.png);
     }
 
+    .x-tree-node .x-tree-node-el input[type=checkbox] {
+        margin-left: 3px;
+    }
+
     //
     //  Styles for "js" tooltip with positionings
     //  --------------------------------------
@@ -4070,6 +4074,21 @@
     }
 }
 
+.adminhtml-email_template-preview {
+    .cms-revision-preview {
+        padding-top: 56.25%;
+        position: relative;
+
+        #preview_iframe {
+            height: 100%;
+            left: 0;
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+    }
+}
+
 .admin__scope-old {
     .buttons-set {
         margin: 0 0 15px;
@@ -5086,7 +5105,7 @@
 .adminhtml-locks-index {
     .admin__scope-old {
         .grid .col-name {
-            &:extend(.col-570 all);
+            &:extend(.col-570-max all);
         }
     }
 }

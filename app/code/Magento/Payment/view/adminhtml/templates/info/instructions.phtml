@@ -9,7 +9,7 @@
  * @see \Magento\Payment\Block\Info
  */
 ?>
-<p><?= $block->escapeHtml($block->getTitle()) ?></p>
+<p><?= $block->escapeHtml($block->getMethod()->getTitle()) ?></p>
 <?php if ($block->getInstructions()) : ?>
     <table>
         <tbody>

@@ -68,7 +68,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function _prepareForm()
     {
@@ -114,7 +114,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'name' => 'password',
                 'label' => __('New Password'),
                 'title' => __('New Password'),
-                'class' => 'validate-admin-password admin__control-text'
+                'class' => 'validate-admin-password'
             ]
         );
 
@@ -124,7 +124,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
             [
                 'name' => 'password_confirmation',
                 'label' => __('Password Confirmation'),
-                'class' => 'validate-cpassword admin__control-text'
+                'class' => 'validate-cpassword'
             ]
         );
 
@@ -152,7 +152,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                 'label' => __('Your Password'),
                 'id' => self::IDENTITY_VERIFICATION_PASSWORD_FIELD,
                 'title' => __('Your Password'),
-                'class' => 'validate-current-password required-entry admin__control-text',
+                'class' => 'validate-current-password required-entry',
                 'required' => true
             ]
         );

@@ -60,7 +60,7 @@ class Proxy implements
     }
 
     /**
-     * Sleep magic method.
+     * Remove links to other objects.
      *
      * @return array
      */

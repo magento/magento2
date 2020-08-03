@@ -14,7 +14,7 @@ use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Math\Division as MathDivision;
 
 /**
- * Interface StockStateProvider
+ * Provider stocks state
  */
 class StockStateProvider implements StockStateProviderInterface
 {
@@ -72,31 +72,14 @@ class StockStateProvider implements StockStateProviderInterface
      */
     public function verifyStock(StockItemInterface $stockItem)
     {
-        // Manage stock, but qty is null
         if ($stockItem->getQty() === null && $stockItem->getManageStock()) {
             return false;
         }
-
-        // Backorders are not allowed and qty reached min qty
         if ($stockItem->getBackorders() == StockItemInterface::BACKORDERS_NO
             && $stockItem->getQty() <= $stockItem->getMinQty()
         ) {
             return false;
         }
-
-        $backordersAllowed = [Stock::BACKORDERS_YES_NONOTIFY, Stock::BACKORDERS_YES_NOTIFY];
-        if (in_array($stockItem->getBackorders(), $backordersAllowed)) {
-            // Infinite - let it be In stock
-            if ($stockItem->getMinQty() == 0) {
-                return true;
-            }
-
-            // qty reached min qty - let it stand Out Of Stock
-            if ($stockItem->getQty() <= $stockItem->getMinQty()) {
-                return false;
-            }
-        }
-
         return true;
     }
 
@@ -173,6 +156,7 @@ class StockStateProvider implements StockStateProviderInterface
 
         if (!$stockItem->getIsInStock()) {
             $result->setHasError(true)
+                ->setErrorCode('out_stock')
                 ->setMessage(__('This product is out of stock.'))
                 ->setQuoteMessage(__('Some of the products are out of stock.'))
                 ->setQuoteMessageIndex('stock');
@@ -182,7 +166,11 @@ class StockStateProvider implements StockStateProviderInterface
 
         if (!$this->checkQty($stockItem, $summaryQty) || !$this->checkQty($stockItem, $qty)) {
             $message = __('The requested qty is not available');
-            $result->setHasError(true)->setMessage($message)->setQuoteMessage($message)->setQuoteMessageIndex('qty');
+            $result->setHasError(true)
+                ->setErrorCode('qty_available')
+                ->setMessage($message)
+                ->setQuoteMessage($message)
+                ->setQuoteMessageIndex('qty');
             return $result;
         } else {
             if ($stockItem->getQty() - $summaryQty < 0) {
@@ -262,17 +250,15 @@ class StockStateProvider implements StockStateProviderInterface
         if (!$stockItem->getManageStock()) {
             return true;
         }
-
-        $backordersAllowed = [Stock::BACKORDERS_YES_NONOTIFY, Stock::BACKORDERS_YES_NOTIFY];
-        // Infinite check
-        if ($stockItem->getMinQty() == 0 && in_array($stockItem->getBackorders(), $backordersAllowed)) {
-            return true;
-        }
-
         if ($stockItem->getQty() - $stockItem->getMinQty() - $qty < 0) {
-            return false;
+            switch ($stockItem->getBackorders()) {
+                case \Magento\CatalogInventory\Model\Stock::BACKORDERS_YES_NONOTIFY:
+                case \Magento\CatalogInventory\Model\Stock::BACKORDERS_YES_NOTIFY:
+                    break;
+                default:
+                    return false;
+            }
         }
-
         return true;
     }
 

@@ -70,7 +70,9 @@ class CreateCustomer implements ResolverInterface
         if (!$this->newsLetterConfig->isActive(ScopeInterface::SCOPE_STORE)) {
             $args['input']['is_subscribed'] = false;
         }
-      
+        if (isset($args['input']['date_of_birth'])) {
+            $args['input']['dob'] = $args['input']['date_of_birth'];
+        }
         $customer = $this->createCustomerAccount->execute(
             $args['input'],
             $context->getExtensionAttributes()->getStore()

@@ -15,7 +15,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
      */
     protected $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $roleAdmin = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\Authorization\Model\Role::class);

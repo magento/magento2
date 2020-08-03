@@ -7,7 +7,6 @@ namespace Magento\Catalog\Controller\Adminhtml\Product\Initialization;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\CatalogInventory\Model\Stock;
 
 /**
  * Class StockDataFilter
@@ -61,8 +60,8 @@ class StockDataFilter
             $stockData['qty'] = self::MAX_QTY_VALUE;
         }
 
-        if (isset($stockData['min_qty'])) {
-            $stockData['min_qty'] = $this->purifyMinQty($stockData['min_qty'], $stockData['backorders']);
+        if (isset($stockData['min_qty']) && (int)$stockData['min_qty'] < 0) {
+            $stockData['min_qty'] = 0;
         }
 
         if (!isset($stockData['is_decimal_divided']) || $stockData['is_qty_decimal'] == 0) {
@@ -70,28 +69,5 @@ class StockDataFilter
         }
 
         return $stockData;
-    }
-
-    /**
-     * Purifies min_qty.
-     *
-     * @param int $minQty
-     * @param int $backOrders
-     * @return float
-     */
-    private function purifyMinQty(int $minQty, int $backOrders): float
-    {
-        /**
-         * As described in the documentation if the Backorders Option is disabled
-         * it is recommended to set the Out Of Stock Threshold to a positive number.
-         * That's why to clarify the logic to the end user the code below prevent him to set a negative number so such
-         * a number will turn to zero.
-         * @see https://docs.magento.com/m2/ce/user_guide/catalog/inventory-backorders.html
-         */
-        if ($backOrders === Stock::BACKORDERS_NO && $minQty < 0) {
-            $minQty = 0;
-        }
-
-        return (float)$minQty;
     }
 }

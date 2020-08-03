@@ -3,9 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
-class TokensExchangeTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest
+use Magento\Integration\Controller\Adminhtml\Integration;
+use Magento\Integration\Model\Oauth\Consumer;
+use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest;
+
+class TokensExchangeTest extends IntegrationTest
 {
     public function testTokensExchangeReauthorize()
     {
@@ -18,22 +24,22 @@ class TokensExchangeTest extends \Magento\Integration\Test\Unit\Controller\Admin
             ->willReturnMap(
                 [
                     [
-                        \Magento\Integration\Controller\Adminhtml\Integration::PARAM_INTEGRATION_ID,
+                        Integration::PARAM_INTEGRATION_ID,
                         null,
                         self::INTEGRATION_ID,
                     ],
-                    [\Magento\Integration\Controller\Adminhtml\Integration::PARAM_REAUTHORIZE, 0, 1],
+                    [Integration::PARAM_REAUTHORIZE, 0, 1],
                 ]
             );
 
         $this->_integrationSvcMock->expects($this->once())
             ->method('get')
-            ->with($this->equalTo(self::INTEGRATION_ID))
+            ->with(self::INTEGRATION_ID)
             ->willReturn($this->_getIntegrationModelMock());
 
         $this->_oauthSvcMock->expects($this->once())->method('deleteIntegrationToken');
         $this->_oauthSvcMock->expects($this->once())->method('postToConsumer');
-        $consumerMock = $this->createMock(\Magento\Integration\Model\Oauth\Consumer::class);
+        $consumerMock = $this->createMock(Consumer::class);
         $consumerMock->expects($this->once())->method('getId')->willReturn(1);
         $this->_oauthSvcMock->expects($this->once())->method('loadConsumer')->willReturn($consumerMock);
 

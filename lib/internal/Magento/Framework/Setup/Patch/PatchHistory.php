@@ -56,9 +56,9 @@ class PatchHistory
      * Read and cache data patches from db
      *
      * All patches are store in patch_list table
-     * @see self::TABLE_NAME
      *
-     * @return array
+     * @see self::TABLE_NAME
+     * @return string[]
      */
     private function getAppliedPatches()
     {
@@ -87,12 +87,14 @@ class PatchHistory
 
         $adapter = $this->resourceConnection->getConnection();
         $adapter->insert($this->resourceConnection->getTableName(self::TABLE_NAME), [self::CLASS_NAME => $patchName]);
+
+        $this->patchesRegistry[] = $patchName;
     }
 
     /**
      * Revert patch from history
      *
-     * @param $patchName
+     * @param string $patchName
      * @return void
      */
     public function revertPatchFromHistory($patchName)

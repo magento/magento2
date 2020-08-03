@@ -1,0 +1,156 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUrlRewritesForProductInAnchorCategoriesTestWithConfigurationTurnedOffTest">
+        <annotations>
+            <features value="Url Rewrite"/>
+            <stories value="Url-rewrites for product in anchor categories"/>
+            <title value="Url-rewrites for product in anchor categories with configuration turned off"/>
+            <description value="For a product with category that has parent anchor categories, the rewrites is created when the category/product is saved."/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-6844"/>
+            <group value="urlRewrite"/>
+        </annotations>
+
+        <!-- Preconditions-->
+        <!-- Create 3 categories -->
+        <before>
+            <!-- Set the configuration for Generate "category/product" URL Rewrites to Yes (default)-->
+            <comment userInput="Enable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentEnableUrlRewriteConfig"/>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="enableGenerateUrlRewrite"/>
+            <!--Flush cache-->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterEnableConfig">
+                <argument name="tags" value=""/>
+            </actionGroup>
+
+            <createData entity="SimpleSubCategory" stepKey="simpleSubCategory1"/>
+            <createData entity="SubCategoryWithParent" stepKey="simpleSubCategory2">
+                <requiredEntity createDataKey="simpleSubCategory1"/>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="simpleSubCategory3">
+                <requiredEntity createDataKey="simpleSubCategory2"/>
+            </createData>
+            <!-- Create Simple product 1 and assign it to Category 3 -->
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="simpleSubCategory3"/>
+            </createData>
+            <!-- Set the configuration for Generate "category/product" URL Rewrites to No-->
+            <comment userInput="Disable SEO configuration setting to generate category/product URL Rewrites" stepKey="commentDisableUrlRewriteConfig"/>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0" stepKey="disableGenerateUrlRewrite"/>
+            <!--Flush cache-->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="simpleSubCategory1" stepKey="deletesimpleSubCategory1"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1" stepKey="resetConfigurationSetting"/>
+            <!--Flush cache-->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterDisableConfig">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </after>
+        <!-- Steps -->
+        <!-- 1. Log in to Admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <!-- 2. Open Marketing - SEO & Search - URL Rewrites -->
+        <actionGroup ref="AdminSearchUrlRewriteByRequestPathActionGroup" stepKey="searchingUrlRewrite">
+            <argument name="requestPath" value="$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathInUrlRewriteGrigActionGroup" stepKey="seeValueOne">
+            <argument name="requestPath" value="$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathIsNotFoundInUrlRewriteGrigActionGroup" stepKey="doNotSeeValueTwo">
+            <argument name="requestPath" value="$simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathIsNotFoundInUrlRewriteGrigActionGroup" stepKey="doNotSeeValueThree">
+            <argument name="requestPath" value="$simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathIsNotFoundInUrlRewriteGrigActionGroup" stepKey="doNotSeeValueFour">
+            <argument name="requestPath" value="$simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+
+        <!-- 3. Edit Category 1 for DEFAULT Store View: -->
+        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="switchStoreView">
+            <argument name="Store" value="_defaultStore.name"/>
+            <argument name="CatName" value="$$simpleSubCategory1.name$$"/>
+        </actionGroup>
+
+        <!-- 4. Change URL key for category and save changes -->
+        <actionGroup ref="ChangeSeoUrlKeyForSubCategoryActionGroup" stepKey="changeCategoryUrlKey">
+            <argument name="value" value="$simpleSubCategory1.custom_attributes[url_key]$new"/>
+        </actionGroup>
+
+        <!-- 5. Open Marketing - SEO & Search - URL Rewrites -->
+        <actionGroup ref="AdminSearchUrlRewriteByRequestPathActionGroup" stepKey="searchingUrlRewriteOneMoreTime">
+            <argument name="requestPath" value="$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathInUrlRewriteGrigActionGroup" stepKey="seeValueInGrid">
+            <argument name="requestPath" value="$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathIsNotFoundInUrlRewriteGrigActionGroup" stepKey="doNotSeeValueTwoInGrid">
+            <argument name="requestPath" value="$simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathIsNotFoundInUrlRewriteGrigActionGroup" stepKey="doNotSeeValueThreeInGrid">
+            <argument name="requestPath" value="$simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathIsNotFoundInUrlRewriteGrigActionGroup" stepKey="doNotSeeValueFourInGrid">
+            <argument name="requestPath" value="$simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathIsNotFoundInUrlRewriteGrigActionGroup" stepKey="doNotSeeValueFiveInGrid">
+            <argument name="requestPath" value="$simpleSubCategory1.custom_attributes[url_key]$-new/$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathIsNotFoundInUrlRewriteGrigActionGroup" stepKey="doNotSeeValueSixInGrid">
+            <argument name="requestPath" value="$simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRequestPathIsNotFoundInUrlRewriteGrigActionGroup" stepKey="doNotSeeValueSevenInGrid">
+            <argument name="requestPath" value="$simpleSubCategory1.custom_attributes[url_key]$-new/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+
+        <!-- 6. Assert Redirects work and Product is present on StoreFront-->
+        <actionGroup ref="AssertStorefrontProductRedirectActionGroup" stepKey="verifyProductInStoreFrontPage">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+            <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
+            <argument name="productRequestPath" value="/$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductRedirectActionGroup" stepKey="verifyProductInStoreFrontPageSecondAttempt">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+            <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
+            <argument name="productRequestPath" value="/$simpleSubCategory1.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductRedirectActionGroup" stepKey="verifyProductInStoreFrontPageThirdAttempt">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+            <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
+            <argument name="productRequestPath" value="/$simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductRedirectActionGroup" stepKey="verifyProductInStoreFrontPageFourthAttempt">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+            <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
+            <argument name="productRequestPath" value="/$simpleSubCategory1.custom_attributes[url_key]$/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductRedirectActionGroup" stepKey="verifyProductInStoreFrontPageFifthAttempt">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+            <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
+            <argument name="productRequestPath" value="/$simpleSubCategory1.custom_attributes[url_key]$new/$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductRedirectActionGroup" stepKey="verifyProductInStoreFrontPageSixthAttempt">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+            <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
+            <argument name="productRequestPath" value="/$simpleSubCategory1.custom_attributes[url_key]$new/$simpleSubCategory2.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontProductRedirectActionGroup" stepKey="verifyProductInStoreFrontPageSeventhAttempt">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+            <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
+            <argument name="productRequestPath" value="/$simpleSubCategory1.custom_attributes[url_key]$new/$simpleSubCategory2.custom_attributes[url_key]$/$simpleSubCategory3.custom_attributes[url_key]$/$createSimpleProduct.custom_attributes[url_key]$.html"/>
+        </actionGroup>
+    </test>
+</tests>

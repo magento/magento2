@@ -19,7 +19,7 @@ use Magento\Catalog\Model\Product\Attribute\Source\Status as ProductStatus;
  * @api
  * @since 100.0.2
  *
- * @deprecated 2.3.0 Replaced with Multi Source Inventory
+ * @deprecated 100.3.0 Replaced with Multi Source Inventory
  * @link https://devdocs.magento.com/guides/v2.3/inventory/index.html
  * @link https://devdocs.magento.com/guides/v2.3/inventory/catalog-inventory-replacements.html
  */
@@ -230,6 +230,8 @@ class DefaultStock extends AbstractIndexer implements StockInterface
     {
         $connection = $this->getConnection();
         $qtyExpr = $connection->getCheckSql('cisi.qty > 0', 'cisi.qty', 0);
+        $metadata = $this->getMetadataPool()->getMetadata(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $linkField = $metadata->getLinkField();
 
         $select = $connection->select()->from(
             ['e' => $this->getTable('catalog_product_entity')],
@@ -242,6 +244,12 @@ class DefaultStock extends AbstractIndexer implements StockInterface
         )->joinInner(
             ['cisi' => $this->getTable('cataloginventory_stock_item')],
             'cisi.stock_id = cis.stock_id AND cisi.product_id = e.entity_id',
+            []
+        )->joinInner(
+            ['mcpei' => $this->getTable('catalog_product_entity_int')],
+            'e.' . $linkField . ' = mcpei.' . $linkField
+            . ' AND mcpei.attribute_id = ' . $this->_getAttribute('status')->getId()
+            . ' AND mcpei.value = ' . ProductStatus::STATUS_ENABLED,
             []
         )->columns(
             ['qty' => $qtyExpr]

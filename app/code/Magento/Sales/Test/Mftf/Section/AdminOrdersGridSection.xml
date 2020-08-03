@@ -39,5 +39,6 @@
         <element name="changeOrderStatus" type="button" selector="//div[contains(concat(' ',normalize-space(@class),' '),' row-gutter ')]//span[text()='{{status}}']" parameterized="true" timeout="30"/>
         <element name="viewLink" type="text" selector="//td/div[contains(.,'{{orderID}}')]/../..//a[@class='action-menu-item']" parameterized="true"/>
         <element name="selectOrderID" type="checkbox" selector="//td/div[text()='{{orderId}}']/../preceding-sibling::td//input" parameterized="true" timeout="60"/>
+        <element name="orderId" type="text" selector="//table[contains(@class, 'data-grid')]//div[contains(text(), '{{orderId}}')]" parameterized="true"/>
     </section>
 </sections>

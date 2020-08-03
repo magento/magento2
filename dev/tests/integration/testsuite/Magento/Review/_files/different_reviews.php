@@ -3,9 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-// phpcs:ignore Magento2.Security.IncludeFile
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple.php');
 
 $review = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\Review\Model\Review::class,
@@ -29,6 +29,12 @@ $review->setEntityId(
     ]
 )->save();
 
+/*
+ * Added a sleep because in a few tests the sql query orders by created at. Without the sleep the reviews
+ * have sometimes the same created at timestamp, that causes this tests randomly to fail.
+ */
+sleep(1);
+
 $review = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\Review\Model\Review::class,
     ['data' => ['nickname' => 'Nickname', 'title' => '2 filter first review', 'detail' => 'Review text']]
@@ -50,6 +56,12 @@ $review->setEntityId(
         )->getStore()->getId()
     ]
 )->save();
+
+/*
+ * Added a sleep because in a few tests the sql query orders by created at. Without the sleep the reviews
+ * have sometimes the same created at timestamp, that causes this tests randomly to fail.
+ */
+sleep(1);
 
 $review = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\Review\Model\Review::class,

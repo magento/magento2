@@ -18,7 +18,7 @@ use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Framework\Url\ScopeInterface as UrlScopeInterface;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Api\Data\StoreInterface;
-use Zend\Uri\UriFactory;
+use Laminas\Uri\UriFactory;
 
 /**
  * Store model
@@ -53,7 +53,7 @@ class Store extends AbstractExtensibleModel implements
     const ENTITY = 'store';
 
     /**
-     * Custom entry point param
+     * Parameter used to determine app context.
      */
     const CUSTOM_ENTRY_POINT_PARAM = 'custom_entry_point';
 
@@ -104,7 +104,7 @@ class Store extends AbstractExtensibleModel implements
     const ADMIN_CODE = 'admin';
 
     /**
-     * Cache tag
+     * Tag to use to cache stores.
      */
     const CACHE_TAG = 'store';
 
@@ -208,7 +208,7 @@ class Store extends AbstractExtensibleModel implements
      * Flag that shows that backend URLs are secure
      *
      * @var boolean|null
-     * @deprecated unused protected property
+     * @deprecated 101.0.0 unused protected property
      */
     protected $_isAdminSecure = null;
 
@@ -278,6 +278,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @var \Magento\Framework\Session\SidResolverInterface
+     * @deprecated 101.0.5 Not used anymore.
      */
     protected $_sidResolver;
 
@@ -1133,6 +1134,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 101.0.0
      */
     public function getIsActive()
     {
@@ -1141,6 +1143,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 101.0.0
      */
     public function setIsActive($isActive)
     {
@@ -1199,7 +1202,6 @@ class Store extends AbstractExtensibleModel implements
      */
     public function getCurrentUrl($fromStore = true)
     {
-        $sidQueryParam = $this->_sidResolver->getSessionIdQueryParam($this->_getSession());
         $requestString = $this->_url->escape(ltrim($this->_request->getRequestString(), '/'));
 
         $storeUrl = $this->getUrl('', ['_secure' => $this->_storeManager->getStore()->isCurrentlySecure()]);
@@ -1218,12 +1220,6 @@ class Store extends AbstractExtensibleModel implements
         }
 
         $currQuery = $this->_request->getQueryValue();
-        if (isset($currQuery[$sidQueryParam])
-            && !empty($currQuery[$sidQueryParam])
-            && $this->_getSession()->getSessionIdForHost($storeUrl) != $currQuery[$sidQueryParam]
-        ) {
-            unset($currQuery[$sidQueryParam]);
-        }
 
         foreach ($currQuery as $key => $value) {
             $storeParsedQuery[$key] = $value;
@@ -1395,6 +1391,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function getScopeType()
     {
@@ -1403,6 +1400,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @inheritdoc
+     * @since 100.1.0
      */
     public function getScopeTypeName()
     {

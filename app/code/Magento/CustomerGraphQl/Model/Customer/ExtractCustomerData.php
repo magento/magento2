@@ -101,8 +101,16 @@ class ExtractCustomerData
             }
         }
         $customerData = array_merge($customerData, $customAttributes);
+        //Fields are deprecated and should not be exposed on storefront.
+        $customerData['group_id'] = null;
+        $customerData['id'] = null;
 
         $customerData['model'] = $customer;
+
+        //'dob' is deprecated, 'date_of_birth' is used instead.
+        if (!empty($customerData['dob'])) {
+            $customerData['date_of_birth'] = $customerData['dob'];
+        }
         return $customerData;
     }
 }

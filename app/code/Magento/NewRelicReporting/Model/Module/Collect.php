@@ -6,7 +6,7 @@
 namespace Magento\NewRelicReporting\Model\Module;
 
 use Magento\Framework\Module\FullModuleList;
-use Magento\Framework\Module\ModuleManagerInterface;
+use Magento\Framework\Module\Manager;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\NewRelicReporting\Model\Config;
 use Magento\NewRelicReporting\Model\Module;
@@ -22,7 +22,7 @@ class Collect
     protected $moduleList;
 
     /**
-     * @var ModuleManagerInterface
+     * @var Manager
      */
     protected $moduleManager;
 
@@ -46,14 +46,14 @@ class Collect
      *
      * @param ModuleListInterface $moduleList
      * @param FullModuleList $fullModuleList
-     * @param ModuleManagerInterface $moduleManager
+     * @param Manager $moduleManager
      * @param \Magento\NewRelicReporting\Model\ModuleFactory $moduleFactory
      * @param \Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory $moduleCollectionFactory
      */
     public function __construct(
         ModuleListInterface $moduleList,
         FullModuleList $fullModuleList,
-        ModuleManagerInterface $moduleManager,
+        Manager $moduleManager,
         \Magento\NewRelicReporting\Model\ModuleFactory $moduleFactory,
         \Magento\NewRelicReporting\Model\ResourceModel\Module\CollectionFactory $moduleCollectionFactory
     ) {

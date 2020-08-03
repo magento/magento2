@@ -20,6 +20,7 @@ use Magento\Framework\Phrase;
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractDb extends AbstractResource
 {
@@ -220,9 +221,10 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
-     * Set main entity table name and primary key field name
+     * Main table setter.
      *
-     * If field name is omitted {table_name}_id will be used
+     * Set main entity table name and primary key field name.
+     * If field name is omitted {table_name}_id will be used.
      *
      * @param string $mainTable
      * @param string|null $idFieldName
@@ -255,7 +257,10 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
-     * Returns main table name - extracted from "module/table" style and validated by db adapter
+     * Main table getter.
+     *
+     * Returns main table name - extracted from "module/table" style and
+     * validated by db adapter.
      *
      * @throws LocalizedException
      * @return string
@@ -358,7 +363,7 @@ abstract class AbstractDb extends AbstractResource
         $object->afterLoad();
         $object->setOrigData();
         $object->setHasDataChanges(false);
-        
+
         return $this;
     }
 
@@ -544,7 +549,7 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
-     * Check that model data fields that can be saved has really changed comparing with origData
+     * Check that model data fields that can be saved has really changed comparing with origData.
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return bool

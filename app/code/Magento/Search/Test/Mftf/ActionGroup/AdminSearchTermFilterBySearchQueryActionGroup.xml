@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Filter by search query and select -->
+    <actionGroup name="AdminSearchTermFilterBySearchQueryActionGroup">
+        <annotations>
+            <description>Fills in the provided Search Query on the Admin Search Term grid page.</description>
+        </annotations>
+        <arguments>
+            <argument name="searchQuery" type="string"/>
+        </arguments>
+
+        <click selector="{{AdminCatalogSearchTermIndexSection.resetFilterButton}}" stepKey="clickOnResetButton"/>
+        <waitForPageLoad stepKey="waitForResetFilter"/>
+        <fillField selector="{{AdminCatalogSearchTermIndexSection.searchQuery}}" userInput="{{searchQuery}}" stepKey="fillSearchQuery"/>
+        <click selector="{{AdminCatalogSearchTermIndexSection.searchButton}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitForSearchResultLoad"/>
+        <checkOption selector="{{AdminCatalogSearchTermIndexSection.searchTermRowCheckboxBySearchQuery(searchQuery)}}" stepKey="checkCheckBox"/>
+    </actionGroup>
+</actionGroups>

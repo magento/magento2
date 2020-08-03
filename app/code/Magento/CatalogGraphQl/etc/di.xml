@@ -36,6 +36,7 @@
         <arguments>
             <argument name="attributesInstances" xsi:type="array">
                 <item name="products" xsi:type="object">Magento\CatalogGraphQl\Model\Resolver\Products\FilterArgument\ProductEntityAttributesForAst</item>
+                <item name="categoryList" xsi:type="object">Magento\CatalogGraphQl\Model\Category\CategoryFilterAttributesForAst</item>
             </argument>
         </arguments>
     </type>
@@ -68,5 +69,19 @@
 
     <type name="Magento\Framework\Search\Request\Config\FilesystemReader">
         <plugin name="productAttributesDynamicFields"  type="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader" />
+    </type>
+
+    <preference type="\Magento\CatalogGraphQl\Model\Resolver\Product\Price\Provider" for="\Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderInterface"/>
+
+    <preference type="Magento\CatalogGraphQl\Model\Resolver\Products\Query\Search" for="Magento\CatalogGraphQl\Model\Resolver\Products\Query\ProductQueryInterface"/>
+
+    <type name="\Magento\CatalogGraphQl\Model\Resolver\Product\BatchProductLinks">
+        <arguments>
+            <argument name="linkTypes" xsi:type="array">
+                <item name="related" xsi:type="string">related</item>
+                <item name="upsell" xsi:type="string">upsell</item>
+                <item name="crosssell" xsi:type="string">crosssell</item>
+            </argument>
+        </arguments>
     </type>
 </config>

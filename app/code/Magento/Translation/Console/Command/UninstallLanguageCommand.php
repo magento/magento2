@@ -85,31 +85,33 @@ class UninstallLanguageCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function configure()
     {
         $this->setName('i18n:uninstall')
             ->setDescription('Uninstalls language packages')
-            ->setDefinition([
-                new InputArgument(
-                    self::PACKAGE_ARGUMENT,
-                    InputArgument::IS_ARRAY | InputArgument::REQUIRED,
-                    'Language package name'
-                ),
-                new InputOption(
-                    self::BACKUP_CODE_OPTION,
-                    '-b',
-                    InputOption::VALUE_NONE,
-                    'Take code and configuration files backup (excluding temporary files)'
-                ),
-            ]);
+            ->setDefinition(
+                [
+                    new InputArgument(
+                        self::PACKAGE_ARGUMENT,
+                        InputArgument::IS_ARRAY | InputArgument::REQUIRED,
+                        'Language package name'
+                    ),
+                    new InputOption(
+                        self::BACKUP_CODE_OPTION,
+                        '-b',
+                        InputOption::VALUE_NONE,
+                        'Take code and configuration files backup (excluding temporary files)'
+                    )
+                ]
+            );
 
         parent::configure();
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -121,7 +123,7 @@ class UninstallLanguageCommand extends Command
             if (!$this->validate($package)) {
                 $output->writeln("<info>Package $package is not a Magento language and will be skipped.</info>");
             } else {
-                if (sizeof($dependencies[$package]) > 0) {
+                if (count($dependencies[$package]) > 0) {
                     $output->writeln("<info>Package $package has dependencies and will be skipped.</info>");
                 } else {
                     $packagesToRemove[] = $package;

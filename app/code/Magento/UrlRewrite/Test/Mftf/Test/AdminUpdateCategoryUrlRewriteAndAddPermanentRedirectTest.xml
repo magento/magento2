@@ -13,26 +13,26 @@
             <title value="Update Category URL Rewrites, permanent"/>
             <description value="Login as Admin and update category UrlRewrite and add Permanent redirect type"/>
             <testCaseId value="MC-5357"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
         </annotations>
 
         <before>
             <createData entity="SimpleSubCategory" stepKey="category"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Search and Select Edit option for created category in grid -->
-        <actionGroup ref="AdminSearchAndSelectUrlRewriteInGrid" stepKey="editUrlRewrite">
+        <actionGroup ref="AdminSearchAndSelectUrlRewriteInGridActionGroup" stepKey="editUrlRewrite">
             <argument name="requestPath" value="$$category.custom_attributes[url_key]$$.html"/>
         </actionGroup>
 
         <!-- Open UrlRewrite Edit page and update the fields  -->
-        <actionGroup ref="AdminUpdateUrlRewrite" stepKey="updateCategoryUrlRewrite">
+        <actionGroup ref="AdminUpdateUrlRewriteActionGroup" stepKey="updateCategoryUrlRewrite">
             <argument name="storeValue" value="Default Store View"/>
             <argument name="requestPath" value="{{defaultUrlRewrite.request_path}}"/>
             <argument name="redirectTypeValue" value="Permanent (301)"/>
@@ -40,20 +40,20 @@
         </actionGroup>
 
         <!-- Open Category Page and Get Category ID -->
-        <actionGroup ref="OpenCategoryFromCategoryTree" stepKey="getCategoryId">
+        <actionGroup ref="OpenCategoryFromCategoryTreeActionGroup" stepKey="getCategoryId">
             <argument name="category"  value="$$category.name$$"/>
         </actionGroup>
         <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#"/>
 
         <!--Assert category Url Rewrite in grid -->
-        <actionGroup ref="AdminSearchByRequestPath" stepKey="searchByNewRequestPath">
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByNewRequestPath">
             <argument name="redirectPath" value="{{defaultUrlRewrite.request_path}}" />
             <argument name="redirectType" value="Permanent (301)" />
             <argument name="targetPath" value="catalog/category/view/id/{$categoryId}"/>
         </actionGroup>
 
         <!-- Assert category redirect in Store Front -->
-        <actionGroup ref="AssertStorefrontUrlRewriteRedirect" stepKey="verifyCategoryInStoreFront">
+        <actionGroup ref="AssertStorefrontUrlRewriteRedirectActionGroup" stepKey="verifyCategoryInStoreFront">
             <argument name="category" value="$$category.name$$"/>
             <argument name="newRequestPath" value="{{defaultUrlRewrite.request_path}}"/>
         </actionGroup>

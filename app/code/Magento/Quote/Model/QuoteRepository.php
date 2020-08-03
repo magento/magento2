@@ -43,7 +43,7 @@ class QuoteRepository implements CartRepositoryInterface
 
     /**
      * @var QuoteFactory
-     * @deprecated
+     * @deprecated 101.1.2
      */
     protected $quoteFactory;
 
@@ -54,7 +54,7 @@ class QuoteRepository implements CartRepositoryInterface
 
     /**
      * @var QuoteCollection
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $quoteCollection;
 
@@ -224,7 +224,7 @@ class QuoteRepository implements CartRepositoryInterface
     {
         /** @var CartInterface $quote */
         $quote = $this->cartFactory->create();
-        if ($sharedStoreIds && method_exists($quote, 'setSharedStoreIds')) {
+        if ($sharedStoreIds && is_callable([$quote, 'setSharedStoreIds'])) {
             $quote->setSharedStoreIds($sharedStoreIds);
         }
         $quote->setStoreId($this->storeManager->getStore()->getId())->$loadMethod($identifier);
@@ -261,7 +261,7 @@ class QuoteRepository implements CartRepositoryInterface
      * @param FilterGroup $filterGroup The filter group.
      * @param QuoteCollection $collection The quote collection.
      * @return void
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @throws InputException The specified filter group or quote collection does not exist.
      */
     protected function addFilterGroupToCollection(FilterGroup $filterGroup, QuoteCollection $collection)

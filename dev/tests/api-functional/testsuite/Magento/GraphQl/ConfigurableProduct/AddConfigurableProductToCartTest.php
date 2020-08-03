@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\ConfigurableProduct;
 
+use Exception;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -24,7 +25,7 @@ class AddConfigurableProductToCartTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -140,13 +141,72 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/configurable_products_with_custom_attribute_layered_navigation.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     *
+     */
+    public function testAddVariationFromAnotherConfigurableProductWithTheSameSuperAttributeToCart()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find specified product.');
+
+        $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable_12345'));
+        $product = current($searchResponse['products']['items']);
+
+        $quantity = 2;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $parentSku = $product['sku'];
+
+        $sku = 'simple_20';
+
+        $query = $this->getQuery(
+            $maskedQuoteId,
+            $parentSku,
+            $sku,
+            $quantity
+        );
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/configurable_products_with_different_super_attribute.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     *
+     */
+    public function testAddVariationFromAnotherConfigurableProductWithDifferentSuperAttributeToCart()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find specified product.');
+
+        $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable_12345'));
+        $product = current($searchResponse['products']['items']);
+
+        $quantity = 2;
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $parentSku = $product['sku'];
+
+        $sku = 'simple_20';
+
+        $query = $this->getQuery(
+            $maskedQuoteId,
+            $parentSku,
+            $sku,
+            $quantity
+        );
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The requested qty is not available
      */
     public function testAddProductIfQuantityIsNotAvailable()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The requested qty is not available');
+
         $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable'));
         $product = current($searchResponse['products']['items']);
 
@@ -167,11 +227,12 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_sku.php
      * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a product with SKU "configurable_no_exist"
      */
     public function testAddNonExistentConfigurableProductParentToCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a product with SKU "configurable_no_exist"');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
         $parentSku = 'configurable_no_exist';
         $sku = 'simple_20';
@@ -206,9 +267,62 @@ QUERY;
             2000
         );
 
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $this->expectExceptionMessage(
-            'Could not add the product with SKU configurable to the shopping cart: Could not find specified product.'
+            'Could not add the product with SKU configurable to the shopping cart: The product that was requested ' .
+            'doesn\'t exist. Verify the product and try again.'
+        );
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_disable_first_child.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testAddDisabledVariationToCart()
+    {
+        $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable'));
+        $product = current($searchResponse['products']['items']);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $parentSku = $product['sku'];
+        $sku = 'simple_10';
+        $query = $this->getQuery(
+            $maskedQuoteId,
+            $parentSku,
+            $sku,
+            1
+        );
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Could not add the product with SKU configurable to the shopping cart'
+        );
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable_zero_qty_first_child.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testOutOfStockVariationToCart()
+    {
+        $searchResponse = $this->graphQlQuery($this->getFetchProductQuery('configurable'));
+        $product = current($searchResponse['products']['items']);
+        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_order_1');
+        $parentSku = $product['sku'];
+        $sku = 'simple_10';
+        $query = $this->getQuery(
+            $maskedQuoteId,
+            $parentSku,
+            $sku,
+            1
+        );
+
+        $this->expectException(Exception::class);
+        $this->expectExceptionMessage(
+            'Could not add the product with SKU configurable to the shopping cart'
         );
 
         $this->graphQlMutation($query);

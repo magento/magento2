@@ -19,6 +19,7 @@ use Magento\Framework\Code\GeneratedFiles;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class ObjectManagerFactory
 {
@@ -106,7 +107,10 @@ class ObjectManagerFactory
     public function create(array $arguments)
     {
         $writeFactory = new \Magento\Framework\Filesystem\Directory\WriteFactory($this->driverPool);
-        $generatedFiles = new GeneratedFiles($this->directoryList, $writeFactory);
+        /** @var \Magento\Framework\Filesystem\Driver\File $fileDriver */
+        $fileDriver = $this->driverPool->getDriver(DriverPool::FILE);
+        $lockManager = new \Magento\Framework\Lock\Backend\FileLock($fileDriver, BP);
+        $generatedFiles = new GeneratedFiles($this->directoryList, $writeFactory, $lockManager);
         $generatedFiles->cleanGeneratedFiles();
 
         $deploymentConfig = $this->createDeploymentConfig($this->directoryList, $this->configFilePool, $arguments);
@@ -291,7 +295,7 @@ class ObjectManagerFactory
      * @param \Magento\Framework\ObjectManager\Config\Config $diConfig
      * @param \Magento\Framework\ObjectManager\DefinitionInterface $definitions
      * @return \Magento\Framework\Interception\PluginList\PluginList
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _createPluginList(

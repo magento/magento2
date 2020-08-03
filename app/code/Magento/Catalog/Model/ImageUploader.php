@@ -191,12 +191,12 @@ class ImageUploader
      * Checking file for moving and move it
      *
      * @param string $imageName
-     *
+     * @param bool $returnRelativePath
      * @return string
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function moveFileFromTmp($imageName)
+    public function moveFileFromTmp($imageName, $returnRelativePath = false)
     {
         $baseTmpPath = $this->getBaseTmpPath();
         $basePath = $this->getBasePath();
@@ -221,12 +221,14 @@ class ImageUploader
                 $baseImagePath
             );
         } catch (\Exception $e) {
+            $this->logger->critical($e);
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Something went wrong while saving the file(s).')
+                __('Something went wrong while saving the file(s).'),
+                $e
             );
         }
 
-        return $imageName;
+        return $returnRelativePath ? $baseImagePath : $imageName;
     }
 
     /**
@@ -276,7 +278,8 @@ class ImageUploader
             } catch (\Exception $e) {
                 $this->logger->critical($e);
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Something went wrong while saving the file(s).')
+                    __('Something went wrong while saving the file(s).'),
+                    $e
                 );
             }
         }

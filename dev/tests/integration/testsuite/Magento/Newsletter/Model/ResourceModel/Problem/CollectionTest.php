@@ -15,7 +15,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     protected $_collection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_collection = Bootstrap::getObjectManager()
             ->create(\Magento\Newsletter\Model\ResourceModel\Problem\Collection::class);
@@ -45,6 +45,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($customer->getEmail(), $item->getSubscriberEmail());
         $this->assertEquals($customer->getFirstname(), $item->getCustomerFirstName());
         $this->assertEquals($customer->getLastname(), $item->getCustomerLastName());
-        $this->assertContains($customer->getFirstname(), $item->getCustomerName());
+        $this->assertStringContainsString($customer->getFirstname(), $item->getCustomerName());
     }
 }

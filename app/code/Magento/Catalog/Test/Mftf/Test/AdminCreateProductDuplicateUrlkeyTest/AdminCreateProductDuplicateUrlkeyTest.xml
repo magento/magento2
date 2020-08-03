@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateProductDuplicateUrlkeyTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Errors"/>
+            <title value="Admin should see an error when trying to save a product with a duplicate URL key"/>
+            <description value="Admin should see an error when trying to save a product with a duplicate URL key"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-112"/>
+            <group value="product"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleTwo" stepKey="simpleProduct">
+            </createData>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+        </after>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
+        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
+        <fillField userInput="$$simpleProduct.name$$new" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
+        <fillField userInput="$$simpleProduct.sku$$new" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
+        <fillField userInput="$$simpleProduct.price$$" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
+        <fillField userInput="$$simpleProduct.quantity$$" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+        <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="openSeoSection"/>
+        <fillField userInput="$$simpleProduct.custom_attributes[url_key]$$" selector="{{AdminProductSEOSection.urlKeyInput}}" stepKey="fillUrlKey"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
+        <see userInput="The value specified in the URL Key field would generate a URL that already exists" selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="assertErrorMessage"/>
+    </test>
+</tests>

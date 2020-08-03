@@ -20,6 +20,8 @@ use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Math\Random;
+use Magento\Framework\Indexer\IndexerInterface;
 
 /**
  * Customer model
@@ -61,8 +63,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     const XML_PATH_RESET_PASSWORD_TEMPLATE = 'customer/password/reset_password_template';
 
     /**
-     * @deprecated
-     * @see AccountConfirmation::XML_PATH_IS_CONFIRM
+     * @deprecated @see \Magento\Customer\Model\AccountConfirmation::XML_PATH_IS_CONFIRM
      */
     const XML_PATH_IS_CONFIRM = 'customer/create_account/confirm';
 
@@ -180,7 +181,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     protected $_encryptor;
 
     /**
-     * @var \Magento\Framework\Math\Random
+     * @var Random
      */
     protected $mathRandom;
 
@@ -227,6 +228,11 @@ class Customer extends \Magento\Framework\Model\AbstractModel
     private $storedAddress;
 
     /**
+     * @var IndexerInterface|null
+     */
+    private $indexer;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
@@ -248,6 +254,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Data\Collection\AbstractDb|null $resourceCollection
      * @param array $data
      * @param AccountConfirmation|null $accountConfirmation
+     * @param Random|null $mathRandom
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -272,7 +279,8 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
         array $data = [],
-        AccountConfirmation $accountConfirmation = null
+        AccountConfirmation $accountConfirmation = null,
+        Random $mathRandom = null
     ) {
         $this->metadataService = $metadataService;
         $this->_scopeConfig = $scopeConfig;
@@ -291,6 +299,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
         $this->indexerRegistry = $indexerRegistry;
         $this->accountConfirmation = $accountConfirmation ?: ObjectManager::getInstance()
             ->get(AccountConfirmation::class);
+        $this->mathRandom = $mathRandom ?: ObjectManager::getInstance()->get(Random::class);
         parent::__construct(
             $context,
             $registry,
@@ -298,6 +307,19 @@ class Customer extends \Magento\Framework\Model\AbstractModel
             $resourceCollection,
             $data
         );
+    }
+
+    /**
+     * Micro-caching optimization
+     *
+     * @return IndexerInterface
+     */
+    private function getIndexer() : IndexerInterface
+    {
+        if ($this->indexer === null) {
+            $this->indexer = $this->indexerRegistry->get(self::CUSTOMER_GRID_INDEXER_ID);
+        }
+        return $this->indexer;
     }
 
     /**
@@ -798,7 +820,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check if accounts confirmation is required in config
      *
      * @return bool
-     * @deprecated
+     * @deprecated 101.0.4
      * @see AccountConfirmation::isConfirmationRequired
      */
     public function isConfirmationRequired()
@@ -815,8 +837,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     public function getRandomConfirmationKey()
     {
-        // phpcs:ignore Magento2.Security.InsecureFunction
-        return md5(uniqid());
+        return $this->mathRandom->getRandomString(32);
     }
 
     /**
@@ -979,9 +1000,11 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Retrieve attribute set id for customer.
      *
      * @return int
+     * @since 102.0.1
      */
     public function getAttributeSetId()
     {
+        // phpstan:ignore "Call to an undefined static method*"
         return parent::getAttributeSetId() ?: CustomerMetadataInterface::ATTRIBUTE_SET_ID_CUSTOMER;
     }
 
@@ -1072,8 +1095,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     public function afterSave()
     {
-        $indexer = $this->indexerRegistry->get(self::CUSTOMER_GRID_INDEXER_ID);
-        if ($indexer->getState()->getStatus() == StateInterface::STATUS_VALID) {
+        if ($this->getIndexer()->getState()->getStatus() == StateInterface::STATUS_VALID) {
             $this->_getResource()->addCommitCallback([$this, 'reindex']);
         }
         return parent::afterSave();
@@ -1097,9 +1119,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      */
     public function reindex()
     {
-        /** @var \Magento\Framework\Indexer\IndexerInterface $indexer */
-        $indexer = $this->indexerRegistry->get(self::CUSTOMER_GRID_INDEXER_ID);
-        $indexer->reindexRow($this->getId());
+        $this->getIndexer()->reindexRow($this->getId());
     }
 
     /**
@@ -1178,7 +1198,7 @@ class Customer extends \Magento\Framework\Model\AbstractModel
      * Check whether confirmation may be skipped when registering using certain email address
      *
      * @return bool
-     * @deprecated
+     * @deprecated 101.0.4
      * @see AccountConfirmation::isConfirmationRequired
      */
     protected function canSkipConfirmation()

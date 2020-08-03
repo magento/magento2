@@ -13,9 +13,10 @@ use Magento\Framework\Exception\LocalizedException;
 /**
  * @api
  *
- * @deprecated 2.3.0 Replaced with Multi Source Inventory
+ * @deprecated 100.3.0 Replaced with Multi Source Inventory
  * @link https://devdocs.magento.com/guides/v2.3/inventory/index.html
  * @link https://devdocs.magento.com/guides/v2.3/inventory/catalog-inventory-replacements.html
+ * @since 100.3.0
  */
 interface RegisterProductSaleInterface
 {
@@ -29,6 +30,7 @@ interface RegisterProductSaleInterface
      * @param int $websiteId
      * @return StockItemInterface[]
      * @throws LocalizedException
+     * @since 100.3.0
      */
     public function registerProductsSale($items, $websiteId = null);
 }

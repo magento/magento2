@@ -7,10 +7,9 @@
 -->
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="SelectBillingInfoActionGroup">
         <waitForPageLoad stepKey="waitForBillingInfoPageLoad"/>
-        <click stepKey="goToReviewOrder" selector="{{PaymentMethodSection.goToReviewOrder}}"/>
+        <click selector="{{PaymentMethodSection.goToReviewOrder}}" stepKey="goToReviewOrder"/>
     </actionGroup>
 </actionGroups>
-

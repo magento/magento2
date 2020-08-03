@@ -72,7 +72,12 @@ class AddSimpleProductToCart
         }
 
         if (is_string($result)) {
-            throw new GraphQlInputException(__($result));
+            $e = new GraphQlInputException(__('Cannot add product to cart'));
+            $errors = array_unique(explode("\n", $result));
+            foreach ($errors as $error) {
+                $e->addError(new GraphQlInputException(__($error)));
+            }
+            throw $e;
         }
     }
 

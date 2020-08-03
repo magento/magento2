@@ -1,22 +1,26 @@
 <?php
 /**
- * Base HTTP response object
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\HTTP\PhpEnvironment;
 
-class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Framework\App\Response\HttpInterface
+/**
+ * Base HTTP response object
+ */
+class Response extends \Laminas\Http\PhpEnvironment\Response implements \Magento\Framework\App\Response\HttpInterface
 {
     /**
      * Flag; is this response a redirect?
+     *
      * @var boolean
      */
     protected $isRedirect = false;
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getHeader($name)
     {
@@ -24,13 +28,15 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
         $headers = $this->getHeaders();
         if ($headers->has($name)) {
             $header = $headers->get($name);
+            if (is_iterable($header)) {
+                $header = $header[0];
+            }
         }
         return $header;
     }
 
     /**
-     * Send the response, including all headers, rendering exceptions if so
-     * requested.
+     * Send the response, including all headers, rendering exceptions if so requested.
      *
      * @return void
      */
@@ -40,7 +46,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function appendBody($value)
     {
@@ -50,7 +56,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setBody($value)
     {
@@ -60,6 +66,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
 
     /**
      * Clear body
+     *
      * @return $this
      */
     public function clearBody()
@@ -69,7 +76,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setHeader($name, $value, $replace = false)
     {
@@ -84,14 +91,19 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function clearHeader($name)
     {
         $headers = $this->getHeaders();
         if ($headers->has($name)) {
-            $header = $headers->get($name);
-            $headers->removeHeader($header);
+            $headerValues = $headers->get($name);
+            if (!is_iterable($headerValues)) {
+                $headerValues = [$headerValues];
+            }
+            foreach ($headerValues as $headerValue) {
+                $headers->removeHeader($headerValue);
+            }
         }
 
         return $this;
@@ -111,7 +123,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setRedirect($url, $code = 302)
     {
@@ -122,7 +134,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setHttpResponseCode($code)
     {
@@ -130,14 +142,14 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
             throw new \InvalidArgumentException('Invalid HTTP response code');
         }
 
-        $this->isRedirect = (300 <= $code && 307 >= $code) ? true : false;
+        $this->isRedirect = (300 <= $code && 307 >= $code);
 
         $this->setStatusCode($code);
         return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function setStatusHeader($httpCode, $version = null, $phrase = null)
     {
@@ -152,7 +164,7 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getHttpResponseCode()
     {
@@ -170,7 +182,10 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     }
 
     /**
+     * @inheritDoc
+     *
      * @return string[]
+     * @SuppressWarnings(PHPMD.SerializationAware)
      */
     public function __sleep()
     {

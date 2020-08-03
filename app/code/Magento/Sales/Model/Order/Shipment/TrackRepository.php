@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Model\Order\Shipment;
 
 use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
@@ -14,7 +16,13 @@ use Magento\Sales\Api\Data\ShipmentTrackInterfaceFactory;
 use Magento\Sales\Api\Data\ShipmentTrackSearchResultInterfaceFactory;
 use Magento\Sales\Api\ShipmentTrackRepositoryInterface;
 use Magento\Sales\Model\Spi\ShipmentTrackResourceInterface;
+use Magento\Sales\Model\ResourceModel\Order\Shipment\CollectionFactory;
+use Magento\Framework\App\ObjectManager;
+use Psr\Log\LoggerInterface;
 
+/**
+ * Repository of shipment tracking information
+ */
 class TrackRepository implements ShipmentTrackRepositoryInterface
 {
     /**
@@ -38,22 +46,39 @@ class TrackRepository implements ShipmentTrackRepositoryInterface
     private $collectionProcessor;
 
     /**
+     * @var CollectionFactory
+     */
+    private $shipmentCollection;
+
+    /**
+     * @var LoggerInterface
+     */
+    private $logger;
+
+    /**
      * @param ShipmentTrackResourceInterface $trackResource
      * @param ShipmentTrackInterfaceFactory $trackFactory
      * @param ShipmentTrackSearchResultInterfaceFactory $searchResultFactory
      * @param CollectionProcessorInterface $collectionProcessor
+     * @param CollectionFactory|null $shipmentCollection
+     * @param LoggerInterface|null $logger
      */
     public function __construct(
         ShipmentTrackResourceInterface $trackResource,
         ShipmentTrackInterfaceFactory $trackFactory,
         ShipmentTrackSearchResultInterfaceFactory $searchResultFactory,
-        CollectionProcessorInterface $collectionProcessor
+        CollectionProcessorInterface $collectionProcessor,
+        CollectionFactory $shipmentCollection = null,
+        LoggerInterface $logger = null
     ) {
-
         $this->trackResource = $trackResource;
         $this->trackFactory = $trackFactory;
         $this->searchResultFactory = $searchResultFactory;
         $this->collectionProcessor = $collectionProcessor;
+        $this->shipmentCollection = $shipmentCollection ?:
+            ObjectManager::getInstance()->get(CollectionFactory::class);
+        $this->logger = $logger ?:
+            ObjectManager::getInstance()->get(LoggerInterface::class);
     }
 
     /**
@@ -95,6 +120,16 @@ class TrackRepository implements ShipmentTrackRepositoryInterface
      */
     public function save(ShipmentTrackInterface $entity)
     {
+        $shipments = $this->shipmentCollection->create()
+            ->addFieldToFilter('order_id', $entity['order_id'])
+            ->addFieldToFilter('entity_id', $entity['parent_id'])
+            ->toArray();
+
+        if (empty($shipments['items'])) {
+            $this->logger->error('The shipment doesn\'t belong to the order.');
+            throw new CouldNotSaveException(__('Could not save the shipment tracking.'));
+        }
+
         try {
             $this->trackResource->save($entity);
         } catch (\Exception $e) {

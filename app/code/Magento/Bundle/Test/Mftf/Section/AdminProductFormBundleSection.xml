@@ -46,6 +46,10 @@
         <element name="currentBundleOption" type="text" selector="//div[@data-index='bundle-items']//div[contains(@class, 'admin__collapsible-title')]/span"/>
         <!--AddingAnOption-->
         <element name="addOptions" type="button" selector="//tr[@data-repeat-index='0']//td[4]" timeout="30"/>
+        <!--DragAnOption -->
+        <element name="dragOption" type="block" selector="//tr[{{dragIndex}}]//div[contains(@class, 'draggable-handle')]" timeout="30" parameterized="true"/>
+        <!--DeleteAnOption -->
+        <element name="deleteOption" type="button" selector="//tr[{{deleteIndex}}]//button[@data-index='delete_button']" timeout="30" parameterized="true"/>
         <!--SEODropdownTab-->
         <element name="seoDropdown" type="button" selector="//div[@data-index='search-engine-optimization']"/>
         <element name="seoDependent" type="button" selector="//div[@data-index='search-engine-optimization']//div[contains(@class, '_show')]"/>

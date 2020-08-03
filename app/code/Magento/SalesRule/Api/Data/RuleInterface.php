@@ -5,13 +5,15 @@
  */
 namespace Magento\SalesRule\Api\Data;
 
+use Magento\Framework\Api\ExtensibleDataInterface;
+
 /**
  * Interface RuleInterface
  *
  * @api
  * @since 100.0.2
  */
-interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
+interface RuleInterface extends ExtensibleDataInterface
 {
     const FREE_SHIPPING_NONE = 'NONE';
     const FREE_SHIPPING_MATCHING_ITEMS_ONLY = 'MATCHING_ITEMS_ONLY';
@@ -173,7 +175,7 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * Set whether the coupon is active
      *
      * @param bool $isActive
-     * @return bool
+     * @return $this
      */
     public function setIsActive($isActive);
 
@@ -232,6 +234,8 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getIsAdvanced();
 
     /**
+     * Set if rule is advanced
+     *
      * @param bool $isAdvanced
      * @return $this
      */
@@ -260,6 +264,8 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
     public function getSortOrder();
 
     /**
+     * Set sort order
+     *
      * @param int $sortOrder
      * @return $this
      */
@@ -446,5 +452,5 @@ interface RuleInterface extends \Magento\Framework\Api\ExtensibleDataInterface
      * @param \Magento\SalesRule\Api\Data\RuleExtensionInterface $extensionAttributes
      * @return $this
      */
-    public function setExtensionAttributes(\Magento\SalesRule\Api\Data\RuleExtensionInterface $extensionAttributes);
+    public function setExtensionAttributes(RuleExtensionInterface $extensionAttributes);
 }

@@ -3,9 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\ObjectManager\Profiler;
 
-use Magento\Framework\ObjectManager\Profiler\Tree\Item as Item;
+use Magento\Framework\ObjectManager\Profiler\Tree\Item;
 
 /**
  * Class Log
@@ -133,17 +134,19 @@ class Log
     {
         $this->stats['used'] = count($this->used);
         $this->stats['unused'] = $this->stats['total'] - $this->stats['used'];
+        //phpcs:disable
         echo '<table border="1" cellspacing="0" cellpadding="2">',
-            '<thead><tr><th>',
-            "Creation chain (Red items are never used) Total: {$this->stats['total']}\n",
-            "Used: {$this->stats['used']} Not used: {$this->stats['unused']}",
-            '</th></tr></thead>',
-            '<tbody>',
-            '<tr><th>Instance class</th></tr>';
+        '<thead><tr><th>',
+        "Creation chain (Red items are never used) Total: {$this->stats['total']}\n",
+        "Used: {$this->stats['used']} Not used: {$this->stats['unused']}",
+        '</th></tr></thead>',
+        '<tbody>',
+        '<tr><th>Instance class</th></tr>';
         foreach ($this->roots as $root) {
             $this->displayItem($root);
         }
         echo '</tbody></table>';
+        //phpcs:enable
     }
 
     /**
@@ -156,9 +159,10 @@ class Log
     protected function displayItem(Item $item, $level = 0)
     {
         $colorStyle = isset($this->used[$item->getHash()]) ? '' : ' style="color:red" ';
-
+        //phpcs:disable
         echo "<tr><td $colorStyle>" . str_repeat('·&nbsp;', $level) . $item->getClass()
             . ' - ' . $item->getHash() . '</td></tr>';
+        //phpcs:enable
 
         foreach ($item->getChildren() as $child) {
             $this->displayItem($child, $level + 1);

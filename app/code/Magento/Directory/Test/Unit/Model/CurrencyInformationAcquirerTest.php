@@ -1,58 +1,76 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Directory\Test\Unit\Model;
 
-/**
- * Class CurrencyInformationAcquirerTest
- */
-class CurrencyInformationAcquirerTest extends \PHPUnit\Framework\TestCase
+use Magento\Directory\Model\Currency;
+use Magento\Directory\Model\CurrencyInformationAcquirer;
+use Magento\Directory\Model\Data\CurrencyInformation;
+use Magento\Directory\Model\Data\CurrencyInformationFactory;
+use Magento\Directory\Model\Data\ExchangeRate;
+use Magento\Directory\Model\Data\ExchangeRateFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CurrencyInformationAcquirerTest extends TestCase
 {
     /**
-     * @var \Magento\Directory\Model\CurrencyInformationAcquirer
+     * @var CurrencyInformationAcquirer
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $currencyInformationFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $exchangeRateFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $storeManager;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
      * Setup the test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
 
-        $className = \Magento\Directory\Model\Data\CurrencyInformationFactory::class;
-        $this->currencyInformationFactory = $this->createPartialMock($className, ['create']);
+        $this->currencyInformationFactory = $this->getMockBuilder(CurrencyInformationFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
 
-        $className = \Magento\Directory\Model\Data\ExchangeRateFactory::class;
-        $this->exchangeRateFactory = $this->createPartialMock($className, ['create']);
+        $this->exchangeRateFactory = $this->getMockBuilder(ExchangeRateFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
 
-        $className = \Magento\Store\Model\StoreManager::class;
-        $this->storeManager = $this->createPartialMock($className, ['getStore']);
+        $this->storeManager = $this->getMockBuilder(StoreManager::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getStore'])
+            ->getMock();
 
         $this->model = $this->objectManager->getObject(
-            \Magento\Directory\Model\CurrencyInformationAcquirer::class,
+            CurrencyInformationAcquirer::class,
             [
                 'currencyInformationFactory' => $this->currencyInformationFactory,
                 'exchangeRateFactory' => $this->exchangeRateFactory,
@@ -66,27 +84,30 @@ class CurrencyInformationAcquirerTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCurrencyInfo()
     {
-        /** @var \Magento\Directory\Model\Data\ExchangeRate $exchangeRate */
-        $exchangeRate = $this->createPartialMock(\Magento\Directory\Model\Data\ExchangeRate::class, ['load']);
+        /** @var ExchangeRate $exchangeRate */
+        $exchangeRate = $this->getMockBuilder(ExchangeRate::class)
+            ->addMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $exchangeRate->expects($this->any())->method('load')->willReturnSelf();
         $this->exchangeRateFactory->expects($this->any())->method('create')->willReturn($exchangeRate);
 
-        /** @var \Magento\Directory\Model\Data\CurrencyInformation $currencyInformation */
-        $currencyInformation = $this->createPartialMock(
-            \Magento\Directory\Model\Data\CurrencyInformation::class,
-            ['load']
-        );
+        /** @var CurrencyInformation $currencyInformation */
+        $currencyInformation = $this->getMockBuilder(CurrencyInformation::class)
+            ->addMethods(['load'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $currencyInformation->expects($this->any())->method('load')->willReturnSelf();
         $this->currencyInformationFactory->expects($this->any())->method('create')->willReturn($currencyInformation);
 
-        /** @var \Magento\Store\Model\Store $store */
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
+        /** @var Store $store */
+        $store = $this->createMock(Store::class);
 
-        /** @var \Magento\Directory\Model\Currency $baseCurrency */
+        /** @var Currency $baseCurrency */
         $baseCurrency = $this->createPartialMock(
-            \Magento\Directory\Model\Currency::class,
+            Currency::class,
             ['getCode', 'getCurrencySymbol', 'getRate']
         );
         $baseCurrency->expects($this->atLeastOnce())->method('getCode')->willReturn('USD');
@@ -107,7 +128,7 @@ class CurrencyInformationAcquirerTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals('USD', $result->getDefaultDisplayCurrencyCode());
         $this->assertEquals('$', $result->getDefaultDisplayCurrencySymbol());
         $this->assertEquals(['AUD'], $result->getAvailableCurrencyCodes());
-        $this->assertTrue(is_array($result->getExchangeRates()));
+        $this->assertIsArray($result->getExchangeRates());
         $this->assertEquals([$exchangeRate], $result->getExchangeRates());
         $this->assertEquals('0.80', $result->getExchangeRates()[0]->getRate());
         $this->assertEquals('AUD', $result->getExchangeRates()[0]->getCurrencyTo());

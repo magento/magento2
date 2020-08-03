@@ -10,39 +10,57 @@
         <section id="tax">
             <group id="weee" translate="label" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Fixed Product Taxes</label>
-                <field id="enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="enable" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Enable FPT</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="display_list" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="display_list" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Display Prices In Product Lists</label>
                     <source_model>Magento\Weee\Model\Config\Source\Display</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
                 </field>
-                <field id="display" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="display" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Display Prices On Product View Page</label>
                     <source_model>Magento\Weee\Model\Config\Source\Display</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
                 </field>
-                <field id="display_sales" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="display_sales" translate="label" type="select" sortOrder="30" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Display Prices In Sales Modules</label>
                     <source_model>Magento\Weee\Model\Config\Source\Display</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
                 </field>
-                <field id="display_email" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="display_email" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Display Prices In Emails</label>
                     <source_model>Magento\Weee\Model\Config\Source\Display</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
                 </field>
-                <field id="apply_vat" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="apply_vat" translate="label" type="select" sortOrder="60" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Apply Tax To FPT</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
                 </field>
-                <field id="include_in_subtotal" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="include_in_subtotal" translate="label" type="select" sortOrder="70" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Include FPT In Subtotal</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
+                    <depends>
+                        <field id="enable">1</field>
+                    </depends>
                 </field>
             </group>
         </section>
         <section id="sales">
             <group id="totals_sort">
-                <field id="weee" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="weee" translate="label" type="text" sortOrder="4" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Fixed Product Tax</label>
                     <validate>required-number validate-number</validate>
                 </field>

@@ -5,16 +5,14 @@
  */
 namespace Magento\CatalogInventory\Model\ResourceModel\Stock;
 
-use Magento\CatalogInventory\Api\Data\StockItemInterface;
+use Magento\Catalog\Model\Indexer\Product\Price\Processor as PriceIndexProcessor;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
 use Magento\CatalogInventory\Model\Stock;
 use Magento\CatalogInventory\Model\Indexer\Stock\Processor;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\DB\Select;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\DateTime\DateTime;
-use Zend_Db_Expr;
 
 /**
  * Stock item resource model
@@ -44,26 +42,32 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     private $dateTime;
 
     /**
+     * @var PriceIndexProcessor
+     */
+    private $priceIndexProcessor;
+
+    /**
      * @param Context $context
      * @param Processor $processor
-     * @param string $connectionName
      * @param StockConfigurationInterface $stockConfiguration
      * @param DateTime $dateTime
+     * @param PriceIndexProcessor $priceIndexProcessor
+     * @param string $connectionName
      */
     public function __construct(
         Context $context,
         Processor $processor,
-        $connectionName = null,
-        StockConfigurationInterface $stockConfiguration = null,
-        DateTime $dateTime = null
+        StockConfigurationInterface $stockConfiguration,
+        DateTime $dateTime,
+        PriceIndexProcessor $priceIndexProcessor,
+        $connectionName = null
     ) {
         $this->stockIndexerProcessor = $processor;
         parent::__construct($context, $connectionName);
 
-        $this->stockConfiguration = $stockConfiguration ??
-            ObjectManager::getInstance()->get(StockConfigurationInterface::class);
-        $this->dateTime = $dateTime ??
-            ObjectManager::getInstance()->get(DateTime::class);
+        $this->stockConfiguration = $stockConfiguration;
+        $this->dateTime = $dateTime;
+        $this->priceIndexProcessor = $priceIndexProcessor;
     }
 
     /**
@@ -145,10 +149,25 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected function _afterSave(AbstractModel $object)
     {
         parent::_afterSave($object);
-        /** @var StockItemInterface $object */
+
+        $productId = $object->getProductId();
         if ($this->processIndexEvents) {
-            $this->stockIndexerProcessor->reindexRow($object->getProductId());
+            $this->stockIndexerProcessor->reindexRow($productId);
         }
+        $fields = [
+            'is_in_stock',
+            'use_config_manage_stock',
+            'manage_stock',
+        ];
+        foreach ($fields as $field) {
+            if ($object->dataHasChangedFor($field)) {
+                $this->addCommitCallback(function () use ($productId) {
+                    $this->priceIndexProcessor->reindexRow($productId);
+                });
+                break;
+            }
+        }
+
         return $this;
     }
 
@@ -184,15 +203,20 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             'is_in_stock = ' . Stock::STOCK_IN_STOCK,
             '(use_config_manage_stock = 1 AND 1 = ' . $this->stockConfiguration->getManageStock() . ')'
             . ' OR (use_config_manage_stock = 0 AND manage_stock = 1)',
-            '(' . $this->getBackordersExpr() .' = 0 AND qty <= ' . $this->getMinQtyExpr() . ')'
-            . ' OR (' . $this->getBackordersExpr() .' != 0 AND '
-            . $this->getMinQtyExpr() . ' != 0 AND qty <= ' . $this->getMinQtyExpr() . ')',
+            '(use_config_min_qty = 1 AND qty <= ' . $this->stockConfiguration->getMinQty() . ')'
+            . ' OR (use_config_min_qty = 0 AND qty <= min_qty)',
             'product_id IN (' . $select->assemble() . ')',
         ];
-
+        $backordersWhere = '(use_config_backorders = 0 AND backorders = ' . Stock::BACKORDERS_NO . ')';
+        if (Stock::BACKORDERS_NO == $this->stockConfiguration->getBackorders()) {
+            $where[] = $backordersWhere . ' OR use_config_backorders = 1';
+        } else {
+            $where[] = $backordersWhere;
+        }
         $connection->update($this->getMainTable(), $values, $where);
 
         $this->stockIndexerProcessor->markIndexerAsInvalid();
+        $this->priceIndexProcessor->markIndexerAsInvalid();
     }
 
     /**
@@ -212,8 +236,8 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $where = [
             'website_id = ' . $websiteId,
             'stock_status_changed_auto = 1',
-            '(qty > ' . $this->getMinQtyExpr() . ')'
-            . ' OR (' . $this->getBackordersExpr() . ' != 0 AND ' . $this->getMinQtyExpr() . ' = 0)', // If infinite
+            '(use_config_min_qty = 1 AND qty > ' . $this->stockConfiguration->getMinQty() . ')'
+            . ' OR (use_config_min_qty = 0 AND qty > min_qty)',
             'product_id IN (' . $select->assemble() . ')',
         ];
         $manageStockWhere = '(use_config_manage_stock = 0 AND manage_stock = 1)';
@@ -225,6 +249,7 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         $connection->update($this->getMainTable(), $values, $where);
 
         $this->stockIndexerProcessor->markIndexerAsInvalid();
+        $this->priceIndexProcessor->markIndexerAsInvalid();
     }
 
     /**
@@ -301,12 +326,12 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Get Minimum Sale Quantity Expression.
+     * Get Minimum Sale Quantity Expression
      *
      * @param string $tableAlias
-     * @return Zend_Db_Expr
+     * @return \Zend_Db_Expr
      */
-    public function getMinSaleQtyExpr(string $tableAlias = ''): Zend_Db_Expr
+    public function getMinSaleQtyExpr(string $tableAlias = ''): \Zend_Db_Expr
     {
         if ($tableAlias) {
             $tableAlias .= '.';
@@ -318,26 +343,6 @@ class Item extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         );
 
         return $itemMinSaleQty;
-    }
-
-    /**
-     * Get Min Qty Expression
-     *
-     * @param string $tableAlias
-     * @return Zend_Db_Expr
-     */
-    public function getMinQtyExpr(string $tableAlias = ''): Zend_Db_Expr
-    {
-        if ($tableAlias) {
-            $tableAlias .= '.';
-        }
-        $itemBackorders = $this->getConnection()->getCheckSql(
-            $tableAlias . 'use_config_min_qty = 1',
-            $this->stockConfiguration->getMinQty(),
-            $tableAlias . 'min_qty'
-        );
-
-        return $itemBackorders;
     }
 
     /**

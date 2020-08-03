@@ -81,16 +81,7 @@
                             <argument name="sortable" xsi:type="string">1</argument>
                             <argument name="index" xsi:type="string">display_in_terms</argument>
                             <argument name="type" xsi:type="string">options</argument>
-                            <argument name="options" xsi:type="array">
-                                <item name="yes" xsi:type="array">
-                                    <item name="value" xsi:type="string">1</item>
-                                    <item name="label" xsi:type="string" translate="true">yes</item>
-                                </item>
-                                <item name="no" xsi:type="array">
-                                    <item name="value" xsi:type="string">0</item>
-                                    <item name="label" xsi:type="string" translate="true">no</item>
-                                </item>
-                            </argument>
+                            <argument name="options" xsi:type="options" model="Magento\Config\Model\Config\Source\Yesno"/>
                         </arguments>
                     </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.catalog.search.grid.columnSet.action" as="action">

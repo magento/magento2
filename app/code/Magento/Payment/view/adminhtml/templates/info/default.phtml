@@ -9,8 +9,9 @@
  * @see \Magento\Payment\Block\Info
  */
 $specificInfo = $block->getSpecificInformation();
+$paymentTitle = $block->getMethod()->getConfigData('title', $block->getInfo()->getOrder()->getStoreId());
 ?>
-<?= $block->escapeHtml($block->getMethod()->getTitle()) ?>
+<?= $block->escapeHtml($paymentTitle) ?>
 
 <?php if ($specificInfo) : ?>
     <table class="data-table admin__table-secondary">

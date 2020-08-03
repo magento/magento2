@@ -192,6 +192,7 @@ class Info extends AbstractModel implements InfoInterface
      */
     public function unsAdditionalInformation($key = null)
     {
+        $this->initAdditionalInformation();
         if ($key && isset($this->additionalInformation[$key])) {
             unset($this->additionalInformation[$key]);
             return $this->setData('additional_information', $this->additionalInformation);

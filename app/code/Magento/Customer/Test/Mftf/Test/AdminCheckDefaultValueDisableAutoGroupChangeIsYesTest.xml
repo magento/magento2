@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckDefaultValueDisableAutoGroupChangeIsYesTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Default Value for Disable Automatic Group Changes Based on VAT ID"/>
+            <title value="Check settings Default Value for Disable Automatic Group Changes Based on VAT ID is Yes"/>
+            <description value="Check settings Default Value for Disable Automatic Group Changes Based on VAT ID is Yes"/>
+            <severity value="MAJOR"/>
+            <group value="customer"/>
+            <group value="create"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set customer/create_account/viv_disable_auto_group_assign_default 1" stepKey="setConfigDefaultIsYes"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set customer/create_account/viv_disable_auto_group_assign_default 0" stepKey="setConfigDefaultIsNo"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <actionGroup ref="AdminNavigateNewCustomerActionGroup" stepKey="navigateToNewCustomer"/>
+
+        <actionGroup ref="AdminAssertDefaultValueDisableAutoGroupInCustomerFormActionGroup" stepKey="seeDefaultValueInForm">
+            <argument name="isChecked" value="1"/>
+        </actionGroup>
+    </test>
+</tests>

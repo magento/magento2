@@ -15,19 +15,10 @@
         <arguments>
             <argument name="storeView" defaultValue="customStore"/>
         </arguments>
-        
+
         <click selector="{{StorefrontHeaderSection.storeViewSwitcher}}" stepKey="clickStoreViewSwitcher"/>
         <waitForElementVisible selector="{{StorefrontHeaderSection.storeViewDropdown}}" stepKey="waitForStoreViewDropdown"/>
         <click selector="{{StorefrontHeaderSection.storeViewOption(storeView.code)}}" stepKey="clickSelectStoreView"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-    </actionGroup>
-
-    <actionGroup name="StorefrontSwitchDefaultStoreViewActionGroup" extends="StorefrontSwitchStoreViewActionGroup">
-        <annotations>
-            <description>EXTENDS: StorefrontSwitchStoreViewActionGroup. Clicks on the Default Store View.</description>
-        </annotations>
-
-        <remove keyForRemoval="clickSelectStoreView"/>
-        <click selector="{{StorefrontHeaderSection.storeViewOption('default')}}" stepKey="clickSelectDefaultStoreView" after="waitForStoreViewDropdown"/>
     </actionGroup>
 </actionGroups>

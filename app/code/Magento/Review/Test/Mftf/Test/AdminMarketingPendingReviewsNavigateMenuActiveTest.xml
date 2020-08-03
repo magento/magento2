@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMarketingPendingReviewsNavigateMenuActiveTest">
+        <annotations>
+            <features value="Pending Reviews"/>
+            <stories value="Menu Navigation"/>
+            <title value="Admin marketing pending reviews navigate menu"/>
+            <description value="Admin able see navigate head menu Marketing is active, when open page Marketing > Pending Reviews"/>
+            <severity value="MAJOR"/>
+            <group value="menu"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsViewsPage">
+            <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuUserContentPendingReviews.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
+            <argument name="title" value="{{AdminMenuUserContentPendingReviews.pageTitle}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertClassElementRelativeIdActionGroup" stepKey="assertClass">
+            <argument name="elementId" value="{{AdminMenuSection.marketing}}"/>
+            <argument name="expectClass" value="{{AdminMenuUserContentPendingReviews.dataActiveClass}}"/>
+        </actionGroup>
+    </test>
+</tests>

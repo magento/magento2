@@ -161,6 +161,7 @@ class Queue
     public function process()
     {
         $returnStatus = 0;
+        $logDelay = 10;
         $this->start = $this->lastJobStarted = time();
         $packages = $this->packages;
         while (count($packages) && $this->checkTimeout()) {
@@ -168,12 +169,24 @@ class Queue
                 // Unsets each member of $packages array (passed by reference) as each is executed
                 $this->assertAndExecute($name, $packages, $packageJob);
             }
-            $this->logger->info('.');
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            sleep(3);
-            foreach ($this->inProgress as $name => $package) {
-                if ($this->isDeployed($package)) {
-                    unset($this->inProgress[$name]);
+
+            // refresh current status in console once in 10 iterations (once in 5 sec)
+            if ($logDelay >= 10) {
+                $this->logger->info('.');
+                $logDelay = 0;
+            } else {
+                $logDelay++;
+            }
+
+            if ($this->isCanBeParalleled()) {
+                // in parallel mode sleep before trying to check status and run new jobs
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                usleep(500000); // 0.5 sec (less sleep == less time waste)
+
+                foreach ($this->inProgress as $name => $package) {
+                    if ($this->isDeployed($package)) {
+                        unset($this->inProgress[$name]);
+                    }
                 }
             }
         }
@@ -243,15 +256,25 @@ class Queue
      */
     private function awaitForAllProcesses()
     {
+        $logDelay = 10;
         while ($this->inProgress && $this->checkTimeout()) {
             foreach ($this->inProgress as $name => $package) {
                 if ($this->isDeployed($package)) {
                     unset($this->inProgress[$name]);
                 }
             }
-            $this->logger->info('.');
+
+            // refresh current status in console once in 10 iterations (once in 5 sec)
+            if ($logDelay >= 10) {
+                $this->logger->info('.');
+                $logDelay = 0;
+            } else {
+                $logDelay++;
+            }
+
+            // sleep before checking parallel jobs status
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            sleep(5);
+            usleep(500000); // 0.5 sec (less sleep == less time waste)
         }
         if ($this->isCanBeParalleled()) {
             // close connections only if ran with forks

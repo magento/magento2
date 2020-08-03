@@ -10,7 +10,7 @@ use Magento\Framework\Code\Generator;
 use Magento\Framework\Logger\Monolog as MagentoMonologLogger;
 use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject as MockObject;
 use Psr\Log\LoggerInterface;
 
 class AutoloaderTest extends TestCase
@@ -33,7 +33,7 @@ class AutoloaderTest extends TestCase
      */
     public function setupLoggerTestDouble(): void
     {
-        $loggerTestDouble = $this->createMock(LoggerInterface::class);
+        $loggerTestDouble = $this->getMockForAbstractClass(LoggerInterface::class);
         $this->getTestFrameworkObjectManager()->addSharedInstance($loggerTestDouble, MagentoMonologLogger::class);
     }
 

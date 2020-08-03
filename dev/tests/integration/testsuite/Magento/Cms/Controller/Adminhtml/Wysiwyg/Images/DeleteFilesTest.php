@@ -10,6 +10,8 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Test for \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images\DeleteFiles class.
+ *
+ * @magentoAppArea adminhtml
  */
 class DeleteFilesTest extends \PHPUnit\Framework\TestCase
 {
@@ -51,7 +53,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $directoryName = 'directory1';
@@ -75,20 +77,45 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
      * Execute method with correct directory path and file name to check that files under WYSIWYG media directory
      * can be removed.
      *
+     * @param string $filename
      * @return void
+     * @dataProvider executeDataProvider
      */
-    public function testExecute()
+    public function testExecute(string $filename)
     {
+        $filePath =  $this->fullDirectoryPath . DIRECTORY_SEPARATOR . $filename;
+        $fixtureDir = realpath(__DIR__ . '/../../../../../Catalog/_files');
+        copy($fixtureDir . '/' . $this->fileName, $filePath);
+
         $this->model->getRequest()->setMethod('POST')
-            ->setPostValue('files', [$this->imagesHelper->idEncode($this->fileName)]);
+            ->setPostValue('files', [$this->imagesHelper->idEncode($filename)]);
         $this->model->getStorage()->getSession()->setCurrentPath($this->fullDirectoryPath);
         $this->model->execute();
 
         $this->assertFalse(
             $this->mediaDirectory->isExist(
-                $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . '/' . $this->fileName)
+                $this->mediaDirectory->getRelativePath($this->fullDirectoryPath . '/' . $filename)
             )
         );
+    }
+
+    /**
+     * DataProvider for testExecute
+     *
+     * @return array
+     */
+    public function executeDataProvider(): array
+    {
+        return [
+            ['name with spaces.jpg'],
+            ['name with, comma.jpg'],
+            ['name with* asterisk.jpg'],
+            ['name with[ bracket.jpg'],
+            ['magento_small_image.jpg'],
+            ['_.jpg'],
+            [' - .jpg'],
+            ['-.jpg'],
+        ];
     }
 
     /**
@@ -155,7 +182,7 @@ class DeleteFilesTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(\Magento\Framework\Filesystem::class);

@@ -13,8 +13,8 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\CategoryLinkManagement;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\Eav\Model\Config;
-use Magento\Indexer\Model\Indexer;
 use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Catalog\Model\Product;
@@ -28,18 +28,52 @@ use Magento\TestFramework\Helper\CacheCleaner;
  * @SuppressWarnings(PHPMD.TooManyPublicMethods)
  * @SuppressWarnings(PHPMD.ExcessiveClassLength)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.UnusedPrivateMethod)
  */
 class ProductSearchTest extends GraphQlAbstract
 {
     /**
+     * Verify that filters for non-existing category are empty
+     *
+     * @throws \Exception
+     */
+    public function testFilterForNonExistingCategory()
+    {
+        $query = <<<QUERY
+{
+  products(filter: {category_id: {eq: "99999999"}}) {
+    filters {
+      name
+    }
+  }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+
+        $this->assertArrayHasKey(
+            'filters',
+            $response['products'],
+            'Filters are missing in product query result.'
+        );
+
+        $this->assertEmpty(
+            $response['products']['filters'],
+            'Returned filters data set does not empty'
+        );
+    }
+
+    /**
      * Verify that layered navigation filters and aggregations are correct for product query
      *
      * Filter products by an array of skus
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testFilterLn()
     {
+        $this->reIndexAndCleanCache();
         $query = <<<QUERY
 {
     products (
@@ -84,17 +118,37 @@ QUERY;
             $response['products'],
             'Filters are missing in product query result.'
         );
+
+        $expectedFilters = $this->getExpectedFiltersDataSet();
+        $actualFilters = $response['products']['filters'];
+        // presort expected and actual results as different search engines have different orders
+        usort($expectedFilters, [$this, 'compareFilterNames']);
+        usort($actualFilters, [$this, 'compareFilterNames']);
+
         $this->assertFilters(
-            $response,
-            $this->getExpectedFiltersDataSet(),
+            ['products' => ['filters' => $actualFilters]],
+            $expectedFilters,
             'Returned filters data set does not match the expected value'
         );
+    }
+
+    /**
+     * Compare arrays by value in 'name' field.
+     *
+     * @param array $a
+     * @param array $b
+     * @return int
+     */
+    private function compareFilterNames(array $a, array $b)
+    {
+        return strcmp($a['name'], $b['name']);
     }
 
     /**
      *  Layered navigation for Configurable products with out of stock options
      * Two configurable products each having two variations and one of the child products of one Configurable set to OOS
      *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/configurable_products_with_custom_attribute_layered_navigation.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -103,7 +157,7 @@ QUERY;
         CacheCleaner::cleanAll();
         $attributeCode = 'test_configurable';
 
-        /** @var \Magento\Eav\Model\Config $eavConfig */
+        /** @var Config $eavConfig */
         $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Config::class);
         $attribute = $eavConfig->getAttribute('catalog_product', $attributeCode);
         /** @var AttributeOptionInterface[] $options */
@@ -151,7 +205,7 @@ QUERY;
     {
         return <<<QUERY
 {
-  products(filter:{                   
+  products(filter:{
                    $attributeCode: {in:["{$firstOption}", "{$secondOption}"]}
                    }
                    pageSize: 3
@@ -159,7 +213,7 @@ QUERY;
        )
   {
   total_count
-    items 
+    items
      {
       name
       sku
@@ -172,14 +226,14 @@ QUERY;
     filters{
       name
       request_var
-      filter_items_count 
+      filter_items_count
       filter_items{
         label
         items_count
         value_string
         __typename
       }
-    }  
+    }
     aggregations{
         attribute_code
         count
@@ -190,8 +244,8 @@ QUERY;
            count
     }
   }
-      
-    } 
+
+    }
 }
 QUERY;
     }
@@ -209,16 +263,14 @@ QUERY;
         $optionValue = $this->getDefaultAttributeOptionValue($attributeCode);
         $query = <<<QUERY
 {
-  products(filter:{                   
-                   $attributeCode: {eq: "{$optionValue}"}
-                   }
-                   
-                   pageSize: 3
-                   currentPage: 1
-       )
+  products(
+      filter:{ $attributeCode: {eq: "{$optionValue}"} }
+      pageSize: 3
+      currentPage: 1
+  )
   {
-  total_count
-    items 
+    total_count
+    items
      {
       name
       sku
@@ -231,14 +283,13 @@ QUERY;
     filters{
       name
       request_var
-      filter_items_count 
+      filter_items_count
       filter_items{
         label
         items_count
         value_string
         __typename
       }
-       
     }
      aggregations{
         attribute_code
@@ -251,8 +302,8 @@ QUERY;
           value
         }
       }
-      
-    } 
+
+    }
 }
 QUERY;
 
@@ -282,7 +333,7 @@ QUERY;
             );
         }
 
-        /** @var \Magento\Eav\Model\Config $eavConfig */
+        /** @var Config $eavConfig */
         $eavConfig = $objectManager->get(Config::class);
         $attribute = $eavConfig->getAttribute('catalog_product', 'second_test_configurable');
         // Validate custom attribute filter layer data from aggregations
@@ -305,15 +356,19 @@ QUERY;
 
     /**
      * @return void
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function reIndexAndCleanCache() : void
     {
-        $objectManager = Bootstrap::getObjectManager();
-        $indexer = $objectManager->create(Indexer::class);
-        $indexer->load('catalogsearch_fulltext');
-        $indexer->reindexAll();
+        $appDir = dirname(Bootstrap::getInstance()->getAppTempDir());
+        $out = '';
+        // phpcs:ignore Magento2.Security.InsecureFunction
+        exec("php -f {$appDir}/bin/magento indexer:reindex catalog_category_product", $out);
+        // phpcs:ignore Magento2.Security.InsecureFunction
+        exec("php -f {$appDir}/bin/magento indexer:reindex catalogsearch_fulltext", $out);
         CacheCleaner::cleanAll();
     }
+
     /**
      * Filter products using an array of  multi select custom attributes
      *
@@ -325,8 +380,8 @@ QUERY;
         $objectManager = Bootstrap::getObjectManager();
         $this->reIndexAndCleanCache();
         $attributeCode = 'multiselect_attribute';
-        /** @var \Magento\Eav\Model\Config $eavConfig */
-        $eavConfig = $objectManager->get(\Magento\Eav\Model\Config::class);
+        /** @var Config $eavConfig */
+        $eavConfig = $objectManager->get(Config::class);
         $attribute = $eavConfig->getAttribute('catalog_product', $attributeCode);
         /** @var AttributeOptionInterface[] $options */
         $options = $attribute->getOptions();
@@ -338,15 +393,15 @@ QUERY;
         }
         $query = <<<QUERY
 {
-  products(filter:{                   
-                   $attributeCode: {in:["{$optionValues[0]}", "{$optionValues[1]}", "{$optionValues[2]}"]} 
+  products(filter:{
+                   $attributeCode: {in:["{$optionValues[0]}", "{$optionValues[1]}", "{$optionValues[2]}"]}
                    }
                    pageSize: 3
                    currentPage: 1
        )
   {
   total_count
-    items 
+    items
      {
       name
       sku
@@ -359,14 +414,14 @@ QUERY;
     filters{
       name
       request_var
-      filter_items_count 
+      filter_items_count
       filter_items{
         label
         items_count
         value_string
         __typename
       }
-    }  
+    }
        aggregations{
         attribute_code
         count
@@ -375,15 +430,16 @@ QUERY;
         {
           label
           value
-        
+
         }
       }
-      
-    } 
+
+    }
 }
 QUERY;
 
         $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response, 'Response has errors.');
         $this->assertEquals(3, $response['products']['total_count']);
         $this->assertNotEmpty($response['products']['filters']);
         $this->assertNotEmpty($response['products']['aggregations']);
@@ -397,8 +453,8 @@ QUERY;
      */
     private function getDefaultAttributeOptionValue(string $attributeCode) : string
     {
-        /** @var \Magento\Eav\Model\Config $eavConfig */
-        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
+        /** @var Config $eavConfig */
+        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Config::class);
         $attribute = $eavConfig->getAttribute('catalog_product', $attributeCode);
         /** @var AttributeOptionInterface[] $options */
         $options = $attribute->getOptions();
@@ -408,7 +464,7 @@ QUERY;
     }
 
     /**
-     * Full text search for Products and then filter the results by custom attribute ( sort is by defaulty by relevance)
+     * Full text search for Products and then filter the results by custom attribute (default sort is relevance)
      *
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_custom_attribute.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
@@ -430,7 +486,7 @@ QUERY;
        )
   {
    total_count
-    items 
+    items
      {
       name
       sku
@@ -443,15 +499,15 @@ QUERY;
     filters{
       name
       request_var
-      filter_items_count 
+      filter_items_count
       filter_items{
         label
         items_count
         value_string
         __typename
       }
-       
-    } 
+
+    }
     aggregations
     {
         attribute_code
@@ -463,10 +519,8 @@ QUERY;
           label
           value
         }
-    }   
-      
     }
- 
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -500,7 +554,7 @@ QUERY;
             );
         }
 
-       // Validate the price layer of aggregations from the response
+        // Validate the price layer of aggregations from the response
         $this->assertResponseFields(
             $response['products']['aggregations'][0],
             [
@@ -516,8 +570,8 @@ QUERY;
                      ],
                     [
                         'count' => 1,
-                        'label' => '40-*',
-                        'value' => '40_*',
+                        'label' => '40-50',
+                        'value' => '40_50',
 
                     ],
                  ],
@@ -576,7 +630,7 @@ QUERY;
        )
   {
   total_count
-    items 
+    items
      {
       name
       sku
@@ -589,7 +643,7 @@ QUERY;
     filters{
       name
       request_var
-      filter_items_count 
+      filter_items_count
       filter_items{
         label
         items_count
@@ -609,7 +663,7 @@ QUERY;
           value
         }
     }
-  } 
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -618,7 +672,7 @@ QUERY;
         $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
         $product1 = $productRepository->get('simple');
         $product2 = $productRepository->get('simple-4');
-        $filteredProducts = [$product1, $product2];
+        $filteredProducts = [$product2, $product1];
         $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
         //phpcs:ignore Generic.CodeAnalysis.ForLoopWithTestFunctionCall
         for ($itemIndex = 0; $itemIndex < count($filteredProducts); $itemIndex++) {
@@ -626,7 +680,8 @@ QUERY;
             //validate that correct products are returned
             $this->assertResponseFields(
                 $productItemsInResponse[$itemIndex][0],
-                [ 'name' => $filteredProducts[$itemIndex]->getName(),
+                [
+                    'name' => $filteredProducts[$itemIndex]->getName(),
                     'sku' => $filteredProducts[$itemIndex]->getSku()
                 ]
             );
@@ -640,7 +695,7 @@ QUERY;
         //Validate the number of categories/sub-categories that contain the products with the custom attribute
         $this->assertCount(6, $actualCategoriesFromResponse);
 
-        $expectedCategoryInAggregrations =
+        $expectedCategoryInAggregations =
             [
                 [
                   'count' =>  2,
@@ -676,9 +731,12 @@ QUERY;
                     'value'=> '13'
                 ],
             ];
-        $categoryInAggregations = array_map(null, $expectedCategoryInAggregrations, $actualCategoriesFromResponse);
+        // presort expected and actual results as different search engines have different orders
+        usort($expectedCategoryInAggregations, [$this, 'compareLabels']);
+        usort($actualCategoriesFromResponse, [$this, 'compareLabels']);
+        $categoryInAggregations = array_map(null, $expectedCategoryInAggregations, $actualCategoriesFromResponse);
 
-//Validate the categories and sub-categories data in the filter layer
+        //Validate the categories and sub-categories data in the filter layer
         foreach ($categoryInAggregations as $index => $categoryAggregationsData) {
             $this->assertNotEmpty($categoryAggregationsData);
             $this->assertEquals(
@@ -692,6 +750,18 @@ QUERY;
                 'Products count in the category is incorrect'
             );
         }
+    }
+
+    /**
+     * Compare arrays by value in 'label' field.
+     *
+     * @param array $a
+     * @param array $b
+     * @return int
+     */
+    private function compareLabels(array $a, array $b)
+    {
+        return strcmp($a['label'], $b['label']);
     }
 
     /**
@@ -718,7 +788,7 @@ QUERY;
        )
   {
   total_count
-    items 
+    items
      {
       name
       sku
@@ -732,7 +802,7 @@ QUERY;
     filters{
       name
       request_var
-      filter_items_count 
+      filter_items_count
       filter_items{
         label
         items_count
@@ -752,7 +822,7 @@ QUERY;
           value
         }
     }
-  } 
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -781,17 +851,17 @@ QUERY;
        )
   {
   total_count
-    items 
+    items
      {
       name
       sku
       url_key
       }
-    
+
     filters{
       name
       request_var
-      filter_items_count      
+      filter_items_count
     }
      aggregations
     {
@@ -805,7 +875,7 @@ QUERY;
           value
         }
     }
-  } 
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query2);
@@ -844,7 +914,7 @@ QUERY;
        )
   {
   total_count
-    items 
+    items
      {
       name
       sku
@@ -853,12 +923,12 @@ QUERY;
     page_info{
       current_page
       page_size
-      
+
     }
     filters{
       name
       request_var
-      filter_items_count      
+      filter_items_count
     }
      aggregations
     {
@@ -872,7 +942,7 @@ QUERY;
           value
         }
     }
-  } 
+  }
 }
 QUERY;
         $response = $this->graphQlQuery($query);
@@ -901,8 +971,8 @@ QUERY;
      */
     private function getExpectedFiltersDataSet()
     {
-        /** @var \Magento\Eav\Model\Config $eavConfig */
-        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
+        /** @var Config $eavConfig */
+        $eavConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(Config::class);
         $attribute = $eavConfig->getAttribute('catalog_product', 'test_configurable');
         /** @var \Magento\Eav\Api\Data\AttributeOptionInterface[] $options */
         $options = $attribute->getOptions();
@@ -962,7 +1032,7 @@ QUERY;
     private function assertFilters($response, $expectedFilters, $message = '')
     {
         $this->assertArrayHasKey('filters', $response['products'], 'Product has filters');
-        $this->assertTrue(is_array(($response['products']['filters'])), 'Product filters is not array');
+        $this->assertIsArray(($response['products']['filters']), 'Product filters is not array');
         $this->assertTrue(count($response['products']['filters']) > 0, 'Product filters is empty');
         foreach ($expectedFilters as $expectedFilter) {
             $found = false;
@@ -982,6 +1052,7 @@ QUERY;
     /**
      * Verify product filtering using price range AND matching skus AND name sorted in DESC order
      *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -1048,17 +1119,97 @@ QUERY;
     }
 
     /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category_with_three_products.php
+     * @SuppressWarnings(PHPMD.UnusedLocalVariable)
+     */
+    public function testSortByPosition()
+    {
+        $this->reIndexAndCleanCache();
+        // Get category ID for filtering
+        /** @var Collection $categoryCollection */
+        $categoryCollection = Bootstrap::getObjectManager()->get(Collection::class);
+        $category = $categoryCollection->addFieldToFilter('name', 'Category 999')->getFirstItem();
+        $categoryId = $category->getId();
+
+        $queryAsc = <<<QUERY
+{
+  products(filter: {category_id: {eq: "$categoryId"}}, sort: {position: ASC}) {
+    total_count
+    items {
+      sku
+      name
+    }
+  }
+}
+QUERY;
+        $resultAsc = $this->graphQlQuery($queryAsc);
+        $this->assertArrayNotHasKey('errors', $resultAsc);
+        $productsAsc = array_column($resultAsc['products']['items'], 'sku');
+        $expectedProductsAsc = ['simple1002', 'simple1001', 'simple1000'];
+        // position equal and secondary sort by entity_id DESC
+        $this->assertEquals($expectedProductsAsc, $productsAsc);
+
+        $queryDesc = <<<QUERY
+{
+  products(filter: {category_id: {eq: "$categoryId"}}, sort: {position: DESC}) {
+    total_count
+    items {
+      sku
+      name
+    }
+  }
+}
+QUERY;
+        $resultDesc = $this->graphQlQuery($queryDesc);
+        $this->assertArrayNotHasKey('errors', $resultDesc);
+        $productsDesc = array_column($resultDesc['products']['items'], 'sku');
+        // position equal and secondary sort by entity_id DESC
+        $this->assertEquals($expectedProductsAsc, $productsDesc);
+
+        //revert position
+        $productPositions = $category->getProductsPosition();
+        $count = 1;
+        foreach ($productPositions as $productId => $position) {
+            $productPositions[$productId] = $count;
+            $count++;
+        }
+        ksort($productPositions);
+
+        $category->setPostedProducts($productPositions);
+        $category->save();
+        $this->reIndexAndCleanCache();
+
+        $queryDesc = <<<QUERY
+{
+  products(filter: {category_id: {eq: "$categoryId"}}, sort: {position: ASC}) {
+    total_count
+    items {
+      sku
+      name
+    }
+  }
+}
+QUERY;
+        $resultDesc = $this->graphQlQuery($queryDesc);
+        $this->assertArrayNotHasKey('errors', $resultDesc);
+        $productsDesc = array_column($resultDesc['products']['items'], 'sku');
+        // position NOT equal and oldest entity first
+        $this->assertEquals(array_reverse($expectedProductsAsc), $productsDesc);
+    }
+
+    /**
      * pageSize = total_count and current page = 2
      * expected - error is thrown
      * Actual - empty array
      *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
 
     public function testSearchWithFilterWithPageSizeEqualTotalCount()
     {
-
+        $this->reIndexAndCleanCache();
         $query
             = <<<QUERY
 {
@@ -1114,6 +1265,7 @@ QUERY;
     /**
      * Filtering for products and sorting using multiple sort parameters
      *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -1125,10 +1277,10 @@ QUERY;
     products(
         filter:
         {
-            price:{to :"50"}            
+            price:{to :"50"}
             sku:{in:["simple1", "simple2"]}
             name:{match:"Simple"}
-             
+
         }
          pageSize:4
          currentPage:1
@@ -1163,10 +1315,10 @@ QUERY;
           page_size
           current_page
         }
-        sort_fields 
+        sort_fields
         {
           default
-          options 
+          options
           {
             value
             label
@@ -1279,8 +1431,8 @@ QUERY;
                         'count' => 1,
                     ],
                     [
-                        'label' => '20-*',
-                        'value' => '20_*',
+                        'label' => '20-30',
+                        'value' => '20_30',
                         'count' => 1,
                     ]
                 ]
@@ -1309,7 +1461,7 @@ QUERY;
         $query
             = <<<QUERY
 {
-   products(filter:{     
+   products(filter:{
           category_id :{in:["4","5","12"]}
          })
  {
@@ -1356,7 +1508,7 @@ QUERY;
             category_id:{eq:"{$queryCategoryId}"}
         }
     pageSize:2
-            
+
      )
     {
       items
@@ -1373,7 +1525,7 @@ QUERY;
         }
       }
        total_count
-        
+
     }
 }
 
@@ -1387,6 +1539,7 @@ QUERY;
         $categoryRepository = ObjectManager::getInstance()->get(CategoryRepositoryInterface::class);
 
         $links = $productLinks->getAssignedProducts($queryCategoryId);
+        $links = array_reverse($links);
         foreach ($response['products']['items'] as $itemIndex => $itemData) {
             $this->assertNotEmpty($itemData);
             $this->assertEquals($response['products']['items'][$itemIndex]['sku'], $links[$itemIndex]->getSku());
@@ -1447,7 +1600,7 @@ QUERY;
        )
   {
     total_count
-    items 
+    items
      {
       name
       sku
@@ -1460,14 +1613,14 @@ QUERY;
     filters{
       name
       request_var
-      filter_items_count 
+      filter_items_count
       filter_items{
         label
         items_count
         value_string
         __typename
       }
-    }    
+    }
      aggregations{
         attribute_code
         count
@@ -1477,27 +1630,28 @@ QUERY;
           value
           count
         }
-      } 
+      }
     }
- 
+
 }
 QUERY;
         $response = $this->graphQlQuery($query);
         $this->assertEquals(3, $response['products']['total_count']);
         $this->assertNotEmpty($response['products']['filters'], 'Filters should have the Category layer');
         $this->assertEquals('Colorful Category', $response['products']['filters'][0]['filter_items'][0]['label']);
+        $this->assertCount(2, $response['products']['aggregations']);
         $productsInResponse = ['Blue briefs','Navy Blue Striped Shoes','Grey shorts'];
         $count = count($response['products']['items']);
         for ($i = 0; $i < $count; $i++) {
             $this->assertEquals($productsInResponse[$i], $response['products']['items'][$i]['name']);
         }
-        $this->assertCount(2, $response['products']['aggregations']);
     }
 
     /**
      * Filtering for product with sku "equals" a specific value
      * If pageSize and current page are not requested, default values are returned
      *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -1600,7 +1754,7 @@ QUERY;
           items_count
           label
           value_string
-        }        
+        }
       }
       aggregations{
         attribute_code
@@ -1637,6 +1791,279 @@ QUERY;
                         'minimalPrice' => [
                             'amount' => [
                                 'value' => $filteredProducts[$itemIndex]->getPrice(),
+                                'currency' => 'USD'
+                            ]
+                        ]
+                    ]
+                ]
+            );
+        }
+    }
+
+    /**
+     * Partial search filtered for price and sorted by price and name
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     */
+    public function testProductPartialNameFullTextSearchQuery()
+    {
+        $this->reIndexAndCleanCache();
+        $textToSearch = 'Sim';
+        $query
+            =<<<QUERY
+{
+    products(
+      search: "{$textToSearch}"
+      filter:{
+                price:{to:"25"}
+             }
+            sort:{
+            price:DESC
+            name:ASC
+            }
+    )
+    {
+        total_count
+        items {
+          name
+          sku
+          price {
+            minimalPrice {
+              amount {
+                value
+                currency
+              }
+            }
+          }
+        }
+        page_info {
+          page_size
+          current_page
+        }
+          filters{
+        filter_items {
+          items_count
+          label
+          value_string
+        }
+      }
+      aggregations{
+        attribute_code
+        count
+        label
+        options{
+          count
+          label
+          value
+        }
+      }
+      }
+}
+QUERY;
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+
+        $prod1 = $productRepository->get('simple1');
+        $prod2 = $productRepository->get('simple2');
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(2, $response['products']['total_count']);
+
+        $filteredProducts = [$prod1, $prod2];
+        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
+            $this->assertNotEmpty($itemArray);
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                [
+                    'sku' => $filteredProducts[$itemIndex]->getSku(),
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                    'price' => [
+                        'minimalPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
+                                'currency' => 'USD'
+                            ]
+                        ]
+                    ]
+                ]
+            );
+        }
+    }
+
+    /**
+     * Partial search on sku filtered for price and sorted by price and sku
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products_with_different_sku_and_name.php
+     */
+    public function testProductPartialSkuFullTextSearchQuery()
+    {
+        $this->reIndexAndCleanCache();
+        $textToSearch = 'prd';
+        $query
+            =<<<QUERY
+{
+    products(
+      search: "{$textToSearch}"
+      filter:{
+                price:{to:"25"}
+             }
+            sort:{
+            price:DESC
+            name:ASC
+            }
+    )
+    {
+        total_count
+        items {
+          name
+          sku
+          price {
+            minimalPrice {
+              amount {
+                value
+                currency
+              }
+            }
+          }
+        }
+        page_info {
+          page_size
+          current_page
+        }
+          filters{
+        filter_items {
+          items_count
+          label
+          value_string
+        }
+      }
+      aggregations{
+        attribute_code
+        count
+        label
+        options{
+          count
+          label
+          value
+        }
+      }
+      }
+}
+QUERY;
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+
+        $prod1 = $productRepository->get('prd1sku');
+        $prod2 = $productRepository->get('prd2-sku2');
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(2, $response['products']['total_count']);
+
+        $filteredProducts = [$prod1, $prod2];
+        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
+            $this->assertNotEmpty($itemArray);
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                [
+                    'sku' => $filteredProducts[$itemIndex]->getSku(),
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                    'price' => [
+                        'minimalPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
+                                'currency' => 'USD'
+                            ]
+                        ]
+                    ]
+                ]
+            );
+        }
+    }
+
+    /**
+     * Partial search on hyphenated sku filtered for price and sorted by price and sku
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products_with_different_sku_and_name.php
+     */
+    public function testProductPartialSkuHyphenatedFullTextSearchQuery()
+    {
+        $this->reIndexAndCleanCache();
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+
+        $prod2 = $productRepository->get('prd2-sku2');
+        $textToSearch = 'sku2';
+        $query
+            =<<<QUERY
+{
+    products(
+      search: "{$textToSearch}"
+      filter:{
+                price:{to:"25"}
+             }
+            sort:{
+            price:DESC
+            name:ASC
+            }
+    )
+    {
+        total_count
+        items {
+          name
+          sku
+          price {
+            minimalPrice {
+              amount {
+                value
+                currency
+              }
+            }
+          }
+        }
+        page_info {
+          page_size
+          current_page
+        }
+          filters{
+        filter_items {
+          items_count
+          label
+          value_string
+        }
+      }
+      aggregations{
+        attribute_code
+        count
+        label
+        options{
+          count
+          label
+          value
+        }
+      }
+      }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(1, $response['products']['total_count']);
+
+        $filteredProducts = [$prod2];
+        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
+            $this->assertNotEmpty($itemArray);
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                [
+                    'sku' => $filteredProducts[$itemIndex]->getSku(),
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                    'price' => [
+                        'minimalPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
                                 'currency' => 'USD'
                             ]
                         ]
@@ -1748,6 +2175,7 @@ QUERY;
     /**
      * No items are returned if the conditions are not met
      *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -1758,11 +2186,11 @@ QUERY;
 {
 products(
     filter:
-    {        
+    {
         price:{from:"50"}
-        
+
         description:{match:"Description"}
-        
+
     }
     pageSize:2
     currentPage:1
@@ -1807,6 +2235,7 @@ QUERY;
     /**
      * Asserts that exception is thrown when current page > totalCount of items returned
      *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/multiple_mixed_products_2.php
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -1914,7 +2343,7 @@ QUERY;
             sku:{eq:"simple_visible_in_stock"}
         }
     pageSize:20
-            
+
      )
     {
       items
@@ -1923,7 +2352,7 @@ QUERY;
        name
       }
        total_count
-        
+
     }
 }
 QUERY;
@@ -1953,12 +2382,14 @@ QUERY;
     /**
      * Verify that invalid current page return an error
      *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage currentPage value must be greater than 0
      */
     public function testInvalidCurrentPage()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('currentPage value must be greater than 0');
+
         $query = <<<QUERY
 {
   products (
@@ -1982,12 +2413,14 @@ QUERY;
     /**
      * Verify that invalid page size returns an error.
      *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
      * @magentoApiDataFixture Magento/Catalog/_files/products_with_layered_navigation_attribute.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage pageSize value must be greater than 0
      */
     public function testInvalidPageSize()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('pageSize value must be greater than 0');
+
         $query = <<<QUERY
 {
   products (

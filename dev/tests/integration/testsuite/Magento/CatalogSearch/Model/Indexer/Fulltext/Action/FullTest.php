@@ -7,7 +7,7 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
-use Magento\CatalogSearch\Model\ResourceModel\Engine;
+use Magento\CatalogSearch\Model\ResourceModel\EngineInterface as Engine;
 use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Store\Model\Store;
@@ -16,24 +16,14 @@ use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Class for testing fulltext index rebuild
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class FullTest extends \PHPUnit\Framework\TestCase
 {
-    /**
-     * @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full
-     */
-    protected $actionFull;
-
-    /**
-     * @inheritdoc
-     */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->actionFull = Bootstrap::getObjectManager()->create(
-            \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::class
-        );
+        $this->markTestSkipped("MC-18332: Mysql Search Engine is deprecated and will be removed");
     }
-
     /**
      * Testing fulltext index rebuild
      *
@@ -43,18 +33,29 @@ class FullTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetIndexData()
     {
+        $engineProvider = Bootstrap::getObjectManager()->create(
+            \Magento\CatalogSearch\Model\ResourceModel\EngineProvider::class
+        );
+        $dataProvider = Bootstrap::getObjectManager()->create(
+            \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\DataProvider::class,
+            ['engineProvider' => $engineProvider]
+        );
+        $actionFull = Bootstrap::getObjectManager()->create(
+            \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::class,
+            ['dataProvider' => $dataProvider]
+        );
         /** @var ProductRepositoryInterface $productRepository */
         $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
         $allowedStatuses = Bootstrap::getObjectManager()->get(Status::class)->getVisibleStatusIds();
         $allowedVisibility = Bootstrap::getObjectManager()->get(Engine::class)->getAllowedVisibility();
-        $result = iterator_to_array($this->actionFull->rebuildStoreIndex(Store::DISTRO_STORE_ID));
+        $result = iterator_to_array($actionFull->rebuildStoreIndex(Store::DISTRO_STORE_ID));
         $this->assertNotEmpty($result);
 
         $productsIds = array_keys($result);
         foreach ($productsIds as $productId) {
             $product = $productRepository->getById($productId);
-            $this->assertContains($product->getVisibility(), $allowedVisibility);
-            $this->assertContains($product->getStatus(), $allowedStatuses);
+            $this->assertContainsEquals($product->getVisibility(), $allowedVisibility);
+            $this->assertContainsEquals($product->getStatus(), $allowedStatuses);
         }
 
         $expectedData = $this->getExpectedIndexData();
@@ -132,6 +133,9 @@ class FullTest extends \PHPUnit\Framework\TestCase
      */
     public function testRebuildStoreIndexConfigurable()
     {
+        $actionFull = Bootstrap::getObjectManager()->create(
+            \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::class
+        );
         $storeId = 1;
 
         $simpleProductId = $this->getIdBySku('simple_10');
@@ -141,8 +145,8 @@ class FullTest extends \PHPUnit\Framework\TestCase
             $simpleProductId,
             $configProductId
         ];
-        $storeIndexDataSimple = $this->actionFull->rebuildStoreIndex($storeId, [$simpleProductId]);
-        $storeIndexDataExpected = $this->actionFull->rebuildStoreIndex($storeId, $expected);
+        $storeIndexDataSimple = $actionFull->rebuildStoreIndex($storeId, [$simpleProductId]);
+        $storeIndexDataExpected = $actionFull->rebuildStoreIndex($storeId, $expected);
 
         $this->assertEquals($storeIndexDataSimple, $storeIndexDataExpected);
     }

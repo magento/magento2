@@ -34,14 +34,16 @@ define([
 
         /**
          * Overrides default window.clearTimeout() to catch errors from iframe and reload Captcha.
+         *
+         * @param {Number} timeoutID
          */
-        clearTimeout: function () {
+        clearTimeout: function (timeoutID) {
             var captcha = captchaList.getCaptchaByFormId(this.formId);
 
             if (captcha !== null) {
                 captcha.refresh();
             }
-            clearTimeout();
+            clearTimeout(timeoutID);
         }
     };
 

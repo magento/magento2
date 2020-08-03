@@ -18,7 +18,7 @@ class RestErrorHandlingTest extends \Magento\TestFramework\TestCase\WebapiAbstra
      */
     protected $mode;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_markTestAsRestOnly();
         $this->mode = Bootstrap::getObjectManager()->get(\Magento\Framework\App\State::class)->getMode();

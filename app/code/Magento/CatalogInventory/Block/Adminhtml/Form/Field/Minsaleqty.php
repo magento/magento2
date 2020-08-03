@@ -13,7 +13,7 @@ namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
  * @api
  * @since 100.0.2
  *
- * @deprecated 2.3.0 Replaced with Multi Source Inventory
+ * @deprecated 100.3.0 Replaced with Multi Source Inventory
  * @link https://devdocs.magento.com/guides/v2.3/inventory/index.html
  * @link https://devdocs.magento.com/guides/v2.3/inventory/catalog-inventory-replacements.html
  */
@@ -37,7 +37,7 @@ class Minsaleqty extends \Magento\Config\Block\System\Config\Form\Field\FieldArr
                 '',
                 ['data' => ['is_render_to_js_template' => true]]
             );
-            $this->_groupRenderer->setClass('customer_group_select');
+            $this->_groupRenderer->setClass('customer_group_select admin__control-select');
         }
         return $this->_groupRenderer;
     }
@@ -57,7 +57,7 @@ class Minsaleqty extends \Magento\Config\Block\System\Config\Form\Field\FieldArr
             'min_sale_qty',
             [
                 'label' => __('Minimum Qty'),
-                'class' => 'required-entry validate-number validate-greater-than-zero'
+                'class' => 'required-entry validate-number validate-greater-than-zero admin__control-text'
             ]
         );
         $this->_addAfter = false;
