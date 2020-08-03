@@ -4,9 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute $attribute */
+/** @var Attribute $attribute */
 
 use Magento\Catalog\Model\Category\AttributeFactory;
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /** @var AttributeFactory $attributeFactory */
