@@ -258,6 +258,7 @@ class CreditmemoTest extends GraphQlAbstract
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
      * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_10_percent_off_with_discount_on_shipping.php
      * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_shipping_excludeTax_order_display_settings.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCreditMemoForBundleProductWithTaxesAndDiscounts()
     {
@@ -704,7 +705,6 @@ QUERY;
 
         /** @var $order \Magento\Sales\Model\Order */
         $orderCollection = Bootstrap::getObjectManager()->create(OrderCollection::class);
-        $creditmemoRepository = Bootstrap::getObjectManager()->get(CreditmemoRepositoryInterface::class);
         foreach ($orderCollection as $order) {
             $this->orderRepository->delete($order);
         }
