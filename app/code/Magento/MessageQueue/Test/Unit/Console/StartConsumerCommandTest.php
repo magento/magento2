@@ -172,7 +172,7 @@ class StartConsumerCommandTest extends \PHPUnit\Framework\TestCase
                 'singleThread' => true,
                 'lockExpects' => 1,
                 'isLocked' => false,
-                'unlockExpects' => 1,
+                'unlockExpects' => 0,
                 'runProcessExpects' => 0,
                 'expectedReturn' => \Magento\Framework\Console\Cli::RETURN_FAILURE,
             ],
