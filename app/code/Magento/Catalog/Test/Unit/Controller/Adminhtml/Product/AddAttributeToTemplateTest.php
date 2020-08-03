@@ -3,29 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Catalog\Api\AttributeSetRepositoryInterface;
 use Magento\Catalog\Controller\Adminhtml\Product\AddAttributeToTemplate;
+use Magento\Catalog\Controller\Adminhtml\Product\Builder as ProductBuilder;
+use Magento\Eav\Api\AttributeGroupRepositoryInterface;
+use Magento\Eav\Api\Data\AttributeGroupInterface;
+use Magento\Eav\Api\Data\AttributeGroupInterfaceFactory;
+use Magento\Eav\Api\Data\AttributeGroupSearchResultsInterface;
+use Magento\Eav\Api\Data\AttributeSetInterface;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Backend\App\Action\Context;
-use Magento\Catalog\Controller\Adminhtml\Product\Builder as ProductBuilder;
-use Magento\Framework\Controller\Result\JsonFactory;
-use Magento\Framework\App\RequestInterface;
-use Magento\Catalog\Api\AttributeSetRepositoryInterface;
-use Magento\Eav\Api\Data\AttributeSetInterface;
-use Magento\Framework\Api\SearchCriteriaBuilder;
-use Magento\Framework\Api\SearchCriteria;
-use Magento\Eav\Api\AttributeGroupRepositoryInterface;
-use Magento\Eav\Api\Data\AttributeGroupSearchResultsInterface;
-use Magento\Eav\Api\Data\AttributeGroupInterfaceFactory;
-use Magento\Eav\Api\Data\AttributeGroupInterface;
-use Magento\Framework\Controller\Result\Json;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AddAttributeToTemplateTest extends \PHPUnit\Framework\TestCase
+class AddAttributeToTemplateTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -38,71 +42,71 @@ class AddAttributeToTemplateTest extends \PHPUnit\Framework\TestCase
     private $controller;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
-     * @var ProductBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductBuilder|MockObject
      */
     private $productBuilderMock;
 
     /**
-     * @var JsonFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var JsonFactory|MockObject
      */
     private $resultJsonFactoryMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     private $requestMock;
 
     /**
-     * @var AttributeSetRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeSetRepositoryInterface|MockObject
      */
     private $attributeSetRepositoryMock;
 
     /**
-     * @var AttributeSetInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeSetInterface|MockObject
      */
     private $attributeSetInterfaceMock;
 
     /**
-     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaBuilder|MockObject
      */
     private $searchCriteriaBuilderMock;
 
     /**
-     * @var SearchCriteria|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteria|MockObject
      */
     private $searchCriteriaMock;
 
     /**
-     * @var AttributeGroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeGroupRepositoryInterface|MockObject
      */
     private $attributeGroupRepositoryMock;
 
     /**
-     * @var AttributeGroupSearchResultsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeGroupSearchResultsInterface|MockObject
      */
     private $attributeGroupSearchResultsMock;
 
     /**
-     * @var AttributeGroupInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeGroupInterfaceFactory|MockObject
      */
     private $attributeGroupInterfaceFactoryMock;
 
     /**
-     * @var AttributeGroupInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeGroupInterface|MockObject
      */
     private $attributeGroupInterfaceMock;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|MockObject
      */
     private $jsonMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->contextMock = $this->getMockBuilder(Context::class)
@@ -115,7 +119,7 @@ class AddAttributeToTemplateTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->requestMock = $this->getMockBuilder(\Magento\Framework\App\RequestInterface::class)
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->setMethods(['getParam', 'setParam'])
             ->getMockForAbstractClass();
         $this->contextMock->expects($this->once())

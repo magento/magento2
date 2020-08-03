@@ -9,6 +9,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontGoCheckoutWithMultipleAddressesActionGroup">
+        <waitForAjaxLoad stepKey="waitAjaxLoad"/>
         <click selector="{{MultishippingSection.shippingMultipleCheckout}}" stepKey="clickToMultipleAddressShippingButton"/>
+        <waitForPageLoad stepKey="waitForMultipleCheckoutLoad"/>
+        <seeElement selector="{{MultishippingSection.pageTitle}}" stepKey="seeMultipleCheckoutPageTitle"/>
     </actionGroup>
 </actionGroups>

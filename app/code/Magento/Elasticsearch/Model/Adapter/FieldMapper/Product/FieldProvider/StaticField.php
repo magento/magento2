@@ -7,19 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider;
 
-use Magento\Framework\App\ObjectManager;
 use Magento\Eav\Model\Config;
 use Magento\Catalog\Api\Data\ProductAttributeInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\AttributeProvider;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface
-    as FieldTypeConverterInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface
     as IndexTypeConverterInterface;
-use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface
-    as FieldTypeResolver;
 use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ResolverInterface
     as FieldIndexResolver;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface
+    as FieldTypeConverterInterface;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ResolverInterface
+    as FieldTypeResolver;
+use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface;
 use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 
 /**
@@ -74,7 +73,7 @@ class StaticField implements FieldProviderInterface
      * @param FieldTypeResolver $fieldTypeResolver
      * @param FieldIndexResolver $fieldIndexResolver
      * @param AttributeProvider $attributeAdapterProvider
-     * @param FieldName\ResolverInterface|null $fieldNameResolver
+     * @param FieldName\ResolverInterface $fieldNameResolver
      * @param array $excludedAttributes
      */
     public function __construct(
@@ -84,7 +83,7 @@ class StaticField implements FieldProviderInterface
         FieldTypeResolver $fieldTypeResolver,
         FieldIndexResolver $fieldIndexResolver,
         AttributeProvider $attributeAdapterProvider,
-        FieldName\ResolverInterface $fieldNameResolver = null,
+        FieldName\ResolverInterface $fieldNameResolver,
         array $excludedAttributes = []
     ) {
         $this->eavConfig = $eavConfig;
@@ -93,8 +92,7 @@ class StaticField implements FieldProviderInterface
         $this->fieldTypeResolver = $fieldTypeResolver;
         $this->fieldIndexResolver = $fieldIndexResolver;
         $this->attributeAdapterProvider = $attributeAdapterProvider;
-        $this->fieldNameResolver = $fieldNameResolver ?: ObjectManager::getInstance()
-            ->get(FieldName\ResolverInterface::class);
+        $this->fieldNameResolver = $fieldNameResolver;
         $this->excludedAttributes = $excludedAttributes;
     }
 

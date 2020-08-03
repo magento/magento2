@@ -9,7 +9,7 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="ClearWidgetsForCMSHomePageContentWYSIWYGDisabledActionGroup">
-        <amOnPage url="{{CmsPageEditPage.url('2')}}" stepKey="navigateToEditHomePagePage"/>
+        <amOnPage url="{{AdminCmsPageEditPage.url('2')}}" stepKey="navigateToEditHomePagePage"/>
         <waitForPageLoad stepKey="waitForCmsPageEditPage"/>
         <conditionalClick selector="{{CmsNewPagePageActionsSection.contentSectionName}}" dependentSelector="{{CatalogWidgetSection.insertWidgetButton}}" visible="false" stepKey="clickShowHideEditorIfVisible"/>
         <waitForElementVisible selector="{{CmsNewPagePageContentSection.content}}" stepKey="waitForContentField"/>

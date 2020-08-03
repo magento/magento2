@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontGuestCheckoutWithSidebarDisabledTest" extends="StorefrontGuestCheckoutTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout via Guest Checkout"/>
+            <title value="Guest Checkout when Cart sidebar disabled"/>
+            <description value="Should be able to place an order as a Guest when Cart sidebar is disabled"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-16587"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <magentoCLI stepKey="disableSidebar" command="config:set checkout/sidebar/display 0"/>
+        </before>
+        <after>
+            <magentoCLI stepKey="enableSidebar" command="config:set checkout/sidebar/display 1"/>
+        </after>
+        <remove keyForRemoval="guestGoToCheckoutFromMinicart"/>
+        <actionGroup ref="GoToCheckoutFromCartActionGroup" stepKey="guestGoToCheckoutFromCart" after="seeCartQuantity"/>
+    </test>
+</tests>

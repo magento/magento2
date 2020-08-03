@@ -36,7 +36,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrderListingFilters"/>
-            <actionGroup ref="logout" stepKey="logoutAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
             <!-- Logout customer -->
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
         </after>
@@ -115,9 +115,7 @@
         <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="1:00 AM" stepKey="seeProductOptionTimeInput" />
         <!--Select shipping method-->
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
-        <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterClickNext"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
         <!--Select payment method-->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
         <!-- Place Order -->
@@ -128,7 +126,7 @@
 
         <!-- Login to Admin and open Order -->
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterByOrderId">
             <argument name="orderId" value="$grabOrderNumber"/>

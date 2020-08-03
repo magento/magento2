@@ -200,12 +200,12 @@ class TableTest extends \PHPUnit\Framework\TestCase
      * Composes information message based on list of legacy tables, found in a file
      *
      * @param  array $legacyTables
-     * @return null|string
+     * @return string
      */
-    protected function _composeFoundsMessage($legacyTables)
+    protected function _composeFoundsMessage($legacyTables): string
     {
         if (!$legacyTables) {
-            return null;
+            return '';
         }
 
         $descriptions = [];

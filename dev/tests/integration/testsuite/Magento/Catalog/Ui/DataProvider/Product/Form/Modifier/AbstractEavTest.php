@@ -37,7 +37,7 @@ abstract class AbstractEavTest extends TestCase
     protected $eavModifier;
 
     /**
-     * @var LocatorInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var LocatorInterface|PHPUnit\Framework\MockObject\MockObject
      */
     protected $locatorMock;
 
@@ -79,7 +79,7 @@ abstract class AbstractEavTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $mappings = [
@@ -92,7 +92,7 @@ abstract class AbstractEavTest extends TestCase
             'gallery' => 'image'
         ];
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->locatorMock = $this->createMock(LocatorInterface::class);
+        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
         $this->locatorMock->expects($this->any())->method('getStore')->willReturn(
             $this->objectManager->get(StoreInterface::class)
         );

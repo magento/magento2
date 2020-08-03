@@ -4,30 +4,41 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\GiftMessage\Test\Unit\Model;
 
-class SaveTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\Model\Session\Quote;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\GiftMessage\Helper\Message;
+use Magento\GiftMessage\Model\MessageFactory;
+use Magento\GiftMessage\Model\Save;
+use Magento\Sales\Model\Order;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class SaveTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $messageFactoryMock;
 
     /**
-     * @var \Magento\GiftMessage\Model\Save
+     * @var Save
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $productRepositoryMock = $this->createMock(\Magento\Catalog\Api\ProductRepositoryInterface::class);
-        $this->messageFactoryMock = $this->getMockBuilder(\Magento\GiftMessage\Model\MessageFactory::class)
+        $productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
+        $this->messageFactoryMock = $this->getMockBuilder(MessageFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $sessionMock = $this->createMock(\Magento\Backend\Model\Session\Quote::class);
-        $giftMessageHelperMock = $this->createMock(\Magento\GiftMessage\Helper\Message::class);
-        $this->model = new \Magento\GiftMessage\Model\Save(
+        $sessionMock = $this->createMock(Quote::class);
+        $giftMessageHelperMock = $this->createMock(Message::class);
+        $this->model = new Save(
             $productRepositoryMock,
             $this->messageFactoryMock,
             $sessionMock,
@@ -37,18 +48,17 @@ class SaveTest extends \PHPUnit\Framework\TestCase
 
     public function testSaveAllInOrder()
     {
-        $message = [1 =>
-            [
-                'from' => 'John Doe',
-                'to' => 'Jane Doe',
-                'message' => 'I love Magento',
-                'type' => 'order'
-            ]
+        $message = [1 => [
+            'from' => 'John Doe',
+            'to' => 'Jane Doe',
+            'message' => 'I love Magento',
+            'type' => 'order'
+        ]
         ];
         $this->model->setGiftmessages($message);
 
         $messageMock = $this->createMock(\Magento\GiftMessage\Model\Message::class);
-        $entityModelMock = $this->createMock(\Magento\Sales\Model\Order::class);
+        $entityModelMock = $this->createMock(Order::class);
 
         $this->messageFactoryMock->expects($this->once())->method('create')->willReturn($messageMock);
         $messageMock->expects($this->once())->method('getEntityModelByType')->with('order')->willReturnSelf();

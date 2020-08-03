@@ -65,8 +65,14 @@ class CategoryTest extends AbstractBackendController
      *
      * @throws \Magento\Framework\Exception\AuthenticationException
      */
-    protected function setUp()
+    protected function setUp(): void
     {
+        Bootstrap::getObjectManager()->configure([
+            'preferences' => [
+                \Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager::class
+                => \Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager::class
+            ]
+        ]);
         parent::setUp();
 
         /** @var ProductResource $productResource */
@@ -885,6 +891,72 @@ class CategoryTest extends AbstractBackendController
                 [
                     'URL key "backend" matches a reserved endpoint name '
                     . '(admin, soap, rest, graphql, standard, backend). Use another URL key.'
+                ]
+            ),
+            MessageInterface::TYPE_ERROR
+        );
+    }
+
+    /**
+     * Verify that the category cannot be saved if category name can not be converted to Latin (like Thai)
+     *
+     * @return void
+     */
+    public function testSaveWithThaiCategoryNameAction(): void
+    {
+        $categoryName = 'ประเภท';
+        $errorMessage = 'Invalid URL key. The "%1" category name can not be used to generate Latin URL key. ' .
+            'Please add URL key or change category name using Latin letters and numbers to avoid generating ' .
+            'URL key issues.';
+        $inputData = [
+            'name' => $categoryName,
+            'use_config' => [
+                'available_sort_by' => 1,
+                'default_sort_by' => 1
+            ],
+            'is_active' => '1',
+            'include_in_menu' => '1',
+        ];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($inputData);
+        $this->dispatch('backend/catalog/category/save');
+        $this->assertSessionMessages(
+            $this->equalTo(
+                [
+                    (string)__($errorMessage, $categoryName)
+                ]
+            ),
+            MessageInterface::TYPE_ERROR
+        );
+    }
+
+    /**
+     * Verify that the category cannot be saved if category URL key can not be converted to Latin (like Thai)
+     *
+     * @return void
+     */
+    public function testSaveWithThaiCategoryUrlKeyAction(): void
+    {
+        $categoryUrlKey = 'ประเภท';
+        $errorMessage = 'Invalid URL key. The "%1" URL key can not be used to generate Latin URL key. ' .
+            'Please use Latin letters and numbers to avoid generating URL key issues.';
+        $inputData = [
+            'name' => 'category name',
+            'url_key' => $categoryUrlKey,
+            'use_config' => [
+                'available_sort_by' => 1,
+                'default_sort_by' => 1
+            ],
+            'is_active' => '1',
+            'include_in_menu' => '1',
+        ];
+        $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
+        $this->getRequest()->setPostValue($inputData);
+        $this->dispatch('backend/catalog/category/save');
+        $this->assertSessionMessages(
+            $this->equalTo(
+                [
+                    (string)__($errorMessage, $categoryUrlKey)
                 ]
             ),
             MessageInterface::TYPE_ERROR

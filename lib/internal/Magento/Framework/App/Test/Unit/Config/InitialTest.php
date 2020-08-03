@@ -3,22 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit\Config;
 
-class InitialTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Cache\Type\Config;
+use Magento\Framework\App\Config\Initial;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class InitialTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\App\Config\Initial
+     * @var Initial
      */
     private $config;
 
     /**
-     * @var \Magento\Framework\App\Cache\Type\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $cacheMock;
 
@@ -34,20 +43,20 @@ class InitialTest extends \PHPUnit\Framework\TestCase
         'metadata' => ['metadata'],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->cacheMock = $this->createMock(\Magento\Framework\App\Cache\Type\Config::class);
+        $this->objectManager = new ObjectManager($this);
+        $this->cacheMock = $this->createMock(Config::class);
         $this->cacheMock->expects($this->any())
             ->method('load')
             ->with('initial_config')
             ->willReturn(json_encode($this->data));
-        $serializerMock = $this->createMock(\Magento\Framework\Serialize\SerializerInterface::class);
+        $serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $serializerMock->method('unserialize')
             ->willReturn($this->data);
 
         $this->config = $this->objectManager->getObject(
-            \Magento\Framework\App\Config\Initial::class,
+            Initial::class,
             [
                 'cache' => $this->cacheMock,
                 'serializer' => $serializerMock,

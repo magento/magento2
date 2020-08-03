@@ -20,6 +20,7 @@ use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\Store\Api\StoreResolverInterface;
 use Magento\Store\Controller\Store\Redirect;
 use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\StoreSwitcher\HashGenerator;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -31,8 +32,20 @@ use PHPUnit\Framework\TestCase;
  */
 class RedirectTest extends TestCase
 {
-    private const DEFAULT_STORE_VIEW_CODE = 'default';
-    private const STORE_CODE = 'sv1';
+    /**
+     * Stub for default store view code
+     */
+    private const STUB_DEFAULT_STORE_VIEW_CODE = 'default';
+
+    /**
+     * Stub for default store code
+     */
+    private const STUB_STORE_CODE = 'sv1';
+
+    /**
+     * @var StoreManagerInterface|MockObject
+     */
+    private $storeManagerMock;
 
     /**
      * @var StoreRepositoryInterface|MockObject
@@ -67,7 +80,12 @@ class RedirectTest extends TestCase
     /**
      * @var Store|MockObject
      */
-    private $formStoreMock;
+    private $fromStoreMock;
+
+    /**
+     * @var Store|MockObject
+     */
+    private $targetStoreMock;
 
     /**
      * @var Store|MockObject
@@ -87,13 +105,14 @@ class RedirectTest extends TestCase
     /**
      * @var Redirect
      */
-    private $redirectController;
+    private $model;
 
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getParam'])
@@ -117,7 +136,11 @@ class RedirectTest extends TestCase
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->formStoreMock = $this->getMockBuilder(Store::class)
+        $this->fromStoreMock = $this->getMockBuilder(Store::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getCode'])
+            ->getMockForAbstractClass();
+        $this->targetStoreMock = $this->getMockBuilder(Store::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCode'])
             ->getMockForAbstractClass();
@@ -150,9 +173,10 @@ class RedirectTest extends TestCase
                 'messageManager' => $this->messageManagerMock,
             ]
         );
-        $this->redirectController = $objectManager->getObject(
+        $this->model = $objectManager->getObject(
             Redirect::class,
             [
+                'storeManager' => $this->storeManagerMock,
                 'storeRepository' => $this->storeRepositoryMock,
                 'storeResolver' => $this->storeResolverMock,
                 'sidResolver' => $this->sidResolverMock,
@@ -186,19 +210,25 @@ class RedirectTest extends TestCase
                 $defaultStoreViewCode
             );
         $this->storeRepositoryMock
-            ->expects($this->once())
+            ->expects($this->exactly(2))
             ->method('get')
-            ->with($defaultStoreViewCode)
-            ->willReturn($this->formStoreMock);
-        $this->formStoreMock
+            ->willReturnMap([
+                [$defaultStoreViewCode, $this->fromStoreMock],
+                [$storeCode, $this->targetStoreMock],
+            ]);
+        $this->fromStoreMock
             ->expects($this->once())
             ->method('getCode')
             ->willReturn($defaultStoreViewCode);
         $this->hashGeneratorMock
             ->expects($this->once())
             ->method('generateHash')
-            ->with($this->formStoreMock)
+            ->with($this->fromStoreMock)
             ->willReturn([]);
+        $this->storeManagerMock
+            ->expects($this->once())
+            ->method('setCurrentStore')
+            ->with($this->targetStoreMock);
         $this->redirectMock
             ->expects($this->once())
             ->method('redirect')
@@ -214,7 +244,7 @@ class RedirectTest extends TestCase
                 ]
             );
 
-        $this->assertEquals(null, $this->redirectController->execute());
+        $this->assertNull($this->model->execute());
     }
 
     /**
@@ -257,7 +287,7 @@ class RedirectTest extends TestCase
             ->with($this->responseMock, $this->currentStoreMock)
             ->willReturnSelf();
 
-        $this->assertEquals(null, $this->redirectController->execute());
+        $this->assertNull($this->model->execute());
     }
 
     /**
@@ -281,7 +311,7 @@ class RedirectTest extends TestCase
             ->expects($this->never())
             ->method('get');
 
-        $this->assertEquals($this->responseMock, $this->redirectController->execute());
+        $this->assertEquals($this->responseMock, $this->model->execute());
     }
 
     /**
@@ -292,7 +322,7 @@ class RedirectTest extends TestCase
     public function getConfigDataProvider(): array
     {
         return [
-            [self::DEFAULT_STORE_VIEW_CODE, self::STORE_CODE]
+            [self::STUB_DEFAULT_STORE_VIEW_CODE, self::STUB_STORE_CODE]
         ];
     }
 }
