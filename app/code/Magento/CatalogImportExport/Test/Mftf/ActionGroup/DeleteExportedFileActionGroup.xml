@@ -10,19 +10,19 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="DeleteExportedFileActionGroup">
         <annotations>
-            <description>Deletes the provided Grid Index on the Exports grid page.</description>
+            <description>Deletes the exported file on the Exports grid page.</description>
         </annotations>
         <arguments>
-            <argument name="rowIndex" type="string"/>
+            <argument name="fileName" type="string"/>
         </arguments>
 
         <amOnPage url="{{AdminExportIndexPage.url}}" stepKey="goToExportIndexPage"/>
         <waitForPageLoad time="30" stepKey="waitFormReload"/>
-        <click stepKey="clickSelectBtn" selector="{{AdminExportAttributeSection.selectByIndex(rowIndex)}}"/>
-        <click stepKey="clickOnDelete" selector="{{AdminExportAttributeSection.delete(rowIndex)}}" after="clickSelectBtn"/>
+        <click stepKey="clickSelectBtn" selector="{{AdminExportAttributeSection.selectByFileName(fileName)}}"/>
+        <click stepKey="clickOnDelete" selector="{{AdminExportAttributeSection.deleteByFileName(fileName)}}" after="clickSelectBtn"/>
         <waitForElementVisible selector="{{AdminProductGridConfirmActionSection.title}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminProductGridConfirmActionSection.ok}}" stepKey="confirmDelete"/>
-        <waitForElementVisible selector="{{AdminDataGridTableSection.dataGridEmpty}}" stepKey="waitDataGridEmptyMessageAppears"/>
-        <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage"/>
+        <waitForPageLoad time="30" stepKey="waitFormReload2"/>
+        <dontSeeElement selector="{{AdminExportAttributeSection.fileName(fileName)}}" stepKey="assertDontSeeFile"/>
     </actionGroup>
 </actionGroups>

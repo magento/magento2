@@ -221,8 +221,10 @@ class ImageUploader
                 $baseImagePath
             );
         } catch (\Exception $e) {
+            $this->logger->critical($e);
             throw new \Magento\Framework\Exception\LocalizedException(
-                __('Something went wrong while saving the file(s).')
+                __('Something went wrong while saving the file(s).'),
+                $e
             );
         }
 
@@ -276,7 +278,8 @@ class ImageUploader
             } catch (\Exception $e) {
                 $this->logger->critical($e);
                 throw new \Magento\Framework\Exception\LocalizedException(
-                    __('Something went wrong while saving the file(s).')
+                    __('Something went wrong while saving the file(s).'),
+                    $e
                 );
             }
         }

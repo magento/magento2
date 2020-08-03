@@ -3,22 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Config\Test\Unit\Model\Config;
 
+use Magento\Config\Model\Config\Backend\Encrypted;
 use Magento\Config\Model\Config\ScopeDefiner;
 use Magento\Config\Model\Config\Structure;
 use Magento\Config\Model\Config\Structure\Data;
+use Magento\Config\Model\Config\Structure\Element\Field;
 use Magento\Config\Model\Config\Structure\Element\FlyweightFactory;
 use Magento\Config\Model\Config\Structure\Element\Iterator\Tab as TabIterator;
-use PHPUnit_Framework_MockObject_MockObject as Mock;
+use Magento\Config\Model\Config\Structure\Element\Section;
+use Magento\Config\Model\Config\Structure\ElementInterface;
+use PHPUnit\Framework\MockObject\MockObject as Mock;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Structure.
  *
  * @see Structure
  */
-class StructureTest extends \PHPUnit\Framework\TestCase
+class StructureTest extends TestCase
 {
     /**
      * @var Structure|Mock
@@ -53,7 +59,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_flyweightFactory = $this->getMockBuilder(FlyweightFactory::class)
             ->disableOriginalConstructor()
@@ -106,7 +112,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
             ->method('setElements')
             ->with($expected);
 
-        $model = new \Magento\Config\Model\Config\Structure(
+        $model = new Structure(
             $this->_structureDataMock,
             $this->_tabIteratorMock,
             $this->_flyweightFactory,
@@ -154,7 +160,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
                 ]
             );
 
-        $model = new \Magento\Config\Model\Config\Structure(
+        $model = new Structure(
             $this->_structureDataMock,
             $this->_tabIteratorMock,
             $this->_flyweightFactory,
@@ -227,7 +233,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
     ) {
         $expectedConfig = ['id' => $expectedId, 'path' => $expectedPath, '_elementType' => $expectedType];
 
-        $elementMock = $this->getMockBuilder(Structure\ElementInterface::class)
+        $elementMock = $this->getMockBuilder(ElementInterface::class)
             ->getMockForAbstractClass();
         $elementMock->expects($this->once())
             ->method('setData')
@@ -287,7 +293,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         $section = $this->_structureData['config']['system']['sections']['section_1'];
         $fieldData = $section['children']['group_level_1']['children']['field_3'];
 
-        $elementMock = $this->getMockBuilder(Structure\Element\Field::class)
+        $elementMock = $this->getMockBuilder(Field::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -316,7 +322,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         ];
         $pathParts = explode('/', 'section_1/group_level_1/field_3');
 
-        $elementMock = $this->getMockBuilder(Structure\Element\Field::class)
+        $elementMock = $this->getMockBuilder(Field::class)
             ->disableOriginalConstructor()
             ->getMock();
         $structureDataMock = $this->getMockBuilder(Data::class)
@@ -356,7 +362,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $tabMock->expects($this->once())
             ->method('rewind');
-        $section = $this->getMockBuilder(Structure\Element\Section::class)
+        $section = $this->getMockBuilder(Section::class)
             ->disableOriginalConstructor()
             ->setMethods(['isVisible', 'getData'])
             ->getMock();
@@ -412,7 +418,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         $section = $this->_structureData['config']['system']['sections']['section_1'];
         $fieldData = $section['children']['group_level_1']['children']['field_3'];
 
-        $elementMock = $this->getMockBuilder(Structure\Element\Field::class)
+        $elementMock = $this->getMockBuilder(Field::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -448,7 +454,7 @@ class StructureTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'backend_model',
-                \Magento\Config\Model\Config\Backend\Encrypted::class,
+                Encrypted::class,
                 [
                     'section_1/group_1/field_2',
                     'section_1/group_level_1/group_level_2/group_level_3/field_3_1_1',

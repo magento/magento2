@@ -3,18 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Swatches\Controller\Adminhtml\Product\Attribute\Plugin;
 
 use Magento\Catalog\Controller\Adminhtml\Product\Attribute;
 use Magento\Framework\App\RequestInterface;
-use Magento\Swatches\Model\Swatch;
+use Magento\Swatches\Model\ConvertSwatchAttributeFrontendInput;
 
 /**
  * Plugin for product attribute save controller.
  */
 class Save
 {
+    /**
+     * @var ConvertSwatchAttributeFrontendInput
+     */
+    private $convertSwatchAttributeFrontendInput;
+
+    /**
+     * @param ConvertSwatchAttributeFrontendInput $convertSwatchAttributeFrontendInput
+     */
+    public function __construct(
+        ConvertSwatchAttributeFrontendInput $convertSwatchAttributeFrontendInput
+    ) {
+        $this->convertSwatchAttributeFrontendInput = $convertSwatchAttributeFrontendInput;
+    }
+
     /**
      * Performs the conversion of the frontend input value.
      *
@@ -23,30 +38,12 @@ class Save
      * @return array
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function beforeDispatch(Attribute\Save $subject, RequestInterface $request)
+    public function beforeDispatch(Attribute\Save $subject, RequestInterface $request): array
     {
         $data = $request->getPostValue();
+        $data = $this->convertSwatchAttributeFrontendInput->execute($data);
+        $request->setPostValue($data);
 
-        if (isset($data['frontend_input'])) {
-            switch ($data['frontend_input']) {
-                case 'swatch_visual':
-                    $data[Swatch::SWATCH_INPUT_TYPE_KEY] = Swatch::SWATCH_INPUT_TYPE_VISUAL;
-                    $data['frontend_input'] = 'select';
-                    $request->setPostValue($data);
-                    break;
-                case 'swatch_text':
-                    $data[Swatch::SWATCH_INPUT_TYPE_KEY] = Swatch::SWATCH_INPUT_TYPE_TEXT;
-                    $data['use_product_image_for_swatch'] = 0;
-                    $data['frontend_input'] = 'select';
-                    $request->setPostValue($data);
-                    break;
-                case 'select':
-                    $data[Swatch::SWATCH_INPUT_TYPE_KEY] = Swatch::SWATCH_INPUT_TYPE_DROPDOWN;
-                    $data['frontend_input'] = 'select';
-                    $request->setPostValue($data);
-                    break;
-            }
-        }
         return [$request];
     }
 }

@@ -45,7 +45,7 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritdoc
      */
     public function convert($source)
     {
@@ -54,6 +54,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
         foreach ($source->getElementsByTagName('consumer') as $consumerNode) {
             $consumerName = $this->getAttributeValue($consumerNode, 'name');
             $handler = $this->getAttributeValue($consumerNode, 'handler');
+            $onlySpawnWhenMessageAvailable =  $this->getAttributeValue(
+                $consumerNode,
+                'onlySpawnWhenMessageAvailable'
+            );
+
             $result[$consumerName] = [
                 'name' => $consumerName,
                 'queue' => $this->getAttributeValue($consumerNode, 'queue'),
@@ -68,7 +73,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                     'connection',
                     $this->defaultValueProvider->getConnection()
                 ),
-                'maxMessages' => $this->getAttributeValue($consumerNode, 'maxMessages')
+                'maxMessages' => $this->getAttributeValue($consumerNode, 'maxMessages'),
+                'maxIdleTime' => $this->getAttributeValue($consumerNode, 'maxIdleTime'),
+                'sleep' => $this->getAttributeValue($consumerNode, 'sleep'),
+                'onlySpawnWhenMessageAvailable' =>
+                    $onlySpawnWhenMessageAvailable === null ? null : boolval($onlySpawnWhenMessageAvailable)
             ];
         }
         return $result;

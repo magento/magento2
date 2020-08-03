@@ -25,5 +25,6 @@
         <element name="customOptionDropDown" type="select" selector="//*[@id='product-options-wrapper']//select[contains(@class, 'product-custom-option admin__control-select')]"/>
         <element name="qtyInputWithProduct" type="input" selector="//tr//strong[contains(.,'{{productName}}')]/../../td[@class='col qty']//input" parameterized="true"/>
         <element name="customOptionRadio" type="input" selector="//span[contains(text(),'{{customOption}}')]/../../input" parameterized="true"/>
+        <element name="onlyProductsLeft" type="block" selector="//div[@class='product-info-price']//div[@class='product-info-stock-sku']//div[@class='availability only']"/>
     </section>
 </sections>

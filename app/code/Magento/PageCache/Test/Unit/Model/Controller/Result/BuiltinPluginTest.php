@@ -3,23 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\PageCache\Test\Unit\Model\Controller\Result;
 
-use Magento\PageCache\Model\Controller\Result\BuiltinPlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\PageCache\Model\Config;
+use Laminas\Http\Header\HeaderInterface as HttpHeaderInterface;
 use Magento\Framework\App\PageCache\Kernel;
-use Magento\Framework\App\State as AppState;
-use Magento\Framework\Registry;
-use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\App\Response\Http as ResponseHttp;
-use Zend\Http\Header\HeaderInterface as HttpHeaderInterface;
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\PageCache\Model\Cache\Type as CacheType;
+use Magento\PageCache\Model\Config;
+use Magento\PageCache\Model\Controller\Result\BuiltinPlugin;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class BuiltinPluginTest extends \PHPUnit\Framework\TestCase
+class BuiltinPluginTest extends TestCase
 {
     /**
      * @var BuiltinPlugin
@@ -32,41 +36,41 @@ class BuiltinPluginTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $configMock;
 
     /**
-     * @var Kernel|\PHPUnit_Framework_MockObject_MockObject
+     * @var Kernel|MockObject
      */
     private $kernelMock;
 
     /**
-     * @var AppState|\PHPUnit_Framework_MockObject_MockObject
+     * @var AppState|MockObject
      */
     private $stateMock;
 
     /**
-     * @var Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|MockObject
      */
     private $registryMock;
 
     /**
-     * @var ResultInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultInterface|MockObject
      */
     private $resultMock;
 
     /**
-     * @var ResponseHttp|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseHttp|MockObject
      */
     private $responseMock;
 
     /**
-     * @var HttpHeaderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var HttpHeaderInterface|MockObject
      */
     private $httpHeaderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()

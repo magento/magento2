@@ -7,8 +7,10 @@ namespace Magento\Catalog\Model\ResourceModel\Product\Website;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\EntityManager\MetadataPool;
 
+/**
+ * Class Link used for assign website to the product
+ */
 class Link
 {
     /**
@@ -28,6 +30,7 @@ class Link
 
     /**
      * Retrieve associated with product websites ids
+     *
      * @param int $productId
      * @return array
      */
@@ -48,29 +51,53 @@ class Link
 
     /**
      * Return true - if websites was changed, and false - if not
+     *
      * @param ProductInterface $product
      * @param array $websiteIds
      * @return bool
      */
     public function saveWebsiteIds(ProductInterface $product, array $websiteIds)
     {
+        $productId = (int) $product->getId();
+        return $this->updateProductWebsite($productId, $websiteIds);
+    }
+
+    /**
+     * Get Product website table
+     *
+     * @return string
+     */
+    private function getProductWebsiteTable()
+    {
+        return $this->resourceConnection->getTableName('catalog_product_website');
+    }
+
+    /**
+     * Update product website table
+     *
+     * @param int $productId
+     * @param array $websiteIds
+     * @return bool
+     */
+    public function updateProductWebsite(int $productId, array $websiteIds): bool
+    {
         $connection = $this->resourceConnection->getConnection();
 
-        $oldWebsiteIds = $this->getWebsiteIdsByProductId($product->getId());
+        $oldWebsiteIds = $this->getWebsiteIdsByProductId($productId);
         $insert = array_diff($websiteIds, $oldWebsiteIds);
         $delete = array_diff($oldWebsiteIds, $websiteIds);
 
         if (!empty($insert)) {
             $data = [];
             foreach ($insert as $websiteId) {
-                $data[] = ['product_id' => (int) $product->getId(), 'website_id' => (int) $websiteId];
+                $data[] = ['product_id' => $productId, 'website_id' => (int)$websiteId];
             }
             $connection->insertMultiple($this->getProductWebsiteTable(), $data);
         }
 
         if (!empty($delete)) {
             foreach ($delete as $websiteId) {
-                $condition = ['product_id = ?' => (int) $product->getId(), 'website_id = ?' => (int) $websiteId];
+                $condition = ['product_id = ?' => $productId, 'website_id = ?' => (int)$websiteId];
                 $connection->delete($this->getProductWebsiteTable(), $condition);
             }
         }
@@ -80,13 +107,5 @@ class Link
         }
 
         return false;
-    }
-
-    /**
-     * @return string
-     */
-    private function getProductWebsiteTable()
-    {
-        return $this->resourceConnection->getTableName('catalog_product_website');
     }
 }

@@ -38,7 +38,7 @@ class AddCommentTest extends AbstractInvoiceControllerTest
         $this->dispatch('backend/sales/order_invoice/addComment');
 
         $html = $this->getResponse()->getBody();
-        $this->assertContains($comment, $html);
+        $this->assertStringContainsString($comment, $html);
 
         $message = $this->transportBuilder->getSentMessage();
         $subject = __('Update to your %1 invoice', $order->getStore()->getFrontendName())->render();

@@ -8,7 +8,7 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="queue" resource="default" engine="innodb" comment="Table storing unique queues">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true"
                 comment="Queue ID"/>
         <column xsi:type="varchar" name="name" nullable="true" length="255" comment="Queue name"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -19,7 +19,7 @@
         </constraint>
     </table>
     <table name="queue_message" resource="default" engine="innodb" comment="Queue messages">
-        <column xsi:type="bigint" name="id" padding="20" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="bigint" name="id" unsigned="true" nullable="false" identity="true"
                 comment="Message ID"/>
         <column xsi:type="varchar" name="topic_name" nullable="true" length="255" comment="Message topic"/>
         <column xsi:type="longtext" name="body" nullable="true" comment="Message body"/>
@@ -29,17 +29,17 @@
     </table>
     <table name="queue_message_status" resource="default" engine="innodb"
            comment="Relation table to keep associations between queues and messages">
-        <column xsi:type="bigint" name="id" padding="20" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="bigint" name="id" unsigned="true" nullable="false" identity="true"
                 comment="Relation ID"/>
-        <column xsi:type="int" name="queue_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="queue_id" unsigned="true" nullable="false" identity="false"
                 comment="Queue ID"/>
-        <column xsi:type="bigint" name="message_id" padding="20" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="bigint" name="message_id" unsigned="true" nullable="false" identity="false"
                 comment="Message ID"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Updated At"/>
-        <column xsi:type="smallint" name="status" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="status" unsigned="true" nullable="false" identity="false"
                 comment="Message status in particular queue"/>
-        <column xsi:type="smallint" name="number_of_trials" padding="5" unsigned="true" nullable="false"
+        <column xsi:type="smallint" name="number_of_trials" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Number of trials to processed failed message processing"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="id"/>

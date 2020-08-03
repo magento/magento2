@@ -46,7 +46,7 @@ if (!$attribute->getId()) {
                     'option_1' => ['Option 1'],
                     'option_2' => ['Option 2'],
                     'option_3' => ['Option 3'],
-                    'option_4' => ['Simple']
+                    'option_4' => ['xbox']
                 ],
                 'order' => [
                     'option_1' => 1,

@@ -19,6 +19,9 @@
         <click selector="{{AdminCatalogSearchConfigurationSection.elastic6ConnectionWizard}}" stepKey="clickOnTestConnectionButton"/>
         <waitForPageLoad stepKey="waitForConnectionEstablishment"/>
         <grabTextFrom selector="{{AdminCatalogSearchConfigurationSection.connectionStatus}}" stepKey="grabConnectionStatus"/>
-        <assertEquals expected="{{AdminElasticsearch6TestConnectionMessageData.successMessage}}" expectedType="string" actual="$grabConnectionStatus"  stepKey="assertThatConnectionSuccessful"/>
+        <assertEquals stepKey="assertThatConnectionSuccessful">
+			<actualResult type="const">$grabConnectionStatus</actualResult>
+			<expectedResult type="string">{{AdminElasticsearch6TestConnectionMessageData.successMessage}}</expectedResult>
+        </assertEquals>
     </actionGroup>
 </actionGroups>
