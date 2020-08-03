@@ -217,14 +217,11 @@ interface CreditMemoItemInterface @doc(description: "Credit memo item details") 
     product_name: String @doc(description: "The name of the base product")
     product_sku: String! @doc(description: "SKU of the base product")
     product_sale_price: Money! @doc(description: "The sale price for the base product, including selected options")
+    discounts: [Discount] @doc(description: "Contains information about the final discount amount for the base product, including discounts on options")
     quantity_refunded: Float @doc(description: "The number of refunded items")
 }
 
 type CreditMemoItem implements CreditMemoItemInterface {
-}
-
-type BundleCreditMemoItem implements CreditMemoItemInterface {
-    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product")
 }
 
 type CreditMemoTotal @doc(description: "Credit memo price details") {

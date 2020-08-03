@@ -123,7 +123,36 @@ class CreditMemoItems implements ResolverInterface
             ],
             'quantity_refunded' => $creditMemoItem->getQty(),
             'model' => $creditMemoItem,
-            'product_type' => $orderItem['product_type']
+            'product_type' => $orderItem['product_type'],
+            'discounts' => $this->formatDiscountDetails($order, $creditMemoItem)
         ];
+    }
+
+    /**
+     * Returns formatted information about an applied discount
+     *
+     * @param OrderInterface $associatedOrder
+     * @param CreditmemoItemInterface $creditmemoItem
+     * @return array
+     */
+    private function formatDiscountDetails(
+        OrderInterface $associatedOrder,
+        CreditmemoItemInterface $creditmemoItem
+    ) : array {
+        if ($associatedOrder->getDiscountDescription() === null
+            && $creditmemoItem->getDiscountAmount() == 0
+            && $associatedOrder->getDiscountAmount() == 0
+        ) {
+            $discounts = [];
+        } else {
+            $discounts[] = [
+                'label' => $associatedOrder->getDiscountDescription() ?? _('Discount'),
+                'amount' => [
+                    'value' => abs($creditmemoItem->getDiscountAmount()) ?? 0,
+                    'currency' => $associatedOrder->getOrderCurrencyCode()
+                ]
+            ];
+        }
+        return $discounts;
     }
 }
