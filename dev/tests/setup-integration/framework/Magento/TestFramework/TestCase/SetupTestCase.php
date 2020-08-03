@@ -3,10 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\TestFramework\TestCase;
 
-use Magento\Framework\App\DesignInterface;
-use Magento\Framework\View\DesignExceptions;
+use Magento\Framework\DB\Adapter\ConnectionException;
+use Magento\Framework\DB\Adapter\SqlVersionProvider;
+use Magento\TestFramework\Annotation\DataProviderFromFile;
+use Magento\TestFramework\Helper\Bootstrap;
 
 /**
  * Instance of Setup test case. Used in order to tweak dataProviders functionality.
@@ -17,6 +22,25 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
      * @var array
      */
     private $data = [];
+
+    /**
+     * @var string
+     */
+    private $dbKey;
+
+    /**
+     * @var SqlVersionProvider
+     */
+    private $sqlVersionProvider;
+
+    /**
+     * @inheritDoc
+     */
+    public function __construct($name = null, array $data = [], $dataName = '')
+    {
+        parent::__construct($name, $data, $dataName);
+        $this->sqlVersionProvider = Bootstrap::getObjectManager()->get(SqlVersionProvider::class);
+    }
 
     /**
      * @inheritdoc
@@ -36,9 +60,45 @@ class SetupTestCase extends \PHPUnit\Framework\TestCase implements MutableDataIn
 
     /**
      * @inheritdoc
+     *
+     * @throws ConnectionException
      */
     public function getData()
     {
-        return $this->data;
+        return $this->data[$this->getDbKey()] ?? $this->data[DataProviderFromFile::FALLBACK_VALUE];
+    }
+
+    /**
+     * Get database version.
+     *
+     * @return string
+     * @throws ConnectionException
+     */
+    protected function getDatabaseVersion(): string
+    {
+        return $this->sqlVersionProvider->getSqlVersion();
+    }
+
+    /**
+     * Get db key to decide which file to use.
+     *
+     * @return string
+     * @throws ConnectionException
+     */
+    private function getDbKey(): string
+    {
+        if ($this->dbKey) {
+            return $this->dbKey;
+        }
+
+        $this->dbKey = DataProviderFromFile::FALLBACK_VALUE;
+        foreach (DataProviderFromFile::POSSIBLE_SUFFIXES as $possibleVersion => $suffix) {
+            if (strpos($this->getDatabaseVersion(), (string)$possibleVersion) !== false) {
+                $this->dbKey = $suffix;
+                break;
+            }
+        }
+
+        return $this->dbKey;
     }
 }

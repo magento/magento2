@@ -6,6 +6,7 @@
 namespace Magento\Framework\DB\Adapter\Pdo;
 
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\TestFramework\Helper\CacheCleaner;
 use Magento\Framework\DB\Ddl\Table;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -80,7 +81,7 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
      *
      * @param $sql
      * @return void|\Zend_Db_Statement_Pdo
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @throws \Zend_Db_Adapter_Exception
      */
     private function executeQuery($sql)
@@ -187,7 +188,11 @@ class MysqlTest extends \PHPUnit\Framework\TestCase
         //Test default value with expression
         $this->assertEquals('created_at', $dateColumn['COLUMN_NAME'], 'Incorrect column name');
         $this->assertEquals(Table::TYPE_DATETIME, $dateColumn['DATA_TYPE'], 'Incorrect column type');
-        $this->assertEquals('CURRENT_TIMESTAMP', $dateColumn['DEFAULT'], 'Incorrect column default expression value');
+        $this->assertRegExp(
+            '/^(CURRENT_TIMESTAMP|current_timestamp\(\))$/',
+            $dateColumn['DEFAULT'],
+            'Incorrect column default expression value'
+        );
 
         //Test default value with integer value
         $this->assertEquals('integer_column', $intColumn['COLUMN_NAME'], 'Incorrect column name');

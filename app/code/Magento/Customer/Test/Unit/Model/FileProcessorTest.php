@@ -9,7 +9,14 @@ use Magento\Customer\Api\AddressMetadataInterface;
 use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Model\FileProcessor;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Filesystem\Directory\WriteFactory;
 
+/**
+ * Test for \Magento\Customer\Model\FileProcessor class.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class FileProcessorTest extends \PHPUnit\Framework\TestCase
 {
     /**
@@ -42,6 +49,16 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private $mime;
 
+    /**
+     * @var DirectoryList|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $directoryListMock;
+
+    /**
+     * @var WriteFactory|\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $writeFactoryMock;
+
     protected function setUp()
     {
         $this->mediaDirectory = $this->getMockBuilder(\Magento\Framework\Filesystem\Directory\WriteInterface::class)
@@ -69,6 +86,12 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
         $this->mime = $this->getMockBuilder(\Magento\Framework\File\Mime::class)
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->directoryListMock = $this->createMock(DirectoryList::class);
+        $this->writeFactoryMock = $this->createMock(WriteFactory::class);
+        $this->writeFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->mediaDirectory);
     }
 
     /**
@@ -78,15 +101,23 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
      */
     private function getModel($entityTypeCode, array $allowedExtensions = [])
     {
-        $model = new FileProcessor(
-            $this->filesystem,
-            $this->uploaderFactory,
-            $this->urlBuilder,
-            $this->urlEncoder,
-            $entityTypeCode,
-            $this->mime,
-            $allowedExtensions
+        $objectManager = new ObjectManager($this);
+
+        $model = $objectManager->getObject(
+            FileProcessor::class,
+            [
+                'filesystem' => $this->filesystem,
+                'uploaderFactory' => $this->uploaderFactory,
+                'urlBuilder' => $this->urlBuilder,
+                'urlEncoder' => $this->urlEncoder,
+                'entityTypeCode' => $entityTypeCode,
+                'mime' => $this->mime,
+                'allowedExtensions' => $allowedExtensions,
+                'writeFactory' => $this->writeFactoryMock,
+                'directoryList' => $this->directoryListMock,
+            ]
         );
+
         return $model;
     }
 
@@ -96,7 +127,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->mediaDirectory->expects($this->once())
             ->method('stat')
-            ->with(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . $fileName)
+            ->with($fileName)
             ->willReturn(['size' => 1]);
 
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
@@ -113,7 +144,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->mediaDirectory->expects($this->once())
             ->method('isExist')
-            ->with(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . $fileName)
+            ->with($fileName)
             ->willReturn(true);
 
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
@@ -168,7 +199,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->mediaDirectory->expects($this->once())
             ->method('delete')
-            ->with(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . $fileName)
+            ->with($fileName)
             ->willReturn(true);
 
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER);
@@ -225,7 +256,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->mediaDirectory->expects($this->once())
             ->method('getAbsolutePath')
-            ->with(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . '/' . FileProcessor::TMP_DIR)
+            ->with('/' . FileProcessor::TMP_DIR)
             ->willReturn($absolutePath);
 
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, $allowedExtensions);
@@ -280,7 +311,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->mediaDirectory->expects($this->once())
             ->method('getAbsolutePath')
-            ->with(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . '/' . FileProcessor::TMP_DIR)
+            ->with('/' . FileProcessor::TMP_DIR)
             ->willReturn($absolutePath);
 
         $model = $this->getModel(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER, $allowedExtensions);
@@ -289,13 +320,13 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Unable to create directory customer/f/i
+     * @expectedExceptionMessage Unable to create directory /f/i
      */
     public function testMoveTemporaryFileUnableToCreateDirectory()
     {
         $filePath = '/filename.ext1';
 
-        $destinationPath = 'customer/f/i';
+        $destinationPath = '/f/i';
 
         $this->mediaDirectory->expects($this->once())
             ->method('create')
@@ -314,7 +345,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $filePath = '/filename.ext1';
 
-        $destinationPath = 'customer/f/i';
+        $destinationPath = '/f/i';
 
         $this->mediaDirectory->expects($this->once())
             ->method('create')
@@ -333,7 +364,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $filePath = '/filename.ext1';
 
-        $destinationPath = 'customer/f/i';
+        $destinationPath = '/f/i';
 
         $this->mediaDirectory->expects($this->once())
             ->method('create')
@@ -348,7 +379,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
             ->with($destinationPath)
             ->willReturn('/' . $destinationPath);
 
-        $path = CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . '/' . FileProcessor::TMP_DIR . $filePath;
+        $path = '/' . FileProcessor::TMP_DIR . $filePath;
         $newPath = $destinationPath . $filePath;
 
         $this->mediaDirectory->expects($this->once())
@@ -368,7 +399,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
     {
         $filePath = '/filename.ext1';
 
-        $destinationPath = 'customer/f/i';
+        $destinationPath = '/f/i';
 
         $this->mediaDirectory->expects($this->once())
             ->method('create')
@@ -383,7 +414,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
             ->with($destinationPath)
             ->willReturn('/' . $destinationPath);
 
-        $path = CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . '/' . FileProcessor::TMP_DIR . $filePath;
+        $path = '/' . FileProcessor::TMP_DIR . $filePath;
         $newPath = $destinationPath . $filePath;
 
         $this->mediaDirectory->expects($this->once())
@@ -404,7 +435,7 @@ class FileProcessorTest extends \PHPUnit\Framework\TestCase
 
         $this->mediaDirectory->expects($this->once())
             ->method('getAbsolutePath')
-            ->with(CustomerMetadataInterface::ENTITY_TYPE_CUSTOMER . '/' . ltrim($fileName, '/'))
+            ->with($fileName)
             ->willReturn($absoluteFilePath);
 
         $this->mime->expects($this->once())
