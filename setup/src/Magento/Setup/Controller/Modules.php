@@ -11,6 +11,11 @@ use Zend\Mvc\Controller\AbstractActionController;
 use Zend\View\Model\JsonModel;
 use Zend\Json\Json;
 
+/**
+ * Class Modules
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
+ */
 class Modules extends AbstractActionController
 {
     /**

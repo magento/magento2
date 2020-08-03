@@ -6,8 +6,12 @@
 
 namespace Magento\SalesRule\Model;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item\AbstractItem;
+use Magento\SalesRule\Helper\CartFixedDiscount;
+use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory;
 
 /**
  * SalesRule Validator Model
@@ -61,7 +65,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     protected $_catalogData = null;
 
     /**
-     * @var \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_collectionFactory;
 
@@ -98,9 +102,14 @@ class Validator extends \Magento\Framework\Model\AbstractModel
     protected $counter = 0;
 
     /**
+     * @var CartFixedDiscount
+     */
+    private $cartFixedDiscountHelper;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
-     * @param \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $collectionFactory
+     * @param CollectionFactory $collectionFactory
      * @param \Magento\Catalog\Helper\Data $catalogData
      * @param Utility $utility
      * @param RulesApplier $rulesApplier
@@ -110,12 +119,13 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param CartFixedDiscount|null $cartFixedDiscount
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
         \Magento\Framework\Registry $registry,
-        \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory $collectionFactory,
+        CollectionFactory $collectionFactory,
         \Magento\Catalog\Helper\Data $catalogData,
         \Magento\SalesRule\Model\Utility $utility,
         \Magento\SalesRule\Model\RulesApplier $rulesApplier,
@@ -124,7 +134,8 @@ class Validator extends \Magento\Framework\Model\AbstractModel
         \Magento\Framework\Message\ManagerInterface $messageManager,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        ?CartFixedDiscount $cartFixedDiscount = null
     ) {
         $this->_collectionFactory = $collectionFactory;
         $this->_catalogData = $catalogData;
@@ -133,6 +144,8 @@ class Validator extends \Magento\Framework\Model\AbstractModel
         $this->priceCurrency = $priceCurrency;
         $this->validators = $validators;
         $this->messageManager = $messageManager;
+        $this->cartFixedDiscountHelper = $cartFixedDiscount ?:
+            ObjectManager::getInstance()->get(CartFixedDiscount::class);
         parent::__construct($context, $registry, $resource, $resourceCollection, $data);
     }
 
@@ -158,6 +171,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      *
      * @param Address|null $address
      * @return \Magento\SalesRule\Model\ResourceModel\Rule\Collection
+     * @throws \Zend_Db_Select_Exception
      */
     protected function _getRules(Address $address = null)
     {
@@ -221,6 +235,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      *
      * @param AbstractItem $item
      * @return bool
+     * @throws \Zend_Db_Select_Exception
      */
     public function canApplyRules(AbstractItem $item)
     {
@@ -259,6 +274,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      *
      * @param AbstractItem $item
      * @return $this
+     * @throws \Zend_Db_Select_Exception
      */
     public function process(AbstractItem $item)
     {
@@ -288,6 +304,9 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @param Address $address
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     * @SuppressWarnings(PHPMD.NPathComplexity)
+     * @throws \Zend_Db_Select_Exception
      */
     public function processShippingAmount(Address $address)
     {
@@ -313,6 +332,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
                 case \Magento\SalesRule\Model\Rule::TO_PERCENT_ACTION:
                     $rulePercent = max(0, 100 - $rule->getDiscountAmount());
                 // break is intentionally omitted
+                // no break
                 case \Magento\SalesRule\Model\Rule::BY_PERCENT_ACTION:
                     $discountAmount = ($shippingAmount - $address->getShippingDiscountAmount()) * $rulePercent / 100;
                     $baseDiscountAmount = ($baseShippingAmount -
@@ -331,7 +351,40 @@ class Validator extends \Magento\Framework\Model\AbstractModel
                     $baseDiscountAmount = $rule->getDiscountAmount();
                     break;
                 case \Magento\SalesRule\Model\Rule::CART_FIXED_ACTION:
-                    // Shouldn't be proceed according to MAGETWO-96403
+                    $cartRules = $address->getCartFixedRules();
+                    $quoteAmount = $this->priceCurrency->convert($rule->getDiscountAmount(), $quote->getStore());
+                    $isAppliedToShipping = (int) $rule->getApplyToShipping();
+                    if (!isset($cartRules[$rule->getId()])) {
+                        $cartRules[$rule->getId()] = $rule->getDiscountAmount();
+                    }
+                    if ($cartRules[$rule->getId()] > 0) {
+                        $shippingAmount = $address->getShippingAmount() - $address->getShippingDiscountAmount();
+                        $quoteBaseSubtotal = (float) $quote->getBaseSubtotal();
+                        $isMultiShipping = $this->cartFixedDiscountHelper->checkMultiShippingQuote($quote);
+                        if ($isAppliedToShipping) {
+                            $quoteBaseSubtotal = ($quote->getIsMultiShipping() && $isMultiShipping) ?
+                                $this->cartFixedDiscountHelper->getQuoteTotalsForMultiShipping($quote) :
+                                $this->cartFixedDiscountHelper->getQuoteTotalsForRegularShipping(
+                                    $address,
+                                    $quoteBaseSubtotal
+                                );
+                            $discountAmount = $this->cartFixedDiscountHelper->
+                            getShippingDiscountAmount(
+                                $rule,
+                                $shippingAmount,
+                                $quoteBaseSubtotal
+                            );
+                            $baseDiscountAmount = $discountAmount;
+                        } else {
+                            $discountAmount = min($shippingAmount, $quoteAmount);
+                            $baseDiscountAmount = min(
+                                $baseShippingAmount - $address->getBaseShippingDiscountAmount(),
+                                $cartRules[$rule->getId()]
+                            );
+                        }
+                        $cartRules[$rule->getId()] -= $baseDiscountAmount;
+                    }
+                    $address->setCartFixedRules($cartRules);
                     break;
             }
 
@@ -340,8 +393,8 @@ class Validator extends \Magento\Framework\Model\AbstractModel
                 $address->getBaseShippingDiscountAmount() + $baseDiscountAmount,
                 $baseShippingAmount
             );
-            $address->setShippingDiscountAmount($discountAmount);
-            $address->setBaseShippingDiscountAmount($baseDiscountAmount);
+            $address->setShippingDiscountAmount($this->priceCurrency->roundPrice($discountAmount));
+            $address->setBaseShippingDiscountAmount($this->priceCurrency->roundPrice($baseDiscountAmount));
             $appliedRuleIds[$rule->getRuleId()] = $rule->getRuleId();
 
             $this->rulesApplier->maintainAddressCouponCode($address, $rule, $this->getCouponCode());
@@ -363,6 +416,8 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @param mixed $items
      * @param Address $address
      * @return $this
+     * @throws \Zend_Validate_Exception
+     * @throws \Zend_Db_Select_Exception
      */
     public function initTotals($items, Address $address)
     {
@@ -383,13 +438,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
 
                 foreach ($items as $item) {
                     //Skipping child items to avoid double calculations
-                    if ($item->getParentItemId()) {
-                        continue;
-                    }
-                    if (!$rule->getActions()->validate($item)) {
-                        continue;
-                    }
-                    if (!$this->canApplyDiscount($item)) {
+                    if (!$this->isValidItemForRule($item, $rule)) {
                         continue;
                     }
                     $qty = $this->validatorUtility->getItemQty($item, $rule);
@@ -407,6 +456,30 @@ class Validator extends \Magento\Framework\Model\AbstractModel
         }
 
         return $this;
+    }
+
+    /**
+     * Determine if quote item is valid for a given sales rule
+     *
+     * @param AbstractItem $item
+     * @param Rule $rule
+     * @return bool
+     */
+    private function isValidItemForRule(AbstractItem $item, Rule $rule)
+    {
+        if ($item->getParentItemId()) {
+            return false;
+        }
+        if ($item->getParentItem()) {
+            return false;
+        }
+        if (!$rule->getActions()->validate($item)) {
+            return false;
+        }
+        if (!$this->canApplyDiscount($item)) {
+            return false;
+        }
+        return true;
     }
 
     /**
@@ -487,6 +560,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      * @param array $items
      * @param Address $address
      * @return array $items
+     * @throws \Zend_Db_Select_Exception
      */
     public function sortItemsByPriority($items, Address $address = null)
     {
@@ -542,6 +616,7 @@ class Validator extends \Magento\Framework\Model\AbstractModel
      *
      * @param AbstractItem $item
      * @return bool
+     * @throws \Zend_Validate_Exception
      */
     public function canApplyDiscount(AbstractItem $item)
     {

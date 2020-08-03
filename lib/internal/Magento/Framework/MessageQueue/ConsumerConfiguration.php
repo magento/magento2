@@ -174,7 +174,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      *
      * @return ConsumerConfig
      *
-     * @deprecated 102.0.4
+     * @deprecated 102.0.5
      */
     private function getConsumerConfig()
     {
@@ -189,7 +189,7 @@ class ConsumerConfiguration implements ConsumerConfigurationInterface
      *
      * @return CommunicationConfig
      *
-     * @deprecated 102.0.4
+     * @deprecated 102.0.5
      */
     private function getCommunicationConfig()
     {

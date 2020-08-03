@@ -14,6 +14,7 @@ use Magento\Framework\Setup\LoggerInterface;
  * Web UI Logger
  *
  * @package Magento\Setup\Model
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 class WebLogger implements LoggerInterface
 {

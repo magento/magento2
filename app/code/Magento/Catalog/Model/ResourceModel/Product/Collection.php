@@ -1718,7 +1718,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
             // optimize if using cat index
             $filters = $this->_productLimitationFilters;
             if (isset($filters['category_id']) || isset($filters['visibility'])) {
-                $this->getSelect()->order('cat_index.position ' . $dir);
+                $this->getSelect()->order([
+                    'cat_index.position ' . $dir,
+                    'e.entity_id ' . \Magento\Framework\DB\Select::SQL_DESC
+                ]);
             } else {
                 $this->getSelect()->order('e.entity_id ' . $dir);
             }
@@ -1733,7 +1736,9 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Collection\Abstrac
         if ($attribute == 'price' && $storeId != 0) {
             $this->addPriceData();
             if ($this->_productLimitationFilters->isUsingPriceIndex()) {
-                $this->getSelect()->order("price_index.min_price {$dir}");
+                $this->getSelect()->order(
+                    new \Zend_Db_Expr("price_index.min_price = 0, price_index.min_price {$dir}")
+                );
                 return $this;
             }
         }

@@ -305,6 +305,11 @@
             <column name="entity_type_id"/>
             <column name="attribute_code"/>
         </constraint>
+        <index referenceId="EAV_ATTRIBUTE_FRONTEND_INPUT_ENTITY_TYPE_ID_IS_USER_DEFINED" indexType="btree">
+            <column name="frontend_input"/>
+            <column name="entity_type_id"/>
+            <column name="is_user_defined"/>
+        </index>
     </table>
     <table name="eav_entity_store" resource="default" engine="innodb" comment="Eav Entity Store">
         <column xsi:type="int" name="entity_store_id" padding="10" unsigned="true" nullable="false" identity="true"

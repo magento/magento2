@@ -8,6 +8,8 @@ namespace Magento\Setup\Model\Cron;
 
 /**
  * Class to get PSR-3 compliant logger instance
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 class SetupLoggerFactory
 {

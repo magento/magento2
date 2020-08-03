@@ -426,8 +426,10 @@ class Url extends \Magento\Framework\DataObject implements \Magento\Framework\Ur
      */
     public function setScope($params)
     {
-        $this->setData('scope', $this->_scopeResolver->getScope($params));
-        $this->getRouteParamsResolver()->setScope($this->_scopeResolver->getScope($params));
+        $scope = $this->_scopeResolver->getScope($params);
+        $this->setData('scope', $scope);
+        $this->getRouteParamsResolver()->setScope($scope);
+
         return $this;
     }
 

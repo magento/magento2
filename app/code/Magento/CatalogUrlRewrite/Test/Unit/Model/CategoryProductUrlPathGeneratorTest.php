@@ -5,19 +5,20 @@
  */
 namespace Magento\CatalogUrlRewrite\Test\Unit\Model;
 
-use Magento\Catalog\Model\Category;
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ResourceModel\Category\Collection;
 use Magento\CatalogUrlRewrite\Model\CategoryProductUrlPathGenerator;
 use Magento\CatalogUrlRewrite\Model\ProductScopeRewriteGenerator;
-use Magento\Catalog\Model\ResourceModel\Category\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class CategoryProductUrlPathGeneratorTest
+ * Class test generate product url path
  */
-class CategoryProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
+class CategoryProductUrlPathGeneratorTest extends TestCase
 {
     /**
-     * @var ProductScopeRewriteGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductScopeRewriteGenerator|MockObject
      */
     private $productScopeRewriteGeneratorMock;
 
@@ -26,6 +27,9 @@ class CategoryProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     private $generator;
 
+    /**
+     * @inheritdoc
+     */
     public function setUp()
     {
         $this->productScopeRewriteGeneratorMock = $this->getMockBuilder(ProductScopeRewriteGenerator::class)
@@ -37,11 +41,16 @@ class CategoryProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
+    /**
+     * Test to generate product url rewrites based on all product categories on global scope
+     */
     public function testGenerationWithGlobalScope()
     {
+        /** @var Collection|MockObject $categoryCollectionMock */
         $categoryCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
+        /** @var Product|MockObject $productMock */
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -58,6 +67,10 @@ class CategoryProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         $productMock->expects($this->once())
             ->method('getCategoryCollection')
             ->willReturn($categoryCollectionMock);
+        $categoryCollectionMock->expects($this->once())
+            ->method('setStoreId')
+            ->with($storeId)
+            ->willReturnSelf();
         $categoryCollectionMock->expects($this->atLeastOnce())
             ->method('addAttributeToSelect')
             ->willReturnSelf();
@@ -74,11 +87,16 @@ class CategoryProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($urls, $this->generator->generate($productMock, $categoryId));
     }
 
+    /**
+     * Test to generate product url rewrites based on all product categories on specific store
+     */
     public function testGenerationWithSpecificStore()
     {
+        /** @var Collection|MockObject $categoryCollectionMock */
         $categoryCollectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
+        /** @var Product|MockObject $productMock */
         $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -95,6 +113,10 @@ class CategoryProductUrlPathGeneratorTest extends \PHPUnit\Framework\TestCase
         $productMock->expects($this->once())
             ->method('getCategoryCollection')
             ->willReturn($categoryCollectionMock);
+        $categoryCollectionMock->expects($this->once())
+            ->method('setStoreId')
+            ->with($storeId)
+            ->willReturnSelf();
         $categoryCollectionMock->expects($this->atLeastOnce())
             ->method('addAttributeToSelect')
             ->willReturnSelf();

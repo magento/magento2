@@ -200,7 +200,7 @@ class SaveTest extends \PHPUnit\Framework\TestCase
             ->method('setData')
             ->with(
                 [
-                    'message' => __('Customer address has been updated.'),
+                    'messages' => __('Customer address has been updated.'),
                     'error' => false,
                     'data' => [
                         'entity_id' => $addressId

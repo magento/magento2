@@ -217,6 +217,32 @@ class SaveTest extends AbstractBackendController
     }
 
     /**
+     * Update customer with exceptions
+     *
+     * @magentoDbIsolation enabled
+     *
+     * @return void
+     */
+    public function testUpdateCustomerErrors(): void
+    {
+        $postData = [
+            'customer' => [
+                CustomerData::FIRSTNAME => 'John',
+                CustomerData::LASTNAME => 'Doe',
+            ],
+            'subscription' => '1',
+        ];
+        $expectedMessages = [(string)__('Something went wrong while saving the customer.')];
+        $postData['customer']['entity_id'] = -1;
+        $params = ['back' => true];
+        $this->dispatchCustomerSave($postData, $params);
+        $this->assertSessionMessages(
+            $this->equalTo($expectedMessages),
+            MessageInterface::TYPE_ERROR
+        );
+    }
+
+    /**
      * Update customer with subscription and redirect to edit page.
      *
      * @magentoDataFixture Magento/Customer/_files/customer.php

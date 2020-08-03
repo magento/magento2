@@ -292,9 +292,10 @@ namespace Magento\Setup\Test\Unit\Model {
             $setup = $this->createMock(\Magento\Setup\Module\Setup::class);
             $table = $this->createMock(\Magento\Framework\DB\Ddl\Table::class);
             $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
-                ->setMethods(['getSchemaListener', 'newTable'])
+                ->setMethods(['getSchemaListener', 'newTable', 'getTables'])
                 ->getMockForAbstractClass();
             $connection->expects($this->any())->method('getSchemaListener')->willReturn($this->schemaListenerMock);
+            $connection->expects($this->once())->method('getTables')->willReturn([]);
             $setup->expects($this->any())->method('getConnection')->willReturn($connection);
             $table->expects($this->any())->method('addColumn')->willReturn($table);
             $table->expects($this->any())->method('setComment')->willReturn($table);

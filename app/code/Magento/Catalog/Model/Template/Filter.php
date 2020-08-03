@@ -28,7 +28,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * Whether to allow SID in store directive: NO
      *
      * @var bool
-     * @deprecated SID query parameter is not used in URLs anymore.
+     * @deprecated 103.0.5 SID query parameter is not used in URLs anymore.
      */
     protected $_useSessionInUrl = false;
 
@@ -81,7 +81,7 @@ class Filter extends \Magento\Framework\Filter\Template
      * @param bool $flag
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @deprecated SID query parameter is not used in URLs anymore.
+     * @deprecated 103.0.5 SID query parameter is not used in URLs anymore.
      */
     public function setUseSessionInUrl($flag)
     {

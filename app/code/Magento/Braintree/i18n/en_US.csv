@@ -73,7 +73,7 @@ YY,YY
 "Please try again with another form of payment.","Please try again with another form of payment."
 "Sorry, but something went wrong.","Sorry, but something went wrong."
 "Payment ","Payment "
-Braintree,Braintree
+"Braintree (Deprecated)","Braintree (Deprecated)"
 "Accept credit/debit cards and PayPal in your Magento store.<br/>No setup or monthly fees and your customers never leave your store to complete the purchase.","Accept credit/debit cards and PayPal in your Magento store.<br/>No setup or monthly fees and your customers never leave your store to complete the purchase."
 "Enable this Solution","Enable this Solution"
 "Enable PayPal through Braintree","Enable PayPal through Braintree"

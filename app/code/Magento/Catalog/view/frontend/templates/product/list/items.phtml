@@ -239,8 +239,8 @@ $_item = null;
                                         <?php // phpcs:disable ?>
                                         <div class="product actions product-item-actions">
                                             <?php if ($showCart):?>
+                                                <div class="actions-primary">
                                                 <?php if ($_item->isSaleable()):?>
-                                                    <div class="actions-primary">
                                                     <?php if (!$_item->getTypeInstance()->isPossibleBuyFromList($_item)):?>
                                                         <button
                                                             class="action tocart primary"

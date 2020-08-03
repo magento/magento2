@@ -8,6 +8,9 @@ namespace Magento\Elasticsearch\Model\Adapter\Index;
 use Magento\Framework\Locale\Resolver as LocaleResolver;
 use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
 
+/**
+ * Index Builder
+ */
 class Builder implements BuilderInterface
 {
     /**
@@ -40,7 +43,7 @@ class Builder implements BuilderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function build()
     {
@@ -71,7 +74,10 @@ class Builder implements BuilderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * Setter for storeId property
+     *
+     * @param int $storeId
+     * @return void
      */
     public function setStoreId($storeId)
     {
@@ -79,6 +85,8 @@ class Builder implements BuilderInterface
     }
 
     /**
+     * Return tokenizer configuration
+     *
      * @return array
      */
     protected function getTokenizer()
@@ -92,6 +100,8 @@ class Builder implements BuilderInterface
     }
 
     /**
+     * Return filter configuration
+     *
      * @return array
      */
     protected function getFilter()
@@ -107,6 +117,8 @@ class Builder implements BuilderInterface
     }
 
     /**
+     * Return char filter configuration
+     *
      * @return array
      */
     protected function getCharFilter()
@@ -120,6 +132,8 @@ class Builder implements BuilderInterface
     }
 
     /**
+     * Return stemmer configuration
+     *
      * @return array
      */
     protected function getStemmerConfig()

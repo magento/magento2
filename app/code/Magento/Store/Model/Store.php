@@ -278,7 +278,7 @@ class Store extends AbstractExtensibleModel implements
 
     /**
      * @var \Magento\Framework\Session\SidResolverInterface
-     * @deprecated Not used anymore.
+     * @deprecated 101.0.5 Not used anymore.
      */
     protected $_sidResolver;
 

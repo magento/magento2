@@ -18,6 +18,9 @@
             <testCaseId value="MC-13654"/>
             <useCaseId value="MC-10971"/>
             <group value="CatalogRule"/>
+            <skip>
+                <issueId value="DEPRECATED">Please use AdminCatalogPriceRuleWithUndefinedProductDropdownAttributeConditionTest and AdminCatalogPriceRuleWithUndefinedProductYesnoAttributeConditionTest instead.</issueId>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="login"/>

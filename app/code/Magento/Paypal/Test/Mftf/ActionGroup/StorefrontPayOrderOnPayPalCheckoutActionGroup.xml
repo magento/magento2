@@ -16,8 +16,9 @@
             <argument name="productName" type="string"/>
         </arguments>
         <click selector="{{PayPalPaymentSection.cartIcon}}" stepKey="openCart"/>
-        <waitForPageLoad stepKey="waitForCartLoad"/>
+        <waitForElementVisible selector="{{PayPalPaymentSection.itemName(productName)}}" stepKey="waitForCartLoad"/>
         <seeElement selector="{{PayPalPaymentSection.itemName(productName)}}" stepKey="seeProductName"/>
+        <scrollTo selector="{{PayPalPaymentSection.PayPalSubmitBtn}}" stepKey="scrollToPayPalSubmitBtn"/>
         <click selector="{{PayPalPaymentSection.PayPalSubmitBtn}}" stepKey="clickPayPalSubmitBtn"/>
         <switchToPreviousTab stepKey="switchToPreviousTab"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>

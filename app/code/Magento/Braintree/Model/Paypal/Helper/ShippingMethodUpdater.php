@@ -10,7 +10,10 @@ use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\Quote;
 
 /**
- * Class ShippingMethodUpdater
+ * Class for updating shipping method in the quote.
+ *
+ * @deprecated Starting from Magento 2.3.6 Braintree payment method core integration is deprecated
+ * in favor of official payment integration available on the marketplace
  */
 class ShippingMethodUpdater extends AbstractHelper
 {
@@ -58,6 +61,12 @@ class ShippingMethodUpdater extends AbstractHelper
                 $this->disabledQuoteAddressValidation($quote);
 
                 $shippingAddress->setShippingMethod($shippingMethod);
+                $quoteExtensionAttributes = $quote->getExtensionAttributes();
+                if ($quoteExtensionAttributes && $quoteExtensionAttributes->getShippingAssignments()) {
+                    $quoteExtensionAttributes->getShippingAssignments()[0]
+                        ->getShipping()
+                        ->setMethod($shippingMethod);
+                }
                 $shippingAddress->setCollectShippingRates(true);
 
                 $quote->collectTotals();

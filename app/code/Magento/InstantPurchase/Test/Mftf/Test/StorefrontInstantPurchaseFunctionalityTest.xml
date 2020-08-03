@@ -21,6 +21,7 @@
             <group value="braintree"/>
         </annotations>
         <before>
+            <magentoCLI command="downloadable:domains:add" arguments="example.com static.magento.com" stepKey="addDownloadableDomain"/>
             <!-- Configure Braintree payment method -->
             <createData entity="BraintreeConfig" stepKey="configureBraintreePayment"/>
             <!-- Enable Braintree with Vault -->
@@ -31,7 +32,6 @@
             <createData entity="VirtualProduct" stepKey="createVirtualProduct"/>
             <actionGroup ref="AdminCreateApiConfigurableProductActionGroup" stepKey="createConfigurableProduct"/>
             <!-- Create Downloadable Product -->
-            <magentoCLI command="downloadable:domains:add example.com static.magento.com" stepKey="addDownloadableDomain"/>
             <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct"/>
             <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink">
                 <requiredEntity createDataKey="createDownloadableProduct"/>

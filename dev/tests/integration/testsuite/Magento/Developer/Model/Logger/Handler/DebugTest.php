@@ -139,7 +139,7 @@ class DebugTest extends \PHPUnit\Framework\TestCase
     {
         $message = 'test message';
         $this->reinitDebugHandler(State::MODE_DEVELOPER);
-
+        $this->deploymentConfig->resetData();
         $this->removeDebugLog();
         $this->logger->debug($message);
         $this->assertFileExists($this->getDebuggerLogPath());

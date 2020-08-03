@@ -15,7 +15,7 @@ use Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldN
 /**
  * Provide data mapping for categories fields
  *
- * @deprecated because of EOL for Elasticsearch2
+ * @deprecated 100.3.5 because of EOL for Elasticsearch2
  */
 class CategoryFieldsProvider implements AdditionalFieldsProviderInterface
 {

@@ -14,6 +14,8 @@ use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Reflection\DataObjectProcessor;
 use Magento\Framework\Session\SessionManagerInterface;
+use Magento\Framework\Url as UrlBuilder;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -664,6 +666,34 @@ class AccountManagementTest extends \PHPUnit\Framework\TestCase
         $customerId = 1;
         $this->assertNull($this->accountManagement->getDefaultBillingAddress($customerId));
         $this->assertNull($this->accountManagement->getDefaultShippingAddress($customerId));
+    }
+
+    /**
+     * Test reset password for customer on second website when shared account is enabled
+     *
+     * When customer from second website initiate reset password on first website
+     * global scope should not be reinited to customer scope
+     *
+     * @magentoConfigFixture current_store customer/account_share/scope 0
+     * @magentoDataFixture Magento/Customer/_files/customer_for_second_website.php
+     */
+    public function testInitiatePasswordResetForCustomerOnSecondWebsite()
+    {
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $store = $storeManager->getStore();
+
+        $this->accountManagement->initiatePasswordReset(
+            'customer@example.com',
+            AccountManagement::EMAIL_RESET,
+            $storeManager->getWebsite()->getId()
+        );
+
+        $this->assertEquals($store->getId(), $storeManager->getStore()->getId());
+        $urlBuilder = $this->objectManager->get(UrlBuilder::class);
+        // to init scope if it has not inited yet
+        $urlBuilder->setScope($urlBuilder->getData('scope'));
+        $scope = $urlBuilder->getData('scope');
+        $this->assertEquals($store->getId(), $scope->getId());
     }
 
     /**

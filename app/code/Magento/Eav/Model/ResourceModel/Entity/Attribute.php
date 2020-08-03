@@ -101,7 +101,7 @@ class Attribute extends AbstractDb
      */
     public function loadByCode(AbstractModel $object, $entityTypeId, $code)
     {
-        $bind = [':entity_type_id' => $entityTypeId];
+        $bind = [':entity_type_id' => (int) $entityTypeId];
         $select = $this->_getLoadSelect('attribute_code', $code, $object)->where('entity_type_id = :entity_type_id');
         $data = $this->getConnection()->fetchRow($select, $bind);
 
@@ -298,7 +298,7 @@ class Attribute extends AbstractDb
         if ($additionalTable) {
             $connection = $this->getConnection();
             $data = $this->_prepareDataForTable($object, $this->getTable($additionalTable));
-            $bind = [':attribute_id' => $object->getId()];
+            $bind = [':attribute_id' => (int) $object->getId()];
             $select = $connection->select()->from(
                 $this->getTable($additionalTable),
                 ['attribute_id']

@@ -12,6 +12,8 @@ use Magento\Setup\Model\ConfigOptionsList\DriverOptions;
 
 /**
  * Admin user credentials validator
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 class AdminCredentialsValidator
 {

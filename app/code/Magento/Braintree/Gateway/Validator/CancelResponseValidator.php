@@ -19,6 +19,9 @@ use Magento\Braintree\Gateway\SubjectReader;
  *
  * This validator decorates the general response validator to handle specific cases like
  * an expired or already voided on Braintree side authorization transaction.
+ *
+ * @deprecated Starting from Magento 2.3.6 Braintree payment method core integration is deprecated
+ * in favor of official payment integration available on the marketplace
  */
 class CancelResponseValidator extends AbstractValidator
 {

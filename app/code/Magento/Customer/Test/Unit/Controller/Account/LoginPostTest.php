@@ -557,7 +557,7 @@ class LoginPostTest extends \PHPUnit\Framework\TestCase
                     $url
                 );
                 $this->messageManager->expects($this->once())
-                    ->method('addErrorMessage')
+                    ->method('addError')
                     ->with($message)
                     ->willReturnSelf();
 

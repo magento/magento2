@@ -132,11 +132,6 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->willReturn($mainTable);
 
         $this->connectionMock->expects($this->once())
-            ->method('isTableExists')
-            ->with($mainTable)
-            ->willReturn(true);
-
-        $this->connectionMock->expects($this->once())
             ->method('select')
             ->willReturn($this->select);
 
@@ -146,41 +141,6 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
 
         $this->connectionMock->expects($this->once())
-            ->method('fetchAll')
-            ->with($this->select)
-            ->willReturn($data);
-
-        $this->assertEquals($data, $this->model->readAllStores());
-    }
-
-    public function testReadAllStoresNoDbTable()
-    {
-        $mainTable = 'no_store_table';
-        $data = [];
-
-        $this->resourceMock->expects($this->once())
-            ->method('getConnection')
-            ->willReturn($this->connectionMock);
-
-        $this->resourceMock->expects($this->once())
-            ->method('getTableName')
-            ->willReturn($mainTable);
-
-        $this->connectionMock->expects($this->once())
-            ->method('isTableExists')
-            ->with($mainTable)
-            ->willReturn(false);
-
-        $this->connectionMock->expects($this->never())
-            ->method('select')
-            ->willReturn($this->select);
-
-        $this->select->expects($this->never())
-            ->method('from')
-            ->with($mainTable)
-            ->willReturnSelf();
-
-        $this->connectionMock->expects($this->never())
             ->method('fetchAll')
             ->with($this->select)
             ->willReturn($data);

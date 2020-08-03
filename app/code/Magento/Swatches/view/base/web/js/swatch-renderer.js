@@ -278,7 +278,7 @@ define([
             // tier prise selectors end
 
             // A price label selector
-            normalPriceLabelSelector: '.normal-price .price-label'
+            normalPriceLabelSelector: '.product-info-main .normal-price .price-label'
         },
 
         /**
@@ -996,22 +996,11 @@ define([
          */
         _getNewPrices: function () {
             var $widget = this,
-                optionPriceDiff = 0,
-                allowedProduct = this._getAllowedProductWithMinPrice(this._CalcProducts()),
-                optionPrices = this.options.jsonConfig.optionPrices,
-                basePrice = parseFloat(this.options.jsonConfig.prices.basePrice.amount),
-                optionFinalPrice,
-                newPrices;
+                newPrices = $widget.options.jsonConfig.prices,
+                allowedProduct = this._getAllowedProductWithMinPrice(this._CalcProducts());
 
             if (!_.isEmpty(allowedProduct)) {
-                optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
-                optionPriceDiff = optionFinalPrice - basePrice;
-            }
-
-            if (optionPriceDiff !== 0) {
-                newPrices  = this.options.jsonConfig.optionPrices[allowedProduct];
-            } else {
-                newPrices = $widget.options.jsonConfig.prices;
+                newPrices = this.options.jsonConfig.optionPrices[allowedProduct];
             }
 
             return newPrices;

@@ -197,11 +197,14 @@ class EmailMessageTest extends TestCase
             . '>';
         $this->assertContains($ccString, $message->toString());
         $this->assertContains('Bcc: ' . $bcc[0]->getEmail(), $message->toString());
-        $contentDescription = 'Content-Description: =?utf-8?Q?'
+        $contentDescription = 'Content-Description: =?UTF-8?Q?'
             . str_replace(' ', '=20', $this->description)
             . '?=';
         $this->assertContains($contentDescription, $message->toString());
-        $this->assertContains('Subject: ' . $this->subject, $message->toString());
+        $subject = 'Subject: =?UTF-8?Q?'
+            . str_replace(' ', '=20', $this->subject)
+            . '?=';
+        $this->assertContains($subject, $message->toString());
         $this->assertContains($content, $message->toString());
         //tests address factory
         $this->assertInstanceOf(Address::class, $message->getTo()[0]);

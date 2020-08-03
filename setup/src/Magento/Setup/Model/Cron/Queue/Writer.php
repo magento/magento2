@@ -10,6 +10,8 @@ use Magento\Framework\Filesystem;
 
 /**
  * Queue content writer
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
  */
 class Writer extends Reader
 {

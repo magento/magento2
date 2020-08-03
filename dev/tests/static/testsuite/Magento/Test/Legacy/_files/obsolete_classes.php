@@ -4243,4 +4243,5 @@ return [
     ['Zend_Mime', 'Magento\Framework\HTTP\Mime'],
     ['Magento\Framework\Encryption\Crypt', 'Magento\Framework\Encryption\EncryptionAdapterInterface'],
     ['Magento\Wishlist\Setup\Patch\Schema\AddProductIdConstraint'],
+    ['Magento\Wishlist\Setup\Patch\Data\CleanUpData'],
 ];

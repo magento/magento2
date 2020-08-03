@@ -30,13 +30,14 @@ use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Sales\Model\ResourceModel\Order\Item\Collection as ItemCollection;
 use Magento\Store\Api\Data\StoreInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\TestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  */
-class CreateTest extends \PHPUnit\Framework\TestCase
+class CreateTest extends TestCase
 {
     const CUSTOMER_ID = 1;
 
@@ -46,12 +47,12 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     private $adminOrderCreate;
 
     /**
-     * @var CartRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CartRepositoryInterface|MockObject
      */
     private $quoteRepository;
 
     /**
-     * @var QuoteFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteFactory|MockObject
      */
     private $quoteFactory;
 
@@ -111,7 +112,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
             ->setMethods(['getForCustomer'])
             ->getMockForAbstractClass();
 
-        $this->sessionQuote = $this->getMockBuilder(\Magento\Backend\Model\Session\Quote::class)
+        $this->sessionQuote = $this->getMockBuilder(SessionQuote::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -227,6 +228,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
                 'customer_tax_class_id' => $taxClassId
             ]
         );
+        $quote->method('getStoreId')->willReturn(1);
         $this->dataObjectHelper->method('populateWithArray')
             ->with(
                 $customer,
@@ -244,6 +246,10 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         $this->groupRepository->method('getById')
             ->willReturn($customerGroup);
+
+        $customer->expects($this->once())
+            ->method('setStoreId')
+            ->with(1);
 
         $this->adminOrderCreate->setAccountData(['group_id' => 1]);
     }

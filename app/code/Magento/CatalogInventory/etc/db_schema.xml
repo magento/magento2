@@ -87,6 +87,10 @@
         <index referenceId="CATALOGINVENTORY_STOCK_ITEM_WEBSITE_ID" indexType="btree">
             <column name="website_id"/>
         </index>
+        <index referenceId="CATALOGINVENTORY_STOCK_ITEM_WEBSITE_ID_PRODUCT_ID" indexType="btree">
+            <column name="website_id"/>
+            <column name="product_id"/>
+        </index>
         <index referenceId="CATALOGINVENTORY_STOCK_ITEM_STOCK_ID" indexType="btree">
             <column name="stock_id"/>
         </index>

@@ -10,6 +10,11 @@ use Zend\View\Model\JsonModel;
 use Zend\Json\Json;
 use Magento\Framework\Validator\Url as UrlValidator;
 
+/**
+ * Class UrlCheck
+ *
+ * @deprecated Starting from Magento 2.3.6 Web Setup Wizard is deprecated
+ */
 class UrlCheck extends AbstractActionController
 {
     /**

@@ -1355,20 +1355,11 @@ XMLAuth;
      */
     protected function _formShipmentRequest(\Magento\Framework\DataObject $request)
     {
-        $packageParams = $request->getPackageParams();
-        $height = $packageParams->getHeight();
-        $width = $packageParams->getWidth();
-        $length = $packageParams->getLength();
-        $weightUnits = $packageParams->getWeightUnits() == \Zend_Measure_Weight::POUND ? 'LBS' : 'KGS';
-        $dimensionsUnits = $packageParams->getDimensionUnits() == \Zend_Measure_Length::INCH ? 'IN' : 'CM';
-
-        $itemsDesc = [];
-        $itemsShipment = $request->getPackageItems();
-        foreach ($itemsShipment as $itemShipment) {
-            $item = new \Magento\Framework\DataObject();
-            $item->setData($itemShipment);
-            $itemsDesc[] = $item->getName();
+        $packages = $request->getPackages();
+        foreach ($packages as $package) {
+            $shipmentItems[] = $package['items'];
         }
+        $shipmentItems = array_merge(...$shipmentItems);
 
         $xmlRequest = $this->_xmlElFactory->create(
             ['data' => '<?xml version = "1.0" ?><ShipmentConfirmRequest xml:lang="en-US"/>']
@@ -1383,7 +1374,7 @@ XMLAuth;
             // UPS Print Return Label
             $returnPart->addChild('Code', '9');
         }
-        $shipmentPart->addChild('Description', substr(implode(' ', $itemsDesc), 0, 35));
+        $shipmentPart->addChild('Description', $this->generateShipmentDescription($shipmentItems));
         //empirical
 
         $shipperPart = $shipmentPart->addChild('Shipper');
@@ -1475,62 +1466,80 @@ XMLAuth;
 
         $servicePart = $shipmentPart->addChild('Service');
         $servicePart->addChild('Code', $request->getShippingMethod());
-        $packagePart = $shipmentPart->addChild('Package');
-        $packagePart->addChild('Description', substr(implode(' ', $itemsDesc), 0, 35));
-        //empirical
-        $packagePart->addChild('PackagingType')->addChild('Code', $request->getPackagingType());
-        $packageWeight = $packagePart->addChild('PackageWeight');
-        $packageWeight->addChild('Weight', $request->getPackageWeight());
-        $packageWeight->addChild('UnitOfMeasurement')->addChild('Code', $weightUnits);
 
-        // set dimensions
-        if ($length || $width || $height) {
-            $packageDimensions = $packagePart->addChild('Dimensions');
-            $packageDimensions->addChild('UnitOfMeasurement')->addChild('Code', $dimensionsUnits);
-            $packageDimensions->addChild('Length', $length);
-            $packageDimensions->addChild('Width', $width);
-            $packageDimensions->addChild('Height', $height);
+        $packagePart = [];
+        $customsTotal = 0;
+        $packagingTypes = [];
+        $deliveryConfirmationLevel = $this->_getDeliveryConfirmationLevel(
+            $request->getRecipientAddressCountryCode()
+        );
+        foreach ($packages as $packageId => $package) {
+            $packageItems = $package['items'];
+            $packageParams = new DataObject($package['params']);
+            $packagingType = $package['params']['container'];
+            $packagingTypes[] = $packagingType;
+            $height = $packageParams->getHeight();
+            $width = $packageParams->getWidth();
+            $length = $packageParams->getLength();
+            $weight = $packageParams->getWeight();
+            $weightUnits = $packageParams->getWeightUnits() == \Zend_Measure_Weight::POUND ? 'LBS' : 'KGS';
+            $dimensionsUnits = $packageParams->getDimensionUnits() == \Zend_Measure_Length::INCH ? 'IN' : 'CM';
+            $deliveryConfirmation = $packageParams->getDeliveryConfirmation();
+            $customsTotal += $packageParams->getCustomsValue();
+
+            $packagePart[$packageId] = $shipmentPart->addChild('Package');
+            $packagePart[$packageId]->addChild('Description', $this->generateShipmentDescription($packageItems));
+            //empirical
+            $packagePart[$packageId]->addChild('PackagingType')->addChild('Code', $packagingType);
+            $packageWeight = $packagePart[$packageId]->addChild('PackageWeight');
+            $packageWeight->addChild('Weight', $weight);
+            $packageWeight->addChild('UnitOfMeasurement')->addChild('Code', $weightUnits);
+
+            // set dimensions
+            if ($length || $width || $height) {
+                $packageDimensions = $packagePart[$packageId]->addChild('Dimensions');
+                $packageDimensions->addChild('UnitOfMeasurement')->addChild('Code', $dimensionsUnits);
+                $packageDimensions->addChild('Length', $length);
+                $packageDimensions->addChild('Width', $width);
+                $packageDimensions->addChild('Height', $height);
+            }
+
+            // ups support reference number only for domestic service
+            if ($this->_isUSCountry($request->getRecipientAddressCountryCode())
+                && $this->_isUSCountry($request->getShipperAddressCountryCode())
+            ) {
+                if ($request->getReferenceData()) {
+                    $referenceData = $request->getReferenceData() . $packageId;
+                } else {
+                    $referenceData = 'Order #' .
+                        $request->getOrderShipment()->getOrder()->getIncrementId() .
+                        ' P' .
+                        $packageId;
+                }
+                $referencePart = $packagePart[$packageId]->addChild('ReferenceNumber');
+                $referencePart->addChild('Code', '02');
+                $referencePart->addChild('Value', $referenceData);
+            }
+
+            if ($deliveryConfirmation && $deliveryConfirmationLevel === self::DELIVERY_CONFIRMATION_PACKAGE) {
+                    $serviceOptionsNode = $packagePart[$packageId]->addChild('PackageServiceOptions');
+                    $serviceOptionsNode->addChild(
+                        'DeliveryConfirmation'
+                    )->addChild(
+                        'DCISType',
+                        $deliveryConfirmation
+                    );
+            }
         }
 
-        // ups support reference number only for domestic service
-        if ($this->_isUSCountry($request->getRecipientAddressCountryCode())
-            && $this->_isUSCountry($request->getShipperAddressCountryCode())
-        ) {
-            if ($request->getReferenceData()) {
-                $referenceData = $request->getReferenceData() . $request->getPackageId();
-            } else {
-                $referenceData = 'Order #' .
-                    $request->getOrderShipment()->getOrder()->getIncrementId() .
-                    ' P' .
-                    $request->getPackageId();
-            }
-            $referencePart = $packagePart->addChild('ReferenceNumber');
-            $referencePart->addChild('Code', '02');
-            $referencePart->addChild('Value', $referenceData);
-        }
-
-        $deliveryConfirmation = $packageParams->getDeliveryConfirmation();
-        if ($deliveryConfirmation) {
-            /** @var $serviceOptionsNode Element */
-            $serviceOptionsNode = null;
-            switch ($this->_getDeliveryConfirmationLevel($request->getRecipientAddressCountryCode())) {
-                case self::DELIVERY_CONFIRMATION_PACKAGE:
-                    $serviceOptionsNode = $packagePart->addChild('PackageServiceOptions');
-                    break;
-                case self::DELIVERY_CONFIRMATION_SHIPMENT:
-                    $serviceOptionsNode = $shipmentPart->addChild('ShipmentServiceOptions');
-                    break;
-                default:
-                    break;
-            }
-            if ($serviceOptionsNode !== null) {
-                $serviceOptionsNode->addChild(
-                    'DeliveryConfirmation'
-                )->addChild(
-                    'DCISType',
-                    $packageParams->getDeliveryConfirmation()
-                );
-            }
+        if (isset($deliveryConfirmation) && $deliveryConfirmationLevel === self::DELIVERY_CONFIRMATION_SHIPMENT) {
+            $serviceOptionsNode = $shipmentPart->addChild('ShipmentServiceOptions');
+            $serviceOptionsNode->addChild(
+                'DeliveryConfirmation'
+            )->addChild(
+                'DCISType',
+                $deliveryConfirmation
+            );
         }
 
         $shipmentPart->addChild('PaymentInformation')
@@ -1538,14 +1547,14 @@ XMLAuth;
             ->addChild('BillShipper')
             ->addChild('AccountNumber', $this->getConfigData('shipper_number'));
 
-        if ($request->getPackagingType() != $this->configHelper->getCode('container', 'ULE')
+        if (!in_array($this->configHelper->getCode('container', 'ULE'), $packagingTypes)
             && $request->getShipperAddressCountryCode() == self::USA_COUNTRY_ID
             && ($request->getRecipientAddressCountryCode() == 'CA'
                 || $request->getRecipientAddressCountryCode() == 'PR')
         ) {
             $invoiceLineTotalPart = $shipmentPart->addChild('InvoiceLineTotal');
             $invoiceLineTotalPart->addChild('CurrencyCode', $request->getBaseCurrencyCode());
-            $invoiceLineTotalPart->addChild('MonetaryValue', ceil($packageParams->getCustomsValue()));
+            $invoiceLineTotalPart->addChild('MonetaryValue', ceil($customsTotal));
         }
 
         $labelPart = $xmlRequest->addChild('LabelSpecification');
@@ -1553,6 +1562,25 @@ XMLAuth;
         $labelPart->addChild('LabelImageFormat')->addChild('Code', 'GIF');
 
         return $xmlRequest->asXml();
+    }
+
+    /**
+     * Generates shipment description.
+     *
+     * @param array $items
+     * @return string
+     */
+    private function generateShipmentDescription(array $items): string
+    {
+        $itemsDesc = [];
+        $itemsShipment = $items;
+        foreach ($itemsShipment as $itemShipment) {
+            $item = new \Magento\Framework\DataObject();
+            $item->setData($itemShipment);
+            $itemsDesc[] = $item->getName();
+        }
+
+        return substr(implode(' ', $itemsDesc), 0, 35);
     }
 
     /**
@@ -1632,30 +1660,29 @@ XMLAuth;
     /**
      * Request quotes for given packages.
      *
-     * @param DataObject[] $packages
+     * @param DataObject $request
      * @return string[] Quote IDs.
      * @throws LocalizedException
      * @throws \RuntimeException
      */
-    private function requestQuotes(array $packages): array
+    private function requestQuotes(DataObject $request): array
     {
         /** @var HttpResponseDeferredInterface[] $quotesRequests */
-        $quotesRequests = [];
         //Getting quotes
-        foreach ($packages as $package) {
-            $this->_prepareShipmentRequest($package);
-            $rawXmlRequest = $this->_formShipmentRequest($package);
-            $this->setXMLAccessRequest();
-            $xmlRequest = $this->_xmlAccessRequest . $rawXmlRequest;
-            $quotesRequests[] = $this->asyncHttpClient->request(
-                new Request(
-                    $this->getShipConfirmUrl(),
-                    Request::METHOD_POST,
-                    ['Content-Type' => 'application/xml'],
-                    $xmlRequest
-                )
-            );
-        }
+        $this->_prepareShipmentRequest($request);
+        $rawXmlRequest = $this->_formShipmentRequest($request);
+        $this->setXMLAccessRequest();
+        $xmlRequest = $this->_xmlAccessRequest . $rawXmlRequest;
+        $this->_debug(['request_quote' => $this->filterDebugData($this->_xmlAccessRequest) . $rawXmlRequest]);
+        $quotesRequests[] = $this->asyncHttpClient->request(
+            new Request(
+                $this->getShipConfirmUrl(),
+                Request::METHOD_POST,
+                ['Content-Type' => 'application/xml'],
+                $xmlRequest
+            )
+        );
+
         $ids = [];
         //Processing quote responses
         foreach ($quotesRequests as $quotesRequest) {
@@ -1666,6 +1693,7 @@ XMLAuth;
             try {
                 /** @var Element $response */
                 $response = $this->_xmlElFactory->create(['data' => $httpResponse->getBody()]);
+                $this->_debug(['response_quote' => $response]);
             } catch (\Throwable $e) {
                 throw new \RuntimeException($e->getMessage());
             }
@@ -1702,6 +1730,12 @@ XMLAuth;
             $request->addChild('RequestAction', 'ShipAccept');
             $xmlRequest->addChild('ShipmentDigest', $quoteId);
 
+            $debugRequest = $this->filterDebugData($this->_xmlAccessRequest) . $xmlRequest->asXml();
+            $this->_debug(
+                [
+                    'request_shipment' => $debugRequest
+                ]
+            );
             $shippingRequests[] = $this->asyncHttpClient->request(
                 new Request(
                     $this->getShipAcceptUrl(),
@@ -1715,7 +1749,6 @@ XMLAuth;
         /** @var DataObject[] $results */
         $results = [];
         foreach ($shippingRequests as $shippingRequest) {
-            $result = new DataObject();
             $httpResponse = $shippingRequest->get();
             if ($httpResponse->getStatusCode() >= 400) {
                 throw new LocalizedException(__('Failed to send the package'));
@@ -1723,19 +1756,23 @@ XMLAuth;
             try {
                 /** @var Element $response */
                 $response = $this->_xmlElFactory->create(['data' => $httpResponse->getBody()]);
+                $this->_debug(['response_shipment' => $response]);
             } catch (\Throwable $e) {
                 throw new \RuntimeException($e->getMessage());
             }
             if (isset($response->Error)) {
                 throw new \RuntimeException((string)$response->Error->ErrorDescription);
-            } else {
-                $shippingLabelContent = (string)$response->ShipmentResults->PackageResults->LabelImage->GraphicImage;
-                $trackingNumber = (string)$response->ShipmentResults->PackageResults->TrackingNumber;
+            }
+
+            foreach ($response->ShipmentResults->PackageResults as $packageResult) {
+                $result = new DataObject();
+                $shippingLabelContent = (string)$packageResult->LabelImage->GraphicImage;
+                $trackingNumber = (string)$packageResult->TrackingNumber;
                 // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 $result->setLabelContent(base64_decode($shippingLabelContent));
                 $result->setTrackingNumber($trackingNumber);
+                $results[] = $result;
             }
-            $results[] = $result;
         }
 
         return $results;
@@ -1835,25 +1872,16 @@ XMLAuth;
         if ($request->getStoreId() != null) {
             $this->setStore($request->getStoreId());
         }
-        /** @var Shipment[] $packageRequests */
-        $packageRequests = [];
-        //Preparing packages info.
-        foreach ($packages as $packageId => $package) {
-            $request->setPackageId($packageId);
-            $request->setPackagingType($package['params']['container']);
-            $request->setPackageWeight($package['params']['weight']);
-            $request->setPackageParams(new DataObject($package['params']));
-            $request->setPackageItems($package['items']);
-            $packageRequests[] = clone $request;
-        }
 
         // phpcs:disable
         try {
-            $quoteIds = $this->requestQuotes($packageRequests);
+            $quoteIds = $this->requestQuotes($request);
             $labels = $this->requestShipments($quoteIds);
         } catch (LocalizedException $exception) {
+            $this->_logger->critical($exception);
             return new DataObject(['errors' => [$exception->getMessage()]]);
         } catch (\RuntimeException $exception) {
+            $this->_logger->critical($exception);
             return new DataObject(['errors' => __('Failed to send items')]);
         }
         // phpcs:enable

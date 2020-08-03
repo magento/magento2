@@ -13,7 +13,7 @@ use Magento\Framework\HTTP\ZendClient;
  * Class RequestSender
  * Gets HTTP client end sends request to Signifyd API
  *
- * @deprecated Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
+ * @deprecated 100.3.5 Starting from Magento 2.3.5 Signifyd core integration is deprecated in favor of
  * official Signifyd integration available on the marketplace
  */
 class RequestSender
