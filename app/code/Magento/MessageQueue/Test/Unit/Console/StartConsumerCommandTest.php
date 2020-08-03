@@ -187,7 +187,7 @@ class StartConsumerCommandTest extends TestCase
                 'singleThread' => true,
                 'lockExpects' => 1,
                 'isLocked' => false,
-                'unlockExpects' => 1,
+                'unlockExpects' => 0,
                 'runProcessExpects' => 0,
                 'expectedReturn' => Cli::RETURN_FAILURE,
             ],
