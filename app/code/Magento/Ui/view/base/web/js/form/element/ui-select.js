@@ -1167,7 +1167,7 @@ define([
                 return;
             }
 
-            if (searchKey !== this.lastSearchKey) {
+            if (currentPage === 1) {
                 this.options([]);
             }
             this.processRequest(searchKey, currentPage);
