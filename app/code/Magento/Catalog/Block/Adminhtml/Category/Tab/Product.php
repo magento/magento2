@@ -77,7 +77,7 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -98,6 +98,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Add column filter to collection
+     *
      * @param Column $column
      * @return $this
      */
@@ -121,6 +123,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepares collection
+     *
      * @return Grid
      */
     protected function _prepareCollection()
@@ -166,6 +170,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Prepare columns
+     *
      * @return Extended
      */
     protected function _prepareColumns()
@@ -262,6 +268,8 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
     }
 
     /**
+     * Retrieve selected products
+     *
      * @return array
      */
     protected function _getSelectedProducts()
