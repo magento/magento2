@@ -22,7 +22,6 @@ use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * Product field data provider for product search, used for GraphQL resolver processing.
- * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductSearch
 {
