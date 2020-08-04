@@ -85,13 +85,17 @@ define([
 
                 add: function (e, data) {
                     if (!this.isSizeExceeded(data.files[0]).passed) {
-                        this.addValidationErrorMessage('Cannot upload "' + data.files[0].name +
-                                      '". File exceeds maximum file size limit.');
+                        this.addValidationErrorMessage(
+                            $t('Cannot upload "%1". File exceeds maximum file size limit.')
+                                .replace('%1', data.files[0].name)
+                        );
 
                         return;
                     } else if (!this.isFileNameLengthExceeded(data.files[0]).passed) {
-                        this.addValidationErrorMessage('Cannot upload "' + data.files[0].name +
-                                                       '". Filename is too long, must be 90 characters or less.');
+                        this.addValidationErrorMessage(
+                            $t('Cannot upload "%1". Filename is too long, must be 90 characters or less.')
+                                .replace('%1', data.files[0].name)
+                        );
 
                         return;
                     }
@@ -137,10 +141,7 @@ define([
          * @param {String} message
          */
         addValidationErrorMessage: function (message) {
-            this.mediaGridMessages().add(
-                'error',
-                $t(message)
-            );
+            this.mediaGridMessages().add('error', message);
 
             this.count() < 2 || this.mediaGridMessages().scheduleCleanup();
         },
@@ -203,12 +204,10 @@ define([
          * Show success message, and files counts
          */
         showSuccessMessage: function () {
-            var prefix = this.count() === 1 ? 'an image' : this.count() + ' images';
-
             this.mediaGridMessages().messages.remove(function (item) {
                 return item.code === 'success';
             });
-            this.mediaGridMessages().add('success', $t('Successfully uploaded ' + prefix));
+            this.mediaGridMessages().add('success', $t('Assets have been successfully uploaded!'));
             this.count(this.count() + 1);
 
         },

@@ -84,7 +84,7 @@ class SourceIconProvider extends Column
      *
      * @return string|null
      */
-    public function getSourceIconUrl(string $sourceName): ?string
+    private function getSourceIconUrl(string $sourceName): ?string
     {
         return isset($this->sourceIcons[$sourceName])
             ? $this->assetRepository->getUrlWithParams(
