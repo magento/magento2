@@ -18,11 +18,11 @@ use Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultAp
 use Magento\Framework\Api\Search\SearchResultInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\Api\SearchResultsInterface;
-use Magento\Framework\Exception\InputException;
 use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * Product field data provider for product search, used for GraphQL resolver processing.
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ProductSearch
 {
@@ -88,7 +88,6 @@ class ProductSearch
      * @param array $attributes
      * @param ContextInterface|null $context
      * @return SearchResultsInterface
-     * @throws InputException
      */
     public function getList(
         SearchCriteriaInterface $searchCriteria,
@@ -148,7 +147,6 @@ class ProductSearch
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @return array
-     * @throws InputException
      */
     private function getSortOrderArray(SearchCriteriaInterface $searchCriteria)
     {
@@ -156,6 +154,8 @@ class ProductSearch
         $sortOrders = $searchCriteria->getSortOrders();
         if (is_array($sortOrders)) {
             foreach ($sortOrders as $sortOrder) {
+                // I am replacing _id with entity_id because in ElasticSearch _id is required for sorting by ID.
+                // Where as entity_id is required when using ID as the sort in $collection->load();.
                 if ($sortOrder->getField() === '_id') {
                     $sortOrder->setField('entity_id');
                 }
