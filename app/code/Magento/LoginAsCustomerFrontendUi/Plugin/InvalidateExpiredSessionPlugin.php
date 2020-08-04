@@ -61,7 +61,9 @@ class InvalidateExpiredSessionPlugin
             $customerId = (int)$this->session->getCustomerId();
             if ($adminId && $customerId) {
                 if (!$this->isLoginAsCustomerSessionActive->execute($customerId, $adminId)) {
-                    $this->session->destroy();
+                    $this->session->clearStorage();
+                    $this->session->expireSessionCookie();
+                    $this->session->regenerateId();
                 }
             }
         }
