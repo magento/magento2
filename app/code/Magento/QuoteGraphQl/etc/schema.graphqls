@@ -373,18 +373,18 @@ type Order {
     order_id: String @deprecated(reason: "The order_id field is deprecated, use order_number instead.")
 }
 
-type CheckoutUserInputError @doc(description:"An error encountered while adding an item to the the cart.") {
+type CartUserInputError @doc(description:"An error encountered while adding an item to the the cart.") {
     message: String! @doc(description: "A localized error message")
     path: [String]! @doc(description: "Path to the input field that caused an error. See the GraphQL specification about path errors for details: http://spec.graphql.org/draft/#sec-Errors")
-    code: CheckoutUserInputErrorCodes! @doc(description: "Checkout-specific error code")
+    code: CartUserInputErrorType! @doc(description: "Checkout-specific error code")
 }
 
 type AddProductsToCartOutput {
     cart: Cart! @doc(description: "The cart after products have been added")
-    userInputErrors:[CheckoutUserInputError]! @doc(description: "An error encountered while adding an item to the cart.")
+    userInputErrors:[CartUserInputError]! @doc(description: "An error encountered while adding an item to the cart.")
 }
 
-enum CheckoutUserInputErrorCodes {
+enum CartUserInputErrorType {
     PRODUCT_NOT_FOUND
     NOT_SALABLE
     INSUFFICIENT_STOCK
