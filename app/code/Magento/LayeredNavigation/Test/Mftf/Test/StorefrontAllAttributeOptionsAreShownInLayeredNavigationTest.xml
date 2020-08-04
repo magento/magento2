@@ -1,0 +1,397 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAllAttributeOptionsAreShownInLayeredNavigationTest">
+        <annotations>
+            <features value="LayeredNavigation"/>
+            <stories value="Product attributes in Layered Navigation"/>
+            <title value="Limitation of displayed attribute options number in layered navigation with ElasticSearch"/>
+            <description value="All attribute options are shown in Layered navigation"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-28963"/>
+            <group value="layeredNavigation"/>
+            <group value="catalog"/>
+            <group value="SearchEngineElasticsearch"/>
+        </annotations>
+
+        <before>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <magentoCLI command="config:set {{DisplayProductCountDefaultValue.path}} {{DisplayProductCountDefaultValue.value}}" stepKey="enableDisplayProductCount"/>
+            <magentoCLI command="config:set {{PriceNavigationStepCalculationDefaultValue.path}} {{PriceNavigationStepCalculationDefaultValue.value}}" stepKey="setPriceNavigationStepCalculationDefaultValue"/>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <!-- Create an attribute -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <!--Create 15 attribute options-->
+            <createData entity="productAttributeOption" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createConfigProductAttributeOption3">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createConfigProductAttributeOption4">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createConfigProductAttributeOption5">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createConfigProductAttributeOption6">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createConfigProductAttributeOption7">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createConfigProductAttributeOption8">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createConfigProductAttributeOption9">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createConfigProductAttributeOption10">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createConfigProductAttributeOption11">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createConfigProductAttributeOption12">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createConfigProductAttributeOption13">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createConfigProductAttributeOption14">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createConfigProductAttributeOption15">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <!--Get Created options data-->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="3" stepKey="getConfigAttributeOption3">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="4" stepKey="getConfigAttributeOption4">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="5" stepKey="getConfigAttributeOption5">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="6" stepKey="getConfigAttributeOption6">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="7" stepKey="getConfigAttributeOption7">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="8" stepKey="getConfigAttributeOption8">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="9" stepKey="getConfigAttributeOption9">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="10" stepKey="getConfigAttributeOption10">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="11" stepKey="getConfigAttributeOption11">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="12" stepKey="getConfigAttributeOption12">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="13" stepKey="getConfigAttributeOption13">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="14" stepKey="getConfigAttributeOption14">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="15" stepKey="getConfigAttributeOption15">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Add attribute to attribute set-->
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+
+            <!-- Create Configurable product -->
+            <createData entity="BaseConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create simple products and set them created attribute value -->
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createConfigChildProduct3">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption3"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createConfigChildProduct4">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption4"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createConfigChildProduct5">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption5"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createConfigChildProduct6">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption6"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createConfigChildProduct7">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption7"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createConfigChildProduct8">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption8"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createConfigChildProduct9">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption9"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createConfigChildProduct10">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption10"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createConfigChildProduct11">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption11"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createConfigChildProduct12">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption12"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createConfigChildProduct13">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption13"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createConfigChildProduct14">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption14"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createConfigChildProduct15">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption15"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Create the configurable product -->
+            <createData entity="ConfigurableProduct15Options" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+                <requiredEntity createDataKey="getConfigAttributeOption3"/>
+                <requiredEntity createDataKey="getConfigAttributeOption4"/>
+                <requiredEntity createDataKey="getConfigAttributeOption5"/>
+                <requiredEntity createDataKey="getConfigAttributeOption6"/>
+                <requiredEntity createDataKey="getConfigAttributeOption7"/>
+                <requiredEntity createDataKey="getConfigAttributeOption8"/>
+                <requiredEntity createDataKey="getConfigAttributeOption9"/>
+                <requiredEntity createDataKey="getConfigAttributeOption10"/>
+                <requiredEntity createDataKey="getConfigAttributeOption11"/>
+                <requiredEntity createDataKey="getConfigAttributeOption12"/>
+                <requiredEntity createDataKey="getConfigAttributeOption13"/>
+                <requiredEntity createDataKey="getConfigAttributeOption14"/>
+                <requiredEntity createDataKey="getConfigAttributeOption15"/>
+            </createData>
+
+            <!-- Add simple products to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild3">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct3"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild4">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct4"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild5">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct5"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild6">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct6"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild7">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct7"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild8">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct8"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild9">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct9"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild10">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct10"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild11">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct11"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild12">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct12"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild13">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct13"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild14">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct14"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild15">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct15"/>
+            </createData>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigChildProduct3" stepKey="deleteConfigChildProduct3"/>
+            <deleteData createDataKey="createConfigChildProduct4" stepKey="deleteConfigChildProduct4"/>
+            <deleteData createDataKey="createConfigChildProduct5" stepKey="deleteConfigChildProduct5"/>
+            <deleteData createDataKey="createConfigChildProduct6" stepKey="deleteConfigChildProduct6"/>
+            <deleteData createDataKey="createConfigChildProduct7" stepKey="deleteConfigChildProduct7"/>
+            <deleteData createDataKey="createConfigChildProduct8" stepKey="deleteConfigChildProduct8"/>
+            <deleteData createDataKey="createConfigChildProduct9" stepKey="deleteConfigChildProduct9"/>
+            <deleteData createDataKey="createConfigChildProduct10" stepKey="deleteConfigChildProduct10"/>
+            <deleteData createDataKey="createConfigChildProduct11" stepKey="deleteConfigChildProduct11"/>
+            <deleteData createDataKey="createConfigChildProduct12" stepKey="deleteConfigChildProduct12"/>
+            <deleteData createDataKey="createConfigChildProduct13" stepKey="deleteConfigChildProduct13"/>
+            <deleteData createDataKey="createConfigChildProduct14" stepKey="deleteConfigChildProduct14"/>
+            <deleteData createDataKey="createConfigChildProduct15" stepKey="deleteConfigChildProduct15"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategory">
+            <argument name="category" value="$createCategory$"/>
+        </actionGroup>
+        <!--Check filtration options for created attribute. All attribute options should be displayed -->
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertAttributeOption1PresentInLayeredNavigation">
+            <argument name="attributeLabel" value="$createConfigProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getConfigAttributeOption1.label$"/>
+            <argument name="attributeOptionPosition" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertAttributeOption2PresentInLayeredNavigation">
+            <argument name="attributeLabel" value="$createConfigProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getConfigAttributeOption2.label$"/>
+            <argument name="attributeOptionPosition" value="2"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertAttributeOption3PresentInLayeredNavigation">
+            <argument name="attributeLabel" value="$createConfigProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getConfigAttributeOption3.label$"/>
+            <argument name="attributeOptionPosition" value="3"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertAttributeOption4PresentInLayeredNavigation">
+            <argument name="attributeLabel" value="$createConfigProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getConfigAttributeOption4.label$"/>
+            <argument name="attributeOptionPosition" value="4"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertAttributeOption5PresentInLayeredNavigation">
+            <argument name="attributeLabel" value="$createConfigProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getConfigAttributeOption5.label$"/>
+            <argument name="attributeOptionPosition" value="5"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertAttributeOption6PresentInLayeredNavigation">
+            <argument name="attributeLabel" value="$createConfigProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getConfigAttributeOption6.label$"/>
+            <argument name="attributeOptionPosition" value="6"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertAttributeOption7PresentInLayeredNavigation">
+            <argument name="attributeLabel" value="$createConfigProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getConfigAttributeOption7.label$"/>
+            <argument name="attributeOptionPosition" value="7"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertAttributeOption8PresentInLayeredNavigation">
+            <argument name="attributeLabel" value="$createConfigProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getConfigAttributeOption8.label$"/>
+            <argument name="attributeOptionPosition" value="8"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertAttributeOption9PresentInLayeredNavigation">
+            <argument name="attributeLabel" value="$createConfigProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getConfigAttributeOption9.label$"/>
+            <argument name="attributeOptionPosition" value="9"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertAttributeOption10PresentInLayeredNavigation">
+            <argument name="attributeLabel" value="$createConfigProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getConfigAttributeOption10.label$"/>
+            <argument name="attributeOptionPosition" value="10"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertAttributeOption11PresentInLayeredNavigation">
+            <argument name="attributeLabel" value="$createConfigProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getConfigAttributeOption11.label$"/>
+            <argument name="attributeOptionPosition" value="11"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertAttributeOption12PresentInLayeredNavigation">
+            <argument name="attributeLabel" value="$createConfigProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getConfigAttributeOption12.label$"/>
+            <argument name="attributeOptionPosition" value="12"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertAttributeOption13PresentInLayeredNavigation">
+            <argument name="attributeLabel" value="$createConfigProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getConfigAttributeOption13.label$"/>
+            <argument name="attributeOptionPosition" value="13"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertAttributeOption14PresentInLayeredNavigation">
+            <argument name="attributeLabel" value="$createConfigProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getConfigAttributeOption14.label$"/>
+            <argument name="attributeOptionPosition" value="14"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontAttributeOptionPresentInLayeredNavigationActionGroup" stepKey="assertAttributeOption15PresentInLayeredNavigation">
+            <argument name="attributeLabel" value="$createConfigProductAttribute.attribute[frontend_labels][0][label]$"/>
+            <argument name="attributeOptionLabel" value="$getConfigAttributeOption15.label$"/>
+            <argument name="attributeOptionPosition" value="15"/>
+        </actionGroup>
+    </test>
+</tests>
