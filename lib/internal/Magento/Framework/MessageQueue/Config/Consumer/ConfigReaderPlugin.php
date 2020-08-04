@@ -11,7 +11,7 @@ use Magento\Framework\MessageQueue\Consumer\Config\CompositeReader as ConsumerCo
 /**
  * Plugin which provides access to consumers declared in queue config using consumer config interface.
  *
- * @deprecated 100.2.0
+ * @deprecated 103.0.0
  */
 class ConfigReaderPlugin
 {
@@ -71,7 +71,7 @@ class ConfigReaderPlugin
                 'maxMessages' => $consumerData['max_messages'],
                 'maxIdleTime' => null,
                 'sleep' => null,
-                'onlySpawnWhenMessageAvailable' => false
+                'onlySpawnWhenMessageAvailable' => null
             ];
         }
 

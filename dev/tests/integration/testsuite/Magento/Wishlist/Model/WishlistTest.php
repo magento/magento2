@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests for wish list model.
  *
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @magentoAppIsolation disabled
  */
 class WishlistTest extends TestCase
@@ -116,17 +116,13 @@ class WishlistTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Wishlist/_files/wishlist.php
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist_with_disabled_simple_product.php
      *
      * @return void
      */
     public function testGetItemCollectionWithDisabledProduct(): void
     {
-        $productSku = 'simple';
         $customerId = 1;
-        $product = $this->productRepository->get($productSku);
-        $product->setStatus(ProductStatus::STATUS_DISABLED);
-        $this->productRepository->save($product);
         $this->assertEmpty($this->getWishlistByCustomerId->execute($customerId)->getItemCollection()->getItems());
     }
 
@@ -143,7 +139,12 @@ class WishlistTest extends TestCase
         $configurableOptions = $configurableProduct->getTypeInstance()->getConfigurableOptions($configurableProduct);
         $attributeId = key($configurableOptions);
         $option = reset($configurableOptions[$attributeId]);
-        $buyRequest = ['super_attribute' => [$attributeId => $option['value_index']]];
+        $buyRequest = [
+            'super_attribute' => [
+                $attributeId => $option['value_index']
+            ],
+            'action' => 'add',
+        ];
         $wishlist = $this->getWishlistByCustomerId->execute(1);
         $wishlist->addNewItem($configurableProduct, $buyRequest);
         $item = $this->getWishlistByCustomerId->getItemBySku(1, 'Configurable product');
@@ -166,7 +167,12 @@ class WishlistTest extends TestCase
         $option = reset($bundleOptions);
         $productLinks = $option->getProductLinks();
         $this->assertNotNull($productLinks[0]);
-        $buyRequest = ['bundle_option' => [$option->getOptionId() => $productLinks[0]->getId()]];
+        $buyRequest = [
+            'bundle_option' => [
+                $option->getOptionId() => $productLinks[0]->getId()
+            ],
+            'action' => 'add',
+        ];
         $skuWithChosenOption = implode('-', [$bundleProduct->getSku(), $productLinks[0]->getSku()]);
         $wishlist = $this->getWishlistByCustomerId->execute(1);
         $wishlist->addNewItem($bundleProduct, $buyRequest);
