@@ -50,7 +50,7 @@
         <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageBtn}}" userInput="Insert Image..." stepKey="seeInsertImage2"/>
         <dontSee selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="insertWidget2" />
         <dontSee selector="{{TinyMCESection.InsertVariableBtn}}" stepKey="insertVariable2" />
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
         <!-- Go to storefront product page, assert product content -->
         <amOnPage url="{{_defaultProduct.name}}.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
