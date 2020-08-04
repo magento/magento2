@@ -7,16 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\Formatter;
 
-use Magento\Framework\GraphQl\Config\Element\Type;
+use Magento\Framework\GraphQl\Config\Element\UnionType;
 use Magento\Framework\GraphQl\Config\ConfigElementInterface;
 use Magento\Framework\GraphQl\Schema\Type\OutputTypeInterface;
 use Magento\Framework\GraphQl\Schema\Type\Output\ElementMapper\FormatterInterface;
 use Magento\Framework\GraphQl\Schema\Type\Output\OutputMapper;
 
 /**
- * Add interfaces implemented by type if configured.
+ * Add unions implemented by type if configured.
  */
-class Interfaces implements FormatterInterface
+class Unions implements FormatterInterface
 {
     /**
      * @var OutputMapper
@@ -37,12 +37,12 @@ class Interfaces implements FormatterInterface
     public function format(ConfigElementInterface $configElement, OutputTypeInterface $outputType) : array
     {
         $config = [];
-        if ($configElement instanceof Type && !empty($configElement->getInterfaces())) {
-            $interfaces = [];
-            foreach ($configElement->getInterfaces() as $interface) {
-                $interfaces[$interface['interface']] = $this->outputMapper->getOutputType($interface['interface']);
+        if ($configElement instanceof UnionType && !empty($configElement->getTypes())) {
+            $unionTypes = [];
+            foreach ($configElement->getTypes() as $unionName) {
+                $unionTypes[$unionName] = $this->outputMapper->getOutputType($unionName);
             }
-            $config['interfaces'] = $interfaces;
+            $config['types'] = $unionTypes;
         }
 
         return $config;

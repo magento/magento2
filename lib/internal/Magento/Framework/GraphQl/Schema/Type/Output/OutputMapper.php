@@ -38,7 +38,7 @@ class OutputMapper
      * @return OutputTypeInterface
      * @throws GraphQlInputException
      */
-    public function getOutputType($typeName)
+    public function getOutputType(string $typeName)
     {
         $outputType = $this->typeRegistry->get($typeName);
 

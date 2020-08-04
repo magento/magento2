@@ -23,6 +23,8 @@ class GraphQlReader implements ReaderInterface
 
     public const GRAPHQL_INTERFACE = 'graphql_interface';
 
+    public const GRAPHQL_UNION = 'graphql_union';
+
     /**
      * File locator
      *
@@ -178,7 +180,7 @@ class GraphQlReader implements ReaderInterface
     private function copyInterfaceFieldsToConcreteTypes(array $source): array
     {
         foreach ($source as $interface) {
-            if ($interface['type'] == 'graphql_interface') {
+            if ($interface['type'] ?? '' == 'graphql_interface') {
                 foreach ($source as $typeName => $type) {
                     if (isset($type['implements'])
                         && isset($type['implements'][$interface['name']])
@@ -253,7 +255,7 @@ class GraphQlReader implements ReaderInterface
     private function addPlaceHolderInSchema(string $graphQlSchemaContent) :string
     {
         $placeholderField = self::GRAPHQL_PLACEHOLDER_FIELD_NAME;
-        $typesKindsPattern = '(type|interface|input)';
+        $typesKindsPattern = '(type|interface|input|union)';
         $enumKindsPattern = '(enum)';
         $typeNamePattern = '([_A-Za-z][_0-9A-Za-z]+)';
         $typeDefinitionPattern = '([^\{]*)(\{[\s\t\n\r^\}]*\})';
@@ -329,10 +331,13 @@ class GraphQlReader implements ReaderInterface
     private function addModuleNameToTypes(array $source, string $filePath): array
     {
         foreach ($source as $typeName => $type) {
-            if (!isset($type['module']) && (
-                ($type['type'] === self::GRAPHQL_INTERFACE && isset($type['typeResolver']))
+            if (!isset($type['type'])) {
+                $x=1;
+            }
+            if ((!isset($type['module']))
+                && (($type['type'] ?? '' === self::GRAPHQL_INTERFACE && isset($type['typeResolver']))
                     || isset($type['implements'])
-            )
+                )
             ) {
                 $source[$typeName]['module'] = self::getModuleNameForRelevantFile($filePath);
             }
