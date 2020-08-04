@@ -23,6 +23,7 @@ use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface;
 use Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterfaceFactory;
 use Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataForUserInterface;
+use Magento\LoginAsCustomerApi\Api\IsLoginAsCustomerEnabledForCustomerInterface;
 use Magento\LoginAsCustomerApi\Api\SaveAuthenticationDataInterface;
 use Magento\LoginAsCustomerApi\Api\SetLoggedAsCustomerCustomerIdInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -88,16 +89,22 @@ class Login extends Action implements HttpGetActionInterface
     private $setLoggedAsCustomerCustomerId;
 
     /**
+     * @var IsLoginAsCustomerEnabledForCustomerInterface
+     */
+    private $isLoginAsCustomerEnabled;
+
+    /**
      * @param Context $context
      * @param Session $authSession
      * @param StoreManagerInterface $storeManager
      * @param CustomerRepositoryInterface $customerRepository
      * @param ConfigInterface $config
      * @param AuthenticationDataInterfaceFactory $authenticationDataFactory
-     * @param SaveAuthenticationDataInterface $saveAuthenticationData ,
+     * @param SaveAuthenticationDataInterface $saveAuthenticationData
      * @param DeleteAuthenticationDataForUserInterface $deleteAuthenticationDataForUser
      * @param Url $url
      * @param SetLoggedAsCustomerCustomerIdInterface $setLoggedAsCustomerCustomerId
+     * @param IsLoginAsCustomerEnabledForCustomerInterface $isLoginAsCustomerEnabled
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -111,7 +118,8 @@ class Login extends Action implements HttpGetActionInterface
         SaveAuthenticationDataInterface $saveAuthenticationData,
         DeleteAuthenticationDataForUserInterface $deleteAuthenticationDataForUser,
         Url $url,
-        ?SetLoggedAsCustomerCustomerIdInterface $setLoggedAsCustomerCustomerId = null
+        ?SetLoggedAsCustomerCustomerIdInterface $setLoggedAsCustomerCustomerId = null,
+        ?IsLoginAsCustomerEnabledForCustomerInterface $isLoginAsCustomerEnabled = null
     ) {
         parent::__construct($context);
 
@@ -124,6 +132,8 @@ class Login extends Action implements HttpGetActionInterface
         $this->deleteAuthenticationDataForUser = $deleteAuthenticationDataForUser;
         $this->url = $url;
         $this->setLoggedAsCustomerCustomerId = $setLoggedAsCustomerCustomerId ?? ObjectManager::getInstance()->get(SetLoggedAsCustomerCustomerIdInterface::class);
+        $this->isLoginAsCustomerEnabled = $isLoginAsCustomerEnabled
+            ?? ObjectManager::getInstance()->get(IsLoginAsCustomerEnabledForCustomerInterface::class);
     }
 
     /**
@@ -138,20 +148,24 @@ class Login extends Action implements HttpGetActionInterface
         /** @var Redirect $resultRedirect */
         $resultRedirect = $this->resultFactory->create(ResultFactory::TYPE_REDIRECT);
 
-        if (!$this->config->isEnabled()) {
-            $this->messageManager->addErrorMessage(__('Login as Customer is disabled.'));
-            return $resultRedirect->setPath('customer/index/index');
-        }
-
         $customerId = (int)$this->_request->getParam('customer_id');
         if (!$customerId) {
             $customerId = (int)$this->_request->getParam('entity_id');
         }
 
+        $isLoginAsCustomerEnabled = $this->isLoginAsCustomerEnabled->execute($customerId);
+        if (!$isLoginAsCustomerEnabled->isEnabled()) {
+            foreach ($isLoginAsCustomerEnabled->getMessages() as $message) {
+                $this->messageManager->addErrorMessage(__($message));
+            }
+
+            return $resultRedirect->setPath('customer/index/index');
+        }
+
         try {
             $customer = $this->customerRepository->getById($customerId);
         } catch (NoSuchEntityException $e) {
-            $this->messageManager->addErrorMessage(__('Customer with this ID are no longer exist.'));
+            $this->messageManager->addErrorMessage('Customer with this ID are no longer exist.');
             return $resultRedirect->setPath('customer/index/index');
         }
 
