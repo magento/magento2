@@ -47,14 +47,14 @@ class GetCustomOptionsWithUIDForQueryBySku
                 case 'area':
                     $enteredOptions[] = [
                         'type' => 'field',
-                        'id' => $this->encodeEnteredOption((int) $customOption->getOptionId()),
+                        'uid' => $this->encodeEnteredOption((int) $customOption->getOptionId()),
                         'value' => 'test'
                     ];
                     break;
                 case 'date':
                     $enteredOptions[] = [
                         'type' => 'date',
-                        'id' => $this->encodeEnteredOption((int) $customOption->getOptionId()),
+                        'uid' => $this->encodeEnteredOption((int) $customOption->getOptionId()),
                         'value' => '2012-12-12 00:00:00'
                     ];
                     break;

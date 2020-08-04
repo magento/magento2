@@ -43,7 +43,7 @@ class CustomizableOptionDataProvider implements BuyRequestDataProviderInterface
 
         foreach ($cartItem->getEnteredOptions() as $option) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $optionData = \explode('/', base64_decode($option->getId()));
+            $optionData = \explode('/', base64_decode($option->getUid()));
 
             if ($this->isProviderApplicable($optionData) === false) {
                 continue;

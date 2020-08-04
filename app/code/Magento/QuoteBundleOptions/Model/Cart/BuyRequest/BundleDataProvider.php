@@ -45,7 +45,7 @@ class BundleDataProvider implements BuyRequestDataProviderInterface
         //for bundle options with custom quantity
         foreach ($cartItem->getEnteredOptions() as $option) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $optionData = \explode('/', base64_decode($option->getId()));
+            $optionData = \explode('/', base64_decode($option->getUid()));
 
             if ($this->isProviderApplicable($optionData) === false) {
                 continue;

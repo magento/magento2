@@ -309,11 +309,11 @@ mutation {
                         "{$optionUid1}", "{$optionUid0}"
                     ],
                     entered_options: [{
-                        id: "{$optionUid0}"
+                        uid: "{$optionUid0}"
                         value: "5"
                      },
                      {
-                        id: "{$optionUid1}"
+                        uid: "{$optionUid1}"
                         value: "5"
                      }]
                 }

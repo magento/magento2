@@ -38,8 +38,8 @@ class GetCartItemOptionsFromUID
             if ($enteredOption['type'] === 'date') {
                 $enteredOption['value'] = date('M d, Y', strtotime($enteredOption['value']));
             }
-            [$optionType, $optionId] = explode('/', base64_decode($enteredOption['id']));
-            if ($optionType = 'custom-option') {
+            [$optionType, $optionId] = explode('/', base64_decode($enteredOption['uid']));
+            if ($optionType == 'custom-option') {
                 $customOptions[$optionId] = $enteredOption['value'];
             }
         }

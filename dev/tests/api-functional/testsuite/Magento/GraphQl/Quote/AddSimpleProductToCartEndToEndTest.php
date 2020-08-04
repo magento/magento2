@@ -107,7 +107,7 @@ class AddSimpleProductToCartEndToEndTest extends GraphQlAbstract
                 $value = $option['title'] === 'date option' ? '2012-12-12 00:00:00' : 'test';
 
                 $receivedItemOptions['entered_options'][] = [
-                    'id' => $option['entered_option']['uid'],
+                    'uid' => $option['entered_option']['uid'],
                     'value' => $value
                 ];
 
