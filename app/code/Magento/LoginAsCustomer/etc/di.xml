@@ -9,7 +9,6 @@
     <preference for="Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataInterface" type="Magento\LoginAsCustomer\Model\AuthenticationData"/>
     <preference for="Magento\LoginAsCustomerApi\Api\SaveAuthenticationDataInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\SaveAuthenticationData"/>
     <preference for="Magento\LoginAsCustomerApi\Api\GetAuthenticationDataBySecretInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\GetAuthenticationDataBySecret"/>
-    <preference for="Magento\LoginAsCustomerApi\Api\AuthenticateCustomerBySecretInterface" type="Magento\LoginAsCustomer\Model\AuthenticateCustomerBySecret"/>
     <preference for="Magento\LoginAsCustomerApi\Api\DeleteAuthenticationDataForUserInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\DeleteAuthenticationDataForUser"/>
     <preference for="Magento\LoginAsCustomerApi\Api\ConfigInterface" type="Magento\LoginAsCustomer\Model\Config"/>
     <preference for="Magento\LoginAsCustomerApi\Api\IsLoginAsCustomerSessionActiveInterface" type="Magento\LoginAsCustomer\Model\ResourceModel\IsLoginAsCustomerSessionActive"/>
