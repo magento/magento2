@@ -87,5 +87,6 @@ class AbstractCollectionTest extends \Magento\Eav\Test\Unit\Model\Entity\Collect
     {
         $item = $this->getMagentoObject();
         $this->entitySnapshot->expects($this->once())->method('clear')->with($item);
+        $this->subject->clear();
     }
 }
