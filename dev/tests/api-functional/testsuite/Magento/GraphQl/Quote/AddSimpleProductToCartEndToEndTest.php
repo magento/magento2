@@ -111,7 +111,6 @@ class AddSimpleProductToCartEndToEndTest extends GraphQlAbstract
                     'value' => $value
                 ];
 
-
             } elseif (isset($option['selected_option'])) {
                 $receivedItemOptions['selected_options'][] = reset($option['selected_option'])['uid'];
                 $expectedItemOptions[$option['option_id']] = reset($option['selected_option'])['option_type_id'];
@@ -132,10 +131,9 @@ class AddSimpleProductToCartEndToEndTest extends GraphQlAbstract
      */
     private function getProductQuery(string $sku): string
     {
-        $sku = $options = $values = null; // WTF?
         return <<<QUERY
 query {
-  products(filter: { sku: { eq: "$sku" } }) {
+  products(search: "$sku") {
     items {
       sku
 

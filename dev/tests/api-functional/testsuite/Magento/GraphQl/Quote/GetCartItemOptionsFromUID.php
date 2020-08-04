@@ -23,13 +23,14 @@ class GetCartItemOptionsFromUID
         $customOptions = [];
 
         foreach ($encodedCustomOptions['selected_options'] as $selectedOption) {
-            [,$optionId, $optionValueId] = explode('/', base64_decode($selectedOption));
-            if (isset($customOptions[$optionId])) {
-                $customOptions[$optionId] = [$customOptions[$optionId], $optionValueId];
-            } else {
-                $customOptions[$optionId] = $optionValueId;
+            [$optionType, $optionId, $optionValueId] = explode('/', base64_decode($selectedOption));
+            if ($optionType == 'custom-option') {
+                if (isset($customOptions[$optionId])) {
+                    $customOptions[$optionId] = [$customOptions[$optionId], $optionValueId];
+                } else {
+                    $customOptions[$optionId] = $optionValueId;
+                }
             }
-
         }
 
         foreach ($encodedCustomOptions['entered_options'] as $enteredOption) {
@@ -37,8 +38,10 @@ class GetCartItemOptionsFromUID
             if ($enteredOption['type'] === 'date') {
                 $enteredOption['value'] = date('M d, Y', strtotime($enteredOption['value']));
             }
-            [,$optionId] = explode('/', base64_decode($enteredOption['id']));
-            $customOptions[$optionId] = $enteredOption['value'];
+            [$optionType, $optionId] = explode('/', base64_decode($enteredOption['id']));
+            if ($optionType = 'custom-option') {
+                $customOptions[$optionId] = $enteredOption['value'];
+            }
         }
 
         return $customOptions;

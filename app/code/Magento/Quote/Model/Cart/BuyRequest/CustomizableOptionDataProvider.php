@@ -35,8 +35,10 @@ class CustomizableOptionDataProvider implements BuyRequestDataProviderInterface
             }
             $this->validateInput($optionData);
 
-            [, $optionId, $optionValue] = $optionData;
-            $customizableOptionsData[$optionId][] = $optionValue;
+            [$optionType, $optionId, $optionValue] = $optionData;
+            if ($optionType == self::OPTION_TYPE) {
+                $customizableOptionsData[$optionId][] = $optionValue;
+            }
         }
 
         foreach ($cartItem->getEnteredOptions() as $option) {
@@ -47,8 +49,10 @@ class CustomizableOptionDataProvider implements BuyRequestDataProviderInterface
                 continue;
             }
 
-            [, $optionId] = $optionData;
-            $customizableOptionsData[$optionId][] = $option->getValue();
+            [$optionType, $optionId] = $optionData;
+            if ($optionType == self::OPTION_TYPE) {
+                $customizableOptionsData[$optionId][] = $option->getValue();
+            }
         }
 
         return ['options' => $this->flattenOptionValues($customizableOptionsData)];

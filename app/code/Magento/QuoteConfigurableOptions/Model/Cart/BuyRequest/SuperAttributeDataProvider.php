@@ -35,8 +35,10 @@ class SuperAttributeDataProvider implements BuyRequestDataProviderInterface
             }
             $this->validateInput($optionData);
 
-            [, $attributeId, $valueIndex] = $optionData;
-            $configurableProductData[$attributeId] = $valueIndex;
+            [$optionType, $attributeId, $valueIndex] = $optionData;
+            if ($optionType == self::OPTION_TYPE) {
+                $configurableProductData[$attributeId] = $valueIndex;
+            }
         }
 
         return ['super_attribute' => $configurableProductData];

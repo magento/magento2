@@ -36,8 +36,10 @@ class DownloadableLinkDataProvider implements BuyRequestDataProviderInterface
             }
             $this->validateInput($optionData);
 
-            [, $linkId] = $optionData;
-            $linksData[] = $linkId;
+            [$optionType, $linkId] = $optionData;
+            if ($optionType == self::OPTION_TYPE) {
+                $linksData[] = $linkId;
+            }
         }
 
         return ['links' => $linksData];

@@ -256,14 +256,4 @@ mutation {
 }
 MUTATION;
     }
-
-    private function getCartQuery(string $maskedQuoteId)
-    {
-        return <<<QUERY
-{
-    cart(cart_id: "{$maskedQuoteId}") {
-        total_quantity
-}
-QUERY;
-    }
 }

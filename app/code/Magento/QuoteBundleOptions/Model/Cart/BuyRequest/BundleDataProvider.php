@@ -36,9 +36,11 @@ class BundleDataProvider implements BuyRequestDataProviderInterface
             }
             $this->validateInput($optionData);
 
-            [, $optionId, $optionValueId, $optionQuantity] = $optionData;
-            $bundleOptionsData['bundle_option'][$optionId] = $optionValueId;
-            $bundleOptionsData['bundle_option_qty'][$optionId] = $optionQuantity;
+            [$optionType, $optionId, $optionValueId, $optionQuantity] = $optionData;
+            if ($optionType == self::OPTION_TYPE) {
+                $bundleOptionsData['bundle_option'][$optionId] = $optionValueId;
+                $bundleOptionsData['bundle_option_qty'][$optionId] = $optionQuantity;
+            }
         }
         //for bundle options with custom quantity
         foreach ($cartItem->getEnteredOptions() as $option) {
@@ -50,10 +52,12 @@ class BundleDataProvider implements BuyRequestDataProviderInterface
             }
             $this->validateInput($optionData);
 
-            [, $optionId, $optionValueId] = $optionData;
-            $optionQuantity = $option->getValue();
-            $bundleOptionsData['bundle_option'][$optionId] = $optionValueId;
-            $bundleOptionsData['bundle_option_qty'][$optionId] = $optionQuantity;
+            [$optionType, $optionId, $optionValueId] = $optionData;
+            if ($optionType == self::OPTION_TYPE) {
+                $optionQuantity = $option->getValue();
+                $bundleOptionsData['bundle_option'][$optionId] = $optionValueId;
+                $bundleOptionsData['bundle_option_qty'][$optionId] = $optionQuantity;
+            }
         }
 
         return $bundleOptionsData;
