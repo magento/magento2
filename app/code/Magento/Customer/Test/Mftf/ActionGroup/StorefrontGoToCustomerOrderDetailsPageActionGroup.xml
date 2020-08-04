@@ -16,7 +16,7 @@
             <argument name="orderId" type="string"/>
             <argument name="orderNumber" type="string"/>
         </arguments>
-        <amOnPage url="sales/order/view/order_id/{{orderId}}" stepKey="goToOrdersPage"/>
+        <amOnPage url="{{StorefrontCustomerOrderViewPage.url(orderId)}}" stepKey="goToOrdersPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <waitForText selector="{{StorefrontCustomerAccountMainSection.pageTitle}}" userInput="{{orderNumber}}" stepKey="verifyOrderNo"/>
     </actionGroup>
