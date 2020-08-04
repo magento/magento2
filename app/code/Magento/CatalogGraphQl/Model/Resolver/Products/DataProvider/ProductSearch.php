@@ -87,15 +87,14 @@ class ProductSearch
      *
      * @param SearchCriteriaInterface $searchCriteria
      * @param SearchResultInterface $searchResult
-     * @param array $args
      * @param array $attributes
      * @param ContextInterface|null $context
      * @return SearchResultsInterface
+     * @throws InputException
      */
     public function getList(
         SearchCriteriaInterface $searchCriteria,
         SearchResultInterface $searchResult,
-        array $args,
         array $attributes = [],
         ContextInterface $context = null
     ): SearchResultsInterface {
@@ -108,7 +107,7 @@ class ProductSearch
         $this->getSearchResultsApplier(
             $searchResult,
             $collection,
-            $this->getSortOrderArray($searchCriteriaForCollection, $args)
+            $this->getSortOrderArray($searchCriteriaForCollection)
         )->apply();
 
         $this->collectionPreProcessor->process($collection, $searchCriteriaForCollection, $attributes, $context);
@@ -154,7 +153,7 @@ class ProductSearch
      * @return array
      * @throws InputException
      */
-    private function getSortOrderArray(SearchCriteriaInterface $searchCriteria, $args)
+    private function getSortOrderArray(SearchCriteriaInterface $searchCriteria)
     {
         $ordersArray = [];
         $sortOrders = $searchCriteria->getSortOrders();
