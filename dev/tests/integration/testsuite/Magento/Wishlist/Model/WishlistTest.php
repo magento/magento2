@@ -20,7 +20,7 @@ use PHPUnit\Framework\TestCase;
 /**
  * Tests for wish list model.
  *
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @magentoAppIsolation disabled
  */
 class WishlistTest extends TestCase
@@ -116,17 +116,13 @@ class WishlistTest extends TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Wishlist/_files/wishlist.php
+     * @magentoDataFixture Magento/Wishlist/_files/wishlist_with_disabled_simple_product.php
      *
      * @return void
      */
     public function testGetItemCollectionWithDisabledProduct(): void
     {
-        $productSku = 'simple';
         $customerId = 1;
-        $product = $this->productRepository->get($productSku);
-        $product->setStatus(ProductStatus::STATUS_DISABLED);
-        $this->productRepository->save($product);
         $this->assertEmpty($this->getWishlistByCustomerId->execute($customerId)->getItemCollection()->getItems());
     }
 
