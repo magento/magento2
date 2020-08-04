@@ -183,7 +183,7 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
 
         $response = $this->graphQlMutation($query);
 
-        $expectedErrorMessage = 'This product is out of stock.';
+        $expectedErrorMessage = 'There are no source items with the in stock status';
         self::assertEquals($expectedErrorMessage, $response['addProductsToCart']['userInputErrors'][0]['message']);
     }
 
