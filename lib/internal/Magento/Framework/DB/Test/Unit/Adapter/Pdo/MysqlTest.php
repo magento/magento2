@@ -153,6 +153,8 @@ class MysqlTest extends TestCase
 
     public function testMultipleQueryException()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Multiple queries can\'t be executed. Run a single query and try again.');
         $sql = "SELECT COUNT(*) AS _num FROM test; ";
         $sql .= "INSERT INTO test(id) VALUES (1); ";
         $sql .= "SELECT COUNT(*) AS _num FROM test; ";
