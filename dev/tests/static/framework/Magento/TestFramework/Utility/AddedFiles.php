@@ -15,7 +15,7 @@ class AddedFiles
     /**
      * Provide list of new files.
      *
-     * @param $changedFilesBaseDir
+     * @param string $changedFilesBaseDir
      *
      * @return string[]
      */

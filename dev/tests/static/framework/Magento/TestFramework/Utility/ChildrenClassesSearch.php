@@ -17,6 +17,9 @@ class ChildrenClassesSearch
      */
     private $classNameExtractor;
 
+    /**
+     * ChildrenClassesSearch constructor.
+     */
     public function __construct()
     {
         $this->classNameExtractor = new ClassNameExtractor();

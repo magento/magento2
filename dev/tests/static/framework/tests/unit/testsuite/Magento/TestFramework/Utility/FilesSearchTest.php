@@ -38,7 +38,6 @@ class FilesSearchTest extends TestCase
     {
         $pattern = 'zzz.txt';
 
-
         $files = FilesSearch::getFilesFromListFile(__DIR__, $pattern, function () {
             return ['1', '2', '3'];
         });

@@ -5,6 +5,8 @@
  */
 namespace Magento\TestFramework\Utility\ChildrenClassesSearch;
 
+// @codingStandardsIgnoreStar
 interface Z
 {
 }
+// @codingStandardsIgnoreEnd
