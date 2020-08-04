@@ -5,14 +5,14 @@
   * See COPYING.txt for license details.
   */
 -->
-<!-- Test XML Example -->
+
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminGridSelectAllCheckboxTest">
         <annotations>
             <stories value="Select All Rows in Grid"/>
             <title value="Select All Rows Grid ans unselect row"/>
             <description value="Test for check selected rows in Grid and Select All selector"/>
-            <group value="uI"/>
+            <group value="ui"/>
         </annotations>
         <before>
             <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
