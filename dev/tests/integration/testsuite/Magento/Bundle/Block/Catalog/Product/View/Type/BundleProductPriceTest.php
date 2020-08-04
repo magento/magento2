@@ -31,9 +31,6 @@ class BundleProductPriceTest extends TestCase
     /** @var ObjectManagerInterface */
     private $objectManager;
 
-    /** @var Page */
-    protected $page;
-
     /** @var Registry */
     private $registry;
 
@@ -49,6 +46,9 @@ class BundleProductPriceTest extends TestCase
     /** @var StoreManagerInterface */
     private $storeManager;
 
+    /** @var PageFactory */
+    private $pageFactory;
+
     /**
      * @inheritdoc
      */
@@ -63,6 +63,7 @@ class BundleProductPriceTest extends TestCase
         $this->json = $this->objectManager->get(SerializerInterface::class);
         $this->executeInStoreContext = $this->objectManager->get(ExecuteInStoreContext::class);
         $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $this->pageFactory = $this->objectManager->get(PageFactory::class);
     }
 
     /**
@@ -274,7 +275,7 @@ class BundleProductPriceTest extends TestCase
         $this->objectManager->removeSharedInstance(BundleOptions::class);
         $this->registerProduct($productSku);
         /** @var Page $page */
-        $page = $this->objectManager->get(PageFactory::class)->create();
+        $page = $this->pageFactory->create();
         $page->addHandle([
             'default',
             'catalog_product_view',

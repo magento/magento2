@@ -31,6 +31,7 @@ $observer = $objectManager->get(Observer::class);
 $objectManager->get(SwitchPriceAttributeScopeOnConfigChange::class)->execute($observer);
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
+$productRepository->cleanCache();
 /** @var WebsiteRepositoryInterface $websiteRepository */
 $websiteRepository = $objectManager->get(WebsiteRepositoryInterface::class);
 $websiteId = $websiteRepository->get('test')->getId();
