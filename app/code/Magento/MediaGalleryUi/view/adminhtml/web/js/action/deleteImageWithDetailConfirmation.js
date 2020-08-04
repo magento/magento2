@@ -21,8 +21,7 @@ define([
          * @param {String} deleteImageUrl
          */
         deleteImageAction: function (recordsIds, imageDetailsUrl, deleteImageUrl) {
-            var imagesCount = Object.keys(recordsIds).length,
-                confirmationContent = $t('%1 Are you sure you want to delete "%2" image(s)?')
+            var confirmationContent = $t('%1 Are you sure you want to delete "%2" image(s)?')
                 .replace('%2', Object.keys(recordsIds).length),
                 deferred = $.Deferred();
 
