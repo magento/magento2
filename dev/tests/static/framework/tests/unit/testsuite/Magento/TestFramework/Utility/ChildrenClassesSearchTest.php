@@ -3,11 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\TestFramework\Utility;
 
-use Magento\Framework\App\Action\AbstractAction;
+use Magento\TestFramework\Utility\ChildrenClassesSearch\A;
+use Magento\TestFramework\Utility\ChildrenClassesSearch\B;
+use Magento\TestFramework\Utility\ChildrenClassesSearch\E;
+use Magento\TestFramework\Utility\ChildrenClassesSearch\F;
+use PHPUnit\Framework\TestCase;
 
-class ChildrenClassesSearchTest extends \PHPUnit\Framework\TestCase
+class ChildrenClassesSearchTest extends TestCase
 {
     /**
      * @var ChildrenClassesSearch
@@ -22,18 +28,27 @@ class ChildrenClassesSearchTest extends \PHPUnit\Framework\TestCase
     public function testChildrenSearch(): void
     {
         $files = [
-            __DIR__ . '/PartialNamespace/Foo.php',
-            __DIR__ . '/PartialNamespace/Bar.php',
-            __DIR__ . '/PartialNamespace/Baz.php',
+            __DIR__ . '/ChildrenClassesSearch/A.php',
+            __DIR__ . '/ChildrenClassesSearch/B.php',
+            __DIR__ . '/ChildrenClassesSearch/C.php',
+            __DIR__ . '/ChildrenClassesSearch/D.php',
+            __DIR__ . '/ChildrenClassesSearch/E.php',
+            __DIR__ . '/ChildrenClassesSearch/F.php',
+            __DIR__ . '/ChildrenClassesSearch/Z.php',
         ];
 
         $found = $this->childrenClassesSearch->getClassesWhichAreChildrenOf(
             $files,
-            AbstractAction::class,
+            A::class,
             false
         );
 
-        $this->assertCount(1, $found);
-        $this->assertEquals(current($found), \Magento\TestFramework\Utility\PartialNamespace\Foo::class);
+        $expected = [
+            B::class,
+            E::class,
+            F::class
+        ];
+
+        $this->assertSame($expected, $found);
     }
 }
