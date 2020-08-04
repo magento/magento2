@@ -12,6 +12,7 @@ use Magento\Framework\App\ObjectManager;
 /**
  * Abstract Rule product condition data model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @api
