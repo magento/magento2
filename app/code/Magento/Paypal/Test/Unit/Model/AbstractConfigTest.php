@@ -12,8 +12,7 @@ use Magento\Framework\App\ProductMetadataInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 
 /**
- * Class AbstractConfigTest
- * @package Magento\Paypal\Test\Unit\Model
+ * Test for \Magento\Framework\App\Config\ScopeConfigInterface
  */
 class AbstractConfigTest extends \PHPUnit\Framework\TestCase
 {
@@ -30,7 +29,7 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
 
     protected function setUp()
     {
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->setMethods(['getValue', 'isSetFlag'])
             ->getMockForAbstractClass();
 
@@ -51,7 +50,7 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
     public function testSetMethodInstance()
     {
         /** @var $methodInterfaceMock MethodInterface */
-        $methodInterfaceMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
+        $methodInterfaceMock = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
         $this->assertSame($this->config, $this->config->setMethodInstance($methodInterfaceMock));
     }
@@ -66,7 +65,7 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
     public function setMethodDataProvider()
     {
         /** @var $methodInterfaceMock MethodInterface */
-        $methodInterfaceMock = $this->getMockBuilder(\Magento\Payment\Model\MethodInterface::class)
+        $methodInterfaceMock = $this->getMockBuilder(MethodInterface::class)
             ->getMockForAbstractClass();
         $methodInterfaceMock->expects($this->once())
             ->method('getCode')
@@ -353,7 +352,7 @@ class AbstractConfigTest extends \PHPUnit\Framework\TestCase
             $productMetadata
         );
 
-        self::assertEquals('Magento_Cart_SomeEdition', $this->config->getBuildNotationCode());
+        self::assertEquals('Magento_2_SomeEdition', $this->config->getBuildNotationCode());
     }
 
     /**
