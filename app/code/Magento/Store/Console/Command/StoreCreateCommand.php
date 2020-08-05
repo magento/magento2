@@ -122,7 +122,12 @@ class StoreCreateCommand extends Command
             ];
             /** @var \Magento\Store\Model\Store $storeModel */
             $storeModel = $this->storeFactory->create();
-            $data['name'] = $this->filterManager->removeTags($data['name']);
+            $data[self::INPUT_ARGUMENT_NAME] = $this->filterManager->removeTags(
+                $data[self::INPUT_ARGUMENT_NAME]
+            );
+            $data[self::INPUT_ARGUMENT_CODE] = $this->filterManager->removeTags(
+                $data[self::INPUT_ARGUMENT_CODE]
+            );
 
             $storeModel->setData($data);
             $groupModel = $this->groupFactory->create()->load(
