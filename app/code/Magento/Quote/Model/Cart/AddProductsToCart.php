@@ -200,7 +200,7 @@ class AddProductsToCart
     private function getErrorCode(string $message): string
     {
         foreach (self::MESSAGE_CODES as $codeMessage => $code) {
-            if (false !== stripos($codeMessage, $message)) {
+            if (false !== stripos($message, $codeMessage)) {
                 return $code;
             }
         }
