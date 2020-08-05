@@ -6,19 +6,34 @@
 
 namespace Magento\CatalogRule\Cron;
 
+use Magento\CatalogRule\Model\Indexer\PartialIndex;
+use Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor;
+
+/**
+ * Daily update catalog price rule by cron
+ */
 class DailyCatalogUpdate
 {
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor
+     * @var RuleProductProcessor
      */
     protected $ruleProductProcessor;
 
     /**
-     * @param \Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor $ruleProductProcessor
+     * @var PartialIndex
      */
-    public function __construct(\Magento\CatalogRule\Model\Indexer\Rule\RuleProductProcessor $ruleProductProcessor)
-    {
+    private $partialIndex;
+
+    /**
+     * @param RuleProductProcessor $ruleProductProcessor
+     * @param PartialIndex $partialIndex
+     */
+    public function __construct(
+        RuleProductProcessor $ruleProductProcessor,
+        PartialIndex $partialIndex
+    ) {
         $this->ruleProductProcessor = $ruleProductProcessor;
+        $this->partialIndex = $partialIndex;
     }
 
     /**
@@ -31,6 +46,8 @@ class DailyCatalogUpdate
      */
     public function execute()
     {
-        $this->ruleProductProcessor->markIndexerAsInvalid();
+        $this->ruleProductProcessor->isIndexerScheduled()
+            ? $this->partialIndex->partialUpdateCatalogRuleProductPrice()
+            : $this->ruleProductProcessor->markIndexerAsInvalid();
     }
 }

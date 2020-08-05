@@ -450,12 +450,12 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Installing user configuration...'],
                         ['Enabling caches:'],
                         ['Current status:'],
-                        [print_r(['foo' => 1, 'bar' => 1], true)],
+                        ['foo: 1'],
+                        ['bar: 1'],
                         ['Installing data...'],
                         ['Data install/update:'],
                         ['Disabling caches:'],
                         ['Current status:'],
-                        [print_r([], true)],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Data post-updates:'],
@@ -463,7 +463,6 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Module \'Bar_Two\':'],
                         ['Enabling caches:'],
                         ['Current status:'],
-                        [print_r([], true)],
                         ['Caches clearing:'],
                         ['Cache cleared successfully'],
                         ['Disabling Maintenance Mode:'],
@@ -502,12 +501,12 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Installing user configuration...'],
                         ['Enabling caches:'],
                         ['Current status:'],
-                        [print_r(['foo' => 1, 'bar' => 1], true)],
+                        ['foo: 1'],
+                        ['bar: 1'],
                         ['Installing data...'],
                         ['Data install/update:'],
                         ['Disabling caches:'],
                         ['Current status:'],
-                        [print_r([], true)],
                         ['Module \'Foo_One\':'],
                         ['Module \'Bar_Two\':'],
                         ['Data post-updates:'],
@@ -515,7 +514,6 @@ namespace Magento\Setup\Test\Unit\Model {
                         ['Module \'Bar_Two\':'],
                         ['Enabling caches:'],
                         ['Current status:'],
-                        [print_r([], true)],
                         ['Installing admin user...'],
                         ['Caches clearing:'],
                         ['Cache cleared successfully'],
@@ -590,11 +588,12 @@ namespace Magento\Setup\Test\Unit\Model {
             );
             $installer = $this->prepareForUpdateModulesTests();
 
-            $this->logger->expects($this->at(0))->method('log')->with('Cache cleared successfully');
-            $this->logger->expects($this->at(1))->method('log')->with('File system cleanup:');
-            $this->logger->expects($this->at(2))->method('log')
+            $this->logger->expects($this->at(0))->method('log')->with('Cache types config flushed successfully');
+            $this->logger->expects($this->at(1))->method('log')->with('Cache cleared successfully');
+            $this->logger->expects($this->at(2))->method('log')->with('File system cleanup:');
+            $this->logger->expects($this->at(3))->method('log')
                 ->with('The directory \'/generation\' doesn\'t exist - skipping cleanup');
-            $this->logger->expects($this->at(3))->method('log')->with('Updating modules:');
+            $this->logger->expects($this->at(4))->method('log')->with('Updating modules:');
             $installer->updateModulesSequence(false);
         }
 
@@ -604,8 +603,9 @@ namespace Magento\Setup\Test\Unit\Model {
 
             $installer = $this->prepareForUpdateModulesTests();
 
-            $this->logger->expects($this->at(0))->method('log')->with('Cache cleared successfully');
-            $this->logger->expects($this->at(1))->method('log')->with('Updating modules:');
+            $this->logger->expects($this->at(0))->method('log')->with('Cache types config flushed successfully');
+            $this->logger->expects($this->at(1))->method('log')->with('Cache cleared successfully');
+            $this->logger->expects($this->at(2))->method('log')->with('Updating modules:');
             $installer->updateModulesSequence(true);
         }
 

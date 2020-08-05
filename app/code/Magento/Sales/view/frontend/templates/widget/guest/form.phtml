@@ -4,15 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-/** @var $block \Magento\Sales\Block\Widget\Guest\Form */
+/**
+ * @var $block \Magento\Sales\Block\Widget\Guest\Form
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
-<?php if ($block->isEnable()) : ?>
+<?php if ($block->isEnable()): ?>
     <div class="widget block block-orders-returns">
         <div class="block-title">
             <strong role="heading" aria-level="2"><?= $block->escapeHtml(__('Orders and Returns')) ?></strong>
         </div>
         <div class="block-content">
-            <form id="oar-widget-orders-and-returns-form" data-mage-init='{"ordersReturns":{},"validation":{}}' action="<?= $block->escapeUrl($block->getActionUrl()) ?>" method="post"
+            <form id="oar-widget-orders-and-returns-form" data-mage-init='{"ordersReturns":{},"validation":{}}'
+                  action="<?= $block->escapeUrl($block->getActionUrl()) ?>" method="post"
                   class="form form-orders-search" name="guest_post">
                 <fieldset class="fieldset">
                     <div class="field find required">
@@ -26,10 +30,13 @@
                         </div>
                     </div>
                     <div class="field id required">
-                        <label for="oar-order-id" class="label"><span><?= $block->escapeHtml(__('Order ID')) ?></span></label>
+                        <label for="oar-order-id" class="label">
+                            <span><?= $block->escapeHtml(__('Order ID')) ?></span>
+                        </label>
 
                         <div class="control">
-                            <input type="text" class="input-text" id="oar-order-id" name="oar_order_id" autocomplete="off"
+                            <input type="text" class="input-text" id="oar-order-id" name="oar_order_id"
+                                   autocomplete="off"
                                    data-validate="{required:true}">
                         </div>
                     </div>
@@ -50,14 +57,17 @@
                                    data-validate="{required:true, 'validate-email':true}">
                         </div>
                     </div>
-                    <div id="oar-zip" style="display: none;" class="field zip required">
-                        <label for="oar_zip" class="label"><span><?= $block->escapeHtml(__('Billing ZIP Code')) ?></span></label>
+                    <div id="oar-zip" class="field zip required">
+                        <label for="oar_zip" class="label">
+                            <span><?= $block->escapeHtml(__('Billing ZIP Code')) ?></span>
+                        </label>
 
                         <div class="control">
                             <input type="text" class="input-text" id="oar_zip" name="oar_zip"
                                    data-validate="{required:true}"/>
                         </div>
                     </div>
+                    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display: none;", 'div#oar-zip') ?>
                 </fieldset>
                 <div class="actions-toolbar">
                     <div class="primary">
