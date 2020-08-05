@@ -3,57 +3,63 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogInventory\Test\Unit\Api;
 
+use Magento\Catalog\Model\ProductTypes\ConfigInterface;
+use Magento\CatalogInventory\Api\StockConfigurationInterface;
+use Magento\CatalogInventory\Helper\Minsaleqty;
+use Magento\CatalogInventory\Model\Configuration;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class StockConfigurationTest
- */
-class StockConfigurationTest extends \PHPUnit\Framework\TestCase
+class StockConfigurationTest extends TestCase
 {
-    /** @var \Magento\CatalogInventory\Api\StockConfigurationInterface */
+    /** @var StockConfigurationInterface */
     protected $stockConfiguration;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Catalog\Model\ProductTypes\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     protected $config;
 
     /**
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfig;
 
     /**
-     * @var \Magento\CatalogInventory\Helper\Minsaleqty|\PHPUnit_Framework_MockObject_MockObject
+     * @var Minsaleqty|MockObject
      */
     protected $minsaleqtyHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->config = $this->getMockForAbstractClass(
-            \Magento\Catalog\Model\ProductTypes\ConfigInterface::class,
+            ConfigInterface::class,
             [],
             '',
             false
         );
         $this->scopeConfig = $this->getMockForAbstractClass(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class,
+            ScopeConfigInterface::class,
             ['isSetFlag'],
             '',
             false
         );
 
-        $this->minsaleqtyHelper = $this->createMock(\Magento\CatalogInventory\Helper\Minsaleqty::class);
+        $this->minsaleqtyHelper = $this->createMock(Minsaleqty::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->stockConfiguration = $this->objectManagerHelper->getObject(
-            \Magento\CatalogInventory\Model\Configuration::class,
+            Configuration::class,
             [
                 'config' => $this->config,
                 'scopeConfig' => $this->scopeConfig,
@@ -84,11 +90,11 @@ class StockConfigurationTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
             ->with(
-                \Magento\CatalogInventory\Model\Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                Configuration::XML_PATH_SHOW_OUT_OF_STOCK,
+                ScopeInterface::SCOPE_STORE,
                 $store
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->stockConfiguration->isShowOutOfStock());
     }
 
@@ -98,11 +104,11 @@ class StockConfigurationTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
             ->with(
-                \Magento\CatalogInventory\Model\Configuration::XML_PATH_ITEM_AUTO_RETURN,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                Configuration::XML_PATH_ITEM_AUTO_RETURN,
+                ScopeInterface::SCOPE_STORE,
                 $store
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->stockConfiguration->isAutoReturnEnabled());
     }
 
@@ -112,11 +118,11 @@ class StockConfigurationTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig->expects($this->once())
             ->method('isSetFlag')
             ->with(
-                \Magento\CatalogInventory\Model\Configuration::XML_PATH_DISPLAY_PRODUCT_STOCK_STATUS,
-                \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
+                Configuration::XML_PATH_DISPLAY_PRODUCT_STOCK_STATUS,
+                ScopeInterface::SCOPE_STORE,
                 $store
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->assertTrue($this->stockConfiguration->isDisplayProductStockStatus());
     }
 }

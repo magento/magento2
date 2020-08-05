@@ -23,8 +23,10 @@
             <createData entity="SimpleProduct" stepKey="simpleProduct">
                 <requiredEntity createDataKey="category"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!--Clean up created test data.-->
@@ -32,8 +34,10 @@
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
             <!--Enable required 'email' field on create order page.-->
             <magentoCLI command="config:set {{EnableEmailRequiredForOrder.path}} {{EnableEmailRequiredForOrder.value}}" stepKey="enableRequiredFieldEmailForAdminOrderCreation"/>
-            <actionGroup ref="logout" stepKey="logout"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </after>
 
         <!--Create order.-->

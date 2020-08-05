@@ -4,8 +4,11 @@
  * See COPYING.txt for license details.
  */
 declare(strict_types=1);
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/configurable_attribute_with_source_model.php';
+Resolver::getInstance()->requireDataFixture(
+    'Magento/ConfigurableProduct/_files/configurable_attribute_with_source_model.php'
+);
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

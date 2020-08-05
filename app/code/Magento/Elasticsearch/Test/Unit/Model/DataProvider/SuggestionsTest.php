@@ -3,22 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Test\Unit\Model\DataProvider;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Elasticsearch\Model\DataProvider\Suggestions;
+use Magento\AdvancedSearch\Model\Client\ClientInterface;
 use Magento\Elasticsearch\Model\Config;
+use Magento\Elasticsearch\Model\DataProvider\Suggestions;
 use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use Magento\Search\Model\QueryResultFactory;
-use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
-use Magento\Store\Model\StoreManagerInterface as StoreManager;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Search\Model\QueryInterface;
+use Magento\Search\Model\QueryResult;
+use Magento\Search\Model\QueryResultFactory;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface as StoreManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class SuggestionsTest extends \PHPUnit\Framework\TestCase
+class SuggestionsTest extends TestCase
 {
     /**
      * @var Suggestions
@@ -26,37 +33,37 @@ class SuggestionsTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $config;
 
     /**
-     * @var QueryResultFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var QueryResultFactory|MockObject
      */
     private $queryResultFactory;
 
     /**
-     * @var ConnectionManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConnectionManager|MockObject
      */
     private $connectionManager;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfig;
 
     /**
-     * @var SearchIndexNameResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchIndexNameResolver|MockObject
      */
     private $searchIndexNameResolver;
 
     /**
-     * @var StoreManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManager|MockObject
      */
     private $storeManager;
 
     /**
-     * @var QueryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var QueryInterface|MockObject
      */
     private $query;
 
@@ -65,29 +72,29 @@ class SuggestionsTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->config = $this->getMockBuilder(\Magento\Elasticsearch\Model\Config::class)
+        $this->config = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods(['isElasticsearchEnabled'])
             ->getMock();
 
-        $this->queryResultFactory = $this->getMockBuilder(\Magento\Search\Model\QueryResultFactory::class)
+        $this->queryResultFactory = $this->getMockBuilder(QueryResultFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->connectionManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
+        $this->connectionManager = $this->getMockBuilder(ConnectionManager::class)
             ->disableOriginalConstructor()
             ->setMethods(['getConnection'])
             ->getMock();
 
-        $this->scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->searchIndexNameResolver = $this
-            ->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver::class)
+            ->getMockBuilder(SearchIndexNameResolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['getIndexName'])
             ->getMock();
@@ -96,14 +103,14 @@ class SuggestionsTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->query = $this->getMockBuilder(\Magento\Search\Model\QueryInterface::class)
+        $this->query = $this->getMockBuilder(QueryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManager = new ObjectManagerHelper($this);
 
         $this->model = $objectManager->getObject(
-            \Magento\Elasticsearch\Model\DataProvider\Suggestions::class,
+            Suggestions::class,
             [
                 'queryResultFactory' => $this->queryResultFactory,
                 'connectionManager' => $this->connectionManager,
@@ -128,9 +135,9 @@ class SuggestionsTest extends \PHPUnit\Framework\TestCase
             ->method('isElasticsearchEnabled')
             ->willReturn(1);
 
-        $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+        $store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->storeManager->expects($this->any())
             ->method('getStore')
@@ -148,9 +155,10 @@ class SuggestionsTest extends \PHPUnit\Framework\TestCase
             ->method('getQueryText')
             ->willReturn('query');
 
-        $client = $this->getMockBuilder(\Magento\Elasticsearch\Model\Client\Elasticsearch::class)
+        $client = $this->getMockBuilder(ClientInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->setMethods(['suggest'])
+            ->getMockForAbstractClass();
 
         $this->connectionManager->expects($this->any())
             ->method('getConnection')
@@ -172,7 +180,7 @@ class SuggestionsTest extends \PHPUnit\Framework\TestCase
                 ],
             ]);
 
-        $query = $this->getMockBuilder(\Magento\Search\Model\QueryResult::class)
+        $query = $this->getMockBuilder(QueryResult::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -180,6 +188,6 @@ class SuggestionsTest extends \PHPUnit\Framework\TestCase
             ->method('create')
             ->willReturn($query);
 
-        $this->assertInternalType('array', $this->model->getItems($this->query));
+        $this->assertIsArray($this->model->getItems($this->query));
     }
 }

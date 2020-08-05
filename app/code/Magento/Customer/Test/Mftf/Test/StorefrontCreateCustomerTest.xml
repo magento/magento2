@@ -14,7 +14,7 @@
             <stories value="Create a Customer via the Storefront"/>
             <title value="As a Customer I should be able to register an account on Storefront"/>
             <description value="As a Customer I should be able to register an account on Storefront"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-23546"/>
             <group value="customer"/>
             <group value="create"/>

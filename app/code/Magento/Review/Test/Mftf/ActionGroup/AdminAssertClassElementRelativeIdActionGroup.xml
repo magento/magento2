@@ -13,9 +13,9 @@
         </arguments>
 
         <grabAttributeFrom selector="{{elementId}}" userInput="class" stepKey="grabClass"/>
-        <assertContains stepKey="assertClass">
+        <assertStringContainsString stepKey="assertClass">
             <actualResult type="string">{$grabClass}</actualResult>
             <expectedResult type="string">{{expectClass}}</expectedResult>
-        </assertContains>
+        </assertStringContainsString>
     </actionGroup>
 </actionGroups>

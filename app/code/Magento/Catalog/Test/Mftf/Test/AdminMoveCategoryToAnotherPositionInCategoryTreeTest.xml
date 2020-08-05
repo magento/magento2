@@ -14,13 +14,13 @@
             <title value="Move Category to Another Position in Category Tree"/>
             <description value="Test log in to Move Category and Move Category to Another Position in Category Tree"/>
             <testCaseId value="MC-13612"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="_defaultCategory" stepKey="createDefaultCategory"/>
         </before>
         <after>
@@ -32,10 +32,8 @@
         </after>
 
         <!-- Open Category Page -->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoaded"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickExpandTree"/>
-        <waitForPageLoad stepKey="waitForCategoryToLoad"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCategory"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <!-- Create three level deep sub Category -->
@@ -68,10 +66,8 @@
         </assertEquals>
 
         <!-- Move Category to another position in category tree and click ok button-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openTheAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitTillPageLoad"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openTheAdminCategoryIndexPage"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
         <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SecondLevelSubCat.name)}}" selector2="{{AdminCategorySidebarTreeSection.categoryInTree('Default Category')}}" stepKey="DragCategory"/>
         <see selector="{{AdminCategoryModalSection.message}}" userInput="This operation can take a long time" stepKey="seeWarningMessageForOneMoreTime"/>
         <click selector="{{AdminCategoryModalSection.ok}}" stepKey="clickOkButtonOnWarningPopup"/>

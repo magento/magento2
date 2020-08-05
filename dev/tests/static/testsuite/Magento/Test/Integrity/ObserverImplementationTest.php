@@ -22,7 +22,7 @@ class ObserverImplementationTest extends \PHPUnit\Framework\TestCase
      */
     protected static $observerClasses = [];
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         self::$observerClasses = array_merge(
             self::getObserverClasses('{*/events.xml,events.xml}', '//observer')

@@ -3,88 +3,116 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\Product\Price\Validation;
+
+use Magento\Catalog\Api\Data\TierPriceInterface;
+use Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor;
+use Magento\Catalog\Model\Product\Price\Validation\Result;
+use Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator;
+use Magento\Catalog\Model\Product\Type;
+use Magento\Catalog\Model\ProductIdLocatorInterface;
+use Magento\Customer\Api\Data\GroupInterface;
+use Magento\Customer\Api\Data\GroupSearchResultsInterface;
+use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Framework\Api\AbstractSimpleObject;
+use Magento\Framework\Api\FilterBuilder;
+use Magento\Framework\Api\Search\SearchCriteriaInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Api\WebsiteRepositoryInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for \Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TierPriceValidatorTest extends \PHPUnit\Framework\TestCase
+class TierPriceValidatorTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator
+     * @var TierPriceValidator
      */
     private $tierPriceValidator;
 
     /**
-     * @var \Magento\Catalog\Model\ProductIdLocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductIdLocatorInterface|MockObject
      */
     private $productIdLocator;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaBuilder|MockObject
      */
     private $searchCriteriaBuilder;
 
     /**
-     * @var \Magento\Framework\Api\FilterBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var FilterBuilder|MockObject
      */
     private $filterBuilder;
 
     /**
-     * @var \Magento\Customer\Api\GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupRepositoryInterface|MockObject
      */
     private $customerGroupRepository;
 
     /**
-     * @var \Magento\Store\Api\WebsiteRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WebsiteRepositoryInterface|MockObject
      */
     private $websiteRepository;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Price\Validation\Result|\PHPUnit_Framework_MockObject_MockObject
+     * @var Result|MockObject
      */
     private $validationResult;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor
-     *      |\PHPUnit_Framework_MockObject_MockObject
+     * @var InvalidSkuProcessor|MockObject
      */
     private $invalidSkuProcessor;
 
     /**
-     * @var \Magento\Catalog\Api\Data\TierPriceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var TierPriceInterface|MockObject
      */
     private $tierPrice;
 
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->productIdLocator = $this->getMockBuilder(\Magento\Catalog\Model\ProductIdLocatorInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
-        $this->searchCriteriaBuilder = $this->getMockBuilder(\Magento\Framework\Api\SearchCriteriaBuilder::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->filterBuilder = $this->getMockBuilder(\Magento\Framework\Api\FilterBuilder::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->customerGroupRepository = $this->getMockBuilder(\Magento\Customer\Api\GroupRepositoryInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
-        $this->websiteRepository = $this->getMockBuilder(\Magento\Store\Api\WebsiteRepositoryInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
-        $this->validationResult = $this->getMockBuilder(\Magento\Catalog\Model\Product\Price\Validation\Result::class)
-            ->disableOriginalConstructor()->getMock();
+        $this->productIdLocator = $this->getMockBuilder(ProductIdLocatorInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->searchCriteriaBuilder = $this->getMockBuilder(SearchCriteriaBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->filterBuilder = $this->getMockBuilder(FilterBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->customerGroupRepository = $this->getMockBuilder(GroupRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->websiteRepository = $this->getMockBuilder(WebsiteRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->validationResult = $this->getMockBuilder(Result::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->invalidSkuProcessor = $this
-            ->getMockBuilder(\Magento\Catalog\Model\Product\Price\Validation\InvalidSkuProcessor::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->tierPrice = $this->getMockBuilder(\Magento\Catalog\Api\Data\TierPriceInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->getMockBuilder(InvalidSkuProcessor::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->tierPrice = $this->getMockBuilder(TierPriceInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->tierPriceValidator = $objectManagerHelper->getObject(
-            \Magento\Catalog\Model\Product\Price\Validation\TierPriceValidator::class,
+            TierPriceValidator::class,
             [
                 'productIdLocator' => $this->productIdLocator,
                 'searchCriteriaBuilder' => $this->searchCriteriaBuilder,
@@ -106,18 +134,21 @@ class TierPriceValidatorTest extends \PHPUnit\Framework\TestCase
     private function prepareCustomerGroupRepositoryMock(array $returned)
     {
         $searchCriteria = $this
-            ->getMockBuilder(\Magento\Framework\Api\Search\SearchCriteriaInterface::class)
-            ->disableOriginalConstructor()->getMock();
-        $filter = $this->getMockBuilder(\Magento\Framework\Api\AbstractSimpleObject::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->getMockBuilder(SearchCriteriaInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $filter = $this->getMockBuilder(AbstractSimpleObject::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->filterBuilder->expects($this->atLeastOnce())->method('setField')->willReturnSelf();
         $this->filterBuilder->expects($this->atLeastOnce())->method('setValue')->willReturnSelf();
         $this->filterBuilder->expects($this->atLeastOnce())->method('create')->willReturn($filter);
         $this->searchCriteriaBuilder->expects($this->atLeastOnce())->method('addFilters')->willReturnSelf();
         $this->searchCriteriaBuilder->expects($this->atLeastOnce())->method('create')->willReturn($searchCriteria);
         $customerGroupSearchResults = $this
-            ->getMockBuilder(\Magento\Customer\Api\Data\GroupSearchResultsInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->getMockBuilder(GroupSearchResultsInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $customerGroupSearchResults->expects($this->once())->method('getItems')
             ->willReturn($returned['customerGroupSearchResults_getItems']);
         $this->customerGroupRepository->expects($this->atLeastOnce())->method('getList')
@@ -150,7 +181,7 @@ class TierPriceValidatorTest extends \PHPUnit\Framework\TestCase
         $this->invalidSkuProcessor->expects($this->atLeastOnce())->method('retrieveInvalidSkuList')
             ->willReturn($skuDiff);
         $productId = 3346346;
-        $productType = \Magento\Catalog\Model\Product\Type::TYPE_BUNDLE;
+        $productType = Type::TYPE_BUNDLE;
         $idsBySku = [
             $sku => [$productId => $productType]
         ];
@@ -187,8 +218,9 @@ class TierPriceValidatorTest extends \PHPUnit\Framework\TestCase
         $prices = [$this->tierPrice];
         $existingPrices = [$this->tierPrice];
         $this->prepareRetrieveValidationResultMethod($sku, $returned);
-        $website = $this->getMockBuilder(\Magento\Store\Api\Data\WebsiteInterface::class)
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+        $website = $this->getMockBuilder(WebsiteInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->websiteRepository->expects($this->atLeastOnce())->method('getById')->willReturn($website);
         $this->prepareCustomerGroupRepositoryMock($returned);
 
@@ -206,9 +238,10 @@ class TierPriceValidatorTest extends \PHPUnit\Framework\TestCase
     public function retrieveValidationResultDataProvider()
     {
         $customerGroupName = 'test_Group';
-        $customerGroup = $this->getMockBuilder(\Magento\Customer\Api\Data\GroupInterface::class)
+        $customerGroup = $this->getMockBuilder(GroupInterface::class)
             ->setMethods(['getCode', 'getId'])
-            ->disableOriginalConstructor()->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $customerGroup->expects($this->atLeastOnce())->method('getCode')->willReturn($customerGroupName);
         $customerGroupId = 23;
         $customerGroup->expects($this->atLeastOnce())->method('getId')->willReturn($customerGroupId);
@@ -217,14 +250,14 @@ class TierPriceValidatorTest extends \PHPUnit\Framework\TestCase
             [
                 [
                     'tierPrice_getCustomerGroup' => $customerGroupName,
-                    'tierPrice_getPriceType' => \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_DISCOUNT,
+                    'tierPrice_getPriceType' => TierPriceInterface::PRICE_TYPE_DISCOUNT,
                     'customerGroupSearchResults_getItems' => [$customerGroup]
                 ]
             ],
             [
                 [
                     'tierPrice_getCustomerGroup' => $customerGroupName,
-                    'tierPrice_getPriceType' => \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_FIXED,
+                    'tierPrice_getPriceType' => TierPriceInterface::PRICE_TYPE_FIXED,
                     'customerGroupSearchResults_getItems' => []
                 ]
             ]
@@ -243,12 +276,12 @@ class TierPriceValidatorTest extends \PHPUnit\Framework\TestCase
         $prices = [$this->tierPrice];
         $existingPrices = [$this->tierPrice];
         $returned = [
-            'tierPrice_getPriceType' => \Magento\Catalog\Api\Data\TierPriceInterface::PRICE_TYPE_DISCOUNT,
+            'tierPrice_getPriceType' => TierPriceInterface::PRICE_TYPE_DISCOUNT,
             'customerGroupSearchResults_getItems' => [],
             'tierPrice_getCustomerGroup' => $customerGroupName,
         ];
         $this->prepareRetrieveValidationResultMethod($sku, $returned);
-        $exception = new \Magento\Framework\Exception\NoSuchEntityException();
+        $exception = new NoSuchEntityException();
         $this->websiteRepository->expects($this->atLeastOnce())->method('getById')->willThrowException($exception);
         $this->prepareCustomerGroupRepositoryMock($returned);
 

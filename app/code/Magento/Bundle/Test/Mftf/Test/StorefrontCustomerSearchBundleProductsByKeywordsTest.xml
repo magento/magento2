@@ -39,7 +39,9 @@
                 <requiredEntity createDataKey="fixedBundleOption"/>
                 <requiredEntity createDataKey="createSimpleProductTwo"/>
             </createData>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="createDynamicBundle" stepKey="deleteDynamicBundleProduct"/>
@@ -48,7 +50,7 @@
             <deleteData createDataKey="createSimpleProductTwo" stepKey="createSimpleProductTwo"/>
         </after>
         <!-- 1. Go to storefront home page -->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
         <!-- 2. Fill quick search bar with test values unique for dynamic bundle product and click search -->
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchDynamic">
             <argument name="phrase" value="Dynamic"/>

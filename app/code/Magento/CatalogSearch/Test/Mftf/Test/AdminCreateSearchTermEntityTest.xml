@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create simple product -->
             <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
@@ -47,8 +47,7 @@
         </actionGroup>
 
         <!-- Go to storefront -->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage"/>
 
         <!-- Assert created search term on storefront -->
         <actionGroup ref="AssertSearchTermOnFrontendActionGroup" stepKey="assertCreatedSearchTermOnFrontend">

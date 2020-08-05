@@ -17,6 +17,9 @@
             <argument name="categoryLevel" type="string" defaultValue="3"/>
         </arguments>
 
-        <assertEquals expected="{{parentCategoryLevel}} + 1" actual="{{categoryLevel}}" message="wrongCategoryLevel" stepKey="compareCategoryLevel"/>
+        <assertEquals message="wrongCategoryLevel" stepKey="compareCategoryLevel">
+			<actualResult type="const">{{categoryLevel}}</actualResult>
+			<expectedResult type="const">{{parentCategoryLevel}} + 1</expectedResult>
+        </assertEquals>
     </actionGroup>
 </actionGroups>

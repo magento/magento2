@@ -3,16 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter\Filter\Builder;
 
+use Magento\Elasticsearch\Model\Adapter\FieldMapperInterface;
 use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Wildcard;
+use Magento\Elasticsearch\SearchAdapter\Filter\Builder\Wildcard as WildcardBuilder;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @see \Magento\Elasticsearch\SearchAdapter\Filter\Builder\Wildcard
  */
-class WildcardTest extends \PHPUnit\Framework\TestCase
+class WildcardTest extends TestCase
 {
     /**
      * @var Wildcard
@@ -20,12 +25,12 @@ class WildcardTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Elasticsearch\Model\Adapter\FieldMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FieldMapperInterface|MockObject
      */
     protected $fieldMapper;
 
     /**
-     * @var \Magento\Framework\Search\Request\Filter\Wildcard|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Search\Request\Filter\Wildcard|MockObject
      */
     protected $filterInterface;
 
@@ -34,11 +39,11 @@ class WildcardTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->fieldMapper = $this->getMockBuilder(\Magento\Elasticsearch\Model\Adapter\FieldMapperInterface::class)
+        $this->fieldMapper = $this->getMockBuilder(FieldMapperInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->filterInterface = $this->getMockBuilder(\Magento\Framework\Search\Request\Filter\Wildcard::class)
             ->disableOriginalConstructor()
@@ -50,7 +55,7 @@ class WildcardTest extends \PHPUnit\Framework\TestCase
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
-            \Magento\Elasticsearch\SearchAdapter\Filter\Builder\Wildcard::class,
+            WildcardBuilder::class,
             [
                 'fieldMapper' => $this->fieldMapper
             ]

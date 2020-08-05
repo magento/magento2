@@ -14,7 +14,7 @@ use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Newsletter\Model\ResourceModel\Subscriber as SubscriberResource;
 use Magento\Newsletter\Model\ResourceModel\Subscriber\CollectionFactory;
 use Magento\TestFramework\TestCase\AbstractController;
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 
 /**
  * Class checks subscription behaviour from frontend
@@ -45,7 +45,7 @@ class NewActionTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -59,7 +59,7 @@ class NewActionTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         if ($this->subscriberToDelete) {
             $this->deleteSubscriber($this->subscriberToDelete);

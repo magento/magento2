@@ -17,7 +17,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <createData entity="simpleCmsPage" stepKey="createCMSPage"/>
         </before>
         <after>

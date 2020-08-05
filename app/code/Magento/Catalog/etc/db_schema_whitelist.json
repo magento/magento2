@@ -69,7 +69,8 @@
         },
         "index": {
             "CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID": true,
-            "CATALOG_PRODUCT_ENTITY_INT_STORE_ID": true
+            "CATALOG_PRODUCT_ENTITY_INT_STORE_ID": true,
+            "CATALOG_PRODUCT_ENTITY_INT_ATTRIBUTE_ID_STORE_ID_VALUE": true
         },
         "constraint": {
             "PRIMARY": true,
@@ -479,8 +480,7 @@
             "label": true,
             "position": true,
             "disabled": true,
-            "record_id": true,
-            "image_metadata": true
+            "record_id": true
         },
         "index": {
             "CATALOG_PRODUCT_ENTITY_MEDIA_GALLERY_VALUE_STORE_ID": true,

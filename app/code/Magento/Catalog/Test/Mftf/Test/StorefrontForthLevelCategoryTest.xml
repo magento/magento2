@@ -35,7 +35,7 @@
             <deleteData createDataKey="category2" stepKey="deleteCategory2"/>
             <deleteData createDataKey="category1" stepKey="deleteCategory1"/>
         </after>
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage"/>
         <moveMouseOver
             selector="{{StorefrontHeaderSection.NavigationCategoryByName($$category1.name$$)}}"
             stepKey="hoverCategoryLevelOne"/>

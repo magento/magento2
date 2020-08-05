@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Cache/etc/cache.xsd">
+    <type name="type_name_1" translate="label,description" instance="Instance1\Class\Name">
+        <label>Type1</label>
+        <description>Type1</description>
+    </type>
+    <type name="type_name_2" translate="label,description" instance="Instance2\Class\Name">
+        <label>Type2</label>
+        <description>Type2</description>
+    </type>
+</config>

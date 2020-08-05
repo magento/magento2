@@ -13,7 +13,7 @@
             <stories value="Create orders"/>
             <title value="Email is required to create an order from Admin Panel"/>
             <description value="Admin should not be able to submit orders without an email address"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-92980"/>
             <group value="sales"/>
         </annotations>
@@ -29,11 +29,10 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
         <!--Create order via Admin-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <comment userInput="Admin creates order" stepKey="adminCreateOrderComment"/>
         <!--<actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="navigateToNewOrderPage"/>-->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderIndexPage"/>
-        <waitForPageLoad stepKey="waitForIndexPageLoad"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="navigateToOrderIndexPage"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Orders" stepKey="seeIndexPageTitle"/>
         <click selector="{{AdminOrdersGridSection.createNewOrder}}" stepKey="clickCreateNewOrder"/>
         <click selector="{{AdminOrderFormActionSection.CreateNewCustomer}}" stepKey="clickCreateCustomer"/>
