@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnhancedMediaGalleryVerifyImageDetailsActionGroup">
+        <annotations>
+            <description>Verifies image information on the View Details panel</description>
+        </annotations>
+        <arguments>
+            <argument name="image"/>
+        </arguments>
+
+        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.title}}" stepKey="grabImageTitle"/>
+        <assertStringContainsString stepKey="verifyImageTitle">
+            <actualResult type="variable">grabImageTitle</actualResult>
+            <expectedResult type="string">{{image.fileName}}</expectedResult>
+        </assertStringContainsString>
+
+        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.contentType}}" stepKey="grabContentType"/>
+        <assertStringContainsStringIgnoringCase stepKey="verifyContentType">
+            <actualResult type="variable">grabContentType</actualResult>
+            <expectedResult type="string">{{image.extension}}</expectedResult>
+        </assertStringContainsStringIgnoringCase>
+
+        <grabTextFrom selector="{{AdminEnhancedMediaGalleryViewDetailsSection.type}}" stepKey="grabType"/>
+        <assertStringContainsString stepKey="verifyType">
+            <actualResult type="variable">grabType</actualResult>
+            <expectedResult type="string">Image</expectedResult>
+        </assertStringContainsString>
+    </actionGroup>
+</actionGroups>
