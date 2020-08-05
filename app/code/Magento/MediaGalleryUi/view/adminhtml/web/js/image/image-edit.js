@@ -10,7 +10,8 @@ define([
     'uiLayout',
     'Magento_Ui/js/lib/key-codes',
     'Magento_MediaGalleryUi/js/action/getDetails',
-    'mage/validation'
+    'mage/validation',
+    'Magento_Ui/js/lib/view/utils/async'
 ], function ($, _, Component, layout, keyCodes, getDetails) {
     'use strict';
 
@@ -54,7 +55,31 @@ define([
         initialize: function () {
             this._super().initView();
 
+            this.removeMouseOverEvent();
+
             return this;
+        },
+
+        /**
+         * Remove mousemove event from ui-select as it deprecated
+         */
+        removeMouseOverEvent: function () {
+
+            if (_.isUndefined(this.keywordsSelect())) {
+                setTimeout(function () {
+                    this.removeMouseOverEvent();
+                }.bind(this), 100);
+
+                return;
+            }
+
+            $.async(
+                this.keywordsSelect().rootListSelector,
+                function () {
+                    $(this.keywordsSelect().rootListSelector).off('mousemove');
+                }.bind(this)
+            );
+
         },
 
         /**
