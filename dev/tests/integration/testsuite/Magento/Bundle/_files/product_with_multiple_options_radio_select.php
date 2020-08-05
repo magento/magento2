@@ -4,9 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/../../../Magento/Catalog/_files/multiple_products.php';
+use Magento\Catalog\Model\Product;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/multiple_products.php');
+
+$objectManager = Bootstrap::getObjectManager();
 
 $productIds = range(10, 12, 1);
 foreach ($productIds as $productId) {
@@ -24,8 +28,8 @@ foreach ($productIds as $productId) {
     $stockItem->save();
 }
 
-/** @var $product \Magento\Catalog\Model\Product */
-$product = $objectManager->create(\Magento\Catalog\Model\Product::class);
+/** @var $product Product */
+$product = $objectManager->create(Product::class);
 $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
     ->setId(3)
     ->setAttributeSetId(4)
@@ -35,7 +39,6 @@ $product->setTypeId(\Magento\Catalog\Model\Product\Type::TYPE_BUNDLE)
     ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
     ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
     ->setStockData(['use_config_manage_stock' => 1, 'qty' => 100, 'is_qty_decimal' => 0, 'is_in_stock' => 1])
-    ->setPriceView(1)
     ->setPriceType(1)
     ->setPrice(10.0)
     ->setShipmentType(0)

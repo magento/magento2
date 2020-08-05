@@ -416,16 +416,13 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
         if ($product->getCanSaveBundleSelections()) {
             $product->canAffectOptions(true);
             $selections = $product->getBundleSelectionsData();
-            if ($selections && !empty($selections)) {
-                $options = $product->getBundleOptionsData();
-                if ($options) {
-                    foreach ($options as $option) {
-                        if (empty($option['delete']) || 1 != (int)$option['delete']) {
-                            $product->setTypeHasOptions(true);
-                            if (1 == (int)$option['required']) {
-                                $product->setTypeHasRequiredOptions(true);
-                                break;
-                            }
+            if (!empty($selections) && $options = $product->getBundleOptionsData()) {
+                foreach ($options as $option) {
+                    if (empty($option['delete']) || 1 != (int)$option['delete']) {
+                        $product->setTypeHasOptions(true);
+                        if (1 == (int)$option['required']) {
+                            $product->setTypeHasRequiredOptions(true);
+                            break;
                         }
                     }
                 }
@@ -461,7 +458,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Retrieve bundle option collection
      *
      * @param \Magento\Catalog\Model\Product $product
-     * @return Collection
+     * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      */
     public function getOptionsCollection($product)
     {
@@ -532,10 +529,10 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * Example: the catalog inventory validation of decimal qty can change qty to int,
      * so need to change quote item qty option value too.
      *
-     * @param   array $options
-     * @param   \Magento\Framework\DataObject $option
-     * @param   mixed $value
-     * @param   \Magento\Catalog\Model\Product $product
+     * @param  array $options
+     * @param  \Magento\Framework\DataObject $option
+     * @param  mixed $value
+     * @param  \Magento\Catalog\Model\Product $product
      * @return $this
      */
     public function updateQtyOption($options, \Magento\Framework\DataObject $option, $value, $product)
@@ -894,7 +891,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param array $optionIds
      * @param \Magento\Catalog\Model\Product $product
-     * @return Collection
+     * @return \Magento\Bundle\Model\ResourceModel\Option\Collection
      */
     public function getOptionsByIds($optionIds, $product)
     {
@@ -1191,9 +1188,11 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
+    // @codingStandardsIgnoreStart
     public function deleteTypeSpecificData(\Magento\Catalog\Model\Product $product)
     {
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * Return array of specific to type product entities
@@ -1203,18 +1202,19 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     public function getIdentities(\Magento\Catalog\Model\Product $product)
     {
-        $identities = parent::getIdentities($product);
+        $identities = [];
+        $identities[] = parent::getIdentities($product);
         /** @var \Magento\Bundle\Model\Option $option */
         foreach ($this->getOptions($product) as $option) {
             if ($option->getSelections()) {
                 /** @var \Magento\Catalog\Model\Product $selection */
                 foreach ($option->getSelections() as $selection) {
-                    $identities = array_merge($identities, $selection->getIdentities());
+                    $identities[] = $selection->getIdentities();
                 }
             }
         }
 
-        return $identities;
+        return array_merge([], ...$identities);
     }
 
     /**
@@ -1261,7 +1261,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Catalog\Model\Product $product
      * @param bool $isStrictProcessMode
-     * @param Collection $optionsCollection
+     * @param \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection
      * @param int[] $options
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -1331,7 +1331,7 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      *
      * @param \Magento\Bundle\Model\ResourceModel\Selection\Collection $selections
      * @param bool $skipSaleableCheck
-     * @param Collection $optionsCollection
+     * @param \Magento\Bundle\Model\ResourceModel\Option\Collection $optionsCollection
      * @param int[] $options
      * @return void
      * @throws \Magento\Framework\Exception\LocalizedException
@@ -1387,16 +1387,18 @@ class Type extends \Magento\Catalog\Model\Product\Type\AbstractType
      */
     protected function mergeSelectionsWithOptions($options, $selections)
     {
+        $selections = [];
+
         foreach ($options as $option) {
             $optionSelections = $option->getSelections();
             if ($option->getRequired() && is_array($optionSelections) && count($optionSelections) == 1) {
-                $selections = array_merge($selections, $optionSelections);
+                $selections[] = $optionSelections;
             } else {
                 $selections = [];
                 break;
             }
         }
 
-        return $selections;
+        return array_merge([], ...$selections);
     }
 }
