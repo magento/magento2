@@ -134,7 +134,7 @@ class Quote extends \Magento\Framework\Session\SessionManager
             $cookieMetadataFactory,
             $appState
         );
-        if ($this->_storeManager->hasSingleStore()) {
+        if ($this->_storeManager->isSingleStoreMode()) {
             $this->setStoreId($this->_storeManager->getStore(true)->getId());
         }
     }
