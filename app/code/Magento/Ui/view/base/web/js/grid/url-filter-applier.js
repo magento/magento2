@@ -105,16 +105,6 @@ define([
             delete options['filters[asset_id]'];
 
             return options;
-        },
-
-        /**
-         * Set select component options
-         *
-         * @param {Array} options
-         */
-        setOptions: function (options) {
-            this.selectComponent().options(options);
-
         }
     });
 });
