@@ -12,7 +12,7 @@
 <div class="grid">
     <?php $randomId = rand(); ?>
     <div class="admin__table-wrapper">
-        <table class="data-grid">
+        <table id="packaging-data-grid-<?= /* @noEscape */ $randomId ?>" class="data-grid">
             <thead>
             <tr>
                 <th class="data-grid-checkbox-cell">
@@ -123,9 +123,9 @@
         </table>
         <?php $scriptString = <<<script
         require(['jquery'], function ($) {
-            $("table.data-grid").on('blur', 'td.custom-value input',
+            $("#packaging-data-grid-{$randomId}").on('blur', 'td.custom-value input',
                 function(){packaging.recalcContainerWeightAndCustomsValue(this)});
-            $("table.data-grid").on('click', 'button[data-action="package-delete-item"]',
+            $("#packaging-data-grid-{$randomId}").on('click', 'button[data-action="package-delete-item"]',
                 function(){packaging.deleteItem(this)});
         });
 script;
