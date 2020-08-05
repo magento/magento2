@@ -38,13 +38,10 @@
     <div id="product_composite_configure_confirmed" class="product_composite_configure_confirmed"></div>
 
     <?php $scriptString = <<<script
-        prodCompConfIframe = document.querySelector("iframe[name='product_composite_configure_iframe']");
-        prodCompConfIframe.style.width = 0;
-        prodCompConfIframe.style.height = 0;
-        prodCompConfIframe.style.border = "0px solid #fff";
-        prodCompConfIframe.style.position = "absolute";
-        prodCompConfIframe.style.top = "-1000px";
-        prodCompConfIframe.style.left = "-1000px";
+        prodCompConfIframe = document.querySelectorAll("iframe[name='product_composite_configure_iframe']");
+        for (var i = 0; i < prodCompConfIframe.length; i++) {
+            prodCompConfIframe[i].style.display = "none";
+        }
         prodCompConfMessages = document.querySelectorAll(".product_composite_configure_messages");
         for (var i = 0; i < prodCompConfMessages.length; i++) {
             prodCompConfMessages[i].style.display = "none";
