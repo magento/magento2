@@ -209,6 +209,8 @@
     <preference for="Magento\Framework\MessageQueue\QueueFactoryInterface" type="Magento\Framework\MessageQueue\QueueFactory" />
     <preference for="Magento\Framework\Search\Request\IndexScopeResolverInterface" type="Magento\Framework\Indexer\ScopeResolver\IndexScopeResolver"/>
     <preference for="Magento\Framework\HTTP\ClientInterface" type="Magento\Framework\HTTP\Client\Curl" />
+    <preference for="Magento\Framework\Interception\ConfigLoaderInterface" type="Magento\Framework\Interception\PluginListGenerator" />
+    <preference for="Magento\Framework\Interception\ConfigWriterInterface" type="Magento\Framework\Interception\PluginListGenerator" />
     <type name="Magento\Framework\Model\ResourceModel\Db\TransactionManager" shared="false" />
     <type name="Magento\Framework\Acl\Data\Cache">
         <arguments>
@@ -426,6 +428,17 @@
             <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy</argument>
             <argument name="cacheId" xsi:type="string">plugin-list</argument>
             <argument name="scopePriorityScheme" xsi:type="array">
+                <item name="primary" xsi:type="string">primary</item>
+                <item name="first" xsi:type="string">global</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Interception\PluginListGenerator">
+        <arguments>
+            <argument name="reader" xsi:type="object">Magento\Framework\ObjectManager\Config\Reader\Dom\Proxy</argument>
+            <argument name="logger" xsi:type="object">\Psr\Log\LoggerInterface\Proxy</argument>
+            <argument name="scopePriorityScheme" xsi:type="array">
+                <item name="primary" xsi:type="string">primary</item>
                 <item name="first" xsi:type="string">global</item>
             </argument>
         </arguments>

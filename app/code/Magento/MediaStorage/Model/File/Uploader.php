@@ -142,6 +142,7 @@ class Uploader extends \Magento\Framework\File\Uploader
 
     /**
      * @inheritDoc
+     * @since 100.4.0
      */
     protected function _validateFile()
     {

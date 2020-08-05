@@ -86,6 +86,7 @@ class Checkbox extends \Magento\Bundle\Block\Catalog\Product\View\Type\Bundle\Op
 
     /**
      * @inheritdoc
+     * @since 100.3.1
      */
     public function getSelectionPrice($selection)
     {

@@ -9,6 +9,7 @@ namespace Magento\Framework\Search\Request;
  * Data binder for search request.
  *
  * @api
+ * @since 100.0.2
  */
 class Binder
 {

@@ -31,7 +31,7 @@ class QuoteAddressValidator
     protected $customerRepository;
 
     /**
-     * @deprecated This class is not a part of HTML presentation layer and should not use sessions.
+     * @deprecated 101.1.1 This class is not a part of HTML presentation layer and should not use sessions.
      */
     protected $customerSession;
 

@@ -13,10 +13,15 @@
          columns="max"
          beStrictAboutTestsThatDoNotTestAnything="false"
          bootstrap="./framework/bootstrap.php"
+         testSuiteLoaderClass="Magento\TestFramework\ApiSuiteLoader"
+         testSuiteLoaderFile="framework/Magento/TestFramework/ApiSuiteLoader.php"
 >
     <!-- Test suites definition -->
     <testsuites>
         <testsuite name="Magento GraphQL web API functional tests">
+             <file>testsuite/Magento/WebApiTest.php</file>
+        </testsuite>
+        <testsuite name="Magento GraphQL web API functional tests real suite">
             <directory>testsuite/Magento/GraphQl</directory>
         </testsuite>
     </testsuites>
@@ -47,6 +52,7 @@
         <const name="TESTS_MAGENTO_INSTALLATION" value="disabled"/>
         <!-- Magento mode for tests execution. Possible values are "default", "developer" and "production". -->
         <const name="TESTS_MAGENTO_MODE" value="default"/>
+        <const name="USE_OVERRIDE_CONFIG" value="enabled"/>
     </php>
 
     <!-- Test listeners -->

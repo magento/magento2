@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontRemoveProductFromCompareSidebarTest">
+        <annotations>
+            <title value="Verify that the product isn't removed on clicking the product name"/>
+            <stories value="Verify that the product isn't removed on clicking the product name"/>
+            <description value="Verify that the product isn't removed on clicking the product name, but it's redirected to product page"/>
+            <features value="Catalog"/>
+            <severity value="MINOR"/>
+            <group value="Catalog"/>
+            <testCaseId value="MC-35068"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="defaultCategory"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="defaultCategory"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="defaultCategory" stepKey="deleteCategory"/>
+        </after>
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategoryPage">
+            <argument name="category" value="$$defaultCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAddCategoryProductToCompareActionGroup" stepKey="addProductToCompareList">
+            <argument name="productVar" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontClickOnProductFromSidebarCompareListActionGroup" stepKey="clickOnComparingProductLink">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontCheckProductUrlActionGroup" stepKey="checkProductPageUrl">
+            <argument name="productUrl" value="$$simpleProduct.custom_attributes[url_key]$$"/>
+        </actionGroup>
+    </test>
+</tests>

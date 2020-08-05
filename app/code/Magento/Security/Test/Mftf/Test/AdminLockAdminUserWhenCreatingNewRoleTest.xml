@@ -18,9 +18,6 @@
             <testCaseId value="MC-14384" />
             <group value="security"/>
             <group value="mtf_migrated"/>
-            <skip>
-                <issueId value="MQE-1964"/>
-            </skip>
         </annotations>
         <before>
             <!-- Log in to Admin Panel -->

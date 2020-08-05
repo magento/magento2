@@ -37,16 +37,15 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryStorefront2"/>
-        <waitForPageLoad stepKey="waitForCategoryStorefront"/>
-        <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct.name$$)}}" stepKey="dontSeeCreatedProduct"/>
-        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="onCategoryIndexPage"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandAll"/>
-        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree($$simpleSubCategory.name$$)}}" stepKey="clickOnCreatedSimpleSubCategoryBeforeDelete"/>
-        <waitForPageLoad stepKey="AdminCategoryEditPageLoad"/>
-        <click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="EnableCategory"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategoryWithProducts"/>
-        <waitForPageLoad stepKey="waitForCategorySaved"/>
+        <actionGroup ref="AssertStorefrontProductAbsentOnCategoryPageActionGroup" stepKey="doNotSeeProductOnCategoryPage">
+            <argument name="categoryUrlKey" value="$$createCategory.name$$"/>
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="openCreatedSubCategory">
+            <argument name="Category" value="$$simpleSubCategory$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnableCategoryActionGroup" stepKey="enableCategory"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="seeSuccessMessage"/>
 
         <!--Run re-index task-->
@@ -54,8 +53,12 @@
             <argument name="indices" value=""/>
         </actionGroup>
 
-        <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryStorefront"/>
-        <waitForPageLoad stepKey="waitForCategoryStorefrontPage"/>
-        <seeElement selector="{{StorefrontCategoryProductSection.ProductImageByName($$createSimpleProduct.name$$)}}" stepKey="seeCreatedProduct"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepage"/>
+        <actionGroup ref="StorefrontGoToCategoryPageActionGroup" stepKey="openEnabledCategory">
+            <argument name="categoryName" value="$$createCategory.name$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertProductNameOnProductMainPageActionGroup" stepKey="seeCreatedProduct">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
     </test>
 </tests>

@@ -29,7 +29,7 @@
             <deleteData createDataKey="createConfigProductAttributeCreateConfigurableProduct" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createConfigChildProduct1CreateConfigurableProduct" stepKey="deleteConfigChildProduct1"/>
             <deleteData createDataKey="createConfigChildProduct2CreateConfigurableProduct" stepKey="deleteConfigChildProduct2"/>
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
             <actionGroup ref="DeleteProductActionGroup" stepKey="deleteProduct1">
                 <argument name="productName" value="$$createConfigProductCreateConfigurableProduct.name$$"/>
@@ -108,6 +108,7 @@
 
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
+        <magentoCron stepKey="runCronIndex" groups="index"/>
         <!--Go to frontend and check image and price-->
         <amOnPage url="{{StorefrontProductPage.url($$createConfigProductCreateConfigurableProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
 

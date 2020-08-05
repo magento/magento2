@@ -311,13 +311,6 @@ script;
 endif;
 $scriptString .= <<<script
     }).find('input:text').attr('autocomplete', 'off');
-    dataForm.submit(function () {
-        $(this).find(':submit').attr('disabled', 'disabled');
-    });
-    dataForm.bind("invalid-form.validate", function () {
-        $(this).find(':submit').prop('disabled', false);
-    });
-
 });
 script;
 ?>
@@ -351,6 +344,11 @@ script;
         ".field.password": {
             "passwordStrengthIndicator": {
                 "formSelector": "form.form-create-account"
+            }
+        },
+        "*": {
+            "Magento_Customer/js/block-submit-on-send": {
+                "formId": "form-validate"
             }
         }
     }
