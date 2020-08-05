@@ -82,12 +82,12 @@ class CreditMemoItems implements ResolverInterface
      */
     private function getCreditMemoItems(OrderInterface $order, array $creditMemoItems): \Closure
     {
-        $items = [];
+        $orderItems = [];
         foreach ($creditMemoItems as $item) {
             $this->orderItemProvider->addOrderItemId((int)$item->getOrderItemId());
         }
 
-        return function () use ($order, $creditMemoItems, $items): array {
+        return function () use ($order, $creditMemoItems, $orderItems): array {
             foreach ($creditMemoItems as $creditMemoItem) {
                 $orderItem = $this->orderItemProvider->getOrderItemById((int)$creditMemoItem->getOrderItemId());
                 /** @var OrderItemInterface $orderItemModel */
@@ -95,11 +95,11 @@ class CreditMemoItems implements ResolverInterface
                 if (!$orderItemModel->getParentItem()) {
                     $creditMemoItemData = $this->getCreditMemoItemData($order, $creditMemoItem);
                     if (isset($creditMemoItemData)) {
-                        $items[$creditMemoItem->getOrderItemId()] = $creditMemoItemData;
+                        $orderItems[$creditMemoItem->getOrderItemId()] = $creditMemoItemData;
                     }
                 }
             }
-            return $items;
+            return $orderItems;
         };
     }
 
@@ -138,7 +138,7 @@ class CreditMemoItems implements ResolverInterface
     private function formatDiscountDetails(
         OrderInterface $associatedOrder,
         CreditmemoItemInterface $creditmemoItem
-    ) : array {
+    ): array {
         if ($associatedOrder->getDiscountDescription() === null
             && $creditmemoItem->getDiscountAmount() == 0
             && $associatedOrder->getDiscountAmount() == 0

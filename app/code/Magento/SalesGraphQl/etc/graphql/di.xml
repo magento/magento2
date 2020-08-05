@@ -20,6 +20,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\CreditMemoItem">
+        <arguments>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="default" xsi:type="string">CreditMemoItem</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\SalesGraphQl\Model\TypeResolver\ShipmentItem">
         <arguments>
             <argument name="productTypeMap" xsi:type="array">
@@ -32,13 +39,6 @@
         <arguments>
             <argument name="formatters" xsi:type="array">
                 <item name="default" xsi:type="object">Magento\SalesGraphQl\Model\Shipment\Item\ShipmentItemFormatter\Proxy</item>
-            </argument>
-        </arguments>
-    </type>
-    <type name="Magento\SalesGraphQl\Model\CreditmemoItemInterfaceTypeResolverComposite">
-        <arguments>
-            <argument name="creditMemoItemTypeResolvers" xsi:type="array">
-                <item name="creditmemo_catalog_item_type_resolver" xsi:type="object">Magento\SalesGraphQl\Model\CreditmemoItemTypeResolver</item>
             </argument>
         </arguments>
     </type>

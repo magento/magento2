@@ -86,6 +86,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\CreditMemoItem">
+        <arguments>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="bundle" xsi:type="string">BundleCreditMemoItem</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\SalesGraphQl\Model\Shipment\ItemProvider">
         <arguments>
             <argument name="formatters" xsi:type="array">

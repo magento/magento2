@@ -108,7 +108,7 @@ class CreditMemoTotal implements ResolverInterface
             'adjustment' => [
                 'value' =>  abs($creditMemo->getAdjustment()),
                 'currency' => $currency
-            ],
+            ]
         ];
     }
 
@@ -119,7 +119,7 @@ class CreditMemoTotal implements ResolverInterface
      * @param OrderInterface $orderModel
      * @return array
      */
-    private function getShippingDiscountDetails(CreditmemoInterface $creditmemoModel, $orderModel)
+    private function getShippingDiscountDetails(CreditmemoInterface $creditmemoModel, $orderModel): array
     {
         $creditmemoShippingAmount = (float)$creditmemoModel->getShippingAmount();
         $orderShippingAmount = (float)$orderModel->getShippingAmount();
@@ -146,7 +146,7 @@ class CreditMemoTotal implements ResolverInterface
      * @param CreditmemoInterface $creditmemo
      * @return array
      */
-    private function getDiscountDetails(CreditmemoInterface $creditmemo)
+    private function getDiscountDetails(CreditmemoInterface $creditmemo): array
     {
         $discounts = [];
         if (!($creditmemo->getDiscountDescription() === null && $creditmemo->getDiscountAmount() == 0)) {
@@ -168,7 +168,7 @@ class CreditMemoTotal implements ResolverInterface
      * @param array $appliedTaxes
      * @return array
      */
-    private function formatTaxes(OrderInterface $order, array $appliedTaxes)
+    private function formatTaxes(OrderInterface $order, array $appliedTaxes): array
     {
         $taxes = [];
         foreach ($appliedTaxes as $appliedTax) {

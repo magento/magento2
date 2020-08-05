@@ -116,12 +116,12 @@ class InvoiceTotal implements ResolverInterface
      * @param OrderInterface $orderModel
      * @return array
      */
-    private function getShippingDiscountDetails(InvoiceInterface $invoiceModel, OrderInterface $orderModel)
+    private function getShippingDiscountDetails(InvoiceInterface $invoiceModel, OrderInterface $orderModel): array
     {
         $invoiceShippingAmount = (float)$invoiceModel->getShippingAmount();
         $orderShippingAmount = (float)$orderModel->getShippingAmount();
         $calculatedShippingRatioFromOriginal = $invoiceShippingAmount != 0 && $orderShippingAmount != 0 ?
-            ( $invoiceShippingAmount / $orderShippingAmount) : 0;
+            ($invoiceShippingAmount / $orderShippingAmount) : 0;
         $orderShippingDiscount = (float)$orderModel->getShippingDiscountAmount();
         $calculatedInvoiceShippingDiscount = $orderShippingDiscount * $calculatedShippingRatioFromOriginal;
         $shippingDiscounts = [];
@@ -143,7 +143,7 @@ class InvoiceTotal implements ResolverInterface
      * @param InvoiceInterface $invoice
      * @return array
      */
-    private function getDiscountDetails(InvoiceInterface $invoice)
+    private function getDiscountDetails(InvoiceInterface $invoice): array
     {
         $discounts = [];
         if (!($invoice->getDiscountDescription() === null && $invoice->getDiscountAmount() == 0)) {
@@ -165,7 +165,7 @@ class InvoiceTotal implements ResolverInterface
      * @param array $appliedTaxes
      * @return array
      */
-    private function formatTaxes(OrderInterface $order, array $appliedTaxes)
+    private function formatTaxes(OrderInterface $order, array $appliedTaxes): array
     {
         $taxes = [];
         foreach ($appliedTaxes as $appliedTax) {
