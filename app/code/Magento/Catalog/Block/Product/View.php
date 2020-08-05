@@ -30,7 +30,7 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
 
     /**
      * @var \Magento\Framework\Pricing\PriceCurrencyInterface
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      */
     protected $priceCurrency;
 
@@ -323,9 +323,9 @@ class View extends AbstractProduct implements \Magento\Framework\DataObject\Iden
      */
     public function getIdentities()
     {
-        $identities = $this->getProduct()->getIdentities();
+        $product = $this->getProduct();
 
-        return $identities;
+        return $product ? $product->getIdentities() : [];
     }
 
     /**

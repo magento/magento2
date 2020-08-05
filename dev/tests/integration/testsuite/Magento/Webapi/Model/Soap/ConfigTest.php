@@ -17,7 +17,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $soapConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->soapConfig = $objectManager->create(Config::class);

@@ -3,19 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Product\Option\Type;
 
-use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
-use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
-use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
-use Magento\Catalog\Model\Product\Option;
-use Magento\Catalog\Model\Product\Option\Value;
-use Magento\Catalog\Pricing\Price\CalculateCustomOptionCatalogRule;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use Magento\Catalog\Model\Product\Option;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
+use Magento\Catalog\Model\Product\Option\Value;
 
 /**
  * Catalog product option default type
@@ -64,29 +61,20 @@ class DefaultType extends \Magento\Framework\DataObject
     protected $_checkoutSession;
 
     /**
-     * @var CalculateCustomOptionCatalogRule
-     */
-    private $calculateCustomOptionCatalogRule;
-
-    /**
      * Construct
      *
      * @param \Magento\Checkout\Model\Session $checkoutSession
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param array $data
-     * @param CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule
      */
     public function __construct(
         \Magento\Checkout\Model\Session $checkoutSession,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
-        array $data = [],
-        CalculateCustomOptionCatalogRule $calculateCustomOptionCatalogRule = null
+        array $data = []
     ) {
         $this->_checkoutSession = $checkoutSession;
         parent::__construct($data);
         $this->_scopeConfig = $scopeConfig;
-        $this->calculateCustomOptionCatalogRule = $calculateCustomOptionCatalogRule ?? ObjectManager::getInstance()
-                ->get(CalculateCustomOptionCatalogRule::class);
     }
 
     /**
@@ -104,12 +92,12 @@ class DefaultType extends \Magento\Framework\DataObject
     /**
      * Option Instance getter
      *
-     * @return Option
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @return Option
      */
     public function getOption()
     {
-        if ($this->_option instanceof Option) {
+        if ($this->_option instanceof \Magento\Catalog\Model\Product\Option) {
             return $this->_option;
         }
         throw new LocalizedException(__('The option instance type in options group is incorrect.'));
@@ -130,8 +118,8 @@ class DefaultType extends \Magento\Framework\DataObject
     /**
      * Product Instance getter
      *
-     * @return Product
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @return Product
      */
     public function getProduct()
     {
@@ -169,8 +157,7 @@ class DefaultType extends \Magento\Framework\DataObject
      */
     public function getConfigurationItem()
     {
-        if ($this->_getData('configuration_item') instanceof ItemInterface
-        ) {
+        if ($this->_getData('configuration_item') instanceof ItemInterface) {
             return $this->_getData('configuration_item');
         }
 
@@ -354,11 +341,7 @@ class DefaultType extends \Magento\Framework\DataObject
     {
         $option = $this->getOption();
 
-        return $this->calculateCustomOptionCatalogRule->execute(
-            $option->getProduct(),
-            (float)$option->getPrice(),
-            $option->getPriceType() === Value::TYPE_PERCENT
-        );
+        return $this->_getChargeableOptionPrice($option->getPrice(), $option->getPriceType() == 'percent', $basePrice);
     }
 
     /**
@@ -418,8 +401,8 @@ class DefaultType extends \Magento\Framework\DataObject
      * @param boolean $isPercent Price type - percent or fixed
      * @param float $basePrice For percent price type
      * @return float
-     * @deprecated 102.0.4 typo in method name
-     * @see CalculateCustomOptionCatalogRule::execute
+     * @deprecated 102.0.6 typo in method name
+     * @see _getChargeableOptionPrice
      */
     protected function _getChargableOptionPrice($price, $isPercent, $basePrice)
     {
@@ -433,8 +416,7 @@ class DefaultType extends \Magento\Framework\DataObject
      * @param boolean $isPercent Price type - percent or fixed
      * @param float $basePrice For percent price type
      * @return float
-     * @deprecated
-     * @see CalculateCustomOptionCatalogRule::execute
+     * @since 102.0.6
      */
     protected function _getChargeableOptionPrice($price, $isPercent, $basePrice)
     {

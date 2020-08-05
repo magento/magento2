@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="TinyMCESection">
+        <element name="checkIfContentTabOpen" type="button" selector="//span[text()='Content']/parent::strong/parent::*[@data-state-collapsible='closed']"/>
+        <element name="CheckIfTabExpand" type="button" selector="//div[@data-state-collapsible='closed']//span[text()='Content']"/>
+        <element name="TinyMCE4" type="text" selector=".mce-branding"/>
+        <element name="InsertWidgetBtn" type="button" selector=".action-add-widget"/>
+        <element name="InsertWidgetIcon" type="button" selector="div[aria-label='Insert Widget']"/>
+        <element name="InsertVariableBtn" type="button" selector=".scalable.add-variable.plugin"/>
+        <element name="InsertVariableIcon" type="button" selector="div[aria-label='Insert Variable']"/>
+        <element name="InsertImageBtn" type="button" selector=".scalable.action-add-image.plugin"/>
+        <element name="InsertImageIcon" type="button" selector=".mce-i-image"/>
+        <element name="Style" type="button" selector=".mce-txt"/>
+        <element name="Bold" type="button" selector=".mce-i-bold"/>
+        <element name="Italic" type="button" selector=".mce-i-italic"/>
+        <element name="Underline" type="button" selector=".mce-i-underline"/>
+        <element name="AlignLeft" type="button" selector=".mce-i-alignleft"/>
+        <element name="AlignCenter" type="button" selector=".mce-i-aligncenter"/>
+        <element name="AlignRight" type="button" selector=".mce-i-alignright"/>
+        <element name="Bullet" type="button" selector=".mce-i-bullist"/>
+        <element name="Numlist" type="button" selector=".mce-i-numlist"/>
+        <element name="InsertLink" type="button" selector=".mce-i-link"/>
+        <element name="InsertImage" type="button" selector=".mce-i-image"/>
+        <element name="InsertTable" type="button" selector=".mce-i-table"/>
+        <element name="SpecialCharacter" type="button" selector=".mce-i-charmap"/>
+        <element name="WidgetButton" type="button" selector="span[class*='magento-widget mceNonEditable']"/>
+        <element name="EditorContent" type="input" selector="#tinymce"/>
+    </section>
+</sections>

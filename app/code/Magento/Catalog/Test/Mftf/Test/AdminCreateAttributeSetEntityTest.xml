@@ -15,11 +15,11 @@
             <title value="Create attribute set with new product attribute"/>
             <description value="Admin should be able to create attribute set with new product attribute"/>
             <testCaseId value="MC-10884"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="productAttributeWysiwyg" stepKey="createProductAttribute"/>
             <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
         </before>
@@ -28,7 +28,7 @@
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
@@ -57,8 +57,7 @@
         <see userInput="$$createProductAttribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup2"/>
 
         <!-- Assert attribute can be used in product creation -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToCatalogProductGrid"/>
-        <waitForPageLoad stepKey="waitForPageLoad3"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToCatalogProductGrid"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
         <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
 

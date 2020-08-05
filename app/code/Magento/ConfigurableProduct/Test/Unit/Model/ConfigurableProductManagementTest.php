@@ -3,13 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\ConfigurableProduct\Model\ConfigurableProductManagement;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
+use Magento\ConfigurableProduct\Model\ProductVariationsBuilder;
+use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory;
+use Magento\Eav\Model\Entity\Attribute\Option;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfigurableProductManagementTest extends \PHPUnit\Framework\TestCase
+class ConfigurableProductManagementTest extends TestCase
 {
     /**
      * @var ConfigurableProductManagement
@@ -17,42 +26,42 @@ class ConfigurableProductManagementTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductAttributeRepositoryInterface|MockObject
      */
     protected $attributeRepository;
 
     /**
-     * @var \Magento\ConfigurableProduct\Model\ProductVariationsBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductVariationsBuilder|MockObject
      */
     protected $productVariationBuilder;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductInterface
+     * @var ProductInterface
      */
     protected $product;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $option;
 
     /**
-     * @var CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $productsFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->attributeRepository = $this->createMock(\Magento\Catalog\Api\ProductAttributeRepositoryInterface::class);
-        $this->product = $this->createMock(\Magento\Catalog\Api\Data\ProductInterface::class);
+        $this->attributeRepository = $this->getMockForAbstractClass(ProductAttributeRepositoryInterface::class);
+        $this->product = $this->getMockForAbstractClass(ProductInterface::class);
         $this->option = $this->createMock(
-            \Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class
+            Attribute::class
         );
         $this->productVariationBuilder = $this->createMock(
-            \Magento\ConfigurableProduct\Model\ProductVariationsBuilder::class
+            ProductVariationsBuilder::class
         );
         $this->productsFactoryMock = $this->createPartialMock(
-            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
 
@@ -66,7 +75,7 @@ class ConfigurableProductManagementTest extends \PHPUnit\Framework\TestCase
     public function testGenerateVariation()
     {
         $data = ['someKey' => 'someValue'];
-        $attributeOption = $this->createMock(\Magento\Eav\Model\Entity\Attribute\Option::class);
+        $attributeOption = $this->createMock(Option::class);
         $attributeOption->expects($this->once())->method('getData')->willReturn(['key' => 'value']);
 
         $attribute = $this->createMock(\Magento\Catalog\Model\ResourceModel\Eav\Attribute::class);
@@ -99,7 +108,7 @@ class ConfigurableProductManagementTest extends \PHPUnit\Framework\TestCase
     {
         $statusEnabled = 1;
         $productsMock = $this->createMock(
-            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection::class
+            Collection::class
         );
 
         $this->productsFactoryMock
@@ -126,7 +135,7 @@ class ConfigurableProductManagementTest extends \PHPUnit\Framework\TestCase
     {
         $statusDisabled = 2;
         $productsMock = $this->createMock(
-            \Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Product\Collection::class
+            Collection::class
         );
 
         $this->productsFactoryMock

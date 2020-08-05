@@ -19,7 +19,7 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
      */
     protected $deleteButtonBlock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -37,14 +37,14 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
     {
         $integration = $this->getFixtureIntegration();
         $buttonHtml = $this->deleteButtonBlock->render($integration);
-        $this->assertContains('title="Remove"', $buttonHtml);
-        $this->assertContains(
-            'onclick="this.setAttribute(&#039;data-url&#039;, '
-            . '&#039;http://localhost/index.php/backend/admin/integration/delete/id/'
+        self::assertStringContainsString('title="Remove"', $buttonHtml);
+        self::assertStringContainsString(
+            'this.setAttribute(\'data-url\', '
+            . '\'http://localhost/index.php/backend/admin/integration/delete/id/'
             . $integration->getId(),
             $buttonHtml
         );
-        $this->assertNotContains('disabled', $buttonHtml);
+        $this->assertStringNotContainsString('disabled', $buttonHtml);
     }
 
     public function testRenderDisabled()
@@ -52,14 +52,18 @@ class DeleteTest extends \PHPUnit\Framework\TestCase
         $integration = $this->getFixtureIntegration();
         $integration->setSetupType(Integration::TYPE_CONFIG);
         $buttonHtml = $this->deleteButtonBlock->render($integration);
-        $this->assertContains('title="Uninstall the extension to remove this integration"', $buttonHtml);
-        $this->assertContains(
-            'onclick="this.setAttribute(&#039;data-url&#039;, '
-            . '&#039;http://localhost/index.php/backend/admin/integration/delete/id/'
+        self::assertStringContainsString(
+            'title="' .$this->deleteButtonBlock->escapeHtmlAttr('Uninstall the extension to remove this integration')
+            .'"',
+            $buttonHtml
+        );
+        self::assertStringContainsString(
+            'this.setAttribute(\'data-url\', '
+            . '\'http://localhost/index.php/backend/admin/integration/delete/id/'
             . $integration->getId(),
             $buttonHtml
         );
-        $this->assertContains('disabled="disabled"', $buttonHtml);
+        self::assertStringContainsString('disabled="disabled"', $buttonHtml);
     }
 
     /**

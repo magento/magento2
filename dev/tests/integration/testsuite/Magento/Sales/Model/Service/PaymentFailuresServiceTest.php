@@ -42,7 +42,7 @@ class PaymentFailuresServiceTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->quote = Bootstrap::getObjectManager()->create(Quote::class);
         $this->cartRepositoryMock = $this->getMockBuilder(CartRepositoryInterface::class)

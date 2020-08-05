@@ -5,6 +5,7 @@
  */
 
 /** @var $block \Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Webapi */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
 <?= $block->getChildHtml() ?>
@@ -18,8 +19,7 @@
         <label class="label" for="all_resources"><span><?= $block->escapeHtml(__('Resource Access')) ?></span></label>
 
         <div class="control">
-            <select id="all_resources" name="all_resources"
-                    onchange="jQuery('[data-role=tree-resources-container]').toggle()" class="select">
+            <select id="all_resources" name="all_resources" class="select">
                 <option value="0" <?= ($block->isEverythingAllowed() ? '' : 'selected="selected"') ?>>
                     <?= $block->escapeHtml(__('Custom')) ?>
                 </option>
@@ -27,11 +27,16 @@
                     <?= $block->escapeHtml(__('All')) ?>
                 </option>
             </select>
+            <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                'onchange',
+                "jQuery('[data-role=tree-resources-container]').toggle()",
+                'select#all_resources'
+            ) ?>
         </div>
     </div>
 
     <div class="field
-        <?php if ($block->isEverythingAllowed()) :?>
+        <?php if ($block->isEverythingAllowed()):?>
             no-display
         <?php endif ?>"
          data-role="tree-resources-container">

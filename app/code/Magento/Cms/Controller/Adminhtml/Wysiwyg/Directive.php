@@ -21,6 +21,7 @@ use Magento\Framework\Controller\Result\Raw;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Filesystem\Driver\File;
 
 /**
  * Process template text for wysiwyg editor.
@@ -68,6 +69,11 @@ class Directive extends Action implements HttpGetActionInterface
     private $filter;
 
     /**
+     * @var File
+     */
+    private $file;
+
+    /**
      * Constructor
      *
      * @param Context $context
@@ -77,6 +83,7 @@ class Directive extends Action implements HttpGetActionInterface
      * @param LoggerInterface|null $logger
      * @param Config|null $config
      * @param Filter|null $filter
+     * @param File|null $file
      */
     public function __construct(
         Context $context,
@@ -85,7 +92,8 @@ class Directive extends Action implements HttpGetActionInterface
         AdapterFactory $adapterFactory = null,
         LoggerInterface $logger = null,
         Config $config = null,
-        Filter $filter = null
+        Filter $filter = null,
+        File $file = null
     ) {
         parent::__construct($context);
         $this->urlDecoder = $urlDecoder;
@@ -94,6 +102,7 @@ class Directive extends Action implements HttpGetActionInterface
         $this->logger = $logger ?: ObjectManager::getInstance()->get(LoggerInterface::class);
         $this->config = $config ?: ObjectManager::getInstance()->get(Config::class);
         $this->filter = $filter ?: ObjectManager::getInstance()->get(Filter::class);
+        $this->file = $file ?: ObjectManager::getInstance()->get(File::class);
     }
 
     /**
@@ -127,6 +136,15 @@ class Directive extends Action implements HttpGetActionInterface
                 $this->logger->warning($e);
             }
         }
+        $mimeType = $image->getMimeType();
+        unset($image);
+        // To avoid issues with PNG images with alpha blending we return raw file
+        // after validation as an image source instead of generating the new PNG image
+        // with image adapter
+        $content = $this->file->fileGetContents($imagePath);
+        $resultRaw->setHeader('Content-Type', $mimeType);
+        $resultRaw->setContents($content);
+
         return $resultRaw;
     }
 }

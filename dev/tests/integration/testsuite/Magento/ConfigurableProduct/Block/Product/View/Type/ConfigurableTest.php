@@ -67,7 +67,7 @@ class ConfigurableTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
@@ -145,9 +145,9 @@ class ConfigurableTest extends TestCase
         foreach ($products as $simpleProduct) {
             $i++;
             $resultImage = reset($config['images'][$simpleProduct->getId()]);
-            $this->assertContains($simpleProduct->getImage(), $resultImage['thumb']);
-            $this->assertContains($simpleProduct->getImage(), $resultImage['img']);
-            $this->assertContains($simpleProduct->getImage(), $resultImage['full']);
+            $this->assertStringContainsString($simpleProduct->getImage(), $resultImage['thumb']);
+            $this->assertStringContainsString($simpleProduct->getImage(), $resultImage['img']);
+            $this->assertStringContainsString($simpleProduct->getImage(), $resultImage['full']);
             $this->assertTrue($resultImage['isMain']);
             $this->assertEquals('image', $resultImage['type']);
             $this->assertEquals($i, $resultImage['position']);

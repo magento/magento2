@@ -3,33 +3,39 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Security\Test\Unit\Model\Plugin;
 
+use Magento\Framework\Message\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Security\Model\AdminSessionInfo;
+use Magento\Security\Model\AdminSessionsManager;
+use Magento\Security\Model\Plugin\Auth;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Security\Model\Plugin\Auth testing
  */
-class AuthTest extends \PHPUnit\Framework\TestCase
+class AuthTest extends TestCase
 {
     /**
-     * @var  \Magento\Security\Model\Plugin\Auth
+     * @var  Auth
      */
     protected $model;
 
     /**
-     * @var \Magento\Security\Model\AdminSessionsManager
+     * @var AdminSessionsManager
      */
     protected $sessionsManager;
 
     /**
-     * @var \Magento\Framework\Message\ManagerInterface
+     * @var ManagerInterface
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Security\Model\AdminSessionInfo
+     * @var AdminSessionInfo
      */
     protected $currentSession;
 
@@ -39,7 +45,7 @@ class AuthTest extends \PHPUnit\Framework\TestCase
     protected $authMock;
 
     /**
-     * @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var  ObjectManager
      */
     protected $objectManager;
 
@@ -47,31 +53,31 @@ class AuthTest extends \PHPUnit\Framework\TestCase
      * Init mocks for tests
      * @return void
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
         $this->sessionsManager = $this->createPartialMock(
-            \Magento\Security\Model\AdminSessionsManager::class,
+            AdminSessionsManager::class,
             ['processLogin', 'processLogout', 'getCurrentSession']
         );
 
         $this->messageManager = $this->getMockForAbstractClass(
-            \Magento\Framework\Message\ManagerInterface::class,
-            ['addWarning'],
+            ManagerInterface::class,
+            ['addWarningMessage'],
             '',
             false
         );
 
         $this->currentSession = $this->createPartialMock(
-            \Magento\Security\Model\AdminSessionInfo::class,
+            AdminSessionInfo::class,
             ['isOtherSessionsTerminated']
         );
 
         $this->authMock =  $this->createMock(\Magento\Backend\Model\Auth::class);
 
         $this->model = $this->objectManager->getObject(
-            \Magento\Security\Model\Plugin\Auth::class,
+            Auth::class,
             [
                 'sessionsManager' => $this->sessionsManager,
                 'messageManager' =>$this->messageManager
@@ -94,7 +100,7 @@ class AuthTest extends \PHPUnit\Framework\TestCase
             ->method('isOtherSessionsTerminated')
             ->willReturn(true);
         $this->messageManager->expects($this->once())
-            ->method('addWarning')
+            ->method('addWarningMessage')
             ->with($warningMessage);
 
         $this->model->afterLogin($this->authMock);

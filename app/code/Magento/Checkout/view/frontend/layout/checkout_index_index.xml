@@ -105,7 +105,7 @@
                                                                     <item name="trigger" xsi:type="string">opc-new-shipping-address</item>
                                                                     <item name="buttons" xsi:type="array">
                                                                         <item name="save" xsi:type="array">
-                                                                            <item name="text" xsi:type="string" translate="true">Ship here</item>
+                                                                            <item name="text" xsi:type="string" translate="true">Ship Here</item>
                                                                             <item name="class" xsi:type="string">action primary action-save-address</item>
                                                                         </item>
                                                                         <item name="cancel" xsi:type="array">
@@ -222,10 +222,10 @@
                                                                             <item name="min_text_length" xsi:type="number">0</item>
                                                                         </item>
                                                                     </item>
-                                                                    <item name="country_id" xsi:type="array">
-                                                                        <item name="sortOrder" xsi:type="string">115</item>
-                                                                    </item>
                                                                     <item name="telephone" xsi:type="array">
+                                                                        <item name="validation" xsi:type="array">
+                                                                            <item name="validate-phoneStrict" xsi:type="number">0</item>
+                                                                        </item>
                                                                         <item name="config" xsi:type="array">
                                                                             <item name="tooltip" xsi:type="array">
                                                                                 <item name="description" xsi:type="string" translate="true">For delivery questions.</item>

@@ -3,28 +3,33 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test class for \Magento\ImportExport\Model\Import\Entity\AbstractEntity
  */
 namespace Magento\ImportExport\Test\Unit\Model\Import\Entity;
 
+use Magento\ImportExport\Model\Import;
+use Magento\ImportExport\Model\Import\AbstractSource;
 use Magento\ImportExport\Model\Import\Entity\AbstractEntity;
+use Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
 
-class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\AbstractImportTestCase
+class AbstractTest extends AbstractImportTestCase
 {
     /**
      * Abstract import entity model
      *
-     * @var \Magento\ImportExport\Model\Import\Entity\AbstractEntity|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractEntity|MockObject
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
-        $this->_model = $this->getMockBuilder(\Magento\ImportExport\Model\Import\Entity\AbstractEntity::class)
+        $this->_model = $this->getMockBuilder(AbstractEntity::class)
             ->disableOriginalConstructor()
             ->setMethods(['_saveValidatedBunches', 'getErrorAggregator'])
             ->getMockForAbstractClass();
@@ -34,7 +39,7 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
 
@@ -45,13 +50,13 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
      * Create source adapter mock and set it into model object which tested in this class
      *
      * @param array $columns value which will be returned by method getColNames()
-     * @return \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit_Framework_MockObject_MockObject
+     * @return AbstractSource|MockObject
      */
     protected function _createSourceAdapterMock(array $columns)
     {
-        /** @var $source \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var $source \Magento\ImportExport\Model\Import\AbstractSource|MockObject */
         $source = $this->getMockForAbstractClass(
-            \Magento\ImportExport\Model\Import\AbstractSource::class,
+            AbstractSource::class,
             [],
             '',
             false,
@@ -59,7 +64,7 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
             true,
             ['getColNames']
         );
-        $source->expects($this->any())->method('getColNames')->will($this->returnValue($columns));
+        $source->expects($this->any())->method('getColNames')->willReturn($columns);
         $this->_model->setSource($source);
 
         return $source;
@@ -88,7 +93,7 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
     public function testValidateDataEmptyColumnNameForDeleteBehaviour()
     {
         $this->_createSourceAdapterMock(['']);
-        $this->_model->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE]);
+        $this->_model->setParameters(['behavior' => Import::BEHAVIOR_DELETE]);
         $errorAggregator = $this->_model->validateData();
         $this->assertEquals(0, $errorAggregator->getErrorsCount());
     }
@@ -101,7 +106,7 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
     public function testValidateDataColumnNameWithWhitespacesForDeleteBehaviour()
     {
         $this->_createSourceAdapterMock(['  ']);
-        $this->_model->setParameters(['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_DELETE]);
+        $this->_model->setParameters(['behavior' => Import::BEHAVIOR_DELETE]);
         $errorAggregator = $this->_model->validateData();
         $this->assertEquals(0, $errorAggregator->getErrorsCount());
     }
@@ -143,7 +148,7 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
      */
     public function testIsNeedToLogInHistory()
     {
-        $this->assertEquals(false, $this->_model->isNeedToLogInHistory());
+        $this->assertFalse($this->_model->isNeedToLogInHistory());
     }
 
     /**
@@ -195,7 +200,7 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
      */
     public function testGetCreatedItemsCount()
     {
-        $this->assertNotEmpty('integer', $this->_model->getCreatedItemsCount());
+        $this->assertIsInt($this->_model->getCreatedItemsCount());
     }
 
     /**
@@ -203,7 +208,7 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
      */
     public function testGetUpdatedItemsCount()
     {
-        $this->assertInternalType('integer', $this->_model->getUpdatedItemsCount());
+        $this->assertIsInt($this->_model->getUpdatedItemsCount());
     }
 
     /**
@@ -211,6 +216,6 @@ class AbstractTest extends \Magento\ImportExport\Test\Unit\Model\Import\Abstract
      */
     public function testGetDeletedItemsCount()
     {
-        $this->assertNotEmpty('integer', $this->_model->getDeletedItemsCount());
+        $this->assertIsInt($this->_model->getDeletedItemsCount());
     }
 }

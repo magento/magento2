@@ -18,13 +18,13 @@
             <testCaseId value="MAGETWO-84375"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
         <after>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
@@ -98,8 +98,7 @@
         <fillField selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Height}}" userInput="{{ImageUpload3.height}}" stepKey="fillImageHeight2" />
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.OkBtn}}" stepKey="clickOkBtn2" />
         <waitForPageLoad stepKey="waitForPageLoad6"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading12" />
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
         <amOnPage url="{{_defaultProduct.name}}.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad7"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.mediaDescription}}" stepKey="assertMediaDescription"/>

@@ -18,7 +18,7 @@
             <group value="review"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="textProductAttribute" stepKey="createProductAttribute"/>
             <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
             <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/$$createAttributeSet.attribute_set_id$$/"
@@ -39,7 +39,7 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
             <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="goToProductPage"/>

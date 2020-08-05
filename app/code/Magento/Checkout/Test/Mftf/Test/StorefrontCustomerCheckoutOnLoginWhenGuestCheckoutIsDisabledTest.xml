@@ -18,7 +18,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <magentoCLI command="config:set {{DisableGuestCheckoutConfigData.path}} {{DisableGuestCheckoutConfigData.value}}" stepKey="disableGuestCheckout"/>
             <magentoCLI command="config:set {{DisableCustomerRedirectToDashboardConfigData.path}} {{DisableCustomerRedirectToDashboardConfigData.value}}" stepKey="disableCustomerRedirect"/>
             <createData entity="SimpleProduct2" stepKey="simpleProduct">
@@ -35,7 +35,7 @@
             <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Product page in StoreFront and assert product and price range -->
@@ -77,8 +77,7 @@
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderLink}}" stepKey="orderId"/>
 
         <!-- Open Order Index Page -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
 
         <!-- Filter Order using orderId and assert order-->
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">

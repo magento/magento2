@@ -25,6 +25,7 @@ use Magento\Framework\View;
  * @SuppressWarnings(PHPMD.DepthOfInheritance)
  *
  * @api
+ * @since 100.0.2
  */
 class Page extends Layout
 {

@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,25 +7,35 @@ namespace Magento\Quote\Api;
 
 use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\CatalogInventory\Model\Stock;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
+/**
+ * Test for Magento\Quote\Api\GuestCartItemRepositoryInterface.
+ */
 class GuestCartItemRepositoryTest extends WebapiAbstract
 {
-    const SERVICE_VERSION = 'V1';
-    const SERVICE_NAME = 'quoteGuestCartItemRepositoryV1';
-    const RESOURCE_PATH = '/V1/guest-carts/';
+    public const SERVICE_NAME = 'quoteGuestCartItemRepositoryV1';
+    private const SERVICE_VERSION = 'V1';
+    private const RESOURCE_PATH = '/V1/guest-carts/';
 
     /**
-     * @var \Magento\TestFramework\ObjectManager
+     * @var ObjectManager
      */
-    protected $objectManager;
+    private $objectManager;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->objectManager = Bootstrap::getObjectManager();
     }
 
     /**
+     * Test quote items
+     *
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_items_saved.php
      */
     public function testGetList()
@@ -112,12 +121,16 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
         ];
 
         $requestData = [
-            "cartItem" => [
-                "sku" => $productSku,
-                "qty" => 7,
-                "quote_id" => $cartId,
+            'cartItem' => [
+                'sku' => $productSku,
+                'qty' => 7,
             ],
         ];
+
+        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
+            $requestData['cartItem']['quote_id'] = $cartId;
+        }
+
         $this->_webApiCall($serviceInfo, $requestData);
         $this->assertTrue($quote->hasProductId(2));
         $this->assertEquals(7, $quote->getItemByProduct($product)->getQty());
@@ -205,20 +218,11 @@ class GuestCartItemRepositoryTest extends WebapiAbstract
             ],
         ];
 
-        if (TESTS_WEB_API_ADAPTER == self::ADAPTER_SOAP) {
-            $requestData = [
-                "cartItem" => [
-                    "qty" => 5,
-                    "quote_id" => $cartId,
-                    "itemId" => $itemId,
-                ],
-            ];
-        } else {
-            $requestData = [
-                "cartItem" => [
-                    "qty" => 5,
-                    "quote_id" => $cartId,
-                ],
+        $requestData['cartItem']['qty'] = 5;
+        if (TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP) {
+            $requestData['cartItem'] += [
+                'quote_id' => $cartId,
+                'itemId' => $itemId,
             ];
         }
         if ($errorMessage) {
