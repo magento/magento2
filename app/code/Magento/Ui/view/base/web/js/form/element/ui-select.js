@@ -749,11 +749,6 @@ define([
         },
 
         /**
-         * @deprecated
-         */
-        onMousemove: function () {},
-
-        /**
          * Handles hover on list items.
          *
          * @param {Object} event - mousemove event
