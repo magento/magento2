@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminOpenLoginAsCustomerLogFromMenuActionGroup">
         <annotations>
-            <description>Navigate to Login As Customer Log from Menu.</description>
+            <description>Navigate to Login as Customer Log from Menu.</description>
         </annotations>
 
         <click selector="{{AdminMenuSection.menuItem(AdminMenuCustomers.dataUiId)}}"
@@ -18,7 +18,7 @@
         <click selector="{{AdminMenuSection.menuItem(AdminMenuLoginAsCustomer.dataUiId)}}"
                stepKey="openLoginAsCustomerLog"/>
         <waitForPageLoad stepKey="waitForLoginAsCustomerLog"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Login As Customer Log"
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="Login as Customer Log"
              stepKey="seeForLoginAsCustomerLog"/>
     </actionGroup>
 </actionGroups>

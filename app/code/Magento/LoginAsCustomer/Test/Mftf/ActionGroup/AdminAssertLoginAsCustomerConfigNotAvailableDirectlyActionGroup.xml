@@ -10,12 +10,12 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAssertLoginAsCustomerConfigNotAvailableDirectlyActionGroup">
         <annotations>
-            <description>Verify Login As Customer config section is not available by direct url.</description>
+            <description>Verify Login as Customer config section is not available by direct url.</description>
         </annotations>
 
         <amOnPage url="{{AdminLoginAsCustomerConfigPage.url}}" stepKey="navigateToLoginAsCustomerConfigSection"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <seeInCurrentUrl url="admin/system_config/index" stepKey="seeRedirectToConfigIndexPage"/>
-        <dontSee userInput="Login As Customer" stepKey="dontSeeLoginAsCustomer"/>
+        <dontSee userInput="Login as Customer" stepKey="dontSeeLoginAsCustomer"/>
     </actionGroup>
 </actionGroups>

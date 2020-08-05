@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAssertLoginAsCustomerLogRecordActionGroup">
         <annotations>
-            <description>Assert Login As Customer Log record is correct.</description>
+            <description>Assert Login as Customer Log record is correct.</description>
         </annotations>
         <arguments>
             <argument name="rowNumber" type="string"/>

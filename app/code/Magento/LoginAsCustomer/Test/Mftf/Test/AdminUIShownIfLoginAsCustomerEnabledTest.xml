@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminUIShownIfLoginAsCustomerEnabledTest">
         <annotations>
-            <features value="Login As Customer"/>
+            <features value="Login as Customer"/>
             <stories value="Availability of UI elements if module enable/disable"/>
             <title value="UI elements are shown if 'Login as customer' functionality is enabled"/>
             <description
@@ -42,7 +42,7 @@
             <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
         </after>
 
-        <!-- Verify Login As Customer Login action works correctly from Customer page -->
+        <!-- Verify Login as Customer Login action works correctly from Customer page -->
         <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
                      stepKey="verifyLoginAsCustomerWorksOnCustomerPage">
             <argument name="customerId" value="$$createCustomer.id$$"/>
@@ -64,7 +64,7 @@
             <argument name="orderId" value="$grabOrderId"/>
         </actionGroup>
 
-        <!-- Verify Login As Customer Login action works correctly from Order page -->
+        <!-- Verify Login as Customer Login action works correctly from Order page -->
         <actionGroup ref="AdminLoginAsCustomerLoginFromOrderPageActionGroup"
                      stepKey="verifyLoginAsCustomerWorksOnOrderPage">
             <argument name="orderId" value="$grabOrderId"/>

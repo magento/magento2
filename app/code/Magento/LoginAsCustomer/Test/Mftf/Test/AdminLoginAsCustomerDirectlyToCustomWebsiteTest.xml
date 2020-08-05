@@ -10,16 +10,13 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminLoginAsCustomerDirectlyToCustomWebsiteTest">
         <annotations>
-            <features value="Login As Customer"/>
-            <stories value="Login As Customer into additional website"/>
+            <features value="Login as Customer"/>
+            <stories value="Login as Customer into additional website"/>
             <title value="Admin user directly login into customer account on custom website"/>
             <description
                 value="Verify admin user can directly login into customer account on custom website using 'Login as customer' functionality"/>
             <severity value="BLOCKER"/>
             <group value="login_as_customer"/>
-            <skip>
-                <issueId value="https://github.com/magento/magento2-login-as-customer/issues/102"/>
-            </skip>
         </annotations>
         <before>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
@@ -66,7 +63,7 @@
             <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
         </after>
 
-        <!-- Login As Customer from Customer page -->
+        <!-- Login as Customer from Customer page -->
         <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="OpenEditCustomerFrom">
             <argument name="customer" value="Simple_US_Customer"/>
         </actionGroup>
@@ -77,7 +74,6 @@
         </actionGroup>
 
         <!-- Assert Customer logged on Custom Website -->
-        <actionGroup ref="StorefrontClickOnHeaderLogoActionGroup" stepKey="clickOnStorefrontHeaderLogo"/>
         <actionGroup ref="AssertStorefrontStoreCodeInUrlActionGroup" stepKey="seeStoreCodeInUrl">
             <argument name="storeCode" value="{{customStoreEN.code}}"/>
         </actionGroup>

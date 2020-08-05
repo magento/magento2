@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminChangUserAccessToLoginAsCustomerButtonTest">
         <annotations>
-            <features value="Login As Customer"/>
+            <features value="Login as Customer"/>
             <stories value="Permissions and ACl"/>
             <title value="Change admin user's access to 'Login as Customer Button'"/>
             <description

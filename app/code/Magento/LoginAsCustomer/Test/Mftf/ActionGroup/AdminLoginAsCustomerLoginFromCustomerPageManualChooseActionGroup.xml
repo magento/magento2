@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminLoginAsCustomerLoginFromCustomerPageManualChooseActionGroup">
         <annotations>
-            <description>Verify Login As Customer Login action is works properly from Customer page with manual Store View choose.</description>
+            <description>Verify Login as Customer Login action is works properly from Customer page with manual Store View choose.</description>
         </annotations>
         <arguments>
             <argument name="customerId" type="string"/>
@@ -21,8 +21,7 @@
         <waitForPageLoad stepKey="waitForCustomerPageLoad"/>
         <click selector="{{AdminCustomerMainActionsSection.loginAsCustomer}}" stepKey="clickLoginAsCustomerLink"/>
         <see selector="{{AdminConfirmationModalSection.title}}" userInput="Login as Customer: Select Store View" stepKey="seeModal"/>
-        <!-- TODO: Unskip after https://github.com/magento/magento2-login-as-customer/issues/137 is fixed-->
-        <!-- <see selector="{{AdminConfirmationModalSection.message}}" userInput="Actions taken while in "Login as Customer" will affect actual customer data." stepKey="seeModalMessage"/>-->
+         <see selector="{{AdminConfirmationModalSection.message}}" userInput="Actions taken while in &quot;Login as Customer&quot; will affect actual customer data." stepKey="seeModalMessage"/>
         <selectOption selector="{{AdminLoginAsCustomerConfirmationModalSection.storeView}}" userInput="{{storeViewName}}" stepKey="selectStoreView"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickLogin"/>
         <switchToNextTab stepKey="switchToNewTab"/>

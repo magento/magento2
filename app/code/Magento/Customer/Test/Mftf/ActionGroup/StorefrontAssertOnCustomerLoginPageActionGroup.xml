@@ -8,12 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminAssertLoginAsCustomerConfigNotVisibleActionGroup">
+    <actionGroup name="StorefrontAssertOnCustomerLoginPageActionGroup">
         <annotations>
-            <description>Verify no Login as Customer config section available.</description>
+            <description>Assert on the Storefront Customer Sign-In page.</description>
         </annotations>
 
-        <!-- TODO: update -->
-        <dontSee userInput="Login as Customer" stepKey="dontSeeLoginAsCustomerItem"/>
+        <seeInCurrentUrl url="{{StorefrontCustomerSignInPage.url}}" stepKey="seeOnSignInPage"/>
     </actionGroup>
 </actionGroups>

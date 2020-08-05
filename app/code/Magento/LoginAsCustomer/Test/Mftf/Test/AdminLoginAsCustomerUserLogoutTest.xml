@@ -8,45 +8,51 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontLoginAsCustomerNotificationBannerTest">
+    <test name="AdminLoginAsCustomerUserLogoutTest">
         <annotations>
             <features value="Login as Customer"/>
-            <stories value="Availability of UI elements if module enable/disable"/>
-            <title value="Notification Banner is present on Storefront page"/>
+            <stories value="Destroy impersonated customer sessions on admin logout"/>
+            <title
+                value="Login as Customer sessions are ended/invalidated when the related admin session is logged out."/>
             <description
-                value="Verify that Notification Banner is present on page if 'Login as customer' functionality used"/>
+                value="Verify Login as Customer session is ended/invalidated when the related admin session is logged out."/>
             <severity value="MAJOR"/>
             <group value="login_as_customer"/>
         </annotations>
         <before>
-            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
                         stepKey="enableLoginAsCustomer"/>
             <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
                         stepKey="enableLoginAsCustomerAutoDetection"/>
             <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultUser"/>
         </before>
         <after>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAfter"/>
             <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
                         stepKey="disableLoginAsCustomer"/>
             <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
         </after>
 
-        <!-- Login as Customer from Customer page -->
+        <!-- Login into Customer account -->
         <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
-                     stepKey="loginAsCustomerFromCustomerPage">
+                     stepKey="loginAsCustomer">
             <argument name="customerId" value="$$createCustomer.id$$"/>
         </actionGroup>
 
-        <!-- Assert Notification Banner is present on page -->
-        <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBanner">
+        <!-- Assert correctly logged in as Customer -->
+        <actionGroup ref="StorefrontAssertLoginAsCustomerLoggedInActionGroup" stepKey="assertLoggedInFromCustomerPage">
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
+            <argument name="customerEmail" value="$$createCustomer.email$$"/>
         </actionGroup>
 
-        <!-- Log out Customer by Notification Banner and close tab -->
-        <actionGroup ref="StorefrontSignOutNotificationBannerAndCloseTabActionGroup" stepKey="signOutAndCloseTab"/>
+        <!-- End Admin session -->
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+
+        <!-- Assert Customer session invalidated -->
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="openCustomerAccountPage"/>
+        <actionGroup ref="StorefrontAssertOnCustomerLoginPageActionGroup" stepKey="AssertOnCustomerLoginPage"/>
     </test>
 </tests>

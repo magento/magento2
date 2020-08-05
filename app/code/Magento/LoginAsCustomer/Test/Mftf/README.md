@@ -1,3 +1,3 @@
-# Integration Functional Tests
+# Functional Tests
 
-The Functional Test Module for **Magento Login As Customer** module.
+The Functional Tests for **Magento Login as Customer** module.

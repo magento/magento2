@@ -10,11 +10,11 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminLoginAsCustomerEditCustomersAddressTest">
         <annotations>
-            <features value="Login As Customer"/>
+            <features value="Login as Customer"/>
             <stories value="Edit Customer addresses"/>
             <title value="Admin user login as customer and edit customer's address"/>
             <description
-                value="Verify Admin can access customer's personal cabinet and change his default shipping and billing addresses using Login As Customer functionality"/>
+                value="Verify Admin can access customer's personal cabinet and change his default shipping and billing addresses using Login as Customer functionality"/>
             <severity value="CRITICAL"/>
             <group value="login_as_customer"/>
         </annotations>
@@ -35,7 +35,7 @@
             <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
         </after>
 
-        <!-- Login As Customer Login from Customer page -->
+        <!-- Login as Customer Login from Customer page -->
         <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
                      stepKey="loginAsCustomerFromCustomerPage">
             <argument name="customerId" value="$$createCustomer.id$$"/>

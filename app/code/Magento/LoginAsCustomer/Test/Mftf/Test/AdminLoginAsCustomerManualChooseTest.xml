@@ -10,7 +10,7 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminLoginAsCustomerManualChooseTest">
         <annotations>
-            <features value="Login As Customer"/>
+            <features value="Login as Customer"/>
             <stories value="Select Store View based on 'Store View To Login In' setting"/>
             <title
                 value="Admin user directly login into customer account with store View To Login In = Manual Choose"/>
@@ -19,7 +19,7 @@
             <severity value="CRITICAL"/>
             <group value="login_as_customer"/>
             <skip>
-                <issueId value="https://github.com/magento/magento2-login-as-customer/issues/102"/>
+                <issueId value="https://github.com/magento/magento2-login-as-customer/issues/58"/>
             </skip>
         </annotations>
         <before>
@@ -45,7 +45,7 @@
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
         </after>
 
-        <!-- Login As Customer from Customer page -->
+        <!-- Login as Customer from Customer page -->
         <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageManualChooseActionGroup"
                      stepKey="loginAsCustomerFromCustomerPage">
             <argument name="customerId" value="$$createCustomer.id$$"/>

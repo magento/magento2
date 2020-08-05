@@ -9,7 +9,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminCustomerGridSection">
-        <element name="customerLoginAsCustomerLinkByEmail" type="text" selector="//tr[contains(@class, 'data-row') and td/div[text()='{{customerEmail}}']]//a[@class='action-menu-item'][text() = 'Login As Customer']" parameterized="true" timeout="30"/>
+        <element name="customerLoginAsCustomerLinkByEmail" type="text" selector="//tr[contains(@class, 'data-row') and td/div[text()='{{customerEmail}}']]//a[@class='action-menu-item'][text() = 'Login as Customer']" parameterized="true" timeout="30"/>
     </section>
 </sections>
 
