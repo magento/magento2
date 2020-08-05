@@ -56,8 +56,7 @@
         <selectOption selector="{{AdminProductFormAdvancedInventorySection.advancedInventoryStockStatus}}" userInput="In Stock" stepKey="selectOutOfStock"/>
         <click stepKey="clickOnDoneButton" selector="{{AdminProductFormAdvancedInventorySection.doneButton}}"/>
         <waitForPageLoad stepKey="waitForProductPageToLoad"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}"  stepKey="clickOnSaveButton"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
         <!--Clear cache and reindex-->
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
