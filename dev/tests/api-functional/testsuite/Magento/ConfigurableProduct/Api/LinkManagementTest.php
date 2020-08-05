@@ -7,10 +7,14 @@
 namespace Magento\ConfigurableProduct\Api;
 
 use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Model\AttributeRepository;
 use Magento\Eav\Model\Entity\Attribute\Option;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Webapi\Rest\Request;
 use Magento\TestFramework\TestCase\WebapiAbstract;
+use PHPUnit\Framework\TestResult;
 
 /**
  * Class LinkManagementTest for testing ConfigurableProduct to SimpleProduct link functionality
@@ -21,6 +25,20 @@ class LinkManagementTest extends WebapiAbstract
     const OPTION_SERVICE_NAME = 'configurableProductOptionRepositoryV1';
     const SERVICE_VERSION = 'V1';
     const RESOURCE_PATH = '/V1/configurable-products';
+
+    /**
+     * @var string[]
+     */
+    private $dbStateTables = [
+        'catalog_product_entity' => 'assertIsEmpty',
+        'eav_attribute' => 'eavAttributeAssert',
+        'catalog_category_entity' => 'assertTwoRecords',
+        'eav_attribute_set' => 'attributeSetAssert',
+        'store' => 'assertTwoRecords',
+        //'catalog_data_exporter_products' => 'assertIsEmpty',
+        //'catalog_data_exporter_product_attributes' => 'assertIsEmpty',
+        //'catalog_data_exporter_categories' => 'assertIsEmpty'
+    ];
 
     /**
      * @var \Magento\Framework\ObjectManagerInterface
@@ -40,6 +58,96 @@ class LinkManagementTest extends WebapiAbstract
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->attributeRepository = $this->objectManager->get(\Magento\Eav\Model\AttributeRepository::class);
     }
+
+    /**
+     * @param TestResult|null $result
+     * @return TestResult
+     */
+    public function run(TestResult $result = null): TestResult
+    {
+        $isolationProblem = [];
+        foreach ($this->dbStateTables as $dbStateTable => $method) {
+            $data = $this->pullDbState($dbStateTable);
+            $data = $this->{$method}($data);
+
+            if ($data) {
+                $isolationProblem[$dbStateTable] = $data;
+            }
+        }
+
+        if (!empty($isolationProblem)) {
+            throw new \Exception("There was a problem with isolation: " . var_export($isolationProblem, true));
+        }
+
+        return parent::run($result);
+    }
+
+    /**
+     * @param array $data
+     * @throws \Exception
+     */
+    private function attributeSetAssert(array $data)
+    {
+        if (count($data) > 9) {
+            return array_slice($data, 9, count($data) - 9);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array $data
+     * @throws \Exception
+     */
+    private function assertTwoRecords(array $data)
+    {
+        //2 default records
+        if (count($data) > 2) {
+            return array_slice($data, 2, count($data) - 2);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array $data
+     * @throws \Exception
+     */
+    private function eavAttributeAssert(array $data)
+    {
+        //178 - default number of attributes
+        if (count($data) > 178) {
+            return array_slice($data, 178, count($data) - 178);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $data
+     */
+    private function assertIsEmpty(array $data)
+    {
+        if (!empty($data)) {
+            return $data;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $table
+     * @return array
+     */
+    private function pullDbState(string $table)
+    {
+        $resource = ObjectManager::getInstance()->get(ResourceConnection::class);
+        $connection = $resource->getConnection();
+        $select = $connection->select()
+            ->from($table);
+        return $connection->fetchAll($select);
+    }
+
 
     /**
      * @magentoApiDataFixture Magento/ConfigurableProduct/_files/product_configurable.php
