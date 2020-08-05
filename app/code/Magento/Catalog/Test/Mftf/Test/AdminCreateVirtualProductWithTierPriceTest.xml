@@ -60,7 +60,7 @@
 
         <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage1"/>
         <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchProductGrid">
-            <argument name="keyword" value="{{virtualProductBigQty.name}}"/>
+            <argument name="keyword" value="virtualProductBigQty.name"/>
         </actionGroup>
         <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyCreatedVirtualProduct"/>
         <waitForPageLoad stepKey="waitUntilProductIsOpened" />
