@@ -300,7 +300,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
         $form->setId(self::FORM_ELEMENT_ID);
         $form->setMethod('post');
 
-        if (!$this->_storeManager->hasSingleStore()) {
+        if (!$this->_storeManager->isSingleStoreMode()) {
             $form->addElement($this->_fieldsetFactory->create()->setLegend(__('Tax Titles')));
         }
 
