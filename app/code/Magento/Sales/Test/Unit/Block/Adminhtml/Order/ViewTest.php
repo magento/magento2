@@ -77,7 +77,7 @@ class ViewTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
         $this->coreRegistryMock = $this->createMock(Registry::class);
