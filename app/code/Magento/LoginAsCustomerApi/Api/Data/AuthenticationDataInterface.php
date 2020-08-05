@@ -13,6 +13,7 @@ use Magento\Framework\Api\ExtensibleDataInterface;
  * Authentication data
  *
  * @api
+ * @since 100.4.0
  */
 interface AuthenticationDataInterface extends ExtensibleDataInterface
 {
@@ -20,6 +21,7 @@ interface AuthenticationDataInterface extends ExtensibleDataInterface
      * Get Customer Id
      *
      * @return int
+     * @since 100.4.0
      */
     public function getCustomerId(): int;
 
@@ -27,6 +29,7 @@ interface AuthenticationDataInterface extends ExtensibleDataInterface
      * Get Admin Id
      *
      * @return int
+     * @since 100.4.0
      */
     public function getAdminId(): int;
 
@@ -36,6 +39,7 @@ interface AuthenticationDataInterface extends ExtensibleDataInterface
      * Fully qualified namespaces is needed for proper work of ccode generation
      *
      * @return \Magento\LoginAsCustomerApi\Api\Data\AuthenticationDataExtensionInterface|null
+     * @since 100.4.0
      */
     public function getExtensionAttributes(): ?AuthenticationDataExtensionInterface;
 }

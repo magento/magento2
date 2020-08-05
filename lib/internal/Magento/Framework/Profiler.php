@@ -12,6 +12,7 @@ use Magento\Framework\Profiler\DriverInterface;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class Profiler
 {
