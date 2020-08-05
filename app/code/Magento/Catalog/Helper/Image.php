@@ -384,7 +384,9 @@ class Image extends AbstractHelper implements ArgumentInterface
     {
         // assume that 3 params were given instead of array
         if (!is_array($colorRGB)) {
+            //phpcs:disable
             $colorRGB = func_get_args();
+            //phpcs:enabled
         }
         $this->_getModel()->setBackgroundColor($colorRGB);
         return $this;
@@ -498,7 +500,11 @@ class Image extends AbstractHelper implements ArgumentInterface
             if ($this->getImageFile()) {
                 $model->setBaseFile($this->getImageFile());
             } else {
-                $model->setBaseFile($this->getProduct() ? $this->getProduct()->getData($model->getDestinationSubdir()) : '');
+                $model->setBaseFile(
+                    $this->getProduct()
+                        ? $this->getProduct()->getData($model->getDestinationSubdir())
+                        : ''
+                );
             }
         }
         return $this;
