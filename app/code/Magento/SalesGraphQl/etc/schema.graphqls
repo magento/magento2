@@ -224,4 +224,8 @@ type KeyValue @doc(description: "The key-value type") {
 
 enum CheckoutUserInputErrorCodes {
     REORDER_NOT_AVAILABLE
+    PRODUCT_NOT_FOUND
+    NOT_SALABLE
+    INSUFFICIENT_STOCK
+    UNDEFINED
 }
