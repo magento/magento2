@@ -170,8 +170,7 @@ class Search implements ProductQueryInterface
             if ($attributeValue && !($attributeValue instanceof Phrase)) {
                 return $attributeValue;
             } else {
-                return isset($productArray[$product->getId()][$field]) ?
-                    $productArray[$product->getId()][$field] : null;
+                return $productArray[$product->getId()][$field] ?? null;
             }
         }
 
