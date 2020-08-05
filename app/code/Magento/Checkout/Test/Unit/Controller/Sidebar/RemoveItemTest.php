@@ -221,6 +221,57 @@ class RemoveItemTest extends TestCase
         $this->assertEquals($resultJson, $this->action->execute());
     }
 
+    /**
+     * Test controller when DB exception is thrown.
+     *
+     * @return void
+     */
+    public function testExecuteWithDbException(): void
+    {
+        $itemId = 1;
+        $dbError = 'Error';
+        $message = __('An unspecified error occurred. Please contact us for assistance.');
+        $responseData = [
+            'success' => false,
+            'error_message' => $message,
+        ];
+
+        $this->formKeyValidatorMock
+            ->expects($this->once())
+            ->method('validate')
+            ->with($this->requestMock)
+            ->willReturn(true);
+        $this->requestMock->expects($this->once())
+            ->method('getParam')
+            ->with('item_id')
+            ->willReturn($itemId);
+
+        $exception = new \Zend_Db_Exception($dbError);
+
+        $this->sidebarMock->expects($this->once())
+            ->method('checkQuoteItem')
+            ->with($itemId)
+            ->willThrowException($exception);
+
+        $this->loggerMock->expects($this->once())->method('critical')->with($exception);
+
+        $this->sidebarMock->expects($this->once())
+            ->method('getResponseData')
+            ->with($message)
+            ->willReturn($responseData);
+
+        $resultJson = $this->createMock(ResultJson::class);
+        $resultJson->expects($this->once())
+            ->method('setData')
+            ->with($responseData)
+            ->willReturnSelf();
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($resultJson);
+
+        $this->action->execute();
+    }
+
     public function testExecuteWhenFormKeyValidationFailed()
     {
         $resultRedirect = $this->createMock(ResultRedirect::class);

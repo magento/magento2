@@ -50,61 +50,17 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
      */
     public function testGetCustomerOrdersSimpleProductQuery()
     {
-        $query =
-            <<<QUERY
-{
-  customer
-  {
-   orders(filter:{number:{eq:"100000002"}}){
-    total_count
-    items
-    {
-      id
-      number
-      status
-      order_date
-      items{
-        quantity_ordered
-        product_sku
-        product_name
-        product_sale_price{currency value}
-      }
-      total {
-                    base_grand_total {
-                        value
-                        currency
-                    }
-                    grand_total {
-                        value
-                        currency
-                    }
-                    subtotal {
-                        value
-                        currency
-                    }
-
-                }
-    }
-   }
- }
-}
-QUERY;
-
-        $currentEmail = 'customer@example.com';
-        $currentPassword = 'password';
-        $response = $this->graphQlQuery(
-            $query,
-            [],
-            '',
-            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
-        );
-
+        $orderNumber = '100000002';
+        $response = $this->getCustomerOrderQueryOnSimpleProducts($orderNumber);
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $this->assertNotEmpty($response['customer']['orders']['items']);
         $customerOrderItemsInResponse = $response['customer']['orders']['items'][0];
         $this->assertArrayHasKey('items', $customerOrderItemsInResponse);
         $this->assertNotEmpty($customerOrderItemsInResponse['items']);
+        $this->assertNotEmpty($response["customer"]["orders"]["items"][0]["billing_address"]);
+        $this->assertNotEmpty($response["customer"]["orders"]["items"][0]["shipping_address"]);
+        $this->assertNotEmpty($response["customer"]["orders"]["items"][0]["payment_methods"]);
 
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', '100000002')
             ->create();
@@ -154,6 +110,46 @@ QUERY;
         $this->setPaymentMethod($cartId, $paymentMethod);
         $orderNumber = $this->placeOrder($cartId);
         $customerOrderResponse = $this->getCustomerOrderQuery($orderNumber);
+        $billingAssertionMap = [
+            'firstname' => 'John',
+            'lastname' => 'Smith',
+            'city' => 'Texas City',
+            'company' => 'Test company',
+            'country_code' => 'US',
+            'postcode' => '78717',
+            'region' => 'Texas',
+            'region_id' => '57',
+            'street' => [
+                0 => 'test street 1',
+                1 => 'test street 2',
+            ],
+            'telephone' => '5123456677'
+        ];
+        $this->assertResponseFields($customerOrderResponse[0]["billing_address"], $billingAssertionMap);
+        $shippingAssertionMap = [
+            'firstname' => 'test shipFirst',
+            'lastname' => 'test shipLast',
+            'city' => 'Montgomery',
+            'company' => 'test company',
+            'country_code' => 'US',
+            'postcode' => '36013',
+            'street' => [
+                0 => 'test street 1',
+                1 => 'test street 2',
+            ],
+            'region_id' => '1',
+            'region' => 'Alabama',
+            'telephone' => '3347665522'
+        ];
+        $this->assertResponseFields($customerOrderResponse[0]["shipping_address"], $shippingAssertionMap);
+        $paymentMethodAssertionMap = [
+            [
+                'name' => 'Check / Money order',
+                'type' => 'checkmo',
+                'additional_data' => []
+            ]
+        ];
+        $this->assertResponseFields($customerOrderResponse[0]["payment_methods"], $paymentMethodAssertionMap);
         // Asserting discounts on order item level
         $this->assertEquals(4, $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']);
         $this->assertEquals('USD', $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']);
@@ -1218,6 +1214,22 @@ QUERY;
            number
            order_date
            status
+           payment_methods
+           {
+             name
+             type
+             additional_data
+             {
+              name
+              value
+              }
+           }
+           shipping_address {
+           ... address
+           }
+           billing_address {
+           ... address
+           }
            items{product_name product_sku quantity_ordered discounts {amount{value currency} label}}
            total {
              base_grand_total{value currency}
@@ -1241,6 +1253,22 @@ QUERY;
        }
      }
    }
+
+   fragment address on OrderAddress {
+          firstname
+          lastname
+          city
+          company
+          country_code
+          fax
+          middlename
+          postcode
+          street
+          region
+          region_id
+          telephone
+          vat_id
+        }
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
@@ -1254,6 +1282,98 @@ QUERY;
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         return $response['customer']['orders']['items'];
+    }
+
+    /**
+     * Get customer order query
+     *
+     * @param string $orderNumber
+     * @return array
+     */
+    private function getCustomerOrderQueryOnSimpleProducts($orderNumber): array
+    {
+        $query =
+            <<<QUERY
+{
+  customer
+  {
+   orders(filter:{number:{eq:"{$orderNumber}"}}) {
+    total_count
+    items
+    {
+      id
+      number
+      status
+      order_date
+      payment_methods
+      {
+        name
+        type
+        additional_data
+        {
+         name
+         value
+         }
+      }
+      shipping_address {
+         ... address
+      }
+      billing_address {
+      ... address
+      }
+      items{
+        quantity_ordered
+        product_sku
+        product_name
+        product_sale_price{currency value}
+      }
+      total {
+             base_grand_total {
+                        value
+                        currency
+                    }
+                    grand_total {
+                        value
+                        currency
+                    }
+                    subtotal {
+                        value
+                        currency
+                    }
+                }
+    }
+   }
+ }
+}
+
+fragment address on OrderAddress {
+          firstname
+          lastname
+          city
+          company
+          country_code
+          fax
+          middlename
+          postcode
+          street
+          region
+          region_id
+          telephone
+          vat_id
+        }
+QUERY;
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
+
+        $this->assertArrayHasKey('orders', $response['customer']);
+        $this->assertArrayHasKey('items', $response['customer']['orders']);
+        return $response;
     }
 
     /**
