@@ -12,7 +12,6 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Select;
 use Magento\Ui\Api\BookmarkManagementInterface;
@@ -34,6 +33,8 @@ class UsedInProducts extends Select
     private $productRepository;
 
     /**
+     * Constructor
+     *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param FilterBuilder $filterBuilder
@@ -70,7 +71,7 @@ class UsedInProducts extends Select
         $this->productRepository = $productRepository;
     }
 
-    /*
+    /**
      * Prepare component configuration
      *
      * @return void
@@ -99,7 +100,6 @@ class UsedInProducts extends Select
                 'optgroup' => false
 
             ];
-
         }
 
         $this->wrappedComponent = $this->uiComponentFactory->create(
@@ -112,11 +112,11 @@ class UsedInProducts extends Select
         );
 
         $this->wrappedComponent->prepare();
-        $jsConfig = array_replace_recursive(
+        $productsFilterJsConfig = array_replace_recursive(
             $this->getJsConfig($this->wrappedComponent),
             $this->getJsConfig($this)
         );
-        $this->setData('js_config', $jsConfig);
+        $this->setData('js_config', $productsFilterJsConfig);
 
         $this->setData(
             'config',

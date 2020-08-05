@@ -12,16 +12,15 @@ use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
-use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Select;
 use Magento\Ui\Api\BookmarkManagementInterface;
-use Magento\Cms\Api\BlockRepositoryInterface;
+use Magento\Cms\Api\PageRepositoryInterface;
 
 /**
- * Used in blocks filter
+ * Used in pages filter
  */
-class UsedInBlocks extends Select
+class UsedInPages extends Select
 {
     /**
      * @var BookmarkManagementInterface
@@ -29,18 +28,20 @@ class UsedInBlocks extends Select
     private $bookmarkManagement;
 
     /**
-     * @var BlockRepositoryInterface
+     * @var PageRepositoryInterface
      */
-    private $blockRepository;
+    private $pageRepository;
 
     /**
+     * Constructor
+     *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param FilterBuilder $filterBuilder
      * @param FilterModifier $filterModifier
      * @param OptionSourceInterface $optionsProvider
      * @param BookmarkManagementInterface $bookmarkManagement
-     * @param BlockRepositoryInterface $blockRepository
+     * @param PageRepositoryInterface $pageRepository
      * @param array $components
      * @param array $data
      */
@@ -51,7 +52,7 @@ class UsedInBlocks extends Select
         FilterModifier $filterModifier,
         OptionSourceInterface $optionsProvider = null,
         BookmarkManagementInterface $bookmarkManagement,
-        BlockRepositoryInterface $blockRepository,
+        PageRepositoryInterface $pageRepository,
         array $components = [],
         array $data = []
     ) {
@@ -67,10 +68,10 @@ class UsedInBlocks extends Select
             $data
         );
         $this->bookmarkManagement = $bookmarkManagement;
-        $this->blockRepository = $blockRepository;
+        $this->pageRepository = $pageRepository;
     }
 
-    /*
+    /**
      * Prepare component configuration
      *
      * @return void
@@ -78,26 +79,25 @@ class UsedInBlocks extends Select
     public function prepare()
     {
         $options = [];
-        $blockIds = [];
+        $pageIds = [];
         $bookmarks = $this->bookmarkManagement->loadByNamespace($this->context->getNameSpace())->getItems();
         foreach ($bookmarks as $bookmark) {
             if ($bookmark->getIdentifier() === 'current') {
                 $applied = $bookmark->getConfig()['current']['filters']['applied'];
                 if (isset($applied[$this->getName()])) {
-                    $blockIds = $applied[$this->getName()];
+                    $pageIds = $applied[$this->getName()];
                 }
             }
         }
 
-        foreach ($blockIds as $id) {
-            $block = $this->blockRepository->getById($id);
+        foreach ($pageIds as $id) {
+            $page = $this->pageRepository->getById($id);
             $options[] = [
                 'value' => $id,
-                'label' => $block->getTitle(),
-                'is_active' => $block->isActive(),
+                'label' => $page->getTitle(),
+                'is_active' => $page->isActive(),
                 'optgroup' => false
-              ];
-
+            ];
         }
 
         $this->wrappedComponent = $this->uiComponentFactory->create(
@@ -110,11 +110,11 @@ class UsedInBlocks extends Select
         );
 
         $this->wrappedComponent->prepare();
-        $jsConfig = array_replace_recursive(
+        $pagesFilterjsConfig = array_replace_recursive(
             $this->getJsConfig($this->wrappedComponent),
             $this->getJsConfig($this)
         );
-        $this->setData('js_config', $jsConfig);
+        $this->setData('js_config', $pagesFilterjsConfig);
 
         $this->setData(
             'config',

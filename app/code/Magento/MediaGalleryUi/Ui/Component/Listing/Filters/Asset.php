@@ -51,6 +51,8 @@ class Asset extends Select
     private $storage;
 
     /**
+     * Constructor
+     *
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param FilterBuilder $filterBuilder
@@ -63,6 +65,7 @@ class Asset extends Select
      * @param Storage $storage
      * @param array $components
      * @param array $data
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         ContextInterface $context,
@@ -96,7 +99,7 @@ class Asset extends Select
         $this->storage = $storage;
     }
 
-    /*
+    /**
      * Prepare component configuration
      *
      * @return void
