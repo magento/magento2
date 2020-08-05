@@ -131,7 +131,8 @@ class Login extends Action implements HttpGetActionInterface
         $this->saveAuthenticationData = $saveAuthenticationData;
         $this->deleteAuthenticationDataForUser = $deleteAuthenticationDataForUser;
         $this->url = $url;
-        $this->setLoggedAsCustomerCustomerId = $setLoggedAsCustomerCustomerId ?? ObjectManager::getInstance()->get(SetLoggedAsCustomerCustomerIdInterface::class);
+        $this->setLoggedAsCustomerCustomerId = $setLoggedAsCustomerCustomerId
+            ?? ObjectManager::getInstance()->get(SetLoggedAsCustomerCustomerIdInterface::class);
         $this->isLoginAsCustomerEnabled = $isLoginAsCustomerEnabled
             ?? ObjectManager::getInstance()->get(IsLoginAsCustomerEnabledForCustomerInterface::class);
     }

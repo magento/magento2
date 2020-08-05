@@ -45,7 +45,8 @@ class Configuration implements \Magento\Framework\View\Element\Block\ArgumentInt
     ) {
         $this->config = $config;
         $this->httpContext = $httpContext;
-        $this->getLoggedAsCustomerAdminId = $getLoggedAsCustomerAdminId ?? ObjectManager::getInstance()->get(GetLoggedAsCustomerAdminIdInterface::class);
+        $this->getLoggedAsCustomerAdminId = $getLoggedAsCustomerAdminId
+            ?? ObjectManager::getInstance()->get(GetLoggedAsCustomerAdminIdInterface::class);
     }
 
     /**

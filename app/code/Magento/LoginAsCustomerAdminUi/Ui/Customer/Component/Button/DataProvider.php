@@ -14,8 +14,6 @@ use Magento\Framework\UrlInterface;
  * Get data for Login as Customer button.
  *
  * Use this class as a base for virtual types declaration.
- *
- * @api
  */
 class DataProvider
 {

@@ -48,7 +48,8 @@ class AuthenticateCustomerBySecret implements AuthenticateCustomerBySecretInterf
     ) {
         $this->getAuthenticationDataBySecret = $getAuthenticationDataBySecret;
         $this->customerSession = $customerSession;
-        $this->setLoggedAsCustomerAdminId = $setLoggedAsCustomerAdminId ?? ObjectManager::getInstance()->get(SetLoggedAsCustomerAdminIdInterface::class);
+        $this->setLoggedAsCustomerAdminId = $setLoggedAsCustomerAdminId
+            ?? ObjectManager::getInstance()->get(SetLoggedAsCustomerAdminIdInterface::class);
     }
 
     /**

@@ -48,7 +48,8 @@ class LoginAsCustomerUi implements SectionSourceInterface
     ) {
         $this->customerSession = $customerSession;
         $this->storeManager = $storeManager;
-        $this->getLoggedAsCustomerAdminId = $getLoggedAsCustomerAdminId ?? ObjectManager::getInstance()->get(GetLoggedAsCustomerAdminIdInterface::class);
+        $this->getLoggedAsCustomerAdminId = $getLoggedAsCustomerAdminId
+            ?? ObjectManager::getInstance()->get(GetLoggedAsCustomerAdminIdInterface::class);
     }
 
     /**

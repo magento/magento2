@@ -9,8 +9,6 @@ namespace Magento\LoginAsCustomerApi\Api\Data;
 
 /**
  * IsLoginAsCustomerEnabledForCustomerInterface results.
- *
- * @api
  */
 interface IsLoginAsCustomerEnabledForCustomerResultInterface
 {

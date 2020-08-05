@@ -6,7 +6,8 @@
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-customer": "*",
-        "magento/module-user": "*"
+        "magento/module-user": "*",
+        "magento/module-login-as-customer-api": "*"
     },
     "suggest": {
         "magento/module-sales": "*"
