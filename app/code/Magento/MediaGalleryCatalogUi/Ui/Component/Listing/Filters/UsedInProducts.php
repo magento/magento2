@@ -6,7 +6,7 @@
 
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Ui\Component\Listing\Filters;
+namespace Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Filters;
 
 use Magento\Framework\Api\FilterBuilder;
 use Magento\Framework\Data\OptionSourceInterface;
@@ -16,14 +16,12 @@ use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Select;
 use Magento\Ui\Api\BookmarkManagementInterface;
-use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
-use Magento\Cms\Helper\Wysiwyg\Images;
-use Magento\Cms\Model\Wysiwyg\Images\Storage;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 
 /**
- * Asset filter
+ * Used in products filter
  */
-class Asset extends Select
+class UsedInProducts extends Select
 {
     /**
      * @var BookmarkManagementInterface
@@ -31,24 +29,9 @@ class Asset extends Select
     private $bookmarkManagement;
 
     /**
-     * @var GetContentByAssetIdsInterface
+     * @var ProductRepositoryInterface
      */
-    private $getContentIdentities;
-
-    /**
-     * @var GetAssetsByIdsInterface
-     */
-    private $getAssetsByIds;
-
-    /**
-     * @var Images
-     */
-    private $images;
-
-    /**
-     * @var Storage
-     */
-    private $storage;
+    private $productRepository;
 
     /**
      * @param ContextInterface $context
@@ -56,11 +39,8 @@ class Asset extends Select
      * @param FilterBuilder $filterBuilder
      * @param FilterModifier $filterModifier
      * @param OptionSourceInterface $optionsProvider
-     * @param GetContentByAssetIdsInterface $getContentIdentities
      * @param BookmarkManagementInterface $bookmarkManagement
-     * @param GetAssetsByIdsInterface $getAssetsByIds
-     * @param Images $images
-     * @param Storage $storage
+     * @param ProductRepositoryInterface $productRepository
      * @param array $components
      * @param array $data
      */
@@ -70,11 +50,8 @@ class Asset extends Select
         FilterBuilder $filterBuilder,
         FilterModifier $filterModifier,
         OptionSourceInterface $optionsProvider = null,
-        GetContentByAssetIdsInterface $getContentIdentities,
         BookmarkManagementInterface $bookmarkManagement,
-        GetAssetsByIdsInterface $getAssetsByIds,
-        Images $images,
-        Storage $storage,
+        ProductRepositoryInterface $productRepository,
         array $components = [],
         array $data = []
     ) {
@@ -89,11 +66,8 @@ class Asset extends Select
             $components,
             $data
         );
-        $this->getContentIdentities = $getContentIdentities;
         $this->bookmarkManagement = $bookmarkManagement;
-        $this->getAssetsByIds = $getAssetsByIds;
-        $this->images = $images;
-        $this->storage = $storage;
+        $this->productRepository = $productRepository;
     }
 
     /*
@@ -104,26 +78,28 @@ class Asset extends Select
     public function prepare()
     {
         $options = [];
-        $assetIds = [];
+        $productIds = [];
         $bookmarks = $this->bookmarkManagement->loadByNamespace($this->context->getNameSpace())->getItems();
         foreach ($bookmarks as $bookmark) {
             if ($bookmark->getIdentifier() === 'current') {
                 $applied = $bookmark->getConfig()['current']['filters']['applied'];
                 if (isset($applied[$this->getName()])) {
-                    $assetIds[] = $applied[$this->getName()];
+                    $productIds = $applied[$this->getName()];
                 }
             }
         }
 
-        $assets = $this->getAssetsByIds->execute($assetIds);
-
-        foreach ($assets as $asset) {
-            $assetPath = $this->storage->getThumbnailUrl($this->images->getStorageRoot() . $asset->getPath());
+        foreach ($productIds as $id) {
+            $product = $this->productRepository->getById($id);
             $options[] = [
-                'value' => (string) $asset->getId(),
-                'label' => $asset->getTitle(),
-                'src' => $assetPath
+                'value' => $id,
+                'label' => $product->getName(),
+                'is_active' => $product->getStatus(),
+                'path' => $product->getSku(),
+                'optgroup' => false
+
             ];
+
         }
 
         $this->wrappedComponent = $this->uiComponentFactory->create(
@@ -153,45 +129,5 @@ class Asset extends Select
         $this->applyFilter();
 
         parent::prepare();
-    }
-
-    /**
-     * Apply filter
-     *
-     * @return void
-     */
-    public function applyFilter()
-    {
-        if (isset($this->filterData[$this->getName()])) {
-            $ids = is_array($this->filterData[$this->getName()])
-                ? $this->filterData[$this->getName()]
-                : [$this->filterData[$this->getName()]];
-            $filter = $this->filterBuilder->setConditionType('in')
-                    ->setField($this->_data['config']['identityColumn'])
-                    ->setValue($this->getEntityIdsByAsset($ids))
-                    ->create();
-
-            $this->getContext()->getDataProvider()->addFilter($filter);
-        }
-    }
-
-    /**
-     * Return entity ids by assets ids.
-     *
-     * @param array $ids
-     */
-    private function getEntityIdsByAsset(array $ids): string
-    {
-        if (!empty($ids)) {
-            $categoryIds = [];
-            $data = $this->getContentIdentities->execute($ids);
-            foreach ($data as $identity) {
-                if ($identity->getEntityType() === $this->_data['config']['entityType']) {
-                    $categoryIds[] = $identity->getEntityId();
-                }
-            }
-            return implode(',', $categoryIds);
-        }
-        return '';
     }
 }

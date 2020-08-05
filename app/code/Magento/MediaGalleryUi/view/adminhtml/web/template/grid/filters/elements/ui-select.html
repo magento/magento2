@@ -108,9 +108,8 @@
                         </if>
                         <label class="admin__action-multiselect-label">
                             <span text="option.label"></span>
-                            <img if="$parent.getPath(option)"
-                                 class="admin__action-multiselect-item-path"
-                                 attr="{ src: option.path }"/>
+                            <img class="admin__action-multiselect-item-path"
+                                 attr="{ src: option.src }"/>
                         </label>
                     </div>
                     <if args="$data.optgroup">
