@@ -8,20 +8,24 @@
  * Multishipping checkout billing information
  *
  * @var $block \Magento\Multishipping\Block\Checkout\Billing
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
 <div id="checkout-loader" data-role="checkout-loader" class="loading-mask" data-mage-init='{"billingLoader": {}}'>
     <div class="loader">
         <img src="<?= $block->escapeUrl($block->getViewFileUrl('images/loader-1.gif')); ?>"
-             alt="<?= $block->escapeHtml(__('Loading...')); ?>"
-             style="position: absolute;">
+             alt="<?= $block->escapeHtml(__('Loading...')); ?>">
     </div>
 </div>
-<script>
-    window.checkoutConfig = <?= /* @noEscape */ $block->getCheckoutData()->getSerializedCheckoutConfigs(); ?>;
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag('position: absolute;', 'div#checkout-loader .loader img') ?>
+<?php $checkoutConfig = /* @noEscape */ $block->getCheckoutData()->getSerializedCheckoutConfigs();
+$scriptString = <<<script
+    window.checkoutConfig = {$checkoutConfig};
     window.isCustomerLoggedIn = window.checkoutConfig.isCustomerLoggedIn;
     window.customerData = window.checkoutConfig.customerData;
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <div id="checkout" data-bind="scope:'checkoutMessages'">
     <!-- ko template: getTemplate() --><!-- /ko -->
     <script type="text/x-magento-init">
@@ -72,7 +76,7 @@
                             $methodsCount = count($methods);
                             $methodsForms = $block->hasFormTemplates() ? $block->getFormTemplates(): [];
 
-                            foreach ($methods as $_method) :
+                            foreach ($methods as $_method):
                                     $code = $_method->getCode();
                                     $checked = $block->getSelectedMethodCode() === $code;
 
@@ -82,7 +86,7 @@
                                 ?>
                                 <div data-bind="scope: 'payment_method_<?= $block->escapeHtml($code);?>'">
                                     <dt class="item-title">
-                                        <?php if ($methodsCount > 1) : ?>
+                                        <?php if ($methodsCount > 1): ?>
                                             <input type="radio"
                                                    id="p_method_<?= $block->escapeHtml($code); ?>"
                                                    value="<?= $block->escapeHtml($code); ?>"
@@ -93,11 +97,11 @@
                                                        checked: isChecked,
                                                        click: selectPaymentMethod,
                                                        visible: isRadioButtonVisible()"
-                                                <?php if ($checked) : ?>
+                                                <?php if ($checked): ?>
                                                     checked="checked"
                                                 <?php endif; ?>
                                                    class="radio"/>
-                                        <?php else : ?>
+                                        <?php else: ?>
                                             <input type="radio"
                                                    id="p_method_<?= $block->escapeHtml($code); ?>"
                                                    value="<?= $block->escapeHtml($code); ?>"
@@ -112,7 +116,7 @@
                                             <?= $block->escapeHtml($_method->getTitle()) ?>
                                         </label>
                                     </dt>
-                                    <?php if ($html = $block->getChildHtml('payment.method.' . $code)) : ?>
+                                    <?php if ($html = $block->getChildHtml('payment.method.' . $code)): ?>
                                         <dd class="item-content <?= $checked ? '' : 'no-display'; ?>">
                                             <?= /* @noEscape */ $html; ?>
                                         </dd>
@@ -142,12 +146,14 @@
         </div>
     </div>
 </form>
-<script>
+<?php $quoteBaseGrandTotal = (float)$block->getQuoteBaseGrandTotal();
+$scriptString = <<<script
+
     require(['jquery', 'mage/mage'], function(jQuery) {
         var addtocartForm = jQuery('#multishipping-billing-form');
 
         addtocartForm.mage('payment', {
-            checkoutPrice: <?= (float)$block->getQuoteBaseGrandTotal() ?>
+            checkoutPrice: {$quoteBaseGrandTotal}
         });
 
         addtocartForm.mage('validation', {
@@ -160,9 +166,13 @@
             }
         });
     });
-</script>
 
-<script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+
+<?php $scriptString = <<<script
+
     //<![CDATA[
     require(
         [
@@ -171,21 +181,27 @@
             'domReady!'
         ], function(quote, $) {
             quote.billingAddress({
-                    city: '<?= /* @noEscape */ $block->getAddress()->getCity() ?>',
-                    company: '<?= /* @noEscape */ $block->getAddress()->getCompany(); ?>',
-                    countryId: '<?= /* @noEscape */ $block->getAddress()->getCountryId(); ?>',
-                    customerAddressId: '<?= /* @noEscape */ $block->getAddress()->getCustomerAddressId(); ?>',
-                    customerId: '<?= /* @noEscape */ $block->getAddress()->getCustomerId(); ?>',
-                    fax: '<?= /* @noEscape */ $block->getAddress()->getFax(); ?>',
-                    firstname: '<?= /* @noEscape */ $block->getAddress()->getFirstname(); ?>',
-                    lastname: '<?= /* @noEscape */ $block->getAddress()->getLastname(); ?>',
-                    postcode: '<?= /* @noEscape */ $block->getAddress()->getPostcode(); ?>',
-                    regionId: '<?= /* @noEscape */ $block->getAddress()->getRegionId(); ?>',
-                    regionCode: '<?= /* @noEscape */ $block->getAddress()->getRegionCode() ?>',
-                    region: '<?= /* @noEscape */ $block->getAddress()->getRegion(); ?>',
-                    street: <?= /* @noEscape */ json_encode($block->getAddress()->getStreet()); ?>,
-                    telephone: '<?= /* @noEscape */ $block->getAddress()->getTelephone(); ?>'
+
+script;
+$scriptString .= "city: '" . /* @noEscape */ $block->getAddress()->getCity() . "'," . PHP_EOL;
+$scriptString .= "company: '" . /* @noEscape */ $block->getAddress()->getCompany() . "'," . PHP_EOL;
+$scriptString .= "countryId: '" . /* @noEscape */ $block->getAddress()->getCountryId() . "'," . PHP_EOL;
+$scriptString .= "customerAddressId: '" . /* @noEscape */ $block->getAddress()->getCustomerAddressId() . "'," . PHP_EOL;
+$scriptString .= "customerId: '" . /* @noEscape */ $block->getAddress()->getCustomerId() . "'," . PHP_EOL;
+$scriptString .= "fax: '" . /* @noEscape */ $block->getAddress()->getFax() . "'," . PHP_EOL;
+$scriptString .= "firstname: '" . /* @noEscape */ $block->getAddress()->getFirstname() . "'," . PHP_EOL;
+$scriptString .= "lastname: '" . /* @noEscape */ $block->getAddress()->getLastname() . "'," . PHP_EOL;
+$scriptString .= "postcode: '" . /* @noEscape */ $block->getAddress()->getPostcode() . "'," . PHP_EOL;
+$scriptString .= "regionId: '" . /* @noEscape */ $block->getAddress()->getRegionId() . "'," . PHP_EOL;
+$scriptString .= "regionCode: '" . /* @noEscape */ $block->getAddress()->getRegionCode() . "'," . PHP_EOL;
+$scriptString .= "region: '" . /* @noEscape */ $block->getAddress()->getRegion() . "'," . PHP_EOL;
+$scriptString .= "street: " . /* @noEscape */ json_encode($block->getAddress()->getStreet()) . "," . PHP_EOL;
+$scriptString .= "telephone: '" . /* @noEscape */ $block->getAddress()->getTelephone() . "'" . PHP_EOL;
+$scriptString .= <<<script
             });
         });
     //]]>
-</script>
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

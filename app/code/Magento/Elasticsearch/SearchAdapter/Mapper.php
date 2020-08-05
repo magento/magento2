@@ -19,7 +19,7 @@ use Magento\Elasticsearch\Elasticsearch5\SearchAdapter\Mapper as Elasticsearch5M
  *
  * @api
  * @since 100.1.0
- * @deprecated because of EOL for Elasticsearch2
+ * @deprecated 100.3.5 because of EOL for Elasticsearch2
  */
 class Mapper extends Elasticsearch5Mapper
 {
