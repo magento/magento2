@@ -5,6 +5,12 @@
  */
 namespace Magento\Framework\View\Element\Html;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+use Magento\Framework\View\Element\Template\Context;
+
 /**
  * HTML anchor element block
  *
@@ -13,6 +19,7 @@ namespace Magento\Framework\View\Element\Html;
  * @method string getTitle()
  *
  * @api
+ * @since 100.0.2
  */
 class Link extends \Magento\Framework\View\Element\Template
 {
@@ -52,6 +59,33 @@ class Link extends \Magento\Framework\View\Element\Template
     ];
 
     /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
+     * @var Random
+     */
+    private $random;
+
+    /**
+     * @param Context $context
+     * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
+     * @param Random|null $random
+     */
+    public function __construct(
+        Context $context,
+        array $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null,
+        ?Random $random = null
+    ) {
+        parent::__construct($context, $data);
+        $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+        $this->random = $random ?? ObjectManager::getInstance()->get(Random::class);
+    }
+
+    /**
      * Prepare link attributes as serialized and formatted string
      *
      * @return string
@@ -60,6 +94,9 @@ class Link extends \Magento\Framework\View\Element\Template
     {
         $attributes = [];
         foreach ($this->allowedAttributes as $attribute) {
+            if ($attribute === 'style' || mb_strpos($attribute, 'on') === 0) {
+                continue;
+            }
             $value = $this->getDataUsingMethod($attribute);
             if ($value !== null) {
                 $attributes[$attribute] = $this->escapeHtml($value);
@@ -103,7 +140,12 @@ class Link extends \Magento\Framework\View\Element\Template
             return parent::_toHtml();
         }
 
-        return '<li><a ' . $this->getLinkAttributes() . ' >' . $this->escapeHtml($this->getLabel()) . '</a></li>';
+        if (!$this->getDataUsingMethod('id')) {
+            $this->setDataUsingMethod('id', 'id' .$this->random->getRandomString(8));
+        }
+
+        return '<li><a ' . $this->getLinkAttributes() . ' >' . $this->escapeHtml($this->getLabel()) . '</a></li>'
+            .$this->renderSpecialAttributes();
     }
 
     /**
@@ -114,5 +156,35 @@ class Link extends \Magento\Framework\View\Element\Template
     public function getHref()
     {
         return $this->getUrl($this->getPath());
+    }
+
+    /**
+     * Render attributes that require separate tags.
+     *
+     * @return string
+     */
+    private function renderSpecialAttributes(): string
+    {
+        $id = $this->getDataUsingMethod('id');
+        if (!$id) {
+            throw new \RuntimeException('ID is required to render the link');
+        }
+
+        $html = '';
+        $style = $this->getDataUsingMethod('style');
+        if ($style) {
+            $html .= $this->secureRenderer->renderStyleAsTag($style, "#$id");
+        }
+        foreach ($this->allowedAttributes as $attribute) {
+            if (mb_strpos($attribute, 'on') === 0 && $value = $this->getDataUsingMethod($attribute)) {
+                $html .= $this->secureRenderer->renderEventListenerAsTag(
+                    $attribute,
+                    $value,
+                    "#$id"
+                );
+            }
+        }
+
+        return $html;
     }
 }

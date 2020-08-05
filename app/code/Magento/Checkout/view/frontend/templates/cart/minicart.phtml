@@ -5,6 +5,7 @@
  */
 
 /** @var $block \Magento\Checkout\Block\Cart\Sidebar */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
 <div data-block="minicart" class="minicart-wrapper">
@@ -12,7 +13,8 @@
        data-bind="scope: 'minicart_content'">
         <span class="text"><?= $block->escapeHtml(__('My Cart')) ?></span>
         <span class="counter qty empty"
-              data-bind="css: { empty: !!getCartParam('summary_count') == false && !isLoading() }, blockLoader: isLoading">
+              data-bind="css: { empty: !!getCartParam('summary_count') == false && !isLoading() },
+               blockLoader: isLoading">
             <span class="counter-number"><!-- ko text: getCartParam('summary_count') --><!-- /ko --></span>
             <span class="counter-label">
             <!-- ko if: getCartParam('summary_count') -->
@@ -22,7 +24,7 @@
             </span>
         </span>
     </a>
-    <?php if ($block->getIsNeedToDisplaySideBar()) :?>
+    <?php if ($block->getIsNeedToDisplaySideBar()):?>
         <div class="block block-minicart"
              data-role="dropdownDialog"
              data-mage-init='{"dropdownDialog":{
@@ -39,18 +41,19 @@
             </div>
             <?= $block->getChildHtml('minicart.addons') ?>
         </div>
-    <?php else :?>
-        <script>
+    <?php else: ?>
+        <?php $scriptString = <<<script
             require(['jquery'], function ($) {
                 $('a.action.showcart').click(function() {
                     $(document.body).trigger('processStart');
                 });
             });
-        </script>
+script;
+        ?>
+        <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
     <?php endif ?>
-    <script>
-        window.checkout = <?= /* @noEscape */ $block->getSerializedConfig() ?>;
-    </script>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], 'window.checkout = ' .
+     /* @noEscape */ $block->getSerializedConfig(), false); ?>
     <script type="text/x-magento-init">
     {
         "[data-block='minicart']": {
@@ -64,5 +67,3 @@
     }
     </script>
 </div>
-
-
