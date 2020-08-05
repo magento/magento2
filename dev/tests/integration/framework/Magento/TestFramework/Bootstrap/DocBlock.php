@@ -52,6 +52,7 @@ class DocBlock
     protected function _getSubscribers(Application $application)
     {
         return [
+            new \Magento\TestFramework\Workaround\IsolationLogger(),
             new \Magento\TestFramework\Workaround\Segfault(),
             new \Magento\TestFramework\Workaround\Cleanup\TestCaseProperties(),
             new \Magento\TestFramework\Workaround\Cleanup\StaticProperties(),
