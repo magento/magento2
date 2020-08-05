@@ -351,6 +351,9 @@ class LayoutProcessor implements LayoutProcessorInterface
                                 ],
                             ],
                             'telephone' => [
+                                'validation' => [
+                                    'validate-phoneStrict' => 0,
+                                ],
                                 'config' => [
                                     'tooltip' => [
                                         'description' => __('For delivery questions.'),

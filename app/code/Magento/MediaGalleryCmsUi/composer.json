@@ -1,0 +1,23 @@
+{
+    "name": "magento/module-media-gallery-cms-ui",
+    "description": "Cms related UI elements in the magento media gallery",
+    "require": {
+        "php": "~7.3.0||~7.4.0",
+        "magento/framework": "*",
+        "magento/module-cms": "*",
+        "magento/module-backend": "*"
+    },
+    "type": "magento2-module",
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ],
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Magento\\MediaGalleryCmsUi\\": ""
+        }
+    }
+}
