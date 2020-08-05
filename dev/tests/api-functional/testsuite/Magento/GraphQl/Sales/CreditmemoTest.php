@@ -17,6 +17,7 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\CreditmemoFactory;
 use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection;
 use Magento\Sales\Model\Service\CreditmemoService;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -53,9 +54,6 @@ class CreditmemoTest extends GraphQlAbstract
     /** @var SearchCriteriaBuilder */
     private $searchCriteriaBuilder;
 
-    /** @var string */
-    private $orderNumber;
-
     /**
      * Set up
      */
@@ -76,8 +74,8 @@ class CreditmemoTest extends GraphQlAbstract
 
     protected function tearDown(): void
     {
+        $this->cleanUpCreditMemos();
         $this->deleteOrder();
-        $this->cleanUpCreditMemos($this->orderNumber);
     }
 
     /**
@@ -174,10 +172,9 @@ class CreditmemoTest extends GraphQlAbstract
             ['sku' => 'bundle-product-two-dropdown-options', 'quantity' => 2]
         );
         $orderNumber = $placeOrderResponse['placeOrder']['order']['order_number'];
-        $this->orderNumber = $orderNumber;
-        $this->prepareInvoice($this->orderNumber, 2);
+        $this->prepareInvoice($orderNumber, 2);
 
-        $order = $this->order->loadByIncrementId($this->orderNumber);
+        $order = $this->order->loadByIncrementId($orderNumber);
         /** @var Order\Item $orderItem */
         $orderItem = current($order->getAllItems());
         $orderItem->setQtyRefunded(1);
@@ -277,10 +274,8 @@ class CreditmemoTest extends GraphQlAbstract
             ['sku' => 'bundle-product-two-dropdown-options', 'quantity' => 2]
         );
         $orderNumber = $placeOrderResponse['placeOrder']['order']['order_number'];
-        $this->orderNumber = $orderNumber;
-        $this->prepareInvoice($this->orderNumber, 2);
-
-        $order = $this->order->loadByIncrementId($this->orderNumber);
+        $this->prepareInvoice($orderNumber, 2);
+        $order = $this->order->loadByIncrementId($orderNumber);
         /** @var Order\Item $orderItem */
         $orderItem = current($order->getAllItems());
         $orderItem->setQtyRefunded(1);
@@ -427,17 +422,21 @@ class CreditmemoTest extends GraphQlAbstract
     }
 
     /**
-     * @param $orderNumber
+     * @return void
      */
-    private function cleanUpCreditMemos($orderNumber): void
+    private function cleanUpCreditMemos(): void
     {
+        /** @var \Magento\Framework\Registry $registry */
+        $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', true);
         $creditmemoRepository = Bootstrap::getObjectManager()->get(CreditmemoRepositoryInterface::class);
-        $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', $orderNumber)
-            ->create();
-        $creditmemos = $creditmemoRepository->getList($searchCriteria)->getItems();
-        foreach ($creditmemos as $creditmemo) {
+        $creditmemoCollection = Bootstrap::getObjectManager()->create(Collection::class);
+        foreach ($creditmemoCollection as $creditmemo) {
             $creditmemoRepository->delete($creditmemo);
         }
+        $registry->unregister('isSecureArea');
+        $registry->register('isSecureArea', false);
     }
 
     /**
