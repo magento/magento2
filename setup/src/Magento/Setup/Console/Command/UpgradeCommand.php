@@ -6,9 +6,11 @@
 namespace Magento\Setup\Console\Command;
 
 use Magento\Deploy\Console\Command\App\ConfigImportCommand;
-use Magento\Framework\App\State as AppState;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State as AppState;
+use Magento\Framework\Console\Cli;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Config\CacheInterface;
 use Magento\Framework\Setup\ConsoleLogger;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
@@ -140,6 +142,7 @@ class UpgradeCommand extends AbstractSetupCommand
             $searchConfig = $this->searchConfigFactory->create();
             $this->cache->clean();
             $searchConfig->validateSearchEngine();
+            $installer->removeUnusedTriggers();
             $installer->installSchema($request);
             $installer->installDataFixtures($request);
 
@@ -148,8 +151,8 @@ class UpgradeCommand extends AbstractSetupCommand
                 $arrayInput = new ArrayInput([]);
                 $arrayInput->setInteractive($input->isInteractive());
                 $result = $importConfigCommand->run($arrayInput, $output);
-                if ($result === \Magento\Framework\Console\Cli::RETURN_FAILURE) {
-                    throw new \Magento\Framework\Exception\RuntimeException(
+                if ($result === Cli::RETURN_FAILURE) {
+                    throw new RuntimeException(
                         __('%1 failed. See previous output.', ConfigImportCommand::COMMAND_NAME)
                     );
                 }
@@ -162,9 +165,9 @@ class UpgradeCommand extends AbstractSetupCommand
             }
         } catch (\Exception $e) {
             $output->writeln('<error>' . $e->getMessage() . '</error>');
-            return \Magento\Framework\Console\Cli::RETURN_FAILURE;
+            return Cli::RETURN_FAILURE;
         }
 
-        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+        return Cli::RETURN_SUCCESS;
     }
 }
