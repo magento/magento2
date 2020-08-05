@@ -25,7 +25,7 @@
         <click selector="{{AdminTaxRulesSection.selectProductTaxClass(taxableGoodsTaxClass.class_name)}}" stepKey="unSelectTaxClass"/>
         <click selector="{{AdminTaxRulesSection.selectProductTaxClass(productTaxClassName)}}" stepKey="selectProductTaxClass"/>
         <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSave"/>
-        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitForSuccessMessage"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You saved the tax rule." stepKey="verifyRuleSaved"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the tax rule." stepKey="verifyRuleSaved"/>
     </actionGroup>
 </actionGroups>

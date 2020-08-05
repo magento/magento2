@@ -4,26 +4,28 @@
  * See COPYING.txt for license details.
  */
 
-use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
-use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\CatalogSearch\Model\Indexer\Fulltext as FulltextIndexer;
-use Magento\Catalog\Model\Product;
-use Magento\Sales\Model\Order\Address as OrderAddress;
-use Magento\Sales\Model\Order\Payment as OrderPayment;
-use Magento\Sales\Model\Order\Item as OrderItem;
+use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Address as OrderAddress;
+use Magento\Sales\Model\Order\Item as OrderItem;
+use Magento\Sales\Model\Order\Payment as OrderPayment;
 use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap as BootstrapHelper;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../Store/_files/core_fixturestore.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/core_fixturestore.php');
 
 $objectManager = BootstrapHelper::getObjectManager();
 
 $objectManager->get(IndexerRegistry::class)
     ->get(FulltextIndexer::INDEXER_ID)
     ->reindexAll();
-
-require __DIR__ . '/../../Catalog/_files/product_simple_duplicated.php';
-/** @var Product $product */
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple_duplicated.php');
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$product = $productRepository->get('simple-1');
 
 $addressData = include __DIR__ . '/address_data.php';
 

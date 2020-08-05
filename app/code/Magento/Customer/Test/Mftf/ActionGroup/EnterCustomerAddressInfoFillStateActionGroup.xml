@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="EnterCustomerAddressInfoFillStateActionGroup" extends="EnterCustomerAddressInfoActionGroup">
         <annotations>
-            <description>EXTENDS: EnterCustomerAddressInfo. Fills the State field.</description>
+            <description>EXTENDS: EnterCustomerAddressInfoActionGroup. Fills the State field.</description>
         </annotations>
 
         <fillField stepKey="selectState" selector="{{StorefrontCustomerAddressSection.stateProvinceFill}}" userInput="{{Address.state}}"/>

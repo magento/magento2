@@ -43,7 +43,7 @@ class ReportsConfigRule implements RuleInterface
                 }
                 if (strtolower($currentModule) !== strtolower($this->moduleTableMap[$table])) {
                     $dependenciesInfo[] = [
-                        'module' => $this->moduleTableMap[$table],
+                        'modules' => [$this->moduleTableMap[$table]],
                         'type' => RuleInterface::TYPE_HARD,
                         'source' => $table,
                     ];

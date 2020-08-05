@@ -81,7 +81,7 @@ class GuestPaymentInformationManagementPluginTest extends \PHPUnit\Framework\Tes
      */
     protected $objectManager;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->customerSession = $this->objectManager->get(\Magento\Customer\Model\Session::class);

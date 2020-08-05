@@ -126,7 +126,7 @@
             <deleteData createDataKey="simpleProduct20" stepKey="deleteCartItem20"/>
         </after>
         <!-- Go to the shopping cart and check if the pager is missing-->
-        <actionGroup ref="StorefrontOpenCartPageActionGroup" stepKey="goToCartPage" />
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCartPage" />
         <actionGroup ref="AssertPagerTextIsNotVisibleActionGroup" stepKey="VerifyMissingPagerText" >
             <argument name="text" value="Items 1 to 20"/>
         </actionGroup>

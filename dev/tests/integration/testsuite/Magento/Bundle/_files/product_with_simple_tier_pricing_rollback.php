@@ -5,10 +5,17 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple_rollback.php';
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple_rollback.php');
+
+$objectManager = Bootstrap::getObjectManager();
 /** @var \Magento\Framework\Registry $registry */
-$registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+$registry = $objectManager->get(\Magento\Framework\Registry::class);
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);

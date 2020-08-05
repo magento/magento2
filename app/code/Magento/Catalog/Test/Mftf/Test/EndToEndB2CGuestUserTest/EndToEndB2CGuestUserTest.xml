@@ -57,13 +57,15 @@
         </after>
 
         <!--Re-index-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
 
         <!-- Step 1: User browses catalog -->
         <comment userInput="Start of browsing catalog" stepKey="startOfBrowsingCatalog"/>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
-        <waitForElementVisible selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="homeWaitForWelcomeMessage"/>
-        <see userInput="Default welcome msg!" selector="{{StorefrontPanelHeaderSection.WelcomeMessage}}" stepKey="homeCheckWelcome"/>
+        <waitForElementVisible selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="homeWaitForWelcomeMessage"/>
+        <see userInput="Default welcome msg!" selector="{{StorefrontPanelHeaderSection.welcomeMessage}}" stepKey="homeCheckWelcome"/>
 
         <!-- Open Category -->
         <comment userInput="Open category" stepKey="commentOpenCategory"/>

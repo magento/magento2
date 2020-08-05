@@ -25,7 +25,7 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
     /**
      * Initialize model
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -98,7 +98,7 @@ class RobotsTest extends \PHPUnit\Framework\TestCase
     /**
      * Remove created robots.txt
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         require 'Magento/Config/Model/_files/no_robots_txt.php';
     }

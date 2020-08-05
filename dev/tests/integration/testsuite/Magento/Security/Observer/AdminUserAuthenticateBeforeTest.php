@@ -17,12 +17,12 @@ class AdminUserAuthenticateBeforeTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoDataFixture Magento/Security/_files/expired_users.php
-     * @expectedException \Magento\Framework\Exception\Plugin\AuthenticationException
-     * @expectedExceptionMessage The account sign-in was incorrect or your account is disabled temporarily.
-     *  Please wait and try again later
      */
     public function testWithExpiredUser()
     {
+        $this->expectException(\Magento\Framework\Exception\Plugin\AuthenticationException::class);
+        $this->expectExceptionMessage('The account sign-in was incorrect or your account is disabled temporarily. Please wait and try again later');
+
         $adminUserNameFromFixture = 'adminUserExpired';
         $password = \Magento\TestFramework\Bootstrap::ADMIN_PASSWORD;
         /** @var \Magento\User\Model\User $user */

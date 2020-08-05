@@ -3,24 +3,30 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Quote\Test\Unit\Model\Quote;
 
-class ConfigTest extends \PHPUnit\Framework\TestCase
+use Magento\Quote\Model\Quote\Config;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigTest extends TestCase
 {
     /**
-     * @var \Magento\Quote\Model\Quote\Config
+     * @var Config
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_attributeConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_attributeConfig = $this->createMock(\Magento\Catalog\Model\Attribute\Config::class);
-        $this->_model = new \Magento\Quote\Model\Quote\Config($this->_attributeConfig);
+        $this->_model = new Config($this->_attributeConfig);
     }
 
     public function testGetProductAttributes()
@@ -32,8 +38,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'getAttributeNames'
         )->with(
             'quote_item'
-        )->will(
-            $this->returnValue($attributes)
+        )->willReturn(
+            $attributes
         );
         $this->assertEquals($attributes, $this->_model->getProductAttributes());
     }

@@ -141,7 +141,7 @@
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveConfigurableProductVariationOption2Option2"/>
 
             <!-- Reindex invalidated indices after product attribute has been created -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndicesAfterCreateAttributes"/>
+           <magentoCron groups="index" stepKey="reindexInvalidatedIndicesAfterCreateAttributes"/>
         </before>
 
         <after>
@@ -160,7 +160,7 @@
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductAttributeGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
             <!-- Reindex invalidated indices after product attribute has been created -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndicesAfterDeleteAttributes"/>
+           <magentoCron groups="index" stepKey="reindexInvalidatedIndicesAfterDeleteAttributes"/>
         </after>
 
         <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openConfigurableProductPage">

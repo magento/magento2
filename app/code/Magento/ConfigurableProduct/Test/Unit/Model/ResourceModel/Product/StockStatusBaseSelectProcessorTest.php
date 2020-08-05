@@ -3,17 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ConfigurableProduct\Test\Unit\Model\ResourceModel\Product;
 
-use Magento\Framework\DB\Select;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Catalog\Model\ResourceModel\Product\BaseSelectProcessorInterface;
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\CatalogInventory\Model\Stock\Status as StockStatus;
 use Magento\CatalogInventory\Model\ResourceModel\Stock\Status as StockStatusResource;
+use Magento\CatalogInventory\Model\Stock\Status as StockStatus;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\StockStatusBaseSelectProcessor;
+use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
+class StockStatusBaseSelectProcessorTest extends TestCase
 {
     /**
      * @var StockStatusBaseSelectProcessor
@@ -21,7 +25,7 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
     private $subject;
 
     /**
-     * @var StockConfigurationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockConfigurationInterface|MockObject
      */
     private $stockConfigMock;
 
@@ -31,11 +35,11 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
     private $stockStatusTable = 'cataloginventory_stock_status';
 
     /**
-     * @var StockStatusResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var StockStatusResource|MockObject
      */
     private $stockStatusResourceMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stockConfigMock = $this->getMockBuilder(StockConfigurationInterface::class)
             ->disableOriginalConstructor()
@@ -68,7 +72,7 @@ class StockStatusBaseSelectProcessorTest extends \PHPUnit\Framework\TestCase
             ->method('isShowOutOfStock')
             ->willReturn($isShowOutOfStock);
 
-        /** @var Select|\PHPUnit_Framework_MockObject_MockObject $selectMock */
+        /** @var Select|MockObject $selectMock */
         $selectMock = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();

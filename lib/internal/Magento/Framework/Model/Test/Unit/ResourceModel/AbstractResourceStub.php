@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Model\Test\Unit\ResourceModel;
 
 use Magento\Framework\DataObject;
@@ -52,6 +54,7 @@ class AbstractResourceStub extends AbstractResource
      * @param null $defaultValue
      * @param bool $unsetEmpty
      * @return $this
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function _serializeField(DataObject $object, $field, $defaultValue = null, $unsetEmpty = false)
     {
@@ -62,6 +65,7 @@ class AbstractResourceStub extends AbstractResource
      * @param DataObject $object
      * @param string $field
      * @param null $defaultValue
+     * phpcs:disable Generic.CodeAnalysis.UselessOverridingMethod
      */
     public function _unserializeField(DataObject $object, $field, $defaultValue = null)
     {
