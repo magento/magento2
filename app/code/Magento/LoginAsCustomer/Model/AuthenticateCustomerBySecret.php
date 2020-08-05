@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\LoginAsCustomerFrontendUi\Model;
+namespace Magento\LoginAsCustomer\Model;
 
 use Magento\Customer\Model\Session;
 use Magento\Framework\App\ObjectManager;

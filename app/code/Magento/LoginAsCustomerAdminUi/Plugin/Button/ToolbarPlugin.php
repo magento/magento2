@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomerAdminUi\Plugin\Button;
 
 use Magento\Backend\Block\Widget\Button\ButtonList;
-use Magento\Backend\Block\Widget\Button\Toolbar;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Escaper;
 use Magento\Framework\View\Element\AbstractBlock;
@@ -62,13 +61,13 @@ class ToolbarPlugin
     /**
      * Add Login as Customer button.
      *
-     * @param \Magento\Backend\Block\Widget\Button\Toolbar $subject
+     * @param \Magento\Backend\Block\Widget\Button\ToolbarInterface $subject
      * @param \Magento\Framework\View\Element\AbstractBlock $context
      * @param \Magento\Backend\Block\Widget\Button\ButtonList $buttonList
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforePushButtons(
-        Toolbar $subject,
+        \Magento\Backend\Block\Widget\Button\ToolbarInterface $subject,
         AbstractBlock $context,
         ButtonList $buttonList
     ): void {
