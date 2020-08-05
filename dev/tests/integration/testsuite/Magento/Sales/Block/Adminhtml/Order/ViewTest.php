@@ -38,7 +38,7 @@ class ViewTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->layout = $this->_objectManager->get(LayoutInterface::class);
