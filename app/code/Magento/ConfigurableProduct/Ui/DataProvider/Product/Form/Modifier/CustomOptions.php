@@ -40,7 +40,7 @@ class CustomOptions extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {
@@ -48,7 +48,7 @@ class CustomOptions extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -92,7 +92,8 @@ class CustomOptions extends AbstractModifier
                     ),
                     'imports' => [
                         'updateVisibility' => 'ns = ${ $.ns }, index = '
-                            . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty'
+                            . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
+                        '__disableTmpl' => ['updateVisibility' => false],
                     ]
                 ]
             );
@@ -128,6 +129,7 @@ class CustomOptions extends AbstractModifier
                     'imports' => [
                         'updateOptions' => 'ns = ${ $.ns }, index = '
                             . ConfigurablePanel::CONFIGURABLE_MATRIX . ':isEmpty',
+                        '__disableTmpl' => ['updateOptions' => false],
                     ],
                 ]
             );

@@ -3,42 +3,48 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\SendFriend\Test\Unit\Model;
 
+use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\SendFriend\Helper\Data;
+use Magento\SendFriend\Model\SendFriend;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test SendFriend
  *
  */
-class SendFriendTest extends \PHPUnit\Framework\TestCase
+class SendFriendTest extends TestCase
 {
     /**
-     * @var \Magento\SendFriend\Model\SendFriend
+     * @var SendFriend
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Stdlib\CookieManagerInterface
+     * @var MockObject|CookieManagerInterface
      */
     protected $cookieManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $sendfriendDataMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->sendfriendDataMock = $this->getMockBuilder(\Magento\SendFriend\Helper\Data::class)
+        $this->sendfriendDataMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cookieManagerMock = $this->createMock(\Magento\Framework\Stdlib\CookieManagerInterface::class);
+        $this->cookieManagerMock = $this->getMockForAbstractClass(CookieManagerInterface::class);
 
         $this->model = $objectManager->getObject(
-            \Magento\SendFriend\Model\SendFriend::class,
+            SendFriend::class,
             [
                 'sendfriendData' => $this->sendfriendDataMock,
                 'cookieManager' => $this->cookieManagerMock,
@@ -49,11 +55,11 @@ class SendFriendTest extends \PHPUnit\Framework\TestCase
     public function testGetSentCountWithCheckCookie()
     {
         $cookieName = 'testCookieName';
-        $this->sendfriendDataMock->expects($this->once())->method('getLimitBy')->with()->will(
-            $this->returnValue(\Magento\SendFriend\Helper\Data::CHECK_COOKIE)
+        $this->sendfriendDataMock->expects($this->once())->method('getLimitBy')->with()->willReturn(
+            Data::CHECK_COOKIE
         );
-        $this->sendfriendDataMock->expects($this->once())->method('getCookieName')->with()->will(
-            $this->returnValue($cookieName)
+        $this->sendfriendDataMock->expects($this->once())->method('getCookieName')->with()->willReturn(
+            $cookieName
         );
 
         $this->cookieManagerMock->expects($this->once())->method('getCookie')->with($cookieName);
@@ -63,13 +69,13 @@ class SendFriendTest extends \PHPUnit\Framework\TestCase
     public function testSentCountByCookies()
     {
         $cookieName = 'testCookieName';
-        $this->sendfriendDataMock->expects($this->once())->method('getCookieName')->with()->will(
-            $this->returnValue($cookieName)
+        $this->sendfriendDataMock->expects($this->once())->method('getCookieName')->with()->willReturn(
+            $cookieName
         );
 
         $this->cookieManagerMock->expects($this->once())->method('getCookie')->with($cookieName);
         $this->cookieManagerMock->expects($this->once())->method('setSensitiveCookie');
-        $sendFriendClass = new \ReflectionClass(\Magento\SendFriend\Model\SendFriend::class);
+        $sendFriendClass = new \ReflectionClass(SendFriend::class);
         $method = $sendFriendClass->getMethod('_sentCountByCookies');
         $method->setAccessible(true);
         $method->invokeArgs($this->model, [true]);

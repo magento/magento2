@@ -11,7 +11,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
 
 /**
- * Upload product image action controller
+ * Class Upload
  */
 class Upload extends \Magento\Backend\App\Action implements HttpPostActionInterface
 {

@@ -51,4 +51,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\CatalogImportExport\Model\Import\Product\LinkProcessor">
+        <arguments>
+            <argument name="linkNameToId" xsi:type="array">
+                <item name="_related_" xsi:type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_RELATED</item>
+                <item name="_crosssell_" xsi:type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_CROSSSELL</item>
+                <item name="_upsell_" xsi:type="const">Magento\Catalog\Model\Product\Link::LINK_TYPE_UPSELL</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

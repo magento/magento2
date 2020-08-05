@@ -23,14 +23,14 @@
             <createData entity="Simple_US_Customer" stepKey="createSecondCustomer">
                 <field key="firstname">&quot;Jane Doe&quot;</field>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="createFirstCustomer" stepKey="deleteFirstCustomer"/>
             <deleteData createDataKey="createSecondCustomer" stepKey="deleteSecondCustomer"/>
             <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>
             <actionGroup ref="AdminResetFilterInCustomerAddressGrid" stepKey="clearCustomerGridFilter"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Step 1: Go to Customers > All Customers-->
         <amOnPage url="{{AdminCustomerPage.url}}" stepKey="openCustomersGridPage"/>

@@ -185,13 +185,9 @@ class Block extends AbstractDb
         $entityMetadata = $this->metadataPool->getMetadata(BlockInterface::class);
         $linkField = $entityMetadata->getLinkField();
 
-        $stores = (array)$object->getData('store_id');
-        $isDefaultStore = $this->_storeManager->isSingleStoreMode()
-            || array_search(Store::DEFAULT_STORE_ID, $stores) !== false;
-
-        if (!$isDefaultStore) {
-            $stores[] = Store::DEFAULT_STORE_ID;
-        }
+        $stores = $this->_storeManager->isSingleStoreMode()
+            ? [Store::DEFAULT_STORE_ID]
+            : (array)$object->getData('store_id');
 
         $select = $this->getConnection()->select()
             ->from(['cb' => $this->getMainTable()])
@@ -200,11 +196,8 @@ class Block extends AbstractDb
                 'cb.' . $linkField . ' = cbs.' . $linkField,
                 []
             )
-            ->where('cb.identifier = ?  ', $object->getData('identifier'));
-
-        if (!$isDefaultStore) {
-            $select->where('cbs.store_id IN (?)', $stores);
-        }
+            ->where('cb.identifier = ?  ', $object->getData('identifier'))
+            ->where('cbs.store_id IN (?)', $stores);
 
         if ($object->getId()) {
             $select->where('cb.' . $entityMetadata->getIdentifierField() . ' <> ?', $object->getId());

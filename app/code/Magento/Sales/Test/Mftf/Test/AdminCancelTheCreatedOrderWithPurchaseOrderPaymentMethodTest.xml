@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Enable Purchase Order payment method -->
             <magentoCLI command="config:set {{EnablePurchaseOrderConfigData.path}} {{EnablePurchaseOrderConfigData.value}}" stepKey="enableCPurchaseOrderPayment"/>
@@ -35,14 +35,18 @@
             <createData entity="SimpleProduct2" stepKey="simpleProduct">
                 <field key="price">10.00</field>
             </createData>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <magentoCLI command="config:set {{DisablePurchaseOrderConfigData.path}} {{DisablePurchaseOrderConfigData.value}}" stepKey="disablePurchaseOrderPayment"/>
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
             <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create new customer order-->

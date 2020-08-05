@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductCanAddToCartTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="View configurable product details in storefront"/>
+            <title value="Guest customer should be able to successfully add the product to the cart"/>
+            <description value="Guest customer should be able to successfully add the product to the cart"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-97"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Create a configurable product via the UI -->
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteProduct">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!-- Verify adding configurable product to cart after an option is selected in storefront product view -->
+        <amOnPage url="{{_defaultProduct.urlKey}}.html" stepKey="amOnConfigurableProductPage"/>
+        <waitForPageLoad stepKey="wait"/>
+        <see userInput="{{_defaultProduct.name}}" selector="{{StorefrontProductInfoMainSection.productName}}" stepKey="seeProductName"/>
+        <selectOption userInput="{{colorProductAttribute1.name}}" selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="selectOption1"/>
+        <waitForElementVisible selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="waitForAddToCartVisible"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="_defaultProduct"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+    </test>
+</tests>

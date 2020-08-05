@@ -3,27 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Persistent\Test\Unit\Model;
 
-class FactoryTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Persistent\Model\Factory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class FactoryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $_objectManagerMock;
 
     /**
-     * @var \Magento\Persistent\Model\Factory
+     * @var Factory
      */
     protected $_factory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
 
-        $this->_objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->_objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->_factory = $helper->getObject(
-            \Magento\Persistent\Model\Factory::class,
+            Factory::class,
             ['objectManager' => $this->_objectManagerMock]
         );
     }
@@ -42,8 +50,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $className,
             []
-        )->will(
-            $this->returnValue($classMock)
+        )->willReturn(
+            $classMock
         );
 
         $this->assertEquals($classMock, $this->_factory->create($className));
@@ -62,8 +70,8 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         )->with(
             $className,
             $data
-        )->will(
-            $this->returnValue($classMock)
+        )->willReturn(
+            $classMock
         );
 
         $this->assertEquals($classMock, $this->_factory->create($className, $data));

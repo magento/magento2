@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminChangeCustomerGroupInNewOrderTest">
+        <annotations>
+            <title value="Customer account group cannot be selected while creating a new customer in order"/>
+            <stories value="MC-15290: Customer account group cannot be selected while creating a new customer in order"/>
+            <description value="Customer account group cannot be selected while creating a new customer in order"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-15290"/>
+            <useCaseId value="MC-15289"/>
+            <group value="sales"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <actionGroup ref="NavigateToNewOrderPageNewCustomerActionGroup" stepKey="openNewOrder"/>
+        <selectOption selector="{{AdminOrderFormAccountSection.group}}" userInput="Retailer" stepKey="selectCustomerGroup"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <grabValueFrom selector="{{AdminOrderFormAccountSection.group}}" stepKey="grabGroupValue"/>
+        <assertEquals stepKey="assertValueIsStillSelected">
+            <actualResult type="variable">$grabGroupValue</actualResult>
+            <expectedResult type="string">3</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

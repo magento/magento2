@@ -5,7 +5,7 @@
  */
 namespace Magento\Framework;
 
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
@@ -18,16 +18,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = Bootstrap::getObjectManager()->create(\Magento\Framework\Url::class);
-    }
-
-    public function testSetGetUseSession()
-    {
-        $this->assertFalse((bool)$this->model->getUseSession());
-        $this->model->setUseSession(false);
-        $this->assertFalse($this->model->getUseSession());
     }
 
     public function testSetRouteFrontName()

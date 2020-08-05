@@ -108,6 +108,11 @@ sub vcl_recv {
         #unset req.http.Cookie;
     }
 
+     # Authenticated GraphQL requests should not be cached by default
+    if (req.url ~ "/graphql" && req.http.Authorization ~ "^Bearer") {
+        return (pass);
+    }
+
     return (hash);
 }
 

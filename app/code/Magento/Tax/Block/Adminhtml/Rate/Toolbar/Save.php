@@ -133,7 +133,7 @@ class Save extends \Magento\Backend\Block\Template implements \Magento\Backend\B
                     ) . '\', \'' . $this->getUrl(
                         'tax/*/delete',
                         ['rate' => $rate]
-                    ) . '\')',
+                    ) . '\', {data: {}})',
                     'class' => 'delete'
                 ]
             );

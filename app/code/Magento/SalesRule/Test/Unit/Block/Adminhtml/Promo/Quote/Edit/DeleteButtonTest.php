@@ -3,40 +3,48 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Test\Unit\Block\Adminhtml\Promo\Quote\Edit;
 
+use Magento\Backend\Block\Widget\Context;
+use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\UrlInterface;
+use Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\DeleteButton;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DeleteButtonTest extends \PHPUnit\Framework\TestCase
+class DeleteButtonTest extends TestCase
 {
     /**
-     * @var \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\DeleteButton
+     * @var DeleteButton
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $registryMock;
 
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->urlBuilderMock = $this->createMock(\Magento\Framework\UrlInterface::class);
-        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
-        $contextMock = $this->createMock(\Magento\Backend\Block\Widget\Context::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->registryMock = $this->createMock(Registry::class);
+        $contextMock = $this->createMock(Context::class);
 
         $contextMock->expects($this->any())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
 
         $this->model = (new ObjectManager($this))->getObject(
-            \Magento\SalesRule\Block\Adminhtml\Promo\Quote\Edit\DeleteButton::class,
+            DeleteButton::class,
             [
                 'context' => $contextMock,
                 'registry' => $this->registryMock

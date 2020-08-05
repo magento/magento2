@@ -8,7 +8,7 @@ namespace Magento\Framework\App\Request;
 use Magento\Framework\App\HttpRequestInterface;
 use Magento\Framework\App\RequestContentInterface;
 use Magento\Framework\App\RequestSafetyInterface;
-use Magento\Framework\App\Route\ConfigInterface\Proxy as ConfigInterface;
+use Magento\Framework\App\Route\ConfigInterface;
 use Magento\Framework\HTTP\PhpEnvironment\Request;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Stdlib\Cookie\CookieReaderInterface;
@@ -16,6 +16,7 @@ use Magento\Framework\Stdlib\StringUtils;
 
 /**
  * Http request
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Http extends Request implements RequestContentInterface, RequestSafetyInterface, HttpRequestInterface
 {
@@ -106,7 +107,7 @@ class Http extends Request implements RequestContentInterface, RequestSafetyInte
      * @param ConfigInterface $routeConfig
      * @param PathInfoProcessorInterface $pathInfoProcessor
      * @param ObjectManagerInterface $objectManager
-     * @param \Zend\Uri\UriInterface|string|null $uri
+     * @param \Laminas\Uri\UriInterface|string|null $uri
      * @param array $directFrontNames
      * @param PathInfo|null $pathInfoService
      */

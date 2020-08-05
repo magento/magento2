@@ -3,17 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Payment\Test\Unit\Model\Source;
 
-use \Magento\Payment\Model\Source\Cctype;
+use Magento\Payment\Model\Config;
+use Magento\Payment\Model\Source\Cctype;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CctypeTest extends \PHPUnit\Framework\TestCase
+class CctypeTest extends TestCase
 {
     /**
      * Payment config model
      *
-     * @var \Magento\Payment\Model\Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     protected $_paymentConfig;
 
@@ -43,11 +47,12 @@ class CctypeTest extends \PHPUnit\Framework\TestCase
      */
     protected $_expectedToOptionsArray = [['value' => 'allowed_cc_type', 'label' => 'name']];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_paymentConfig = $this->getMockBuilder(
-            \Magento\Payment\Model\Config::class
-        )->disableOriginalConstructor()->setMethods([])->getMock();
+            Config::class
+        )->disableOriginalConstructor()
+            ->setMethods([])->getMock();
 
         $this->_model = new Cctype($this->_paymentConfig);
     }
@@ -73,8 +78,8 @@ class CctypeTest extends \PHPUnit\Framework\TestCase
 
     private function _preparePaymentConfig()
     {
-        $this->_paymentConfig->expects($this->once())->method('getCcTypes')->will(
-            $this->returnValue($this->_cctypesArray)
+        $this->_paymentConfig->expects($this->once())->method('getCcTypes')->willReturn(
+            $this->_cctypesArray
         );
     }
 }

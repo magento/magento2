@@ -3,23 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Msrp\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
-use Magento\Msrp\Ui\DataProvider\Product\Form\Modifier\Msrp;
 use Magento\Msrp\Model\Config as MsrpConfig;
+use Magento\Msrp\Ui\DataProvider\Product\Form\Modifier\Msrp;
+use PHPUnit\Framework\MockObject\MockObject;
 
-/**
- * Class MsrpTest
- */
 class MsrpTest extends AbstractModifierTest
 {
     /**
-     * @var MsrpConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var MsrpConfig|MockObject
      */
     private $msrpConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->msrpConfigMock = $this->getMockBuilder(MsrpConfig::class)
             ->disableOriginalConstructor()

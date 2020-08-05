@@ -4,11 +4,16 @@
  * See COPYING.txt for license details.
  */
 
-/** @var \Magento\Sales\Block\Adminhtml\Order\Create\Comment $block */
+/**
+ * @var \Magento\Sales\Block\Adminhtml\Order\Create\Comment $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
 
 <div class="admin__field field-comment">
-    <label for="order-comment" class="admin__field-label"><span><?= $block->escapeHtml(__('Order Comments')) ?></span></label>
+    <label for="order-comment" class="admin__field-label">
+        <span><?= $block->escapeHtml(__('Order Comments')) ?></span>
+    </label>
     <div class="admin__field-control">
         <textarea
             id="order-comment"
@@ -16,8 +21,10 @@
             class="admin__control-textarea"><?= $block->escapeHtml($block->getCommentNote()) ?></textarea>
     </div>
 </div>
-<script>
+<?php $scriptString = <<<script
     require(["Magento_Sales/order/create/form"], function(){
         order.commentFieldsBind('order-comment')
     });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
