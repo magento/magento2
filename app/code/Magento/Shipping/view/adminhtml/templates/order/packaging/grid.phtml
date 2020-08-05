@@ -31,11 +31,14 @@
                 </th>
                 <th class="data-grid-th"><?= $block->escapeHtml(__('Product Name')) ?></th>
                 <th class="data-grid-th"><?= $block->escapeHtml(__('Weight')) ?></th>
-                <th class="data-grid-th custom-value">
+                <th id="th-custom-value-<?= /* @noEscape */ $randomId ?>" class="data-grid-th">
                     <?= $block->escapeHtml(__('Customs Value')) ?>
                 </th>
                 <?php if (!$block->displayCustomsValue()): ?>
-                    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display: none;', 'th.custom-value') ?>
+                    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                        'display:none',
+                        '#th-custom-value-' . $randomId
+                    ) ?>
                 <?php endif ?>
                 <th class="data-grid-th"><?= $block->escapeHtml(__('Qty Ordered')) ?></th>
                 <th class="data-grid-th"><?= $block->escapeHtml(__('Qty')) ?></th>
