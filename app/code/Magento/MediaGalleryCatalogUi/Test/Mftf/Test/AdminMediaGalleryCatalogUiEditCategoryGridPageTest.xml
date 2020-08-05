@@ -27,5 +27,6 @@
         </after>
         <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openCategoryPage"/>
         <actionGroup ref="AdminEditCategoryInGridPageActionGroup" stepKey="editCategoryItem"/>
+        <actionGroup ref="AdminAssertCategoryPageTitleActionGroup" stepKey="assertCategoryByName"/>
    </test>
 </tests>

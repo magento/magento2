@@ -7,11 +7,10 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminEditCategoryInGridPageActionGroup">
+    <actionGroup name="AdminAssertCategoryPageTitleActionGroup">
         <annotations>
-            <description>Clicks the Edit action from the Media Gallery Category Grid</description>
+            <description>Assert's category page title for Simple Sub Category</description>
         </annotations>
-        <click selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.edit('2', 'Edit')}}" stepKey="clickOnCategoryRow"/>
-        <waitForPageLoad time="30" stepKey="waitForCategoryDetailsPageLoad"/>
+        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{SimpleSubCategory.name}}" stepKey="seeCategoryTitle"/>
     </actionGroup>
 </actionGroups>
