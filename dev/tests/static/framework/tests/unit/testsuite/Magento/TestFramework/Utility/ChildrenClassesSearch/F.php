@@ -5,6 +5,6 @@
  */
 namespace Magento\TestFramework\Utility\ChildrenClassesSearch;
 
-class F extends E implements Z
+class F extends E implements ZInterface
 {
 }

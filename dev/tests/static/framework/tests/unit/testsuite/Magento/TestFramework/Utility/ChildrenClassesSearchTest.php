@@ -34,7 +34,7 @@ class ChildrenClassesSearchTest extends TestCase
             __DIR__ . '/ChildrenClassesSearch/D.php',
             __DIR__ . '/ChildrenClassesSearch/E.php',
             __DIR__ . '/ChildrenClassesSearch/F.php',
-            __DIR__ . '/ChildrenClassesSearch/Z.php',
+            __DIR__ . '/ChildrenClassesSearch/ZInterface.php',
         ];
 
         $found = $this->childrenClassesSearch->getClassesWhichAreChildrenOf(

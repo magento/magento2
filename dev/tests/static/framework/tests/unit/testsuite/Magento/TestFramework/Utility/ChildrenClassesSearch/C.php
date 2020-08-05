@@ -5,6 +5,6 @@
  */
 namespace Magento\TestFramework\Utility\ChildrenClassesSearch;
 
-class C implements Z
+class C implements ZInterface
 {
 }
