@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminConfigSystemSection">
+        <element name="enhancedMediaGalleryFieldset" type="block" selector="#system_media_gallery-head"/>
+        <element name="enhancedMediaGalleryEnabledField" type="select" selector="[data-ui-id='select-groups-media-gallery-fields-enabled-value']"/>
+    </section>
+</sections>
