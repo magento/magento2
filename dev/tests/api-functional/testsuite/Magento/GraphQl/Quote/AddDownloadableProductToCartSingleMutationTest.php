@@ -186,7 +186,7 @@ mutation {
                 }
             }
         },
-        userInputErrors {
+        user_errors {
             message
         }
     }

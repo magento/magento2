@@ -49,12 +49,12 @@ input WishlistItemInput @doc(description: "Defines the items to add to a wish li
 
 type AddProductsToWishlistOutput @doc(description: "Contains the customer's wish list and any errors encountered") {
     wishlist: Wishlist! @doc(description: "Contains the wish list with all items that were successfully added")
-    userInputErrors:[WishListUserInputError]! @doc(description: "An array of errors encountered while adding products to a wish list")
+    user_errors:[WishListUserInputError!]! @doc(description: "An array of errors encountered while adding products to a wish list")
 }
 
 type RemoveProductsFromWishlistOutput @doc(description: "Contains the customer's wish list and any errors encountered") {
     wishlist: Wishlist! @doc(description: "Contains the wish list with after items were successfully deleted")
-    userInputErrors:[WishListUserInputError]! @doc(description:"An array of errors encountered while deleting products from a wish list")
+    user_errors:[WishListUserInputError!]! @doc(description:"An array of errors encountered while deleting products from a wish list")
 }
 
 input WishlistItemUpdateInput @doc(description: "Defines updates to items in a wish list") {
@@ -67,7 +67,7 @@ input WishlistItemUpdateInput @doc(description: "Defines updates to items in a w
 
 type UpdateProductsInWishlistOutput @doc(description: "Contains the customer's wish list and any errors encountered") {
     wishlist: Wishlist! @doc(description: "Contains the wish list with all items that were successfully updated")
-    userInputErrors:[WishListUserInputError]! @doc(description:"An array of errors encountered while updating products in a wish list")
+    user_errors: [WishListUserInputError!]! @doc(description:"An array of errors encountered while updating products in a wish list")
 }
 
 type WishListUserInputError @doc(description:"An error encountered while performing operations with WishList.") {

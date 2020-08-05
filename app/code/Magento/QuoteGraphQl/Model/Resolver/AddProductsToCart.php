@@ -78,7 +78,7 @@ class AddProductsToCart implements ResolverInterface
             'cart' => [
                 'model' => $addProductsToCartOutput->getCart(),
             ],
-            'userInputErrors' => array_map(
+            'user_errors' => array_map(
                 function (Error $error) {
                     return [
                         'code' => $error->getCode(),

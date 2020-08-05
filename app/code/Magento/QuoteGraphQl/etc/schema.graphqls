@@ -375,12 +375,12 @@ type Order {
 
 type CartUserInputError @doc(description:"An error encountered while adding an item to the the cart.") {
     message: String! @doc(description: "A localized error message")
-    code: CartUserInputErrorType! @doc(description: "Checkout-specific error code")
+    code: CartUserInputErrorType! @doc(description: "Cart-specific error code")
 }
 
 type AddProductsToCartOutput {
     cart: Cart! @doc(description: "The cart after products have been added")
-    userInputErrors:[CartUserInputError]! @doc(description: "An error encountered while adding an item to the cart.")
+    user_errors: [CartUserInputError!]! @doc(description: "An error encountered while adding an item to the cart.")
 }
 
 enum CartUserInputErrorType {

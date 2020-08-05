@@ -103,7 +103,7 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
 
         self::assertEquals(
             'You need to choose options for your item.',
-            $response['addProductsToCart']['userInputErrors'][0]['message']
+            $response['addProductsToCart']['user_errors'][0]['message']
         );
     }
 
@@ -132,7 +132,7 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
 
         self::assertEquals(
             'The requested qty is not available',
-            $response['addProductsToCart']['userInputErrors'][0]['message']
+            $response['addProductsToCart']['user_errors'][0]['message']
         );
     }
 
@@ -156,7 +156,7 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
 
         self::assertEquals(
             'Could not find a product with SKU "configurable_no_exist"',
-            $response['addProductsToCart']['userInputErrors'][0]['message']
+            $response['addProductsToCart']['user_errors'][0]['message']
         );
     }
 
@@ -188,7 +188,7 @@ class AddConfigurableProductToCartSingleMutationTest extends GraphQlAbstract
             'This product is out of stock.'
         ];
         $this->assertContains(
-            $response['addProductsToCart']['userInputErrors'][0]['message'],
+            $response['addProductsToCart']['user_errors'][0]['message'],
             $expectedErrorMessages
         );
     }
@@ -235,7 +235,7 @@ mutation {
                 }
             }
         },
-        userInputErrors {
+        user_errors {
             message
         }
     }

@@ -112,11 +112,11 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
         $query = $this->getAddToCartMutation($maskedQuoteId, 1, $sku, '');
         $response = $this->graphQlMutation($query);
 
-        self::assertArrayHasKey('userInputErrors', $response['addProductsToCart']);
-        self::assertCount(1, $response['addProductsToCart']['userInputErrors']);
+        self::assertArrayHasKey('user_errors', $response['addProductsToCart']);
+        self::assertCount(1, $response['addProductsToCart']['user_errors']);
         self::assertEquals(
             $message,
-            $response['addProductsToCart']['userInputErrors'][0]['message']
+            $response['addProductsToCart']['user_errors'][0]['message']
         );
     }
 
@@ -140,10 +140,10 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
         $query = $this->getAddToCartMutation($maskedQuoteId, 1, $sku, '');
         $response = $this->graphQlMutation($query);
 
-        self::assertArrayHasKey('userInputErrors', $response['addProductsToCart']);
+        self::assertArrayHasKey('user_errors', $response['addProductsToCart']);
         self::assertEquals(
             'The requested qty is not available',
-            $response['addProductsToCart']['userInputErrors'][0]['message']
+            $response['addProductsToCart']['user_errors'][0]['message']
         );
         self::assertEquals(100, $response['addProductsToCart']['cart']['total_quantity']);
     }
@@ -164,12 +164,12 @@ class AddSimpleProductToCartSingleMutationTest extends GraphQlAbstract
 
         $query = $this->getAddToCartMutation($maskedQuoteId, $quantity, $sku, '');
         $response = $this->graphQlMutation($query);
-        self::assertArrayHasKey('userInputErrors', $response['addProductsToCart']);
-        self::assertCount(1, $response['addProductsToCart']['userInputErrors']);
+        self::assertArrayHasKey('user_errors', $response['addProductsToCart']);
+        self::assertCount(1, $response['addProductsToCart']['user_errors']);
 
         self::assertEquals(
             $message,
-            $response['addProductsToCart']['userInputErrors'][0]['message']
+            $response['addProductsToCart']['user_errors'][0]['message']
         );
     }
 
@@ -249,7 +249,7 @@ mutation {
                 }
             }
         },
-        userInputErrors {
+        user_errors {
             message
         }
     }

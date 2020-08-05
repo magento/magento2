@@ -208,7 +208,7 @@ mutation {
             }
         }
     }
-    userInputErrors {
+    user_errors {
         message
     }
   }
@@ -219,7 +219,7 @@ QUERY;
 
         self::assertEquals(
             "Please select all required options.",
-            $response['addProductsToCart']['userInputErrors'][0]['message']
+            $response['addProductsToCart']['user_errors'][0]['message']
         );
     }
 
@@ -341,7 +341,7 @@ mutation {
             }
         }
     }
-    userInputErrors {
+    user_errors {
         message
     }
   }
