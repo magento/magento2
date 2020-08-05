@@ -375,7 +375,6 @@ type Order {
 
 type CartUserInputError @doc(description:"An error encountered while adding an item to the the cart.") {
     message: String! @doc(description: "A localized error message")
-    path: [String]! @doc(description: "Path to the input field that caused an error. See the GraphQL specification about path errors for details: http://spec.graphql.org/draft/#sec-Errors")
     code: CartUserInputErrorType! @doc(description: "Checkout-specific error code")
 }
 

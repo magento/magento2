@@ -72,7 +72,6 @@ type UpdateProductsInWishlistOutput @doc(description: "Contains the customer's w
 
 type WishListUserInputError @doc(description:"An error encountered while performing operations with WishList.") {
     message: String! @doc(description: "A localized error message")
-    path: [String]! @doc(description: "Path to the input field that caused an error. See the GraphQL specification about path errors for details: http://spec.graphql.org/draft/#sec-Errors")
     code: WishListUserInputErrorType! @doc(description: "Wishlist-specific error code")
 }
 
