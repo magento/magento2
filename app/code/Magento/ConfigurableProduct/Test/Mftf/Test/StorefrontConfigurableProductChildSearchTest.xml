@@ -117,8 +117,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
 
             <!-- Go to the product page for the first product -->
-            <amOnPage stepKey="goToProductGrid" url="{{ProductCatalogPage.url}}"/>
-            <waitForPageLoad stepKey="waitForProductGridLoad"/>
+            <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="goToProductGrid"/>
             <actionGroup stepKey="searchForSimpleProduct" ref="FilterProductGridBySku2ActionGroup">
                 <argument name="sku" value="$$createConfigChildProduct1.sku$$"/>
             </actionGroup>
@@ -127,7 +126,7 @@
             <!-- Edit the attribute for the first simple product -->
             <selectOption stepKey="editSelectAttribute" selector="{{ModifyAttributes.nthExistingAttribute($$createConfigProductAttributeSelect.default_frontend_label$$)}}" userInput="$$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$"/>
             <scrollToTopOfPage stepKey="scrollToTop"/>
-            <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+            <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
             <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="assertSaveMessageSuccess"/>
         </before>
 
@@ -145,12 +144,15 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
-        <magentoCLI command="indexer:reindex" stepKey="reindexAll"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAll">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!-- Quick search the storefront for the first attribute option -->
-        <amOnPage stepKey="goToStoreFront" url="{{StorefrontHomePage.url}}"/>
-        <waitForPageLoad stepKey="waitForStorefront"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStoreFront"/>
         <submitForm selector="#search_mini_form" parameterArray="['q' => $$createConfigProductAttributeSelectOption1.option[store_labels][0][label]$$]" stepKey="searchStorefront1" />
         <seeElement stepKey="seeProduct1" selector="{{StorefrontCategoryProductSection.ProductTitleByName('$$createConfigProduct.name$$')}}"/>
 

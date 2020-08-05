@@ -3,8 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/**
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
-<script>
+
+<?php $scriptString = <<<script
 require([
     'prototype'
 ], function () {
@@ -68,7 +73,10 @@ originModel.prototype = {
     {
         this.reload = false;
         this.loader = new varienLoader(true);
-        this.regionsUrl = "<?= $block->escapeJs($block->escapeUrl($block->getUrl('directory/json/countryRegion'))) ?>";
+script;
+
+$scriptString .= 'this.regionsUrl = "' . $block->escapeJs($block->getUrl('directory/json/countryRegion')) . '";';
+$scriptString .= <<<script
 
         this.bindCountryRegionRelation();
     },
@@ -259,4 +267,7 @@ function showHint() {
 Event.observe(window, 'load', showHint);
 
 });
-</script>
+script;
+?>
+
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
