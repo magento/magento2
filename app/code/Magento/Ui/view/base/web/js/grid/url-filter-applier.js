@@ -12,8 +12,8 @@ define([
     return Component.extend({
         defaults: {
             listingNamespace: null,
-            selectComponentName: null,
-            selectProvider: 'index = ${ $.selectComponentName }, ns = ${ $.listingNamespace }',
+            filterComponentName: null,
+            selectProvider: 'index = ${ $.filterComponentName }, ns = ${ $.listingNamespace }',
             filterProvider: 'componentType = filters, ns = ${ $.listingNamespace }',
             filterKey: 'filters',
             optionsKey: 'options',
@@ -44,7 +44,7 @@ define([
                 options = this.getOptionsParam(this.searchString);
 
             if (_.isUndefined(this.filterComponent()) ||
-                !_.isNull(this.selectComponentName) && _.isUndefined(this.selectComponent())) {
+                !_.isNull(this.filterComponentName) && _.isUndefined(this.selectComponent())) {
                 setTimeout(function () {
                     this.apply();
                 }.bind(this), 100);
@@ -54,7 +54,6 @@ define([
 
             if (Object.keys(options).length) {
                 this.selectComponent().options(options);
-                this.selectComponent().cacheOptions.plain = options;
             }
 
             if (Object.keys(urlFilter).length) {
@@ -101,8 +100,8 @@ define([
         getOptionsParam: function (url) {
             var params = [],
                 chunks,
-                chunk,
-                values = {},
+                values,
+                i,
                 options,
                 searchString = decodeURI(url);
 
@@ -111,20 +110,35 @@ define([
                     if (item && item.search(this.optionsKey) !== -1) {
                         chunks = item.substring(item.indexOf('?') + 1).split('&');
 
-                        for (var i = 0; i < chunks.length ; i++) {
-                            options = chunks[i].substring(item.indexOf('[]') + 3).replace(/[\[\]]/g, '').split(',');
-                            options.map(function (item) {
-                                chunk = item.split('=');
-                                values[chunk[0]] = chunk[1];
-                            }.bind(this));
+                        for (i = 0; i < chunks.length; i++) {
+                            options = chunks[i].substring(item.indexOf('[]') + 3)
+                                .replace(/[\[\]]/g, '')
+                                .split(/,(?=(?:(?:[^"]*"){2})*[^"]*$)/);
+                            values = this.getOptionsValues(options);
+
                         }
                         params[k - 1] = values;
-                        values = {};
                     }
                 }.bind(this));
 
             return params;
-        }
+        },
 
+        /**
+         * Return options values as array
+         *
+         * @param {Array} options
+         * @return {Array}
+         */
+        getOptionsValues: function (options) {
+            var values = {},
+                j;
+
+            for (j = 0; j < options.length; j++) {
+                values[options[j].split('=')[0]] = options[j].split('=')[1];
+            }
+
+            return values;
+        }
     });
 });
