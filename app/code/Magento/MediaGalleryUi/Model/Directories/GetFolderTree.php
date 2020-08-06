@@ -15,7 +15,7 @@ use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 /**
  * Build folder tree structure by path
  */
-class FolderTree
+class GetFolderTree
 {
     /**
      * @var Filesystem
