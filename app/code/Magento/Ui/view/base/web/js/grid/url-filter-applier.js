@@ -54,7 +54,7 @@ define([
 
             if (Object.keys(options).length) {
                 this.selectComponent().options(options);
-                this.selectComponent().cacheOptions.plain = [options];
+                this.selectComponent().cacheOptions.plain = options;
             }
 
             if (Object.keys(urlFilter).length) {
@@ -99,12 +99,32 @@ define([
          * @param {String} url
          */
         getOptionsParam: function (url) {
-            var searchString = decodeURI(url),
-                options;
-            options = Object.fromEntries(new URLSearchParams(searchString));
-            delete options['filters[asset_id]'];
+            var params = [],
+                chunks,
+                chunk,
+                values = {},
+                options,
+                searchString = decodeURI(url);
 
-            return options;
+            _.chain(searchString.slice(1).split('&'))
+                .map(function (item, k) {
+                    if (item && item.search(this.optionsKey) !== -1) {
+                        chunks = item.substring(item.indexOf('?') + 1).split('&');
+
+                        for (var i = 0; i < chunks.length ; i++) {
+                            options = chunks[i].substring(item.indexOf('[]') + 3).replace(/[\[\]]/g, '').split(',');
+                            options.map(function (item) {
+                                chunk = item.split('=');
+                                values[chunk[0]] = chunk[1];
+                            }.bind(this));
+                        }
+                        params[k - 1] = values;
+                        values = {};
+                    }
+                }.bind(this));
+
+            return params;
         }
+
     });
 });
