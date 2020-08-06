@@ -26,6 +26,7 @@ function curl_exec($resource)
  */
 class CurlMock extends Curl
 {
+    // @codingStandardsIgnoreStart
     /**
      * Unfortunately, it is necessary for the tests to set this function public.
      *
@@ -38,6 +39,7 @@ class CurlMock extends Curl
     {
         return parent::parseHeaders($ch, $data);
     }
+    // @codingStandardsIgnoreEnd
 
     /**
      * Return Curl resource, only used for testing.
