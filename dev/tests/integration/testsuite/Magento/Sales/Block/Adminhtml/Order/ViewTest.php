@@ -59,7 +59,7 @@ class ViewTest extends AbstractBackendController
         $this->block->setOrder($order);
         $this->dispatch('backend/sales/order/view/order_id/' . $order->getEntityId());
 
-        $this->assertContains('http://localhost/index.php/backend/sales/order/index/', $this->block->getBackUrl());
-        $this->assertNotContains('order_id/' . $order->getEntityId(), $this->block->getBackUrl());
+        $this->assertStringContainsString('http://localhost/index.php/backend/sales/order/index/', $this->block->getBackUrl());
+        $this->assertStringNotContainsString('order_id/' . $order->getEntityId(), $this->block->getBackUrl());
     }
 }
