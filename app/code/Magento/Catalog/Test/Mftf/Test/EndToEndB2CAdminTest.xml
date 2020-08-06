@@ -29,8 +29,7 @@
 
         <!--Admin creates product-->
         <!--Create Simple Product-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageSimple"/>
-        <waitForPageLoad time="30" stepKey="waitForProductPageLoadSimple"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPageSimple"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateSimpleProduct">
                 <argument name="product" value="SimpleProduct"/>
@@ -57,8 +56,7 @@
         </actionGroup>
 
         <!--Create Virtual Product-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageVirtual"/>
-        <waitForPageLoad time="30" stepKey="waitForProductPageLoadVirtual"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPageVirtual"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateVirtualProduct">
             <argument name="product" value="VirtualProduct"/>
         </actionGroup>
@@ -73,8 +71,7 @@
 
         <!--Admin uses product grid-->
         <!--Start with default view-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageGrid"/>
-        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPageGrid"/>
 
         <!--Search by keyword-->
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
@@ -82,7 +79,11 @@
             <argument name="keyword" value="SimpleProduct.name"/>
         </actionGroup>
         <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" userInput="1" stepKey="seeOnlyOneProductInGrid"/>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="{{SimpleProduct.name}}" stepKey="seeOnlySimpleProductInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeOnlySimpleProductInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Name"/>
+            <argument name="value" value="{{SimpleProduct.name}}"/>
+        </actionGroup>
 
         <!--Paging works-->
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="setProductGridToDefaultPagination"/>
@@ -108,7 +109,11 @@
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
         <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" userInput="1" stepKey="seeOneMatchingSkuInProductGrid"/>
-        <see selector="{{AdminProductGridSection.productGridCell('1','SKU')}}" userInput="{{GroupedProduct.sku}}" stepKey="seeProductInFilteredGridSku"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeProductInFilteredGridSku">
+            <argument name="row" value="1"/>
+            <argument name="column" value="SKU"/>
+            <argument name="value" value="{{GroupedProduct.sku}}"/>
+        </actionGroup>
         <!--Filter by price-->
         <actionGroup ref="FilterProductGridByPriceRangeActionGroup" stepKey="filterProductGridByPrice">
             <argument name="filter" value="PriceFilterRange"/>
@@ -197,7 +202,11 @@
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridToCheckWeightColumn">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1','Weight')}}" userInput="{{SimpleProduct.weight}}" stepKey="seeCorrectProductWeightInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeCorrectProductWeightInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Weight"/>
+            <argument name="value" value="{{SimpleProduct.weight}}"/>
+        </actionGroup>
         <!--END Admin uses product grid-->
 
         <!--Admin creates category-->
@@ -218,7 +227,7 @@
         <!--Admin moves category-->
         <comment userInput="Admin moves category." stepKey="adminMovesCategoryComment" before="onCategoryPageToMoveCategory"/>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="onCategoryPageToMoveCategory"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandTree"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandTree"/>
         <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}"
                      selector2="{{AdminCategorySidebarTreeSection.categoryTreeRoot}}"
                      stepKey="dragAndDropCategory"/>

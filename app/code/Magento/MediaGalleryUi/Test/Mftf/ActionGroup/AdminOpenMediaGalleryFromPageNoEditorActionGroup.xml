@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenMediaGalleryFromPageNoEditorActionGroup">
+        <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickExpandContent"/>
+        <waitForElementVisible selector="{{CmsWYSIWYGSection.InsertImageBtn}}" stepKey="waitForInsertImageButton" />
+        <click selector="{{CmsWYSIWYGSection.InsertImageBtn}}" stepKey="clickInsertImage" />
+        <!-- wait for initial media gallery load, where the gallery chrome loads (and triggers loading modal) -->
+        <waitForPageLoad stepKey="waitForMediaGalleryInitialLoad"/>
+        <!-- wait for second media gallery load, where the gallery images load (and triggers loading modal once more) -->
+        <waitForPageLoad stepKey="waitForMediaGallerySecondaryLoad"/>
+    </actionGroup>
+</actionGroups>
