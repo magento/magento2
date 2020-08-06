@@ -82,7 +82,7 @@ define([
          * @param {String} message
          * @return {String}
          */
-        prepareMessageForHtml: function (message) {
+        prepareMessageUnsanitizedHtml: function (message) {
             return escaper.escapeHtml(message, this.allowedTags);
         }
     });
