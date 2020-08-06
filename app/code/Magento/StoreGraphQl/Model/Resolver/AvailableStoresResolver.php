@@ -41,8 +41,12 @@ class AvailableStoresResolver implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
+        $storeGroupId = !empty($args['use_current_group']) ?
+            (int)$context->getExtensionAttributes()->getStore()->getStoreGroupId() :
+            null;
         return $this->storeConfigDataProvider->getAvailableStoreConfig(
-            (int)$context->getExtensionAttributes()->getStore()->getWebsiteId()
+            (int)$context->getExtensionAttributes()->getStore()->getWebsiteId(),
+            $storeGroupId
         );
     }
 }

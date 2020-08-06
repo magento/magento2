@@ -48,10 +48,11 @@ class StoreWebsiteRelation
      * Get website store data
      *
      * @param int $websiteId
+     * @param int $storeGroupId
      * @param bool $available
      * @return array
      */
-    public function getWebsiteStores(int $websiteId, bool $available = false): array
+    public function getWebsiteStores(int $websiteId, int $storeGroupId = null, bool $available = false): array
     {
         $connection = $this->resource->getConnection();
         $storeTable = $this->resource->getTableName('store');
@@ -59,6 +60,13 @@ class StoreWebsiteRelation
             'website_id = ?',
             $websiteId
         );
+
+        if ($storeGroupId) {
+            $storeSelect = $storeSelect->where(
+                'group_id = ?',
+                $storeGroupId
+            );
+        }
 
         if ($available) {
             $storeSelect = $storeSelect->where(
