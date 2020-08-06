@@ -4,11 +4,11 @@
  */
 
 define([
-    'Magento_MediaGalleryUi/js/grid/messages',
+    'Magento_MediaGalleryUi/js/grid/messages'
 ], function (Messages) {
     'use strict';
 
-    describe('Magento_MediaGalleryUi/grid/messages', function () {
+    describe('Magento_MediaGalleryUi/js/grid/messages', function () {
         var message,
             messageText,
             errorType,
@@ -49,7 +49,7 @@ define([
             });
 
             it('prepare message to be rendered as HTML', function () {
-               expect(message.prepareMessageUnsanitizedHtml(messageData)).toEqual(expectedData)
+                expect(message.prepareMessageUnsanitizedHtml(messageData)).toEqual(expectedData)
             });
         });
     });
