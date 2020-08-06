@@ -341,7 +341,7 @@
             </group>
             <group id="upload_configuration" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Images Upload Configuration</label>
-                <field id="enable_resize" translate="label" type="select" sortOrder="200" showInDefault="1" canRestore="1">
+                <field id="enable_resize" translate="label comment" type="select" sortOrder="200" showInDefault="1" canRestore="1">
                     <label>Enable Frontend Resize</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Resize performed via javascript before file upload.</comment>

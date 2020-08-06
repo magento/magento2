@@ -56,8 +56,7 @@
             <argument name="parentCategory" value="$$createNewRootCategoryA.name$$"/>
         </actionGroup>
         <!-- Change root category for Main Website Store. -->
-        <amOnPage stepKey="s1" url="{{AdminSystemStorePage.url}}"/>
-        <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad" />
+        <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="s1"/>
         <click stepKey="s2" selector="{{AdminStoresGridSection.resetButton}}"/>
         <waitForPageLoad stepKey="waitForPageAdminStoresGridLoadAfterResetButton" time="10"/>
         <fillField stepKey="s4" selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"/>

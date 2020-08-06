@@ -7,6 +7,9 @@
  */
 namespace Magento\TestFramework\Dependency;
 
+/**
+ * Class to get DB dependencies information
+ */
 class DbRule implements \Magento\TestFramework\Dependency\RuleInterface
 {
     /**
@@ -37,7 +40,7 @@ class DbRule implements \Magento\TestFramework\Dependency\RuleInterface
      */
     public function getDependencyInfo($currentModule, $fileType, $file, &$contents)
     {
-        if ('php' != $fileType || !preg_match('#.*/(Setup|Resource)/.*\.php$#', $file)) {
+        if ('php' !== $fileType || !preg_match('#.*/(Setup|Resource|Query)/.*\.php$#', $file)) {
             return [];
         }
 

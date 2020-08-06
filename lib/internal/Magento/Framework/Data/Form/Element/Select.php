@@ -15,6 +15,7 @@ use Magento\Framework\View\Helper\SecureHtmlRenderer;
  *
  * @api
  * @author      Magento Core Team <core@magentocommerce.com>
+ * @since 100.0.2
  */
 class Select extends AbstractElement
 {

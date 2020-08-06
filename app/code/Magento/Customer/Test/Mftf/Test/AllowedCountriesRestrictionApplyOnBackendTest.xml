@@ -26,7 +26,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!--Create new website,store and store view-->
             <comment userInput="Create new website,store and store view" stepKey="createWebsite"/>
-            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="goToAdminSystemStorePage"/>
+            <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="goToAdminSystemStorePage"/>
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="adminCreateNewWebsite">
                 <argument name="newWebsiteName" value="{{NewWebSiteData.name}}"/>
                 <argument name="websiteCode" value="{{NewWebSiteData.code}}"/>

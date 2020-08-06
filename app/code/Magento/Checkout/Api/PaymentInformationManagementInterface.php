@@ -8,6 +8,7 @@ namespace Magento\Checkout\Api;
 /**
  * Interface for managing quote payment information
  * @api
+ * @since 100.0.2
  */
 interface PaymentInformationManagementInterface
 {

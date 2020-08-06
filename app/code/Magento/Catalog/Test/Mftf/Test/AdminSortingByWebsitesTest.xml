@@ -55,8 +55,7 @@
         </after>
 
         <!--Assign Custom Website to Simple Product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToCatalogProductGrid"/>
-        <waitForPageLoad stepKey="waitForCatalogProductGrid"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToCatalogProductGrid"/>
 
         <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}" dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true" stepKey="clickClearFiltersInitial"/>
         <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="assignCustomWebsiteToProduct">
@@ -68,13 +67,11 @@
         <uncheckOption selector="{{ProductInWebsitesSection.website(_defaultWebsite.name)}}" stepKey="deselectMainWebsite"/>
         <checkOption selector="{{ProductInWebsitesSection.website(customWebsite.name)}}" stepKey="selectWebsite"/>
 
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForProductPageToSaveAgain"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
         <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeSaveProductMessageAgain"/>
 
         <!--Navigate To Product Grid To Check Website Sorting-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToCatalogProductGridToSortByWebsite"/>
-        <waitForPageLoad stepKey="waitForCatalogProductGridLoaded"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToCatalogProductGridToSortByWebsite"/>
 
         <!--Sorting works (By Websites) ASC-->
         <click selector="{{AdminProductGridSection.columnHeader('Websites')}}" stepKey="clickWebsitesHeaderToSortAsc"/>

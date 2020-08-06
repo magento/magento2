@@ -49,8 +49,7 @@
         </after>
 
         <!-- Delete the simple product and catalog price rule -->
-        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage1"/>
-        <waitForPageLoad stepKey="waitForPriceRulePage"/>
+        <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage1"/>
         <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deletePriceRule1">
             <argument name="name" value="{{DeleteActiveCatalogPriceRuleWithConditions.name}}"/>
             <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
