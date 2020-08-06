@@ -64,7 +64,8 @@ class Entity implements CustomFilterInterface
      */
     private function getSelectByEntityIds(array $ids): Select
     {
-        return $this->connection->getConnection()->select()->from(
+        $connection = $this->connection->getConnection();
+        return $connection->fetchAssoc($connection->select()->from(
             ['asset_content_table' => $this->connection->getTableName(self::TABLE_MEDIA_CONTENT_ASSET)],
             ['asset_id']
         )->where(
@@ -73,6 +74,6 @@ class Entity implements CustomFilterInterface
         )->where(
             'entity_id IN (?)',
             $ids
-        );
+        ));
     }
 }
