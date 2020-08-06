@@ -26,7 +26,7 @@ class RobotsTest extends TestCase
     private $layout;
 
     /**
-     * @var mixed
+     * @var SitemapFactory
      */
     private $sitemapFactory;
 
