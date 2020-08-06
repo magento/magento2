@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminMediaGalleryCatalogUiCategoryGridSection">
+        <element name="path" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Path')]/preceding-sibling::th)]" parameterized="true"/>
+        <element name="name" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Name')]/preceding-sibling::th) +1 ]//*[text()='{{categoryName}}']" parameterized="true"/>
+        <element name="displayMode" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Display Mode')]/preceding-sibling::th) +1 ]//*[text()='{{productsText}}']" parameterized="true"/>
+        <element name="products" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Products')]/preceding-sibling::th) +1 ]//*[text()='{{productsQty}}']" parameterized="true"/>
+ </section>
+</sections>
