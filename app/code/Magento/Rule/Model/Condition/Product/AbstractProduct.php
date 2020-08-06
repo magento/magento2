@@ -658,7 +658,7 @@ abstract class AbstractProduct extends \Magento\Rule\Model\Condition\AbstractCon
      * Retrieve category ids where product is available
      *
      * @param int $productId
-     * @return int[]
+     * @return array
      */
     protected function _getAvailableInCategories($productId)
     {
