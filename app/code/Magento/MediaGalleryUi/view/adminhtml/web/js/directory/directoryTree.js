@@ -254,15 +254,16 @@ define([
 
             if (_.isUndefined(currentFilterPath)) {
                 this.clearFiltersHandle();
-            } else {
-                currentTreePath = this.isFiltersApplied(currentFilterPath) || !isMediaBrowser ? currentFilterPath :
-                    Base64.idDecode(window.MediabrowserUtility.pathId);
+                return;
+            }
 
-                if (this.folderExistsInTree(currentTreePath)) {
-                    this.locateNode(currentTreePath);
-                } else {
-                    this.selectStorageRoot();
-                }
+            currentTreePath = this.isFiltersApplied(currentFilterPath) || !isMediaBrowser ? currentFilterPath :
+                Base64.idDecode(window.MediabrowserUtility.pathId);
+
+            if (this.folderExistsInTree(currentTreePath)) {
+                this.locateNode(currentTreePath);
+            } else {
+                this.selectStorageRoot();
             }
         },
 
@@ -285,8 +286,7 @@ define([
          * @param {String} currentFilterPath
          */
         isFiltersApplied: function (currentFilterPath) {
-            return !_.isUndefined(currentFilterPath) && currentFilterPath !== ''
-                && currentFilterPath !== 'catalog/category';
+            return !_.isUndefined(currentFilterPath) && currentFilterPath !== '';
         },
 
         /**
@@ -306,6 +306,9 @@ define([
 
         },
 
+        /**
+         * Clear filters
+         */
         clearFiltersHandle: function () {
             $(this.directoryTreeSelector).jstree('deselect_all');
             this.activeNode(null);
