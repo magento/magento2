@@ -23,4 +23,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Store\Model\Resolver\Store">
+        <plugin name="graphQlLocalizationStoreResolver" type="Magento\StoreGraphQl\Plugin\StoreResolver" />
+    </type>
 </config>

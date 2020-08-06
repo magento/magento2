@@ -4,12 +4,10 @@ namespace Magento\GraphQl\Plugin;
 
 use Magento\Framework\App\AreaInterface;
 use Magento\Framework\App\AreaList;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\State;
-use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Load translations for GraphQL requests
+ * Load translations on the first instance of a translated string
  */
 class TranslationLoader
 {
@@ -24,6 +22,11 @@ class TranslationLoader
     private $appState;
 
     /**
+     * @var bool
+     */
+    private $translationsLoaded = false;
+
+    /**
      * @param AreaList $areaList
      * @param State $appState
      */
@@ -36,11 +39,16 @@ class TranslationLoader
     }
 
     /**
-     * Before rendering any string ensure the translation aspect of area is loaded
+     * Before render of any localized string ensure the translation data is loaded
+     *
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function beforeRender(\Magento\Framework\Phrase $subject)
+    public function beforeRender()
     {
-        $area = $this->areaList->getArea($this->appState->getAreaCode());
-        $area->load(AreaInterface::PART_TRANSLATE);
+        if ($this->translationsLoaded === false) {
+            $area = $this->areaList->getArea($this->appState->getAreaCode());
+            $area->load(AreaInterface::PART_TRANSLATE);
+            $this->translationsLoaded = true;
+        }
     }
 }

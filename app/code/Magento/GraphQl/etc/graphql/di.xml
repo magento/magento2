@@ -44,7 +44,4 @@
     <type name="Magento\Framework\Phrase">
         <plugin name="graphQlLocalizationPhrasePlugin" type="Magento\GraphQl\Plugin\TranslationLoader" />
     </type>
-    <type name="Magento\Store\Model\StoreResolver">
-        <plugin name="graphQlLocalizationStoreResolver" type="Magento\GraphQl\Plugin\StoreResolver" />
-    </type>
 </config>
