@@ -7,6 +7,7 @@
 declare(strict_types=1);
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Api\ProductAttributeRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
 use Magento\Catalog\Model\Product\Visibility;
@@ -19,6 +20,11 @@ Resolver::getInstance()->requireDataFixture('Magento/CatalogSearch/_files/search
 
 /** @var ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();
+
+/** @var ProductAttributeRepositoryInterface $productAttributeRepository */
+$productAttributeRepository = $objectManager->get(ProductAttributeRepositoryInterface::class);
+$attribute = $productAttributeRepository->get('test_searchable_attribute');
+
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 /** @var ProductFactory $productFactory */
