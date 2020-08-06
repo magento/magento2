@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGallerySwitchingBetweenViewsTest">
+        <annotations>
+            <features value="MediaGallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1523"/>
+            <title value="User switches between Views and checks if the folder is changed"/>
+            <stories value="User switches between Views and checks if the folder is changed"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1337102/scenarios/5060037"/>
+            <description value="User switches between Views and checks if the folder is changed"/>
+            <severity value="CRITICAL"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryDeleteGridViewActionGroup" stepKey="deleteView">
+                <argument name="viewToDelete" value="New View"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolderForDelete"/>
+            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFolder"/>
+            <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertFolderWasDeleted"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+        </after>
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="openNewPage"/>
+        <actionGroup ref="AdminOpenMediaGalleryFromPageNoEditorActionGroup" stepKey="openMediaGalleryForPage"/>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
+        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder"/>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertNewFolderCreated"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForFolderContents"/>
+        <actionGroup ref="AdminEnhancedMediaGallerySaveCustomViewActionGroup" stepKey="saveCustomView">
+            <argument name="viewName" value="New View"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoryPage"/>
+        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
+            <argument name="category" value="$$category$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromImageUploader"/>
+        <actionGroup ref="AdminEnhancedMediaGallerySelectCustomBookmarksViewActionGroup" stepKey="selectDefaultView">
+            <argument name="selectView" value="Default View"/>
+        </actionGroup>
+        <actionGroup ref="AssertFolderIsChangedActionGroup" stepKey="assertFolderIsChanged">
+            <argument name="newSelectedFolder" value="category" />
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGallerySelectCustomBookmarksViewActionGroup" stepKey="switchBackToNewView">
+            <argument name="selectView" value="New View"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryAssertActiveFiltersActionGroup" stepKey="assertFilterApplied">
+            <argument name="resultValue" value="{{AdminMediaGalleryFolderData.name}}"/>
+        </actionGroup>
+    </test>
+</tests>
