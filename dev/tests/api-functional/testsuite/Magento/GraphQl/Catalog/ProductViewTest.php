@@ -578,8 +578,8 @@ QUERY;
      */
     public function testProductPrices()
     {
-        $firstProductSku = 'simple-249';
-        $secondProductSku = 'simple-156';
+        $firstProductSku = 'simple-156';
+        $secondProductSku = 'simple-249';
         $query = <<<QUERY
        {
            products(filter: {price: {from: "150.0", to: "250.0"}})

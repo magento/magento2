@@ -14,6 +14,7 @@ use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResult;
 use Magento\CatalogGraphQl\Model\Resolver\Products\SearchResultFactory;
 use Magento\Framework\Api\Search\SearchCriteriaInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\InputException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Phrase;
 use Magento\GraphQl\Model\Query\ContextInterface;
@@ -88,6 +89,7 @@ class Search implements ProductQueryInterface
      * @param ResolveInfo $info
      * @param ContextInterface $context
      * @return SearchResult
+     * @throws InputException
      */
     public function getResult(
         array $args,
@@ -108,7 +110,12 @@ class Search implements ProductQueryInterface
         //Address limitations of sort and pagination on search API apply original pagination from GQL query
         $searchCriteria->setPageSize($realPageSize);
         $searchCriteria->setCurrentPage($realCurrentPage);
-        $searchResults = $this->productsProvider->getList($searchCriteria, $itemsResults, $queryFields, $context);
+        $searchResults = $this->productsProvider->getList(
+            $searchCriteria,
+            $itemsResults,
+            $queryFields,
+            $context
+        );
 
         $totalPages = $realPageSize ? ((int)ceil($searchResults->getTotalCount() / $realPageSize)) : 0;
 
