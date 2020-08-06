@@ -58,7 +58,7 @@ class GiftMessage implements ResolverInterface
         if (!isset($value['id'])) {
             throw new GraphQlInputException(__('"id" value should be specified'));
         }
-
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $orderId = (int)base64_decode($value['id']) ?: (int)$value['id'];
 
         try {

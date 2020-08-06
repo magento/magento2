@@ -33,8 +33,8 @@ class GiftMessage implements ResolverInterface
     private $giftMessageHelper;
 
     /**
-     * @param OrderItemRepositoryInterface $itemRepository
-     * @param GiftMessageHelper       $giftMessageHelper
+     * @param OrderItemRepositoryInterface  $itemRepository
+     * @param GiftMessageHelper             $giftMessageHelper
      */
     public function __construct(
         OrderItemRepositoryInterface $itemRepository,
