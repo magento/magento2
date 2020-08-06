@@ -7,6 +7,10 @@ declare(strict_types=1);
 
 namespace Magento\StoreGraphQl\Controller\HttpHeaderProcessor;
 
+use Magento\Framework\App\AreaInterface;
+use Magento\Framework\App\AreaList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\State;
 use Magento\GraphQl\Controller\HttpHeaderProcessorInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Framework\App\Http\Context as HttpContext;
@@ -33,18 +37,34 @@ class StoreProcessor implements HttpHeaderProcessorInterface
     private $storeCookieManager;
 
     /**
+     * @var AreaList
+     */
+    private $areaList;
+
+    /**
+     * @var State
+     */
+    private $appState;
+
+    /**
      * @param StoreManagerInterface $storeManager
      * @param HttpContext $httpContext
      * @param StoreCookieManagerInterface $storeCookieManager
+     * @param AreaList $areaList
+     * @param State $appState
      */
     public function __construct(
         StoreManagerInterface $storeManager,
         HttpContext $httpContext,
-        StoreCookieManagerInterface $storeCookieManager
+        StoreCookieManagerInterface $storeCookieManager,
+        AreaList $areaList = null,
+        State $appState = null
     ) {
         $this->storeManager = $storeManager;
         $this->httpContext = $httpContext;
         $this->storeCookieManager = $storeCookieManager;
+        $this->areaList = $areaList ?? ObjectManager::getInstance()->get(AreaList::class);
+        $this->appState = $appState ?? ObjectManager::getInstance()->get(State::class);
     }
 
     /**
@@ -67,6 +87,10 @@ class StoreProcessor implements HttpHeaderProcessorInterface
             $this->storeManager->setCurrentStore($storeCode);
             $this->updateContext($storeCode);
         }
+
+        // Load translations for the app
+        $area = $this->areaList->getArea($this->appState->getAreaCode());
+        $area->load(AreaInterface::PART_TRANSLATE);
     }
 
     /**
