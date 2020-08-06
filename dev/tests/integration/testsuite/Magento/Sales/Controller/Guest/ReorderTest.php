@@ -75,6 +75,10 @@ class ReorderTest extends AbstractController
         $this->assertRedirect($this->stringContains('checkout/cart'));
         $quoteItemsCollection = $this->checkoutSession->getQuote()->getItemsCollection();
         $this->assertCount(1, $quoteItemsCollection);
+        $this->assertEquals(
+            $order->getItemsCollection()->getFirstItem()->getSku(),
+            $quoteItemsCollection->getFirstItem()->getSku()
+        );
     }
 
     /**

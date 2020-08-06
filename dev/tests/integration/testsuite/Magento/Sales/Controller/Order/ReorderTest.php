@@ -8,10 +8,8 @@ declare(strict_types=1);
 namespace Magento\Sales\Controller\Order;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
-use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session;
-use Magento\Framework\Module\Manager;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
@@ -40,9 +38,6 @@ class ReorderTest extends AbstractController
     /** @var ProductRepositoryInterface */
     private $productRepository;
 
-    /** @var Manager */
-    private $moduleManager;
-
     /** @var CartRepositoryInterface */
     private $quoteRepository;
 
@@ -61,7 +56,6 @@ class ReorderTest extends AbstractController
         $this->customerSession = $this->_objectManager->get(Session::class);
         $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
-        $this->moduleManager = $this->_objectManager->get(Manager::class);
         $this->quoteRepository = $this->_objectManager->get(CartRepositoryInterface::class);
     }
 
@@ -90,45 +84,32 @@ class ReorderTest extends AbstractController
         $this->dispatchReorderRequest((int)$order->getId());
         $this->assertRedirect($this->stringContains('checkout/cart'));
         $this->quote = $this->checkoutSession->getQuote();
-        $this->assertCount(1, $this->quote->getItemsCollection());
-    }
-
-    /**
-     * @magentoDataFixture Magento/Sales/_files/customer_order_with_taxable_product.php
-     *
-     * @return void
-     */
-    public function testReorderDisabledProduct(): void
-    {
-        if ($this->moduleManager->isEnabled('Magento_NegotiableQuote')) {
-            $this->markTestSkipped('Magento_NegotiableQuote module enabled.');
-        }
-        $order = $this->orderFactory->create()->loadByIncrementId('test_order_with_taxable_product');
-        $this->customerSession->setCustomerId($order->getCustomerId());
-        $product = $this->productRepository->get('taxable_product');
-        $product->setStatus(Status::STATUS_DISABLED);
-        $this->productRepository->save($product);
-        $this->dispatchReorderRequest((int)$order->getId());
-        $this->assertRedirect($this->stringContains('sales/order/history'));
-        $this->assertSessionMessages(
-            $this->contains((string)__('Product that you are trying to add is not available.')),
-            MessageInterface::TYPE_ERROR
+        $quoteItemsCollection = $this->quote->getItemsCollection();
+        $this->assertCount(1, $quoteItemsCollection);
+        $this->assertEquals(
+            $order->getItemsCollection()->getFirstItem()->getSku(),
+            $quoteItemsCollection->getFirstItem()->getSku()
         );
     }
 
     /**
-     * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @magentoDataFixture Magento/Sales/_files/order_with_two_order_items_with_simple_product.php
      *
      * @return void
      */
-    public function testReorderWithoutParams(): void
+    public function testReorderProductLowQty(): void
     {
-        if ($this->moduleManager->isEnabled('Magento_NegotiableQuote')) {
-            $this->markTestSkipped('Magento_NegotiableQuote module enabled.');
-        }
-        $this->customerSession->setCustomerId(1);
-        $this->dispatchReorderRequest();
-        $this->assert404NotFound();
+        $order = $this->orderFactory->create()->loadByIncrementId('100000001');
+        $this->customerSession->setCustomerId($order->getCustomerId());
+        $product = $this->productRepository->get('simple');
+        $product->setStockData(['qty' => 3]);
+        $this->productRepository->save($product);
+        $this->dispatchReorderRequest((int)$order->getId());
+        $this->assertSessionMessages(
+            $this->contains((string)__('The requested qty is not available')),
+            MessageInterface::TYPE_ERROR
+        );
+        $this->quote = $this->checkoutSession->getQuote();
     }
 
     /**
