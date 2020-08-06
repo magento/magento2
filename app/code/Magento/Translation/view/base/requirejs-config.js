@@ -6,7 +6,10 @@
 var config = {
     map: {
         '*': {
-            'mediaUploader':  'Magento_Backend/js/media-uploader'
+            mageTranslationDictionary: 'Magento_Translation/js/mage-translation-dictionary'
         }
-    }
+    },
+    deps: [
+        'mageTranslationDictionary'
+    ]
 };
