@@ -594,17 +594,17 @@ class File implements DriverInterface
     {
         try {
             $result = @stream_get_line($resource, $length, $ending);
-            if (false === $result) {
-                throw new FileSystemException(
-                    new \Magento\Framework\Phrase('File cannot be read %1', [$this->getWarningMessage()])
-                );
-            }
-            return $result;
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase('File cannot be read %1', [$this->getWarningMessage()])
             );
         }
+        if (false === $result) {
+            throw new FileSystemException(
+                new \Magento\Framework\Phrase('File cannot be read %1', [$this->getWarningMessage()])
+            );
+        }
+        return $result;
     }
 
     /**

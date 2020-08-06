@@ -8,20 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\Theme\Test\Unit\Model\Design\Backend;
 
-use Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface;
-use Magento\Framework\App\Cache\TypeListInterface;
-use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\Data\Collection\AbstractDb;
-use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Io\File as IoFile;
-use Magento\Framework\Model\Context;
-use Magento\Framework\Model\ResourceModel\AbstractResource;
-use Magento\Framework\Registry;
-use Magento\Framework\UrlInterface;
-use Magento\MediaStorage\Helper\File\Storage\Database;
-use Magento\MediaStorage\Model\File\UploaderFactory;
 use Magento\Theme\Model\Design\Backend\Image;
 use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -44,36 +34,13 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      */
     public function setUp()
     {
-        $context = $this->getMockObject(Context::class);
-        $registry = $this->getMockObject(Registry::class);
-        $config = $this->getMockObject(ScopeConfigInterface::class);
-        $cacheTypeList = $this->getMockObject(TypeListInterface::class);
-        $uploaderFactory = $this->getMockObject(UploaderFactory::class);
-        $requestData = $this->getMockObject(RequestDataInterface::class);
-        $filesystem = $this->getMockObject(Filesystem::class);
-        $urlBuilder = $this->getMockObject(UrlInterface::class);
-        $databaseHelper = $this->getMockObject(Database::class);
-        $abstractResource = $this->getMockObject(AbstractResource::class);
-        $abstractDb = $this->getMockObject(AbstractDb::class);
         $this->ioFileSystem = $this->getMockObject(IoFile::class);
         $this->tmpDirectory = $this->getMockObject(ReadFactory::class);
 
-        $this->imageBackend = new Image(
-            $context,
-            $registry,
-            $config,
-            $cacheTypeList,
-            $uploaderFactory,
-            $requestData,
-            $filesystem,
-            $urlBuilder,
-            $abstractResource,
-            $abstractDb,
-            [],
-            $databaseHelper,
-            $this->ioFileSystem,
-            $this->tmpDirectory
-        );
+        $objectManagerHelper = new ObjectManager($this);
+        $this->imageBackend = $objectManagerHelper->getObject(Image::class, [
+            'ioFileSystem' => $this->ioFileSystem,
+        ]);
     }
 
     /**
