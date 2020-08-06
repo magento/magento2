@@ -99,8 +99,7 @@
         <fillField selector="{{ProductShortDescriptionWYSIWYGToolbarSection.Height}}" userInput="{{ImageUpload3.height}}" stepKey="fillImageHeight2" />
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.OkBtn}}" stepKey="clickOkBtn2" />
         <waitForPageLoad stepKey="waitForPageLoad6"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading12" />
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
         <amOnPage url="{{_defaultProduct.name}}.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad7"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.mediaDescription}}" stepKey="assertMediaDescription"/>
