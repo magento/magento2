@@ -137,9 +137,9 @@ class Search extends Action implements HttpGetActionInterface
             if (!empty($assets)) {
                 foreach ($assets as $asset) {
                     $responseContent['options'][] = [
-                        'value' => (string) $asset->getId(),
+                        'value' => $asset->getId(),
                         'label' => $asset->getTitle(),
-                        'src' => $this->storage->getThumbnailUrl($this->images->getStorageRoot() . $asset->getPath())
+                        'path' => $this->storage->getThumbnailUrl($this->images->getStorageRoot() . $asset->getPath())
                     ];
                     $responseContent['total'] = count($responseContent['options']);
                 }

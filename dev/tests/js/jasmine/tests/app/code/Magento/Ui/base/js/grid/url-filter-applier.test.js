@@ -14,15 +14,11 @@ define([
             filterComponentMock = {
                 setData: jasmine.createSpy(),
                 apply: jasmine.createSpy()
-            },
-            selectComponentMock = {
-                options: jasmine.createSpy()
             };
 
         beforeEach(function () {
             urlFilterApplierObj = new UrlFilterApplier({});
             urlFilterApplierObj.filterComponent = jasmine.createSpy().and.returnValue(filterComponentMock);
-            urlFilterApplierObj.selectComponent = jasmine.createSpy().and.returnValue(selectComponentMock);
         });
 
         describe('"getFilterParam" method', function () {
@@ -57,21 +53,6 @@ define([
                     'qty': '1'
                 });
             });
-            it('return object from url with multiple options for select filters', function () {
-                var urlSearch = '?filters[name]=[27,23]&options[]=[value=27,' +
-                    'label=Label]&options[]=[value=23,label=Label2]&filters[qty]=1&anotherparam=1';
-
-                expect(urlFilterApplierObj.getOptionsParam(urlSearch)).toEqual([
-                    {
-                        value: '27',
-                        label: 'Label'
-                    },
-                    {
-                        value: '23',
-                        label: 'Label2'
-                    }
-                ]);
-            });
             it('return object from url with another parameter', function () {
                 var urlSearch = '?anotherparam=1';
 
@@ -81,21 +62,12 @@ define([
 
         describe('"apply" method', function () {
             it('applies url filter on filter component', function () {
-                urlFilterApplierObj.searchString = '?filters[name]=test' +
-                    '&options[]=[value=23,label=Label]&filters[qty]=1';
+                urlFilterApplierObj.searchString = '?filters[name]=test&filters[qty]=1';
                 urlFilterApplierObj.apply();
                 expect(urlFilterApplierObj.filterComponent().setData).toHaveBeenCalledWith({
                     'name': 'test',
                     'qty': '1'
                 }, false);
-                expect(urlFilterApplierObj.selectComponent().options).toHaveBeenCalledWith(
-                    [
-                        {
-                            value: '23',
-                            label: 'Label'
-                        }
-                    ]
-                );
                 expect(urlFilterApplierObj.filterComponent().apply).toHaveBeenCalled();
             });
         });

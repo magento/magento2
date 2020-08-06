@@ -161,10 +161,7 @@ define([
          * @param {String} link
          */
         getFilterUrl: function (link) {
-            return link + '?filters[asset_id]=[' + this.image().id + ']' +
-                '&options[]=[value=' + this.image().id +
-                ',label="' + this.image().title +
-                '",src=' + this.image()['image_url'] + ']';
+            return link + '?filters[asset_id]=[' + this.image().id + ']';
         },
 
         /**
