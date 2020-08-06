@@ -118,12 +118,7 @@
         <actionGroup ref="BundleProductFilter" stepKey="FilterForOnlyBundleProducts"/>
 
         <!--Delete-->
-        <click selector="{{AdminProductFiltersSection.allCheckbox}}" stepKey="SelectAllOnly1"/>
-        <waitForPageLoad stepKey="loading"/>
-        <click selector="{{AdminProductFiltersSection.actions}}" stepKey="ClickOnActionsChangingView"/>
-        <click selector="{{AdminProductFiltersSection.delete}}" stepKey="ClickDelete"/>
-        <click selector="//button[@class='action-primary action-accept']" stepKey="ConfirmDelete"/>
-        <waitForPageLoad stepKey="loading3"/>
+        <actionGroup ref="AdminSelectAndDeleteProductsActionGroup" stepKey="selectAndDeleteProducts"/>
 
         <!--Locating delete message-->
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="deleteMessage"/>
