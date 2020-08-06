@@ -8,13 +8,17 @@ declare(strict_types=1);
 
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Api\SearchCriteria;
+use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\ResourceModel\Order\Payment\EncryptionUpdateTest;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require 'order.php';
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-
+$objectManager = Bootstrap::getObjectManager();
+/** @var OrderRepositoryInterface $orderRepository */
+$orderRepository = $objectManager->create(OrderRepositoryInterface::class);
 /** @var DeploymentConfig $deployConfig */
 $deployConfig = $objectManager->get(DeploymentConfig::class);
 

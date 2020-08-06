@@ -4,13 +4,13 @@
  * See COPYING.txt for license details.
  */
 
-include 'category.php';
-
 use Magento\Catalog\Api\CategoryLinkManagementInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Visibility;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/category.php');
 $products = [
     [
         'type' => 'simple',

@@ -11,13 +11,15 @@ namespace Magento\LoginAsCustomerApi\Api;
  * LoginAsCustomer config
  *
  * @api
+ * @since 100.4.0
  */
 interface ConfigInterface
 {
     /**
-     * Check if Login As Customer extension is enabled
+     * Check if Login as Customer extension is enabled
      *
      * @return bool
+     * @since 100.4.0
      */
     public function isEnabled(): bool;
 
@@ -25,6 +27,7 @@ interface ConfigInterface
      * Check if store view manual choice is enabled
      *
      * @return bool
+     * @since 100.4.0
      */
     public function isStoreManualChoiceEnabled(): bool;
 
@@ -32,6 +35,7 @@ interface ConfigInterface
      * Get authentication data expiration time (in seconds)
      *
      * @return int
+     * @since 100.4.0
      */
     public function getAuthenticationDataExpirationTime(): int;
 }

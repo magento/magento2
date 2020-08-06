@@ -13,6 +13,7 @@ use Magento\Framework\View\Element\Template\Context;
  * Redirect block for register specific params in layout
  *
  * @api
+ * @since 100.3.5
  */
 class Redirect extends Template
 {
@@ -44,6 +45,7 @@ class Redirect extends Template
      * Returns url for redirect.
      *
      * @return string
+     * @since 100.3.5
      */
     public function getRedirectUrl(): string
     {
@@ -53,10 +55,22 @@ class Redirect extends Template
     /**
      * Returns params to be redirected.
      *
+     * Encodes invalid UTF-8 values to UTF-8 to prevent character escape error.
+     * Some payment methods like PayPal, send data in merchant defined language encoding
+     * which can be different from the system character encoding (UTF-8).
+     *
      * @return array
+     * @since 100.3.5
      */
     public function getPostParams(): array
     {
-        return (array)$this->_request->getPostValue();
+        $params = [];
+        foreach ($this->_request->getPostValue() as $name => $value) {
+            if (!empty($value) && mb_detect_encoding($value, 'UTF-8', true) === false) {
+                $value = utf8_encode($value);
+            }
+            $params[$name] = $value;
+        }
+        return $params;
     }
 }

@@ -33,7 +33,9 @@
                 <argument name="price" value="Fixed"/>
                 <argument name="amount" value="24.00"/>
             </actionGroup>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <magentoCLI command="config:set {{DisablePaymentBankTransferConfigData.path}} {{DisablePaymentBankTransferConfigData.value}}" stepKey="enableGuestCheckout"/>
@@ -108,8 +110,7 @@
         <see selector="{{StorefrontCustomerAddressesSection.shippingAddress}}" userInput="T: {{updateCustomerUKAddress.telephone}}" stepKey="seeTelephoneInShippingAddress"/>
 
         <!--Open Order Index Page -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForOrderIndexPageToLoad"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
 
         <!-- Filter Order using orderId and assert order-->
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">

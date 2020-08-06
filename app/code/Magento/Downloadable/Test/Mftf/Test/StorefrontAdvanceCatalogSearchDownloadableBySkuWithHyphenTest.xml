@@ -19,7 +19,7 @@
              <group value="Downloadable"/>
              <group value="SearchEngineElasticsearch"/>
              <skip>
-                 <issueId value="MC-21228"/>
+                 <issueId value="MC-34217"/>
              </skip>
          </annotations>
          <before>

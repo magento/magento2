@@ -313,7 +313,7 @@ QUERY;
         $product1 = $productRepository->get('simple');
         $product2 = $productRepository->get('12345');
         $product3 = $productRepository->get('simple-4');
-        $filteredProducts = [$product1, $product2, $product3 ];
+        $filteredProducts = [$product3, $product2, $product1];
         $countOfFilteredProducts = count($filteredProducts);
         $this->reIndexAndCleanCache();
         $response = $this->graphQlQuery($query);
@@ -570,8 +570,8 @@ QUERY;
                      ],
                     [
                         'count' => 1,
-                        'label' => '40-*',
-                        'value' => '40_*',
+                        'label' => '40-50',
+                        'value' => '40_50',
 
                     ],
                  ],
@@ -898,7 +898,7 @@ QUERY;
         $product1 = $productRepository->get('simple');
         $product2 = $productRepository->get('12345');
         $product3 = $productRepository->get('simple-4');
-        $filteredProducts = [$product1, $product2, $product3];
+        $filteredProducts = [$product3, $product2, $product1];
         $urlKey =[];
         foreach ($filteredProducts as $product) {
             $urlKey[] = $product->getUrlKey();
@@ -1431,8 +1431,8 @@ QUERY;
                         'count' => 1,
                     ],
                     [
-                        'label' => '20-*',
-                        'value' => '20_*',
+                        'label' => '20-30',
+                        'value' => '20_30',
                         'count' => 1,
                     ]
                 ]
@@ -1791,6 +1791,279 @@ QUERY;
                         'minimalPrice' => [
                             'amount' => [
                                 'value' => $filteredProducts[$itemIndex]->getPrice(),
+                                'currency' => 'USD'
+                            ]
+                        ]
+                    ]
+                ]
+            );
+        }
+    }
+
+    /**
+     * Partial search filtered for price and sorted by price and name
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products.php
+     */
+    public function testProductPartialNameFullTextSearchQuery()
+    {
+        $this->reIndexAndCleanCache();
+        $textToSearch = 'Sim';
+        $query
+            =<<<QUERY
+{
+    products(
+      search: "{$textToSearch}"
+      filter:{
+                price:{to:"25"}
+             }
+            sort:{
+            price:DESC
+            name:ASC
+            }
+    )
+    {
+        total_count
+        items {
+          name
+          sku
+          price {
+            minimalPrice {
+              amount {
+                value
+                currency
+              }
+            }
+          }
+        }
+        page_info {
+          page_size
+          current_page
+        }
+          filters{
+        filter_items {
+          items_count
+          label
+          value_string
+        }
+      }
+      aggregations{
+        attribute_code
+        count
+        label
+        options{
+          count
+          label
+          value
+        }
+      }
+      }
+}
+QUERY;
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+
+        $prod1 = $productRepository->get('simple1');
+        $prod2 = $productRepository->get('simple2');
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(2, $response['products']['total_count']);
+
+        $filteredProducts = [$prod1, $prod2];
+        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
+            $this->assertNotEmpty($itemArray);
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                [
+                    'sku' => $filteredProducts[$itemIndex]->getSku(),
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                    'price' => [
+                        'minimalPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
+                                'currency' => 'USD'
+                            ]
+                        ]
+                    ]
+                ]
+            );
+        }
+    }
+
+    /**
+     * Partial search on sku filtered for price and sorted by price and sku
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products_with_different_sku_and_name.php
+     */
+    public function testProductPartialSkuFullTextSearchQuery()
+    {
+        $this->reIndexAndCleanCache();
+        $textToSearch = 'prd';
+        $query
+            =<<<QUERY
+{
+    products(
+      search: "{$textToSearch}"
+      filter:{
+                price:{to:"25"}
+             }
+            sort:{
+            price:DESC
+            name:ASC
+            }
+    )
+    {
+        total_count
+        items {
+          name
+          sku
+          price {
+            minimalPrice {
+              amount {
+                value
+                currency
+              }
+            }
+          }
+        }
+        page_info {
+          page_size
+          current_page
+        }
+          filters{
+        filter_items {
+          items_count
+          label
+          value_string
+        }
+      }
+      aggregations{
+        attribute_code
+        count
+        label
+        options{
+          count
+          label
+          value
+        }
+      }
+      }
+}
+QUERY;
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+
+        $prod1 = $productRepository->get('prd1sku');
+        $prod2 = $productRepository->get('prd2-sku2');
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(2, $response['products']['total_count']);
+
+        $filteredProducts = [$prod1, $prod2];
+        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
+            $this->assertNotEmpty($itemArray);
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                [
+                    'sku' => $filteredProducts[$itemIndex]->getSku(),
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                    'price' => [
+                        'minimalPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
+                                'currency' => 'USD'
+                            ]
+                        ]
+                    ]
+                ]
+            );
+        }
+    }
+
+    /**
+     * Partial search on hyphenated sku filtered for price and sorted by price and sku
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/category.php
+     * @magentoApiDataFixture Magento/Catalog/_files/multiple_products_with_different_sku_and_name.php
+     */
+    public function testProductPartialSkuHyphenatedFullTextSearchQuery()
+    {
+        $this->reIndexAndCleanCache();
+        /** @var ProductRepositoryInterface $productRepository */
+        $productRepository = ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+
+        $prod2 = $productRepository->get('prd2-sku2');
+        $textToSearch = 'sku2';
+        $query
+            =<<<QUERY
+{
+    products(
+      search: "{$textToSearch}"
+      filter:{
+                price:{to:"25"}
+             }
+            sort:{
+            price:DESC
+            name:ASC
+            }
+    )
+    {
+        total_count
+        items {
+          name
+          sku
+          price {
+            minimalPrice {
+              amount {
+                value
+                currency
+              }
+            }
+          }
+        }
+        page_info {
+          page_size
+          current_page
+        }
+          filters{
+        filter_items {
+          items_count
+          label
+          value_string
+        }
+      }
+      aggregations{
+        attribute_code
+        count
+        label
+        options{
+          count
+          label
+          value
+        }
+      }
+      }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertEquals(1, $response['products']['total_count']);
+
+        $filteredProducts = [$prod2];
+        $productItemsInResponse = array_map(null, $response['products']['items'], $filteredProducts);
+        foreach ($productItemsInResponse as $itemIndex => $itemArray) {
+            $this->assertNotEmpty($itemArray);
+            $this->assertResponseFields(
+                $productItemsInResponse[$itemIndex][0],
+                [
+                    'sku' => $filteredProducts[$itemIndex]->getSku(),
+                    'name' => $filteredProducts[$itemIndex]->getName(),
+                    'price' => [
+                        'minimalPrice' => [
+                            'amount' => [
+                                'value' => $filteredProducts[$itemIndex]->getSpecialPrice(),
                                 'currency' => 'USD'
                             ]
                         ]
