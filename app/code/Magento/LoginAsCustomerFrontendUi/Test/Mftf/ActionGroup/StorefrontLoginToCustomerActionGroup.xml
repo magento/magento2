@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontLoginToCustomerActionGroup">
+        <annotations>
+            <description>Login to customer account using Login As customer.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerId" type="string"/>
+        </arguments>
+
+        <amOnPage url="admin/loginascustomer/login/login/customer_id/{{customerId}}/" stepKey="loginAsCustomer"/>
+        <waitForElementVisible selector="{{StorefrontCustomerLoginAsCustomerSection.loginAsCustomerBanner}}" stepKey="waitForLoginAsCustomerPageLoad"/>
+    </actionGroup>
+</actionGroups>

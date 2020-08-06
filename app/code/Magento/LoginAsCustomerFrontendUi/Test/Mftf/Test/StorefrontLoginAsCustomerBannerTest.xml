@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontLoginAsCustomerBannerTest">
+        <annotations>
+            <features value="StorefrontLoginAsCustomerBanner"/>
+            <stories value="User login as customer and verify banner is sticky"/>
+            <useCaseId value="https://github.com/magento/magento2/issues/29354"/>
+            <title value="User login as customer and verify banner is sticky"/>
+            <testCaseId value=""/>
+            <description value="User login as customer and verify banner is sticky"/>
+            <severity value="CRITICAL"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer" />
+        </after>
+
+        <actionGroup ref="StorefrontLoginToCustomerActionGroup" stepKey="LoginAsCustomer">
+            <argument name="customerId" value="$$createCustomer.id$$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontAssertLoginAsCustomerBannerVisibleActionGroup" stepKey="assertBannerIsSticky" />
+    </test>
+</tests>
