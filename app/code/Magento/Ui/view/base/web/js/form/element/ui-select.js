@@ -292,6 +292,13 @@ define([
         },
 
         /**
+         * Return empty options html
+         */
+        getEmptyOptionsUnsanitizedHtml: function () {
+            return this.emptyOptionsHtml;
+        },
+
+        /**
          * Check options length and set to cache
          * if some options is added
          *
