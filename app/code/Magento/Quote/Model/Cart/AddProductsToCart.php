@@ -115,7 +115,7 @@ class AddProductsToCart
             }
         }
 
-        if (!count($this->errors) === 0) {
+        if (count($this->errors) !== 0) {
             /* Revert changes introduced by add to cart processes in case of an error */
             $cart->getItemsCollection()->clear();
         }
