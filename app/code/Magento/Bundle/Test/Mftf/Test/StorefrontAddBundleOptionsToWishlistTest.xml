@@ -1,0 +1,107 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddBundleOptionsToWishlistTest">
+        <annotations>
+            <features value="Wishlist"/>
+            <stories value="Add To Wishlist Bundle product with product options"/>
+            <title value="Bundle product options on Wishlist"/>
+            <description value="On Wishlist product should be correct present Bundle product options."/>
+            <severity value="MAJOR"/>
+            <group value="Bundle"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <createData entity="CustomerEntityOne" stepKey="createCustomerViaTheStorefront"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct3"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomerViaTheStorefront" stepKey="deleteCustomerViaTheStorefront"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="simpleProduct3" stepKey="deleteSimpleProduct3"/>
+            <!--delete created bundle product-->
+            <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">
+                <argument name="sku" value="{{BundleProduct.sku}}"/>
+            </actionGroup>
+            <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
+                              dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true"
+                              stepKey="clickClearFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Start creating a bundle product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillNameAndSku">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+
+        <!-- Add Option One, a "Checkbox" type option, with tree products -->
+        <actionGroup ref="AddBundleOptionWithThreeProductsActionGroup" stepKey="addBundleOptionWithTreeProducts">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
+            <argument name="prodTwoSku" value="$$simpleProduct2.sku$$"/>
+            <argument name="prodTreeSku" value="$$simpleProduct3.sku$$"/>
+            <argument name="optionTitle" value="Option One"/>
+            <argument name="inputType" value="checkbox"/>
+        </actionGroup>
+
+        <!-- Save product-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomerViaTheStorefront$$"/>
+        </actionGroup>
+
+        <!--Go to Storefront and open Bundle Product page-->
+        <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>
+        <waitForPageLoad stepKey="waitForStorefront"/>
+
+        <!--Click "Customize and Add to Cart" button-->
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
+
+        <!--Chose all products from 1st & 3rd options -->
+        <click stepKey="selectProduct1" selector="{{StorefrontBundledSection.productCheckbox('1','1')}}"/>
+        <click stepKey="selectProduct2" selector="{{StorefrontBundledSection.productCheckbox('1','2')}}"/>
+        <click stepKey="selectProduct3" selector="{{StorefrontBundledSection.productCheckbox('1','3')}}"/>
+
+        <!--Unselect products 2nd & 3rd options -->
+        <click stepKey="unselectProduct2" selector="{{StorefrontBundledSection.productCheckbox('1','2')}}"/>
+        <click stepKey="unselectProduct3" selector="{{StorefrontBundledSection.productCheckbox('1','3')}}"/>
+
+        <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addToWishlistProduct">
+            <argument name="productVar" value="$$BundleProduct$$"/>
+        </actionGroup>
+
+        <!-- Assert product details in Wishlist -->
+        <actionGroup ref="AssertProductDetailsInWishlistActionGroup" stepKey="assertProductDetails">
+            <argument name="productName" value="{{BundleProduct.name}}"/>
+            <argument name="label" value="$$simpleProduct1.title$$"/>
+            <argument name="labelValue" value="$$simpleProduct1.sku$$"/>
+        </actionGroup>
+
+        <!-- Assert product details not in Wishlist -->
+        <actionGroup ref="AssertProductDetailsIsNotPresentInWishlistActionGroup"
+                     stepKey="assertProductDetailsNotPresent">
+            <argument name="productName" value="{{BundleProduct.name}}"/>
+            <argument name="label" value="$$simpleProduct2.title$$"/>
+            <argument name="labelValue" value="$$simpleProduct2.sku$$"/>
+        </actionGroup>
+
+    </test>
+</tests>
