@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomerAssistance\Model\ResourceModel;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\LoginAsCustomerAssistance\Api\SaveLoginAsCustomerAssistanceAllowedInterface;
 
 /**
  * Save Login as Customer assistance allowed record.

@@ -9,8 +9,6 @@ namespace Magento\LoginAsCustomerAssistance\Api;
 
 /**
  * Set 'assistance_allowed' attribute to Customer.
- *
- * @api
  */
 interface SetAssistanceInterface
 {

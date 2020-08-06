@@ -8,9 +8,7 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomerAssistance\Api;
 
 /**
- * LoginAsCustomerAssistance config
- *
- * @api
+ * LoginAsCustomerAssistance config.
  */
 interface ConfigInterface
 {

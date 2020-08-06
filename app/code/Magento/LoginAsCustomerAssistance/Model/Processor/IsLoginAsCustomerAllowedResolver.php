@@ -10,7 +10,6 @@ namespace Magento\LoginAsCustomerAssistance\Model\Processor;
 use Magento\LoginAsCustomer\Model\IsLoginAsCustomerEnabledForCustomerResultFactory;
 use Magento\LoginAsCustomerApi\Api\Data\IsLoginAsCustomerEnabledForCustomerResultInterface;
 use Magento\LoginAsCustomerApi\Api\IsLoginAsCustomerEnabledForCustomerInterface;
-use Magento\LoginAsCustomerApi\Model\IsLoginAsCustomerEnabledForCustomerResolverInterface;
 use Magento\LoginAsCustomerAssistance\Api\IsAssistanceEnabledInterface;
 
 /**
@@ -30,6 +29,7 @@ class IsLoginAsCustomerAllowedResolver implements IsLoginAsCustomerEnabledForCus
 
     /**
      * @param IsAssistanceEnabledInterface $isAssistanceEnabled
+     * @param IsLoginAsCustomerEnabledForCustomerResultFactory $resultFactory
      */
     public function __construct(
         IsAssistanceEnabledInterface $isAssistanceEnabled,
