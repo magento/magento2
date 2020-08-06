@@ -9,6 +9,8 @@ use Magento\Deploy\Console\InputValidator;
 use Magento\Deploy\Console\ConsoleLoggerFactory;
 use Magento\Deploy\Console\DeployStaticOptions as Options;
 use Magento\Framework\App\State;
+use Magento\Framework\Console\Cli;
+use Psr\Log\LogLevel;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -20,14 +22,14 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Deploy\Service\DeployStaticContent;
 
 /**
- * Deploy static content command
+ * Command to Deploy Static Content
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class DeployStaticContentCommand extends Command
 {
     /**
-     * Default language value
+     * Default language value. Always used for adminhtml, fallback if no frontend locale is supplied.
      */
     const DEFAULT_LANGUAGE_VALUE = 'en_US';
 
@@ -55,16 +57,16 @@ class DeployStaticContentCommand extends Command
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\App\State
+     * @var State
      */
     private $appState;
 
     /**
      * StaticContentCommand constructor
      *
-     * @param InputValidator        $inputValidator
-     * @param ConsoleLoggerFactory  $consoleLoggerFactory
-     * @param Options               $options
+     * @param InputValidator $inputValidator
+     * @param ConsoleLoggerFactory $consoleLoggerFactory
+     * @param Options $options
      * @param ObjectManagerProvider $objectManagerProvider
      */
     public function __construct(
@@ -82,7 +84,7 @@ class DeployStaticContentCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @throws \InvalidArgumentException
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
@@ -96,7 +98,10 @@ class DeployStaticContentCommand extends Command
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
+     * @param InputInterface $input
+     * @param OutputInterface $output
+     *
      * @throws \InvalidArgumentException
      * @throws LocalizedException
      */
@@ -104,22 +109,12 @@ class DeployStaticContentCommand extends Command
     {
         $time = microtime(true);
 
-        if (!$input->getOption(Options::FORCE_RUN) && $this->getAppState()->getMode() !== State::MODE_PRODUCTION) {
-            throw new LocalizedException(
-                __(
-                    'NOTE: Manual static content deployment is not required in "default" and "developer" modes.'
-                    . PHP_EOL . 'In "default" and "developer" modes static contents are being deployed '
-                    . 'automatically on demand.'
-                    . PHP_EOL . 'If you still want to deploy in these modes, use -f option: '
-                    . "'bin/magento setup:static-content:deploy -f'"
-                )
-            );
-        }
-
+        $this->checkAppMode($input);
         $this->inputValidator->validate($input);
 
         $options = $input->getOptions();
-        $options[Options::LANGUAGE] = $input->getArgument(Options::LANGUAGES_ARGUMENT) ?: ['all'];
+        $languageOption = $options[Options::LANGUAGE] ?: ['all'];
+        $options[Options::LANGUAGE] = $input->getArgument(Options::LANGUAGES_ARGUMENT) ?: $languageOption;
         $refreshOnly = isset($options[Options::REFRESH_CONTENT_VERSION_ONLY])
             && $options[Options::REFRESH_CONTENT_VERSION_ONLY];
 
@@ -132,18 +127,44 @@ class DeployStaticContentCommand extends Command
 
         $this->mockCache();
 
-        /** @var DeployStaticContent $deployService */
-        $deployService = $this->objectManager->create(DeployStaticContent::class, [
-            'logger' => $logger
-        ]);
-
-        $deployService->deploy($options);
+        $exitCode = Cli::RETURN_SUCCESS;
+        try {
+            /** @var DeployStaticContent $deployService */
+            $deployService = $this->objectManager->create(DeployStaticContent::class, [
+                'logger' => $logger
+            ]);
+            $deployService->deploy($options);
+        } catch (\Throwable $e) {
+            $logger->error('Error happened during deploy process: ' . $e->getMessage());
+            $exitCode = Cli::RETURN_FAILURE;
+        }
 
         if (!$refreshOnly) {
             $logger->notice(PHP_EOL . "Execution time: " . (microtime(true) - $time));
         }
 
-        return \Magento\Framework\Console\Cli::RETURN_SUCCESS;
+        return $exitCode;
+    }
+
+    /**
+     * Check application mode
+     *
+     * @param InputInterface $input
+     * @throws LocalizedException
+     */
+    private function checkAppMode(InputInterface $input): void
+    {
+        if (!$input->getOption(Options::FORCE_RUN) && $this->getAppState()->getMode() !== State::MODE_PRODUCTION) {
+            throw new LocalizedException(
+                __(
+                    'NOTE: Manual static content deployment is not required in "default" and "developer" modes.'
+                    . PHP_EOL . 'In "default" and "developer" modes static contents are being deployed '
+                    . 'automatically on demand.'
+                    . PHP_EOL . 'If you still want to deploy in these modes, use -f option: '
+                    . "'bin/magento setup:static-content:deploy -f'"
+                )
+            );
+        }
     }
 
     /**
@@ -161,6 +182,8 @@ class DeployStaticContentCommand extends Command
     }
 
     /**
+     * Retrieve application state
+     *
      * @return State
      */
     private function getAppState()

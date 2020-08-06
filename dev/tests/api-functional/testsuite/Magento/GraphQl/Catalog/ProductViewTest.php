@@ -232,7 +232,7 @@ class ProductViewTest extends GraphQlAbstract
             special_from_date
             special_price
             special_to_date
-            swatch_image            
+            swatch_image
             tier_price
             tier_prices
             {
@@ -578,8 +578,8 @@ QUERY;
      */
     public function testProductPrices()
     {
-        $firstProductSku = 'simple-249';
-        $secondProductSku = 'simple-156';
+        $firstProductSku = 'simple-156';
+        $secondProductSku = 'simple-249';
         $query = <<<QUERY
        {
            products(filter: {price: {from: "150.0", to: "250.0"}})
@@ -665,7 +665,8 @@ QUERY;
     {
         $mediaGalleryEntries = $product->getMediaGalleryEntries();
         $this->assertCount(1, $mediaGalleryEntries, "Precondition failed, incorrect number of media gallery entries.");
-        $this->assertIsArray([$actualResponse['media_gallery_entries']],
+        $this->assertIsArray(
+            [$actualResponse['media_gallery_entries']],
             "Media galleries field must be of an array type."
         );
         $this->assertCount(1, $actualResponse['media_gallery_entries'], "There must be 1 record in media gallery.");
@@ -701,10 +702,10 @@ QUERY;
      */
     private function assertCustomAttribute($actualResponse)
     {
-        $customAttribute = null;
+        $customAttribute = 'customAttributeValue';
         $this->assertEquals($customAttribute, $actualResponse['attribute_code_custom']);
     }
-    
+
     /**
      * @param ProductInterface $product
      * @param $actualResponse
@@ -1049,7 +1050,7 @@ QUERY;
     {
         $query = <<<QUERY
 {
-    products(filter: 
+    products(filter:
              {
              sku: {in:["12345"]}
              }

@@ -28,13 +28,10 @@ class Syslog extends \Magento\Framework\Logger\Handler\Syslog
     private $deploymentConfig;
 
     /**
-     * @param ScopeConfigInterface $scopeConfig Scope config
      * @param DeploymentConfig $deploymentConfig Deployment config
      * @param string $ident The string ident to be added to each message
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
-        ScopeConfigInterface $scopeConfig,
         DeploymentConfig $deploymentConfig,
         string $ident
     ) {

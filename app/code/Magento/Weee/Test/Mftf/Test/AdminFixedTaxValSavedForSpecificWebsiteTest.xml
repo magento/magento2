@@ -51,8 +51,12 @@
             <!--Set catalog price scope to Global-->
             <comment userInput="Set catalog price scope to Global" stepKey="commentSetPriceScope"/>
             <magentoCLI command="config:set catalog/price/scope 0" stepKey="setPriceScopeGlobal"/>
-            <magentoCLI command="indexer:reindex catalog_product_price" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value="catalog_product_price"/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!--Set catalog price scope to Global-->
@@ -97,8 +101,12 @@
         <!--Set catalog price scope to Website-->
         <comment userInput="Set catalog price scope to Website" stepKey="commentSetPriceScope"/>
         <magentoCLI command="config:set catalog/price/scope 1" stepKey="setPriceScopeWebsite"/>
-        <magentoCLI command="indexer:reindex catalog_product_price" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value="catalog_product_price"/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!--See available websites only 'All Websites'-->
         <comment userInput="See available websites 'All Websites', 'Main Website' and Second website" stepKey="commentCheckWebsitesInProductPage"/>
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductPageSecondTime">

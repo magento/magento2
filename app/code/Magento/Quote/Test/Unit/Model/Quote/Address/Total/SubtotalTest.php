@@ -59,7 +59,7 @@ class SubtotalTest extends TestCase
 
         $this->stockRegistry = $this->createPartialMock(
             StockRegistry::class,
-            ['getStockItem', '__wakeup']
+            ['getStockItem']
         );
         $this->stockItemMock = $this->createPartialMock(
             \Magento\CatalogInventory\Model\Stock\Item::class,
@@ -110,10 +110,11 @@ class SubtotalTest extends TestCase
             ]
         );
         /** @var Address|MockObject $address */
-        $address = $this->createPartialMock(
-            Address::class,
-            ['setTotalQty', 'getTotalQty', 'removeItem', 'getQuote']
-        );
+        $address = $this->getMockBuilder(Address::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['removeItem', 'getQuote'])
+            ->addMethods(['setTotalQty', 'getTotalQty'])
+            ->getMock();
 
         /** @var Product|MockObject $product */
         $product = $this->createMock(Product::class);
@@ -161,10 +162,10 @@ class SubtotalTest extends TestCase
         $shippingAssignmentMock->expects($this->exactly(2))->method('getShipping')->willReturn($shipping);
         $shippingAssignmentMock->expects($this->once())->method('getItems')->willReturn([$quoteItem]);
 
-        $total = $this->createPartialMock(
-            Total::class,
-            ['setBaseVirtualAmount', 'setVirtualAmount']
-        );
+        $total = $this->getMockBuilder(Total::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['setVirtualAmount', 'setBaseVirtualAmount'])
+            ->getMock();
         $total->expects($this->once())->method('setBaseVirtualAmount')->willReturnSelf();
         $total->expects($this->once())->method('setVirtualAmount')->willReturnSelf();
 
@@ -185,7 +186,9 @@ class SubtotalTest extends TestCase
         ];
 
         $quoteMock = $this->createMock(Quote::class);
-        $totalMock = $this->createPartialMock(Total::class, ['getSubtotal']);
+        $totalMock = $this->getMockBuilder(Total::class)
+            ->addMethods(['getSubtotal'])
+            ->getMockForAbstractClass();
         $totalMock->expects($this->once())->method('getSubtotal')->willReturn(100);
 
         $this->assertEquals($expectedResult, $this->subtotalModel->fetch($quoteMock, $totalMock));
@@ -229,13 +232,11 @@ class SubtotalTest extends TestCase
         $address->expects($this->once())
             ->method('removeItem')
             ->with($addressItemId);
-        $addressItem = $this->createPartialMock(
-            AddressItem::class,
-            [
-                'getId',
-                'getQuoteItemId'
-            ]
-        );
+        $addressItem = $this->getMockBuilder(AddressItem::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getId'])
+            ->addMethods(['getQuoteItemId'])
+            ->getMock();
         $addressItem->setAddress($address);
         $addressItem->method('getId')
             ->willReturn($addressItemId);

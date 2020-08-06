@@ -25,7 +25,9 @@
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaModeAlwaysConfigData.path}} {{StorefrontCustomerCaptchaModeAlwaysConfigData.value}}" stepKey="alwaysEnableCaptcha" />
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaLength3ConfigData.path}} {{StorefrontCustomerCaptchaLength3ConfigData.value}}" stepKey="setCaptchaLength" />
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaSymbols1ConfigData.path}} {{StorefrontCustomerCaptchaSymbols1ConfigData.value}}" stepKey="setCaptchaSymbols" />
-            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
         </before>
         <after>
             <!-- Set default configuration. -->
@@ -33,7 +35,9 @@
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaModeAfterFailConfigData.path}} {{StorefrontCustomerCaptchaModeAfterFailConfigData.value}}" stepKey="defaultCaptchaMode" />
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultLengthConfigData.path}} {{StorefrontCustomerCaptchaDefaultLengthConfigData.value}}" stepKey="setDefaultCaptchaLength" />
             <magentoCLI command="config:set {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.path}} {{StorefrontCustomerCaptchaDefaultSymbolsConfigData.value}}" stepKey="setDefaultCaptchaSymbols" />
-            <magentoCLI command="cache:clean config full_page" stepKey="cleanInvalidatedCaches"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
         </after>
 
         <!-- Open Customer registration page -->
