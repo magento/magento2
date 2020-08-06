@@ -5,10 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Wishlist\Model\Wishlist\Data;
+namespace Magento\Quote\Model\Cart\Data;
 
 /**
- * DTO represents entered options
+ * DTO for quote item entered option
  */
 class EnteredOption
 {
@@ -33,7 +33,7 @@ class EnteredOption
     }
 
     /**
-     * Get entered option id
+     * Returns entered option ID
      *
      * @return string
      */
@@ -43,7 +43,7 @@ class EnteredOption
     }
 
     /**
-     * Get entered option value
+     * Returns entered option value
      *
      * @return string
      */

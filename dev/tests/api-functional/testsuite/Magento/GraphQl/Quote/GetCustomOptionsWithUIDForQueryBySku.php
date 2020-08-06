@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\GraphQl\Wishlist;
+namespace Magento\GraphQl\Quote;
 
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 
 /**
- * Generate an array with test values for customizable options with encoded id_v2 value
+ * Generate an array with test values for customizable options with UID
  */
-class GetCustomOptionsWithIDV2ForQueryBySku
+class GetCustomOptionsWithUIDForQueryBySku
 {
     /**
      * @var ProductCustomOptionRepositoryInterface
@@ -31,7 +31,6 @@ class GetCustomOptionsWithIDV2ForQueryBySku
      * Returns array of custom options for the product
      *
      * @param string $sku
-     *
      * @return array
      */
     public function execute(string $sku): array
@@ -43,24 +42,37 @@ class GetCustomOptionsWithIDV2ForQueryBySku
         foreach ($customOptions as $customOption) {
             $optionType = $customOption->getType();
 
-            if ($optionType === 'field' || $optionType === 'area' || $optionType === 'date') {
-                $enteredOptions[] = [
-                    'uid' => $this->encodeEnteredOption((int)$customOption->getOptionId()),
-                    'value' => '2012-12-12'
-                ];
-            } elseif ($optionType === 'drop_down') {
-                $optionSelectValues = $customOption->getValues();
-                $selectedOptions[] = $this->encodeSelectedOption(
-                    (int)$customOption->getOptionId(),
-                    (int)reset($optionSelectValues)->getOptionTypeId()
-                );
-            } elseif ($optionType === 'multiple') {
-                foreach ($customOption->getValues() as $optionValue) {
+            switch ($optionType) {
+                case 'field':
+                case 'area':
+                    $enteredOptions[] = [
+                        'type' => 'field',
+                        'uid' => $this->encodeEnteredOption((int) $customOption->getOptionId()),
+                        'value' => 'test'
+                    ];
+                    break;
+                case 'date':
+                    $enteredOptions[] = [
+                        'type' => 'date',
+                        'uid' => $this->encodeEnteredOption((int) $customOption->getOptionId()),
+                        'value' => '2012-12-12 00:00:00'
+                    ];
+                    break;
+                case 'drop_down':
+                    $optionSelectValues = $customOption->getValues();
                     $selectedOptions[] = $this->encodeSelectedOption(
-                        (int)$customOption->getOptionId(),
-                        (int)$optionValue->getOptionTypeId()
+                        (int) $customOption->getOptionId(),
+                        (int) reset($optionSelectValues)->getOptionTypeId()
                     );
-                }
+                    break;
+                case 'multiple':
+                    foreach ($customOption->getValues() as $optionValue) {
+                        $selectedOptions[] = $this->encodeSelectedOption(
+                            (int) $customOption->getOptionId(),
+                            (int) $optionValue->getOptionTypeId()
+                        );
+                    }
+                    break;
             }
         }
 
@@ -71,11 +83,10 @@ class GetCustomOptionsWithIDV2ForQueryBySku
     }
 
     /**
-     * Returns id_v2 of the selected custom option
+     * Returns UID of the selected custom option
      *
      * @param int $optionId
      * @param int $optionValueId
-     *
      * @return string
      */
     private function encodeSelectedOption(int $optionId, int $optionValueId): string
@@ -84,10 +95,9 @@ class GetCustomOptionsWithIDV2ForQueryBySku
     }
 
     /**
-     * Returns id_v2 of the entered custom option
+     * Returns UID of the entered custom option
      *
      * @param int $optionId
-     *
      * @return string
      */
     private function encodeEnteredOption(int $optionId): string

@@ -5,40 +5,44 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Wishlist\Model\Wishlist\BuyRequest;
+namespace Magento\Quote\Model\Cart\BuyRequest;
 
-use Magento\Wishlist\Model\Wishlist\Data\WishlistItem;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Quote\Model\Cart\Data\CartItem;
 
 /**
- * Data provider for custom options buy requests
+ * Extract buy request elements require for custom options
  */
 class CustomizableOptionDataProvider implements BuyRequestDataProviderInterface
 {
-    private const PROVIDER_OPTION_TYPE = 'custom-option';
+    private const OPTION_TYPE = 'custom-option';
 
     /**
      * @inheritdoc
      *
-     * @phpcs:disable Magento2.Functions.DiscouragedFunction
+     * @throws LocalizedException
      */
-    public function execute(WishlistItem $wishlistItemData, ?int $productId): array
+    public function execute(CartItem $cartItem): array
     {
         $customizableOptionsData = [];
-        foreach ($wishlistItemData->getSelectedOptions() as $optionData) {
+
+        foreach ($cartItem->getSelectedOptions() as $optionData) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $optionData = \explode('/', base64_decode($optionData->getId()));
 
             if ($this->isProviderApplicable($optionData) === false) {
                 continue;
             }
+            $this->validateInput($optionData);
 
             [$optionType, $optionId, $optionValue] = $optionData;
-
-            if ($optionType == self::PROVIDER_OPTION_TYPE) {
+            if ($optionType == self::OPTION_TYPE) {
                 $customizableOptionsData[$optionId][] = $optionValue;
             }
         }
 
-        foreach ($wishlistItemData->getEnteredOptions() as $option) {
+        foreach ($cartItem->getEnteredOptions() as $option) {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $optionData = \explode('/', base64_decode($option->getUid()));
 
             if ($this->isProviderApplicable($optionData) === false) {
@@ -46,30 +50,18 @@ class CustomizableOptionDataProvider implements BuyRequestDataProviderInterface
             }
 
             [$optionType, $optionId] = $optionData;
-
-            if ($optionType == self::PROVIDER_OPTION_TYPE) {
+            if ($optionType == self::OPTION_TYPE) {
                 $customizableOptionsData[$optionId][] = $option->getValue();
             }
         }
 
-        if (empty($customizableOptionsData)) {
-            return $customizableOptionsData;
-        }
-
-        $result = ['options' => $this->flattenOptionValues($customizableOptionsData)];
-
-        if ($productId) {
-            $result += ['product' => $productId];
-        }
-
-        return $result;
+        return ['options' => $this->flattenOptionValues($customizableOptionsData)];
     }
 
     /**
      * Flatten option values for non-multiselect customizable options
      *
      * @param array $customizableOptionsData
-     *
      * @return array
      */
     private function flattenOptionValues(array $customizableOptionsData): array
@@ -91,6 +83,25 @@ class CustomizableOptionDataProvider implements BuyRequestDataProviderInterface
      */
     private function isProviderApplicable(array $optionData): bool
     {
-        return $optionData[0] === self::PROVIDER_OPTION_TYPE;
+        if ($optionData[0] !== self::OPTION_TYPE) {
+            return false;
+        }
+
+        return true;
+    }
+
+    /**
+     * Validates the provided options structure
+     *
+     * @param array $optionData
+     * @throws LocalizedException
+     */
+    private function validateInput(array $optionData): void
+    {
+        if (count($optionData) !== 3) {
+            throw new LocalizedException(
+                __('Wrong format of the entered option data')
+            );
+        }
     }
 }

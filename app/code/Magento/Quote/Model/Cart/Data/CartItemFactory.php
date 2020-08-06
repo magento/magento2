@@ -5,40 +5,40 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Wishlist\Model\Wishlist\Data;
+namespace Magento\Quote\Model\Cart\Data;
 
 use Magento\Framework\Exception\InputException;
 
 /**
- * Create WishlistItem DTO
+ * Creates CartItem DTO
  */
-class WishlistItemFactory
+class CartItemFactory
 {
     /**
-     * Create wishlist item DTO
+     * Creates CartItem DTO
      *
      * @param array $data
-     *
-     * @return WishlistItem
+     * @return CartItem
+     * @throws InputException
      */
-    public function create(array $data): WishlistItem
+    public function create(array $data): CartItem
     {
-        return new WishlistItem(
+        if (!isset($data['sku'], $data['quantity'])) {
+            throw new InputException(__('Required fields are not present: sku, quantity'));
+        }
+        return new CartItem(
+            $data['sku'],
             $data['quantity'],
-            $data['sku'] ?? null,
             $data['parent_sku'] ?? null,
-            isset($data['wishlist_item_id']) ? (int) $data['wishlist_item_id'] : null,
-            $data['description'] ?? null,
             isset($data['selected_options']) ? $this->createSelectedOptions($data['selected_options']) : [],
             isset($data['entered_options']) ? $this->createEnteredOptions($data['entered_options']) : []
         );
     }
 
     /**
-     * Create array of Entered Options
+     * Creates array of Entered Options
      *
      * @param array $options
-     *
      * @return EnteredOption[]
      */
     private function createEnteredOptions(array $options): array
@@ -57,10 +57,9 @@ class WishlistItemFactory
     }
 
     /**
-     * Create array of Selected Options
+     * Creates array of Selected Options
      *
      * @param string[] $options
-     *
      * @return SelectedOption[]
      */
     private function createSelectedOptions(array $options): array
