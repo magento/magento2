@@ -13,7 +13,7 @@ use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Filesystem;
-use Magento\Framework\Filesystem\Io\File;
+use Magento\Framework\Filesystem\Io\File as IoFile;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
@@ -21,7 +21,7 @@ use Magento\Framework\UrlInterface;
 use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Magento\Theme\Model\Design\Backend\Image;
-use PHPUnit_Framework_MockObject_MockObject;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -31,8 +31,13 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /** @var Image */
     private $imageBackend;
 
-    /** @var File */
+    /** @var IoFile */
     private $ioFileSystem;
+
+    /**
+     * @var ReadFactory||\PHPUnit_Framework_MockObject_MockObject
+     */
+    private $tmpDirectory;
 
     /**
      * @inheritdoc
@@ -50,7 +55,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
         $databaseHelper = $this->getMockObject(Database::class);
         $abstractResource = $this->getMockObject(AbstractResource::class);
         $abstractDb = $this->getMockObject(AbstractDb::class);
-        $this->ioFileSystem = $this->getMockObject(File::class);
+        $this->ioFileSystem = $this->getMockObject(IoFile::class);
+        $this->tmpDirectory = $this->getMockObject(ReadFactory::class);
+
         $this->imageBackend = new Image(
             $context,
             $registry,
@@ -64,7 +71,8 @@ class ImageTest extends \PHPUnit\Framework\TestCase
             $abstractDb,
             [],
             $databaseHelper,
-            $this->ioFileSystem
+            $this->ioFileSystem,
+            $this->tmpDirectory
         );
     }
 
@@ -79,9 +87,9 @@ class ImageTest extends \PHPUnit\Framework\TestCase
     /**
      * @param string $class
      * @param array $methods
-     * @return PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit_Framework_MockObject_MockObject
      */
-    private function getMockObject(string $class, array $methods = []): PHPUnit_Framework_MockObject_MockObject
+    protected function getMockObject($class, $methods = [])
     {
         $builder =  $this->getMockBuilder($class)
             ->disableOriginalConstructor();
@@ -95,7 +103,7 @@ class ImageTest extends \PHPUnit\Framework\TestCase
      * Test for beforeSave method with invalid file extension.
      *
      * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Something is wrong with the file upload settings.
+     * @expectedExceptionMessage Invalid file provided.
      */
     public function testBeforeSaveWithInvalidExtensionFile()
     {

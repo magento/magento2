@@ -13,9 +13,8 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Magento\Framework\Filesystem\Glob;
 
 /**
- * Class File
+ * Class File for Filesystem Driver
  *
- * @package Magento\Framework\Filesystem\Driver
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  */
 class File implements DriverInterface
@@ -593,13 +592,19 @@ class File implements DriverInterface
      */
     public function fileReadLine($resource, $length, $ending = null)
     {
-        $result = @stream_get_line($resource, $length, $ending);
-        if (false === $result) {
+        try {
+            $result = @stream_get_line($resource, $length, $ending);
+            if (false === $result) {
+                throw new FileSystemException(
+                    new \Magento\Framework\Phrase('File cannot be read %1', [$this->getWarningMessage()])
+                );
+            }
+            return $result;
+        } catch (\Exception $e) {
             throw new FileSystemException(
                 new \Magento\Framework\Phrase('File cannot be read %1', [$this->getWarningMessage()])
             );
         }
-        return $result;
     }
 
     /**
