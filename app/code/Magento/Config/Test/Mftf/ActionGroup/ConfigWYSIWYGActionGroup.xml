@@ -20,9 +20,12 @@
         <magentoCLI stepKey="enableWYSIWYG" command="config:set cms/wysiwyg/enabled enabled"/>
     </actionGroup>
 
-    <actionGroup name="SwitchToTinyMCE3">
+    <!--
+    NOTICE: SwitchToTinyMCE3 is deprecated.
+    -->
+    <actionGroup name="SwitchToTinyMCE3" deprecated="This version of TinyMCE is no longer supported">
         <annotations>
-            <description>Goes to the 'Configuration' page for 'Content Management'. Sets 'WYSIWYG Editor' to 'TinyMCE 3'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>
+            <description>DEPRECATED. Goes to the 'Configuration' page for 'Content Management'. Sets 'WYSIWYG Editor' to 'TinyMCE 3'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>
         </annotations>
 
         <comment userInput="Choose TinyMCE3 as the default editor" stepKey="chooseTinyMCE3AsEditor"/>
@@ -55,7 +58,7 @@
         <arguments>
             <argument name="value" defaultValue="Yes" type="string"/>
         </arguments>
-        
+
         <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true"/>
@@ -70,7 +73,7 @@
         <annotations>
             <description>Goes to the 'Configuration' page for 'Content Management'. Sets 'Enable WYSIWYG Editor' to 'Enabled by Default'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>
         </annotations>
-        
+
         <amOnPage url="{{AdminContentManagementPage.url}}" stepKey="navigateToConfigurationPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <conditionalClick selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.EnableWYSIWYG}}" visible="false" stepKey="expandWYSIWYGOptionsTab"/>
