@@ -19,7 +19,7 @@
             <group value="ConfigurableProduct"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create configurable product-->
             <comment userInput="Create configurable product" stepKey="commentCreateConfigProduct"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -36,12 +36,12 @@
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
             <!--Delete product attributes-->
             <comment userInput="Delete product attributes" stepKey="deleteCommentAttributes"/>
-            <actionGroup ref="DeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
-                <argument name="ProductAttribute" value="colorProductAttribute"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductAttribute">
+                <argument name="productAttributeLabel" value="{{colorProductAttribute.default_label}}"/>
             </actionGroup>
             <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGridFirst"/>
-            <actionGroup ref="DeleteProductAttributeByLabelActionGroup" stepKey="deleteProductSecondAttribute">
-                <argument name="ProductAttribute" value="productAttributeColor"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteProductSecondAttribute">
+                <argument name="productAttributeLabel" value="{{productAttributeColor.default_label}}"/>
             </actionGroup>
             <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGridSecond"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -49,7 +49,9 @@
         </after>
         <!--Create attribute and options for product-->
         <comment userInput="Create attribute and options for product" stepKey="commentCreateAttributesAndOptions"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createConfigProduct.id$$)}}" stepKey="navigateToConfigProductPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="navigateToConfigProductPage">
+            <argument name="productId" value="$$createConfigProduct.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForProductPageLoad"/>
         <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForProduct1">
             <argument name="image" value="MagentoLogo"/>
@@ -188,8 +190,12 @@
         <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="generateConfigsForDuplicatedProduct"/>
         <waitForPageLoad stepKey="waitForDuplicatedProductPageLoad"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveDuplicatedProduct"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!--Assert configurable product in category-->
         <comment userInput="Assert configurable product in category" stepKey="commentAssertProductInCategoryPage"/>
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onStorefrontCategoryPage"/>

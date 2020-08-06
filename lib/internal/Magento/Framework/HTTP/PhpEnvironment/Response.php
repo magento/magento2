@@ -10,7 +10,7 @@ namespace Magento\Framework\HTTP\PhpEnvironment;
 /**
  * Base HTTP response object
  */
-class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Framework\App\Response\HttpInterface
+class Response extends \Laminas\Http\PhpEnvironment\Response implements \Magento\Framework\App\Response\HttpInterface
 {
     /**
      * Flag; is this response a redirect?
@@ -28,9 +28,8 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
         $headers = $this->getHeaders();
         if ($headers->has($name)) {
             $header = $headers->get($name);
-            // zend-http >= 2.10.11 can return \ArrayIterator instead of a single Header
-            if ($header instanceof \ArrayIterator) {
-                $header = $header->current();
+            if (is_iterable($header)) {
+                $header = $header[0];
             }
         }
         return $header;
@@ -98,8 +97,13 @@ class Response extends \Zend\Http\PhpEnvironment\Response implements \Magento\Fr
     {
         $headers = $this->getHeaders();
         if ($headers->has($name)) {
-            $header = $headers->get($name);
-            $headers->removeHeader($header);
+            $headerValues = $headers->get($name);
+            if (!is_iterable($headerValues)) {
+                $headerValues = [$headerValues];
+            }
+            foreach ($headerValues as $headerValue) {
+                $headers->removeHeader($headerValue);
+            }
         }
 
         return $this;

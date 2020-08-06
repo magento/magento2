@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Rule\Test\Unit\Model\Condition\Product;
 
 use Magento\Catalog\Model\ProductCategoryList;
@@ -19,7 +21,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class to test Abstract Rule product condition data model
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AbstractProductTest extends TestCase
 {
@@ -61,7 +63,7 @@ class AbstractProductTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_condition = $this->getMockForAbstractClass(
             AbstractProduct::class,
@@ -94,7 +96,10 @@ class AbstractProductTest extends TestCase
      */
     public function testValidateAttributeEqualCategoryId()
     {
-        $product = $this->createPartialMock(AbstractModel::class, ["getAttribute"]);
+        $product = $this->getMockBuilder(AbstractModel::class)
+            ->addMethods(["getAttribute"])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->_condition->setAttribute('category_ids');
         $this->_condition->setValueParsed('1');
         $this->_condition->setOperator('{}');
@@ -122,10 +127,11 @@ class AbstractProductTest extends TestCase
      */
     public function testValidateEmptyEntityAttributeValues()
     {
-        $product = $this->createPartialMock(
-            AbstractModel::class,
-            ["getAttribute", 'getResource']
-        );
+        $product = $this->getMockBuilder(AbstractModel::class)
+            ->addMethods(["getAttribute"])
+            ->onlyMethods(['getResource'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $product->expects($this->once())
             ->method('getResource')
             ->willReturn(null);
@@ -144,10 +150,11 @@ class AbstractProductTest extends TestCase
      */
     public function testValidateEmptyEntityAttributeValuesWithResource()
     {
-        $product = $this->createPartialMock(
-            AbstractModel::class,
-            ["getAttribute", 'getResource']
-        );
+        $product = $this->getMockBuilder(AbstractModel::class)
+            ->addMethods(["getAttribute"])
+            ->onlyMethods(['getResource'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $product->setId(1);
         $time = '04/19/2012 11:59 am';
         $product->setData('someAttribute', $time);
@@ -166,7 +173,7 @@ class AbstractProductTest extends TestCase
         $newResource->expects($this->any())
             ->method('getAttribute')
             ->with('someAttribute')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
         $newResource->_config = $this->createMock(Config::class);
         $product->expects($this->atLeastOnce())
             ->method('getResource')
@@ -182,7 +189,7 @@ class AbstractProductTest extends TestCase
         $newResource->expects($this->any())
             ->method('getAttribute')
             ->with('someAttribute')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
         $newResource->_config = $this->createMock(Config::class);
 
         $product->setResource($newResource);
@@ -195,10 +202,11 @@ class AbstractProductTest extends TestCase
     public function testValidateSetEntityAttributeValuesWithResource()
     {
         $this->_condition->setAttribute('someAttribute');
-        $product = $this->createPartialMock(
-            AbstractModel::class,
-            ['getAttribute', 'getResource']
-        );
+        $product = $this->getMockBuilder(AbstractModel::class)
+            ->addMethods(['getAttribute'])
+            ->onlyMethods(['getResource'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $product->setAtribute('attribute');
         $product->setId(12);
 
@@ -218,7 +226,7 @@ class AbstractProductTest extends TestCase
         $newResource->expects($this->any())
             ->method('getAttribute')
             ->with('someAttribute')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
         $newResource->_config = $this->createMock(Config::class);
 
         $product->expects($this->atLeastOnce())
@@ -241,10 +249,11 @@ class AbstractProductTest extends TestCase
      */
     public function testValidateSetEntityAttributeValuesWithoutResource()
     {
-        $product = $this->createPartialMock(
-            AbstractModel::class,
-            ['someMethod', 'getResource', 'load']
-        );
+        $product = $this->getMockBuilder(AbstractModel::class)
+            ->addMethods(['someMethod'])
+            ->onlyMethods(['getResource', 'load'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->_condition->setAttribute('someAttribute');
         $product->setAtribute('attribute');
         $product->setId(12);
@@ -266,7 +275,7 @@ class AbstractProductTest extends TestCase
         $newResource->expects($this->any())
             ->method('getAttribute')
             ->with('someAttribute')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
         $newResource->_config = $this->createMock(Config::class);
 
         $product->expects($this->atLeastOnce())
@@ -292,7 +301,7 @@ class AbstractProductTest extends TestCase
         $newResource->expects($this->any())
             ->method('getAttribute')
             ->with('someAttribute')
-            ->will($this->returnValue($attribute));
+            ->willReturn($attribute);
         $newResource->_config = $this->createMock(Config::class);
 
         $product->setResource($newResource);
@@ -395,8 +404,8 @@ class AbstractProductTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $attrSetCollectionValueMock->method('setEntityTypeFilter')->will($this->returnSelf());
-        $attrSetCollectionValueMock->method('load')->will($this->returnSelf());
+        $attrSetCollectionValueMock->method('setEntityTypeFilter')->willReturnSelf();
+        $attrSetCollectionValueMock->method('load')->willReturnSelf();
         $attrSetCollectionValueMock
             ->expects((null === $attrSetCollectionOptionsArray) ? $this->never() : $this->once())
             ->method('toOptionArray')

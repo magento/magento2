@@ -3,13 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Test\Unit\SearchAdapter;
 
-use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
+use Magento\Elasticsearch\Model\Config;
+use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SearchIndexNameResolverTest extends \PHPUnit\Framework\TestCase
+class SearchIndexNameResolverTest extends TestCase
 {
     /**
      * @var SearchIndexNameResolver
@@ -17,7 +22,7 @@ class SearchIndexNameResolverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ClientOptionsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientOptionsInterface|MockObject
      */
     protected $clientConfig;
 
@@ -40,9 +45,9 @@ class SearchIndexNameResolverTest extends \PHPUnit\Framework\TestCase
      * Setup method
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->clientConfig = $this->getMockBuilder(\Magento\Elasticsearch\Model\Config::class)
+        $this->clientConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getIndexPrefix',
@@ -60,7 +65,7 @@ class SearchIndexNameResolverTest extends \PHPUnit\Framework\TestCase
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
-            \Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver::class,
+            SearchIndexNameResolver::class,
             [
                 'clientConfig' => $this->clientConfig,
             ]

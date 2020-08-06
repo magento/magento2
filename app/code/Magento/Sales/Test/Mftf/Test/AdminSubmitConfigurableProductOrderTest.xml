@@ -87,7 +87,7 @@
                 <requiredEntity createDataKey="createConfigChildProduct2"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <!--Create new customer order-->

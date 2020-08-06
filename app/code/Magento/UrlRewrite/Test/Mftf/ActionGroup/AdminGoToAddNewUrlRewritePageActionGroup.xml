@@ -13,7 +13,7 @@
             <description>Goes to the Admin Add URL Rewrite edit page</description>
         </annotations>
 
-        <amOnPage url="{{AdminUrlRewriteEditPage.url}}" stepKey="openUrlRewriteEditPage"/>
+        <amOnPage url="{{AdminUrlRewriteEditPage.url('')}}" stepKey="openUrlRewriteEditPage"/>
         <waitForPageLoad stepKey="waitForUrlRewriteEditPageToLoad"/>
     </actionGroup>
 </actionGroups>

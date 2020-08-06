@@ -255,4 +255,16 @@
     <type name="Magento\Framework\Session\SessionStartChecker">
         <plugin name="transparent_session_checker" type="Magento\Paypal\Plugin\TransparentSessionChecker"/>
     </type>
+    <type name="Magento\Sales\Model\Order\Payment">
+        <plugin name="paypal_transparent" type="Magento\Paypal\Plugin\TransparentOrderPayment"/>
+    </type>
+    <type name="Magento\Paypal\Model\System\Config\Source\DisableFundingOptions">
+        <arguments>
+            <argument name="disallowedFundingOptions" xsi:type="array">
+                <item name="CREDIT" xsi:type="string">PayPal Credit</item>
+                <item name="CARD" xsi:type="string">PayPal Guest Checkout Credit Card Icons</item>
+                <item name="ELV" xsi:type="string">Elektronisches Lastschriftverfahren - German ELV</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

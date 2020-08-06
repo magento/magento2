@@ -25,7 +25,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
      */
     protected $productFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->productFactory = $this->objectManager->get(\Magento\Catalog\Model\ProductFactory::class);
@@ -61,7 +61,7 @@ class ProductCustomOptionRepositoryTest extends WebapiAbstract
         /** @var  \Magento\Catalog\Model\Product $product */
         $product = $productRepository->get($sku, false, null, true);
         $this->assertNull($product->getOptionById($optionId));
-        $this->assertEquals(9, count($product->getOptions()));
+        $this->assertCount(9, $product->getOptions());
     }
 
     /**

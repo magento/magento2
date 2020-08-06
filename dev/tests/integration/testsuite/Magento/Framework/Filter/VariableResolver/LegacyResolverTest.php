@@ -25,7 +25,7 @@ class LegacyResolverTest extends TestCase
      */
     private $filter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = ObjectManager::getInstance();
         $this->variableResolver = $objectManager->get(LegacyResolver::class);
@@ -117,6 +117,7 @@ class LegacyResolverTest extends TestCase
                 ['foo' => $dataClassStub, 'g' => ['h' => ['i' => 'abc']]],
                 'abca=123,b=321,'
             ],
+            'disallow __callParent method' => ['foo.___callParent()',['foo' => $classStub], null],
         ];
     }
 }

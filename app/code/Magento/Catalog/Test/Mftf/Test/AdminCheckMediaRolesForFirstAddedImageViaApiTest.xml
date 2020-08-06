@@ -15,6 +15,7 @@
             <description value="Login as admin, create simple product, add image to created product (via API).Go to
                 Admin Product Edit page for created product to check that added image has selected image roles."/>
             <group value="catalog"/>
+            <severity value="MAJOR"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
@@ -25,12 +26,12 @@
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+           <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
-        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToSimpleProduct">
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToSimpleProduct">
             <argument name="productId" value="$$createSimpleProduct.id$$"/>
         </actionGroup>
         <actionGroup ref="AdminOpenProductImagesSectionActionGroup" stepKey="openProductImagesSection"/>

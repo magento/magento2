@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\MessageQueue\Test\Unit\Config\Consumer;
 
 use Magento\Framework\MessageQueue\Config\Consumer\ConfigReaderPlugin as ConsumerConfigReaderPlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Framework\MessageQueue\ConfigInterface;
 use Magento\Framework\MessageQueue\Consumer\Config\CompositeReader as ConsumerConfigCompositeReader;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
+class ConfigReaderPluginTest extends TestCase
 {
     /**
      * @var ConsumerConfigReaderPlugin
@@ -23,16 +27,16 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     private $configMock;
 
     /**
-     * @var ConsumerConfigCompositeReader|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConsumerConfigCompositeReader|MockObject
      */
     private $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->getMockBuilder(ConfigInterface::class)
             ->getMockForAbstractClass();
@@ -78,7 +82,10 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
                 'consumerInstance' => 'type1',
                 'handlers' => ['handlerConfig1_1_1', 'handlerConfig1_1_2', 'handlerConfig1_2_1'],
                 'connection' => 'connection1',
-                'maxMessages' => 100
+                'maxMessages' => 100,
+                'maxIdleTime' => null,
+                'sleep' => null,
+                'onlySpawnWhenMessageAvailable' => false
             ],
             'consumer2' => [
                 'name' => 'consumer2',
@@ -86,7 +93,10 @@ class ConfigReaderPluginTest extends \PHPUnit\Framework\TestCase
                 'consumerInstance' => 'type2',
                 'handlers' => [],
                 'connection' => 'connection2',
-                'maxMessages' => 2
+                'maxMessages' => 2,
+                'maxIdleTime' => null,
+                'sleep' => null,
+                'onlySpawnWhenMessageAvailable' => false
             ],
             'consumer0' => []
         ];

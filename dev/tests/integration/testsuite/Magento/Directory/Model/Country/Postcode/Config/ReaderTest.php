@@ -13,7 +13,7 @@ class ReaderTest extends \PHPUnit\Framework\TestCase
      */
     private $reader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->reader = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Directory\Model\Country\Postcode\Config\Reader::class

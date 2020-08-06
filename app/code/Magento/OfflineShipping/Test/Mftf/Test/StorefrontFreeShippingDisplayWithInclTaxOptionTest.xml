@@ -45,8 +45,7 @@
             <argument name="product" value="$$createSimpleProduct$$"/>
         </actionGroup>
         <!-- Assert that taxes are applied correctly for CA -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="goToCheckout"/>
-        <waitForPageLoad stepKey="waitForCart"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckout"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.tax}}" stepKey="waitForOverviewVisible"/>
         <waitForElement time="30" selector="{{CheckoutCartSummarySection.estimateShippingAndTaxForm}}" stepKey="waitForEstimateShippingAndTaxForm"/>
         <waitForElement time="30" selector="{{CheckoutCartSummarySection.shippingMethodForm}}" stepKey="waitForShippingMethodForm"/>

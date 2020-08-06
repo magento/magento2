@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\FileInfo;
@@ -10,21 +12,23 @@ use Magento\Analytics\Model\FileInfoFactory;
 use Magento\Analytics\Model\FileInfoManager;
 use Magento\Framework\FlagManager;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FileInfoManagerTest extends \PHPUnit\Framework\TestCase
+class FileInfoManagerTest extends TestCase
 {
     /**
-     * @var FlagManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var FlagManager|MockObject
      */
     private $flagManagerMock;
 
     /**
-     * @var FileInfoFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileInfoFactory|MockObject
      */
     private $fileInfoFactoryMock;
 
     /**
-     * @var FileInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileInfo|MockObject
      */
     private $fileInfoMock;
 
@@ -53,20 +57,16 @@ class FileInfoManagerTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->flagManagerMock = $this->getMockBuilder(FlagManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->flagManagerMock = $this->createMock(FlagManager::class);
 
         $this->fileInfoFactoryMock = $this->getMockBuilder(FileInfoFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->fileInfoMock = $this->getMockBuilder(FileInfo::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->fileInfoMock = $this->createMock(FileInfo::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
 
@@ -119,10 +119,10 @@ class FileInfoManagerTest extends \PHPUnit\Framework\TestCase
      * @param string|null $path
      * @param string|null $initializationVector
      * @dataProvider saveWithLocalizedExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testSaveWithLocalizedException($path, $initializationVector)
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $this->fileInfoMock
             ->expects($this->once())
             ->method('getPath')

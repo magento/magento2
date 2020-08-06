@@ -3,22 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Setup;
 
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Serialize\Serializer\Serialize;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Setup\SerializedDataConverter;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class SerializedDataConverterTest extends \PHPUnit\Framework\TestCase
+class SerializedDataConverterTest extends TestCase
 {
     /**
-     * @var Serialize|\PHPUnit_Framework_MockObject_MockObject
+     * @var Serialize|MockObject
      */
     private $serializeMock;
 
     /**
-     * @var Json|\PHPUnit_Framework_MockObject_MockObject
+     * @var Json|MockObject
      */
     private $jsonMock;
 
@@ -27,7 +31,7 @@ class SerializedDataConverterTest extends \PHPUnit\Framework\TestCase
      */
     private $serializedDataConverter;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->serializeMock = $this->createMock(Serialize::class);
@@ -169,11 +173,9 @@ class SerializedDataConverterTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \Magento\Framework\DB\DataConverter\DataConversionException
-     */
     public function testConvertCorruptedData()
     {
+        $this->expectException('Magento\Framework\DB\DataConverter\DataConversionException');
         $this->serializeMock->expects($this->once())
             ->method('unserialize')
             ->willReturnCallback(

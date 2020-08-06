@@ -7,13 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Test\Unit\Model\Asset\Command;
 
-use Magento\MediaGallery\Model\Asset\Command\DeleteByPath;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Exception\CouldNotDeleteException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\MediaGallery\Model\Asset\Command\DeleteByPath;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -44,7 +44,7 @@ class DeleteByPathTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
         $resourceConnection = $this->createMock(ResourceConnection::class);
 
         $this->deleteMediaAssetByPath = (new ObjectManager($this))->getObject(
@@ -55,7 +55,7 @@ class DeleteByPathTest extends TestCase
             ]
         );
 
-        $this->adapter = $this->createMock(AdapterInterface::class);
+        $this->adapter = $this->getMockForAbstractClass(AdapterInterface::class);
         $resourceConnection->expects($this->once())
             ->method('getConnection')
             ->willReturn($this->adapter);

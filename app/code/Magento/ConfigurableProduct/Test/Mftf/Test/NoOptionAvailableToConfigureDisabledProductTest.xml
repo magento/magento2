@@ -20,7 +20,7 @@
             <group value="ConfigurableProduct"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!--Create category-->
             <comment userInput="Create category" stepKey="commentCreateCategory"/>
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -109,13 +109,17 @@
         </after>
         <!-- Disable child product -->
         <comment userInput="Disable child product" stepKey="disableChildProduct"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProduct1.id$$)}}" stepKey="goToEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToEditPage">
+            <argument name="productId" value="$$createConfigChildProduct1.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForChildProductPageLoad"/>
         <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="disableProduct"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
         <!-- Set the second product out of stock -->
         <comment userInput="Set the second product out of stock" stepKey="outOfStockChildProduct"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createConfigChildProduct2.id$$)}}" stepKey="goToSecondProductEditPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToSecondProductEditPage">
+            <argument name="productId" value="$$createConfigChildProduct2.id$$"/>
+        </actionGroup>
         <waitForPageLoad stepKey="waitForSecondChildProductPageLoad"/>
         <selectOption selector="{{AdminProductFormSection.productStockStatus}}" userInput="Out of Stock" stepKey="outOfStockStatus"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondProductForm"/>
@@ -150,6 +154,22 @@
         <click selector="{{AdminOrderFormItemsSection.addSelected}}" stepKey="clickToAddProductToOrder"/>
         <waitForPageLoad stepKey="waitForNewOrderPageLoad"/>
         <see userInput="This product is out of stock." stepKey="seeTheErrorMessageDisplayed"/>
+
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="createNewOrderThirdTime">
+            <argument name="customer" value="$createCustomer$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addThirdChildProductToOrder">
+            <argument name="product" value="$createConfigChildProduct3$"/>
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminItemOrderedErrorNotVisibleActionGroup" stepKey="assertNoticeAbsent">
+            <argument name="productName" value="$createConfigChildProduct3.name$"/>
+            <argument name="messageType" value="notice"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminItemOrderedErrorNotVisibleActionGroup" stepKey="assertErrorAbsent">
+            <argument name="productName" value="$createConfigChildProduct3.name$"/>
+            <argument name="messageType" value="error"/>
+        </actionGroup>
         <!-- Select shipping method -->
         <comment userInput="Select shipping method" stepKey="selectShippingMethod"/>
         <click selector="{{AdminInvoicePaymentShippingSection.getShippingMethodAndRates}}" stepKey="openShippingMethod"/>
@@ -157,7 +177,6 @@
         <click selector="{{AdminInvoicePaymentShippingSection.shippingMethod}}" stepKey="chooseShippingMethod"/>
         <waitForPageLoad stepKey="waitForShippingMethodLoad"/>
         <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
-        <waitForPageLoad stepKey="waitForSuccess"/>
-        <see selector="{{AdminOrderDetailsMessagesSection.successMessage}}" userInput="You created the order." stepKey="seeSuccessMessage"/>
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="checkOrderSuccessfullyCreated"/>
     </test>
 </tests>

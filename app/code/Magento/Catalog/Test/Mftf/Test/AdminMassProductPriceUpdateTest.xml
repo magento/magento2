@@ -19,7 +19,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct1"/>
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct2"/>
         </before>
@@ -30,8 +30,7 @@
         </after>
 
         <!--Open Product Index Page-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
 
         <!--Search products using keyword -->
         <actionGroup ref="SearchProductGridByKeyword2ActionGroup" stepKey="searchByKeyword">
@@ -56,11 +55,13 @@
         <waitForPageLoad stepKey="waitForUpdatedProductToSave" />
         <see selector="{{AdminProductMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeAttributeUpateSuccessMsg"/>
 
-        <!-- Run cron twice -->
-        <magentoCLI command="cron:run" stepKey="runCron1"/>
-        <magentoCLI command="cron:run" stepKey="runCron2"/>
-        <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitFormToReload1"/>
+        <!-- Start message queue -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueueConsumer">
+            <argument name="consumerName" value="{{AdminProductAttributeUpdateConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminProductAttributeUpdateConsumerData.messageLimit}}"/>
+        </actionGroup>
+        <!-- Run cron -->
+        <magentoCLI command="cron:run --group=index" stepKey="runCron"/>
 
         <!--Verify product name, sku and updated price-->
         <click stepKey="openFirstProduct" selector="{{AdminProductGridSection.productRowBySku($$simpleProduct1.sku$$)}}"/>

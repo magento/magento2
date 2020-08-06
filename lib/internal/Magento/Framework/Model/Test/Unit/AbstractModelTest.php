@@ -3,77 +3,94 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Model\Test\Unit;
 
-class AbstractModelTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Model\ActionValidator\RemoveAction;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Registry;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class AbstractModelTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Model\AbstractModel
+     * @var AbstractModel
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject
+     * @var Registry|MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractDb|MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\Data\Collection\AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Data\Collection\AbstractDb|MockObject
      */
     protected $resourceCollectionMock;
 
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $actionValidatorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->actionValidatorMock = $this->createMock(\Magento\Framework\Model\ActionValidator\RemoveAction::class);
-        $this->contextMock = new \Magento\Framework\Model\Context(
-            $this->createMock(\Psr\Log\LoggerInterface::class),
-            $this->createMock(\Magento\Framework\Event\ManagerInterface::class),
-            $this->createMock(\Magento\Framework\App\CacheInterface::class),
-            $this->createMock(\Magento\Framework\App\State::class),
+        $this->actionValidatorMock = $this->createMock(RemoveAction::class);
+        $this->contextMock = new Context(
+            $this->getMockForAbstractClass(LoggerInterface::class),
+            $this->getMockForAbstractClass(ManagerInterface::class),
+            $this->getMockForAbstractClass(CacheInterface::class),
+            $this->createMock(State::class),
             $this->actionValidatorMock
         );
-        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
-        $this->resourceMock = $this->createPartialMock(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class, [
-                '_construct',
-                'getConnection',
-                '__wakeup',
-                'commit',
-                'delete',
-                'getIdFieldName',
-                'rollBack'
-            ]);
+        $this->registryMock = $this->createMock(Registry::class);
+        $this->resourceMock = $this->createPartialMock(AbstractDb::class, [
+            '_construct',
+            'getConnection',
+            '__wakeup',
+            'commit',
+            'delete',
+            'getIdFieldName',
+            'rollBack'
+        ]);
         $this->resourceCollectionMock = $this->getMockBuilder(\Magento\Framework\Data\Collection\AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->model = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\AbstractModel::class,
+            AbstractModel::class,
             [$this->contextMock, $this->registryMock, $this->resourceMock, $this->resourceCollectionMock]
         );
-        $this->connectionMock = $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->resourceMock->expects($this->any())
             ->method('getConnection')
-            ->will($this->returnValue($this->connectionMock));
+            ->willReturn($this->connectionMock);
     }
 
     public function testDelete()

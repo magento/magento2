@@ -3,69 +3,78 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Msrp\Test\Unit\Ui\DataProvider\Product\Listing\Collector;
 
+use Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionFactory;
+use Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterface;
+use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface;
 use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Pricing\Adjustment\CalculatorInterface;
 use Magento\Framework\Pricing\Amount\AmountInterface;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Msrp\Api\Data\ProductRender\MsrpPriceInfoInterfaceFactory;
 use Magento\Msrp\Api\Data\ProductRender\MsrpPriceInfoInterface;
-use Magento\Catalog\Api\Data\ProductRender\PriceInfoInterface;
-use Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionFactory;
+use Magento\Msrp\Api\Data\ProductRender\MsrpPriceInfoInterfaceFactory;
+use Magento\Msrp\Helper\Data;
+use Magento\Msrp\Model\Config;
+use Magento\Msrp\Ui\DataProvider\Product\Listing\Collector\MsrpPrice;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MsrpPriceTest extends \PHPUnit\Framework\TestCase
+class MsrpPriceTest extends TestCase
 {
-    /** @var \Magento\Msrp\Ui\DataProvider\Product\Listing\Collector\MsrpPrice */
+    /** @var MsrpPrice */
     protected $model;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var PriceCurrencyInterface|MockObject */
     protected $priceCurrencyMock;
 
-    /** @var \Magento\Msrp\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Data|MockObject */
     protected $msrpHelperMock;
 
-    /** @var \Magento\Msrp\Model\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Config|MockObject */
     protected $configMock;
 
     /**
-     * @var \Magento\Msrp\Api\Data\ProductRender\MsrpPriceInfoInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var MsrpPriceInfoInterfaceFactory|MockObject
      */
     private $msrpPriceInfoFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $adjustmentCalculator;
 
     /**
-     * @var \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var PriceInfoExtensionFactory|MockObject
      */
     private $priceInfoExtensionFactory;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->priceCurrencyMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
+        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->getMockForAbstractClass();
-        $this->msrpHelperMock = $this->getMockBuilder(\Magento\Msrp\Helper\Data::class)
+        $this->msrpHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->configMock = $this->getMockBuilder(\Magento\Msrp\Model\Config::class)
+        $this->configMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->msrpPriceInfoFactory = $this->getMockBuilder(
-            \Magento\Msrp\Api\Data\ProductRender\MsrpPriceInfoInterfaceFactory::class
+            MsrpPriceInfoInterfaceFactory::class
         )
             ->disableOriginalConstructor()
             ->setMethods(['create'])
@@ -74,10 +83,10 @@ class MsrpPriceTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->adjustmentCalculator = $this->createMock(CalculatorInterface::class);
+        $this->adjustmentCalculator = $this->getMockForAbstractClass(CalculatorInterface::class);
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\Msrp\Ui\DataProvider\Product\Listing\Collector\MsrpPrice::class,
+            MsrpPrice::class,
             [
                 'priceCurrency' => $this->priceCurrencyMock,
                 'msrpHelper' => $this->msrpHelperMock,
@@ -97,14 +106,14 @@ class MsrpPriceTest extends \PHPUnit\Framework\TestCase
         $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $productRenderInfoDto = $this->createMock(ProductRenderInterface::class);
-        $productPriceInfo = $this->createMock(PriceInfoInterface::class);
+        $productRenderInfoDto = $this->getMockForAbstractClass(ProductRenderInterface::class);
+        $productPriceInfo = $this->getMockForAbstractClass(PriceInfoInterface::class);
 
         $productRenderInfoDto->expects($this->once())
             ->method('getPriceInfo')
             ->willReturn($productPriceInfo);
         $extensionAttributes = $this->getMockBuilder(
-            \Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterface::class
+            PriceInfoExtensionInterface::class
         )
             ->setMethods(['setMsrp'])
             ->getMockForAbstractClass();
@@ -112,7 +121,7 @@ class MsrpPriceTest extends \PHPUnit\Framework\TestCase
         $priceInfo = $this->getMockBuilder(MsrpPriceInfoInterface::class)
             ->setMethods(['getPrice', 'getExtensionAttributes'])
             ->getMockForAbstractClass();
-        $amountInterface = $this->createMock(AmountInterface::class);
+        $amountInterface = $this->getMockForAbstractClass(AmountInterface::class);
         $amountInterface->expects($this->once())
             ->method('getValue')
             ->willReturn(20);

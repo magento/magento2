@@ -20,36 +20,36 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var BooleanUtils|\PHPUnit_Framework_MockObject_MockObject
+     * @var BooleanUtils|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $booleanUtils;
 
     /**
      * Prepare subject for test.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->booleanUtils = $this->createMock(\Magento\Framework\Stdlib\BooleanUtils::class);
         $this->booleanUtils->expects(
             $this->any()
         )->method(
             'toBoolean'
-        )->will(
-            $this->returnValueMap([['true', true], ['false', false]])
+        )->willReturnMap(
+            [['true', true], ['false', false]]
         );
 
         $baseStringUtils = new BaseStringUtils($this->booleanUtils);
         $this->model = new StringUtils($this->booleanUtils, $baseStringUtils);
-        /** @var RendererInterface|\PHPUnit_Framework_MockObject_MockObject $translateRenderer */
+        /** @var RendererInterface|\PHPUnit\Framework\MockObject\MockObject $translateRenderer */
         $translateRenderer = $this->getMockBuilder(RendererInterface::class)
           ->setMethods(['render'])
           ->getMockForAbstractClass();
-        $translateRenderer->expects($this->any())->method('render')->will(
-            $this->returnCallback(
+        $translateRenderer->expects($this->any())->method('render')->willReturnCallback(
+            
                 function ($input) {
                     return end($input) . ' (translated)';
                 }
-            )
+            
         );
         \Magento\Framework\Phrase::setRenderer($translateRenderer);
     }
@@ -92,11 +92,12 @@ class StringUtilsTest extends \PHPUnit\Framework\TestCase
      * @param array $input
      *
      * @dataProvider evaluateExceptionDataProvider
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage String value is expected
      */
     public function testEvaluateException($input)
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('String value is expected');
+
         $this->model->evaluate($input);
     }
 

@@ -14,13 +14,13 @@
             <stories value="Import Products"/>
             <title value="Checking product visibility in different store views after product importing"/>
             <description value="Checking product visibility in different store views after product importing"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-6406"/>
             <useCaseId value="MAGETWO-59265"/>
             <group value="importExport"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create English and Chinese store views-->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createEnglishStoreView">
                 <argument name="StoreGroup" value="_defaultStoreGroup"/>
