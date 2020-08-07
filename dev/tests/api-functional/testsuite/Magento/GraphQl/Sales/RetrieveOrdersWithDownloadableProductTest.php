@@ -75,7 +75,14 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
                     'uid'=> base64_encode("downloadable/{$linkId}")
                 ]
             ];
-        $this->assertResponseFields($expectedDownloadableLinksData,$downloadableLinksFromResponse);
+        $this->assertResponseFields($expectedDownloadableLinksData, $downloadableLinksFromResponse);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Downloadable/_files/order_with_customer_and_downloadable_product_with_multiple_links.php
+     */
+    public function testGetCustomerOrdersDownloadableWithmultiplelinks()
+    {
     }
 
     /**
