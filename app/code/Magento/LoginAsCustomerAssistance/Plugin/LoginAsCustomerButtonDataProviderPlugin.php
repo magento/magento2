@@ -36,6 +36,7 @@ class LoginAsCustomerButtonDataProviderPlugin
      * @param array $result
      * @param int $customerId
      * @return array
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function afterGetData(DataProvider $subject, array $result, int $customerId): array
     {

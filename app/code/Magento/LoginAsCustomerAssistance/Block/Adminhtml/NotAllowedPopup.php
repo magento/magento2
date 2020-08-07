@@ -10,12 +10,9 @@ namespace Magento\LoginAsCustomerAssistance\Block\Adminhtml;
 use Magento\Backend\Block\Template;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface;
-use Magento\Store\Ui\Component\Listing\Column\Store\Options as StoreOptions;
 
 /**
  * Pop-up for Login as Customer button then Login as Customer is not allowed.
- *
- * @api
  */
 class NotAllowedPopup extends Template
 {

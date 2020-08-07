@@ -46,6 +46,7 @@ class SetAssistance implements SetAssistanceInterface
     /**
      * @param CustomerExtensionFactory $customerExtensionFactory
      * @param CustomerRepositoryInterface $customerRepository
+     * @param DeleteLoginAsCustomerAssistanceAllowed $deleteLoginAsCustomerAssistanceAllowed
      * @param SaveLoginAsCustomerAssistanceAllowed $saveLoginAsCustomerAssistanceAllowed
      */
     public function __construct(

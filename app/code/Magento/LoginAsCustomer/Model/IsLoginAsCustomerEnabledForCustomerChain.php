@@ -10,7 +10,6 @@ namespace Magento\LoginAsCustomer\Model;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 use Magento\LoginAsCustomerApi\Api\Data\IsLoginAsCustomerEnabledForCustomerResultInterface;
 use Magento\LoginAsCustomerApi\Api\IsLoginAsCustomerEnabledForCustomerInterface;
-use Magento\LoginAsCustomerApi\Model\IsLoginAsCustomerEnabledForCustomerResolverInterface;
 
 /**
  * @inheritdoc

@@ -64,7 +64,9 @@ class DataProviderWithDefaultAddressesPlugin
 
         foreach ($result as $id => $entityData) {
             if ($id) {
-                $assistanceAllowedStatus = $this->resolveStatus($this->getLoginAsCustomerAssistanceAllowed->execute((int)$entityData['customer_id']));
+                $assistanceAllowedStatus = $this->resolveStatus(
+                    $this->getLoginAsCustomerAssistanceAllowed->execute((int)$entityData['customer_id'])
+                );
                 $isAssistanceAllowed[$id]['customer']['extension_attributes']['assistance_allowed'] =
                     (string)$assistanceAllowedStatus;
             }
