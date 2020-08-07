@@ -96,13 +96,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
                     . '<td colspan="4">' . $field->toHtml() . '</td></tr>';
             } else {
                 $elements .= $field->toHtml();
-                $styleTag = '';
-                if (!empty($field->getFieldConfig()['depends']['fields'])) {
-                    $styleTag .= $this->secureRenderer->renderStyleAsTag(
-                        'display: none;',
-                        '#row_' . $field->getHtmlId()
-                    );
-                }
+                $styleTag = $this->addVisibilityTag($field);
                 $elements .= $styleTag;
             }
         }
@@ -176,13 +170,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
      */
     protected function _getHeaderTitleHtml($element)
     {
-        $styleTag = '';
-        if (!empty($element->getGroup()['depends']['fields'])) {
-            $styleTag .= $this->secureRenderer->renderStyleAsTag(
-                'display: none;',
-                '#' . $element->getHtmlId() . '-head'
-            );
-        }
+        $styleTag = $this->addVisibilityTag($element);
         return '<a id="' .
             $element->getHtmlId() .
             '-head" href="#' .
@@ -291,5 +279,34 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
             return $extra['configState'][$element->getId()];
         }
         return $this->isCollapsedDefault;
+    }
+
+    /**
+     * If element or it's parent depends on other element we hide it during page load.
+     *
+     * @param AbstractElement $field
+     * @return string
+     */
+    private function addVisibilityTag(AbstractElement $field): string
+    {
+        $elementId = '';
+        $styleTag = '';
+
+        if (!empty($field->getFieldConfig()['depends']['fields'])
+            || !empty($field->getContainer()->getGroup()['depends']['fields'])
+        ) {
+            $elementId = '#row_' . $field->getHtmlId();
+        } elseif (!empty($field->getGroup()['depends']['fields'])) {
+            $elementId = '#' . $field->getHtmlId() . '-head';
+        }
+
+        if (!empty($elementId)) {
+            $styleTag .= $this->secureRenderer->renderStyleAsTag(
+                'display: none;',
+                $elementId
+            );
+        }
+
+        return $styleTag;
     }
 }
