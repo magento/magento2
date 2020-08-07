@@ -3,29 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-use Magento\Checkout\_files\ValidatorFileMock;
+use Magento\Catalog\Api\Data\ProductCustomOptionInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product\Option;
+use Magento\Catalog\Model\Product\Option\Type\File\ValidatorFile;
+use Magento\Framework\DataObject;
+use Magento\Quote\Model\QuoteIdMask;
+use Magento\Quote\Model\QuoteIdMaskFactory;
+use Magento\Quote\Model\QuoteRepository;
+use Magento\TestFramework\Catalog\Model\Product\Option\Type\File\ValidatorFileMock;
+use Magento\TestFramework\Helper\Bootstrap;
 
 require __DIR__ . '/../../Checkout/_files/quote_with_address.php';
 require __DIR__ . '/../../Catalog/_files/product_with_options.php';
-require __DIR__ . '/../../Checkout/_files/ValidatorFileMock.php';
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-/** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
-$productRepository = $objectManager->create(\Magento\Catalog\Api\ProductRepositoryInterface::class);
+$objectManager = Bootstrap::getObjectManager();
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
 $product = $productRepository->get('simple');
 
 $options = [];
-/** @var $option \Magento\Catalog\Model\Product\Option */
+/** @var $option Option */
 foreach ($product->getOptions() as $option) {
     switch ($option->getGroupByType()) {
-        case \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_DATE:
+        case ProductCustomOptionInterface::OPTION_GROUP_DATE:
             $value = ['year' => 2013, 'month' => 8, 'day' => 9, 'hour' => 13, 'minute' => 35];
             break;
-        case \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_SELECT:
+        case ProductCustomOptionInterface::OPTION_GROUP_SELECT:
             $value = key($option->getValues());
             break;
-        case \Magento\Catalog\Api\Data\ProductCustomOptionInterface::OPTION_GROUP_FILE:
+        case ProductCustomOptionInterface::OPTION_GROUP_FILE:
             $value = 'test.jpg';
             break;
         default:
@@ -35,19 +44,19 @@ foreach ($product->getOptions() as $option) {
     $options[$option->getId()] = $value;
 }
 
-$requestInfo = new \Magento\Framework\DataObject(['qty' => 1, 'options' => $options]);
-$validatorFile = (new ValidatorFileMock())->getInstance();
-$objectManager->addSharedInstance($validatorFile, \Magento\Catalog\Model\Product\Option\Type\File\ValidatorFile::class);
+$requestInfo = new DataObject(['qty' => 1, 'options' => $options]);
+$validatorFile = $objectManager->get(ValidatorFileMock::class)->getInstance();
+$objectManager->addSharedInstance($validatorFile, ValidatorFile::class);
 
 
 $quote->setReservedOrderId('test_order_item_with_items_and_custom_options');
 $quote->addProduct($product, $requestInfo);
 $quote->collectTotals();
-$objectManager->get(\Magento\Quote\Model\QuoteRepository::class)->save($quote);
+$objectManager->get(QuoteRepository::class)->save($quote);
 
-/** @var \Magento\Quote\Model\QuoteIdMask $quoteIdMask */
-$quoteIdMask = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
-    ->create(\Magento\Quote\Model\QuoteIdMaskFactory::class)
+/** @var QuoteIdMask $quoteIdMask */
+$quoteIdMask = Bootstrap::getObjectManager()
+    ->create(QuoteIdMaskFactory::class)
     ->create();
 $quoteIdMask->setQuoteId($quote->getId());
 $quoteIdMask->setDataChanges(true);
