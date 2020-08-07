@@ -4,9 +4,10 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/Sales/_files/default_rollback.php';
-require 'rollback_quote.php';
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/default_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Checkout/_files/rollback_quote.php');
 
 /** @var $product \Magento\Catalog\Model\Product */
 $product1 = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Catalog\Model\Product::class);

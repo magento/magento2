@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCmsBlockGridUrlFilterApplierTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Filter CMS block using GET URL parameter"/>
+            <title value="Verify that filter is applied on block grid when filters parameter is set on url"/>
+            <description value="Accessing block grid url with filters parameter"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4931106"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="Sales25offBlock" stepKey="createBlock"/>
+        </before>
+        <after>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
+            <deleteData createDataKey="createBlock" stepKey="deletePage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+        <amOnPage url="{{CmsBlocksPage.url}}?filters[title]=$$createBlock.title$$" stepKey="navigateToBlockGridWithFilters"/>
+        <waitForPageLoad stepKey="waitForBlockGrid"/>
+        <see selector="{{BlockPageActionsSection.blockGridRowByTitle($$createBlock.title$$)}}" userInput="$$createBlock.title$$" stepKey="seeBlock"/>
+        <seeElement selector="{{BlockPageActionsSection.activeFilterDiv}}" stepKey="seeEnabledFilters"/>
+        <see selector="{{BlockPageActionsSection.activeFilterDiv}}" userInput="Title: $$createBlock.title$$" stepKey="seeBlockTitleFilter"/>
+    </test>
+</tests>

@@ -13,6 +13,8 @@
     <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\ConverterInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldIndex\Converter" />
     <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\ConverterInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter" />
     <preference for="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\FieldProviderInterface" type="Magento\Elasticsearch\Model\Adapter\FieldMapper\Product\CompositeFieldProvider" />
+    <preference for="Magento\Framework\Search\Dynamic\DataProviderInterface" type="Magento\Elasticsearch\SearchAdapter\Dynamic\DataProvider" />
+    <preference for="Magento\CatalogSearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplierInterface" type="Magento\Elasticsearch\Model\ResourceModel\Fulltext\Collection\SearchResultApplier"/>
     <type name="Magento\Catalog\Model\Indexer\Category\Product\Action\Rows">
         <plugin name="catalogsearchFulltextProductAssignment" type="Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Category\Product\Action\Rows"/>
     </type>
@@ -113,6 +115,7 @@
     <type name="Magento\CatalogSearch\Model\Advanced\ProductCollectionPrepareStrategyProvider">
         <arguments>
             <argument name="strategies" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\Elasticsearch\Model\Advanced\ProductCollectionPrepareStrategy</item>
                 <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Model\Advanced\ProductCollectionPrepareStrategy</item>
             </argument>
         </arguments>
@@ -150,6 +153,11 @@
     <type name="Magento\Elasticsearch\Model\Adapter\BatchDataMapper\ProductDataMapper">
         <arguments>
             <argument name="additionalFieldsProvider" xsi:type="object">additionalFieldsProviderForElasticsearch</argument>
+            <argument name="filterableAttributeTypes" xsi:type="array">
+                <item name="boolean" xsi:type="string">boolean</item>
+                <item name="multiselect" xsi:type="string">multiselect</item>
+                <item name="select" xsi:type="string">select</item>
+            </argument>
         </arguments>
     </type>
     <preference for="Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface" type="Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperResolver" />
@@ -226,6 +234,7 @@
             <argument name="engines" xsi:type="array">
                 <item name="elasticsearch5" xsi:type="string">elasticsearch5</item>
             </argument>
+            <argument name="defaultEngine" xsi:type="string">elasticsearch5</argument>
         </arguments>
     </type>
     <virtualType name="Magento\Elasticsearch\SearchAdapter\ProductEntityMetadata" type="Magento\Framework\Search\EntityMetadata">
@@ -508,6 +517,36 @@
         <arguments>
             <argument name="excludedAttributes" xsi:type="array">
                 <item name="price" xsi:type="string">price</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Elasticsearch\Setup\InstallConfig">
+        <arguments>
+            <argument name="searchConfigMapping" xsi:type="array">
+                <item name="elasticsearch-host" xsi:type="string">elasticsearch5_server_hostname</item>
+                <item name="elasticsearch-port" xsi:type="string">elasticsearch5_server_port</item>
+                <item name="elasticsearch-timeout" xsi:type="string">elasticsearch5_server_timeout</item>
+                <item name="elasticsearch-index-prefix" xsi:type="string">elasticsearch5_index_prefix</item>
+                <item name="elasticsearch-enable-auth" xsi:type="string">elasticsearch5_enable_auth</item>
+                <item name="elasticsearch-username" xsi:type="string">elasticsearch5_username</item>
+                <item name="elasticsearch-password" xsi:type="string">elasticsearch5_password</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Search\Setup\CompositeInstallConfig">
+        <arguments>
+            <argument name="installConfigList" xsi:type="array">
+                <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Setup\InstallConfig</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Search\Model\SearchEngine\Validator">
+        <arguments>
+            <argument name="excludedEngineList" xsi:type="array">
+                <item name="elasticsearch" xsi:type="string">Elasticsearch 2</item>
+            </argument>
+            <argument name="engineValidators" xsi:type="array">
+                <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Setup\Validator</item>
             </argument>
         </arguments>
     </type>

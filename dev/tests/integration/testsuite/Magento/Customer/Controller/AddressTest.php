@@ -22,7 +22,7 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $logger = $this->createMock(\Psr\Log\LoggerInterface::class);
@@ -45,9 +45,9 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/address/index');
 
         $body = $this->getResponse()->getBody();
-        $this->assertContains('Default Billing Address', $body);
-        $this->assertContains('Default Shipping Address', $body);
-        $this->assertContains('Green str, 67', $body);
+        $this->assertStringContainsString('Default Billing Address', $body);
+        $this->assertStringContainsString('Default Shipping Address', $body);
+        $this->assertStringContainsString('Green str, 67', $body);
     }
 
     /**
@@ -59,8 +59,8 @@ class AddressTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/address/edit');
 
         $body = $this->getResponse()->getBody();
-        $this->assertContains('value="John"', $body);
-        $this->assertContains('value="Smith"', $body);
+        $this->assertStringContainsString('value="John"', $body);
+        $this->assertStringContainsString('value="Smith"', $body);
     }
 
     /**

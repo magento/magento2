@@ -12,7 +12,6 @@
                 <search_terms>1</search_terms>
             </seo>
             <search>
-                <engine>mysql</engine>
                 <min_query_length>3</min_query_length>
                 <max_query_length>128</max_query_length>
                 <max_count_cacheable_search_terms>100</max_count_cacheable_search_terms>

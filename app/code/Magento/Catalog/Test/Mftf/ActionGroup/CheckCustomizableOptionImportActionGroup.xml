@@ -26,7 +26,7 @@
         </assertEquals>
         <assertEquals stepKey="assertOptionPrice">
 			<actualResult type="const">$grabOptionPrice</actualResult>
-			<expectedResult type="string">{{option.price}}</expectedResult>
+			<expectedResult type="string">{{option.priceWithDecimals}}</expectedResult>
         </assertEquals>
         <assertEquals stepKey="assertOptionSku">
 			<actualResult type="const">$grabOptionSku</actualResult>

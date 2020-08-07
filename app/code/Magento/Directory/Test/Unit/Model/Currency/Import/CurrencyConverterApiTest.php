@@ -14,8 +14,8 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -46,7 +46,7 @@ class CurrencyConverterApiTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->currencyFactory = $this->getMockBuilder(CurrencyFactory::class)
             ->disableOriginalConstructor()
@@ -59,7 +59,7 @@ class CurrencyConverterApiTest extends TestCase
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $objectManagerHelper->getObject(
@@ -81,7 +81,9 @@ class CurrencyConverterApiTest extends TestCase
         $currencyToList = ['EUR', 'UAH'];
 
         /** @var Currency|MockObject $currency */
-        $currency = $this->getMockBuilder(Currency::class)->disableOriginalConstructor()->getMock();
+        $currency = $this->getMockBuilder(Currency::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $currency->expects($this->once())->method('getConfigBaseCurrencies')->willReturn($currencyFromList);
         $currency->expects($this->once())->method('getConfigAllowCurrencies')->willReturn($currencyToList);
 

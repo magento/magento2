@@ -5,4 +5,6 @@
  */
 declare(strict_types=1);
 
-require __DIR__ . '/product_downloadable_rollback.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Downloadable/_files/product_downloadable_rollback.php');

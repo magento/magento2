@@ -30,7 +30,7 @@ class LinkTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -47,7 +47,7 @@ class LinkTest extends TestCase
         $block = $this->page->getLayout()->getBlock('customer-account-navigation-downloadable-products-link');
         $this->assertNotFalse($block);
         $html = $block->toHtml();
-        $this->assertContains('downloadable/customer/products', $html);
+        $this->assertStringContainsString('downloadable/customer/products', $html);
         $this->assertEquals('My Downloadable Products', strip_tags($html));
     }
 

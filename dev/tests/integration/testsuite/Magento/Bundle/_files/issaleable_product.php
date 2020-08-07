@@ -4,7 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-require __DIR__ . '/multiple_products.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Bundle/_files/multiple_products.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Catalog\Model\ProductRepository $productRepository */
