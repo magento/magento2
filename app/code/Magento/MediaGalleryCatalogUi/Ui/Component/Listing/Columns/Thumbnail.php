@@ -6,7 +6,7 @@
 namespace Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Columns;
 
 use Magento\Catalog\Helper\Image;
-use Magento\Framework\DataObject;
+use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Store\Model\Store;
@@ -30,10 +30,16 @@ class Thumbnail extends Column
     private $imageHelper;
 
     /**
+     * @var ProductFactory
+     */
+    private $productFactory;
+
+    /**
      * @param ContextInterface $context
      * @param UiComponentFactory $uiComponentFactory
      * @param StoreManagerInterface $storeManager
      * @param Image $image
+     * @param ProductFactory $productFactory
      * @param array $components
      * @param array $data
      */
@@ -42,12 +48,14 @@ class Thumbnail extends Column
         UiComponentFactory $uiComponentFactory,
         StoreManagerInterface $storeManager,
         Image $image,
+        ProductFactory $productFactory,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $uiComponentFactory, $components, $data);
         $this->imageHelper = $image;
         $this->storeManager = $storeManager;
+        $this->productFactory = $productFactory;
     }
 
     /**
@@ -64,7 +72,7 @@ class Thumbnail extends Column
                 if (isset($item[$fieldName])) {
                     $item[$fieldName . '_src'] = $this->getUrl($item[$fieldName]);
                 } else {
-                    $category = new DataObject($item);
+                    $category = $this->productFactory->create($item);
                     $imageHelper = $this->imageHelper->init($category, 'product_listing_thumbnail');
                     $item[$fieldName . '_src'] = $imageHelper->getUrl();
                 }
