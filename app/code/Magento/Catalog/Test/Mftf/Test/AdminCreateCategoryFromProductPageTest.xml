@@ -38,8 +38,7 @@
             <argument name="product" value="SimpleTwo"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForFiltersToBeApplied"/>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage"/>
 
         <!-- Fill out the form for the new category -->
         <actionGroup ref="FillNewProductCategoryActionGroup" stepKey="FillNewProductCategory">

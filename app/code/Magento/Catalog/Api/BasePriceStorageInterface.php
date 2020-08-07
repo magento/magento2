@@ -9,7 +9,7 @@ namespace Magento\Catalog\Api;
 /**
  * Base prices storage.
  * @api
- * @since 101.1.0
+ * @since 102.0.0
  */
 interface BasePriceStorageInterface
 {
@@ -18,7 +18,7 @@ interface BasePriceStorageInterface
      *
      * @param string[] $skus
      * @return \Magento\Catalog\Api\Data\BasePriceInterface[]
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function get(array $skus);
 
@@ -33,7 +33,7 @@ interface BasePriceStorageInterface
      * @param \Magento\Catalog\Api\Data\BasePriceInterface[] $prices
      * @return \Magento\Catalog\Api\Data\PriceUpdateResultInterface[]
      * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function update(array $prices);
 }

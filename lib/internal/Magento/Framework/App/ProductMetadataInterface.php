@@ -9,6 +9,7 @@ namespace Magento\Framework\App;
  * Magento application product metadata
  *
  * @api
+ * @since 100.0.2
  */
 interface ProductMetadataInterface
 {
