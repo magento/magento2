@@ -72,7 +72,7 @@ class Thumbnail extends Column
                 if (isset($item[$fieldName])) {
                     $item[$fieldName . '_src'] = $this->getUrl($item[$fieldName]);
                 } else {
-                    $category = $this->productFactory->create($item);
+                    $category = $this->productFactory->create(['data' => $item]);
                     $imageHelper = $this->imageHelper->init($category, 'product_listing_thumbnail');
                     $item[$fieldName . '_src'] = $imageHelper->getUrl();
                 }
