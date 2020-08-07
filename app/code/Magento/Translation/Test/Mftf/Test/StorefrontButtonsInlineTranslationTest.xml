@@ -20,6 +20,9 @@
             <group value="translation"/>
             <group value="catalog"/>
             <group value="developer_mode_only"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontButtonsInlineTranslationOnProductPageTest instead</issueId>
+            </skip>
         </annotations>
         <before>
             <!-- Enable Translate Inline For Storefront -->
