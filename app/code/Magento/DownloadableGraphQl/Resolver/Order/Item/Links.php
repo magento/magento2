@@ -16,10 +16,10 @@ use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Sales\Api\Data\CreditmemoItemInterface;
 use Magento\Sales\Api\Data\InvoiceItemInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\ShipmentItemInterface;
-use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Store\Api\Data\StoreInterface;
 
 /**
@@ -86,15 +86,12 @@ class Links implements ResolverInterface
             }
 
             if ($value['model'] instanceof OrderItemInterface) {
-                /** @var OrderItemInterface $item */
+                return $this->formatLinksData($value['model'], $store);
+            } elseif ($value['model'] instanceof InvoiceItemInterface
+                || $value['model'] instanceof CreditmemoItemInterface
+                || $value['model'] instanceof ShipmentItemInterface) {
                 $item = $value['model'];
-                return $this->formatLinksData($item, $value, $store);
-            }
-            if ($value['model'] instanceof InvoiceItemInterface || $value['model'] instanceof ShipmentItemInterface) {
-                /** @var InvoiceItemInterface|ShipmentItemInterface $item */
-                $item = $value['model'];
-                // Have to pass down order and item to map to avoid re-fetching all data
-                return $this->formatLinksData($item->getOrderItem(), $value, $store);
+                return $this->formatLinksData($item->getOrderItem(), $store);
             }
             return null;
         });
@@ -104,13 +101,11 @@ class Links implements ResolverInterface
      * Format values from order links item
      *
      * @param OrderItemInterface $item
-     * @param array $formattedItem
      * @param StoreInterface $store
      * @return array
      */
     private function formatLinksData(
         OrderItemInterface $item,
-        array $formattedItem,
         StoreInterface $store
     ): array {
         $linksData = [];
