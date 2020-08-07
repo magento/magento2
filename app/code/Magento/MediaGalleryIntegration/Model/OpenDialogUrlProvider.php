@@ -35,6 +35,6 @@ class OpenDialogUrlProvider extends DataObject
      */
     public function getUrl(): string
     {
-        return $this->config->isEnabled() ? 'media_gallery/index/index' : 'cms/wysiwyg_images/index';
+        return $this->config->isEnabled() ? 'cms/wysiwyg_images/index' : 'media_gallery/index/index';
     }
 }

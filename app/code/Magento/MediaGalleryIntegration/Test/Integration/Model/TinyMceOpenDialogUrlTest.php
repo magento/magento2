@@ -58,7 +58,7 @@ class TinyMceOpenDialogUrlTest extends TestCase
 
     /**
      * Test image open dialog url when enhanced media gallery not enabled.
-     * @magentoConfigFixture default/system/media_gallery/enabled 0
+     * @magentoConfigFixture default/system/media_gallery/enabled 1
      */
     public function testWithEnhancedMediaGalleryDisabled(): void
     {
@@ -68,7 +68,7 @@ class TinyMceOpenDialogUrlTest extends TestCase
 
     /**
      * Test image open dialog url when enhanced media gallery enabled.
-     * @magentoConfigFixture default/system/media_gallery/enabled 1
+     * @magentoConfigFixture default/system/media_gallery/enabled 0
      */
     public function testWithEnhancedMediaGalleryEnabled(): void
     {

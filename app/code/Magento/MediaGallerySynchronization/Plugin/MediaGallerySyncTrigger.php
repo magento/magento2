@@ -43,7 +43,7 @@ class MediaGallerySyncTrigger
     {
         if ($result->getPath() === self::MEDIA_GALLERY_CONFIG_VALUE
             && $result->isValueChanged()
-            && (int) $result->getValue() === self::MEDIA_GALLERY_ENABLED_VALUE
+            && (int) $result->getValue() !== self::MEDIA_GALLERY_ENABLED_VALUE
         ) {
             $this->publish->execute();
         }
