@@ -8,8 +8,6 @@ declare(strict_types=1);
 namespace Magento\Config\Setup;
 
 use Magento\Framework\App\DeploymentConfig;
-use Magento\Framework\App\ObjectManager;
-use Magento\Framework\App\State;
 use Magento\Framework\Config\Data\ConfigDataFactory;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Setup\ConfigOptionsListInterface;
@@ -113,7 +111,9 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      */
     private function boolVal($option): ?int
     {
-        return $option === '' ? 
-            null : (int)in_array(strtolower((string)$option), BooleanConfigOption::OPTIONS_POSITIVE);
+        if ($option === '') {
+            return null;
+        }
+        return (int)in_array(strtolower((string)$option), BooleanConfigOption::OPTIONS_POSITIVE);
     }
 }
