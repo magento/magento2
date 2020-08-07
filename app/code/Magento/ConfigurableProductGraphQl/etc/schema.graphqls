@@ -18,6 +18,7 @@ type ConfigurableAttributeOption @doc(description: "ConfigurableAttributeOption 
     label: String @doc(description: "A string that describes the configurable attribute option")
     code: String @doc(description: "The ID assigned to the attribute")
     value_index: Int @doc(description: "A unique index number assigned to the configurable product option")
+    uid: ID! @doc(description: "A string that encodes option details.") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Variant\\Attributes\\ConfigurableAttributeUid") # A Base64 string that encodes option details.
 }
 
 type ConfigurableProductOptions @doc(description: "ConfigurableProductOptions defines configurable attributes for the specified product") {

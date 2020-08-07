@@ -12,7 +12,7 @@ use Magento\Framework\App\State;
 /**
  * Resolves SID by processing request parameters.
  *
- * @deprecated 2.3.3 SIDs in URLs are no longer used
+ * @deprecated 102.0.2 SIDs in URLs are no longer used
  */
 class SidResolver implements SidResolverInterface
 {
@@ -28,13 +28,13 @@ class SidResolver implements SidResolverInterface
 
     /**
      * @var \Magento\Framework\UrlInterface
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.5 Not used anymore.
      */
     protected $urlBuilder;
 
     /**
      * @var \Magento\Framework\App\RequestInterface
-     * @deprecated Not used anymore.
+     * @deprecated 102.0.5 Not used anymore.
      */
     protected $request;
 

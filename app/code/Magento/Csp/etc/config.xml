@@ -75,14 +75,14 @@
                     <styles>
                         <policy_id>style-src</policy_id>
                         <self>1</self>
-                        <inline>0</inline>
+                        <inline>1</inline>
                         <eval>0</eval>
                         <dynamic>0</dynamic>
                     </styles>
                     <scripts>
                         <policy_id>script-src</policy_id>
                         <self>1</self>
-                        <inline>0</inline>
+                        <inline>1</inline>
                         <eval>1</eval>
                         <dynamic>0</dynamic>
                     </scripts>
@@ -180,14 +180,14 @@
                     <styles>
                         <policy_id>style-src</policy_id>
                         <self>1</self>
-                        <inline>0</inline>
+                        <inline>1</inline>
                         <eval>0</eval>
                         <dynamic>0</dynamic>
                     </styles>
                     <scripts>
                         <policy_id>script-src</policy_id>
                         <self>1</self>
-                        <inline>0</inline>
+                        <inline>1</inline>
                         <eval>1</eval>
                         <dynamic>0</dynamic>
                     </scripts>
