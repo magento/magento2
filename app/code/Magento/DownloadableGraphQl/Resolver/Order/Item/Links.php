@@ -12,8 +12,13 @@ use Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory;
 use Magento\DownloadableGraphQl\Model\ConvertLinksToArray;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Sales\Api\Data\InvoiceItemInterface;
+use Magento\Sales\Api\Data\OrderItemInterface;
+use Magento\Sales\Api\Data\ShipmentItemInterface;
 use Magento\Sales\Model\Order\Item as OrderItem;
 use Magento\Store\Api\Data\StoreInterface;
 
@@ -33,15 +38,33 @@ class Links implements ResolverInterface
     private $linkCollectionFactory;
 
     /**
+     * Serializer
+     *
+     * @var Json
+     */
+    private $serializer;
+
+    /**
+     * @var ValueFactory
+     */
+    private $valueFactory;
+
+    /**
      * @param ConvertLinksToArray $convertLinksToArray
      * @param CollectionFactory $linkCollectionFactory
+     * @param ValueFactory $valueFactory
+     * @param Json $serializer
      */
     public function __construct(
         ConvertLinksToArray $convertLinksToArray,
-        CollectionFactory $linkCollectionFactory
+        CollectionFactory $linkCollectionFactory,
+        ValueFactory $valueFactory,
+        Json $serializer
     ) {
         $this->convertLinksToArray = $convertLinksToArray;
         $this->linkCollectionFactory = $linkCollectionFactory;
+        $this->valueFactory = $valueFactory;
+        $this->serializer = $serializer;
     }
 
     /**
@@ -54,23 +77,54 @@ class Links implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($value['model'])) {
-            throw new LocalizedException(__('"model" value should be specified'));
-        }
         /** @var StoreInterface $store */
         $store = $context->getExtensionAttributes()->getStore();
 
-        /** @var OrderItem $orderItem */
-        $orderItem = $value['model'];
+        return $this->valueFactory->create(function () use ($value, $store) {
+            if (!isset($value['model'])) {
+                throw new LocalizedException(__('"model" value should be specified'));
+            }
 
-        $orderLinks = $orderItem->getProductOptionByCode('links');
+            if ($value['model'] instanceof OrderItemInterface) {
+                /** @var OrderItemInterface $item */
+                $item = $value['model'];
+                return $this->formatLinksData($item, $value, $store);
+            }
+            if ($value['model'] instanceof InvoiceItemInterface || $value['model'] instanceof ShipmentItemInterface) {
+                /** @var InvoiceItemInterface|ShipmentItemInterface $item */
+                $item = $value['model'];
+                // Have to pass down order and item to map to avoid re-fetching all data
+                return $this->formatLinksData($item->getOrderItem(), $value, $store);
+            }
+            return null;
+        });
+    }
 
-        /** @var Collection */
-        $linksCollection = $this->linkCollectionFactory->create();
-        $linksCollection->addTitleToResult($store->getStoreId())
-            ->addPriceToResult($store->getWebsiteId())
-            ->addFieldToFilter('main_table.link_id', ['in' => $orderLinks]);
+    /**
+     * Format values from order links item
+     *
+     * @param OrderItemInterface $item
+     * @param array $formattedItem
+     * @param StoreInterface $store
+     * @return array
+     */
+    private function formatLinksData(
+        OrderItemInterface $item,
+        array $formattedItem,
+        StoreInterface $store
+    ): array {
+        $linksData = [];
+        if ($item->getProductType() === 'downloadable') {
+            $orderLinks = $item->getProductOptionByCode('links') ?? [];
 
-        return $this->convertLinksToArray->execute($linksCollection->getItems());
+            /** @var Collection */
+            $linksCollection = $this->linkCollectionFactory->create();
+            $linksCollection->addTitleToResult($store->getId())
+                ->addPriceToResult($store->getWebsiteId())
+                ->addFieldToFilter('main_table.link_id', ['in' => $orderLinks]);
+
+            $linksData = $this->convertLinksToArray->execute($linksCollection->getItems());
+        }
+        return $linksData;
     }
 }
