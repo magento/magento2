@@ -7,8 +7,7 @@
         "magento/module-backend": "*",
         "magento/module-customer": "*",
         "magento/module-login-as-customer": "*",
-        "magento/module-login-as-customer-api": "*",
-        "magento/module-store": "*"
+        "magento/module-login-as-customer-api": "*"
     },
     "suggest": {
         "magento/module-login-as-customer-admin-ui": "*"
@@ -24,4 +23,4 @@
             "Magento\\LoginAsCustomerAssistance\\": ""
         }
     }
-},
+}
