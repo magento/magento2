@@ -113,6 +113,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      */
     private function boolVal($option): ?int
     {
-        return $option === "" ? null : (int)in_array(strtolower((string)$option), BooleanConfigOption::OPTIONS_POSITIVE);
+        return $option === '' ? 
+            null : (int)in_array(strtolower((string)$option), BooleanConfigOption::OPTIONS_POSITIVE);
     }
 }
