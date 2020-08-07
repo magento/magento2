@@ -84,7 +84,7 @@ define([
                     }, 10);
                 };
 
-                if (jQuery('#' + this.getAreaId('items')).is(':visible')) {
+                jQuery.async('#order-items .admin__page-section-title', (function () {
                     this.dataArea.onLoad = this.dataArea.onLoad.wrap(function (proceed) {
                         proceed();
                         this._parent.itemsArea.setNode($(this._parent.getAreaId('items')));
@@ -99,7 +99,9 @@ define([
                     });
                     this.areasLoaded();
                     this.itemsArea.onLoad();
-                }
+
+                }).bind(this));
+
             }).bind(this));
 
             jQuery('#edit_form')
