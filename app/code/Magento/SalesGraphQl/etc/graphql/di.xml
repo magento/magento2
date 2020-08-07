@@ -20,6 +20,13 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\CreditMemoItem">
+        <arguments>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="default" xsi:type="string">CreditMemoItem</item>
+            </argument>
+        </arguments>
+    </type>
     <type name="Magento\SalesGraphQl\Model\TypeResolver\ShipmentItem">
         <arguments>
             <argument name="productTypeMap" xsi:type="array">

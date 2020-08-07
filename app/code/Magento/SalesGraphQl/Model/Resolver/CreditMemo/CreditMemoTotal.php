@@ -5,22 +5,22 @@
  */
 declare(strict_types=1);
 
-namespace Magento\SalesGraphQl\Model\Resolver\Invoice;
+namespace Magento\SalesGraphQl\Model\Resolver\CreditMemo;
 
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Sales\Api\Data\InvoiceInterface;
+use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Tax\Api\OrderTaxManagementInterface;
 use Magento\SalesGraphQl\Model\SalesItem\ShippingTaxCalculator;
+use Magento\Tax\Api\OrderTaxManagementInterface;
 use Magento\Tax\Helper\Data as TaxHelper;
 
 /**
- * Resolver for Invoice total
+ * Resolve credit memo totals information
  */
-class InvoiceTotal implements ResolverInterface
+class CreditMemoTotal implements ResolverInterface
 {
     /**
      * @var TaxHelper
@@ -36,7 +36,6 @@ class InvoiceTotal implements ResolverInterface
      * @var ShippingTaxCalculator
      */
     private $shippingTaxCalculator;
-
     /**
      * @param OrderTaxManagementInterface $orderTaxManagement
      * @param TaxHelper $taxHelper
@@ -62,7 +61,7 @@ class InvoiceTotal implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!(($value['model'] ?? null) instanceof InvoiceInterface)) {
+        if (!(($value['model'] ?? null) instanceof CreditmemoInterface)) {
             throw new LocalizedException(__('"model" value should be specified'));
         }
 
@@ -72,39 +71,43 @@ class InvoiceTotal implements ResolverInterface
 
         /** @var OrderInterface $orderModel */
         $orderModel = $value['order'];
-        /** @var InvoiceInterface $invoiceModel */
-        $invoiceModel = $value['model'];
+        /** @var CreditmemoInterface $creditMemo */
+        $creditMemo = $value['model'];
         $currency = $orderModel->getOrderCurrencyCode();
         $baseCurrency = $orderModel->getBaseCurrencyCode();
         return [
-            'base_grand_total' => ['value' => $invoiceModel->getBaseGrandTotal(), 'currency' => $baseCurrency],
-            'grand_total' => ['value' =>  $invoiceModel->getGrandTotal(), 'currency' => $currency],
-            'subtotal' => ['value' =>  $invoiceModel->getSubtotal(), 'currency' => $currency],
-            'total_tax' => ['value' =>  $invoiceModel->getTaxAmount(), 'currency' => $currency],
-            'total_shipping' => ['value' => $invoiceModel->getShippingAmount(), 'currency' => $currency],
-            'discounts' => $this->getDiscountDetails($invoiceModel),
+            'base_grand_total' => ['value' => $creditMemo->getBaseGrandTotal(), 'currency' => $baseCurrency],
+            'grand_total' => ['value' =>  $creditMemo->getGrandTotal(), 'currency' => $currency],
+            'subtotal' => ['value' =>  $creditMemo->getSubtotal(), 'currency' => $currency],
+            'total_tax' => ['value' =>  $creditMemo->getTaxAmount(), 'currency' => $currency],
+            'total_shipping' => ['value' => $creditMemo->getShippingAmount(), 'currency' => $currency],
+            'discounts' => $this->getDiscountDetails($creditMemo),
             'taxes' => $this->formatTaxes(
                 $orderModel,
-                $this->taxHelper->getCalculatedTaxes($invoiceModel),
+                $this->taxHelper->getCalculatedTaxes($creditMemo),
             ),
             'shipping_handling' => [
                 'amount_excluding_tax' => [
-                    'value' => $invoiceModel->getShippingAmount() ?? 0,
+                    'value' => $creditMemo->getShippingAmount() ?? 0,
                     'currency' => $currency
                 ],
                 'amount_including_tax' => [
-                    'value' => $invoiceModel->getShippingInclTax() ?? 0,
+                    'value' => $creditMemo->getShippingInclTax() ?? 0,
                     'currency' => $currency
                 ],
                 'total_amount' => [
-                    'value' => $invoiceModel->getShippingAmount() ?? 0,
+                    'value' => $creditMemo->getShippingAmount() ?? 0,
                     'currency' => $currency
                 ],
-                'discounts' => $this->getShippingDiscountDetails($invoiceModel, $orderModel),
+                'discounts' => $this->getShippingDiscountDetails($creditMemo, $orderModel),
                 'taxes' => $this->formatTaxes(
                     $orderModel,
-                    $this->shippingTaxCalculator->calculateShippingTaxes($orderModel, $invoiceModel),
+                    $this->shippingTaxCalculator->calculateShippingTaxes($orderModel, $creditMemo),
                 )
+            ],
+            'adjustment' => [
+                'value' =>  abs($creditMemo->getAdjustment()),
+                'currency' => $currency
             ]
         ];
     }
@@ -112,27 +115,27 @@ class InvoiceTotal implements ResolverInterface
     /**
      * Return information about an applied discount on shipping
      *
-     * @param InvoiceInterface $invoiceModel
+     * @param CreditmemoInterface $creditmemoModel
      * @param OrderInterface $orderModel
      * @return array
      */
-    private function getShippingDiscountDetails(InvoiceInterface $invoiceModel, OrderInterface $orderModel): array
+    private function getShippingDiscountDetails(CreditmemoInterface $creditmemoModel, $orderModel): array
     {
-        $invoiceShippingAmount = (float)$invoiceModel->getShippingAmount();
+        $creditmemoShippingAmount = (float)$creditmemoModel->getShippingAmount();
         $orderShippingAmount = (float)$orderModel->getShippingAmount();
-        $calculatedShippingRatioFromOriginal = $invoiceShippingAmount != 0 && $orderShippingAmount != 0 ?
-            ($invoiceShippingAmount / $orderShippingAmount) : 0;
+        $calculatedShippingRatio = (float)$creditmemoShippingAmount != 0 && $orderShippingAmount != 0 ?
+            ($creditmemoShippingAmount / $orderShippingAmount) : 0;
         $orderShippingDiscount = (float)$orderModel->getShippingDiscountAmount();
-        $calculatedInvoiceShippingDiscount = $orderShippingDiscount * $calculatedShippingRatioFromOriginal;
+        $calculatedCreditmemoShippingDiscount = $orderShippingDiscount * $calculatedShippingRatio;
+
         $shippingDiscounts = [];
-        if ($calculatedInvoiceShippingDiscount != 0) {
-            $shippingDiscounts[] =
-                [
-                    'amount' => [
-                        'value' => sprintf('%.2f', abs($calculatedInvoiceShippingDiscount)),
-                        'currency' => $invoiceModel->getOrderCurrencyCode()
-                    ]
-                ];
+        if ($calculatedCreditmemoShippingDiscount != 0) {
+            $shippingDiscounts[] = [
+                'amount' => [
+                    'value' => sprintf('%.2f', abs($calculatedCreditmemoShippingDiscount)),
+                    'currency' => $creditmemoModel->getOrderCurrencyCode()
+                ]
+            ];
         }
         return $shippingDiscounts;
     }
@@ -140,18 +143,18 @@ class InvoiceTotal implements ResolverInterface
     /**
      * Return information about an applied discount
      *
-     * @param InvoiceInterface $invoice
+     * @param CreditmemoInterface $creditmemo
      * @return array
      */
-    private function getDiscountDetails(InvoiceInterface $invoice): array
+    private function getDiscountDetails(CreditmemoInterface $creditmemo): array
     {
         $discounts = [];
-        if (!($invoice->getDiscountDescription() === null && $invoice->getDiscountAmount() == 0)) {
+        if (!($creditmemo->getDiscountDescription() === null && $creditmemo->getDiscountAmount() == 0)) {
             $discounts[] = [
-                'label' => $invoice->getDiscountDescription() ?? __('Discount'),
+                'label' => $creditmemo->getDiscountDescription() ?? __('Discount'),
                 'amount' => [
-                    'value' => abs($invoice->getDiscountAmount()),
-                    'currency' => $invoice->getOrderCurrencyCode()
+                    'value' => abs($creditmemo->getDiscountAmount()),
+                    'currency' => $creditmemo->getOrderCurrencyCode()
                 ]
             ];
         }
