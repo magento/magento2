@@ -3,7 +3,7 @@
 type Query {
     storeConfig : StoreConfig @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\StoreConfigResolver") @doc(description: "The store config query") @cache(cacheable: false)
     availableStores(
-        use_current_group : Boolean @doc(description: "Get only store views from the current store group")
+        useCurrentGroup: Boolean @doc(description: "Get only store views from the current store group")
     ): [StoreConfig] @resolver(class: "Magento\\StoreGraphQl\\Model\\Resolver\\AvailableStoresResolver") @doc(description: "Get a list of available store views and their config information.")
 }
 
