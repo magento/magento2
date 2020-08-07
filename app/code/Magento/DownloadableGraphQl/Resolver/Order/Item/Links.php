@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\DownloadableGraphQl\Resolver\DownloadableOrderItem;
+namespace Magento\DownloadableGraphQl\Resolver\Order\Item;
 
 use Magento\Downloadable\Model\ResourceModel\Link\Collection;
 use Magento\Downloadable\Model\ResourceModel\Link\CollectionFactory;

@@ -66,7 +66,15 @@ type DownloadableProductSamples @doc(description: "DownloadableProductSamples de
 }
 
 type DownloadableOrderItem implements OrderItemInterface {
-    downloadable_links: [DownloadableItemsLinks] @doc(description: "A list of downloadable links that are ordered from the downloadable product") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\DownloadableOrderItem\\Links")
+    downloadable_links: [DownloadableItemsLinks] @doc(description: "A list of downloadable links that are ordered from the downloadable product") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Order\\Item\\Links")
+}
+
+type DownloadableInvoiceItem implements InvoiceItemInterface {
+    downloadable_links: [DownloadableItemsLinks] @doc(description: "A list of downloadable links that are invoiced from the downloadable product") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Order\\Item\\Links")
+}
+
+type DownloadableCreditMemoItem implements CreditMemoItemInterface {
+    downloadable_links: [DownloadableItemsLinks] @doc(description: "A list of downloadable links that are refunded from the downloadable product") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Order\\Item\\Links")
 }
 
 type DownloadableItemsLinks @doc(description: "DownloadableProductLinks defines characteristics of a downloadable product") {
