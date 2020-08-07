@@ -4,10 +4,12 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Theme\Model\Design\Backend;
 
-use Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface;
 use Magento\Config\Model\Config\Backend\File as BackendFile;
+use Magento\Config\Model\Config\Backend\File\RequestData\RequestDataInterface;
 use Magento\Framework\App\Cache\TypeListInterface;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ObjectManager;
@@ -15,15 +17,15 @@ use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\File\Mime;
 use Magento\Framework\Filesystem;
+use Magento\Framework\Filesystem\Directory\ReadFactory;
+use Magento\Framework\Filesystem\Io\File as IoFile;
 use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Framework\UrlInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database;
 use Magento\MediaStorage\Model\File\UploaderFactory;
 use Magento\Theme\Model\Design\Config\FileUploader\FileProcessor;
-use Magento\MediaStorage\Helper\File\Storage\Database;
-use Magento\Framework\Filesystem\Io\File as IoFile;
-use Magento\Framework\Filesystem\Directory\ReadFactory;
 
 /**
  * File Backend
@@ -108,7 +110,7 @@ class File extends BackendFile
         /** @var ReadFactory $readFactory */
         $readFactory = ObjectManager::getInstance()->get(ReadFactory::class);
         $this->tmpDirectory = $tmpDirectory ?: $readFactory->create(
-            $this->_mediaDirectory->getAbsolutePath() .'tmp/' . FileProcessor::FILE_DIR
+            $this->_mediaDirectory->getAbsolutePath() . 'tmp/' . FileProcessor::FILE_DIR
         );
     }
 
@@ -227,7 +229,7 @@ class File extends BackendFile
             $urlType = ['_type' => empty($baseUrl['type']) ? 'link' : (string)$baseUrl['type']];
             $baseUrl = $baseUrl['value'] . '/';
         }
-        return $this->urlBuilder->getBaseUrl($urlType) . $baseUrl  . $fileName;
+        return $this->urlBuilder->getBaseUrl($urlType) . $baseUrl . $fileName;
     }
 
     /**
