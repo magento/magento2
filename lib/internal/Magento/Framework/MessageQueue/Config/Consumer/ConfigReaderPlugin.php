@@ -71,7 +71,7 @@ class ConfigReaderPlugin
                 'maxMessages' => $consumerData['max_messages'],
                 'maxIdleTime' => null,
                 'sleep' => null,
-                'onlySpawnWhenMessageAvailable' => false
+                'onlySpawnWhenMessageAvailable' => null
             ];
         }
 

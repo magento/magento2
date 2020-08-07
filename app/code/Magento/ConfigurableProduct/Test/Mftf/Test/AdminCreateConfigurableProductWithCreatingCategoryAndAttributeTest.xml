@@ -93,8 +93,7 @@
         </actionGroup>
 
         <!-- Assert configurable product on admin product page -->
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage"/>
         <actionGroup ref="AssertConfigurableProductOnAdminProductPageActionGroup" stepKey="assertConfigurableProductOnAdminProductPage">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>

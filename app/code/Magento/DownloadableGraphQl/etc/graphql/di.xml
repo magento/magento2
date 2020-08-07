@@ -39,17 +39,24 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\SalesGraphQl\Model\OrderItemInterfaceTypeResolverComposite">
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\OrderItem">
         <arguments>
-            <argument name="orderItemTypeResolvers" xsi:type="array">
-                <item name="downloadable_order_catalog_item_type_resolver" xsi:type="object">Magento\DownloadableGraphQl\Resolver\DownloadableOrderItem\OrderItemTypeResolver</item>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="downloadable" xsi:type="string">DownloadableOrderItem</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\SalesGraphQl\Model\InvoiceItemInterfaceTypeResolverComposite">
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\InvoiceItem">
         <arguments>
-            <argument name="invoiceItemTypeResolvers" xsi:type="array">
-                <item name="downloadable_invoice_catalog_item_type_resolver" xsi:type="object">Magento\DownloadableGraphQl\Resolver\DownloadableOrderItem\InvoiceItemTypeResolver</item>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="downloadable" xsi:type="string">DownloadableInvoiceItem</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\CreditMemoItem">
+        <arguments>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="downloadable" xsi:type="string">DownloadableCreditMemoItem</item>
             </argument>
         </arguments>
     </type>
