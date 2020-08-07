@@ -40,10 +40,10 @@
         <fillField selector="{{AdminProductFormAdvancedPricingSection.specialPrice}}" userInput="{{virtualProductWithoutManageStock.special_price}}" stepKey="fillSpecialPrice"/>
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickDoneButton"/>
         <fillField selector="{{AdminProductFormSection.productQuantity}}" userInput="{{virtualProductWithoutManageStock.quantity}}" stepKey="fillProductQuantity"/>
-        <click selector="{{AdminProductFormSection.advancedInventoryLink}}" stepKey="clickAdvancedInventoryLink"/>
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickAdvancedInventoryLink"/>
         <click selector="{{AdminProductFormAdvancedInventorySection.manageStock}}" stepKey="clickManageStock"/>
         <checkOption selector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" stepKey="CheckUseConfigSettingsCheckBox"/>
-        <click selector="{{AdminProductFormAdvancedInventorySection.doneButton}}" stepKey="clickDoneButtonOnAdvancedInventorySection"/>
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickDoneButtonOnAdvancedInventorySection"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
         <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
