@@ -79,13 +79,9 @@ class StartConsumerCommand extends Command
 
         $singleThread = $input->getOption(self::OPTION_SINGLE_THREAD);
 
-        if ($singleThread && $this->lockManager->isLocked(md5($consumerName))) { //phpcs:ignore
+        if ($singleThread && !$this->lockManager->lock(md5($consumerName),0)) { //phpcs:ignore
             $output->writeln('<error>Consumer with the same name is running</error>');
             return \Magento\Framework\Console\Cli::RETURN_FAILURE;
-        }
-
-        if ($singleThread) {
-            $this->lockManager->lock(md5($consumerName)); //phpcs:ignore
         }
 
         $this->appState->setAreaCode($areaCode ?? 'global');
@@ -163,7 +159,7 @@ To specify the number of messages per batch for the batch consumer:
 To specify the preferred area:
 
     <comment>%command.full_name% someConsumer --area-code='adminhtml'</comment>
-    
+
 To do not run multiple copies of one consumer simultaneously:
 
     <comment>%command.full_name% someConsumer --single-thread'</comment>
