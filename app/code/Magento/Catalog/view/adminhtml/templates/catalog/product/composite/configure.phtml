@@ -5,7 +5,7 @@
  */
 
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
-$blockId = $block->getId();
+$blockId = $block->escapeHtmlAttr($block->getId());
 ?>
 <div id="product_composite_configure" class="product-configure-popup-<?= $blockId ?>">
     <iframe name="product_composite_configure_iframe" id="product_composite_configure_iframe"></iframe>
