@@ -70,7 +70,6 @@ class ResultTest extends AbstractController
     /**
      * Advanced search test by difference product attributes.
      *
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch7
      * @magentoAppArea frontend
      * @magentoDataFixture Magento/CatalogSearch/_files/product_for_search_with_hyphen_in_sku.php
      * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
