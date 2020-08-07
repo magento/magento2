@@ -254,6 +254,7 @@ define([
 
             if (_.isUndefined(currentFilterPath)) {
                 this.clearFiltersHandle();
+
                 return;
             }
 
