@@ -5,12 +5,14 @@
  */
 namespace Magento\Sales\Test\Unit\Model\Order\Pdf;
 
-use Magento\MediaStorage\Helper\File\Storage\Database;
-use Magento\Sales\Model\Order\Creditmemo;
-use Magento\Sales\Model\Order;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\MediaStorage\Helper\File\Storage\Database;
+use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\Address;
 use Magento\Sales\Model\Order\Address\Renderer;
+use Magento\Sales\Model\Order\Creditmemo;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class CreditmemoTest
@@ -19,7 +21,7 @@ use Magento\Sales\Model\Order\Address\Renderer;
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CreditmemoTest extends \PHPUnit\Framework\TestCase
+class CreditmemoTest extends TestCase
 {
     /**
      * @var \Magento\Sales\Model\Order\Pdf\Invoice
@@ -27,32 +29,32 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
     protected $_model;
 
     /**
-     * @var \Magento\Sales\Model\Order\Pdf\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order\Pdf\Config|MockObject
      */
     protected $_pdfConfigMock;
 
     /**
-     * @var Database|\PHPUnit_Framework_MockObject_MockObject
+     * @var Database|MockObject
      */
     protected $databaseMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\Framework\Filesystem\Directory\Write|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\Filesystem\Directory\Write|MockObject
      */
     protected $directoryMock;
 
     /**
-     * @var Renderer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Renderer|MockObject
      */
     protected $addressRendererMock;
 
     /**
-     * @var \Magento\Payment\Helper\Data|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Payment\Helper\Data|MockObject
      */
     protected $paymentDataMock;
 
@@ -61,7 +63,7 @@ class CreditmemoTest extends \PHPUnit\Framework\TestCase
      */
     private $appEmulation;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_pdfConfigMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Pdf\Config::class)
             ->disableOriginalConstructor()
