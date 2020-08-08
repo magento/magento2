@@ -161,6 +161,7 @@ class CreditmemoTest extends GraphQlAbstract
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_two_dropdown_options.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCreditMemoForBundledProductsWithPartialRefund()
     {
@@ -537,6 +538,7 @@ class CreditmemoTest extends GraphQlAbstract
      *
      * @return array
      * @throws AuthenticationException
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function getCustomerOrderWithCreditMemoQuery(): array
     {
