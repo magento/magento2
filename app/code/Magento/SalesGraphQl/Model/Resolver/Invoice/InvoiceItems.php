@@ -93,7 +93,7 @@ class InvoiceItems implements ResolverInterface
                 $orderItemModel = $orderItem['model'];
                 if (!$orderItemModel->getParentItem()) {
                     $invoiceItemData = $this->getInvoiceItemData($order, $invoiceItem);
-                    if (isset($invoiceItemData)) {
+                    if (!empty($invoiceItemData)) {
                         $itemsList[$invoiceItem->getOrderItemId()] = $invoiceItemData;
                     }
                 }
