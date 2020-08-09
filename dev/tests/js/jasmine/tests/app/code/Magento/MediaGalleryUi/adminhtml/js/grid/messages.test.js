@@ -4,53 +4,75 @@
  */
 
 define([
-    'Magento_MediaGalleryUi/js/grid/messages'
-], function (Messages) {
+    'Magento_MediaGalleryUi/js/grid/messages',
+    'escaper'
+], function (Messages, Escaper) {
     'use strict';
 
     describe('Magento_MediaGalleryUi/js/grid/messages', function () {
-        var message,
+        var messagesInstance,
+            escaperInstance,
             messageText,
             errorType,
             successType;
 
         beforeEach(function () {
-            message = Messages;
+            escaperInstance = Escaper;
+            messagesInstance = Messages({
+                escaper: escaperInstance
+            });
             messageText = 'test message';
             errorType = 'error';
             successType = 'success';
         });
 
-        describe('message handling', function () {
-            it('add error message, get error message', function () {
-                message.add(errorType, messageText);
-                expect(message.get()).toEqual([messageText]);
-            });
-
-            it('add success message, get success message', function () {
-                message.add(successType, messageText);
-                expect(message.get()).toEqual([messageText]);
-            });
-
-            it('scheduled cleaning messages', function () {
-                message.add(errorType, messageText);
-                message.scheduleCleanup();
-                expect(message.get()).toEqual([]);
-            });
+        it('add error message, get error message', function () {
+            messagesInstance.add(errorType, messageText);
+            expect(messagesInstance.get()).toEqual([{
+                code: errorType,
+                message: messageText
+            }]);
         });
 
-        describe('prepareMessageUnsanitizedHtml', function () {
-            var messageData,
-                expectedData;
+        it('add success message, get success message', function () {
+            messagesInstance.add(successType, messageText);
+            expect(messagesInstance.get()).toEqual([{
+                code: successType,
+                message: messageText
+            }]);
+        });
 
-            beforeEach(function () {
-                messageData = 'Login failed. Please check if the <a href="%1">Secret Key</a> is set correctly and try again.';
-                expectedData = 'Login failed. Please check if the <a href="%1">Secret Key</a> is set correctly and try again.';
+        it('handles multiple messages', function () {
+            messagesInstance.add(successType, messageText);
+            messagesInstance.add(errorType, messageText);
+            expect(messagesInstance.get()).toEqual([
+                {
+                    code: successType,
+                    message: messageText
+                },
+                {
+                    code: errorType,
+                    message: messageText
+                }
+            ]);
+        });
+
+        it('cleans messages', function () {
+            messagesInstance.add(errorType, messageText);
+            messagesInstance.clear();
+
+            expect(messagesInstance.get()).toEqual([]);
+        });
+
+        it('prepare message to be rendered as HTML', function () {
+            var escapedMessage = 'escaped message';
+
+            // eslint-disable-next-line max-nested-callbacks
+            spyOn(escaperInstance, 'escapeHtml').and.callFake(function () {
+                return escapedMessage;
             });
 
-            it('prepare message to be rendered as HTML', function () {
-                expect(message.prepareMessageUnsanitizedHtml(messageData)).toEqual(expectedData)
-            });
+            expect(messagesInstance.prepareMessageUnsanitizedHtml(messageText)).toEqual(escapedMessage);
         });
     });
 });
