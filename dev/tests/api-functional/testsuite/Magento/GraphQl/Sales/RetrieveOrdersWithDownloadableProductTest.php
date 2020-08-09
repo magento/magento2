@@ -136,7 +136,7 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
                amount_including_tax{value}
                amount_excluding_tax{value}
                total_amount{value}
-               discounts{amount{value} label}
+               discounts{amount{value}}
                taxes {amount{value} title rate}
              }
              discounts {amount{value currency} label}
