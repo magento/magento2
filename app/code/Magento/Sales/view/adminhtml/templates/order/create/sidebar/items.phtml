@@ -6,8 +6,11 @@
 
 /* @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Sidebar\AbstractSidebar */
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+
+$blockDataId = $block->getDataId();
+$jsEscapedBlockDataId = $block->escapeJs($blockDataId);
 ?>
-<div class="create-order-sidebar-block" id="sidebar_data_<?= $block->escapeHtmlAttr($block->getDataId()) ?>">
+<div class="create-order-sidebar-block" id="sidebar_data_<?= $block->escapeHtmlAttr($blockDataId) ?>">
     <div class="head sidebar-title-block">
         <a href="#" class="action-refresh" title="<?= $block->escapeHtml(__('Refresh')) ?>">
             <span><?= $block->escapeHtml(__('Refresh')) ?></span>
@@ -19,9 +22,12 @@
     </div>
     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
         'onclick',
-        "order.loadArea('sidebar_" . $block->escapeJs($block->getDataId()) .
-        "', 'sidebar_data_" . $block->escapeJs($block->getDataId()) . "');event.preventDefault();",
-        'div.head.sidebar-title-block'
+        "order.loadArea(
+            'sidebar_" . $jsEscapedBlockDataId ."',
+            'sidebar_data_" . $jsEscapedBlockDataId . "'
+        );
+        event.preventDefault();",
+        'div#sidebar_data_'. $jsEscapedBlockDataId . ' a.action-refresh'
     ) ?>
     <div class="content">
         <div class="auto-scroll">
@@ -83,7 +89,7 @@
                                            type="checkbox"
                                            class="admin__control-checkbox"
                                            name="sidebar[remove][<?= (int) $block->getItemId($_item) ?>]"
-                                           value="<?= $block->escapeHtmlAttr($block->getDataId()) ?>"
+                                           value="<?= $block->escapeHtmlAttr($blockDataId) ?>"
                                            title="<?= $block->escapeHtml(__('Remove')) ?>" />
                                     <label class="admin__field-label"
                                            for="sidebar-remove-<?=
@@ -97,7 +103,7 @@
                         <td class="col-add">
                             <div class="admin__field-option">
                                 <?php if ($block->isConfigurationRequired($_item->getTypeId()) &&
-                                    $block->getDataId() == 'wishlist'): ?>
+                                    $blockDataId == 'wishlist'): ?>
                                     <a href="#"
                                        class="icon icon-configure"
                                        title="<?= $block->escapeHtml(__('Configure and Add to Order')) ?>">
