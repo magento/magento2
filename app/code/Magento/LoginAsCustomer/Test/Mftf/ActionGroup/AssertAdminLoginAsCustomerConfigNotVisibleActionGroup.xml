@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminAssertLoginAsCustomerConfigNotVisibleActionGroup">
+    <actionGroup name="AssertAdminLoginAsCustomerConfigNotVisibleActionGroup">
         <annotations>
             <description>Verify no Login as Customer config section available.</description>
         </annotations>

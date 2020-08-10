@@ -25,16 +25,16 @@
         </after>
 
         <amOnPage url="{{AdminLoginAsCustomerConfigPage.url}}" stepKey="navigateToLoginAsCustomerConfigSection"/>
-        <actionGroup ref="AdminAssertLoginAsCustomerConfigVisibleActionGroup" stepKey="seeLoginAsCustomerConfig"/>
+        <actionGroup ref="AssertAdminLoginAsCustomerConfigVisibleActionGroup" stepKey="seeLoginAsCustomerConfig"/>
 
         <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="switchToDefaultStoreView">
             <argument name="storeViewName" value="'Default Store View'"/>
         </actionGroup>
-        <actionGroup ref="AdminAssertLoginAsCustomerSectionLinkNotAvailableActionGroup" stepKey="dontSeeLoginAsCustomerSectionLinkOnStoreView"/>
+        <actionGroup ref="AssertAdminLoginAsCustomerSectionLinkNotAvailableActionGroup" stepKey="dontSeeLoginAsCustomerSectionLinkOnStoreView"/>
 
         <actionGroup ref="SwitchToTheNewStoreViewActionGroup" stepKey="switchToDefaultWebsite">
             <argument name="storeViewName" value="'Main Website'"/>
         </actionGroup>
-        <actionGroup ref="AdminAssertLoginAsCustomerSectionLinkNotAvailableActionGroup" stepKey="dontSeeLoginAsCustomerSectionLink"/>
+        <actionGroup ref="AssertAdminLoginAsCustomerSectionLinkNotAvailableActionGroup" stepKey="dontSeeLoginAsCustomerSectionLink"/>
     </test>
 </tests>

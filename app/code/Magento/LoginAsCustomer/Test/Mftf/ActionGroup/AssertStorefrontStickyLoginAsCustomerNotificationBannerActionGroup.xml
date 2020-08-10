@@ -8,9 +8,9 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup">
+    <actionGroup name="AssertStorefrontStickyLoginAsCustomerNotificationBannerActionGroup">
         <annotations>
-            <description>Verify Login as Customer notification banner present on page.</description>
+            <description>Verify Sticky Login as Customer notification banner present on page.</description>
         </annotations>
         <arguments>
             <argument name="customerFullName" type="string"/>
@@ -23,5 +23,11 @@
              stepKey="assertCorrectNotificationBannerMessage"/>
         <seeElement selector="{{StorefrontLoginAsCustomerNotificationSection.closeLink}}"
              stepKey="assertCloseNotificationBannerPresent"/>
+        <executeJS function="window.scrollTo(0,document.body.scrollHeight);" stepKey="scrollToBottomOfPage"/>
+        <see selector="{{StorefrontLoginAsCustomerNotificationSection.notificationText}}"
+             userInput="You are connected as {{customerFullName}} on {{websiteName}}"
+             stepKey="assertCorrectNotificationBannerMessageAfterScroll"/>
+        <seeElement selector="{{StorefrontLoginAsCustomerNotificationSection.closeLink}}"
+                    stepKey="assertCloseNotificationBannerPresentAfterScroll"/>
     </actionGroup>
 </actionGroups>
