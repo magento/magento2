@@ -40,8 +40,8 @@ class CategoryManagementTest extends WebapiAbstract
             ]
         ];
         $result = $this->_webApiCall($serviceInfo, $requestData);
-        $expected = array_replace_recursive($result, $expected);
-        $this->assertEquals($expected, $result);
+        $diff = $this->compareArraysRecursively($expected, $result);
+        self::assertEquals([], $diff, "Actual categories response doesn't equal expected data");
     }
 
     /**
