@@ -13,5 +13,6 @@
         <element name="name" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Name')]/preceding-sibling::th) +1 ]//*[text()='{{categoryName}}']" parameterized="true"/>
         <element name="displayMode" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Display Mode')]/preceding-sibling::th) +1 ]//*[text()='{{productsText}}']" parameterized="true"/>
         <element name="products" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Products')]/preceding-sibling::th) +1 ]//*[text()='{{productsQty}}']" parameterized="true"/>
- </section>
+        <element name="edit" type="button" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Action')]/preceding-sibling::th) +1 ]//*[text()='{{edit}}']" parameterized="true"/>
+    </section>
 </sections>
