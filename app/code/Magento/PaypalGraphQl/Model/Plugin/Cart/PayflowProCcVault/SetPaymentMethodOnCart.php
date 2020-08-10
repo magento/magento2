@@ -70,7 +70,10 @@ class SetPaymentMethodOnCart
         $additionalData = $this->additionalDataProviderPool->getData(self::CC_VAULT_CODE, $additionalData);
         $customerId = (int) $cart->getCustomer()->getId();
         $payment = $cart->getPayment();
-        if (!is_array($additionalData) || !isset($additionalData[PaymentTokenInterface::PUBLIC_HASH])) {
+        if (!is_array($additionalData)
+            || !isset($additionalData[PaymentTokenInterface::PUBLIC_HASH])
+            || $customerId === 0
+        ) {
             return;
         }
         $tokenPublicHash = $additionalData[PaymentTokenInterface::PUBLIC_HASH];
