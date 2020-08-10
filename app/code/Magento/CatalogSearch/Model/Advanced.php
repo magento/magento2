@@ -361,6 +361,8 @@ class Advanced extends \Magento\Framework\Model\AbstractModel
      */
     protected function getPreparedSearchCriteria($attribute, $value)
     {
+        $from = null;
+        $to = null;
         if (is_array($value)) {
             if (isset($value['from']) && isset($value['to'])) {
                 if (!empty($value['from']) || !empty($value['to'])) {
