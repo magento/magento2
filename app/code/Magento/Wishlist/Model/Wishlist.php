@@ -475,6 +475,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
             $_buyRequest = $buyRequest;
         } elseif (is_string($buyRequest)) {
             $isInvalidItemConfiguration = false;
+            $buyRequestData = [];
             try {
                 $buyRequestData = $this->serializer->unserialize($buyRequest);
                 if (!is_array($buyRequestData)) {
@@ -515,6 +516,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
 
         $errors = [];
         $items = [];
+        $item = null;
 
         foreach ($cartCandidates as $candidate) {
             if ($candidate->getParentProductId()) {
