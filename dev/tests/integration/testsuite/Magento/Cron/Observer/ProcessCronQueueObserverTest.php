@@ -14,7 +14,7 @@ class ProcessCronQueueObserverTest extends \PHPUnit\Framework\TestCase
      */
     private $_model = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\App\AreaList::class)
             ->getArea('crontab')

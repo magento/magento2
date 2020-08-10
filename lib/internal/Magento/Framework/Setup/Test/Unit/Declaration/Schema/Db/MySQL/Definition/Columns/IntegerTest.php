@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Setup\Test\Unit\Declaration\Schema\Db\MySQL\Definition\Columns;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Boolean;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Comment;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Identity;
@@ -14,8 +16,11 @@ use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Integ
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Nullable;
 use Magento\Framework\Setup\Declaration\Schema\Db\MySQL\Definition\Columns\Unsigned;
 use Magento\Framework\Setup\Declaration\Schema\Dto\Columns\Integer as IntegerColumnDto;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class IntegerTest extends \PHPUnit\Framework\TestCase
+class IntegerTest extends TestCase
 {
     /**
      * @var ObjectManager
@@ -28,36 +33,36 @@ class IntegerTest extends \PHPUnit\Framework\TestCase
     private $integer;
 
     /**
-     * @var Nullable|\PHPUnit_Framework_MockObject_MockObject
+     * @var Nullable|MockObject
      */
     private $nullableMock;
 
     /**
-     * @var Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Comment|MockObject
      */
     private $commentMock;
 
     /**
-     * @var ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceConnectionMock;
 
     /**
-     * @var Identity|\PHPUnit_Framework_MockObject_MockObject
+     * @var Identity|MockObject
      */
     private $identityMock;
 
     /**
-     * @var Unsigned|\PHPUnit_Framework_MockObject_MockObject
+     * @var Unsigned|MockObject
      */
     private $unsignedMock;
 
     /**
-     * @var Boolean|\PHPUnit_Framework_MockObject_MockObject
+     * @var Boolean|MockObject
      */
     private $booleanMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->nullableMock = $this->getMockBuilder(Nullable::class)
@@ -96,7 +101,7 @@ class IntegerTest extends \PHPUnit\Framework\TestCase
      */
     public function testToDefinition()
     {
-        /** @var IntegerColumnDto|\PHPUnit_Framework_MockObject_MockObject $column */
+        /** @var IntegerColumnDto|MockObject $column */
         $column = $this->getMockBuilder(IntegerColumnDto::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -123,9 +128,9 @@ class IntegerTest extends \PHPUnit\Framework\TestCase
         $this->identityMock->expects($this->any())
             ->method('toDefinition')
             ->willReturn('AUTO_INCREMENT');
-        $adapterMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $adapterMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resourceConnectionMock->expects($this->once())->method('getConnection')->willReturn($adapterMock);
         $adapterMock->expects($this->once())
             ->method('quoteIdentifier')
@@ -140,7 +145,7 @@ class IntegerTest extends \PHPUnit\Framework\TestCase
             ->with($column)
             ->willReturn('COMMENT "Comment"');
         $this->assertEquals(
-            '`int_column` int(10) UNSIGNED NOT NULL DEFAULT 0 AUTO_INCREMENT COMMENT "Comment"',
+            '`int_column` int UNSIGNED NOT NULL DEFAULT 0 AUTO_INCREMENT COMMENT "Comment"',
             $this->integer->toDefinition($column)
         );
     }
@@ -175,13 +180,15 @@ class IntegerTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['int'],
-            ['int(10)', 10],
+            ['int(10)'],
             ['tinyint'],
-            ['mediumint(5)', 5],
+            ['tinyint(1)', 1],
+            ['tinyint(2)'],
+            ['mediumint(5)'],
             ['mediumint'],
-            ['smallint(3)', 3],
+            ['smallint(3)'],
             ['smallint'],
-            ['bigint(10)', 10],
+            ['bigint(10)'],
             ['bigint'],
         ];
     }

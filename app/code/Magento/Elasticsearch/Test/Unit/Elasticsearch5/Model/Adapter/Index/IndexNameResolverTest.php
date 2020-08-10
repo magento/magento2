@@ -3,19 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Test\Unit\Elasticsearch5\Model\Adapter\Index;
 
-use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
-use Psr\Log\LoggerInterface;
-use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
-use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
+use Elasticsearch\Client;
+use Elasticsearch\Namespaces\IndicesNamespace;
 use Magento\AdvancedSearch\Model\Client\ClientInterface as ElasticsearchClient;
+use Magento\AdvancedSearch\Model\Client\ClientOptionsInterface;
+use Magento\Elasticsearch\Elasticsearch5\Model\Client\Elasticsearch;
+use Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver;
+use Magento\Elasticsearch\Model\Config;
+use Magento\Elasticsearch\SearchAdapter\ConnectionManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IndexNameResolverTest extends \PHPUnit\Framework\TestCase
+class IndexNameResolverTest extends TestCase
 {
     /**
      * @var IndexNameResolver
@@ -23,22 +32,22 @@ class IndexNameResolverTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var ConnectionManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConnectionManager|MockObject
      */
     protected $connectionManager;
 
     /**
-     * @var ClientOptionsInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ClientOptionsInterface|MockObject
      */
     protected $clientConfig;
 
     /**
-     * @var LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     protected $logger;
 
     /**
-     * @var ElasticsearchClient|\PHPUnit_Framework_MockObject_MockObject
+     * @var ElasticsearchClient|MockObject
      */
     protected $client;
 
@@ -61,18 +70,18 @@ class IndexNameResolverTest extends \PHPUnit\Framework\TestCase
      * Setup method
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
 
-        $this->connectionManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
+        $this->connectionManager = $this->getMockBuilder(ConnectionManager::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getConnection',
             ])
             ->getMock();
 
-        $this->clientConfig = $this->getMockBuilder(\Magento\Elasticsearch\Model\Config::class)
+        $this->clientConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getIndexPrefix',
@@ -81,11 +90,11 @@ class IndexNameResolverTest extends \PHPUnit\Framework\TestCase
             ])
             ->getMock();
 
-        $this->logger = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+        $this->logger = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
-        $elasticsearchClientMock = $this->getMockBuilder(\Elasticsearch\Client::class)
+        $elasticsearchClientMock = $this->getMockBuilder(Client::class)
             ->setMethods([
                 'indices',
                 'ping',
@@ -96,7 +105,7 @@ class IndexNameResolverTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $indicesMock = $this->getMockBuilder(\Elasticsearch\Namespaces\IndicesNamespace::class)
+        $indicesMock = $this->getMockBuilder(IndicesNamespace::class)
             ->setMethods([
                 'exists',
                 'getSettings',
@@ -112,7 +121,7 @@ class IndexNameResolverTest extends \PHPUnit\Framework\TestCase
         $elasticsearchClientMock->expects($this->any())
             ->method('indices')
             ->willReturn($indicesMock);
-        $this->client = $this->getMockBuilder(\Magento\Elasticsearch\Elasticsearch5\Model\Client\Elasticsearch::class)
+        $this->client = $this->getMockBuilder(Elasticsearch::class)
             ->setConstructorArgs([
                 'options' => $this->getClientOptions(),
                 'elasticsearchClient' => $elasticsearchClientMock
@@ -134,7 +143,7 @@ class IndexNameResolverTest extends \PHPUnit\Framework\TestCase
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
-            \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver::class,
+            IndexNameResolver::class,
             [
                 'connectionManager' => $this->connectionManager,
                 'clientConfig' => $this->clientConfig,
@@ -225,12 +234,11 @@ class IndexNameResolverTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
     public function testConnectException()
     {
-        $connectionManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
+        $this->expectException(LocalizedException::class);
+
+        $connectionManager = $this->getMockBuilder(ConnectionManager::class)
             ->disableOriginalConstructor()
             ->setMethods([
                 'getConnection',
@@ -242,7 +250,7 @@ class IndexNameResolverTest extends \PHPUnit\Framework\TestCase
             ->willThrowException(new \Exception('Something went wrong'));
 
         $this->objectManager->getObject(
-            \Magento\Elasticsearch\Model\Adapter\Index\IndexNameResolver::class,
+            IndexNameResolver::class,
             [
                 'connectionManager' => $connectionManager,
                 'clientConfig' => $this->clientConfig,

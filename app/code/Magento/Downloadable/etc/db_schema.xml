@@ -8,15 +8,15 @@
 <schema xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="downloadable_link" resource="default" engine="innodb" comment="Downloadable Link Table">
-        <column xsi:type="int" name="link_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="link_id" unsigned="true" nullable="false" identity="true"
                 comment="Link ID"/>
-        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Product ID"/>
-        <column xsi:type="int" name="sort_order" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="sort_order" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Sort order"/>
-        <column xsi:type="int" name="number_of_downloads" padding="11" unsigned="false" nullable="true" identity="false"
+        <column xsi:type="int" name="number_of_downloads" unsigned="false" nullable="true" identity="false"
                 comment="Number of downloads"/>
-        <column xsi:type="smallint" name="is_shareable" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="is_shareable" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Shareable flag"/>
         <column xsi:type="varchar" name="link_url" nullable="true" length="255" comment="Link Url"/>
         <column xsi:type="varchar" name="link_file" nullable="true" length="255" comment="Link File"/>
@@ -36,11 +36,11 @@
         </index>
     </table>
     <table name="downloadable_link_price" resource="default" engine="innodb" comment="Downloadable Link Price Table">
-        <column xsi:type="int" name="price_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="price_id" unsigned="true" nullable="false" identity="true"
                 comment="Price ID"/>
-        <column xsi:type="int" name="link_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"
+        <column xsi:type="int" name="link_id" unsigned="true" nullable="false" identity="false" default="0"
                 comment="Link ID"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Website ID"/>
         <column xsi:type="decimal" name="price" scale="6" precision="20" unsigned="false" nullable="false" default="0"
                 comment="Price"/>
@@ -62,18 +62,18 @@
     </table>
     <table name="downloadable_link_purchased" resource="default" engine="innodb"
            comment="Downloadable Link Purchased Table">
-        <column xsi:type="int" name="purchased_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="purchased_id" unsigned="true" nullable="false" identity="true"
                 comment="Purchased ID"/>
-        <column xsi:type="int" name="order_id" padding="10" unsigned="true" nullable="true" identity="false" default="0"
+        <column xsi:type="int" name="order_id" unsigned="true" nullable="true" identity="false" default="0"
                 comment="Order ID"/>
         <column xsi:type="varchar" name="order_increment_id" nullable="true" length="50" comment="Order Increment ID"/>
-        <column xsi:type="int" name="order_item_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="order_item_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Order Item ID"/>
         <column xsi:type="timestamp" name="created_at" on_update="false" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Date of creation"/>
         <column xsi:type="timestamp" name="updated_at" on_update="true" nullable="false" default="CURRENT_TIMESTAMP"
                 comment="Date of modification"/>
-        <column xsi:type="int" name="customer_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="customer_id" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Customer ID"/>
         <column xsi:type="varchar" name="product_name" nullable="true" length="255" comment="Product name"/>
         <column xsi:type="varchar" name="product_sku" nullable="true" length="255" comment="Product sku"/>
@@ -99,23 +99,23 @@
     </table>
     <table name="downloadable_link_purchased_item" resource="default" engine="innodb"
            comment="Downloadable Link Purchased Item Table">
-        <column xsi:type="int" name="item_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="item_id" unsigned="true" nullable="false" identity="true"
                 comment="Item ID"/>
-        <column xsi:type="int" name="purchased_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="purchased_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Purchased ID"/>
-        <column xsi:type="int" name="order_item_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="order_item_id" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Order Item ID"/>
-        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="true" identity="false"
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="true" identity="false"
                 default="0" comment="Product ID"/>
         <column xsi:type="varchar" name="link_hash" nullable="true" length="255" comment="Link hash"/>
-        <column xsi:type="int" name="number_of_downloads_bought" padding="10" unsigned="true" nullable="false"
+        <column xsi:type="int" name="number_of_downloads_bought" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Number of downloads bought"/>
-        <column xsi:type="int" name="number_of_downloads_used" padding="10" unsigned="true" nullable="false"
+        <column xsi:type="int" name="number_of_downloads_used" unsigned="true" nullable="false"
                 identity="false" default="0" comment="Number of downloads used"/>
-        <column xsi:type="int" name="link_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"
+        <column xsi:type="int" name="link_id" unsigned="true" nullable="false" identity="false" default="0"
                 comment="Link ID"/>
         <column xsi:type="varchar" name="link_title" nullable="true" length="255" comment="Link Title"/>
-        <column xsi:type="smallint" name="is_shareable" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="is_shareable" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Shareable Flag"/>
         <column xsi:type="varchar" name="link_url" nullable="true" length="255" comment="Link Url"/>
         <column xsi:type="varchar" name="link_file" nullable="true" length="255" comment="Link File"/>
@@ -145,11 +145,11 @@
         </index>
     </table>
     <table name="downloadable_link_title" resource="default" engine="innodb" comment="Link Title Table">
-        <column xsi:type="int" name="title_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="title_id" unsigned="true" nullable="false" identity="true"
                 comment="Title ID"/>
-        <column xsi:type="int" name="link_id" padding="10" unsigned="true" nullable="false" identity="false" default="0"
+        <column xsi:type="int" name="link_id" unsigned="true" nullable="false" identity="false" default="0"
                 comment="Link ID"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Store ID"/>
         <column xsi:type="varchar" name="title" nullable="true" length="255" comment="Title"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -170,14 +170,14 @@
         </index>
     </table>
     <table name="downloadable_sample" resource="default" engine="innodb" comment="Downloadable Sample Table">
-        <column xsi:type="int" name="sample_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="sample_id" unsigned="true" nullable="false" identity="true"
                 comment="Sample ID"/>
-        <column xsi:type="int" name="product_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="product_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Product ID"/>
         <column xsi:type="varchar" name="sample_url" nullable="true" length="255" comment="Sample URL"/>
         <column xsi:type="varchar" name="sample_file" nullable="true" length="255" comment="Sample file"/>
         <column xsi:type="varchar" name="sample_type" nullable="true" length="20" comment="Sample Type"/>
-        <column xsi:type="int" name="sort_order" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="sort_order" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Sort Order"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
             <column name="sample_id"/>
@@ -191,11 +191,11 @@
     </table>
     <table name="downloadable_sample_title" resource="default" engine="innodb"
            comment="Downloadable Sample Title Table">
-        <column xsi:type="int" name="title_id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="title_id" unsigned="true" nullable="false" identity="true"
                 comment="Title ID"/>
-        <column xsi:type="int" name="sample_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="sample_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Sample ID"/>
-        <column xsi:type="smallint" name="store_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="store_id" unsigned="true" nullable="false" identity="false"
                 default="0" comment="Store ID"/>
         <column xsi:type="varchar" name="title" nullable="true" length="255" comment="Title"/>
         <constraint xsi:type="primary" referenceId="PRIMARY">
@@ -217,11 +217,11 @@
     </table>
     <table name="catalog_product_index_price_downlod_idx" resource="default" engine="innodb"
            comment="Indexer Table for price of downloadable products">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
-        <column xsi:type="int" name="customer_group_id" padding="11" unsigned="false" nullable="false"
+        <column xsi:type="int" name="customer_group_id" unsigned="false" nullable="false"
                 identity="false"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 comment="Website ID"/>
         <column xsi:type="decimal" name="min_price" scale="6" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Minimum price"/>
@@ -235,11 +235,11 @@
     </table>
     <table name="catalog_product_index_price_downlod_tmp" resource="default" engine="innodb"
            comment="Temporary Indexer Table for price of downloadable products">
-        <column xsi:type="int" name="entity_id" padding="10" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="int" name="entity_id" unsigned="true" nullable="false" identity="false"
                 comment="Entity ID"/>
-        <column xsi:type="int" name="customer_group_id" padding="11" unsigned="false" nullable="false"
+        <column xsi:type="int" name="customer_group_id" unsigned="false" nullable="false"
                 identity="false"/>
-        <column xsi:type="smallint" name="website_id" padding="5" unsigned="true" nullable="false" identity="false"
+        <column xsi:type="smallint" name="website_id" unsigned="true" nullable="false" identity="false"
                 comment="Website ID"/>
         <column xsi:type="decimal" name="min_price" scale="6" precision="20" unsigned="false" nullable="false"
                 default="0" comment="Minimum price"/>

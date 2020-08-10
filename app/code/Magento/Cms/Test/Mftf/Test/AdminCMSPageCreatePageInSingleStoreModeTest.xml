@@ -22,7 +22,7 @@
         </annotations>
         <before>
             <magentoCLI command="config:set {{StorefrontSingleStoreModeEnabledConfigData.path}} {{StorefrontSingleStoreModeEnabledConfigData.value}}" stepKey="enableSingleStoreMode" />
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <magentoCLI command="config:set {{StorefrontSingleStoreModeDisabledConfigData.path}} {{StorefrontSingleStoreModeDisabledConfigData.value}}" stepKey="disableSingleStoreMode" />

@@ -17,12 +17,12 @@
             <testCaseId value="MAGETWO-89910"/>
             <group value="product"/>
         </annotations>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminProductCreatePage.url(SimpleProduct.visibility, SimpleProduct.type_id)}}" stepKey="goToCreateProduct"/>
         <waitForPageLoad stepKey="wait1"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="fillName"/>
         <fillField selector="{{AdminProductFormSection.productPrice}}" userInput="0" stepKey="fillPrice"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSave"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSave"/>
         <amOnPage url="{{StorefrontProductPage.url(SimpleProduct.name)}}" stepKey="viewProduct"/>
         <waitForPageLoad stepKey="wait2"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$0.00" stepKey="seeZeroPrice"/>

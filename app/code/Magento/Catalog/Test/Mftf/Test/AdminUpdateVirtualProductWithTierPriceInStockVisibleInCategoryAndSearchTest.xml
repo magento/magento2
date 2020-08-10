@@ -25,10 +25,8 @@
                 <requiredEntity createDataKey="initialCategoryEntity"/>
             </createData>
             <createData entity="SimpleSubCategory" stepKey="categoryEntity"/>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
-
-            <!-- TODO: Replace this with CliRunReindexUsingCronJobsActionGroup after MC-29943 delivered-->
-            <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext catalog_category_product" stepKey="reindexIndices"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <magentoCron groups="index" stepKey="RunToScheduleJobs"/>
         </before>
 
         <after>
@@ -99,7 +97,7 @@
             <actualResult type="variable">selectedCategories</actualResult>
             <expectedResult type="array">[$categoryEntity.name$]</expectedResult>
         </assertEquals>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneOnCategorySelect"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneOnCategorySelect"/>
         <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="{{updateVirtualProductTierPriceInStock.visibility}}" stepKey="seeVisibility"/>
 
         <conditionalClick selector="{{AdminProductSEOSection.sectionHeader}}" dependentSelector="{{AdminProductSEOSection.useDefaultUrl}}" visible="false" stepKey="openSearchEngineOptimizationSection"/>
@@ -110,8 +108,8 @@
         <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="openCategoryPageOnFrontend">
             <argument name="category" value="$categoryEntity$"/>
         </actionGroup>
-        <actionGroup ref="AssertProductOnCategoryPageActionGroup" stepKey="checkProductOnCategoryPage">
-            <argument name="product" value="updateVirtualProductTierPriceInStock"/>
+        <actionGroup ref="AssertStorefrontProductIsPresentOnCategoryPageActionGroup" stepKey="checkProductOnCategoryPage">
+            <argument name="productName" value="{{updateVirtualProductTierPriceInStock.name}}"/>
         </actionGroup>
 
         <!--Verify customer see updated virtual product with tier price on product storefront page -->

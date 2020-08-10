@@ -32,7 +32,7 @@ class MsrpPriceCalculatorTest extends TestCase
     /**
      * Prepare environment to test
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->msrpGroupedCalculatorMock = $this->createMock(MsrpGroupedCalculator::class);
@@ -95,7 +95,11 @@ class MsrpPriceCalculatorTest extends TestCase
      */
     private function createProductMock($typeId, $msrp)
     {
-        $productMock = $this->createPartialMock(Product::class, ['getTypeId', 'getMsrp']);
+        $productMock = $this->getMockBuilder(Product::class)
+            ->addMethods(['getMsrp'])
+            ->onlyMethods(['getTypeId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $productMock->expects($this->any())->method('getTypeId')->willReturn($typeId);
         $productMock->expects($this->any())->method('getMsrp')->willReturn($msrp);
         return $productMock;

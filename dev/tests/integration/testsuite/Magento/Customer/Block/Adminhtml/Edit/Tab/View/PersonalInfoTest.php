@@ -48,7 +48,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
      */
     protected $dateTime;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -85,7 +85,7 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->_coreRegistry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
         /** @var \Magento\Customer\Model\CustomerRegistry $customerRegistry */
@@ -239,9 +239,9 @@ class PersonalInfoTest extends \PHPUnit\Framework\TestCase
     {
         $this->_loadCustomer();
         $html = $this->_block->getBillingAddressHtml();
-        $this->assertContains('John Smith<br />', $html);
-        $this->assertContains('Green str, 67<br />', $html);
-        $this->assertContains('CityM,  Alabama, 75477<br />', $html);
+        $this->assertStringContainsString('John Smith<br />', $html);
+        $this->assertStringContainsString('Green str, 67<br />', $html);
+        $this->assertStringContainsString('CityM,  Alabama, 75477<br />', $html);
     }
 
     public function testGetBillingAddressHtmlNoDefaultAddress()

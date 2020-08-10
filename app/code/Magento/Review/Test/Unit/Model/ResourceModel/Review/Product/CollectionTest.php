@@ -3,97 +3,97 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Test\Unit\Model\ResourceModel\Review\Product;
 
+use Magento\Catalog\Model\ResourceModel\Product;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
+use Magento\Eav\Model\Config;
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Framework\Data\Collection\Db\FetchStrategy\Query;
+use Magento\Framework\DB\Adapter\Pdo\Mysql;
+use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Validator\UniversalFactory;
+use Magento\Review\Model\ResourceModel\Review\Product\Collection;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     private $objectManager;
 
     /**
-     * @var \Magento\Review\Model\ResourceModel\Review\Product\Collection
+     * @var Collection
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $connectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $dbSelect;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->markTestSkipped('MAGETWO-59234: Code under the test depends on a virtual type which cannot be mocked.');
 
-        $attribute = $this->getMock(\Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class, null, [], '', false);
-        $eavConfig = $this->getMock(\Magento\Eav\Model\Config::class, ['getAttribute'], [], '', false);
-        $eavConfig->expects($this->any())->method('getAttribute')->will($this->returnValue($attribute));
-        $this->dbSelect = $this->getMock(\Magento\Framework\DB\Select::class, ['where', 'from', 'join'], [], '', false);
-        $this->dbSelect->expects($this->any())->method('from')->will($this->returnSelf());
-        $this->dbSelect->expects($this->any())->method('join')->will($this->returnSelf());
-        $this->connectionMock = $this->getMock(
-            \Magento\Framework\DB\Adapter\Pdo\Mysql::class,
-            ['prepareSqlCondition', 'select', 'quoteInto'],
-            [],
-            '',
-            false
+        $attribute = $this->createMock(AbstractAttribute::class);
+        $eavConfig = $this->createMock(Config::class);
+        $eavConfig->expects($this->any())->method('getAttribute')->willReturn($attribute);
+        $this->dbSelect = $this->createMock(Select::class);
+        $this->dbSelect->expects($this->any())->method('from')->willReturnSelf();
+        $this->dbSelect->expects($this->any())->method('join')->willReturnSelf();
+        $this->connectionMock = $this->createMock(
+            Mysql::class
         );
-        $this->connectionMock->expects($this->once())->method('select')->will($this->returnValue($this->dbSelect));
-        $entity = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product::class,
-            ['getConnection', 'getTable', 'getDefaultAttributes', 'getEntityTable', 'getEntityType', 'getType'],
-            [],
-            '',
-            false
+        $this->connectionMock->expects($this->once())->method('select')->willReturn($this->dbSelect);
+        $entity = $this->createMock(
+            Product::class
         );
-        $entity->expects($this->once())->method('getConnection')->will($this->returnValue($this->connectionMock));
-        $entity->expects($this->any())->method('getTable')->will($this->returnValue('table'));
-        $entity->expects($this->any())->method('getEntityTable')->will($this->returnValue('table'));
-        $entity->expects($this->any())->method('getDefaultAttributes')->will($this->returnValue([1 => 1]));
-        $entity->expects($this->any())->method('getType')->will($this->returnValue('type'));
-        $entity->expects($this->any())->method('getEntityType')->will($this->returnValue('type'));
-        $universalFactory = $this->getMock(
-            \Magento\Framework\Validator\UniversalFactory::class,
-            ['create'],
-            [],
-            '',
-            false
+        $entity->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
+        $entity->expects($this->any())->method('getTable')->willReturn('table');
+        $entity->expects($this->any())->method('getEntityTable')->willReturn('table');
+        $entity->expects($this->any())->method('getDefaultAttributes')->willReturn([1 => 1]);
+        $entity->expects($this->any())->method('getType')->willReturn('type');
+        $entity->expects($this->any())->method('getEntityType')->willReturn('type');
+        $universalFactory = $this->createMock(
+            UniversalFactory::class
         );
-        $universalFactory->expects($this->any())->method('create')->will($this->returnValue($entity));
-        $store = $this->getMock(\Magento\Store\Model\Store::class, ['getId'], [], '', false);
-        $store->expects($this->any())->method('getId')->will($this->returnValue(1));
-        $storeManager = $this->getMock(\Magento\Store\Model\StoreManagerInterface::class);
-        $storeManager->expects($this->any())->method('getStore')->will($this->returnValue($store));
-        $fetchStrategy = $this->getMock(
-            \Magento\Framework\Data\Collection\Db\FetchStrategy\Query::class,
-            ['fetchAll'],
-            [],
-            '',
-            false
+        $universalFactory->expects($this->any())->method('create')->willReturn($entity);
+        $store = $this->createMock(Store::class);
+        $store->expects($this->any())->method('getId')->willReturn(1);
+        $storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
+        $storeManager->expects($this->any())->method('getStore')->willReturn($store);
+        $fetchStrategy = $this->createMock(
+            Query::class
         );
-        $fetchStrategy->expects($this->any())->method('fetchAll')->will($this->returnValue([]));
-        $productLimitationMock = $this->getMock(
-            \Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation::class
+        $fetchStrategy->expects($this->any())->method('fetchAll')->willReturn([]);
+        $productLimitationMock = $this->createMock(
+            ProductLimitation::class
         );
         $productLimitationFactoryMock = $this->getMockBuilder(ProductLimitationFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $productLimitationFactoryMock->method('create')
             ->willReturn($productLimitationMock);
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $this->objectManager = new ObjectManager($this);
         $this->model = $this->objectManager->getObject(
-            \Magento\Review\Model\ResourceModel\Review\Product\Collection::class,
+            Collection::class,
             [
                 'universalFactory' => $universalFactory,
                 'storeManager' => $storeManager,
@@ -116,12 +116,11 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->once())
             ->method('prepareSqlCondition')
             ->with($attribute, $condition)
-            ->will($this->returnValue($conditionSqlQuery));
+            ->willReturn($conditionSqlQuery);
         $this->dbSelect
             ->expects($this->once())
             ->method('where')
-            ->with($conditionSqlQuery)
-            ->will($this->returnSelf());
+            ->with($conditionSqlQuery)->willReturnSelf();
         $this->model->addAttributeToFilter($attribute, $condition);
     }
 
@@ -148,7 +147,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->at(0))
             ->method('quoteInto')
             ->with('rt.review_id=store.review_id AND store.store_id = ?', $storeId)
-            ->will($this->returnValue('sqlQuery'));
+            ->willReturn('sqlQuery');
         $this->model->addAttributeToFilter('stores', ['eq' => $storeId]);
         $this->model->load();
     }
@@ -171,13 +170,13 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->expects($this->at(0))
             ->method('prepareSqlCondition')
             ->with('rdt.customer_id', $sqlConditionWith)
-            ->will($this->returnValue($conditionSqlQuery));
+            ->willReturn($conditionSqlQuery);
         if ($sqlConditionWithSec) {
             $this->connectionMock
                 ->expects($this->at(1))
                 ->method('prepareSqlCondition')
                 ->with('rdt.store_id', $sqlConditionWithSec)
-                ->will($this->returnValue($conditionSqlQuery));
+                ->willReturn($conditionSqlQuery);
         }
         $conditionSqlQuery = $doubleConditionSqlQuery
             ? $conditionSqlQuery . ' AND ' . $conditionSqlQuery
@@ -185,8 +184,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
         $this->dbSelect
             ->expects($this->once())
             ->method('where')
-            ->with($conditionSqlQuery)
-            ->will($this->returnSelf());
+            ->with($conditionSqlQuery)->willReturnSelf();
         $this->model->addAttributeToFilter('type', $condition);
     }
 
@@ -196,7 +194,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     public function addAttributeToFilterWithAttributeTypeDataProvider()
     {
         $exprNull = new \Zend_Db_Expr('NULL');
-        $defaultStore = \Magento\Store\Model\Store::DEFAULT_STORE_ID;
+        $defaultStore = Store::DEFAULT_STORE_ID;
         return [
             [1, ['is' => $exprNull], ['eq' => $defaultStore], true],
             [2, ['gt' => 0], null, false],

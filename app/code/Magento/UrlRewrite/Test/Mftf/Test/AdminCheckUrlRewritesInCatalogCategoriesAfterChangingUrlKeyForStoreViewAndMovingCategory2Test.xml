@@ -31,11 +31,13 @@
             </createData>
 
             <!-- Log in to backend -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create additional Store View in Main Website Store -->
             <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindexAll"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAll">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
 
         <after>

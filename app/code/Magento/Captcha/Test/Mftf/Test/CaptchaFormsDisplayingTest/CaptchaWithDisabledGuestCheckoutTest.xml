@@ -24,6 +24,7 @@
             <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <magentoCLI command="config:set checkout/options/guest_checkout 1" stepKey="enableGuestCheckout"/>
@@ -33,11 +34,9 @@
         </after>
         <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.sku$$)}}" stepKey="openProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="addToCart"/>
-        <waitForPageLoad stepKey="waitForAddToCart"/>
-        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
         <waitForText userInput="You added $$createSimpleProduct.name$$ to your shopping cart." stepKey="waitForText"/>
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickCart"/>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
         <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.email}}" stepKey="waitEmailFieldVisible"/>
         <fillField selector="{{StorefrontCustomerSignInPopupFormSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillCustomerEmail"/>
@@ -49,7 +48,7 @@
         <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.captchaReload}}" stepKey="seeCaptchaReloadButton"/>
         <reloadPage stepKey="refreshPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickCart2"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickCart2"/>
         <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout2"/>
         <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.email}}" stepKey="waitEmailFieldVisible2"/>
         <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.captchaField}}" stepKey="seeCaptchaField2"/>

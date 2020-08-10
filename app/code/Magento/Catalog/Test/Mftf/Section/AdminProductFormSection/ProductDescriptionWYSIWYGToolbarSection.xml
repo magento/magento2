@@ -8,7 +8,7 @@
 <sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
 	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="ProductDescriptionWYSIWYGToolbarSection">
-        <element name="TinyMCE4" type="button" selector="//div[@id='editorproduct_form_description']//*[contains(@class,'mce-branding')]"/>
+        <element name="TinyMCE4" type="button" selector="div#editorproduct_form_description .mce-branding"/>
         <element name="showHideBtn" type="button" selector="#toggleproduct_form_description"/>
         <element name="InsertImageBtn" type="button" selector="#buttonsproduct_form_description &gt; .scalable.action-add-image.plugin"/>
         <element name="Style" type="button" selector="//div[@id='editorproduct_form_description']//span[text()='Paragraph']"/>

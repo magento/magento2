@@ -3,73 +3,74 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AdvancedPricing;
-use Magento\Store\Model\StoreManagerInterface;
 use Magento\Customer\Api\Data\GroupInterface as CustomerGroupInterface;
 use Magento\Customer\Api\GroupManagementInterface;
 use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Directory\Helper\Data as DirectoryHelper;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Module\Manager as ModuleManager;
-use Magento\Directory\Helper\Data as DirectoryHelper;
-use Magento\Catalog\Model\ResourceModel\Product as ProductResource;
-use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class AdvancedPricingTest
- *
  * @method AdvancedPricing getModel
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdvancedPricingTest extends AbstractModifierTest
 {
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var GroupRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupRepositoryInterface|MockObject
      */
     protected $groupRepositoryMock;
 
     /**
-     * @var GroupManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var GroupManagementInterface|MockObject
      */
     protected $groupManagementMock;
 
     /**
-     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaBuilder|MockObject
      */
     protected $searchCriteriaBuilderMock;
 
     /**
-     * @var ModuleManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ModuleManager|MockObject
      */
     protected $moduleManagerMock;
 
     /**
-     * @var DirectoryHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var DirectoryHelper|MockObject
      */
     protected $directoryHelperMock;
 
     /**
-     * @var ProductResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductResource|MockObject
      */
     protected $productResourceMock;
 
     /**
-     * @var Attribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var Attribute|MockObject
      */
     protected $attributeMock;
 
     /**
-     * @var CustomerGroupInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerGroupInterface|MockObject
      */
     protected $customerGroupMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
@@ -109,13 +110,13 @@ class AdvancedPricingTest extends AbstractModifierTest
         return $this->objectManager->getObject(
             AdvancedPricing::class,
             [
-            'locator' => $this->locatorMock,
-            'storeManager' => $this->storeManagerMock,
-            'groupRepository' => $this->groupRepositoryMock,
-            'groupManagement' => $this->groupManagementMock,
-            'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
-            'moduleManager' => $this->moduleManagerMock,
-            'directoryHelper' => $this->directoryHelperMock
+                'locator' => $this->locatorMock,
+                'storeManager' => $this->storeManagerMock,
+                'groupRepository' => $this->groupRepositoryMock,
+                'groupManagement' => $this->groupManagementMock,
+                'searchCriteriaBuilder' => $this->searchCriteriaBuilderMock,
+                'moduleManager' => $this->moduleManagerMock,
+                'directoryHelper' => $this->directoryHelperMock
             ]
         );
     }

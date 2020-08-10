@@ -13,6 +13,7 @@
             <stories value="Menu Navigation"/>
             <title value="Admin system index management grid change test"/>
             <description value="Verify changes in 'Schedule column' on system index management"/>
+            <severity value="CRITICAL"/>
         </annotations>
         <before>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
@@ -22,16 +23,24 @@
 
             <!--Open Index Management Page and Select Index mode "Update by Schedule" -->
             <magentoCLI command="indexer:set-mode" arguments="schedule" stepKey="setIndexerModeSchedule"/>
-            <magentoCLI command="indexer:reindex" stepKey="indexerReindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/></before>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="indexerReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/></before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <magentoCLI command="indexer:set-mode" arguments="realtime" stepKey="setIndexerModeRealTime"/>
-            <magentoCLI command="indexer:reindex" stepKey="indexerReindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="indexerReindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToIndexManagementPageFirst">

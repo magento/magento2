@@ -3,30 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Locale\Test\Unit;
 
+use Magento\Framework\CurrencyFactory;
+use Magento\Framework\Event\Manager;
 use Magento\Framework\Locale\Currency;
+use Magento\Framework\Locale\Resolver;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class CurrencyTest extends \PHPUnit\Framework\TestCase
+class CurrencyTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Event\Manager | \PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|MockObject
      */
     private $mockEventManager;
 
     /**
-     * @var \Magento\Framework\Locale\Resolver | \PHPUnit_Framework_MockObject_MockObject
+     * @var Resolver|MockObject
      */
     private $mockLocaleResolver;
 
     /**
-     * @var \Magento\Framework\CurrencyFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var CurrencyFactory|MockObject
      */
     private $mockCurrencyFactory;
 
     /**
-     * @var \Magento\Framework\Locale\Currency
+     * @var Currency
      */
     private $testCurrencyObject;
 
@@ -34,29 +41,29 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
     const TEST_NONCACHED_CURRENCY_LOCALE = 'en_US';
     const TEST_CACHED_CURRENCY = 'CAD';
     const TEST_CACHED_CURRENCY_LOCALE = 'en_CA';
-    const TEST_NONEXISTANT_CURRENCY = 'QQQ';
-    const TEST_NONEXISTANT_CURRENCY_LOCALE = 'fr_FR';
+    const TEST_NONEXISTENT_CURRENCY = 'QQQ';
+    const TEST_NONEXISTENT_CURRENCY_LOCALE = 'fr_FR';
     const TEST_EXCEPTION_CURRENCY = 'ZZZ';
     const TEST_EXCEPTION_CURRENCY_LOCALE = 'es_ES';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->mockEventManager = $this
-            ->getMockBuilder(\Magento\Framework\Event\Manager::class)
+            ->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockLocaleResolver = $this
-            ->getMockBuilder(\Magento\Framework\Locale\Resolver::class)
+            ->getMockBuilder(Resolver::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->mockCurrencyFactory = $this
-            ->getMockBuilder(\Magento\Framework\CurrencyFactory::class)
+            ->getMockBuilder(CurrencyFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->testCurrencyObject = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
+        $this->testCurrencyObject = (new ObjectManager($this))
             ->getObject(
-                \Magento\Framework\Locale\Currency::class,
+                Currency::class,
                 [
                     'eventManager'     => $this->mockEventManager,
                     'localeResolver'   => $this->mockLocaleResolver,
@@ -79,7 +86,7 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
         $this->mockCurrencyFactory
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($options));
+            ->willReturn($options);
 
         $this->mockEventManager
             ->expects($this->once())
@@ -101,7 +108,7 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
         $this->mockCurrencyFactory
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($options));
+            ->willReturn($options);
 
         $this->mockEventManager
             ->expects($this->once())
@@ -124,7 +131,7 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
         $this->mockCurrencyFactory
             ->expects($this->never())
             ->method('create')
-            ->will($this->returnValue($options));
+            ->willReturn($options);
 
         $this->mockEventManager
             ->expects($this->never())
@@ -139,14 +146,14 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals([self::TEST_CACHED_CURRENCY], $retrievedCurrencyObject->getCurrencyList());
     }
 
-    public function testGetNonExistantCurrency()
+    public function testGetNonExistentCurrency()
     {
-        $options = new \Zend_Currency(null, self::TEST_NONEXISTANT_CURRENCY_LOCALE);
+        $options = new \Zend_Currency(null, self::TEST_NONEXISTENT_CURRENCY_LOCALE);
 
         $this->mockCurrencyFactory
             ->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($options));
+            ->willReturn($options);
 
         $this->mockEventManager
             ->expects($this->once())
@@ -157,10 +164,10 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
             ->method('dispatch');
 
         $retrievedCurrencyObject = $this->testCurrencyObject
-            ->getCurrency(self::TEST_NONEXISTANT_CURRENCY);
+            ->getCurrency(self::TEST_NONEXISTENT_CURRENCY);
 
         $this->assertInstanceOf('Zend_Currency', $retrievedCurrencyObject);
-        $this->assertEquals(self::TEST_NONEXISTANT_CURRENCY_LOCALE, $retrievedCurrencyObject->getLocale());
+        $this->assertEquals(self::TEST_NONEXISTENT_CURRENCY_LOCALE, $retrievedCurrencyObject->getLocale());
         $this->assertEquals('euro', $retrievedCurrencyObject->getName());
         $this->assertEquals(['EUR'], $retrievedCurrencyObject->getCurrencyList());
     }
@@ -172,12 +179,12 @@ class CurrencyTest extends \PHPUnit\Framework\TestCase
         $this->mockCurrencyFactory
             ->expects($this->at(0))
             ->method('create')
-            ->will($this->throwException(new \Exception()));
+            ->willThrowException(new \Exception());
 
         $this->mockCurrencyFactory
             ->expects($this->at(1))
             ->method('create')
-            ->will($this->returnValue($options));
+            ->willReturn($options);
 
         $this->mockEventManager
             ->expects($this->once())

@@ -26,11 +26,11 @@
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProductWithOptions"/>
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductFilter"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <!-- Edit Simple Product -->
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct">
             <argument name="productId" value="$$createProduct.id$$"/>

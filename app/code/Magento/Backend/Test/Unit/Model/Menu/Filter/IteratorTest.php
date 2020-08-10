@@ -3,50 +3,56 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Backend\Test\Unit\Model\Menu\Filter;
 
+use Magento\Backend\Model\Menu;
+use Magento\Backend\Model\Menu\Filter\Iterator;
+use Magento\Backend\Model\Menu\Item;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class IteratorTest extends \PHPUnit\Framework\TestCase
+class IteratorTest extends TestCase
 {
     /**
-     * @var \Magento\Backend\Model\Menu
+     * @var Menu
      */
     private $menuModel;
 
     /**
-     * @var \Magento\Backend\Model\Menu\Item[]
+     * @var Item[]
      */
     private $items = [];
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->items['item1'] = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
-        $this->items['item1']->expects($this->any())->method('getId')->will($this->returnValue('item1'));
-        $this->items['item1']->expects($this->any())->method('isDisabled')->will($this->returnValue(false));
-        $this->items['item1']->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
+        $this->items['item1'] = $this->createMock(Item::class);
+        $this->items['item1']->expects($this->any())->method('getId')->willReturn('item1');
+        $this->items['item1']->expects($this->any())->method('isDisabled')->willReturn(false);
+        $this->items['item1']->expects($this->any())->method('isAllowed')->willReturn(true);
 
-        $this->items['item2'] = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
-        $this->items['item2']->expects($this->any())->method('getId')->will($this->returnValue('item2'));
-        $this->items['item2']->expects($this->any())->method('isDisabled')->will($this->returnValue(true));
-        $this->items['item2']->expects($this->any())->method('isAllowed')->will($this->returnValue(true));
+        $this->items['item2'] = $this->createMock(Item::class);
+        $this->items['item2']->expects($this->any())->method('getId')->willReturn('item2');
+        $this->items['item2']->expects($this->any())->method('isDisabled')->willReturn(true);
+        $this->items['item2']->expects($this->any())->method('isAllowed')->willReturn(true);
 
-        $this->items['item3'] = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
-        $this->items['item3']->expects($this->any())->method('getId')->will($this->returnValue('item3'));
-        $this->items['item3']->expects($this->any())->method('isDisabled')->will($this->returnValue(false));
-        $this->items['item3']->expects($this->any())->method('isAllowed')->will($this->returnValue(false));
+        $this->items['item3'] = $this->createMock(Item::class);
+        $this->items['item3']->expects($this->any())->method('getId')->willReturn('item3');
+        $this->items['item3']->expects($this->any())->method('isDisabled')->willReturn(false);
+        $this->items['item3']->expects($this->any())->method('isAllowed')->willReturn(false);
 
-        $this->menuModel = (new ObjectManager($this))->getObject(\Magento\Backend\Model\Menu::class);
+        $this->menuModel = (new ObjectManager($this))->getObject(Menu::class);
     }
 
     public function testLoopWithAllItemsDisabledDoesntIterate()
     {
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
-        $filterIteratorModel = new \Magento\Backend\Model\Menu\Filter\Iterator(
+        $this->menuModel->add($this->createMock(Item::class));
+        $this->menuModel->add($this->createMock(Item::class));
+        $this->menuModel->add($this->createMock(Item::class));
+        $this->menuModel->add($this->createMock(Item::class));
+        $this->menuModel->add($this->createMock(Item::class));
+        $filterIteratorModel = new Iterator(
             $this->menuModel->getIterator()
         );
 
@@ -59,14 +65,14 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
 
     public function testLoopIteratesOnlyValidItems()
     {
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
+        $this->menuModel->add($this->createMock(Item::class));
+        $this->menuModel->add($this->createMock(Item::class));
 
         $this->menuModel->add($this->items['item1']);
 
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
-        $filterIteratorModel = new \Magento\Backend\Model\Menu\Filter\Iterator(
+        $this->menuModel->add($this->createMock(Item::class));
+        $this->menuModel->add($this->createMock(Item::class));
+        $filterIteratorModel = new Iterator(
             $this->menuModel->getIterator()
         );
 
@@ -79,15 +85,15 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
 
     public function testLoopIteratesDosntIterateDisabledItems()
     {
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
+        $this->menuModel->add($this->createMock(Item::class));
+        $this->menuModel->add($this->createMock(Item::class));
 
         $this->menuModel->add($this->items['item1']);
         $this->menuModel->add($this->items['item2']);
 
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
-        $filterIteratorModel = new \Magento\Backend\Model\Menu\Filter\Iterator(
+        $this->menuModel->add($this->createMock(Item::class));
+        $this->menuModel->add($this->createMock(Item::class));
+        $filterIteratorModel = new Iterator(
             $this->menuModel->getIterator()
         );
 
@@ -100,15 +106,15 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
 
     public function testLoopIteratesDosntIterateNotAllowedItems()
     {
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
+        $this->menuModel->add($this->createMock(Item::class));
+        $this->menuModel->add($this->createMock(Item::class));
 
         $this->menuModel->add($this->items['item1']);
         $this->menuModel->add($this->items['item3']);
 
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
-        $filterIteratorModel = new \Magento\Backend\Model\Menu\Filter\Iterator(
+        $this->menuModel->add($this->createMock(Item::class));
+        $this->menuModel->add($this->createMock(Item::class));
+        $filterIteratorModel = new Iterator(
             $this->menuModel->getIterator()
         );
 
@@ -121,16 +127,16 @@ class IteratorTest extends \PHPUnit\Framework\TestCase
 
     public function testLoopIteratesMixedItems()
     {
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
+        $this->menuModel->add($this->createMock(Item::class));
+        $this->menuModel->add($this->createMock(Item::class));
 
         $this->menuModel->add($this->items['item1']);
         $this->menuModel->add($this->items['item2']);
         $this->menuModel->add($this->items['item3']);
 
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
-        $this->menuModel->add($this->createMock(\Magento\Backend\Model\Menu\Item::class));
-        $filterIteratorModel = new \Magento\Backend\Model\Menu\Filter\Iterator(
+        $this->menuModel->add($this->createMock(Item::class));
+        $this->menuModel->add($this->createMock(Item::class));
+        $filterIteratorModel = new Iterator(
             $this->menuModel->getIterator()
         );
 

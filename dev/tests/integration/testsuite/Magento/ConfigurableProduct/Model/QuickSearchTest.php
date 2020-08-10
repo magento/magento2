@@ -44,7 +44,7 @@ class QuickSearchTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->quickSearchByQuery = $this->objectManager->get(QuickSearchByQuery::class);
@@ -54,8 +54,6 @@ class QuickSearchTest extends TestCase
 
     /**
      * Assert that configurable child products has not found by query using mysql search engine.
-     *
-     * @magentoConfigFixture default/catalog/search/engine mysql
      *
      * @return void
      */

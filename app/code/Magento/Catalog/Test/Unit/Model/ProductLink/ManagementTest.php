@@ -3,17 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Catalog\Test\Unit\Model\ProductLink;
 
-use Magento\Framework\Exception\NoSuchEntityException;
-use Magento\Framework\Exception\InputException;
-use Magento\Framework\Exception\CouldNotSaveException;
-use Magento\Catalog\Model\ProductLink\Management;
-use Magento\Catalog\Model\ProductRepository;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\LinkTypeProvider;
 use Magento\Catalog\Model\ProductLink\Link;
+use Magento\Catalog\Model\ProductLink\Management;
+use Magento\Catalog\Model\ProductRepository;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
@@ -23,7 +24,6 @@ use PHPUnit\Framework\TestCase;
  */
 class ManagementTest extends TestCase
 {
-
     const STUB_PRODUCT_SKU_1 = 'Simple Product 1';
     const STUB_PRODUCT_SKU_2 = 'Simple Product 2';
     const STUB_PRODUCT_TYPE = 'simple';
@@ -380,7 +380,6 @@ class ManagementTest extends TestCase
         string $productSku2,
         string $typeId
     ) {
-
         $inputRelatedLinkMock = $this->objectManager->getObject(Link::class);
         $inputRelatedLinkMock->setProductSku($productSku1);
         $inputRelatedLinkMock->setLinkType($linkType);

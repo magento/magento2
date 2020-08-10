@@ -18,13 +18,12 @@
         <group value="category"/>
     </annotations>
     <before>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
     </before>
     <after>
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
     </after>
-    <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
-    <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+    <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage"/>
     <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
     <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="enterCategoryName"/>
     <click selector="{{CategoryDisplaySettingsSection.DisplaySettingTab}}" stepKey="clickOnDisplaySettingsTab"/>
