@@ -12,7 +12,7 @@ use Magento\Downloadable\Model\Link\Purchased\Item;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Downlaodable Sales Order Email items renderer
+ * Downloadable Sales Order Email items renderer
  *
  * @api
  * @since 100.0.2
