@@ -21,7 +21,6 @@
             <skip>
                   <issueId value="MC-34217"/>
            </skip>
-
         </annotations>
         <before>
             <createData entity="ApiProductWithDescription" stepKey="simple1" before="simple2"/>

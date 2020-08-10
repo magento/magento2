@@ -3,15 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Catalog\Model\Category;
 
+use Magento\Catalog\Model\Category;
+use Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate;
+use Magento\Catalog\Model\CategoryFactory;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\Registry;
 use PHPUnit\Framework\TestCase;
-use Magento\Catalog\Model\Category;
-use Magento\Catalog\Model\CategoryFactory;
-use Magento\Catalog\Model\Category\Attribute\Backend\LayoutUpdate;
 
 /**
  * @magentoDbIsolation enabled
@@ -41,6 +46,16 @@ class DataProviderTest extends TestCase
     private $fakeFiles;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * Create subject instance.
      *
      * @return DataProvider
@@ -58,7 +73,7 @@ class DataProviderTest extends TestCase
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     protected function setUp(): void
     {
@@ -74,12 +89,14 @@ class DataProviderTest extends TestCase
         $this->registry = $objectManager->get(Registry::class);
         $this->categoryFactory = $objectManager->get(CategoryFactory::class);
         $this->fakeFiles = $objectManager->get(CategoryLayoutUpdateManager::class);
+        $this->scopeConfig = $objectManager->get(ScopeConfigInterface::class);
+        $this->storeManager = $objectManager->get(StoreManagerInterface::class);
     }
 
     /**
      * @return void
      */
-    public function testGetMetaRequiredAttributes()
+    public function testGetMetaRequiredAttributes(): void
     {
         $requiredAttributes = [
             'general' => ['name'],
@@ -226,5 +243,49 @@ class DataProviderTest extends TestCase
         sort($expectedList);
         sort($list);
         $this->assertEquals($expectedList, $list);
+    }
+
+    /**
+     * Check if existing category page layout will remain unaffected by category page layout default value setting
+     *
+     * @return void
+     */
+    public function testExistingCategoryLayoutUnaffectedByDefaults(): void
+    {
+        /** @var Category $category */
+        $category = $this->categoryFactory->create();
+        $category->load(2);
+
+        $this->registry->register('category', $category);
+        $meta = $this->dataProvider->getMeta();
+        $categoryPageLayout = $meta["design"]["children"]["page_layout"]["arguments"]["data"]["config"]["default"];
+        $this->registry->unregister('category');
+
+        $this->assertNull($categoryPageLayout);
+    }
+
+    /**
+     * Check if category page layout default value setting will apply to the new category during it's creation
+     *
+     * @throws NoSuchEntityException
+     */
+    public function testNewCategoryLayoutMatchesDefault(): void
+    {
+        $categoryDefaultPageLayout = $this->scopeConfig->getValue(
+            'web/default_layouts/default_category_layout',
+            ScopeInterface::SCOPE_STORE,
+            $this->storeManager->getStore()->getId()
+        );
+
+        /** @var Category $category */
+        $category = $this->categoryFactory->create();
+        $category->setName('Net Test Category');
+
+        $this->registry->register('category', $category);
+        $meta = $this->dataProvider->getMeta();
+        $categoryPageLayout = $meta["design"]["children"]["page_layout"]["arguments"]["data"]["config"]["default"];
+        $this->registry->unregister('category');
+
+        $this->assertEquals($categoryDefaultPageLayout, $categoryPageLayout);
     }
 }

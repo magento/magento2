@@ -9,7 +9,7 @@
 ?>
 <div id="authenticationPopup" data-bind="scope:'authenticationPopup', style: {display: 'none'}">
     <?php $scriptString = 'window.authenticationPopup = ' . /* @noEscape */ $block->getSerializedConfig(); ?>
-    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>;
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>
     <!-- ko template: getTemplate() --><!-- /ko -->
     <script type="text/x-magento-init">
         {

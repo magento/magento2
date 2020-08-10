@@ -5,10 +5,11 @@
 
 define([
     'jquery',
+    'underscore',
     'uiComponent',
     'Magento_Customer/js/customer-data',
     'mage/translate'
-], function ($, Component, customer) {
+], function ($, _, Component, customer) {
     'use strict';
 
     return Component.extend({
@@ -63,8 +64,8 @@ define([
 
             if (this.fullname !== undefined && this.websiteName !== undefined) {
                 this.notificationText($.mage.__('You are connected as <strong>%1</strong> on %2')
-                    .replace('%1', this.fullname)
-                    .replace('%2', this.websiteName));
+                    .replace('%1', _.escape(this.fullname))
+                    .replace('%2', _.escape(this.websiteName)));
             }
         }
     });

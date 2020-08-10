@@ -37,7 +37,7 @@ script;
 $defaultMinSaleQty = $block->getDefaultConfigValue('min_sale_qty');
 if (!is_numeric($defaultMinSaleQty)) {
     $defaultMinSaleQty = json_decode($defaultMinSaleQty, true);
-    $defaultMinSaleQty = (float) $defaultMinSaleQty[\Magento\Customer\Api\Data\GroupInterface::CUST_GROUP_ALL] ?? 1;
+    $defaultMinSaleQty = (float) ($defaultMinSaleQty[\Magento\Customer\Api\Data\GroupInterface::CUST_GROUP_ALL] ?? 1);
 }
 ?>
 <div class="fieldset-wrapper form-inline advanced-inventory-edit">
@@ -223,7 +223,8 @@ if (!is_numeric($defaultMinSaleQty)) {
                         </select>
                     </div>
                     <div class="field choice">
-                        <input type="checkbox" id="inventory_is_qty_decimal_checkbox"
+                        <input type="checkbox"
+                               id="inventory_is_qty_decimal_checkbox"
                                data-role="toggle-editability-all"/>
                         <label for="inventory_is_qty_decimal_checkbox"
                                class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
@@ -301,7 +302,8 @@ if (!is_numeric($defaultMinSaleQty)) {
                                class="label"><span><?= $block->escapeHtml(__('Use Config Settings')) ?></span></label>
                     </div>
                     <div class="field choice">
-                        <input type="checkbox" id="inventory_notify_stock_qty_checkbox"
+                        <input type="checkbox"
+                               id="inventory_notify_stock_qty_checkbox"
                                data-role="toggle-editability-all"/>
                         <label for="inventory_notify_stock_qty_checkbox"
                                class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
@@ -341,7 +343,8 @@ if (!is_numeric($defaultMinSaleQty)) {
                                class="label"><span><?= $block->escapeHtml(__('Use Config Settings')) ?></span></label>
                     </div>
                     <div class="field choice">
-                        <input type="checkbox" id="inventory_enable_qty_increments_checkbox"
+                        <input type="checkbox"
+                               id="inventory_enable_qty_increments_checkbox"
                                data-role="toggle-editability-all"/>
                         <label for="inventory_enable_qty_increments_checkbox"
                                class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
@@ -376,7 +379,8 @@ if (!is_numeric($defaultMinSaleQty)) {
                                class="label"><span><?= $block->escapeHtml(__('Use Config Settings')) ?></span></label>
                     </div>
                     <div class="field choice">
-                        <input type="checkbox" id="inventory_qty_increments_checkbox"
+                        <input type="checkbox"
+                               id="inventory_qty_increments_checkbox"
                                data-role="toggle-editability-all"/>
                         <label for="inventory_qty_increments_checkbox"
                                class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>
@@ -405,7 +409,8 @@ if (!is_numeric($defaultMinSaleQty)) {
                         </select>
                     </div>
                     <div class="field choice">
-                        <input type="checkbox" id="inventory_stock_availability_checkbox"
+                        <input type="checkbox"
+                               id="inventory_stock_availability_checkbox"
                                data-role="toggle-editability-all"/>
                         <label for="inventory_stock_availability_checkbox"
                                class="label"><span><?= $block->escapeHtml(__('Change')) ?></span></label>

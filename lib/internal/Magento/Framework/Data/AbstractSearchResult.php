@@ -64,7 +64,7 @@ abstract class AbstractSearchResult extends AbstractDataObject implements Search
     
     /**
      * @var \Magento\Framework\DB\Select
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $select;
 

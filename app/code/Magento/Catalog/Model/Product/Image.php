@@ -45,7 +45,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      * Default quality value (for JPEG images only).
      *
      * @var int
-     * @deprecated use config setting with path self::XML_PATH_JPEG_QUALITY
+     * @deprecated 103.0.1 use config setting with path self::XML_PATH_JPEG_QUALITY
      */
     protected $_quality = null;
 
@@ -305,7 +305,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
      *
      * @param int $quality
      * @return $this
-     * @deprecated use config setting with path self::XML_PATH_JPEG_QUALITY
+     * @deprecated 103.0.1 use config setting with path self::XML_PATH_JPEG_QUALITY
      */
     public function setQuality($quality)
     {
@@ -454,7 +454,7 @@ class Image extends \Magento\Framework\Model\AbstractModel
     /**
      * Get new file
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @return bool|string
      */
     public function getNewFile()

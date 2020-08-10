@@ -278,7 +278,7 @@ define([
             // tier prise selectors end
 
             // A price label selector
-            normalPriceLabelSelector: '.normal-price .price-label'
+            normalPriceLabelSelector: '.product-info-main .normal-price .price-label'
         },
 
         /**
@@ -311,6 +311,7 @@ define([
             if ($(this.element).attr('data-rendered')) {
                 return;
             }
+
             $(this.element).attr('data-rendered', true);
 
             if (_.isEmpty(this.options.jsonConfig.images)) {
@@ -319,6 +320,8 @@ define([
                 // to use it in events handlers instead of _LoadProductMedia()
                 this._debouncedLoadProductMedia = _.debounce(this._LoadProductMedia.bind(this), 500);
             }
+
+            this.options.tierPriceTemplate = $(this.options.tierPriceTemplateSelector).html();
 
             if (this.options.jsonConfig !== '' && this.options.jsonSwatchConfig !== '') {
                 // store unsorted attributes
@@ -330,7 +333,6 @@ define([
             } else {
                 console.log('SwatchRenderer: No input data received');
             }
-            this.options.tierPriceTemplate = $(this.options.tierPriceTemplateSelector).html();
         },
 
         /**
@@ -1029,22 +1031,11 @@ define([
          */
         _getNewPrices: function () {
             var $widget = this,
-                optionPriceDiff = 0,
-                allowedProduct = this._getAllowedProductWithMinPrice(this._CalcProducts()),
-                optionPrices = this.options.jsonConfig.optionPrices,
-                basePrice = parseFloat(this.options.jsonConfig.prices.basePrice.amount),
-                optionFinalPrice,
-                newPrices;
+                newPrices = $widget.options.jsonConfig.prices,
+                allowedProduct = this._getAllowedProductWithMinPrice(this._CalcProducts());
 
             if (!_.isEmpty(allowedProduct)) {
-                optionFinalPrice = parseFloat(optionPrices[allowedProduct].finalPrice.amount);
-                optionPriceDiff = optionFinalPrice - basePrice;
-            }
-
-            if (optionPriceDiff !== 0) {
-                newPrices  = this.options.jsonConfig.optionPrices[allowedProduct];
-            } else {
-                newPrices = $widget.options.jsonConfig.prices;
+                newPrices = this.options.jsonConfig.optionPrices[allowedProduct];
             }
 
             return newPrices;
