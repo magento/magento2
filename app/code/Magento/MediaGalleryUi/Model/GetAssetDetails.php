@@ -81,12 +81,12 @@ class GetAssetDetails
     /**
      * Format image size
      *
-     * @param int $imageSize
+     * @param int $size
      * @return string
      */
-    private function formatSize(int $imageSize): string
+    private function formatSize(int $size): string
     {
-        return $imageSize === 0 ? '' : sprintf('%sKb', $imageSize / 1000);
+        return $size === 0 ? '' : sprintf('%.2f KB', $size / 1024);
     }
 
     /**
