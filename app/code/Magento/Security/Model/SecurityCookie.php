@@ -81,7 +81,7 @@ class SecurityCookie
     {
         $metaData = $this->createCookieMetaData();
         $metaData->setPath('/' . $this->backendData->getAreaFrontName());
-        $metaData->setSameSite('Lax');
+        $metaData->setSameSite('Strict');
 
         $this->phpCookieManager->setPublicCookie(
             self::LOGOUT_REASON_CODE_COOKIE_NAME,

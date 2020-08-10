@@ -120,7 +120,7 @@ class SecurityCookieTest extends TestCase
 
         $this->cookieMetadataMock->expects($this->once())
             ->method('setSameSite')
-            ->with('Lax')
+            ->with('Strict')
             ->willReturnSelf();
 
         $this->phpCookieManagerMock->expects($this->once())
