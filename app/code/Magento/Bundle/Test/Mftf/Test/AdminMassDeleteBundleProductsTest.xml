@@ -118,7 +118,7 @@
         <actionGroup ref="BundleProductFilter" stepKey="FilterForOnlyBundleProducts"/>
 
         <!--Delete-->
-        <actionGroup ref="AdminSelectAndDeleteProductsActionGroup" stepKey="selectAndDeleteProducts"/>
+        <actionGroup ref="AdminDeleteAllProductsFromGridActionGroup" stepKey="selectAndDeleteProducts"/>
 
         <!--Locating delete message-->
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="deleteMessage"/>

@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminSelectAndDeleteProductsActionGroup">
+    <actionGroup name="AdminDeleteAllProductsFromGridActionGroup">
         <annotations>
             <description>Select and delete products in product grid.</description>
         </annotations>
