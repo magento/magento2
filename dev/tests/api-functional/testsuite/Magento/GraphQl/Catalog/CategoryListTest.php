@@ -215,7 +215,7 @@ QUERY;
         $this->assertEquals('Its a description of Test Category 1.2', $secondChildCategory['description']);
         $firstChildCategoryExpectedProducts = [
             ['sku' => 'simple-4', 'name' => 'Simple Product Three'],
-            ['sku' => 'simple', 'name' => 'Simple Product'],
+            ['sku' => 'simple', 'name' => 'Simple Product']
         ];
         $this->assertCategoryProducts($secondChildCategory, $firstChildCategoryExpectedProducts);
         $firstChildCategoryChildren = [];
@@ -630,15 +630,6 @@ QUERY;
                 '["category-1-2", "movable"]',
                 [
                     [
-                        'id' => '7',
-                        'name' => 'Movable',
-                        'url_key' => 'movable',
-                        'url_path' => 'movable',
-                        'children_count' => '0',
-                        'path' => '1/2/7',
-                        'position' => '3'
-                    ],
-                    [
                         'id' => '13',
                         'name' => 'Category 1.2',
                         'url_key' => 'category-1-2',
@@ -646,6 +637,15 @@ QUERY;
                         'children_count' => '0',
                         'path' => '1/2/3/13',
                         'position' => '2'
+                    ],
+                    [
+                        'id' => '7',
+                        'name' => 'Movable',
+                        'url_key' => 'movable',
+                        'url_path' => 'movable',
+                        'children_count' => '0',
+                        'path' => '1/2/7',
+                        'position' => '3'
                     ]
                 ]
             ],
