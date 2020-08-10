@@ -16,5 +16,6 @@
         </annotations>
 
         <click stepKey="clickOnDoneButton" selector="{{AdminProductFormAdvancedInventorySection.doneButton}}"/>
+        <waitForPageLoad stepKey="waitForProductPageToLoad"/>
     </actionGroup>
 </actionGroups>

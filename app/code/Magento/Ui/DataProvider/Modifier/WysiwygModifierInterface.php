@@ -7,6 +7,7 @@ namespace Magento\Ui\DataProvider\Modifier;
 
 /**
  * @api
+ * @since 101.1.0
  */
 interface WysiwygModifierInterface
 {
@@ -14,6 +15,7 @@ interface WysiwygModifierInterface
      * Provide editor name for example tmce4
      *
      * @return array
+     * @since 101.1.0
      */
     public function getEditorName();
 
@@ -23,6 +25,7 @@ interface WysiwygModifierInterface
      * @param array $meta
      *
      * @return array
+     * @since 101.1.0
      */
     public function modifyMeta(array $meta);
 }

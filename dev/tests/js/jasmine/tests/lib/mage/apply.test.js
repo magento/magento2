@@ -64,7 +64,7 @@ define([
                     .toHaveBeenCalledWith(jasmine.any(Object), node);
 
                 done();
-            }, preset.timeout);
+            }, 100);
         });
     });
 });

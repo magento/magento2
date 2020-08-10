@@ -16,7 +16,8 @@
         "magento/module-store": "*"
     },
     "suggest": {
-        "magento/module-graph-ql": "*"
+        "magento/module-graph-ql": "*",
+        "magento/module-store-graph-ql": "*"
     },
     "type": "magento2-module",
     "license": [
