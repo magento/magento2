@@ -35,6 +35,7 @@ use Magento\Vault\Model\PaymentTokenRepository;
  * End to end place order test using payflowpro_cc_vault via graphql endpoint for customer
  *
  * @magentoAppArea graphql
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class PlaceOrderWithPayflowProCCVaultTest extends PaypalPayflowProAbstractTest
 {
