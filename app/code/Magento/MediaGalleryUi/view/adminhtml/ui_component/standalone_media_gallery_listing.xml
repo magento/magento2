@@ -109,6 +109,14 @@
                     <dataScope>entity_type</dataScope>
                 </settings>
             </filterSelect>
+            <filterSelect name="source" provider="${ $.parentName }" sortOrder="60">
+                <settings>
+                    <caption translate="true">All</caption>
+                    <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Columns\Source\Options"/>
+                    <label translate="true">Source</label>
+                    <dataScope>source</dataScope>
+                </settings>
+            </filterSelect>
             <filterSelect name="content_status" provider="${ $.parentName }" sortOrder="220">
                 <settings>
                     <options class="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Options\Status"/>
