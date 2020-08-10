@@ -16,7 +16,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Class RetrieveOrdersTest
+ * Class RetrieveOrdersTest for DownloadableProduct
  */
 class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
 {
@@ -44,6 +44,7 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/order_with_customer_and_downloadable_product.php
+     * @magentoApiDataFixture Magento/Downloadable/_files/customer_order_with_invoice_downloadable_product.php
      */
     public function testGetCustomerOrdersDownloadableProduct()
     {
@@ -76,12 +77,36 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
                 ]
             ];
         $this->assertResponseFields($expectedDownloadableLinksData, $downloadableLinksFromResponse);
+        // invoices assertions
+        $customerOrderItemsInvoicesResponse  = $response[0]['invoices'][0];
+        $this->assertNotEmpty($customerOrderItemsInvoicesResponse);
+        $this->assertNotEmpty($customerOrderItemsInvoicesResponse['number']);
+        $customerOrderItemsInvoicesItemsResponse = $customerOrderItemsInvoicesResponse['items'][0];
+        $this->assertEquals('Downloadable Product', $customerOrderItemsInvoicesItemsResponse['product_name']);
+        $this->assertEquals(10, $customerOrderItemsInvoicesItemsResponse['product_sale_price']['value']);
+        $this->assertEquals(1, $customerOrderItemsInvoicesItemsResponse['quantity_invoiced']);
+        $downloadableItemInTheInvoice = $customerOrderItemsInvoicesItemsResponse['downloadable_links'];
+        $this->assertNotEmpty($downloadableItemInTheInvoice);
+
+        $downloadableProduct = $this->productRepository->get('downloadable-product');
+        /** @var LinkInterface $downloadableProductLinks */
+        $downloadableProductLinks = $downloadableProduct->getExtensionAttributes()->getDownloadableProductLinks();
+        $linkId = $downloadableProductLinks[0]->getId();
+        $expectedDownloadableLinksData =
+            [
+                [
+                    'title' =>'Downloadable Product Link',
+                    'sort_order' => 1,
+                    'uid'=> base64_encode("downloadable/{$linkId}")
+                ]
+            ];
+        $this->assertResponseFields($expectedDownloadableLinksData, $downloadableItemInTheInvoice);
     }
 
     /**
      * @magentoApiDataFixture Magento/Downloadable/_files/order_with_customer_and_downloadable_product_with_multiple_links.php
      */
-    public function testGetCustomerOrdersDownloadableWithmultiplelinks()
+    public function testGetCustomerOrdersDownloadableWithMultipleLinks()
     {
     }
 
@@ -124,7 +149,7 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
               quantity_ordered
           }
          }
-           total {
+         total {
              base_grand_total{value currency}
              grand_total{value currency}
              subtotal {value currency }
@@ -141,10 +166,30 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
              }
              discounts {amount{value currency} label}
            }
+        invoices {
+              number
+              items {
+              	product_name
+                product_sale_price{value currency}
+                quantity_invoiced
+                ... on DownloadableInvoiceItem {
+                   downloadable_links
+                  {
+                   sort_order
+                   title
+                   uid
+                  }
+                  id
+                  product_name
+                  product_sale_price{value}
+                  quantity_invoiced
+                  }
+                }
          }
        }
      }
-   }
+    }
+}
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
