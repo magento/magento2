@@ -62,6 +62,7 @@ class Purchaseorder extends \Magento\Payment\Model\Method\AbstractMethod
      * @return $this
      * @throws LocalizedException
      * @api
+     * @since 100.2.3
      */
     public function validate()
     {

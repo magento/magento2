@@ -47,6 +47,7 @@
         </assertNotEmpty>
 
         <!-- Navigate to backend: Go to Sales > Orders -->
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrderPage"/>
         <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearFilters"/>
 
         <!-- Select Mass Action according to dataset: Unhold -->
