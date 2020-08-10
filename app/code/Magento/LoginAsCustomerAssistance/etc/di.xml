@@ -13,7 +13,7 @@
                 type="Magento\LoginAsCustomerAssistance\Model\IsAssistanceEnabled"/>
     <preference for="Magento\LoginAsCustomerAssistance\Api\SetAssistanceInterface"
                 type="Magento\LoginAsCustomerAssistance\Model\SetAssistance"/>
-    <type name="Magento\LoginAsCustomer\Model\IsLoginAsCustomerEnabledForCustomerChain">
+    <type name="Magento\LoginAsCustomerApi\Model\IsLoginAsCustomerEnabledForCustomerChain">
         <arguments>
             <argument name="resolvers" xsi:type="array">
                 <item name="is_allowed" xsi:type="object">

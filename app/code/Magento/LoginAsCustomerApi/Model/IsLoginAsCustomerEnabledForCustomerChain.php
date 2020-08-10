@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\LoginAsCustomer\Model;
+namespace Magento\LoginAsCustomerApi\Model;
 
 use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 use Magento\LoginAsCustomerApi\Api\Data\IsLoginAsCustomerEnabledForCustomerResultInterface;
@@ -22,7 +22,7 @@ class IsLoginAsCustomerEnabledForCustomerChain implements IsLoginAsCustomerEnabl
     private $config;
 
     /**
-     * @var IsLoginAsCustomerEnabledForCustomerResultFactory
+     * @var IsLoginAsCustomerEnabledForCustomerResultInterfaceFactory
      */
     private $resultFactory;
 
@@ -33,12 +33,12 @@ class IsLoginAsCustomerEnabledForCustomerChain implements IsLoginAsCustomerEnabl
 
     /**
      * @param ConfigInterface $config
-     * @param IsLoginAsCustomerEnabledForCustomerResultFactory $resultFactory
+     * @param IsLoginAsCustomerEnabledForCustomerResultInterfaceFactory $resultFactory
      * @param array $resolvers
      */
     public function __construct(
         ConfigInterface $config,
-        IsLoginAsCustomerEnabledForCustomerResultFactory $resultFactory,
+        IsLoginAsCustomerEnabledForCustomerResultInterfaceFactory $resultFactory,
         array $resolvers = []
     ) {
         $this->config = $config;
@@ -52,7 +52,7 @@ class IsLoginAsCustomerEnabledForCustomerChain implements IsLoginAsCustomerEnabl
     public function execute(int $customerId): IsLoginAsCustomerEnabledForCustomerResultInterface
     {
         $messages = [[]];
-        /** @var IsLoginAsCustomerEnabledForCustomerResultInterface $resolver */
+        /** @var IsLoginAsCustomerEnabledForCustomerInterface $resolver */
         foreach ($this->resolvers as $resolver) {
             $resolverResult = $resolver->execute($customerId);
             if (!$resolverResult->isEnabled()) {

@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomerAssistance\Model\Processor;
 
-use Magento\LoginAsCustomer\Model\IsLoginAsCustomerEnabledForCustomerResultFactory;
+use Magento\LoginAsCustomerApi\Api\Data\IsLoginAsCustomerEnabledForCustomerResultInterfaceFactory;
 use Magento\LoginAsCustomerApi\Api\Data\IsLoginAsCustomerEnabledForCustomerResultInterface;
 use Magento\LoginAsCustomerApi\Api\IsLoginAsCustomerEnabledForCustomerInterface;
 use Magento\LoginAsCustomerAssistance\Api\IsAssistanceEnabledInterface;
@@ -23,17 +23,17 @@ class IsLoginAsCustomerAllowedResolver implements IsLoginAsCustomerEnabledForCus
     private $isAssistanceEnabled;
 
     /**
-     * @var IsLoginAsCustomerEnabledForCustomerResultFactory
+     * @var IsLoginAsCustomerEnabledForCustomerResultInterfaceFactory
      */
     private $resultFactory;
 
     /**
      * @param IsAssistanceEnabledInterface $isAssistanceEnabled
-     * @param IsLoginAsCustomerEnabledForCustomerResultFactory $resultFactory
+     * @param IsLoginAsCustomerEnabledForCustomerResultInterfaceFactory $resultFactory
      */
     public function __construct(
         IsAssistanceEnabledInterface $isAssistanceEnabled,
-        IsLoginAsCustomerEnabledForCustomerResultFactory $resultFactory
+        IsLoginAsCustomerEnabledForCustomerResultInterfaceFactory $resultFactory
     ) {
         $this->isAssistanceEnabled = $isAssistanceEnabled;
         $this->resultFactory = $resultFactory;

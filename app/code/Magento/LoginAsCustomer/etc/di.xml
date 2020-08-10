@@ -23,9 +23,7 @@
     <preference for="Magento\LoginAsCustomerApi\Api\GetLoggedAsCustomerCustomerIdInterface" type="Magento\LoginAsCustomer\Model\GetLoggedAsCustomerCustomerId"/>
     <preference for="Magento\LoginAsCustomerApi\Api\SetLoggedAsCustomerAdminIdInterface" type="Magento\LoginAsCustomer\Model\SetLoggedAsCustomerAdminId"/>
     <preference for="Magento\LoginAsCustomerApi\Api\SetLoggedAsCustomerCustomerIdInterface" type="Magento\LoginAsCustomer\Model\SetLoggedAsCustomerCustomerId"/>
-    <preference for="Magento\LoginAsCustomerApi\Api\IsLoginAsCustomerEnabledForCustomerInterface"
-                type="Magento\LoginAsCustomer\Model\IsLoginAsCustomerEnabledForCustomerChain"/>
-    <type name="Magento\LoginAsCustomer\Model\IsLoginAsCustomerEnabledForCustomerChain">
+    <type name="Magento\LoginAsCustomerApi\Model\IsLoginAsCustomerEnabledForCustomerChain">
         <arguments>
             <argument name="resolvers" xsi:type="array">
                 <item name="is_enabled" xsi:type="object">
