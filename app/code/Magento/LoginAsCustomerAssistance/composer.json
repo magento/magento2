@@ -6,6 +6,7 @@
         "magento/framework": "*",
         "magento/module-backend": "*",
         "magento/module-customer": "*",
+        "magento/module-store": "*",
         "magento/module-login-as-customer": "*",
         "magento/module-login-as-customer-api": "*"
     },

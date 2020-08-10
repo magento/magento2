@@ -9,6 +9,7 @@ namespace Magento\LoginAsCustomerAssistance\Model;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\LoginAsCustomerAssistance\Api\ConfigInterface;
+use Magento\Store\Model\ScopeInterface;
 
 /**
  * @inheritdoc
@@ -42,7 +43,10 @@ class Config implements ConfigInterface
      */
     public function getShoppingAssistanceCheckboxTitle(): string
     {
-        return (string)$this->scopeConfig->getValue(self::XML_PATH_SHOPPING_ASSISTANCE_CHECKBOX_TITLE);
+        return (string)$this->scopeConfig->getValue(
+            self::XML_PATH_SHOPPING_ASSISTANCE_CHECKBOX_TITLE,
+            ScopeInterface::SCOPE_WEBSITE
+        );
     }
 
     /**
@@ -50,6 +54,9 @@ class Config implements ConfigInterface
      */
     public function getShoppingAssistanceCheckboxTooltip(): string
     {
-        return (string)$this->scopeConfig->getValue(self::XML_PATH_SHOPPING_ASSISTANCE_CHECKBOX_TOOLTIP);
+        return (string)$this->scopeConfig->getValue(
+            self::XML_PATH_SHOPPING_ASSISTANCE_CHECKBOX_TOOLTIP,
+            ScopeInterface::SCOPE_WEBSITE
+        );
     }
 }
