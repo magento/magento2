@@ -86,8 +86,8 @@ class UpdateAsset
                 'description' => $data->getDescription() ?? $asset->getDescription(),
                 'source' => $asset->getSource(),
                 'hash' => $asset->getHash(),
-                'created_at' => $asset->getCreatedAt(),
-                'updated_at' => $asset->getUpdatedAt()
+                'createdAt' => $asset->getCreatedAt(),
+                'updatedAt' => $asset->getUpdatedAt()
             ]
         );
 
