@@ -58,7 +58,7 @@ class CustomerDataValidatePlugin
         $scopeOnly = true
     ): void {
         if ($this->isSetAssistanceAllowedParam($request)
-            && !$this->authorization->isAllowed('Magento_LoginAsCustomer::opt_in_preference')
+            && !$this->authorization->isAllowed('Magento_LoginAsCustomer::allow_shopping_assistance')
         ) {
             $customerId = $request->getParam('customer_id');
             $assistanceAllowedParam =
