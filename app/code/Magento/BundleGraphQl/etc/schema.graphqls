@@ -101,7 +101,7 @@ type BundleShipmentItem implements ShipmentItemInterface {
 }
 
 type BundleCreditMemoItem implements CreditMemoItemInterface {
-    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product")
+    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Order\\Item\\BundleOptions")
 }
 
 type ItemSelectedBundleOption @doc(description: "A list of options of the selected bundle product") {
