@@ -89,7 +89,7 @@ class DataProviderWithDefaultAddressesPlugin
     ): array {
         if (!$this->config->isEnabled()) {
             $assistanceAllowedConfig = ['visible' => false];
-        } elseif (!$this->authorization->isAllowed('Magento_LoginAsCustomer::opt_in_preference')) {
+        } elseif (!$this->authorization->isAllowed('Magento_LoginAsCustomer::allow_shopping_assistance')) {
             $assistanceAllowedConfig = [
                 'disabled' => true,
                 'notice' => __('You have no permission to change Opt-In preference.'),

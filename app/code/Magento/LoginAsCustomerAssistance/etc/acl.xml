@@ -11,7 +11,7 @@
             <resource id="Magento_Backend::admin">
                 <resource id="Magento_Customer::customer">
                     <resource id="Magento_LoginAsCustomer::login">
-                        <resource id="Magento_LoginAsCustomer::opt_in_preference" title="Change Customer Opt-In Preference" sortOrder="20" />
+                        <resource id="Magento_LoginAsCustomer::allow_shopping_assistance" title="Allow remote shopping assistance" sortOrder="20" />
                     </resource>
                 </resource>
             </resource>
