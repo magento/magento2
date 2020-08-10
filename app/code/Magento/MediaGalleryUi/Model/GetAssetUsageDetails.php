@@ -91,7 +91,7 @@ class GetAssetUsageDetails
     private function getLinkUrl(string $type): ?string
     {
         if (isset($this->contentTypes[$type]) && !empty($this->contentTypes[$type]['link'])) {
-            return $this->contentTypes[$type]['link'];
+            return $this->url->getUrl($this->contentTypes[$type]['link']);
         }
         return null;
     }
