@@ -9,7 +9,8 @@
         "magento/module-login-as-customer-api": "*"
     },
     "suggest": {
-        "magento/module-login-as-customer-admin-ui": "*"
+        "magento/module-login-as-customer-admin-ui": "*",
+        "magento/module-login-as-customer": "*"
     },
     "type": "magento2-module",
     "license": [
