@@ -41,13 +41,5 @@
         <actionGroup ref="AdminMediaGalleryAssertImageInGridActionGroup" stepKey="assertImageInGrid">
             <argument name="title" value="ImageMetadata.title"/>
         </actionGroup>
-        <actionGroup ref="AdminEnhancedMediaGalleryExpandFilterActionGroup" stepKey="expandFilterToApplySourceFilter"/>
-        <actionGroup ref="AdminEnhancedMediaGallerySelectSourceFilterActionGroup" stepKey="applyAdobeStockFilter">
-            <argument name="filterValue" value="Adobe Stock"/>
-        </actionGroup>
-        <actionGroup ref="AdminEnhancedMediaGalleryApplyFiltersActionGroup" stepKey="applyFiltersWithAdobeStockOption"/>
-        <actionGroup ref="AdminMediaGalleryAssertImageNotExistsInTheGridActionGroup" stepKey="assertImageNotExistsInGrid">
-            <argument name="title" value="ImageMetadata.title"/>
-        </actionGroup>
     </test>
 </tests>

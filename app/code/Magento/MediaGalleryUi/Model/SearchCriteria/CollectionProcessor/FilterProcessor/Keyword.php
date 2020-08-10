@@ -11,7 +11,6 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CustomFilterInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\AbstractDb;
-use Magento\Framework\DB\Select;
 
 class Keyword implements CustomFilterInterface
 {
@@ -59,20 +58,21 @@ class Keyword implements CustomFilterInterface
     private function getAssetIdsByKeyword(string $value): array
     {
         $connection = $this->connection->getConnection();
+
         return $connection->fetchAssoc(
             $connection->select()->from(
                 $connection->select()
-                           ->from(
-                               ['asset_keywords_table' => $this->connection->getTableName(self::TABLE_ASSET_KEYWORD)],
-                               ['id']
-                           )->where(
-                               'keyword = ?',
-                               $value
-                           )->joinInner(
-                               ['keywords_table' => $this->connection->getTableName(self::TABLE_KEYWORDS)],
-                               'keywords_table.keyword_id = asset_keywords_table.id',
-                               ['asset_id']
-                           ),
+                    ->from(
+                        ['asset_keywords_table' => $this->connection->getTableName(self::TABLE_ASSET_KEYWORD)],
+                        ['id']
+                    )->where(
+                        'keyword = ?',
+                        $value
+                    )->joinInner(
+                        ['keywords_table' => $this->connection->getTableName(self::TABLE_KEYWORDS)],
+                        'keywords_table.keyword_id = asset_keywords_table.id',
+                        ['asset_id']
+                    ),
                 ['asset_id']
             )
         );

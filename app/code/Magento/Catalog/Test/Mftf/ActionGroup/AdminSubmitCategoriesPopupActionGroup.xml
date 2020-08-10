@@ -14,5 +14,6 @@
         </annotations>
 
         <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneButton" />
+        <waitForPageLoad stepKey="waitForCategoryApply"/>
     </actionGroup>
 </actionGroups>
