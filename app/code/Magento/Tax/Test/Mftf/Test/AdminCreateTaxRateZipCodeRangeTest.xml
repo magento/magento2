@@ -62,7 +62,7 @@
 
         <!-- Verify we see expected values on the tax rule form page -->
         <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleIndex1"/>
-        <click selector="{{AdminTaxRuleGridSection.add}}" stepKey="clickAdd"/>
+        <actionGroup ref="AdminClickButtonAddTaxRuleActionGroup" stepKey="clickAdd"/>
         <see selector="{{AdminTaxRulesSection.taxRateMultiSelectItems}}" userInput="{{SimpleTaxRate.code}}" stepKey="seeTaxRateOnNewTaxRulePage"/>
     </test>
 </tests>
