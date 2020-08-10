@@ -29,6 +29,10 @@
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload"/>
         </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="clickViewDetails"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryVerifyUploadedImageDateTimeEqualsActionGroup" stepKey="verifyCreatedAndUpdatedAtDate" />
+        <wait time="10" stepKey="waitForUpdateTimeToBeGreater"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryCloseViewDetailsActionGroup" stepKey="closeViewDetails"/>
         <actionGroup ref="AdminEnhancedMediaGalleryEditImageDetailsActionGroup" stepKey="editImageDetails"/>
         <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveImage">
             <argument name="image" value="UpdatedImageDetails"/>
@@ -40,6 +44,7 @@
         <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDetailsActionGroup" stepKey="verifyImageDetails">
             <argument name="image" value="UpdatedImageDetails"/>
         </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageCreatedAtNotEqualsUpdatedAtTimeActionGroup" stepKey="assertUpdatedAtTimeChanged" />
         <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDescriptionActionGroup" stepKey="verifyImageDescription">
             <argument name="description" value="UpdatedImageDetails.description"/>
         </actionGroup>
