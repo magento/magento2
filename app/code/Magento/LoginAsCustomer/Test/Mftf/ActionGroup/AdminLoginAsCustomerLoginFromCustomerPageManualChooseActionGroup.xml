@@ -20,7 +20,7 @@
         <amOnPage url="{{AdminEditCustomerPage.url(customerId)}}" stepKey="gotoCustomerPage"/>
         <waitForPageLoad stepKey="waitForCustomerPageLoad"/>
         <click selector="{{AdminCustomerMainActionsSection.loginAsCustomer}}" stepKey="clickLoginAsCustomerLink"/>
-        <see selector="{{AdminConfirmationModalSection.title}}" userInput="Login as Customer: Select Store View" stepKey="seeModal"/>
+        <see selector="{{AdminConfirmationModalSection.title}}" userInput="Login as Customer: Select Store" stepKey="seeModal"/>
          <see selector="{{AdminConfirmationModalSection.message}}" userInput="Actions taken while in &quot;Login as Customer&quot; will affect actual customer data." stepKey="seeModalMessage"/>
         <selectOption selector="{{AdminLoginAsCustomerConfirmationModalSection.storeView}}" userInput="{{storeViewName}}" stepKey="selectStoreView"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickLogin"/>

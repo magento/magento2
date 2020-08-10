@@ -94,7 +94,7 @@ class Login extends Action implements HttpGetActionInterface
      * @var ManageStoreCookie
      */
     private $manageStoreCookie;
-  
+
     /**
      * @var SetLoggedAsCustomerCustomerIdInterface
      */
@@ -133,7 +133,7 @@ class Login extends Action implements HttpGetActionInterface
         DeleteAuthenticationDataForUserInterface $deleteAuthenticationDataForUser,
         Url $url,
         ?Share $share = null,
-        ?ManageStoreCookie $manageStoreCookie = null
+        ?ManageStoreCookie $manageStoreCookie = null,
         ?SetLoggedAsCustomerCustomerIdInterface $setLoggedAsCustomerCustomerId = null,
         ?IsLoginAsCustomerEnabledForCustomerInterface $isLoginAsCustomerEnabled = null
     ) {
@@ -191,7 +191,7 @@ class Login extends Action implements HttpGetActionInterface
         if ($this->config->isStoreManualChoiceEnabled()) {
             $storeId = (int)$this->_request->getParam('store_id');
             if (empty($storeId)) {
-                $this->messageManager->addNoticeMessage(__('Please select a Store View to login in.'));
+                $this->messageManager->addNoticeMessage(__('Please select a Store to login in.'));
                 return $resultRedirect->setPath('customer/index/edit', ['id' => $customerId]);
             }
         } elseif ($this->share->isGlobalScope()) {

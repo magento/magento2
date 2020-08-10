@@ -65,7 +65,7 @@ class ConfirmationPopup extends Template
         $showStoreViewOptions = $this->config->isStoreManualChoiceEnabled();
 
         $layout['components']['lac-confirmation-popup']['title'] = $showStoreViewOptions
-            ? __('Login as Customer: Select Store View')
+            ? __('Login as Customer: Select Store')
             : __('You are about to Login as Customer');
         $layout['components']['lac-confirmation-popup']['content'] =
             __('Actions taken while in "Login as Customer" will affect actual customer data.');
