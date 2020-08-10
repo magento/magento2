@@ -7,7 +7,8 @@
 /** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 $blockId = $block->getId();
 ?>
-<div id="product_composite_configure" class="product-configure-popup product-configure-popup-<?= $block->escapeHtmlAttr($blockId) ?>">
+<div id="product_composite_configure"
+     class="product-configure-popup product-configure-popup-<?= $block->escapeHtmlAttr($blockId) ?>">
     <iframe name="product_composite_configure_iframe" id="product_composite_configure_iframe"></iframe>
     <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
         'onload',
@@ -39,7 +40,9 @@ $blockId = $block->getId();
     <div id="product_composite_configure_confirmed" class="product_composite_configure_confirmed"></div>
 
     <?php $scriptString = <<<script
-        prodCompConfIframe = document.querySelector(".product-configure-popup-$blockId iframe[name='product_composite_configure_iframe']");
+        prodCompConfIframe = document.querySelector(
+            ".product-configure-popup-$blockId iframe[name='product_composite_configure_iframe']"
+        );
         prodCompConfIframe.style.width = 0;
         prodCompConfIframe.style.height = 0;
         prodCompConfIframe.style.border = "0px solid #fff";
@@ -47,16 +50,24 @@ $blockId = $block->getId();
         prodCompConfIframe.style.top = "-1000px";
         prodCompConfIframe.style.left = "-1000px";
 
-        prodCompConfMessages = document.querySelector(".product-configure-popup-$blockId .product_composite_configure_messages");
+        prodCompConfMessages = document.querySelector(
+            ".product-configure-popup-$blockId .product_composite_configure_messages"
+        );
         prodCompConfMessages.style.display = "none";
 
-        prodCompConfFormAdd = document.querySelector(".product-configure-popup-$blockId .product_composite_configure_form_additional");
+        prodCompConfFormAdd = document.querySelector(
+            ".product-configure-popup-$blockId .product_composite_configure_form_additional"
+        );
         prodCompConfFormAdd.style.display = "none";
 
-        prodCompConfFormConf = document.querySelector(".product-configure-popup-$blockId .product_composite_configure_form_confirmed");
+        prodCompConfFormConf = document.querySelector(
+            ".product-configure-popup-$blockId .product_composite_configure_form_confirmed"
+        );
         prodCompConfFormConf.style.display = "none";
 
-        prodCompConfConf = document.querySelector(".product-configure-popup-$blockId .product_composite_configure_confirmed");
+        prodCompConfConf = document.querySelector(
+            ".product-configure-popup-$blockId .product_composite_configure_confirmed"
+        );
         prodCompConfConf.style.display = "none";
 
         prodConfPopup = document.querySelector(".product-configure-popup-$blockId");
