@@ -16,7 +16,7 @@ use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
-use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
+use Magento\MediaGallerySynchronization\Model\Filesystem\GetFileInfo;
 use Magento\MediaGallerySynchronization\Model\GetContentHash;
 
 /**
@@ -60,9 +60,9 @@ class CreateAssetFromFile
     private $extractMetadata;
 
     /**
-     * @var SplFileInfoFactory
+     * @var GetFileInfo
      */
-    private $splFileInfoFactory;
+    private $getFileInfo;
 
     /**
      * @param Filesystem $filesystem
@@ -71,7 +71,7 @@ class CreateAssetFromFile
      * @param AssetInterfaceFactory $assetFactory
      * @param GetContentHash $getContentHash
      * @param ExtractMetadataInterface $extractMetadata
-     * @param SplFileInfoFactory $splFileInfoFactory
+     * @param GetFileInfo $getFileInfo
      */
     public function __construct(
         Filesystem $filesystem,
@@ -80,7 +80,7 @@ class CreateAssetFromFile
         AssetInterfaceFactory $assetFactory,
         GetContentHash $getContentHash,
         ExtractMetadataInterface $extractMetadata,
-        SplFileInfoFactory $splFileInfoFactory
+        GetFileInfo $getFileInfo
     ) {
         $this->filesystem = $filesystem;
         $this->driver = $driver;
@@ -88,7 +88,7 @@ class CreateAssetFromFile
         $this->assetFactory = $assetFactory;
         $this->getContentHash = $getContentHash;
         $this->extractMetadata = $extractMetadata;
-        $this->splFileInfoFactory = $splFileInfoFactory;
+        $this->getFileInfo = $getFileInfo;
     }
 
     /**
@@ -101,7 +101,7 @@ class CreateAssetFromFile
     public function execute(string $path): AssetInterface
     {
         $absolutePath = $this->getMediaDirectory()->getAbsolutePath($path);
-        $file = $this->splFileInfoFactory->create($absolutePath);
+        $file = $this->getFileInfo->execute($absolutePath);
         [$width, $height] = getimagesize($absolutePath);
 
         $metadata = $this->extractMetadata->execute($absolutePath);
