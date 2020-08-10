@@ -94,8 +94,7 @@
         </actionGroup>
 
         <!-- Assert configurable product on admin product page -->
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnProductPage"/>
         <actionGroup ref="AssertConfigurableProductOnAdminProductPageActionGroup" stepKey="assertConfigurableProductOnAdminProductPage">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
@@ -109,7 +108,9 @@
         <actionGroup ref="DisplayOutOfStockProductActionGroup" stepKey="displayOutOfStockProduct"/>
 
         <!-- Flash cache -->
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!-- Assert configurable product is not present in category -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="amOnCategoryPage"/>
