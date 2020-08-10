@@ -45,7 +45,7 @@
         <scrollTo selector="{{AdminProductFormSection.productStockStatus}}" stepKey="scroll"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
         <click selector="{{AdminProductFormSection.unselectCategories($$initialCategoryEntity.name$$)}}" stepKey="unselectCategories"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategory"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneAdvancedCategory"/>
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
         <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
 
