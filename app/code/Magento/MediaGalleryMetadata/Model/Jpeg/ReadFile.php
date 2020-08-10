@@ -76,7 +76,7 @@ class ReadFile implements ReadFileInterface
      * @return bool
      * @throws FileSystemException
      */
-    public function isApplicable(string $path): bool
+    private function isApplicable(string $path): bool
     {
         $resource = $this->driver->fileOpen($path, 'rb');
         try {
