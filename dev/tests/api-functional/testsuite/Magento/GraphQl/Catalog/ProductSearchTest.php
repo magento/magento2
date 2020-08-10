@@ -313,7 +313,7 @@ QUERY;
         $product1 = $productRepository->get('simple');
         $product2 = $productRepository->get('12345');
         $product3 = $productRepository->get('simple-4');
-        $filteredProducts = [$product1, $product2, $product3 ];
+        $filteredProducts = [$product3, $product2, $product1];
         $countOfFilteredProducts = count($filteredProducts);
         $this->reIndexAndCleanCache();
         $response = $this->graphQlQuery($query);
@@ -898,7 +898,7 @@ QUERY;
         $product1 = $productRepository->get('simple');
         $product2 = $productRepository->get('12345');
         $product3 = $productRepository->get('simple-4');
-        $filteredProducts = [$product1, $product2, $product3];
+        $filteredProducts = [$product3, $product2, $product1];
         $urlKey =[];
         foreach ($filteredProducts as $product) {
             $urlKey[] = $product->getUrlKey();
