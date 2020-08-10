@@ -54,7 +54,7 @@ $payment->setMethod('checkmo')
         ['type' => 'free', 'fraudulent' => false]
     );
 /** @var ProductInterface $product */
-$product = $productRepository->get('downloadable-product');
+$product = $productRepository->get('downloadable-product-with-purchased-separately-links');
 /** @var LinkInterface $links */
 $links = $product->getExtensionAttributes()->getDownloadableProductLinks();
 $link = reset($links);
