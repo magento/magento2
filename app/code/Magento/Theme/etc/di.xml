@@ -326,4 +326,7 @@
             <argument name="filesystemDriver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Data\Collection">
+        <plugin name="currentPageDetection" type="Magento\Theme\Plugin\Data\Collection" />
+    </type>
 </config>
