@@ -80,8 +80,6 @@ class UpdateAsset
                 'path' => $asset->getPath(),
                 'title' => $data->getTitle() ?? $asset->getTitle(),
                 'description' => $data->getDescription() ?? $asset->getDescription(),
-                'createdAt' => $asset->getCreatedAt(),
-                'updatedAt' => $asset->getUpdatedAt(),
                 'width' => $asset->getWidth(),
                 'height' => $asset->getHeight(),
                 'size' => $asset->getSize(),
