@@ -12,10 +12,10 @@ use Magento\TestFramework\Downloadable\Model\RemoveLinkPurchasedByOrderIncrement
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-Resolver::getInstance()
-    ->requireDataFixture('Magento/Downloadable/_files/product_downloadable_with_purchased_separately_links_rollback.php');
-Resolver::getInstance()
-    ->requireDataFixture('Magento/Customer/_files/customer_rollback.php');
+Resolver::getInstance()->requireDataFixture(
+    'Magento/Downloadable/_files/product_downloadable_with_purchased_separately_links_rollback.php'
+);
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer_rollback.php');
 
 $objectManager = Bootstrap::getObjectManager();
 /** @var Registry $registry */
