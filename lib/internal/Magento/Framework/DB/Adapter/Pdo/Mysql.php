@@ -2788,6 +2788,7 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 
         $this->resetDdlCache($tableName, $schemaName);
 
+        // @phpstan-ignore-next-line
         return $result;
     }
 
