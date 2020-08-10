@@ -15,7 +15,7 @@ use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 /**
  * Build folder tree structure by path
  */
-class FolderTree
+class GetFolderTree
 {
     /**
      * @var Filesystem
@@ -56,7 +56,7 @@ class FolderTree
      * @return array
      * @throws ValidatorException
      */
-    public function buildTree(bool $skipRoot = true): array
+    public function execute(bool $skipRoot = true): array
     {
         return $this->buildFolderTree($this->getDirectories(), $skipRoot);
     }
