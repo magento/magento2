@@ -223,6 +223,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         try {
             $website = $websiteRepository->get($websiteCode);
         } catch (NoSuchEntityException $e) {
+            $website = null;
             $this->fail("Couldn`t load website: {$websiteCode}");
         }
 
