@@ -114,7 +114,7 @@ class WriteXmp implements WriteMetadataInterface
      * @param MetadataInterface $metadata
      * @return SegmentInterface
      */
-    public function createPngXmpSegment(MetadataInterface $metadata): SegmentInterface
+    private function createPngXmpSegment(MetadataInterface $metadata): SegmentInterface
     {
         $xmpData = $this->xmpTemplate->get();
         return $this->segmentFactory->create([
