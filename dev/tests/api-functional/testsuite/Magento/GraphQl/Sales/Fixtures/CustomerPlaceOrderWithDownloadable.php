@@ -73,8 +73,6 @@ class CustomerPlaceOrderWithDownloadable
         $this->createCustomerCart();
         $this->addDownloadableProduct($productData);
         $this->setBillingAddress();
-  //      $shippingMethod = $this->setShippingAddress();
-  //      $paymentMethod = $this->setShippingMethod($shippingMethod);
         $paymentMethodCode ='checkmo';
         $this->setPaymentMethod($paymentMethodCode);
         return $this->doPlaceOrder();
@@ -140,63 +138,12 @@ QUERY;
     }
 
     /**
-     * Add a bundle product to the cart
+     * Add downloadable product with link to the cart
      *
      * @param array $productData
      * @return array
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
-    private function addBundleProduct(array $productData)
-    {
-        $productSku = $productData['sku'];
-        $qty = $productData['quantity'] ?? 1;
-        /** @var Product $bundleProduct */
-        $bundleProduct = $this->productRepository->get($productSku);
-        /** @var \Magento\Bundle\Model\Product\Type $typeInstance */
-        $typeInstance = $bundleProduct->getTypeInstance();
-        $optionId1 = (int)$typeInstance->getOptionsCollection($bundleProduct)->getFirstItem()->getId();
-        $optionId2 = (int)$typeInstance->getOptionsCollection($bundleProduct)->getLastItem()->getId();
-        $selectionId1 = (int)$typeInstance->getSelectionsCollection([$optionId1], $bundleProduct)
-            ->getFirstItem()
-            ->getSelectionId();
-        $selectionId2 = (int)$typeInstance->getSelectionsCollection([$optionId2], $bundleProduct)
-            ->getLastItem()
-            ->getSelectionId();
-
-        $addProduct = <<<QUERY
-mutation {
-  addBundleProductsToCart(input:{
-    cart_id:"{$this->getCartId()}"
-    cart_items:[
-      {
-        data:{
-          sku:"{$productSku}"
-          quantity:{$qty}
-        }
-        bundle_options:[
-          {
-            id:{$optionId1}
-            quantity:1
-            value:["{$selectionId1}"]
-          }
-          {
-            id:$optionId2
-            quantity:2
-            value:["{$selectionId2}"]
-          }
-        ]
-      }
-    ]
-  }) {
-    cart {
-      items {quantity product {sku}}
-      }
-    }
-}
-QUERY;
-        return $this->makeRequest($addProduct);
-    }
-
     private function addDownloadableProduct(array $productData)
     {
         $productSku = $productData['sku'];
@@ -281,86 +228,6 @@ mutation {
 }
 QUERY;
         return $this->makeRequest($setBillingAddress);
-    }
-
-    /**
-     * Set the shipping address on the cart and return an available shipping method
-     *
-     * @return array
-     */
-    private function setShippingAddress(): array
-    {
-        $setShippingAddress = <<<QUERY
-mutation {
-  setShippingAddressesOnCart(
-    input: {
-      cart_id: "{$this->getCartId()}"
-      shipping_addresses: [
-        {
-          address: {
-            firstname: "test shipFirst"
-            lastname: "test shipLast"
-            company: "test company"
-            street: ["test street 1", "test street 2"]
-            city: "Montgomery"
-            region: "AL"
-            postcode: "36013"
-            country_code: "US"
-            telephone: "3347665522"
-          }
-        }
-      ]
-    }
-  ) {
-    cart {
-      shipping_addresses {
-        available_shipping_methods {
-          carrier_code
-          method_code
-          amount {value}
-        }
-      }
-    }
-  }
-}
-QUERY;
-        $result = $this->makeRequest($setShippingAddress);
-        $shippingMethod = $result['setShippingAddressesOnCart']
-        ['cart']['shipping_addresses'][0]['available_shipping_methods'][0];
-        return $shippingMethod;
-    }
-
-    /**
-     * Set the shipping method on the cart and return an available payment method
-     *
-     * @param array $shippingMethod
-     * @return array
-     */
-    private function setShippingMethod(array $shippingMethod): array
-    {
-        $setShippingMethod = <<<QUERY
-mutation {
-  setShippingMethodsOnCart(input:  {
-    cart_id: "{$this->getCartId()}",
-    shipping_methods: [
-      {
-         carrier_code: "{$shippingMethod['carrier_code']}"
-         method_code: "{$shippingMethod['method_code']}"
-      }
-    ]
-  }) {
-    cart {
-      available_payment_methods {
-        code
-        title
-      }
-    }
-  }
-}
-QUERY;
-        $result = $this->makeRequest($setShippingMethod);
-        $paymentMethod = $result['setShippingMethodsOnCart']['cart']['available_payment_methods'][0];
-        return $paymentMethod;
     }
 
     /**
