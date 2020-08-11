@@ -28,6 +28,7 @@ use Magento\Sales\Api\InvoiceManagementInterface;
 
 /**
  * Tests downloadable product fields in Orders, Invoices, CreditMemo and Shipments
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
 {
@@ -206,19 +207,18 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
                 ],
                 'items' => [
                     [
-                      'product_name'=> 'Downloadable Product (Links can be purchased separately)',
-                      'product_sku' => 'downloadable-product-with-purchased-separately-links',
-                       'product_sale_price' => ['value' => 12],
-                    'discounts' => [],
-                    'quantity_refunded' => 1,
-                    'downloadable_links' => [
-                      [
-                      'uid'=> base64_encode("downloadable/{$linkId}"),
-                      'title' => 'Downloadable Product Link 1']
-                      ]
-                   ]
+                        'product_name'=> 'Downloadable Product (Links can be purchased separately)',
+                        'product_sku' => 'downloadable-product-with-purchased-separately-links',
+                        'product_sale_price' => ['value' => 12],
+                        'discounts' => [],
+                        'quantity_refunded' => 1,
+                        'downloadable_links' => [
+                            [
+                                'uid'=> base64_encode("downloadable/{$linkId}"),
+                                'title' => 'Downloadable Product Link 1']
+                        ]
+                    ]
                 ],
-
                 'total' => [
                     'subtotal' => [
                         'value' => 12
