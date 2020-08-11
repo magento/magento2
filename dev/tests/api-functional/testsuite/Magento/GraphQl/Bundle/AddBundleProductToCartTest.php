@@ -299,6 +299,7 @@ QUERY;
         $options = $typeInstance->getOptionsCollection($product);
 
         $selectionIds = [];
+        $optionIds = [];
         foreach ($options as $option) {
             $type = $option->getType();
 
