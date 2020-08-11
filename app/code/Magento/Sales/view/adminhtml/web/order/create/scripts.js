@@ -1493,14 +1493,20 @@ define([
             }
 
             if (action === 'change') {
-                var confirmText = message.replace(/%s/, customerGroupOption.text);
+                var self = this,
+                    confirmText = message.replace(/%s/, customerGroupOption.text);
                 confirmText = confirmText.replace(/%s/, currentCustomerGroupTitle);
-                if (confirm(confirmText)) {
-                    $$('#' + groupIdHtmlId + ' option').each(function (o) {
-                        o.selected = o.readAttribute('value') == groupId;
-                    });
-                    this.accountGroupChange();
-                }
+                confirm({
+                    content: confirmText,
+                    actions: {
+                        confirm: function() {
+                            $$('#' + groupIdHtmlId + ' option').each(function (o) {
+                                o.selected = o.readAttribute('value') == groupId;
+                            });
+                            self.accountGroupChange();
+                        }
+                    }
+                })
             } else if (action === 'inform') {
                 alert({
                     content: message + '\n' + groupMessage
