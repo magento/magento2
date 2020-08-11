@@ -61,7 +61,7 @@ class CustomerPlaceOrderWithDownloadable
     }
 
     /**
-     * Place order for a bundled product
+     * Place order for a downloadable product
      *
      * @param array $customerLogin
      * @param array $productData

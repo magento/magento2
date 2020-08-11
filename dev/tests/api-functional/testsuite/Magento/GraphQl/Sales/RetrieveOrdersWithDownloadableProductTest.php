@@ -268,7 +268,6 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
         $this->transaction->addObject($invoice)->addObject($order)->save();
     }
 
-
     /**
      * Get customer order query with invoices
      *
