@@ -8,11 +8,12 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminAnalyticsCheckTrackingTest">
+    <test name="AdminCheckAnalyticsTrackingTest">
         <annotations>
             <stories value="AdminAnalytics Check Tracking."/>
             <title value="AdminAnalytics Check Tracking."/>
             <description value="AdminAnalytics Check Tracking."/>
+            <severity value="MINOR"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
