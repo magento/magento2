@@ -476,5 +476,8 @@ class CategoryRepositoryTest extends WebapiAbstract
         }
         //We don't have permissions to do that.
         $this->assertEquals('Not allowed to edit the category\'s design attributes', $exceptionMessage);
+
+        // delete category to clean up auto-generated url rewrites
+        $this->deleteCategory($result['id']);
     }
 }

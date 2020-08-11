@@ -102,14 +102,31 @@ class IsolationLogger
         }
     }
 
+    private $failures = [];
+
     private function log($message, array $data)
     {
+        $cleanData = \array_map(
+            function ($value) {
+                $dateAttributes = ['created_at' => 1, 'updated_at' => 1, 'created_in' => 1, 'updated_in' => 1,];
+                return \array_diff_key($value, $dateAttributes);
+            },
+            $data
+        );
+
+        $hash = md5(\json_encode($cleanData));
+        if (isset($this->failures[$message][$hash])) {
+            return ;
+        }
+
         echo '>>>isolation>>>' . "\n" .
             'previous test: ' .$this->previousTest . "\n" .
             $message . var_export($data, true) .
             'current test: ' . $this->currenTest . "\n" .
             '<<<isolation<<<' . "\n" .
             "\n\n";
+
+        $this->failures[$message][$hash] = 1;
     }
 
     /**
