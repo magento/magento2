@@ -48,9 +48,10 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
     /** @var CreditmemoFactory */
     private $creditMemoFactory;
 
+    private $creditmemoItemFactory;
+
     protected function setUp():void
     {
-        parent::setUp();
         $objectManager = Bootstrap::getObjectManager();
         $this->customerAuthenticationHeader = $objectManager->get(GetCustomerAuthenticationHeader::class);
         $this->orderRepository = $objectManager->get(OrderRepositoryInterface::class);
@@ -59,6 +60,7 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
         $this->order = $objectManager->create(Order::class);
         $this->creditMemoService = $objectManager->get(CreditmemoService::class);
         $this->creditMemoFactory = $objectManager->get(CreditmemoFactory::class);
+        $this->creditmemoItemFactory = $objectManager->create(\Magento\Sales\Model\Order\Creditmemo\ItemFactory::class);
     }
 
     protected function tearDown(): void
@@ -158,7 +160,6 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
         $creditMemo = $this->creditMemoFactory->createByOrder($order, $order->getData());
         $creditMemo->setOrder($order);
         $creditMemo->setState(1);
-
         $creditMemo->setSubtotal(12);
         $creditMemo->setBaseSubTotal(12);
         $creditMemo->setBaseGrandTotal(12);
@@ -166,13 +167,6 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
         $creditMemo->setAdjustment(-2.00);
         $creditMemo->addComment("Test comment for downloadable refund", false, true);
         $creditMemo->save();
-        /** @var \Magento\Sales\Model\Order\Creditmemo\Item $creditMemoItems */
-  //      $creditMemoItems = $creditMemo->getItemByOrderId($order->getId());
-//        $creditMemoItems->setCreditmemo($creditMemo);
-//        $creditMemoItems->setOrderItemId($orderItem->getId());
- //       $creditMemoItems->setQty(1);
- //       $creditMemoItems->save();
-
         $this->creditMemoService->refund($creditMemo, true);
         $response = $this->getCustomerOrderWithCreditMemoQuery();
         $expectedCreditMemoData = [
@@ -223,8 +217,6 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
 
         $creditMemos = $firstOrderItem['credit_memos'];
         $this->assertResponseFields($creditMemos, $expectedCreditMemoData);
-
-
     }
 
     /**
@@ -363,9 +355,7 @@ query {
     orders {
         items {
             credit_memos {
-                comments {
-                    message
-                }
+                comments { message}
 
                 total {
                     subtotal {
