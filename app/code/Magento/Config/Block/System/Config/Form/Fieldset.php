@@ -274,7 +274,18 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
             return true;
         }
 
+        if (!empty($element->getGroup()['depends']['fields'])) {
+            foreach ($element->getGroup()['depends']['fields'] as $dependFieldData) {
+                if (is_array($dependFieldData) && isset($dependFieldData['value'], $dependFieldData['id'])) {
+                    if ($dependFieldData['value'] !== $this->getConfigData($dependFieldData['id'])) {
+                        return false;
+                    }
+                }
+            }
+        }
+
         $extra = $this->_authSession->getUser()->getExtra();
+
         if (isset($extra['configState'][$element->getId()])) {
             return $extra['configState'][$element->getId()];
         }
@@ -292,9 +303,7 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
         $elementId = '';
         $styleTag = '';
 
-        if (!empty($field->getFieldConfig()['depends']['fields'])
-            || !empty($field->getContainer()->getGroup()['depends']['fields'])
-        ) {
+        if (!empty($field->getFieldConfig()['depends']['fields'])) {
             $elementId = '#row_' . $field->getHtmlId();
         } elseif (!empty($field->getGroup()['depends']['fields'])) {
             $elementId = '#' . $field->getHtmlId() . '-head';
