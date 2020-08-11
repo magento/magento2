@@ -189,7 +189,6 @@ interface ConfigInterface
      * Get session.cookie_samesite
      *
      * @return string
-     *
      */
     public function getCookieSameSite(): string;
 }

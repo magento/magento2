@@ -121,7 +121,8 @@ class ConfigTest extends TestCase
             ['use_trans_sid', 'getUseTransSid', true],
             ['hash_function', 'getHashFunction', 'md5'],
             ['hash_bits_per_character', 'getHashBitsPerCharacter', 5],
-            ['url_rewriter_tags', 'getUrlRewriterTags', 'a=href']
+            ['url_rewriter_tags', 'getUrlRewriterTags', 'a=href'],
+            ['cookie_samesite', 'getCookieSameSite', 'Lax'],
         ];
     }
 
@@ -169,6 +170,7 @@ class ConfigTest extends TestCase
         $validatorMock->expects($this->any())
             ->method('isValid')
             ->willReturn(false);
+        $this->expectException('InvalidArgumentException');
         $this->getModel($validatorMock);
         $preVal = $this->config->getCookieLifetime();
         $this->config->setCookieLifetime('foobar_bogus');
@@ -183,6 +185,7 @@ class ConfigTest extends TestCase
         $validatorMock->expects($this->any())
             ->method('isValid')
             ->willReturn(false);
+        $this->expectException('InvalidArgumentException');
         $this->getModel($validatorMock);
         $preVal = $this->config->getCookieLifetime();
         $this->config->setCookieLifetime(-1);
@@ -233,6 +236,7 @@ class ConfigTest extends TestCase
         $validatorMock->expects($this->any())
             ->method('isValid')
             ->willReturn(false);
+        $this->expectException('InvalidArgumentException');
         $this->getModel($validatorMock);
         $preVal = $this->config->getCookieDomain();
         $this->config->setCookieDomain(24);
@@ -247,6 +251,7 @@ class ConfigTest extends TestCase
         $validatorMock->expects($this->any())
             ->method('isValid')
             ->willReturn(false);
+        $this->expectException('InvalidArgumentException');
         $this->getModel($validatorMock);
         $preVal = $this->config->getCookieDomain();
         $this->config->setCookieDomain('D:\\WINDOWS\\System32\\drivers\\etc\\hosts');
@@ -333,6 +338,10 @@ class ConfigTest extends TestCase
         $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
+
+        if(!$isValid){
+            $this->expectException('InvalidArgumentException');
+        }
         if ($isValidSame) {
             $validatorMock->expects($this->any())
                 ->method('isValid')
@@ -343,6 +352,8 @@ class ConfigTest extends TestCase
                     $validatorMock->expects($this->at($x))
                         ->method('isValid')
                         ->willReturn(false);
+                    $this->expectException('InvalidArgumentException');
+
                 } else {
                     $validatorMock->expects($this->at($x))
                         ->method('isValid')
@@ -350,7 +361,6 @@ class ConfigTest extends TestCase
                 }
             }
         }
-
         $this->getModel($validatorMock);
 
         $this->assertEquals($expected, $this->config->getOptions());
@@ -372,7 +382,8 @@ class ConfigTest extends TestCase
                     'session.cookie_domain' => 'init.host',
                     'session.cookie_httponly' => false,
                     'session.cookie_secure' => false,
-                    'session.save_handler' => 'files'
+                    'session.save_handler' => 'files',
+                    'session.cookie_samesite' => 'Lax'
                 ],
             ],
             'all invalid' => [
