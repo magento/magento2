@@ -44,7 +44,7 @@ class GetFileInfo
             'path' => $splFileInfo->getPath(),
             'filename' => $splFileInfo->getFilename(),
             'extension' => $splFileInfo->getExtension(),
-            'basename' => $splFileInfo->getBasename(),
+            'basename' => $splFileInfo->getBasename('.' . $splFileInfo->getExtension()),
             'pathname' => $splFileInfo->getPathname(),
             'perms' => $splFileInfo->getPerms(),
             'inode' => $splFileInfo->getInode(),
@@ -55,9 +55,7 @@ class GetFileInfo
             'mTime' => $splFileInfo->getMTime(),
             'cTime' => $splFileInfo->getCTime(),
             'type' => $splFileInfo->getType(),
-            'realPath' => $splFileInfo->getRealPath(),
-            'fileInfo' => $splFileInfo->getFileInfo(),
-            'pathInfo' => $splFileInfo->getPathInfo()
+            'realPath' => $splFileInfo->getRealPath()
         ]);
     }
 }
