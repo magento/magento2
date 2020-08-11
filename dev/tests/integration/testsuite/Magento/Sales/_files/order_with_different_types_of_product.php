@@ -87,6 +87,8 @@ $qtyOrdered = 1;
 /** @var \Magento\Sales\Model\Order\Item $orderItem */
 $orderConfigurableItem = $objectManager->create(\Magento\Sales\Model\Order\Item::class);
 $orderConfigurableItem->setProductId($configurableProduct->getId())->setQtyOrdered($qtyOrdered);
+$orderConfigurableItem->setSku($configurableProduct->getSku());
+$orderConfigurableItem->setName($configurableProduct->getName());
 $orderConfigurableItem->setBasePrice($configurableProduct->getPrice());
 $orderConfigurableItem->setPrice($configurableProduct->getPrice());
 $orderConfigurableItem->setRowTotal($configurableProduct->getPrice());
@@ -184,6 +186,8 @@ $requestInfo = [
 /** @var \Magento\Sales\Model\Order\Item $orderItem */
 $orderBundleItem = $objectManager->create(\Magento\Sales\Model\Order\Item::class);
 $orderBundleItem->setProductId($bundleProduct->getId());
+$orderBundleItem->setSku($bundleProduct->getSku());
+$orderBundleItem->setName($bundleProduct->getName());
 $orderBundleItem->setQtyOrdered(1);
 $orderBundleItem->setBasePrice($bundleProduct->getPrice());
 $orderBundleItem->setPrice($bundleProduct->getPrice());
