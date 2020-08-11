@@ -563,7 +563,7 @@ class Config implements ConfigInterface
     }
 
     /**
-     * Get session.use_cookies
+     * Get session.cookie_samesite
      *
      * @return string
      */

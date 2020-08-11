@@ -184,4 +184,12 @@ interface ConfigInterface
      * @return $this
      */
     public function setCookieSameSite(string $cookieSameSite):ConfigInterface;
+
+    /**
+     * Get session.cookie_samesite
+     *
+     * @return string
+     *
+     */
+    public function getCookieSameSite(): string;
 }
