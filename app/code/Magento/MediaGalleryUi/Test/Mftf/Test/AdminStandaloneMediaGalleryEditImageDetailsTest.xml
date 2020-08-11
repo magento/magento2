@@ -31,7 +31,7 @@
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="clickViewDetails"/>
         <actionGroup ref="AssertAdminEnhancedMediaGalleryUploadedImageDateTimeEqualsActionGroup" stepKey="verifyCreatedAndUpdatedAtDate" />
-        <wait time="20" stepKey="waitForUpdateTimeToBeGreater"/>
+        <wait time="100" stepKey="waitForUpdateTimeToBeGreater"/>
         <actionGroup ref="AdminEnhancedMediaGalleryCloseViewDetailsActionGroup" stepKey="closeViewDetails"/>
         <actionGroup ref="AdminEnhancedMediaGalleryEditImageDetailsActionGroup" stepKey="editImageDetails"/>
         <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveImage">
