@@ -232,7 +232,7 @@ class ProductViewTest extends GraphQlAbstract
             special_from_date
             special_price
             special_to_date
-            swatch_image            
+            swatch_image
             tier_price
             tier_prices
             {
@@ -578,8 +578,8 @@ QUERY;
      */
     public function testProductPrices()
     {
-        $firstProductSku = 'simple-249';
-        $secondProductSku = 'simple-156';
+        $firstProductSku = 'simple-156';
+        $secondProductSku = 'simple-249';
         $query = <<<QUERY
        {
            products(filter: {price: {from: "150.0", to: "250.0"}})
@@ -1050,7 +1050,7 @@ QUERY;
     {
         $query = <<<QUERY
 {
-    products(filter: 
+    products(filter:
              {
              sku: {in:["12345"]}
              }

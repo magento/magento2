@@ -16,6 +16,7 @@ use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Sales\Api\Data\InvoiceItemInterface;
 use Magento\Sales\Api\Data\OrderItemInterface;
 use Magento\Sales\Api\Data\ShipmentItemInterface;
+use Magento\Sales\Api\Data\CreditmemoItemInterface;
 
 /**
  * Resolve bundle options items for order item
@@ -56,12 +57,12 @@ class BundleOptions implements ResolverInterface
                 throw new LocalizedException(__('"model" value should be specified'));
             }
             if ($value['model'] instanceof OrderItemInterface) {
-                /** @var OrderItemInterface $item */
                 $item = $value['model'];
                 return $this->getBundleOptions($item, $value);
             }
-            if ($value['model'] instanceof InvoiceItemInterface || $value['model'] instanceof ShipmentItemInterface) {
-                /** @var InvoiceItemInterface|ShipmentItemInterface $item */
+            if ($value['model'] instanceof InvoiceItemInterface
+                || $value['model'] instanceof ShipmentItemInterface
+                || $value['model'] instanceof CreditmemoItemInterface) {
                 $item = $value['model'];
                 // Have to pass down order and item to map to avoid refetching all data
                 return $this->getBundleOptions($item->getOrderItem(), $value);

@@ -23,7 +23,7 @@ use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Class RetrieveOrdersTest for DownloadableProduct
+ * Tests downloadable product fields in Orders, Invoices, CreditMemo and Shipments
  */
 class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
 {
@@ -74,8 +74,8 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
     public function testGetCustomerOrdersDownloadableProduct()
     {
         $orderNumber = '100000001';
-        $response = $this->getCustomerOrderQuery($orderNumber);
-        $customerOrderItemsInResponse = $response[0]['items'];
+        $customerOrders = $this->getCustomersOrderQuery($orderNumber);
+        $customerOrderItemsInResponse = $customerOrders[0]['items'];
 
         $this->assertNotEmpty($customerOrderItemsInResponse);
         $downloadableItemInTheOrder = $customerOrderItemsInResponse[0];
@@ -103,15 +103,15 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
             ];
         $this->assertResponseFields($expectedDownloadableLinksData, $downloadableLinksFromResponse);
         // invoices assertions
-        $customerOrderItemsInvoicesResponse  = $response[0]['invoices'][0];
+        $customerOrderItemsInvoicesResponse  = $customerOrders[0]['invoices'][0];
         $this->assertNotEmpty($customerOrderItemsInvoicesResponse);
         $this->assertNotEmpty($customerOrderItemsInvoicesResponse['number']);
         $customerOrderItemsInvoicesItemsResponse = $customerOrderItemsInvoicesResponse['items'][0];
         $this->assertEquals('Downloadable Product', $customerOrderItemsInvoicesItemsResponse['product_name']);
         $this->assertEquals(10, $customerOrderItemsInvoicesItemsResponse['product_sale_price']['value']);
         $this->assertEquals(1, $customerOrderItemsInvoicesItemsResponse['quantity_invoiced']);
-        $downloadableItemInTheInvoice = $customerOrderItemsInvoicesItemsResponse['downloadable_links'];
-        $this->assertNotEmpty($downloadableItemInTheInvoice);
+        $downloadableItemLinks = $customerOrderItemsInvoicesItemsResponse['downloadable_links'];
+        $this->assertNotEmpty($downloadableItemLinks);
 
         $downloadableProduct = $this->productRepository->get('downloadable-product');
         /** @var LinkInterface $downloadableProductLinks */
@@ -125,7 +125,7 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
                     'uid'=> base64_encode("downloadable/{$linkId}")
                 ]
             ];
-        $this->assertResponseFields($expectedDownloadableLinksData, $downloadableItemInTheInvoice);
+        $this->assertResponseFields($expectedDownloadableLinksData, $downloadableItemLinks);
     }
 
     /**
@@ -253,12 +253,12 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
 
 
     /**
-     * Get customer order query
+     * Get customer order query with invoices
      *
      * @param string $orderNumber
      * @return array
      */
-    private function getCustomerOrderQuery($orderNumber): array
+    private function getCustomersOrderQuery($orderNumber): array
     {
         $query =
             <<<QUERY

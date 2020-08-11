@@ -161,6 +161,7 @@ class CreditmemoTest extends GraphQlAbstract
      *
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Bundle/_files/bundle_product_two_dropdown_options.php
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     public function testCreditMemoForBundledProductsWithPartialRefund()
     {
@@ -195,6 +196,46 @@ class CreditmemoTest extends GraphQlAbstract
 
         $this->creditMemoService->refund($creditMemo, true);
         $response = $this->getCustomerOrderWithCreditMemoQuery();
+        $expectedInvoicesData = [
+            [
+                'items' => [
+                    [
+                        'product_name' => 'Bundle Product With Two dropdown options',
+                        'product_sku' => 'bundle-product-two-dropdown-options-simple1-simple2',
+                        'product_sale_price' => [
+                            'value' => 15
+                        ],
+                        'discounts' => [],
+                        'bundle_options' => [
+                            [
+                                'label' => 'Drop Down Option 1',
+                                'values' => [
+                                    [
+                                        'product_name' => 'Simple Product1',
+                                        'product_sku' => 'simple1',
+                                        'quantity' => 1,
+                                        'price' => ['value' => 1, 'currency' => 'USD']
+                                    ]
+                                ]
+                            ],
+                            [
+                                'label' => 'Drop Down Option 2',
+                                'values' => [
+                                    [
+                                        'product_name' => 'Simple Product2',
+                                        'product_sku' => 'simple2',
+                                        'quantity' => 2,
+                                        'price' => ['value' => 2, 'currency' => 'USD']
+                                    ]
+                                ]
+                            ]
+                        ],
+                        'quantity_invoiced' => 2
+                    ],
+
+                ]
+            ]
+        ];
         $expectedCreditMemoData = [
             [
                 'comments' => [
@@ -208,6 +249,30 @@ class CreditmemoTest extends GraphQlAbstract
                             'value' => 15
                         ],
                         'discounts' => [],
+                        'bundle_options' => [
+                            [
+                                'label' => 'Drop Down Option 1',
+                                'values' => [
+                                    [
+                                        'product_name' => 'Simple Product1',
+                                        'product_sku' => 'simple1',
+                                        'quantity' => 1,
+                                        'price' => ['value' => 1, 'currency' => 'USD']
+                                    ]
+                                ]
+                            ],
+                            [
+                                'label' => 'Drop Down Option 2',
+                                'values' => [
+                                    [
+                                        'product_name' => 'Simple Product2',
+                                        'product_sku' => 'simple2',
+                                        'quantity' => 2,
+                                        'price' => ['value' => 2, 'currency' => 'USD']
+                                    ]
+                                ]
+                            ]
+                        ],
                         'quantity_refunded' => 1
                     ],
 
@@ -250,6 +315,11 @@ class CreditmemoTest extends GraphQlAbstract
             ]
         ];
         $firstOrderItem = current($response['customer']['orders']['items'] ?? []);
+
+        $this->assertArrayHasKey('invoices', $firstOrderItem);
+        $invoices = $firstOrderItem['invoices'];
+        $this->assertResponseFields($invoices, $expectedInvoicesData);
+
         $this->assertArrayHasKey('credit_memos', $firstOrderItem);
         $creditMemos = $firstOrderItem['credit_memos'];
         $this->assertResponseFields($creditMemos, $expectedCreditMemoData);
@@ -318,6 +388,30 @@ class CreditmemoTest extends GraphQlAbstract
                                     'currency' => "USD"
                                 ],
                                 'label' => 'Discount Label for 10% off'
+                            ]
+                        ],
+                        'bundle_options' => [
+                            [
+                                'label' => 'Drop Down Option 1',
+                                'values' => [
+                                    [
+                                        'product_name' => 'Simple Product1',
+                                        'product_sku' => 'simple1',
+                                        'quantity' => 1,
+                                        'price' => ['value' => 1, 'currency' => 'USD']
+                                    ]
+                                ]
+                            ],
+                            [
+                                'label' => 'Drop Down Option 2',
+                                'values' => [
+                                    [
+                                        'product_name' => 'Simple Product2',
+                                        'product_sku' => 'simple2',
+                                        'quantity' => 2,
+                                        'price' => ['value' => 2, 'currency' => 'USD']
+                                    ]
+                                ]
                             ]
                         ],
                         'quantity_refunded' => 1
@@ -444,6 +538,7 @@ class CreditmemoTest extends GraphQlAbstract
      *
      * @return array
      * @throws AuthenticationException
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     private function getCustomerOrderWithCreditMemoQuery(): array
     {
@@ -453,6 +548,32 @@ query {
   customer {
     orders {
         items {
+            invoices {
+               items {
+                    product_name
+                    product_sku
+                    product_sale_price {
+                        value
+                    }
+                    ... on BundleInvoiceItem {
+                      bundle_options {
+                        label
+                        values {
+                          product_sku
+                          product_name
+                          quantity
+                          price {
+                            value
+                            currency
+                          }
+                        }
+                      }
+                    }
+                    discounts { amount{value currency} label }
+                    quantity_invoiced
+                    discounts { amount{value currency} label }
+               }
+            }
             credit_memos {
                 comments {
                     message
@@ -462,6 +583,20 @@ query {
                     product_sku
                     product_sale_price {
                         value
+                    }
+                    ... on BundleCreditMemoItem {
+                      bundle_options {
+                        label
+                        values {
+                          product_sku
+                          product_name
+                          quantity
+                          price {
+                            value
+                            currency
+                          }
+                        }
+                      }
                     }
                     discounts { amount{value currency} label }
                     quantity_refunded

@@ -10,11 +10,11 @@
         "magento/module-quote": "*",
         "magento/module-sales": "*",
         "magento/module-quote-graph-ql": "*",
-        "magento/module-sales-graph-ql": "*",
         "magento/framework": "*"
     },
     "suggest": {
-        "magento/module-catalog-graph-ql": "*"
+        "magento/module-catalog-graph-ql": "*",
+        "magento/module-sales-graph-ql": "*"
     },
     "license": [
         "OSL-3.0",

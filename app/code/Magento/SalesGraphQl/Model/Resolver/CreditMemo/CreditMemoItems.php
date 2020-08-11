@@ -94,7 +94,7 @@ class CreditMemoItems implements ResolverInterface
                 $orderItemModel = $orderItem['model'];
                 if (!$orderItemModel->getParentItem()) {
                     $creditMemoItemData = $this->getCreditMemoItemData($order, $creditMemoItem);
-                    if (isset($creditMemoItemData)) {
+                    if (!empty($creditMemoItemData)) {
                         $orderItems[$creditMemoItem->getOrderItemId()] = $creditMemoItemData;
                     }
                 }
