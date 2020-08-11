@@ -81,6 +81,8 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
     }
 
     /**
+     * Returns links title
+     *
      * @return null|string
      */
     public function getLinksTitle()
@@ -92,6 +94,8 @@ class Downloadable extends \Magento\Sales\Block\Order\Email\Items\DefaultItems
     }
 
     /**
+     * Returns purchased link url
+     *
      * @param Item $item
      * @return string
      */
