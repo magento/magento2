@@ -10,13 +10,13 @@ namespace Magento\MediaContentSynchronizationCatalog\Model\Synchronizer;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
-use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
+use Magento\MediaContentSynchronizationApi\Api\SynchronizeInterface;
 use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
 
 /**
  * Synchronize category content with assets
  */
-class Category implements SynchronizerInterface
+class Category implements SynchronizeInterface
 {
     private const CONTENT_TYPE = 'catalog_category';
     private const TYPE = 'entityType';
