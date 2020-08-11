@@ -50,8 +50,8 @@ class Builder extends View\Layout\Builder
         parent::__construct($layout, $request, $eventManager);
         $this->pageConfig = $pageConfig;
         $this->pageLayoutReader = $pageLayoutReader;
-        $this->pageConfig->setBuilder($this);
         $this->pageLayoutBuilder = $pageLayoutBuilder ?? ObjectManager::getInstance()->get(BuilderInterface::class);
+        $this->pageConfig->setBuilder($this);
     }
 
     /**
