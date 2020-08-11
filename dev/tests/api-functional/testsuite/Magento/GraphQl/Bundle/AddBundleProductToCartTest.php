@@ -80,7 +80,7 @@ class AddBundleProductToCartTest extends GraphQlAbstract
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
 
         $query = <<<QUERY
-mutation {  
+mutation {
   addBundleProductsToCart(input:{
     cart_id:"{$maskedQuoteId}"
     cart_items:[
@@ -223,7 +223,7 @@ QUERY;
         $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
 
         $query = <<<QUERY
-mutation {  
+mutation {
   addBundleProductsToCart(input:{
     cart_id:"{$maskedQuoteId}"
     cart_items:[
@@ -238,6 +238,107 @@ mutation {
             quantity:1
             value:[
               "555"
+            ]
+          }
+        ]
+      }
+    ]
+  }) {
+    cart {
+      items {
+        id
+        quantity
+        product {
+          sku
+        }
+        ... on BundleCartItem {
+          bundle_options {
+            id
+            label
+            type
+            values {
+              id
+              label
+              price
+              quantity
+            }
+          }
+        }
+      }
+    }
+  }
+}
+QUERY;
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Bundle/_files/product_with_multiple_options_radio_select.php
+     * @magentoApiDataFixture Magento/Checkout/_files/active_quote.php
+     */
+    public function testAddBundleToCartWithRadioAndSelectErr()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Option type (select, radio) should have only one element.');
+
+        $sku = 'bundle-product';
+
+        $this->quoteResource->load(
+            $this->quote,
+            'test_order_1',
+            'reserved_order_id'
+        );
+
+        $product = $this->productRepository->get($sku);
+
+        /** @var $typeInstance \Magento\Bundle\Model\Product\Type */
+        $typeInstance = $product->getTypeInstance();
+        $typeInstance->setStoreFilter($product->getStoreId(), $product);
+        /** @var $option \Magento\Bundle\Model\Option */
+        $options = $typeInstance->getOptionsCollection($product);
+
+        $selectionIds = [];
+        $optionIds = [];
+        foreach ($options as $option) {
+            $type = $option->getType();
+
+            /** @var \Magento\Catalog\Model\Product $selection */
+            $selections = $typeInstance->getSelectionsCollection([$option->getId()], $product);
+            $optionIds[$type] = $option->getId();
+
+            foreach ($selections->getItems() as $selection) {
+                $selectionIds[$type][] = $selection->getSelectionId();
+            }
+        }
+
+        $maskedQuoteId = $this->quoteIdToMaskedId->execute((int)$this->quote->getId());
+
+        $query = <<<QUERY
+mutation {
+  addBundleProductsToCart(input:{
+    cart_id:"{$maskedQuoteId}"
+    cart_items:[
+      {
+        data:{
+          sku:"{$sku}"
+          quantity:1
+        }
+        bundle_options:[
+          {
+            id:{$optionIds['select']}
+            quantity:1
+            value:[
+              "{$selectionIds['select'][0]}"
+              "{$selectionIds['select'][1]}"
+            ]
+          },
+           {
+            id:{$optionIds['radio']}
+            quantity:1
+            value:[
+              "{$selectionIds['radio'][0]}"
+              "{$selectionIds['radio'][1]}"
             ]
           }
         ]
