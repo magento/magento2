@@ -8,7 +8,9 @@ declare(strict_types=1);
 namespace Magento\MediaGallerySynchronization\Model\Filesystem;
 
 /**
- * Class FileInfo
+ * Internal class wrapping \SplFileInfo
+ *
+ * @SuppressWarnings(PHPMD.TooManyFields)
  */
 class FileInfo extends \SplFileInfo
 {
@@ -36,11 +38,6 @@ class FileInfo extends \SplFileInfo
      * @var string
      */
     private $pathname;
-
-    /**
-     * @var int
-     */
-    private $perms;
 
     /**
      * @var int
@@ -88,16 +85,6 @@ class FileInfo extends \SplFileInfo
     private $realPath;
 
     /**
-     * @var \SplFileInfo
-     */
-    private $fileInfo;
-
-    /**
-     * @var \SplFileInfo
-     */
-    private $pathInfo;
-
-    /**
      * FileInfo constructor.
      * @param string $file_name
      * @param string $path
@@ -105,7 +92,6 @@ class FileInfo extends \SplFileInfo
      * @param string $extension
      * @param string $basename
      * @param string $pathname
-     * @param int $perms
      * @param int $inode
      * @param int $size
      * @param int $owner
@@ -115,8 +101,7 @@ class FileInfo extends \SplFileInfo
      * @param int $cTime
      * @param string $type
      * @param false|string $realPath
-     * @param \SplFileInfo $fileInfo
-     * @param \SplFileInfo $pathInfo
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         string $file_name,
@@ -125,7 +110,6 @@ class FileInfo extends \SplFileInfo
         string $extension,
         string $basename,
         string $pathname,
-        int $perms,
         int $inode,
         int $size,
         int $owner,
@@ -134,9 +118,7 @@ class FileInfo extends \SplFileInfo
         int $mTime,
         int $cTime,
         string $type,
-        $realPath,
-        \SplFileInfo $fileInfo,
-        \SplFileInfo $pathInfo
+        $realPath
     ) {
         parent::__construct($file_name);
         $this->path = $path;
@@ -144,7 +126,6 @@ class FileInfo extends \SplFileInfo
         $this->extension = $extension;
         $this->basename = $basename;
         $this->pathname = $pathname;
-        $this->perms = $perms;
         $this->inode = $inode;
         $this->size = $size;
         $this->owner = $owner;
@@ -154,8 +135,6 @@ class FileInfo extends \SplFileInfo
         $this->cTime = $cTime;
         $this->type = $type;
         $this->realPath = $realPath;
-        $this->fileInfo = $fileInfo;
-        $this->pathInfo = $pathInfo;
     }
 
     /**
@@ -196,14 +175,6 @@ class FileInfo extends \SplFileInfo
     public function getPathname(): string
     {
         return $this->pathname;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getPerms(): int
-    {
-        return $this->perms;
     }
 
     /**
@@ -276,21 +247,5 @@ class FileInfo extends \SplFileInfo
     public function getRealPath()
     {
         return $this->realPath;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getFileInfo($class_name = null): \SplFileInfo
-    {
-        return $this->fileInfo;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getPathInfo($class_name = null): \SplFileInfo
-    {
-        return $this->pathInfo;
     }
 }
