@@ -225,7 +225,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
     /**
      * Links attribute name-to-link type ID.
      *
-     * @deprecated use DI for LinkProcessor class if you want to add additional types
+     * @deprecated 101.1.0 use DI for LinkProcessor class if you want to add additional types
      *
      * @var array
      */
@@ -554,7 +554,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @var \Magento\CatalogInventory\Model\ResourceModel\Stock\ItemFactory
-     * @deprecated this variable isn't used anymore.
+     * @deprecated 101.0.0 this variable isn't used anymore.
      */
     protected $_stockResItemFac;
 
@@ -618,7 +618,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
 
     /**
      * @var array
-     * @deprecated 100.1.5
+     * @deprecated 100.0.3
      * @since 100.0.3
      */
     protected $productUrlKeys = [];
@@ -969,6 +969,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      * Return empty attribute value constant
      *
      * @return string
+     * @since 101.0.0
      */
     public function getEmptyAttributeValueConstant()
     {
@@ -1289,7 +1290,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * Must be called after ALL products saving done.
      *
-     * @deprecated use linkProcessor Directly
+     * @deprecated 101.1.0 use linkProcessor Directly
      *
      * @return $this
      */
@@ -1473,7 +1474,7 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
      *
      * @return void
      * @since 100.0.4
-     * @deprecated
+     * @deprecated 100.2.3
      */
     protected function initMediaGalleryResources()
     {
@@ -3079,6 +3080,9 @@ class Product extends \Magento\ImportExport\Model\Import\Entity\AbstractEntity
         );
 
         if ($this->stockConfiguration->isQty($this->skuProcessor->getNewSku($sku)['type_id'])) {
+            if (isset($rowData['qty']) && $rowData['qty'] == 0) {
+                $row['is_in_stock'] = 0;
+            }
             $stockItemDo->setData($row);
             $row['is_in_stock'] = $row['is_in_stock'] ?? $this->stockStateProvider->verifyStock($stockItemDo);
             if ($this->stockStateProvider->verifyNotification($stockItemDo)) {

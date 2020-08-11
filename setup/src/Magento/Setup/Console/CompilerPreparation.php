@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Console;
 
 use Magento\Framework\App\Bootstrap;
@@ -65,13 +67,9 @@ class CompilerPreparation
      */
     public function handleCompilerEnvironment()
     {
-        $compilationCommands = $this->getCompilerInvalidationCommands();
-        $cmdName = $this->input->getFirstArgument();
-        $isHelpOption = $this->input->hasParameterOption('--help') || $this->input->hasParameterOption('-h');
-        if (!in_array($cmdName, $compilationCommands) || $isHelpOption) {
+        if (!$this->shouldInvalidateCompiledDI()) {
             return;
         }
-
         if (!$this->getGenerationDirectoryAccess()->check()) {
             throw new GenerationDirectoryAccessException();
         }
@@ -120,5 +118,40 @@ class CompilerPreparation
         }
 
         return $this->generationDirectoryAccess;
+    }
+
+    /**
+     * Checks if the command being executed should invalidate compiled DI.
+     *
+     * @return bool
+     */
+    private function shouldInvalidateCompiledDI(): bool
+    {
+        $compilationCommands = $this->getCompilerInvalidationCommands();
+        $cmdName = $this->input->getFirstArgument();
+        $isHelpOption = $this->input->hasParameterOption('--help') || $this->input->hasParameterOption('-h');
+        $invalidate = false;
+        if (!$isHelpOption) {
+            $invalidate = in_array($cmdName, $compilationCommands);
+            if (!$invalidate) {
+                // Check if it's an abbreviation of compilation commands.
+                $expr = preg_replace_callback(
+                    '{([^:]+|)}',
+                    function ($matches) {
+                        return preg_quote($matches[1]) . '[^:]*';
+                    },
+                    $cmdName
+                );
+                $commands = preg_grep('{^' . $expr . '$}', $compilationCommands);
+                if (empty($commands)) {
+                    $commands = preg_grep('{^' . $expr . '$}i', $compilationCommands);
+                }
+                if (count($commands) === 1) {
+                    $invalidate = true;
+                }
+            }
+        }
+
+        return $invalidate;
     }
 }

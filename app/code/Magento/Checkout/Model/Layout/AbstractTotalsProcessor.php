@@ -17,6 +17,7 @@ use Magento\Store\Model\ScopeInterface;
  *
  * phpcs:disable Magento2.Classes.AbstractApi
  * @api
+ * @since 100.0.2
  */
 abstract class AbstractTotalsProcessor
 {

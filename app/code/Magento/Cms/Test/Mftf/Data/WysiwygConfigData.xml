@@ -18,7 +18,7 @@
         <data key="scope_id">0</data>
         <data key="value">hidden</data>
     </entity>
-    <entity name="WysiwygTinyMCE3Enable">
+    <entity name="WysiwygTinyMCE3Enable" deprecated="Use WysiwygTinyMCE4Enable instead">
         <data key="path">cms/wysiwyg/editor</data>
         <data key="scope_id">0</data>
         <data key="value">Magento_Tinymce3/tinymce3Adapter</data>

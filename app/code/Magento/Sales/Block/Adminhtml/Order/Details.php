@@ -5,12 +5,29 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Element\Template;
+use Magento\GiftMessage\Helper\Message as GiftMessageHelper;
+
 /**
- * Class Details
- * @package Magento\Sales\Block\Adminhtml\Order
+ * Order Details
  */
 class Details extends \Magento\Framework\View\Element\Template
 {
+    /**
+     * @param Template\Context $context
+     * @param array $data
+     * @param Message|null $giftMessageHelper
+     */
+    public function __construct(
+        Template\Context $context,
+        array $data = [],
+        ?GiftMessageHelper $giftMessageHelper = null
+    ) {
+        $data['giftMessageHelper'] = $giftMessageHelper ?? ObjectManager::getInstance()->get(GiftMessageHelper::class);
+        parent::__construct($context, $data);
+    }
+
     /**
      * @var string
      */
