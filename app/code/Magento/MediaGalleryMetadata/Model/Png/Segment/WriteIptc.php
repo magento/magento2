@@ -71,11 +71,9 @@ class WriteIptc implements WriteMetadataInterface
         }
 
         if (empty($pngIptcSegments)) {
-            $segments[] =  $this->createPngIptcSegment($metadata);
-
             return $this->fileFactory->create([
                 'path' => $file->getPath(),
-                'segments' => $segments
+                'segments' => $this->insertPngIptcSegment($segments, $this->createPngIptcSegment($metadata))
             ]);
         }
 
@@ -87,6 +85,22 @@ class WriteIptc implements WriteMetadataInterface
             'path' => $file->getPath(),
             'segments' => $segments
         ]);
+    }
+
+    /**
+     * Insert IPTC segment to image png segments before IEND chunk
+     *
+     * @param SegmentInterface[] $segments
+     * @param SegmentInterface $xmpSegment
+     * @return SegmentInterface[]
+     */
+    private function insertPngIptcSegment(array $segments, SegmentInterface $xmpSegment): array
+    {
+        return array_merge(
+            array_slice($segments, 0, count($segments) - 1),
+            [$xmpSegment],
+            array_slice($segments, count($segments) - 1)
+        );
     }
 
     /**
