@@ -9,12 +9,12 @@ declare(strict_types=1);
 namespace Magento\Rss\Model;
 
 use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\FeedFactoryInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Rss\DataProviderInterface;
 use Magento\Framework\Exception\InputException;
 use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\App\FeedFactoryInterface;
 
 /**
  * Provides functionality to work with RSS feeds
@@ -79,6 +79,7 @@ class Rss
             return $this->serializer->unserialize($cache);
         }
 
+        // serializing data to make sure all Phrase objects converted to a string
         $serializedData = $this->serializer->serialize($this->dataProvider->getRssData());
 
         if ($cacheKey && $cacheLifeTime) {
