@@ -1,0 +1,153 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontFilterableProductAttributeInLayeredNavigationWithoutReindexTest">
+        <annotations>
+            <features value="LayeredNavigation"/>
+            <stories value="Product attributes in Layered Navigation"/>
+            <title value="Create and add new dropdown product attribute to existing set, assign it to existing product with that set and see it on layered navigation"/>
+            <description value="Verify that new dropdown attribute in existing attribute set shows on layered navigation on storefront without reindex"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-35954"/>
+            <group value="layeredNavigation"/>
+            <group value="SearchEngineElasticsearch"/>
+        </annotations>
+
+        <before>
+            <!--Create category, attribute set with multiselect product attribute with two options-->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
+            <createData entity="multipleSelectProductAttribute" stepKey="createMultiselectAttribute"/>
+            <createData entity="ProductAttributeOption10" stepKey="firstMultiselectOption">
+                <requiredEntity createDataKey="createMultiselectAttribute"/>
+            </createData>
+            <createData entity="ProductAttributeOption11" stepKey="secondMultiselectOption">
+                <requiredEntity createDataKey="createMultiselectAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getFirstMultiselectOption">
+                <requiredEntity createDataKey="createMultiselectAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getSecondMultiselectOption">
+                <requiredEntity createDataKey="createMultiselectAttribute"/>
+            </getData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/$createAttributeSet.attribute_set_id$/" stepKey="onAttributeSetEdit"/>
+            <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>
+            <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignMultiselectAttributeToGroup">
+                <argument name="group" value="Product Details"/>
+                <argument name="attribute" value="$createMultiselectAttribute.attribute_code$"/>
+            </actionGroup>
+            <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSet"/>
+            <!--Create configurable product with created attribute set and multiselect attribute-->
+            <createData entity="SimpleOne" storeCode="all" stepKey="createFirstSimpleProduct">
+                <field key="attribute_set_id">$createAttributeSet.attribute_set_id$</field>
+                <requiredEntity createDataKey="createMultiselectAttribute"/>
+                <requiredEntity createDataKey="getFirstMultiselectOption"/>
+            </createData>
+            <createData entity="SimpleOne" storeCode="all" stepKey="createSecondSimpleProduct">
+                <field key="attribute_set_id">$createAttributeSet.attribute_set_id$</field>
+                <requiredEntity createDataKey="createMultiselectAttribute"/>
+                <requiredEntity createDataKey="getSecondMultiselectOption"/>
+            </createData>
+            <createData entity="BaseConfigurableProduct" stepKey="createConfigurableProduct">
+                <field key="attribute_set_id">$createAttributeSet.attribute_set_id$</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ConfigurableProductOneOption" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigurableProduct"/>
+                <requiredEntity createDataKey="createMultiselectAttribute"/>
+                <requiredEntity createDataKey="getFirstMultiselectOption"/>
+            </createData>
+            <createData entity="ConfigurableProductOneOption" stepKey="createConfigProductOption2">
+                <requiredEntity createDataKey="createConfigurableProduct"/>
+                <requiredEntity createDataKey="createMultiselectAttribute"/>
+                <requiredEntity createDataKey="getSecondMultiselectOption"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild">
+                <requiredEntity createDataKey="createConfigurableProduct"/>
+                <requiredEntity createDataKey="createFirstSimpleProduct"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigurableProduct"/>
+                <requiredEntity createDataKey="createSecondSimpleProduct"/>
+            </createData>
+            <!--Create new dropdown attribute with two options and set Use in layered navigation "Filterable (no results)"-->
+            <createData entity="dropdownProductAttribute" stepKey="createDropdownAttribute"/>
+            <createData entity="ProductAttributeOption10" stepKey="firstDropdownOption">
+                <requiredEntity createDataKey="createDropdownAttribute"/>
+            </createData>
+            <createData entity="ProductAttributeOption11" stepKey="secondDropdownOption">
+                <requiredEntity createDataKey="createDropdownAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getFirstDropdownOption">
+                <requiredEntity createDataKey="createDropdownAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getSecondDropdownOption">
+                <requiredEntity createDataKey="createDropdownAttribute"/>
+            </getData>
+            <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="goToDropdownAttributePage">
+                <argument name="productAttributeCode" value="$createDropdownAttribute.attribute_code$"/>
+            </actionGroup>
+            <actionGroup ref="AdminSetProductAttributeUseInLayeredNavigationOptionActionGroup" stepKey="setDropdownUseInLayeredNavigationNoResults">
+                <argument name="useInLayeredNavigationValue" value="Filterable (no results)"/>
+            </actionGroup>
+            <actionGroup ref="AdminProductAttributeSaveActionGroup" stepKey="saveDropdownAttribute"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createFirstSimpleProduct" stepKey="deleteFirstSimpleProduct"/>
+            <deleteData createDataKey="createSecondSimpleProduct" stepKey="deleteSecondSimpleProduct"/>
+            <deleteData createDataKey="createConfigurableProduct" stepKey="deleteConfigurableProduct"/>
+            <deleteData createDataKey="createMultiselectAttribute" stepKey="deleteMultiselectAttribute"/>
+            <deleteData createDataKey="createDropdownAttribute" stepKey="deleteDropdownAttribute"/>
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Set attribute option Use in layered navigation to "Filterable(no results)"-->
+        <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="goToMultiselectAttributePage">
+            <argument name="productAttributeCode" value="$createMultiselectAttribute.attribute_code$"/>
+        </actionGroup>
+        <actionGroup ref="AdminSetProductAttributeUseInLayeredNavigationOptionActionGroup" stepKey="setMultiselectUseInLayeredNavigationNoResults">
+            <argument name="useInLayeredNavigationValue" value="Filterable (no results)"/>
+        </actionGroup>
+        <actionGroup ref="AdminProductAttributeSaveActionGroup" stepKey="saveMultiselectAttribute"/>
+        <amOnPage url="{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="onCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
+        <waitForElementVisible selector="{{StorefrontCategorySidebarSection.filterOptionsTitle($createMultiselectAttribute.default_frontend_label$)}}" stepKey="waitForMultiselectAttributeVisible"/>
+        <conditionalClick selector="{{StorefrontCategorySidebarSection.filterOptionsTitle($createMultiselectAttribute.default_frontend_label$)}}" dependentSelector="{{StorefrontCategorySidebarSection.activeFilterOptions}}" visible="false" stepKey="clickToExpandAttribute"/>
+        <waitForElementVisible selector="{{StorefrontCategorySidebarSection.activeFilterOptions}}" stepKey="waitForMultiselectAttributeOptionsVisible"/>
+        <seeElement selector="{{StorefrontCategorySidebarSection.enabledFilterOptionItemByLabel($getFirstMultiselectOption.label$)}}" stepKey="assertMultiselectAttributeFirstOptionInLayeredNavigation"/>
+        <seeElement selector="{{StorefrontCategorySidebarSection.enabledFilterOptionItemByLabel($getSecondMultiselectOption.label$)}}" stepKey="assertMultiselectAttributeSecondOptionInLayeredNavigation"/>
+        <amOnPage url="{{AdminProductAttributeSetEditPage.url}}/$createAttributeSet.attribute_set_id$/" stepKey="onAttributeSetEditPage"/>
+        <waitForPageLoad stepKey="waitForAttributeSetEditPageLoad"/>
+        <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignDropdownAttributeToGroup">
+            <argument name="group" value="Product Details"/>
+            <argument name="attribute" value="$createDropdownAttribute.attribute_code$"/>
+        </actionGroup>
+        <actionGroup ref="SaveAttributeSetActionGroup" stepKey="saveAttributeSetWithDropdownAttribute"/>
+        <!--Assign dropdown attribute to child product of configurable-->
+        <amOnPage url="{{AdminProductEditPage.url($createFirstSimpleProduct.id$)}}" stepKey="visitAdminEditProductPage"/>
+        <waitForElementVisible selector="{{AdminProductFormSection.customSelectField('$createDropdownAttribute.attribute_code$')}}" stepKey="waitForDropdownAttributeSelectVisible"/>
+        <selectOption selector="{{AdminProductFormSection.customSelectField('$createDropdownAttribute.attribute_code$')}}" userInput="$getFirstDropdownOption.label$" stepKey="selectValueOfNewAttribute"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
+        <!--Assert that dropdown attribute is present on layered navigation with both options-->
+        <amOnPage url="{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}" stepKey="goToCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoadWithDropdownAttribute"/>
+        <waitForElementVisible selector="{{StorefrontCategorySidebarSection.filterOptionsTitle($createDropdownAttribute.default_frontend_label$)}}" stepKey="waitForDropdownAttributeVisible"/>
+        <conditionalClick selector="{{StorefrontCategorySidebarSection.filterOptionsTitle($createDropdownAttribute.default_frontend_label$)}}" dependentSelector="{{StorefrontCategorySidebarSection.activeFilterOptions}}" visible="false" stepKey="clickToExpandDropdownAttribute"/>
+        <waitForElementVisible selector="{{StorefrontCategorySidebarSection.activeFilterOptions}}" stepKey="waitForDropdownAttributeOptionsVisible"/>
+        <seeElement selector="{{StorefrontCategorySidebarSection.enabledFilterOptionItemByLabel($getFirstDropdownOption.label$)}}" stepKey="assertDropdownAttributeFirstOptionInLayeredNavigation"/>
+        <seeElement selector="{{StorefrontCategorySidebarSection.disabledFilterOptionItemByLabel($getSecondDropdownOption.label$)}}" stepKey="assertDropdownAttributeSecondOptionInLayeredNavigation"/>
+    </test>
+</tests>
