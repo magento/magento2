@@ -5,7 +5,6 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminEnhancedMediaGalleryVerifyUpdatedTagsTest">
         <annotations>
@@ -26,13 +25,20 @@
             <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsDeleteActionGroup" stepKey="deleteImage"/>
         </after>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
-            <argument name="image" value="ImageUpload"/>
+            <argument name="image" value="ImageUpload3"/>
         </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="viewImageDetails"/>
         <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsEditActionGroup" stepKey="editImage"/>
         <actionGroup ref="AdminMediaGalleryEditAssetAddKeywordActionGroup" stepKey="setKeywords">
             <argument name="keyword" value="UpdatedImageDetails.keyword"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveImage">
+            <argument name="image" value="UpdatedImageDetails"/>
+        </actionGroup>
+        <actionGroup ref="AssertImageAttributesOnEnhancedMediaGalleryActionGroup" stepKey="verifyUpdateImageOnTheGrid">
+            <argument name="image" value="UpdatedImageDetails"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDetailsActionGroup" stepKey="verifyImageDetails">
             <argument name="image" value="UpdatedImageDetails"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageKeywordsActionGroup" stepKey="verifyAddedKeywords">
