@@ -46,7 +46,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/Wishlist/_files/wishlist_shared.php
      * @magentoAppIsolation enabled
-     * @magentoDbIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testLoadedProductAttributes()
     {
