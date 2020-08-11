@@ -1493,8 +1493,7 @@ define([
             }
 
             if (action === 'change') {
-                var self = this,
-                    confirmText = message.replace(/%s/, customerGroupOption.text);
+                var confirmText = message.replace(/%s/, customerGroupOption.text);
                 confirmText = confirmText.replace(/%s/, currentCustomerGroupTitle);
                 confirm({
                     content: confirmText,
@@ -1503,8 +1502,8 @@ define([
                             $$('#' + groupIdHtmlId + ' option').each(function (o) {
                                 o.selected = o.readAttribute('value') == groupId;
                             });
-                            self.accountGroupChange();
-                        }
+                            this.accountGroupChange();
+                        }.bind(this)
                     }
                 })
             } else if (action === 'inform') {
