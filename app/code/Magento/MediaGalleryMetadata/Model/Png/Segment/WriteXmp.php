@@ -80,9 +80,11 @@ class WriteXmp implements WriteMetadataInterface
         }
 
         if (empty($pngXmpSegments)) {
+            $segments[] = $this->createPngXmpSegment($metadata);
+
             return $this->fileFactory->create([
                 'path' => $file->getPath(),
-                'segments' => $this->insertPngXmpSegment($segments, $this->createPngXmpSegment($metadata))
+                'segments' => $segments
             ]);
         }
 
@@ -94,18 +96,6 @@ class WriteXmp implements WriteMetadataInterface
             'path' => $file->getPath(),
             'segments' => $segments
         ]);
-    }
-
-    /**
-     * Insert XMP segment to image png segments (at position 1)
-     *
-     * @param SegmentInterface[] $segments
-     * @param SegmentInterface $xmpSegment
-     * @return SegmentInterface[]
-     */
-    private function insertPngXmpSegment(array $segments, SegmentInterface $xmpSegment): array
-    {
-        return array_merge(array_slice($segments, 0, 2), [$xmpSegment], array_slice($segments, 2));
     }
 
     /**
