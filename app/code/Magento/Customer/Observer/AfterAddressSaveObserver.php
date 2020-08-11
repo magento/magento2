@@ -25,6 +25,7 @@ use Magento\Store\Model\ScopeInterface;
 /**
  * Customer Observer Model
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class AfterAddressSaveObserver implements ObserverInterface
 {
