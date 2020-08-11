@@ -9,13 +9,13 @@ declare(strict_types=1);
 namespace Magento\Newsletter\Controller\Adminhtml\Subscriber;
 
 use Magento\Backend\App\Action\Context;
-use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\Response\Http\FileFactory;
 use Magento\Newsletter\Controller\Adminhtml\Subscriber;
 use Magento\Newsletter\Model\SubscriberFactory;
 
-class MassUnsubscribe extends Subscriber implements HttpGetActionInterface
+class MassUnsubscribe extends Subscriber implements HttpPostActionInterface
 {
     /**
      * @var SubscriberFactory
@@ -41,7 +41,7 @@ class MassUnsubscribe extends Subscriber implements HttpGetActionInterface
      *
      * @return void
      */
-    public function execute()
+    public function execute(): void
     {
         $subscribersIds = $this->getRequest()->getParam('subscriber');
         if (!is_array($subscribersIds)) {
