@@ -10,7 +10,7 @@ namespace Magento\LoginAsCustomerAssistance\Plugin;
 use Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses;
 use Magento\Framework\AuthorizationInterface;
 use Magento\LoginAsCustomerApi\Api\ConfigInterface;
-use Magento\LoginAsCustomerAssistance\Model\IsAssistanceEnabled;
+use Magento\LoginAsCustomerAssistance\Api\IsAssistanceEnabledInterface;
 use Magento\LoginAsCustomerAssistance\Model\ResourceModel\GetLoginAsCustomerAssistanceAllowed;
 
 /**
@@ -123,6 +123,6 @@ class DataProviderWithDefaultAddressesPlugin
      */
     private function resolveStatus(bool $assistanceAllowed): int
     {
-        return $assistanceAllowed ? IsAssistanceEnabled::ALLOWED : IsAssistanceEnabled::DENIED;
+        return $assistanceAllowed ? IsAssistanceEnabledInterface::ALLOWED : IsAssistanceEnabledInterface::DENIED;
     }
 }

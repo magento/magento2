@@ -5,7 +5,7 @@
  */
 
 use Magento\Framework\Escaper;
-use Magento\LoginAsCustomerAssistance\Model\IsAssistanceEnabled;
+use Magento\LoginAsCustomerAssistance\Api\IsAssistanceEnabledInterface;
 use Magento\LoginAsCustomerAssistance\ViewModel\ShoppingAssistanceViewModel;
 
 /** @var Escaper $escaper */
@@ -17,8 +17,8 @@ $viewModel = $block->getViewModel();
 {
     ".form-create-account, .form-edit-account": {
         "Magento_LoginAsCustomerAssistance/js/opt-in": {
-            "allowAccess": "<?= /* @noEscape */ IsAssistanceEnabled::ALLOWED ?>",
-            "denyAccess": "<?= /* @noEscape */ IsAssistanceEnabled::DENIED ?>"
+            "allowAccess": "<?= /* @noEscape */ IsAssistanceEnabledInterface::ALLOWED ?>",
+            "denyAccess": "<?= /* @noEscape */ IsAssistanceEnabledInterface::DENIED ?>"
         }
     }
 }
