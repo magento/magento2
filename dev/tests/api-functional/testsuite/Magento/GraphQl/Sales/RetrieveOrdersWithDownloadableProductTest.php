@@ -180,7 +180,7 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
                 'comments' => [
                     ['message' => 'Test comment for downloadable refund']
                 ],
-                
+
                 'total' => [
                     'subtotal' => [
                         'value' => 12
