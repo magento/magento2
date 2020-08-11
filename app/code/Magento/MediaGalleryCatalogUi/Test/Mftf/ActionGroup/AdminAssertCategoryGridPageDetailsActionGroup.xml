@@ -12,6 +12,7 @@
             <description>Assert category grid page basic columns values for default category</description>
         </annotations>
 
+        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.image('1','image')}}" stepKey="assertImageColumn"/>
         <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.path('1')}}" stepKey="assertPathColumn"/>
         <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.name('1', 'Default Category')}}" stepKey="assertNameColumn"/>
         <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.displayMode('1', 'PRODUCTS')}}" stepKey="assertDisplayModeColumn"/>
