@@ -12,7 +12,7 @@ use Magento\Framework\View;
 use Magento\Framework\View\Model\PageLayout\Config\BuilderInterface;
 
 /**
- * Class Builder
+ * Page Layout Builder
  */
 class Builder extends View\Layout\Builder
 {
@@ -67,6 +67,7 @@ class Builder extends View\Layout\Builder
 
     /**
      * Read page layout and write structure to ReadContext
+     *
      * @return void
      */
     protected function readPageLayout()
@@ -79,6 +80,8 @@ class Builder extends View\Layout\Builder
     }
 
     /**
+     * Get current page layout or fallback to default
+     *
      * @return string
      */
     protected function getPageLayout()
