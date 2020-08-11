@@ -17,16 +17,16 @@ class GridTest extends \PHPUnit\Framework\TestCase
     protected $_block;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Framework\View\LayoutInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_layoutMock;
 
     /**
-     * @var \Magento\Backend\Block\Widget\Grid\ColumnSet|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Backend\Block\Widget\Grid\ColumnSet|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_columnSetMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_layoutMock = $this->createPartialMock(
             \Magento\Framework\View\Layout::class,
@@ -43,8 +43,8 @@ class GridTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getChildName'
-        )->will(
-            $this->returnValueMap($returnValueMap)
+        )->willReturnMap(
+            $returnValueMap
         );
         $this->_layoutMock->expects(
             $this->any()
@@ -52,8 +52,8 @@ class GridTest extends \PHPUnit\Framework\TestCase
             'getBlock'
         )->with(
             'grid.columnSet'
-        )->will(
-            $this->returnValue($this->_columnSetMock)
+        )->willReturn(
+            $this->_columnSetMock
         );
         $this->_layoutMock->expects(
             $this->any()
@@ -61,14 +61,14 @@ class GridTest extends \PHPUnit\Framework\TestCase
             'createBlock'
         )->with(
             \Magento\Backend\Block\Widget\Button::class
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                     \Magento\Framework\View\LayoutInterface::class
                 )->createBlock(
                     \Magento\Backend\Block\Widget\Button::class
                 )
-            )
+            
         );
         $this->_layoutMock->expects(
             $this->any()
@@ -76,12 +76,12 @@ class GridTest extends \PHPUnit\Framework\TestCase
             'helper'
         )->with(
             \Magento\Framework\Json\Helper\Data::class
-        )->will(
-            $this->returnValue(
+        )->willReturn(
+            
                 \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
                     \Magento\Framework\Json\Helper\Data::class
                 )
-            )
+            
         );
 
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -96,7 +96,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
     /**
      * Retrieve the mocked column set block instance
      *
-     * @return \Magento\Backend\Block\Widget\Grid\ColumnSet|\PHPUnit_Framework_MockObject_MockObject
+     * @return \Magento\Backend\Block\Widget\Grid\ColumnSet|\PHPUnit\Framework\MockObject\MockObject
      */
     protected function _getColumnSetMock()
     {
@@ -138,7 +138,7 @@ class GridTest extends \PHPUnit\Framework\TestCase
 
     public function testGetMainButtonsHtmlReturnsEmptyStringIfFiltersArentVisible()
     {
-        $this->_columnSetMock->expects($this->once())->method('isFilterVisible')->will($this->returnValue(false));
+        $this->_columnSetMock->expects($this->once())->method('isFilterVisible')->willReturn(false);
         $this->_block->getMainButtonsHtml();
     }
 

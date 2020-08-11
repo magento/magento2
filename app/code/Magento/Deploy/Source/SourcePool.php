@@ -44,6 +44,6 @@ class SourcePool
      */
     public function getSource($name)
     {
-        return isset($this->sources[$name]) ? $this->sources[$name] : null;
+        return $this->sources[$name] ?? null;
     }
 }

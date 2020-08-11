@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<suites xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Suite/etc/suiteSchema.xsd">
+    <suite name="SearchEngineElasticsearchSuite">
+        <before>
+            <magentoCLI stepKey="setSearchEngineToElasticsearch" command="config:set {{SearchEngineElasticsearchConfigData.path}} {{SearchEngineElasticsearchConfigData.value}}"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </before>
+        <after></after>
+        <include>
+            <group name="SearchEngineElasticsearch" />
+        </include>
+        <exclude>
+            <group name="skip"/>
+        </exclude>
+    </suite>
+</suites>

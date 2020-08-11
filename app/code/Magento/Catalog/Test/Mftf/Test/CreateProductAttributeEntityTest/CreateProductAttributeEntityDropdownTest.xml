@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CreateProductAttributeEntityDropdownTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Create Product Attributes"/>
+            <title value="Admin should be able to create a Dropdown product attribute"/>
+            <description value="Admin should be able to create a Dropdown product attribute"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-10896"/>
+            <group value="Catalog"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage">
+                <argument name="ProductAttribute" value="{{dropdownProductAttribute.attribute_code}}"/>
+            </actionGroup>
+            <click stepKey="clickDelete" selector="{{AttributePropertiesSection.DeleteAttribute}}"/>
+            <click stepKey="clickOk" selector="{{AttributeDeleteModalSection.confirm}}"/>
+            <waitForPageLoad stepKey="waitForDeletion"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Navigate to Stores > Attributes > Product.-->
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
+
+        <!--Create new Product Attribute as TextField, with code and default value.-->
+        <actionGroup ref="CreateProductAttributeActionGroup" stepKey="createAttribute">
+            <argument name="attribute" value="dropdownProductAttribute"/>
+        </actionGroup>
+
+        <!--Navigate to Product Attribute, add Product Options and Save - 1-->
+        <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPage1">
+            <argument name="ProductAttribute" value="{{dropdownProductAttribute.attribute_code}}"/>
+        </actionGroup>
+        <actionGroup ref="CreateAttributeDropdownNthOptionActionGroup" stepKey="createOption1">
+            <argument name="adminName" value="{{dropdownProductAttribute.option1_admin}}"/>
+            <argument name="frontName" value="{{dropdownProductAttribute.option1_frontend}}"/>
+            <argument name="row" value="1"/>
+        </actionGroup>
+        <actionGroup ref="CreateAttributeDropdownNthOptionActionGroup" stepKey="createOption2">
+            <argument name="adminName" value="{{dropdownProductAttribute.option2_admin}}"/>
+            <argument name="frontName" value="{{dropdownProductAttribute.option2_frontend}}"/>
+            <argument name="row" value="2"/>
+        </actionGroup>
+        <actionGroup ref="CreateAttributeDropdownNthOptionAsDefaultActionGroup" stepKey="createOption3">
+            <argument name="adminName" value="{{dropdownProductAttribute.option3_admin}}"/>
+            <argument name="frontName" value="{{dropdownProductAttribute.option3_frontend}}"/>
+            <argument name="row" value="3"/>
+        </actionGroup>
+        <click stepKey="saveAttribute" selector="{{AttributePropertiesSection.Save}}"/>
+
+        <!--Perform appropriate assertions against dropdownProductAttribute entity-->
+        <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="goToEditPageForAssertions">
+            <argument name="ProductAttribute" value="{{dropdownProductAttribute.attribute_code}}"/>
+        </actionGroup>
+        <seeInField stepKey="assertLabel" selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{dropdownProductAttribute.attribute_code}}"/>
+        <seeOptionIsSelected stepKey="assertInputType" selector="{{AttributePropertiesSection.InputType}}" userInput="{{dropdownProductAttribute.frontend_input_admin}}"/>
+        <seeOptionIsSelected stepKey="assertRequired" selector="{{AttributePropertiesSection.ValueRequired}}" userInput="{{dropdownProductAttribute.is_required_admin}}"/>
+        <seeInField stepKey="assertAttrCode" selector="{{AdvancedAttributePropertiesSection.AttributeCode}}" userInput="{{dropdownProductAttribute.attribute_code}}"/>
+
+        <!--Assert options are in order and with correct attributes-->
+        <seeInField stepKey="seeOption1Admin" selector="{{AttributePropertiesSection.dropdownNthOptionAdmin('1')}}" userInput="{{dropdownProductAttribute.option1_admin}}"/>
+        <seeInField stepKey="seeOption1StoreView" selector="{{AttributePropertiesSection.dropdownNthOptionDefaultStoreView('1')}}" userInput="{{dropdownProductAttribute.option1_frontend}}"/>
+        <dontSeeCheckboxIsChecked stepKey="dontSeeOption1Default" selector="{{AttributePropertiesSection.dropdownNthOptionIsDefault('1')}}"/>
+        <seeInField stepKey="seeOption2Admin" selector="{{AttributePropertiesSection.dropdownNthOptionAdmin('2')}}" userInput="{{dropdownProductAttribute.option2_admin}}"/>
+        <seeInField stepKey="seeOption2StoreView" selector="{{AttributePropertiesSection.dropdownNthOptionDefaultStoreView('2')}}" userInput="{{dropdownProductAttribute.option2_frontend}}"/>
+        <dontSeeCheckboxIsChecked stepKey="dontSeeOption2Default" selector="{{AttributePropertiesSection.dropdownNthOptionIsDefault('2')}}"/>
+        <seeInField stepKey="seeOption3Admin" selector="{{AttributePropertiesSection.dropdownNthOptionAdmin('3')}}" userInput="{{dropdownProductAttribute.option3_admin}}"/>
+        <seeInField stepKey="seeOption3StoreView" selector="{{AttributePropertiesSection.dropdownNthOptionDefaultStoreView('3')}}" userInput="{{dropdownProductAttribute.option3_frontend}}"/>
+        <seeCheckboxIsChecked stepKey="seeOption3Default" selector="{{AttributePropertiesSection.dropdownNthOptionIsDefault('3')}}"/>
+
+        <!--Go to New Product page, add Attribute and check dropdown values-->
+        <amOnPage url="{{AdminProductCreatePage.url('4', 'simple')}}" stepKey="goToCreateSimpleProductPage"/>
+        <actionGroup ref="AddProductAttributeInProductModalActionGroup" stepKey="addAttributeToProduct">
+            <argument name="attributeCode" value="{{dropdownProductAttribute.attribute_code}}"/>
+        </actionGroup>
+        <click stepKey="openAttributes" selector="{{AdminProductAttributesSection.sectionHeader}}"/>
+        <waitForElementVisible selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" stepKey="waitforLabel"/>
+        <seeOptionIsSelected selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" userInput="{{dropdownProductAttribute.option3_admin}}" stepKey="seeDefaultIsCorrect"/>
+        <see stepKey="seeOption1Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" userInput="{{dropdownProductAttribute.option1_admin}}"/>
+        <see stepKey="seeOption2Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" userInput="{{dropdownProductAttribute.option2_admin}}"/>
+        <see stepKey="seeOption3Available" selector="{{AdminProductAttributesSection.attributeDropdownByCode(dropdownProductAttribute.attribute_code)}}" userInput="{{dropdownProductAttribute.option3_admin}}"/>
+    </test>
+</tests>

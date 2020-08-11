@@ -41,6 +41,7 @@ use Magento\Ui\DataProvider\ModifierPoolDataProvider;
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @since 101.0.0
  */
 class DataProvider extends ModifierPoolDataProvider
@@ -176,6 +177,10 @@ class DataProvider extends ModifierPoolDataProvider
      * @var AuthorizationInterface
      */
     private $auth;
+    /**
+     * @var Image
+     */
+    private $categoryImage;
 
     /**
      * @param string $name
@@ -196,6 +201,7 @@ class DataProvider extends ModifierPoolDataProvider
      * @param ScopeOverriddenValue|null $scopeOverriddenValue
      * @param ArrayManager|null $arrayManager
      * @param FileInfo|null $fileInfo
+     * @param Image|null $categoryImage
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -216,7 +222,8 @@ class DataProvider extends ModifierPoolDataProvider
         ?ArrayUtils $arrayUtils = null,
         ScopeOverriddenValue $scopeOverriddenValue = null,
         ArrayManager $arrayManager = null,
-        FileInfo $fileInfo = null
+        FileInfo $fileInfo = null,
+        ?Image $categoryImage = null
     ) {
         $this->eavValidationRules = $eavValidationRules;
         $this->collection = $categoryCollectionFactory->create();
@@ -232,13 +239,14 @@ class DataProvider extends ModifierPoolDataProvider
             ObjectManager::getInstance()->get(ScopeOverriddenValue::class);
         $this->arrayManager = $arrayManager ?: ObjectManager::getInstance()->get(ArrayManager::class);
         $this->fileInfo = $fileInfo ?: ObjectManager::getInstance()->get(FileInfo::class);
+        $this->categoryImage = $categoryImage ?? ObjectManager::getInstance()->get(Image::class);
 
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);
     }
 
     /**
      * @inheritdoc
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getMeta()
     {
@@ -487,7 +495,7 @@ class DataProvider extends ModifierPoolDataProvider
      * @param Category $category
      * @param array $categoryData
      * @return array
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @since 101.0.0
      */
     protected function addUseDefaultSettings($category, $categoryData)
@@ -601,11 +609,7 @@ class DataProvider extends ModifierPoolDataProvider
                     // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     $categoryData[$attributeCode][0]['name'] = basename($fileName);
 
-                    if ($this->fileInfo->isBeginsWithMediaDirectoryPath($fileName)) {
-                        $categoryData[$attributeCode][0]['url'] = $fileName;
-                    } else {
-                        $categoryData[$attributeCode][0]['url'] = $category->getImageUrl($attributeCode);
-                    }
+                    $categoryData[$attributeCode][0]['url'] = $this->categoryImage->getUrl($category, $attributeCode);
 
                     $categoryData[$attributeCode][0]['size'] = isset($stat) ? $stat['size'] : 0;
                     $categoryData[$attributeCode][0]['type'] = $mime;

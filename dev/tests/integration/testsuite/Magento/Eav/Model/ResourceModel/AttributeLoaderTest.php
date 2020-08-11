@@ -21,7 +21,7 @@ class AttributeLoaderTest extends \Magento\TestFramework\Indexer\TestCase
      */
     private $attributeLoader;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $metadataPool = $objectManager->create(

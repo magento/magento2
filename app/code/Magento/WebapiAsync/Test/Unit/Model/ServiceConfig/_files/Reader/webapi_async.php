@@ -5,10 +5,11 @@
  */
 
 declare(strict_types=1);
+use Magento\Customer\Api\CustomerRepositoryInterface;
 
 return [
     'services' => [
-        \Magento\Customer\Api\CustomerRepositoryInterface::class => [
+        CustomerRepositoryInterface::class => [
             'methods' => [
                 'getById' => [
                     'synchronousInvocationOnly' => true,

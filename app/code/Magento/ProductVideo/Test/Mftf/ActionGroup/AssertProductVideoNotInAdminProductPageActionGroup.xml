@@ -13,7 +13,7 @@
             <description>Validates that the provided Video is NOT present on the Admin Product creation/edit page.</description>
         </annotations>
         <arguments>
-            <argument name="video" defaultValue="mftfTestProductVideo"/>
+            <argument name="video" defaultValue="YoutubeProductVideo"/>
         </arguments>
 
         <scrollTo selector="{{AdminProductImagesSection.productImagesToggle}}" x="0" y="-100" stepKey="scrollToArea"/>

@@ -6,64 +6,65 @@
 define(['underscore'], function (_) {
     'use strict';
 
-    var baseUrls, sections, clientSideSections, sectionNames, canonize;
+    var baseUrls = [],
+        sections = [],
+        clientSideSections = [],
+        sectionNames = [],
+        canonize;
 
     /**
      * @param {String} url
      * @return {String}
      */
     canonize = function (url) {
-        var route = url,
-            key;
+        var route = url;
 
-        for (key in baseUrls) { //eslint-disable-line guard-for-in
-            route = url.replace(baseUrls[key], '');
+        _.some(baseUrls, function (baseUrl) {
+            route = url.replace(baseUrl, '');
 
-            if (route != url) { //eslint-disable-line eqeqeq
-                break;
-            }
-        }
+            return route !== url;
+        });
 
         return route.replace(/^\/?index.php\/?/, '').toLowerCase();
     };
 
     return {
         /**
-         * @param {String} url
-         * @return {Array}
+         * Returns a list of sections which should be invalidated for given URL.
+         * @param {String} url - URL which was requested.
+         * @return {Array} - List of sections to invalidate.
          */
         getAffectedSections: function (url) {
             var route = canonize(url),
                 actions = _.find(sections, function (val, section) {
                     var matched;
 
+                    // Covers the case where "*" works as a glob pattern.
                     if (section.indexOf('*') >= 0) {
                         section = section.replace(/\*/g, '[^/]+') + '$';
                         matched = route.match(section);
 
-                        return matched && matched[0] == route; //eslint-disable-line eqeqeq
+                        return matched && matched[0] === route;
                     }
 
                     return route.indexOf(section) === 0;
                 });
 
-            return _.union(_.toArray(actions), _.toArray(sections['*']));
+            return _.union(_.toArray(actions), sections['*']);
         },
 
         /**
-         * @param {*} allSections
-         * @return {*}
+         * Filters the list of given sections to the ones defined as client side.
+         * @param {Array} allSections - List of sections to check.
+         * @return {Array} - List of filtered sections.
          */
         filterClientSideSections: function (allSections) {
-            if (Array.isArray(allSections)) {
-                return _.difference(allSections, clientSideSections);
-            }
-
-            return allSections;
+            return _.difference(allSections, clientSideSections);
         },
 
         /**
-         * @param {String} sectionName
+         * Tells if section is defined as client side.
+         * @param {String} sectionName - Name of the section to check.
          * @return {Boolean}
          */
         isClientSideSection: function (sectionName) {
@@ -72,7 +73,6 @@ define(['underscore'], function (_) {
 
         /**
          * Returns array of section names.
-         *
          * @returns {Array}
          */
         getSectionNames: function () {

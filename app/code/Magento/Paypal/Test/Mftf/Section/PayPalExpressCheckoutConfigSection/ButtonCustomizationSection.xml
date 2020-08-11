@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="ButtonCustomization">
+        <element name="customizeDrpDown" type="button" selector="//tr[@id='row_payment_us_paypal_alternative_payment_methods_express_checkout_us_settings_ec_settings_ec_advanced_express_checkout_frontend_checkout_page_button_checkout_page_button_customize']//select[contains(@data-ui-id, 'button-customize')]"/>
+        <element name="customizeNo" type="text" selector="//tr[@id='row_payment_us_paypal_alternative_payment_methods_express_checkout_us_settings_ec_settings_ec_advanced_express_checkout_frontend_checkout_page_button_checkout_page_button_customize']//select[contains(@data-ui-id, 'button-customize')]/option[@value='0' and @selected='selected']"/>
+        <element name="label" type="input" selector="//tr[@id='row_payment_us_paypal_alternative_payment_methods_express_checkout_us_settings_ec_settings_ec_advanced_express_checkout_frontend_checkout_page_button']//select[contains(@id, 'button_label')]"/>
+        <element name="layout" type="input" selector="//tr[@id='row_payment_us_paypal_alternative_payment_methods_express_checkout_us_settings_ec_settings_ec_advanced_express_checkout_frontend_checkout_page_button']//select[contains(@id, 'button_layout')]"/>
+        <element name="size" type="input" selector="//tr[@id='row_payment_us_paypal_alternative_payment_methods_express_checkout_us_settings_ec_settings_ec_advanced_express_checkout_frontend_checkout_page_button']//select[contains(@id, 'button_size')]"/>
+        <element name="shape" type="input" selector="//tr[@id='row_payment_us_paypal_alternative_payment_methods_express_checkout_us_settings_ec_settings_ec_advanced_express_checkout_frontend_checkout_page_button']//select[contains(@id, 'button_shape')]"/>
+        <element name="color" type="input" selector="//tr[@id='row_payment_us_paypal_alternative_payment_methods_express_checkout_us_settings_ec_settings_ec_advanced_express_checkout_frontend_checkout_page_button']//select[contains(@id, 'button_color')]"/>
+    </section>
+</sections>

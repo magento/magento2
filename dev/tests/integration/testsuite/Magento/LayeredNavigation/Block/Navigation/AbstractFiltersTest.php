@@ -68,7 +68,7 @@ abstract class AbstractFiltersTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
@@ -140,7 +140,7 @@ abstract class AbstractFiltersTest extends TestCase
         $this->updateAttribute($attributeData);
         $this->updateProducts($products, $this->getAttributeCode());
         $this->clearInstanceAndReindexSearch();
-        $this->navigationBlock->getRequest()->setParams(['q' => 'Simple Product']);
+        $this->navigationBlock->getRequest()->setParams(['q' => $this->getSearchString()]);
         $this->navigationBlock->setLayout($this->layout);
         $filter = $this->getFilterByCode($this->navigationBlock->getFilters(), $this->getAttributeCode());
 
@@ -182,8 +182,12 @@ abstract class AbstractFiltersTest extends TestCase
         array $data
     ): void {
         $attribute = $this->attributeRepository->get($this->getAttributeCode());
+        $attribute->setDataChanges(false);
         $attribute->addData($data);
-        $this->attributeRepository->save($attribute);
+
+        if ($attribute->hasDataChanges()) {
+            $this->attributeRepository->save($attribute);
+        }
     }
 
     /**
@@ -223,8 +227,11 @@ abstract class AbstractFiltersTest extends TestCase
 
         foreach ($products as $productSku => $stringValue) {
             $product = $this->productRepository->get($productSku, false, $storeId, true);
+            $productValue = $attribute->usesSource()
+                ? $attribute->getSource()->getOptionId($stringValue)
+                : $stringValue;
             $product->addData(
-                [$attribute->getAttributeCode() => $attribute->getSource()->getOptionId($stringValue)]
+                [$attribute->getAttributeCode() => $productValue]
             );
             $this->productRepository->save($product);
         }
@@ -285,5 +292,15 @@ abstract class AbstractFiltersTest extends TestCase
         } else {
             $this->navigationBlock = $this->objectManager->create(CategoryNavigationBlock::class);
         }
+    }
+
+    /**
+     * Returns search query for filters on search page.
+     *
+     * @return string
+     */
+    protected function getSearchString(): string
+    {
+        return 'Simple Product';
     }
 }

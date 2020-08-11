@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerCheckoutTestWithRestrictedCountriesForPaymentTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout flow if payment solutions are not available"/>
+            <title value="Checkout via Customer Checkout with restricted countries for payment"/>
+            <description value="Should be able to place an order as a Customer with restricted countries for payment."/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-42653"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <magentoCLI command="config:set checkout/options/display_billing_address_on 1" stepKey="setShowBillingAddressOnPaymentPage"/>
+            <magentoCLI command="config:set payment/checkmo/allowspecific 1" stepKey="allowSpecificValue"/>
+            <magentoCLI command="config:set payment/checkmo/specificcountry GB" stepKey="specificCountryValue"/>
+            <createData entity="Simple_US_Customer" stepKey="simpleuscustomer"/>
+
+            <!-- Perform reindex and flush cache -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <magentoCLI command="config:set payment/checkmo/allowspecific 0" stepKey="allowSpecificValue"/>
+            <magentoCLI command="config:set payment/checkmo/specificcountry ''" stepKey="specificCountryValue"/>
+            <magentoCLI command="config:set checkout/options/display_billing_address_on 0" stepKey="setDisplayBillingAddressOnPaymentMethod"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+        </after>
+        <!-- Login as Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$simpleuscustomer$$"/>
+        </actionGroup>
+
+        <!-- Add product to cart -->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addToCart"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createProduct.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
+        <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
+
+        <!-- Go to checkout page -->
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="customerGoToCheckoutFromMinicart"/>
+
+        <!-- Select address -->
+        <click stepKey="selectAddress" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
+        <waitForElement stepKey="waitNextButton" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
+        <click stepKey="clickNextButton" selector="{{CheckoutShippingMethodsSection.next}}"/>
+        <waitForPageLoad stepKey="waitBillingForm"/>
+        <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
+        <dontSee selector="{{CheckoutPaymentSection.paymentMethodByName('Check / Money order')}}" stepKey="paymentMethodDoesNotAvailable"/>
+
+        <!-- Fill UK Address and verify that payment available and checkout successful -->
+        <uncheckOption selector="{{StorefrontCheckoutPaymentMethodSection.billingAddressSameAsShippingShared}}" stepKey="uncheckBillingAddressSameAsShippingCheckCheckBox"/>
+        <selectOption selector="{{CheckoutPaymentSection.billingAddressSelectShared}}" userInput="New Address" stepKey="clickOnNewAddress"/>
+        <waitForPageLoad stepKey="waitNewAddressBillingForm"/>
+        <actionGroup ref="LoggedInCheckoutFillNewBillingAddressActionGroup" stepKey="changeAddress">
+            <argument name="Address" value="updateCustomerUKAddress"/>
+            <argument name="classPrefix" value="[aria-hidden=false]"/>
+        </actionGroup>
+        <click selector="{{CheckoutPaymentSection.addressAction('Update')}}" stepKey="clickUpdateBillingAddressButton"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="customerSelectCheckMoneyOrderPayment"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="customerPlaceorder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+    </test>
+</tests>

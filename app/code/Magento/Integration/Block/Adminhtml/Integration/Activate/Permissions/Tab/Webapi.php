@@ -105,7 +105,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function canShowTab()
     {
@@ -116,7 +116,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @codeCoverageIgnore
      */
@@ -126,7 +126,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @codeCoverageIgnore
      */
@@ -136,7 +136,7 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      *
      * @codeCoverageIgnore
      */
@@ -222,13 +222,13 @@ class Webapi extends \Magento\Backend\Block\Widget\Form\Generic implements
      */
     protected function _getAllResourceIds(array $resources)
     {
-        $resourceIds = [];
+        $resourceIds = [[]];
         foreach ($resources as $resource) {
-            $resourceIds[] = $resource['id'];
+            $resourceIds[] = [$resource['id']];
             if (isset($resource['children'])) {
-                $resourceIds = array_merge($resourceIds, $this->_getAllResourceIds($resource['children']));
+                $resourceIds[] = $this->_getAllResourceIds($resource['children']);
             }
         }
-        return $resourceIds;
+        return array_merge(...$resourceIds);
     }
 }

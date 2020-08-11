@@ -14,7 +14,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Sitemap\Model\Sitemap;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Request;
-use Zend\Stdlib\Parameters;
+use Laminas\Stdlib\Parameters;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -40,7 +40,7 @@ class SitemapTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->model = $this->objectManager->get(Sitemap::class);

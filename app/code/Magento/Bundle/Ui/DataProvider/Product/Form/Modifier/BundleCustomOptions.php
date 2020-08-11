@@ -15,7 +15,7 @@ use Magento\Ui\Component\Container;
 class BundleCustomOptions extends AbstractModifier
 {
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyMeta(array $meta)
     {
@@ -55,6 +55,7 @@ class BundleCustomOptions extends AbstractModifier
         if (!empty($meta[$group]['children'][$container]['children'][$button])) {
             $meta[$group]['children'][$container]['children'][$button]['arguments']['data']['config']['imports'] = [
                 'visible' => '!ns = ${ $.ns }, index = ' . BundlePrice::CODE_PRICE_TYPE . ':checked',
+                '__disableTmpl' => ['visible' => false],
             ];
         }
         return $meta;
@@ -79,6 +80,7 @@ class BundleCustomOptions extends AbstractModifier
                         'sortOrder' => $sortOrder,
                         'imports' => [
                             'visible' => 'ns = ${ $.ns }, index = ' . BundlePrice::CODE_PRICE_TYPE . ':checked',
+                            '__disableTmpl' => ['visible' => false],
                         ],
                     ],
                 ],
@@ -87,7 +89,7 @@ class BundleCustomOptions extends AbstractModifier
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function modifyData(array $data)
     {

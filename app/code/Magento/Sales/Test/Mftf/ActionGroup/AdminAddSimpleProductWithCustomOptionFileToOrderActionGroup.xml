@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAddSimpleProductWithCustomOptionFileToOrderActionGroup" extends="AddSimpleProductToOrderActionGroup">
+        <annotations>
+            <description>Add product to order with custom option type file. Start on create order page.</description>
+        </annotations>
+        <arguments>
+            <argument name="file" type="string" defaultValue="{{TestImageNew.file}}" />
+        </arguments>
+
+        <remove keyForRemoval="fillProductQty"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad" after="selectProduct"/>
+        <fillField selector="{{AdminOrderFormCustomOptionsSection.quantity}}" userInput="{{productQty}}" stepKey="fillProductQty" after="waitForAjaxLoad"/>
+        <attachFile selector="{{AdminOrderFormCustomOptionsSection.file}}" userInput="{{file}}" stepKey="attachImageForOptional" after="fillProductQty"/>
+        <click selector="{{AdminOrderFormCustomOptionsSection.buttonOk}}" stepKey="clickButtonOK" after="attachImageForOptional"/>
+    </actionGroup>
+</actionGroups>

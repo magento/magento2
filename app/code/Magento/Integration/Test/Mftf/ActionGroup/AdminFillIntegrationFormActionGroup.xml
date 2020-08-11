@@ -20,6 +20,7 @@
         <waitForPageLoad stepKey="waitForApiTab" />
 
         <selectOption userInput="{{integration.resourceAccess}}" selector="{{AdminNewIntegrationFormSection.resourceAccess}}" stepKey="selectResourceAccess" />
-        <performOn stepKey="checkNeededResources" selector="{{AdminNewIntegrationFormSection.resourceTree}}" function="function($I,$apiResources={{integration.resources}}){foreach($apiResources as $apiResource){$I->conditionalClick('//li[@data-id=\'' . $apiResource . '\']//*[@class=\'jstree-checkbox\']','//li[@data-id=\'' . $apiResource . '\' and contains(@class, \'jstree-checked\')]',false);}}" />
+        <!--TODO waiting for custom action functionality with MQE-1964 -->
+        <!--<performOn stepKey="checkNeededResources" selector="{{AdminNewIntegrationFormSection.resourceTree}}" function="function($I,$apiResources={{integration.resources}}){foreach($apiResources as $apiResource){$I->conditionalClick('//li[@data-id=\'' . $apiResource . '\']//*[@class=\'jstree-checkbox\']','//li[@data-id=\'' . $apiResource . '\' and contains(@class, \'jstree-checked\')]',false);}}" />-->
     </actionGroup>
 </actionGroups>

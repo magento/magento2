@@ -24,7 +24,7 @@ $attributeRepository = Bootstrap::getObjectManager()->create(AttributeRepository
 $imagesGenerator = Bootstrap::getObjectManager()->get(ImagesGenerator::class);
 /** @var SwatchesMedia $swatchesMedia */
 $swatchesMedia = Bootstrap::getObjectManager()->get(SwatchesMedia::class);
-$imageName = 'visual_swatch_attribute_option_type_image.jpg';
+$imageName = '/visual_swatch_attribute_option_type_image.jpg';
 $imagesGenerator->generate([
     'image-width' => 110,
     'image-height' => 90,
