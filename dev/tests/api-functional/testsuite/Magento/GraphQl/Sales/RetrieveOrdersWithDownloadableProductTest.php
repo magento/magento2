@@ -182,11 +182,6 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
         // prepare invoice
         $this->prepareInvoice($orderNumber, 1);
         $order = $this->order->loadByIncrementId($orderNumber);
-        /** @var Order\Item $orderItem */
-        $orderItem = current($order->getAllItems());
-        $orderItem->setQtyRefunded(1);
-        $order->addItem($orderItem);
-        $order->save();
         // Create a credit memo
         $creditMemo = $this->creditMemoFactory->createByOrder($order, $order->getData());
         $creditMemo->setOrder($order);
@@ -200,10 +195,28 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
         $creditMemo->save();
         $this->creditMemoService->refund($creditMemo, true);
         $response = $this->getCustomerOrderWithCreditMemoQuery();
+        $downloadableProduct = $this->productRepository->get('downloadable-product-with-purchased-separately-links');
+        /** @var LinkInterface $downloadableProductLinks */
+        $downloadableProductLinks = $downloadableProduct->getExtensionAttributes()->getDownloadableProductLinks();
+        $linkId = $downloadableProductLinks[0]->getId();
         $expectedCreditMemoData = [
             [
                 'comments' => [
                     ['message' => 'Test comment for downloadable refund']
+                ],
+                'items' => [
+                    [
+                      'product_name'=> 'Downloadable Product (Links can be purchased separately)',
+                      'product_sku' => 'downloadable-product-with-purchased-separately-links',
+                       'product_sale_price' => ['value' => 12],
+                    'discounts' => [],
+                    'quantity_refunded' => 1,
+                    'downloadable_links' => [
+                      [
+                      'uid'=> base64_encode("downloadable/{$linkId}"),
+                      'title' => 'Downloadable Product Link 1']
+                      ]
+                   ]
                 ],
 
                 'total' => [
@@ -380,7 +393,23 @@ query {
         items {
             credit_memos {
                 comments { message}
-
+                items {
+                    product_name
+                    product_sku
+                    product_sale_price {value }
+                    discounts { amount{value currency} label }
+                    quantity_refunded
+                     ... on DownloadableCreditMemoItem
+                  {
+                    product_name
+                    discounts{amount{value}}
+                    downloadable_links{
+                      uid
+                      title
+                    }
+                    quantity_refunded
+                  }
+                }
                 total {
                     subtotal {
                         value
