@@ -48,7 +48,7 @@ class GetAssetDetails
         $details = [
             [
                 'title' => __('Type'),
-                'value' => __('Asset'),
+                'value' => __('Image'),
             ],
             [
                 'title' => __('Created'),
