@@ -55,7 +55,6 @@ class GetFileInfoTest extends TestCase
         $this->assertNotEmpty($fileInfo->getCTime());
         $this->assertNotEmpty($fileInfo->getType());
         $this->assertNotEmpty($fileInfo->getRealPath());
-
     }
 
     /**
