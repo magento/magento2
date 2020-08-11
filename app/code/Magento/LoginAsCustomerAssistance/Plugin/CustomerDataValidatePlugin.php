@@ -11,8 +11,8 @@ use Magento\Customer\Model\Metadata\Form;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Message\MessageInterface;
+use Magento\LoginAsCustomerAssistance\Api\IsAssistanceEnabledInterface;
 use Magento\LoginAsCustomerAssistance\Model\ResourceModel\GetLoginAsCustomerAssistanceAllowed;
-use Magento\LoginAsCustomerAssistance\Model\IsAssistanceEnabled;
 
 /**
  * Check if User have permission to change Customers Opt-In preference.
@@ -109,11 +109,11 @@ class CustomerDataValidatePlugin
     private function isAssistanceAllowedChangeImportant(int $assistanceAllowed, int $assistanceAllowedParam): bool
     {
         $result = false;
-        if (($assistanceAllowedParam === IsAssistanceEnabled::DENIED
-                && $assistanceAllowed === IsAssistanceEnabled::ALLOWED)
+        if (($assistanceAllowedParam === IsAssistanceEnabledInterface::DENIED
+                && $assistanceAllowed === IsAssistanceEnabledInterface::ALLOWED)
             ||
-            ($assistanceAllowedParam === IsAssistanceEnabled::ALLOWED
-                && $assistanceAllowed !== IsAssistanceEnabled::ALLOWED)) {
+            ($assistanceAllowedParam === IsAssistanceEnabledInterface::ALLOWED
+                && $assistanceAllowed !== IsAssistanceEnabledInterface::ALLOWED)) {
             $result = true;
         }
 
@@ -128,6 +128,6 @@ class CustomerDataValidatePlugin
      */
     private function resolveStatus(bool $assistanceAllowed): int
     {
-        return $assistanceAllowed ? IsAssistanceEnabled::ALLOWED : IsAssistanceEnabled::DENIED;
+        return $assistanceAllowed ? IsAssistanceEnabledInterface::ALLOWED : IsAssistanceEnabledInterface::DENIED;
     }
 }

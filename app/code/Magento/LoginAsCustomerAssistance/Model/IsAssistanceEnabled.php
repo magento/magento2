@@ -24,42 +24,16 @@ class IsAssistanceEnabled implements IsAssistanceEnabledInterface
     private $registry = [];
 
     /**
-     * Merchant assistance denied by customer status code.
-     */
-    public const DENIED = 1;
-
-    /**
-     * Merchant assistance allowed by customer status code.
-     */
-    public const ALLOWED = 2;
-
-    /**
-     * @var CustomerExtensionFactory
-     */
-    private $customerExtensionFactory;
-
-    /**
-     * @var CustomerRepositoryInterface
-     */
-    private $customerRepository;
-
-    /**
      * @var GetLoginAsCustomerAssistanceAllowed
      */
     private $getLoginAsCustomerAssistanceAllowed;
 
     /**
-     * @param CustomerExtensionFactory $customerExtensionFactory
-     * @param CustomerRepositoryInterface $customerRepository
      * @param GetLoginAsCustomerAssistanceAllowed $getLoginAsCustomerAssistanceAllowed
      */
     public function __construct(
-        CustomerExtensionFactory $customerExtensionFactory,
-        CustomerRepositoryInterface $customerRepository,
         GetLoginAsCustomerAssistanceAllowed $getLoginAsCustomerAssistanceAllowed
     ) {
-        $this->customerExtensionFactory = $customerExtensionFactory;
-        $this->customerRepository = $customerRepository;
         $this->getLoginAsCustomerAssistanceAllowed = $getLoginAsCustomerAssistanceAllowed;
     }
 
@@ -71,54 +45,10 @@ class IsAssistanceEnabled implements IsAssistanceEnabledInterface
      */
     public function execute(int $customerId): bool
     {
-        try {
-            $customer = $this->customerRepository->getById($customerId);
-            // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
-        } catch (NoSuchEntityException $exception) {
-            // do nothing
-        }
-        if (isset($customer)) {
-            $extensionAttributes = $customer->getExtensionAttributes();
-            if ($extensionAttributes === null) {
-                $extensionAttributes = $this->customerExtensionFactory->create();
-            }
-            if ($extensionAttributes->getAssistanceAllowed() === null) {
-                if (isset($this->registry[$customerId])) {
-                    $assistanceAllowed = $this->registry[$customerId];
-                } else {
-                    $assistanceAllowed = $this->getLoginAsCustomerAssistanceAllowed->execute($customerId);
-                    $this->registry[$customerId] = $assistanceAllowed;
-                }
-                $extensionAttributes->setAssistanceAllowed($this->resolveStatus($assistanceAllowed));
-                $customer->setExtensionAttributes($extensionAttributes);
-            }
-            $assistanceAllowed = $this->resolveAllowance($customer->getExtensionAttributes()->getAssistanceAllowed());
-        } else {
-            $assistanceAllowed = false;
+        if (!isset($this->registry[$customerId])) {
+            $this->registry[$customerId] = $this->getLoginAsCustomerAssistanceAllowed->execute($customerId);
         }
 
-        return $assistanceAllowed;
-    }
-
-    /**
-     * Get integer status value from boolean.
-     *
-     * @param bool $assistanceAllowed
-     * @return int
-     */
-    private function resolveStatus(bool $assistanceAllowed): int
-    {
-        return $assistanceAllowed ? self::ALLOWED : self::DENIED;
-    }
-
-    /**
-     * Get boolean status value from integer.
-     *
-     * @param int $statusCode
-     * @return bool
-     */
-    private function resolveAllowance(int $statusCode): bool
-    {
-        return $statusCode === self::ALLOWED;
+        return $this->registry[$customerId];
     }
 }
