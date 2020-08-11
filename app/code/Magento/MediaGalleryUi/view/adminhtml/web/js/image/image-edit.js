@@ -229,10 +229,9 @@ define([
          * Remove cached image details in edit form
          *
          * @param {String} id
-         * @param {String} tags
          */
-        removeCached: function (id, tags) {
-            this.images[id].tags = tags;
+        removeCached: function (id) {
+            delete this.images[id];
         }
     });
 });
