@@ -314,6 +314,11 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     private $regionFactory;
 
     /**
+     * @var array
+     */
+    private $regionItems;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -412,6 +417,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
             ->get(SearchCriteriaBuilder::class);
         $this->scopeConfig = $scopeConfig ?: ObjectManager::getInstance()->get(ScopeConfigInterface::class);
         $this->regionFactory = $regionFactory ?: ObjectManager::getInstance()->get(RegionFactory::class);
+        $this->regionItems = [];
 
         parent::__construct(
             $context,
@@ -1337,6 +1343,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getShippingMethod($asObject = false)
     {
+        // phpstan:ignore "Call to an undefined static method"
         $shippingMethod = parent::getShippingMethod();
         if (!$asObject || !$shippingMethod) {
             return $shippingMethod;
@@ -1359,9 +1366,16 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $collection = $this->_addressCollectionFactory->create()->setOrderFilter($this);
         if ($this->getId()) {
             foreach ($collection as $address) {
-                $region->loadByName($address->getRegion(), $address->getCountryId());
-                if ($region->getName()) {
-                    $address->setRegion($region->getName());
+                if (isset($this->regionItems[$address->getCountryId()][$address->getRegion()])) {
+                    if ($this->regionItems[$address->getCountryId()][$address->getRegion()]) {
+                        $address->setRegion($this->regionItems[$address->getCountryId()][$address->getRegion()]);
+                    }
+                } else {
+                    $region->loadByName($address->getRegion(), $address->getCountryId());
+                    $this->regionItems[$address->getCountryId()][$address->getRegion()] = $region->getName();
+                    if ($region->getName()) {
+                        $address->setRegion($region->getName());
+                    }
                 }
                 $address->setOrder($this);
             }
