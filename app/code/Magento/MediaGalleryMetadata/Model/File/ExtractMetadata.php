@@ -66,29 +66,10 @@ class ExtractMetadata implements ExtractMetadataInterface
     public function execute(string $path): MetadataInterface
     {
         try {
-            return $this->extractMetadata($path);
+            return $this->readSegments($this->fileReader->execute($path));
         } catch (\Exception $exception) {
             return $this->metadataFactory->create();
         }
-    }
-
-    /**
-     * Extract metadata from file
-     *
-     * @param string $path
-     * @return MetadataInterface
-     */
-    private function extractMetadata(string $path): MetadataInterface
-    {
-        try {
-            $file = $this->fileReader->execute($path);
-        } catch (\Exception $exception) {
-            throw new LocalizedException(
-                __('Could not parse the image file for metadata: %path', ['path' => $path])
-            );
-        }
-
-        return $this->readSegments($file);
     }
 
     /**
