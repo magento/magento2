@@ -13,7 +13,7 @@
             <stories value="Date element is localized"/>
             <title value="Admin user should be able to create active admin user"/>
             <description value="Admin date element should be localized."/>
-            <testCaseId value="GITHUB_27311"/>
+            <testCaseId value="MC-29484"/>
             <severity value="CRITICAL"/>
             <group value="ui"/>
         </annotations>
