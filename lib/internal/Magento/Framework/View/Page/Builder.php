@@ -6,8 +6,10 @@
 namespace Magento\Framework\View\Page;
 
 use Magento\Framework\App;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event;
 use Magento\Framework\View;
+use Magento\Framework\View\Model\PageLayout\Config\BuilderInterface;
 
 /**
  * Class Builder
@@ -25,23 +27,31 @@ class Builder extends View\Layout\Builder
     protected $pageLayoutReader;
 
     /**
+     * @var BuilderInterface|mixed
+     */
+    private $pageLayoutBuilder;
+
+    /**
      * @param View\LayoutInterface $layout
      * @param App\Request\Http $request
      * @param Event\ManagerInterface $eventManager
      * @param Config $pageConfig
      * @param Layout\Reader $pageLayoutReader
+     * @param BuilderInterface|null $pageLayoutBuilder
      */
     public function __construct(
         View\LayoutInterface $layout,
         App\Request\Http $request,
         Event\ManagerInterface $eventManager,
         Config $pageConfig,
-        Layout\Reader $pageLayoutReader
+        Layout\Reader $pageLayoutReader,
+        ?BuilderInterface $pageLayoutBuilder = null
     ) {
         parent::__construct($layout, $request, $eventManager);
         $this->pageConfig = $pageConfig;
         $this->pageLayoutReader = $pageLayoutReader;
         $this->pageConfig->setBuilder($this);
+        $this->pageLayoutBuilder = $pageLayoutBuilder ?? ObjectManager::getInstance()->get(BuilderInterface::class);
     }
 
     /**
@@ -73,6 +83,10 @@ class Builder extends View\Layout\Builder
      */
     protected function getPageLayout()
     {
-        return $this->pageConfig->getPageLayout() ?: $this->layout->getUpdate()->getPageLayout();
+        $pageLayout = $this->pageConfig->getPageLayout();
+
+        return ($pageLayout && $this->pageLayoutBuilder->getPageLayoutsConfig()->hasPageLayout($pageLayout))
+            ? $pageLayout
+            : $this->layout->getUpdate()->getPageLayout();
     }
 }
