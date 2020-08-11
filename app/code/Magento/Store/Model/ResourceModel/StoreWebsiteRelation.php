@@ -48,11 +48,11 @@ class StoreWebsiteRelation
      * Get website store data
      *
      * @param int $websiteId
-     * @param int $storeGroupId
      * @param bool $available
+     * @param int|null $storeGroupId
      * @return array
      */
-    public function getWebsiteStores(int $websiteId, int $storeGroupId = null, bool $available = false): array
+    public function getWebsiteStores(int $websiteId, bool $available = false, int $storeGroupId = null): array
     {
         $connection = $this->resource->getConnection();
         $storeTable = $this->resource->getTableName('store');

@@ -78,7 +78,7 @@ class StoreConfigDataProvider
      */
     public function getAvailableStoreConfig(int $websiteId, int $storeGroupId = null): array
     {
-        $websiteStores = $this->storeWebsiteRelation->getWebsiteStores($websiteId, $storeGroupId, true);
+        $websiteStores = $this->storeWebsiteRelation->getWebsiteStores($websiteId, true, $storeGroupId);
         $storeCodes = array_column($websiteStores, 'code');
 
         $storeConfigs = $this->storeConfigManager->getStoreConfigs($storeCodes);
