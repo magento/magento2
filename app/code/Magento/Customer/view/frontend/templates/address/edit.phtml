@@ -58,6 +58,13 @@ $viewModel = $block->getViewModel();
         <div class="field street required">
             <label for="street_1" class="label"><span><?= /* @noEscape */ $_street ?></span></label>
             <div class="control">
+                <div class="field primary">
+                    <label for="street_1" class="label">
+                        <span>
+                            <?= $escaper->escapeHtml(__('Street Address: Line %1', 1)) ?>
+                        </span>
+                    </label>
+                </div>
                 <input type="text"
                        name="street[]"
                        value="<?= $escaper->escapeHtmlAttr($block->getStreetLine(1)) ?>"
@@ -68,7 +75,7 @@ $viewModel = $block->getViewModel();
                     <?php for ($_i = 1, $_n = $viewModel->addressGetStreetLines(); $_i < $_n; $_i++): ?>
                         <div class="field additional">
                             <label class="label" for="street_<?= /* @noEscape */ $_i + 1 ?>">
-                                <span><?= $escaper->escapeHtml(__('Street Address %1', $_i + 1)) ?></span>
+                                <span><?= $escaper->escapeHtml(__('Street Address: Line %1', $_i + 1)) ?></span>
                             </label>
                             <div class="control">
                                 <input type="text" name="street[]"
