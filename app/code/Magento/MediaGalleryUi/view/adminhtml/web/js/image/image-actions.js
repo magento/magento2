@@ -100,7 +100,7 @@ define([
                     this.closeModal();
                     this.imageModel().reloadGrid();
                     imageDetails.removeCached(imageId);
-                    imageEditDetails.removeCached(imageId, keywords);
+                    imageEditDetails.removeCached(imageId);
 
                     if (imageDetails.isActive()) {
                         imageDetails.showImageDetailsById(imageId);

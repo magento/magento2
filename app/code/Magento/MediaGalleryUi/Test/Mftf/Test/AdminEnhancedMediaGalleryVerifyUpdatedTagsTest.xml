@@ -35,12 +35,6 @@
         <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveImage">
             <argument name="image" value="UpdatedImageDetails"/>
         </actionGroup>
-        <actionGroup ref="AssertImageAttributesOnEnhancedMediaGalleryActionGroup" stepKey="verifyUpdateImageOnTheGrid">
-            <argument name="image" value="UpdatedImageDetails"/>
-        </actionGroup>
-        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageDetailsActionGroup" stepKey="verifyImageDetails">
-            <argument name="image" value="UpdatedImageDetails"/>
-        </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageKeywordsActionGroup" stepKey="verifyAddedKeywords">
             <argument name="keywords" value="UpdatedImageDetails.keyword"/>
         </actionGroup>
