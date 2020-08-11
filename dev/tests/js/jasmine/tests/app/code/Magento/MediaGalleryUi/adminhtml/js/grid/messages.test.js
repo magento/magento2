@@ -28,24 +28,24 @@ define([
 
         it('add error message, get error message', function () {
             messagesInstance.add(errorType, messageText);
-            expect(messagesInstance.get()).toEqual([{
+            expect(JSON.stringify(messagesInstance.get())).toEqual(JSON.stringify([{
                 code: errorType,
                 message: messageText
-            }]);
+            }]));
         });
 
         it('add success message, get success message', function () {
             messagesInstance.add(successType, messageText);
-            expect(messagesInstance.get()).toEqual([{
+            expect(JSON.stringify(messagesInstance.get())).toEqual(JSON.stringify([{
                 code: successType,
                 message: messageText
-            }]);
+            }]));
         });
 
         it('handles multiple messages', function () {
             messagesInstance.add(successType, messageText);
             messagesInstance.add(errorType, messageText);
-            expect(messagesInstance.get()).toEqual([
+            expect(JSON.stringify(messagesInstance.get())).toEqual(JSON.stringify([
                 {
                     code: successType,
                     message: messageText
@@ -54,14 +54,14 @@ define([
                     code: errorType,
                     message: messageText
                 }
-            ]);
+            ]));
         });
 
         it('cleans messages', function () {
             messagesInstance.add(errorType, messageText);
             messagesInstance.clear();
 
-            expect(messagesInstance.get()).toEqual([]);
+            expect(JSON.stringify(messagesInstance.get())).toEqual(JSON.stringify([]));
         });
 
         it('prepare message to be rendered as HTML', function () {
