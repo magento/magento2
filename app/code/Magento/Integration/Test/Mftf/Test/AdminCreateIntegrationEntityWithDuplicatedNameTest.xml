@@ -54,5 +54,8 @@
             <argument name="message" value="The integration with name &quot;{{defaultIntegrationData.name}}&quot; exists."/>
             <argument value="error" name="messageType"/>
         </actionGroup>
+        <actionGroup ref="AssertAdminIntegrationNameInFormActionGroup" stepKey="checkEnteredValueIsPreserved">
+            <argument name="name" value="{{defaultIntegrationData.name}}"/>
+        </actionGroup>
     </test>
 </tests>

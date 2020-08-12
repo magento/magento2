@@ -3,8 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Backend\Block\Template $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<script>
+
+<?php $scriptString = <<<script
 require([
     'Magento_Ui/js/modal/alert',
     'prototype'
@@ -26,14 +30,14 @@ require([
          *  Handle value change in entity type selector
          */
         modifyFilterGrid: function() {
-            if ($('entity') && $F('entity') && $F('entity') != 'catalog_product') {
-                    $$('col:first-child').each(function(el) {
+            if ($('entity') && \$F('entity') && \$F('entity') != 'catalog_product') {
+                    \$$('col:first-child').each(function(el) {
                         el.show();
                     });
-                    $$('th.no-link:first-child').each(function(el) {
+                    \$$('th.no-link:first-child').each(function(el) {
                         el.show();
                     });
-                    $$('td.a-center').each(function(el) {
+                    \$$('td.a-center').each(function(el) {
                         el.show();
                     });
             }
@@ -43,9 +47,9 @@ require([
          * Post form data and process response via AJAX
          */
         getFilter: function() {
-            if ($('entity') && $F('entity')) {
-                var url    = "<?= $block->escapeJs($block->escapeUrl($block->getUrl('*/*/getFilter'))) ?>";
-                var entity = $F('entity');
+            if ($('entity') && \$F('entity')) {
+                var url    = "{$block->escapeJs($block->getUrl('*/*/getFilter'))}";
+                var entity = \$F('entity');
                 if (entity != this.previousGridEntity) {
                     this.previousGridEntity = entity;
                     url += ((url.slice(-1) != '/') ? '/' : '') + 'entity/' + entity;
@@ -76,20 +80,20 @@ require([
      * return void
      */
     getFile = function() {
-        if ($('entity') && $F('entity')) {
+        if ($('entity') && \$F('entity')) {
             var form      = $('export_filter_form');
             var oldAction = form.action;
-            var url = oldAction + ((oldAction.slice(-1) != '/') ? '/' : '') + 'entity/' + $F('entity')
-                + '/file_format/' + $F('file_format');
-            if ($F('fields_enclosure')) {
-                url += '/fields_enclosure/' + $F('fields_enclosure');
+            var url = oldAction + ((oldAction.slice(-1) != '/') ? '/' : '') + 'entity/' + \$F('entity')
+                + '/file_format/' + \$F('file_format');
+            if (\$F('fields_enclosure')) {
+                url += '/fields_enclosure/' + \$F('fields_enclosure');
             }
             form.action = url;
             form.submit();
             form.action   = oldAction;
         } else {
             alert({
-                content: '<?= $block->escapeHtml(__('Invalid data')); ?>'
+                content: '{$block->escapeHtml(__('Invalid data'))}'
             });
         }
     };
@@ -98,4 +102,6 @@ require([
 //]]>
 
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

@@ -99,4 +99,14 @@ class ImageMagickTest extends TestCase
         $this->loggerMock->expects($this->once())->method('critical')->with($exception);
         $this->imageMagic->save('product/cache', 'sample.jpg');
     }
+
+    /**
+     * Test open() with invalid URL.
+     */
+    public function testOpenInvalidUrl()
+    {
+        $this->expectException(\InvalidArgumentException::class);
+
+        $this->imageMagic->open('bar://foo.bar');
+    }
 }

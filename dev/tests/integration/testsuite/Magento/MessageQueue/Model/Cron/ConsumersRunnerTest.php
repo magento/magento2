@@ -127,6 +127,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
         $specificConsumer = 'exportProcessor';
         $config = $this->config;
         $config['cron_consumers_runner'] = ['consumers' => [$specificConsumer], 'max_messages' => 0];
+        $config['queue'] = ['only_spawn_when_message_available' => 0];
         $this->writeConfig($config);
         $this->reRunConsumersAndCheckLocks($specificConsumer);
         $this->reRunConsumersAndCheckLocks($specificConsumer);

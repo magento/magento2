@@ -90,7 +90,7 @@ mutation {
     wishlistId: {$wishlistId},
     wishlistItemsIds: [{$wishlistItemId}]
 ) {
-    userInputErrors {
+    user_errors {
       code
       message
     }

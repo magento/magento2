@@ -45,7 +45,7 @@ class GetCustomOptionsWithUidForQueryBySku
 
             if ($optionType === 'field' || $optionType === 'area' || $optionType === 'date') {
                 $enteredOptions[] = [
-                    'id' => $this->encodeEnteredOption((int)$customOption->getOptionId()),
+                    'uid' => $this->encodeEnteredOption((int)$customOption->getOptionId()),
                     'value' => '2012-12-12'
                 ];
             } elseif ($optionType === 'drop_down') {

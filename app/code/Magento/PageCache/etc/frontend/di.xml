@@ -9,6 +9,7 @@
     <type name="Magento\Framework\App\FrontControllerInterface">
         <plugin name="front-controller-builtin-cache" type="Magento\PageCache\Model\App\FrontController\BuiltinPlugin"/>
         <plugin name="front-controller-varnish-cache" type="Magento\PageCache\Model\App\FrontController\VarnishPlugin"/>
+        <plugin name="page_cache_form_key_from_cookie" type="Magento\PageCache\Plugin\RegisterFormKeyFromCookie" />
     </type>
     <type name="Magento\Framework\Controller\ResultInterface">
         <plugin name="result-builtin-cache" type="Magento\PageCache\Model\Controller\Result\BuiltinPlugin"/>

@@ -109,7 +109,7 @@ class RemoveProductsFromWishlist implements ResolverInterface
 
         return [
             'wishlist' => $this->wishlistDataMapper->map($wishlistOutput->getWishlist()),
-            'userInputErrors' => \array_map(
+            'user_errors' => \array_map(
                 function (Error $error) {
                     return [
                         'code' => $error->getCode(),
