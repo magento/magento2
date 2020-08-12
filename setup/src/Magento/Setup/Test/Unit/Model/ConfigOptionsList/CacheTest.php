@@ -112,7 +112,6 @@ class CacheTest extends TestCase
                         'id_prefix' => $this->expectedIdPrefix(),
                     ]
                 ],
-                'allow_parallel_generation' => '',
             ]
         ];
 
@@ -143,7 +142,6 @@ class CacheTest extends TestCase
                         'id_prefix' => $this->expectedIdPrefix(),
                     ]
                 ],
-                'allow_parallel_generation' => null,
             ]
         ];
 
