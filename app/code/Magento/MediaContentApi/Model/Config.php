@@ -36,7 +36,7 @@ class Config
     }
 
     /**
-     * Check if new media gallery emabled
+     * Check if new media gallery enabled
      *
      * @return bool
      */
