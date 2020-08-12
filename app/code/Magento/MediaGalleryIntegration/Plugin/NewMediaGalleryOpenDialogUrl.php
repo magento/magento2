@@ -33,11 +33,6 @@ class NewMediaGalleryOpenDialogUrl
      */
     public function afterGet(OpenDialogUrl $subject, string $result)
     {
-        $writer = new \Zend\Log\Writer\Stream(BP . '/var/log/newmediagalleryplugin.log');
-        $logger = new \Zend\Log\Logger();
-        $logger->addWriter($writer);
-        $logger->debug(__METHOD__);
-        $logger->debug("PASSING HERE!");
         return $this->config->isEnabled() ? 'media_gallery/index/index' : $result;
     }
 }
