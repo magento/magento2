@@ -12,7 +12,7 @@
 <?= /* @noEscape */ $secureRenderer->renderTag(
     'script',
     [
-        'src' => '"' . $block->escapeJs($block->getTrackingUrl()) .'"',
+        'src' => $block->getTrackingUrl(),
         'async' => true,
     ],
     '&nbsp;',
