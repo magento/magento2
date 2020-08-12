@@ -82,10 +82,10 @@ class CategoryDelete implements ObserverInterface
     ) {
         $this->extractAssetsFromContent = $extractAssetsFromContent;
         $this->getContent = $getContent;
+        $this->config = $config;
         $this->deleteContentAssetLinks = $deleteContentAssetLinks;
         $this->contentAssetLinkFactory = $contentAssetLinkFactory;
         $this->contentIdentityFactory = $contentIdentityFactory;
-        $this->config = $config;
         $this->fields = $fields;
     }
 

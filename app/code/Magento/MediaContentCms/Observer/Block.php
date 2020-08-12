@@ -57,8 +57,8 @@ class Block implements ObserverInterface
         array $fields
     ) {
         $this->contentIdentityFactory = $contentIdentityFactory;
-        $this->updateContentAssetLinks = $updateContentAssetLinks;
         $this->config = $config;
+        $this->updateContentAssetLinks = $updateContentAssetLinks;
         $this->fields = $fields;
     }
 
