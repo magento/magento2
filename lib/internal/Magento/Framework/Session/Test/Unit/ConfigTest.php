@@ -339,7 +339,7 @@ class ConfigTest extends TestCase
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
-        if(!$isValid){
+        if (!$isValid) {
             $this->expectException('InvalidArgumentException');
         }
         if ($isValidSame) {
