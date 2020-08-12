@@ -3,12 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Module\Test\Unit\ModuleList;
 
-use \Magento\Framework\Module\ModuleList\Loader;
+use Magento\Framework\Component\ComponentRegistrarInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Filesystem\DriverInterface;
+use Magento\Framework\Module\Declaration\Converter\Dom;
+use Magento\Framework\Module\ModuleList\Loader;
+use Magento\Framework\Xml\Parser;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class LoaderTest extends \PHPUnit\Framework\TestCase
+class LoaderTest extends TestCase
 {
     /**
      * A sample empty XML
@@ -18,27 +26,27 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
     private static $sampleXml = '<?xml version="1.0"?><test></test>';
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $converter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $parser;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $registry;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $driver;
 
     /**
-     * @var \Magento\Framework\Module\ModuleList\Loader
+     * @var Loader
      */
     private $loader;
 
@@ -47,13 +55,13 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
      */
     private $loadFixture;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->converter = $this->createMock(\Magento\Framework\Module\Declaration\Converter\Dom::class);
-        $this->parser = $this->createMock(\Magento\Framework\Xml\Parser::class);
+        $this->converter = $this->createMock(Dom::class);
+        $this->parser = $this->createMock(Parser::class);
         $this->parser->expects($this->once())->method('initErrorHandler');
-        $this->registry = $this->createMock(\Magento\Framework\Component\ComponentRegistrarInterface::class);
-        $this->driver = $this->createMock(\Magento\Framework\Filesystem\DriverInterface::class);
+        $this->registry = $this->getMockForAbstractClass(ComponentRegistrarInterface::class);
+        $this->driver = $this->getMockForAbstractClass(DriverInterface::class);
         $this->loader = new Loader($this->converter, $this->parser, $this->registry, $this->driver);
     }
 
@@ -74,13 +82,13 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
             'e' => ['name' => 'e', 'sequence' => ['a']], // e is after a
             // so expected sequence is a -> e -> c -> d -> b
         ];
-        $this->driver->expects($this->exactly(5))->method('fileGetContents')->will($this->returnValueMap([
+        $this->driver->expects($this->exactly(5))->method('fileGetContents')->willReturnMap([
             ['/path/to/a/etc/module.xml', null, null, self::$sampleXml],
             ['/path/to/b/etc/module.xml', null, null, self::$sampleXml],
             ['/path/to/c/etc/module.xml', null, null, self::$sampleXml],
             ['/path/to/d/etc/module.xml', null, null, self::$sampleXml],
             ['/path/to/e/etc/module.xml', null, null, self::$sampleXml],
-        ]));
+        ]);
         $index = 0;
         foreach ($this->loadFixture as $name => $fixture) {
             $this->converter->expects($this->at($index++))->method('convert')->willReturn([$name => $fixture]);
@@ -122,12 +130,12 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
         $this->registry->expects($this->once())
             ->method('getPaths')
             ->willReturn(['/path/to/a', '/path/to/b', '/path/to/c', '/path/to/d']);
-        $this->driver->expects($this->exactly(4))->method('fileGetContents')->will($this->returnValueMap([
+        $this->driver->expects($this->exactly(4))->method('fileGetContents')->willReturnMap([
             ['/path/to/a/etc/module.xml', null, null, self::$sampleXml],
             ['/path/to/b/etc/module.xml', null, null, self::$sampleXml],
             ['/path/to/c/etc/module.xml', null, null, self::$sampleXml],
             ['/path/to/d/etc/module.xml', null, null, self::$sampleXml],
-        ]));
+        ]);
         $this->converter->expects($this->at(0))->method('convert')->willReturn(['a' => $fixture['a']]);
         $this->converter->expects($this->at(1))->method('convert')->willReturn(['b' => $fixture['b']]);
         $this->converter->expects($this->at(2))->method('convert')->willReturn(['c' => $fixture['c']]);
@@ -141,12 +149,10 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
         $this->assertSame($fixture['c'], $result['c']);
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Circular sequence reference from 'b' to 'a'
-     */
     public function testLoadCircular()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Circular sequence reference from \'b\' to \'a\'');
         $fixture = [
             'a' => ['name' => 'a', 'sequence' => ['b']],
             'b' => ['name' => 'b', 'sequence' => ['a']],
@@ -154,15 +160,15 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
         $this->converter->expects($this->at(0))->method('convert')->willReturn(['a' => $fixture['a']]);
         $this->converter->expects($this->at(1))->method('convert')->willReturn(['b' => $fixture['b']]);
         $this->registry->expects($this->once())->method('getPaths')->willReturn(['/path/to/a', '/path/to/b']);
-        $this->driver->expects($this->exactly(2))->method('fileGetContents')->will($this->returnValueMap([
+        $this->driver->expects($this->exactly(2))->method('fileGetContents')->willReturnMap([
             ['/path/to/a/etc/module.xml', null, null, self::$sampleXml],
             ['/path/to/b/etc/module.xml', null, null, self::$sampleXml],
-        ]));
+        ]);
         $this->loader->load();
     }
 
     /**
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function testLoadPrearranged(): void
     {
@@ -191,13 +197,13 @@ class LoaderTest extends \PHPUnit\Framework\TestCase
 
         $this->driver->expects($this->exactly(5))
             ->method('fileGetContents')
-            ->will($this->returnValueMap([
+            ->willReturnMap([
                 ['/path/to/Foo_Bar/etc/module.xml', null, null, self::$sampleXml],
                 ['/path/to/Magento_Directory/etc/module.xml', null, null, self::$sampleXml],
                 ['/path/to/Magento_Store/etc/module.xml', null, null, self::$sampleXml],
                 ['/path/to/Magento_Theme/etc/module.xml', null, null, self::$sampleXml],
                 ['/path/to/Test_HelloWorld/etc/module.xml', null, null, self::$sampleXml],
-            ]));
+            ]);
 
         // Load the full module list information
         $result = $this->loader->load();

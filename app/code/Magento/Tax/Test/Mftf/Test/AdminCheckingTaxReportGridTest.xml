@@ -106,7 +106,7 @@
             <deleteData createDataKey="createSecondProductTaxClass" stepKey="deleteSecondProductTaxClass"/>
 
             <!-- Clear filter Product -->
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterProduct"/>
 
             <!-- Delete Customer and clear filter -->
@@ -123,7 +123,7 @@
         </after>
 
         <!--Open Created product. In Tax Class select new created Product Tax class.-->
-        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="openProductForEdit">
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductForEdit">
             <argument name="productId" value="$createFirstProduct.id$"/>
         </actionGroup>
         <selectOption selector="{{AdminProductFormSection.productTaxClass}}" userInput="$productTaxClass.class_name$" stepKey="selectTexClassForProduct"/>
@@ -131,7 +131,7 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!--Open Created Second Product. In Tax Class select new created Product Tax class.-->
-        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="openSecondProductForEdit">
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openSecondProductForEdit">
             <argument name="productId" value="$createSecondProduct.id$"/>
         </actionGroup>
 
@@ -181,9 +181,9 @@
 
         <actionGroup ref="SubmitInvoiceActionGroup" stepKey="clickSubmitInvoice"/>
 
-        <actionGroup ref="goToShipmentIntoOrder" stepKey="seeShipmentOrderPage"/>
+        <actionGroup ref="GoToShipmentIntoOrderActionGroup" stepKey="seeShipmentOrderPage"/>
         <!--Submit Shipment-->
-        <actionGroup ref="submitShipmentIntoOrder" stepKey="clickSubmitShipment"/>
+        <actionGroup ref="SubmitShipmentIntoOrderActionGroup" stepKey="clickSubmitShipment"/>
         <!--Go to "Reports" -> "Sales" -> "Tax"-->
         <amOnPage url="{{AdminSalesTaxReportPage.url}}" stepKey="navigateToReportsTaxPage"/>
         <waitForPageLoad stepKey="waitForReportsTaxPageLoad"/>

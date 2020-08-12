@@ -163,11 +163,13 @@
 
             <!-- Save the settings -->
             <scrollToTopOfPage stepKey="scrollToTop"/>
-            <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveTaxOptions"/>
-            <waitForPageLoad stepKey="waitForTaxSaved"/>
+            <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveTaxOptions"/>
+
             <see userInput="You saved the configuration." selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccess"/>
 
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- navigate to the tax configuration page -->
@@ -190,8 +192,7 @@
 
             <!-- Save the settings -->
             <scrollToTopOfPage stepKey="scrollToTop"/>
-            <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveTaxOptions"/>
-            <waitForPageLoad stepKey="waitForTaxSaved"/>
+            <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveTaxOptions"/>
             <see userInput="You saved the configuration." selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccess"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>

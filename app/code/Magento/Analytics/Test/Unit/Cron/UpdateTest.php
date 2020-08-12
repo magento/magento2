@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Cron;
 
 use Magento\Analytics\Cron\Update;
@@ -13,31 +15,33 @@ use Magento\Framework\App\Config\ReinitableConfigInterface;
 use Magento\Framework\App\Config\Storage\WriterInterface;
 use Magento\Framework\Exception\NotFoundException;
 use Magento\Framework\FlagManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class UpdateTest extends \PHPUnit\Framework\TestCase
+class UpdateTest extends TestCase
 {
     /**
-     * @var Connector|\PHPUnit_Framework_MockObject_MockObject
+     * @var Connector|MockObject
      */
     private $connectorMock;
 
     /**
-     * @var WriterInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var WriterInterface|MockObject
      */
     private $configWriterMock;
 
     /**
-     * @var FlagManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var FlagManager|MockObject
      */
     private $flagManagerMock;
 
     /**
-     * @var ReinitableConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ReinitableConfigInterface|MockObject
      */
     private $reinitableConfigMock;
 
     /**
-     * @var AnalyticsToken|\PHPUnit_Framework_MockObject_MockObject
+     * @var AnalyticsToken|MockObject
      */
     private $analyticsTokenMock;
 
@@ -49,23 +53,13 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->connectorMock =  $this->getMockBuilder(Connector::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->configWriterMock =  $this->getMockBuilder(WriterInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->flagManagerMock =  $this->getMockBuilder(FlagManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->reinitableConfigMock = $this->getMockBuilder(ReinitableConfigInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->analyticsTokenMock = $this->getMockBuilder(AnalyticsToken::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->connectorMock =  $this->createMock(Connector::class);
+        $this->configWriterMock =  $this->getMockForAbstractClass(WriterInterface::class);
+        $this->flagManagerMock =  $this->createMock(FlagManager::class);
+        $this->reinitableConfigMock = $this->getMockForAbstractClass(ReinitableConfigInterface::class);
+        $this->analyticsTokenMock = $this->createMock(AnalyticsToken::class);
 
         $this->update = new Update(
             $this->connectorMock,
@@ -92,7 +86,6 @@ class UpdateTest extends \PHPUnit\Framework\TestCase
             ->with('update')
             ->willReturn(false);
         $this->analyticsTokenMock
-            ->expects($this->any())
             ->method('isTokenExist')
             ->willReturn(false);
         $this->addFinalOutputAsserts();

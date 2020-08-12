@@ -103,8 +103,9 @@ class ExportFileDataProvider extends DataProvider
             $result['items'][]['file_name'] = $this->getPathToExportFile($this->fileIO->getPathInfo($file));
         }
 
-        $pageSize = (int) $this->request->getParam('paging')['pageSize'];
-        $pageCurrent = (int) $this->request->getParam('paging')['current'];
+        $paging = $this->request->getParam('paging');
+        $pageSize = (int) ($paging['pageSize'] ?? 0);
+        $pageCurrent = (int) ($paging['current'] ?? 0);
         $pageOffset = ($pageCurrent - 1) * $pageSize;
         $result['totalRecords'] = count($result['items']);
         $result['items'] = array_slice($result['items'], $pageOffset, $pageSize);

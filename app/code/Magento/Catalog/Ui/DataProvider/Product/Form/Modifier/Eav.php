@@ -40,7 +40,7 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Eav\Model\ResourceModel\Entity\Attribute\CollectionFactory as AttributeCollectionFactory;
 
 /**
- * Data provider for eav attributes on product page
+ * Class Eav data provider for product editing form
  *
  * @api
  *
@@ -686,7 +686,6 @@ class Eav extends AbstractModifier
                 'scopeLabel' => $this->getScopeLabel($attribute),
                 'globalScope' => $this->isScopeGlobal($attribute),
                 'sortOrder' => $sortOrder * self::SORT_ORDER_MULTIPLIER,
-                '__disableTmpl' => ['label' => true, 'code' => true]
             ]
         );
         $product = $this->locator->getProduct();
@@ -792,7 +791,9 @@ class Eav extends AbstractModifier
                 \Magento\Store\Model\ScopeInterface::SCOPE_STORE,
                 $this->storeManager->getStore()
             );
-            $attribute->setDefaultValue($defaultValue);
+            if ($defaultValue !== null) {
+                $attribute->setDefaultValue($defaultValue);
+            }
         }
         return $attribute->getDefaultValue();
     }
@@ -861,7 +862,6 @@ class Eav extends AbstractModifier
                 'breakLine' => false,
                 'label' => $attribute->getDefaultFrontendLabel(),
                 'required' => $attribute->getIsRequired(),
-                '__disableTmpl' => ['label' => true]
             ]
         );
 

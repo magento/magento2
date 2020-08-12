@@ -17,7 +17,7 @@
             <severity value="CRITICAL"/>
             <testCaseId value="MC-6092"/>
             <group value="LayeredNavigation"/>
-            <group value="SearchEngineMysql"/>
+            <group value="SearchEngineElasticsearch"/>
         </annotations>
         <before>
             <createData entity="productDropDownAttribute" stepKey="attribute"/>
@@ -50,11 +50,16 @@
         </actionGroup>
         <selectOption selector="{{AdminProductFormSection.customSelectField($$attribute.attribute[attribute_code]$$)}}" userInput="option1" stepKey="selectAttribute"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAll">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!-- Check storefront mobile view for shop by button is functioning as expected -->
         <comment userInput="Check storefront mobile view for shop by button is functioning as expected" stepKey="commentCheckShopByButton" />
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
-        <waitForPageLoad stepKey="waitForHomePageToLoad"/>
-        <submitForm selector="#search_mini_form" parameterArray="['q' => 'Test Simple Product']" stepKey="fillSearchBar" />
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+        <submitForm selector="#search_mini_form" parameterArray="['q' => 'Simple']" stepKey="fillSearchBar" />
         <resizeWindow width="600" height="800" stepKey="resizeWindow"/>
         <waitForPageLoad stepKey="waitForHomePageToLoad2"/>
         <seeElement selector="{{StorefrontCategorySidebarMobileSection.shopByButton}}" stepKey="seeShopByButton"/>

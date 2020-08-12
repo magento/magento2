@@ -30,8 +30,8 @@
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
-            <actionGroup ref="DeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute">
-                <argument name="ProductAttribute" value="visualSwatchAttribute"/>
+            <actionGroup ref="AdminDeleteProductAttributeByLabelActionGroup" stepKey="deleteAttribute">
+                <argument name="productAttributeLabel" value="{{visualSwatchAttribute.default_label}}"/>
             </actionGroup>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
@@ -71,8 +71,12 @@
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductForm"/>
 
         <!-- Perform reindex and flush cache -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!--Select any option in the Layered navigation and verify product image-->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
@@ -83,10 +87,10 @@
         <waitForElementVisible selector="{{StorefrontCategorySidebarSection.filterOptionByLabel(visualSwatchOption1.default_label)}}" stepKey="waitForOption"/>
         <click selector="{{StorefrontCategorySidebarSection.filterOptionByLabel(visualSwatchOption1.default_label)}}" stepKey="clickFirstOption"/>
         <grabAttributeFrom selector="{{StorefrontCategoryMainSection.productImage}}" userInput="src" stepKey="grabFirstOptionImg"/>
-        <assertContains stepKey="assertProductFirstOptionImage">
+        <assertStringContainsString stepKey="assertProductFirstOptionImage">
 			<actualResult type="variable">$grabFirstOptionImg</actualResult>
 			<expectedResult type="string">{{MagentoLogo.filename}}</expectedResult>
-        </assertContains>
+        </assertStringContainsString>
         <click selector="{{StorefrontCategorySidebarSection.removeFilter}}" stepKey="removeSideBarFilter"/>
         <actionGroup ref="SelectStorefrontSideBarAttributeOption" stepKey="selectStorefrontProductAttributeForSecondOption">
             <argument name="categoryName" value="$$createCategory.name$$"/>
@@ -95,9 +99,9 @@
         <waitForElementVisible selector="{{StorefrontCategorySidebarSection.filterOptionByLabel(visualSwatchOption2.default_label)}}" stepKey="waitForSecondOption"/>
         <click selector="{{StorefrontCategorySidebarSection.filterOptionByLabel(visualSwatchOption2.default_label)}}" stepKey="clickSecondOption"/>
         <grabAttributeFrom selector="{{StorefrontCategoryMainSection.productImage}}" userInput="src" stepKey="grabSecondOptionImg"/>
-        <assertContains stepKey="assertProductSecondOptionImage">
+        <assertStringContainsString stepKey="assertProductSecondOptionImage">
 			<actualResult type="variable">$grabSecondOptionImg</actualResult>
 			<expectedResult type="string">{{TestImageNew.filename}}</expectedResult>
-        </assertContains>
+        </assertStringContainsString>
     </test>
 </tests>

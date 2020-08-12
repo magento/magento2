@@ -3,18 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Rss\Product;
 
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\Rss\Product\Special;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class SpecialTest
- * @package Magento\Catalog\Model\Rss\Product
- */
-class SpecialTest extends \PHPUnit\Framework\TestCase
+class SpecialTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Rss\Product\Special
+     * @var Special
      */
     protected $special;
 
@@ -24,30 +31,30 @@ class SpecialTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $productFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Product
+     * @var MockObject|Product
      */
     protected $product;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     protected $storeManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->product = $this->createMock(\Magento\Catalog\Model\Product::class);
-        $this->productFactory = $this->createPartialMock(\Magento\Catalog\Model\ProductFactory::class, ['create']);
-        $this->productFactory->expects($this->any())->method('create')->will($this->returnValue($this->product));
-        $this->storeManager = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $this->product = $this->createMock(Product::class);
+        $this->productFactory = $this->createPartialMock(ProductFactory::class, ['create']);
+        $this->productFactory->expects($this->any())->method('create')->willReturn($this->product);
+        $this->storeManager = $this->createMock(StoreManager::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->special = $this->objectManagerHelper->getObject(
-            \Magento\Catalog\Model\Rss\Product\Special::class,
+            Special::class,
             [
                 'productFactory' => $this->productFactory,
                 'storeManager' => $this->storeManager
@@ -58,26 +65,26 @@ class SpecialTest extends \PHPUnit\Framework\TestCase
     public function testGetProductsCollection()
     {
         $storeId = 1;
-        $store = $this->createMock(\Magento\Store\Model\Store::class);
-        $this->storeManager->expects($this->once())->method('getStore')->with($storeId)->will(
-            $this->returnValue($store)
+        $store = $this->createMock(Store::class);
+        $this->storeManager->expects($this->once())->method('getStore')->with($storeId)->willReturn(
+            $store
         );
         $websiteId = 1;
-        $store->expects($this->once())->method('getWebsiteId')->will($this->returnValue($websiteId));
+        $store->expects($this->once())->method('getWebsiteId')->willReturn($websiteId);
 
-        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
+        /** @var Collection $productCollection */
         $productCollection =
-            $this->createMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class);
-        $this->product->expects($this->once())->method('getResourceCollection')->will(
-            $this->returnValue($productCollection)
+            $this->createMock(Collection::class);
+        $this->product->expects($this->once())->method('getResourceCollection')->willReturn(
+            $productCollection
         );
         $customerGroupId = 1;
-        $productCollection->expects($this->once())->method('addPriceDataFieldFilter')->will($this->returnSelf());
-        $productCollection->expects($this->once())->method('addPriceData')->with($storeId, $customerGroupId)->will(
-            $this->returnSelf()
+        $productCollection->expects($this->once())->method('addPriceDataFieldFilter')->willReturnSelf();
+        $productCollection->expects($this->once())->method('addPriceData')->with($storeId, $customerGroupId)->willReturnSelf(
+            
         );
-        $productCollection->expects($this->once())->method('addAttributeToSelect')->will($this->returnSelf());
-        $productCollection->expects($this->once())->method('addAttributeToSort')->will($this->returnSelf());
+        $productCollection->expects($this->once())->method('addAttributeToSelect')->willReturnSelf();
+        $productCollection->expects($this->once())->method('addAttributeToSort')->willReturnSelf();
 
         $products = $this->special->getProductsCollection($storeId, $customerGroupId);
         $this->assertEquals($productCollection, $products);

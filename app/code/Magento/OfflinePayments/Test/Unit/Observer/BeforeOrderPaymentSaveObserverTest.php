@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\OfflinePayments\Test\Unit\Observer;
 
 use Magento\Framework\Event;
@@ -18,7 +20,7 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test class for \Magento\OfflinePayments\Observer\BeforeOrderPaymentSaveObserver
+ * @covers \Magento\OfflinePayments\Observer\BeforeOrderPaymentSaveObserver
  */
 class BeforeOrderPaymentSaveObserverTest extends TestCase
 {
@@ -52,7 +54,7 @@ class BeforeOrderPaymentSaveObserverTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManagerHelper = new ObjectManager($this);
         $this->paymentMock = $this->getMockBuilder(Payment::class)

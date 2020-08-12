@@ -15,7 +15,7 @@ class IdentityValidatorTest extends \PHPUnit\Framework\TestCase
      */
     protected $identityValidator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->identityValidator = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->get(IdentityValidator::class);
@@ -24,18 +24,18 @@ class IdentityValidatorTest extends \PHPUnit\Framework\TestCase
     public function testIsValid()
     {
         $isValid = $this->identityValidator->isValid(self::VALID_UUID);
-        $this->assertEquals(true, $isValid);
+        $this->assertTrue($isValid);
     }
 
     public function testIsNotValid()
     {
         $isValid = $this->identityValidator->isValid(self::INVALID_UUID);
-        $this->assertEquals(false, $isValid);
+        $this->assertFalse($isValid);
     }
 
     public function testEmptyValue()
     {
         $isValid = $this->identityValidator->isValid('');
-        $this->assertEquals(false, $isValid);
+        $this->assertFalse($isValid);
     }
 }

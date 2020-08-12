@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App\Test\Unit;
 
-use \Magento\Framework\App\DeploymentConfig;
-use \Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\App\DeploymentConfig\Reader;
+use Magento\Framework\Config\ConfigOptionsListConstants;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DeploymentConfigTest extends \PHPUnit\Framework\TestCase
+class DeploymentConfigTest extends TestCase
 {
     /**
      * @var array
@@ -53,36 +57,36 @@ class DeploymentConfigTest extends \PHPUnit\Framework\TestCase
     protected static $fixtureConfigMerged;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig
+     * @var DeploymentConfig
      */
     protected $_deploymentConfig;
 
     /**
-     * @var \Magento\Framework\App\DeploymentConfig
+     * @var DeploymentConfig
      */
     protected $_deploymentConfigMerged;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $reader;
 
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
-        self::$fixtureConfig       = require __DIR__.'/_files/config.php';
-        self::$fixtureConfigMerged = require __DIR__.'/_files/other/local_developer_merged.php';
+        self::$fixtureConfig       = require __DIR__ . '/_files/config.php';
+        self::$fixtureConfigMerged = require __DIR__ . '/_files/other/local_developer_merged.php';
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->reader                  = $this->createMock(\Magento\Framework\App\DeploymentConfig\Reader::class);
-        $this->_deploymentConfig       = new \Magento\Framework\App\DeploymentConfig(
+        $this->reader                  = $this->createMock(Reader::class);
+        $this->_deploymentConfig       = new DeploymentConfig(
             $this->reader,
             ['test_override' => 'overridden']
         );
-        $this->_deploymentConfigMerged = new \Magento\Framework\App\DeploymentConfig(
+        $this->_deploymentConfigMerged = new DeploymentConfig(
             $this->reader,
-            require __DIR__.'/_files/other/local_developer.php'
+            require __DIR__ . '/_files/other/local_developer.php'
         );
     }
 
@@ -124,7 +128,7 @@ class DeploymentConfigTest extends \PHPUnit\Framework\TestCase
      */
     public function testNotAvailableThenAvailable(): void
     {
-        $this->reader->expects($this->once())->method('load')->willReturn([]);
+        $this->reader->expects($this->once())->method('load')->willReturn(['Test']);
         $object = new DeploymentConfig($this->reader);
         $this->assertFalse($object->isAvailable());
         $this->assertFalse($object->isAvailable());
@@ -132,12 +136,12 @@ class DeploymentConfigTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $data
-     * @expectedException \Exception
-     * @expectedExceptionMessage Key collision
      * @dataProvider keyCollisionDataProvider
      */
     public function testKeyCollision(array $data): void
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Key collision');
         $this->reader->expects($this->once())->method('load')->willReturn($data);
         $object = new DeploymentConfig($this->reader);
         $object->get();

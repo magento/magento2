@@ -6,10 +6,10 @@
 namespace Magento\Framework\MessageQueue\UseCase;
 
 use Magento\Framework\App\DeploymentConfig\FileReader;
-use Magento\TestModuleAsyncAmqp\Model\AsyncTestData;
 use Magento\Framework\App\DeploymentConfig\Writer;
 use Magento\Framework\Config\File\ConfigFilePool;
 use Magento\Framework\Filesystem;
+use Magento\TestModuleAsyncAmqp\Model\AsyncTestData;
 
 class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
 {
@@ -51,9 +51,10 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
+        // phpstan:ignore "Class Magento\TestModuleAsyncAmqp\Model\AsyncTestData not found."
         $this->msgObject = $this->objectManager->create(AsyncTestData::class);
         $this->reader = $this->objectManager->get(FileReader::class);
         $this->filesystem = $this->objectManager->get(Filesystem::class);
@@ -65,21 +66,30 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
      */
     public function testWaitForMessages()
     {
-        $this->assertArraySubset(['queue' => ['consumers_wait_for_messages' => 1]], $this->config);
+        $this->publisherConsumerController->stopConsumers();
+
+        $config = $this->config;
+        $config['queue']['consumers_wait_for_messages'] = 1;
+        $this->writeConfig($config);
+
+        $loadedConfig = $this->loadConfig();
+        $this->assertArrayHasKey('queue', $loadedConfig);
+        $this->assertArrayHasKey('consumers_wait_for_messages', $loadedConfig['queue']);
+        $this->assertEquals(1, $loadedConfig['queue']['consumers_wait_for_messages']);
 
         foreach ($this->messages as $message) {
             $this->publishMessage($message);
         }
-
+        $this->publisherConsumerController->startConsumers();
         $this->waitForAsynchronousResult(count($this->messages), $this->logFilePath);
 
         foreach ($this->messages as $item) {
-            $this->assertContains($item, file_get_contents($this->logFilePath));
+            $this->assertStringContainsString($item, file_get_contents($this->logFilePath));
         }
 
         $this->publishMessage('message4');
         $this->waitForAsynchronousResult(count($this->messages) + 1, $this->logFilePath);
-        $this->assertContains('message4', file_get_contents($this->logFilePath));
+        $this->assertStringContainsString('message4', file_get_contents($this->logFilePath));
     }
 
     /**
@@ -93,7 +103,10 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
         $config['queue']['consumers_wait_for_messages'] = 0;
         $this->writeConfig($config);
 
-        $this->assertArraySubset(['queue' => ['consumers_wait_for_messages' => 0]], $this->loadConfig());
+        $loadedConfig = $this->loadConfig();
+        $this->assertArrayHasKey('queue', $loadedConfig);
+        $this->assertArrayHasKey('consumers_wait_for_messages', $loadedConfig['queue']);
+        $this->assertEquals(0, $loadedConfig['queue']['consumers_wait_for_messages']);
         foreach ($this->messages as $message) {
             $this->publishMessage($message);
         }
@@ -102,14 +115,13 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
         $this->waitForAsynchronousResult(count($this->messages), $this->logFilePath);
 
         foreach ($this->messages as $item) {
-            $this->assertContains($item, file_get_contents($this->logFilePath));
+            $this->assertStringContainsString($item, file_get_contents($this->logFilePath));
         }
 
         // Checks that consumers do not wait 4th message and die
-        $this->assertArraySubset(
-            ['mixed.sync.and.async.queue.consumer' => []],
-            $this->publisherConsumerController->getConsumersProcessIds()
-        );
+        $consumersProcessIds = $this->publisherConsumerController->getConsumersProcessIds();
+        $this->assertArrayHasKey('mixed.sync.and.async.queue.consumer', $consumersProcessIds);
+        $this->assertEquals([], $consumersProcessIds['mixed.sync.and.async.queue.consumer']);
     }
 
     /**
@@ -142,7 +154,7 @@ class WaitAndNotWaitMessagesTest extends QueueTestCaseAbstract
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->writeConfig($this->config);
