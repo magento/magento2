@@ -274,14 +274,8 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
             return true;
         }
 
-        if (!empty($element->getGroup()['depends']['fields'])) {
-            foreach ($element->getGroup()['depends']['fields'] as $dependFieldData) {
-                if (is_array($dependFieldData) && isset($dependFieldData['value'], $dependFieldData['id'])) {
-                    if ($dependFieldData['value'] !== $this->getConfigData($dependFieldData['id'])) {
-                        return false;
-                    }
-                }
-            }
+        if ($this->isCollapseStateByDependentField($element)) {
+            return false;
         }
 
         $extra = $this->_authSession->getUser()->getExtra();
@@ -290,6 +284,34 @@ class Fieldset extends \Magento\Backend\Block\AbstractBlock implements
             return $extra['configState'][$element->getId()];
         }
         return $this->isCollapsedDefault;
+    }
+
+    /**
+     * Check if element should be collapsed by dependent field value.
+     *
+     * @param AbstractElement $element
+     * @return bool
+     */
+    private function isCollapseStateByDependentField(AbstractElement $element): bool
+    {
+        if (!empty($element->getGroup()['depends']['fields'])) {
+            foreach ($element->getGroup()['depends']['fields'] as $dependFieldData) {
+                if (is_array($dependFieldData) && isset($dependFieldData['value'], $dependFieldData['id'])) {
+                    $fieldSetForm = $this->getForm();
+                    $dependentFieldConfigValue = $this->_scopeConfig->getValue(
+                        $dependFieldData['id'],
+                        $fieldSetForm->getScope(),
+                        $fieldSetForm->getScopeCode()
+                    );
+
+                    if ($dependFieldData['value'] !== $dependentFieldConfigValue) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        return false;
     }
 
     /**
