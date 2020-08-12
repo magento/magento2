@@ -86,7 +86,7 @@ define([
             $.each(usedIn, function (entityName, number) {
                 count++;
                 message += entityName + '(' + number + ')';
-                message += count != Object.keys(usedIn).length ?  ', ' : '.';
+                message += count !== Object.keys(usedIn).length ?  ', ' : '.';
             });
 
             return message;
