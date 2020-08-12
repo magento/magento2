@@ -40,8 +40,7 @@
 
         <!-- Create a grouped product to appear in the widget -->
 
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductList"/>
-        <waitForPageLoad stepKey="waitForProductList"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductList"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="toggleAddProductButton"/>
         <click selector="{{AdminProductGridActionSection.addGroupedProduct}}" stepKey="clickAddGroupedProduct"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{_defaultProduct.name}}" stepKey="fillProductName"/>
@@ -58,7 +57,7 @@
         <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('0')}}" stepKey="checkFilterResult1"/>
         <checkOption selector="{{AdminAddProductsToGroupPanel.nThCheckbox('1')}}" stepKey="checkFilterResult2"/>
         <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="clickAddSelectedGroupProducts"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveProduct"/>
 
         <!-- If PageCache is enabled, Cache clearing happens here, via merge -->
 

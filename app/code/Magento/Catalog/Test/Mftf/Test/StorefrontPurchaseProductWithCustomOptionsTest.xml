@@ -115,9 +115,7 @@
         <see selector="{{CheckoutPaymentSection.ProductOptionsActiveByProductItemName($$createProduct.name$$)}}" userInput="1:00 AM" stepKey="seeProductOptionTimeInput" />
         <!--Select shipping method-->
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
-        <waitForElement selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterClickNext"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
         <!--Select payment method-->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
         <!-- Place Order -->

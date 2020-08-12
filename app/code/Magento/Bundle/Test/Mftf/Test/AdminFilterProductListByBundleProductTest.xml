@@ -25,7 +25,7 @@
             <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
         </after>
@@ -57,7 +57,7 @@
         <actionGroup ref="AncillaryPrepBundleProductActionGroup" stepKey="createBundledProductForTwoSimpleProducts"/>
 
         <!--Save the product-->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
 
         <!--Apply Bundle Product Filter-->

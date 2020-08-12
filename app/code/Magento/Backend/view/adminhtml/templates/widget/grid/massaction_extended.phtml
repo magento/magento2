@@ -3,10 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <div id="<?= $block->getHtmlId() ?>" class="admin__grid-massaction">
 
-    <?php if ($block->getHideFormElement() !== true) : ?>
+    <?php if ($block->getHideFormElement() !== true): ?>
     <form action="" id="<?= $block->getHtmlId() ?>-form" method="post">
     <?php endif ?>
         <div class="admin__grid-massaction-form">
@@ -14,20 +16,25 @@
             <select
                 id="<?= $block->getHtmlId() ?>-select"
                 class="required-entry local-validation admin__control-select">
-                <option class="admin__control-select-placeholder" value="" selected><?= $block->escapeHtml(__('Actions')) ?></option>
-                <?php foreach ($block->getItems() as $_item) : ?>
-                    <option value="<?= $block->escapeHtmlAttr($_item->getId()) ?>"<?= ($_item->getSelected() ? ' selected="selected"' : '') ?>><?= $block->escapeHtml($_item->getLabel()) ?></option>
+                <option class="admin__control-select-placeholder" value="" selected>
+                    <?= $block->escapeHtml(__('Actions')) ?>
+                </option>
+                <?php foreach ($block->getItems() as $_item): ?>
+                    <option value="<?= $block->escapeHtmlAttr($_item->getId()) ?>"
+                        <?= ($_item->getSelected() ? ' selected="selected"' : '') ?>>
+                        <?= $block->escapeHtml($_item->getLabel()) ?>
+                    </option>
                 <?php endforeach; ?>
             </select>
             <span class="outer-span" id="<?= $block->getHtmlId() ?>-form-hiddens"></span>
             <span class="outer-span" id="<?= $block->getHtmlId() ?>-form-additional"></span>
             <?= $block->getApplyButtonHtml() ?>
         </div>
-    <?php if ($block->getHideFormElement() !== true) : ?>
+    <?php if ($block->getHideFormElement() !== true): ?>
     </form>
     <?php endif ?>
     <div class="no-display">
-        <?php foreach ($block->getItems() as $_item) : ?>
+        <?php foreach ($block->getItems() as $_item): ?>
             <div id="<?= $block->getHtmlId() ?>-item-<?= /* @noEscape */ $_item->getId() ?>-block">
                 <?= $_item->getAdditionalActionBlockHtml() ?>
             </div>
@@ -40,7 +47,7 @@
             data-menu="grid-mass-select">
             <optgroup label="<?= $block->escapeHtml(__('Mass Actions')) ?>">
                 <option disabled selected></option>
-            <?php if ($block->getUseSelectAll()) : ?>
+            <?php if ($block->getUseSelectAll()): ?>
                 <option value="selectAll">
                     <?= $block->escapeHtml(__('Select All')) ?>
                 </option>
@@ -58,33 +65,41 @@
         </select>
         <label for="<?= $block->getHtmlId() ?>-mass-select"></label>
     </div>
-<script>
+    <?php $scriptString = <<<script
     require(['jquery'], function($){
         'use strict';
-        $('#<?= $block->getHtmlId() ?>-mass-select').change(function () {
+        $('#{$block->getHtmlId()}-mass-select').change(function () {
             var massAction = $('option:selected', this).val();
             switch (massAction) {
-                <?php if ($block->getUseSelectAll()) : ?>
+script;
+    if ($block->getUseSelectAll()):
+        $scriptString .= <<<script
                 case 'selectAll':
-                    return <?= $block->escapeJs($block->getJsObjectName()) ?>.selectAll();
+                    return {$block->escapeJs($block->getJsObjectName())}.selectAll();
                     break;
                 case 'unselectAll':
-                    return <?= $block->escapeJs($block->getJsObjectName()) ?>.unselectAll();
+                    return {$block->escapeJs($block->getJsObjectName())}.unselectAll();
                     break;
-                <?php endif; ?>
+script;
+endif;
+    $scriptString .= <<<script
                 case 'selectVisible':
-                    return <?= $block->escapeJs($block->getJsObjectName()) ?>.selectVisible();
+                    return {$block->escapeJs($block->getJsObjectName())}.selectVisible();
                     break;
                 case 'unselectVisible':
-                    return <?= $block->escapeJs($block->getJsObjectName()) ?>.unselectVisible();
+                    return {$block->escapeJs($block->getJsObjectName())}.unselectVisible();
                     break;
             }
             this.blur();
         });
     });
-
-    <?php if (!$block->getParentBlock()->canDisplayContainer()) : ?>
-        <?= $block->escapeJs($block->getJsObjectName()) ?>.setGridIds('<?= /* @noEscape */ $block->getGridIdsJson() ?>');
-    <?php endif; ?>
-</script>
+script;
+    if (!$block->getParentBlock()->canDisplayContainer()):
+        $gridIdsJson = /* @noEscape */ $block->getGridIdsJson();
+        $scriptString .= <<<script
+        {$block->escapeJs($block->getJsObjectName())}.setGridIds('{$gridIdsJson}');
+script;
+    endif;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 </div>

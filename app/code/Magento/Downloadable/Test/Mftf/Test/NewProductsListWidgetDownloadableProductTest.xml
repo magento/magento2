@@ -31,8 +31,7 @@
 
         <!-- Create a Downloadable product to appear in the widget -->
 
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductList"/>
-        <waitForPageLoad stepKey="waitForProductList"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductList"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProduct"/>
         <click selector="{{AdminProductGridActionSection.addDownloadableProduct}}" stepKey="clickAddDownloadableProduct"/>
         <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{_defaultProduct.name}}" stepKey="fillProductName"/>
@@ -49,7 +48,7 @@
         <actionGroup ref="AddDownloadableProductLinkWithMaxDownloadsActionGroup" stepKey="addDownloadableLinkWithMaxDownloads">
             <argument name="link" value="downloadableLinkWithMaxDownloads"/>
         </actionGroup>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveProduct"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveProduct"/>
 
         <!-- If PageCache is enabled, Cache clearing happens here, via merge -->
 

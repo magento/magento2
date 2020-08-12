@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Test\Unit\Model\Plugin;
@@ -18,6 +19,7 @@ use Magento\ConfigurableProduct\Test\Unit\Model\Product\ProductExtensionAttribut
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Framework\Exception\InputException;
 
 /**
  * Test for ProductRepositorySave plugin
@@ -71,7 +73,8 @@ class ProductRepositorySaveTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->productAttributeRepository = $this->getMockForAbstractClass(ProductAttributeRepositoryInterface::class);
+        $this->productAttributeRepository =
+            $this->getMockForAbstractClass(ProductAttributeRepositoryInterface::class);
 
         $this->product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
@@ -105,8 +108,10 @@ class ProductRepositorySaveTest extends TestCase
 
     /**
      * Validating the result after saving a configurable product
+     *
+     * @return void
      */
-    public function testBeforeSaveWhenProductIsSimple()
+    public function testBeforeSaveWhenProductIsSimple(): void
     {
         $this->product->expects(static::once())
             ->method('getTypeId')
@@ -122,8 +127,10 @@ class ProductRepositorySaveTest extends TestCase
 
     /**
      * Test saving a configurable product without attribute options
+     *
+     * @return void
      */
-    public function testBeforeSaveWithoutOptions()
+    public function testBeforeSaveWithoutOptions(): void
     {
         $this->product->expects(static::once())
             ->method('getTypeId')
@@ -151,10 +158,12 @@ class ProductRepositorySaveTest extends TestCase
 
     /**
      * Test saving a configurable product with same set of attribute values
+     *
+     * @return void
      */
-    public function testBeforeSaveWithLinks()
+    public function testBeforeSaveWithLinks(): void
     {
-        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectException(InputException::class);
         $this->expectExceptionMessage('Products "5" and "4" have the same set of attribute values.');
         $links = [4, 5];
         $this->product->expects(static::once())
@@ -191,10 +200,12 @@ class ProductRepositorySaveTest extends TestCase
 
     /**
      * Test saving a configurable product with missing attribute
+     *
+     * @return void
      */
-    public function testBeforeSaveWithLinksWithMissingAttribute()
+    public function testBeforeSaveWithLinksWithMissingAttribute(): void
     {
-        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectException(InputException::class);
         $this->expectExceptionMessage('Product with id "4" does not contain required attribute "color".');
         $simpleProductId = 4;
         $links = [$simpleProductId, 5];
@@ -239,17 +250,19 @@ class ProductRepositorySaveTest extends TestCase
         $product->expects(static::once())
             ->method('getData')
             ->with($attributeCode)
-            ->willReturn(false);
+            ->willReturn(null);
 
         $this->plugin->beforeSave($this->productRepository, $this->product);
     }
 
     /**
      * Test saving a configurable product with duplicate attributes
+     *
+     * @return void
      */
-    public function testBeforeSaveWithLinksWithDuplicateAttributes()
+    public function testBeforeSaveWithLinksWithDuplicateAttributes(): void
     {
-        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectException(InputException::class);
         $this->expectExceptionMessage('Products "5" and "4" have the same set of attribute values.');
         $links = [4, 5];
         $attributeCode = 'color';

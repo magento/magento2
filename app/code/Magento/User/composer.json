@@ -12,7 +12,8 @@
         "magento/module-email": "*",
         "magento/module-integration": "*",
         "magento/module-security": "*",
-        "magento/module-store": "*"
+        "magento/module-store": "*",
+        "magento/module-ui": "*"
     },
     "type": "magento2-module",
     "license": [

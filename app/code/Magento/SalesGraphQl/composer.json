@@ -8,9 +8,9 @@
         "magento/module-sales": "*",
         "magento/module-store": "*",
         "magento/module-catalog": "*",
-        "magento/module-graph-ql": "*"
-    },
-    "suggest": {
+        "magento/module-tax": "*",
+        "magento/module-quote": "*",
+        "magento/module-graph-ql": "*",
         "magento/module-shipping": "*"
     },
     "license": [
