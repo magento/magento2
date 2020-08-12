@@ -74,7 +74,6 @@ class Cache implements ConfigOptionsListInterface
         self::INPUT_KEY_CACHE_BACKEND_REDIS_PASSWORD => self::CONFIG_PATH_CACHE_BACKEND_PASSWORD,
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESS_DATA => self::CONFIG_PATH_CACHE_BACKEND_COMPRESS_DATA,
         self::INPUT_KEY_CACHE_BACKEND_REDIS_COMPRESSION_LIB => self::CONFIG_PATH_CACHE_BACKEND_COMPRESSION_LIB,
-        self::INPUT_KEY_CACHE_ALLOW_PARALLEL_CACHE_GENERATION => self::CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION,
     ];
 
     /**
@@ -174,6 +173,13 @@ class Cache implements ConfigOptionsListInterface
             } else {
                 $configData->set(self::CONFIG_PATH_CACHE_BACKEND, $options[self::INPUT_KEY_CACHE_BACKEND]);
             }
+        }
+
+        if (isset($options[self::INPUT_KEY_CACHE_ALLOW_PARALLEL_CACHE_GENERATION])) {
+            $configData->set(
+                self::CONFIG_PATH_ALLOW_PARALLEL_CACHE_GENERATION,
+                $this->boolVal($options[self::INPUT_KEY_CACHE_ALLOW_PARALLEL_CACHE_GENERATION])
+            );
         }
 
         foreach ($this->inputKeyToConfigPathMap as $inputKey => $configPath) {
@@ -295,5 +301,17 @@ class Cache implements ConfigOptionsListInterface
     {
         // phpcs:ignore Magento2.Functions.DiscouragedFunction
         return substr(\hash('sha256', dirname(__DIR__, 6)), 0, 3) . '_';
+    }
+
+    /**
+     * Convert any valid input option to a boolean
+     *
+     * @param mixed $option
+     *
+     * @return int|null
+     */
+    private function boolVal($option): ?int
+    {
+        return (int)in_array(strtolower((string)$option), BooleanConfigOption::OPTIONS_POSITIVE);
     }
 }

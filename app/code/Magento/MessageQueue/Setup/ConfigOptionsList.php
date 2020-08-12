@@ -50,22 +50,26 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      * @inheritdoc
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function createConfig(array $data, DeploymentConfig $deploymentConfig): ConfigData
+    public function createConfig(array $data, DeploymentConfig $deploymentConfig): array
     {
-        $configData = new ConfigData(ConfigFilePool::APP_ENV);
+        $deploymentOption = [
+            self::INPUT_KEY_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES => self::CONFIG_PATH_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES,
+        ];
 
-        if (!isset($data[self::INPUT_KEY_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES])
-            || $data[self::INPUT_KEY_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES] === ''
-        ) {
-            return $configData;
+        $config = [];
+        foreach ($deploymentOption as $inputKey => $configPath) {
+            $configData = new ConfigData(ConfigFilePool::APP_ENV);
+            $config[] = $configData;
+            if (!isset($data[$inputKey])) {
+                continue;
+            }
+            $configData->set(
+                $configPath,
+                $this->boolVal($data[$inputKey])
+            );
         }
 
-        $configData->set(
-            self::CONFIG_PATH_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES,
-            $this->boolVal($data[self::INPUT_KEY_QUEUE_CONSUMERS_WAIT_FOR_MESSAGES])
-        );
-
-        return $configData;
+        return $config;
     }
 
     /**
@@ -81,10 +85,10 @@ class ConfigOptionsList implements ConfigOptionsListInterface
      *
      * @param mixed $option
      *
-     * @return bool
+     * @return int|null
      */
-    private function boolVal($option): bool
+    private function boolVal($option): ?int
     {
-        return in_array(strtolower((string)$option), BooleanConfigOption::OPTIONS_POSITIVE);
+        return (int)in_array(strtolower((string)$option), BooleanConfigOption::OPTIONS_POSITIVE);
     }
 }
