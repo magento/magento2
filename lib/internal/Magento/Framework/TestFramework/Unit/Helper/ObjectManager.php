@@ -266,6 +266,7 @@ class ObjectManager
                 $defaultValue = $parameter->getDefaultValue();
             }
 
+            $object = null;
             try {
                 if ($parameter->getClass()) {
                     $argClassName = $parameter->getClass()->getName();
@@ -286,7 +287,7 @@ class ObjectManager
                 }
             }
 
-            $constructArguments[$parameterName] = !isset($object) || null === $object ? $defaultValue : $object;
+            $constructArguments[$parameterName] = null === $object ? $defaultValue : $object;
         }
         return $constructArguments;
     }
