@@ -9,16 +9,16 @@ declare(strict_types=1);
 namespace Magento\MediaGalleryIntegration\Test\Integration\Model;
 
 use Magento\Framework\ObjectManagerInterface;
-use Magento\MediaGalleryIntegration\Model\OpenDialogUrlProvider;
 use Magento\MediaGalleryUiApi\Api\ConfigInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Ui\Component\Form\Element\DataType\Media\OpenDialogUrl;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Provide tests cover getting correct url based on the config settings.
  * @magentoAppArea adminhtml
  */
-class OpenDialogUrlProviderTest extends TestCase
+class OpenDialogUrlTest extends TestCase
 {
     /**
      * @var ObjectManagerInterface
@@ -26,9 +26,9 @@ class OpenDialogUrlProviderTest extends TestCase
     private $objectManger;
 
     /**
-     * @var OpenDialogUrlProvider
+     * @var OpenDialogUrl
      */
-    private $openDialogUrlProvider;
+    private $openDialogUrl;
 
     /**
      * @inheritdoc
@@ -37,8 +37,8 @@ class OpenDialogUrlProviderTest extends TestCase
     {
         $this->objectManger = Bootstrap::getObjectManager();
         $config = $this->objectManger->create(ConfigInterface::class);
-        $this->openDialogUrlProvider = $this->objectManger->create(
-            OpenDialogUrlProvider::class,
+        $this->openDialogUrl = $this->objectManger->create(
+            OpenDialogUrl::class,
             ['config' => $config]
         );
     }
@@ -49,7 +49,7 @@ class OpenDialogUrlProviderTest extends TestCase
      */
     public function testWithEnhancedMediaGalleryDisabled(): void
     {
-        self::assertEquals('cms/wysiwyg_images/index', $this->openDialogUrlProvider->getUrl());
+        self::assertEquals('cms/wysiwyg_images/index', $this->openDialogUrl->get());
     }
 
     /**
@@ -58,6 +58,6 @@ class OpenDialogUrlProviderTest extends TestCase
      */
     public function testWithEnhancedMediaGalleryEnabled(): void
     {
-        self::assertEquals('media_gallery/index/index', $this->openDialogUrlProvider->getUrl());
+        self::assertEquals('media_gallery/index/index', $this->openDialogUrl->get());
     }
 }
