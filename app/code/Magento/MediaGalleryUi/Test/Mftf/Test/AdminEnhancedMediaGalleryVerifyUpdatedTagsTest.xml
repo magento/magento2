@@ -38,8 +38,15 @@
         <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageKeywordsActionGroup" stepKey="verifyAddedKeywords">
             <argument name="keywords" value="UpdatedImageDetails.keyword"/>
         </actionGroup>
-        <actionGroup ref="AdminEnhancedMediaGalleryVerifyImageKeywordsActionGroup" stepKey="verifyMetadataKeywords">
-            <argument name="keywords" value="ImageMetadata.keywords"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsEditActionGroup" stepKey="updateImageDetails"/>
+        <actionGroup ref="AdminMediaGalleryEditAssetRemoveKeywordActionGroup" stepKey="removeKeywords">
+            <argument name="selectedKeywords" value="UpdatedImageDetails.keyword"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveUpdatedImage">
+            <argument name="image" value="UpdatedImageDetails"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryVerifyRemovedImageKeywordsActionGroup" stepKey="verifyRemovedKeywords">
+            <argument name="keywords" value="UpdatedImageDetails.keyword"/>
         </actionGroup>
     </test>
 </tests>
