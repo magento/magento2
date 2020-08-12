@@ -61,9 +61,9 @@ class ListCompare extends \Magento\Framework\DataObject
     private $productRepository;
 
     /**
-     * @var AddToList
+     * @var CompareList
      */
-    private $addToCompareList;
+    private $compareList;
 
     /**
      * Constructor
@@ -73,7 +73,7 @@ class ListCompare extends \Magento\Framework\DataObject
      * @param \Magento\Catalog\Model\ResourceModel\Product\Compare\Item $catalogProductCompareItem
      * @param \Magento\Customer\Model\Session $customerSession
      * @param \Magento\Customer\Model\Visitor $customerVisitor
-     * @param \Magento\Catalog\Model\Product\Compare\AddToList
+     * @param \Magento\Catalog\Model\Product\Compare\CompareList
      * @param array $data
      * @param ProductRepository|null $productRepository
      */
@@ -83,7 +83,7 @@ class ListCompare extends \Magento\Framework\DataObject
         \Magento\Catalog\Model\ResourceModel\Product\Compare\Item $catalogProductCompareItem,
         \Magento\Customer\Model\Session $customerSession,
         \Magento\Customer\Model\Visitor $customerVisitor,
-        \Magento\Catalog\Model\Product\Compare\AddToList $addToList,
+        \Magento\Catalog\Model\Product\Compare\CompareList $addToList,
         array $data = [],
         ProductRepository $productRepository = null
     ) {
@@ -92,7 +92,7 @@ class ListCompare extends \Magento\Framework\DataObject
         $this->_catalogProductCompareItem = $catalogProductCompareItem;
         $this->_customerSession = $customerSession;
         $this->_customerVisitor = $customerVisitor;
-        $this->addToCompareList = $addToList;
+        $this->compareList = $addToList;
         $this->productRepository = $productRepository ?: ObjectManager::getInstance()->create(ProductRepository::class);
         parent::__construct($data);
     }
@@ -110,7 +110,7 @@ class ListCompare extends \Magento\Framework\DataObject
         $item = $this->_compareItemFactory->create();
         $this->_addVisitorToItem($item);
         $item->loadByProduct($product);
-        $listId = $this->addToCompareList->execute();
+        $listId = $this->compareList->getListId($item);
 
         if (!$item->getId() && $this->productExists($product)) {
             $item->addProductData($product);
