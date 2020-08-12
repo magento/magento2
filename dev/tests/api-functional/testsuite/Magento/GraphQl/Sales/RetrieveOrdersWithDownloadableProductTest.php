@@ -296,7 +296,7 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
        orders(filter:{number:{eq:"{$orderNumber}"}}) {
          total_count
          items {
-          id
+           id
            number
            order_date
            status
@@ -314,7 +314,7 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
                 sort_order
                 uid
               }
-              entered_options{value id}
+              entered_options{value label}
               product_sku
               product_name
               quantity_ordered
