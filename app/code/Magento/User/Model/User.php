@@ -66,6 +66,11 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     const MESSAGE_ID_PASSWORD_EXPIRED = 'magento_user_password_expired';
 
     /**
+     * Tag to use for user assigned role caching.
+     */
+    private const CACHE_TAG = 'user_assigned_role';
+
+    /**
      * Model event prefix
      *
      * @var string
@@ -148,6 +153,14 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @deprecated 101.1.0
      */
     private $deploymentConfig;
+
+    /**
+     * @var array
+     */
+    protected $_cacheTag = [
+        \Magento\Backend\Block\Menu::CACHE_TAGS,
+        self::CACHE_TAG,
+    ];
 
     /**
      * @param \Magento\Framework\Model\Context $context
@@ -684,7 +697,27 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function hasAssigned2Role($user)
     {
-        return $this->getResource()->hasAssigned2Role($user);
+        if ($user instanceof AbstractModel) {
+            $userId = $user->getUserId();
+        } elseif (is_numeric($user) && (int)$user !== 0) {
+            $userId = $user;
+        } else {
+            return null;
+        }
+        $data = $this->_cacheManager->load('assigned_role_' . $userId);
+        if (false === $data) {
+            $data = $this->getResource()->hasAssigned2Role($user);
+
+            $this->_cacheManager->save(
+                $this->serializer->serialize($data),
+                'assigned_role_' . $userId,
+                [self::CACHE_TAG]
+            );
+        } else {
+            $data = $this->serializer->unserialize($data);
+        }
+
+        return $data;
     }
 
     /**
