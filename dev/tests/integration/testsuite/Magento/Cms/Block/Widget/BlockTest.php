@@ -28,9 +28,9 @@ class BlockTest extends \PHPUnit\Framework\TestCase
         $block->setBlockId($cmsBlock->getId());
         $block->toHtml();
         $result = $block->getText();
-        $this->assertContains('<a href="http://example.com/', $result);
-        $this->assertContains('<p>Config value: "http://example.com/".</p>', $result);
-        $this->assertContains('<p>Custom variable: "HTML Value".</p>', $result);
+        $this->assertStringContainsString('<a href="http://example.com/', $result);
+        $this->assertStringContainsString('<p>Config value: "http://example.com/".</p>', $result);
+        $this->assertStringContainsString('<p>Custom variable: "HTML Value".</p>', $result);
         $this->assertSame($cmsBlock->getIdentities(), $block->getIdentities());
     }
 }

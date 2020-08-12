@@ -17,7 +17,7 @@
     <type name="Magento\Search\Model\Adminhtml\System\Config\Source\Engine">
         <arguments>
             <argument name="engines" xsi:type="array">
-                <item sortOrder="20" name="elasticsearch6" xsi:type="string">Elasticsearch 6.x</item>
+                <item sortOrder="20" name="elasticsearch6" xsi:type="string">Elasticsearch 6.x (Deprecated)</item>
             </argument>
         </arguments>
     </type>
@@ -77,6 +77,7 @@
             <argument name="engines" xsi:type="array">
                 <item name="elasticsearch6" xsi:type="string">elasticsearch6</item>
             </argument>
+            <argument name="defaultEngine" xsi:type="string">elasticsearch6</argument>
         </arguments>
     </type>
 
@@ -216,6 +217,33 @@
                 <item name="catalog/search/elasticsearch6_server_port" xsi:type="string">1</item>
                 <item name="catalog/search/elasticsearch6_username" xsi:type="string">1</item>
                 <item name="catalog/search/elasticsearch6_server_timeout" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+    <virtualType name="Magento\Elasticsearch6\Setup\InstallConfig" type="Magento\Elasticsearch\Setup\InstallConfig">
+        <arguments>
+            <argument name="searchConfigMapping" xsi:type="array">
+                <item name="elasticsearch-host" xsi:type="string">elasticsearch6_server_hostname</item>
+                <item name="elasticsearch-port" xsi:type="string">elasticsearch6_server_port</item>
+                <item name="elasticsearch-timeout" xsi:type="string">elasticsearch6_server_timeout</item>
+                <item name="elasticsearch-index-prefix" xsi:type="string">elasticsearch6_index_prefix</item>
+                <item name="elasticsearch-enable-auth" xsi:type="string">elasticsearch6_enable_auth</item>
+                <item name="elasticsearch-username" xsi:type="string">elasticsearch6_username</item>
+                <item name="elasticsearch-password" xsi:type="string">elasticsearch6_password</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Search\Setup\CompositeInstallConfig">
+        <arguments>
+            <argument name="installConfigList" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="object">Magento\Elasticsearch6\Setup\InstallConfig</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Search\Model\SearchEngine\Validator">
+        <arguments>
+            <argument name="engineValidators" xsi:type="array">
+                <item name="elasticsearch6" xsi:type="object">Magento\Elasticsearch\Setup\Validator</item>
             </argument>
         </arguments>
     </type>

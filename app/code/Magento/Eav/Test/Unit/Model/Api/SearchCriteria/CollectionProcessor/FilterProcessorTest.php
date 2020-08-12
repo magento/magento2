@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types = 1);
+declare(strict_types=1);
 
 namespace Magento\Eav\Test\Unit\Model\Api\SearchCriteria\CollectionProcessor;
 
@@ -143,8 +143,12 @@ class FilterProcessorTest extends TestCase
 
     public function testProcessWithException(): void
     {
+        $this->expectException('InvalidArgumentException');
         /** @var stdClass|MockObject $customFilterMock */
-        $customFilterMock = $this->createPartialMock(stdClass::class, ['apply']);
+        $customFilterMock = $this->getMockBuilder(stdClass::class)
+            ->addMethods(['apply'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $customFilterField = 'customFilterField';
         $customFilters = [$customFilterField => $customFilterMock];
@@ -187,7 +191,6 @@ class FilterProcessorTest extends TestCase
         $collectionMock->expects($this->never())
             ->method('addFieldToFilter');
 
-        $this->expectException(InvalidArgumentException::class);
         $model->process($searchCriteriaMock, $collectionMock);
     }
 

@@ -9,6 +9,7 @@ namespace Magento\Catalog\Test\Unit\Model\ResourceModel;
 use Magento\Catalog\Model\ResourceModel\Product\Website\Link;
 use Magento\Catalog\Model\ResourceModel\ProductWebsiteAssignmentHandler;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class ProductWebsiteAssignmentHandlerTest extends TestCase
@@ -19,11 +20,11 @@ class ProductWebsiteAssignmentHandlerTest extends TestCase
     protected $handler;
 
     /**
-     * @var Link|\PHPUnit_Framework_MockObject_MockObject
+     * @var Link|MockObject
      */
     protected $productLinkMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 

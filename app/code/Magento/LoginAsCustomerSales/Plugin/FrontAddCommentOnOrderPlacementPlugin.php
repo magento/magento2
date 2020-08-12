@@ -7,41 +7,41 @@ declare(strict_types=1);
 
 namespace Magento\LoginAsCustomerSales\Plugin;
 
-use Magento\Customer\Model\Session;
+use Magento\LoginAsCustomerApi\Api\GetLoggedAsCustomerAdminIdInterface;
 use Magento\Sales\Model\Order;
 use Magento\User\Model\UserFactory;
 
 /**
- * Add comment after order placed by admin using login-as-customer.
+ * Add comment after order placed by admin using Login as Customer.
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class FrontAddCommentOnOrderPlacementPlugin
 {
     /**
-     * @var Session
-     */
-    private $customerSession;
-
-    /**
      * @var UserFactory
      */
     private $userFactory;
 
     /**
-     * @param Session $session
+     * @var GetLoggedAsCustomerAdminIdInterface
+     */
+    private $getLoggedAsCustomerAdminId;
+
+    /**
      * @param UserFactory $userFactory
+     * @param GetLoggedAsCustomerAdminIdInterface $getLoggedAsCustomerAdminId
      */
     public function __construct(
-        Session $session,
-        UserFactory $userFactory
+        UserFactory $userFactory,
+        GetLoggedAsCustomerAdminIdInterface $getLoggedAsCustomerAdminId
     ) {
-        $this->customerSession = $session;
         $this->userFactory = $userFactory;
+        $this->getLoggedAsCustomerAdminId = $getLoggedAsCustomerAdminId;
     }
 
     /**
-     * Add comment after order placed by admin using login-as-customer.
+     * Add comment after order placed by admin using Login as Customer.
      *
      * @param Order $subject
      * @param Order $result
@@ -49,7 +49,7 @@ class FrontAddCommentOnOrderPlacementPlugin
      */
     public function afterPlace(Order $subject, Order $result): Order
     {
-        $adminId = $this->customerSession->getLoggedAsCustomerAdmindId();
+        $adminId = $this->getLoggedAsCustomerAdminId->execute();
         if ($adminId) {
             $adminUser = $this->userFactory->create()->load($adminId);
             $subject->addCommentToStatusHistory(

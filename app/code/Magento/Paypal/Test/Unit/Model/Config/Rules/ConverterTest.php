@@ -3,17 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Model\Config\Rules;
+
+use Magento\Paypal\Model\Config\Rules\Converter;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ConverterTest
  *
  * Test for class \Magento\Paypal\Model\Config\Rules\Converter
  */
-class ConverterTest extends \PHPUnit\Framework\TestCase
+class ConverterTest extends TestCase
 {
     /**
-     * @var \Magento\Paypal\Model\Config\Rules\Converter
+     * @var Converter
      */
     protected $converter;
 
@@ -22,9 +27,9 @@ class ConverterTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->converter = new \Magento\Paypal\Model\Config\Rules\Converter();
+        $this->converter = new Converter();
     }
 
     /**

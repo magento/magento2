@@ -20,7 +20,7 @@ class ExtendedTest extends \PHPUnit\Framework\TestCase
      */
     protected $_layoutMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

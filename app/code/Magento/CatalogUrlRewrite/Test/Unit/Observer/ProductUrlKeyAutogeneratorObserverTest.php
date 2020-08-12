@@ -7,20 +7,26 @@ declare(strict_types=1);
 
 namespace Magento\CatalogUrlRewrite\Test\Unit\Observer;
 
+use Magento\Catalog\Model\Product;
+use Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
+use Magento\CatalogUrlRewrite\Observer\ProductUrlKeyAutogeneratorObserver;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for \Magento\CatalogUrlRewrite\Observer\ProductUrlKeyAutogeneratorObserver class
  */
-class ProductUrlKeyAutogeneratorObserverTest extends \PHPUnit\Framework\TestCase
+class ProductUrlKeyAutogeneratorObserverTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogUrlRewrite\Model\ProductUrlPathGenerator|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductUrlPathGenerator|MockObject
      */
     private $productUrlPathGenerator;
 
-    /** @var \Magento\CatalogUrlRewrite\Observer\ProductUrlKeyAutogeneratorObserver */
+    /** @var ProductUrlKeyAutogeneratorObserver */
     private $productUrlKeyAutogeneratorObserver;
 
     /**
@@ -34,7 +40,7 @@ class ProductUrlKeyAutogeneratorObserverTest extends \PHPUnit\Framework\TestCase
             ->getMock();
 
         $this->productUrlKeyAutogeneratorObserver = (new ObjectManagerHelper($this))->getObject(
-            \Magento\CatalogUrlRewrite\Observer\ProductUrlKeyAutogeneratorObserver::class,
+            ProductUrlKeyAutogeneratorObserver::class,
             [
                 'productUrlPathGenerator' => $this->productUrlPathGenerator
             ]
@@ -48,18 +54,18 @@ class ProductUrlKeyAutogeneratorObserverTest extends \PHPUnit\Framework\TestCase
     {
         $urlKey = 'product_url_key';
 
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['setUrlKey'])
             ->getMock();
         $product->expects($this->atLeastOnce())->method('setUrlKey')->with($urlKey);
-        $event = $this->getMockBuilder(\Magento\Framework\Event::class)
+        $event = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProduct'])
             ->getMock();
         $event->expects($this->atLeastOnce())->method('getProduct')->willReturn($product);
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $observer */
-        $observer = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        /** @var Observer|MockObject $observer */
+        $observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEvent'])
             ->getMock();
@@ -75,18 +81,18 @@ class ProductUrlKeyAutogeneratorObserverTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecuteWithEmptyUrlKey(): void
     {
-        $product = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $product = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->setMethods(['setUrlKey'])
             ->getMock();
         $product->expects($this->never())->method('setUrlKey');
-        $event = $this->getMockBuilder(\Magento\Framework\Event::class)
+        $event = $this->getMockBuilder(Event::class)
             ->disableOriginalConstructor()
             ->setMethods(['getProduct'])
             ->getMock();
         $event->expects($this->atLeastOnce())->method('getProduct')->willReturn($product);
-        /** @var \Magento\Framework\Event\Observer|\PHPUnit_Framework_MockObject_MockObject $observer */
-        $observer = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        /** @var Observer|MockObject $observer */
+        $observer = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->setMethods(['getEvent'])
             ->getMock();
