@@ -29,7 +29,8 @@
         }
     }
 
-    .media-gallery-asset-ui-select-filter {
+    .media-gallery-asset-ui-select-filter,
+    .edit-image-details {
 
         .admin__action-multiselect-crumb {
             max-width: 70%;
@@ -47,7 +48,10 @@
             position: absolute;
             text-overflow: ellipsis;
         }
+    }
 
+    .media-gallery-asset-ui-select-filter,
+    .edit-image-details {
         .admin__action-multiselect-item-path {
             float: right;
             max-height: 70px;
@@ -307,7 +311,7 @@
             }
         }
 
-        .adobe-stock-icon {
+        .media-gallery-source-icon {
             margin-bottom: -6px;
             width: 29px;
         }
@@ -366,7 +370,7 @@
         }
 
         .image-type {
-            .adobe-stock-icon {
+            .media-gallery-source-icon {
                 margin-bottom: -6px;
                 width: 29px;
             }
@@ -412,12 +416,14 @@
 
                         & > * {
                             float: left;
+                            margin-left: -1px;
                             width: 50%;
                         }
 
                         .value {
                             display: inline;
                             float: right;
+                            margin-left: 1px;
                         }
 
                         .title {
