@@ -10,7 +10,7 @@ namespace Magento\GraphQl\Wishlist;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface;
 
 /**
- * Generate an array with test values for customizable options with encoded id_v2 value
+ * Generate an array with test values for customizable options with encoded uid value
  */
 class GetCustomOptionsWithUidForQueryBySku
 {

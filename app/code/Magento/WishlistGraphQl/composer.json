@@ -7,8 +7,6 @@
         "magento/framework": "*",
         "magento/module-catalog": "*",
         "magento/module-catalog-graph-ql": "*",
-        "magento/module-downloadable": "*",
-        "magento/module-downloadable-graphql": "*",
         "magento/module-wishlist": "*",
         "magento/module-store": "*"
     },

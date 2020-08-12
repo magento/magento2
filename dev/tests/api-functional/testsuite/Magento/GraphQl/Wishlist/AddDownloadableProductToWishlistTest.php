@@ -221,7 +221,7 @@ MUTATION;
     }
 
     /**
-     * Generates Id_v2 for downloadable links
+     * Generates uid for downloadable links
      *
      * @param int $linkId
      *

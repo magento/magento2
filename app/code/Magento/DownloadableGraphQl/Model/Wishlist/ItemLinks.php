@@ -5,20 +5,20 @@
  */
 declare(strict_types=1);
 
-namespace Magento\WishlistGraphQl\Model\Resolver\Type\Downloadable;
+namespace Magento\DownloadableGraphQl\Model\Wishlist;
 
+use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Downloadable\Helper\Catalog\Product\Configuration;
 use Magento\DownloadableGraphQl\Model\ConvertLinksToArray;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Wishlist\Model\Item;
 
 /**
- * Fetches the selected downloadable links
+ * Fetches the selected item downloadable links
  */
-class Links implements ResolverInterface
+class ItemLinks implements ResolverInterface
 {
     /**
      * @var ConvertLinksToArray
@@ -52,13 +52,15 @@ class Links implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!isset($value['wishlistItemModel'])) {
-            throw new LocalizedException(__('Missing key "wishlistItemModel" in Wishlist Item value data'));
+        if (!$value['itemModel'] instanceof ItemInterface) {
+            throw new LocalizedException(__('"itemModel" should be a "%instance" instance', [
+                'instance' => ItemInterface::class
+            ]));
         }
-        /** @var Item $wishlistItem */
-        $wishlistItem = $value['wishlistItemModel'];
+        /** @var ItemInterface $wishlistItem */
+        $itemItem = $value['itemModel'];
 
-        $links = $this->downloadableConfiguration->getLinks($wishlistItem);
+        $links = $this->downloadableConfiguration->getLinks($itemItem);
         $links = $this->convertLinksToArray->execute($links);
 
         return $links;

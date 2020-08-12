@@ -71,7 +71,7 @@ class WishlistItems implements ResolverInterface
                 'description' => $wishlistItem->getDescription(),
                 'added_at' => $wishlistItem->getAddedAt(),
                 'model' => $wishlistItem->getProduct(),
-                'wishlistItemModel' => $wishlistItem,
+                'itemModel' => $wishlistItem,
             ];
         }
         return $data;

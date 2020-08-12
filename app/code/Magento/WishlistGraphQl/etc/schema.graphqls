@@ -52,7 +52,7 @@ type ConfigurableWishlistItem implements WishlistItemInterface {
 }
 
 type DownloadableWishlistItem implements WishlistItemInterface @doc(description: "Downloadable Wishlist Item") {
-    links_v2: [DownloadableProductLinks] @doc(description: "An array containing information about the selected links") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\Type\\Downloadable\\Links")
+    links_v2: [DownloadableProductLinks] @doc(description: "An array containing information about the selected links") @resolver(class: "\\Magento\\DownloadableGraphQl\\Model\\Wishlist\\ItemLinks")
     samples: [DownloadableProductSamples] @doc(description: "DownloadableProductSamples defines characteristics of a downloadable product") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\Samples")
 }
 

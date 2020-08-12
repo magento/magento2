@@ -43,14 +43,14 @@ class ConfigurableOptions implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!$value['wishlistItemModel'] instanceof Item) {
-            throw new LocalizedException(__('"wishlistItemModel" should be a "%instance" instance', [
+        if (!$value['itemModel'] instanceof Item) {
+            throw new LocalizedException(__('"itemModel" should be a "%instance" instance', [
                 'instance' => Item::class
             ]));
         }
 
         /** @var Item $wishlistItem */
-        $wishlistItem = $value['wishlistItemModel'];
+        $wishlistItem = $value['itemModel'];
         $result = [];
 
         foreach ($this->configurationHelper->getOptions($wishlistItem) as $option) {

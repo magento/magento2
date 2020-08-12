@@ -160,7 +160,7 @@ MUTATION;
     }
 
     /**
-     * Generates Id_v2 for super configurable product super attributes
+     * Generates uid for super configurable product super attributes
      *
      * @param int $attributeId
      * @param int $valueIndex
