@@ -15,6 +15,8 @@ use Magento\Framework\UrlInterface;
 use Magento\TestFramework\Dependency\Reader\ClassScanner;
 use Magento\TestFramework\Dependency\Route\RouteMapper;
 use Magento\TestFramework\Exception\NoSuchActionException;
+use Magento\Webapi\Model\Config as WebApiConfig;
+use Magento\Webapi\Model\Config\Converter;
 
 /**
  * Rule to check the dependencies between modules based on references, getUrl and layout blocks
@@ -59,6 +61,12 @@ class PhpRule implements RuleInterface
     protected $_mapLayoutBlocks = [];
 
     /**
+     * Used to retrieve information from WebApi urls
+     * @var WebApiConfig
+     */
+    protected $webApiConfig;
+
+    /**
      * Default modules list.
      *
      * @var array
@@ -88,21 +96,22 @@ class PhpRule implements RuleInterface
     /**
      * @param array $mapRouters
      * @param array $mapLayoutBlocks
+     * @param WebApiConfig $webApiConfig
      * @param array $pluginMap
      * @param array $whitelists
      * @param ClassScanner|null $classScanner
-     *
-     * @throws LocalizedException
      */
     public function __construct(
         array $mapRouters,
         array $mapLayoutBlocks,
+        WebApiConfig $webApiConfig,
         array $pluginMap = [],
         array $whitelists = [],
         ClassScanner $classScanner = null
     ) {
         $this->_mapRouters = $mapRouters;
         $this->_mapLayoutBlocks = $mapLayoutBlocks;
+        $this->webApiConfig = $webApiConfig;
         $this->pluginMap = $pluginMap ?: null;
         $this->routeMapper = new RouteMapper();
         $this->whitelists = $whitelists;
@@ -297,36 +306,29 @@ class PhpRule implements RuleInterface
      */
     protected function _caseGetUrl(string $currentModule, string &$contents): array
     {
-        $pattern = '#(\->|:)(?<source>getUrl\(([\'"])(?<route_id>[a-z0-9\-_]{3,}|\*)'
-            .'(/(?<controller_name>[a-z0-9\-_]+|\*))?(/(?<action_name>[a-z0-9\-_]+|\*))?\3)#i';
-
         $dependencies = [];
+        $pattern = '#(\->|:)(?<source>getUrl\([\'\"](?<path>[a-zA-Z0-9\-_\*\/]+)[\'\"]\))#';
         if (!preg_match_all($pattern, $contents, $matches, PREG_SET_ORDER)) {
             return $dependencies;
         }
-
         try {
             foreach ($matches as $item) {
-                $routeId = $item['route_id'];
-                $controllerName = $item['controller_name'] ?? UrlInterface::DEFAULT_CONTROLLER_NAME;
-                $actionName = $item['action_name'] ?? UrlInterface::DEFAULT_ACTION_NAME;
-
-                // skip rest
-                if ($routeId === "rest") { //MC-19890
+                $path = $item['path'];
+                $retDependencies = [];
+                if (preg_match('#rest(?<service>/V1/\w+)#i', $path, $apiMatch)) {
+                    $retDependencies = $this->processApiUrl($apiMatch['service']);
+                } elseif (strpos($path, "*") !== false) {
+                    /**
+                     * Skip processing wildcard urls since they always resolve to the current
+                     * route_front_name/area_front_name/controller_name
+                     */
                     continue;
+                } else {
+                    $retDependencies = $this->processStandardUrl($path);
                 }
-                // skip wildcards
-                if ($routeId === "*" || $controllerName === "*" || $actionName === "*") { //MC-19890
-                    continue;
-                }
-                $modules = $this->routeMapper->getDependencyByRoutePath(
-                    $routeId,
-                    $controllerName,
-                    $actionName
-                );
-                if (!in_array($currentModule, $modules)) {
+                if ($retDependencies && !in_array($currentModule, $retDependencies)) {
                     $dependencies[] = [
-                        'modules' => $modules,
+                        'modules' => $retDependencies,
                         'type' => RuleInterface::TYPE_HARD,
                         'source' => $item['source'],
                     ];
@@ -337,8 +339,45 @@ class PhpRule implements RuleInterface
                 throw new LocalizedException(__('Invalid URL path: %1', $e->getMessage()), $e);
             }
         }
-
         return $dependencies;
+    }
+
+    /**
+     * @param string $path
+     * @return string[]
+     * @throws NoSuchActionException
+     */
+    private function processStandardUrl(string $path)
+    {
+        $pattern = '#(?<route_id>[a-z0-9\-_]{3,})'
+                   . '\/?(?<controller_name>[a-z0-9\-_]+)?\/?(?<action_name>[a-z0-9\-_]+)?#i';
+        preg_match($pattern, $path, $match);
+
+        $routeId = $match['route_id'];
+        $controllerName = $match['controller_name'] ?? UrlInterface::DEFAULT_CONTROLLER_NAME;
+        $actionName = $match['action_name'] ?? UrlInterface::DEFAULT_ACTION_NAME;
+
+        return $this->routeMapper->getDependencyByRoutePath(
+            $routeId,
+            $controllerName,
+            $actionName
+        );
+    }
+
+    /**
+     * @param string $path
+     * @return string[]
+     */
+    private function processApiUrl(string $path): array
+    {
+        $serviceMethods = $this->webApiConfig->getServices()[Converter::KEY_ROUTES][$path];
+
+        //assume that all HTTP methods use the same class
+        $method =  $serviceMethods['GET'] ?? $serviceMethods['POST'] ?? $serviceMethods['PUT'];
+        $className = $method['service']['class'];
+        //get module from className
+        preg_match('#(?<module>Magento(\\\\)\w+).*#', $className, $match);
+        return [$match['module']];
     }
 
     /**

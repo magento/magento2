@@ -14,14 +14,15 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Test\Integrity\Dependency\DeclarativeSchemaDependencyProvider;
 use Magento\Test\Integrity\Dependency\GraphQlSchemaDependencyProvider;
+use Magento\TestFramework\Dependency\AnalyticsConfigRule;
 use Magento\TestFramework\Dependency\DbRule;
 use Magento\TestFramework\Dependency\DiRule;
 use Magento\TestFramework\Dependency\LayoutRule;
 use Magento\TestFramework\Dependency\PhpRule;
 use Magento\TestFramework\Dependency\ReportsConfigRule;
-use Magento\TestFramework\Dependency\AnalyticsConfigRule;
 use Magento\TestFramework\Dependency\Route\RouteMapper;
 use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
+use Magento\Webapi\Model\Config;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -279,11 +280,14 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         $tableToAnyModuleMap = self::getTableToAnyModuleMap();
         // In case primary module declaring the table cannot be identified, use any module referencing this table
         $tableToModuleMap = array_merge($tableToAnyModuleMap, $tableToPrimaryModuleMap);
+        $objectManager = Bootstrap::create(BP, $_SERVER)->getObjectManager();
+        $webApiConfig = $objectManager->create(Config::class);
 
         self::$_rulesInstances = [
             new PhpRule(
                 self::$routeMapper->getRoutes(),
                 self::$_mapLayoutBlocks,
+                $webApiConfig,
                 [],
                 ['routes' => self::getRoutesWhitelist()]
             ),
