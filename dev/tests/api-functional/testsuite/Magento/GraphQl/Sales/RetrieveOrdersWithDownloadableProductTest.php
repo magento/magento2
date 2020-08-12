@@ -17,13 +17,18 @@ use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Model\Order;
 use Magento\Sales\Model\Order\CreditmemoFactory;
 use Magento\Sales\Model\ResourceModel\Order\Collection as OrderCollection;
-use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection;
+use Magento\Sales\Model\ResourceModel\Order\Creditmemo\Collection as CreditmemoCollection;
 use Magento\Sales\Model\Service\CreditmemoService;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\Sales\Model\Order\Creditmemo\ItemFactory;
+use Magento\Framework\Registry;
+use Magento\Framework\DB\Transaction;
+use Magento\Sales\Api\InvoiceManagementInterface;
 
 /**
  * Tests downloadable product fields in Orders, Invoices, CreditMemo and Shipments
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
 {
@@ -48,7 +53,29 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
     /** @var CreditmemoFactory */
     private $creditMemoFactory;
 
+    /** @var ItemFactory  */
     private $creditmemoItemFactory;
+
+    /** @var CustomerPlaceOrderWithDownloadable  */
+    private $customerPlaceOrderWithDownloadable;
+
+    /** @var InvoiceManagementInterface  */
+    private $invoiceManagement;
+
+    /** @var OrderCollection  */
+    private $orderCollection;
+
+    /** @var CreditmemoRepositoryInterface  */
+    private $creditmemoRepository;
+
+    /** @var CreditmemoCollection  */
+    private $creditmemoCollection;
+
+    /** @var Registry  */
+    private $registry;
+
+    /** @var Transaction  */
+    private $transaction;
 
     protected function setUp():void
     {
@@ -60,7 +87,14 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
         $this->order = $objectManager->create(Order::class);
         $this->creditMemoService = $objectManager->get(CreditmemoService::class);
         $this->creditMemoFactory = $objectManager->get(CreditmemoFactory::class);
-        $this->creditmemoItemFactory = $objectManager->create(\Magento\Sales\Model\Order\Creditmemo\ItemFactory::class);
+        $this->creditmemoItemFactory = $objectManager->create(ItemFactory::class);
+        $this->customerPlaceOrderWithDownloadable = $objectManager->create(CustomerPlaceOrderWithDownloadable::class);
+        $this->invoiceManagement = $objectManager->create(InvoiceManagementInterface::class);
+        $this->orderCollection = $objectManager->create(OrderCollection::class);
+        $this->creditmemoRepository = $objectManager->get(CreditmemoRepositoryInterface::class);
+        $this->creditmemoCollection = $objectManager->create(CreditmemoCollection::class);
+        $this->registry = $objectManager->get(Registry::class);
+        $this->transaction = $objectManager->create(Transaction::class);
     }
 
     protected function tearDown(): void
@@ -139,9 +173,7 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
         //Place order with downloadable product
         $qty = 1;
         $downloadableSku = 'downloadable-product-with-purchased-separately-links';
-        /** @var CustomerPlaceOrderWithDownloadable $downloadableProductOrderFixture */
-        $downloadableProductOrderFixture = Bootstrap::getObjectManager()->create(CustomerPlaceOrderWithDownloadable::class);
-        $orderResponse = $downloadableProductOrderFixture->placeOrderWithDownloadableProduct(
+        $orderResponse = $this->customerPlaceOrderWithDownloadable->placeOrderWithDownloadableProduct(
             ['email' => 'customer@example.com', 'password' => 'password'],
             ['sku' => $downloadableSku, 'quantity' => $qty]
         );
@@ -151,11 +183,6 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
         // prepare invoice
         $this->prepareInvoice($orderNumber, 1);
         $order = $this->order->loadByIncrementId($orderNumber);
-        /** @var Order\Item $orderItem */
-        $orderItem = current($order->getAllItems());
-        $orderItem->setQtyRefunded(1);
-        $order->addItem($orderItem);
-        $order->save();
         // Create a credit memo
         $creditMemo = $this->creditMemoFactory->createByOrder($order, $order->getData());
         $creditMemo->setOrder($order);
@@ -169,12 +196,29 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
         $creditMemo->save();
         $this->creditMemoService->refund($creditMemo, true);
         $response = $this->getCustomerOrderWithCreditMemoQuery();
+        $downloadableProduct = $this->productRepository->get('downloadable-product-with-purchased-separately-links');
+        /** @var LinkInterface $downloadableProductLinks */
+        $downloadableProductLinks = $downloadableProduct->getExtensionAttributes()->getDownloadableProductLinks();
+        $linkId = $downloadableProductLinks[0]->getId();
         $expectedCreditMemoData = [
             [
                 'comments' => [
                     ['message' => 'Test comment for downloadable refund']
                 ],
-
+                'items' => [
+                    [
+                        'product_name'=> 'Downloadable Product (Links can be purchased separately)',
+                        'product_sku' => 'downloadable-product-with-purchased-separately-links',
+                        'product_sale_price' => ['value' => 12],
+                        'discounts' => [],
+                        'quantity_refunded' => 1,
+                        'downloadable_links' => [
+                            [
+                                'uid'=> base64_encode("downloadable/{$linkId}"),
+                                'title' => 'Downloadable Product Link 1']
+                        ]
+                    ]
+                ],
                 'total' => [
                     'subtotal' => [
                         'value' => 12
@@ -227,22 +271,15 @@ class RetrieveOrdersWithDownloadableProductTest extends GraphQlAbstract
      */
     private function prepareInvoice(string $orderNumber, int $qty = null)
     {
-        /** @var \Magento\Sales\Model\Order $order */
-        $order = Bootstrap::getObjectManager()
-            ->create(\Magento\Sales\Model\Order::class)->loadByIncrementId($orderNumber);
+        /** @var Order $order */
+        $order = $this->order->loadByIncrementId($orderNumber);
         $orderItem = current($order->getItems());
-        $orderService = Bootstrap::getObjectManager()->create(
-            \Magento\Sales\Api\InvoiceManagementInterface::class
-        );
-        $invoice = $orderService->prepareInvoice($order, [$orderItem->getId() => $qty]);
+        $invoice = $this->invoiceManagement->prepareInvoice($order, [$orderItem->getId() => $qty]);
         $invoice->register();
         $order = $invoice->getOrder();
         $order->setIsInProcess(true);
-        $transactionSave = Bootstrap::getObjectManager()
-            ->create(\Magento\Framework\DB\Transaction::class);
-        $transactionSave->addObject($invoice)->addObject($order)->save();
+        $this->transaction->addObject($invoice)->addObject($order)->save();
     }
-
 
     /**
      * Get customer order query with invoices
@@ -356,7 +393,23 @@ query {
         items {
             credit_memos {
                 comments { message}
-
+                items {
+                    product_name
+                    product_sku
+                    product_sale_price {value }
+                    discounts { amount{value currency} label }
+                    quantity_refunded
+                     ... on DownloadableCreditMemoItem
+                  {
+                    product_name
+                    discounts{amount{value}}
+                    downloadable_links{
+                      uid
+                      title
+                    }
+                    quantity_refunded
+                  }
+                }
                 total {
                     subtotal {
                         value
@@ -409,18 +462,14 @@ QUERY;
      */
     private function deleteOrder(): void
     {
-        /** @var \Magento\Framework\Registry $registry */
-        $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
-        $registry->unregister('isSecureArea');
-        $registry->register('isSecureArea', true);
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', true);
 
-        /** @var $order \Magento\Sales\Model\Order */
-        $orderCollection = Bootstrap::getObjectManager()->create(OrderCollection::class);
-        foreach ($orderCollection as $order) {
+        foreach ($this->orderCollection as $order) {
             $this->orderRepository->delete($order);
         }
-        $registry->unregister('isSecureArea');
-        $registry->register('isSecureArea', false);
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', false);
     }
 
     /**
@@ -428,16 +477,12 @@ QUERY;
      */
     private function cleanUpCreditMemos(): void
     {
-        /** @var \Magento\Framework\Registry $registry */
-        $registry = Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
-        $registry->unregister('isSecureArea');
-        $registry->register('isSecureArea', true);
-        $creditmemoRepository = Bootstrap::getObjectManager()->get(CreditmemoRepositoryInterface::class);
-        $creditmemoCollection = Bootstrap::getObjectManager()->create(Collection::class);
-        foreach ($creditmemoCollection as $creditmemo) {
-            $creditmemoRepository->delete($creditmemo);
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', true);
+        foreach ($this->creditmemoCollection as $creditmemo) {
+            $this->creditmemoRepository->delete($creditmemo);
         }
-        $registry->unregister('isSecureArea');
-        $registry->register('isSecureArea', false);
+        $this->registry->unregister('isSecureArea');
+        $this->registry->register('isSecureArea', false);
     }
 }
