@@ -1,0 +1,37 @@
+# Copyright © Magento, Inc. All rights reserved.
+# See COPYING.txt for license details.
+
+type ComparableItem {
+    productId: ID! @doc(description: "Product Id")
+    name: String! @doc(description: "Product name")
+    sku: String! @doc(description: "Product SKU")
+    priceRange: PriceRange! @doc(description: "Product prices")
+    canonical_url: String @doc(description: "Product URL")
+    images: [ProductImage]! @doc(description: "Product Images")
+    #    values: [ProductAttribute]! @doc(description: "Product comparable attributes")
+}
+
+type ComparableAttribute {
+    code: String! @doc(description: "Attribute code")
+    title: String! @doc(description: "Addibute display title")
+}
+
+type CompareList {
+    list_id: ID! @doc(description: "Compare list id")
+    items: [ComparableItem] @doc(description: "Comparable products")
+    attributes: [ComparableAttribute] @doc(description: "Comparable attributes, provides codes and titles for the attributes")
+}
+
+type Customer {
+    compare_list: CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\CustomerCompareList") @doc(description: "Active customers compare list")
+}
+
+type Query {
+    compareList(id: ID!): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\CompareList") @doc(description: "Compare list")
+}
+
+type Mutation {
+    addItemsToCompareList(id: ID!, items: [ID!]): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\AddItemsToCompareList") @doc(description: "Add items to compare list")
+    removeItemsFromCompareList(id: ID!, items: [ID!]): CompareList @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\RemoveItemsFromCompareList") @doc(description: "Remove items from compare list")
+    assignCompareListToCustomer(customerId: ID!, listId: ID!): Boolean @resolver(class: "\\Magento\\CompareListGraphQl\\Model\\Resolver\\AssignCompareListToCustomer") @doc(description: "Assign compare list to customer")
+}
