@@ -59,7 +59,7 @@
         </after>
         <!-- Select Created Category-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
         <waitForPageLoad stepKey="waitForPageToLoaded"/>
         <!--Update Category Name and Description -->
@@ -67,8 +67,7 @@
         <scrollTo  selector="{{AdminCategoryContentSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToContent"/>
         <click selector="{{AdminCategoryContentSection.sectionHeader}}"  stepKey="selectContent"/>
         <fillField selector="{{AdminCategoryContentSection.description}}"  userInput="Updated category Description Fields" stepKey="fillUpdatedDescription"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory"/>
-        <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
         <!--Run full reindex and clear caches -->
         <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
@@ -96,7 +95,7 @@
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName(SimpleSubCategory.name)}}" stepKey="seeCategoryOnNavigation1"/>
         <!-- Verify Updated  Category Name and description on Category Page-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage1"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree1"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree1"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}" stepKey="selectUpdatedCategory"/>
         <waitForPageLoad stepKey="waitForUpdatedCategoryPageToLoad"/>
         <seeInField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="seeUpdatedSubCategoryName"/>
