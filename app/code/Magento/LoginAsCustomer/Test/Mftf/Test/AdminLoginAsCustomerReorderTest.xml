@@ -28,7 +28,7 @@
             <createData entity="SimpleProduct" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer"/>
 
             <!-- Create new User -->
             <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
