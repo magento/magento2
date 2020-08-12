@@ -10,6 +10,9 @@ namespace Magento\MediaGalleryIntegration\Plugin;
 use Magento\MediaGalleryUiApi\Api\ConfigInterface;
 use Magento\Ui\Component\Form\Element\DataType\Media\OpenDialogUrl;
 
+/**
+ * Plugin to get open media gallery dialog URL for WYSIWYG and widgets
+ */
 class NewMediaGalleryOpenDialogUrl
 {
     /**
@@ -26,6 +29,8 @@ class NewMediaGalleryOpenDialogUrl
     }
 
     /**
+     * Get Url based on media gallery configuration
+     *
      * @param OpenDialogUrl $subject
      * @param string $result
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
