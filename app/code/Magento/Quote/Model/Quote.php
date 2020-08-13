@@ -992,9 +992,7 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         $this->_customer = $customer;
         $this->setCustomerId($customer->getId());
         $origAddresses = $customer->getAddresses();
-        if (!$customer->getEmail()) {
-            $customer->setEmail($this->getCustomerEmail());
-        }
+        $customer->setEmail($customer->getEmail() ?: $this->getCustomerEmail());
         $customer->setAddresses([]);
         $customerDataFlatArray = $this->objectFactory->create(
             $this->extensibleDataObjectConverter->toFlatArray(
