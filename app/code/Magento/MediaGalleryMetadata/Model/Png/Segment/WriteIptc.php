@@ -91,10 +91,10 @@ class WriteIptc implements WriteMetadataInterface
      * Insert IPTC segment to image png segments before IEND chunk
      *
      * @param SegmentInterface[] $segments
-     * @param SegmentInterface $xmpSegment
+     * @param SegmentInterface $iptcSegment
      * @return SegmentInterface[]
      */
-    private function insertPngIptcSegment(array $segments, SegmentInterface $xmpSegment): array
+    private function insertPngIptcSegment(array $segments, SegmentInterface $iptcSegment): array
     {
         $iendSegmentIndex = count($segments) - 1;
 
