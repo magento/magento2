@@ -80,16 +80,13 @@ define([
          * @return {String}
          */
         usedInObjectToString: function (usedIn) {
-            var message = '',
-                count = 0;
+            var entities = [];
 
             $.each(usedIn, function (entityName, number) {
-                count++;
-                message += entityName + '(' + number + ')';
-                message += count !== Object.keys(usedIn).length ?  ', ' : '.';
+                entities.push(entityName + '(' + number + ')');
             });
 
-            return message;
+            return entities.join(', ') + '.';
         }
     };
 });
