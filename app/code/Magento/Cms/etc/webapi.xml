@@ -23,19 +23,19 @@
     <route url="/V1/cmsPage" method="POST">
         <service class="Magento\Cms\Api\PageRepositoryInterface" method="save"/>
         <resources>
-            <resource ref="Magento_Cms::page"/>
+            <resource ref="Magento_Cms::save"/>
         </resources>
     </route>
     <route url="/V1/cmsPage/:id" method="PUT">
         <service class="Magento\Cms\Api\PageRepositoryInterface" method="save"/>
         <resources>
-            <resource ref="Magento_Cms::page"/>
+            <resource ref="Magento_Cms::save"/>
         </resources>
     </route>
     <route url="/V1/cmsPage/:pageId" method="DELETE">
         <service class="Magento\Cms\Api\PageRepositoryInterface" method="deleteById"/>
         <resources>
-            <resource ref="Magento_Cms::page"/>
+            <resource ref="Magento_Cms::page_delete"/>
         </resources>
     </route>
     <!-- Cms Block -->
