@@ -200,6 +200,7 @@ class SubscriptionManager implements SubscriptionManagerInterface
             && (int)$subscriber->getCustomerId() === (int)$customer->getId()
             && (int)$subscriber->getStoreId() === $storeId
             && !$emailChanged
+            && $status !== Subscriber::STATUS_NOT_ACTIVE
         ) {
             return false;
         }
@@ -220,10 +221,10 @@ class SubscriptionManager implements SubscriptionManagerInterface
 
         /**
          * If the subscriber is waiting to confirm from the customer
-         * and customer changed the email
+         * or customer changed the email
          * than need to send confirmation letter to the new email
          */
-        return $status === Subscriber::STATUS_NOT_ACTIVE && $emailChanged;
+        return $status === Subscriber::STATUS_NOT_ACTIVE || $emailChanged;
     }
 
     /**
