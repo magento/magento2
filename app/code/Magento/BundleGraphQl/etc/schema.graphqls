@@ -87,3 +87,33 @@ enum ShipBundleItemsEnum @doc(description: "This enumeration defines whether bun
     TOGETHER
     SEPARATELY
 }
+
+type BundleOrderItem implements OrderItemInterface {
+    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Order\\Item\\BundleOptions")
+}
+
+type BundleInvoiceItem implements InvoiceItemInterface{
+    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Order\\Item\\BundleOptions")
+}
+
+type BundleShipmentItem implements ShipmentItemInterface {
+    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Order\\Item\\BundleOptions")
+}
+
+type BundleCreditMemoItem implements CreditMemoItemInterface {
+    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Order\\Item\\BundleOptions")
+}
+
+type ItemSelectedBundleOption @doc(description: "A list of options of the selected bundle product") {
+    id: ID! @doc(description: "The unique identifier of the option")
+    label: String! @doc(description: "The label of the option")
+    values: [ItemSelectedBundleOptionValue] @doc(description: "A list of products that represent the values of the parent option")
+}
+
+type ItemSelectedBundleOptionValue @doc(description: "A list of values for the selected bundle product") {
+    id: ID! @doc(description: "The unique identifier of the value")
+    product_name: String! @doc(description: "The name of the child bundle product")
+    product_sku: String! @doc(description: "The SKU of the child bundle product")
+    quantity: Float! @doc(description: "Indicates how many of this bundle product were ordered")
+    price: Money! @doc(description: "The price of the child bundle product")
+}
