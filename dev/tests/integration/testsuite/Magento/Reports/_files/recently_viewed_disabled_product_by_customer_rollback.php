@@ -43,3 +43,6 @@ try {
     $session->logout();
     $config->setValue('reports/options/enabled', $originalValue);
 }
+
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/simple_product_disabled_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer_rollback.php');
