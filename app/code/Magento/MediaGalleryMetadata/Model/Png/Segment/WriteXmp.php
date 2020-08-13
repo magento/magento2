@@ -105,10 +105,11 @@ class WriteXmp implements WriteMetadataInterface
      */
     private function insertPngXmpSegment(array $segments, SegmentInterface $xmpSegment): array
     {
+        $iendSegmentIndex = count($segments) - 1;
         return array_merge(
-            array_slice($segments, 0, count($segments) - 1),
+            array_slice($segments, 0, $iendSegmentIndex),
             [$xmpSegment],
-            array_slice($segments, count($segments) - 1)
+            array_slice($segments, $iendSegmentIndex)
         );
     }
 

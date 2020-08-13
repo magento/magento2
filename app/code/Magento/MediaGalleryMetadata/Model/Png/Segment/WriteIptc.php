@@ -96,10 +96,12 @@ class WriteIptc implements WriteMetadataInterface
      */
     private function insertPngIptcSegment(array $segments, SegmentInterface $iptcSegment): array
     {
+        $iendSegmentIndex = count($segments) - 1;
+
         return array_merge(
-            array_slice($segments, 0, count($segments) - 1),
+            array_slice($segments, 0, $iendSegmentIndex),
             [$iptcSegment],
-            array_slice($segments, count($segments) - 1)
+            array_slice($segments, $iendSegmentIndex)
         );
     }
 
