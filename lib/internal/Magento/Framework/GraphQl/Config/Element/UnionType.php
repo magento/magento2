@@ -25,7 +25,7 @@ class UnionType implements UnionInterface
     /**
      * @var string
      */
-    private $resolver;
+    private $typeResolver;
 
     /**
      * @var string
@@ -34,19 +34,19 @@ class UnionType implements UnionInterface
 
     /**
      * @param string $name
-     * @param string $resolver
+     * @param string $typeResolver
      * @param string[] $types
      * @param string $description
      */
     public function __construct(
         string $name,
-        string $resolver,
+        string $typeResolver,
         array $types,
         string $description
     ) {
         $this->name = $name;
         $this->types = $types;
-        $this->resolver = $resolver;
+        $this->typeResolver = $typeResolver;
         $this->description = $description;
     }
 
@@ -75,9 +75,9 @@ class UnionType implements UnionInterface
      *
      * @return string
      */
-    public function getResolver()
+    public function getTypeResolver()
     {
-        return $this->resolver;
+        return $this->typeResolver;
     }
 
     /**

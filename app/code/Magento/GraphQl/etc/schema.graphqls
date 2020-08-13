@@ -30,14 +30,12 @@ directive @resolver(class: String="") on QUERY
     | OBJECT
     | FIELD_DEFINITION
     | ARGUMENT_DEFINITION
-    | INTERFACE
-    | UNION
     | ENUM
     | ENUM_VALUE
     | INPUT_OBJECT
     | INPUT_FIELD_DEFINITION
 
-directive @typeResolver(class: String="") on INTERFACE | OBJECT
+directive @typeResolver(class: String="") on INTERFACE | OBJECT | UNION
 
 directive @cache(cacheIdentity: String="" cacheable: Boolean=true) on QUERY
 

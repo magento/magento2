@@ -331,9 +331,6 @@ class GraphQlReader implements ReaderInterface
     private function addModuleNameToTypes(array $source, string $filePath): array
     {
         foreach ($source as $typeName => $type) {
-            if (!isset($type['type'])) {
-                $x=1;
-            }
             if ((!isset($type['module']))
                 && (($type['type'] ?? '' === self::GRAPHQL_INTERFACE && isset($type['typeResolver']))
                     || isset($type['implements'])

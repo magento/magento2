@@ -60,7 +60,7 @@ class UnionFactory implements ConfigElementFactoryInterface
             UnionType::class,
             [
                 'name' => $unionData['name'],
-                'resolver' => $unionData['resolver'],
+                'typeResolver' => $unionData['typeResolver'],
                 'types' => $types,
                 'description' => isset($unionData['description']) ? $unionData['description'] : ''
             ]

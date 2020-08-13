@@ -44,7 +44,7 @@ class ResolveType implements FormatterInterface
                 return $typeResolver->resolveType($value);
             };
         } elseif ($configElement instanceof UnionType) {
-            $typeResolver = $this->objectManager->create($configElement->getResolver());
+            $typeResolver = $this->objectManager->create($configElement->getTypeResolver());
             $config['resolveType'] = function ($value) use ($typeResolver) {
                 return $typeResolver->resolveType($value);
             };

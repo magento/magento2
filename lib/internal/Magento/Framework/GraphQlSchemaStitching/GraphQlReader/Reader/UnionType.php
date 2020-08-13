@@ -64,7 +64,7 @@ class UnionType implements TypeMetaReaderInterface
 
             $unionResolveType = $this->getUnionTypeResolver($typeMeta);
             if (!empty($unionResolveType)) {
-                $result['resolver'] = $unionResolveType;
+                $result['typeResolver'] = $unionResolveType;
             }
 
 
@@ -89,7 +89,7 @@ class UnionType implements TypeMetaReaderInterface
         /** @var \GraphQL\Language\AST\NodeList $directives */
         $directives = $unionTypeMeta->astNode->directives;
         foreach ($directives as $directive) {
-            if ($directive->name->value == 'resolver') {
+            if ($directive->name->value == 'typeResolver') {
                 foreach ($directive->arguments as $directiveArgument) {
                     if ($directiveArgument->name->value == 'class') {
                         return $directiveArgument->value->value;
