@@ -114,6 +114,7 @@ class Attribute extends AbstractDb
 
         if ($data) {
             $object->setData($data);
+            $object->setOrigData('entity_type_id', $object->getEntityTypeId());
             $this->_afterLoad($object);
             return true;
         }
@@ -204,6 +205,7 @@ class Attribute extends AbstractDb
      * @param AbstractModel $attribute
      * @return AbstractDb
      * @throws CouldNotDeleteException
+     * @since 102.0.2
      */
     protected function _beforeDelete(AbstractModel $attribute)
     {
