@@ -16,5 +16,7 @@
         <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.name('1', 'Default Category')}}" stepKey="assertNameColumn"/>
         <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.displayMode('1', 'PRODUCTS')}}" stepKey="assertDisplayModeColumn"/>
         <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.products('1', '0')}}" stepKey="assertProductsColumn"/>
+        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.inMenu('1', 'Yes')}}" stepKey="assertInMenuColumn"/>
+        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.enabled('1', 'Yes')}}" stepKey="assertEnabledColumn"/>
     </actionGroup>
 </actionGroups>
