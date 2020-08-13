@@ -110,7 +110,7 @@ class CreateAssetFromFile
             [
                 'id' => null,
                 'path' => $path,
-                'title' => $metadata->getTitle() ?: $file->getBasename('.' . $file->getExtension()),
+                'title' => $metadata->getTitle() ?: $file->getBasename(),
                 'description' => $metadata->getDescription(),
                 'createdAt' => $this->date->date($file->getCTime())->format(self::DATE_FORMAT),
                 'updatedAt' => $this->date->date($file->getMTime())->format(self::DATE_FORMAT),

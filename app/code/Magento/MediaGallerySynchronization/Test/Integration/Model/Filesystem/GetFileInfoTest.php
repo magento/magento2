@@ -40,21 +40,14 @@ class GetFileInfoTest extends TestCase
         $path = $this->getImageFilePath($file);
 
         $fileInfo = $this->getFileInfo->execute($path);
-        $this->assertNotEmpty($fileInfo->getPath());
-        $this->assertNotEmpty($fileInfo->getFilename());
-        $this->assertNotEmpty($fileInfo->getExtension());
-        $this->assertNotEmpty($fileInfo->getBasename());
-        $this->assertNotEmpty($fileInfo->getPathname());
-        $this->assertNotEmpty($fileInfo->getPerms());
-        $this->assertNotEmpty($fileInfo->getInode());
-        $this->assertNotEmpty($fileInfo->getSize());
-        $this->assertNotEmpty($fileInfo->getOwner());
-        $this->assertNotEmpty($fileInfo->getGroup());
-        $this->assertNotEmpty($fileInfo->getATime());
-        $this->assertNotEmpty($fileInfo->getMTime());
-        $this->assertNotEmpty($fileInfo->getCTime());
-        $this->assertNotEmpty($fileInfo->getType());
-        $this->assertNotEmpty($fileInfo->getRealPath());
+        $expectedResult = new \SplFileInfo($path);
+        $this->assertEquals($expectedResult->getPath(), $fileInfo->getPath());
+        $this->assertEquals($expectedResult->getFilename(), $fileInfo->getFilename());
+        $this->assertEquals($expectedResult->getExtension(), $fileInfo->getExtension());
+        $this->assertEquals($expectedResult->getBasename('.' . $expectedResult->getExtension()), $fileInfo->getBasename());
+        $this->assertEquals($expectedResult->getSize(), $fileInfo->getSize());
+        $this->assertEquals($expectedResult->getMTime(), $fileInfo->getMTime());
+        $this->assertEquals($expectedResult->getCTime(), $fileInfo->getCTime());
     }
 
     /**
