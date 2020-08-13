@@ -40,22 +40,13 @@ class GetFileInfo
         $splFileInfo = new \SplFileInfo($path);
 
         return $this->fileInfoFactory->create([
-            'file_name' => $path,
             'path' => $splFileInfo->getPath(),
             'filename' => $splFileInfo->getFilename(),
             'extension' => $splFileInfo->getExtension(),
             'basename' => $splFileInfo->getBasename('.' . $splFileInfo->getExtension()),
-            'pathname' => $splFileInfo->getPathname(),
-            'perms' => $splFileInfo->getPerms(),
-            'inode' => $splFileInfo->getInode(),
             'size' => $splFileInfo->getSize(),
-            'owner' => $splFileInfo->getOwner(),
-            'group' => $splFileInfo->getGroup(),
-            'aTime' => $splFileInfo->getATime(),
             'mTime' => $splFileInfo->getMTime(),
-            'cTime' => $splFileInfo->getCTime(),
-            'type' => $splFileInfo->getType(),
-            'realPath' => $splFileInfo->getRealPath()
+            'cTime' => $splFileInfo->getCTime()
         ]);
     }
 }

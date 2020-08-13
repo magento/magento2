@@ -8,11 +8,9 @@ declare(strict_types=1);
 namespace Magento\MediaGallerySynchronization\Model\Filesystem;
 
 /**
- * Internal class wrapping \SplFileInfo
- *
- * @SuppressWarnings(PHPMD.TooManyFields)
+ * Class for getting image file information.
  */
-class FileInfo extends \SplFileInfo
+class FileInfo
 {
     /**
      * @var string
@@ -35,34 +33,9 @@ class FileInfo extends \SplFileInfo
     private $basename;
 
     /**
-     * @var string
-     */
-    private $pathname;
-
-    /**
-     * @var int
-     */
-    private $inode;
-
-    /**
      * @var int
      */
     private $size;
-
-    /**
-     * @var int
-     */
-    private $owner;
-
-    /**
-     * @var int
-     */
-    private $group;
-
-    /**
-     * @var int
-     */
-    private $aTime;
 
     /**
      * @var int
@@ -75,70 +48,38 @@ class FileInfo extends \SplFileInfo
     private $cTime;
 
     /**
-     * @var string
-     */
-    private $type;
-
-    /**
-     * @var false|string
-     */
-    private $realPath;
-
-    /**
      * FileInfo constructor.
-     * @param string $file_name
+     *
      * @param string $path
      * @param string $filename
      * @param string $extension
      * @param string $basename
-     * @param string $pathname
-     * @param int $inode
      * @param int $size
-     * @param int $owner
-     * @param int $group
-     * @param int $aTime
      * @param int $mTime
      * @param int $cTime
-     * @param string $type
-     * @param false|string $realPath
-     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        string $file_name,
         string $path,
         string $filename,
         string $extension,
         string $basename,
-        string $pathname,
-        int $inode,
         int $size,
-        int $owner,
-        int $group,
-        int $aTime,
         int $mTime,
-        int $cTime,
-        string $type,
-        $realPath
+        int $cTime
     ) {
-        parent::__construct($file_name);
         $this->path = $path;
         $this->filename = $filename;
         $this->extension = $extension;
         $this->basename = $basename;
-        $this->pathname = $pathname;
-        $this->inode = $inode;
         $this->size = $size;
-        $this->owner = $owner;
-        $this->group = $group;
-        $this->aTime = $aTime;
         $this->mTime = $mTime;
         $this->cTime = $cTime;
-        $this->type = $type;
-        $this->realPath = $realPath;
     }
 
     /**
-     * @inheritDoc
+     * Get path without filename.
+     *
+     * @return string
      */
     public function getPath(): string
     {
@@ -146,7 +87,9 @@ class FileInfo extends \SplFileInfo
     }
 
     /**
-     * @inheritDoc
+     * Get filename.
+     *
+     * @return string
      */
     public function getFilename(): string
     {
@@ -154,7 +97,9 @@ class FileInfo extends \SplFileInfo
     }
 
     /**
-     * @inheritDoc
+     * Get file extension.
+     *
+     * @return string
      */
     public function getExtension(): string
     {
@@ -162,31 +107,19 @@ class FileInfo extends \SplFileInfo
     }
 
     /**
-     * @inheritDoc
+     * Get file basename.
+     *
+     * @return string
      */
-    public function getBasename($suffix = null): string
+    public function getBasename(): string
     {
         return $this->basename;
     }
 
     /**
-     * @inheritDoc
-     */
-    public function getPathname(): string
-    {
-        return $this->pathname;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getInode(): int
-    {
-        return $this->inode;
-    }
-
-    /**
-     * @inheritDoc
+     * Get file size.
+     *
+     * @return int
      */
     public function getSize(): int
     {
@@ -194,31 +127,9 @@ class FileInfo extends \SplFileInfo
     }
 
     /**
-     * @inheritDoc
-     */
-    public function getOwner(): int
-    {
-        return $this->owner;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getGroup(): int
-    {
-        return $this->group;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getATime(): int
-    {
-        return $this->aTime;
-    }
-
-    /**
-     * @inheritDoc
+     * Get last modified time.
+     *
+     * @return int
      */
     public function getMTime(): int
     {
@@ -226,26 +137,12 @@ class FileInfo extends \SplFileInfo
     }
 
     /**
-     * @inheritDoc
+     * Get inode change time.
+     *
+     * @return int
      */
     public function getCTime(): int
     {
         return $this->cTime;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getType(): string
-    {
-        return $this->type;
-    }
-
-    /**
-     * @inheritDoc
-     */
-    public function getRealPath()
-    {
-        return $this->realPath;
     }
 }
