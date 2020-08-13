@@ -49,7 +49,7 @@ class UnionType implements TypeMetaReaderInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      */
     public function read(\GraphQL\Type\Definition\Type $typeMeta) : array
     {
@@ -62,9 +62,9 @@ class UnionType implements TypeMetaReaderInterface
                 'types' => $types,
             ];
 
-            $unionResolveType = $this->getUnionTypeResolver($typeMeta);
-            if (!empty($unionResolveType)) {
-                $result['typeResolver'] = $unionResolveType;
+            $unionTypeResolver = $this->getUnionTypeResolver($typeMeta);
+            if (!empty($unionTypeResolver)) {
+                $result['typeResolver'] = $unionTypeResolver;
             }
 
 

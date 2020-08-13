@@ -71,7 +71,7 @@ class GraphQlReader implements ReaderInterface
     }
 
     /**
-     * @inheritdoc
+     * @inheritDoc
      *
      * @param string|null $scope
      * @return array

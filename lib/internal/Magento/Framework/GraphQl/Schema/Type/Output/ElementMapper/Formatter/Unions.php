@@ -32,7 +32,7 @@ class Unions implements FormatterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function format(ConfigElementInterface $configElement, OutputTypeInterface $outputType) : array
     {

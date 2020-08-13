@@ -35,7 +35,9 @@ directive @resolver(class: String="") on QUERY
     | INPUT_OBJECT
     | INPUT_FIELD_DEFINITION
 
-directive @typeResolver(class: String="") on INTERFACE | OBJECT | UNION
+directive @typeResolver(class: String="") on UNION
+    | INTERFACE
+    | OBJECT
 
 directive @cache(cacheIdentity: String="" cacheable: Boolean=true) on QUERY
 

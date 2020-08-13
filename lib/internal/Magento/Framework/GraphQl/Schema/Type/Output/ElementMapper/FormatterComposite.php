@@ -11,7 +11,7 @@ use Magento\Framework\GraphQl\Config\ConfigElementInterface;
 use Magento\Framework\GraphQl\Schema\Type\OutputTypeInterface;
 
 /**
- * {@inheritdoc}
+ * @inheritDoc
  */
 class FormatterComposite implements FormatterInterface
 {
@@ -29,7 +29,7 @@ class FormatterComposite implements FormatterInterface
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function format(ConfigElementInterface $configElement, OutputTypeInterface $outputType) : array
     {
