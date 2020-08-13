@@ -8,9 +8,9 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminDeleteRoleActionGroup">
+    <actionGroup name="AdminDeleteRoleActionGroup" deprecated="ActionGroup duplicates existing 'AdminDeleteUserRoleActionGroup'">
         <annotations>
-            <description>Deletes a User Role. Avoid using of this ActionGroup, it duplicates existing "AdminDeleteUserRoleActionGroup"</description>
+            <description>DEPRECATED. Deletes a User Role.</description>
         </annotations>
         <arguments>
             <argument name="role" defaultValue=""/>
