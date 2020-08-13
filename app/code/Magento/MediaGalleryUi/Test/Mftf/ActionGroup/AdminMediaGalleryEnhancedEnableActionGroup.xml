@@ -12,7 +12,7 @@
         <arguments>
             <argument name="enabled" type="string" defaultValue="{{MediaGalleryConfigDataDisabled.value}}"/>
         </arguments>
-        <amOnPage url="{{AdminConfigSystemPage.url}}" stepKey="navigateToSystemConfigurationPage" />
+        <amOnPage url="{{AdminMediaGalleryConfigSystemPage.url}}" stepKey="navigateToSystemConfigurationPage" />
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <scrollTo selector="{{AdminConfigSystemSection.enhancedMediaGalleryFieldset}}" stepKey="scrollToEnhancedMediaGalleryFieldset"/>
         <conditionalClick stepKey="expandEnhancedMediaGalleryTab" selector="{{AdminConfigSystemSection.enhancedMediaGalleryFieldset}}" dependentSelector="{{AdminConfigSystemSection.enhancedMediaGalleryEnabledField}}" visible="false" />

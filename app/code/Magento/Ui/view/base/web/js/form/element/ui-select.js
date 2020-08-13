@@ -292,6 +292,13 @@ define([
         },
 
         /**
+         * Return empty options html
+         */
+        getEmptyOptionsUnsanitizedHtml: function () {
+            return this.emptyOptionsHtml;
+        },
+
+        /**
          * Check options length and set to cache
          * if some options is added
          *
@@ -747,11 +754,6 @@ define([
 
             return this.value() ? !!this.value().length : false;
         },
-
-        /**
-         * @deprecated
-         */
-        onMousemove: function () {},
 
         /**
          * Handles hover on list items.
