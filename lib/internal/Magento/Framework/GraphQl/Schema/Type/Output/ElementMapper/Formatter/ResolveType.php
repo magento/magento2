@@ -38,12 +38,7 @@ class ResolveType implements FormatterInterface
     public function format(ConfigElementInterface $configElement, OutputTypeInterface $outputType) : array
     {
         $config = [];
-        if ($configElement instanceof InterfaceType) {
-            $typeResolver = $this->objectManager->create($configElement->getTypeResolver());
-            $config['resolveType'] = function ($value) use ($typeResolver) {
-                return $typeResolver->resolveType($value);
-            };
-        } elseif ($configElement instanceof UnionType) {
+        if ($configElement instanceof InterfaceType || $configElement instanceof UnionType) {
             $typeResolver = $this->objectManager->create($configElement->getTypeResolver());
             $config['resolveType'] = function ($value) use ($typeResolver) {
                 return $typeResolver->resolveType($value);

@@ -17,6 +17,8 @@ use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\CacheAnnot
  */
 class UnionType implements TypeMetaReaderInterface
 {
+    public const GRAPHQL_UNION = 'graphql_union';
+
     /**
      * @var FieldMetaReader
      */
@@ -58,7 +60,7 @@ class UnionType implements TypeMetaReaderInterface
             $types = $typeMeta->getTypes();
             $result = [
                 'name' => $typeName,
-                'type' => 'graphql_union',
+                'type' => self::GRAPHQL_UNION,
                 'types' => $types,
             ];
 
@@ -66,7 +68,6 @@ class UnionType implements TypeMetaReaderInterface
             if (!empty($unionTypeResolver)) {
                 $result['typeResolver'] = $unionTypeResolver;
             }
-
 
             if ($this->docReader->read($typeMeta->astNode->directives)) {
                 $result['description'] = $this->docReader->read($typeMeta->astNode->directives);
@@ -79,7 +80,7 @@ class UnionType implements TypeMetaReaderInterface
     }
 
     /**
-     * Retrieve the interface type resolver if it exists from the meta data
+     * Retrieve the union type resolver if it exists from the meta data
      *
      * @param \GraphQL\Type\Definition\UnionType $unionTypeMeta
      * @return string

@@ -10,7 +10,7 @@ namespace Magento\Framework\GraphQl\Config\Element;
 use Magento\Framework\GraphQl\Config\ConfigElementInterface;
 
 /**
- * Defines contracts for return type data as GraphQL objects.
+ * Defines the contract for the union configuration data type.
  */
 interface UnionInterface extends ConfigElementInterface
 {

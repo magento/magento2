@@ -11,7 +11,7 @@ use Magento\Framework\GraphQl\Config\Element\UnionType as UnionElement;
 use Magento\Framework\GraphQl\Schema\Type\UnionType;
 
 /**
- * 'union' type compatible with GraphQL schema generator.
+ * The 'union' type compatible with GraphQL schema generator.
  */
 class OutputUnionObject extends UnionType
 {

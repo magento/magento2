@@ -13,7 +13,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\Phrase;
 
 /**
- * Map type names to their output type/interface/enum classes.
+ * Map type names to their output type/interface/union/enum classes.
  */
 class OutputMapper
 {

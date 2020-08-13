@@ -11,6 +11,7 @@ use Magento\Framework\Component\ComponentRegistrar;
 use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\Config\ReaderInterface;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface as TypeReaderComposite;
+use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\Reader\InterfaceType;
 
 /**
  * Reads *.graphqls files from modules and combines the results as array to be used with a library to configure objects
@@ -21,9 +22,8 @@ class GraphQlReader implements ReaderInterface
 
     public const GRAPHQL_SCHEMA_FILE = 'schema.graphqls';
 
+    /** @deprecated */
     public const GRAPHQL_INTERFACE = 'graphql_interface';
-
-    public const GRAPHQL_UNION = 'graphql_union';
 
     /**
      * File locator
@@ -180,7 +180,7 @@ class GraphQlReader implements ReaderInterface
     private function copyInterfaceFieldsToConcreteTypes(array $source): array
     {
         foreach ($source as $interface) {
-            if ($interface['type'] ?? '' == 'graphql_interface') {
+            if ($interface['type'] ?? '' == InterfaceType::GRAPHQL_INTERFACE) {
                 foreach ($source as $typeName => $type) {
                     if (isset($type['implements'])
                         && isset($type['implements'][$interface['name']])
@@ -332,7 +332,7 @@ class GraphQlReader implements ReaderInterface
     {
         foreach ($source as $typeName => $type) {
             if ((!isset($type['module']))
-                && (($type['type'] ?? '' === self::GRAPHQL_INTERFACE && isset($type['typeResolver']))
+                && (($type['type'] ?? '' === InterfaceType::GRAPHQL_INTERFACE && isset($type['typeResolver']))
                     || isset($type['implements'])
                 )
             ) {

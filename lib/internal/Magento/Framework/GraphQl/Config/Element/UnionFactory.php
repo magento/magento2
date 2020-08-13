@@ -31,7 +31,7 @@ class UnionFactory implements ConfigElementFactoryInterface
     }
 
     /**
-     * Instantiate an object representing 'interface' GraphQL config element.
+     * Instantiate an object representing 'union' GraphQL config element.
      *
      * @param array $data
      * @return ConfigElementInterface
@@ -42,11 +42,11 @@ class UnionFactory implements ConfigElementFactoryInterface
     }
 
     /**
-     * Create interface object based off array of configured GraphQL Output/InputInterface.
+     * Create union object based off array of configured GraphQL.
      *
-     * Interface data must contain name, type resolver, and field definitions. The type resolver should point to an
-     * implementation of the TypeResolverInterface that decides what concrete GraphQL type to output. Description is
-     * the only optional field.
+     * Union data must contain name, type resolver, and possible concrete types definitions
+     * The type resolver should point to an implementation of the TypeResolverInterface
+     * that decides what concrete GraphQL type to output. Description is the only optional field.
      *
      * @param array $unionData
      * @param array $types
