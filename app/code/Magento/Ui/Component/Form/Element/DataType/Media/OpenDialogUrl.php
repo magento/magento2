@@ -21,15 +21,20 @@ class OpenDialogUrl
     private $openDialogUrl;
 
     /**
+     * @param string $url
+     */
+    public function __construct(string $url = null)
+    {
+        $this->openDialogUrl = $url ?? self::DEFAULT_OPEN_DIALOG_URL;
+    }
+
+    /**
      * Returns open dialog url for media browser
      *
      * @return string
      */
     public function get(): string
     {
-        if ($this->openDialogUrl) {
-            return $this->openDialogUrl;
-        }
-        return self::DEFAULT_OPEN_DIALOG_URL;
+        return $this->openDialogUrl;
     }
 }
