@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\Sales\Controller\Order;
 
-use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Checkout\Model\Session as CheckoutSession;
 use Magento\Customer\Model\Session;
 use Magento\Framework\Message\MessageInterface;
@@ -35,9 +34,6 @@ class ReorderTest extends AbstractController
     /** @var Session */
     private $customerSession;
 
-    /** @var ProductRepositoryInterface */
-    private $productRepository;
-
     /** @var CartRepositoryInterface */
     private $quoteRepository;
 
@@ -54,8 +50,6 @@ class ReorderTest extends AbstractController
         $this->checkoutSession = $this->_objectManager->get(CheckoutSession::class);
         $this->orderFactory = $this->_objectManager->get(OrderInterfaceFactory::class);
         $this->customerSession = $this->_objectManager->get(Session::class);
-        $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
-        $this->productRepository->cleanCache();
         $this->quoteRepository = $this->_objectManager->get(CartRepositoryInterface::class);
     }
 
@@ -93,17 +87,14 @@ class ReorderTest extends AbstractController
     }
 
     /**
-     * @magentoDataFixture Magento/Sales/_files/order_with_two_order_items_with_simple_product.php
+     * @magentoDataFixture Magento/Sales/_files/customer_order_with_simple_product.php
      *
      * @return void
      */
     public function testReorderProductLowQty(): void
     {
-        $order = $this->orderFactory->create()->loadByIncrementId('100000001');
+        $order = $this->orderFactory->create()->loadByIncrementId('55555555');
         $this->customerSession->setCustomerId($order->getCustomerId());
-        $product = $this->productRepository->get('simple');
-        $product->setStockData(['qty' => 3]);
-        $this->productRepository->save($product);
         $this->dispatchReorderRequest((int)$order->getId());
         $this->assertSessionMessages(
             $this->contains((string)__('The requested qty is not available')),
