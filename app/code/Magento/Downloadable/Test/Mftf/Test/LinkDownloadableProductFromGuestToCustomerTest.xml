@@ -20,11 +20,12 @@
         <before>
             <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>
             <magentoCLI command="config:set {{EnableGuestCheckoutWithDownloadableItems.path}} {{EnableGuestCheckoutWithDownloadableItems.value}}" stepKey="enableGuestCheckoutWithDownloadableItems" />
+            <magentoCLI command="config:set {{EnableShareableDownloadableItems.path}} {{EnableShareableDownloadableItems.value}}" stepKey="enableShareableDownloadableItems" />
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="DownloadableProductWithOneLink" stepKey="createProduct">
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
-            <createData entity="downloadableLink1" stepKey="addDownloadableLink">
+            <createData entity="downloadableLinkSharable" stepKey="addDownloadableLink">
                 <requiredEntity createDataKey="createProduct"/>
             </createData>
         </before>
