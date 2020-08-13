@@ -67,6 +67,7 @@ $formData = $block->getFormData();
         <?php if ($_gender->isEnabled()): ?>
             <?= $_gender->setGender($formData->getGender())->toHtml() ?>
         <?php endif ?>
+        <?= $block->getChildHtml('fieldset_create_info_additional') ?>
     </fieldset>
     <?php if ($block->getShowAddressFields()): ?>
         <?php $cityValidationClass = $addressHelper->getAttributeValidationClass('city'); ?>
