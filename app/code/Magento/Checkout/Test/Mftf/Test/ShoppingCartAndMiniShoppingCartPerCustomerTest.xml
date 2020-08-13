@@ -20,7 +20,9 @@
         </annotations>
         <before>
             <!-- Flush cache -->
-            <magentoCLI command="cache:flush" stepKey="clearCache"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
 
             <!-- Create two customers -->
             <createData entity="Simple_US_Customer" stepKey="createFirstCustomer"/>
@@ -115,8 +117,7 @@
             <argument name="Customer" value="$$createFirstCustomer$$"/>
         </actionGroup>
 
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnPageShoppingCart"/>
-        <waitForPageLoad stepKey="waitForCheckoutPageLoad"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnPageShoppingCart"/>
 
         <!-- Assert first products present in shopping cart -->
         <actionGroup ref="StorefrontCheckCartSimpleProductActionGroup" stepKey="checkFirstProductInCart">
@@ -155,8 +156,7 @@
         </actionGroup>
 
         <!-- Assert first products present in shopping cart -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnShoppingCartPage"/>
-        <waitForPageLoad stepKey="waitForShoppingCartPageLoad"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnShoppingCartPage"/>
         <actionGroup ref="StorefrontCheckCartSimpleProductActionGroup" stepKey="checkProductInCart">
             <argument name="product" value="$$createSimpleProduct$$"/>
             <argument name="productQuantity" value="quoteQty2Price123.qty"/>

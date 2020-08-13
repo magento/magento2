@@ -3,54 +3,62 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 
 namespace Magento\CatalogRule\Test\Unit\Model\Indexer;
 
 use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface;
+use Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\Stdlib\DateTime;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RuleProductPricesPersistorTest extends \PHPUnit\Framework\TestCase
+class RuleProductPricesPersistorTest extends TestCase
 {
     /**
-     * @var \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor
+     * @var RuleProductPricesPersistor
      */
     private $model;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime|\PHPUnit_Framework_MockObject_MockObject
+     * @var DateTime|MockObject
      */
     private $dateTimeMock;
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResourceConnection|MockObject
      */
     private $resourceMock;
 
     /**
-     * @var ActiveTableSwitcher|\PHPUnit_Framework_MockObject_MockObject
+     * @var ActiveTableSwitcher|MockObject
      */
     private $activeTableSwitcherMock;
 
     /**
-     * @var IndexerTableSwapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerTableSwapperInterface|MockObject
      */
     private $tableSwapperMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->dateTimeMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime::class)
+        $this->dateTimeMock = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceMock = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->resourceMock = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->activeTableSwitcherMock = $this->getMockBuilder(ActiveTableSwitcher::class)
-                ->disableOriginalConstructor()
-                ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->tableSwapperMock = $this->getMockForAbstractClass(
             IndexerTableSwapperInterface::class
         );
-        $this->model = new \Magento\CatalogRule\Model\Indexer\RuleProductPricesPersistor(
+        $this->model = new RuleProductPricesPersistor(
             $this->dateTimeMock,
             $this->resourceMock,
             $this->activeTableSwitcherMock,
@@ -67,7 +75,7 @@ class RuleProductPricesPersistorTest extends \PHPUnit\Framework\TestCase
     {
         $priceData = [
             [
-               'product_id' => 1,
+                'product_id' => 1,
                 'rule_date' => '2017-05-01',
                 'latest_start_date' => '2017-05-10',
                 'earliest_end_date' => '2017-05-20',
@@ -80,9 +88,9 @@ class RuleProductPricesPersistorTest extends \PHPUnit\Framework\TestCase
             ->with('catalogrule_product_price')
             ->willReturn($tableName);
 
-        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->resourceMock->expects($this->once())->method('getConnection')->willReturn($connectionMock);
         $this->resourceMock->expects($this->at(1))
             ->method('getTableName')
@@ -115,12 +123,10 @@ class RuleProductPricesPersistorTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->model->execute($priceData, true));
     }
 
-    /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Insert error.
-     */
     public function testExecuteWithException()
     {
+        $this->expectException('Exception');
+        $this->expectExceptionMessage('Insert error.');
         $priceData = [
             [
                 'product_id' => 1,
@@ -151,9 +157,9 @@ class RuleProductPricesPersistorTest extends \PHPUnit\Framework\TestCase
             ->with($priceData[0]['earliest_end_date'], false)
             ->willReturn($priceData[0]['earliest_end_date']);
 
-        $connectionMock = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connectionMock = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $connectionMock->expects($this->once())
             ->method('insertOnDuplicate')
             ->with($tableName, $priceData)

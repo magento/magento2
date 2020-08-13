@@ -3,15 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing\Validator;
 
 use Magento\AdvancedPricingImportExport\Model\Import\AdvancedPricing;
+use Magento\CatalogImportExport\Model\Import\Product;
 use Magento\CatalogImportExport\Model\Import\Product\RowValidatorInterface;
+use Magento\CatalogImportExport\Model\Import\Product\StoreResolver;
+use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractImportValidator;
+use Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractPrice;
+use Magento\Customer\Api\GroupRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\LocalizedException;
 
-class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Validator\AbstractPrice
+class TierPrice extends AbstractPrice
 {
     /**
-     * @var \Magento\CatalogImportExport\Model\Import\Product\StoreResolver
+     * @var StoreResolver
      */
     protected $storeResolver;
 
@@ -27,21 +37,26 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
     ];
 
     /**
-     * @param \Magento\Customer\Api\GroupRepositoryInterface $groupRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
-     * @param \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver
+     * @param GroupRepositoryInterface $groupRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param StoreResolver $storeResolver
      */
     public function __construct(
-        \Magento\Customer\Api\GroupRepositoryInterface $groupRepository,
-        \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder,
-        \Magento\CatalogImportExport\Model\Import\Product\StoreResolver $storeResolver
+        GroupRepositoryInterface $groupRepository,
+        SearchCriteriaBuilder $searchCriteriaBuilder,
+        StoreResolver $storeResolver
     ) {
         $this->storeResolver = $storeResolver;
         parent::__construct($groupRepository, $searchCriteriaBuilder);
     }
 
     /**
-     * {@inheritdoc}
+     * Initialize method
+     *
+     * @param Product $context
+     *
+     * @return RowValidatorInterface|AbstractImportValidator|void
+     * @throws LocalizedException
      */
     public function init($context)
     {
@@ -52,7 +67,10 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
     }
 
     /**
+     * Add decimal error
+     *
      * @param string $attribute
+     *
      * @return void
      */
     protected function addDecimalError($attribute)
@@ -83,12 +101,12 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
     }
 
     /**
-     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      * Validation
      *
      * @param mixed $value
      * @return bool
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
+     * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
      */
     public function isValid($value)
     {
@@ -133,6 +151,7 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
      * Check if at list one value and length are valid
      *
      * @param array $value
+     *
      * @return bool
      */
     protected function isValidValueAndLength(array $value)
@@ -150,6 +169,7 @@ class TierPrice extends \Magento\CatalogImportExport\Model\Import\Product\Valida
      * Check if value has empty columns
      *
      * @param array $value
+     *
      * @return bool
      */
     protected function hasEmptyColumns(array $value)

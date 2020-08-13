@@ -3,29 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Product\Eav\Action;
 
+use Magento\Catalog\Model\Indexer\Product\Eav\Action\Rows;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class RowsTest extends \PHPUnit\Framework\TestCase
+class RowsTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Indexer\Product\Eav\Action\Rows
+     * @var Rows
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->_model = $objectManager->getObject(\Magento\Catalog\Model\Indexer\Product\Eav\Action\Rows::class);
+        $this->_model = $objectManager->getObject(Rows::class);
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\InputException
-     * @expectedExceptionMessage Bad value was supplied.
-     */
     public function testEmptyIds()
     {
+        $this->expectException('Magento\Framework\Exception\InputException');
+        $this->expectExceptionMessage('Bad value was supplied.');
         $this->_model->execute(null);
     }
 }

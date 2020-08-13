@@ -265,4 +265,8 @@
         <data key="level">0</data>
         <var key="parent_id" entityType="category" entityKey="id"/>
     </entity>
+    <entity name="AssignProductToCategory" type="category_product_link">
+        <var key="category_id" entityKey="id" entityType="category"/>
+        <var key="sku" entityKey="sku" entityType="product"/>
+    </entity>
 </entities>

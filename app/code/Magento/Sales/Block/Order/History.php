@@ -158,7 +158,7 @@ class History extends \Magento\Framework\View\Element\Template
      *
      * @param object $order
      * @return string
-     * @deprecated Action does not exist
+     * @deprecated 102.0.3 Action does not exist
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function getTrackUrl($order)
@@ -193,6 +193,7 @@ class History extends \Magento\Framework\View\Element\Template
      * Get message for no orders.
      *
      * @return \Magento\Framework\Phrase
+     * @since 102.1.0
      */
     public function getEmptyOrdersMessage()
     {

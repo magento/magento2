@@ -40,7 +40,7 @@ class PayflowNvpTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
 
@@ -95,7 +95,7 @@ class PayflowNvpTest extends \PHPUnit\Framework\TestCase
             . 'L_NAME1=Simple 2&L_QTY1=2&L_COST1=9.69&'
             . 'L_NAME2=Simple 3&L_QTY2=3&L_COST2=11.69&'
             . 'L_NAME3=Discount&L_QTY3=1&L_COST3=-10.00&'
-            . 'TRXTYPE=A&ACTION=S&BUTTONSOURCE=Magento_Cart_';
+            . 'TRXTYPE=A&ACTION=S&BUTTONSOURCE=Magento_2_';
 
         $this->httpClient->method('write')
             ->with(

@@ -7,15 +7,17 @@ declare(strict_types=1);
 
 namespace Magento\MediaGallery\Model\Asset\Command;
 
-use Magento\MediaGalleryApi\Model\DataExtractorInterface;
-use Magento\MediaGalleryApi\Api\Data\AssetInterface;
-use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\MediaGalleryApi\Api\Data\AssetInterface;
+use Magento\MediaGalleryApi\Model\Asset\Command\SaveInterface;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class Save
+ * Save media asset
+ *
+ * @deprecated 100.4.0 use \Magento\MediaGalleryApi\Api\SaveAssetsInterface instead
+ * @see \Magento\MediaGalleryApi\Api\SaveAssetsInterface
  */
 class Save implements SaveInterface
 {
@@ -27,11 +29,6 @@ class Save implements SaveInterface
     private $resourceConnection;
 
     /**
-     * @var DataExtractorInterface
-     */
-    private $extractor;
-
-    /**
      * @var LoggerInterface
      */
     private $logger;
@@ -40,21 +37,18 @@ class Save implements SaveInterface
      * Save constructor.
      *
      * @param ResourceConnection $resourceConnection
-     * @param DataExtractorInterface $extractor
      * @param LoggerInterface $logger
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        DataExtractorInterface $extractor,
         LoggerInterface $logger
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->extractor = $extractor;
         $this->logger = $logger;
     }
 
     /**
-     * Save media assets
+     * Save media asset
      *
      * @param AssetInterface $mediaAsset
      *
@@ -67,9 +61,27 @@ class Save implements SaveInterface
             /** @var \Magento\Framework\DB\Adapter\Pdo\Mysql $connection */
             $connection = $this->resourceConnection->getConnection();
             $tableName = $this->resourceConnection->getTableName(self::TABLE_MEDIA_GALLERY_ASSET);
+            $record = [
+                'id' => $mediaAsset->getId(),
+                'path' => $mediaAsset->getPath(),
+                'title' => $mediaAsset->getTitle(),
+                'source' => $mediaAsset->getSource(),
+                'content_type' => $mediaAsset->getContentType(),
+                'width' => $mediaAsset->getWidth(),
+                'height' => $mediaAsset->getHeight(),
+                'size' => $mediaAsset->getSize(),
+            ];
 
-            $connection->insertOnDuplicate($tableName, $this->extractor->extract($mediaAsset, AssetInterface::class));
-            return (int) $connection->lastInsertId($tableName);
+            if ($mediaAsset->getCreatedAt()) {
+                $record['created_at'] = $mediaAsset->getCreatedAt();
+            }
+
+            if ($mediaAsset->getUpdatedAt()) {
+                $record['updated_at'] = $mediaAsset->getUpdatedAt();
+            }
+
+            $connection->insertOnDuplicate($tableName, $record);
+            return (int)$connection->lastInsertId($tableName);
         } catch (\Exception $exception) {
             $this->logger->critical($exception);
             $message = __('An error occurred during media asset save: %1', $exception->getMessage());

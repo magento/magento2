@@ -40,14 +40,16 @@ class InstructionsConfigProviderTest extends TestCase
 
     protected function setUp(): void
     {
-        $this->methodOneMock = $this->createPartialMock(
-            AbstractMethod::class,
-            ['isAvailable', 'getInstructions']
-        );
-        $this->methodTwoMock = $this->createPartialMock(
-            AbstractMethod::class,
-            ['isAvailable', 'getInstructions']
-        );
+        $this->methodOneMock = $this->getMockBuilder(AbstractMethod::class)
+            ->addMethods(['getInstructions'])
+            ->onlyMethods(['isAvailable'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->methodTwoMock = $this->getMockBuilder(AbstractMethod::class)
+            ->addMethods(['getInstructions'])
+            ->onlyMethods(['isAvailable'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         /** @var PaymentHelper|MockObject $paymentHelperMock */
         $paymentHelperMock = $this->createMock(PaymentHelper::class);

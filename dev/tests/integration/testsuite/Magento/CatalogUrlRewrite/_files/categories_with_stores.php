@@ -9,8 +9,10 @@ use Magento\Backend\App\Area\FrontNameResolver;
 use Magento\Catalog\Model\Category;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../../Magento/Store/_files/second_store.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_store.php');
+
 Bootstrap::getInstance()->loadArea(FrontNameResolver::AREA_CODE);
 
 $store = Bootstrap::getObjectManager()->get(Store::class);

@@ -88,7 +88,7 @@ class Xml implements \Magento\Framework\Webapi\Rest\Response\RendererInterface
         } else {
             $data = (array)$data;
         }
-        $isAssoc = !preg_match('/^\d+$/', implode(array_keys($data), ''));
+        $isAssoc = !preg_match('/^\d+$/', implode('', array_keys($data)));
 
         $formattedData = [];
         foreach ($data as $key => $value) {

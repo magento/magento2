@@ -13,12 +13,12 @@
             <argument name="attributeSelector2" type="string" defaultValue="show_buttons"/>
             <argument name="productAttributeSection1" type="string"  defaultValue="1"/>
             <argument name="productAttributeSection2" type="string" defaultValue="4" />
-            <argument name="buttonToShowSection1" type="string"  defaultValue="1"/>
             <argument name="buttonToShowSection2" type="string" defaultValue="3" />
         </arguments>
-        <click selector="{{CmsNewPagePageActionsSection.contentSectionName}}" stepKey="expandContent"/>
-        <waitForPageLoad time="50" stepKey="waitForPageLoadContentSection"/>
-        <conditionalClick selector="{{CmsNewPagePageActionsSection.showHideEditor}}" dependentSelector="{{CmsNewPagePageActionsSection.showHideEditor}}" visible="true" stepKey="clickNextShowHideEditorIfVisible"/>
+
+        <conditionalClick selector="{{CmsNewPagePageActionsSection.contentSectionName}}" dependentSelector="{{CmsNewPagePageActionsSection.showHideEditor}}" visible="false" stepKey="expandContentSectionIfNotVisible"/>
+        <waitForPageLoad time="30" stepKey="waitForPageLoadContentSection"/>
+        <conditionalClick selector="{{CmsNewPagePageActionsSection.showHideEditor}}" dependentSelector="{{CatalogWidgetSection.insertWidgetButton}}" visible="false" stepKey="clickNextShowHideEditorIfVisible"/>
         <waitForElementVisible selector="{{CatalogWidgetSection.insertWidgetButton}}" stepKey="waitForInsertWidgetElement"/>
         <click selector="{{CatalogWidgetSection.insertWidgetButton}}" stepKey="clickInsertWidget"/>
         <waitForElementVisible selector="{{InsertWidgetSection.widgetTypeDropDown}}" time="30" stepKey="waitForWidgetTypeDropDownVisible"/>
@@ -32,7 +32,7 @@
         <click selector="{{WidgetSection.InsertWidget}}" stepKey="clickInsertWidgetToSave"/>
         <waitForPageLoad time="30" stepKey="waitForWidgetInsertPageLoad"/>
         <!-- Check that widget is inserted -->
-        <waitForElementVisible selector="#cms_page_form_content" stepKey="checkCMSContent" time="30"/>
+        <waitForElementVisible selector="{{CmsNewPagePageContentSection.content}}" stepKey="checkCMSContent" time="30"/>
         <click selector="{{CmsNewPagePageActionsSection.saveAndContinueEdit}}" stepKey="clickNextSave"/>
         <waitForPageLoad stepKey="waitForPageActionSave" time="30"/>
         <waitForElementVisible selector="*[data-ui-id='messages-message-success']" time="60" stepKey="waitForSaveSuccess"/>

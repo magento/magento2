@@ -1,86 +1,99 @@
 <?php
-declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model\Customer;
 
+use Magento\Customer\Model\Address;
 use Magento\Customer\Model\AttributeMetadataResolver;
+use Magento\Customer\Model\Customer;
 use Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses;
 use Magento\Customer\Model\FileUploaderDataResolver;
-use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
 use Magento\Customer\Model\ResourceModel\Customer\Collection as CustomerCollection;
+use Magento\Customer\Model\ResourceModel\Customer\CollectionFactory as CustomerCollectionFactory;
+use Magento\Directory\Model\CountryFactory;
 use Magento\Eav\Model\Config;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Type;
+use Magento\Framework\Session\SessionManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Ui\Component\Form\Field;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for class \Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DataProviderWithDefaultAddressesTest extends \PHPUnit\Framework\TestCase
+class DataProviderWithDefaultAddressesTest extends TestCase
 {
     private const ATTRIBUTE_CODE = 'test-code';
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $eavConfigMock;
 
     /**
-     * @var CustomerCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerCollectionFactory|MockObject
      */
     private $customerCollectionFactoryMock;
 
     /**
-     * @var \Magento\Framework\Session\SessionManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SessionManagerInterface|MockObject
      */
     private $sessionMock;
 
     /**
-     * @var \Magento\Directory\Model\CountryFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CountryFactory|MockObject
      */
     private $countryFactoryMock;
 
     /**
-     * @var \Magento\Customer\Model\Customer|\PHPUnit_Framework_MockObject_MockObject
+     * @var Customer|MockObject
      */
     private $customerMock;
 
     /**
-     * @var CustomerCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var CustomerCollection|MockObject
      */
     private $customerCollectionMock;
 
     /**
-     * @var FileUploaderDataResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileUploaderDataResolver|MockObject
      */
     private $fileUploaderDataResolver;
 
     /**
-     * @var AttributeMetadataResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeMetadataResolver|MockObject
      */
     private $attributeMetadataResolver;
 
     /**
-     * @return void
+     * @var DataProviderWithDefaultAddresses
+     */
+    private $dataProvider;
+
+    /**
+     * @inheritdoc
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function setUp(): void
     {
         $this->eavConfigMock = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
         $this->customerCollectionFactoryMock = $this->createPartialMock(CustomerCollectionFactory::class, ['create']);
-        $this->sessionMock = $this->getMockBuilder(\Magento\Framework\Session\SessionManagerInterface::class)
+        $this->sessionMock = $this->getMockBuilder(SessionManagerInterface::class)
             ->setMethods(['getCustomerFormData', 'unsCustomerFormData'])
             ->getMockForAbstractClass();
-        $this->countryFactoryMock = $this->getMockBuilder(\Magento\Directory\Model\CountryFactory::class)
+        $this->countryFactoryMock = $this->getMockBuilder(CountryFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create', 'loadByCode', 'getName'])
             ->getMock();
-        $this->customerMock = $this->getMockBuilder(\Magento\Customer\Model\Customer::class)
+        $this->customerMock = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerCollectionMock = $this->getMockBuilder(CustomerCollection::class)
@@ -151,20 +164,21 @@ class DataProviderWithDefaultAddressesTest extends \PHPUnit\Framework\TestCase
                     ],
                 ]
             );
+
         $helper = new ObjectManager($this);
         $this->dataProvider = $helper->getObject(
             DataProviderWithDefaultAddresses::class,
             [
-                'name'                      => 'test-name',
-                'primaryFieldName'          => 'primary-field-name',
-                'requestFieldName'          => 'request-field-name',
+                'name' => 'test-name',
+                'primaryFieldName' => 'primary-field-name',
+                'requestFieldName' => 'request-field-name',
                 'customerCollectionFactory' => $this->customerCollectionFactoryMock,
-                'eavConfig'                 => $this->eavConfigMock,
-                'countryFactory'            => $this->countryFactoryMock,
-                'session'                   => $this->sessionMock,
-                'fileUploaderDataResolver'  => $this->fileUploaderDataResolver,
+                'eavConfig' => $this->eavConfigMock,
+                'countryFactory' => $this->countryFactoryMock,
+                'session' => $this->sessionMock,
+                'fileUploaderDataResolver' => $this->fileUploaderDataResolver,
                 'attributeMetadataResolver' => $this->attributeMetadataResolver,
-                true
+                'allowToShowHiddenAttributes' => true,
             ]
         );
     }
@@ -247,11 +261,11 @@ class DataProviderWithDefaultAddressesTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $customerAttributes
-     * @return Type|\PHPUnit_Framework_MockObject_MockObject
+     * @return Type|MockObject
      */
     protected function getTypeCustomerMock($customerAttributes = [])
     {
-        $typeCustomerMock = $this->getMockBuilder(\Magento\Eav\Model\Entity\Type::class)
+        $typeCustomerMock = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
             ->getMock();
         $attributesCollection = !empty($customerAttributes) ? $customerAttributes : $this->getAttributeMock();
@@ -270,7 +284,7 @@ class DataProviderWithDefaultAddressesTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param array $options
-     * @return AbstractAttribute[]|\PHPUnit_Framework_MockObject_MockObject[]
+     * @return AbstractAttribute[]|MockObject[]
      */
     protected function getAttributeMock($options = []): array
     {
@@ -333,6 +347,7 @@ class DataProviderWithDefaultAddressesTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetData(): void
     {
+        $customerId = 1;
         $customerData = [
             'email' => 'test@test.ua',
             'default_billing' => 2,
@@ -340,18 +355,35 @@ class DataProviderWithDefaultAddressesTest extends \PHPUnit\Framework\TestCase
             'password_hash' => 'password_hash',
             'rp_token' => 'rp_token',
         ];
+        $addressData = [
+            'country_id' => 'code',
+            'entity_id' => 2,
+            'parent_id' => $customerId,
+            'street' => "line 1\nline 2",
+            'region' => 'Region Name',
+        ];
+        $localeRegionName = 'Locale Region Name';
 
-        $address = $this->getMockBuilder(\Magento\Customer\Model\Address::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->customerCollectionMock->expects($this->once())->method('getItems')->willReturn([$this->customerMock]);
-        $this->customerMock->expects($this->once())->method('getData')->willReturn($customerData);
-        $this->customerMock->expects($this->atLeastOnce())->method('getId')->willReturn(1);
+        $address = $this->createMock(Address::class);
+        $address->method('getData')->willReturn($addressData);
+        $address->method('getRegion')->willReturn($localeRegionName);
 
-        $this->customerMock->expects($this->once())->method('getDefaultBillingAddress')->willReturn($address);
-        $this->countryFactoryMock->expects($this->once())->method('create')->willReturnSelf();
-        $this->countryFactoryMock->expects($this->once())->method('loadByCode')->willReturnSelf();
-        $this->countryFactoryMock->expects($this->once())->method('getName')->willReturn('Ukraine');
+        $this->customerCollectionMock->method('getItems')->willReturn([$this->customerMock]);
+        $this->customerMock->method('getDefaultBillingAddress')->willReturn($address);
+        $this->customerMock->method('getDefaultShippingAddress')->willReturn(false);
+        $this->customerMock->method('getData')->willReturn($customerData);
+        $this->customerMock->method('getId')->willReturn($customerId);
+
+        $this->countryFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturnSelf();
+        $this->countryFactoryMock->expects($this->once())
+            ->method('loadByCode')
+            ->with('code')
+            ->willReturnSelf();
+        $this->countryFactoryMock->expects($this->once())
+            ->method('getName')
+            ->willReturn('Ukraine');
 
         $this->sessionMock->expects($this->once())
             ->method('getCustomerFormData')
@@ -359,7 +391,7 @@ class DataProviderWithDefaultAddressesTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(
             [
-                1 => [
+                $customerId => [
                     'customer' => [
                         'email' => 'test@test.ua',
                         'default_billing' => 2,
@@ -367,9 +399,14 @@ class DataProviderWithDefaultAddressesTest extends \PHPUnit\Framework\TestCase
                     ],
                     'default_billing_address' => [
                         'country' => 'Ukraine',
+                        'country_id' => 'code',
+                        'entity_id' => 2,
+                        'parent_id' => $customerId,
+                        'street' => ['line 1', 'line 2'],
+                        'region' => $localeRegionName,
                     ],
                     'default_shipping_address' => [],
-                    'customer_id' => 1
+                    'customer_id' => $customerId
                 ]
             ],
             $this->dataProvider->getData()

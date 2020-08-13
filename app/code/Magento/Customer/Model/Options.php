@@ -74,7 +74,7 @@ class Options
      * @param bool $isOptional
      * @return array|bool
      *
-     * @deprecated
+     * @deprecated 101.0.4
      * @see prepareNamePrefixSuffixOptions()
      */
     protected function _prepareNamePrefixSuffixOptions($options, $isOptional = false)

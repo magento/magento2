@@ -8,14 +8,17 @@ declare(strict_types=1);
 namespace Magento\Catalog\Test\Unit\Plugin\Model\Attribute\Backend;
 
 use Magento\Catalog\Plugin\Model\Attribute\Backend\AttributeValidation;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Store\Model\StoreManagerInterface;
-use Magento\Store\Api\Data\StoreInterface;
-use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Attribute\Backend\AbstractBackend;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AttributeValidationTest extends \PHPUnit\Framework\TestCase
+class AttributeValidationTest extends TestCase
 {
     /**
      * @var AttributeValidation
@@ -23,12 +26,12 @@ class AttributeValidationTest extends \PHPUnit\Framework\TestCase
     private $attributeValidation;
 
     /**
-     * @var StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|MockObject
      */
     private $storeMock;
 
@@ -48,21 +51,21 @@ class AttributeValidationTest extends \PHPUnit\Framework\TestCase
     private $isProceedMockCalled = false;
 
     /**
-     * @var AbstractBackend|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractBackend|MockObject
      */
     private $subjectMock;
 
     /**
-     * @var AbstractAttribute|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractAttribute|MockObject
      */
     private $attributeMock;
 
     /**
-     * @var DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataObject|MockObject
      */
     private $entityMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -110,7 +113,7 @@ class AttributeValidationTest extends \PHPUnit\Framework\TestCase
      * @param bool $defaultStoreUsed
      * @param null|int|string $storeId
      * @dataProvider aroundValidateDataProvider
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      * @return void
      */
     public function testAroundValidate(bool $shouldProceedRun, bool $defaultStoreUsed, $storeId)
