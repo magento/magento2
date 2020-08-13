@@ -43,6 +43,8 @@ class WriteTest extends TestCase
      * @param string $basePath
      * @param int $permissions
      * @param string $path
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function testCreate($basePath, $permissions, $path)
     {
@@ -66,6 +68,11 @@ class WriteTest extends TestCase
         ];
     }
 
+    /**
+     * Test for create outside
+     *
+     * @throws FileSystemException
+     */
     public function testCreateOutside()
     {
         $exceptions = 0;
@@ -93,6 +100,8 @@ class WriteTest extends TestCase
      *
      * @dataProvider deleteProvider
      * @param string $path
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function testDelete($path)
     {
@@ -113,6 +122,11 @@ class WriteTest extends TestCase
         return [['subdir'], ['subdir/subsubdir']];
     }
 
+    /**
+     * Test for delete outside
+     *
+     * @throws FileSystemException
+     */
     public function testDeleteOutside()
     {
         $exceptions = 0;
@@ -143,6 +157,8 @@ class WriteTest extends TestCase
      * @param int $permissions
      * @param string $name
      * @param string $newName
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function testRename($basePath, $permissions, $name, $newName)
     {
@@ -166,6 +182,11 @@ class WriteTest extends TestCase
         return [['newDir1', 0777, 'first_name.txt', 'second_name.txt']];
     }
 
+    /**
+     * Test for rename outside
+     *
+     * @throws FileSystemException
+     */
     public function testRenameOutside()
     {
         $exceptions = 0;
@@ -200,6 +221,8 @@ class WriteTest extends TestCase
      * @param int $permission
      * @param string $name
      * @param string $newName
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function testRenameTargetDir($firstDir, $secondDir, $permission, $name, $newName)
     {
@@ -259,6 +282,11 @@ class WriteTest extends TestCase
         ];
     }
 
+    /**
+     * Test for copy outside
+     *
+     * @throws FileSystemException|ValidatorException
+     */
     public function testCopyOutside()
     {
         $exceptions = 0;
@@ -333,6 +361,8 @@ class WriteTest extends TestCase
 
     /**
      * Test for changePermissions method
+     *
+     * @throws FileSystemException|ValidatorException
      */
     public function testChangePermissions()
     {
@@ -341,6 +371,11 @@ class WriteTest extends TestCase
         $this->assertTrue($directory->changePermissions('test_directory', 0644));
     }
 
+    /**
+     * Test for changePermissions outside
+     *
+     * @throws FileSystemException
+     */
     public function testChangePermissionsOutside()
     {
         $exceptions = 0;
@@ -365,6 +400,8 @@ class WriteTest extends TestCase
 
     /**
      * Test for changePermissionsRecursively method
+     *
+     * @throws FileSystemException|ValidatorException
      */
     public function testChangePermissionsRecursively()
     {
@@ -376,6 +413,11 @@ class WriteTest extends TestCase
         $this->assertTrue($directory->changePermissionsRecursively('test_directory', 0777, 0644));
     }
 
+    /**
+     * Test for changePermissionsRecursively outside
+     *
+     * @throws FileSystemException
+     */
     public function testChangePermissionsRecursivelyOutside()
     {
         $exceptions = 0;
@@ -430,6 +472,11 @@ class WriteTest extends TestCase
         ];
     }
 
+    /**
+     * Test for touch outside
+     *
+     * @throws FileSystemException
+     */
     public function testTouchOutside()
     {
         $exceptions = 0;
@@ -454,6 +501,8 @@ class WriteTest extends TestCase
 
     /**
      * Test isWritable method
+     *
+     * @throws FileSystemException|ValidatorException
      */
     public function testIsWritable()
     {
@@ -463,6 +512,11 @@ class WriteTest extends TestCase
         $this->assertTrue($directory->isWritable('bar'));
     }
 
+    /**
+     * Test isWritable method outside
+     *
+     * @throws FileSystemException
+     */
     public function testIsWritableOutside()
     {
         $exceptions = 0;
@@ -517,6 +571,11 @@ class WriteTest extends TestCase
         ];
     }
 
+    /**
+     * Test for openFile outside
+     *
+     * @throws FileSystemException
+     */
     public function testOpenFileOutside()
     {
         $exceptions = 0;
@@ -587,6 +646,11 @@ class WriteTest extends TestCase
         return [['file1', '123', '456'], ['folder1/file1', '123', '456']];
     }
 
+    /**
+     * Test for writeFile outside
+     *
+     * @throws FileSystemException
+     */
     public function testWriteFileOutside()
     {
         $exceptions = 0;
@@ -610,6 +674,8 @@ class WriteTest extends TestCase
     }
 
     /**
+     * Test for invalidDeletePath
+     *
      * @throws ValidatorException
      */
     public function testInvalidDeletePath()
@@ -623,6 +689,8 @@ class WriteTest extends TestCase
 
     /**
      * Tear down
+     *
+     * @throws ValidatorException|FileSystemException
      */
     protected function tearDown(): void
     {
