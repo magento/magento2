@@ -15,6 +15,9 @@ use Magento\Store\Model\ScopeInterface as ModelScopeInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
+/**
+ * Test for \Magento\Paypal\Model\AbstractConfig
+ */
 class AbstractConfigTest extends TestCase
 {
 
@@ -353,7 +356,7 @@ class AbstractConfigTest extends TestCase
             $productMetadata
         );
 
-        self::assertEquals('Magento_Cart_SomeEdition', $this->config->getBuildNotationCode());
+        self::assertEquals('Magento_2_SomeEdition', $this->config->getBuildNotationCode());
     }
 
     /**

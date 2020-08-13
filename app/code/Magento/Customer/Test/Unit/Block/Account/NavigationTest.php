@@ -19,11 +19,6 @@ use PHPUnit\Framework\TestCase;
 class NavigationTest extends TestCase
 {
     /**
-     * Stub name top links
-     */
-    private const STUB_TOP_LINKS_NAME_IN_LAYOUT = 'top.links';
-
-    /**
      * @var ObjectManagerHelper
      */
     private $objectManagerHelper;
@@ -67,7 +62,7 @@ class NavigationTest extends TestCase
      *
      * @return void
      */
-    public function testGetLinksWithCustomerAndWishList(): void
+    public function testGetLinksWithCustomerAndWishList()
     {
         $wishListLinkMock = $this->getMockBuilder(WishListLink::class)
             ->disableOriginalConstructor()
@@ -81,30 +76,30 @@ class NavigationTest extends TestCase
 
         $wishListLinkMock->expects($this->any())
             ->method('getSortOrder')
-            ->willReturn(30);
+            ->willReturn(100);
 
         $customerAccountLinkMock->expects($this->any())
             ->method('getSortOrder')
-            ->willReturn(0);
+            ->willReturn(20);
 
-        $topLinksNameInLayout = self::STUB_TOP_LINKS_NAME_IN_LAYOUT;
+        $nameInLayout = 'top.links';
 
         $blockChildren = [
-            'customerAccountLink' => $customerAccountLinkMock,
-            'wishListLink' => $wishListLinkMock
+            'wishListLink' => $wishListLinkMock,
+            'customerAccountLink' => $customerAccountLinkMock
         ];
 
-        $this->navigation->setNameInLayout($topLinksNameInLayout);
+        $this->navigation->setNameInLayout($nameInLayout);
         $this->layoutMock->expects($this->any())
             ->method('getChildBlocks')
-            ->with($topLinksNameInLayout)
+            ->with($nameInLayout)
             ->willReturn($blockChildren);
 
         /* Assertion */
         $this->assertEquals(
             [
-                0 => $customerAccountLinkMock,
-                1 => $wishListLinkMock
+                0 => $wishListLinkMock,
+                1 => $customerAccountLinkMock
             ],
             $this->navigation->getLinks()
         );
