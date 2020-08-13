@@ -16,6 +16,7 @@ define([
 
     return Component.extend({
         defaults: {
+            deleteButtonSelector: '#delete_selected_massaction',
             deleteImagesSelector: '#delete_massaction',
             mediaGalleryImageDetailsName: 'mediaGalleryImageDetails',
             modules: {
@@ -86,6 +87,7 @@ define([
 
                 this.massActionMode(false);
                 this.switchMode();
+                this.imageModel().updateSelected();
             }.bind(this));
         },
 
@@ -124,7 +126,7 @@ define([
          */
         handleDeleteAction: function () {
             if (this.massActionMode()) {
-                $(this.massactionView().deleteButtonSelector).on('massDelete', function () {
+                $(this.deleteButtonSelector).on('massDelete.MediaGallery', function () {
                     if (this.getSelectedCount() < 1) {
                         uiAlert({
                             content: $t('You need to select at least one image')
