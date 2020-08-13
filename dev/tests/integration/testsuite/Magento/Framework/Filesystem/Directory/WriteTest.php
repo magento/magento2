@@ -7,15 +7,17 @@
  */
 namespace Magento\Framework\Filesystem\Directory;
 
+use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem\DriverPool;
 use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class ReadTest
  * Test for Magento\Framework\Filesystem\Directory\Read class
  */
-class WriteTest extends \PHPUnit\Framework\TestCase
+class WriteTest extends TestCase
 {
     /**
      * Test data to be cleaned
@@ -231,6 +233,8 @@ class WriteTest extends \PHPUnit\Framework\TestCase
      * @param int $permissions
      * @param string $name
      * @param string $newName
+     * @throws ValidatorException
+     * @throws FileSystemException
      */
     public function testCopy($basePath, $permissions, $name, $newName)
     {
@@ -298,6 +302,8 @@ class WriteTest extends \PHPUnit\Framework\TestCase
      * @param int $permission
      * @param string $name
      * @param string $newName
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function testCopyTargetDir($firstDir, $secondDir, $permission, $name, $newName)
     {
@@ -400,6 +406,8 @@ class WriteTest extends \PHPUnit\Framework\TestCase
      * @param int $permissions
      * @param string $path
      * @param int $time
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function testTouch($basePath, $permissions, $path, $time)
     {
@@ -485,6 +493,8 @@ class WriteTest extends \PHPUnit\Framework\TestCase
      * @param int $permissions
      * @param string $path
      * @param string $mode
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function testOpenFile($basePath, $permissions, $path, $mode)
     {
@@ -536,6 +546,8 @@ class WriteTest extends \PHPUnit\Framework\TestCase
      * @param string $path
      * @param string $content
      * @param string $extraContent
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function testWriteFile($path, $content, $extraContent)
     {
@@ -553,6 +565,8 @@ class WriteTest extends \PHPUnit\Framework\TestCase
      * @param string $path
      * @param string $content
      * @param string $extraContent
+     * @throws FileSystemException
+     * @throws ValidatorException
      */
     public function testWriteFileAppend($path, $content, $extraContent)
     {
@@ -596,6 +610,18 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @throws ValidatorException
+     */
+    public function testInvalidDeletePath()
+    {
+        $this->expectException(FileSystemException::class);
+        $directory = $this->getDirectoryInstance('newDir', 0777);
+        $invalidPath = 'invalidPath/../';
+        $directory->create($invalidPath);
+        $directory->delete($invalidPath);
+    }
+
+    /**
      * Tear down
      */
     protected function tearDown(): void
@@ -620,8 +646,8 @@ class WriteTest extends \PHPUnit\Framework\TestCase
     {
         $fullPath = __DIR__ . '/../_files/' . $path;
         $objectManager = Bootstrap::getObjectManager();
-        /** @var \Magento\Framework\Filesystem\Directory\WriteFactory $directoryFactory */
-        $directoryFactory = $objectManager->create(\Magento\Framework\Filesystem\Directory\WriteFactory::class);
+        /** @var WriteFactory $directoryFactory */
+        $directoryFactory = $objectManager->create(WriteFactory::class);
         $directory = $directoryFactory->create($fullPath, DriverPool::FILE, $permissions);
         $this->testDirectories[] = $directory;
         return $directory;
