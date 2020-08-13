@@ -100,7 +100,7 @@ class WriteIptc implements WriteMetadataInterface
 
         return array_merge(
             array_slice($segments, 0, $iendSegmentIndex),
-            [$xmpSegment],
+            [$iptcSegment],
             array_slice($segments, $iendSegmentIndex)
         );
     }
