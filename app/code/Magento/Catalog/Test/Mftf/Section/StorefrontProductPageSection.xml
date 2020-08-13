@@ -13,7 +13,7 @@
         <element name="addToCartBtn" type="button" selector="button.action.tocart.primary" timeout="30"/>
         <element name="successMsg" type="button" selector="div.message-success" timeout="30"/>
         <element name="errorMsg" type="button" selector="div.message-error" timeout="30"/>
-        <element name="alertMessage" type="text" selector=".page.messages [role=alert][aria-atomic=true]"/>
+        <element name="alertMessage" type="text" selector=".page.messages [role=alert]"/>
         <element name="messagesBlock" type="text" selector=".page.messages" timeout="30"/>
         <element name="addToWishlist" type="button" selector="//a[@class='action towishlist']" timeout="30"/>
         <element name="customTextOptionInput" type="input" selector=".input-text.product-custom-option"/>
