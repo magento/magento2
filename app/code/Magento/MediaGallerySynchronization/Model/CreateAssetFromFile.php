@@ -17,7 +17,7 @@ use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
-use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
+use Magento\MediaGallerySynchronization\Model\GetContentHash;
 
 /**
  * Create media asset object based on the file information
@@ -50,7 +50,7 @@ class CreateAssetFromFile
     private $assetFactory;
 
     /**
-     * @var GetContentHashInterface
+     * @var GetContentHash
      */
     private $getContentHash;
 
@@ -69,7 +69,7 @@ class CreateAssetFromFile
      * @param File $driver
      * @param TimezoneInterface $date
      * @param AssetInterfaceFactory $assetFactory
-     * @param GetContentHashInterface $getContentHash
+     * @param GetContentHash $getContentHash
      * @param ExtractMetadataInterface $extractMetadata
      * @param SplFileInfoFactory $splFileInfoFactory
      */
@@ -78,7 +78,7 @@ class CreateAssetFromFile
         File $driver,
         TimezoneInterface $date,
         AssetInterfaceFactory $assetFactory,
-        GetContentHashInterface $getContentHash,
+        GetContentHash $getContentHash,
         ExtractMetadataInterface $extractMetadata,
         SplFileInfoFactory $splFileInfoFactory
     ) {

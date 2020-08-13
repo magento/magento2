@@ -163,8 +163,8 @@
 
             <!-- Save the settings -->
             <scrollToTopOfPage stepKey="scrollToTop"/>
-            <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveTaxOptions"/>
-            <waitForPageLoad stepKey="waitForTaxSaved"/>
+            <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveTaxOptions"/>
+
             <see userInput="You saved the configuration." selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccess"/>
 
             <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
@@ -192,8 +192,7 @@
 
             <!-- Save the settings -->
             <scrollToTopOfPage stepKey="scrollToTop"/>
-            <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveTaxOptions"/>
-            <waitForPageLoad stepKey="waitForTaxSaved"/>
+            <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveTaxOptions"/>
             <see userInput="You saved the configuration." selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccess"/>
 
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
