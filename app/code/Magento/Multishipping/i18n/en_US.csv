@@ -92,4 +92,4 @@ Options,Options
 "Error:","Error:"
 "We are unable to process your request. Please, try again later.","We are unable to process your request. Please, try again later."
 "Quote address for failed order ID "%1" not found.","Quote address for failed order ID "%1" not found."
-"All shippable products have been removed from your order","All shippable products have been removed from your order"
+"The current cart does not match multi shipping criteria, please review or contact the store administrator","The current cart does not match multi shipping criteria, please review or contact the store administrator"
