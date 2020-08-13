@@ -198,7 +198,7 @@
         </container>
     </listingToolbar>
     <container name="media_gallery_directories"
-               class="Magento\MediaGalleryUi\Ui\Component\DirectoriesTree"
+               class="Magento\MediaGalleryUi\Ui\Component\DirectoryTree"
                template="Magento_MediaGalleryUi/grid/directories/directoryTree"
                component="Magento_MediaGalleryUi/js/directory/directoryTree"/>
     <columns name="media_gallery_columns" component="Magento_MediaGalleryUi/js/grid/masonry">
