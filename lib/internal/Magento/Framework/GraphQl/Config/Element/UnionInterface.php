@@ -19,5 +19,5 @@ interface UnionInterface extends ConfigElementInterface
      *
      * @return Type[]
      */
-    public function getTypes() : array;
+    public function getTypes(): array;
 }

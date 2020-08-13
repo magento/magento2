@@ -31,7 +31,7 @@ class FormatterComposite implements FormatterInterface
     /**
      * @inheritDoc
      */
-    public function format(ConfigElementInterface $configElement, OutputTypeInterface $outputType) : array
+    public function format(ConfigElementInterface $configElement, OutputTypeInterface $outputType): array
     {
         $defaultConfig = [
             'name' => $configElement->getName(),
@@ -42,6 +42,6 @@ class FormatterComposite implements FormatterInterface
             $formattedConfig[] = $formatter->format($configElement, $outputType);
         }
 
-        return  array_merge($defaultConfig,...$formattedConfig);
+        return  array_merge($defaultConfig, ...$formattedConfig);
     }
 }

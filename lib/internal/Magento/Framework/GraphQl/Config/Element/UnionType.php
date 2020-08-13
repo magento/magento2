@@ -55,7 +55,7 @@ class UnionType implements UnionInterface
      *
      * @return string
      */
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -65,7 +65,7 @@ class UnionType implements UnionInterface
      *
      * @return string[]
      */
-    public function getTypes() : array
+    public function getTypes(): array
     {
         return $this->types;
     }
@@ -75,7 +75,7 @@ class UnionType implements UnionInterface
      *
      * @return string
      */
-    public function getTypeResolver()
+    public function getTypeResolver(): string
     {
         return $this->typeResolver;
     }
@@ -85,7 +85,7 @@ class UnionType implements UnionInterface
      *
      * @return string
      */
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return $this->description;
     }

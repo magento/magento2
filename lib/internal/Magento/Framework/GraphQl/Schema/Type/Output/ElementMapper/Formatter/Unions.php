@@ -34,7 +34,7 @@ class Unions implements FormatterInterface
     /**
      * @inheritDoc
      */
-    public function format(ConfigElementInterface $configElement, OutputTypeInterface $outputType) : array
+    public function format(ConfigElementInterface $configElement, OutputTypeInterface $outputType): array
     {
         $config = [];
         if ($configElement instanceof UnionType && !empty($configElement->getTypes())) {

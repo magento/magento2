@@ -53,7 +53,7 @@ class UnionType implements TypeMetaReaderInterface
     /**
      * @inheritDoc
      */
-    public function read(\GraphQL\Type\Definition\Type $typeMeta) : array
+    public function read(\GraphQL\Type\Definition\Type $typeMeta): array
     {
         if ($typeMeta instanceof \GraphQL\Type\Definition\UnionType) {
             $typeName = $typeMeta->name;
@@ -85,7 +85,7 @@ class UnionType implements TypeMetaReaderInterface
      * @param \GraphQL\Type\Definition\UnionType $unionTypeMeta
      * @return string
      */
-    private function getUnionTypeResolver(\GraphQL\Type\Definition\UnionType $unionTypeMeta) : string
+    private function getUnionTypeResolver(\GraphQL\Type\Definition\UnionType $unionTypeMeta): string
     {
         /** @var \GraphQL\Language\AST\NodeList $directives */
         $directives = $unionTypeMeta->astNode->directives;
