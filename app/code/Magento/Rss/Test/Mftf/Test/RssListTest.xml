@@ -14,7 +14,8 @@
             <stories value="RSS Feed available to view"/>
             <title value="RSS Feed"/>
             <description value="View selected RSS feed by link."/>
-            <severity value="MAJOR"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-36686"/>
         </annotations>
         <before>
             <createData entity="SimpleProductWithNewFromDate" stepKey="createProduct"/>
