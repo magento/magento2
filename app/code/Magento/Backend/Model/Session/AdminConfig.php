@@ -85,7 +85,7 @@ class AdminConfig extends Config
         $this->setCookiePath($adminPath);
         $this->setName($sessionName);
         $this->setCookieSecure($this->_httpRequest->isSecure());
-        $this->setCookieSameSite('Strict');
+        $this->setCookieSameSite('Lax');
     }
 
     /**
