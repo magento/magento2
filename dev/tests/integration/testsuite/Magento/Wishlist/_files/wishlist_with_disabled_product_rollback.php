@@ -13,6 +13,10 @@ use Magento\Wishlist\Model\WishlistFactory;
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
 $objectManager = Bootstrap::getObjectManager();
+
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/simple_product_disabled_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer_rollback.php');
+
 /** @var Registry $registry */
 $registry = $objectManager->get(Registry::class);
 /** @var WishlistResource $wishListResource */
@@ -28,6 +32,3 @@ if ($wishlist->getId()) {
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
-
-Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/simple_product_disabled.php');
-Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer_rollback.php');
