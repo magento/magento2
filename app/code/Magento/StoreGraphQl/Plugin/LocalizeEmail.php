@@ -1,4 +1,8 @@
 <?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
 
 namespace Magento\StoreGraphQl\Plugin;
 
@@ -61,6 +65,7 @@ class LocalizeEmail
      * @param \Closure $proceed
      * @return mixed
      * @throws NoSuchEntityException|LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function aroundGetTransport(TransportBuilder $subject, \Closure $proceed)
     {
