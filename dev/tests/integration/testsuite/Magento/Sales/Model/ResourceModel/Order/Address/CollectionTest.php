@@ -30,11 +30,6 @@ class CollectionTest extends TestCase
     private $localeResolverMock;
 
     /**
-     * @var CollectionFactory
-     */
-    private $addressCollectionFactory;
-
-    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -78,8 +73,6 @@ class CollectionTest extends TestCase
             ->setStoreId(Bootstrap::getObjectManager()->get(StoreManagerInterface::class)->getStore()->getId())
             ->setPayment($payment);
         $order->save();
-
-        $this->addressCollectionFactory = Bootstrap::getObjectManager()->get(CollectionFactory::class);
     }
 
     /**
@@ -93,7 +86,7 @@ class CollectionTest extends TestCase
         $order = Bootstrap::getObjectManager()->create(Order::class)
             ->loadByIncrementId('100000001');
 
-        $collection = $this->addressCollectionFactory->create()->setOrderFilter($order);
+        $collection = $order->getAddressesCollection();
         foreach ($collection as $address) {
             $this->assertEquals('アラバマ', $address->getData(OrderAddress::REGION));
         }
