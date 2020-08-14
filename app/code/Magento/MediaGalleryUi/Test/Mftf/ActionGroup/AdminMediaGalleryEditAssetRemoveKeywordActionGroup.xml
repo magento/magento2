@@ -13,9 +13,9 @@
             <description>Remove Keywords on the Edit Details panel</description>
         </annotations>
         <arguments>
-            <argument name="selectedKeywords"/>
+            <argument name="keyword" type="string"/>
         </arguments>
 
-        <click selector="{{AdminEnhancedMediaGalleryEditDetailsSection.removeSelectedKeyword(selectedKeywords)}}" stepKey="removeKeyword"/>
+        <click selector="{{AdminEnhancedMediaGalleryEditDetailsSection.removeSelectedKeyword(keyword)}}" stepKey="removeKeyword"/>
     </actionGroup>
 </actionGroups>

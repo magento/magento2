@@ -40,13 +40,13 @@
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsEditActionGroup" stepKey="updateImageDetails"/>
         <actionGroup ref="AdminMediaGalleryEditAssetRemoveKeywordActionGroup" stepKey="removeKeywords">
-            <argument name="selectedKeywords" value="UpdatedImageDetails.keyword"/>
+            <argument name="keyword" value="{{UpdatedImageDetails.keyword}}"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryImageDetailsSaveActionGroup" stepKey="saveUpdatedImage">
             <argument name="image" value="UpdatedImageDetails"/>
         </actionGroup>
-        <actionGroup ref="AdminEnhancedMediaGalleryVerifyRemovedImageKeywordsActionGroup" stepKey="verifyRemovedKeywords">
-            <argument name="keywords" value="UpdatedImageDetails.keyword"/>
+        <actionGroup ref="AssetAdminEnhancedMediaGalleryAssetDetailsKeywordsAbsentActionGroup" stepKey="verifyRemovedKeywords">
+            <argument name="keywords" value="{{UpdatedImageDetails.keyword}}"/>
         </actionGroup>
     </test>
 </tests>
