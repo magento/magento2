@@ -44,7 +44,10 @@ class GetFileInfoTest extends TestCase
         $this->assertEquals($expectedResult->getPath(), $fileInfo->getPath());
         $this->assertEquals($expectedResult->getFilename(), $fileInfo->getFilename());
         $this->assertEquals($expectedResult->getExtension(), $fileInfo->getExtension());
-        $this->assertEquals($expectedResult->getBasename('.' . $expectedResult->getExtension()), $fileInfo->getBasename());
+        $this->assertEquals(
+            $expectedResult->getBasename('.' . $expectedResult->getExtension()),
+            $fileInfo->getBasename()
+        );
         $this->assertEquals($expectedResult->getSize(), $fileInfo->getSize());
         $this->assertEquals($expectedResult->getMTime(), $fileInfo->getMTime());
         $this->assertEquals($expectedResult->getCTime(), $fileInfo->getCTime());
