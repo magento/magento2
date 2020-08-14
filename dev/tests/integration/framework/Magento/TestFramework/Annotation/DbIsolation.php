@@ -5,6 +5,10 @@
  */
 namespace Magento\TestFramework\Annotation;
 
+use Magento\Eav\Model\AttributeRepository;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
+
 /**
  * Implementation of the @magentoDbIsolation DocBlock annotation
  */
@@ -16,6 +20,104 @@ class DbIsolation
      * @var bool
      */
     protected $_isIsolationActive = false;
+
+    /**
+     * @var string[]
+     */
+    private $dbStateTables = [
+        'catalog_product_entity' => 'assertIsEmpty',
+        'eav_attribute' => 'eavAttributeAssert',
+        'catalog_category_entity' => 'assertTwoRecords',
+        'eav_attribute_set' => 'attributeSetAssert',
+        'store' => 'assertTwoRecords'
+    ];
+
+    /**
+     * @var \Magento\Framework\ObjectManagerInterface
+     */
+    protected $objectManager;
+
+    /**
+     * @var AttributeRepository
+     */
+    protected $attributeRepository;
+
+    /**
+     * Execute per test initialization
+     */
+    protected function setUp(): void
+    {
+        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+        $this->attributeRepository = $this->objectManager->get(\Magento\Eav\Model\AttributeRepository::class);
+    }
+
+    /**
+     * @param array $data
+     * @throws \Exception
+     */
+    private function attributeSetAssert(array $data)
+    {
+        if (count($data) > 9) {
+            return array_slice($data, 9, count($data) - 9);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array $data
+     * @throws \Exception
+     */
+    private function assertTwoRecords(array $data)
+    {
+        //2 default records
+        if (count($data) > 2) {
+            return array_slice($data, 2, count($data) - 2);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param array $data
+     * @throws \Exception
+     */
+    private function eavAttributeAssert(array $data)
+    {
+        //178 - default number of attributes
+        if (count($data) > 178) {
+            return array_slice($data, 178, count($data) - 178);
+        }
+
+        return false;
+    }
+
+    /**
+     * @param $data
+     */
+    private function assertIsEmpty(array $data)
+    {
+        if (!empty($data)) {
+            return $data;
+        }
+
+        return false;
+    }
+
+    /**
+     * @param string $table
+     * @return array
+     */
+    private function pullDbState(string $table)
+    {
+        $resource = ObjectManager::getInstance()->get(ResourceConnection::class);
+        $connection = $resource->getConnection();
+        $select = $connection->select()
+            ->from($table);
+        return $connection->fetchAll($select);
+    }
+
+
 
     /**
      * Handler for 'startTestTransactionRequest' event
@@ -49,6 +151,20 @@ class DbIsolation
     ) {
         if ($this->_isIsolationActive && $this->_getIsolation($test)) {
             $param->requestTransactionRollback();
+        } else {
+            $isolationProblem = [];
+            foreach ($this->dbStateTables as $dbStateTable => $method) {
+                $data = $this->pullDbState($dbStateTable);
+                $data = $this->{$method}($data);
+
+                if ($data) {
+                    $isolationProblem[$dbStateTable] = $data;
+                }
+            }
+
+            if (!empty($isolationProblem)) {
+                throw new \Exception("There was a problem with isolation: " . var_export($isolationProblem, true));
+            }
         }
     }
 
