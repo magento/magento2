@@ -5,7 +5,6 @@
  */
 namespace Magento\TestFramework\Annotation;
 
-use Magento\Eav\Model\AttributeRepository;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 
@@ -31,25 +30,6 @@ class DbIsolation
         'eav_attribute_set' => 'attributeSetAssert',
         'store' => 'assertTwoRecords'
     ];
-
-    /**
-     * @var \Magento\Framework\ObjectManagerInterface
-     */
-    protected $objectManager;
-
-    /**
-     * @var AttributeRepository
-     */
-    protected $attributeRepository;
-
-    /**
-     * Execute per test initialization
-     */
-    protected function setUp(): void
-    {
-        $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
-        $this->attributeRepository = $this->objectManager->get(\Magento\Eav\Model\AttributeRepository::class);
-    }
 
     /**
      * @param array $data
