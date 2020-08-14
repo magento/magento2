@@ -231,7 +231,7 @@ QUERY;
         $this->assertEquals('test@magento.com', $sentMessage->getTo()[0]->getEmail());
 
         // Assert the email contains the expected content
-        $this->assertEquals('Bienvenue sur Test Group.', $sentMessage->getSubject());
+        $this->assertEquals('Bienvenue sur Test Group', $sentMessage->getSubject());
         $messageRaw = $sentMessage->getBody()->getParts()[0]->getRawContent();
         $this->assertStringContainsString('Bienvenue sur Test Group.', $messageRaw);
     }

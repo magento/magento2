@@ -6,4 +6,4 @@
 
 use Magento\Framework\Component\ComponentRegistrar;
 
-ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'french', __DIR__);
+ComponentRegistrar::register(ComponentRegistrar::LANGUAGE, 'french_fr_fr', __DIR__);
