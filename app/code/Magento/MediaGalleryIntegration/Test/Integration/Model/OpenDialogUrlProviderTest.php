@@ -45,7 +45,7 @@ class OpenDialogUrlProviderTest extends TestCase
 
     /**
      * Test getting open dialog url with enhanced media gallery disabled.
-     * @magentoConfigFixture default/system/media_gallery/enabled 1
+     * @magentoConfigFixture default/system/media_gallery/enabled 0
      */
     public function testWithEnhancedMediaGalleryDisabled(): void
     {
@@ -54,7 +54,7 @@ class OpenDialogUrlProviderTest extends TestCase
 
     /**
      * Test getting open dialog url when enhanced media gallery enabled.
-     * @magentoConfigFixture default/system/media_gallery/enabled 0
+     * @magentoConfigFixture default/system/media_gallery/enabled 1
      */
     public function testWithEnhancedMediaGalleryEnabled(): void
     {

@@ -9,10 +9,10 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="MediaGalleryConfigDataEnabled">
         <data key="path">system/media_gallery/enabled</data>
-        <data key="value">0</data>
+        <data key="value">1</data>
     </entity>
     <entity name="MediaGalleryConfigDataDisabled">
         <data key="path">system/media_gallery/enabled</data>
-        <data key="value">1</data>
+        <data key="value">0</data>
     </entity>
 </entities>

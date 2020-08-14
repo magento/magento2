@@ -86,7 +86,7 @@ class SaveBaseCategoryImageInformation
      */
     public function afterMoveFileFromTmp(ImageUploader $subject, string $imagePath): string
     {
-        if ($this->config->isEnabled()) {
+        if (!$this->config->isEnabled()) {
             return $imagePath;
         }
 

@@ -78,7 +78,7 @@ class SaveImageInformation
      */
     public function afterSave(Uploader $subject, array $result): array
     {
-        if ($this->config->isEnabled()) {
+        if (!$this->config->isEnabled()) {
             return $result;
         }
 
