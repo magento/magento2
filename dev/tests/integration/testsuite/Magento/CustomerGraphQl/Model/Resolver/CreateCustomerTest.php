@@ -197,7 +197,7 @@ mutation createAccount {
         }
     }
 }
-QUERY;Magento/StoreGraphQl/Plugin/LocalizeEmail.php
+QUERY;
 
         $response = $this->graphQlRequest->send(
             $query,
