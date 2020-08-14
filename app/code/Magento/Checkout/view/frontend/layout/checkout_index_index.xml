@@ -445,6 +445,7 @@
                     </argument>
                 </arguments>
             </block>
+            <referenceBlock name="authentication-popup" remove="true"/>
         </referenceContainer>
         <referenceContainer name="page.messages" remove="true"/>
     </body>
