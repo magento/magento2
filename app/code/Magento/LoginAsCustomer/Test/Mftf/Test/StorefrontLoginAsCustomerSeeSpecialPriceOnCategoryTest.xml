@@ -31,7 +31,7 @@
                 <requiredEntity createDataKey="createCategory"/>
                 <field key="price">10</field>
             </createData>
-            <createData entity="Simple_US_Customer" stepKey="createCustomer">
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createCustomer">
                 <field key="group_id">3</field>
             </createData>
             <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
