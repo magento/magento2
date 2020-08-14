@@ -114,9 +114,7 @@ class EnumLookupTest extends TestCase
             )
             ->getMock();
 
-        $this->enumDataMapperMock = $this->getMockBuilder(DataMapperInterface::class)
-            ->setConstructorArgs($this->map)
-            ->getMock();
+        $this->enumDataMapperMock = $this->getMockForAbstractClass(DataMapperInterface::class);
 
         $this->configDataMock = $this->getMockBuilder(DataInterface::class)
             ->getMock();
@@ -125,15 +123,7 @@ class EnumLookupTest extends TestCase
         $this->queryFieldsMock = $this->getMockBuilder(QueryFields::class)
             ->getMock();
 
-        $this->typeConfigMock = $this->getMockBuilder(ConfigInterface::class)
-            ->setConstructorArgs(
-                [
-                    $this->configDataMock,
-                    $this->configElementFactoryMock,
-                    $this->queryFieldsMock,
-                ]
-            )
-            ->getMock();
+        $this->typeConfigMock = $this->getMockForAbstractClass(ConfigInterface::class);
 
         $this->enumLookup = $this->objectManager->getObject(
             EnumLookup::class,
