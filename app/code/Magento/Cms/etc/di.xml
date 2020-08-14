@@ -284,6 +284,7 @@
                 <item name="img" xsi:type="string">img</item>
                 <item name="hr" xsi:type="string">hr</item>
                 <item name="figure" xsi:type="string">figure</item>
+                <item name="button" xsi:type="string">button</item>
             </argument>
             <argument name="allowedAttributes" xsi:type="array">
                 <item name="class" xsi:type="string">class</item>
@@ -301,6 +302,9 @@
                 </item>
                 <item name="img" xsi:type="array">
                     <item name="src" xsi:type="string">src</item>
+                </item>
+                <item name="button" xsi:type="array">
+                    <item name="type" xsi:type="string">type</item>
                 </item>
             </argument>
             <argument name="attributeValidators" xsi:type="array">
