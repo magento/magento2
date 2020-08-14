@@ -5,22 +5,29 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Rss\Controller\Feed;
+namespace Magento\Rss\Test\Integration\Controller\Feed;
 
-class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendController
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Model\Session;
+use Magento\Framework\Exception\AuthenticationException;
+use Magento\Rss\Model\UrlBuilder;
+use Magento\TestFramework\TestCase\AbstractBackendController;
+use Magento\Wishlist\Model\Wishlist;
+
+class IndexTest extends AbstractBackendController
 {
     /**
-     * @var \Magento\Rss\Model\UrlBuilder
+     * @var UrlBuilder
      */
     private $urlBuilder;
 
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @var CustomerRepositoryInterface
      */
     private $customerRepository;
 
     /**
-     * @var \Magento\Wishlist\Model\Wishlist
+     * @var Wishlist
      */
     private $wishlist;
 
@@ -29,15 +36,19 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      */
     private $customerSession;
 
+    /**
+     * @return void
+     * @throws AuthenticationException
+     */
     protected function setUp(): void
     {
         parent::setUp();
-        $this->urlBuilder = $this->_objectManager->get(\Magento\Rss\Model\UrlBuilder::class);
+        $this->urlBuilder = $this->_objectManager->get(UrlBuilder::class);
         $this->customerRepository = $this->_objectManager->get(
-            \Magento\Customer\Api\CustomerRepositoryInterface::class
+            CustomerRepositoryInterface::class
         );
-        $this->wishlist = $this->_objectManager->get(\Magento\Wishlist\Model\Wishlist::class);
-        $this->customerSession = $this->_objectManager->get(\Magento\Customer\Model\Session::class);
+        $this->wishlist = $this->_objectManager->get(Wishlist::class);
+        $this->customerSession = $this->_objectManager->get(Session::class);
     }
 
     /**
@@ -48,13 +59,13 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      * @magentoConfigFixture current_store rss/wishlist/active 1
      * @magentoConfigFixture current_store rss/config/active 1
      */
-    public function testRssResponse()
+    public function testRssResponse(): void
     {
         $firstCustomerId = 1;
         $this->customerSession->setCustomerId($firstCustomerId);
         $customer = $this->customerRepository->getById($firstCustomerId);
         $customerEmail = $customer->getEmail();
-        $wishlistId = $this->wishlist->loadByCustomerId($firstCustomerId)->getId();
+        $wishlistId = (int) $this->wishlist->loadByCustomerId($firstCustomerId)->getId();
         $this->dispatch($this->getLink($firstCustomerId, $customerEmail, $wishlistId));
         $body = $this->getResponse()->getBody();
         $this->assertStringContainsString('<title>John Smith\'s Wishlist</title>', $body);
@@ -68,22 +79,28 @@ class IndexTest extends \Magento\TestFramework\TestCase\AbstractBackendControlle
      * @magentoConfigFixture current_store rss/wishlist/active 1
      * @magentoConfigFixture current_store rss/config/active 1
      */
-    public function testRssResponseWithIncorrectWishlistId()
+    public function testRssResponseWithIncorrectWishlistId(): void
     {
         $firstCustomerId = 1;
         $secondCustomerId = 2;
         $this->customerSession->setCustomerId($firstCustomerId);
         $customer = $this->customerRepository->getById($firstCustomerId);
         $customerEmail = $customer->getEmail();
-        $wishlistId = $this->wishlist->loadByCustomerId($secondCustomerId, true)->getId();
+        $wishlistId = (int) $this->wishlist->loadByCustomerId($secondCustomerId, true)->getId();
         $this->dispatch($this->getLink($firstCustomerId, $customerEmail, $wishlistId));
         $body = $this->getResponse()->getBody();
         $this->assertStringContainsString('<title>404 Not Found</title>', $body);
     }
 
-    private function getLink($customerId, $customerEmail, $wishlistId)
+    /**
+     * @param int $customerId
+     * @param string $customerEmail
+     * @param int $wishlistId
+     *
+     * @return string
+     */
+    private function getLink(int $customerId, string $customerEmail, int $wishlistId): string
     {
-
         return 'rss/feed/index/type/wishlist/data/'
             . base64_encode($customerId . ',' . $customerEmail)
             . '/wishlist_id/' . $wishlistId;
