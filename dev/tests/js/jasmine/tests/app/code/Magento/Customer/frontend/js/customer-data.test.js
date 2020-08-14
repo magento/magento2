@@ -76,8 +76,14 @@ define([
                 spyOn(obj, 'reload').and.returnValue(true);
                 spyOn($, 'initNamespaceStorage').and.callFake(function (name) {
                     let ns = {
-                        localStorage: {cookie: false, _ns: name},
-                        sessionStorage: {cookie: false, _ns: name}
+                        localStorage: {
+                            cookie: false,
+                            _ns: name
+                        },
+                        sessionStorage: {
+                            cookie: false,
+                            _ns: name
+                        }
                     };
 
                     $.namespaceStorages[name] = ns;
@@ -92,7 +98,7 @@ define([
             afterEach(function () {
                 obj.reload = originalReload;
                 $.initNameSpaceStorage = originalInitNamespaceStorage;
-                $.namespaceStorages={};
+                $.namespaceStorages = {};
             });
 
             it('Should be defined', function () {
