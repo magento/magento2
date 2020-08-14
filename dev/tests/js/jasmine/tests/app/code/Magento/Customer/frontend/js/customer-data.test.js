@@ -16,7 +16,6 @@ define([
         sectionConfig,
         originalGetJSON,
         originalReload,
-        originalInitNamespaceStorage,
         originalEach,
         obj;
 
@@ -72,24 +71,12 @@ define([
 
             beforeEach(function () {
                 originalReload = obj.reload;
-                originalInitNamespaceStorage = $.initNamespaceStorage;
                 spyOn(obj, 'reload').and.returnValue(true);
-                spyOn($, 'initNamespaceStorage').and.callFake(function (name) {
-                    var ns = {
-                        localStorage: {
-                            cookie: false,
-                            _ns: name
-                        },
-                        sessionStorage: {
-                            cookie: false,
-                            _ns: name
-                        }
-                    };
 
-                    $.namespaceStorages[name] = ns;
+                //Init storage api library
+                $.initNamespaceStorage('mage-cache-storage').localStorage;
+                $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
 
-                    return ns;
-                });
                 spyOn(dataProvider, 'getFromStorage');
                 spyOn(storage, 'keys').and.returnValue(['section']);
                 spyOn(storageInvalidation, 'keys').and.returnValue(['section']);
@@ -97,7 +84,6 @@ define([
 
             afterEach(function () {
                 obj.reload = originalReload;
-                $.initNameSpaceStorage = originalInitNamespaceStorage;
                 $.namespaceStorages = {};
             });
 
