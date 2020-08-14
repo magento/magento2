@@ -216,6 +216,7 @@ class SessionManager implements SessionManagerInterface
                 $this->_addHost();
                 \Magento\Framework\Profiler::stop('session_start');
             }
+            // phpstan:ignore
             $this->storage->init(isset($_SESSION) ? $_SESSION : []);
         }
         return $this;
@@ -553,7 +554,7 @@ class SessionManager implements SessionManagerInterface
         } else {
             session_start();
         }
-
+        // phpstan:ignore
         $this->storage->init(isset($_SESSION) ? $_SESSION : []);
 
         if ($this->sessionConfig->getUseCookies()) {

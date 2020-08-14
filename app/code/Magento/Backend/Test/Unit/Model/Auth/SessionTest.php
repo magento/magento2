@@ -259,7 +259,9 @@ class SessionTest extends TestCase
             $this->storage->expects($this->once())->method('getUser')->willReturn($userMock);
         }
         if ($isAclDefined && $isUserDefined) {
+            // phpstan:ignore "Undefined variable"
             $userMock->expects($this->any())->method('getAclRole')->willReturn($userAclRole);
+            // phpstan:ignore "Undefined variable"
             $aclMock->expects($this->once())->method('isAllowed')->with($userAclRole)->willReturn($isAllowed);
         }
 
