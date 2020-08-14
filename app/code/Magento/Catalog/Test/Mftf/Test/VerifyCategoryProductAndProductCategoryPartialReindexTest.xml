@@ -8,16 +8,19 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="VerifyCategoryProductAndProductCategoryPartialReindexTest">
+    <test name="VerifyCategoryProductAndProductCategoryPartialReindexTest" deprecated="Use StorefrontVerifyCategoryProductAndProductCategoryPartialReindexTest instead.">
         <annotations>
             <features value="Catalog"/>
             <stories value="Product Categories Indexer"/>
-            <title value="Verify Category Product and Product Category partial reindex"/>
+            <title value="DEPRECATED. Verify Category Product and Product Category partial reindex"/>
             <description value="Verify that Merchant Developer can use console commands to perform partial reindex for Category Products, Product Categories, and Catalog Search"/>
             <severity value="BLOCKER"/>
             <testCaseId value="MC-11386"/>
             <group value="catalog"/>
             <group value="indexer"/>
+            <skip>
+                <issueId value="DEPRECATED">Use StorefrontVerifyCategoryProductAndProductCategoryPartialReindexTest instead.</issueId>
+            </skip>
         </annotations>
         <before>
             <!-- Change "Category Products" and "Product Categories" indexers to "Update by Schedule" mode -->
