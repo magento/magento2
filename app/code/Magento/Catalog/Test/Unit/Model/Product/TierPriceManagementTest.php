@@ -203,7 +203,9 @@ class TierPriceManagementTest extends TestCase
             ->method('getValue')
             ->with('catalog/price/scope', ScopeInterface::SCOPE_WEBSITE)
             ->willReturn(0);
-        $this->priceModifierMock->expects($this->once())->method('removeTierPrice')->with($this->productMock, 4, 5, 0);
+        $this->priceModifierMock->expects($this->once())
+            ->method('removeTierPrice')
+            ->with($this->productMock, 4, 5, 0);
 
         $this->assertTrue($this->service->remove('product_sku', 4, 5, 0));
     }
