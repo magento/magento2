@@ -142,6 +142,7 @@ class TierPriceManagementTest extends TestCase
             ->method('getValue')
             ->with('catalog/price/scope', ScopeInterface::SCOPE_WEBSITE)
             ->willReturn($configValue);
+        $priceMock = null;
         if ($expected) {
             $priceMock = $this->getMockForAbstractClass(ProductTierPriceInterface::class);
             $priceMock->expects($this->once())
