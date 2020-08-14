@@ -50,10 +50,6 @@ class StateTest extends TestCase
         $this->orderMock->expects($this->any())
             ->method('getConfig')
             ->willReturnSelf();
-        $this->addressMock = $this->createMock(Address::class);
-        $this->addressCollectionMock = $this->createMock(
-            Collection::class
-        );
         $this->state = new State();
     }
 
@@ -111,6 +107,9 @@ class StateTest extends TestCase
     }
 
     /**
+     * Data provider for testCheck
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      * @return array
      */
     public function stateCheckDataProvider()
