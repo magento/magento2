@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentSynchronization\Model;
 
+use Magento\Framework\Exception\LocalizedException;
+use Magento\MediaContentSynchronizationApi\Api\SynchronizeIdentitiesInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizeInterface;
 
 /**
@@ -20,18 +22,33 @@ class Consume
     private $synchronize;
 
     /**
-     * @param SynchronizeInterface $synchronize
+     * @var SynchronizeIdentitiesInterface
      */
-    public function __construct(SynchronizeInterface $synchronize)
-    {
+    private $synchronizeIdentities;
+
+    /**
+     * @param SynchronizeInterface $synchronize
+     * @param SynchronizeIdentitiesInterface $synchronizeIdentities
+     */
+    public function __construct(
+        SynchronizeInterface $synchronize,
+        SynchronizeIdentitiesInterface $synchronizeIdentities
+    ) {
         $this->synchronize = $synchronize;
+        $this->synchronizeIdentities = $synchronizeIdentities;
     }
 
     /**
      * Run media files synchronization.
+     * @param string[] $message
+     * @throws LocalizedException
      */
-    public function execute() : void
+    public function execute(array $message) : void
     {
         $this->synchronize->execute();
+
+        if (!empty($message)) {
+            $this->synchronizeIdentities->execute($message);
+        }
     }
 }
