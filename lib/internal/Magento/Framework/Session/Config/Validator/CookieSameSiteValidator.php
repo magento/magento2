@@ -16,9 +16,9 @@ class CookieSameSiteValidator extends \Magento\Framework\Validator\AbstractValid
      * Constant for validating same site allowed values
      */
     private const SAME_SITE_ALLOWED_VALUES = [
-        'strict' => 'Strict',
-        'lax' => 'Lax',
-        'none' => 'None',
+        'strict',
+        'lax',
+        'none'
     ];
 
     /**
@@ -26,9 +26,6 @@ class CookieSameSiteValidator extends \Magento\Framework\Validator\AbstractValid
      */
     public function isValid($value)
     {
-        if (!array_key_exists(strtolower($value), self::SAME_SITE_ALLOWED_VALUES)) {
-            return false;
-        }
-        return true;
+        return in_array(strtolower($value), self::SAME_SITE_ALLOWED_VALUES);
     }
 }
