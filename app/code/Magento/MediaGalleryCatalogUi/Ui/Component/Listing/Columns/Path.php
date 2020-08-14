@@ -6,6 +6,8 @@
 namespace Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Columns;
 
 use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Model\Category;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\Ui\Component\Listing\Columns\Column;
@@ -63,13 +65,15 @@ class Path extends Column
      * Replace category path ids with category names
      *
      * @param string $pathWithIds
+     * @return string
+     * @throws NoSuchEntityException
      */
     private function getCategoryPathWithNames(string $pathWithIds): string
     {
         $categoryPathWithName = '';
         $categoryIds = explode('/', $pathWithIds);
         foreach ($categoryIds as $id) {
-            if ($id == 1) {
+            if ($id == Category::TREE_ROOT_ID) {
                 continue;
             }
             $categoryName = $this->categoryRepository->get($id)->getName();
