@@ -46,7 +46,7 @@ class XmlCatalogGenerateCommandTest extends TestCase
             ->with(
                 $this->equalTo(['urn:magento:framework:Module/etc/module.xsd' => $fixtureXmlFile]),
                 $this->equalTo('test')
-            )->willReturn(null);
+            );
 
         $formats = ['phpstorm' => $phpstormFormatMock];
         $readFactory = $this->createMock(ReadFactory::class);
