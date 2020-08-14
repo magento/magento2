@@ -75,7 +75,7 @@ define([
                 originalInitNamespaceStorage = $.initNamespaceStorage;
                 spyOn(obj, 'reload').and.returnValue(true);
                 spyOn($, 'initNamespaceStorage').and.callFake(function (name) {
-                    let ns = {
+                    var ns = {
                         localStorage: {
                             cookie: false,
                             _ns: name
