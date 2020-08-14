@@ -44,25 +44,25 @@ class GetDetailsByAssetId
     private $getAssetKeywords;
 
     /**
-     * @var AssetDetailsProviderPool
+     * @var GetAssetDetails
      */
-    private $detailsProviderPool;
+    private $getAssetDetails;
 
     /**
-     * @param AssetDetailsProviderPool $detailsProviderPool
+     * @param GetAssetDetails $getAssetDetails
      * @param GetAssetsByIdsInterface $getAssetById
      * @param StoreManagerInterface $storeManager
      * @param SourceIconProvider $sourceIconProvider
      * @param GetAssetsKeywordsInterface $getAssetKeywords
      */
     public function __construct(
-        AssetDetailsProviderPool $detailsProviderPool,
+        GetAssetDetails $getAssetDetails,
         GetAssetsByIdsInterface $getAssetById,
         StoreManagerInterface $storeManager,
         SourceIconProvider $sourceIconProvider,
         GetAssetsKeywordsInterface $getAssetKeywords
     ) {
-        $this->detailsProviderPool = $detailsProviderPool;
+        $this->getAssetDetails = $getAssetDetails;
         $this->getAssetsById = $getAssetById;
         $this->storeManager = $storeManager;
         $this->sourceIconProvider = $sourceIconProvider;
@@ -89,7 +89,7 @@ class GetDetailsByAssetId
                 'path' => $asset->getPath(),
                 'description' => $asset->getDescription(),
                 'id' => $asset->getId(),
-                'details' => $this->detailsProviderPool->execute($asset),
+                'details' => $this->getAssetDetails->execute($asset),
                 'size' => $asset->getSize(),
                 'tags' => $this->getKeywords($asset),
                 'source' => $asset->getSource() ?
