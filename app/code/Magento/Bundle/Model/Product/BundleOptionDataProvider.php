@@ -10,10 +10,9 @@ namespace Magento\Bundle\Model\Product;
 use Magento\Bundle\Helper\Catalog\Product\Configuration;
 use Magento\Bundle\Model\Option;
 use Magento\Catalog\Model\Product;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Framework\Pricing\Helper\Data;
 use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Wishlist\Model\Item;
 
 /**
  * Data provider for bundled product options
@@ -51,13 +50,13 @@ class BundleOptionDataProvider
     }
 
     /**
-     * Extract data for a bundled wishlist item
+     * Extract data for a bundled item
      *
-     * @param Item $item
+     * @param ItemInterface $item
      *
      * @return array
      */
-    public function getData(Item $item): array
+    public function getData(ItemInterface $item): array
     {
         $options = [];
         $product = $item->getProduct();
@@ -89,11 +88,11 @@ class BundleOptionDataProvider
      * Build bundle product options based on current selection
      *
      * @param Option[] $bundleOptions
-     * @param Item $item
+     * @param ItemInterface $item
      *
      * @return array
      */
-    private function buildBundleOptions(array $bundleOptions, Item $item): array
+    private function buildBundleOptions(array $bundleOptions, ItemInterface $item): array
     {
         $options = [];
         foreach ($bundleOptions as $bundleOption) {
@@ -116,13 +115,11 @@ class BundleOptionDataProvider
      * Build bundle product option values based on current selection
      *
      * @param Product[] $selections
-     * @param Item $item
+     * @param ItemInterface $item
      *
      * @return array
-     *
-     * @throws LocalizedException
      */
-    private function buildBundleOptionValues(array $selections, Item $item): array
+    private function buildBundleOptionValues(array $selections, ItemInterface $item): array
     {
         $product = $item->getProduct();
         $values = [];
