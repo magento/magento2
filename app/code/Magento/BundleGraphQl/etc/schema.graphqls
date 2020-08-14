@@ -117,3 +117,7 @@ type ItemSelectedBundleOptionValue @doc(description: "A list of values for the s
     quantity: Float! @doc(description: "Indicates how many of this bundle product were ordered")
     price: Money! @doc(description: "The price of the child bundle product")
 }
+
+type BundleWishlistItem implements WishlistItemInterface {
+    bundle_options: [SelectedBundleOption!] @doc(description: "An array containing information about the selected bundled items") @resolver(class: "\\Magento\\BundleGraphQl\\Model\\Wishlist\\BundleOptions")
+}

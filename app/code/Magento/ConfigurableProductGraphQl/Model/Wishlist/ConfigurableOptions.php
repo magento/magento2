@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\WishlistGraphQl\Model\Resolver\Type\Configurable;
+namespace Magento\ConfigurableProductGraphQl\Model\Wishlist;
 
 use Magento\Catalog\Helper\Product\Configuration;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Wishlist\Model\Item;
 
 /**
  * Fetches the selected configurable options
@@ -43,17 +43,17 @@ class ConfigurableOptions implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!$value['itemModel'] instanceof Item) {
+        if (!$value['itemModel'] instanceof ItemInterface) {
             throw new LocalizedException(__('"itemModel" should be a "%instance" instance', [
-                'instance' => Item::class
+                'instance' => ItemInterface::class
             ]));
         }
 
-        /** @var Item $wishlistItem */
-        $wishlistItem = $value['itemModel'];
+        /** @var ItemInterface $item */
+        $item = $value['itemModel'];
         $result = [];
 
-        foreach ($this->configurationHelper->getOptions($wishlistItem) as $option) {
+        foreach ($this->configurationHelper->getOptions($item) as $option) {
             $result[] = [
                 'id' => $option['option_id'],
                 'option_label' => $option['label'],

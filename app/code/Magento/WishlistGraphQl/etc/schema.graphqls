@@ -24,7 +24,7 @@ type WishlistOutput @doc(description: "Deprecated: `Wishlist` type should be use
 
 type Wishlist {
     id: ID @doc(description: "Wishlist unique identifier")
-    items: [WishlistItem] @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItemsResolver") @doc(description: "Use field `items_v2` from type `Wishlist` instead")
+    items: [WishlistItem] @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItemsResolver") @deprecated(description: "Use field `items_v2` from type `Wishlist` instead")
     items_v2: [WishlistItemInterface] @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItems") @doc(description: "An array of items in the customer's wishlist")
     items_count: Int @doc(description: "The number of items in the wish list")
     sharing_code: String @doc(description: "An encrypted code that Magento uses to link to the wish list")
@@ -38,26 +38,6 @@ interface WishlistItemInterface @typeResolver(class: "Magento\\WishlistGraphQl\\
     added_at: String
     product: ProductInterface @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\ProductResolver")
     customizable_options: [SelectedCustomizableOption]
-}
-
-type SimpleWishlistItem implements WishlistItemInterface @doc(description: "Simple Wishlist Item") {
-}
-
-type VirtualWishlistItem implements WishlistItemInterface @doc(description: "Virtual Wishlist Item") {
-}
-
-type ConfigurableWishlistItem implements WishlistItemInterface {
-    child_sku: String! @doc(description: "SKU of the simple product corresponding to a set of selected configurable options.") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\Type\\Configurable\\ChildSku")
-    configurable_options: [SelectedConfigurableOption!] @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\Type\\Configurable\\ConfigurableOptions")
-}
-
-type DownloadableWishlistItem implements WishlistItemInterface @doc(description: "Downloadable Wishlist Item") {
-    links_v2: [DownloadableProductLinks] @doc(description: "An array containing information about the selected links") @resolver(class: "\\Magento\\DownloadableGraphQl\\Model\\Wishlist\\ItemLinks")
-    samples: [DownloadableProductSamples] @doc(description: "DownloadableProductSamples defines characteristics of a downloadable product") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\Samples")
-}
-
-type BundleWishlistItem implements WishlistItemInterface {
-    bundle_options: [SelectedBundleOption!] @doc(description: "An array containing information about the selected bundled items") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\Type\\Bundle\\BundleOptions")
 }
 
 type WishlistItem {

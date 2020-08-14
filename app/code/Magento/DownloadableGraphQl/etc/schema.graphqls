@@ -64,3 +64,8 @@ type DownloadableProductSamples @doc(description: "DownloadableProductSamples de
     sample_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
     sample_file: String @deprecated(reason: "`sample_url` serves to get the downloadable sample")
 }
+
+type DownloadableWishlistItem implements WishlistItemInterface @doc(description: "Downloadable Wishlist Item") {
+    links_v2: [DownloadableProductLinks] @doc(description: "An array containing information about the selected links") @resolver(class: "\\Magento\\DownloadableGraphQl\\Model\\Wishlist\\ItemLinks")
+    samples: [DownloadableProductSamples] @doc(description: "DownloadableProductSamples defines characteristics of a downloadable product") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\Samples")
+}

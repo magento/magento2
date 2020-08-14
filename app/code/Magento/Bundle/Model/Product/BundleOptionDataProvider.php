@@ -5,11 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Wishlist\Model\Product;
+namespace Magento\Bundle\Model\Product;
 
 use Magento\Bundle\Helper\Catalog\Product\Configuration;
 use Magento\Bundle\Model\Option;
-use Magento\Bundle\Model\Product\Type;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\Helper\Data;

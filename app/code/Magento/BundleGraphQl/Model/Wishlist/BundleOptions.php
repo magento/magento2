@@ -5,14 +5,14 @@
  */
 declare(strict_types=1);
 
-namespace Magento\WishlistGraphQl\Model\Resolver\Type\Bundle;
+namespace Magento\BundleGraphQl\Model\Wishlist;
 
-use Magento\Wishlist\Model\Product\BundleOptionDataProvider;
+use Magento\Bundle\Model\Product\BundleOptionDataProvider;
+use Magento\Catalog\Model\Product\Configuration\Item\ItemInterface;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Wishlist\Model\Item;
 
 /**
  * Fetches the selected bundle options
@@ -43,9 +43,9 @@ class BundleOptions implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!$value['itemModel'] instanceof Item) {
+        if (!$value['itemModel'] instanceof ItemInterface) {
             throw new LocalizedException(__('"itemModel" should be a "%instance" instance', [
-                'instance' => Item::class
+                'instance' => ItemInterface::class
             ]));
         }
 

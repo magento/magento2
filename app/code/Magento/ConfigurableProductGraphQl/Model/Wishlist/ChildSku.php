@@ -5,13 +5,13 @@
  */
 declare(strict_types=1);
 
-namespace Magento\WishlistGraphQl\Model\Resolver\Type\Configurable;
+namespace Magento\ConfigurableProductGraphQl\Model\Wishlist;
 
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Wishlist\Model\Item;
 
 /**
  * Fetches the simple child sku of configurable product
@@ -28,15 +28,15 @@ class ChildSku implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        if (!$value['itemModel'] instanceof Item) {
+        if (!$value['model'] instanceof Product) {
             throw new LocalizedException(__('"itemModel" should be a "%instance" instance', [
-                'instance' => Item::class
+                'instance' => Product::class
             ]));
         }
 
-        /** @var Item $wishlistItem */
-        $wishlistItem = $value['itemModel'];
-        $optionProduct = $wishlistItem->getProduct()->getCustomOption('simple_product')->getProduct();
+        /** @var Product $product */
+        $product = $value['model'];
+        $optionProduct = $product->getCustomOption('simple_product')->getProduct();
 
         return $optionProduct->getSku();
     }
