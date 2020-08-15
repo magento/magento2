@@ -17,6 +17,11 @@ class ProductSearchAggregationsTest extends GraphQlAbstract
      */
     public function testAggregationBooleanAttribute()
     {
+        $this->markTestSkipped(
+            'MC-22184: Elasticsearch returns incorrect aggregation options for booleans'
+            . 'MC-36768: Custom attribute not appears in elasticsearch'
+        );
+
         $skus= '"search_product_1", "search_product_2", "search_product_3", "search_product_4" ,"search_product_5"';
         $query = <<<QUERY
 {
