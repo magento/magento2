@@ -24,7 +24,7 @@ class CategoryLink extends AbstractExtensibleModel implements CategoryLinkInterf
      */
     public function getPosition()
     {
-        return $this->_get(self::KEY_POSITION);
+        return $this->getData(self::KEY_POSITION);
     }
 
     /**
@@ -32,10 +32,12 @@ class CategoryLink extends AbstractExtensibleModel implements CategoryLinkInterf
      */
     public function getCategoryId()
     {
-        return $this->_get(self::KEY_CATEGORY_ID);
+        return $this->getData(self::KEY_CATEGORY_ID);
     }
 
     /**
+     * {@inheritDoc}
+     *
      * @param int $position
      * @return $this
      */
@@ -56,7 +58,7 @@ class CategoryLink extends AbstractExtensibleModel implements CategoryLinkInterf
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @return \Magento\Catalog\Api\Data\CategoryLinkExtensionInterface|null
      */
@@ -66,7 +68,7 @@ class CategoryLink extends AbstractExtensibleModel implements CategoryLinkInterf
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      *
      * @param \Magento\Catalog\Api\Data\CategoryLinkExtensionInterface $extensionAttributes
      * @return $this
