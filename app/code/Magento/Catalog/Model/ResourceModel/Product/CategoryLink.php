@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\ResourceModel\Product;
 
 use Magento\Catalog\Api\Data\CategoryInterface;
 use Magento\Catalog\Api\Data\CategoryLinkInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Product CategoryLink resource model
@@ -16,7 +19,7 @@ use Magento\Framework\App\ResourceConnection;
 class CategoryLink
 {
     /**
-     * @var \Magento\Framework\EntityManager\MetadataPool
+     * @var MetadataPool
      */
     private $metadataPool;
 
@@ -31,13 +34,16 @@ class CategoryLink
     private $categoryLinkMetadata;
 
     /**
-     * CategoryLink constructor.
-     *
-     * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
+     * @var array
+     */
+    private $productLinks = [];
+
+    /**
+     * @param MetadataPool $metadataPool
      * @param ResourceConnection $resourceConnection
      */
     public function __construct(
-        \Magento\Framework\EntityManager\MetadataPool $metadataPool,
+        MetadataPool $metadataPool,
         ResourceConnection $resourceConnection
     ) {
         $this->metadataPool = $metadataPool;
@@ -50,22 +56,29 @@ class CategoryLink
      * @param ProductInterface $product
      * @param array $categoryIds
      * @return array
+     *
+     * @TODO This still can be improved with caching single categories and request only non-cached ones
      */
     public function getCategoryLinks(ProductInterface $product, array $categoryIds = [])
     {
-        $connection = $this->resourceConnection->getConnection();
+        $productId = (int)$product->getId();
+        $cacheKey = $this->getCategoryLinksCacheKey($categoryIds, $productId);
 
-        $select = $connection->select();
-        $select->from($this->getCategoryLinkMetadata()->getEntityTable(), ['category_id', 'position']);
-        $select->where('product_id = ?', (int)$product->getId());
+        if (!isset($this->productLinks[$cacheKey])) {
+            $connection = $this->resourceConnection->getConnection();
 
-        if (!empty($categoryIds)) {
-            $select->where('category_id IN(?)', $categoryIds);
+            $select = $connection->select();
+            $select->from($this->getCategoryLinkMetadata()->getEntityTable(), ['category_id', 'position']);
+            $select->where('product_id = ?', $productId);
+
+            if (!empty($categoryIds)) {
+                $select->where('category_id IN(?)', $categoryIds);
+            }
+
+            $this->productLinks[$cacheKey] = $connection->fetchAll($select);
         }
 
-        $result = $connection->fetchAll($select);
-
-        return $result;
+        return $this->productLinks[$cacheKey];
     }
 
     /**
@@ -251,5 +264,23 @@ class CategoryLink
         $insert = array_merge_recursive($insert, $deleteUpdate['updated']);
 
         return [$delete, $insert, $insertUpdate['updated']];
+    }
+
+    /**
+     * Returns cache key based on product ID and category IDs
+     *
+     * Category IDs were filtered out and sorted to avoid fetching the same data from Database,
+     * when the list of categories is provided in different order.
+     *
+     * @param array $categoryIds
+     * @param int $productId
+     * @return string
+     */
+    private function getCategoryLinksCacheKey(array $categoryIds, int $productId): string
+    {
+        $categoryIds = array_filter(array_map('intval', $categoryIds));
+        sort($categoryIds);
+
+        return sprintf('%d|%s', $productId, implode(',', $categoryIds));
     }
 }
