@@ -8,7 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\HTTP\Test\Unit\Client;
 
-use Magento\Framework\HTTP\Client\CurlMock;
+use Magento\Framework\HTTP\Test\Unit\Client\Mock\CurlMock;
 use PHPUnit\Framework\TestCase;
 
 /**
