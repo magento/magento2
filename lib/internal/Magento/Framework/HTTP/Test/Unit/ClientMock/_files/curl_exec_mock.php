@@ -7,7 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Framework\HTTP\Client;
 
-use Magento\Framework\HTTP\Test\Unit\Client\CurlMockTest;
+use Magento\Framework\HTTP\Test\Unit\ClientMock\CurlMockTest;
 
 /**
  * Override global PHP function

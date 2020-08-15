@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\Framework\HTTP\Test\Unit\Client\Mock;
+namespace Magento\Framework\HTTP\Test\Unit\ClientMock\Mock;
 
 use Magento\Framework\HTTP\Client\Curl;
 

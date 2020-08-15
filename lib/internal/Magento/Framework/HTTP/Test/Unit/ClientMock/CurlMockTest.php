@@ -6,9 +6,9 @@
 
 declare(strict_types=1);
 
-namespace Magento\Framework\HTTP\Test\Unit\Client;
+namespace Magento\Framework\HTTP\Test\Unit\ClientMock;
 
-use Magento\Framework\HTTP\Test\Unit\Client\Mock\CurlMock;
+use Magento\Framework\HTTP\Test\Unit\ClientMock\Mock\CurlMock;
 use PHPUnit\Framework\TestCase;
 
 /**
