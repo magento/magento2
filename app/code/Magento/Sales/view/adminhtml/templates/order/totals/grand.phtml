@@ -3,19 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <?php $_source  = $block->getSource() ?>
 <?php $block->setPriceDataObject($_source) ?>
 
-<tr>
+<tr id="grand-totals">
     <td class="label">
-        <strong style="font-size: larger">
-        <?php if ($block->getGrandTotalTitle()) : ?>
+        <strong>
+        <?php if ($block->getGrandTotalTitle()): ?>
             <?= $block->escapeHtml($block->getGrandTotalTitle()) ?>
-        <?php else : ?>
+        <?php else: ?>
             <?= $block->escapeHtml(__('Grand Total')) ?>
         <?php endif; ?>
         </strong>
     </td>
-    <td class="emph" style="font-size: larger"><?= /* @noEscape */ $block->displayPriceAttribute('grand_total', true) ?></td>
+    <td class="emph"><?= /* @noEscape */ $block->displayPriceAttribute('grand_total', true) ?></td>
 </tr>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+    "font-size: larger",
+    'tr#grand-totals td.label strong'
+) ?>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+    "font-size: larger",
+    'tr#grand-totals td.emph'
+) ?>

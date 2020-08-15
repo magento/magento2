@@ -8,6 +8,8 @@ declare(strict_types=1);
 namespace Magento\Cms\Controller\Page;
 
 use Magento\Cms\Helper\Page as PageHelper;
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\RequestInterface;
@@ -17,7 +19,7 @@ use Magento\Framework\Controller\ResultInterface;
 /**
  * Custom page for storefront. Needs to be accessible by POST because of the store switching.
  */
-class View implements HttpGetActionInterface, HttpPostActionInterface
+class View extends Action implements HttpGetActionInterface, HttpPostActionInterface
 {
     /**
      * @var ForwardFactory
@@ -35,15 +37,18 @@ class View implements HttpGetActionInterface, HttpPostActionInterface
     private $pageHelper;
 
     /**
+     * @param Context $context
      * @param RequestInterface $request
      * @param PageHelper $pageHelper
      * @param ForwardFactory $resultForwardFactory
      */
     public function __construct(
+        Context $context,
         RequestInterface $request,
         PageHelper $pageHelper,
         ForwardFactory $resultForwardFactory
     ) {
+        parent::__construct($context);
         $this->request = $request;
         $this->pageHelper = $pageHelper;
         $this->resultForwardFactory = $resultForwardFactory;
