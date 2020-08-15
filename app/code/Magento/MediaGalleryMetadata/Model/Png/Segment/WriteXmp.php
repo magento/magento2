@@ -97,7 +97,7 @@ class WriteXmp implements WriteMetadataInterface
     }
 
     /**
-     * Insert XMP segment to image png segments (at position 1)
+     * Insert XMP segment to image png segments before IEND chunk
      *
      * @param SegmentInterface[] $segments
      * @param SegmentInterface $xmpSegment
@@ -105,7 +105,12 @@ class WriteXmp implements WriteMetadataInterface
      */
     private function insertPngXmpSegment(array $segments, SegmentInterface $xmpSegment): array
     {
-        return array_merge(array_slice($segments, 0, 2), [$xmpSegment], array_slice($segments, 2));
+        $iendSegmentIndex = count($segments) - 1;
+        return array_merge(
+            array_slice($segments, 0, $iendSegmentIndex),
+            [$xmpSegment],
+            array_slice($segments, $iendSegmentIndex)
+        );
     }
 
     /**
