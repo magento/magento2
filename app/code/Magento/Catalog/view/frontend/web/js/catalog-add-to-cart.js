@@ -154,6 +154,7 @@ define([
 
                     if (res.messages) {
                         $(self.options.messagesSelector).html(res.messages);
+                        $("html, body").animate({ scrollTop: 0 }, 500);
                     }
 
                     if (res.minicart) {
