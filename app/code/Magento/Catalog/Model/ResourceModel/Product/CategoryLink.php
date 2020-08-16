@@ -194,6 +194,8 @@ class CategoryLink
             }
         }
 
+        $this->cleanCategoryLinksCache();
+
         return array_column($insertLinks, 'category_id');
     }
 
@@ -215,6 +217,8 @@ class CategoryLink
             'product_id = ?' => (int)$product->getId(),
             'category_id IN(?)' => array_column($deleteLinks, 'category_id')
         ]);
+
+        $this->cleanCategoryLinksCache();
 
         return array_column($deleteLinks, 'category_id');
     }
@@ -282,5 +286,20 @@ class CategoryLink
         sort($categoryIds);
 
         return sprintf('%d|%s', $productId, implode(',', $categoryIds));
+    }
+
+    /**
+     * Removes ObjectCache for Category Links
+     *
+     * @return void
+     */
+    private function cleanCategoryLinksCache(?string $cacheKey = null): void
+    {
+        if ($cacheKey) {
+            unset($this->productLinks[$cacheKey]);
+            return;
+        }
+
+        $this->productLinks = [];
     }
 }
