@@ -51,6 +51,7 @@ define([
                 return;
             }
 
+            this.mediaGalleryEditDetails().keywordsSelect().cacheOptions.plain = [];
             modalElement.modal('closeModal');
         },
 
