@@ -137,7 +137,7 @@ class Search extends Action implements HttpGetActionInterface
             if (!empty($assets)) {
                 foreach ($assets as $asset) {
                     $responseContent['options'][] = [
-                        'value' => $asset->getId(),
+                        'value' => (string) $asset->getId(),
                         'label' => $asset->getTitle(),
                         'path' => $this->storage->getThumbnailUrl($this->images->getStorageRoot() . $asset->getPath())
                     ];
