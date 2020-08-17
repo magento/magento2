@@ -25,6 +25,15 @@ class GraphQlQueryTest extends GraphQlAbstract
         item_id
         name
     }
+    testUnion {
+      __typename
+      ... on TypeCustom1 {
+          custom_name1
+      }
+      ... on TypeCustom2 {
+          custom_name2
+      }
+    }
 }
 QUERY;
 
@@ -99,5 +108,43 @@ QUERY;
         $response = $this->graphQlQuery($query, $variables, '', []);
 
         $this->assertArrayHasKey('testItem', $response);
+    }
+
+    public function testQueryTestUnionResults()
+    {
+        $id = 1;
+
+        $query = <<<QUERY
+{
+    testItem(id: {$id})
+    {
+        item_id
+        name
+    }
+    testUnion {
+      __typename
+      ... on TypeCustom1 {
+          custom_name1
+      }
+      ... on TypeCustom2 {
+          custom_name2
+      }
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayHasKey('testItem', $response);
+        $testItem = $response['testItem'];
+        $this->assertArrayHasKey('item_id', $testItem);
+        $this->assertArrayHasKey('name', $testItem);
+        $this->assertEquals(1, $testItem['item_id']);
+        $this->assertEquals('itemName', $testItem['name']);
+
+        $this->assertArrayHasKey('testUnion', $response);
+        $testUnion = $response['testUnion'];
+        $this->assertArrayHasKey('custom_name1', $testUnion);
+        $this->assertEquals('custom_name1_value', $testUnion['custom_name1']);
+        $this->assertArrayNotHasKey('custom_name2', $testUnion);
     }
 }
