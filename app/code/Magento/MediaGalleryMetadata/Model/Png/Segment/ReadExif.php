@@ -75,7 +75,6 @@ class ReadExif implements ReadMetadataInterface
         if ($data) {
             $title = isset($data['DocumentName']) ? $data['DocumentName'] : null;
             $description = isset($data['ImageDescription']) ? $data['ImageDescription'] : null;
-            $keywords = '';
         }
 
         return $this->metadataFactory->create([

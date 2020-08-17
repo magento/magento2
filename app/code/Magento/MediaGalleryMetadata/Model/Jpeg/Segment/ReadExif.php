@@ -70,20 +70,19 @@ class ReadExif implements ReadMetadataInterface
     {
         $title = null;
         $description = null;
-        $keywords = [];
+        $keywords = null;
 
         $data = exif_read_data($filePath);
 
-        if ($data) {
+        if (!empty($data)) {
             $title = isset($data['DocumentName']) ? $data['DocumentName'] : null;
             $description = isset($data['ImageDescription']) ? $data['ImageDescription'] : null;
-            $keywords = '';
         }
 
         return $this->metadataFactory->create([
             'title' => $title,
             'description' => $description,
-            'keywords' => !empty($keywords) ? $keywords : null
+            'keywords' => $keywords
         ]);
     }
 
@@ -97,9 +96,9 @@ class ReadExif implements ReadMetadataInterface
     {
         return $segment->getName() === self::EXIF_SEGMENT_NAME
             && strncmp(
-                substr($segment->getData(), self::EXIF_DATA_START_POSITION, 4),
+                substr($segment->getData(), self::EXIF_DATA_START_POSITION, 5),
                 self::EXIF_SEGMENT_START,
-                self::EXIF_DATA_START_POSITION
+                5
             ) == 0;
     }
 }
