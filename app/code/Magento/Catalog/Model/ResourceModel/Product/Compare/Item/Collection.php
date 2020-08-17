@@ -32,6 +32,13 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     protected $_visitorId = 0;
 
     /**
+     * List Id Filter
+     *
+     * @var int
+     */
+    protected $listId = 0;
+
+    /**
      * Comparable attributes cache
      *
      * @var array
@@ -157,6 +164,30 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     }
 
     /**
+     * Set listId filter to collection
+     *
+     * @param $listId
+     *
+     * @return $this
+     */
+    public function setListId($listId)
+    {
+        $this->listId = (int)$listId;
+        $this->_addJoinToSelect();
+        return $this;
+    }
+
+    /**
+     * Retrieve listId filter applied to collection
+     *
+     * @return int
+     */
+    public function getListId()
+    {
+        return $this->listId;
+    }
+
+    /**
      * Set visitor filter to collection
      *
      * @param int $visitorId
@@ -202,6 +233,10 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
         if ($this->getVisitorId()) {
             return ['visitor_id' => $this->getVisitorId()];
+        }
+
+        if ($this->getListId()) {
+            return ['list_id' => $this->getListId()];
         }
 
         return ['customer_id' => ['null' => true], 'visitor_id' => '0'];

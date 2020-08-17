@@ -8,7 +8,12 @@ type ComparableItem {
     priceRange: PriceRange! @doc(description: "Product prices")
     canonical_url: String @doc(description: "Product URL")
     images: [ProductImage]! @doc(description: "Product Images")
-    #    values: [ProductAttribute]! @doc(description: "Product comparable attributes")
+    values: [ProductAttribute]! @doc(description: "Product comparable attributes")
+}
+
+type ProductAttribute {
+    code: String! @doc(description:"Attribute code")
+    value: String! @doc(description:"Addibute display value")
 }
 
 type ComparableAttribute {

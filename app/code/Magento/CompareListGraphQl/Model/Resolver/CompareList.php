@@ -7,26 +7,57 @@ declare(strict_types=1);
 
 namespace Magento\CompareListGraphQl\Model\Resolver;
 
+use Magento\Catalog\Model\ResourceModel\CompareList as ResourceCompareList;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\CompareListGraphQl\Model\Service\CompareListService;
+use Magento\Catalog\Model\CompareList as ModelCompareList;
+use Magento\Catalog\Model\CompareListFactory;
+use Magento\Store\Api\Data\StoreInterface;
 
 class CompareList implements ResolverInterface
 {
     /**
+     * @var CompareListFactory
+     */
+    private $compareListFactory;
+
+    /**
+     * @var ResourceCompareList
+     */
+    private $resourceCompareList;
+
+    /**
+     * @var CompareListService
+     */
+    private $compareListService;
+
+    public function __construct(
+        CompareListFactory $compareListFactory,
+        ResourceCompareList $resourceCompareList,
+        CompareListService $compareListService
+    ) {
+        $this->compareListFactory = $compareListFactory;
+        $this->resourceCompareList = $resourceCompareList;
+        $this->compareListService = $compareListService;
+    }
+
+    /**
      * Get compare list
      *
-     * @param Field            $field
+     * @param Field $field
      * @param ContextInterface $context
-     * @param ResolveInfo      $info
-     * @param array|null       $value
-     * @param array|null       $args
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
      *
      * @return array|Value|mixed
      *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     *
      */
     public function resolve(
         Field $field,
@@ -35,7 +66,21 @@ class CompareList implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        // TODO: Implement resolve() method.
+        /** @var StoreInterface $store */
+        $store = $context->getExtensionAttributes()->getStore();
+        /** @var  $compareListModel ModelCompareList*/
+        $compareListModel = $this->compareListFactory->create();
+        $this->resourceCompareList->load($compareListModel, $args['id']);
+        $listId = (int)$compareListModel->getId();
+
+        if (!$listId) {
+            return null;
+        }
+
+        return [
+            'list_id' => $listId,
+            'items' => $this->compareListService->getComparableItems($listId, $context, $store),
+            'attributes' => $this->compareListService->getComparableAttributes($listId, $context)
+        ];
     }
 }
-
