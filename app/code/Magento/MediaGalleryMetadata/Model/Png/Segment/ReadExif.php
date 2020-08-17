@@ -39,6 +39,12 @@ class ReadExif implements ReadMetadataInterface
      */
     public function execute(FileInterface $file): MetadataInterface
     {
+        if (!is_callable('exif_read_data')) {
+            throw new LocalizedException(
+                __('exif_read_data() must be enabled in php configuration')
+            );
+        }
+
         foreach ($file->getSegments() as $segment) {
             if ($this->isExifSegment($segment)) {
                 return $this->getExifData($segment);
