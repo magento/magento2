@@ -110,7 +110,7 @@ class AttributeTest extends TestCase
             ->setMethods(['validate'])
             ->getMockForAbstractClass();
         $this->removeProductAttributeDataMock = $this->getMockBuilder(RemoveProductAttributeData::class)
-            ->setMethods(['execute'])
+            ->setMethods(['removeData'])
             ->disableOriginalConstructor()
             ->getMock();
     }
@@ -132,7 +132,6 @@ class AttributeTest extends TestCase
         ];
 
         $backendTableName = 'weee_tax';
-        $backendFieldName = 'value_id';
 
         $attributeModel = $this->getMockBuilder(Attribute::class)
             ->setMethods(['getEntityAttribute', 'getConnection', 'getTable'])
@@ -189,7 +188,7 @@ class AttributeTest extends TestCase
         $backendModelMock->expects($this->any())->method('getTable')->willReturn($backendTableName);
 
         $this->removeProductAttributeDataMock->expects($this->once())
-            ->method('execute')
+            ->method('removeData')
             ->with($abstractModelMock, $result['attribute_set_id']);
 
         $attributeModel->expects($this->any())->method('getConnection')->willReturn($this->connectionMock);

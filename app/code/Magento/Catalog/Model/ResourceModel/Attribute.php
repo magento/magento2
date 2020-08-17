@@ -11,8 +11,6 @@ use Magento\Framework\App\ObjectManager;
 
 /**
  * Catalog attribute resource model
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
 {
@@ -141,7 +139,7 @@ class Attribute extends \Magento\Eav\Model\ResourceModel\Entity\Attribute
                 );
             }
 
-            $this->removeProductAttributeData->execute($object, (int)$result['attribute_set_id']);
+            $this->removeProductAttributeData->removeData($object, (int)$result['attribute_set_id']);
         }
 
         $condition = ['entity_attribute_id = ?' => $object->getEntityAttributeId()];

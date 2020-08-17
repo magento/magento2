@@ -40,7 +40,7 @@ class RemoveProductWeeData
      * @return void
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecute(
+    public function aroundRemoveData(
         RemoveProductAttributeData $subject,
         \Closure $proceed,
         AbstractModel $object,

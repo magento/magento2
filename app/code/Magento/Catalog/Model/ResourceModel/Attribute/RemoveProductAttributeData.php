@@ -46,7 +46,7 @@ class RemoveProductAttributeData
      * @param int $attributeSetId
      * @return void
      */
-    public function execute(AbstractModel $object, int $attributeSetId): void
+    public function removeData(AbstractModel $object, int $attributeSetId): void
     {
         $backendTable = $object->getBackend()->getTable();
         if ($backendTable) {
