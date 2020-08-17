@@ -46,7 +46,7 @@
         </actionGroup>
 
         <!-- Assert correctly logged in as First Customer -->
-        <actionGroup ref="AssertStorefrontLoginAsCustomerLoggedInActionGroup" stepKey="assertLoggedInFromFirstCustomerPage">
+        <actionGroup ref="StorefrontAssertLoginAsCustomerLoggedInActionGroup" stepKey="assertLoggedInFromFirstCustomerPage">
             <argument name="customerFullName" value="$$createFirstCustomer.firstname$$ $$createFirstCustomer.lastname$$"/>
             <argument name="customerEmail" value="$$createFirstCustomer.email$$"/>
         </actionGroup>
@@ -58,7 +58,7 @@
         </actionGroup>
 
         <!-- Assert correctly logged in as Second Customer -->
-        <actionGroup ref="AssertStorefrontLoginAsCustomerLoggedInActionGroup" stepKey="assertLoggedInFromSecondCustomerPage">
+        <actionGroup ref="StorefrontAssertLoginAsCustomerLoggedInActionGroup" stepKey="assertLoggedInFromSecondCustomerPage">
             <argument name="customerFullName" value="$$createSecondCustomer.firstname$$ $$createSecondCustomer.lastname$$"/>
             <argument name="customerEmail" value="$$createSecondCustomer.email$$"/>
         </actionGroup>

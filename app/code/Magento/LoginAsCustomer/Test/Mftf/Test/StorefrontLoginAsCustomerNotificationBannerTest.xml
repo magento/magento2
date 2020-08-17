@@ -42,7 +42,7 @@
         </actionGroup>
 
         <!-- Assert Notification Banner is present on page -->
-        <actionGroup ref="AssertStorefrontLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBanner">
+        <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBanner">
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
         </actionGroup>
 

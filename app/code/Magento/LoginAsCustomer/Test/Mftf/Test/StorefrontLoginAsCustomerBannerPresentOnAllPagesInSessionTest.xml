@@ -48,20 +48,20 @@
         <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup" stepKey="loginAsCustomerFromCustomerPage">
             <argument name="customerId" value="$$createCustomer.id$$"/>
         </actionGroup>
-        <actionGroup ref="AssertStorefrontLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBanner">
+        <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBanner">
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
         </actionGroup>
 
         <!-- Go to Wishlist and assert notification banner -->
         <amOnPage url="{{StorefrontCustomerWishlistPage.url}}" stepKey="amOnWishListPage"/>
         <waitForPageLoad stepKey="waitForWishlistPageLoad"/>
-        <actionGroup ref="AssertStorefrontLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerOnWishList">
+        <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerOnWishList">
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
         </actionGroup>
 
         <!-- Go to category page and assert notification banner -->
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="navigateToCategoryPage"/>
-        <actionGroup ref="AssertStorefrontLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerOnCategoryPage">
+        <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerOnCategoryPage">
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
         </actionGroup>
 
@@ -69,7 +69,7 @@
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">
             <argument name="productUrlKey" value="$$createSimpleProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
-        <actionGroup ref="AssertStorefrontLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerOnProductPage">
+        <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerOnProductPage">
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
         </actionGroup>
 
@@ -79,14 +79,14 @@
             <argument name="productCount" value="1"/>
         </actionGroup>
         <actionGroup ref="StorefrontOpenCartFromMinicartActionGroup" stepKey="openCartPage"/>
-        <actionGroup ref="AssertStorefrontLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerOnCartPage">
+        <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerOnCartPage">
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
         </actionGroup>
 
         <!-- Proceed to checkout and assert notification banner -->
         <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
         <waitForPageLoad stepKey="waitForProceedToCheckout"/>
-        <actionGroup ref="AssertStorefrontLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerOnCheckoutPage">
+        <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerOnCheckoutPage">
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
         </actionGroup>
 
@@ -95,7 +95,7 @@
         <waitForElementVisible selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
         <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterClickNext"/>
-        <actionGroup ref="AssertStorefrontLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerBeforePlaceOrder">
+        <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerBeforePlaceOrder">
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
         </actionGroup>
 
@@ -105,7 +105,7 @@
             <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
             <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
         </actionGroup>
-        <actionGroup ref="AssertStorefrontLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerAfterPlaceOrder">
+        <actionGroup ref="StorefrontAssertLoginAsCustomerNotificationBannerActionGroup" stepKey="assertNotificationBannerAfterPlaceOrder">
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
         </actionGroup>
     </test>

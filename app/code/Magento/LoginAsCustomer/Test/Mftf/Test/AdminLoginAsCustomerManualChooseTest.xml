@@ -53,11 +53,11 @@
         </actionGroup>
 
         <!-- Assert Customer logged on on custom store view -->
-        <actionGroup ref="AssertStorefrontLoginAsCustomerLoggedInActionGroup" stepKey="assertLoggedInFromCustomerGird">
+        <actionGroup ref="StorefrontAssertLoginAsCustomerLoggedInActionGroup" stepKey="assertLoggedInFromCustomerGird">
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
             <argument name="customerEmail" value="$$createCustomer.email$$"/>
         </actionGroup>
-        <actionGroup ref="AssertStorefrontCustomerOnStoreViewActionGroup" stepKey="assertCustomStoreView">
+        <actionGroup ref="StorefrontAssertCustomerOnStoreViewActionGroup" stepKey="assertCustomStoreView">
             <argument name="storeViewName" value="{{customStore.name}}"/>
         </actionGroup>
 

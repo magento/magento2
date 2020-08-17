@@ -84,22 +84,22 @@
         <actionGroup ref="AdminOpenLoginAsCustomerLogActionGroup" stepKey="gotoLoginAsCustomerLog"/>
 
         <!-- Perform assertions -->
-        <actionGroup ref="AssertAdminLoginAsCustomerLogRecordActionGroup" stepKey="verifyDefaultAdminFirstCustomerLogRecord">
+        <actionGroup ref="AdminAssertLoginAsCustomerLogRecordActionGroup" stepKey="verifyDefaultAdminFirstCustomerLogRecord">
             <argument name="rowNumber" value="4"/>
             <argument name="adminId" value="1"/>
             <argument name="customerId" value="$$createFirstCustomer.id$$"/>
         </actionGroup>
-        <actionGroup ref="AssertAdminLoginAsCustomerLogRecordActionGroup" stepKey="verifyDefaultAdminSecondCustomerLogRecord">
+        <actionGroup ref="AdminAssertLoginAsCustomerLogRecordActionGroup" stepKey="verifyDefaultAdminSecondCustomerLogRecord">
             <argument name="rowNumber" value="3"/>
             <argument name="adminId" value="1"/>
             <argument name="customerId" value="$$createSecondCustomer.id$$"/>
         </actionGroup>
-        <actionGroup ref="AssertAdminLoginAsCustomerLogRecordActionGroup" stepKey="verifyNewAdminFirstCustomerLogRecord">
+        <actionGroup ref="AdminAssertLoginAsCustomerLogRecordActionGroup" stepKey="verifyNewAdminFirstCustomerLogRecord">
             <argument name="rowNumber" value="2"/>
             <argument name="adminId" value="$$createNewAdmin.id$$"/>
             <argument name="customerId" value="$$createFirstCustomer.id$$"/>
         </actionGroup>
-        <actionGroup ref="AssertAdminLoginAsCustomerLogRecordActionGroup" stepKey="verifyNewAdminSecondCustomerLogRecord">
+        <actionGroup ref="AdminAssertLoginAsCustomerLogRecordActionGroup" stepKey="verifyNewAdminSecondCustomerLogRecord">
             <argument name="rowNumber" value="1"/>
             <argument name="adminId" value="$$createNewAdmin.id$$"/>
             <argument name="customerId" value="$$createSecondCustomer.id$$"/>

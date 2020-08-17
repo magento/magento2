@@ -48,7 +48,7 @@
             <argument name="customerId" value="$$createCustomer.id$$"/>
         </actionGroup>
 
-        <actionGroup ref="AssertStorefrontLoginAsCustomerLoggedInActionGroup" stepKey="assertLoggedInFromCustomerPage">
+        <actionGroup ref="StorefrontAssertLoginAsCustomerLoggedInActionGroup" stepKey="assertLoggedInFromCustomerPage">
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
             <argument name="customerEmail" value="$$createCustomer.email$$"/>
         </actionGroup>
@@ -70,7 +70,7 @@
             <argument name="orderId" value="$grabOrderId"/>
         </actionGroup>
 
-        <actionGroup ref="AssertStorefrontLoginAsCustomerLoggedInActionGroup" stepKey="assertLoggedInFromOrderPage">
+        <actionGroup ref="StorefrontAssertLoginAsCustomerLoggedInActionGroup" stepKey="assertLoggedInFromOrderPage">
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
             <argument name="customerEmail" value="$$createCustomer.email$$"/>
         </actionGroup>
