@@ -18,10 +18,12 @@ define([
         onVisibilityChange: function (isOpened) {
             this._super(isOpened);
 
-            // Once the Custom Options tab is opened change "affect_product_custom_options" value to true
+            // Once the Custom Options tab is opened change "affect_product_custom_options" value to 1
             // in order custom options be processed on backend.
             if (this.opened()) {
-                uiRegistry.get('product_form.product_form.custom_options.affect_product_custom_options').value(1);
+                uiRegistry.get('product_form.product_form.custom_options.affect_product_custom_options', function(component) {
+                    component.value(1);
+                });
             }
         }
     });
