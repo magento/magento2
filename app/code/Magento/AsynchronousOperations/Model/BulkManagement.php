@@ -168,7 +168,7 @@ class BulkManagement implements BulkManagementInterface
                     $currentBatchSize = 0;
                 }
                 $currentBatchSize++;
-                $operationIds[] = $operation->getId();
+                $operationIds[] = $operation->getOperationKey();
             }
             // remove operations from the last batch
             if (!empty($operationIds)) {

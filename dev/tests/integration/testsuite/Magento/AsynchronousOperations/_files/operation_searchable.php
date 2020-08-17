@@ -89,6 +89,15 @@ $operations = [
         'result_message' => '',
         'operation_key' => 5
     ],
+    [
+        'bulk_uuid' => 'bulk-uuid-searchable-6-1',
+        'topic_name' => 'topic-5',
+        'serialized_data' => json_encode(['entity_id' => 5]),
+        'status' => OperationInterface::STATUS_TYPE_COMPLETE,
+        'error_code' => null,
+        'result_message' => '',
+        'operation_key' => 0
+    ],
 ];
 
 $bulkQuery = "INSERT INTO {$bulkTable} (`uuid`, `user_id`, `description`, `operation_count`, `start_time`)"

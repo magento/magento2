@@ -121,4 +121,52 @@ class OperationRepositoryInterfaceTest extends WebapiAbstract
             $this->assertEquals('bulk-uuid-searchable-6', $item['bulk_uuid']);
         }
     }
+
+    /**
+     * @magentoApiDataFixture Magento/AsynchronousOperations/_files/operation_searchable.php
+     */
+    public function testGetMultipleBulkUuids()
+    {
+        $searchCriteria = [
+            'searchCriteria' => [
+                'filter_groups' => [
+                    [
+                        'filters' => [
+                            [
+                                'field' => 'status',
+                                'value' => OperationInterface::STATUS_TYPE_COMPLETE,
+                                'condition_type' => 'eq',
+                            ],
+                        ],
+                    ],
+                ],
+                'current_page' => 1,
+            ],
+        ];
+
+        $serviceInfo = [
+            'rest' => [
+                'resourcePath' => self::RESOURCE_PATH . '?' . http_build_query($searchCriteria),
+                'httpMethod' => Request::HTTP_METHOD_GET,
+            ],
+            'soap' => [
+                'service' => self::SERVICE_NAME,
+                'operation' => self::SERVICE_NAME . 'GetList',
+            ],
+        ];
+
+        $response = $this->_webApiCall($serviceInfo, $searchCriteria);
+
+        $this->assertArrayHasKey('search_criteria', $response);
+        $this->assertArrayHasKey('total_count', $response);
+        $this->assertArrayHasKey('items', $response);
+
+        $this->assertEquals($searchCriteria['searchCriteria'], $response['search_criteria']);
+        $this->assertEquals(2, $response['total_count']);
+        $this->assertCount(2, $response['items']);
+
+        foreach ($response['items'] as $item) {
+            $this->assertEquals('0', $item['operation_key']);
+        }
+    }
 }
