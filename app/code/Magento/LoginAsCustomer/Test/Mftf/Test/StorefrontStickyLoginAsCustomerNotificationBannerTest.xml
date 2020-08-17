@@ -17,6 +17,7 @@
             <description
                 value="Verify that Sticky Notification Banner is present on page if 'Login as customer' functionality used"/>
             <testCaseId value=""/>
+            <group value="login_as_customer"/>
             <severity value="CRITICAL"/>
         </annotations>
         <before>
