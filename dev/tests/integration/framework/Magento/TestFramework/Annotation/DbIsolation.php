@@ -7,6 +7,8 @@ namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
+use PHPUnit\Framework\AssertionFailedError;
+use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Implementation of the @magentoDbIsolation DocBlock annotation
@@ -32,63 +34,73 @@ class DbIsolation
     ];
 
     /**
+     * Assert number of attribute sets
+     *
      * @param array $data
-     * @throws \Exception
+     * @return array
      */
-    private function attributeSetAssert(array $data)
+    private function attributeSetAssert(array $data): array
     {
         if (count($data) > 9) {
             return array_slice($data, 9, count($data) - 9);
         }
 
-        return false;
+        return [];
     }
 
     /**
+     * Assert that array has only 2 records
+     *
      * @param array $data
-     * @throws \Exception
+     * @return array
      */
-    private function assertTwoRecords(array $data)
+    private function assertTwoRecords(array $data): array
     {
         //2 default records
         if (count($data) > 2) {
             return array_slice($data, 2, count($data) - 2);
         }
 
-        return false;
+        return [];
     }
 
     /**
+     * Assert that EAV attributes are only 178
+     *
      * @param array $data
-     * @throws \Exception
+     * @return array
      */
-    private function eavAttributeAssert(array $data)
+    private function eavAttributeAssert(array $data): array
     {
         //178 - default number of attributes
         if (count($data) > 178) {
             return array_slice($data, 178, count($data) - 178);
         }
 
-        return false;
+        return [];
     }
 
     /**
+     * Assert array is empty
+     *
      * @param $data
      */
-    private function assertIsEmpty(array $data)
+    private function assertIsEmpty(array $data): array
     {
         if (!empty($data)) {
             return $data;
         }
 
-        return false;
+        return [];
     }
 
     /**
+     * Pull data from specific table
+     *
      * @param string $table
      * @return array
      */
-    private function pullDbState(string $table)
+    private function pullDbState(string $table): array
     {
         $resource = ObjectManager::getInstance()->get(ResourceConnection::class);
         $connection = $resource->getConnection();
@@ -96,8 +108,6 @@ class DbIsolation
             ->from($table);
         return $connection->fetchAll($select);
     }
-
-
 
     /**
      * Handler for 'startTestTransactionRequest' event
@@ -143,7 +153,7 @@ class DbIsolation
             }
 
             if (!empty($isolationProblem)) {
-                throw new \Exception("There was a problem with isolation: " . var_export($isolationProblem, true));
+                $test::fail("There was a problem with isolation: " . var_export($isolationProblem, true));
             }
         }
     }
