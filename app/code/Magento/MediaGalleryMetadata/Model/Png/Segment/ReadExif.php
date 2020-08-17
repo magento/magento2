@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryMetadata\Model\Jpeg\Segment;
+namespace Magento\MediaGalleryMetadata\Model\Png\Segment;
 
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
@@ -18,9 +18,7 @@ use Magento\MediaGalleryMetadataApi\Model\SegmentInterface;
  */
 class ReadExif implements ReadMetadataInterface
 {
-    private const EXIF_SEGMENT_NAME = 'APP1';
-    private const EXIF_SEGMENT_START = "Exif\x00";
-    private const EXIF_DATA_START_POSITION = 0;
+    private const EXIF_SEGMENT_NAME = 'eXIf';
 
     /**
      * @var MetadataInterfaceFactory
@@ -41,15 +39,9 @@ class ReadExif implements ReadMetadataInterface
      */
     public function execute(FileInterface $file): MetadataInterface
     {
-        if (!is_callable('exif_read_data')) {
-            throw new LocalizedException(
-                __('exif_read_data() must be enabled in php configuration')
-            );
-        }
-
         foreach ($file->getSegments() as $segment) {
             if ($this->isExifSegment($segment)) {
-                return $this->getExifData($file->getPath());
+                return $this->getExifData($segment);
             }
         }
 
@@ -63,15 +55,15 @@ class ReadExif implements ReadMetadataInterface
     /**
      * Parese exif data from segment
      *
-     * @param string $filePath
+     * @param FileInterface $filePath
      */
-    private function getExifData(string $filePath): MetadataInterface
+    private function getExifData(SegmentInterface $segment): MetadataInterface
     {
         $title = null;
         $description = null;
         $keywords = [];
 
-        $data = exif_read_data($filePath);
+        $data = exif_read_data('data://image/jpeg;base64,' . base64_encode($segment->getData()));
 
         if ($data) {
             $title = isset($data['DocumentName']) ? $data['DocumentName'] : null;
@@ -94,11 +86,6 @@ class ReadExif implements ReadMetadataInterface
      */
     private function isExifSegment(SegmentInterface $segment): bool
     {
-        return $segment->getName() === self::EXIF_SEGMENT_NAME
-            && strncmp(
-                substr($segment->getData(), self::EXIF_DATA_START_POSITION, 4),
-                self::EXIF_SEGMENT_START,
-                self::EXIF_DATA_START_POSITION
-            ) == 0;
+        return $segment->getName() === self::EXIF_SEGMENT_NAME;
     }
 }
