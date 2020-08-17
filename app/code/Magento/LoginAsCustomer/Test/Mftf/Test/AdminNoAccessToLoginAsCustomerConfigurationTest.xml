@@ -87,10 +87,10 @@
         </actionGroup>
 
         <!-- Assert no Login as Customer config section visible -->
-        <actionGroup ref="AdminAssertLoginAsCustomerConfigNotVisibleActionGroup" stepKey="assertConfigNotVisible"/>
+        <actionGroup ref="AssertAdminLoginAsCustomerConfigNotVisibleActionGroup" stepKey="assertConfigNotVisible"/>
 
         <!-- Assert Login as Customer config section is not available by direct url -->
-        <actionGroup ref="AdminAssertLoginAsCustomerConfigNotAvailableDirectlyActionGroup"
+        <actionGroup ref="AssertAdminLoginAsCustomerConfigNotAvailableDirectlyActionGroup"
                      stepKey="assertConfigNotAvailableDirectly"/>
     </test>
 </tests>
