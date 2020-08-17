@@ -163,6 +163,23 @@ class Operation extends DataObject implements OperationInterface
     }
 
     /**
+     * @inheritDoc
+     */
+    public function getOperationKey()
+    {
+        return $this->getData(self::OPERATION_KEY);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function setOperationKey(int $operationKey)
+    {
+        $this->setData(self::OPERATION_KEY, $operationKey);
+        return $this;
+    }
+
+    /**
      * Retrieve existing extension attributes object.
      *
      * @return \Magento\AsynchronousOperations\Api\Data\OperationExtensionInterface|null
