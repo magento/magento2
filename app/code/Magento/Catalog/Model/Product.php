@@ -881,8 +881,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         $this->setTypeHasOptions(false);
         $this->setTypeHasRequiredOptions(false);
-        $this->setHasOptions(false);
-        $this->setRequiredOptions(false);
 
         $this->getTypeInstance()->beforeSave($this);
 
