@@ -261,6 +261,9 @@ define([
                 }
             });
 
+            //remove expired section names of previously installed/enable modules
+            expiredSectionNames = _.intersection(expiredSectionNames, sectionConfig.getSectionNames());
+
             return _.uniq(expiredSectionNames);
         },
 
