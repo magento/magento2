@@ -283,4 +283,28 @@ class Option extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 
         return $this->_optionData;
     }
+
+    /**
+     * Get option id by rating id and value
+     *
+     * @param int $ratingId
+     * @param int $value
+     * @return int
+     */
+    public function getOptionIdByRatingIdAndValue($ratingId, $value)
+    {
+        $select = $this->getConnection()->select()->from(
+            $this->getMainTable(),
+            ['option_id']
+        )->where(
+            'rating_id = :rating_id'
+        )->where(
+            'value = :value'
+        );
+        $binds = [
+            ':rating_id' => $ratingId,
+            ':value' => $value
+        ];
+        return (int)$this->getConnection()->fetchOne($select, $binds);
+    }
 }

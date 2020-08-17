@@ -3,76 +3,75 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-declare(strict_types=1);
 
 namespace Magento\Review\Test\Unit\Model;
 
 use Magento\Catalog\Model\Product;
-use Magento\Framework\DataObject;
-use Magento\Framework\Model\Context;
-use Magento\Framework\Registry;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\UrlInterface;
-use Magento\Review\Model\ResourceModel\Review\Product\Collection;
-use Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory;
 use Magento\Review\Model\Review;
-use Magento\Review\Model\Review\Summary;
-use Magento\Review\Model\Review\SummaryFactory;
-use Magento\Store\Model\Store;
-use Magento\Store\Model\StoreManagerInterface;
-use PHPUnit\Framework\MockObject\MockObject;
-use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ReviewTest extends TestCase
+class ReviewTest extends \PHPUnit\Framework\TestCase
 {
-    /** @var Review */
+    /** @var \Magento\Review\Model\Review */
     protected $review;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var Context|MockObject */
+    /** @var \Magento\Framework\Model\Context|\PHPUnit_Framework_MockObject_MockObject */
     protected $contextMock;
 
-    /** @var Registry|MockObject */
+    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
     protected $registryMock;
 
-    /** @var MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $productFactoryMock;
 
-    /** @var MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $statusFactoryMock;
 
-    /** @var MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $reviewSummaryMock;
 
-    /** @var MockObject */
+    /** @var \PHPUnit_Framework_MockObject_MockObject */
     protected $summaryModMock;
 
-    /** @var Summary|MockObject */
+    /** @var \Magento\Review\Model\Review\Summary|\PHPUnit_Framework_MockObject_MockObject */
     protected $summaryMock;
 
-    /** @var StoreManagerInterface|MockObject */
+    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $storeManagerMock;
 
-    /** @var UrlInterface|MockObject */
+    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
     protected $urlInterfaceMock;
 
-    /** @var \Magento\Review\Model\ResourceModel\Review|MockObject */
+    /** @var \Magento\Review\Model\ResourceModel\Review|\PHPUnit_Framework_MockObject_MockObject */
     protected $resource;
 
-    /** @var int */
+    /** @var \Magento\Framework\Api\AttributeValueFactory|\PHPUnit_Framework_MockObject_MockObject */
+    protected $extensionFactoryMock;
+
+    /** @var \Magento\Framework\Api\ExtensionAttributesFactory|\PHPUnit_Framework_MockObject_MockObject */
+    private $customAttributeFactoryMock;
+
+    /** @var \Magento\ReviewApi\Model\AggregatorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $reviewAggregatorMock;
+
+    /** @var \Magento\ReviewApi\Model\ReviewValidatorInterface|\PHPUnit_Framework_MockObject_MockObject */
+    private $reviewValidatorMock;
+
+    /** @var int  */
     protected $reviewId = 8;
 
-    protected function setUp(): void
+    protected function setUp()
     {
-        $this->contextMock = $this->createMock(Context::class);
-        $this->registryMock = $this->createMock(Registry::class);
+        $this->contextMock = $this->createMock(\Magento\Framework\Model\Context::class);
+        $this->registryMock = $this->createMock(\Magento\Framework\Registry::class);
         $this->productFactoryMock = $this->createPartialMock(
-            CollectionFactory::class,
+            \Magento\Review\Model\ResourceModel\Review\Product\CollectionFactory::class,
             ['create']
         );
         $this->statusFactoryMock = $this->createPartialMock(
@@ -83,17 +82,25 @@ class ReviewTest extends TestCase
             \Magento\Review\Model\ResourceModel\Review\Summary\CollectionFactory::class
         );
         $this->summaryModMock = $this->createPartialMock(
-            SummaryFactory::class,
+            \Magento\Review\Model\Review\SummaryFactory::class,
             ['create']
         );
-        $this->summaryMock = $this->createMock(Summary::class);
-        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
-        $this->urlInterfaceMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->summaryMock = $this->createMock(\Magento\Review\Model\Review\Summary::class);
+        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->urlInterfaceMock = $this->createMock(\Magento\Framework\UrlInterface::class);
         $this->resource = $this->createMock(\Magento\Review\Model\ResourceModel\Review::class);
+        $this->extensionFactoryMock = $this->createMock(
+            \Magento\Framework\Api\ExtensionAttributesFactory::class
+        );
+        $this->customAttributeFactoryMock = $this->createMock(
+            \Magento\Framework\Api\AttributeValueFactory::class
+        );
+        $this->reviewAggregatorMock = $this->createMock(\Magento\ReviewApi\Model\AggregatorInterface::class);
+        $this->reviewValidatorMock = $this->createMock(\Magento\ReviewApi\Model\ReviewValidatorInterface::class);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->review = $this->objectManagerHelper->getObject(
-            Review::class,
+            \Magento\Review\Model\Review::class,
             [
                 'context' => $this->contextMock,
                 'registry' => $this->registryMock,
@@ -105,17 +112,21 @@ class ReviewTest extends TestCase
                 'storeManager' => $this->storeManagerMock,
                 'urlModel' => $this->urlInterfaceMock,
                 'resource' => $this->resource,
-                'data' => ['review_id' => $this->reviewId, 'status_id' => 1, 'stores' => [2, 3, 4]]
+                'data' => ['review_id' => $this->reviewId, 'status_id' => 1, 'stores' => [2, 3, 4]],
+                'extensionFactory' => $this->extensionFactoryMock,
+                'customAttributeFactory' => $this->customAttributeFactoryMock,
+                'reviewAggregator' => $this->reviewAggregatorMock,
+                'reviewValidator' => $this->reviewValidatorMock
             ]
         );
     }
 
     public function testGetProductCollection()
     {
-        $collection = $this->createMock(Collection::class);
+        $collection = $this->createMock(\Magento\Review\Model\ResourceModel\Review\Product\Collection::class);
         $this->productFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($collection);
+            ->will($this->returnValue($collection));
         $this->assertSame($collection, $this->review->getProductCollection());
     }
 
@@ -124,7 +135,7 @@ class ReviewTest extends TestCase
         $collection = $this->createMock(\Magento\Review\Model\ResourceModel\Review\Status\Collection::class);
         $this->statusFactoryMock->expects($this->once())
             ->method('create')
-            ->willReturn($collection);
+            ->will($this->returnValue($collection));
         $this->assertSame($collection, $this->review->getStatusCollection());
     }
 
@@ -135,49 +146,46 @@ class ReviewTest extends TestCase
         $storeId = 0;
         $result = 5;
         $this->resource->expects($this->once())->method('getTotalReviews')
-            ->with($primaryKey, $approvedOnly, $storeId)
-            ->willReturn($result);
+            ->with($this->equalTo($primaryKey), $this->equalTo($approvedOnly), $this->equalTo($storeId))
+            ->will($this->returnValue($result));
         $this->assertSame($result, $this->review->getTotalReviews($primaryKey, $approvedOnly, $storeId));
     }
 
     public function testAggregate()
     {
-        $this->resource->expects($this->once())->method('aggregate')
-            ->with($this->review)
-            ->willReturn($this->review);
+        $this->reviewAggregatorMock->expects($this->once())->method('aggregate')
+            ->with($this->equalTo($this->review))
+            ->will($this->returnValue($this->review));
         $this->assertSame($this->review, $this->review->aggregate());
     }
 
-    /**
-     * @deprecated
-     */
     public function testGetEntitySummary()
     {
         $productId = 6;
         $storeId = 4;
         $testSummaryData = ['test' => 'value'];
-        $summary = new DataObject();
+        $summary = new \Magento\Framework\DataObject();
         $summary->setData($testSummaryData);
 
-        $product = $this->getMockBuilder(Product::class)
-            ->addMethods(['setRatingSummary'])
-            ->onlyMethods(['getId', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
-        $product->expects($this->once())->method('getId')->willReturn($productId);
-        $product->expects($this->once())->method('setRatingSummary')->with($summary)->willReturnSelf();
+        $product = $this->createPartialMock(
+            \Magento\Catalog\Model\Product::class,
+            ['getId', 'setRatingSummary', '__wakeup']
+        );
+        $product->expects($this->once())->method('getId')->will($this->returnValue($productId));
+        $product->expects($this->once())->method('setRatingSummary')->with($summary)->will($this->returnSelf());
 
-        $summaryData = $this->getMockBuilder(Summary::class)
-            ->addMethods(['setStoreId'])
-            ->onlyMethods(['load', 'getData', '__wakeup'])
-            ->disableOriginalConstructor()
-            ->getMock();
+        $summaryData = $this->createPartialMock(
+            \Magento\Review\Model\Review\Summary::class,
+            ['load', 'getData', 'setStoreId', '__wakeup']
+        );
         $summaryData->expects($this->once())->method('setStoreId')
-            ->with($storeId)->willReturnSelf();
+            ->with($this->equalTo($storeId))
+            ->will($this->returnSelf());
         $summaryData->expects($this->once())->method('load')
-            ->with($productId)->willReturnSelf();
-        $summaryData->expects($this->once())->method('getData')->willReturn($testSummaryData);
-        $this->summaryModMock->expects($this->once())->method('create')->willReturn($summaryData);
+            ->with($this->equalTo($productId))
+            ->will($this->returnSelf());
+        $summaryData->expects($this->once())->method('getData')->will($this->returnValue($testSummaryData));
+        $this->summaryModMock->expects($this->once())->method('create')->will($this->returnValue($summaryData));
         $this->assertNull($this->review->getEntitySummary($product, $storeId));
     }
 
@@ -190,8 +198,8 @@ class ReviewTest extends TestCase
     {
         $result = 'http://some.url';
         $this->urlInterfaceMock->expects($this->once())->method('getUrl')
-            ->with('review/product/view', ['id' => $this->reviewId])
-            ->willReturn($result);
+            ->with($this->equalTo('review/product/view'), $this->equalTo(['id' => $this->reviewId]))
+            ->will($this->returnValue($result));
         $this->assertSame($result, $this->review->getReviewUrl());
     }
 
@@ -205,12 +213,13 @@ class ReviewTest extends TestCase
     {
         if ($storeId) {
             $this->urlInterfaceMock->expects($this->once())->method('setScope')
-                ->with($storeId)->willReturnSelf();
+                ->with($this->equalTo($storeId))
+                ->will($this->returnSelf());
         }
 
         $this->urlInterfaceMock->expects($this->once())->method('getUrl')
-            ->with('catalog/product/view', ['id' => $productId])
-            ->willReturn($result);
+            ->with($this->equalTo('catalog/product/view'), $this->equalTo(['id' => $productId]))
+            ->will($this->returnValue($result));
         $this->assertSame($result, $this->review->getProductUrl($productId, $storeId));
     }
 
@@ -237,13 +246,13 @@ class ReviewTest extends TestCase
      */
     public function testIsAvailableOnStore($storeId, $result)
     {
-        $store = $this->createMock(Store::class);
+        $store = $this->createMock(\Magento\Store\Model\Store::class);
         if ($storeId) {
-            $store->expects($this->once())->method('getId')->willReturn($storeId);
+            $store->expects($this->once())->method('getId')->will($this->returnValue($storeId));
             $this->storeManagerMock->expects($this->once())
                 ->method('getStore')
-                ->with($store)
-                ->willReturn($store);
+                ->with($this->equalTo($store))
+                ->will($this->returnValue($store));
         }
         $this->assertSame($result, $this->review->isAvailableOnStore($store));
     }
@@ -265,8 +274,8 @@ class ReviewTest extends TestCase
         $entityCode = 'test';
         $result = 22;
         $this->resource->expects($this->once())->method('getEntityIdByCode')
-            ->with($entityCode)
-            ->willReturn($result);
+            ->with($this->equalTo($entityCode))
+            ->will($this->returnValue($result));
         $this->assertSame($result, $this->review->getEntityIdByCode($entityCode));
     }
 

@@ -3,71 +3,90 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Review\Model;
 
+use Magento\Framework\Api\AttributeValueFactory;
+use Magento\Framework\Api\ExtensionAttributesFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\Collection\AbstractDb;
 use Magento\Framework\DataObject\IdentityInterface;
+use Magento\Framework\Model\AbstractExtensibleModel;
+use Magento\Framework\Model\Context;
+use Magento\Framework\Model\ResourceModel\AbstractResource;
+use Magento\Framework\Registry;
+use Magento\Review\Model\Rating\OptionFactory as RatingOptionFactory;
+use Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory as RatingOptionCollectionFactory;
+use Magento\ReviewApi\Api\Data\RatingInterface;
 
 /**
  * Rating model
- *
- * @api
- * @method array getRatingCodes()
- * @method \Magento\Review\Model\Rating setRatingCodes(array $value)
- * @method array getStores()
- * @method \Magento\Review\Model\Rating setStores(array $value)
- * @method string getRatingCode()
- *
- * @author      Magento Core Team <core@magentocommerce.com>
- * @since 100.0.2
  */
-class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityInterface
+class Rating extends AbstractExtensibleModel implements IdentityInterface, RatingInterface
 {
     /**
      * rating entity codes
      */
     const ENTITY_PRODUCT_CODE = 'product';
-
     const ENTITY_PRODUCT_REVIEW_CODE = 'product_review';
-
     const ENTITY_REVIEW_CODE = 'review';
 
     /**
-     * @var \Magento\Review\Model\Rating\OptionFactory
+     * @var RatingOptionFactory
      */
     protected $_ratingOptionFactory;
 
     /**
-     * @var \Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory
+     * @var RatingOptionCollectionFactory
      */
     protected $_ratingCollectionF;
 
     /**
-     * @param \Magento\Framework\Model\Context $context
-     * @param \Magento\Framework\Registry $registry
-     * @param \Magento\Review\Model\Rating\OptionFactory $ratingOptionFactory
-     * @param \Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory $ratingCollectionF
-     * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
-     * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
+     * Rating constructor
+     *
+     * @param Context $context
+     * @param Registry $registry
+     * @param RatingOptionFactory $ratingOptionFactory
+     * @param RatingOptionCollectionFactory $ratingOptionCollectionFactory
+     * @param AbstractResource $resource
+     * @param AbstractDb $resourceCollection
      * @param array $data
+     * @param ExtensionAttributesFactory|null $extensionFactory
+     * @param AttributeValueFactory|null $customAttributeFactory
      */
     public function __construct(
-        \Magento\Framework\Model\Context $context,
-        \Magento\Framework\Registry $registry,
-        \Magento\Review\Model\Rating\OptionFactory $ratingOptionFactory,
-        \Magento\Review\Model\ResourceModel\Rating\Option\CollectionFactory $ratingCollectionF,
-        \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
-        \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        Context $context,
+        Registry $registry,
+        RatingOptionFactory $ratingOptionFactory,
+        RatingOptionCollectionFactory $ratingOptionCollectionFactory,
+        AbstractResource $resource = null,
+        AbstractDb $resourceCollection = null,
+        array $data = [],
+        ExtensionAttributesFactory $extensionFactory = null,
+        AttributeValueFactory $customAttributeFactory = null
     ) {
         $this->_ratingOptionFactory = $ratingOptionFactory;
-        $this->_ratingCollectionF = $ratingCollectionF;
-        parent::__construct($context, $registry, $resource, $resourceCollection, $data);
+        $this->_ratingCollectionF = $ratingOptionCollectionFactory;
+
+        $extensionFactory = $extensionFactory
+            ?: ObjectManager::getInstance()->get(ExtensionAttributesFactory::class);
+        $customAttributeFactory = $customAttributeFactory
+            ?: ObjectManager::getInstance()->get(AttributeValueFactory::class);
+
+        parent::__construct(
+            $context,
+            $registry,
+            $extensionFactory,
+            $customAttributeFactory,
+            $resource,
+            $resourceCollection,
+            $data
+        );
     }
 
     /**
-     * Define resource model
-     *
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
@@ -75,6 +94,198 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
     }
 
     /**
+     * @inheritdoc
+     */
+    public function getRatingId(): ?int
+    {
+        return (int)$this->_getData(self::RATING_ID);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setRatingId(?int $ratingId): RatingInterface
+    {
+        $this->setData(self::RATING_ID, $ratingId);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRatingEntityId(): int
+    {
+        return (int)$this->_getData(self::RATING_ENTITY_ID);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setRatingEntityId(int $entityId): RatingInterface
+    {
+        $this->setData(self::RATING_ENTITY_ID, $entityId);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRatingName(): string
+    {
+        return $this->_getData(self::RATING_NAME);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setRatingName(string $ratingName): RatingInterface
+    {
+        $this->setData(self::RATING_NAME, $ratingName);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getRatingNames(): ?array
+    {
+        return $this->_getData(self::RATING_NAMES);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setRatingNames(?array $ratingNames): RatingInterface
+    {
+        $this->setData(self::RATING_NAMES, $ratingNames);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getPosition(): int
+    {
+        return (int)$this->_getData(self::POSITION);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setPosition(int $position): RatingInterface
+    {
+        $this->setData(self::POSITION, $position);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isActive(): bool
+    {
+        return (bool)$this->_getData(self::IS_ACTIVE);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setIsActive($isActive): RatingInterface
+    {
+        $this->setData(self::IS_ACTIVE, $isActive);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getStoreId(): ?int
+    {
+        return $this->_getData(self::STORE_ID) ? (int)$this->_getData(self::STORE_ID) : null;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setStoreId($storeId): RatingInterface
+    {
+        $this->setData(self::STORE_ID, $storeId);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getStores(): array
+    {
+        return $this->_getData(self::STORES) ?: [];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setStores(array $stores): RatingInterface
+    {
+        $this->setData(self::STORES, $stores);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getOptions()
+    {
+        $options = $this->getData(self::RATING_OPTIONS);
+        if ($options) {
+            return $options;
+        } elseif ($this->getId()) {
+            return $this->_ratingCollectionF->create()->addRatingFilter(
+                $this->getId()
+            )->setPositionOrder()->load()->getItems();
+        }
+        return [];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setOptions(array $options)
+    {
+        $this->setData(self::RATING_OPTIONS, $options);
+        return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getExtensionAttributes(): \Magento\ReviewApi\Api\Data\RatingExtensionInterface
+    {
+        $extensionAttributes = $this->_getExtensionAttributes();
+        if (!$extensionAttributes) {
+            return $this->extensionAttributesFactory->create(RatingInterface::class);
+        }
+        return $extensionAttributes;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function setExtensionAttributes(
+        \Magento\ReviewApi\Api\Data\RatingExtensionInterface $extensionAttributes
+    ): RatingInterface {
+        return $this->_setExtensionAttributes($extensionAttributes);
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getIdentities()
+    {
+        return [Review::CACHE_TAG];
+    }
+
+    /**
+     * Add option vote
+     *
      * @param int $optionId
      * @param int $entityPkValue
      * @return $this
@@ -94,6 +305,8 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
     }
 
     /**
+     * Update option vote
+     *
      * @param int $optionId
      * @return $this
      */
@@ -112,29 +325,12 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
     }
 
     /**
-     * retrieve rating options
-     *
-     * @return array
-     */
-    public function getOptions()
-    {
-        $options = $this->getData('options');
-        if ($options) {
-            return $options;
-        } elseif ($this->getId()) {
-            return $this->_ratingCollectionF->create()->addRatingFilter(
-                $this->getId()
-            )->setPositionOrder()->load()->getItems();
-        }
-        return [];
-    }
-
-    /**
      * Get rating collection object
      *
      * @param int $entityPkValue
      * @param bool $onlyForCurrentStore
-     * @return \Magento\Framework\Data\Collection\AbstractDb
+     * @return AbstractDb
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getEntitySummary($entityPkValue, $onlyForCurrentStore = true)
     {
@@ -143,9 +339,12 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
     }
 
     /**
+     * Get review summary
+     *
      * @param int $reviewId
      * @param bool $onlyForCurrentStore
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function getReviewSummary($reviewId, $onlyForCurrentStore = true)
     {
@@ -162,16 +361,5 @@ class Rating extends \Magento\Framework\Model\AbstractModel implements IdentityI
     public function getEntityIdByCode($entityCode)
     {
         return $this->getResource()->getEntityIdByCode($entityCode);
-    }
-
-    /**
-     * Return unique ID(s) for each object in system
-     *
-     * @return array
-     */
-    public function getIdentities()
-    {
-        // clear cache for all reviews
-        return [Review::CACHE_TAG];
     }
 }

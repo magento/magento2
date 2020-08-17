@@ -16,6 +16,11 @@ namespace Magento\Review\Model\ResourceModel\Rating;
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
+     * @var string
+     */
+    protected $_idFieldName = 'rating_id';
+
+    /**
      * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $_storeManager;
@@ -330,5 +335,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         $this->getSelect()->where('main_table.is_active=?', $isActive);
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _toOptionHash($valueField = null, $labelField = 'rating_code')
+    {
+        return parent::_toOptionHash($valueField, $labelField);
     }
 }

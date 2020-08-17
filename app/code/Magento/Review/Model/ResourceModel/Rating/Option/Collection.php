@@ -13,6 +13,11 @@ namespace Magento\Review\Model\ResourceModel\Rating\Option;
 class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
 {
     /**
+     * @var string
+     */
+    protected $_idFieldName = 'option_id';
+
+    /**
      * Rating votes table
      *
      * @var string
@@ -59,5 +64,13 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     {
         $this->setOrder('main_table.position', $dir);
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function _toOptionHash($valueField = null, $labelField = 'value')
+    {
+        return parent::_toOptionHash($valueField, $labelField);
     }
 }
