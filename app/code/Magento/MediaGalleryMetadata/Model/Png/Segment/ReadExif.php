@@ -61,7 +61,7 @@ class ReadExif implements ReadMetadataInterface
     /**
      * Parese exif data from segment
      *
-     * @param FileInterface $filePath
+     * @param SegmentInterface $segment
      */
     private function getExifData(SegmentInterface $segment): MetadataInterface
     {
