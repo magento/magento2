@@ -10,7 +10,7 @@ namespace Magento\GraphQl\TestModule;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 /**
- * Class GraphQlQueryTest
+ * Test for basic GraphQl features
  */
 class GraphQlQueryTest extends GraphQlAbstract
 {
@@ -24,15 +24,6 @@ class GraphQlQueryTest extends GraphQlAbstract
     {
         item_id
         name
-    }
-    testUnion {
-      __typename
-      ... on TypeCustom1 {
-          custom_name1
-      }
-      ... on TypeCustom2 {
-          custom_name2
-      }
     }
 }
 QUERY;

@@ -24,5 +24,4 @@ class UnionTypeResolver implements TypeResolverInterface
         }
         return '';
     }
-
 }
