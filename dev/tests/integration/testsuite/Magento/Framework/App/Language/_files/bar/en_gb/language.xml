@@ -10,5 +10,5 @@
     <vendor>bar</vendor>
     <package>en_gb</package>
     <sort_order>100</sort_order>
-    <use package="en_us" vendor="bar"/>
+    <use package="en_az" vendor="bar"/>
 </language>

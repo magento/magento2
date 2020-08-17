@@ -105,7 +105,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      * Initialize fixture namespaces.
      * //phpcs:disable
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         //phpcs:enable
         parent::setUpBeforeClass();
@@ -118,7 +118,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      * @return void
      * //phpcs:disable
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         //phpcs:enable
         //clear garbage in memory
@@ -142,7 +142,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $fixtureNamespace = self::_getFixtureNamespace();
         if (isset(self::$_methodLevelFixtures[$fixtureNamespace])
@@ -258,10 +258,10 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
      *
      * @param \Magento\Framework\Model\AbstractModel $model
      * @param bool $secure
-     * @return \Magento\TestFramework\TestCase\WebapiAbstract
+     * @return void
      * //phpcs:disable
      */
-    public static function callModelDelete($model, $secure = false)
+    public static function callModelDelete($model, $secure = false) : void
     {
         //phpcs:enable
         if ($model instanceof \Magento\Framework\Model\AbstractModel && $model->getId()) {
@@ -592,7 +592,11 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
         $expectedWrappedErrors = [],
         $traceString = null
     ) {
-        $this->assertContains($expectedMessage, $soapFault->getMessage(), "Fault message is invalid.");
+        $this->assertStringContainsString(
+            $expectedMessage,
+            $soapFault->getMessage(),
+            "Fault message is invalid."
+        );
 
         $errorDetailsNode = 'GenericFault';
         $errorDetails = isset($soapFault->detail->$errorDetailsNode) ? $soapFault->detail->$errorDetailsNode : null;
@@ -611,7 +615,7 @@ abstract class WebapiAbstract extends \PHPUnit\Framework\TestCase
                 ->getMode();
             if ($mode == \Magento\Framework\App\State::MODE_DEVELOPER) {
                 /** Developer mode changes tested behavior and it cannot properly be tested for now */
-                $this->assertContains(
+                $this->assertStringContainsString(
                     $traceString,
                     $errorDetails->$traceNode,
                     'Trace Information is incorrect.'

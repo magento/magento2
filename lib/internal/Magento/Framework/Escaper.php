@@ -10,6 +10,7 @@ namespace Magento\Framework;
  * Magento escape methods
  *
  * @api
+ * @since 100.0.2
  */
 class Escaper
 {
@@ -29,6 +30,11 @@ class Escaper
     private $logger;
 
     /**
+     * @var \Magento\Framework\Translate\InlineInterface
+     */
+    private $translateInline;
+
+    /**
      * @var string[]
      */
     private $notAllowedTags = ['script', 'img', 'embed', 'iframe', 'video', 'source', 'object', 'audio'];
@@ -36,7 +42,12 @@ class Escaper
     /**
      * @var string[]
      */
-    private $allowedAttributes = ['id', 'class', 'href', 'target', 'title', 'style'];
+    private $allowedAttributes = ['id', 'class', 'href', 'title', 'style'];
+
+    /**
+     * @var array
+     */
+    private $notAllowedAttributes = ['a' => ['style']];
 
     /**
      * @var string
@@ -80,7 +91,7 @@ class Escaper
                 set_error_handler(
                     function ($errorNumber, $errorString) {
                         // phpcs:ignore Magento2.Exceptions.DirectThrow
-                        throw new \Exception($errorString, $errorNumber);
+                        throw new \InvalidArgumentException($errorString, $errorNumber);
                     }
                 );
                 $data = $this->prepareUnescapedCharacters($data);
@@ -95,6 +106,7 @@ class Escaper
                 }
                 restore_error_handler();
 
+                $this->removeComments($domDocument);
                 $this->removeNotAllowedTags($domDocument, $allowedTags);
                 $this->removeNotAllowedAttributes($domDocument);
                 $this->escapeText($domDocument);
@@ -141,7 +153,7 @@ class Escaper
             . '\']'
         );
         foreach ($nodes as $node) {
-            if ($node->nodeName != '#text' && $node->nodeName != '#comment') {
+            if ($node->nodeName != '#text') {
                 $node->parentNode->replaceChild($domDocument->createTextNode($node->textContent), $node);
             }
         }
@@ -161,6 +173,31 @@ class Escaper
         );
         foreach ($nodes as $node) {
             $node->parentNode->removeAttribute($node->nodeName);
+        }
+
+        foreach ($this->notAllowedAttributes as $tag => $attributes) {
+            $nodes = $xpath->query(
+                '//@*[name() =\'' . implode('\' or name() = \'', $attributes) . '\']'
+                . '[parent::node()[name() = \'' . $tag . '\']]'
+            );
+            foreach ($nodes as $node) {
+                $node->parentNode->removeAttribute($node->nodeName);
+            }
+        }
+    }
+
+    /**
+     * Remove comments
+     *
+     * @param \DOMDocument $domDocument
+     * @return void
+     */
+    private function removeComments(\DOMDocument $domDocument)
+    {
+        $xpath = new \DOMXPath($domDocument);
+        $nodes = $xpath->query('//comment()');
+        foreach ($nodes as $node) {
+            $node->parentNode->removeChild($node);
         }
     }
 
@@ -216,7 +253,7 @@ class Escaper
      * @param string $string
      * @param boolean $escapeSingleQuote
      * @return string
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function escapeHtmlAttr($string, $escapeSingleQuote = true)
     {
@@ -242,7 +279,7 @@ class Escaper
      *
      * @param string $string
      * @return string
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function encodeUrlParam($string)
     {
@@ -254,7 +291,7 @@ class Escaper
      *
      * @param string $string
      * @return string
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function escapeJs($string)
     {
@@ -281,7 +318,7 @@ class Escaper
      *
      * @param string $string
      * @return string
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function escapeCss($string)
     {
@@ -289,12 +326,12 @@ class Escaper
     }
 
     /**
-     * Escape quotes in java script
+     * Escape single quotes/apostrophes ('), or other specified $quote character in javascript
      *
-     * @param string|array $data
+     * @param string|string[]|array $data
      * @param string $quote
      * @return string|array
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     public function escapeJsQuote($data, $quote = '\'')
     {
@@ -314,12 +351,15 @@ class Escaper
      *
      * @param string $data
      * @return string
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     public function escapeXssInUrl($data)
     {
+        $data = html_entity_decode((string)$data);
+        $this->getTranslateInline()->processResponseBody($data);
+
         return htmlspecialchars(
-            $this->escapeScriptIdentifiers(html_entity_decode((string)$data)),
+            $this->escapeScriptIdentifiers($data),
             $this->htmlSpecialCharsFlag | ENT_HTML5 | ENT_HTML401,
             'UTF-8',
             false
@@ -359,7 +399,7 @@ class Escaper
      * @param string $data
      * @param bool $addSlashes
      * @return string
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     public function escapeQuote($data, $addSlashes = false)
     {
@@ -373,7 +413,7 @@ class Escaper
      * Get escaper
      *
      * @return \Magento\Framework\ZendEscaper
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getEscaper()
     {
@@ -388,7 +428,7 @@ class Escaper
      * Get logger
      *
      * @return \Psr\Log\LoggerInterface
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getLogger()
     {
@@ -420,5 +460,20 @@ class Escaper
         }
 
         return $allowedTags;
+    }
+
+    /**
+     * Resolve inline translator.
+     *
+     * @return \Magento\Framework\Translate\InlineInterface
+     */
+    private function getTranslateInline()
+    {
+        if ($this->translateInline === null) {
+            $this->translateInline = \Magento\Framework\App\ObjectManager::getInstance()
+                ->get(\Magento\Framework\Translate\InlineInterface::class);
+        }
+
+        return $this->translateInline;
     }
 }

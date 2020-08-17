@@ -53,6 +53,10 @@ class ShippingDiscount extends \Magento\Quote\Model\Quote\Address\Total\Abstract
 
         $address->setShippingDiscountAmount(0);
         $address->setBaseShippingDiscountAmount(0);
+        if ($total->getShippingAmountForDiscount() !== null) {
+            $address->setShippingAmountForDiscount($total->getShippingAmountForDiscount());
+            $address->setBaseShippingAmountForDiscount($total->getBaseShippingAmountForDiscount());
+        }
         if ($address->getShippingAmount()) {
             $this->calculator->processShippingAmount($address);
             $total->addTotalAmount(DiscountCollector::COLLECTOR_TYPE_CODE, -$address->getShippingDiscountAmount());

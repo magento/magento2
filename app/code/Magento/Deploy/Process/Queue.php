@@ -29,7 +29,7 @@ class Queue
     /**
      * Default max execution time
      */
-    const DEFAULT_MAX_EXEC_TIME = 400;
+    const DEFAULT_MAX_EXEC_TIME = 900;
 
     /**
      * @var array
@@ -97,6 +97,11 @@ class Queue
     private $lastJobStarted = 0;
 
     /**
+     * @var int
+     */
+    private $logDelay;
+
+    /**
      * @param AppState $appState
      * @param LocaleResolver $localeResolver
      * @param ResourceConnection $resourceConnection
@@ -157,10 +162,12 @@ class Queue
      * Process jobs
      *
      * @return int
+     * @throws TimeoutException
      */
     public function process()
     {
         $returnStatus = 0;
+        $this->logDelay = 10;
         $this->start = $this->lastJobStarted = time();
         $packages = $this->packages;
         while (count($packages) && $this->checkTimeout()) {
@@ -168,19 +175,44 @@ class Queue
                 // Unsets each member of $packages array (passed by reference) as each is executed
                 $this->assertAndExecute($name, $packages, $packageJob);
             }
-            $this->logger->info('.');
-            // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            sleep(3);
-            foreach ($this->inProgress as $name => $package) {
-                if ($this->isDeployed($package)) {
-                    unset($this->inProgress[$name]);
+
+            $this->refreshStatus();
+
+            if ($this->isCanBeParalleled()) {
+                // in parallel mode sleep before trying to check status and run new jobs
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                usleep(500000); // 0.5 sec (less sleep == less time waste)
+
+                foreach ($this->inProgress as $name => $package) {
+                    if ($this->isDeployed($package)) {
+                        unset($this->inProgress[$name]);
+                    }
                 }
             }
         }
 
         $this->awaitForAllProcesses();
 
+        if (!empty($packages)) {
+            throw new TimeoutException('Not all packages are deployed.');
+        }
+
         return $returnStatus;
+    }
+
+    /**
+     * Refresh current status in console once in 10 iterations (once in 5 sec)
+     *
+     * @return void
+     */
+    private function refreshStatus(): void
+    {
+        if ($this->logDelay >= 10) {
+            $this->logger->info('.');
+            $this->logDelay = 0;
+        } else {
+            $this->logDelay++;
+        }
     }
 
     /**
@@ -191,7 +223,7 @@ class Queue
      * @param array $packageJob
      * @return void
      */
-    private function assertAndExecute($name, array & $packages, array $packageJob)
+    private function assertAndExecute($name, array &$packages, array $packageJob)
     {
         /** @var Package $package */
         $package = $packageJob['package'];
@@ -249,9 +281,12 @@ class Queue
                     unset($this->inProgress[$name]);
                 }
             }
-            $this->logger->info('.');
+
+            $this->refreshStatus();
+
+            // sleep before checking parallel jobs status
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            sleep(5);
+            usleep(500000); // 0.5 sec (less sleep == less time waste)
         }
         if ($this->isCanBeParalleled()) {
             // close connections only if ran with forks

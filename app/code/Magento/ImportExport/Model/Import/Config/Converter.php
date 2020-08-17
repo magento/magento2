@@ -5,7 +5,7 @@
  */
 namespace Magento\ImportExport\Model\Import\Config;
 
-use Magento\Framework\Module\ModuleManagerInterface;
+use Magento\Framework\Module\Manager;
 use Magento\Framework\App\Utility\Classes;
 
 /**
@@ -14,14 +14,14 @@ use Magento\Framework\App\Utility\Classes;
 class Converter implements \Magento\Framework\Config\ConverterInterface
 {
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     protected $moduleManager;
 
     /**
-     * @param ModuleManagerInterface $moduleManager
+     * @param Manager $moduleManager
      */
-    public function __construct(ModuleManagerInterface $moduleManager)
+    public function __construct(Manager $moduleManager)
     {
         $this->moduleManager = $moduleManager;
     }

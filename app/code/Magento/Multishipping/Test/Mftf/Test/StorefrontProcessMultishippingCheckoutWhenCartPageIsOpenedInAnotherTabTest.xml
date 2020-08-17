@@ -14,16 +14,14 @@
             <stories value="Multishipping"/>
             <title value="Process multishipping checkout when Cart page is opened in another tab"/>
             <description value="Process multishipping checkout when Cart page is opened in another tab"/>
-            <severity value="MAJOR"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-17871"/>
             <useCaseId value="MC-17469"/>
             <group value="multishipping"/>
         </annotations>
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
-            <!-- Set configurations -->
-            <magentoCLI command="config:set multishipping/options/checkout_multiple 1" stepKey="allowShippingToMultipleAddresses"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!-- Create two simple products -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
             <createData entity="_defaultProduct" stepKey="createFirstProduct">
@@ -36,7 +34,7 @@
         </before>
         <after>
             <!-- Delete created data -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -59,10 +57,9 @@
             <argument name="product" value="$$createSecondProduct$$"/>
             <argument name="productCount" value="2"/>
         </actionGroup>
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnShoppingCartPage"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnShoppingCartPage"/>
         <!-- Click 'Check Out with Multiple Addresses' -->
-        <waitForPageLoad stepKey="waitForSecondPageLoad"/>
-        <actionGroup ref="StorefrontGoCheckoutWithMultipleAddresses" stepKey="goCheckoutWithMultipleAddresses"/>
+        <actionGroup ref="StorefrontGoCheckoutWithMultipleAddressesActionGroup" stepKey="goCheckoutWithMultipleAddresses"/>
         <!-- Select different addresses and click 'Go to Shipping Information' -->
         <actionGroup ref="StorefrontCheckoutShippingSelectMultipleAddressesActionGroup" stepKey="selectMultipleAddresses">
             <argument name="firstAddress" value="{{UK_Not_Default_Address.street[0]}}"/>
@@ -71,7 +68,7 @@
         <waitForPageLoad stepKey="waitPageLoad"/>
         <!-- Open the Cart page in another browser window and go back -->
         <openNewTab stepKey="openNewTab"/>
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="amOnShoppingCartPageNewTab"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="amOnShoppingCartPageNewTab"/>
         <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertFirstProductItemInCheckOutCart">
             <argument name="productName" value="$$createFirstProduct.name$$"/>
             <argument name="productSku" value="$$createFirstProduct.sku$$"/>
@@ -104,12 +101,12 @@
         <seeElement selector="{{StorefrontCustomerOrdersGridSection.orderView({$grabSecondOrderId})}}" stepKey="seeSecondOrder"/>
         <waitForPageLoad stepKey="waitForOrderPageLoad"/>
         <!-- Go to Admin > Sales > Orders -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
-        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchFirstOrder">
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrdersPage"/>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchFirstOrder">
             <argument name="keyword" value="$grabFirstOrderId"/>
         </actionGroup>
         <seeElement selector="{{AdminOrdersGridSection.orderId({$grabFirstOrderId})}}" stepKey="seeAdminFirstOrder"/>
-        <actionGroup ref="searchAdminDataGridByKeyword" stepKey="searchSecondOrder">
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchSecondOrder">
             <argument name="keyword" value="$grabSecondOrderId"/>
         </actionGroup>
         <seeElement selector="{{AdminOrdersGridSection.orderId({$grabSecondOrderId})}}" stepKey="seeAdminSecondOrder"/>

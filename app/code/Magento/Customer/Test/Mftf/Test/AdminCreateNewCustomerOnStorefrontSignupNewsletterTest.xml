@@ -20,13 +20,13 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteNewUser">
                 <argument name="email" value="{{CustomerEntityOne.email}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Create new customer on storefront and signup news letter-->
@@ -49,6 +49,6 @@
         <waitForPageLoad stepKey="waitForEditLinkLoad"/>
         <click selector="{{AdminEditCustomerInformationSection.newsLetter}}" stepKey="clickNewsLetter"/>
         <waitForPageLoad stepKey="waitForNewsletterTabToOpen"/>
-        <seeCheckboxIsChecked selector="{{AdminEditCustomerNewsletterSection.subscribedToNewsletter}}" stepKey="seeAssertSubscribedToNewsletterCheckboxIsChecked"/>
+        <seeCheckboxIsChecked selector="{{AdminEditCustomerNewsletterSection.subscribedStatus('1')}}" stepKey="seeAssertSubscribedToNewsletterCheckboxIsChecked"/>
     </test>
 </tests>

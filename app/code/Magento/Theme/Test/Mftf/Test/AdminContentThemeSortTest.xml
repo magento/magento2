@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminContentThemesSortTest">
+        <annotations>
+            <features value="Theme"/>
+            <stories value="Menu Navigation"/>
+            <title value="Admin content themes sort themes test"/>
+            <description value="Admin should be able to sort Themes"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="https://github.com/magento/magento2/pull/25926"/>
+            <group value="menu"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToContentThemesPage">
+            <argument name="menuUiId" value="{{AdminMenuContent.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuContentDesignThemes.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
+            <argument name="title" value="{{AdminMenuContentDesignThemes.pageTitle}}"/>
+        </actionGroup>
+        <click selector="{{AdminThemeSection.columnHeader('Theme Title')}}" stepKey="clickSortByTitle"/>
+        <click selector="{{AdminThemeSection.columnHeader('Theme Title')}}" stepKey="clickSortByTitleSecondTime"/>
+        <seeNumberOfElements selector="{{AdminThemeSection.rowsInColumn('theme_path')}}" userInput="2" stepKey="see2RowsOnTheGrid"/>
+        <seeNumberOfElements selector="{{AdminThemeSection.gridCellUpdated('Magento Luma')}}" userInput="1" stepKey="seeLumaThemeInTitleColumn"/>
+    </test>
+</tests>

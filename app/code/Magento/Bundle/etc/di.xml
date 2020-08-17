@@ -221,4 +221,17 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Eav\Model\Config">
+        <arguments>
+            <argument name="attributesForPreload" xsi:type="array">
+                <item name="catalog_product" xsi:type="array">
+                    <item name="price_type" xsi:type="string">catalog_product</item>
+                    <item name="price_view" xsi:type="string">catalog_product</item>
+                    <item name="shipment_type" xsi:type="string">catalog_product</item>
+                    <item name="sku_type" xsi:type="string">catalog_product</item>
+                    <item name="weight_type" xsi:type="string">catalog_product</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

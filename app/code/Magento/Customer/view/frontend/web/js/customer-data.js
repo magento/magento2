@@ -24,19 +24,11 @@ define([
         invalidateCacheByCloseCookieSession,
         dataProvider,
         buffer,
-        customerData;
+        customerData,
+        deferred = $.Deferred();
 
     url.setBaseUrl(window.BASE_URL);
     options.sectionLoadUrl = url.build('customer/section/load');
-
-    //TODO: remove global change, in this case made for initNamespaceStorage
-    $.cookieStorage.setConf({
-        path: '/',
-        expires: 1
-    });
-
-    storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
-    storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
 
     /**
      * @param {Object} invalidateOptions
@@ -214,6 +206,23 @@ define([
                     this.reload(storageInvalidation.keys(), false);
                 }
             }
+
+            if (!_.isEmpty($.cookieStorage.get('section_data_clean'))) {
+                this.reload(sectionConfig.getSectionNames(), true);
+                $.cookieStorage.set('section_data_clean', '');
+            }
+        },
+
+        /**
+         * Storage init
+         */
+        initStorage: function () {
+            $.cookieStorage.setConf({
+                path: '/',
+                expires: new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000)
+            });
+            storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
+            storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
         },
 
         /**
@@ -337,14 +346,25 @@ define([
         },
 
         /**
+         * Checks if customer data is initialized.
+         *
+         * @returns {jQuery.Deferred}
+         */
+        getInitCustomerData: function () {
+            return deferred.promise();
+        },
+
+        /**
          * @param {Object} settings
          * @constructor
          */
         'Magento_Customer/js/customer-data': function (settings) {
             options = settings;
+            customerData.initStorage();
             invalidateCacheBySessionTimeOut(settings);
             invalidateCacheByCloseCookieSession();
             customerData.init();
+            deferred.resolve();
         }
     };
 

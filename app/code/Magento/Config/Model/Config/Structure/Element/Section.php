@@ -6,7 +6,7 @@
 namespace Magento\Config\Model\Config\Structure\Element;
 
 /**
- * Section
+ * Element section
  *
  * @api
  * @since 100.0.2
@@ -22,13 +22,13 @@ class Section extends AbstractComposite
 
     /**
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param Iterator $childrenIterator
      * @param \Magento\Framework\AuthorizationInterface $authorization
      */
     public function __construct(
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         Iterator $childrenIterator,
         \Magento\Framework\AuthorizationInterface $authorization
     ) {
@@ -43,7 +43,7 @@ class Section extends AbstractComposite
      */
     public function getHeaderCss()
     {
-        return isset($this->_data['header_css']) ? $this->_data['header_css'] : '';
+        return $this->_data['header_css'] ?? '';
     }
 
     /**

@@ -3,28 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Shipping\Test\Unit\Model;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\CatalogInventory\Model\Stock\Item as StockItem;
 use Magento\CatalogInventory\Model\StockRegistry;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
 use Magento\Shipping\Model\Carrier\AbstractCarrierInterface;
 use Magento\Shipping\Model\CarrierFactory;
 use Magento\Shipping\Model\Shipping;
-use Magento\Quote\Model\Quote\Address\RateRequest;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Store\Model\Store;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * @see Shipping
+ * Unit tests for \Magento\Shipping\Model\Shipping class.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ShippingTest extends \PHPUnit\Framework\TestCase
+class ShippingTest extends TestCase
 {
     /**
-     * Test identification number of product
+     * Test identification number of product.
      *
      * @var int
      */
@@ -50,22 +56,34 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
      */
     private $carrier;
 
-    protected function setUp()
+    /**
+     * @var ScopeConfigInterface|MockObject
+     */
+    private $scopeConfig;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
         $this->stockRegistry = $this->createMock(StockRegistry::class);
         $this->stockItemData = $this->createMock(StockItem::class);
+        $this->scopeConfig = $this->getMockForAbstractClass(ScopeConfigInterface::class);
 
         $this->shipping = (new ObjectManagerHelper($this))->getObject(
             Shipping::class,
             [
                 'stockRegistry' => $this->stockRegistry,
                 'carrierFactory' => $this->getCarrierFactory(),
+                'scopeConfig' => $this->scopeConfig,
             ]
         );
     }
 
     /**
+     * Compose Packages For Carrier.
      *
+     * @return void
      */
     public function testComposePackages()
     {
@@ -85,31 +103,31 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
             )->getMock();
         $product = $this->createMock(Product::class);
 
-        $item->method('getQty')->will($this->returnValue(1));
-        $item->method('getWeight')->will($this->returnValue(10));
-        $item->method('getIsQtyDecimal')->will($this->returnValue(true));
-        $item->method('getProductType')->will($this->returnValue(ProductType::TYPE_SIMPLE));
-        $item->method('getProduct')->will($this->returnValue($product));
+        $item->method('getQty')->willReturn(1);
+        $item->method('getWeight')->willReturn(10);
+        $item->method('getIsQtyDecimal')->willReturn(true);
+        $item->method('getProductType')->willReturn(ProductType::TYPE_SIMPLE);
+        $item->method('getProduct')->willReturn($product);
 
         $store = $this->createPartialMock(Store::class, ['getWebsiteId']);
-        $store->method('getWebsiteId')->will($this->returnValue(10));
-        $item->method('getStore')->will($this->returnValue($store));
+        $store->method('getWebsiteId')->willReturn(10);
+        $item->method('getStore')->willReturn($store);
 
-        $product->method('getId')->will($this->returnValue($this->productId));
+        $product->method('getId')->willReturn($this->productId);
         $request->setData('all_items', [$item]);
 
-        $this->stockItemData->method('getIsDecimalDivided')->will($this->returnValue(true));
+        $this->stockItemData->method('getIsDecimalDivided')->willReturn(true);
 
         /** Testable service calls to CatalogInventory module */
         $this->stockRegistry->expects($this->atLeastOnce())->method('getStockItem')
             ->with($this->productId, 10)
-            ->will($this->returnValue($this->stockItemData));
+            ->willReturn($this->stockItemData);
 
         $this->stockItemData->expects($this->atLeastOnce())
             ->method('getEnableQtyIncrements')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->stockItemData->expects($this->atLeastOnce())->method('getQtyIncrements')
-            ->will($this->returnValue(0.5));
+            ->willReturn(0.5);
         $this->carrier->method('getConfigData')
             ->willReturnCallback(
                 function ($key) {
@@ -125,14 +143,25 @@ class ShippingTest extends \PHPUnit\Framework\TestCase
 
     /**
      * Active flag should be set before collecting carrier rates.
+     *
+     * @return void
      */
     public function testCollectCarrierRatesSetActiveFlag()
     {
+        $carrierCode = 'carrier';
+        $scopeStore = 'store';
+        $this->scopeConfig->expects($this->once())
+            ->method('isSetFlag')
+            ->with(
+                'carriers/' . $carrierCode . '/active',
+                $scopeStore
+            )
+            ->willReturn(true);
         $this->carrier->expects($this->atLeastOnce())
             ->method('setActiveFlag')
             ->with('active');
 
-        $this->shipping->collectCarrierRates('carrier', new RateRequest());
+        $this->shipping->collectCarrierRates($carrierCode, new RateRequest());
     }
 
     /**

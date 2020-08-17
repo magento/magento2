@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CheckShipToInformationInCheckoutActionGroup">
+        <annotations>
+            <description>Validates that the provided Customer and Address details are present and correct on the Storefront Checkout page under the 'Ship To' section.</description>
+        </annotations>
+        <arguments>
+            <argument name="customerVar"/>
+            <argument name="customerAddressVar"/>
+        </arguments>
+
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" time="30" stepKey="waitForPaymentSectionLoaded"/>
+        <see userInput="{{customerVar.firstname}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationFirstName"/>
+        <see userInput="{{customerVar.lastname}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationLastName"/>
+        <see userInput="{{customerAddressVar.street[0]}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationStreet"/>
+        <see userInput="{{customerAddressVar.city}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationCity"/>
+        <see userInput="{{customerAddressVar.state}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationState"/>
+        <see userInput="{{customerAddressVar.postcode}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationPostcode"/>
+        <see userInput="{{customerAddressVar.telephone}}" selector="{{CheckoutPaymentSection.shipToInformation}}" stepKey="assertShipToInformationTelephone"/>
+    </actionGroup>
+</actionGroups>

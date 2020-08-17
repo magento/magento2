@@ -3,35 +3,41 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ProductVideo\Test\Unit\Helper;
 
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\Helper\Context;
 use Magento\ProductVideo\Helper\Media;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class MediaTest extends \PHPUnit\Framework\TestCase
+class MediaTest extends TestCase
 {
-    /** @var \Magento\Framework\App\Config\ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ScopeConfigInterface|MockObject */
     protected $scopeConfigMock;
 
     /**
-     * @var \Magento\ProductVideo\Helper\Media|\PHPUnit_Framework_MockObject_MockObject
+     * @var Media|MockObject
      */
     protected $helper;
 
     /**
-     * @var \Magento\Framework\App\Helper\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $contextMock;
 
     /**
      * Create mock objects
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->scopeConfigMock = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $this->scopeConfigMock = $this->getMockBuilder(ScopeConfigInterface::class)
             ->getMock();
-        $this->contextMock = $this->createMock(\Magento\Framework\App\Helper\Context::class);
+        $this->contextMock = $this->createMock(Context::class);
         $this->contextMock->expects($this->any())->method('getScopeConfig')->willReturn($this->scopeConfigMock);
-        $this->helper = new \Magento\ProductVideo\Helper\Media(
+        $this->helper = new Media(
             $this->contextMock
         );
     }
@@ -44,7 +50,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $return = 'some_value';
         $this->scopeConfigMock->expects($this->once())->method('getValue')
             ->with(Media::XML_PATH_PLAY_IF_BASE)
-            ->will($this->returnValue($return));
+            ->willReturn($return);
 
         $this->assertEquals(
             $return,
@@ -60,7 +66,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $return = 'some_value';
         $this->scopeConfigMock->expects($this->once())->method('getValue')
             ->with(Media::XML_PATH_SHOW_RELATED)
-            ->will($this->returnValue($return));
+            ->willReturn($return);
 
         $this->assertEquals(
             $return,
@@ -76,7 +82,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $return = 'some_value';
         $this->scopeConfigMock->expects($this->once())->method('getValue')
             ->with(Media::XML_PATH_VIDEO_AUTO_RESTART)
-            ->will($this->returnValue($return));
+            ->willReturn($return);
 
         $this->assertEquals(
             $return,
@@ -92,7 +98,7 @@ class MediaTest extends \PHPUnit\Framework\TestCase
         $return = 'some_value';
         $this->scopeConfigMock->expects($this->once())->method('getValue')
             ->with(Media::XML_PATH_YOUTUBE_API_KEY)
-            ->will($this->returnValue($return));
+            ->willReturn($return);
 
         $this->assertEquals(
             $return,

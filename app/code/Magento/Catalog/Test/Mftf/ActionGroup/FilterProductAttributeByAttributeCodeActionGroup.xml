@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="FilterProductAttributeByAttributeCodeActionGroup">
+        <annotations>
+            <description>Filters the Product Attributes grid by the provided Product Attribute Code.</description>
+        </annotations>
+        <arguments>
+            <argument name="ProductAttributeCode" type="string"/>
+        </arguments>
+
+        <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
+        <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="{{ProductAttributeCode}}" stepKey="setAttributeCode"/>
+        <waitForPageLoad stepKey="waitForUserInput"/>
+        <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromTheGrid"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,56 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteCategoryUrlRewriteTest">
+        <annotations>
+            <stories value="Delete Category URL rewrite"/>
+            <title value="Delete Category URL rewrite"/>
+            <description value="Test log in to URL rewrite and Delete Category URL rewrite"/>
+            <testCaseId value=""/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
+            <createData entity="_defaultCategory" stepKey="category"/>
+        </before>
+        <after>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Open Url Rewrite Index Page and update the Category Url Rewrite, Store, Request Path, Redirect Type and Description -->
+        <actionGroup ref="AdminAddUrlRewriteActionGroup" stepKey="addUrlRewrite">
+            <argument name="category" value="$$category.name$$"/>
+            <argument name="customUrlRewriteValue" value="For Category'"/>
+            <argument name="storeValue" value="Default Store View"/>
+            <argument name="requestPath" value="newcategoryrequestpath.html"/>
+            <argument name="redirectTypeValue" value="No"/>
+            <argument name="description" value="End To End Test"/>
+        </actionGroup>
+
+        <!-- Get Category ID -->
+        <actionGroup ref="OpenCategoryFromCategoryTreeActionGroup" stepKey="getCategoryId">
+            <argument name="category" value="$$category.name$$"/>
+        </actionGroup>
+        <grabFromCurrentUrl stepKey="categoryId" regex="#\/([0-9]*)?\/$#"/>
+
+        <!--Delete created product url rewrite and verify AssertUrlRewriteDeletedMessage-->
+        <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteUrlRewrite">
+            <argument name="requestPath" value="newcategoryrequestpath.html"/>
+        </actionGroup>
+        <!--Search and verify AssertUrlRewriteNotInGrid-->
+        <actionGroup ref="AdminSearchDeletedUrlRewriteActionGroup" stepKey="searchDeletedUrlRewriteInGrid">
+            <argument name="requestPath" value="newcategoryrequestpath.html"/>
+        </actionGroup>
+        <!--Verify AssertPageByUrlRewriteIsNotFound-->
+        <actionGroup ref="AssertPageByUrlRewriteIsNotFoundActionGroup" stepKey="amOnPage">
+            <argument name="requestPath" value="newcategoryrequestpath.html"/>
+        </actionGroup>
+    </test>
+</tests>

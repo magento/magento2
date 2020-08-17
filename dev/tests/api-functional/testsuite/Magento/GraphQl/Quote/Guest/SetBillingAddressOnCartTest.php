@@ -21,7 +21,7 @@ class SetBillingAddressOnCartTest extends GraphQlAbstract
      */
     private $getMaskedQuoteIdByReservedOrderId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -42,22 +42,37 @@ mutation {
     input: {
       cart_id: "$maskedQuoteId"
       billing_address: {
-        address: {
+         address: {
           firstname: "test firstname"
           lastname: "test lastname"
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AL"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
-        }
+         }
+         same_as_shipping: true
       }
     }
   ) {
     cart {
       billing_address {
+        firstname
+        lastname
+        company
+        street
+        city
+        postcode
+        telephone
+        country {
+          code
+          label
+        }
+        __typename
+      }
+      shipping_addresses {
         firstname
         lastname
         company
@@ -82,9 +97,15 @@ QUERY;
         self::assertArrayHasKey('billing_address', $cartResponse);
         $billingAddressResponse = $cartResponse['billing_address'];
         $this->assertNewAddressFields($billingAddressResponse);
+        self::assertArrayHasKey('shipping_addresses', $cartResponse);
+        $shippingAddressResponse = current($cartResponse['shipping_addresses']);
+        $this->assertNewAddressFields($billingAddressResponse);
+        $this->assertNewAddressFields($shippingAddressResponse, 'ShippingCartAddress');
     }
 
     /**
+     * Test case for deprecated `use_for_shipping` param.
+     *
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
@@ -105,7 +126,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AL"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
@@ -180,7 +201,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AL"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
@@ -209,11 +230,12 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testSetBillingAddressFromAddressBook()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
@@ -238,11 +260,12 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testSetBillingAddressOnNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "non_existent_masked_id"');
+
         $maskedQuoteId = 'non_existent_masked_id';
         $query = <<<QUERY
 mutation {
@@ -256,7 +279,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AL"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
@@ -279,58 +302,6 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     *
-     * @dataProvider dataProviderSetWithoutRequiredParameters
-     * @param string $input
-     * @param string $message
-     * @throws \Exception
-     */
-    public function testSetBillingAddressWithoutRequiredParameters(string $input, string $message)
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $input = str_replace('cart_id_value', $maskedQuoteId, $input);
-
-        $query = <<<QUERY
-mutation {
-  setBillingAddressOnCart(
-    input: {
-      {$input}
-    }
-  ) {
-    cart {
-        billing_address {
-            city
-          }
-    }
-  }
-}
-QUERY;
-        $this->expectExceptionMessage($message);
-        $this->graphQlMutation($query);
-    }
-
-    /**
-     * @return array
-     */
-    public function dataProviderSetWithoutRequiredParameters(): array
-    {
-        return [
-            'missed_billing_address' => [
-                'cart_id: "cart_id_value"',
-                'Field SetBillingAddressOnCartInput.billing_address of required type BillingAddressInput!'
-                . ' was not provided.',
-            ],
-            'missed_cart_id' => [
-                'billing_address: {}',
-                'Required parameter "cart_id" is missing'
-            ]
-        ];
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
     public function testSetNewBillingAddressWithoutCustomerAddressIdAndAddress()
     {
@@ -342,7 +313,7 @@ mutation {
     input: {
       cart_id: "$maskedQuoteId"
       billing_address: {
-        use_for_shipping: true
+        same_as_shipping: true
       }
     }
   ) {
@@ -367,7 +338,7 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/set_multishipping_with_two_shipping_addresses.php
      */
-    public function testSetNewBillingAddressWithUseForShippingAndMultishipping()
+    public function testSetNewBillingAddressWithSameAsShippingAndMultishipping()
     {
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
@@ -383,12 +354,12 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AL"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
         }
-        use_for_shipping: true
+        same_as_shipping: true
       }
     }
   ) {
@@ -402,7 +373,7 @@ mutation {
 QUERY;
 
         self::expectExceptionMessage(
-            'Using the "use_for_shipping" option with multishipping is not possible.'
+            'Using the "same_as_shipping" option with multishipping is not possible.'
         );
         $this->graphQlMutation($query);
     }
@@ -428,7 +399,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2", "test street 3"]
           city: "test city"
-          region: "test region"
+          region: "AL"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"
@@ -470,7 +441,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AL"
           postcode: "887766"
           country_code: "us"
           telephone: "88776655"

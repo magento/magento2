@@ -43,7 +43,9 @@
                 <requiredEntity createDataKey="product"/>
                 <requiredEntity createDataKey="simple3"/>
             </updateData>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="simple1" stepKey="deleteProduct1"/>
@@ -64,7 +66,7 @@
         </actionGroup>
 
         <!-- Select Mini Cart and select 'View And Edit Cart' -->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="selectViewAndEditCart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="selectViewAndEditCart"/>
 
         <!--Assert Product1 items in cart -->
         <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertSimpleProduct1ItemsInCheckOutCart">
@@ -101,8 +103,7 @@
         </actionGroup>
 
         <!-- Assert product1 details in Mini Cart -->
-        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickOnMiniCart"/>
-        <waitForPageLoad stepKey="waitForPageToLoad1"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>
         <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct3MiniCart">
             <argument name="productName" value="$$simple3.name$$"/>
             <argument name="productPrice" value="$300.00"/>

@@ -6,13 +6,14 @@
 
 declare(strict_types=1);
 
-include __DIR__ . '/../../GraphQl/Catalog/_files/simple_product.php';
-
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/GraphQl/Catalog/_files/simple_product.php');
 
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);

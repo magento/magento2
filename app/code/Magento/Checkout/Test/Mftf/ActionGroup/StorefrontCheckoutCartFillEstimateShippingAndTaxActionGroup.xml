@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCheckoutCartFillEstimateShippingAndTaxActionGroup">
+        <annotations>
+            <description>Fill address data in Estimate Shipping And Tax section of shopping cart on storefront</description>
+        </annotations>
+        <arguments>
+            <argument name="country" type="string" defaultValue="{{US_Address_TX.country}}"/>
+            <argument name="state" type="string" defaultValue="{{US_Address_TX.state}}"/>
+            <argument name="postcode" type="string" defaultValue="{{US_Address_TX.postcode}}"/>
+        </arguments>
+
+        <conditionalClick selector="{{CheckoutCartSummarySection.estimateShippingAndTax}}" dependentSelector="{{CheckoutCartSummarySection.estimateShippingAndTaxSummary}}" visible="false" stepKey="openEestimateShippingAndTaxSection"/>
+        <selectOption selector="{{CheckoutCartSummarySection.country}}" userInput="{{country}}" stepKey="selectCountry"/>
+        <selectOption selector="{{CheckoutCartSummarySection.stateProvince}}" userInput="{{state}}" stepKey="selectState"/>
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.postcode}}" stepKey="waitForPostCodeVisible"/>
+        <fillField selector="{{CheckoutCartSummarySection.postcode}}" userInput="{{postcode}}" stepKey="selectPostCode"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDiappear"/>
+    </actionGroup>
+</actionGroups>

@@ -70,9 +70,9 @@ class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
 
         $this->dispatch('backend/admin/import/validate');
 
-        $this->assertContains($message, $this->getResponse()->getBody());
-        $this->assertNotContains('The file was not uploaded.', $this->getResponse()->getBody());
-        $this->assertNotRegExp(
+        $this->assertStringContainsString($message, $this->getResponse()->getBody());
+        $this->assertStringNotContainsString('The file was not uploaded.', $this->getResponse()->getBody());
+        $this->assertDoesNotMatchRegularExpression(
             '/clear[^\[]*\[[^\]]*(import_file|import_image_archive)[^\]]*\]/m',
             $this->getResponse()->getBody()
         );
@@ -93,7 +93,7 @@ class ValidateTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
             [
                 'file_name' => 'test.txt',
                 'mime-type' => 'text/csv',
-                'message' => '\'txt\' file extension is not supported',
+                'message' => 'The file cannot be uploaded.',
                 'delimiter' => ',',
             ],
             [

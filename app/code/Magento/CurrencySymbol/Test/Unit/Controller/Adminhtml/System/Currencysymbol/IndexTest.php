@@ -3,75 +3,85 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CurrencySymbol\Test\Unit\Controller\Adminhtml\System\Currencysymbol;
 
+use Magento\Backend\Model\Menu;
+use Magento\Backend\Model\Menu\Item;
+use Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol\Index;
+use Magento\Framework\App\ViewInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\Layout;
+use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\Title;
+use Magento\Framework\View\Result\Page;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class IndexTest
- */
-class IndexTest extends \PHPUnit\Framework\TestCase
+class IndexTest extends TestCase
 {
     /**
-     * @var \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol\Index
+     * @var Index
      */
     protected $action;
 
     /**
-     * @var \Magento\Framework\App\ViewInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ViewInterface|MockObject
      */
     protected $viewMock;
 
     /**
-     * @var \Magento\Framework\View\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var Layout|MockObject
      */
     protected $layoutMock;
 
     /**
-     * @var \Magento\Framework\View\Element\BlockInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BlockInterface|MockObject
      */
     protected $blockMock;
 
     /**
-     * @var \Magento\Backend\Model\Menu|\PHPUnit_Framework_MockObject_MockObject
+     * @var Menu|MockObject
      */
     protected $menuMock;
 
     /**
-     * @var \Magento\Backend\Model\Menu\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|MockObject
      */
     protected $menuItemMock;
 
     /**
-     * @var \Magento\Framework\View\Result\Page|\PHPUnit_Framework_MockObject_MockObject
+     * @var Page|MockObject
      */
     protected $pageMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     protected $pageConfigMock;
 
     /**
-     * @var \Magento\Framework\View\Page\Title|\PHPUnit_Framework_MockObject_MockObject
+     * @var Title|MockObject
      */
     protected $titleMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
-        $this->menuItemMock = $this->createMock(\Magento\Backend\Model\Menu\Item::class);
-        $this->menuMock = $this->createMock(\Magento\Backend\Model\Menu::class);
+        $this->menuItemMock = $this->createMock(Item::class);
+        $this->menuMock = $this->createMock(Menu::class);
 
-        $this->titleMock = $this->createMock(\Magento\Framework\View\Page\Title::class);
+        $this->titleMock = $this->createMock(Title::class);
 
-        $this->pageConfigMock = $this->createMock(\Magento\Framework\View\Page\Config::class);
+        $this->pageConfigMock = $this->createMock(Config::class);
 
-        $this->pageMock = $this->createMock(\Magento\Framework\View\Result\Page::class);
+        $this->pageMock = $this->createMock(Page::class);
 
         $this->blockMock = $this->getMockForAbstractClass(
-            \Magento\Framework\View\Element\BlockInterface::class,
+            BlockInterface::class,
             [],
             '',
             false,
@@ -80,12 +90,12 @@ class IndexTest extends \PHPUnit\Framework\TestCase
             ['addLink', 'setActive', 'getMenuModel']
         );
 
-        $this->layoutMock = $this->createMock(\Magento\Framework\View\Layout::class);
+        $this->layoutMock = $this->createMock(Layout::class);
 
-        $this->viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);
+        $this->viewMock = $this->getMockForAbstractClass(ViewInterface::class);
 
         $this->action = $objectManager->getObject(
-            \Magento\CurrencySymbol\Controller\Adminhtml\System\Currencysymbol\Index::class,
+            Index::class,
             [
                 'view' => $this->viewMock
             ]

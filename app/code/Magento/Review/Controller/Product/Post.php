@@ -10,6 +10,9 @@ use Magento\Review\Controller\Product as ProductController;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Review\Model\Review;
 
+/**
+ * Class Post
+ */
 class Post extends ProductController implements HttpPostActionInterface
 {
     /**
@@ -63,19 +66,19 @@ class Post extends ProductController implements HttpPostActionInterface
                     }
 
                     $review->aggregate();
-                    $this->messageManager->addSuccess(__('You submitted your review for moderation.'));
+                    $this->messageManager->addSuccessMessage(__('You submitted your review for moderation.'));
                 } catch (\Exception $e) {
                     $this->reviewSession->setFormData($data);
-                    $this->messageManager->addError(__('We can\'t post your review right now.'));
+                    $this->messageManager->addErrorMessage(__('We can\'t post your review right now.'));
                 }
             } else {
                 $this->reviewSession->setFormData($data);
                 if (is_array($validate)) {
                     foreach ($validate as $errorMessage) {
-                        $this->messageManager->addError($errorMessage);
+                        $this->messageManager->addErrorMessage($errorMessage);
                     }
                 } else {
-                    $this->messageManager->addError(__('We can\'t post your review right now.'));
+                    $this->messageManager->addErrorMessage(__('We can\'t post your review right now.'));
                 }
             }
         }

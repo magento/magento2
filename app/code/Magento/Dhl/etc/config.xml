@@ -32,7 +32,7 @@
                 <specificerrmsg>This shipping method is currently unavailable. If you would like to ship using this shipping method, please contact us.</specificerrmsg>
                 <divide_order_weight>1</divide_order_weight>
                 <unit_of_measure>K</unit_of_measure>
-                <size>R</size>
+                <size>0</size>
                 <handling_type>F</handling_type>
                 <handling_action>O</handling_action>
                 <shipment_days>Mon,Tue,Wed,Thu,Fri</shipment_days>

@@ -20,7 +20,7 @@ class TemplateTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
         ];
         $this->getRequest()->setPostValue($post);
         $this->dispatch('backend/admin/email_template/defaultTemplate/?isAjax=true');
-        $this->assertContains(
+        $this->assertStringContainsString(
             '"template_type":2,"template_subject":"{{trans \"Reset your',
             $this->getResponse()->getBody()
         );

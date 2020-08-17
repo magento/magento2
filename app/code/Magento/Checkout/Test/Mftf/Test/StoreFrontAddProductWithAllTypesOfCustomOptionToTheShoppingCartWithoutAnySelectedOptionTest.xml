@@ -13,7 +13,7 @@
             <title value="Add simple product with all types of custom options to cart without selecting any options"/>
             <description value="Add simple product with all types of custom options to cart without selecting any options"/>
             <testCaseId value="MC-14725"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
         </annotations>
 
@@ -23,7 +23,9 @@
                 <requiredEntity createDataKey="createCategory"/>
             </createData>
             <updateData createDataKey="createProduct" entity="productWithOptions" stepKey="updateProductWithCustomOptions"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData  createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -31,7 +33,7 @@
         </after>
 
         <!-- Open Product page in StoreFront -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct1PageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProduct1PageAndVerifyProduct">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
@@ -78,7 +80,7 @@
 
         <!-- Verify mini cart is empty -->
         <actionGroup ref="AssertStorefrontSeeElementActionGroup" stepKey="assertEmptryCart">
-            <argument name="selector" value="{{StorefrontMiniCartSection.emptyMiniCart}}"/>
+            <argument name="selector" value="{{StorefrontMinicartSection.emptyMiniCart}}"/>
         </actionGroup>
     </test>
 </tests>

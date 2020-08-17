@@ -21,29 +21,29 @@
         <before>
             <createData entity="defaultUrlRewrite" stepKey="urlRewrite"/>
             <createData entity="defaultSimpleProduct" stepKey="createProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="AdminDeleteUrlRewrite" stepKey="deleteCustomUrlRewrite">
+            <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteCustomUrlRewrite">
                 <argument name="requestPath" value="{{customTemporaryUrlRewrite.request_path}}"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Filter Product in product page and get the Product ID -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="filterProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterProduct">
             <argument name="productSku" value="$$createProduct.sku$$"/>
         </actionGroup>
         <grabFromCurrentUrl stepKey="productId" regex="#\/([0-9]*)?\/$#"/>
 
         <!--Search default custom url rewrite in grid-->
-        <actionGroup ref="AdminSearchAndSelectUrlRewriteInGrid" stepKey="searchUrlRewrite">
+        <actionGroup ref="AdminSearchAndSelectUrlRewriteInGridActionGroup" stepKey="searchUrlRewrite">
             <argument name="requestPath" value="$$urlRewrite.request_path$$"/>
         </actionGroup>
 
         <!--Update default custom url rewrite as per requirement and verify AssertUrlRewriteSaveMessage-->
-        <actionGroup ref="AdminUpdateCustomUrlRewrite" stepKey="updateUrlRewrite">
+        <actionGroup ref="AdminUpdateCustomUrlRewriteActionGroup" stepKey="updateUrlRewrite">
             <argument name="storeValue" value="Default Store View"/>
             <argument name="requestPath" value="{{customTemporaryUrlRewrite.request_path}}"/>
             <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>
@@ -52,14 +52,14 @@
         </actionGroup>
 
         <!--Search and verify AssertUrlRewriteInGrid-->
-        <actionGroup ref="AdminSearchByRequestPath" stepKey="verifyUpdatedUrlRewriteInGrid">
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="verifyUpdatedUrlRewriteInGrid">
             <argument name="redirectPath" value="{{customTemporaryUrlRewrite.request_path}}"/>
             <argument name="redirectType" value="{{customTemporaryUrlRewrite.redirect_type_label}}"/>
             <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>
         </actionGroup>
 
         <!-- AssertUrlRewriteCustomSearchRedirect-->
-        <actionGroup ref="AssertStorefrontProductRedirect" stepKey="verifyProductInStoreFrontPage">
+        <actionGroup ref="AssertStorefrontProductRedirectActionGroup" stepKey="verifyProductInStoreFrontPage">
             <argument name="productName" value="$$createProduct.name$$"/>
             <argument name="productSku" value="$$createProduct.sku$$"/>
             <argument name="productRequestPath" value="$$createProduct.name$$.html"/>

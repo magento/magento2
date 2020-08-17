@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateCatalogPriceRuleByPercentTest">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Create catalog price rule"/>
+            <title value="Admin should be able to create a catalog price rule applied as a percentage of original (for simple product)"/>
+            <description value="Admin should be able to create a catalog price rule applied as a percentage of original (for simple product)"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-65"/>
+            <group value="CatalogRule"/>
+        </annotations>
+        <before>
+            <!-- Create the simple product and category that it will be in -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Perform reindex and flush cache -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+
+            <!-- log in and create the price rule -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup stepKey="createNewPriceRule" ref="NewCatalogPriceRuleByUIActionGroup"/>
+            <actionGroup stepKey="selectNotLoggedInCustomerGroup" ref="SelectNotLoggedInCustomerGroupActionGroup"/>
+            <click stepKey="saveAndApply" selector="{{AdminNewCatalogPriceRule.saveAndApply}}"/>
+            <see stepKey="assertSuccess" selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the rule."/>
+        </before>
+        <after>
+            <!-- delete the simple product and catalog price rule and logout -->
+            <amOnPage stepKey="goToPriceRulePage" url="admin/catalog_rule/promo_catalog/"/>
+            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
+                <argument name="name" value="{{_defaultCatalogRule.name}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+        </after>
+
+        <!-- Go to category page and make sure that all of the prices are correct -->
+        <amOnPage url="$$createCategory.name$$.html" stepKey="goToCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategory"/>
+        <see stepKey="seeOldPrice" selector="{{StorefrontCategoryProductSection.ProductOldPriceByNumber('1')}}" userInput="$$createProduct.price$$"/>
+        <see stepKey="seeNewPrice" selector="{{StorefrontCategoryProductSection.ProductSpecialPriceByNumber('1')}}" userInput="$110.70"/>
+
+        <!-- Go to the simple product page and check that the prices are correct -->
+        <amOnPage stepKey="goToProductPage" url="$$createProduct.sku$$.html"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
+        <see stepKey="seeOldPriceTag" selector="{{StorefrontProductInfoMainSection.oldPriceTag}}" userInput="Regular Price"/>
+        <see stepKey="seeOldPrice2" selector="{{StorefrontProductInfoMainSection.oldPriceAmount}}" userInput="$$createProduct.price$$"/>
+        <see stepKey="seeNewPrice2" selector="{{StorefrontProductInfoMainSection.updatedPrice}}" userInput="$110.70"/>
+
+        <!-- Add the product to cart and check that the price is correct there -->
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckout"/>
+        <see stepKey="seeNewPriceInCart" selector="{{CheckoutCartSummarySection.subtotal}}" userInput="$110.70"/>
+    </test>
+</tests>

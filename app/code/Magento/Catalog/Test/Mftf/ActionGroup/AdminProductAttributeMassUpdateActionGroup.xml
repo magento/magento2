@@ -20,10 +20,11 @@
         <seeInCurrentUrl url="{{ProductAttributesEditPage.url}}" stepKey="seeAttributePageEditUrl"/>
         <click selector="{{AdminUpdateAttributesSection.toggleName}}" stepKey="clickToChangeName"/>
         <fillField selector="{{AdminUpdateAttributesSection.name}}" userInput="{{product.name}}" stepKey="fillFieldName"/>
+        <scrollTo selector="{{AdminUpdateAttributesSection.toggleDescription}}" x="0" y="-80" stepKey="scrollToDescription"/>
         <click selector="{{AdminUpdateAttributesSection.toggleDescription}}" stepKey="clickToChangeDescription"/>
         <fillField selector="{{AdminUpdateAttributesSection.description}}" userInput="{{product.description}}" stepKey="fillFieldDescription"/>
         <click selector="{{AdminUpdateAttributesSection.saveButton}}" stepKey="save"/>
-        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitVisibleSuccessMessage"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="Message is added to queue" stepKey="seeSuccessMessage"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitVisibleSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="Message is added to queue" stepKey="seeSuccessMessage"/>
     </actionGroup>
 </actionGroups>

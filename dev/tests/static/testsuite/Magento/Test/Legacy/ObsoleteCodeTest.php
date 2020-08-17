@@ -42,7 +42,7 @@ class ObsoleteCodeTest extends \PHPUnit\Framework\TestCase
     /**
      * Read fixtures into memory as arrays
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $errors = [];
         self::_populateList(self::$_classes, $errors, 'obsolete_classes*.php', false);

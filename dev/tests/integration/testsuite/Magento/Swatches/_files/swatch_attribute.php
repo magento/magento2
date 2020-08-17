@@ -16,6 +16,7 @@ $data = [
     'backend_type' => '',
     'is_searchable' => 0,
     'is_filterable' => 0,
+    'is_user_defined' => 1,
     'is_filterable_in_search' => 0,
     'frontend_label' => 'Attribute ',
     'entity_type_id' => 4

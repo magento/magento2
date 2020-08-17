@@ -8,13 +8,13 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="sales">
-            <group id="gift_options" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1" showInStore="0">
+            <group id="gift_options" translate="label" type="text" sortOrder="100" showInDefault="1" showInWebsite="1">
                 <label>Gift Options</label>
-                <field id="allow_order" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="allow_order" translate="label" type="select" sortOrder="1" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Allow Gift Messages on Order Level</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="allow_items" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" showInStore="0" canRestore="1">
+                <field id="allow_items" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="1" canRestore="1">
                     <label>Allow Gift Messages for Order Items</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>

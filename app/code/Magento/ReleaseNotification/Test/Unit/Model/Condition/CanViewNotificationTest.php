@@ -3,46 +3,41 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ReleaseNotification\Test\Unit\Model\Condition;
 
+use Magento\Backend\Model\Auth\Session;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\App\ProductMetadataInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\ReleaseNotification\Model\Condition\CanViewNotification;
 use Magento\ReleaseNotification\Model\ResourceModel\Viewer\Logger;
 use Magento\ReleaseNotification\Model\Viewer\Log;
-use Magento\Framework\App\ProductMetadataInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Backend\Model\Auth\Session;
-use Magento\Framework\App\CacheInterface;
-use Magento\User\Model\User;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class CanViewNotificationTest
- */
-class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
+class CanViewNotificationTest extends TestCase
 {
     /** @var CanViewNotification */
     private $canViewNotification;
 
-    /** @var  Logger|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Logger|MockObject */
     private $viewerLoggerMock;
 
-    /** @var ProductMetadataInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ProductMetadataInterface|MockObject */
     private $productMetadataMock;
 
-    /** @var Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Session|MockObject */
     private $sessionMock;
 
-    /** @var  Log|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Log|MockObject */
     private $logMock;
 
-    /** @var  $cacheStorageMock \PHPUnit_Framework_MockObject_MockObject|CacheInterface */
+    /** @var MockObject|CacheInterface */
     private $cacheStorageMock;
 
-    /**
-     * @var User|\PHPUnit_Framework_MockObject_MockObject
-     */
-    private $userMock;
-
-    public function setUp()
+    protected function setUp(): void
     {
         $this->cacheStorageMock = $this->getMockBuilder(CacheInterface::class)
             ->getMockForAbstractClass();
@@ -50,14 +45,14 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
+            ->setMethods(['getUser', 'getId'])
             ->getMock();
         $this->viewerLoggerMock = $this->getMockBuilder(Logger::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->productMetadataMock = $this->getMockBuilder(ProductMetadataInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->userMock = $this->createMock(User::class);
+            ->getMockForAbstractClass();
         $objectManager = new ObjectManager($this);
         $this->canViewNotification = $objectManager->getObject(
             CanViewNotification::class,
@@ -74,15 +69,15 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
     {
         $this->sessionMock->expects($this->once())
             ->method('getUser')
-            ->willReturn($this->userMock);
-        $this->userMock->expects($this->once())
+            ->willReturn($this->sessionMock);
+        $this->sessionMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
         $this->cacheStorageMock->expects($this->once())
             ->method('load')
             ->with('release-notification-popup-1')
             ->willReturn("0");
-        $this->assertEquals(false, $this->canViewNotification->isVisible([]));
+        $this->assertFalse($this->canViewNotification->isVisible([]));
     }
 
     /**
@@ -99,8 +94,8 @@ class CanViewNotificationTest extends \PHPUnit\Framework\TestCase
             ->willReturn(false);
         $this->sessionMock->expects($this->once())
             ->method('getUser')
-            ->willReturn($this->userMock);
-        $this->userMock->expects($this->once())
+            ->willReturn($this->sessionMock);
+        $this->sessionMock->expects($this->once())
             ->method('getId')
             ->willReturn(1);
         $this->productMetadataMock->expects($this->once())

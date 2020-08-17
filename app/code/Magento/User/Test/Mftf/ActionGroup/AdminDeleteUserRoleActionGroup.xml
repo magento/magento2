@@ -21,7 +21,7 @@
         <click selector="{{AdminEditRoleInfoSection.deleteButton}}" stepKey="deleteUserRole"/>
         <waitForElementVisible selector="{{AdminConfirmationModalSection.message}}" stepKey="waitForConfirmModal"/>
         <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="confirmDelete"/>
-        <waitForElementVisible selector="{{AdminMessagesSection.successMessage}}" stepKey="waitSuccessMessage"/>
-        <see selector="{{AdminMessagesSection.successMessage}}" userInput="You deleted the role." stepKey="seeUserRoleDeleteMessage"/>
+        <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitSuccessMessage"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You deleted the role." stepKey="seeUserRoleDeleteMessage"/>
     </actionGroup>
 </actionGroups>

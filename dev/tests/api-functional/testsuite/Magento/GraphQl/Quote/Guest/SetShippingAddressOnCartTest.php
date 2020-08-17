@@ -21,7 +21,7 @@ class SetShippingAddressOnCartTest extends GraphQlAbstract
      */
     private $getMaskedQuoteIdByReservedOrderId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -49,7 +49,7 @@ mutation {
             company: "test company"
             street: ["test street 1", "test street 2"]
             city: "test city"
-            region: "test region"
+            region: "AL"
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
@@ -93,11 +93,12 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_virtual_product.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The Cart includes virtual product(s) only, so a shipping address is not used.
      */
     public function testSetNewShippingAddressOnCartWithVirtualProduct()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Shipping address is not allowed on cart: cart contains no items for shipment.');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
@@ -113,7 +114,7 @@ mutation {
             company: "test company"
             street: ["test street 1", "test street 2"]
             city: "test city"
-            region: "test region"
+            region: "AL"
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
@@ -139,11 +140,12 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testSetShippingAddressFromAddressBook()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
@@ -176,10 +178,11 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
-     * @expectedException \Exception
      */
     public function testSetShippingAddressToCustomerCart()
     {
+        $this->expectException(\Exception::class);
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
@@ -212,40 +215,6 @@ QUERY;
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
-     *
-     * @dataProvider dataProviderUpdateWithMissedRequiredParameters
-     * @param string $input
-     * @param string $message
-     * @throws \Exception
-     */
-    public function testSetNewShippingAddressWithMissedRequiredParameters(string $input, string $message)
-    {
-        $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
-        $input = str_replace('cart_id_value', $maskedQuoteId, $input);
-
-        $query = <<<QUERY
-mutation {
-  setShippingAddressesOnCart(
-    input: {
-      {$input}
-    }
-  ) {
-    cart {
-        shipping_addresses {
-            city
-          }
-    }
-  }
-}
-QUERY;
-        $this->expectExceptionMessage($message);
-        $this->graphQlMutation($query);
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      */
     public function testSetNewShippingAddressOnCartWithRedundantStreetLine()
     {
@@ -264,7 +233,7 @@ mutation {
             company: "test company"
             street: ["test street 1", "test street 2", "test street 3"]
             city: "test city"
-            region: "test region"
+            region: "AL"
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
@@ -286,37 +255,16 @@ QUERY;
     }
 
     /**
-     * @return array
-     */
-    public function dataProviderUpdateWithMissedRequiredParameters(): array
-    {
-        return [
-            'missed_shipping_addresses' => [
-                'cart_id: "cart_id_value"',
-                'Field SetShippingAddressesOnCartInput.shipping_addresses of required type [ShippingAddressInput]! ' .
-                'was not provided.',
-            ],
-            'missed_city' => [
-                'shipping_addresses: [ { address: { save_in_address_book: false } } ]',
-                'Field CartAddressInput.city of required type String! was not provided'
-            ],
-            'missed_cart_id' => [
-                'shipping_addresses: {}',
-                'Required parameter "cart_id" is missing'
-            ]
-        ];
-    }
-
-    /**
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/add_simple_product.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage You cannot specify multiple shipping addresses.
      */
     public function testSetMultipleNewShippingAddresses()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('You cannot specify multiple shipping addresses.');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
 
         $query = <<<QUERY
@@ -332,7 +280,7 @@ mutation {
             company: "test company"
             street: ["test street 1", "test street 2"]
             city: "test city"
-            region: "test region"
+            region: "AL"
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
@@ -345,7 +293,7 @@ mutation {
             company: "test company 2"
             street: ["test street 1", "test street 2"]
             city: "test city"
-            region: "test region"
+            region: "AL"
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
@@ -366,11 +314,12 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testSetShippingAddressOnNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "non_existent_masked_id"');
+
         $maskedQuoteId = 'non_existent_masked_id';
         $query = <<<QUERY
 mutation {
@@ -384,7 +333,7 @@ mutation {
           company: "test company"
           street: ["test street 1", "test street 2"]
           city: "test city"
-          region: "test region"
+          region: "AL"
           postcode: "887766"
           country_code: "US"
           telephone: "88776655"

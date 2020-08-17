@@ -26,6 +26,8 @@ use Magento\Customer\Controller\AbstractAccount;
 use Magento\Framework\Phrase;
 
 /**
+ * Post login customer action.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, HttpPostActionInterface
@@ -64,6 +66,11 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
      * @var \Magento\Framework\Stdlib\Cookie\PhpCookieManager
      */
     private $cookieMetadataManager;
+
+    /**
+     * @var CustomerUrl
+     */
+    private $customerUrl;
 
     /**
      * @param Context $context
@@ -183,7 +190,6 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
                 try {
                     $customer = $this->customerAccountManagement->authenticate($login['username'], $login['password']);
                     $this->session->setCustomerDataAsLoggedIn($customer);
-                    $this->session->regenerateId();
                     if ($this->getCookieManager()->getCookie('mage-cache-sessid')) {
                         $metadata = $this->getCookieMetadataFactory()->createCookieMetadata();
                         $metadata->setPath('/');
@@ -198,16 +204,11 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
                         return $resultRedirect;
                     }
                 } catch (EmailNotConfirmedException $e) {
-                    $value = $this->customerUrl->getEmailConfirmationUrl($login['username']);
-                    $message = __(
-                        'This account is not confirmed. <a href="%1">Click here</a> to resend confirmation email.',
-                        $value
+                    $this->messageManager->addComplexErrorMessage(
+                        'confirmAccountErrorMessage',
+                        ['url' => $this->customerUrl->getEmailConfirmationUrl($login['username'])]
                     );
-                } catch (UserLockedException $e) {
-                    $message = __(
-                        'The account sign-in was incorrect or your account is disabled temporarily. '
-                        . 'Please wait and try again later.'
-                    );
+                    $this->session->setUsername($login['username']);
                 } catch (AuthenticationException $e) {
                     $message = __(
                         'The account sign-in was incorrect or your account is disabled temporarily. '
@@ -217,17 +218,17 @@ class LoginPost extends AbstractAccount implements CsrfAwareActionInterface, Htt
                     $message = $e->getMessage();
                 } catch (\Exception $e) {
                     // PA DSS violation: throwing or logging an exception here can disclose customer password
-                    $this->messageManager->addError(
+                    $this->messageManager->addErrorMessage(
                         __('An unspecified error occurred. Please contact us for assistance.')
                     );
                 } finally {
                     if (isset($message)) {
-                        $this->messageManager->addError($message);
+                        $this->messageManager->addErrorMessage($message);
                         $this->session->setUsername($login['username']);
                     }
                 }
             } else {
-                $this->messageManager->addError(__('A login and a password are required.'));
+                $this->messageManager->addErrorMessage(__('A login and a password are required.'));
             }
         }
 

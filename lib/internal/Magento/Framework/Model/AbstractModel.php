@@ -15,6 +15,7 @@ use Magento\Framework\Phrase;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.NumberOfChildren)
  * @SuppressWarnings(PHPMD.TooManyFields)
+ * @since 100.0.2
  */
 abstract class AbstractModel extends \Magento\Framework\DataObject
 {
@@ -220,9 +221,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Remove unneeded properties from serialization
      *
      * @return string[]
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -247,9 +245,6 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Init not serializable fields
      *
      * @return void
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {
@@ -473,7 +468,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @deprecated because resource models should be used directly
+     * @deprecated 101.0.0 because resource models should be used directly
      */
     protected function _getResource()
     {
@@ -502,7 +497,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * @TODO MAGETWO-23541: Incorrect dependencies between Model\AbstractModel and Data\Collection\Db from Framework
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
-     * @deprecated because collections should be used directly via factory
+     * @deprecated 101.0.0 because collections should be used directly via factory
      */
     public function getResourceCollection()
     {
@@ -523,7 +518,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      *
      * @TODO MAGETWO-23541: Incorrect dependencies between Model\AbstractModel and Data\Collection\Db from Framework
      * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
-     * @deprecated because collections should be used directly via factory
+     * @deprecated 101.0.0 because collections should be used directly via factory
      */
     public function getCollection()
     {
@@ -593,7 +588,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * @param string $identifier
      * @param string|null $field
      * @return void
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function beforeLoad($identifier, $field = null)
     {
@@ -901,7 +896,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Retrieve model resource
      *
      * @return \Magento\Framework\Model\ResourceModel\Db\AbstractDb
-     * @deprecated because resource models should be used directly
+     * @deprecated 101.0.0 because resource models should be used directly
      */
     public function getResource()
     {

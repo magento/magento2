@@ -13,7 +13,7 @@
             <stories value="MC-17838: Shopping cart items added to the order created in the admin"/>
             <description value="Shopping cart items must not be added to the order unless they were moved manually"/>
             <features value="Sales"/>
-            <severity value="AVERAGE"/>
+            <severity value="BLOCKER"/>
             <group value="Sales"/>
         </annotations>
         <before>
@@ -37,7 +37,7 @@
             </createData>
 
             <!--Login as admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <!-- Step 1: Go to Storefront as Customer -->
@@ -53,12 +53,12 @@
         </actionGroup>
 
         <!--Step 3: Create new customer order-->
-        <actionGroup ref="navigateToNewOrderPageExistingCustomer" stepKey="navigateToNewOrderWithExistingCustomer">
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
             <argument name="customer" value="$$simpleCustomer$$"/>
         </actionGroup>
 
         <!--Step 4: Add product2 to the order-->
-        <actionGroup ref="addSimpleProductToOrder" stepKey="addSimpleProductToOrder">
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
             <argument name="product" value="$$product2$$"/>
         </actionGroup>
 
@@ -66,21 +66,21 @@
         <click selector="{{AdminOrderFormShoppingCartSection.addProduct($$product1.name$$)}}" stepKey="selectProduct1InTheShoppingCart"/>
 
         <!--Step 6: Select FlatRate shipping method-->
-        <actionGroup ref="orderSelectFlatRateShipping" stepKey="orderSelectFlatRateShippingMethod"/>
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
 
         <!--Step 7: Submit order-->
         <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
 
         <!--Step 8: Verify order information-->
-        <actionGroup ref="verifyCreatedOrderInformation" stepKey="verifyCreatedOrderInformation"/>
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
 
         <!--Step 9: Check that product 2 is in the order items list -->
-        <actionGroup ref="seeProductInItemsOrdered" stepKey="seeProduct2InItemsOrdered">
+        <actionGroup ref="SeeProductInItemsOrderedActionGroup" stepKey="seeProduct2InItemsOrdered">
             <argument name="product" value="$$product2$$"/>
         </actionGroup>
 
         <!--Step 10: Check that product 1 is not in the order items list -->
-        <actionGroup ref="dontSeeProductInItemsOrdered" stepKey="dontSeeProduct1InItemsOrdered">
+        <actionGroup ref="DontSeeProductInItemsOrderedActionGroup" stepKey="dontSeeProduct1InItemsOrdered">
             <argument name="product" value="$$product1$$"/>
         </actionGroup>
         <after>
@@ -97,7 +97,7 @@
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
 
             <!--Logout-->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

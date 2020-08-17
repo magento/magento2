@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Sales;
 
+use Exception;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -21,7 +22,7 @@ class OrdersTest extends GraphQlAbstract
      */
     private $customerTokenService;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
@@ -97,6 +98,26 @@ QUERY;
                 "status is different than the expected for order - " . $data['order_number']
             );
         }
+    }
+
+    /**
+     */
+    public function testOrdersQueryNotAuthorized()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
+        $query = <<<QUERY
+{
+  customerOrders {
+    items {
+      increment_id
+      grand_total
+    }
+  }
+}
+QUERY;
+        $this->graphQlQuery($query);
     }
 
     /**

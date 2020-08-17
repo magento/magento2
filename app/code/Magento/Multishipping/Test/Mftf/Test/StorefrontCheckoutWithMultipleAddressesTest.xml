@@ -21,9 +21,7 @@
         </annotations>
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
-            <!-- Set configurations -->
-            <magentoCLI command="config:set multishipping/options/checkout_multiple 1" stepKey="allowShippingToMultipleAddresses"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!-- Create simple products -->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
             <createData entity="SimpleProduct" stepKey="firstProduct">
@@ -36,7 +34,7 @@
         </before>
         <after>
             <!-- Delete created data -->
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <deleteData createDataKey="firstProduct" stepKey="deleteFirstProduct"/>
             <deleteData createDataKey="secondProduct" stepKey="deleteSecondProduct"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -51,7 +49,7 @@
             <argument name="productUrl" value="$$firstProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
         <!--  Add the first product to the Shopping Cart -->
-        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPage" stepKey="addFirstProductToCart">
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addFirstProductToCart">
             <argument name="productName" value="$$firstProduct.name$$"/>
             <argument name="productQty" value="1"/>
         </actionGroup>
@@ -60,7 +58,7 @@
             <argument name="productUrl" value="$$secondProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
         <!--  Add the second product to the Shopping Cart -->
-        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPage" stepKey="addSecondProductToCart">
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addSecondProductToCart">
             <argument name="productName" value="$$secondProduct.name$$"/>
             <argument name="productQty" value="1"/>
         </actionGroup>
@@ -89,7 +87,7 @@
             <argument name="productUrl" value="$$firstProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
         <!--  Add three identical products to the Shopping Cart -->
-        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPage" stepKey="addIdenticalProductsToCart">
+        <actionGroup ref="AddProductWithQtyToCartFromStorefrontProductPageActionGroup" stepKey="addIdenticalProductsToCart">
             <argument name="productName" value="$$firstProduct.name$$"/>
             <argument name="productQty" value="3"/>
         </actionGroup>

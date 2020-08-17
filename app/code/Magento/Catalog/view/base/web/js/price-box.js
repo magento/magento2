@@ -49,6 +49,7 @@ define([
 
             box.on('reloadPrice', this.reloadPrice.bind(this));
             box.on('updatePrice', this.onUpdatePrice.bind(this));
+            box.trigger('price-box-initialized');
         },
 
         /**

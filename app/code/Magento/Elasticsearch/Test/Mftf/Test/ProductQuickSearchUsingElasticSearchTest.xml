@@ -11,12 +11,13 @@
     <test name="ProductQuickSearchUsingElasticSearchTest">
         <annotations>
             <features value="Search"/>
-            <stories value="Quick Search of products on Storefront when ES 5.0+ is enabled"/>
+            <stories value="Quick Search of products on Storefront when ES 5.x is enabled"/>
             <title value="Product quick search doesn't throw exception after ES is chosen as search engine"/>
             <description value="Verify no elastic search exception is thrown when searching for product before catalogsearch reindexing"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-94995"/>
             <group value="Catalog"/>
+            <group value="SearchEngineElasticsearch" />
         </annotations>
         <before>
             <createData entity="SimpleSubCategory" stepKey="categoryFirst"/>
@@ -28,26 +29,24 @@
         <after>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="categoryFirst" stepKey="deleteCategory"/>
-            <actionGroup ref="ResetSearchEngineConfiguration" stepKey="resetCatalogSearchConfiguration"/>
-            <actionGroup ref="updateIndexerOnSave" stepKey="resetIndexerBackToOriginalState">
+            <comment userInput="The test was moved to elasticsearch suite" stepKey="resetCatalogSearchConfiguration"/>
+            <actionGroup ref="AdminIndexerSetUpdateOnSaveActionGroup" stepKey="resetIndexerBackToOriginalState">
                 <argument name="indexerName" value="catalogsearch_fulltext"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <comment userInput="Change Catalog search engine option to Elastic Search 5.0+" stepKey="chooseElasticSearch5"/>
-        <actionGroup ref="ChooseElasticSearchAsSearchEngine" stepKey="chooseES5"/>
+        <comment userInput="The test was moved to elasticsearch suite" stepKey="chooseES5"/>
         <actionGroup ref="ClearPageCacheActionGroup" stepKey="clearing"/>
-        <actionGroup ref="updateIndexerBySchedule" stepKey="updateAnIndexerBySchedule">
+        <actionGroup ref="UpdateIndexerByScheduleActionGroup" stepKey="updateAnIndexerBySchedule">
             <argument name="indexerName" value="catalogsearch_fulltext"/>
         </actionGroup>
-        <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         <!--Navigate to storefront and do a quick search for the product -->
         <comment userInput="Navigate to Storefront to check if quick search works" stepKey="commentCheckQuickSearch" />
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToHomePage"/>
-
-        <waitForPageLoad stepKey="waitForHomePageToLoad" time="30"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
         <fillField userInput="Simple" selector="{{StorefrontQuickSearchSection.searchPhrase}}" stepKey="fillSearchBar"/>
         <waitForPageLoad stepKey="wait2" time="30"/>
         <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearchButton"/>
@@ -55,6 +54,6 @@
         <seeInTitle userInput="Search results for: 'Simple'" stepKey="assertQuickSearchTitle"/>
         <see userInput="Search results for: 'Simple'" selector="{{StorefrontCatalogSearchMainSection.SearchTitle}}" stepKey="assertQuickSearchName"/>
         <comment userInput="End of searching products" stepKey="endOfSearchingProducts"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin2"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin2"/>
         </test>
 </tests>

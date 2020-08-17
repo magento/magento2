@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlAuthenticationException;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
 use Magento\Framework\Api\DataObjectHelper;
+use Magento\Newsletter\Model\SubscriptionManagerInterface;
 use Magento\Store\Api\Data\StoreInterface;
 
 /**
@@ -39,11 +40,6 @@ class UpdateCustomerAccount
     private $dataObjectHelper;
 
     /**
-     * @var ChangeSubscriptionStatus
-     */
-    private $changeSubscriptionStatus;
-
-    /**
      * @var ValidateCustomerData
      */
     private $validateCustomerData;
@@ -54,27 +50,32 @@ class UpdateCustomerAccount
     private $restrictedKeys;
 
     /**
+     * @var SubscriptionManagerInterface
+     */
+    private $subscriptionManager;
+
+    /**
      * @param SaveCustomer $saveCustomer
      * @param CheckCustomerPassword $checkCustomerPassword
      * @param DataObjectHelper $dataObjectHelper
-     * @param ChangeSubscriptionStatus $changeSubscriptionStatus
      * @param ValidateCustomerData $validateCustomerData
+     * @param SubscriptionManagerInterface $subscriptionManager
      * @param array $restrictedKeys
      */
     public function __construct(
         SaveCustomer $saveCustomer,
         CheckCustomerPassword $checkCustomerPassword,
         DataObjectHelper $dataObjectHelper,
-        ChangeSubscriptionStatus $changeSubscriptionStatus,
         ValidateCustomerData $validateCustomerData,
+        SubscriptionManagerInterface $subscriptionManager,
         array $restrictedKeys = []
     ) {
         $this->saveCustomer = $saveCustomer;
         $this->checkCustomerPassword = $checkCustomerPassword;
         $this->dataObjectHelper = $dataObjectHelper;
         $this->restrictedKeys = $restrictedKeys;
-        $this->changeSubscriptionStatus = $changeSubscriptionStatus;
         $this->validateCustomerData = $validateCustomerData;
+        $this->subscriptionManager = $subscriptionManager;
     }
 
     /**
@@ -112,7 +113,11 @@ class UpdateCustomerAccount
         $this->saveCustomer->execute($customer);
 
         if (isset($data['is_subscribed'])) {
-            $this->changeSubscriptionStatus->execute((int)$customer->getId(), (bool)$data['is_subscribed']);
+            if ((bool)$data['is_subscribed']) {
+                $this->subscriptionManager->subscribeCustomer((int)$customer->getId(), (int)$store->getId());
+            } else {
+                $this->subscriptionManager->unsubscribeCustomer((int)$customer->getId(), (int)$store->getId());
+            }
         }
     }
 }

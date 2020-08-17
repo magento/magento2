@@ -14,7 +14,7 @@ use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Collection test
+ * Test for Magento\Catalog\Model\ResourceModel\Product\Collection
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -39,7 +39,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * Sets up the fixture, for example, opens a network connection.
      * This method is called before a test is executed.
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->collection = Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\ResourceModel\Product\Collection::class
@@ -262,7 +262,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             . ' LEFT JOIN `' . $urlRewriteTable . '` AS `alias` ON (alias.entity_id =e.entity_id)'
             . ' AND (alias.entity_type = \'product\')';
 
-        self::assertContains($expected, str_replace(PHP_EOL, '', $sql));
+        self::assertStringContainsString($expected, str_replace(PHP_EOL, '', $sql));
     }
 
     /**
@@ -277,15 +277,57 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Add tier price attribute filter to collection
+     * Add tier price attribute filter to collection with different condition types.
      *
+     * @param mixed $condition
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/few_simple_products.php
      * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     *
+     * @dataProvider addAttributeTierPriceToFilterDataProvider
      */
-    public function testAddAttributeTierPriceToFilter(): void
+    public function testAddAttributeTierPriceToFilter($condition): void
     {
-        $this->assertEquals(11, $this->collection->getSize());
-        $this->collection->addAttributeToFilter('tier_price', ['gt' => 0]);
-        $this->assertEquals(1, $this->collection->getSize());
+        $size = $this->collection->addAttributeToFilter('tier_price', $condition)->getSize();
+        $this->assertEquals(1, $size);
+    }
+
+    /**
+     * @return array
+     */
+    public function addAttributeTierPriceToFilterDataProvider(): array
+    {
+        return [
+            'condition is array' => [['eq' => 8]],
+            'condition is string' => ['8'],
+            'condition is int' => [8],
+            'condition is null' => [null]
+        ];
+    }
+
+    /**
+     * Add is_saleable attribute filter to collection with different condition types.
+     *
+     * @param mixed $condition
+     * @magentoDataFixture Magento/Catalog/Model/ResourceModel/_files/product_simple.php
+     *
+     * @dataProvider addAttributeIsSaleableToFilterDataProvider
+     */
+    public function testAddAttributeIsSaleableToFilter($condition): void
+    {
+        $size = $this->collection->addAttributeToFilter('is_saleable', $condition)->getSize();
+        $this->assertEquals(1, $size);
+    }
+
+    /**
+     * @return array
+     */
+    public function addAttributeIsSaleableToFilterDataProvider(): array
+    {
+        return [
+            'condition is array' => [['eq' => 1]],
+            'condition is string' => ['1'],
+            'condition is int' => [1],
+            'condition is null' => [null]
+        ];
     }
 }

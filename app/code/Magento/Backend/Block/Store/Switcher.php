@@ -592,7 +592,7 @@ class Switcher extends \Magento\Backend\Block\Template
                 'What is this?'
             ) . '"' . ' class="admin__field-tooltip-action action-help"><span>' . __(
                 'What is this?'
-            ) . '</span></a></span>' . ' </div>';
+            ) . '</span></a>' . ' </div>';
         }
         return $html;
     }

@@ -35,7 +35,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Current customer
      *
-     * @deprecated 100.2.0, as unused property
+     * @deprecated 100.2.0 as unused property
      * @var CurrentCustomer
      */
     protected $currentCustomer;
@@ -134,7 +134,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Get cache key informative items.
      *
      * @return array
-     * @since 100.2.0
+     * @since 100.1.10
      */
     public function getCacheKeyInfo()
     {
@@ -182,11 +182,10 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     {
         if (!$this->hasAllowProducts()) {
             $products = [];
-            $skipSaleableCheck = $this->catalogProduct->getSkipSaleableCheck();
             $allProducts = $this->getProduct()->getTypeInstance()->getUsedProducts($this->getProduct(), null);
             /** @var $product \Magento\Catalog\Model\Product */
             foreach ($allProducts as $product) {
-                if ($skipSaleableCheck || ((int) $product->getStatus()) === Status::STATUS_ENABLED) {
+                if ((int) $product->getStatus() === Status::STATUS_ENABLED) {
                     $products[] = $product;
                 }
             }
@@ -254,7 +253,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Get product images for configurable variations
      *
      * @return array
-     * @since 100.2.0
+     * @since 100.1.10
      */
     protected function getOptionImages()
     {
@@ -333,7 +332,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
     /**
      * Replace ',' on '.' for js
      *
-     * @deprecated 100.2.0 Will be removed in major release
+     * @deprecated 100.1.10 Will be removed in major release
      * @param float $price
      * @return string
      */
@@ -346,7 +345,7 @@ class Configurable extends \Magento\Catalog\Block\Product\View\AbstractView
      * Should we generate "As low as" block or not
      *
      * @return bool
-     * @since 100.2.0
+     * @since 100.1.10
      */
     public function showMinimalPrice()
     {

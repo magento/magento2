@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCheckColorUploadChooserVisualSwatchTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Check correct view of visual swatches"/>
+            <title value="Correct view of Swatches while choosing color or upload image"/>
+            <description value="Correct view of Swatches while choosing color or upload image"/>
+            <severity value="AVERAGE"/>
+            <group value="Swatches"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="addNewProductAttribute"/>
+        <selectOption selector="{{AttributePropertiesSection.InputType}}"
+                      userInput="{{visualSwatchAttribute.input_type}}" stepKey="fillInputType"/>
+
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch1"/>
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch2"/>
+        <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch3"/>
+        <click selector="{{AdminManageSwatchSection.nthVisualSwatch('3')}}" stepKey="clickSwatch3"/>
+
+        <click selector="{{AdminManageSwatchSection.nthVisualSwatch('2')}}" stepKey="clickSwatch2"/>
+        <seeElement selector="{{AdminManageSwatchSection.chooserBlock('2')}}" stepKey="seeSwatch2"/>
+        <dontSeeElement selector="{{AdminManageSwatchSection.chooserBlock('3')}}" stepKey="dontSeeSwatch3"/>
+
+        <click selector="{{AdminManageSwatchSection.nthVisualSwatch('1')}}" stepKey="clickSwatch1"/>
+        <seeElement selector="{{AdminManageSwatchSection.chooserBlock('1')}}" stepKey="seeSwatch1"/>
+        <dontSeeElement selector="{{AdminManageSwatchSection.chooserBlock('2')}}" stepKey="dontSeeSwatch2"/>
+    </test>
+</tests>

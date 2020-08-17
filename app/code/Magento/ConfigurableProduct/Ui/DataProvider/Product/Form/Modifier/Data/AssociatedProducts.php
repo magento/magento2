@@ -234,7 +234,7 @@ class AssociatedProducts
      * @return void
      * @throws \Zend_Currency_Exception
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * phpcs:disable Generic.Metrics.NestingLevel
+     * phpcs:disable Generic.Metrics.NestingLevel.TooHigh
      */
     protected function prepareVariations()
     {
@@ -321,6 +321,7 @@ class AssociatedProducts
         $this->productIds = $productIds;
         $this->productAttributes = array_values($attributes);
     }
+    //phpcs: enable
 
     /**
      * Get JSON string that contains attribute code and value

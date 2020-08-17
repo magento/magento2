@@ -6,6 +6,9 @@
 
 namespace Magento\Eav\Model\ResourceModel\Entity\Attribute;
 
+/**
+ * Basic implementation for attribute sets
+ */
 class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
 {
     /**
@@ -24,8 +27,6 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     protected $eavConfig;
 
     /**
-     * Constructor
-     *
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param GroupFactory $attrGroupFactory
      * @param \Magento\Eav\Model\Config $eavConfig
@@ -54,7 +55,7 @@ class Set extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     }
 
     /**
-     * Perform actions after object save
+     * Perform actions after object save.
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return $this
