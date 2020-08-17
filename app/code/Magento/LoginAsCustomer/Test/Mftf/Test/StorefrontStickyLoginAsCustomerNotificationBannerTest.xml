@@ -42,7 +42,7 @@
             <argument name="customerId" value="$$createCustomer.id$$"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontAssertStickyLoginAsCustomerNotificationBannerActionGroup" stepKey="assertStickyNotificationBanner">
+        <actionGroup ref="AssertStorefrontStickyLoginAsCustomerNotificationBannerActionGroup" stepKey="assertStickyNotificationBanner">
             <argument name="customerFullName" value="$$createCustomer.firstname$$ $$createCustomer.lastname$$"/>
         </actionGroup>
 
