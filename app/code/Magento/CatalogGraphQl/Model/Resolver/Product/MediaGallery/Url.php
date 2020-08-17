@@ -55,7 +55,7 @@ class Url implements ResolverInterface
         $context,
         ResolveInfo $info,
         array $value = null,
-        array $args = null
+        array $args = []
     ) {
         if (!isset($value['image_type']) && !isset($value['file'])) {
             throw new LocalizedException(__('"image_type" value should be specified'));
@@ -69,9 +69,9 @@ class Url implements ResolverInterface
         $product = $value['model'];
         if (isset($value['image_type'])) {
             $imagePath = $product->getData($value['image_type']);
-            return $this->getImageUrl($value['image_type'], $imagePath);
+            return $this->getImageUrl($value['image_type'], $imagePath, $args);
         } elseif (isset($value['file'])) {
-            return $this->getImageUrl('image', $value['file']);
+            return $this->getImageUrl('image', $value['file'], $args);
         }
         return [];
     }
@@ -84,13 +84,15 @@ class Url implements ResolverInterface
      * @return string
      * @throws \Exception
      */
-    private function getImageUrl(string $imageType, ?string $imagePath): string
+    private function getImageUrl(string $imageType, ?string $imagePath, array $imageArgs = []): string
     {
         if (empty($imagePath) && !empty($this->placeholderCache[$imageType])) {
             return $this->placeholderCache[$imageType];
         }
         $image = $this->productImageFactory->create();
         $image->setDestinationSubdir($imageType)
+            ->setWidth($imageArgs['width'] ?? null)
+            ->setHeight($imageArgs['height'] ?? null)
             ->setBaseFile($imagePath);
 
         if ($image->isBaseFilePlaceholder()) {
