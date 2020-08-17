@@ -35,6 +35,11 @@ class CompareList implements ResolverInterface
      */
     private $compareListService;
 
+    /**
+     * @param CompareListFactory $compareListFactory
+     * @param ResourceCompareList $resourceCompareList
+     * @param CompareListService $compareListService
+     */
     public function __construct(
         CompareListFactory $compareListFactory,
         ResourceCompareList $resourceCompareList,
