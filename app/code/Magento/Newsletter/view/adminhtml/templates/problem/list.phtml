@@ -4,8 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <?= $block->getChildHtml('grid') ?>
 
@@ -15,16 +14,17 @@
     <?= $block->getDeleteButtonHtml() ?>
 </div>
 <?php endif ?>
-<script>
+<?php $scriptString = <<<script
 require(["prototype", "mage/adminhtml/events"], function(){
 
-    <!--
     problemController = {
         checkCheckboxes:function (controlCheckbox) {
-            var elements = $('problemGrid').getElementsByClassName('problemCheckbox');
-            elements.each(function (obj) {
-                obj.checked = controlCheckbox.checked;
-            });
+            var elements = \$$('input.problemCheckbox');
+            if (elements && elements.length) {
+                elements.each(function (obj) {
+                    obj.checked = controlCheckbox.checked;
+                });
+            }
         },
         rowClick:function (e) {
             if (!Event.element(e).hasClassName('problemCheckbox')) {
@@ -37,7 +37,7 @@ require(["prototype", "mage/adminhtml/events"], function(){
         },
 
         unsubscribe:function () {
-            var elements = $$('input.problemCheckbox');
+            var elements = \$$('input.problemCheckbox');
             var serializedElements = Form.serializeElements(elements, true);
             serializedElements._unsubscribe = '1';
             serializedElements.form_key = FORM_KEY;
@@ -50,7 +50,7 @@ require(["prototype", "mage/adminhtml/events"], function(){
         },
 
         deleteSelected:function () {
-            var elements = $$('input.problemCheckbox');
+            var elements = \$$('input.problemCheckbox');
             var serializedElements = Form.serializeElements(elements, true);
             serializedElements._delete = '1';
             serializedElements.form_key = FORM_KEY;
@@ -67,4 +67,6 @@ require(["prototype", "mage/adminhtml/events"], function(){
     //-->
 
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

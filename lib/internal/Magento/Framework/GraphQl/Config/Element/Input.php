@@ -28,18 +28,26 @@ class Input implements TypeInterface
     private $description;
 
     /**
+     * @var array
+     */
+    private $deprecated;
+
+    /**
      * @param string $name
      * @param Field[] $fields
      * @param string $description
+     * @param array $deprecated
      */
     public function __construct(
         string $name,
         array $fields,
-        string $description
+        string $description,
+        array $deprecated = []
     ) {
         $this->name = $name;
         $this->fields = $fields;
         $this->description = $description;
+        $this->deprecated = $deprecated;
     }
 
     /**
@@ -70,5 +78,15 @@ class Input implements TypeInterface
     public function getDescription(): string
     {
         return $this->description;
+    }
+
+    /**
+     * Return the deprecated annotation for the input
+     *
+     * @return array
+     */
+    public function getDeprecated() : array
+    {
+        return $this->deprecated;
     }
 }

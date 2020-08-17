@@ -3,35 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Tests for \Magento\Framework\Data\Form\Element\Password
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
-class PasswordTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Data\Form\Element\CollectionFactory;
+use Magento\Framework\Data\Form\Element\Factory;
+use Magento\Framework\Data\Form\Element\Obscure;
+use Magento\Framework\Data\Form\Element\Password;
+use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class PasswordTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_objectManagerMock;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\Password
+     * @var Password
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
-        $collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
-        $escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
-        $this->_model = new \Magento\Framework\Data\Form\Element\Obscure(
+        $factoryMock = $this->createMock(Factory::class);
+        $collectionFactoryMock = $this->createMock(CollectionFactory::class);
+        $escaperMock = $this->createMock(Escaper::class);
+        $this->_model = new Obscure(
             $factoryMock,
             $collectionFactoryMock,
             $escaperMock
         );
-        $formMock = new \Magento\Framework\DataObject();
+        $formMock = new DataObject();
         $formMock->getHtmlIdPrefix('id_prefix');
         $formMock->getHtmlIdPrefix('id_suffix');
         $this->_model->setForm($formMock);
@@ -52,7 +62,7 @@ class PasswordTest extends \PHPUnit\Framework\TestCase
     public function testGetHtml()
     {
         $html = $this->_model->getHtml();
-        $this->assertContains('type="password"', $html);
-        $this->assertTrue(preg_match('/class=\".*input-text.*\"/i', $html) > 0);
+        $this->assertStringContainsString('type="password"', $html);
+        $this->assertGreaterThan(0, preg_match('/class=\"* input-text admin__control-text.*\"/i', $html));
     }
 }

@@ -10,9 +10,13 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Go to Address Book -->
     <actionGroup name="StorefrontCustomerAddressBookNumberOfAddresses">
+        <annotations>
+            <description>Validate that the Customer Address count is present and correct on the Storefront Customer Dashboard page.</description>
+        </annotations>
         <arguments>
             <argument name="number" type="string"/>
         </arguments>
+        
         <see userInput="{{number}} Item" selector="{{StorefrontCustomerAddressesSection.numberOfAddresses}}" stepKey="checkNumberOfAddresses"/>
     </actionGroup>
 </actionGroups>

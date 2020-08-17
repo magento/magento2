@@ -3,14 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php $_element = $block->getElement() ?>
 
-<?php if (!$_element->getNoDisplay()): ?>
+<?php if (!$_element->getNoDisplay()) : ?>
 <div class="cms-manage-content-actions">
-    <?= trim($_element->getElementHtml()) ?>
+    <?= /* @noEscape */ trim($_element->getElementHtml()) ?>
 </div>
 <?php endif; ?>

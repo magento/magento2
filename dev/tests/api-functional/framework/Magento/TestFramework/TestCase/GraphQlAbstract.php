@@ -78,6 +78,29 @@ abstract class GraphQlAbstract extends WebapiAbstract
     }
 
     /**
+     * Perform GraphQL query via GET and returns only the response headers
+     *
+     * @param string $query
+     * @param array $variables
+     * @param string $operationName
+     * @param array $headers
+     * @return array
+     */
+    public function graphQlQueryWithResponseHeaders(
+        string $query,
+        array $variables = [],
+        string $operationName = '',
+        array $headers = []
+    ): array {
+        return $this->getGraphQlClient()->getWithResponseHeaders(
+            $query,
+            $variables,
+            $operationName,
+            $this->composeHeaders($headers)
+        );
+    }
+
+    /**
      * Compose headers
      *
      * @param array $headers
@@ -148,6 +171,11 @@ abstract class GraphQlAbstract extends WebapiAbstract
                 $expectedValue,
                 "Value of '{$responseField}' field must not be NULL"
             );
+            self::assertArrayHasKey(
+                $responseField,
+                $actualResponse,
+                "Response array does not contain key '{$responseField}'"
+            );
             self::assertEquals(
                 $expectedValue,
                 $actualResponse[$responseField],
@@ -155,5 +183,62 @@ abstract class GraphQlAbstract extends WebapiAbstract
                 . var_export($expectedValue, true)
             );
         }
+    }
+
+    /**
+     * Compare arrays recursively regardless of nesting.
+     *
+     * Can compare arrays that have both one level and n-level nesting.
+     * ```
+     *  [
+     * 'products' => [
+     *      'items' => [
+     *      [
+     *          'sku'       => 'bundle-product',
+     *          'type_id'   => 'bundle',
+     *          'items'     => [
+     *          [
+     *              'title'     => 'Bundle Product Items',
+     *              'sku'       => 'bundle-product',
+     *              'options'   => [
+     *              [
+     *                  'price' => 2.75,
+     *                  'label' => 'Simple Product',
+     *                  'product' => [
+     *                      'name'    => 'Simple Product',
+     *                      'sku'     => 'simple',
+     *                  ]
+     *              ]
+     *          ]
+     *      ]
+     *  ];
+     * ```
+     *
+     * @param array $expected
+     * @param array $actual
+     * @return array
+     */
+    public function compareArraysRecursively(array $expected, array $actual): array
+    {
+        $diffResult = [];
+
+        foreach ($expected as $key => $value) {
+            if (array_key_exists($key, $actual)) {
+                if (is_array($value)) {
+                    $recursiveDiff = $this->compareArraysRecursively($value, $actual[$key]);
+                    if (!empty($recursiveDiff)) {
+                        $diffResult[$key] = $recursiveDiff;
+                    }
+                } else {
+                    if (!in_array($value, $actual, true)) {
+                        $diffResult[$key] = $value;
+                    }
+                }
+            } else {
+                $diffResult[$key] = $value;
+            }
+        }
+
+        return $diffResult;
     }
 }

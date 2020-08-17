@@ -3,24 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\MessageQueue\Test\Unit\Model\Cron;
 
-use Magento\Framework\MessageQueue\ConnectionTypeResolver;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Framework\ShellInterface;
-use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfigInterface;
-use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Lock\LockManagerInterface;
+use Magento\Framework\MessageQueue\ConnectionTypeResolver;
+use Magento\Framework\MessageQueue\Consumer\Config\ConsumerConfigItemInterface;
+use Magento\Framework\MessageQueue\Consumer\ConfigInterface as ConsumerConfigInterface;
+use Magento\Framework\ShellInterface;
 use Magento\MessageQueue\Model\Cron\ConsumersRunner;
-use Magento\MessageQueue\Model\Cron\ConsumersRunner\PidConsumerManager;
+use Magento\MessageQueue\Model\CheckIsAvailableMessagesInQueue;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Symfony\Component\Process\PhpExecutableFinder;
 
-class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
+/**
+ * Unit tests for ConsumersRunner.
+ */
+class ConsumersRunnerTest extends TestCase
 {
     /**
-     * @var PidConsumerManager|MockObject
+     * @var LockManagerInterface|MockObject
      */
-    private $pidConsumerManagerMock;
+    private $lockManagerMock;
 
     /**
      * @var ShellInterface|MockObject
@@ -43,9 +50,14 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     private $phpExecutableFinderMock;
 
     /**
+     * @var CheckIsAvailableMessagesInQueue|MockObject
+     */
+    private $checkIsAvailableMessagesMock;
+
+    /**
      * @var ConnectionTypeResolver
      */
-    private $connectionTypeResover;
+    private $connectionTypeResolver;
 
     /**
      * @var ConsumersRunner
@@ -55,16 +67,15 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         require_once __DIR__ . '/../../_files/consumers_runner_functions_mocks.php';
 
-        $this->phpExecutableFinderMock = $this->getMockBuilder(phpExecutableFinder::class)
+        $this->phpExecutableFinderMock = $this->getMockBuilder(PhpExecutableFinder::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->pidConsumerManagerMock = $this->getMockBuilder(PidConsumerManager::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->lockManagerMock = $this->getMockBuilder(LockManagerInterface::class)
+            ->getMockForAbstractClass();
         $this->shellBackgroundMock = $this->getMockBuilder(ShellInterface::class)
             ->getMockForAbstractClass();
         $this->consumerConfigMock = $this->getMockBuilder(ConsumerConfigInterface::class)
@@ -72,18 +83,21 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
         $this->deploymentConfigMock = $this->getMockBuilder(DeploymentConfig::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->connectionTypeResover = $this->getMockBuilder(ConnectionTypeResolver::class)
+        $this->checkIsAvailableMessagesMock = $this->createMock(CheckIsAvailableMessagesInQueue::class);
+        $this->connectionTypeResolver = $this->getMockBuilder(ConnectionTypeResolver::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->connectionTypeResover->method('getConnectionType')->willReturn('something');
+        $this->connectionTypeResolver->method('getConnectionType')->willReturn('something');
 
         $this->consumersRunner = new ConsumersRunner(
             $this->phpExecutableFinderMock,
             $this->consumerConfigMock,
             $this->deploymentConfigMock,
             $this->shellBackgroundMock,
-            $this->pidConsumerManagerMock,
-            $this->connectionTypeResover
+            $this->lockManagerMock,
+            $this->connectionTypeResolver,
+            null,
+            $this->checkIsAvailableMessagesMock
         );
     }
 
@@ -91,16 +105,18 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
     {
         $this->deploymentConfigMock->expects($this->once())
             ->method('get')
-            ->willReturnMap([
-                ['cron_consumers_runner/cron_run', true, false],
-                ['cron_consumers_runner/max_messages', 10000, 10000],
-                ['cron_consumers_runner/consumers', [], []],
-            ]);
+            ->willReturnMap(
+                [
+                    ['cron_consumers_runner/cron_run', true, false],
+                    ['cron_consumers_runner/max_messages', 10000, 10000],
+                    ['cron_consumers_runner/consumers', [], []],
+                ]
+            );
 
         $this->consumerConfigMock->expects($this->never())
             ->method('getConsumers');
-        $this->pidConsumerManagerMock->expects($this->never())
-            ->method('isRun');
+        $this->lockManagerMock->expects($this->never())
+            ->method('isLocked');
         $this->shellBackgroundMock->expects($this->never())
             ->method('execute');
 
@@ -109,7 +125,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @param int $maxMessages
-     * @param bool $isRun
+     * @param bool $isLocked
      * @param string $php
      * @param string $command
      * @param array $arguments
@@ -120,7 +136,7 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
      */
     public function testRun(
         $maxMessages,
-        $isRun,
+        $isLocked,
         $php,
         $command,
         $arguments,
@@ -129,22 +145,22 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
         $isRunExpects
     ) {
         $consumerName = 'consumerName';
-        $pidFilePath = 'consumerName-myHostName.pid';
 
-        $this->deploymentConfigMock->expects($this->exactly(3))
+        $this->deploymentConfigMock
             ->method('get')
-            ->willReturnMap([
-                ['cron_consumers_runner/cron_run', true, true],
-                ['cron_consumers_runner/max_messages', 10000, $maxMessages],
-                ['cron_consumers_runner/consumers', [], $allowedConsumers],
-            ]);
+            ->willReturnMap(
+                [
+                    ['cron_consumers_runner/cron_run', true, true],
+                    ['cron_consumers_runner/max_messages', 10000, $maxMessages],
+                    ['cron_consumers_runner/consumers', [], $allowedConsumers],
+                    ['queue/only_spawn_when_message_available', null, 0],
+                ]
+            );
 
         /** @var ConsumerConfigInterface|MockObject $firstCunsumer */
         $consumer = $this->getMockBuilder(ConsumerConfigItemInterface::class)
             ->getMockForAbstractClass();
-        $consumer->expects($this->any())
-            ->method('getName')
-            ->willReturn($consumerName);
+        $consumer->method('getName')->willReturn($consumerName);
 
         $this->phpExecutableFinderMock->expects($this->once())
             ->method('find')
@@ -154,10 +170,10 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
             ->method('getConsumers')
             ->willReturn([$consumer]);
 
-        $this->pidConsumerManagerMock->expects($this->exactly($isRunExpects))
-            ->method('isRun')
-            ->with($pidFilePath)
-            ->willReturn($isRun);
+        $this->lockManagerMock->expects($this->exactly($isRunExpects))
+            ->method('isLocked')
+            ->with(md5($consumerName)) //phpcs:ignore
+            ->willReturn($isLocked);
 
         $this->shellBackgroundMock->expects($this->exactly($shellBackgroundExpects))
             ->method('execute')
@@ -174,83 +190,204 @@ class ConsumersRunnerTest extends \PHPUnit\Framework\TestCase
         return [
             [
                 'maxMessages' => 20000,
-                'isRun' => false,
+                'isLocked' => false,
                 'php' => '',
-                'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
-                'arguments' => ['consumerName', '--pid-file-path=consumerName-myHostName.pid', '--max-messages=20000'],
+                'command' => 'php ' . BP . '/bin/magento queue:consumers:start %s %s %s',
+                'arguments' => ['consumerName', '--single-thread', '--max-messages=20000'],
                 'allowedConsumers' => [],
                 'shellBackgroundExpects' => 1,
                 'isRunExpects' => 1,
             ],
             [
                 'maxMessages' => 10000,
-                'isRun' => false,
+                'isLocked' => false,
                 'php' => '',
-                'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
-                'arguments' => ['consumerName', '--pid-file-path=consumerName-myHostName.pid', '--max-messages=10000'],
+                'command' => 'php ' . BP . '/bin/magento queue:consumers:start %s %s %s',
+                'arguments' => ['consumerName', '--single-thread', '--max-messages=10000'],
                 'allowedConsumers' => [],
                 'shellBackgroundExpects' => 1,
                 'isRunExpects' => 1,
             ],
             [
                 'maxMessages' => 10000,
-                'isRun' => false,
+                'isLocked' => false,
                 'php' => '',
-                'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
-                'arguments' => ['consumerName', '--pid-file-path=consumerName-myHostName.pid', '--max-messages=10000'],
+                'command' => 'php ' . BP . '/bin/magento queue:consumers:start %s %s %s',
+                'arguments' => ['consumerName', '--single-thread', '--max-messages=10000'],
                 'allowedConsumers' => ['someConsumer'],
                 'shellBackgroundExpects' => 0,
                 'isRunExpects' => 0,
             ],
             [
                 'maxMessages' => 10000,
-                'isRun' => true,
+                'isLocked' => true,
                 'php' => '',
-                'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
-                'arguments' => ['consumerName', '--pid-file-path=consumerName-myHostName.pid', '--max-messages=10000'],
+                'command' => 'php ' . BP . '/bin/magento queue:consumers:start %s %s %s',
+                'arguments' => ['consumerName', '--single-thread', '--max-messages=10000'],
                 'allowedConsumers' => ['someConsumer'],
                 'shellBackgroundExpects' => 0,
                 'isRunExpects' => 0,
             ],
             [
                 'maxMessages' => 10000,
-                'isRun' => true,
+                'isLocked' => true,
                 'php' => '',
-                'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
-                'arguments' => ['consumerName', '--pid-file-path=consumerName-myHostName.pid', '--max-messages=10000'],
+                'command' => 'php ' . BP . '/bin/magento queue:consumers:start %s %s %s',
+                'arguments' => ['consumerName', '--single-thread', '--max-messages=10000'],
                 'allowedConsumers' => [],
                 'shellBackgroundExpects' => 0,
                 'isRunExpects' => 1,
             ],
             [
                 'maxMessages' => 10000,
-                'isRun' => true,
+                'isLocked' => true,
                 'php' => '',
-                'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
-                'arguments' => ['consumerName', '--pid-file-path=consumerName-myHostName.pid', '--max-messages=10000'],
+                'command' => 'php ' . BP . '/bin/magento queue:consumers:start %s %s %s',
+                'arguments' => ['consumerName', '--single-thread', '--max-messages=10000'],
                 'allowedConsumers' => ['consumerName'],
                 'shellBackgroundExpects' => 0,
                 'isRunExpects' => 1,
             ],
             [
                 'maxMessages' => 10000,
-                'isRun' => false,
+                'isLocked' => false,
                 'php' => '',
-                'command' => 'php '. BP . '/bin/magento queue:consumers:start %s %s %s',
-                'arguments' => ['consumerName', '--pid-file-path=consumerName-myHostName.pid', '--max-messages=10000'],
+                'command' => 'php ' . BP . '/bin/magento queue:consumers:start %s %s %s',
+                'arguments' => ['consumerName', '--single-thread', '--max-messages=10000'],
                 'allowedConsumers' => ['consumerName'],
                 'shellBackgroundExpects' => 1,
                 'isRunExpects' => 1,
             ],
             [
                 'maxMessages' => 0,
-                'isRun' => false,
+                'isLocked' => false,
                 'php' => '/bin/php',
-                'command' => '/bin/php '. BP . '/bin/magento queue:consumers:start %s %s',
-                'arguments' => ['consumerName', '--pid-file-path=consumerName-myHostName.pid'],
+                'command' => '/bin/php ' . BP . '/bin/magento queue:consumers:start %s %s',
+                'arguments' => ['consumerName', '--single-thread'],
                 'allowedConsumers' => ['consumerName'],
                 'shellBackgroundExpects' => 1,
                 'isRunExpects' => 1,
+            ],
+        ];
+    }
+
+    /**
+     * @param boolean $onlySpawnWhenMessageAvailable
+     * @param boolean $isMassagesAvailableInTheQueue
+     * @param int $shellBackgroundExpects
+     * @param boolean $globalOnlySpawnWhenMessageAvailable
+     * @param int $getOnlySpawnWhenMessageAvailableCallCount
+     * @param int $isMassagesAvailableInTheQueueCallCount
+     * @dataProvider runBasedOnOnlySpawnWhenMessageAvailableConsumerConfigurationDataProvider
+     */
+    public function testRunBasedOnOnlySpawnWhenMessageAvailableConsumerConfiguration(
+        $onlySpawnWhenMessageAvailable,
+        $isMassagesAvailableInTheQueue,
+        $shellBackgroundExpects,
+        $globalOnlySpawnWhenMessageAvailable,
+        $getOnlySpawnWhenMessageAvailableCallCount,
+        $isMassagesAvailableInTheQueueCallCount
+    ) {
+        $consumerName = 'consumerName';
+        $connectionName = 'connectionName';
+        $queueName = 'queueName';
+        $this->deploymentConfigMock->expects($this->exactly(4))
+            ->method('get')
+            ->willReturnMap(
+                [
+                    ['cron_consumers_runner/cron_run', true, true],
+                    ['cron_consumers_runner/max_messages', 10000, 1000],
+                    ['cron_consumers_runner/consumers', [], []],
+                    ['queue/only_spawn_when_message_available', true, $globalOnlySpawnWhenMessageAvailable],
+                ]
+            );
+
+        /** @var ConsumerConfigInterface|MockObject $firstCunsumer */
+        $consumer = $this->getMockBuilder(ConsumerConfigItemInterface::class)
+            ->getMockForAbstractClass();
+        $consumer->method('getName')->willReturn($consumerName);
+        $consumer->expects($this->once())
+            ->method('getConnection')
+            ->willReturn($connectionName);
+        $consumer->method('getQueue')->willReturn($queueName);
+        $consumer->expects($this->exactly($getOnlySpawnWhenMessageAvailableCallCount))
+            ->method('getOnlySpawnWhenMessageAvailable')
+            ->willReturn($onlySpawnWhenMessageAvailable);
+        $this->consumerConfigMock->expects($this->once())
+            ->method('getConsumers')
+            ->willReturn([$consumer]);
+
+        $this->phpExecutableFinderMock->expects($this->once())
+            ->method('find')
+            ->willReturn('');
+
+        $this->lockManagerMock->expects($this->once())
+            ->method('isLocked')
+            ->willReturn(false);
+
+        $this->checkIsAvailableMessagesMock->expects($this->exactly($isMassagesAvailableInTheQueueCallCount))
+            ->method('execute')
+            ->willReturn($isMassagesAvailableInTheQueue);
+
+        $this->shellBackgroundMock->expects($this->exactly($shellBackgroundExpects))
+            ->method('execute');
+
+        $this->consumersRunner->run();
+    }
+
+    /**
+     * @return array
+     */
+    public function runBasedOnOnlySpawnWhenMessageAvailableConsumerConfigurationDataProvider()
+    {
+        return [
+            [
+                'onlySpawnWhenMessageAvailable' => true,
+                'isMassagesAvailableInTheQueue' => true,
+                'shellBackgroundExpects' => 1,
+                'globalOnlySpawnWhenMessageAvailable' => false,
+                'getOnlySpawnWhenMessageAvailableCallCount' => 1,
+                'isMassagesAvailableInTheQueueCallCount' => 1
+            ],
+            [
+                'onlySpawnWhenMessageAvailable' => true,
+                'isMassagesAvailableInTheQueue' => false,
+                'shellBackgroundExpects' => 0,
+                'globalOnlySpawnWhenMessageAvailable' => false,
+                'getOnlySpawnWhenMessageAvailableCallCount' => 1,
+                'isMassagesAvailableInTheQueueCallCount' => 1
+            ],
+            [
+                'onlySpawnWhenMessageAvailable' => false,
+                'isMassagesAvailableInTheQueue' => true,
+                'shellBackgroundExpects' => 1,
+                'globalOnlySpawnWhenMessageAvailable' => false,
+                'getOnlySpawnWhenMessageAvailableCallCount' => 2,
+                'isMassagesAvailableInTheQueueCallCount' => 0
+            ],
+            [
+                'onlySpawnWhenMessageAvailable' => null,
+                'isMassagesAvailableInTheQueue' => true,
+                'shellBackgroundExpects' => 1,
+                'globalOnlySpawnWhenMessageAvailable' => true,
+                'getOnlySpawnWhenMessageAvailableCallCount' => 2,
+                'isMassagesAvailableInTheQueueCallCount' => 1
+            ],
+            [
+                'onlySpawnWhenMessageAvailable' => null,
+                'isMassagesAvailableInTheQueue' => true,
+                'shellBackgroundExpects' => 1,
+                'globalOnlySpawnWhenMessageAvailable' => false,
+                'getOnlySpawnWhenMessageAvailableCallCount' => 2,
+                'isMassagesAvailableInTheQueueCallCount' => 0
+            ],
+            [
+                'onlySpawnWhenMessageAvailable' => false,
+                'isMassagesAvailableInTheQueue' => true,
+                'shellBackgroundExpects' => 1,
+                'globalOnlySpawnWhenMessageAvailable' => true,
+                'getOnlySpawnWhenMessageAvailableCallCount' => 2,
+                'isMassagesAvailableInTheQueueCallCount' => 0
             ],
         ];
     }

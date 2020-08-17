@@ -17,7 +17,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $soapConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->soapConfig = $objectManager->create(Config::class);
@@ -64,7 +64,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
                                     '\\' . LocalizedException::class
                                 ]
                             ]
-                        ]
+                        ],
+                        'parameters' => []
                     ]
                 ],
                 'class' => AccountManagementInterface::class,
@@ -88,8 +89,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'isSecure' => false,
             'resources' => [
                 'Magento_Customer::customer',
-                'self'
             ],
+            'parameters' => []
         ];
         $actual = $this->soapConfig->getServiceMethodInfo(
             'customerCustomerRepositoryV1GetById',

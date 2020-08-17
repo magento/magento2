@@ -1,0 +1,90 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminFrontendAreaSessionMustNotAffectAdminAreaTest">
+        <annotations>
+            <stories value="Backend"/>
+            <features value="Session cookies"/>
+            <title value="Frontend area session must not affect admin area"/>
+            <description value="Frontend area session must not affect admin area"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-12353"/>
+            <group value="backend"/>
+            <group value="pagecache"/>
+            <group value="cookie"/>
+        </annotations>
+        <before>
+            <!-- Create Data -->
+            <createData entity="_defaultCategory" stepKey="createCategoryA"/>
+            <createData entity="SubCategoryWithParent" stepKey="createCategoryB">
+                <requiredEntity createDataKey="createCategoryA"/>
+            </createData>
+            <createData entity="SubCategoryWithParent" stepKey="createCategoryC">
+                <requiredEntity createDataKey="createCategoryB"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct1">
+                <requiredEntity createDataKey="createCategoryC"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct2">
+                <requiredEntity createDataKey="createCategoryC"/>
+            </createData>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct3">
+                <requiredEntity createDataKey="createCategoryA"/>
+            </createData>
+
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+            <resetCookie userInput="PHPSESSID" stepKey="resetSessionCookie"/>
+        </before>
+        <after>
+            <!-- Delete data -->
+            <deleteData createDataKey="createProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="createProduct3" stepKey="deleteProduct3"/>
+
+            <deleteData createDataKey="createCategoryC" stepKey="deleteCategoryC"/>
+            <deleteData createDataKey="createCategoryB" stepKey="deleteCategoryB"/>
+            <deleteData createDataKey="createCategoryA" stepKey="deleteCategoryA"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+        </after>
+
+        <!-- 1. Login as admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+
+        <!-- 2. Navigate Go to "Catalog"->"Products" -->
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="onCatalogProductPage"/>
+
+        <!-- 3. Open separate tab with Storefront -->
+        <openNewTab stepKey="openNewTab"/>
+
+        <!-- 4. Navigate to Men -> "Tops" -> "Jackets" -->
+        <amOnPage
+            url="{{StorefrontCategoryPage.url($$createCategoryA.custom_attributes[url_key]$$/$$createCategoryB.custom_attributes[url_key]$$/$$createCategoryC.custom_attributes[url_key]$$)}}"
+            stepKey="openCategoryPage"/>
+        <waitForPageLoad time="60" stepKey="waitForCategoryPage"/>
+
+        <!-- 5. Open admin tab with page with products. Reload this page twice. -->
+        <switchToPreviousTab stepKey="switchToPreviousTab"/>
+        <reloadPage stepKey="reloadAdminCatalogPageFirst"/>
+        <waitForPageLoad stepKey="waitForReloadFirst"/>
+        <reloadPage stepKey="reloadAdminCatalogPageSecond"/>
+        <waitForPageLoad stepKey="waitForReloadSecond"/>
+
+        <seeInTitle userInput="Products / Inventory / Catalog / Magento Admin" stepKey="seeAdminProductsPageTitle"/>
+        <see userInput="Products" selector="{{AdminHeaderSection.pageTitle}}" stepKey="seeAdminProductsPageHeader"/>
+
+        <switchToNextTab stepKey="switchToFrontendTab"/>
+        <closeTab stepKey="closeFrontendTab"/>
+    </test>
+</tests>

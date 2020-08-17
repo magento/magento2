@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontVerifySecureURLRedirectPaypalTest">
+        <annotations>
+            <features value="Paypal"/>
+            <stories value="Storefront Secure URLs"/>
+            <title value="Verify Secure URLs For Storefront Paypal Pages"/>
+            <description value="Verify that the Secure URL configuration applies to the Paypal pages on the Storefront"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-15541"/>
+            <group value="paypal"/>
+            <group value="configuration"/>
+            <group value="secure_storefront_url"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="customer"/>
+            <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
+                <argument name="Customer" value="$$customer$$"/>
+            </actionGroup>
+            <executeJS function="return window.location.host" stepKey="hostname"/>
+            <magentoCLI command="config:set web/secure/base_url https://{$hostname}/" stepKey="setSecureBaseURL"/>
+            <magentoCLI command="config:set web/secure/use_in_frontend 1" stepKey="useSecureURLsOnStorefront"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set web/secure/use_in_frontend 0" stepKey="dontUseSecureURLsOnStorefront"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
+        </after>
+        <executeJS function="return window.location.host" stepKey="hostname"/>
+        <amOnUrl url="http://{$hostname}/paypal/billing" stepKey="goToUnsecurePaypalBillingURL"/>
+        <seeCurrentUrlEquals url="https://{$hostname}/paypal/billing" stepKey="seeSecurePaypalBillingURL"/>
+        <amOnUrl url="http://{$hostname}/paypal/billing_agreement" stepKey="goToUnsecurePaypalBillingAgreementURL"/>
+        <seeCurrentUrlEquals url="https://{$hostname}/paypal/billing_agreement" stepKey="seeSecurePaypalBillingAgreementURL"/>
+        <amOnUrl url="http://{$hostname}/paypal/bml" stepKey="goToUnsecurePaypalBmlURL"/>
+        <seeCurrentUrlEquals url="https://{$hostname}/paypal/bml" stepKey="seeSecurePaypalBmlURL"/>
+        <amOnUrl url="http://{$hostname}/paypal/hostedpro" stepKey="goToUnsecurePaypalHostedProURL"/>
+        <seeCurrentUrlEquals url="https://{$hostname}/paypal/hostedpro" stepKey="seeSecurePaypalHostedProURL"/>
+        <amOnUrl url="http://{$hostname}/paypal/ipn" stepKey="goToUnsecurePaypalIpnURL"/>
+        <seeCurrentUrlEquals url="https://{$hostname}/paypal/ipn" stepKey="seeSecurePaypalIpnURL"/>
+        <amOnUrl url="http://{$hostname}/paypal/payflow" stepKey="goToUnsecurePaypalPayflowUL"/>
+        <seeCurrentUrlEquals url="https://{$hostname}/paypal/payflow" stepKey="seeSecurePaypalPayflowURL"/>
+        <amOnUrl url="http://{$hostname}/paypal/payflowadvanced" stepKey="goToUnsecurePaypalPayflowAdvancedURL"/>
+        <seeCurrentUrlEquals url="https://{$hostname}/paypal/payflowadvanced" stepKey="seeSecurePaypalPayflowAdvancedURL"/>
+        <amOnUrl url="http://{$hostname}/paypal/payflowbml" stepKey="goToUnsecurePaypalPayflowBmlURL"/>
+        <seeCurrentUrlEquals url="https://{$hostname}/paypal/payflowbml" stepKey="seeSecurePaypalPayflowBmlURL"/>
+        <amOnUrl url="http://{$hostname}/paypal/payflowexpress" stepKey="goToUnsecurePaypalPayflowExpressURL"/>
+        <seeCurrentUrlEquals url="https://{$hostname}/paypal/payflowexpress" stepKey="seeSecurePaypalPayflowExpressURL"/>
+        <amOnUrl url="http://{$hostname}/paypal/transparent" stepKey="goToUnsecurePaypalTransparentURL"/>
+        <seeCurrentUrlEquals url="https://{$hostname}/paypal/transparent" stepKey="seeSecurePaypalTransparentURL"/>
+        <amOnUrl url="http://{$hostname}/paypal/express" stepKey="goToUnsecurePaypalExpressURL"/>
+        <seeCurrentUrlEquals url="https://{$hostname}/paypal/express" stepKey="seeSecurePaypalExpressURL"/>
+    </test>
+</tests>

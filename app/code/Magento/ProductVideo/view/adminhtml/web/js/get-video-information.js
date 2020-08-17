@@ -520,7 +520,7 @@ define([
                 if (type === 'youtube') {
                     googleapisUrl = 'https://www.googleapis.com/youtube/v3/videos?id=' +
                         id +
-                        '&part=snippet,contentDetails,statistics,status&key=' +
+                        '&part=snippet,contentDetails&key=' +
                         this.options.youtubeKey + '&alt=json&callback=?';
                     $.getJSON(googleapisUrl,
                         {

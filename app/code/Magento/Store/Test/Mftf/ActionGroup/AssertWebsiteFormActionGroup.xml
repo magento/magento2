@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertWebsiteFormActionGroup">
+        <annotations>
+            <description>Clicks on the provided Website Name in the Admin Stores grid. Validates that the URL, Website Name/Code are present and correct.</description>
+        </annotations>
+        <arguments>
+            <argument name="websiteName" type="string"/>
+            <argument name="websiteCode" type="string"/>
+        </arguments>
+
+        <click selector="{{AdminStoresGridSection.websiteName(websiteName)}}" stepKey="clickWebsiteFirstRowInGrid"/>
+        <waitForPageLoad stepKey="waitTillWebsiteFormPageIsOpened"/>
+        <grabFromCurrentUrl regex="~(\d+)/~" stepKey="grabWebsiteIdFromCurrentUrl"/>
+        <seeInCurrentUrl url="/system_store/editWebsite/website_id/{$grabWebsiteIdFromCurrentUrl}" stepKey="seeWebsiteId"/>
+        <seeInField selector="{{AdminNewWebsiteSection.name}}" userInput="{{websiteName}}" stepKey="seeAssertWebsiteName"/>
+        <seeInField selector="{{AdminNewWebsiteSection.code}}" userInput="{{websiteCode}}" stepKey="seeAssertWebsiteCode"/>
+    </actionGroup>
+</actionGroups>

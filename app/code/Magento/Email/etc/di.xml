@@ -18,7 +18,7 @@
     </type>
     <type name="Magento\Email\Model\Template">
         <arguments>
-            <argument name="urlModel" xsi:type="object" shared="false">Magento\Framework\Url</argument>
+            <argument name="urlModel" xsi:type="object">Magento\Framework\Url</argument>
         </arguments>
     </type>
     <type name="Magento\Theme\Model\Design\Config\MetadataProvider">
@@ -69,6 +69,24 @@
             <argument name="environment" xsi:type="array">
                 <item name="system/smtp/host" xsi:type="string">1</item>
                 <item name="system/smtp/port" xsi:type="string">1</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Filter\Template">
+        <arguments>
+            <argument name="directiveProcessors" xsi:type="array">
+                <item name="depend" sortOrder="100" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\DependDirective</item>
+                <item name="if" sortOrder="200" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\IfDirective</item>
+                <item name="template" sortOrder="300" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\TemplateDirective</item>
+                <item name="legacy" sortOrder="400" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\LegacyDirective</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Filter\DirectiveProcessor\Filter\FilterPool">
+        <arguments>
+            <argument name="filters" xsi:type="array">
+                <item name="nl2br" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\Filter\NewlineToBreakFilter</item>
+                <item name="escape" xsi:type="object">Magento\Framework\Filter\DirectiveProcessor\Filter\EscapeFilter</item>
             </argument>
         </arguments>
     </type>

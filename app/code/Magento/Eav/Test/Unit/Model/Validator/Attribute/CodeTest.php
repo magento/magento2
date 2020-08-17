@@ -13,9 +13,6 @@ namespace Magento\Eav\Test\Unit\Model\Validator\Attribute;
 use Magento\Eav\Model\Validator\Attribute\Code;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class CodeTest
- */
 class CodeTest extends TestCase
 {
     /**
@@ -61,7 +58,10 @@ class CodeTest extends TestCase
             ], [
                 'more_than_60_chars_more_than_60_chars_more_than_60_chars_more',
                 false
-            ]
+            ], [
+                'container_attribute',
+                false,
+            ],
         ];
     }
 }

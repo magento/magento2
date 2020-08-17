@@ -50,6 +50,7 @@ class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCr
     ) {
         $this->_messageHelper = $messageHelper;
         $this->_giftMessageSave = $giftMessageSave;
+        $data['giftMessageHelper'] = $messageHelper;
         parent::__construct($context, $sessionQuote, $orderCreate, $priceCurrency, $data);
     }
 
@@ -97,7 +98,7 @@ class Giftmessage extends \Magento\Sales\Block\Adminhtml\Order\Create\AbstractCr
             }
         }
 
-        if (sizeof($items)) {
+        if (count($items)) {
             return $items;
         }
 

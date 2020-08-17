@@ -3,12 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Model;
 
 use Magento\Analytics\Model\EncodedContext;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\TestCase;
 
-class EncodedContextTest extends \PHPUnit\Framework\TestCase
+class EncodedContextTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -18,7 +21,7 @@ class EncodedContextTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
     }

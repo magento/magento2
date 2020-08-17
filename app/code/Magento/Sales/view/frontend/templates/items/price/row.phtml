@@ -4,13 +4,11 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Sales\Block\Order\Item\Renderer\DefaultRenderer $block */
 $_item = $block->getItem();
 ?>
 <span class="price-excluding-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">
     <span class="cart-price">
-        <?= /* @escapeNotVerified */ $block->getOrder()->formatPrice($block->getItem()->getRowTotal()) ?>
+        <?= /* @noEscape */ $block->getOrder()->formatPrice($block->getItem()->getRowTotal()) ?>
     </span>
 </span>

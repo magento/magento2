@@ -100,7 +100,7 @@ class EditTest extends \PHPUnit\Framework\TestCase
                 'Child block with CMS page has invalid item name'
             );
 
-            $this->assertRegExp(
+            $this->assertMatchesRegularExpression(
                 '/http:\/\/localhost\/index.php\/.*\/cms_page/',
                 $cmsPageLinkBlock->getItemUrl(),
                 'Child block with CMS page contains invalid URL'
@@ -123,24 +123,20 @@ class EditTest extends \PHPUnit\Framework\TestCase
         if (isset($expected['back_button'])) {
             if ($expected['back_button']) {
                 if ($block->getCmsPage()->getId()) {
-                    $this->assertEquals(
-                        1,
-                        \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
-                            '//button[contains(@class, "back") and contains(@onclick, "/cms_page")]',
-                            $buttonsHtml
-                        ),
-                        'Back button is not present in CMS page URL rewrite edit block'
-                    );
-                } else {
-                    $this->assertEquals(
-                        1,
-                        \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
-                            '//button[contains(@class,"back")]',
-                            $buttonsHtml
-                        ),
-                        'Back button is not present in CMS page URL rewrite edit block'
+                    $this->assertRegExp(
+                        '/setLocation\([\\\'\"]\S+?\/cms_page/i',
+                        $buttonsHtml,
+                        'Back button is not present in category URL rewrite edit block'
                     );
                 }
+                $this->assertEquals(
+                    1,
+                    \Magento\TestFramework\Helper\Xpath::getElementsCountForXpath(
+                        '//button[contains(@class, "back")]',
+                        $buttonsHtml
+                    ),
+                    'Back button is not present in CMS page URL rewrite edit block'
+                );
             } else {
                 $this->assertEquals(
                     0,

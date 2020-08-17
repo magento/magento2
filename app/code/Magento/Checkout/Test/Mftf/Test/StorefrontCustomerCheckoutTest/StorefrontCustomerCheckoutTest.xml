@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerCheckoutTest">
+        <annotations>
+            <features value="Customer Checkout"/>
+            <stories value="Checkout via Storefront"/>
+            <title value="Customer Checkout via Storefront"/>
+            <description value="Should be able to place an order as a customer."/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-30274"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteSimpleCategory"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteUsCustomer"/>
+            <actionGroup ref="AdminClearCustomersFiltersActionGroup" stepKey="resetCustomerFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="storefrontCustomerLogin">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
+            <argument name="category" value="$$createCategory$$"/>
+        </actionGroup>
+
+        <waitForPageLoad stepKey="waitForCatalogPageLoad"/>
+
+        <actionGroup ref="StorefrontAddCategoryProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="productCount" value="CONST.one"/>
+        </actionGroup>
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRate"/>
+        <actionGroup ref="StorefrontCheckoutForwardFromShippingStepActionGroup" stepKey="goToReview"/>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="clickOnPlaceOrder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="orderNumber"/>
+
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="addFilterToGridAndOpenOrder">
+            <argument name="orderId" value="{$orderNumber}"/>
+        </actionGroup>
+
+        <see selector="{{AdminOrderDetailsInformationSection.orderStatus}}" userInput="Pending" stepKey="verifyOrderStatus"/>
+        <see selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="Customer" stepKey="verifyAccountInformation"/>
+        <see selector="{{AdminOrderDetailsInformationSection.accountInformation}}" userInput="$$createCustomer.email$$" stepKey="verifyCustomerEmail"/>
+        <see selector="{{AdminOrderDetailsInformationSection.billingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="verifyBillingAddress"/>
+        <see selector="{{AdminOrderDetailsInformationSection.shippingAddress}}" userInput="{{US_Address_TX.street[0]}}" stepKey="verifyShippingAddress"/>
+        <see selector="{{AdminOrderDetailsInformationSection.itemsOrdered}}" userInput="$$createSimpleProduct.name$$" stepKey="verifyProductName"/>
+
+        <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <click selector="{{AdminEditCustomerInformationSection.orders}}" stepKey="navigateToOrdersTab"/>
+        <waitForElementVisible selector="{{AdminEditCustomerOrdersSection.orderGrid}}" stepKey="waitForOrdersGridVisible"/>
+        <see selector="{{AdminEditCustomerOrdersSection.orderGrid}}" userInput="$$createCustomer.firstname$$ $$createCustomer.lastname$$" stepKey="verifyOrder"/>
+    </test>
+</tests>

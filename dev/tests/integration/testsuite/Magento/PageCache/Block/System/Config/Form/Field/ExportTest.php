@@ -22,8 +22,8 @@ class ExportTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
     {
         $this->dispatch('backend/admin/system_config/edit/section/system/');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('system_full_page_cache_varnish_export_button_version4', $body);
-        $this->assertContains('system_full_page_cache_varnish_export_button_version5', $body);
-        $this->assertContains('[id^=system_full_page_cache_varnish_export_button_version]', $body);
+        $this->assertStringContainsString('system_full_page_cache_varnish_export_button_version4', $body);
+        $this->assertStringContainsString('system_full_page_cache_varnish_export_button_version5', $body);
+        $this->assertStringContainsString('[id^=system_full_page_cache_varnish_export_button_version]', $body);
     }
 }

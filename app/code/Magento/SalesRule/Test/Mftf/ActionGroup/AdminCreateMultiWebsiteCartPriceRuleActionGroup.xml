@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateMultiWebsiteCartPriceRuleActionGroup" extends="AdminCreateCartPriceRuleActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateCartPriceRuleActionGroup. Removes 'clickSaveButton' for the next data changing. Assign cart price rule to 2 websites instead of 1.</description>
+        </annotations>
+        <arguments>
+            <argument name="ruleName"/>
+        </arguments>
+        <remove keyForRemoval="clickSaveButton"/>
+        <remove keyForRemoval="seeSuccessMessage"/>
+        <remove keyForRemoval="selectWebsites"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.websites}}" parameterArray="['FirstWebsite', 'SecondWebsite']" stepKey="selectWebsites" after="fillRuleName"/>
+    </actionGroup>
+</actionGroups>

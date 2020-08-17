@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerInformationSection">
+        <element name="customerView" type="button" selector="#tab_customer_edit_tab_view_content"/>
+        <element name="accountInformation" type="button" selector="#tab_customer"/>
+        <element name="addresses" type="button" selector="#tab_address"/>
+        <element name="orders" type="button" selector="#tab_orders_content"/>
+        <element name="shoppingCart" type="button" selector="#tab_cart_content"/>
+        <element name="newsletter" type="button" selector="#tab_newsletter_content"/>
+        <element name="billingAgreements" type="button" selector="#tab_customer_edit_tab_agreements_content"/>
+        <element name="productReviews" type="button" selector="#tab_reviews_content"/>
+        <element name="wishList" type="button" selector="#tab_wishlist_content"/>
+    </section>
+</sections>

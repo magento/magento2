@@ -4,8 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Customer\Block\Widget\Company $block */
 ?>
 <div class="field company <?= $block->isRequired() ? 'required' : '' ?>">
@@ -15,12 +13,12 @@
         </span>
     </label>
     <div class="control">
-        <?php
+            <?php
             $_validationClass = $block->escapeHtmlAttr(
-                $this->helper('Magento\Customer\Helper\Address')
+                $this->helper(\Magento\Customer\Helper\Address::class)
                      ->getAttributeValidationClass('company')
             );
-        ?>
+            ?>
         <input type="text"
                name="company"
                id="company"

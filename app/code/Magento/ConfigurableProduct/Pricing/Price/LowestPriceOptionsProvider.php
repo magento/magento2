@@ -62,14 +62,16 @@ class LowestPriceOptionsProvider implements LowestPriceOptionsProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getProducts(ProductInterface $product)
     {
-        $key = $this->storeManager->getStore()->getId() . '-' . $product->getId();
+        $productId = $product->getId();
+        $storeId = $product->getStoreId() ?: $this->storeManager->getStore()->getId();
+        $key = $storeId . '-' . $productId;
         if (!isset($this->linkedProductMap[$key])) {
             $productIds = $this->resource->getConnection()->fetchCol(
-                '(' . implode(') UNION (', $this->linkedProductSelectBuilder->build($product->getId())) . ')'
+                '(' . implode(') UNION (', $this->linkedProductSelectBuilder->build($productId, $storeId)) . ')'
             );
 
             $this->linkedProductMap[$key] = $this->collectionFactory->create()

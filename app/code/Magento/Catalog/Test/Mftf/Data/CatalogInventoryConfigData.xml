@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="CatalogInventoryOptionsShowOutOfStockEnable">
+        <data key="path">cataloginventory/options/show_out_of_stock</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="CatalogInventoryOptionsShowOutOfStockDisable">
+        <!-- Magento default value -->
+        <data key="path">cataloginventory/options/show_out_of_stock</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="CatalogInventoryItemOptionsBackordersEnable">
+        <data key="path">cataloginventory/item_options/backorders</data>
+        <data key="label">Yes</data>
+        <data key="value">1</data>
+    </entity>
+    <entity name="CatalogInventoryItemOptionsBackordersDisable">
+        <!-- Magento default value -->
+        <data key="path">cataloginventory/item_options/backorders</data>
+        <data key="label">No</data>
+        <data key="value">0</data>
+    </entity>
+    <entity name="CatalogInventoryOptionsOnlyXleftThreshold">
+        <!-- Magento default value -->
+        <data key="path">cataloginventory/options/stock_threshold_qty</data>
+        <data key="value">0</data>
+    </entity>
+</entities>

@@ -414,6 +414,7 @@
                 <argument name="paypal_payflowpro_with_express_checkout">paypal_payflowpro_with_express_checkout</argument>
                 <argument name="payflow_link_us">payflow_link_us</argument>
             </rule>
+            <rule type="simpleDisable" event="deactivate-rule"/>
             <rule type="inContextEnable" event="activate-rule"/>
             <rule type="inContextDisable" event="deactivate-rule"/>
             <rule type="inContextShowMerchantId" event="activate-rule"/>

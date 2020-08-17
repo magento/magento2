@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminScheduledImportSettingsHiddenTest">
+        <annotations>
+            <features value="Directory"/>
+            <title value="Scheduled import settings hidden"/>
+            <stories value="Fields visibility according to 'Enable' value"/>
+            <description value="Scheduled Import Settings should hide fields when 'Enabled' is 'No'"/>
+            <severity value="MINOR"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <magentoCLI command="config:set currency/import/enabled 1" stepKey="enableCurrencyImport"/>
+        </before>
+
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set currency/import/enabled 0" stepKey="disableCurrencyImport"/>
+        </after>
+
+        <amOnPage url="{{AdminCurrencySetupPage.url}}" stepKey="openCurrencyOptionsPage"/>
+        <conditionalClick dependentSelector="{{AdminScheduledImportSettingsSection.enabled}}" visible="false" selector="{{AdminScheduledImportSettingsSection.head}}" stepKey="openCollapsibleBlock"/>
+        <see selector="{{AdminScheduledImportSettingsSection.service}}" userInput="Fixer.io" stepKey="seeServiceFixerIo"/>
+        <selectOption selector="{{AdminScheduledImportSettingsSection.enabled}}" userInput="0" stepKey="disableCurrencyImportOption"/>
+        <dontSeeElement selector="{{AdminScheduledImportSettingsSection.service}}" stepKey="dontSeeServiceFixerIo"/>
+    </test>
+</tests>

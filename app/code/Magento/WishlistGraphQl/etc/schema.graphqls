@@ -2,13 +2,25 @@
 # See COPYING.txt for license details.
 
 type Query {
-    wishlist: WishlistOutput @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistResolver") @doc(description: "The wishlist query returns the contents of a customer's wish list")
+    wishlist: WishlistOutput @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistResolver") @deprecated(reason: "Moved under `Customer` `wishlist`") @doc(description: "The wishlist query returns the contents of a customer's wish list") @cache(cacheable: false)
 }
 
-type WishlistOutput {
+type Customer {
+    wishlist: Wishlist! @resolver(class:"\\Magento\\WishlistGraphQl\\Model\\Resolver\\CustomerWishlistResolver") @doc(description: "Contains the contents of a customer's wish lists")  @cache(cacheable: false)
+}
+
+type WishlistOutput @doc(description: "Deprecated: `Wishlist` type should be used instead") {
+    items: [WishlistItem] @deprecated(reason: "Use field `items` from type `Wishlist` instead") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItemsResolver") @doc(description: "An array of items in the customer's wish list"),
+    items_count: Int @deprecated(reason: "Use field `items_count` from type `Wishlist` instead") @doc(description: "The number of items in the wish list"),
+    name: String @deprecated(reason: "This field is related to Commerce functionality and is always `null` in Open Source edition") @doc(description: "When multiple wish lists are enabled, the name the customer assigns to the wishlist"),
+    sharing_code: String @deprecated(reason: "Use field `sharing_code` from type `Wishlist` instead") @doc(description: "An encrypted code that Magento uses to link to the wish list"),
+    updated_at: String @deprecated(reason: "Use field `updated_at` from type `Wishlist` instead") @doc(description: "The time of the last modification to the wish list")
+}
+
+type Wishlist {
+    id: ID @doc(description: "Wishlist unique identifier")
     items: [WishlistItem] @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItemsResolver") @doc(description: "An array of items in the customer's wish list"),
     items_count: Int @doc(description: "The number of items in the wish list"),
-    name: String @doc(description: "When multiple wish lists are enabled, the name the customer assigns to the wishlist"),
     sharing_code: String @doc(description: "An encrypted code that Magento uses to link to the wish list"),
     updated_at: String @doc(description: "The time of the last modification to the wish list")
 }
@@ -19,4 +31,51 @@ type WishlistItem {
     description: String @doc(description: "The customer's comment about this item"),
     added_at: String @doc(description: "The time when the customer added the item to the wish list"),
     product: ProductInterface @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\ProductResolver")
+}
+
+type Mutation {
+    addProductsToWishlist(wishlistId: ID!, wishlistItems: [WishlistItemInput!]!): AddProductsToWishlistOutput @doc(description: "Adds one or more products to the specified wish list. This mutation supports all product types") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\AddProductsToWishlist")
+    removeProductsFromWishlist(wishlistId: ID!, wishlistItemsIds: [ID!]!): RemoveProductsFromWishlistOutput @doc(description: "Removes one or more products from the specified wish list") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\RemoveProductsFromWishlist")
+    updateProductsInWishlist(wishlistId: ID!, wishlistItems: [WishlistItemUpdateInput!]!): UpdateProductsInWishlistOutput  @doc(description: "Updates one or more products in the specified wish list") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\UpdateProductsInWishlist")
+}
+
+input WishlistItemInput @doc(description: "Defines the items to add to a wish list") {
+    sku: String @doc(description: "The SKU of the product to add. For complex product types, specify the child product SKU")
+    quantity: Float @doc(description: "The amount or number of items to add")
+    parent_sku: String @doc(description: "For complex product types, the SKU of the parent product")
+    selected_options: [ID!] @doc(description: "An array of strings corresponding to options the customer selected")
+    entered_options: [EnteredOptionInput!] @doc(description: "An array of options that the customer entered")
+}
+
+type AddProductsToWishlistOutput @doc(description: "Contains the customer's wish list and any errors encountered") {
+    wishlist: Wishlist! @doc(description: "Contains the wish list with all items that were successfully added")
+    user_errors:[WishListUserInputError!]! @doc(description: "An array of errors encountered while adding products to a wish list")
+}
+
+type RemoveProductsFromWishlistOutput @doc(description: "Contains the customer's wish list and any errors encountered") {
+    wishlist: Wishlist! @doc(description: "Contains the wish list with after items were successfully deleted")
+    user_errors:[WishListUserInputError!]! @doc(description:"An array of errors encountered while deleting products from a wish list")
+}
+
+input WishlistItemUpdateInput @doc(description: "Defines updates to items in a wish list") {
+    wishlist_item_id: ID @doc(description: "The ID of the wishlist item to update")
+    quantity: Float @doc(description: "The new amount or number of this item")
+    description: String @doc(description: "Describes the update")
+    selected_options: [ID!] @doc(description: "An array of strings corresponding to options the customer selected")
+    entered_options: [EnteredOptionInput!] @doc(description: "An array of options that the customer entered")
+}
+
+type UpdateProductsInWishlistOutput @doc(description: "Contains the customer's wish list and any errors encountered") {
+    wishlist: Wishlist! @doc(description: "Contains the wish list with all items that were successfully updated")
+    user_errors: [WishListUserInputError!]! @doc(description:"An array of errors encountered while updating products in a wish list")
+}
+
+type WishListUserInputError @doc(description:"An error encountered while performing operations with WishList.") {
+    message: String! @doc(description: "A localized error message")
+    code: WishListUserInputErrorType! @doc(description: "Wishlist-specific error code")
+}
+
+enum WishListUserInputErrorType {
+    PRODUCT_NOT_FOUND
+    UNDEFINED
 }

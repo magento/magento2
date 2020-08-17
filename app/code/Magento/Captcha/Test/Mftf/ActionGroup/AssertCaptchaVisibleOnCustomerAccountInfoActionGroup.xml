@@ -9,13 +9,17 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AssertCaptchaVisibleOnCustomerAccountInfoActionGroup">
-        <checkOption selector="{{StorefrontCustomerAccountInformationSection.changeEmail}}" stepKey="clickChangeEmailCheckbox" />
+        <annotations>
+            <description>Validate that the Captcha IS present on the Storefront Customer Account Information page.</description>
+        </annotations>
+
+        <checkOption selector="{{StorefrontCustomerAccountInformationSection.changeEmail}}" stepKey="clickChangeEmailCheckbox"/>
         <waitForElementVisible selector="{{StorefrontCustomerAccountInformationSection.captchaField}}" stepKey="seeCaptchaField"/>
         <waitForElementVisible selector="{{StorefrontCustomerAccountInformationSection.captchaImg}}" stepKey="seeCaptchaImage"/>
         <waitForElementVisible selector="{{StorefrontCustomerAccountInformationSection.captchaReload}}" stepKey="seeCaptchaReloadButton"/>
         <reloadPage stepKey="refreshPage"/>
-        <waitForPageLoad stepKey="waitForPageReloaded" />
-        <checkOption selector="{{StorefrontCustomerAccountInformationSection.changeEmail}}" stepKey="clickChangeEmailCheckboxAfterPageReload" />
+        <waitForPageLoad stepKey="waitForPageReloaded"/>
+        <checkOption selector="{{StorefrontCustomerAccountInformationSection.changeEmail}}" stepKey="clickChangeEmailCheckboxAfterPageReload"/>
         <waitForElementVisible selector="{{StorefrontCustomerAccountInformationSection.captchaField}}" stepKey="seeCaptchaFieldAfterPageReload"/>
         <waitForElementVisible selector="{{StorefrontCustomerAccountInformationSection.captchaImg}}" stepKey="seeCaptchaImageAfterPageReload"/>
         <waitForElementVisible selector="{{StorefrontCustomerAccountInformationSection.captchaReload}}" stepKey="seeCaptchaReloadButtonAfterPageReload"/>

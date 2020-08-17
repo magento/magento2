@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+declare(strict_types=1);
+
 namespace Magento\Widget\Model\Widget;
 
 /**
@@ -198,8 +201,9 @@ class Config implements \Magento\Framework\Data\Wysiwyg\ConfigProviderInterface
      */
     public function getAvailableWidgets($config)
     {
+        $result = [];
+
         if (!$config->hasData('widget_types')) {
-            $result = [];
             $allWidgets = $this->_widgetFactory->create()->getWidgetsArray();
             $skipped = $this->_getSkippedWidgets();
             foreach ($allWidgets as $widget) {

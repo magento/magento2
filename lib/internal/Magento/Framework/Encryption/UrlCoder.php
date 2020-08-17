@@ -8,6 +8,7 @@ namespace Magento\Framework\Encryption;
 
 /**
  * @api
+ * @since 100.0.2
  */
 class UrlCoder
 {

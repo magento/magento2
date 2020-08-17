@@ -25,6 +25,7 @@ use Magento\Framework\Data\Collection;
  * At least one target directory must be set
  *
  * @api
+ * @since 100.0.2
  */
 class Filesystem extends \Magento\Framework\Data\Collection
 {
@@ -412,7 +413,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
      * @param string $field
      * @param mixed $value
      * @param string $type 'and'|'or'
-     * @param callback $callback
+     * @param callable $callback
      * @param bool $isInverted
      * @return $this
      */
@@ -473,7 +474,7 @@ class Filesystem extends \Magento\Framework\Data\Collection
     /**
      * Invokes specified callback. Skips, if there is no filtered key in the row.
      *
-     * @param callback $callback
+     * @param callable $callback
      * @param array $callbackParams
      * @return bool
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)

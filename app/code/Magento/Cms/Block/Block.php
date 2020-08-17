@@ -14,6 +14,11 @@ use Magento\Framework\View\Element\AbstractBlock;
 class Block extends AbstractBlock implements \Magento\Framework\DataObject\IdentityInterface
 {
     /**
+     * Prefix for cache key of CMS block
+     */
+    const CACHE_KEY_PREFIX = 'CMS_BLOCK_';
+
+    /**
      * @var \Magento\Cms\Model\Template\FilterProvider
      */
     protected $_filterProvider;
@@ -83,5 +88,15 @@ class Block extends AbstractBlock implements \Magento\Framework\DataObject\Ident
     public function getIdentities()
     {
         return [\Magento\Cms\Model\Block::CACHE_TAG . '_' . $this->getBlockId()];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function getCacheKeyInfo()
+    {
+        $cacheKeyInfo = parent::getCacheKeyInfo();
+        $cacheKeyInfo[] = $this->_storeManager->getStore()->getId();
+        return $cacheKeyInfo;
     }
 }

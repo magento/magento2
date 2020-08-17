@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Plugin\Block;
 
 use Magento\Catalog\Model\Category;
@@ -156,12 +158,13 @@ class Topmenu
      */
     private function getCategoryAsArray($category, $currentCategory, $isParentActive)
     {
+        $categoryId = $category->getId();
         return [
             'name' => $category->getName(),
-            'id' => 'category-node-' . $category->getId(),
+            'id' => 'category-node-' . $categoryId,
             'url' => $this->catalogCategory->getCategoryUrl($category),
-            'has_active' => in_array((string)$category->getId(), explode('/', $currentCategory->getPath()), true),
-            'is_active' => $category->getId() == $currentCategory->getId(),
+            'has_active' => in_array((string)$categoryId, explode('/', (string)$currentCategory->getPath()), true),
+            'is_active' => $categoryId == $currentCategory->getId(),
             'is_category' => true,
             'is_parent_active' => $isParentActive
         ];
@@ -192,5 +195,23 @@ class Topmenu
         $collection->addOrder('entity_id', Collection::SORT_ORDER_ASC);
 
         return $collection;
+    }
+
+    /**
+     * Add active
+     *
+     * @param \Magento\Theme\Block\Html\Topmenu $subject
+     * @param string[] $result
+     * @return string[]
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    public function afterGetCacheKeyInfo(\Magento\Theme\Block\Html\Topmenu $subject, array $result)
+    {
+        $activeCategory = $this->getCurrentCategory();
+        if ($activeCategory) {
+            $result[] = Category::CACHE_TAG . '_' . $activeCategory->getId();
+        }
+
+        return $result;
     }
 }

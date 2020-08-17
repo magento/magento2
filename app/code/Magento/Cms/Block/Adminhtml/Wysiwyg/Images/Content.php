@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Block\Adminhtml\Wysiwyg\Images;
 
 /**
@@ -45,8 +47,12 @@ class Content extends \Magento\Backend\Block\Widget\Container
         $this->buttonList->remove('edit');
         $this->buttonList->add(
             'cancel',
-            ['class' => 'cancel  action-quaternary', 'label' => __('Cancel'), 'type' => 'button',
-                'onclick' => 'MediabrowserUtility.closeDialog();'],
+            [
+                'class' => 'cancel action-quaternary',
+                'label' => __('Cancel'),
+                'type' => 'button',
+                'onclick' => 'MediabrowserUtility.closeDialog();'
+            ],
             0,
             0,
             'header'
@@ -54,7 +60,11 @@ class Content extends \Magento\Backend\Block\Widget\Container
 
         $this->buttonList->add(
             'delete_folder',
-            ['class' => 'delete no-display action-quaternary', 'label' => __('Delete Folder'), 'type' => 'button'],
+            [
+                'class' => 'delete no-display action-quaternary',
+                'label' => __('Delete Folder'),
+                'type' => 'button'
+            ],
             0,
             0,
             'header'
@@ -62,7 +72,11 @@ class Content extends \Magento\Backend\Block\Widget\Container
 
         $this->buttonList->add(
             'delete_files',
-            ['class' => 'delete no-display action-quaternary', 'label' => __('Delete Selected'), 'type' => 'button'],
+            [
+                'class' => 'delete no-display action-quaternary',
+                'label' => __('Delete Selected'),
+                'type' => 'button'
+            ],
             0,
             0,
             'header'
@@ -70,7 +84,11 @@ class Content extends \Magento\Backend\Block\Widget\Container
 
         $this->buttonList->add(
             'new_folder',
-            ['class' => 'save', 'label' => __('Create Folder'), 'type' => 'button'],
+            [
+                'class' => 'save new_folder',
+                'label' => __('Create Folder'),
+                'type' => 'button'
+            ],
             0,
             0,
             'header'
@@ -78,7 +96,11 @@ class Content extends \Magento\Backend\Block\Widget\Container
 
         $this->buttonList->add(
             'insert_files',
-            ['class' => 'save no-display action-primary', 'label' => __('Add Selected'), 'type' => 'button'],
+            [
+                'class' => 'save no-display action-primary',
+                'label' => __('Add Selected'),
+                'type' => 'button'
+            ],
             0,
             0,
             'header'
@@ -92,9 +114,7 @@ class Content extends \Magento\Backend\Block\Widget\Container
      */
     public function getContentsUrl()
     {
-        return $this->getUrl('cms/*/contents', [
-            'type' => $this->getRequest()->getParam('type'),
-        ]);
+        return $this->getUrl('cms/*/contents', ['type' => $this->getRequest()->getParam('type')]);
     }
 
     /**

@@ -4,11 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Customer\Block\Form\Login\Info $block */
 ?>
-<?php if ($block->getRegistration()->isAllowed()): ?>
+<?php if ($block->getRegistration()->isAllowed()) : ?>
 <div class="block block-new-customer">
     <div class="block-title">
         <strong id="block-new-customer-heading" role="heading" aria-level="2"><?= $block->escapeHtml(__('New Customers')) ?></strong>

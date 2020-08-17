@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminSelectCustomerByEmail">
+        <annotations>
+            <description>Checks the Customer for the provided Customer Email Address in the Admin Customers grid.</description>
+        </annotations>
         <arguments>
             <argument name="customerEmail" type="string"/>
         </arguments>
+
         <checkOption selector="{{AdminCustomerGridSection.customerCheckboxByEmail(customerEmail)}}" stepKey="checkCustomerBox"/>
     </actionGroup>
 </actionGroups>

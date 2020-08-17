@@ -4,65 +4,73 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * @var $block \Magento\Tax\Block\Checkout\Tax
  * @see \Magento\Tax\Block\Checkout\Tax
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
 <?php
     $_value = $block->getTotal()->getValue();
-    $_style = $block->getTotal()->getStyle();
-?>
-<?php global $taxIter; $taxIter++; ?>
-
-<?php
+    $_style = $block->escapeHtmlAttr($block->getTotal()->getStyle());
+    /** @var \Magento\Tax\Helper\Data $taxHelper */
+    $taxHelper = $block->getData('taxHelper');
+    /** @var \Magento\Checkout\Helper\Data $checkoutHelper */
+    $checkoutHelper = $block->getData('checkoutHelper');
     $attributes = 'class="totals-tax"';
-    if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary() && $_value != 0) {
-        $attributes = 'class="totals-tax-summary" data-mage-init=\'{"toggleAdvanced": {"selectorsToggleClass": "shown", "baseToggleClass": "expanded", "toggleContainers": ".totals-tax-details"}}\'';
-    }
+
+if ($taxHelper->displayFullSummary() && $_value != 0) {
+    $attributes = 'class="totals-tax-summary" data-mage-init=\'{"toggleAdvanced": {"selectorsToggleClass": "shown",
+     "baseToggleClass": "expanded", "toggleContainers": ".totals-tax-details"}}\'';
+}
 ?>
 
-<tr <?= /* @escapeNotVerified */ $attributes ?>>
-    <th style="<?= /* @escapeNotVerified */ $_style ?>" class="mark" colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>" scope="row">
-        <?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary()): ?>
-            <span class="detailed"><?= /* @escapeNotVerified */ $block->getTotal()->getTitle() ?></span>
+<tr <?= /* @noEscape */ $attributes ?>>
+    <th class="mark" colspan="<?= (int) $block->getColspan() ?>" scope="row">
+        <?php if ($taxHelper->displayFullSummary()): ?>
+            <span class="detailed"><?= $block->escapeHtml($block->getTotal()->getTitle()) ?></span>
         <?php else: ?>
-            <?= /* @escapeNotVerified */ $block->getTotal()->getTitle() ?>
-        <?php endif;?>
+            <?= $block->escapeHtml($block->getTotal()->getTitle()) ?>
+        <?php endif; ?>
     </th>
-    <td style="<?= /* @escapeNotVerified */ $_style ?>" class="amount" data-th="<?= $block->escapeHtml($block->getTotal()->getTitle()) ?>">
-        <?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($_value) ?>
+    <td class="amount" data-th="<?= $block->escapeHtmlAttr($block->getTotal()->getTitle()) ?>">
+        <?= /* @noEscape */ $checkoutHelper->formatPrice($_value) ?>
     </td>
 </tr>
+<?php if ($_style): ?>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($_style, 'tr.totals-tax th.mark') ?>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($_style, 'tr.totals-tax td.amount') ?>
+<?php endif; ?>
 
-<?php if ($this->helper('Magento\Tax\Helper\Data')->displayFullSummary() && $_value != 0): ?>
+<?php if ($taxHelper->displayFullSummary() && $_value != 0): ?>
     <?php foreach ($block->getTotal()->getFullInfo() as $info): ?>
-        <?php if (isset($info['hidden']) && $info['hidden']) {
-            continue;
-        } ?>
+        <?php if (isset($info['hidden']) && $info['hidden']) { continue; } ?>
         <?php $percent = $info['percent']; ?>
         <?php $amount = $info['amount']; ?>
         <?php $rates = $info['rates']; ?>
         <?php $isFirst = 1; ?>
 
         <?php foreach ($rates as $rate): ?>
-            <tr class="totals-tax-details details-<?= /* @escapeNotVerified */ $taxIter ?>">
-                <th class="mark" style="<?= /* @escapeNotVerified */ $_style ?>" colspan="<?= /* @escapeNotVerified */ $block->getColspan() ?>" scope="row">
+            <tr class="totals-tax-details">
+                <th class="mark" colspan="<?= (int) $block->getColspan() ?>" scope="row">
                     <?= $block->escapeHtml($rate['title']) ?>
-                    <?php if (!is_null($rate['percent'])): ?>
-                        (<?= (float)$rate['percent'] ?>%)
+                    <?php if ($rate['percent'] !== null): ?>
+                        (<?= (float) $rate['percent'] ?>%)
                     <?php endif; ?>
                 </th>
                 <?php if ($isFirst): ?>
-                    <td style="<?= /* @escapeNotVerified */ $_style ?>" class="amount" rowspan="<?= count($rates) ?>"
-                       data-th="<?= $block->escapeHtml($rate['title']) ?><?php if (!is_null($rate['percent'])): ?>(<?= (float)$rate['percent'] ?>%)<?php endif; ?>">
-                        <?= /* @escapeNotVerified */ $this->helper('Magento\Checkout\Helper\Data')->formatPrice($amount) ?>
+                    <td class="amount" rowspan="<?= count($rates) ?>"
+                       data-th="<?= $block->escapeHtmlAttr($rate['title']) ?>
+                        <?php if ($rate['percent'] !== null): ?>(<?= (float) $rate['percent'] ?>%)<?php endif; ?>">
+                        <?= /* @noEscape */ $checkoutHelper->formatPrice($amount) ?>
                     </td>
                 <?php endif; ?>
             </tr>
+            <?php if ($_style): ?>
+                <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($_style, 'tr.totals-tax-details th.mark') ?>
+                <?= /* @noEscape */ $secureRenderer->renderStyleAsTag($_style, 'tr.totals-tax-details td.amount') ?>
+            <?php endif; ?>
             <?php $isFirst = 0; ?>
         <?php endforeach; ?>
     <?php endforeach; ?>
-<?php endif;?>
+<?php endif; ?>

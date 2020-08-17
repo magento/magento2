@@ -4,12 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\UrlRewrite\Block\Edit $block */
 ?>
 <?= $block->getChildHtml() ?>
-<?php if ($block->getChildBlock('form')): ?>
+<?php if ($block->getChildBlock('form')) : ?>
 <script type="text/x-magento-init">
     {
         "#edit_form": {

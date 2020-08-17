@@ -141,13 +141,12 @@
         </div>
         <div ifnot="options().length"
              class="admin__action-multiselect-empty-area">
-            <ul data-bind="html: emptyOptionsHtml"/>
+            <ul data-bind="html: getEmptyOptionsUnsanitizedHtml()"/>
         </div>
         <!-- /ko -->
         <ul class="admin__action-multiselect-menu-inner _root"
             data-bind="
                 event: {
-                    mousemove: function(data, event){onMousemove($data, $index(), event)},
                     scroll: function(data, event){onScrollDown(data, event)}
                 }
             ">

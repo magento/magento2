@@ -3,61 +3,58 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php /* @var $block \Magento\Downloadable\Block\Catalog\Product\Links */ ?>
 <?php $_linksPurchasedSeparately = $block->getLinksPurchasedSeparately(); ?>
-<?php if ($block->getProduct()->isSaleable() && $block->hasLinks()):?>
+<?php if ($block->getProduct()->isSaleable() && $block->hasLinks()) :?>
     <?php $_links = $block->getLinks(); ?>
     <?php $_linksLength = 0; ?>
     <?php $_isRequired = $block->getLinkSelectionRequired(); ?>
     <legend class="legend links-title"><span><?= $block->escapeHtml($block->getLinksTitle()) ?></span></legend><br>
-    <div class="field downloads<?php if ($_isRequired) echo ' required' ?><?php if (!$_linksPurchasedSeparately) echo ' downloads-no-separately' ?>">
+    <div class="field downloads<?php if ($_isRequired) { echo ' required'; } ?><?php if (!$_linksPurchasedSeparately) { echo ' downloads-no-separately'; } ?>">
         <label class="label"><span><?= $block->escapeHtml($block->getLinksTitle()) ?></span></label>
         <div class="control" id="downloadable-links-list"
              data-mage-init='{"downloadable":{
                  "linkElement":"input:checkbox[value]",
                  "allElements":"#links_all",
-                 "config":<?= /* @escapeNotVerified */ $block->getJsonConfig() ?>}
+                 "config":<?= $block->escapeHtmlAttr($block->getJsonConfig()) ?>}
              }'
              data-container-for="downloadable-links">
-            <?php foreach ($_links as $_link): ?>
+            <?php foreach ($_links as $_link) : ?>
                 <?php $_linksLength++;?>
                 <div class="field choice" data-role="link">
-                    <?php if ($_linksPurchasedSeparately): ?>
+                    <?php if ($_linksPurchasedSeparately) : ?>
                         <input type="checkbox"
-                               <?php if ($_isRequired): ?>data-validate="{'validate-one-checkbox-required-by-name':'downloadable-links-list'}" <?php endif; ?>
+                               <?php if ($_isRequired) : ?>data-validate="{'validate-one-checkbox-required-by-name':'downloadable-links-list'}" <?php endif; ?>
                                name="links[]"
-                               id="links_<?= /* @escapeNotVerified */ $_link->getId() ?>"
-                               value="<?= /* @escapeNotVerified */ $_link->getId() ?>" <?= /* @escapeNotVerified */ $block->getLinkCheckedValue($_link) ?> />
+                               id="links_<?= $block->escapeHtmlAttr($_link->getId()) ?>"
+                               value="<?= $block->escapeHtmlAttr($_link->getId()) ?>" <?= $block->escapeHtml($block->getLinkCheckedValue($_link)) ?> />
                     <?php endif; ?>
-                    <label class="label" for="links_<?= /* @escapeNotVerified */ $_link->getId() ?>">
+                    <label class="label" for="links_<?= $block->escapeHtmlAttr($_link->getId()) ?>">
                         <span><?= $block->escapeHtml($_link->getTitle()) ?></span>
-                        <?php if ($_link->getSampleFile() || $_link->getSampleUrl()): ?>
+                        <?php if ($_link->getSampleFile() || $_link->getSampleUrl()) : ?>
                             <a class="sample link"
                                href="<?= $block->escapeUrl($block->getLinkSampleUrl($_link)) ?>" <?= $block->getIsOpenInNewWindow() ? 'target="_blank"' : '' ?>>
-                                <?= /* @escapeNotVerified */ __('sample') ?>
+                                <?= $block->escapeHtml(__('sample')) ?>
                             </a>
                         <?php endif; ?>
-                        <?php if ($_linksPurchasedSeparately): ?>
-                            <?= /* @escapeNotVerified */ $block->getLinkPrice($_link) ?>
+                        <?php if ($_linksPurchasedSeparately) : ?>
+                            <?= /* @noEscape */ $block->getLinkPrice($_link) ?>
                         <?php endif; ?>
                     </label>
                 </div>
             <?php endforeach; ?>
-            <?php if ($_linksPurchasedSeparately && $_linksLength > 1): ?>
+            <?php if ($_linksPurchasedSeparately && $_linksLength > 1) : ?>
                 <div class="field choice downloads-all">
                     <input type="checkbox"
-                           data-notchecked="<?= /* @escapeNotVerified */ __('Select all') ?>"
-                           data-checked="<?= /* @escapeNotVerified */ __('Unselect all') ?>"
+                           data-notchecked="<?= $block->escapeHtmlAttr(__('Select all')) ?>"
+                           data-checked="<?= $block->escapeHtmlAttr(__('Unselect all')) ?>"
                            id="links_all" />
-                    <label class="label" for="links_all"><span><?= /* @escapeNotVerified */ __('Select all') ?></span></label>
+                    <label class="label" for="links_all"><span><?= $block->escapeHtml(__('Select all')) ?></span></label>
                 </div>
             <?php endif; ?>
         </div>
-        <?php if ($_isRequired): ?>
+        <?php if ($_isRequired) : ?>
             <span id="links-advice-container"></span>
         <?php endif;?>
     </div>

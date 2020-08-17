@@ -17,12 +17,18 @@
                         Size is 4 bytes.
                     </xs:documentation>
                 </xs:annotation>
-                <xs:attribute name="default" type="xs:integer" />
+                <xs:attribute name="default">
+                    <xs:simpleType>
+                        <xs:restriction base="xs:string">
+                            <xs:pattern value="\d+|null" />
+                        </xs:restriction>
+                    </xs:simpleType>
+                </xs:attribute>
                 <xs:attribute name="padding">
                     <xs:annotation>
                         <xs:documentation>
-                            We can use padding only from 2, because padding 1 used for boolean type.
-                            And we need to distinguish boolean and integer
+                            This attribute is deprecated and the value is ignored.
+                            See https://dev.mysql.com/doc/relnotes/mysql/8.0/en/news-8-0-19.html.
                         </xs:documentation>
                     </xs:annotation>
                     <xs:simpleType>

@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Vault\Test\Unit\Model\Ui;
 
 use Magento\Customer\Model\Session;
@@ -12,12 +14,10 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\PaymentMethodListInterface;
 use Magento\Vault\Model\Ui\VaultConfigProvider;
 use Magento\Vault\Model\VaultPaymentInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class VaultConfigProviderTest
- */
-class VaultConfigProviderTest extends \PHPUnit\Framework\TestCase
+class VaultConfigProviderTest extends TestCase
 {
     /**
      * @var VaultPaymentInterface|MockObject
@@ -49,7 +49,7 @@ class VaultConfigProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $vaultConfigProvider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->vaultPayment = $this->getMockForAbstractClass(VaultPaymentInterface::class);
         $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
@@ -57,7 +57,7 @@ class VaultConfigProviderTest extends \PHPUnit\Framework\TestCase
         $this->session = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->vaultPaymentList = $this->createMock(PaymentMethodListInterface::class);
+        $this->vaultPaymentList = $this->getMockForAbstractClass(PaymentMethodListInterface::class);
 
         $objectManager = new ObjectManager($this);
         $this->vaultConfigProvider = new VaultConfigProvider($this->storeManager, $this->session);

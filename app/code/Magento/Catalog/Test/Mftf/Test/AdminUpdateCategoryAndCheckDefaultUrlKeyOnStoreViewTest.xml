@@ -13,12 +13,12 @@
             <title value="Update category, check default URL key on the custom store view"/>
             <description value="Login as admin and update category and check default URL Key on custom store view"/>
             <testCaseId value="MC-6063"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="Catalog"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="NewRootCategory" stepKey="rootCategory"/>
             <createData entity="SimpleRootSubCategory" stepKey="category">
                 <requiredEntity createDataKey="rootCategory"/>
@@ -29,12 +29,11 @@
                 <argument name="storeGroupName" value="customStore.name"/>
             </actionGroup>
             <deleteData createDataKey="rootCategory" stepKey="deleteRootCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Store Page -->
-        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
-        <waitForPageLoad stepKey="waitForSystemStorePage"/>
+        <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="amOnAdminSystemStorePage"/>
 
         <!--Create Custom Store -->
         <click selector="{{AdminStoresMainActionsSection.createStoreButton}}" stepKey="selectCreateStore"/>
@@ -50,14 +49,12 @@
         </actionGroup>
 
         <!--Update Category-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoaded"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleRootSubCategory.name)}}" stepKey="selectCategory"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="updateCategoryName"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveUpdatedCategory"/>
-        <waitForPageLoad stepKey="waitForCateforyToSave"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveUpdatedCategory"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSuccessMessage"/>
         <waitForPageLoad stepKey="waitForPageToLoad1"/>
         <scrollTo  selector="{{AdminCategorySEOSection.SectionHeader}}" x="0" y="-80" stepKey="scrollToSearchEngineOptimization1"/>

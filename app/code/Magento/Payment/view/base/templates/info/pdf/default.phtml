@@ -4,7 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /**
  * @see \Magento\Payment\Block\Info
  * @var \Magento\Payment\Block\Info $block
@@ -12,8 +11,8 @@
 ?>
 <?= $block->escapeHtml($block->getMethod()->getTitle()) ?>{{pdf_row_separator}}
 
-<?php if ($specificInfo = $block->getSpecificInformation()):?>
-    <?php foreach ($specificInfo as $label => $value):?>
+<?php if ($specificInfo = $block->getSpecificInformation()) : ?>
+    <?php foreach ($specificInfo as $label => $value) : ?>
         <?= $block->escapeHtml($label) ?>:
         <?= $block->escapeHtml(implode(' ', $block->getValueAsArray($value))) ?>
         {{pdf_row_separator}}

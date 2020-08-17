@@ -12,6 +12,8 @@ define([
 ], function (ko, totals, Component, stepNavigator, quote) {
     'use strict';
 
+    var useQty = window.checkoutConfig.useQty;
+
     return Component.extend({
         defaults: {
             template: 'Magento_Checkout/summary/cart-items'
@@ -42,6 +44,15 @@ define([
          */
         getCartLineItemsCount: function () {
             return parseInt(totals.getItems()().length, 10);
+        },
+
+        /**
+         * Returns shopping cart items summary (includes config settings)
+         *
+         * @returns {Number}
+         */
+        getCartSummaryItemsCount: function () {
+            return useQty ? this.getItemsQty() : this.getCartLineItemsCount();
         },
 
         /**

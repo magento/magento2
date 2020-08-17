@@ -13,5 +13,7 @@
         <element name="SecurityTab" type="button" selector="#admin_security-head"/>
         <element name="AdminAccountSharing" type="button" selector="#admin_security_admin_account_sharing"/>
         <element name="EnableSystemValue" type="button" selector="#admin_security_admin_account_sharing_inherit"/>
+        <element name="systemValueForMaximumLoginFailures" type="checkbox" selector="#admin_security_lockout_failures_inherit"/>
+        <element name="MaximumLoginFailures" type="input" selector="#admin_security_lockout_failures"/>
     </section>
 </sections>

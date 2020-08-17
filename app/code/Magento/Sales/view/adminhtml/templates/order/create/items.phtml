@@ -4,12 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/** @var \Magento\Sales\Block\Adminhtml\Order\Create\Items $block */
 ?>
-
 <div class="admin__page-section-title">
-    <strong class="title"><?= /* @escapeNotVerified */ $block->getHeaderText() ?></strong>
+    <strong class="title"><?= $block->escapeHtml($block->getHeaderText()) ?></strong>
     <div class="actions">
         <?= $block->getButtonsHtml() ?>
     </div>

@@ -22,12 +22,13 @@ class Enum extends EnumType
     {
         $config = [
             'name' => $configElement->getName(),
-            'description' => $configElement->getDescription(),
+            'description' => $configElement->getDescription()
         ];
         foreach ($configElement->getValues() as $value) {
             $config['values'][$value->getValue()] = [
                 'value' => $value->getValue(),
-                'description' => $value->getDescription()
+                'description' => $value->getDescription(),
+                'deprecationReason'=> $value->getDeprecatedReason()
             ];
         }
         parent::__construct($config);

@@ -1,0 +1,19 @@
+{
+    "name": "magento/module-configurable-product-catalog-search-functional-test",
+    "description": "MFTF test module for Magento_ConfigurableProduct and Magento_CatalogSearch",
+    "type": "magento2-functional-test-module",
+    "config": {
+        "sort-packages": true
+    },
+    "require": {
+        "magento/magento2-functional-testing-framework": ">=2.5.2"
+    },
+    "suggest": {
+        "magento/module-configurable-product": "type: magento2-module, name: Magento_ConfigurableProduct, version: *",
+        "magento/module-catalog-search": "type: magento2-module, name: Magento_CatalogSearch, version: *"
+    },
+    "license": [
+        "OSL-3.0",
+        "AFL-3.0"
+    ]
+}

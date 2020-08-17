@@ -1,0 +1,238 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="OnePageCheckoutWithAllProductTypesTest">
+        <annotations>
+            <features value="OnePageCheckout"/>
+            <stories value="OnePageCheckout within Offline Payment Methods"/>
+            <title value="OnePageCheckout with all product types test"/>
+            <description value="Checkout with all product types"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-14742"/>
+            <group value="checkout"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
+            <!-- Create category -->
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+
+            <!-- Create Configurable Product -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct"/>
+            </createData>
+
+            <!--Create Bundle Product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProductForBundleProduct"/>
+            <createData entity="ApiFixedBundleProduct" stepKey="createFixedBundleProduct"/>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="firstLinkOptionToFixedProduct">
+                <requiredEntity createDataKey="createFixedBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption"/>
+                <requiredEntity createDataKey="createSimpleProductForBundleProduct"/>
+            </createData>
+
+            <!-- Create Virtual Product -->
+            <createData entity="VirtualProduct" stepKey="createVirtualProduct"/>
+
+            <!--Create Downloadable Product -->
+            <createData entity="ApiDownloadableProduct" stepKey="createDownloadableProduct"/>
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink">
+                <requiredEntity createDataKey="createDownloadableProduct"/>
+            </createData>
+            <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
+                <requiredEntity createDataKey="createDownloadableProduct"/>
+            </createData>
+
+            <!-- Create Grouped Product -->
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+            <createData entity="ApiGroupedProduct" stepKey="createGroupedProduct"/>
+            <createData entity="OneSimpleProductLink" stepKey="addProductOne">
+                <requiredEntity createDataKey="createGroupedProduct"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+
+            <!-- Create customer -->
+            <createData entity="Simple_Customer_Without_Address" stepKey="createCustomer"/>
+
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Delete all created products -->
+            <deleteData createDataKey="createConfigChildProduct" stepKey="deleteConfigChildProduct"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createSimpleProductForBundleProduct" stepKey="deleteSimpleProductForBundleProduct"/>
+            <deleteData createDataKey="createFixedBundleProduct" stepKey="deleteFixedBundleProduct"/>
+            <deleteData createDataKey="createVirtualProduct" stepKey="deleteVirtualProduct"/>
+            <deleteData createDataKey="createDownloadableProduct" stepKey="deleteDownloadableProduct"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createGroupedProduct" stepKey="deleteGroupedProduct"/>
+
+            <!-- Delete customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <!-- Logout customer -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+
+        <!-- Add Simple Product to cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToSimpleProductPage"/>
+        <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage">
+            <argument name="productName" value="$$createSimpleProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Add Configurable Product to cart  -->
+        <actionGroup ref="StorefrontAddConfigurableProductToTheCartActionGroup" stepKey="addConfigurableProductToCart">
+            <argument name="urlKey" value="$$createConfigProduct.custom_attributes[url_key]$$" />
+            <argument name="productAttribute" value="$$createConfigProductAttribute.default_value$$"/>
+            <argument name="productOption" value="$$getConfigAttributeOption.value$$"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+
+        <!-- Add Virtual Product to cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$createVirtualProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToVirtualProductPage"/>
+        <waitForPageLoad stepKey="waitForVirtualProductPageLoad"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartVirtualProductFromStorefrontProductPage">
+            <argument name="productName" value="$$createVirtualProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Add Downloadable Product to cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$createDownloadableProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToDownloadableProductPage"/>
+        <waitForPageLoad stepKey="waitForDownloadableProductPageLoad"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartDownloadableProductFromStorefrontProductPage">
+            <argument name="productName" value="$$createDownloadableProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Add Grouped Product to cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$createGroupedProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToGroupedProductPage"/>
+        <waitForPageLoad stepKey="waitForGroupedProductPageLoad"/>
+        <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="1" stepKey="fillFieldQtyInput"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartGroupedProductFromStorefrontProductPage">
+            <argument name="productName" value="$$createGroupedProduct.name$$"/>
+        </actionGroup>
+
+        <!-- Add Bundle Product to cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$createFixedBundleProduct.custom_attributes[url_key]$$)}}" stepKey="navigateToBundleProductPage"/>
+        <waitForPageLoad stepKey="waitForFixedBundleProductPageLoad"/>
+        <click selector="{{StorefrontBundleProductActionSection.customizeAndAddToCartButton}}" stepKey="clickCustomizeAndAddToCart"/>
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addToCartFixedBundleProductFromStorefrontProductPage">
+            <argument name="productName" value="$$createFixedBundleProduct.name$$"/>
+        </actionGroup>
+
+        <!--Go to shopping cart-->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="FillShippingZipForm" stepKey="fillShippingZipForm">
+            <argument name="address" value="US_Address_CA"/>
+        </actionGroup>
+
+        <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="clickProceedToCheckout"/>
+        <waitForPageLoad stepKey="waitForProceedToCheckout"/>
+        <actionGroup ref="FillCustomerSignInPopupFormActionGroup" stepKey="fillCustomerSignInPopupForm">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <amOnPage url="{{CheckoutShippingPage.url}}" stepKey="navigateToShippingPage"/>
+        <waitForPageLoad stepKey="waitForShippingPageLoad"/>
+
+        <!-- Fill customer address data -->
+        <fillField selector="{{CheckoutShippingGuestInfoSection.company}}" userInput="{{CustomerAddressSimple.company}}" stepKey="fillCompany"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.street}}" userInput="{{CustomerAddressSimple.street}}" stepKey="fillStreet"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.city}}" userInput="{{CustomerAddressSimple.city}}" stepKey="fillCity" />
+        <selectOption selector="{{CheckoutShippingGuestInfoSection.region}}" userInput="{{CustomerAddressSimple.state}}" stepKey="selectRegion"/>
+        <fillField selector="{{CheckoutShippingGuestInfoSection.postcode}}" userInput="{{CustomerAddressSimple.postcode}}" stepKey="fillZipCode" />
+        <fillField selector="{{CheckoutShippingGuestInfoSection.telephone}}" userInput="{{CustomerAddressSimple.telephone}}" stepKey="fillPhone" />
+
+        <!-- Click next button to open payment section -->
+        <click selector="{{CheckoutShippingGuestInfoSection.next}}" stepKey="clickNextBtn"/>
+        <waitForPageLoad stepKey="waitForShipmentPageLoad"/>
+
+        <!-- Check order summary in checkout -->
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" stepKey="waitForPaymentSectionLoaded"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButton"/>
+        <seeElement selector="{{CheckoutSuccessMainSection.success}}" stepKey="orderIsSuccessfullyPlaced" />
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
+
+        <!-- Login as admin -->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <!-- Open created order -->
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
+            <argument name="orderId" value="$grabOrderNumber"/>
+        </actionGroup>
+
+        <!-- Assert that addresses on order page the same -->
+        <grabTextFrom selector="{{AdminShipmentAddressInformationSection.shippingAddress}}" stepKey="shippingAddressOrderPage"/>
+        <grabTextFrom selector="{{AdminShipmentAddressInformationSection.billingAddress}}" stepKey="billingAddressOrderPage"/>
+        <assertEquals stepKey="assertAddressOrderPage">
+			<actualResult type="const">$billingAddressOrderPage</actualResult>
+			<expectedResult type="const">$shippingAddressOrderPage</expectedResult>
+        </assertEquals>
+
+        <!-- Assert order total -->
+        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="navigateToCustomerDashboardPage"/>
+        <waitForPageLoad stepKey="waitForCustomerDashboardPageLoad"/>
+        <see selector="{{StorefrontCustomerRecentOrdersSection.orderTotal}}" userInput="$613.23" stepKey="checkOrderTotalInStorefront"/>
+
+        <!-- Go to Address Book -->
+        <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToAddressBook">
+            <argument name="menu" value="Address Book"/>
+        </actionGroup>
+
+        <!-- Asserts that addresses in address book equal to addresses in order -->
+        <grabTextFrom selector="{{CheckoutOrderSummarySection.shippingAddress}}" stepKey="shippingAddress"/>
+        <grabTextFrom selector="{{CheckoutOrderSummarySection.billingAddress}}" stepKey="billingAddress"/>
+        <assertEquals stepKey="assertShippingAddress">
+			<actualResult type="const">$shippingAddress</actualResult>
+			<expectedResult type="const">$shippingAddressOrderPage</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertBillingAddress">
+			<actualResult type="const">$billingAddress</actualResult>
+			<expectedResult type="const">$billingAddressOrderPage</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

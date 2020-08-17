@@ -281,7 +281,13 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             $key = $this->_implodeArrayField($key);
         } elseif (is_array($value) && $this->isAddressMultilineAttribute($key)) {
             $value = $this->_implodeArrayValues($value);
+        } elseif (self::CUSTOM_ATTRIBUTES === $key && is_array($value)) {
+            foreach ($value as &$attribute) {
+                $attribute = is_array($attribute) ? $attribute : $attribute->__toArray();
+                $attribute = $this->processCustomAttribute($attribute);
+            }
         }
+
         return parent::setData($key, $value);
     }
 
@@ -375,6 +381,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
             }
         } elseif (is_string($region)) {
             $this->setData('region', $region);
+        } elseif (!$regionId && is_array($region)) {
+            $this->setData('region', $regionId);
         }
 
         return $this->getData('region');
@@ -624,7 +632,7 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Unset Region from address
      *
      * @return $this
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function unsRegion()
     {
@@ -635,8 +643,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Is company required
      *
      * @return bool
-     * @since 100.2.0
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 101.0.0
      */
     protected function isCompanyRequired()
     {
@@ -647,8 +655,8 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Is telephone required
      *
      * @return bool
-     * @since 100.2.0
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 101.0.0
      */
     protected function isTelephoneRequired()
     {
@@ -659,11 +667,30 @@ class AbstractAddress extends AbstractExtensibleModel implements AddressModelInt
      * Is fax required
      *
      * @return bool
-     * @since 100.2.0
      * @throws \Magento\Framework\Exception\LocalizedException
+     * @since 101.0.0
      */
     protected function isFaxRequired()
     {
         return ($this->_eavConfig->getAttribute('customer_address', 'fax')->getIsRequired());
+    }
+
+    /**
+     * Unify attribute format.
+     *
+     * @param array $attribute
+     * @return array
+     */
+    private function processCustomAttribute(array $attribute): array
+    {
+        if (isset($attribute['attribute_code']) &&
+            isset($attribute['value']) &&
+            is_array($attribute['value']) &&
+            $this->isAddressMultilineAttribute($attribute['attribute_code'])
+        ) {
+            $attribute['value'] = $this->_implodeArrayValues($attribute['value']);
+        }
+
+        return $attribute;
     }
 }

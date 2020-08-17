@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateConfigurableProductWithAttributeSetActionGroup">
+        <annotations>
+            <description>Admin edit created product as configurable. Choose created options</description>
+        </annotations>
+        <arguments>
+            <argument name="product" defaultValue="_defaultProduct"/>
+            <argument name="label" type="string" defaultValue="mySet"/>
+            <argument name="option" type="string" defaultValue="['option1', 'option2', 'option3', 'option4']"/>
+        </arguments>
+        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
+        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{label}}" stepKey="searchForAttrSet"/>
+        <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
+        <fillField userInput="{{product.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
+        <selectOption selector="{{AdminProductFormSection.additionalOptions}}" parameterArray="{{option}}" stepKey="searchAndMultiSelectCreatedOption"/>
+    </actionGroup>
+</actionGroups>

@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderWithSelectedShoppingCartItemsTest">
+        <annotations>
+            <title value="Shopping cart items must not be added to the order unless they were moved manually"/>
+            <stories value="MC-17838: Shopping cart items added to the order created in the admin"/>
+            <description value="Shopping cart items must not be added to the order unless they were moved manually"/>
+            <features value="Sales"/>
+            <severity value="BLOCKER"/>
+            <group value="Sales"/>
+        </annotations>
+        <before>
+            <!--Set default flat rate shipping method settings-->
+            <magentoCLI command="config:set {{EnableFlatRateConfigData.path}} {{EnableFlatRateConfigData.value}}" stepKey="enableFlatRate"/>
+
+            <!--Create customer-->
+            <createData entity="Simple_US_CA_Customer" stepKey="simpleCustomer"/>
+
+            <!--Create category-->
+            <createData entity="_defaultCategory" stepKey="category1"/>
+
+            <!--Create product1-->
+            <createData entity="_defaultProduct" stepKey="product1">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+
+            <!--Create product2-->
+            <createData entity="_defaultProduct" stepKey="product2">
+                <requiredEntity createDataKey="category1"/>
+            </createData>
+
+            <!--Login as admin-->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <!-- Step 1: Go to Storefront as Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$simpleCustomer$$" />
+        </actionGroup>
+
+        <!-- Step 2: Add product to cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$product1.custom_attributes[url_key]$)}}" stepKey="amOnPage"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$product1$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <!--Step 3: Create new customer order-->
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+
+        <!--Step 4: Add product2 to the order-->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$$product2$$"/>
+        </actionGroup>
+
+        <!--Step 5: Select product1 in the shopping cart-->
+        <click selector="{{AdminOrderFormShoppingCartSection.addProduct($$product1.name$$)}}" stepKey="selectProduct1InTheShoppingCart"/>
+
+        <!--Step 6: Select FlatRate shipping method-->
+        <actionGroup ref="OrderSelectFlatRateShippingActionGroup" stepKey="orderSelectFlatRateShippingMethod"/>
+
+        <!--Step 7: Submit order-->
+        <actionGroup ref="AdminSubmitOrderActionGroup" stepKey="submitOrder"/>
+
+        <!--Step 8: Verify order information-->
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
+
+        <!--Step 9: Check that product 2 is in the order items list -->
+        <actionGroup ref="SeeProductInItemsOrderedActionGroup" stepKey="seeProduct2InItemsOrdered">
+            <argument name="product" value="$$product2$$"/>
+        </actionGroup>
+
+        <!--Step 10: Check that product 1 is not in the order items list -->
+        <actionGroup ref="DontSeeProductInItemsOrderedActionGroup" stepKey="dontSeeProduct1InItemsOrdered">
+            <argument name="product" value="$$product1$$"/>
+        </actionGroup>
+        <after>
+            <!--Delete product1-->
+            <deleteData createDataKey="product1" stepKey="deleteProduct1"/>
+
+            <!--Delete product2-->
+            <deleteData createDataKey="product2" stepKey="deleteProduct2"/>
+
+            <!--Delete category-->
+            <deleteData createDataKey="category1" stepKey="deleteCategory1"/>
+
+            <!--Delete customer-->
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+
+            <!--Logout-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+    </test>
+</tests>

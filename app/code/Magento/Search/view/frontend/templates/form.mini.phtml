@@ -4,43 +4,45 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 ?>
 <?php
 /** @var $block \Magento\Framework\View\Element\Template */
 /** @var $helper \Magento\Search\Helper\Data */
+/** @var $configProvider \Magento\Search\ViewModel\ConfigProvider */
 $helper = $this->helper(\Magento\Search\Helper\Data::class);
+$configProvider = $block->getData('configProvider');
 ?>
 <div class="block block-search">
-    <div class="block block-title"><strong><?= /* @escapeNotVerified */ __('Search') ?></strong></div>
+    <div class="block block-title"><strong><?= $block->escapeHtml(__('Search')) ?></strong></div>
     <div class="block block-content">
-        <form class="form minisearch" id="search_mini_form" action="<?= /* @escapeNotVerified */ $helper->getResultUrl() ?>" method="get">
+        <form class="form minisearch" id="search_mini_form"
+              action="<?= $block->escapeUrl($helper->getResultUrl()) ?>" method="get">
             <div class="field search">
+                <label class="label" for="search" data-role="minisearch-label">
+                    <span><?= $block->escapeHtml(__('Search')) ?></span>
+                </label>
                 <div class="control">
-                    <label for="search" data-role="minisearch-label">
-                        <span class="label">
-                            <?= /* @escapeNotVerified */ __('Search') ?>
-                        </span>
-                        <input
-                            aria-expanded="false"
-                            id="search"
-                            data-mage-init='{"quickSearch":{
-                                "formSelector":"#search_mini_form",
-                                "url":"<?= /* @escapeNotVerified */ $helper->getSuggestUrl()?>",
-                                "destinationSelector":"#search_autocomplete"}
-                                }'
-                            type="text"
-                            name="<?= /* @escapeNotVerified */ $helper->getQueryParamName() ?>"
-                            value="<?= /* @escapeNotVerified */ $helper->getEscapedQueryText() ?>"
-                            placeholder="<?= /* @escapeNotVerified */ __('Search entire store here...') ?>"
-                            class="input-text"
-                            maxlength="<?= /* @escapeNotVerified */ $helper->getMaxQueryLength() ?>"
-                            role="combobox"
-                            aria-haspopup="false"
-                            aria-autocomplete="both"
-                            autocomplete="off"
-                        />
-                    </label>
+                    <input id="search"
+                            <?php if ($configProvider->isSuggestionsAllowed()):?>
+                               data-mage-init='{"quickSearch":{
+                                    "formSelector":"#search_mini_form",
+                                    "url":"<?= $block->escapeUrl($helper->getSuggestUrl())?>",
+                                    "destinationSelector":"#search_autocomplete",
+                                    "minSearchLength":"<?= $block->escapeHtml($helper->getMinQueryLength()) ?>"}
+                               }'
+                            <?php endif;?>
+                           type="text"
+                           name="<?= $block->escapeHtmlAttr($helper->getQueryParamName()) ?>"
+                           value="<?= /* @noEscape */ $helper->getEscapedQueryText() ?>"
+                           placeholder="<?= $block->escapeHtmlAttr(__('Search entire store here...')) ?>"
+                           class="input-text"
+                           maxlength="<?= $block->escapeHtmlAttr($helper->getMaxQueryLength()) ?>"
+                           role="combobox"
+                           aria-haspopup="false"
+                           aria-autocomplete="both"
+                           autocomplete="off"
+                           aria-expanded="false"/>
                     <div id="search_autocomplete" class="search-autocomplete"></div>
                     <?= $block->getChildHtml() ?>
                 </div>
@@ -51,7 +53,7 @@ $helper = $this->helper(\Magento\Search\Helper\Data::class);
                     class="action search"
                     aria-label="Search"
                 >
-                    <span><?= /* @escapeNotVerified */ __('Search') ?></span>
+                    <span><?= $block->escapeHtml(__('Search')) ?></span>
                 </button>
             </div>
         </form>

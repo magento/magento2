@@ -65,7 +65,7 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->reader = $this->objectManager->get(DeploymentConfig\FileReader::class);
@@ -170,7 +170,7 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
             'CONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE_ENVIRONMENT4 for web/test/test_sensitive_environment4',
             'CONFIG__DEFAULT__WEB__TEST__TEST_SENSITIVE_ENVIRONMENT5 for web/test/test_sensitive_environment5'
         ]);
-        $outputMock = $this->createMock(OutputInterface::class);
+        $outputMock = $this->getMockForAbstractClass(OutputInterface::class);
         $outputMock->expects($this->at(0))
             ->method('writeln')
             ->with(['system' => $comment]);
@@ -180,7 +180,7 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
 
         /** @var ApplicationDumpCommand command */
         $command = $this->objectManager->create(ApplicationDumpCommand::class);
-        $command->run($this->createMock(InputInterface::class), $outputMock);
+        $command->run($this->getMockForAbstractClass(InputInterface::class), $outputMock);
 
         $config = $this->loadConfig();
 
@@ -191,7 +191,7 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
         $this->validateSystemEnvSection($configEnv);
 
         $this->assertNotEmpty($this->hash->get());
-        $this->assertContains('For the section: system', $this->loadRawConfig());
+        $this->assertStringContainsString('For the section: system', $this->loadRawConfig());
     }
 
     /**
@@ -307,7 +307,7 @@ class ApplicationDumpCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),

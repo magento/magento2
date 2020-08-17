@@ -809,3 +809,10 @@ Details,Details
 "Product with ID: (%1) doesn't exist", "Product with ID: (%1) doesn't exist"
 "Category with ID: (%1) doesn't exist", "Category with ID: (%1) doesn't exist"
 "You added product %1 to the <a href=""%2"">comparison list</a>.","You added product %1 to the <a href=""%2"">comparison list</a>."
+"Edit Product Design","Edit Product Design"
+"Edit Category Design","Edit Category Design"
+"A total of %1 record(s) haven't been deleted. Please see server logs for more details.","A total of %1 record(s) haven't been deleted. Please see server logs for more details."
+"Are you sure you want to delete this category?","Are you sure you want to delete this category?"
+"Attribute Set Information","Attribute Set Information"
+"Failed to retrieve product links for ""%1""","Failed to retrieve product links for ""%1"""
+

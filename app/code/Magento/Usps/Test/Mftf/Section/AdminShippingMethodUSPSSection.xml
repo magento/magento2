@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminShippingMethodUSPSSection">
+        <element name="carriersUSPSTab" type="button" selector="#carriers_usps-head"/>
+        <element name="carriersUSPSActive" type="input" selector="#carriers_usps_active_inherit"/>
+        <element name="carriersUSPSGatewayXMLUrl" type="input" selector="#carriers_usps_gateway_url_inherit"/>
+        <element name="carriersUSPSGatewaySecureUrl" type="input" selector="#carriers_usps_gateway_secure_url_inherit"/>
+        <element name="carriersUSPSTitle" type="input" selector="#carriers_usps_title_inherit"/>
+        <element name="carriersUSPSUserId" type="input" selector="#carriers_usps_userid"/>
+        <element name="carriersUSPSPassword" type="input" selector="#carriers_usps_password"/>
+        <element name="carriersUSPSShipmentRequestType" type="select" selector="#carriers_usps_shipment_requesttype_inherit"/>
+        <element name="carriersUSPSContainer" type="input" selector="#carriers_usps_container_inherit"/>
+        <element name="carriersUSPSSize" type="input" selector="#carriers_usps_size_inherit"/>
+        <element name="carriersUSPSDestType" type="input" selector="#carriers_usps_machinable_inherit"/>
+        <element name="carriersUSPSMachinable" type="input" selector="#carriers_ups_tracking_xml_url_inherit"/>
+        <element name="carriersUSPSMaxPackageWeight" type="input" selector="#carriers_usps_max_package_weight_inherit"/>
+        <element name="carriersUSPSHandlingType" type="input" selector="#carriers_usps_handling_type_inherit"/>
+        <element name="carriersUSPSHandlingAction" type="input" selector="#carriers_usps_handling_action_inherit"/>
+        <element name="carriersUSPSAllowedMethods" type="input" selector="#carriers_usps_allowed_methods_inherit"/>
+        <element name="carriersUSPSFreeMethod" type="input" selector="#carriers_usps_free_method_inherit"/>
+        <element name="carriersUSPSSpecificErrMsg" type="input" selector="#carriers_usps_specificerrmsg_inherit"/>
+        <element name="carriersUSPSAllowSpecific" type="input" selector="#carriers_usps_sallowspecific_inherit"/>
+        <element name="carriersUSPSSpecificCountry" type="input" selector="#carriers_usps_specificcountry"/>
+    </section>
+</sections>

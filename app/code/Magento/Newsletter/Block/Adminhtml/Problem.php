@@ -41,7 +41,7 @@ class Problem extends \Magento\Backend\Block\Template
     }
 
     /**
-     * @return void
+     * @inheritDoc
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     protected function _construct()
@@ -83,7 +83,7 @@ class Problem extends \Magento\Backend\Block\Template
     /**
      * Get the html element for unsubscribe button
      *
-     * @return $string
+     * @return string
      */
     public function getUnsubscribeButtonHtml()
     {
@@ -93,7 +93,7 @@ class Problem extends \Magento\Backend\Block\Template
     /**
      * Get the html element for delete button
      *
-     * @return $string
+     * @return string
      */
     public function getDeleteButtonHtml()
     {

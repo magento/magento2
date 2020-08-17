@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAddProductToShoppingCartActionGroup">
+        <annotations>
+            <description>Adds the provided Product Name to the Cart on the Admin Customer creation/edit page.</description>
+        </annotations>
         <arguments>
             <argument name="productName" type="string"/>
         </arguments>
+        
         <waitForElementVisible selector="{{AdminCustomerShoppingCartProductItemSection.productItem}}" stepKey="waitForElementVisible"/>
         <click selector="{{AdminCustomerShoppingCartProductItemSection.productItem}}" stepKey="expandProductItem"/>
         <waitForElementVisible selector="{{AdminCustomerShoppingCartProductItemSection.productNameFilter}}" stepKey="waitForProductFilterFieldVisible"/>

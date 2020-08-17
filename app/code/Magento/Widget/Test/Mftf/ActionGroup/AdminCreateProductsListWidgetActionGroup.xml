@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateProductsListWidgetActionGroup" extends="AdminCreateWidgetActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateWidgetActionGroup. Creates a Product List Widget. Validates that the Success Message is present and correct.</description>
+        </annotations>
+
+        <click selector="{{AdminNewWidgetSection.addNewCondition}}" stepKey="clickAddNewCondition"/>
+        <selectOption selector="{{AdminNewWidgetSection.selectCondition}}" userInput="{{widget.condition}}" stepKey="selectCondition"/>
+        <waitForElement selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="waitRuleParameter"/>
+        <click selector="{{AdminNewWidgetSection.ruleParameter}}" stepKey="clickRuleParameter"/>
+        <click selector="{{AdminNewWidgetSection.openChooser}}" stepKey="clickChooser"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+        <click selector="{{AdminNewWidgetSection.selectAll}}" stepKey="clickSelectAll"/>
+        <click selector="{{AdminNewWidgetSection.applyParameter}}" stepKey="clickApplyRuleParameter"/>
+        <click selector="{{AdminMainActionsSection.save}}" stepKey="clickSaveWidget"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="The widget instance has been saved" stepKey="seeSuccess"/>
+    </actionGroup>
+</actionGroups>

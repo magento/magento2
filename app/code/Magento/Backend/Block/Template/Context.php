@@ -5,6 +5,8 @@
  */
 namespace Magento\Backend\Block\Template;
 
+use Magento\Framework\Cache\LockGuardedCacheLoader;
+
 /**
  * Constructor modification point for Magento\Backend\Block\Template.
  *
@@ -85,6 +87,7 @@ class Context extends \Magento\Framework\View\Element\Template\Context
      * @param \Magento\Framework\Math\Random $mathRandom
      * @param \Magento\Framework\Data\Form\FormKey $formKey
      * @param \Magento\Framework\Code\NameBuilder $nameBuilder
+     * @param LockGuardedCacheLoader|null $lockQuery
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -118,7 +121,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
         \Magento\Backend\Model\Session $backendSession,
         \Magento\Framework\Math\Random $mathRandom,
         \Magento\Framework\Data\Form\FormKey $formKey,
-        \Magento\Framework\Code\NameBuilder $nameBuilder
+        \Magento\Framework\Code\NameBuilder $nameBuilder,
+        LockGuardedCacheLoader $lockQuery = null
     ) {
         $this->_authorization = $authorization;
         $this->_backendSession = $backendSession;
@@ -150,7 +154,8 @@ class Context extends \Magento\Framework\View\Element\Template\Context
             $storeManager,
             $pageConfig,
             $resolver,
-            $validator
+            $validator,
+            $lockQuery
         );
     }
 

@@ -169,6 +169,6 @@
             </ShipmentEvent>
         </ShipmentInfo>
     </AWBInfo>
-    <LanguageCode>en</LanguageCode>
+    <LanguageCode>EN</LanguageCode>
 </req:TrackingResponse>
 <!-- ServiceInvocationId:20180227124344_5793_23bed3d9-e792-4955-8055-9472b1b41929 -->

@@ -9,6 +9,10 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="CaptchaFormsDisplayingActionGroup">
+        <annotations>
+            <description>Navigates to store configuration page through UI and expands the CAPTCHA section under Customers > Customer Configuration.</description>
+        </annotations>
+
         <click selector="{{CaptchaFormsDisplayingSection.store}}" stepKey="ClickToGoStores"/>
         <waitForPageLoad stepKey="waitForStoresLoaded"/>
         <click selector="{{CaptchaFormsDisplayingSection.config}}" stepKey="ClickToGoConfiguration"/>

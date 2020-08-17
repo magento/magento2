@@ -28,10 +28,11 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     const KEY_METHOD = 'method';
     const KEY_METHODS = 'methods';
     const KEY_DESCRIPTION = 'description';
+    const KEY_REAL_SERVICE_METHOD = 'realMethod';
     /**#@-*/
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -49,6 +50,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             $service = $route->getElementsByTagName('service')->item(0);
             $serviceClass = $service->attributes->getNamedItem('class')->nodeValue;
             $serviceMethod = $service->attributes->getNamedItem('method')->nodeValue;
+            $soapMethod = $serviceMethod;
+            if ($soapOperationNode = $route->attributes->getNamedItem('soapOperation')) {
+                $soapMethod = trim($soapOperationNode->nodeValue);
+            }
             $url = trim($route->attributes->getNamedItem('url')->nodeValue);
             $version = $this->convertVersion($url);
 
@@ -70,23 +75,25 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
                 // For SOAP
                 $resourcePermissionSet[] = $ref;
             }
+            $data = $this->convertMethodParameters($route->getElementsByTagName('parameter'));
+            $serviceData = $data;
 
-            if (!isset($serviceClassData[self::KEY_METHODS][$serviceMethod])) {
-                $serviceClassData[self::KEY_METHODS][$serviceMethod][self::KEY_ACL_RESOURCES] = $resourcePermissionSet;
+            if (!isset($serviceClassData[self::KEY_METHODS][$soapMethod])) {
+                $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_ACL_RESOURCES] = $resourcePermissionSet;
             } else {
-                $serviceClassData[self::KEY_METHODS][$serviceMethod][self::KEY_ACL_RESOURCES] =
+                $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_ACL_RESOURCES] =
                     array_unique(
                         array_merge(
-                            $serviceClassData[self::KEY_METHODS][$serviceMethod][self::KEY_ACL_RESOURCES],
+                            $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_ACL_RESOURCES],
                             $resourcePermissionSet
                         )
                     );
+                $serviceData = [];
             }
 
             $method = $route->attributes->getNamedItem('method')->nodeValue;
             $secureNode = $route->attributes->getNamedItem('secure');
             $secure = $secureNode ? (bool)trim($secureNode->nodeValue) : false;
-            $data = $this->convertMethodParameters($route->getElementsByTagName('parameter'));
 
             // We could handle merging here by checking if the route already exists
             $result[self::KEY_ROUTES][$url][$method] = [
@@ -100,10 +107,14 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
             ];
 
             $serviceSecure = false;
-            if (isset($serviceClassData[self::KEY_METHODS][$serviceMethod][self::KEY_SECURE])) {
-                $serviceSecure = $serviceClassData[self::KEY_METHODS][$serviceMethod][self::KEY_SECURE];
+            if (isset($serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_SECURE])) {
+                $serviceSecure = $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_SECURE];
             }
-            $serviceClassData[self::KEY_METHODS][$serviceMethod][self::KEY_SECURE] = $serviceSecure || $secure;
+            if (!isset($serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_REAL_SERVICE_METHOD])) {
+                $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_REAL_SERVICE_METHOD] = $serviceMethod;
+            }
+            $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_SECURE] = $serviceSecure || $secure;
+            $serviceClassData[self::KEY_METHODS][$soapMethod][self::KEY_DATA_PARAMETERS] = $serviceData;
 
             $result[self::KEY_SERVICES][$serviceClass][$version] = $serviceClassData;
         }
@@ -147,7 +158,8 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
 
     /**
      * Derive the version from the provided URL.
-     * Assumes the version is the first portion of the URL. For example, '/V1/customers'
+     *
+     * Assumes the version is the first portion of the URL. For example, '/V1/customers'.
      *
      * @param string $url
      * @return string

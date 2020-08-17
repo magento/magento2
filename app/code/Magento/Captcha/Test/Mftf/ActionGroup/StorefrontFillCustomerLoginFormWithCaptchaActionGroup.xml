@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="StorefrontFillCustomerLoginFormWithCaptchaActionGroup" extends="StorefrontFillCustomerLoginFormActionGroup">
+        <annotations>
+            <description>EXTENDS: StorefrontFillCustomerLoginFormActionGroup. Fills in the Captcha field on the Storefront Customer Login page.</description>
+        </annotations>
         <arguments>
-            <argument name="captcha" type="string" />
+            <argument name="captcha" type="string"/>
         </arguments>
-        <fillField stepKey="fillCaptchaField" after="fillPassword" userInput="{{captcha}}" selector="{{StorefrontCustomerSignInFormSection.captchaField}}" />
+
+        <fillField stepKey="fillCaptchaField" after="fillPassword" userInput="{{captcha}}" selector="{{StorefrontCustomerSignInFormSection.captchaField}}"/>
     </actionGroup>
 </actionGroups>

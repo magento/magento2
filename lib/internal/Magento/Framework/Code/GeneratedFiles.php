@@ -3,23 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Code;
 
-use Magento\Framework\App\DeploymentConfig\Writer\PhpFormatter;
 use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\Framework\Config\File\ConfigFilePool;
+use Magento\Framework\Exception\FileSystemException;
+use Magento\Framework\Exception\RuntimeException;
 use Magento\Framework\Filesystem\Directory\WriteFactory;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Lock\LockManagerInterface;
 
 /**
- * Regenerates generated code and DI configuration
+ * Clean generated code, DI configuration and cache folders
  */
 class GeneratedFiles
 {
     /**
-     * Separator literal to assemble timer identifier from timer names
+     * Regenerate flag file name
      */
     const REGENERATE_FLAG = '/var/.regenerate';
+
+    /**
+     * Regenerate lock file name
+     */
+    const REGENERATE_LOCK = self::REGENERATE_FLAG . '.lock';
+
+    /**
+     * Acquire regenerate lock timeout
+     */
+    const REGENERATE_LOCK_TIMEOUT = 5;
 
     /**
      * @var DirectoryList
@@ -32,19 +44,39 @@ class GeneratedFiles
     private $write;
 
     /**
-     * Constructor
+     * @var LockManagerInterface
+     */
+    private $lockManager;
+
+    /**
+     * GeneratedFiles constructor.
      *
      * @param DirectoryList $directoryList
      * @param WriteFactory $writeFactory
+     * @param LockManagerInterface $lockManager
      */
-    public function __construct(DirectoryList $directoryList, WriteFactory $writeFactory)
-    {
+    public function __construct(
+        DirectoryList $directoryList,
+        WriteFactory $writeFactory,
+        LockManagerInterface $lockManager
+    ) {
         $this->directoryList = $directoryList;
         $this->write = $writeFactory->create(BP);
+        $this->lockManager = $lockManager;
     }
 
     /**
-     * Clean generated code and DI configuration
+     * Create flag for cleaning up generated content
+     *
+     * @return void
+     */
+    public function requestRegeneration()
+    {
+        $this->write->touch(self::REGENERATE_FLAG);
+    }
+
+    /**
+     * Clean generated code, generated metadata and cache directories
      *
      * @return void
      *
@@ -57,156 +89,75 @@ class GeneratedFiles
     }
 
     /**
-     * Clean generated/code, generated/metadata and var/cache
+     * Clean generated code, generated metadata and cache directories
      *
      * @return void
      */
     public function cleanGeneratedFiles()
     {
-        if ($this->write->isExist(self::REGENERATE_FLAG)) {
-            $enabledCacheTypes = [];
-
-            //TODO: to be removed in scope of MAGETWO-53476
-            $deploymentConfig = $this->directoryList->getPath(DirectoryList::CONFIG);
-            $configPool = new ConfigFilePool();
-            $envPath = $deploymentConfig . '/' . $configPool->getPath(ConfigFilePool::APP_ENV);
-            if ($this->write->isExist($this->write->getRelativePath($envPath))) {
-                $enabledCacheTypes = $this->getEnabledCacheTypes();
-                $this->disableAllCacheTypes();
+        if ($this->isCleanGeneratedFilesAllowed() && $this->acquireLock()) {
+            try {
+                $this->write->delete(self::REGENERATE_FLAG);
+                $this->deleteFolder(DirectoryList::GENERATED_CODE);
+                $this->deleteFolder(DirectoryList::GENERATED_METADATA);
+                $this->deleteFolder(DirectoryList::CACHE);
+            } catch (FileSystemException $exception) {
+                // A filesystem error occurred, possible concurrency error while trying
+                // to delete a generated folder being used by another process.
+                // Request regeneration for the next and unlock
+                $this->requestRegeneration();
+            } finally {
+                $this->lockManager->unlock(self::REGENERATE_LOCK);
             }
-            //TODO: Till here
-
-            $cachePath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::CACHE));
-            $generationPath = $this->write->getRelativePath(
-                $this->directoryList->getPath(DirectoryList::GENERATED_CODE)
-            );
-            $diPath = $this->write->getRelativePath($this->directoryList->getPath(DirectoryList::GENERATED_METADATA));
-
-            // Clean generated/code dir
-            if ($this->write->isDirectory($generationPath)) {
-                $this->write->delete($generationPath);
-            }
-
-            // Clean generated/metadata
-            if ($this->write->isDirectory($diPath)) {
-                $this->write->delete($diPath);
-            }
-
-            // Clean var/cache
-            if ($this->write->isDirectory($cachePath)) {
-                $this->write->delete($cachePath);
-            }
-            $this->write->delete(self::REGENERATE_FLAG);
-            $this->enableCacheTypes($enabledCacheTypes);
         }
     }
 
     /**
-     * Create flag for cleaning up generated/code, generated/metadata and var/cache directories for subsequent
-     * regeneration of this content
+     * Clean generated files is allowed if requested and not locked
      *
+     * @return bool
+     */
+    private function isCleanGeneratedFilesAllowed(): bool
+    {
+        try {
+            $isAllowed = $this->write->isExist(self::REGENERATE_FLAG)
+                && !$this->lockManager->isLocked(self::REGENERATE_LOCK);
+        } catch (FileSystemException | RuntimeException $e) {
+            // Possible filesystem problem
+            $isAllowed = false;
+        }
+
+        return $isAllowed;
+    }
+
+    /**
+     * Acquire lock for performing operations
+     *
+     * @return bool
+     */
+    private function acquireLock(): bool
+    {
+        try {
+            $lockAcquired = $this->lockManager->lock(self::REGENERATE_LOCK, self::REGENERATE_LOCK_TIMEOUT);
+        } catch (RuntimeException $exception) {
+            // Lock not acquired due to possible filesystem problem
+            $lockAcquired = false;
+        }
+
+        return $lockAcquired;
+    }
+
+    /**
+     * Delete folder by path
+     *
+     * @param string $pathType
      * @return void
      */
-    public function requestRegeneration()
+    private function deleteFolder(string $pathType): void
     {
-        $this->write->touch(self::REGENERATE_FLAG);
-    }
-
-    /**
-     * Reads Cache configuration from env.php and returns indexed array containing all the enabled cache types.
-     *
-     * @return string[]
-     */
-    private function getEnabledCacheTypes()
-    {
-        $enabledCacheTypes = [];
-        $envPath = $this->getEnvPath();
-        if ($this->write->isReadable($this->write->getRelativePath($envPath))) {
-            $envData = include $envPath;
-            if (isset($envData['cache_types'])) {
-                $cacheStatus = $envData['cache_types'];
-                $enabledCacheTypes = array_filter($cacheStatus, function ($value) {
-                    return $value;
-                });
-                $enabledCacheTypes = array_keys($enabledCacheTypes);
-            }
-        }
-        return $enabledCacheTypes;
-    }
-
-    /**
-     * Returns path to env.php file
-     *
-     * @return string
-     * @throws \Exception
-     */
-    private function getEnvPath()
-    {
-        $deploymentConfig = $this->directoryList->getPath(DirectoryList::CONFIG);
-        $configPool = new ConfigFilePool();
-        $envPath = $deploymentConfig . '/' . $configPool->getPath(ConfigFilePool::APP_ENV);
-        return $envPath;
-    }
-
-    /**
-     * Disables all cache types by updating env.php.
-     *
-     * @return void
-     */
-    private function disableAllCacheTypes()
-    {
-        $envPath = $this->getEnvPath();
-        if ($this->write->isWritable($this->write->getRelativePath($envPath))) {
-            $envData = include $envPath;
-
-            if (isset($envData['cache_types'])) {
-                $cacheTypes = array_keys($envData['cache_types']);
-
-                foreach ($cacheTypes as $cacheType) {
-                    $envData['cache_types'][$cacheType] = 0;
-                }
-
-                $formatter = new PhpFormatter();
-                $contents = $formatter->format($envData);
-
-                $this->write->writeFile($this->write->getRelativePath($envPath), $contents);
-                if (function_exists('opcache_invalidate')) {
-                    opcache_invalidate(
-                        $this->write->getAbsolutePath($envPath)
-                    );
-                }
-            }
-        }
-    }
-
-    /**
-     * Enables appropriate cache types in app/etc/env.php based on the passed in $cacheTypes array
-     * TODO: to be removed in scope of MAGETWO-53476
-     *
-     * @param string[] $cacheTypes
-     * @return void
-     */
-    private function enableCacheTypes($cacheTypes)
-    {
-        if (empty($cacheTypes)) {
-            return;
-        }
-        $envPath = $this->getEnvPath();
-        if ($this->write->isReadable($this->write->getRelativePath($envPath))) {
-            $envData = include $envPath;
-            foreach ($cacheTypes as $cacheType) {
-                if (isset($envData['cache_types'][$cacheType])) {
-                    $envData['cache_types'][$cacheType] = 1;
-                }
-            }
-
-            $formatter = new PhpFormatter();
-            $contents = $formatter->format($envData);
-
-            $this->write->writeFile($this->write->getRelativePath($envPath), $contents);
-            if (function_exists('opcache_invalidate')) {
-                opcache_invalidate($this->write->getAbsolutePath($envPath));
-            }
+        $relativePath = $this->write->getRelativePath($this->directoryList->getPath($pathType));
+        if ($this->write->isDirectory($relativePath)) {
+            $this->write->delete($relativePath);
         }
     }
 }

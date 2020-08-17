@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminDeleteUserViaCurlActionGroup">
+        <arguments>
+            <argument name="user" type="entity" />
+        </arguments>
+        <amOnPage stepKey="amOnAdminUsersPage" url="{{AdminUsersPage.url}}"/>
+        <waitForPageLoad stepKey="waitForAdminUserPageLoad"/>
+        <click selector="{{AdminLegacyDataGridFilterSection.clear}}" stepKey="resetFilters" />
+        <grabTextFrom selector="{{AdminLegacyDataGridTableSection.columnTemplateStrict(user.username, 'user_id')}}" stepKey="userId" />
+
+        <!--
+            @TODO: Remove "executeJS" in scope of MQE-1561
+            Hack to be able to pass current admin user password without hardcoding it.
+        -->
+        <executeJS function="return '{{DefaultAdminUser.password}}'" stepKey="adminPassword" />
+
+        <createData entity="deleteUser" stepKey="deleteUser">
+            <field key="user_id">{$userId}</field>
+            <field key="current_password">{$adminPassword}</field>
+        </createData>
+    </actionGroup>
+</actionGroups>

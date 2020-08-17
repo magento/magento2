@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAfterChangeCookieDomainTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Login on the Admin Backend"/>
+            <title value="Admin user can login after changing cookie domain on main website scope without changing cookie domain on default scope"/>
+            <description value="Admin user can login after changing cookie domain on main website scope without changing cookie domain on default scope"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-17847"/>
+            <useCaseId value="MC-17275"/>
+            <group value="backend"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{ChangedCookieDomainForMainWebsiteConfigData.path}} --scope={{ChangedCookieDomainForMainWebsiteConfigData.scope}} --scope-code={{ChangedCookieDomainForMainWebsiteConfigData.scope_code}} {{ChangedCookieDomainForMainWebsiteConfigData.value}}" stepKey="changeDomainForMainWebsiteBeforeTestRun"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheBeforeTestRun">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{EmptyCookieDomainForMainWebsiteConfigData.path}} --scope={{EmptyCookieDomainForMainWebsiteConfigData.scope}} --scope-code={{EmptyCookieDomainForMainWebsiteConfigData.scope_code}} {{EmptyCookieDomainForMainWebsiteConfigData.value}}" stepKey="changeDomainForMainWebsiteAfterTestComplete"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterTestComplete">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+        </after>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AssertAdminDashboardPageIsVisibleActionGroup" stepKey="seeDashboardPage"/>
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+    </test>
+</tests>

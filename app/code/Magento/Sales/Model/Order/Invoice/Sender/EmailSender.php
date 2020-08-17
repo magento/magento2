@@ -100,6 +100,8 @@ class EmailSender extends Sender implements SenderInterface
         $invoice->setSendEmail($this->identityContainer->isEnabled());
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
+            $this->identityContainer->setStore($order->getStore());
+
             $transport = [
                 'order' => $order,
                 'invoice' => $invoice,

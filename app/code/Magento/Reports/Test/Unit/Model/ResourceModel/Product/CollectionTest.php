@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Reports\Test\Unit\Model\ResourceModel\Product;
 
@@ -12,6 +13,7 @@ use Magento\Catalog\Model\Product\OptionFactory;
 use Magento\Catalog\Model\Product\Type as ProductType;
 use Magento\Catalog\Model\ResourceModel\Helper;
 use Magento\Catalog\Model\ResourceModel\Product as ResourceProduct;
+use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitation;
 use Magento\Catalog\Model\ResourceModel\Product\Collection\ProductLimitationFactory;
 use Magento\Catalog\Model\ResourceModel\Url;
 use Magento\Customer\Api\GroupManagementInterface;
@@ -26,10 +28,9 @@ use Magento\Framework\Data\Collection\Db\FetchStrategyInterface;
 use Magento\Framework\Data\Collection\EntityFactory;
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Select;
-use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Event\ManagerInterface;
-use Magento\Framework\Model\ResourceModel\ResourceModelPoolInterface;
-use Magento\Framework\Module\Manager;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\Module\Manager as Manager;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
@@ -37,8 +38,9 @@ use Magento\Framework\Validator\UniversalFactory;
 use Magento\Quote\Model\ResourceModel\Quote\Collection;
 use Magento\Reports\Model\Event\TypeFactory;
 use Magento\Reports\Model\ResourceModel\Product\Collection as ProductCollection;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -47,7 +49,7 @@ use Psr\Log\LoggerInterface;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  *
  */
-class CollectionTest extends \PHPUnit\Framework\TestCase
+class CollectionTest extends TestCase
 {
     /**
      * @var ProductCollection
@@ -55,7 +57,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     private $collection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $eventTypeFactoryMock;
 
@@ -65,23 +67,71 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
     private $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $connectionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $resourceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $selectMock;
 
-    protected function setUp()
+    /**
+     * SetUp method
+     *
+     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
+     */
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
+        $context = $this->createPartialMock(Context::class, ['getResource', 'getEavConfig']);
+        $entityFactoryMock = $this->createMock(EntityFactory::class);
+        $loggerMock = $this->getMockForAbstractClass(LoggerInterface::class);
+        $fetchStrategyMock = $this->getMockForAbstractClass(FetchStrategyInterface::class);
+        $eventManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $eavConfigMock = $this->createMock(Config::class);
+        $this->resourceMock = $this->createPartialMock(ResourceConnection::class, ['getTableName', 'getConnection']);
+        $eavEntityFactoryMock = $this->createMock(EavEntityFactory::class);
+        $resourceHelperMock = $this->createMock(Helper::class);
+        $universalFactoryMock = $this->createMock(UniversalFactory::class);
+        $storeManagerMock = $this->createPartialMockForAbstractClass(
+            StoreManagerInterface::class,
+            ['getStore', 'getId']
+        );
+        $moduleManagerMock = $this->createMock(Manager::class);
+        $productFlatStateMock = $this->createMock(State::class);
+        $scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $optionFactoryMock = $this->createMock(OptionFactory::class);
+        $catalogUrlMock = $this->createMock(Url::class);
+        $localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $customerSessionMock = $this->createMock(Session::class);
+        $dateTimeMock = $this->createMock(DateTime::class);
+        $groupManagementMock = $this->getMockForAbstractClass(GroupManagementInterface::class);
+        $eavConfig = $this->createPartialMock(Config::class, ['getEntityType']);
+        $entityType = $this->createMock(Type::class);
+
+        $eavConfig->expects($this->atLeastOnce())->method('getEntityType')->willReturn($entityType);
+        $context->expects($this->atLeastOnce())->method('getResource')->willReturn($this->resourceMock);
+        $context->expects($this->atLeastOnce())->method('getEavConfig')->willReturn($eavConfig);
+
+        $defaultAttributes = $this->getMockBuilder(DefaultAttributes::class)
+            ->addMethods(['_getDefaultAttributes'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $productMock = $this->objectManager->getObject(
+            ResourceProduct::class,
+            ['context' => $context, 'defaultAttributes' => $defaultAttributes]
+        );
+
+        $this->eventTypeFactoryMock = $this->createMock(TypeFactory::class);
+        $productTypeMock = $this->createMock(ProductType::class);
+        $quoteResourceMock = $this->createMock(Collection::class);
+        $this->connectionMock = $this->createPartialMockForAbstractClass(AdapterInterface::class, ['select']);
         $this->selectMock = $this->createPartialMock(
             Select::class,
             [
@@ -94,65 +144,52 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
                 'having',
             ]
         );
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
-        $this->connectionMock->expects($this->atLeastOnce())->method('select')->willReturn($this->selectMock);
-        $this->resourceMock = $this->createPartialMock(ResourceConnection::class, ['getTableName', 'getConnection']);
+
+        $storeManagerMock->expects($this->atLeastOnce())->method('getStore')->willReturn($storeManagerMock);
+        $storeManagerMock->expects($this->atLeastOnce())->method('getId')->willReturn(1);
+        $universalFactoryMock->expects($this->atLeastOnce())->method('create')->willReturn($productMock);
         $this->resourceMock->expects($this->atLeastOnce())->method('getTableName')->willReturn('test_table');
         $this->resourceMock->expects($this->atLeastOnce())->method('getConnection')->willReturn($this->connectionMock);
-        $eavConfig = $this->createPartialMock(Config::class, ['getEntityType']);
-        $eavConfig->expects($this->atLeastOnce())->method('getEntityType')->willReturn($this->createMock(Type::class));
-        $context = $this->createPartialMock(Context::class, ['getResource', 'getEavConfig']);
-        $context->expects($this->atLeastOnce())->method('getResource')->willReturn($this->resourceMock);
-        $context->expects($this->atLeastOnce())->method('getEavConfig')->willReturn($eavConfig);
-        $storeMock = $this->createMock(StoreInterface::class);
-        $storeMock->expects($this->atLeastOnce())->method('getId')->willReturn(1);
-        $storeManagerMock = $this->createMock(StoreManagerInterface::class);
-        $storeManagerMock->expects($this->atLeastOnce())->method('getStore')->willReturn($storeMock);
-        $productMock = $this->objectManager->getObject(
-            ResourceProduct::class,
-            [
-                'context' => $context,
-                'defaultAttributes' => $this->createPartialMock(
-                    DefaultAttributes::class,
-                    ['_getDefaultAttributes']
-                )
-            ]
-        );
-        $resourceModelPoolMock = $this->createMock(ResourceModelPoolInterface::class);
-        $resourceModelPoolMock->expects($this->atLeastOnce())->method('get')->willReturn($productMock);
-        $this->eventTypeFactoryMock = $this->createMock(TypeFactory::class);
+        $this->connectionMock->expects($this->atLeastOnce())->method('select')->willReturn($this->selectMock);
 
-        $this->collection = new ProductCollection(
-            $this->createMock(EntityFactory::class),
-            $this->createMock(LoggerInterface::class),
-            $this->createMock(FetchStrategyInterface::class),
-            $this->createMock(ManagerInterface::class),
-            $this->createMock(Config::class),
-            $this->resourceMock,
-            $this->createMock(EavEntityFactory::class),
-            $this->createMock(Helper::class),
-            $this->createMock(UniversalFactory::class),
-            $storeManagerMock,
-            $this->createMock(Manager::class),
-            $this->createMock(State::class),
-            $this->createMock(ScopeConfigInterface::class),
-            $this->createMock(OptionFactory::class),
-            $this->createMock(Url::class),
-            $this->createMock(TimezoneInterface::class),
-            $this->createMock(Session::class),
-            $this->createMock(DateTime::class),
-            $this->createMock(GroupManagementInterface::class),
-            $productMock,
-            $this->eventTypeFactoryMock,
-            $this->createMock(ProductType::class),
-            $this->createMock(Collection::class),
-            $this->connectionMock,
-            $this->createMock(ProductLimitationFactory::class),
-            $this->createMock(MetadataPool::class),
-            $this->createMock(\Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer::class),
-            $this->createMock(\Magento\Catalog\Model\Indexer\Product\Price\PriceTableResolver::class),
-            $this->createMock(\Magento\Framework\Indexer\DimensionFactory::class),
-            $resourceModelPoolMock
+        $productLimitationFactoryMock = $this->createPartialMock(
+            ProductLimitationFactory::class,
+            ['create']
+        );
+        $productLimitation = $this->createMock(ProductLimitation::class);
+        $productLimitationFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($productLimitation);
+
+        $this->collection = $this->objectManager->getObject(
+            ProductCollection::class,
+            [
+                'entityFactory' => $entityFactoryMock,
+                'logger' => $loggerMock,
+                'fetchStrategy' => $fetchStrategyMock,
+                'eventManager' => $eventManagerMock,
+                'eavConfig' => $eavConfigMock,
+                'resource' => $this->resourceMock,
+                'eavEntityFactory' => $eavEntityFactoryMock,
+                'resourceHelper' => $resourceHelperMock,
+                'universalFactory' => $universalFactoryMock,
+                'storeManager' => $storeManagerMock,
+                'moduleManager' => $moduleManagerMock,
+                'catalogProductFlatState' => $productFlatStateMock,
+                'scopeConfig' => $scopeConfigMock,
+                'productOptionFactory' => $optionFactoryMock,
+                'catalogUrl' => $catalogUrlMock,
+                'localeDate' => $localeDateMock,
+                'customerSession' => $customerSessionMock,
+                'dateTime' => $dateTimeMock,
+                'groupManagement' => $groupManagementMock,
+                'product' => $productMock,
+                'eventTypeFactory' => $this->eventTypeFactoryMock,
+                'productType' => $productTypeMock,
+                'quoteResource' => $quoteResourceMock,
+                'connection' => $this->connectionMock,
+                'productLimitationFactory' => $productLimitationFactoryMock
+            ]
         );
     }
 
@@ -169,7 +206,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->method('getResources')
             ->willReturn($this->resourceMock);
         $abstractResourceMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
+            AbstractDb::class,
             ['context' => $context],
             '',
             true,
@@ -194,14 +231,10 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             \Magento\Reports\Model\ResourceModel\Event\Type\Collection::class,
             ['resource' => $abstractResourceMock]
         );
-        $eventTypeMock = $this->createPartialMock(
-            \Magento\Reports\Model\Event\Type::class,
-            [
-                'getEventName',
-                'getId',
-                'getCollection',
-            ]
-        );
+        $eventTypeMock = $this->getMockBuilder(\Magento\Reports\Model\Event\Type::class)->addMethods(['getEventName'])
+            ->onlyMethods(['getId', 'getCollection'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $eventTypesCollection->addItem($eventTypeMock);
 
@@ -251,5 +284,26 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->selectMock);
 
         $this->collection->addViewsCount();
+    }
+
+    /**
+     * Get mock for abstract class with methods.
+     *
+     * @param string $className
+     * @param array $methods
+     *
+     * @return MockObject
+     */
+    private function createPartialMockForAbstractClass($className, $methods)
+    {
+        return $this->getMockForAbstractClass(
+            $className,
+            [],
+            '',
+            true,
+            true,
+            true,
+            $methods
+        );
     }
 }

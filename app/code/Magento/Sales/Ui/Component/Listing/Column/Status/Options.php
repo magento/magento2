@@ -9,7 +9,7 @@ use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory;
 
 /**
- * Class Options
+ * Class Options for Listing Column Status
  */
 class Options implements OptionSourceInterface
 {
@@ -41,7 +41,8 @@ class Options implements OptionSourceInterface
     public function toOptionArray()
     {
         if ($this->options === null) {
-            $this->options = $this->collectionFactory->create()->toOptionArray();
+            $options = $this->collectionFactory->create()->toOptionArray();
+            $this->options = $options;
         }
         return $this->options;
     }

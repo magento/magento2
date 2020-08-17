@@ -11,5 +11,7 @@
     <section name="StorefrontWidgetsSection">
         <element name="widgetProductsGrid" type="block" selector=".block.widget.block-products-list.grid"/>
         <element name="widgetProductName" type="text" selector=".product-item-name"/>
+        <element name="widgetBlock" type="block" selector=".widget"/>
+        <element name="widgetTitle" type="text" selector=".block-title"/>
     </section>
 </sections>

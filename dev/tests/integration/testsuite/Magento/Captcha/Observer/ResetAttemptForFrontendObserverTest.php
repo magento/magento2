@@ -26,7 +26,7 @@ class ResetAttemptForFrontendObserverTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -34,7 +34,7 @@ class ResetAttemptForFrontendObserverTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDataFixture Magento/Captcha/_files/failed_logins_frontend.php
      */
-    public function testSuccesfulLoginRemovesFailedAttempts()
+    public function testSuccessfulLoginRemovesFailedAttempts()
     {
         $customerEmail = 'mageuser@dummy.com';
         $customerFactory = $this->objectManager->get(CustomerFactory::class);

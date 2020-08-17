@@ -8,14 +8,20 @@ declare(strict_types=1);
 
 namespace Magento\Test\Integrity;
 
-use Magento\Test\Integrity\Dependency\DeclarativeSchemaDependencyProvider;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Utility\AggregateInvoker;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Test\Integrity\Dependency\DeclarativeSchemaDependencyProvider;
+use Magento\TestFramework\Inspection\Exception as InspectionException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class DeclarativeDependencyTest
+ * Test for undeclared dependencies in declarative schema
  */
-class DeclarativeDependencyTest extends \PHPUnit\Framework\TestCase
+class DeclarativeDependencyTest extends TestCase
 {
     /**
      * @var DeclarativeSchemaDependencyProvider
@@ -23,16 +29,11 @@ class DeclarativeDependencyTest extends \PHPUnit\Framework\TestCase
     private $dependencyProvider;
 
     /**
-     * @var array
-     */
-    private $blacklistedDependencies = [];
-
-    /**
      * Sets up data
      *
-     * @throws \Exception
+     * @throws InspectionException
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $root = BP;
         $rootJson = $this->readJsonFile($root . '/composer.json', true);
@@ -42,23 +43,16 @@ class DeclarativeDependencyTest extends \PHPUnit\Framework\TestCase
                 'MAGETWO-43654: The build is running from vendor/magento. DependencyTest is skipped.'
             );
         }
-        $this->dependencyProvider = new DeclarativeSchemaDependencyProvider();
+        $objectManager = ObjectManager::getInstance();
+        $this->dependencyProvider = $objectManager->create(DeclarativeSchemaDependencyProvider::class);
     }
 
     /**
-     * @throws \Exception
+     * @throws LocalizedException
      */
     public function testUndeclaredDependencies()
     {
-        /** TODO: Remove this temporary solution after MC-15534 is closed */
-        $filePattern = __DIR__ . '/_files/dependency_test/blacklisted_dependencies_*.php';
-        $blacklistedDependencies = [];
-        foreach (glob($filePattern) as $fileName) {
-            $blacklistedDependencies = array_merge($blacklistedDependencies, require $fileName);
-        }
-        $this->blacklistedDependencies = $blacklistedDependencies;
-
-        $invoker = new \Magento\Framework\App\Utility\AggregateInvoker($this);
+        $invoker = new AggregateInvoker($this);
         $invoker(
             /**
              * Check undeclared modules dependencies for specified file
@@ -84,9 +78,7 @@ class DeclarativeDependencyTest extends \PHPUnit\Framework\TestCase
                 $result = [];
                 foreach ($undeclaredDependency as $name => $modules) {
                     $modules = array_unique($modules);
-                    if ($this->filterBlacklistedDependencies($foundModuleName, $modules)) {
-                        $result[] = $this->getErrorMessage($name) . "\n" . implode("\t\n", $modules) . "\n";
-                    }
+                    $result[] = $this->getErrorMessage($name) . "\n" . implode("\t\n", $modules) . "\n";
                 }
                 if (!empty($result)) {
                     $this->fail(
@@ -96,24 +88,6 @@ class DeclarativeDependencyTest extends \PHPUnit\Framework\TestCase
             },
             $this->prepareFiles(Files::init()->getDbSchemaFiles())
         );
-    }
-
-    /**
-     * Filter blacklisted dependencies.
-     *
-     * @todo Remove this temporary solution after MC-15534 is closed
-     *
-     * @param string $moduleName
-     * @param array $dependencies
-     * @return array
-     */
-    private function filterBlacklistedDependencies(string $moduleName, array $dependencies): array
-    {
-        if (!empty($this->blacklistedDependencies[$moduleName])) {
-            $dependencies = array_diff($dependencies, $this->blacklistedDependencies[$moduleName]);
-        }
-
-        return $dependencies;
     }
 
     /**
@@ -140,7 +114,7 @@ class DeclarativeDependencyTest extends \PHPUnit\Framework\TestCase
      */
     private function getErrorMessage(string $id): string
     {
-        $decodedId = $this->dependencyProvider->decodeDependencyId($id);
+        $decodedId = DeclarativeSchemaDependencyProvider::decodeDependencyId($id);
         $entityType = $decodedId['entityType'];
         if ($entityType === DeclarativeSchemaDependencyProvider::SCHEMA_ENTITY_TABLE) {
             $message = sprintf(
@@ -164,14 +138,13 @@ class DeclarativeDependencyTest extends \PHPUnit\Framework\TestCase
      *
      * @param string $file
      * @return mixed
-     * @throws \Exception
+     * @throws InspectionException
      */
     private function readJsonFile(string $file, bool $asArray = false)
     {
         $decodedJson = json_decode(file_get_contents($file), $asArray);
         if (null == $decodedJson) {
-            //phpcs:ignore Magento2.Exceptions.DirectThrow
-            throw new \Exception("Invalid Json: $file");
+            throw new InspectionException("Invalid Json: $file");
         }
 
         return $decodedJson;

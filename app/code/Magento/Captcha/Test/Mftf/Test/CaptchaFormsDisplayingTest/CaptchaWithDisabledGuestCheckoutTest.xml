@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="CaptchaWithDisabledGuestCheckoutTest">
+        <annotations>
+            <features value="Captcha"/>
+            <stories value="MC-5602 - CAPTCHA doesn't appear in login popup after refreshing page."/>
+            <title value="Captcha is displaying on login form with disabled guest checkout"/>
+            <description value="Captcha is displaying on login form with disabled guest checkout"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MAGETWO-96691"/>
+            <group value="captcha"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set checkout/options/guest_checkout 0" stepKey="disableGuestCheckout"/>
+            <magentoCLI command="config:set customer/captcha/failed_attempts_login 1" stepKey="decreaseLoginAttempt"/>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set checkout/options/guest_checkout 1" stepKey="enableGuestCheckout"/>
+            <magentoCLI command="config:set customer/captcha/failed_attempts_login 3" stepKey="increaseLoginAttempt"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct1"/>
+        </after>
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.sku$$)}}" stepKey="openProductPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
+        <waitForText userInput="You added $$createSimpleProduct.name$$ to your shopping cart." stepKey="waitForText"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickCart"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout"/>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.email}}" stepKey="waitEmailFieldVisible"/>
+        <fillField selector="{{StorefrontCustomerSignInPopupFormSection.email}}" userInput="{{Simple_US_Customer.email}}" stepKey="fillCustomerEmail"/>
+        <fillField selector="{{StorefrontCustomerSignInPopupFormSection.password}}" userInput="incorrectPassword" stepKey="fillIncorrectCustomerPassword"/>
+        <click selector="{{StorefrontCustomerSignInPopupFormSection.signIn}}" stepKey="clickSignIn"/>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.errorMessage}}" stepKey="seeErrorMessage"/>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.captchaField}}" stepKey="seeCaptchaField"/>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.captchaImg}}" stepKey="seeCaptchaImage"/>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.captchaReload}}" stepKey="seeCaptchaReloadButton"/>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickCart2"/>
+        <click selector="{{StorefrontMinicartSection.goToCheckout}}" stepKey="goToCheckout2"/>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.email}}" stepKey="waitEmailFieldVisible2"/>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.captchaField}}" stepKey="seeCaptchaField2"/>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.captchaImg}}" stepKey="seeCaptchaImage2"/>
+        <waitForElementVisible selector="{{StorefrontCustomerSignInPopupFormSection.captchaReload}}" stepKey="seeCaptchaReloadButton2"/>
+    </test>
+</tests>

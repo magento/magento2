@@ -4,35 +4,34 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/* @var \Magento\Sales\Block\Adminhtml\Order\Creditmemo\View\Items $block */
 ?>
 <?php $_items = $block->getCreditmemo()->getAllItems() ?>
 <div class="admin__page-section">
     <div class="admin__page-section-title">
-        <span class="title"><?= /* @escapeNotVerified */ __('Items Refunded') ?></span>
+        <span class="title"><?= $block->escapeHtml(__('Items Refunded')) ?></span>
     </div>
     <div class="admin__page-section-content">
         <div class="admin__table-wrapper">
             <table class="data-table admin__table-primary order-creditmemo-tables">
                 <thead>
                     <tr class="headings">
-                        <th class="col-product"><span><?= /* @escapeNotVerified */ __('Product') ?></span></th>
-                        <th class="col-price"><span><?= /* @escapeNotVerified */ __('Price') ?></span></th>
-                        <th class="col-qty"><span><?= /* @escapeNotVerified */ __('Qty') ?></span></th>
-                        <th class="col-subtotal"><span><?= /* @escapeNotVerified */ __('Subtotal') ?></span></th>
-                        <th class="col-tax"><span><?= /* @escapeNotVerified */ __('Tax Amount') ?></span></th>
-                        <th class="col-discount"><span><?= /* @escapeNotVerified */ __('Discount Amount') ?></span></th>
-                        <th class="col-total last"><span><?= /* @escapeNotVerified */ __('Row Total') ?></span></th>
+                        <th class="col-product"><span><?= $block->escapeHtml(__('Product')) ?></span></th>
+                        <th class="col-price"><span><?= $block->escapeHtml(__('Price')) ?></span></th>
+                        <th class="col-qty"><span><?= $block->escapeHtml(__('Qty')) ?></span></th>
+                        <th class="col-subtotal"><span><?= $block->escapeHtml(__('Subtotal')) ?></span></th>
+                        <th class="col-tax"><span><?= $block->escapeHtml(__('Tax Amount')) ?></span></th>
+                        <th class="col-discount"><span><?= $block->escapeHtml(__('Discount Amount')) ?></span></th>
+                        <th class="col-total last"><span><?= $block->escapeHtml(__('Row Total')) ?></span></th>
                     </tr>
                 </thead>
-                <?php $i = 0; foreach ($_items as $_item): ?>
-                    <?php if ($_item->getOrderItem()->getParentItem()) {
+                <?php $i = 0; foreach ($_items as $_item) : ?>
+                    <?php if ($_item->getOrderItem()->getParentItem()) :
                         continue;
-                    } else {
+                    else :
                         $i++;
-                    } ?>
-                    <tbody class="<?= /* @escapeNotVerified */ $i%2 ? 'even' : 'odd' ?>">
+                    endif; ?>
+                    <tbody class="<?= /* @noEscape */ $i%2 ? 'even' : 'odd' ?>">
                         <?= $block->getItemHtml($_item) ?>
                         <?= $block->getItemExtraInfoHtml($_item->getOrderItem()) ?>
                     </tbody>

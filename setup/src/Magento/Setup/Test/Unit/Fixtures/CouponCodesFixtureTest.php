@@ -3,42 +3,52 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Fixtures;
 
-use \Magento\Setup\Fixtures\CouponCodesFixture;
+use Magento\Framework\ObjectManager\ObjectManager;
+use Magento\SalesRule\Model\Coupon;
+use Magento\SalesRule\Model\Rule;
+use Magento\Setup\Fixtures\CartPriceRulesFixture;
+use Magento\Setup\Fixtures\CouponCodesFixture;
+use Magento\Setup\Fixtures\FixtureModel;
+use Magento\Store\Model\StoreManager;
+use Magento\Store\Model\Website;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CouponCodesFixtureTest extends \PHPUnit\Framework\TestCase
+class CouponCodesFixtureTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Fixtures\CartPriceRulesFixture
+     * @var CartPriceRulesFixture
      */
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Fixtures\FixtureModel
+     * @var MockObject|FixtureModel
      */
     private $fixtureModelMock;
 
     /**
-     * @var \Magento\SalesRule\Model\RuleFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\RuleFactory|MockObject
      */
     private $ruleFactoryMock;
 
     /**
-     * @var \Magento\SalesRule\Model\CouponFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesRule\Model\CouponFactory|MockObject
      */
     private $couponCodeFactoryMock;
 
     /**
      * setUp
      */
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->fixtureModelMock = $this->createMock(\Magento\Setup\Fixtures\FixtureModel::class);
+        $this->fixtureModelMock = $this->createMock(FixtureModel::class);
         $this->ruleFactoryMock = $this->createPartialMock(\Magento\SalesRule\Model\RuleFactory::class, ['create']);
         $this->couponCodeFactoryMock = $this->createPartialMock(
             \Magento\SalesRule\Model\CouponFactory::class,
@@ -56,60 +66,20 @@ class CouponCodesFixtureTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute()
     {
-        $storeMock = $this->createMock(\Magento\Store\Model\Store::class);
-        $storeMock->expects($this->once())
-            ->method('getRootCategoryId')
-            ->will($this->returnValue(2));
-
-        $websiteMock = $this->createMock(\Magento\Store\Model\Website::class);
-        $websiteMock->expects($this->once())
-            ->method('getGroups')
-            ->will($this->returnValue([$storeMock]));
+        $websiteMock = $this->createMock(Website::class);
         $websiteMock->expects($this->once())
             ->method('getId')
-            ->will($this->returnValue('website_id'));
+            ->willReturn('website_id');
 
-        $contextMock = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
-        $abstractDbMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\ResourceModel\Db\AbstractDb::class,
-            [$contextMock],
-            '',
-            true,
-            true,
-            true,
-            ['getAllChildren']
-        );
-        $abstractDbMock->expects($this->once())
-            ->method('getAllChildren')
-            ->will($this->returnValue([1]));
-
-        $storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManager::class);
+        $storeManagerMock = $this->createMock(StoreManager::class);
         $storeManagerMock->expects($this->once())
             ->method('getWebsites')
-            ->will($this->returnValue([$websiteMock]));
+            ->willReturn([$websiteMock]);
 
-        $categoryMock = $this->createMock(\Magento\Catalog\Model\Category::class);
-        $categoryMock->expects($this->once())
-            ->method('getResource')
-            ->will($this->returnValue($abstractDbMock));
-        $categoryMock->expects($this->once())
-            ->method('getPath')
-            ->will($this->returnValue('path/to/file'));
-        $categoryMock->expects($this->once())
-            ->method('getId')
-            ->will($this->returnValue('category_id'));
-
-        $objectValueMap = [
-            [\Magento\Catalog\Model\Category::class, $categoryMock]
-        ];
-
-        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
+        $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($storeManagerMock));
-        $objectManagerMock->expects($this->once())
-            ->method('get')
-            ->will($this->returnValueMap($objectValueMap));
+            ->willReturn($storeManagerMock);
 
         $valueMap = [
             ['coupon_codes', 0, 1]
@@ -118,18 +88,18 @@ class CouponCodesFixtureTest extends \PHPUnit\Framework\TestCase
         $this->fixtureModelMock
             ->expects($this->exactly(1))
             ->method('getValue')
-            ->will($this->returnValueMap($valueMap));
+            ->willReturnMap($valueMap);
         $this->fixtureModelMock
-            ->expects($this->exactly(2))
+            ->expects($this->exactly(1))
             ->method('getObjectManager')
-            ->will($this->returnValue($objectManagerMock));
+            ->willReturn($objectManagerMock);
 
-        $ruleMock = $this->createMock(\Magento\SalesRule\Model\Rule::class);
+        $ruleMock = $this->createMock(Rule::class);
         $this->ruleFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($ruleMock);
 
-        $couponMock = $this->createMock(\Magento\SalesRule\Model\Coupon::class);
+        $couponMock = $this->createMock(Coupon::class);
         $couponMock->expects($this->once())
             ->method('setRuleId')
             ->willReturnSelf();
@@ -157,13 +127,13 @@ class CouponCodesFixtureTest extends \PHPUnit\Framework\TestCase
      */
     public function testNoFixtureConfigValue()
     {
-        $ruleMock = $this->createMock(\Magento\SalesRule\Model\Rule::class);
+        $ruleMock = $this->createMock(Rule::class);
         $ruleMock->expects($this->never())->method('save');
 
-        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManager\ObjectManager::class);
+        $objectManagerMock = $this->createMock(ObjectManager::class);
         $objectManagerMock->expects($this->never())
             ->method('get')
-            ->with($this->equalTo(\Magento\SalesRule\Model\Rule::class))
+            ->with(Rule::class)
             ->willReturn($ruleMock);
 
         $this->fixtureModelMock
@@ -191,8 +161,6 @@ class CouponCodesFixtureTest extends \PHPUnit\Framework\TestCase
      */
     public function testIntroduceParamLabels()
     {
-        $this->assertSame([
-            'coupon_codes' => 'Coupon Codes'
-        ], $this->model->introduceParamLabels());
+        $this->assertSame(['coupon_codes' => 'Coupon Codes'], $this->model->introduceParamLabels());
     }
 }

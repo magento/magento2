@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertAdminItemOrderedErrorNotVisibleActionGroup">
+        <annotations>
+            <description>Assert that item in "Item Ordered" grid does not have an error/notice</description>
+        </annotations>
+        <arguments>
+            <argument name="productName" defaultValue="{{_defaultProduct.name}}" type="string"/>
+            <argument name="messageType" defaultValue="error" type="string"/>
+            <argument name="message" defaultValue="The requested qty is not available" type="string"/>
+        </arguments>
+        <dontSee userInput="{{message}}" selector="{{AdminOrderFormItemsOrderedSection.productMessage(productName, messageType)}}" stepKey="assertItemErrorNotVisible"/>
+        <dontSee userInput="{{message}}" selector="{{AdminOrderFormMessagesSection.messageByType(messageType)}}" stepKey="assertOrderErrorNotVisible"/>
+    </actionGroup>
+</actionGroups>

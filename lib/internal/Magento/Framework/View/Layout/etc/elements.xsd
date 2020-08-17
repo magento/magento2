@@ -17,6 +17,13 @@
                 </xs:extension>
             </xs:complexContent>
         </xs:complexType>
+        <xs:complexType name="object">
+            <xs:complexContent>
+                <xs:extension base="argumentType">
+                    <xs:attribute name="shared" use="optional" type="xs:boolean"/>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
     </xs:redefine>
     <!-- Defined the types of elements -->
 
@@ -133,6 +140,13 @@
             <xs:enumeration value="table"/>
             <xs:enumeration value="tfoot"/>
             <xs:enumeration value="ul"/>
+            <xs:enumeration value="article"/>
+            <xs:enumeration value="h1"/>
+            <xs:enumeration value="h2"/>
+            <xs:enumeration value="h3"/>
+            <xs:enumeration value="h4"/>
+            <xs:enumeration value="h5"/>
+            <xs:enumeration value="h6"/>
         </xs:restriction>
     </xs:simpleType>
 

@@ -3,49 +3,63 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\Categories;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
-use Magento\Framework\App\CacheInterface;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\DB\Helper as DbHelper;
 use Magento\Framework\UrlInterface;
 use Magento\Store\Model\Store;
+use Magento\Backend\Model\Auth\Session;
+use Magento\Authorization\Model\Role;
+use Magento\User\Model\User;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class CategoriesTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CategoriesTest extends AbstractModifierTest
 {
     /**
-     * @var CategoryCollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryCollectionFactory|MockObject
      */
     protected $categoryCollectionFactoryMock;
 
     /**
-     * @var DbHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var DbHelper|MockObject
      */
     protected $dbHelperMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     protected $urlBuilderMock;
 
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|MockObject
      */
     protected $storeMock;
 
     /**
-     * @var CategoryCollection|\PHPUnit_Framework_MockObject_MockObject
+     * @var CategoryCollection|MockObject
      */
     protected $categoryCollectionMock;
 
-    protected function setUp()
+    /**
+     * @var AuthorizationInterface|MockObject
+     */
+    private $authorizationMock;
+
+    /**
+     * @var Session|MockObject
+     */
+    private $sessionMock;
+
+    protected function setUp(): void
     {
         parent::setUp();
         $this->categoryCollectionFactoryMock = $this->getMockBuilder(CategoryCollectionFactory::class)
@@ -63,7 +77,13 @@ class CategoriesTest extends AbstractModifierTest
         $this->categoryCollectionMock = $this->getMockBuilder(CategoryCollection::class)
             ->disableOriginalConstructor()
             ->getMock();
-
+        $this->authorizationMock = $this->getMockBuilder(AuthorizationInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->sessionMock = $this->getMockBuilder(Session::class)
+            ->setMethods(['getUser'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->categoryCollectionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->categoryCollectionMock);
@@ -79,6 +99,26 @@ class CategoriesTest extends AbstractModifierTest
         $this->categoryCollectionMock->expects($this->any())
             ->method('getIterator')
             ->willReturn(new \ArrayIterator([]));
+
+        $roleAdmin = $this->getMockBuilder(Role::class)
+            ->setMethods(['getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $roleAdmin->expects($this->any())
+            ->method('getId')
+            ->willReturn(0);
+
+        $userAdmin = $this->getMockBuilder(User::class)
+            ->setMethods(['getRole'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $userAdmin->expects($this->any())
+            ->method('getRole')
+            ->willReturn($roleAdmin);
+
+        $this->sessionMock->expects($this->any())
+            ->method('getUser')
+            ->willReturn($userAdmin);
     }
 
     /**
@@ -86,11 +126,32 @@ class CategoriesTest extends AbstractModifierTest
      */
     protected function createModel()
     {
-        return $this->objectManager->getObject(Categories::class, [
-            'locator' => $this->locatorMock,
-            'categoryCollectionFactory' => $this->categoryCollectionFactoryMock,
-            'arrayManager' => $this->arrayManagerMock,
-        ]);
+        return $this->objectManager->getObject(
+            Categories::class,
+            [
+                'locator' => $this->locatorMock,
+                'categoryCollectionFactory' => $this->categoryCollectionFactoryMock,
+                'arrayManager' => $this->arrayManagerMock,
+                'authorization' => $this->authorizationMock,
+                'session' => $this->sessionMock
+            ]
+        );
+    }
+
+    /**
+     * @param object $object
+     * @param string $method
+     * @param array $args
+     * @return mixed
+     * @throws \ReflectionException
+     */
+    private function invokeMethod($object, $method, $args = [])
+    {
+        $class = new \ReflectionClass(Categories::class);
+        $method = $class->getMethod($method);
+        $method->setAccessible(true);
+
+        return $method->invokeArgs($object, $args);
     }
 
     public function testModifyData()
@@ -130,7 +191,9 @@ class CategoriesTest extends AbstractModifierTest
                 ],
             ],
         ];
-
+        $this->authorizationMock->expects($this->exactly(2))
+            ->method('isAllowed')
+            ->willReturn(true);
         $this->arrayManagerMock->expects($this->any())
             ->method('findPath')
             ->willReturn('path');
@@ -144,7 +207,14 @@ class CategoriesTest extends AbstractModifierTest
             ->willReturnArgument(2);
 
         $modifyMeta = $this->createModel()->modifyMeta($meta);
-        $this->assertEquals($locked, $modifyMeta['arguments']['data']['config']['disabled']);
+        $this->assertEquals(
+            $locked,
+            $modifyMeta['children']['category_ids']['arguments']['data']['config']['disabled']
+        );
+        $this->assertEquals(
+            $locked,
+            $modifyMeta['children']['create_category_button']['arguments']['data']['config']['disabled']
+        );
     }
 
     /**
@@ -153,5 +223,45 @@ class CategoriesTest extends AbstractModifierTest
     public function modifyMetaLockedDataProvider()
     {
         return [[true], [false]];
+    }
+
+    /**
+     * Asserts that a user with an ACL role ID of 0 and a user with an ACL role ID of 1 do not have the same cache IDs
+     * Assumes a store ID of 0
+     *
+     * @throws \ReflectionException
+     */
+    public function testAclCacheIds()
+    {
+        $categoriesAdmin = $this->createModel();
+        $cacheIdAdmin = $this->invokeMethod($categoriesAdmin, 'getCategoriesTreeCacheId', [0]);
+
+        $roleAclUser = $this->getMockBuilder(Role::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $roleAclUser->expects($this->any())
+            ->method('getId')
+            ->willReturn(1);
+
+        $userAclUser = $this->getMockBuilder(User::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $userAclUser->expects($this->any())
+            ->method('getRole')
+            ->will($this->returnValue($roleAclUser));
+
+        $this->sessionMock = $this->getMockBuilder(Session::class)
+            ->setMethods(['getUser'])
+            ->disableOriginalConstructor()
+            ->getMock();
+
+        $this->sessionMock->expects($this->any())
+            ->method('getUser')
+            ->will($this->returnValue($userAclUser));
+
+        $categoriesAclUser = $this->createModel();
+        $cacheIdAclUser = $this->invokeMethod($categoriesAclUser, 'getCategoriesTreeCacheId', [0]);
+
+        $this->assertNotEquals($cacheIdAdmin, $cacheIdAclUser);
     }
 }

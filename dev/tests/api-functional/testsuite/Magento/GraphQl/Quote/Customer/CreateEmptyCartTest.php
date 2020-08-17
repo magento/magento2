@@ -45,7 +45,7 @@ class CreateEmptyCartTest extends GraphQlAbstract
      */
     private $quoteIdMaskFactory;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->quoteCollectionFactory = $objectManager->get(QuoteCollectionFactory::class);
@@ -71,6 +71,25 @@ class CreateEmptyCartTest extends GraphQlAbstract
         self::assertNotNull($guestCart->getId());
         self::assertEquals(1, $guestCart->getCustomer()->getId());
         self::assertEquals('default', $guestCart->getStore()->getCode());
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     */
+    public function testCreateEmptyMultipleRequestsCart()
+    {
+        $query = $this->getQuery();
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMapWithCustomerToken());
+
+        self::assertArrayHasKey('createEmptyCart', $response);
+        self::assertNotEmpty($response['createEmptyCart']);
+        $maskedCartId = $response['createEmptyCart'];
+
+        $response = $this->graphQlMutation($query, [], '', $this->getHeaderMapWithCustomerToken());
+        self::assertArrayHasKey('createEmptyCart', $response);
+        self::assertNotEmpty($response['createEmptyCart']);
+
+        self::assertEquals($maskedCartId, $response['createEmptyCart']);
     }
 
     /**
@@ -121,11 +140,12 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Cart with ID "572cda51902b5b517c0e1a2b2fd004b4" already exists.
      */
     public function testCreateEmptyCartIfPredefinedCartIdAlreadyExists()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Cart with ID "572cda51902b5b517c0e1a2b2fd004b4" already exists.');
+
         $predefinedCartId = '572cda51902b5b517c0e1a2b2fd004b4';
 
         $query = <<<QUERY
@@ -140,11 +160,12 @@ QUERY;
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Cart ID length should to be 32 symbols.
      */
     public function testCreateEmptyCartWithWrongPredefinedCartId()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Cart ID length should to be 32 symbols.');
+
         $predefinedCartId = '572';
 
         $query = <<<QUERY
@@ -181,7 +202,7 @@ QUERY;
         return $headerMap;
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $quoteCollection = $this->quoteCollectionFactory->create();
         foreach ($quoteCollection as $quote) {

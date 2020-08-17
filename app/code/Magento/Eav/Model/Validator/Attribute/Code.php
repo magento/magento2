@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Eav\Model\Validator\Attribute;
 
+use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Eav\Model\Entity\Attribute;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Validator\AbstractValidator;
@@ -62,6 +63,16 @@ class Code extends AbstractValidator
                 'An attribute code must not be less than %1 and more than %2 characters.',
                 $minLength,
                 $maxLength
+            );
+        }
+
+        /**
+         * Check attribute_code for prohibited prefix
+         */
+        if (strpos($attributeCode, AbstractModifier::CONTAINER_PREFIX) === 0) {
+            $errorMessages[] = __(
+                '"%1" prefix is reserved by the system and cannot be used in attribute code names.',
+                AbstractModifier::CONTAINER_PREFIX
             );
         }
 

@@ -8,7 +8,6 @@ declare(strict_types=1);
 namespace Magento\CustomerGraphQl\Model\Resolver;
 
 use Magento\Customer\Model\Customer;
-use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Framework\GraphQl\Config\Element\Field;
@@ -21,24 +20,16 @@ use Magento\CustomerGraphQl\Model\Customer\Address\ExtractCustomerAddressData;
 class CustomerAddresses implements ResolverInterface
 {
     /**
-     * @var GetCustomer
-     */
-    private $getCustomer;
-
-    /**
      * @var ExtractCustomerAddressData
      */
     private $extractCustomerAddressData;
 
     /**
-     * @param GetCustomer $getCustomer
      * @param ExtractCustomerAddressData $extractCustomerAddressData
      */
     public function __construct(
-        GetCustomer $getCustomer,
         ExtractCustomerAddressData $extractCustomerAddressData
     ) {
-        $this->getCustomer = $getCustomer;
         $this->extractCustomerAddressData = $extractCustomerAddressData;
     }
 

@@ -67,4 +67,7 @@
             <argument name="indexer" xsi:type="object" shared="false">Magento\Indexer\Model\Indexer</argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Indexer\ActionInterface">
+        <plugin name="cache_cleaner_after_reindex" type="Magento\Indexer\Model\Indexer\CacheCleaner" />
+    </type>
 </config>

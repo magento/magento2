@@ -33,5 +33,7 @@
         <element name="updateItemsAndQuantities" type="button" selector="//span[contains(text(),'Update Items and Quantities')]"/>
         <element name="creditMemo" type="input" selector="#order_creditmemo"/>
         <element name="configure" type="button" selector=".product-configure-block button.action-default.scalable" timeout="30"/>
+        <element name="couponCode" type="input" selector="#order-coupons input" timeout="30"/>
+        <element name="applyCoupon" type="button" selector="#order-coupons button"/>
     </section>
 </sections>

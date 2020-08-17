@@ -1,0 +1,91 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerCheckoutDisabledProductAndCouponTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Checkout via the Storefront"/>
+            <title value="Customer can login if product in his cart was disabled"/>
+            <description value="Customer can login with disabled product in the cart and a coupon applied"/>
+            <severity value="MINOR"/>
+            <testCaseId value="MC-21996"/>
+            <group value="checkout"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer" stepKey="createUSCustomer"/>
+            <!-- Create sales rule with coupon -->
+            <createData entity="SalesRuleSpecificCouponAndByPercent" stepKey="createSalesRule"/>
+            <createData entity="SimpleSalesRuleCoupon" stepKey="createCouponForCartPriceRule">
+                <requiredEntity createDataKey="createSalesRule"/>
+            </createData>
+        </before>
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createUSCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductListing"/>
+            <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
+        </after>
+
+        <!-- Login as Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createUSCustomer$$" />
+        </actionGroup>
+
+        <!-- Add product to shopping cart -->
+        <amOnPage url="{{StorefrontProductPage.url($$createSimpleProduct.name$$)}}" stepKey="amOnSimpleProductPage"/>
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="cartAddSimpleProductToCart">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+
+        <!-- Open View and edit -->
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="clickMiniCart1"/>
+
+        <!-- Fill the Estimate Shipping and Tax section -->
+        <actionGroup ref="CheckoutFillEstimateShippingAndTaxActionGroup" stepKey="fillEstimateShippingAndTaxFields"/>
+
+        <!-- Apply Coupon -->
+        <actionGroup ref="StorefrontApplyCouponActionGroup" stepKey="applyDiscount">
+            <argument name="coupon" value="$$createCouponForCartPriceRule$$"/>
+        </actionGroup>
+
+        <!-- Sign out Customer from storefront -->
+        <actionGroup ref="StorefrontSignOutActionGroup" stepKey="customerLogout"/>
+
+        <!-- Login to admin panel -->
+        <openNewTab stepKey="openNewTab"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+        <!-- Find the first simple product that we just created using the product grid and go to its page-->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage"/>
+
+        <!-- Disabled simple product from grid -->
+        <actionGroup ref="ChangeStatusProductUsingProductGridActionGroup" stepKey="disabledProductFromGrid">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="status" value="Disable"/>
+        </actionGroup>
+        <closeTab stepKey="closeTab"/>
+
+        <!-- Login as Customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLoginSecondTime">
+            <argument name="Customer" value="$$createUSCustomer$$" />
+        </actionGroup>
+
+        <!-- Check cart -->
+        <click selector="{{StorefrontMinicartSection.showCart}}" stepKey="clickMiniCart2"/>
+        <dontSeeElement selector="{{StorefrontMinicartSection.quantity}}" stepKey="dontSeeCartItem"/>
+    </test>
+</tests>

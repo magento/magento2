@@ -33,7 +33,7 @@ use Magento\Customer\Model\FileUploaderDataResolver;
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
  *
- * @deprecated \Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses is used instead
+ * @deprecated 102.0.1 \Magento\Customer\Model\Customer\DataProviderWithDefaultAddresses is used instead
  * @api
  * @since 100.0.2
  */
@@ -308,51 +308,23 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
     }
 
     /**
-     * Check whether the specific attribute can be shown in form: customer registration, customer edit, etc...
-     *
-     * @param Attribute $customerAttribute
-     * @return bool
-     */
-    private function canShowAttributeInForm(AbstractAttribute $customerAttribute)
-    {
-        $isRegistration = $this->context->getRequestParam($this->getRequestFieldName()) === null;
-
-        if ($customerAttribute->getEntityType()->getEntityTypeCode() === 'customer') {
-            return is_array($customerAttribute->getUsedInForms()) &&
-                (
-                    (in_array('customer_account_create', $customerAttribute->getUsedInForms()) && $isRegistration) ||
-                    (in_array('customer_account_edit', $customerAttribute->getUsedInForms()) && !$isRegistration)
-                );
-        } else {
-            return is_array($customerAttribute->getUsedInForms()) &&
-                in_array('customer_address_edit', $customerAttribute->getUsedInForms());
-        }
-    }
-
-    /**
      * Detect can we show attribute on specific form or not
      *
      * @param Attribute $customerAttribute
      * @return bool
      */
-    private function canShowAttribute(AbstractAttribute $customerAttribute)
+    private function canShowAttribute(AbstractAttribute $customerAttribute): bool
     {
-        $userDefined = (bool) $customerAttribute->getIsUserDefined();
-        if (!$userDefined) {
-            return $customerAttribute->getIsVisible();
-        }
-
-        $canShowOnForm = $this->canShowAttributeInForm($customerAttribute);
-
-        return ($this->allowToShowHiddenAttributes && $canShowOnForm) ||
-            (!$this->allowToShowHiddenAttributes && $canShowOnForm && $customerAttribute->getIsVisible());
+        return $this->allowToShowHiddenAttributes && (bool) $customerAttribute->getIsUserDefined()
+            ? true
+            : (bool) $customerAttribute->getIsVisible();
     }
 
     /**
      * Retrieve Country With Websites Source
      *
      * @return CountryWithWebsites
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getCountryWithWebsiteSource()
     {
@@ -393,6 +365,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
         if (isset($meta[AddressInterface::COUNTRY_ID]) && !$this->getShareConfig()->isGlobalScope()) {
             $meta[AddressInterface::COUNTRY_ID]['arguments']['data']['config']['filterBy'] = [
                 'target' => '${ $.provider }:data.customer.website_id',
+                '__disableTmpl' => ['target' => false],
                 'field' => 'website_ids'
             ];
         }
@@ -403,7 +376,7 @@ class DataProvider extends \Magento\Ui\DataProvider\AbstractDataProvider
      *
      * @param AttributeInterface $attribute
      * @param array $meta
-     * @return array
+     * @return void
      */
     private function processFrontendInput(AttributeInterface $attribute, array &$meta)
     {

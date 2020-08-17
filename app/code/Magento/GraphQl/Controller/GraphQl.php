@@ -12,23 +12,29 @@ use Magento\Framework\App\Request\Http;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\GraphQl\Exception\ExceptionFormatter;
-use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\QueryProcessor;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\Webapi\Response;
+use Magento\Framework\App\Response\Http as HttpResponse;
 use Magento\Framework\GraphQl\Query\Fields as QueryFields;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\App\ObjectManager;
+use Magento\GraphQl\Model\Query\ContextFactoryInterface;
 
 /**
  * Front controller for web API GraphQL area.
  *
  * @api
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.3.0
  */
 class GraphQl implements FrontControllerInterface
 {
     /**
-     * @var Response
+     * @var \Magento\Framework\Webapi\Response
+     * @deprecated 100.3.2
      */
     private $response;
 
@@ -54,6 +60,7 @@ class GraphQl implements FrontControllerInterface
 
     /**
      * @var ContextInterface
+     * @deprecated 100.3.3 $contextFactory is used for creating Context object
      */
     private $resolverContext;
 
@@ -68,14 +75,33 @@ class GraphQl implements FrontControllerInterface
     private $queryFields;
 
     /**
+     * @var JsonFactory
+     */
+    private $jsonFactory;
+
+    /**
+     * @var HttpResponse
+     */
+    private $httpResponse;
+
+    /**
+     * @var ContextFactoryInterface
+     */
+    private $contextFactory;
+
+    /**
      * @param Response $response
      * @param SchemaGeneratorInterface $schemaGenerator
      * @param SerializerInterface $jsonSerializer
      * @param QueryProcessor $queryProcessor
      * @param ExceptionFormatter $graphQlError
-     * @param ContextInterface $resolverContext
+     * @param ContextInterface $resolverContext Deprecated. $contextFactory is used for creating Context object.
      * @param HttpRequestProcessor $requestProcessor
      * @param QueryFields $queryFields
+     * @param JsonFactory|null $jsonFactory
+     * @param HttpResponse|null $httpResponse
+     * @param ContextFactoryInterface $contextFactory
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
         Response $response,
@@ -85,7 +111,10 @@ class GraphQl implements FrontControllerInterface
         ExceptionFormatter $graphQlError,
         ContextInterface $resolverContext,
         HttpRequestProcessor $requestProcessor,
-        QueryFields $queryFields
+        QueryFields $queryFields,
+        JsonFactory $jsonFactory = null,
+        HttpResponse $httpResponse = null,
+        ContextFactoryInterface $contextFactory = null
     ) {
         $this->response = $response;
         $this->schemaGenerator = $schemaGenerator;
@@ -95,6 +124,9 @@ class GraphQl implements FrontControllerInterface
         $this->resolverContext = $resolverContext;
         $this->requestProcessor = $requestProcessor;
         $this->queryFields = $queryFields;
+        $this->jsonFactory = $jsonFactory ?: ObjectManager::getInstance()->get(JsonFactory::class);
+        $this->httpResponse = $httpResponse ?: ObjectManager::getInstance()->get(HttpResponse::class);
+        $this->contextFactory = $contextFactory ?: ObjectManager::getInstance()->get(ContextFactoryInterface::class);
     }
 
     /**
@@ -102,14 +134,15 @@ class GraphQl implements FrontControllerInterface
      *
      * @param RequestInterface $request
      * @return ResponseInterface
+     * @since 100.3.0
      */
     public function dispatch(RequestInterface $request) : ResponseInterface
     {
         $statusCode = 200;
+        $jsonResult = $this->jsonFactory->create();
         try {
             /** @var Http $request */
             $this->requestProcessor->validateRequest($request);
-            $this->requestProcessor->processHeaders($request);
 
             $data = $this->getDataFromRequest($request);
             $query = $data['query'] ?? '';
@@ -123,7 +156,7 @@ class GraphQl implements FrontControllerInterface
             $result = $this->queryProcessor->process(
                 $schema,
                 $query,
-                $this->resolverContext,
+                $this->contextFactory->create(),
                 $data['variables'] ?? []
             );
         } catch (\Exception $error) {
@@ -131,11 +164,11 @@ class GraphQl implements FrontControllerInterface
             $result['errors'][] = $this->graphQlError->create($error);
             $statusCode = ExceptionFormatter::HTTP_GRAPH_QL_SCHEMA_ERROR_STATUS;
         }
-        $this->response->setBody($this->jsonSerializer->serialize($result))->setHeader(
-            'Content-Type',
-            'application/json'
-        )->setHttpResponseCode($statusCode);
-        return $this->response;
+
+        $jsonResult->setHttpResponseCode($statusCode);
+        $jsonResult->setData($result);
+        $jsonResult->renderResult($this->httpResponse);
+        return $this->httpResponse;
     }
 
     /**
@@ -153,6 +186,8 @@ class GraphQl implements FrontControllerInterface
             $data = $request->getParams();
             $data['variables'] = isset($data['variables']) ?
                 $this->jsonSerializer->unserialize($data['variables']) : null;
+            $data['variables'] = is_array($data['variables']) ?
+                $data['variables'] : null;
         } else {
             return [];
         }

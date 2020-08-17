@@ -109,6 +109,11 @@ sub vcl_recv {
         #unset req.http.Cookie;
     }
 
+    # Authenticated GraphQL requests should not be cached by default
+    if (req.url ~ "/graphql" && req.http.Authorization ~ "^Bearer") {
+        return (pass);
+    }
+
     return (hash);
 }
 
@@ -129,6 +134,19 @@ sub vcl_hash {
         hash_data(req.http./* {{ ssl_offloaded_header }} */);
     }
     /* {{ design_exceptions_code }} */
+
+    if (req.url ~ "/graphql") {
+        call process_graphql_headers;
+    }
+}
+
+sub process_graphql_headers {
+    if (req.http.Store) {
+        hash_data(req.http.Store);
+    }
+    if (req.http.Content-Currency) {
+        hash_data(req.http.Content-Currency);
+    }
 }
 
 sub vcl_backend_response {

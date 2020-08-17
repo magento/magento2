@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Model\Product\Type;
 
 use Magento\Catalog\Model\Product;
@@ -202,7 +204,7 @@ class Price
     }
 
     /**
-     * Gets the 'tear_price' array from the product
+     * Gets the 'tier_price' array from the product
      *
      * @param Product $product
      * @param string $key
@@ -260,7 +262,7 @@ class Price
 
         $tierPrice = $product->getTierPrice($qty);
         if (is_numeric($tierPrice)) {
-            $finalPrice = min($finalPrice, $tierPrice);
+            $finalPrice = min($finalPrice, (float) $tierPrice);
         }
         return $finalPrice;
     }
@@ -482,6 +484,7 @@ class Price
      * @param   Product $product
      *
      * @return  array|float
+     * @since 102.0.6
      */
     public function getFormattedTierPrice($qty, $product)
     {
@@ -502,12 +505,12 @@ class Price
     /**
      * Get formatted by currency tier price
      *
-     * @param   float $qty
-     * @param   Product $product
+     * @param float $qty
+     * @param Product $product
      *
-     * @return  array|float
+     * @return array|float
      *
-     * @deprecated
+     * @deprecated 102.0.6
      * @see getFormattedTierPrice()
      */
     public function getFormatedTierPrice($qty, $product)
@@ -520,6 +523,7 @@ class Price
      *
      * @param   Product $product
      * @return  array|float
+     * @since 102.0.6
      */
     public function getFormattedPrice($product)
     {
@@ -529,10 +533,10 @@ class Price
     /**
      * Get formatted by currency product price
      *
-     * @param   Product $product
-     * @return  array || float
+     * @param Product $product
+     * @return array || float
      *
-     * @deprecated
+     * @deprecated 102.0.6
      * @see getFormattedPrice()
      */
     public function getFormatedPrice($product)
@@ -643,7 +647,7 @@ class Price
     ) {
         if ($specialPrice !== null && $specialPrice != false) {
             if ($this->_localeDate->isScopeDateInInterval($store, $specialPriceFrom, $specialPriceTo)) {
-                $finalPrice = min($finalPrice, $specialPrice);
+                $finalPrice = min($finalPrice, (float) $specialPrice);
             }
         }
         return $finalPrice;

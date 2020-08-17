@@ -3,19 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Config\Test\Unit;
 
-class DomTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Config\Dom;
+use Magento\Framework\Config\ValidationStateInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Test for \Magento\Framework\Config\Dom class.
+ */
+class DomTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Config\ValidationStateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ValidationStateInterface|MockObject
      */
     protected $validationStateMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->validationStateMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Config\ValidationStateInterface::class
+            ValidationStateInterface::class
         );
         $this->validationStateMock->method('isValidationRequired')
             ->willReturn(true);
@@ -33,7 +43,7 @@ class DomTest extends \PHPUnit\Framework\TestCase
     {
         $xml = file_get_contents(__DIR__ . "/_files/dom/{$xmlFile}");
         $newXml = file_get_contents(__DIR__ . "/_files/dom/{$newXmlFile}");
-        $config = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock, $ids, $typeAttributeName);
+        $config = new Dom($xml, $this->validationStateMock, $ids, $typeAttributeName);
         $config->merge($newXml);
         $this->assertXmlStringEqualsXmlFile(__DIR__ . "/_files/dom/{$expectedXmlFile}", $config->getDom()->saveXML());
     }
@@ -62,6 +72,37 @@ class DomTest extends \PHPUnit\Framework\TestCase
             ['override_node.xml', 'override_node_new.xml', [], null, 'override_node_merged.xml'],
             ['override_node_new.xml', 'override_node.xml', [], null, 'override_node_merged.xml'],
             ['text_node.xml', 'text_node_new.xml', [], null, 'text_node_merged.xml'],
+            'text node replaced with cdata' => [
+                'text_node_cdata.xml',
+                'text_node_cdata_new.xml',
+                [],
+                null,
+                'text_node_cdata_merged.xml'
+            ],
+            'cdata' => ['cdata.xml', 'cdata_new.xml', [], null, 'cdata_merged.xml'],
+            'cdata with html' => ['cdata_html.xml', 'cdata_html_new.xml', [], null, 'cdata_html_merged.xml'],
+            'cdata replaced with text node' => [
+                'cdata_text.xml',
+                'cdata_text_new.xml',
+                [],
+                null,
+                'cdata_text_merged.xml'
+            ],
+            'big cdata' => ['big_cdata.xml', 'big_cdata_new.xml', [], null, 'big_cdata_merged.xml'],
+            'big cdata with attribute' => [
+                'big_cdata_attribute.xml',
+                'big_cdata_attribute_new.xml',
+                [],
+                null,
+                'big_cdata_attribute_merged.xml'
+            ],
+            'big cdata replaced with text' => [
+                'big_cdata_text.xml',
+                'big_cdata_text_new.xml',
+                [],
+                null,
+                'big_cdata_text_merged.xml'
+            ],
             [
                 'recursive.xml',
                 'recursive_new.xml',
@@ -93,15 +134,13 @@ class DomTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage More than one node matching the query: /root/node/subnode
-     */
     public function testMergeException()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('More than one node matching the query: /root/node/subnode');
         $xml = file_get_contents(__DIR__ . "/_files/dom/ambiguous_two.xml");
         $newXml = file_get_contents(__DIR__ . "/_files/dom/ambiguous_new_one.xml");
-        $config = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock);
+        $config = new Dom($xml, $this->validationStateMock);
         $config->merge($newXml);
     }
 
@@ -115,7 +154,9 @@ class DomTest extends \PHPUnit\Framework\TestCase
         if (!function_exists('libxml_set_external_entity_loader')) {
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }
-        $dom = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock);
+        $actualErrors = [];
+
+        $dom = new Dom($xml, $this->validationStateMock, [], null, null);
         $actualResult = $dom->validate(__DIR__ . '/_files/sample.xsd', $actualErrors);
         $this->assertEquals(empty($expectedErrors), $actualResult);
         $this->assertEquals($expectedErrors, $actualErrors);
@@ -135,48 +176,6 @@ class DomTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @param string $xml
-     * @param string $expectedValue
-     * @dataProvider validateWithDefaultValueDataProvider
-     */
-    public function testValidateWithDefaultValue($xml, $expectedValue)
-    {
-        if (!function_exists('libxml_set_external_entity_loader')) {
-            $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
-        }
-
-        $actualErrors = [];
-
-        $dom = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock);
-        $dom->validate(__DIR__ . '/_files/sample.xsd', $actualErrors);
-
-        $actualValue = $dom->getDom()
-            ->getElementsByTagName('root')->item(0)
-            ->getElementsByTagName('node')->item(0)
-            ->getAttribute('attribute_with_default_value');
-
-        $this->assertEmpty($actualErrors);
-        $this->assertEquals($expectedValue, $actualValue);
-    }
-
-    /**
-     * @return array
-     */
-    public function validateWithDefaultValueDataProvider()
-    {
-        return [
-            'default_value' => [
-                '<root><node id="id1"/></root>',
-                'default_value'
-            ],
-            'custom_value' => [
-                '<root><node id="id1" attribute_with_default_value="non_default_value"/></root>',
-                'non_default_value'
-            ],
-        ];
-    }
-
     public function testValidateCustomErrorFormat()
     {
         $xml = '<root><unknown_node/></root>';
@@ -184,21 +183,19 @@ class DomTest extends \PHPUnit\Framework\TestCase
         $expectedErrors = [
             "Error: `Element 'unknown_node': This element is not expected. Expected is ( node ).`",
         ];
-        $dom = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock, [], null, null, $errorFormat);
+        $dom = new Dom($xml, $this->validationStateMock, [], null, null, $errorFormat);
         $actualResult = $dom->validate(__DIR__ . '/_files/sample.xsd', $actualErrors);
         $this->assertFalse($actualResult);
         $this->assertEquals($expectedErrors, $actualErrors);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Error format '%message%,%unknown%' contains unsupported placeholders
-     */
     public function testValidateCustomErrorFormatInvalid()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Error format \'%message%,%unknown%\' contains unsupported placeholders');
         $xml = '<root><unknown_node/></root>';
         $errorFormat = '%message%,%unknown%';
-        $dom = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock, [], null, null, $errorFormat);
+        $dom = new Dom($xml, $this->validationStateMock, [], null, null, $errorFormat);
         $dom->validate(__DIR__ . '/_files/sample.xsd');
     }
 
@@ -209,29 +206,27 @@ class DomTest extends \PHPUnit\Framework\TestCase
         }
         $xml = '<root><node id="id1"/><node id="id2"/></root>';
         $schemaFile = __DIR__ . '/_files/sample.xsd';
-        $dom = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock);
+        $dom = new Dom($xml, $this->validationStateMock);
         $domMock = $this->createPartialMock(\DOMDocument::class, ['schemaValidate']);
         $domMock->expects($this->once())
             ->method('schemaValidate')
             ->with($schemaFile)
             ->willReturn(false);
         $this->assertEquals(
-            ["Element 'unknown_node': This element is not expected. Expected is ( node ).\nLine: 1\n"],
+            ["Unknown validation error"],
             $dom->validateDomDocument($domMock, $schemaFile)
         );
     }
 
-    /**
-     * @expectedException \Magento\Framework\Config\Dom\ValidationSchemaException
-     */
     public function testValidateDomDocumentThrowsException()
     {
+        $this->expectException('Magento\Framework\Config\Dom\ValidationSchemaException');
         if (!function_exists('libxml_set_external_entity_loader')) {
             $this->markTestSkipped('Skipped on HHVM. Will be fixed in MAGETWO-45033');
         }
         $xml = '<root><node id="id1"/><node id="id2"/></root>';
         $schemaFile = __DIR__ . '/_files/sample.xsd';
-        $dom = new \Magento\Framework\Config\Dom($xml, $this->validationStateMock);
+        $dom = new Dom($xml, $this->validationStateMock);
         $domMock = $this->createPartialMock(\DOMDocument::class, ['schemaValidate']);
         $domMock->expects($this->once())
             ->method('schemaValidate')

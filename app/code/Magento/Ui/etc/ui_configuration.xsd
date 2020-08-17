@@ -560,7 +560,7 @@
         <xs:annotation>
             <xs:documentation>
                 The ExportButton component exports grid data to the specified data format (cvs, xml, and so on).
-                To enable the ExportButton сomponent, add the "exportButton" element with a "selectProvider" item
+                To enable the ExportButton component, add the "exportButton" element with a "selectProvider" item
                 to the listing configuration file.
             </xs:documentation>
         </xs:annotation>

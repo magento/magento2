@@ -71,7 +71,16 @@ class Search implements SearchInterface
 
         $this->requestBuilder->setFrom($searchCriteria->getCurrentPage() * $searchCriteria->getPageSize());
         $this->requestBuilder->setSize($searchCriteria->getPageSize());
-        $this->requestBuilder->setSort($searchCriteria->getSortOrders());
+
+        /**
+         * This added in Backward compatibility purposes.
+         * Temporary solution for an existing API of a fulltext search request builder.
+         * It must be moved to different API.
+         * Scope to split Search request builder API in MC-16461.
+         */
+        if (method_exists($this->requestBuilder, 'setSort')) {
+            $this->requestBuilder->setSort($searchCriteria->getSortOrders());
+        }
         $request = $this->requestBuilder->create();
         $searchResponse = $this->searchEngine->search($request);
 

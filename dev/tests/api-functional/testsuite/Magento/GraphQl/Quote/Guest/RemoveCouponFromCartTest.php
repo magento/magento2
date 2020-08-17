@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Quote\Guest;
 
+use Exception;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -24,7 +25,7 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
@@ -45,15 +46,29 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('removeCouponFromCart', $response);
-        self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']['code']);
+        self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']);
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
+     */
+    public function testRemoveCouponFromCartIfCartIdIsEmpty()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Required parameter "cart_id" is missing');
+
+        $maskedQuoteId = '';
+        $query = $this->getQuery($maskedQuoteId);
+
+        $this->graphQlMutation($query);
+    }
+
+    /**
      */
     public function testRemoveCouponFromNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "non_existent_masked_id"');
+
         $maskedQuoteId = 'non_existent_masked_id';
         $query = $this->getQuery($maskedQuoteId);
 
@@ -62,11 +77,12 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/guest/create_empty_cart.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Cart does not contain products
      */
     public function testRemoveCouponFromEmptyCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Cart does not contain products');
+
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');
         $query = $this->getQuery($maskedQuoteId);
 
@@ -86,7 +102,7 @@ class RemoveCouponFromCartTest extends GraphQlAbstract
         $response = $this->graphQlMutation($query);
 
         self::assertArrayHasKey('removeCouponFromCart', $response);
-        self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']['code']);
+        self::assertNull($response['removeCouponFromCart']['cart']['applied_coupon']);
     }
 
     /**

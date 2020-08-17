@@ -4,8 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
 <?php if ($websites = $block->getWebsites()): ?>
@@ -29,7 +28,10 @@
                             <?php $showGroup = true; ?>
                             <optgroup label="&nbsp;&nbsp;&nbsp;<?= $block->escapeHtmlAttr($group->getName()) ?>">
                         <?php endif; ?>
-                        <option value="<?= $block->escapeHtmlAttr($store->getId()) ?>"<?php if ($block->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>>&nbsp;&nbsp;&nbsp;&nbsp;<?= $block->escapeHtml($store->getName()) ?></option>
+                        <option value="<?= $block->escapeHtmlAttr($store->getId()) ?>"
+                            <?php if ($block->getStoreId() == $store->getId()): ?> selected="selected"<?php endif; ?>>
+                            &nbsp;&nbsp;&nbsp;&nbsp;<?= $block->escapeHtml($store->getName()) ?>
+                        </option>
                     <?php endforeach; ?>
                     <?php if ($showGroup): ?>
                         </optgroup>
@@ -40,7 +42,7 @@
     </div>
     <?= $block->getHintHtml() ?>
 </div>
-<script>
+    <?php $scriptString= <<<script
 require(['prototype'], function(){
 
 //<![CDATA[
@@ -51,5 +53,7 @@ Event.observe($('store_switcher'), 'change', function(event) {
 //]]>
 
 });
-</script>
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php endif; ?>

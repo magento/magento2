@@ -9,9 +9,9 @@
         <span class="admin__action-dropdown-text" translate="activeView.label"/>
     </button>
     <ul class="admin__action-dropdown-menu">
-        <repeat args="foreach: viewsArray, item: '$view'">
-            <li css="_edit: isEditing($view().index)" outerClick="endEdit.bind($data, $view().index)" template="viewTmpl"/>
-        </repeat>
+        <!-- ko foreach: { data: viewsArray, as: '$view'}  -->
+            <li css="_edit: $parent.isEditing($view.index)" outerClick="$parent.endEdit.bind($parent, $view.index)" template="$parent.viewTmpl"/>
+        <!-- /ko -->
         <li visible="hasChanges" outerClick="hideCustom.bind($data)"
             css="
                 _edit: customVisible,

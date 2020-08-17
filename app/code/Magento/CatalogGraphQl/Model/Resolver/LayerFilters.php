@@ -44,6 +44,29 @@ class LayerFilters implements ResolverInterface
             return null;
         }
 
-        return $this->filtersDataProvider->getData($value['layer_type']);
+        $attributes = $this->prepareAttributesResults($value);
+        return $this->filtersDataProvider->getData($value['layer_type'], $attributes);
+    }
+
+    /**
+     * Get attributes available to filtering from the search result
+     *
+     * @param array $value
+     * @return array|null
+     */
+    private function prepareAttributesResults(array $value): ?array
+    {
+        $attributes = [];
+        if (!empty($value['search_result'])) {
+            $buckets = $value['search_result']->getSearchAggregation()->getBuckets();
+            foreach ($buckets as $bucket) {
+                if (!empty($bucket->getValues())) {
+                    $attributes[] = str_replace('_bucket', '', $bucket->getName());
+                }
+            }
+        } else {
+            $attributes = null;
+        }
+        return $attributes;
     }
 }

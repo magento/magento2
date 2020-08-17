@@ -4,10 +4,13 @@
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Api;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Framework\Api\ExtensibleDataInterface;
+use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\WebapiAbstract;
 
 /**
@@ -15,28 +18,46 @@ use Magento\TestFramework\TestCase\WebapiAbstract;
  */
 class ProductRepositoryTest extends WebapiAbstract
 {
-    const SERVICE_NAME = 'catalogProductRepositoryV1';
-    const SERVICE_VERSION = 'V1';
-    const RESOURCE_PATH = '/V1/products';
-    const PRODUCT_SKU = 'sku-test-product-downloadable';
+    private const SERVICE_NAME = 'catalogProductRepositoryV1';
+    private const SERVICE_VERSION = 'V1';
+    private const RESOURCE_PATH = '/V1/products';
+    private const PRODUCT_SKU = 'sku-test-product-downloadable';
+
+    private const PRODUCT_SAMPLES = 'downloadable_product_samples';
+    private const PRODUCT_LINKS = 'downloadable_product_links';
 
     /**
      * @var string
      */
-    protected $testImagePath;
+    private $testImagePath;
 
-    protected function setUp()
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
+        $objectManager = Bootstrap::getObjectManager();
+
         $this->testImagePath = __DIR__ . DIRECTORY_SEPARATOR . '_files' . DIRECTORY_SEPARATOR . 'test_image.jpg';
+
+        /** @var DomainManagerInterface $domainManager */
+        $domainManager = $objectManager->get(DomainManagerInterface::class);
+        $domainManager->addDomains(['www.example.com']);
     }
 
     /**
      * Execute per test cleanup
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->deleteProductBySku(self::PRODUCT_SKU);
         parent::tearDown();
+
+        $objectManager = Bootstrap::getObjectManager();
+
+        /** @var DomainManagerInterface $domainManager */
+        $domainManager = $objectManager->get(DomainManagerInterface::class);
+        $domainManager->removeDomains(['www.example.com']);
     }
 
     protected function getLinkData()
@@ -51,11 +72,13 @@ class ProductRepositoryTest extends WebapiAbstract
                 'link_type' => 'file',
                 'link_file_content' => [
                     'name' => 'link1_content.jpg',
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     'file_data' => base64_encode(file_get_contents($this->testImagePath)),
                 ],
                 'sample_type' => 'file',
                 'sample_file_content' => [
                     'name' => 'link1_sample.jpg',
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     'file_data' => base64_encode(file_get_contents($this->testImagePath)),
                 ],
             ],
@@ -114,6 +137,7 @@ class ProductRepositoryTest extends WebapiAbstract
                 'sample_type' => 'file',
                 'sample_file_content' => [
                     'name' => 'sample2.jpg',
+                    // phpcs:ignore Magento2.Functions.DiscouragedFunction
                     'file_data' => base64_encode(file_get_contents($this->testImagePath)),
                 ],
             ],
@@ -146,7 +170,9 @@ class ProductRepositoryTest extends WebapiAbstract
             "price" => 10,
             'attribute_set_id' => 4,
             "extension_attributes" => [
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 "downloadable_product_links" => array_values($this->getLinkData()),
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 "downloadable_product_samples" => array_values($this->getSampleData()),
             ],
         ];
@@ -175,7 +201,7 @@ class ProductRepositoryTest extends WebapiAbstract
         );
         $resultLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
-        $this->assertEquals(2, count($resultLinks));
+        $this->assertCount(2, $resultLinks);
         $this->assertTrue(isset($resultLinks[0]['id']));
         $this->assertTrue(isset($resultLinks[0]['link_file']));
         $this->assertTrue(isset($resultLinks[0]['sample_file']));
@@ -189,7 +215,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertEquals($expectedLinkData, $resultLinks);
 
         $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
-        $this->assertEquals(2, count($resultSamples));
+        $this->assertCount(2, $resultSamples);
         $this->assertTrue(isset($resultSamples[0]['id']));
         unset($resultSamples[0]['id']);
         $this->assertTrue(isset($resultSamples[1]['id']));
@@ -222,7 +248,9 @@ class ProductRepositoryTest extends WebapiAbstract
             'price' => 5.0,
             'number_of_downloads' => 999,
             'link_type' => 'file',
-            'sample_type' => 'file'
+            'link_file' => $linkFile,
+            'sample_type' => 'file',
+            'sample_file' => $sampleFile,
         ];
         $linkData = $this->getLinkData();
 
@@ -239,7 +267,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $resultLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
 
-        $this->assertEquals(3, count($resultLinks));
+        $this->assertCount(3, $resultLinks);
         $this->assertTrue(isset($resultLinks[0]['id']));
         $this->assertEquals($link1Id, $resultLinks[0]['id']);
         $this->assertTrue(isset($resultLinks[0]['link_file']));
@@ -273,7 +301,36 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertEquals($expectedLinkData, $resultLinks);
 
         $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
-        $this->assertEquals(2, count($resultSamples));
+        $this->assertCount(2, $resultSamples);
+    }
+
+    /**
+     * Update downloadable product extension attribute and check data
+     *
+     * @return void
+     */
+    public function testUpdateDownloadableProductData(): void
+    {
+        $productResponce = $this->createDownloadableProduct();
+        $stockItemData = $productResponce[ProductInterface::EXTENSION_ATTRIBUTES_KEY]['stock_item'];
+
+        $stockItemData = TESTS_WEB_API_ADAPTER === self::ADAPTER_SOAP
+            ? $stockItemData['manage_stock'] = false
+            : ['stock_item' => ['manage_stock' => false]];
+
+        $productData = [
+            ProductInterface::SKU => self::PRODUCT_SKU,
+            ProductInterface::EXTENSION_ATTRIBUTES_KEY => $stockItemData,
+        ];
+
+        $response = $this->saveProduct($productData);
+
+        $this->assertArrayHasKey(ProductInterface::EXTENSION_ATTRIBUTES_KEY, $response);
+        $this->assertArrayHasKey(self::PRODUCT_SAMPLES, $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]);
+        $this->assertArrayHasKey(self::PRODUCT_LINKS, $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY]);
+
+        $this->assertCount(2, $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::PRODUCT_SAMPLES]);
+        $this->assertCount(2, $response[ProductInterface::EXTENSION_ATTRIBUTES_KEY][self::PRODUCT_LINKS]);
     }
 
     /**
@@ -301,11 +358,13 @@ class ProductRepositoryTest extends WebapiAbstract
             'link_type' => 'file',
             'link_file_content' => [
                 'name' => $linkFile . $extension,
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 'file_data' => base64_encode(file_get_contents($this->testImagePath)),
             ],
             'sample_type' => 'file',
             'sample_file_content' => [
                 'name' => $sampleFile . $extension,
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 'file_data' => base64_encode(file_get_contents($this->testImagePath)),
             ],
         ];
@@ -319,11 +378,13 @@ class ProductRepositoryTest extends WebapiAbstract
             'link_type' => 'file',
             'link_file_content' => [
                 'name' => 'link2_content.jpg',
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 'file_data' => base64_encode(file_get_contents($this->testImagePath)),
             ],
             'sample_type' => 'file',
             'sample_file_content' => [
                 'name' => 'link2_sample.jpg',
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 'file_data' => base64_encode(file_get_contents($this->testImagePath)),
             ],
         ];
@@ -341,7 +402,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $resultLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
 
-        $this->assertEquals(2, count($resultLinks));
+        $this->assertCount(2, $resultLinks);
         $this->assertTrue(isset($resultLinks[0]['id']));
         $this->assertEquals($link1Id, $resultLinks[0]['id']);
         $this->assertTrue(isset($resultLinks[0]['link_file']));
@@ -386,7 +447,7 @@ class ProductRepositoryTest extends WebapiAbstract
         $this->assertEquals($expectedLinkData, $resultLinks);
 
         $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
-        $this->assertEquals(2, count($resultSamples));
+        $this->assertCount(2, $resultSamples);
     }
 
     public function testUpdateDownloadableProductSamples()
@@ -420,10 +481,10 @@ class ProductRepositoryTest extends WebapiAbstract
         $resultLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
 
-        $this->assertEquals(2, count($resultLinks));
+        $this->assertCount(2, $resultLinks);
 
         $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
-        $this->assertEquals(3, count($resultSamples));
+        $this->assertCount(3, $resultSamples);
         $this->assertTrue(isset($resultSamples[0]['id']));
         $this->assertEquals($sample1Id, $resultSamples[0]['id']);
         unset($resultSamples[0]['id']);
@@ -463,6 +524,7 @@ class ProductRepositoryTest extends WebapiAbstract
             'sample_type' => 'file',
             'sample_file_content' => [
                 'name' => 'sample1.jpg',
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 'file_data' => base64_encode(file_get_contents($this->testImagePath)),
             ],
         ];
@@ -472,6 +534,11 @@ class ProductRepositoryTest extends WebapiAbstract
             'title' => 'sample2_updated',
             'sort_order' => 2,
             'sample_type' => 'file',
+            'sample_file_content' => [
+                'name' => 'sample2.jpg',
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
+                'file_data' => base64_encode(file_get_contents($this->testImagePath)),
+            ],
         ];
 
         $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"] =
@@ -487,22 +554,22 @@ class ProductRepositoryTest extends WebapiAbstract
         $resultLinks
             = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_links"];
 
-        $this->assertEquals(2, count($resultLinks));
+        $this->assertCount(2, $resultLinks);
 
         $resultSamples = $response[ExtensibleDataInterface::EXTENSION_ATTRIBUTES_KEY]["downloadable_product_samples"];
-        $this->assertEquals(2, count($resultSamples));
+        $this->assertCount(2, $resultSamples);
         $this->assertTrue(isset($resultSamples[0]['id']));
         $this->assertEquals($sample1Id, $resultSamples[0]['id']);
         unset($resultSamples[0]['id']);
         $this->assertTrue(isset($resultSamples[0]['sample_file']));
-        $this->assertContains('sample1', $resultSamples[0]['sample_file']);
+        $this->assertStringContainsString('sample1', $resultSamples[0]['sample_file']);
         $this->assertStringEndsWith('.jpg', $resultSamples[0]['sample_file']);
         unset($resultSamples[0]['sample_file']);
         $this->assertTrue(isset($resultSamples[1]['id']));
         $this->assertEquals($sample2Id, $resultSamples[1]['id']);
         unset($resultSamples[1]['id']);
         $this->assertTrue(isset($resultSamples[1]['sample_file']));
-        $this->assertContains('sample2', $resultSamples[1]['sample_file']);
+        $this->assertStringContainsString('sample2', $resultSamples[1]['sample_file']);
         $this->assertStringEndsWith('.jpg', $resultSamples[1]['sample_file']);
         unset($resultSamples[1]['sample_file']);
 
@@ -606,7 +673,7 @@ class ProductRepositoryTest extends WebapiAbstract
     protected function saveProduct($product)
     {
         if (isset($product['custom_attributes'])) {
-            for ($i=0; $i<sizeof($product['custom_attributes']); $i++) {
+            for ($i = 0, $iMax = count($product['custom_attributes']); $i < $iMax; $i++) {
                 if ($product['custom_attributes'][$i]['attribute_code'] == 'category_ids'
                     && !is_array($product['custom_attributes'][$i]['value'])
                 ) {

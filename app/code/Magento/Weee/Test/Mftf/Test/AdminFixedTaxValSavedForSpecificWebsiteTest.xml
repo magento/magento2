@@ -1,0 +1,131 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminFixedTaxValSavedForSpecificWebsiteTest">
+        <annotations>
+            <features value="Tax"/>
+            <stories value="Website Specific Fixed Product Tax"/>
+            <title value="Fixed Product Tax value is saved correctly for Specific Website"/>
+            <description value="Fixed Product Tax value is saved correctly for Specific Website"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-17182"/>
+            <useCaseId value=" MC-17014"/>
+            <group value="tax"/>
+        </annotations>
+        <before>
+            <!-- Create product attribute and add it to default attribute set />-->
+            <comment userInput="Create product attribute and add it to default attribute set" stepKey="createAttrAndAddToDefaultAttrSet"/>
+            <createData entity="productFPTAttribute" stepKey="createProductFPTAttribute"/>
+            <createData entity="AddToDefaultSet" stepKey="addToDefaultAttributeSet">
+                <requiredEntity createDataKey="createProductFPTAttribute"/>
+            </createData>
+            <!-- Create product, category and log in -->
+            <comment userInput="Create product, category and log in" stepKey="createDataAndLogIn"/>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="ApiSimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create website, store and store view -->
+            <comment userInput="Create website, store and store view" stepKey="createWebsite"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
+                <argument name="newWebsiteName" value="{{NewWebSiteData.name}}"/>
+                <argument name="websiteCode" value="{{NewWebSiteData.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createSecondStore">
+                <argument name="website" value="{{NewWebSiteData.name}}"/>
+                <argument name="storeGroupName" value="{{NewStoreData.name}}"/>
+                <argument name="storeGroupCode" value="{{NewStoreData.code}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+                <argument name="StoreGroup" value="NewStoreData"/>
+                <argument name="customStore" value="storeViewData"/>
+            </actionGroup>
+            <!--Set catalog price scope to Global-->
+            <comment userInput="Set catalog price scope to Global" stepKey="commentSetPriceScope"/>
+            <magentoCLI command="config:set catalog/price/scope 0" stepKey="setPriceScopeGlobal"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value="catalog_product_price"/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Set catalog price scope to Global-->
+            <comment userInput="Set catalog price scope to Global" stepKey="commentSetPriceScope"/>
+            <magentoCLI command="config:set catalog/price/scope 0" stepKey="setPriceScopeGlobal"/>
+            <!-- Delete created data and log out -->
+            <comment userInput="Delete created data and log out" stepKey="deleteDataAndLogOut"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProductFPTAttribute" stepKey="deleteProductFPTAttribute"/>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteCustomWebsite">
+                <argument name="websiteName" value="{{NewWebSiteData.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+        <!-- Go to product edit page and assign it to created website -->
+        <comment userInput="Go to product edit page and assign it to created website" stepKey="assignProductToCreatedWebsite"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="navigateToProductPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+        <actionGroup ref="SelectProductInWebsitesActionGroup" stepKey="selectWebsiteInProduct">
+            <argument name="website" value="{{NewWebSiteData.name}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductFirstTime"/>
+        <!-- Add Fixed Product Tax attribute -->
+        <comment userInput="Add Fixed Product Tax attribute" stepKey="addFixedProdTaxAttr"/>
+        <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFixedProductTaxAttr">
+            <argument name="FPTAttributeCode" value="$$createProductFPTAttribute.attribute_code$$"/>
+            <argument name="stateForFPT" value="California"/>
+            <argument name="valueForFPT" value="10"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductSecondTime"/>
+        <!-- Check if created tax attribute is saved -->
+        <comment userInput="Check if created tax attribute is saved" stepKey="checkThatTaxAttributeIsSaved"/>
+        <seeElement selector="{{AdminProductAddFPTValueSection.setTaxValueForFPT($$createProductFPTAttribute.attribute_code$$)}}" stepKey="checkIfTaxAttributeSaved"/>
+        <!--See available websites only 'All Websites'-->
+        <comment userInput="See available websites only 'All Websites'" stepKey="commentCheckWebsitesDropDown"/>
+        <seeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, 'All Websites')}}" stepKey="seeAllWebsites"/>
+        <dontSeeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, NewWebSiteData.name)}}" stepKey="dontSeeSecondWebsite"/>
+        <dontSeeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, 'Main Website')}}" stepKey="dontSeeMainWebsite"/>
+        <!--Set catalog price scope to Website-->
+        <comment userInput="Set catalog price scope to Website" stepKey="commentSetPriceScope"/>
+        <magentoCLI command="config:set catalog/price/scope 1" stepKey="setPriceScopeWebsite"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value="catalog_product_price"/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+        <!--See available websites only 'All Websites'-->
+        <comment userInput="See available websites 'All Websites', 'Main Website' and Second website" stepKey="commentCheckWebsitesInProductPage"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductPageSecondTime">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductPageLoadSecondTime"/>
+        <seeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, 'All Websites')}}" stepKey="checkAllWebsitesInDropDown"/>
+        <seeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, 'Main Website')}}" stepKey="checkMainWebsiteInDropDown"/>
+        <seeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, NewWebSiteData.name)}}" stepKey="checkSecondWebsitesInDropDown"/>
+        <actionGroup ref="UnassignWebsiteFromProductActionGroup" stepKey="unassignWebsiteInProduct">
+            <argument name="website" value="{{_defaultWebsite.name}}"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductThirdTime"/>
+        <waitForPageLoad stepKey="waitForSavedProductLoad"/>
+        <seeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, 'All Websites')}}" stepKey="checkAllWebsitesInDropDownSecondTime"/>
+        <dontSeeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, 'Main Website')}}" stepKey="checkNoMainWebsiteInDropDown"/>
+        <seeElement selector="{{AdminProductAddFPTValueSection.setWebSiteForFPTOption($$createProductFPTAttribute.attribute_code$$, NewWebSiteData.name)}}" stepKey="checkSecondWebsitesInDropDownSecondTime"/>
+        <!-- Check if created tax attribute is saved -->
+        <comment userInput="Check if created tax attribute is saved" stepKey="checkTaxAttributeIsSaved"/>
+        <seeInField selector="{{AdminProductAddFPTValueSection.setTaxValueForFPT($$createProductFPTAttribute.attribute_code$$)}}" userInput="10.0000" stepKey="checkTaxAttributeSaved"/>
+    </test>
+</tests>

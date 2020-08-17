@@ -6,6 +6,7 @@
 
 namespace Magento\Framework\Search\Request;
 
+use Magento\Framework\Api\SortOrder;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Phrase;
 use Magento\Framework\Search\RequestInterface;
@@ -15,6 +16,7 @@ use Magento\Framework\Search\RequestInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Builder
 {
@@ -103,6 +105,7 @@ class Builder
      *
      * @param \Magento\Framework\Api\SortOrder[] $sort
      * @return $this
+     * @since 102.0.2
      */
     public function setSort($sort)
     {
@@ -173,7 +176,13 @@ class Builder
     private function prepareSorts(array $sorts)
     {
         $sortData = [];
-        foreach ($sorts as $sortField => $direction) {
+        foreach ($sorts as $sortField => $sort) {
+            if ($sort instanceof SortOrder) {
+                $sortField = $sort->getField();
+                $direction = $sort->getDirection();
+            } else {
+                $direction = $sort;
+            }
             $sortData[] = [
                 'field' => $sortField,
                 'direction' => $direction,

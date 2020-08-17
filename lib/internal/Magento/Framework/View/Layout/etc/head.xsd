@@ -67,6 +67,7 @@
             <xs:element name="script" type="scriptType" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="remove" type="srcRemoveType" minOccurs="0" maxOccurs="unbounded"/>
             <xs:element name="attribute" type="headAttributeType" minOccurs="0" maxOccurs="unbounded"/>
+            <xs:element name="font" type="linkType" minOccurs="0" maxOccurs="unbounded"/>
         </xs:sequence>
     </xs:complexType>
 </xs:schema>

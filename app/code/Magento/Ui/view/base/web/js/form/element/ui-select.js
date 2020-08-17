@@ -131,6 +131,7 @@ define([
     return Abstract.extend({
         defaults: {
             options: [],
+            total: 0,
             listVisible: false,
             value: [],
             filterOptions: false,
@@ -153,6 +154,7 @@ define([
             labelsDecoration: false,
             disableLabel: false,
             filterRateLimit: 500,
+            filterRateLimitMethod: 'notifyAtFixedRate',
             closeBtnLabel: $t('Done'),
             optgroupTmpl: 'ui/grid/filters/elements/ui-select-optgroup',
             quantityPlaceholder: $t('options'),
@@ -180,6 +182,7 @@ define([
             debounce: 300,
             missingValuePlaceholder: $t('Entity with ID: %s doesn\'t exist'),
             isDisplayMissingValuePlaceholder: false,
+            currentSearchKey: '',
             listens: {
                 listVisible: 'cleanHoveredElement',
                 filterInputValue: 'filterOptionsList',
@@ -289,6 +292,13 @@ define([
         },
 
         /**
+         * Return empty options html
+         */
+        getEmptyOptionsUnsanitizedHtml: function () {
+            return this.emptyOptionsHtml;
+        },
+
+        /**
          * Check options length and set to cache
          * if some options is added
          *
@@ -330,7 +340,10 @@ define([
             ]);
 
             this.filterInputValue.extend({
-                rateLimit: this.filterRateLimit
+                rateLimit: {
+                    timeout: this.filterRateLimit,
+                    method: this.filterRateLimitMethod
+                }
             });
 
             return this;
@@ -455,12 +468,8 @@ define([
             var value = this.filterInputValue().trim().toLowerCase(),
                 array = [];
 
-            if (value && value.length < 2) {
-                return false;
-            }
-
             if (this.searchOptions) {
-                return _.debounce(this.loadOptions.bind(this, value), this.debounce)();
+                return this.loadOptions(value);
             }
 
             this.cleanHoveredElement();
@@ -547,9 +556,19 @@ define([
         _setItemsQuantity: function (data) {
             if (this.showFilteredQuantity) {
                 data || parseInt(data, 10) === 0 ?
-                    this.itemsQuantity(data + ' ' + this.quantityPlaceholder) :
+                    this.itemsQuantity(this.getItemsPlaceholder(data)) :
                     this.itemsQuantity('');
             }
+        },
+
+        /**
+         * Return formatted items placeholder.
+         *
+         * @param {Object} data - option data
+         * @returns {String}
+         */
+        getItemsPlaceholder: function (data) {
+            return data + ' ' + this.quantityPlaceholder;
         },
 
         /**
@@ -735,11 +754,6 @@ define([
 
             return this.value() ? !!this.value().length : false;
         },
-
-        /**
-         * @deprecated
-         */
-        onMousemove: function () {},
 
         /**
          * Handles hover on list items.
@@ -1148,13 +1162,14 @@ define([
 
             if (this.isSearchKeyCached(searchKey)) {
                 cachedSearchResult = this.getCachedSearchResults(searchKey);
+                this.cacheOptions.plain = cachedSearchResult.options;
                 this.options(cachedSearchResult.options);
                 this.afterLoadOptions(searchKey, cachedSearchResult.lastPage, cachedSearchResult.total);
 
                 return;
             }
 
-            if (searchKey !== this.lastSearchKey) {
+            if (currentPage === 1) {
                 this.options([]);
             }
             this.processRequest(searchKey, currentPage);
@@ -1234,13 +1249,11 @@ define([
          * @param {Number} page
          */
         processRequest: function (searchKey, page) {
-            var total = 0,
-                existingOptions = this.options();
-
             this.loading(true);
+            this.currentSearchKey = searchKey;
             $.ajax({
                 url: this.searchUrl,
-                type: 'post',
+                type: 'get',
                 dataType: 'json',
                 context: this,
                 data: {
@@ -1248,27 +1261,40 @@ define([
                     page: page,
                     limit: this.pageLimit
                 },
-
-                /** @param {Object} response */
-                success: function (response) {
-                    _.each(response.options, function (opt) {
-                        existingOptions.push(opt);
-                    });
-                    total = response.total;
-                    this.options(existingOptions);
-                },
-
-                /** set empty array if error occurs */
-                error: function () {
-                    this.options([]);
-                },
-
-                /** cache options and stop loading*/
-                complete: function () {
-                    this.setCachedSearchResults(searchKey, this.options(), page, total);
-                    this.afterLoadOptions(searchKey, page, total);
-                }
+                success: $.proxy(this.success, this),
+                error: $.proxy(this.error, this),
+                beforeSend: $.proxy(this.beforeSend, this),
+                complete: $.proxy(this.complete, this, searchKey, page)
             });
+        },
+
+        /** @param {Object} response */
+        success: function (response) {
+            var existingOptions = this.options();
+
+            _.each(response.options, function (opt) {
+                existingOptions.push(opt);
+            });
+
+            this.total = response.total;
+            this.cacheOptions.plain = existingOptions;
+            this.options(existingOptions);
+        },
+
+        /** add actions before ajax request */
+        beforeSend: function () {
+
+        },
+
+        /** set empty array if error occurs */
+        error: function () {
+            this.options([]);
+        },
+
+        /** cache options and stop loading*/
+        complete: function (searchKey, page) {
+            this.setCachedSearchResults(searchKey, this.options(), page, this.total);
+            this.afterLoadOptions(searchKey, page, this.total);
         },
 
         /**
@@ -1279,9 +1305,9 @@ define([
          * @param {Number} total
          */
         afterLoadOptions: function (searchKey, page, total) {
-            this._setItemsQuantity(total);
-            this.lastSearchPage = page;
             this.lastSearchKey = searchKey;
+            this.lastSearchPage = page;
+            this._setItemsQuantity(total);
             this.loading(false);
         }
     });

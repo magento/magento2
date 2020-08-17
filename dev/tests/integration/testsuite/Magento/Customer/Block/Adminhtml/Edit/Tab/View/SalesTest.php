@@ -9,7 +9,7 @@ use Magento\Customer\Controller\RegistryConstants;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Class SalesTest
+ * Test for \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Sales
  *
  * @magentoAppArea adminhtml
  */
@@ -41,7 +41,7 @@ class SalesTest extends \PHPUnit\Framework\TestCase
     /**
      * Execute per test initialization.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('adminhtml');
@@ -53,7 +53,7 @@ class SalesTest extends \PHPUnit\Framework\TestCase
             \Magento\Framework\View\LayoutInterface::class
         )->createBlock(
             \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Sales::class,
-            'sales_' . mt_rand(),
+            'sales_' . random_int(0, PHP_INT_MAX),
             ['coreRegistry' => $this->coreRegistry]
         )->setTemplate(
             'tab/view/sales.phtml'
@@ -64,7 +64,7 @@ class SalesTest extends \PHPUnit\Framework\TestCase
     /**
      * Execute post test cleanup.
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->coreRegistry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
         $this->html = '';
@@ -121,7 +121,7 @@ class SalesTest extends \PHPUnit\Framework\TestCase
      */
     public function testToHtml()
     {
-        $this->assertContains('<span class="title">Sales Statistics</span>', $this->html);
-        $this->assertContains('<strong>All Store Views</strong>', $this->html);
+        $this->assertStringContainsString('<span class="title">Sales Statistics</span>', $this->html);
+        $this->assertStringContainsString('<strong>All Store Views</strong>', $this->html);
     }
 }
