@@ -255,7 +255,7 @@ class DataProvider extends ModifierPoolDataProvider
 
     /**
      * @inheritdoc
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getMeta()
     {
@@ -504,7 +504,7 @@ class DataProvider extends ModifierPoolDataProvider
      * @param Category $category
      * @param array $categoryData
      * @return array
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @since 101.0.0
      */
     protected function addUseDefaultSettings($category, $categoryData)

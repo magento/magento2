@@ -22,6 +22,7 @@
     "magento_operation": {
         "column": {
             "id": true,
+            "operation_key": true,
             "bulk_uuid": true,
             "topic_name": true,
             "serialized_data": true,
@@ -35,7 +36,8 @@
         },
         "constraint": {
             "PRIMARY": true,
-            "MAGENTO_OPERATION_BULK_UUID_MAGENTO_BULK_UUID": true
+            "MAGENTO_OPERATION_BULK_UUID_MAGENTO_BULK_UUID": true,
+            "UUID": true
         }
     },
     "magento_acknowledged_bulk": {
