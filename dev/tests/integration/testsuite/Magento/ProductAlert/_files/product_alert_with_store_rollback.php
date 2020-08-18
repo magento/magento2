@@ -28,8 +28,7 @@ $customer = $customerRegistry->remove(1);
 $productRepository = $objectManager->create(ProductRepositoryInterface::class);
 try {
     $product = $productRepository->deleteById('simple');
-}
-catch (\Exception $e){
+} catch (\Exception $e) {
     // product already removed
 }
 /** @var Magento\Store\Model\Store $store */
