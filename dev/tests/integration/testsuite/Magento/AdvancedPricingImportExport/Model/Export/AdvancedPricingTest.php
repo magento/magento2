@@ -7,6 +7,7 @@
 namespace Magento\AdvancedPricingImportExport\Model\Export;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\File\Csv;
 use Magento\TestFramework\Indexer\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
