@@ -13,6 +13,7 @@
                     name="product_id"
                     provider="${ $.parentName }"
                     sortOrder="110"
+                    class="Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Filters\UsedInProducts"
                     component="Magento_Catalog/js/components/product-ui-select"
                     template="ui/grid/filters/elements/ui-select">
                 <argument name="data" xsi:type="array">
