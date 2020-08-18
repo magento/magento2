@@ -115,7 +115,6 @@ class EncryptorTest extends TestCase
         $this->randomGeneratorMock
             ->expects($this->once())
             ->method('getRandomString')
-            ->with($version === Encryptor::HASH_VERSION_ARGON2ID13 ? SODIUM_CRYPTO_PWHASH_SALTBYTES : 32)
             ->willReturn($salt);
         $actual = $this->encryptor->getHash('password', true, $version);
         $this->assertEquals($expected, $actual);
@@ -129,7 +128,6 @@ class EncryptorTest extends TestCase
         $this->randomGeneratorMock
             ->expects($this->once())
             ->method('getRandomString')
-            ->with($this->encryptor->getLatestHashVersion() >= Encryptor::HASH_VERSION_ARGON2ID13 ? 16 : 11)
             ->willReturn(
                 $this->encryptor->getLatestHashVersion() >= Encryptor::HASH_VERSION_ARGON2ID13 ?
                     'random_salt12345' :

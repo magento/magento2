@@ -187,6 +187,8 @@ class Encryptor implements EncryptorInterface
 
     /**
      * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function getHash($password, $salt = false, $version = self::HASH_VERSION_LATEST)
     {
@@ -307,7 +309,7 @@ class Encryptor implements EncryptorInterface
                     $recreated = $this->generateSimpleHash($hashSalt . $recreated, (int)$hashVersion);
                 }
             }
-        } catch (\RuntimeException $exception) {
+        } catch (\Throwable $exception) {
             //Hash is not a password hash.
             $recreated = $this->hash($password);
         }
