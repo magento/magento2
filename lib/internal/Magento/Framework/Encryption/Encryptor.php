@@ -45,7 +45,8 @@ class Encryptor implements EncryptorInterface
 
     /**
      * Key of latest used algorithm
-     * @deprecated
+     *
+     * @deprecated Latest version is dynamic based on current setup.
      * @see \Magento\Framework\Encryption\Encryptor::getLatestHashVersion
      */
     const HASH_VERSION_LATEST = 3;
@@ -212,9 +213,6 @@ class Encryptor implements EncryptorInterface
         }
         if (is_integer($salt)) {
             //Generate salt of given length.
-            if ($isArgon) {
-                $salt = SODIUM_CRYPTO_PWHASH_SALTBYTES;
-            }
             $salt = $this->random->getRandomString($salt);
         }
 

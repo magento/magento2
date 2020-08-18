@@ -80,6 +80,7 @@ class UpgradeHashAlgorithmCommandTest extends TestCase
      */
     public function testUpgrades(): void
     {
+        $latestVersion = $this->encryptor->getLatestHashVersion();
         $original = 'password';
         //Hash the customer's password with the oldest algorithm.
         /** @var Customer $customer */
@@ -93,7 +94,7 @@ class UpgradeHashAlgorithmCommandTest extends TestCase
         //Upgrading customers' password hashes 1 more times than there are algorithms to be sure
         //that running the command won't break anything
         $tester = new CommandTester($this->command);
-        for ($cycle = 0; $cycle < $this->encryptor->getLatestHashVersion(); $cycle++) {
+        for ($cycle = 0; $cycle < $latestVersion; $cycle++) {
             $tester->execute([]);
         }
 

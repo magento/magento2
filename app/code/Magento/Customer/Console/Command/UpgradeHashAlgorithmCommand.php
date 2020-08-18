@@ -78,5 +78,7 @@ class UpgradeHashAlgorithmCommand extends Command
         }
         $output->writeln(".");
         $output->writeln("<info>Finished</info>");
+
+        return 0;
     }
 }
