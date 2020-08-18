@@ -40,15 +40,15 @@ class Consume
 
     /**
      * Run media files synchronization.
-     * @param string[] $message
+     * @param array $paths
      * @throws LocalizedException
      */
-    public function execute(array $message) : void
+    public function execute(array $paths) : void
     {
-        $this->synchronize->execute();
-
-        if (!empty($message)) {
-            $this->synchronizeFiles->execute($message);
+        if (!empty($paths)) {
+            $this->synchronizeFiles->execute($paths);
+        } else {
+            $this->synchronize->execute();
         }
     }
 }

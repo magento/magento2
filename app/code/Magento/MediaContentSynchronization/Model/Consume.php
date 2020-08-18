@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\MediaContentSynchronization\Model;
 
 use Magento\Framework\Exception\LocalizedException;
+use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizeIdentitiesInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizeInterface;
 
@@ -40,15 +41,15 @@ class Consume
 
     /**
      * Run media files synchronization.
-     * @param string[] $message
+     * @param string[] $identities
      * @throws LocalizedException
      */
-    public function execute(array $message) : void
+    public function execute(array $identities) : void
     {
-        $this->synchronize->execute();
-
-        if (!empty($message)) {
-            $this->synchronizeIdentities->execute($message);
+        if (!empty($identities)) {
+            $this->synchronizeIdentities->execute($identities);
+        } else {
+            $this->synchronize->execute();
         }
     }
 }

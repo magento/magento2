@@ -34,12 +34,13 @@ class Publish
 
     /**
      * Publish media content synchronization message to the message queue.
+     * @param array $contentIdentities
      */
-    public function execute() : void
+    public function execute(array $contentIdentities = []) : void
     {
         $this->publisher->publish(
             self::TOPIC_MEDIA_CONTENT_SYNCHRONIZATION,
-            [self::TOPIC_MEDIA_CONTENT_SYNCHRONIZATION]
+            $contentIdentities
         );
     }
 }
