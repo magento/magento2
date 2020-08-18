@@ -14,6 +14,9 @@ use Magento\Vault\Model\PaymentTokenManagement;
 use Magento\Vault\Model\ResourceModel\PaymentToken as TokenResource;
 use Magento\Vault\Model\ResourceModel\PaymentToken\CollectionFactory;
 
+/**
+ * Tests for customer payment tokens
+ */
 class CustomerPaymentTokensTest extends GraphQlAbstract
 {
     /**
@@ -36,7 +39,7 @@ class CustomerPaymentTokensTest extends GraphQlAbstract
      */
     private $tokenResource;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -46,7 +49,7 @@ class CustomerPaymentTokensTest extends GraphQlAbstract
         $this->tokenCollectionFactory = Bootstrap::getObjectManager()->get(CollectionFactory::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
 
@@ -81,7 +84,7 @@ query {
 QUERY;
         $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
 
-        $this->assertEquals(2, count($response['customerPaymentTokens']['items']));
+        $this->assertCount(2, $response['customerPaymentTokens']['items']);
         $this->assertArrayHasKey('public_hash', $response['customerPaymentTokens']['items'][0]);
         $this->assertArrayHasKey('details', $response['customerPaymentTokens']['items'][0]);
         $this->assertArrayHasKey('payment_method_code', $response['customerPaymentTokens']['items'][0]);
@@ -91,11 +94,12 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage GraphQL response contains errors: The current customer isn't authorized.
      */
     public function testGetCustomerPaymentTokensIfUserIsNotAuthorized()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: The current customer isn\'t authorized.');
+
         $query = <<<QUERY
 query {
     customerPaymentTokens {
@@ -139,10 +143,15 @@ mutation {
   }
 }
 QUERY;
-        $response = $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $response = $this->graphQlMutation(
+            $query,
+            [],
+            '',
+            $this->getCustomerAuthHeaders($currentEmail, $currentPassword)
+        );
 
         $this->assertTrue($response['deletePaymentToken']['result']);
-        $this->assertEquals(1, count($response['deletePaymentToken']['customerPaymentTokens']['items']));
+        $this->assertCount(1, $response['deletePaymentToken']['customerPaymentTokens']['items']);
 
         $token = $response['deletePaymentToken']['customerPaymentTokens']['items'][0];
         $this->assertArrayHasKey('public_hash', $token);
@@ -154,11 +163,12 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage GraphQL response contains errors: The current customer isn't authorized.
      */
     public function testDeletePaymentTokenIfUserIsNotAuthorized()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: The current customer isn\'t authorized.');
+
         $query = <<<QUERY
 mutation {
   deletePaymentToken(
@@ -168,16 +178,17 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlQuery($query, [], '');
+        $this->graphQlMutation($query, [], '');
     }
 
     /**
      * @magentoApiDataFixture Magento/Vault/_files/payment_tokens.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage GraphQL response contains errors: Could not find a token using public hash: ksdfk392ks
      */
     public function testDeletePaymentTokenInvalidPublicHash()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: Could not find a token using public hash: ksdfk392ks');
+
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
 
@@ -190,7 +201,7 @@ mutation {
   }
 }
 QUERY;
-        $this->graphQlQuery($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
+        $this->graphQlMutation($query, [], '', $this->getCustomerAuthHeaders($currentEmail, $currentPassword));
     }
 
     /**

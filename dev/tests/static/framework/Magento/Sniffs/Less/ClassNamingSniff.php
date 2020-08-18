@@ -17,7 +17,7 @@ use PHP_CodeSniffer\Files\File;
  * - start with a letter (except helper classes);
  * - words should be separated with dash '-';
  *
- * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#standard-classes
+ * @link https://devdocs.magento.com/guides/v2.3/coding-standards/code-standard-less.html#standard-classes
  */
 class ClassNamingSniff implements Sniff
 {
@@ -49,10 +49,13 @@ class ClassNamingSniff implements Sniff
         $tokens = $phpcsFile->getTokens();
 
         if (T_WHITESPACE !== $tokens[$stackPtr - 1]['code']
-            && !in_array($tokens[$stackPtr - 1]['content'], [
-                TokenizerSymbolsInterface::INDENT_SPACES,
-                TokenizerSymbolsInterface::NEW_LINE,
-            ])
+            && !in_array(
+                $tokens[$stackPtr - 1]['content'],
+                [
+                    TokenizerSymbolsInterface::INDENT_SPACES,
+                    TokenizerSymbolsInterface::NEW_LINE,
+                ]
+            )
         ) {
             return;
         }

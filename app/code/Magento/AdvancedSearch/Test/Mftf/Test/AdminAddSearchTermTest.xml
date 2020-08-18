@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminAddSearchTermTest">
+        <annotations>
+            <features value="AdvancedSearch"/>
+            <stories value="Add a new search term"/>
+            <title value="Admin should be able to create a new search term"/>
+            <description value="Admin should be able to create a new search term using search terms grid"/>
+            <severity value="CRITICAL"/>
+            <group value="AdvancedSearch"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminOpenNewSearchTermsPageActionGroup" stepKey="navigateToSearchTermPage"/>
+        <actionGroup ref="AdminFillSearchTermActionGroup" stepKey="fillNewSearchTermData">
+            <argument name="searchQuery" value="{{SearchTerms.searchQuery}}"/>
+            <argument name="store" value="{{SearchTerms.store}}"/>
+            <argument name="redirectUrl" value="{{SearchTerms.redirectUrl}}"/>
+            <argument name="suggestedTerms" value="{{SearchTerms.suggestedTerms}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminSaveSearchTermActionGroup" stepKey="saveSearchTerm"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSaveSearchTermSuccessMessage">
+            <argument name="message" value="You saved the search term."/>
+            <argument name="messageType" value="success"/>
+        </actionGroup>
+    </test>
+</tests>

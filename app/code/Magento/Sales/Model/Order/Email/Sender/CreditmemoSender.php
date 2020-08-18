@@ -17,7 +17,7 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\DataObject;
 
 /**
- * Class CreditmemoSender
+ * Sends order creditmemo email to the customer.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -57,10 +57,10 @@ class CreditmemoSender extends Sender
      * @param CreditmemoIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
      * @param \Psr\Log\LoggerInterface $logger
+     * @param Renderer $addressRenderer
      * @param PaymentHelper $paymentHelper
      * @param CreditmemoResource $creditmemoResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
-     * @param Renderer $addressRenderer
      * @param ManagerInterface $eventManager
      */
     public function __construct(
@@ -96,23 +96,33 @@ class CreditmemoSender extends Sender
      * @param Creditmemo $creditmemo
      * @param bool $forceSyncMode
      * @return bool
+     * @throws \Exception
      */
     public function send(Creditmemo $creditmemo, $forceSyncMode = false)
     {
-        $creditmemo->setSendEmail(true);
+        $creditmemo->setSendEmail($this->identityContainer->isEnabled());
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $order = $creditmemo->getOrder();
+            $this->identityContainer->setStore($order->getStore());
 
             $transport = [
                 'order' => $order,
+                'order_id' => $order->getId(),
                 'creditmemo' => $creditmemo,
+                'creditmemo_id' => $creditmemo->getId(),
                 'comment' => $creditmemo->getCustomerNoteNotify() ? $creditmemo->getCustomerNote() : '',
                 'billing' => $order->getBillingAddress(),
                 'payment_html' => $this->getPaymentHtml($order),
                 'store' => $order->getStore(),
                 'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
                 'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
+                'order_data' => [
+                    'customer_name' => $order->getCustomerName(),
+                    'is_not_virtual' => $order->getIsNotVirtual(),
+                    'email_customer_note' => $order->getEmailCustomerNote(),
+                    'frontend_status_label' => $order->getFrontendStatusLabel()
+                ]
             ];
             $transportObject = new DataObject($transport);
 
@@ -146,6 +156,7 @@ class CreditmemoSender extends Sender
      *
      * @param Order $order
      * @return string
+     * @throws \Exception
      */
     protected function getPaymentHtml(Order $order)
     {

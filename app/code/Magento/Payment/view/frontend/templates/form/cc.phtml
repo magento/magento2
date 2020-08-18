@@ -4,9 +4,9 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
 /**
  * @var \Magento\Payment\Block\Transparent\Form $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 $code = $block->escapeHtml($block->getMethodCode());
 $ccType = $block->getInfoData('cc_type');
@@ -14,7 +14,7 @@ $ccExpMonth = $block->getInfoData('cc_exp_month');
 $ccExpYear = $block->getInfoData('cc_exp_year');
 ?>
 <fieldset class="fieldset payment items ccard <?= /* @noEscape */ $code ?>"
-          id="payment_form_<?= /* @noEscape */ $code ?>" style="display: none;">
+          id="payment_form_<?= /* @noEscape */ $code ?>">
     <div class="field type required">
         <label for="<?= /* @noEscape */ $code ?>_cc_type" class="label">
             <span><?= $block->escapeHtml(__('Credit Card Type')) ?></span>
@@ -61,8 +61,11 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
             <div class="fields group group-2">
                 <div class="field no-label month">
                     <div class="control">
-                        <select id="<?= /* @noEscape */ $code ?>_expiration" name="payment[cc_exp_month]" class="select month"
-                                data-validate='{required:true, "validate-cc-exp":"#<?= /* @noEscape */ $code ?>_expiration_yr"}'>
+                        <select id="<?= /* @noEscape */ $code ?>_expiration"
+                                name="payment[cc_exp_month]"
+                                class="select month"
+                                data-validate='{required:true, "validate-cc-exp":"#<?= /* @noEscape */ $code
+                                ?>_expiration_yr"}'>
                             <?php foreach ($block->getCcMonths() as $k => $v): ?>
                                 <option value="<?= /* @noEscape */ $k ? $block->escapeHtml($k) : '' ?>"
                                     <?php if ($k == $ccExpMonth): ?> selected="selected"<?php endif; ?>>
@@ -96,7 +99,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
         <div class="control">
             <input type="number" title="<?= $block->escapeHtml(__('Card Verification Number')) ?>"
                    class="input-text cvv" id="<?= /* @noEscape */ $code ?>_cc_cid" name="payment[cc_cid]" value=""
-                   data-validate='{"required-number":true, "validate-cc-cvn":"#<?= /* @noEscape */ $code ?>_cc_type"}' />
+                   data-validate='{"required-number":true, "validate-cc-cvn":"#<?= /* @noEscape */ $code ?>_cc_type"}'/>
             <?php $content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') . '\" alt=\"' .
                 $block->escapeHtml(__('Card Verification Number Visual Reference')) .
                 '\" title=\"' . $block->escapeHtml(__('Card Verification Number Visual Reference')) . '\" />'; ?>
@@ -111,3 +114,7 @@ $ccExpYear = $block->getInfoData('cc_exp_year');
     <?php endif; ?>
     <?= $block->getChildHtml() ?>
 </fieldset>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+    "display:none",
+    'fieldset#payment_form_' . /* @noEscape */ $code
+) ?>

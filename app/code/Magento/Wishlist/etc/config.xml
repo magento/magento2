@@ -18,6 +18,25 @@
                 <number_limit>10</number_limit>
                 <text_limit>255</text_limit>
             </email>
+            <wishlist_link>
+                <use_qty>0</use_qty>
+            </wishlist_link>
         </wishlist>
+        <captcha translate="label">
+            <frontend>
+                <areas>
+                    <share_wishlist_form>
+                        <label>Share Wishlist Form</label>
+                    </share_wishlist_form>
+                </areas>
+            </frontend>
+        </captcha>
+        <customer>
+            <captcha>
+                <shown_to_logged_in_user>
+                    <share_wishlist_form>1</share_wishlist_form>
+                </shown_to_logged_in_user>
+            </captcha>
+        </customer>
     </default>
 </config>

@@ -157,6 +157,7 @@ class Processor
             throw new LocalizedException(__("The image doesn't exist."));
         }
 
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $pathinfo = pathinfo($file);
         $imgExtensions = ['jpg', 'jpeg', 'gif', 'png'];
         if (!isset($pathinfo['extension']) || !in_array(strtolower($pathinfo['extension']), $imgExtensions)) {
@@ -166,10 +167,10 @@ class Processor
         }
 
         $fileName = \Magento\MediaStorage\Model\File\Uploader::getCorrectFileName($pathinfo['basename']);
-        $dispretionPath = \Magento\MediaStorage\Model\File\Uploader::getDispersionPath($fileName);
-        $fileName = $dispretionPath . '/' . $fileName;
+        $dispersionPath = \Magento\MediaStorage\Model\File\Uploader::getDispersionPath($fileName);
+        $fileName = $dispersionPath . '/' . $fileName;
 
-        $fileName = $this->getNotDuplicatedFilename($fileName, $dispretionPath);
+        $fileName = $this->getNotDuplicatedFilename($fileName, $dispersionPath);
 
         $destinationFile = $this->mediaConfig->getTmpMediaPath($fileName);
 
@@ -196,7 +197,7 @@ class Processor
         $mediaGalleryData = $product->getData($attrCode);
         $position = 0;
 
-        $absoluteFilePath = $this->mediaDirectory->getAbsolutePath($file);
+        $absoluteFilePath = $this->mediaDirectory->getAbsolutePath($destinationFile);
         $imageMimeType = $this->mime->getMimeType($absoluteFilePath);
         $imageContent = $this->mediaDirectory->readFile($absoluteFilePath);
         $imageBase64 = base64_encode($imageContent);
@@ -452,6 +453,7 @@ class Processor
             $destinationFile = $forTmp
                 ? $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getTmpMediaPath($file))
                 : $this->mediaDirectory->getAbsolutePath($this->mediaConfig->getMediaPath($file));
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $destFile = dirname($file) . '/'
                 . \Magento\MediaStorage\Model\File\Uploader::getNewFileName($destinationFile);
         }
@@ -463,27 +465,27 @@ class Processor
      * Get filename which is not duplicated with other files in media temporary and media directories
      *
      * @param string $fileName
-     * @param string $dispretionPath
+     * @param string $dispersionPath
      * @return string
      * @since 101.0.0
      */
-    protected function getNotDuplicatedFilename($fileName, $dispretionPath)
+    protected function getNotDuplicatedFilename($fileName, $dispersionPath)
     {
-        $fileMediaName = $dispretionPath . '/'
+        $fileMediaName = $dispersionPath . '/'
             . \Magento\MediaStorage\Model\File\Uploader::getNewFileName($this->mediaConfig->getMediaPath($fileName));
-        $fileTmpMediaName = $dispretionPath . '/'
+        $fileTmpMediaName = $dispersionPath . '/'
             . \Magento\MediaStorage\Model\File\Uploader::getNewFileName($this->mediaConfig->getTmpMediaPath($fileName));
 
         if ($fileMediaName != $fileTmpMediaName) {
             if ($fileMediaName != $fileName) {
                 return $this->getNotDuplicatedFilename(
                     $fileMediaName,
-                    $dispretionPath
+                    $dispersionPath
                 );
             } elseif ($fileTmpMediaName != $fileName) {
                 return $this->getNotDuplicatedFilename(
                     $fileTmpMediaName,
-                    $dispretionPath
+                    $dispersionPath
                 );
             }
         }
@@ -494,7 +496,7 @@ class Processor
     /**
      * Retrieve data for update attribute
      *
-     * @param  \Magento\Catalog\Model\Product $object
+     * @param \Magento\Catalog\Model\Product $object
      * @return array
      * @since 101.0.0
      */

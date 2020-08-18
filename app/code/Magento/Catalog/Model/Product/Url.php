@@ -101,15 +101,10 @@ class Url extends \Magento\Framework\DataObject
      */
     public function getProductUrl($product, $useSid = null)
     {
-        if ($useSid === null) {
-            $useSid = $this->sidResolver->getUseSessionInUrl();
-        }
-
         $params = [];
         if (!$useSid) {
             $params['_nosid'] = true;
         }
-
         return $this->getUrl($product, $params);
     }
 
@@ -162,11 +157,8 @@ class Url extends \Magento\Framework\DataObject
                     \Magento\Store\Model\ScopeInterface::SCOPE_STORE
                 );
 
-                if ($categoryId) {
-                    $filterData[UrlRewrite::METADATA]['category_id'] = $categoryId;
-                } elseif (!$useCategories) {
-                    $filterData[UrlRewrite::METADATA]['category_id'] = '';
-                }
+                $filterData[UrlRewrite::METADATA]['category_id']
+                    = $categoryId && $useCategories ? $categoryId : '';
 
                 $rewrite = $this->urlFinder->findOneByData($filterData);
 

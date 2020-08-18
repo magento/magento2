@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminVariableFormSection">
+        <element name="code" type="input" selector="#edit_form input[name='variable[code]']"/>
+        <element name="name" type="input" selector="#edit_form input[name='variable[name]']"/>
+        <element name="html" type="textarea" selector="#edit_form textarea[name='variable[html_value]']"/>
+        <element name="plain" type="textarea" selector="#edit_form textarea[name='variable[plain_value]']"/>
+        <element name="save" type="button" selector=".page-actions-buttons #save"/>
+        <element name="delete" type="button" selector=".page-actions-buttons #delete"/>
+        <element name="confirmDelete" type="button" selector=".action-primary.action-accept"/>
+    </section>
+</sections>

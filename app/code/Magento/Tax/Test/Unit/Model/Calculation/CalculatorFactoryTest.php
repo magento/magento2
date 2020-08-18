@@ -3,24 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Tax\Test\Unit\Model\Calculation;
 
-use \Magento\Tax\Model\Calculation\CalculatorFactory;
-
 use Magento\Customer\Api\Data\AddressInterface as CustomerAddress;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Tax\Model\Calculation\AbstractCalculator;
+use Magento\Tax\Model\Calculation\CalculatorFactory;
+use Magento\Tax\Model\Calculation\RowBaseCalculator;
+use Magento\Tax\Model\Calculation\TotalBaseCalculator;
+
+use Magento\Tax\Model\Calculation\UnitBaseCalculator;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\Tax\Model\CalculatorFactory
  */
-class CalculatorFactoryTest extends \PHPUnit\Framework\TestCase
+class CalculatorFactoryTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     public $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
     }
@@ -32,7 +40,7 @@ class CalculatorFactoryTest extends \PHPUnit\Framework\TestCase
      * @param CustomerAddress $shippingAddress
      * @param null|int $customerTaxClassId
      * @param null|int $customerId
-     * @param \Magento\Tax\Model\Calculation\AbstractCalculator $expectedInstanceType
+     * @param AbstractCalculator $expectedInstanceType
      *  expected type of calculator instance
      *
      * @dataProvider createDataProvider
@@ -46,18 +54,20 @@ class CalculatorFactoryTest extends \PHPUnit\Framework\TestCase
         $customerId,
         $expectedInstanceType
     ) {
-        $instanceMock = $this->getMockBuilder($expectedInstanceType)->disableOriginalConstructor()->getMock();
-        $objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $instanceMock = $this->getMockBuilder($expectedInstanceType)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         // Verify create() is called with correct concrete type
         $objectManagerMock->expects($this->once())
             ->method('create')
             ->with($expectedInstanceType, ['storeId' => $storeId])
-            ->will($this->returnValue($instanceMock));
+            ->willReturn($instanceMock);
 
         /** @var CalculatorFactory $calculatorFactory */
         $calculatorFactory = $this->objectManager->getObject(
-            \Magento\Tax\Model\Calculation\CalculatorFactory::class,
+            CalculatorFactory::class,
             ['objectManager' => $objectManagerMock]
         );
 
@@ -130,7 +140,7 @@ class CalculatorFactoryTest extends \PHPUnit\Framework\TestCase
                 null,
                 null,
                 null,
-                null, \Magento\Tax\Model\Calculation\UnitBaseCalculator::class,
+                null, UnitBaseCalculator::class,
             ],
             'Row HasBilling' => [
                 CalculatorFactory::CALC_ROW_BASE,
@@ -138,7 +148,7 @@ class CalculatorFactoryTest extends \PHPUnit\Framework\TestCase
                 $billingAddressMock,
                 null,
                 null,
-                null, \Magento\Tax\Model\Calculation\RowBaseCalculator::class,
+                null, RowBaseCalculator::class,
             ],
             'Row HasCustomerTaxClassId' => [
                 CalculatorFactory::CALC_ROW_BASE,
@@ -146,7 +156,7 @@ class CalculatorFactoryTest extends \PHPUnit\Framework\TestCase
                 null,
                 null,
                 123,
-                null, \Magento\Tax\Model\Calculation\RowBaseCalculator::class,
+                null, RowBaseCalculator::class,
             ],
             'Total HasShipping' => [
                 CalculatorFactory::CALC_TOTAL_BASE,
@@ -154,7 +164,7 @@ class CalculatorFactoryTest extends \PHPUnit\Framework\TestCase
                 null,
                 $shippingAddressMock,
                 null,
-                null, \Magento\Tax\Model\Calculation\TotalBaseCalculator::class,
+                null, TotalBaseCalculator::class,
             ],
             'Total HasShipping HasBilling HasCustomerTaxClassId' => [
                 CalculatorFactory::CALC_TOTAL_BASE,
@@ -162,7 +172,7 @@ class CalculatorFactoryTest extends \PHPUnit\Framework\TestCase
                 $billingAddressMock,
                 $shippingAddressMock,
                 1,
-                null, \Magento\Tax\Model\Calculation\TotalBaseCalculator::class,
+                null, TotalBaseCalculator::class,
             ],
             'Total HasShipping HasBilling HasCustomerTaxClassId, HasCustomer' => [
                 CalculatorFactory::CALC_TOTAL_BASE,
@@ -170,20 +180,18 @@ class CalculatorFactoryTest extends \PHPUnit\Framework\TestCase
                 $billingAddressMock,
                 $shippingAddressMock,
                 1,
-                1, \Magento\Tax\Model\Calculation\TotalBaseCalculator::class,
+                1, TotalBaseCalculator::class,
             ],
         ];
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Unknown calculation type: NOT_A_TYPE
-     */
     public function testCreateInvalid()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('Unknown calculation type: NOT_A_TYPE');
         /** @var CalculatorFactory $calculatorFactory */
         $calculatorFactory = $this->objectManager->getObject(
-            \Magento\Tax\Model\Calculation\CalculatorFactory::class
+            CalculatorFactory::class
         );
 
         // Call create() with a bad type to generate exception

@@ -4,12 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues */
 ?>
-<div data-bind="scope: '<?= /* @escapeNotVerified */  $block->getComponentName() ?>'">
-    <h2 class="steps-wizard-title"><?= /* @escapeNotVerified */  __('Step 2: Attribute Values') ?></h2>
+<div data-bind="scope: '<?= $block->escapeHtmlAttr($block->getComponentName()) ?>'">
+    <h2 class="steps-wizard-title"><?= $block->escapeHtml(__('Step 2: Attribute Values')) ?></h2>
     <div class="steps-wizard-info">
         <span><?= $block->escapeHtml(__('Select from the following attribute values for this product. Each unique combination of values creates a unique product SKU.')) ?></span>
     </div>
@@ -25,7 +23,7 @@
                     <div class="attribute-entity-title" data-bind="text: label"></div>
                     <div class="attribute-options-block">
                         (<span class="attribute-length" data-bind="text: $data.options().length"></span>
-                        <?= /* @escapeNotVerified */  __('Options') ?>)
+                        <?= $block->escapeHtml(__('Options')) ?>)
                     </div>
                 </div>
 
@@ -34,19 +32,19 @@
                             class="action-select-all action-tertiary"
                             data-bind="click: $parent.selectAllAttributes"
                             title="<?= $block->escapeHtml(__('Select All')) ?>">
-                        <span><?= /* @escapeNotVerified */  __('Select All') ?></span>
+                        <span><?= $block->escapeHtml(__('Select All')) ?></span>
                     </button>
                     <button type="button"
                             class="action-deselect-all action-tertiary"
                             data-bind="click: $parent.deSelectAllAttributes"
                             title="<?= $block->escapeHtml(__('Deselect All')) ?>">
-                        <span><?= /* @escapeNotVerified */  __('Deselect All') ?></span>
+                        <span><?=$block->escapeHtml(__('Deselect All')) ?></span>
                     </button>
                     <button type="button"
                             class="action-remove-all action-tertiary"
                             data-bind="click: $parent.removeAttribute.bind($parent)"
                             title="<?= $block->escapeHtml(__('Remove Attribute')) ?>">
-                        <span><?= /* @escapeNotVerified */  __('Remove Attribute') ?></span>
+                        <span><?= $block->escapeHtml(__('Remove Attribute')) ?></span>
                     </button>
                 </div>
             </div>
@@ -74,14 +72,14 @@
                                     title="<?= $block->escapeHtml(__('Save Option')) ?>"
                                     data-action="save"
                                     data-bind="click: $parents[1].saveOption.bind($parent)">
-                                <span><?= /* @escapeNotVerified */  __('Save Option') ?></span>
+                                <span><?= $block->escapeHtml(__('Save Option')) ?></span>
                             </button>
                             <button type="button"
                                     class="action-remove"
                                     title="<?= $block->escapeHtml(__('Remove Option')) ?>"
                                     data-action="remove"
                                     data-bind="click: $parents[1].removeOption.bind($parent)">
-                                <span><?= /* @escapeNotVerified */  __('Remove Option') ?></span>
+                                <span><?= $block->escapeHtml(__('Remove Option')) ?></span>
                             </button>
                         </div>
                     </li>
@@ -91,7 +89,7 @@
                     type="button"
                     data-action="addOption"
                     data-bind="click: $parent.createOption, visible: canCreateOption">
-                <span><?= /* @escapeNotVerified */  __('Create New Value') ?></span>
+                <span><?= $block->escapeHtml(__('Create New Value')) ?></span>
             </button>
         </div>
     </div>
@@ -101,11 +99,11 @@
         "*": {
             "Magento_Ui/js/core/app": {
                 "components": {
-                    "<?= /* @escapeNotVerified */  $block->getComponentName() ?>": {
+                    "<?= $block->escapeJs($block->getComponentName()) ?>": {
                         "component": "Magento_ConfigurableProduct/js/variations/steps/attributes_values",
-                        "appendTo": "<?= /* @escapeNotVerified */  $block->getParentComponentName() ?>",
-                        "optionsUrl": "<?= /* @escapeNotVerified */  $block->getUrl('catalog/product_attribute/getAttributes') ?>",
-                        "createOptionsUrl": "<?= /* @escapeNotVerified */  $block->getUrl('catalog/product_attribute/createOptions') ?>"
+                        "appendTo": "<?= $block->escapeJs($block->getParentComponentName()) ?>",
+                        "optionsUrl": "<?= $block->escapeJs($block->escapeUrl($block->getUrl('catalog/product_attribute/getAttributes'))) ?>",
+                        "createOptionsUrl": "<?= $block->escapeJs($block->escapeUrl($block->getUrl('catalog/product_attribute/createOptions'))) ?>"
                     }
                 }
             }

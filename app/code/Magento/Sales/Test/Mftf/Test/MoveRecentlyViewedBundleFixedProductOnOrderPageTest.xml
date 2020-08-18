@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="MoveRecentlyViewedBundleFixedProductOnOrderPageTest">
+        <annotations>
+            <features value="Sales"/>
+            <stories value="Add Products to Order from Recently Viewed Products Section"/>
+            <title value="Move recently viewed bundle fixed product on order page test"/>
+            <description value="Move recently viewed bundle fixed product on order page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-16164"/>
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Login as admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Create customer -->
+            <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
+
+            <!-- Create category -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+
+            <!-- Create simple products -->
+            <createData entity="SimpleProduct2" stepKey="createFirstProduct">
+                <field key="price">755.00</field>
+            </createData>
+            <createData entity="SimpleProduct2" stepKey="createSecondProduct">
+                <field key="price">756.00</field>
+            </createData>
+
+            <!-- Create Bundle product -->
+            <createData entity="BundleProductPriceViewRange" stepKey="createBundleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="DropDownBundleOption" stepKey="createBundleOption">
+                <requiredEntity createDataKey="createBundleProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkFirstOptionToProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption"/>
+                <requiredEntity createDataKey="createFirstProduct"/>
+            </createData>
+            <createData entity="ApiBundleLink" stepKey="linkSecondOptionToProduct">
+                <requiredEntity createDataKey="createBundleProduct"/>
+                <requiredEntity createDataKey="createBundleOption"/>
+                <requiredEntity createDataKey="createSecondProduct"/>
+            </createData>
+            <!-- Change configuration -->
+            <magentoCLI command="config:set reports/options/enabled 1" stepKey="enableReportModule"/>
+
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Admin logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Customer logout -->
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogout"/>
+
+            <!-- Delete customer -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+
+            <!-- Delete created product data -->
+            <deleteData createDataKey="createBundleProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
+            <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
+
+            <!-- Delete category -->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <!-- Change configuration -->
+            <magentoCLI command="config:set reports/options/enabled 0" stepKey="disableReportModule"/>
+        </after>
+
+        <!-- Login as customer -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginAsCustomer">
+            <argument name="Customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <!-- Go to created product page -->
+        <amOnPage url="{{StorefrontProductPage.url($$createBundleProduct.custom_attributes[url_key]$$)}}" stepKey="goToProductPage"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad"/>
+
+        <!-- Search and open customer -->
+        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCreatedCustomer">
+            <argument name="email" value="$$createCustomer.email$$"/>
+        </actionGroup>
+        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickEditButton"/>
+        <waitForPageLoad stepKey="waitForCustomerPageLoad"/>
+
+        <!-- Click create order -->
+        <click selector="{{AdminCustomerMainActionsSection.createOrderBtn}}" stepKey="clickCreateOrder"/>
+
+        <!-- Add configure to bundle product -->
+        <click selector="{{AdminCustomerActivitiesRecentlyViewedSection.addToOrderConfigure($$createBundleProduct.name$$)}}" stepKey="configureProduct"/>
+        <click selector="{{AdminCustomerActivitiesConfigureSection.dropdownProductSelection($$createFirstProduct.name$$)}}" stepKey="selectProductOption"/>
+        <click selector="{{AdminCustomerActivitiesConfigureSection.okButton}}" stepKey="clickOkBtn"/>
+        <waitForPageLoad stepKey="waitForAddingConfigure"/>
+
+        <!-- Click 'Update Changes' -->
+        <click selector="{{AdminCustomerCreateNewOrderSection.updateChangesBtn}}" stepKey="clickUpdateChangesBtn"/>
+
+        <!-- Assert products in items ordered grid -->
+        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('1', 'Product')}}" userInput="$$createBundleProduct.name$$" stepKey="seeProductName"/>
+        <see selector="{{AdminCustomerCreateNewOrderSection.gridCell('1', 'Price')}}" userInput="$755.00" stepKey="seeProductPrice"/>
+    </test>
+</tests>

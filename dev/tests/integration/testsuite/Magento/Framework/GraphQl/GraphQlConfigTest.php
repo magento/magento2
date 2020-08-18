@@ -7,11 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Framework\GraphQl;
 
-use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Cache;
-use Magento\Framework\Config\FileResolverInterface;
 use Magento\Framework\GraphQl\Config\Config;
-use Magento\Framework\GraphQl\Config\ConfigElementInterface;
 use Magento\Framework\GraphQl\Config\Data\Argument;
 use Magento\Framework\GraphQl\Config\Data\Enum;
 use Magento\Framework\GraphQl\Config\Data\Field;
@@ -19,15 +16,17 @@ use Magento\Framework\GraphQl\Config\Data\StructureInterface;
 use Magento\Framework\GraphQl\Config\Data\Type;
 use Magento\Framework\GraphQl\Config\Element\EnumValue;
 use Magento\Framework\GraphQl\Config\Element\InterfaceType;
-use Magento\Framework\GraphQl\Config\Element\TypeFactory;
 use Magento\Framework\ObjectManagerInterface;
 
+/**
+ * Test of schema configuration reading and parsing
+ */
 class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
 {
    /** @var \Magento\Framework\GraphQl\Config  */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var ObjectManagerInterface $objectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -37,20 +36,24 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
         $fileResolverMock = $this->getMockBuilder(
             \Magento\Framework\Config\FileResolverInterface::class
         )->disableOriginalConstructor()->getMock();
+        $filePath1 = __DIR__ . '/_files/schemaC.graphqls';
+        $filePath2 = __DIR__ . '/_files/schemaD.graphqls';
         $fileList = [
-            file_get_contents(__DIR__ . '/_files/schemaC.graphqls'),
-            file_get_contents(__DIR__ . '/_files/schemaD.graphqls')
+            $filePath1 => file_get_contents($filePath1),
+            $filePath2 => file_get_contents($filePath2)
         ];
-        $fileResolverMock->expects($this->any())->method('get')->will($this->returnValue($fileList));
+        $fileResolverMock->expects($this->any())->method('get')->willReturn($fileList);
         $graphQlReader = $objectManager->create(
             \Magento\Framework\GraphQlSchemaStitching\GraphQlReader::class,
             ['fileResolver' => $fileResolverMock]
         );
         $reader = $objectManager->create(
+            // phpstan:ignore
             \Magento\Framework\GraphQlSchemaStitching\Reader::class,
             ['readers' => ['graphql_reader' => $graphQlReader]]
         );
         $data = $objectManager->create(
+            // phpstan:ignore
             \Magento\Framework\GraphQl\Config\Data ::class,
             ['reader' => $reader]
         );
@@ -76,7 +79,12 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
                 ['response_field' => 'required', 'expected_value' => $queryFields[$fieldKey]->isRequired()],
                 ['response_field' => 'isList', 'expected_value' => $queryFields[$fieldKey]->isList()],
                 ['response_field' => 'resolver', 'expected_value' => $queryFields[$fieldKey]->getResolver()],
-                ['response_field' => 'description', 'expected_value' => $queryFields[$fieldKey]->getDescription()]
+                ['response_field' => 'description', 'expected_value' => $queryFields[$fieldKey]->getDescription()],
+                [
+                    'response_field' => 'cache',
+                    'expected_value' => $queryFields[$fieldKey]->getCache(),
+                    'optional' => true
+                ]
             ];
             $this->assertResponseFields($expectedOutputArray['Query']['fields'][$fieldKey], $fieldAssertionMap);
             /** @var \Magento\Framework\GraphQl\Config\Element\Argument $queryFieldArguments */
@@ -212,19 +220,22 @@ class GraphQlConfigTest extends \PHPUnit\Framework\TestCase
                 $expectedValue,
                 "Value of '{$responseField}' field must not be NULL"
             );
-            $this->assertEquals(
-                $expectedValue,
-                $actualResponse[$responseField],
-                "Value of '{$responseField}' field in response does not match expected value: "
-                . var_export($expectedValue, true)
-            );
+            $optionalField = isset($assertionData['optional']) ? $assertionData['optional'] : false;
+            if (!$optionalField || isset($actualResponse[$responseField])) {
+                $this->assertEquals(
+                    $expectedValue,
+                    $actualResponse[$responseField],
+                    "Value of '{$responseField}' field in response does not match expected value: "
+                    . var_export($expectedValue, true)
+                );
+            }
         }
     }
 
     /**
      * {@inheritdoc}
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var ObjectManagerInterface $objectManager */
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

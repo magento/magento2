@@ -9,7 +9,7 @@
     <container name="root">
         <block class="Magento\Backend\Block\Widget\Grid" name="customer.wishlist.edit.tab">
             <arguments>
-                <argument name="dataSource" xsi:type="object">Magento\Wishlist\Model\ResourceModel\Item\Collection\Grid</argument>
+                <argument name="dataSource" xsi:type="object" shared="false">Magento\Wishlist\Model\ResourceModel\Item\Collection\Grid</argument>
                 <argument name="id" xsi:type="string">wishlistGrid</argument>
                 <argument name="use_ajax" xsi:type="string">true</argument>
                 <argument name="default_sort" xsi:type="string">added_at</argument>
@@ -99,6 +99,7 @@
                                 <item name="caption" xsi:type="string" translate="true">Delete</item>
                                 <item name="url" xsi:type="string">#</item>
                                 <item name="onclick" xsi:type="string">return wishlistControl.removeItem($wishlist_item_id);</item>
+                                <item name="class" xsi:type="string">wishlist-remove-button</item>
                             </item>
                         </argument>
                     </arguments>

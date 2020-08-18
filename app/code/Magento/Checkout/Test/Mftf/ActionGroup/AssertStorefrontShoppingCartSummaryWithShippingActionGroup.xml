@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontShoppingCartSummaryWithShippingActionGroup" extends="AssertStorefrontShoppingCartSummaryItemsActionGroup">
+        <annotations>
+            <description>EXTENDS: AssertStorefrontShoppingCartSummaryItemsActionGroup. Waits for the Storefront Checkout 'Shipping Methods' section to appear.</description>
+        </annotations>
+        <arguments>
+            <argument name="shipping" type="string"/>
+        </arguments>
+
+        <waitForElementVisible selector="{{CheckoutCartSummarySection.shipping}}" time="60" after="assertSubtotal" stepKey="waitForShippingElementToBeVisible"/>
+        <waitForText userInput="{{shipping}}" selector="{{CheckoutCartSummarySection.shipping}}" time="30" after="waitForShippingElementToBeVisible" stepKey="assertShipping"/>
+    </actionGroup>
+</actionGroups>

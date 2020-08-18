@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertStoreViewRatingTitleWhenSingleStoreModeIsNoActionGroup">
+        <annotations>
+            <description>If Single Store Mode is disabled, default store view title label should be displayed.</description>
+        </annotations>
+        <seeElement selector="{{AdminEditAndNewRatingSection.defaultStoreViewTitleLabel}}" stepKey="seeLabel"/>
+        <seeElement selector="{{AdminEditAndNewRatingSection.defaultStoreViewTitleInput}}" stepKey="seeInput"/>
+    </actionGroup>
+</actionGroups>

@@ -10,7 +10,7 @@ namespace Magento\Elasticsearch\Elasticsearch5\SearchAdapter;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Class AdapterTest
+ * Class AdapterTest to test Elasticsearch search adapter
  */
 class AdapterTest extends \PHPUnit\Framework\TestCase
 {
@@ -20,7 +20,7 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     private $adapter;
 
     /**
-     * @var \Magento\Elasticsearch\Model\Client\Elasticsearch|\PHPUnit\Framework\MockObject\MockObject
+     * @var \Magento\AdvancedSearch\Model\Client\ClientInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private $clientMock;
 
@@ -37,13 +37,14 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $contentManager = $this->getMockBuilder(\Magento\Elasticsearch\SearchAdapter\ConnectionManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->clientMock = $this->getMockBuilder(\Magento\Elasticsearch6\Model\Client\Elasticsearch::class)
+        $this->clientMock = $this->getMockBuilder(\Magento\AdvancedSearch\Model\Client\ClientInterface::class)
+            ->setMethods(['query', 'testConnection'])
             ->disableOriginalConstructor()
             ->getMock();
         $contentManager
@@ -78,7 +79,6 @@ class AdapterTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix adaptertest
      * @return void
      */

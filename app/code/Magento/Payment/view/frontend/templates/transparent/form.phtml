@@ -4,23 +4,27 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Payment\Block\Transparent\Form $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+
 $code = $block->escapeHtml($block->getMethodCode());
 $ccExpMonth = $block->getInfoData('cc_exp_month');
 $ccExpYear = $block->getInfoData('cc_exp_year');
 $ccType = $block->getInfoData('cc_type');
-$content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') . '\" alt=\"' .
+$content = '<img src=\"' . $block->escapeUrl($block->getViewFileUrl('Magento_Checkout::cvv.png')) . '\" alt=\"' .
     $block->escapeHtml(__('Card Verification Number Visual Reference')) . '\" title=\"' .
     $block->escapeHtml(__('Card Verification Number Visual Reference')) . '\" />';
 ?>
 
 <!-- IFRAME for request to Payment Gateway -->
-<iframe width="0" height="0" id="<?= /* @noescape */ $code ?>-transparent-iframe"
+<iframe width="0" height="0" id="<?= /* @noEscape */ $code ?>-transparent-iframe"
         data-container="<?= /* @noEscape */ $code ?>-transparent-iframe" allowtransparency="true"
-        frameborder="0"  name="iframeTransparent" style="display:none;width:100%;background-color:transparent"
+        frameborder="0"  name="iframeTransparent"
         src="<?= $block->escapeUrl($block->getViewFileUrl('blank.html')) ?>"></iframe>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+    "display: none; width: 100%; background-color: transparent;",
+    'iframe#' . /* @noEscape */ $code . '-transparent-iframe'
+) ?>
 <form class="form" id="co-transparent-form" action="#" method="post" data-mage-init='{
     "transparent":{
         "controller":"<?= $block->escapeHtml($block->getRequest()->getControllerName()) ?>",
@@ -29,7 +33,9 @@ $content = '<img src=\"' . $block->getViewFileUrl('Magento_Checkout::cvv.png') .
         "cgiUrl":"<?= $block->escapeUrl($block->getCgiUrl()) ?>",
         "dateDelim":"<?= $block->escapeHtml($block->getDateDelim()) ?>",
         "cardFieldsMap":<?= $block->escapeHtml($block->getCardFieldsMap()) ?>,
-        "nativeAction":"<?= $block->escapeUrl($block->getUrl('checkout/onepage/saveOrder', ['_secure' => $block->getRequest()->isSecure()])) ?>"
+        "nativeAction":"<?= $block->escapeUrl(
+            $block->getUrl('checkout/onepage/saveOrder', ['_secure' => $block->getRequest()->isSecure()])
+        ) ?>"
     }, "validation":[]}'>
     <fieldset class="fieldset ccard <?= /* @noEscape */ $code ?>" id="payment_form_<?= /* @noEscape */ $code ?>">
         <legend class="legend">

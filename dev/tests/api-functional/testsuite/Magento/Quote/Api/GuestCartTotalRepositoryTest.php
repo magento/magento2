@@ -30,7 +30,7 @@ class GuestCartTotalRepositoryTest extends WebapiAbstract
      */
     private $filterBuilder;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->searchCriteriaBuilder = $this->objectManager->create(
@@ -108,11 +108,12 @@ class GuestCartTotalRepositoryTest extends WebapiAbstract
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage No such entity
      */
     public function testGetTotalsWithAbsentQuote()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('No such entity');
+
         $cartId = 'unknownCart';
         $requestData = ['cartId' => $cartId];
         $this->_webApiCall($this->getServiceInfoForTotalsService($cartId), $requestData);

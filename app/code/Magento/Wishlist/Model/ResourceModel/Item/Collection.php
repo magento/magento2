@@ -6,7 +6,12 @@
 namespace Magento\Wishlist\Model\ResourceModel\Item;
 
 use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
+use Magento\CatalogInventory\Model\Stock;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
+use Magento\Sales\Model\ConfigInterface;
+use Magento\Wishlist\Model\ResourceModel\Item\Product\CollectionBuilderInterface;
 
 /**
  * Wishlist item collection
@@ -145,6 +150,20 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
     protected $metadataPool;
 
     /**
+     * @var TableMaintainer
+     */
+    private $tableMaintainer;
+
+    /**
+     * @var ConfigInterface
+     */
+    private $salesConfig;
+    /**
+     * @var CollectionBuilderInterface
+     */
+    private $productCollectionBuilder;
+
+    /**
      * @param \Magento\Framework\Data\Collection\EntityFactory $entityFactory
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Framework\Data\Collection\Db\FetchStrategyInterface $fetchStrategy
@@ -163,7 +182,9 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
      * @param \Magento\Wishlist\Model\ResourceModel\Item $resource
      * @param \Magento\Framework\App\State $appState
      * @param \Magento\Framework\DB\Adapter\AdapterInterface $connection
-     *
+     * @param TableMaintainer|null $tableMaintainer
+     * @param ConfigInterface|null $salesConfig
+     * @param CollectionBuilderInterface|null $productCollectionBuilder
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -184,7 +205,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Catalog\Model\Entity\AttributeFactory $catalogAttrFactory,
         \Magento\Wishlist\Model\ResourceModel\Item $resource,
         \Magento\Framework\App\State $appState,
-        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null
+        \Magento\Framework\DB\Adapter\AdapterInterface $connection = null,
+        TableMaintainer $tableMaintainer = null,
+        ConfigInterface $salesConfig = null,
+        ?CollectionBuilderInterface $productCollectionBuilder = null
     ) {
         $this->stockConfiguration = $stockConfiguration;
         $this->_adminhtmlSales = $adminhtmlSales;
@@ -199,6 +223,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         $this->_catalogAttrFactory = $catalogAttrFactory;
         $this->_appState = $appState;
         parent::__construct($entityFactory, $logger, $fetchStrategy, $eventManager, $connection, $resource);
+        $this->tableMaintainer = $tableMaintainer ?: ObjectManager::getInstance()->get(TableMaintainer::class);
+        $this->salesConfig = $salesConfig ?: ObjectManager::getInstance()->get(ConfigInterface::class);
+        $this->productCollectionBuilder = $productCollectionBuilder
+            ?: ObjectManager::getInstance()->get(CollectionBuilderInterface::class);
     }
 
     /**
@@ -289,12 +317,10 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             $productCollection->setVisibility($this->_productVisibility->getVisibleInSiteIds());
         }
 
-        $productCollection->addPriceData()
-            ->addTaxPercents()
-            ->addIdFilter($this->_productIds)
-            ->addAttributeToSelect($this->_wishlistConfig->getProductAttributes())
-            ->addOptionsToResult()
-            ->addUrlRewrite();
+        $productCollection->addIdFilter($this->_productIds)
+            ->addAttributeToSelect($this->_wishlistConfig->getProductAttributes());
+
+        $productCollection = $this->productCollectionBuilder->build($this, $productCollection);
 
         if ($this->_productSalable) {
             $productCollection = $this->_adminhtmlSales->applySalableProductTypesFilter($productCollection);
@@ -328,6 +354,54 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
         \Magento\Framework\Profiler::stop('WISHLIST:' . __METHOD__);
 
         return $this;
+    }
+
+    /**
+     * @inheritdoc
+     * @since 101.1.3
+     */
+    protected function _renderFiltersBefore()
+    {
+        parent::_renderFiltersBefore();
+
+        $mainTableName = 'main_table';
+        $connection = $this->getConnection();
+
+        if ($this->_productInStock && !$this->stockConfiguration->isShowOutOfStock()) {
+            $inStockConditions = [
+                "stockItem.product_id =  {$mainTableName}.product_id",
+                $connection->quoteInto('stockItem.stock_status = ?', Stock::STOCK_IN_STOCK),
+            ];
+            $this->getSelect()->join(
+                ['stockItem' => $this->getTable('cataloginventory_stock_status')],
+                join(' AND ', $inStockConditions),
+                []
+            );
+        }
+
+        if ($this->_productVisible) {
+            $rootCategoryId = $this->_storeManager->getStore()->getRootCategoryId();
+            $visibleInSiteIds = $this->_productVisibility->getVisibleInSiteIds();
+            $visibilityConditions = [
+                "cat_index.product_id = {$mainTableName}.product_id",
+                $connection->quoteInto('cat_index.category_id = ?', $rootCategoryId),
+                $connection->quoteInto('cat_index.visibility IN (?)', $visibleInSiteIds)
+            ];
+            $this->getSelect()->join(
+                ['cat_index' => $this->tableMaintainer->getMainTable($this->_storeManager->getStore()->getId())],
+                join(' AND ', $visibilityConditions),
+                []
+            );
+        }
+
+        if ($this->_productSalable) {
+            $availableProductTypes = $this->salesConfig->getAvailableProductTypes();
+            $this->getSelect()->join(
+                ['cat_prod' => $this->getTable('catalog_product_entity')],
+                $this->getConnection()->quoteInto('cat_prod.type_id IN (?)', $availableProductTypes),
+                []
+            );
+        }
     }
 
     /**
@@ -508,10 +582,15 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             $storeId = $this->_storeManager->getStore(\Magento\Store\Model\Store::ADMIN_CODE)->getId();
 
             $entityMetadata = $this->getMetadataPool()->getMetadata(ProductInterface::class);
+            $linkField = $entityMetadata->getLinkField();
 
             $this->getSelect()->join(
+                ['product_entity' => $this->getTable('catalog_product_entity')],
+                'product_entity.entity_id = main_table.product_id',
+                []
+            )->join(
                 ['product_name_table' => $attribute->getBackendTable()],
-                'product_name_table.' . $entityMetadata->getLinkField() . ' = main_table.product_id' .
+                'product_name_table.' . $linkField . ' = product_entity.' . $linkField .
                 ' AND product_name_table.store_id = ' .
                 $storeId .
                 ' AND product_name_table.attribute_id = ' .
@@ -521,6 +600,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
 
             $this->_isProductNameJoined = true;
         }
+
         return $this;
     }
 

@@ -15,7 +15,7 @@
             <title value="Admin should be able to sell products with different variants of their own"/>
             <description value="Admin should be able to sell products with different variants of their own"/>
             <severity value="CRITICAL"/>
-            <testCaseId value="MAGETWO-58184"/>
+            <testCaseId value="MC-16476"/>
             <group value="product"/>
         </annotations>
 
@@ -32,7 +32,7 @@
                 <field key="price">100</field>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
             <!--Create storeView 1-->
 
@@ -52,10 +52,6 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
 
-            <!-- Reset Product filter -->
-
-            <actionGroup ref="ClearProductsFilterActionGroup" stepKey="clearProductsFilter"/>
-
             <!-- Delete Store View EN -->
 
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView1">
@@ -67,19 +63,27 @@
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView2">
                 <argument name="customStore" value="customStoreFR"/>
             </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearWebsitesGridFilters"/>
+
+            <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFilter"/>
+
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
         </after>
 
         <!-- Open Product Grid, Filter product and open -->
 
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="filterGroupedProductOptions">
             <argument name="product" value="_defaultProduct"/>
         </actionGroup>
 
-        <click selector="{{AdminProductGridSection.productGridXRowYColumnButton('1', '2')}}" stepKey="openProductForEdit"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad2"/>
+        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProductPage">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
 
         <!-- Update Product with Option Value DropDown 1-->
         <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses2"/>
@@ -98,18 +102,15 @@
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Custom Options 1', '1')}}" userInput="option2" stepKey="fillOptionValueTitle2"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice('Custom Options 1', '1')}}" userInput="50" stepKey="fillOptionValuePrice2"/>
         <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType('Custom Options 1', '1')}}" userInput="percent" stepKey="clickSelectPriceType"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton1"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton1"/>
 
         <!-- Switcher to Store FR-->
-        <scrollToTopOfPage stepKey="scrollToTopOfPage1"/>
-
-        <click selector="{{AdminProductFormActionSection.changeStoreButton}}" stepKey="clickStoreSwitcher"/>
-        <click selector="{{AdminProductFormActionSection.selectStoreView(customStoreFR.name)}}" stepKey="clickStoreView"/>
-        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="acceptMessage"/>
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToStoreFR">
+            <argument name="storeView" value="customStoreFR.name"/>
+        </actionGroup>
 
         <!-- Open tab Customizable Options -->
 
-        <waitForPageLoad time="10" stepKey="waitForPageLoad4"/>
         <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses3"/>
 
         <!-- Update Option Customizable Options and Option Value 1-->
@@ -125,15 +126,13 @@
         <click selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('1')}}" stepKey="clickHiddenRequireMessage"/>
         <uncheckOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('1')}}" stepKey="uncheckUseDefaultOptionValueTitle2"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('FR Custom Options 1', '1')}}" userInput="FR option2" stepKey="fillOptionValueTitle4"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton2"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton2"/>
 
         <!-- Login Customer Storefront -->
 
-        <amOnPage url="{{StorefrontCustomerSignInPage.url}}" stepKey="amOnSignInPage"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad6"/>
-        <fillField  userInput="$$createCustomer.email$$" selector="{{StorefrontCustomerSignInFormSection.emailField}}" stepKey="fillEmail"/>
-        <fillField  userInput="$$createCustomer.password$$" selector="{{StorefrontCustomerSignInFormSection.passwordField}}" stepKey="fillPassword"/>
-        <click selector="{{StorefrontCustomerSignInFormSection.signInAccountButton}}" stepKey="clickSignInAccountButton"/>
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$createCustomer$$" />
+        </actionGroup>
 
         <!-- Go to Product Page -->
 
@@ -176,26 +175,29 @@
 
         <conditionalClick selector="{{CheckoutPaymentSection.productOptionsByProductItemPrice('150')}}" dependentSelector="{{CheckoutPaymentSection.productOptionsActiveByProductItemPrice('150')}}" visible="false" stepKey="exposeProductOptions1"/>
         <see selector="{{CheckoutPaymentSection.productOptionsActiveByProductItemPrice('150')}}" userInput="option2" stepKey="seeProductOptionValueDropdown1Input2"/>
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad8"/>
 
         <!-- Place Order -->
 
-        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder1"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder"/>
+        <!--Select shipping method-->
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
+        <!--Select payment method-->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+        <!-- Place Order -->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="customerPlaceOrder">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
 
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderNumber"/>
 
         <!-- Open Order -->
 
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="onOrdersPage"/>
-        <waitForPageLoad stepKey="waitForPageLoadOrdersPage"/>
-        <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clearFilters" />
-        <fillField selector="{{AdminOrdersGridSection.search}}" userInput="{$grabOrderNumber}" stepKey="fillOrderNum"/>
-        <click selector="{{AdminOrdersGridSection.submitSearch}}" stepKey="submitSearchOrderNum"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappearOnSearch"/>
-        <click selector="{{AdminOrdersGridSection.firstRow}}" stepKey="clickOrderRow"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad10"/>
+        <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="openOrdersGrid">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
 
         <!-- Checking the correctness of displayed custom options for user parameters on Order -->
 
@@ -204,15 +206,13 @@
 
         <!-- Switch to FR Store View Storefront -->
 
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnProduct4Page"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad11"/>
-        <click selector="{{StorefrontHeaderSection.storeViewSwitcher}}" stepKey="clickStoreViewSwitcher1"/>
-        <waitForElementVisible selector="{{StorefrontHeaderSection.storeViewDropdown}}" stepKey="waitForStoreViewDropdown1"/>
-        <click selector="{{StorefrontHeaderSection.storeViewOption(customStoreFR.code)}}" stepKey="selectStoreView1"/>
-        <waitForPageLoad stepKey="waitForPageLoad12"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnProduct4Page"/>
 
-        <amOnPage url="{{StorefrontHomePage.url}}$$createProduct.custom_attributes[url_key]$$.html" stepKey="amOnProduct2Page"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad13"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchStore">
+            <argument name="storeView" value="customStoreFR"/>
+        </actionGroup>
+
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnProduct2Page"/>
 
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownTitle('FR Custom Options 1')}}" stepKey="seeProductFrOptionDropDownTitle"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownOptionTitle('FR Custom Options 1', 'FR option1')}}" stepKey="productFrOptionDropDownOptionTitle1"/>
@@ -250,18 +250,24 @@
 
         <conditionalClick selector="{{CheckoutPaymentSection.productOptionsByProductItemPrice('150')}}" dependentSelector="{{CheckoutPaymentSection.productOptionsActiveByProductItemPrice('150')}}" visible="false" stepKey="exposeProductOptions3"/>
         <see selector="{{CheckoutPaymentSection.productOptionsActiveByProductItemPrice('150')}}" userInput="FR option2" stepKey="seeProductFrOptionValueDropdown1Input3"/>
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad14"/>
 
         <!-- Place Order -->
 
-        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyOrder2"/>
-        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrder1"/>
+        <!--Select shipping method-->
+        <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod2"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext2"/>
+
+        <!--Select payment method-->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod2"/>
+        <!-- Place Order -->
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="customerPlaceOrder2">
+            <argument name="orderNumberMessage" value="CONST.successCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
 
         <!-- Open Product Grid, Filter product and open -->
 
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad15"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage1"/>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="filterGroupedProductOptions1">
             <argument name="product" value="_defaultProduct"/>
@@ -292,12 +298,11 @@
 
         <waitForPageLoad time="30" stepKey="waitForPageLoad19"/>
         <checkOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('1')}}" stepKey="checkUseDefaultOptionValueTitle2"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton3"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton3"/>
 
         <!--Go to Product Page-->
 
-        <amOnPage url="{{StorefrontHomePage.url}}$$createProduct.custom_attributes[url_key]$$.html" stepKey="amOnProduct2Page2"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad20"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnProduct2Page2"/>
 
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownTitle('Custom Options 1')}}" stepKey="seeProductOptionDropDownTitle1"/>
         <seeElement selector="{{StorefrontProductInfoMainSection.productOptionDropDownOptionTitle('Custom Options 1', 'option1')}}" stepKey="seeProductOptionDropDownOptionTitle3"/>

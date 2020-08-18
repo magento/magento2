@@ -9,7 +9,6 @@
     <module name="Magento_GraphQl" >
         <sequence>
             <module name="Magento_Authorization"/>
-            <module name="Magento_Store"/>
             <module name="Magento_Eav"/>
         </sequence>
     </module>

@@ -50,7 +50,7 @@ class Compare
         if (is_string($value) && $this->jsonValidator->isValid($value)) {
             $value = $this->serializer->unserialize($value);
             if (is_array($value)) {
-                unset($value['qty'], $value['uenc']);
+                unset($value['qty'], $value['uenc'], $value['related_product'], $value['item']);
                 $value = array_filter($value, function ($optionValue) {
                     return !empty($optionValue);
                 });
@@ -71,17 +71,14 @@ class Compare
         if ($target->getProductId() != $compared->getProductId()) {
             return false;
         }
-        $targetOptions = $this->getOptions($target);
-        $comparedOptions = $this->getOptions($compared);
 
-        if (array_diff_key($targetOptions, $comparedOptions) != array_diff_key($comparedOptions, $targetOptions)
-        ) {
+        $targetOptionByCode = $target->getOptionsByCode();
+        $comparedOptionsByCode = $compared->getOptionsByCode();
+        if (!$target->compareOptions($targetOptionByCode, $comparedOptionsByCode)) {
             return false;
         }
-        foreach ($targetOptions as $name => $value) {
-            if ($comparedOptions[$name] != $value) {
-                return false;
-            }
+        if (!$target->compareOptions($comparedOptionsByCode, $targetOptionByCode)) {
+            return false;
         }
         return true;
     }

@@ -29,7 +29,7 @@
             <deleteData createDataKey="createPreReqSimpleProduct" stepKey="deletePreReqSimpleProduct"/>
         </after>
         <!--Step1. Login as admin. Go to Catalog > Products page. Filtering *prod1*. Open *prod1* to edit-->
-        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin" />
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin" />
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="filterGroupedProductOptions">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
@@ -37,11 +37,11 @@
                stepKey="clickOpenProductForEdit"/>
         <waitForPageLoad time="30" stepKey="waitForProductEditOpen"/>
         <!--Step2. Open *Advanced Inventory* pop-up (Click on *Advanced Inventory* link). Set *Qty Uses Decimals* to *Yes*. Click on button *Done*  -->
-        <click selector="{{AdminProductFormSection.advancedInventoryLink}}" stepKey="clickOnAdvancedInventoryLink"/>
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink"/>
         <scrollTo selector="{{AdminProductFormAdvancedInventorySection.qtyUsesDecimals}}" stepKey="scrollToQtyUsesDecimalsDropBox"/>
         <click selector="{{AdminProductFormAdvancedInventorySection.qtyUsesDecimals}}" stepKey="clickOnQtyUsesDecimalsDropBox"/>
         <click selector="{{AdminProductFormAdvancedInventorySection.qtyUsesDecimalsOptions('1')}}" stepKey="chooseYesOnQtyUsesDecimalsDropBox"/>
-        <click selector="{{AdminProductFormAdvancedInventorySection.doneButton}}" stepKey="clickOnDoneButton"/>
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickOnDoneButton"/>
         <!--Step3. Open *Advanced Pricing* pop-up (Click on *Advanced Pricing* link). Click on *Add* button. Fill *0.5* in *Quantity*-->
         <scrollTo selector="{{AdminProductFormSection.productName}}" stepKey="scrollToProductName"/>
         <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingLink1"/>
@@ -50,7 +50,7 @@
         <fillField selector="{{AdminProductFormAdvancedPricingSection.productTierPriceQtyInput('0')}}" userInput="0.5" stepKey="fillProductTierPriceQty"/>
         <!--Step4. Close *Advanced Pricing* (Click on button *Done*). Save *prod1* (Click on button *Save*)-->
         <click selector="{{AdminProductFormAdvancedPricingSection.doneButton}}" stepKey="clickOnDoneButton2"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
 
         <!--The code should be uncommented after fix MAGETWO-96016-->
         <!--<click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickOnAdvancedPricingLink2"/>-->
@@ -58,8 +58,7 @@
         <!--<click selector="{{AdminProductFormAdvancedPricingSection.advancedPricingCloseButton}}" stepKey="clickOnCloseButton"/>-->
 
         <!--Step5. Open *Advanced Inventory* pop-up. Set *Enable Qty Increments* to *Yes*. Fill *.5* in *Qty Increments*-->
-        <click selector="{{AdminProductFormSection.advancedInventoryLink}}" stepKey="clickOnAdvancedInventoryLink2"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink2"/>
         <scrollTo selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrements}}" stepKey="scrollToEnableQtyIncrements"/>
         <click selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrementsUseConfigSettings}}" stepKey="clickOnEnableQtyIncrementsUseConfigSettingsCheckbox"/>
         <click selector="{{AdminProductFormAdvancedInventorySection.enableQtyIncrements}}" stepKey="clickOnEnableQtyIncrements"/>
@@ -69,8 +68,8 @@
         <scrollTo selector="{{AdminProductFormAdvancedInventorySection.qtyIncrements}}" stepKey="scrollToQtyIncrements"/>
         <fillField selector="{{AdminProductFormAdvancedInventorySection.qtyIncrements}}" userInput=".5" stepKey="fillQtyIncrements"/>
         <!--Step6. Close *Advanced Inventory* (Click on button *Done*). Save *prod1* (Click on button *Save*) -->
-        <click selector="{{AdminProductFormAdvancedInventorySection.doneButton}}" stepKey="clickOnDoneButton3"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickOnSaveButton2"/>
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickOnDoneButton3"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton2"/>
         <!--Step7. Open *Customer view* (Go to *Store Front*). Open *prod1* page (Find via search and click on product name) -->
         <amOnPage url="{{StorefrontHomePage.url}}$$createPreReqSimpleProduct.custom_attributes[url_key]$$.html" stepKey="amOnProductPage"/>
         <!--Step8. Fill *1.5* in *Qty*. Click on button *Add to Cart*-->
@@ -79,7 +78,7 @@
         <waitForElementVisible selector="{{StorefrontProductPageSection.successMsg}}" time="30" stepKey="waitForProductAdded"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createPreReqSimpleProduct.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
         <!--Step9. Click on *Cart* icon. Click on *View and Edit Cart* link. Change *Qty* value to *5.5*-->
-        <actionGroup ref="clickViewAndEditCartFromMiniCart" stepKey="goToShoppingCartFromMinicart"/>
+        <actionGroup ref="ClickViewAndEditCartFromMiniCartActionGroup" stepKey="goToShoppingCartFromMinicart"/>
         <fillField selector="{{CheckoutCartProductSection.ProductQuantityByName(('$$createPreReqSimpleProduct.name$$'))}}" userInput="5.5" stepKey="fillQty2"/>
         <click selector="{{CheckoutCartProductSection.updateShoppingCartButton}}" stepKey="clickOnUpdateShoppingCartButton"/>
         <seeInField userInput="5.5" selector="{{CheckoutCartProductSection.ProductQuantityByName(('$$createPreReqSimpleProduct.name$$'))}}" stepKey="seeInField2"/>

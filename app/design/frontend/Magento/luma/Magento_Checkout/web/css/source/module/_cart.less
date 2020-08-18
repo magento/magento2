@@ -210,7 +210,7 @@
                         height: 36px;
                         margin-top: -7px;
                         text-align: center;
-                        width: 45px;
+                        width: 60px;
                     }
                 }
 
@@ -267,6 +267,10 @@
                     .lib-icon-font-symbol(
                     @_icon-font-content: @icon-trash
                     );
+                    
+                    &:hover {
+                        .lib-css(text-decoration, @link__text-decoration);
+                    }
                 }
             }
 
@@ -420,7 +424,14 @@
     .cart-container {
         .form-cart {
             .actions.main {
-                text-align: center;
+                .lib-vendor-prefix-display();
+                .lib-vendor-prefix-flex-direction(column);
+                .lib-vendor-box-align(center);
+
+                .clear,
+                .continue {
+                    .lib-css(margin, 0 0 @indent__m 0);
+                }
             }
         }
     }
@@ -563,6 +574,10 @@
 
         .widget {
             float: left;
+            
+            &.block {
+                margin-bottom: @indent__base;
+            }
         }
     }
 

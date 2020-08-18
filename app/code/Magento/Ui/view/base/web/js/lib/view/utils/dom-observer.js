@@ -5,7 +5,6 @@
 define([
     'jquery',
     'underscore',
-    'MutationObserver',
     'domReady!'
 ], function ($, _) {
     'use strict';
@@ -141,7 +140,7 @@ define([
     }
 
     /**
-     * Calls handlers assocoiated with an added node.
+     * Calls handlers associated with an added node.
      * Adds listeners for the node removal.
      *
      * @param {HTMLElement} node - Added node.
@@ -163,7 +162,7 @@ define([
     }
 
     /**
-     * Calls handlers assocoiated with a removed node.
+     * Calls handlers associated with a removed node.
      *
      * @param {HTMLElement} node - Removed node.
      */

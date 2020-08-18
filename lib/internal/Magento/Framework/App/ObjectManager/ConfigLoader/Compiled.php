@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,9 +7,10 @@ namespace Magento\Framework\App\ObjectManager\ConfigLoader;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\ObjectManager\ConfigLoaderInterface;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\Serialize\Serializer\Serialize;
 
+/**
+ * Load configuration files
+ */
 class Compiled implements ConfigLoaderInterface
 {
     /**
@@ -21,7 +21,7 @@ class Compiled implements ConfigLoaderInterface
     private $configCache = [];
 
     /**
-     * {inheritdoc}
+     * @inheritdoc
      */
     public function load($area)
     {

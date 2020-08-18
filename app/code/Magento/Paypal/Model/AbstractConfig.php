@@ -58,7 +58,7 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * @var string
      */
-    private static $bnCode = 'Magento_Cart_%s';
+    private static $bnCode = 'Magento_2_%s';
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface
@@ -229,7 +229,7 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * Check whether WPP API credentials are available for this method
      *
-     * @deprecated
+     * @deprecated 100.3.1
      * @return bool
      */
     public function isWppApiAvailabe()
@@ -293,7 +293,7 @@ abstract class AbstractConfig implements ConfigInterface
             case Config::METHOD_WPS_BML:
             case Config::METHOD_WPP_BML:
                 $disabledFunding = $this->_scopeConfig->getValue(
-                    'payment/paypal_express/disable_funding_options',
+                    'paypal/style/disable_funding_options',
                     ScopeInterface::SCOPE_STORE,
                     $this->_storeId
                 );

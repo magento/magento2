@@ -5,6 +5,11 @@
  */
 namespace Magento\Sales\Block\Adminhtml;
 
+use Magento\Framework\DataObject;
+
+/**
+ * Adminhtml sales totals block
+ */
 class Totals extends \Magento\Sales\Block\Order\Totals
 {
     /**
@@ -52,56 +57,65 @@ class Totals extends \Magento\Sales\Block\Order\Totals
     protected function _initTotals()
     {
         $this->_totals = [];
-        $this->_totals['subtotal'] = new \Magento\Framework\DataObject(
+        $order = $this->getSource();
+
+        $this->_totals['subtotal'] = new DataObject(
             [
                 'code' => 'subtotal',
-                'value' => $this->getSource()->getSubtotal(),
-                'base_value' => $this->getSource()->getBaseSubtotal(),
+                'value' => $order->getSubtotal(),
+                'base_value' => $order->getBaseSubtotal(),
                 'label' => __('Subtotal'),
             ]
         );
 
         /**
-         * Add shipping
-         */
-        if (!$this->getSource()->getIsVirtual() && ((double)$this->getSource()->getShippingAmount() ||
-            $this->getSource()->getShippingDescription())
-        ) {
-            $this->_totals['shipping'] = new \Magento\Framework\DataObject(
-                [
-                    'code' => 'shipping',
-                    'value' => $this->getSource()->getShippingAmount(),
-                    'base_value' => $this->getSource()->getBaseShippingAmount(),
-                    'label' => __('Shipping & Handling'),
-                ]
-            );
-        }
-
-        /**
          * Add discount
          */
-        if ((double)$this->getSource()->getDiscountAmount() != 0) {
-            if ($this->getSource()->getDiscountDescription()) {
-                $discountLabel = __('Discount (%1)', $this->getSource()->getDiscountDescription());
+        if ((double)$order->getDiscountAmount() != 0) {
+            if ($order->getDiscountDescription()) {
+                $discountLabel = __('Discount (%1)', $order->getDiscountDescription());
             } else {
                 $discountLabel = __('Discount');
             }
-            $this->_totals['discount'] = new \Magento\Framework\DataObject(
+            $this->_totals['discount'] = new DataObject(
                 [
                     'code' => 'discount',
-                    'value' => $this->getSource()->getDiscountAmount(),
-                    'base_value' => $this->getSource()->getBaseDiscountAmount(),
+                    'value' => $order->getDiscountAmount(),
+                    'base_value' => $order->getBaseDiscountAmount(),
                     'label' => $discountLabel,
                 ]
             );
         }
 
-        $this->_totals['grand_total'] = new \Magento\Framework\DataObject(
+        /**
+         * Add shipping
+         */
+        if (!$order->getIsVirtual()
+            && ((double)$order->getShippingAmount()
+            || $order->getShippingDescription())
+        ) {
+            $shippingLabel = __('Shipping & Handling');
+
+            if ($order->getCouponCode() && !isset($this->_totals['discount'])) {
+                $shippingLabel .= " ({$order->getCouponCode()})";
+            }
+
+            $this->_totals['shipping'] = new DataObject(
+                [
+                    'code' => 'shipping',
+                    'value' => $order->getShippingAmount(),
+                    'base_value' => $order->getBaseShippingAmount(),
+                    'label' => $shippingLabel,
+                ]
+            );
+        }
+
+        $this->_totals['grand_total'] = new DataObject(
             [
                 'code' => 'grand_total',
                 'strong' => true,
-                'value' => $this->getSource()->getGrandTotal(),
-                'base_value' => $this->getSource()->getBaseGrandTotal(),
+                'value' => $order->getGrandTotal(),
+                'base_value' => $order->getBaseGrandTotal(),
                 'label' => __('Grand Total'),
                 'area' => 'footer',
             ]

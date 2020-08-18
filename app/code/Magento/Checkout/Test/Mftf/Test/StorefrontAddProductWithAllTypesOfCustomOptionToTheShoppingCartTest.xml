@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAddProductWithAllTypesOfCustomOptionToTheShoppingCartTest">
+        <annotations>
+            <stories value="Shopping Cart"/>
+            <title value="Create a simple products with all types of oprtions and add it to the cart"/>
+            <description value="Create a simple products with all types of oprtions and add it to the cart"/>
+            <testCaseId value="MC-14726"/>
+            <severity value="BLOCKER"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <updateData createDataKey="createProduct" entity="productWithOptions" stepKey="updateProductWithCustomOptions"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData  createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData  createDataKey="createProduct" stepKey="deleteProduct"/>
+        </after>
+        <!-- Open Product page in StoreFront -->
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProduct1PageAndVerifyProduct">
+            <argument name="product" value="$$createProduct$$"/>
+        </actionGroup>
+
+        <!-- Fill Option Input field -->
+        <actionGroup ref="StorefrontFillOptionFieldInputActionGroup" stepKey="fillTheOptionFieldInput">
+            <argument name="fieldInput" value="1"/>
+        </actionGroup>
+
+        <!-- Fill Option Text Area -->
+        <actionGroup ref="StorefrontFillOptionTextAreaActionGroup" stepKey="fillTheOptionTextAreaInput">
+            <argument name="fieldInput" value="1"/>
+        </actionGroup>
+
+        <!-- Attach file option-->
+        <actionGroup ref="StorefrontAttachOptionFileActionGroup" stepKey="selectAndAttachFile"/>
+
+        <!--Select Option From DropDown option -->
+        <actionGroup ref="StorefrontProductPageSelectDropDownOptionValueActionGroup" stepKey="selectFirstOption">
+            <argument name="attributeLabel" value="{{ProductOptionDropDown.title}}"/>
+            <argument name="optionLabel" value="{{ProductOptionValueDropdown2.title}}"/>
+        </actionGroup>
+        <scrollTo selector="{{StorefrontProductInfoMainSection.customOptionLabel(ProductOptionMultiSelect.title)}}" stepKey="scrollToMultiSelect"/>
+
+        <!-- Select CheckBox From CheckBox option -->
+        <actionGroup ref="StorefrontSelectOptionCheckBoxActionGroup" stepKey="selectCheckBoxOption"/>
+
+        <!-- Select RadioButton From Radio Button option -->
+        <actionGroup ref="StorefrontSelectOptionRadioButtonActionGroup" stepKey="selectRadioButtonOption"/>
+
+        <!-- Select option From MultiSelect option -->
+        <actionGroup ref="StorefrontSelectOptionMultiSelectActionGroup" stepKey="selectOptionFromMultiSelect"/>
+
+        <!-- Generate Date -->
+        <generateDate date="Now" format="Y" stepKey="year"/>
+
+        <!-- Select Month,Day and Year  From Date option -->
+        <actionGroup ref="StorefrontSelectOptionDateActionGroup" stepKey="fillOptionDate">
+            <argument name="month" value="11"/>
+            <argument name="day" value="10"/>
+            <argument name="year" value="$year"/>
+        </actionGroup>
+
+        <!-- Select Month, Day, Year, Hour,Minute and DayPart from DateTime option -->
+        <actionGroup ref="StorefrontSelectOptionDateTimeActionGroup" stepKey="fillOptionDateAndTime">
+            <argument name="month" value="11"/>
+            <argument name="day" value="10"/>
+            <argument name="year" value="$year"/>
+            <argument name="hour" value="10"/>
+            <argument name="minute" value="20"/>
+            <argument name="dayPart" value="AM"/>
+        </actionGroup>
+
+        <!-- Select Hour,Minute and DayPart from Time option -->
+        <actionGroup ref="StorefrontSelectOptionTimeActionGroup" stepKey="fillOptionTime">
+            <argument name="hour" value="10"/>
+            <argument name="minute" value="20"/>
+            <argument name="dayPart" value="AM"/>
+        </actionGroup>
+
+        <!-- Add product to the cart -->
+        <fillField selector="{{StorefrontProductInfoMainSection.qty}}" userInput="2" stepKey="fillQuantity"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToTheCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="productCount" value="2"/>
+        </actionGroup>
+
+        <!-- Open Mini Cart -->
+        <actionGroup ref="StorefrontOpenMiniCartActionGroup" stepKey="openMiniCart"/>
+
+        <!-- Assert Product Count in Mini Cart -->
+        <actionGroup ref="StorefrontAssertMiniCartItemCountActionGroup" stepKey="assertProductCountAndTextInMiniCart">
+            <argument name="productCount" value="2"/>
+            <argument name="productCountText" value="2 Item in Cart"/>
+        </actionGroup>
+
+        <!--Assert Product Items in Mini cart-->
+        <actionGroup ref="AssertStorefrontMiniCartItemsActionGroup" stepKey="assertSimpleProduct3MiniCart">
+            <argument name="productName" value="$$createProduct.name$$"/>
+            <argument name="productPrice" value="$1,642.58"/>
+            <argument name="cartSubtotal" value="$3,285.16" />
+            <argument name="qty" value="2"/>
+        </actionGroup>
+    </test>
+</tests>

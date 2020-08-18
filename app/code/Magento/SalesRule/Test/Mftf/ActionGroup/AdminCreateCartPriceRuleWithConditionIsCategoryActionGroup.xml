@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminCreateCartPriceRuleWithConditionIsCategoryActionGroup" extends="AdminCreateCartPriceRuleActionGroup">
+        <annotations>
+            <description>EXTENDS: AdminCreateCartPriceRuleActionGroup. Sets the provide Condition (Actions Aggregator/Value, Child Attribute and Action Value) for Actions on the Admin Cart Price Rule creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="actionsAggregator" type="string" defaultValue="ANY"/>
+            <argument name="actionsValue" type="string" defaultValue="FALSE"/>
+            <argument name="childAttribute" type="string" defaultValue="Category"/>
+            <argument name="actionValue" type="string" defaultValue="2"/>
+        </arguments>
+        <click selector="{{AdminCartPriceRulesFormSection.actionsHeader}}" after="fillDiscountAmount" stepKey="clickOnActionTab"/>
+        <click selector="{{AdminCartPriceRulesFormSection.condition('ALL')}}" after="clickOnActionTab" stepKey="clickToChooseFirstRuleConditionValue"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.actionsAggregator}}" userInput="{{actionsAggregator}}" after="clickToChooseFirstRuleConditionValue" stepKey="changeFirstRuleConditionValue"/>
+        <click selector="{{AdminCartPriceRulesFormSection.condition('TRUE')}}" after="changeFirstRuleConditionValue" stepKey="clickToChooseSecondRuleConditionValue"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.actionsValue}}" userInput="{{actionsValue}}" after="clickToChooseSecondRuleConditionValue" stepKey="changeSecondRuleConditionValue"/>
+        <click selector="{{AdminCartPriceRulesFormSection.conditions}}" after="changeSecondRuleConditionValue" stepKey="clickConditionDropDownMenu"/>
+        <waitForPageLoad stepKey="waitForDropDownOpened"/>
+        <selectOption selector="{{AdminCartPriceRulesFormSection.childAttribute}}" userInput="{{childAttribute}}" after="clickConditionDropDownMenu" stepKey="selectConditionAttributeIsCategory"/>
+        <waitForPageLoad after="selectConditionAttributeIsCategory" stepKey="waitForOperatorOpened"/>
+        <click selector="{{AdminCartPriceRulesFormSection.condition('...')}}" after="waitForOperatorOpened" stepKey="clickToChooserIcon"/>
+        <fillField selector="{{AdminCartPriceRulesFormSection.actionValue}}" userInput="{{actionValue}}" after="clickToChooserIcon" stepKey="choseNeededCategoryFromCategoryGrid"/>
+        <click selector="{{AdminCartPriceRulesFormSection.applyAction}}" after="choseNeededCategoryFromCategoryGrid" stepKey="applyAction"/>
+    </actionGroup>
+</actionGroups>

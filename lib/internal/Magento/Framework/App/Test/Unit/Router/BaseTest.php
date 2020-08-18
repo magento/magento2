@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Tests Magento\Framework\App\Router\Base
  *
@@ -7,59 +7,77 @@
  */
 namespace Magento\Framework\App\Test\Unit\Router;
 
-class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
+use Magento\Framework\App\Action\Action;
+use Magento\Framework\App\ActionFactory;
+use Magento\Framework\App\DefaultPathInterface;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Route\ConfigInterface;
+use Magento\Framework\App\Router\ActionList;
+use Magento\Framework\App\Router\Base;
+use Magento\Framework\App\State;
+use Magento\Framework\Code\NameBuilder;
+use Magento\Framework\TestFramework\Unit\BaseTestCase;
+use PHPUnit\Framework\MockObject\MockObject;
+
+/**
+ * Base router unit test.
+ */
+class BaseTest extends BaseTestCase
 {
     /**
-     * @var \Magento\Framework\App\Router\Base
+     * @var Base
      */
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Request\Http
+     * @var MockObject|Http
      */
     private $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Route\ConfigInterface
+     * @var MockObject|ConfigInterface
      */
     private $routeConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\State
+     * @var MockObject|State
      */
     private $appStateMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Router\ActionList
+     * @var MockObject|ActionList
      */
     private $actionListMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ActionFactory
+     * @var MockObject|ActionFactory
      */
     private $actionFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Code\NameBuilder
+     * @var MockObject|NameBuilder
      */
     private $nameBuilderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\DefaultPathInterface
+     * @var MockObject|DefaultPathInterface
      */
     private $defaultPathMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         // Create mocks
-        $this->requestMock = $this->basicMock(\Magento\Framework\App\Request\Http::class);
-        $this->routeConfigMock = $this->basicMock(\Magento\Framework\App\Route\ConfigInterface::class);
-        $this->appStateMock = $this->createPartialMock(\Magento\Framework\App\State::class, ['isInstalled']);
-        $this->actionListMock = $this->basicMock(\Magento\Framework\App\Router\ActionList::class);
-        $this->actionFactoryMock = $this->basicMock(\Magento\Framework\App\ActionFactory::class);
-        $this->nameBuilderMock = $this->basicMock(\Magento\Framework\Code\NameBuilder::class);
-        $this->defaultPathMock = $this->basicMock(\Magento\Framework\App\DefaultPathInterface::class);
+        $this->requestMock = $this->basicMock(Http::class);
+        $this->routeConfigMock = $this->basicMock(ConfigInterface::class);
+        $this->appStateMock = $this->getMockBuilder(State::class)
+            ->addMethods(['isInstalled'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->actionListMock = $this->basicMock(ActionList::class);
+        $this->actionFactoryMock = $this->basicMock(ActionFactory::class);
+        $this->nameBuilderMock = $this->basicMock(NameBuilder::class);
+        $this->defaultPathMock = $this->basicMock(DefaultPathInterface::class);
 
         // Prepare SUT
         $mocks = [
@@ -70,7 +88,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
             'nameBuilder' => $this->nameBuilderMock,
             'defaultPath' => $this->defaultPathMock,
         ];
-        $this->model = $this->objectManager->getObject(\Magento\Framework\App\Router\Base::class, $mocks);
+        $this->model = $this->objectManager->getObject(Base::class, $mocks);
     }
 
     public function testMatch()
@@ -80,14 +98,16 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         $moduleFrontName = 'module front name';
         $actionPath = 'action path';
         $actionName = 'action name';
-        $actionClassName = \Magento\Framework\App\Action\Action::class;
+        $actionClassName = Action::class;
         $moduleName = 'module name';
         $moduleList = [$moduleName];
+        $paramList = $moduleFrontName . '/' . $actionPath . '/' . $actionName . '/key/val/key2/val2/';
 
         // Stubs
         $this->requestMock->expects($this->any())->method('getModuleName')->willReturn($moduleFrontName);
         $this->requestMock->expects($this->any())->method('getControllerName')->willReturn($actionPath);
         $this->requestMock->expects($this->any())->method('getActionName')->willReturn($actionName);
+        $this->requestMock->expects($this->any())->method('getPathInfo')->willReturn($paramList);
         $this->routeConfigMock->expects($this->any())->method('getModulesByFrontName')->willReturn($moduleList);
         $this->appStateMock->expects($this->any())->method('isInstalled')->willReturn(true);
         $this->actionListMock->expects($this->any())->method('get')->willReturn($actionClassName);
@@ -109,7 +129,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         $moduleFrontName = 'module front name';
         $actionPath = 'action path';
         $actionName = 'action name';
-        $actionClassName = \Magento\Framework\App\Action\Action::class;
+        $actionClassName = Action::class;
         $moduleName = 'module name';
         $moduleList = [$moduleName];
         $paramList = $moduleFrontName . '/' . $actionPath . '/' . $actionName . '/key/val/key2/val2/';
@@ -137,9 +157,10 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         $moduleFrontName = 'module front name';
         $actionPath = 'action path';
         $actionName = 'action name';
-        $actionClassName = \Magento\Framework\App\Action\Action::class;
+        $actionClassName = Action::class;
         $moduleName = 'module name';
         $moduleList = [$moduleName];
+        $paramList = $moduleFrontName . '/' . $actionPath . '/' . $actionName . '/key/val/key2/val2/';
 
         // Stubs
         $defaultReturnMap = [
@@ -147,6 +168,7 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
             ['controller', $actionPath],
             ['action', $actionName],
         ];
+        $this->requestMock->expects($this->any())->method('getPathInfo')->willReturn($paramList);
         $this->defaultPathMock->expects($this->any())->method('getPart')->willReturnMap($defaultReturnMap);
         $this->routeConfigMock->expects($this->any())->method('getModulesByFrontName')->willReturn($moduleList);
         $this->appStateMock->expects($this->any())->method('isInstalled')->willReturn(false);
@@ -169,11 +191,13 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         $moduleFrontName = 'module front name';
         $actionPath = 'action path';
         $actionName = 'action name';
-        $actionClassName = \Magento\Framework\App\Action\Action::class;
+        $actionClassName = Action::class;
         $emptyModuleList = [];
+        $paramList = $moduleFrontName . '/' . $actionPath . '/' . $actionName . '/key/val/key2/val2/';
 
         // Stubs
         $this->requestMock->expects($this->any())->method('getModuleName')->willReturn($moduleFrontName);
+        $this->requestMock->expects($this->any())->method('getPathInfo')->willReturn($paramList);
         $this->routeConfigMock->expects($this->any())->method('getModulesByFrontName')->willReturn($emptyModuleList);
         $this->requestMock->expects($this->any())->method('getControllerName')->willReturn($actionPath);
         $this->requestMock->expects($this->any())->method('getActionName')->willReturn($actionName);
@@ -192,12 +216,14 @@ class BaseTest extends \Magento\Framework\TestFramework\Unit\BaseTestCase
         $moduleFrontName = 'module front name';
         $actionPath = 'action path';
         $actionName = 'action name';
-        $actionClassName = \Magento\Framework\App\Action\Action::class;
+        $actionClassName = Action::class;
         $moduleName = 'module name';
         $moduleList = [$moduleName];
+        $paramList = $moduleFrontName . '/' . $actionPath . '/' . $actionName . '/key/val/key2/val2/';
 
         // Stubs
         $this->requestMock->expects($this->any())->method('getModuleName')->willReturn($moduleFrontName);
+        $this->requestMock->expects($this->any())->method('getPathInfo')->willReturn($paramList);
         $this->routeConfigMock->expects($this->any())->method('getModulesByFrontName')->willReturn($moduleList);
         $this->requestMock->expects($this->any())->method('getControllerName')->willReturn($actionPath);
         $this->requestMock->expects($this->any())->method('getActionName')->willReturn($actionName);

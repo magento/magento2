@@ -16,11 +16,23 @@
 
     <div class="admin__field-control" data-role="grid-wrapper">
         <div class="admin__control-table-pagination" visible="!!$data.getRecordCount()">
-            <div class="admin__data-grid-pager">
-                <button class="action-previous" type="button" data-bind="attr: {title: $t('Previous Page')}, click: previousPage, disable: isFirst()"></button>
-                <input class="admin__control-text" type="number" data-bind="attr: {id: ++ko.uid}, value: currentPage">
-                <label class="admin__control-support-text" data-bind="attr: {for: ko.uid}, text: 'of ' + pages()"></label>
-                <button class="action-next" type="button" data-bind="attr: {title: $t('Next Page')}, click: nextPage, disable: isLast()"></button>
+            <div class="admin__data-grid-pager-wrap">
+                <select class="admin__control-select" data-bind="value:pageSize, event:{change: reload}">
+                    <option value="5">5</option>
+                    <option value="20" selected="selected">20</option>
+                    <option value="30">30</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                    <option value="200">200</option>
+                    <option value="500">500</option>
+                </select>
+                <label class="admin__control-support-text" data-bind="text: $t('per page')"></label>
+                <div class="admin__data-grid-pager">
+                    <button class="action-previous" type="button" data-bind="attr: {title: $t('Previous Page')}, click: previousPage, disable: isFirst()"></button>
+                    <input class="admin__control-text" type="number" data-bind="attr: {id: ++ko.uid}, value: currentPage">
+                    <label class="admin__control-support-text" data-bind="attr: {for: ko.uid}, text: 'of ' + pages()"></label>
+                    <button class="action-next" type="button" data-bind="attr: {title: $t('Next Page')}, click: nextPage, disable: isLast()"></button>
+                </div>
             </div>
         </div>
 

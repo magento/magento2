@@ -18,5 +18,6 @@
         <element name="clearAll" type="button" selector=".admin__data-grid-header .action-tertiary.action-clear" timeout="30"/>
         <element name="viewDropdown" type="button" selector=".admin__data-grid-action-bookmarks button.admin__action-dropdown"/>
         <element name="viewBookmark" type="button" selector="//div[contains(@class, 'admin__data-grid-action-bookmarks')]/ul/li/div/a[text() = '{{label}}']" parameterized="true" timeout="30"/>
+        <element name="countryOptions" type="button" selector=".admin__data-grid-filters select[name=billing_country_id] option"/>
     </section>
 </sections>

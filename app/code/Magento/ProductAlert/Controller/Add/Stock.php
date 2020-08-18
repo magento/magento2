@@ -6,7 +6,7 @@
 
 namespace Magento\ProductAlert\Controller\Add;
 
-use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\ProductAlert\Controller\Add as AddController;
 use Magento\Framework\App\Action\Context;
 use Magento\Customer\Model\Session as CustomerSession;
@@ -19,7 +19,7 @@ use Magento\Store\Model\StoreManagerInterface;
 /**
  * Controller for notifying about stock.
  */
-class Stock extends AddController implements HttpPostActionInterface
+class Stock extends AddController implements HttpGetActionInterface
 {
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
@@ -76,13 +76,13 @@ class Stock extends AddController implements HttpPostActionInterface
                 ->setWebsiteId($store->getWebsiteId())
                 ->setStoreId($store->getId());
             $model->save();
-            $this->messageManager->addSuccess(__('Alert subscription has been saved.'));
+            $this->messageManager->addSuccessMessage(__('Alert subscription has been saved.'));
         } catch (NoSuchEntityException $noEntityException) {
-            $this->messageManager->addError(__('There are not enough parameters.'));
+            $this->messageManager->addErrorMessage(__('There are not enough parameters.'));
             $resultRedirect->setUrl($backUrl);
             return $resultRedirect;
         } catch (\Exception $e) {
-            $this->messageManager->addException(
+            $this->messageManager->addExceptionMessage(
                 $e,
                 __("The alert subscription couldn't update at this time. Please try again later.")
             );

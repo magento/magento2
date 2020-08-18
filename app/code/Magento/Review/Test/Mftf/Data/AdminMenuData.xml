@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="AdminMenuUserContentReviews">
+        <data key="pageTitle">Reviews</data>
+        <data key="title">Reviews</data>
+        <data key="dataUiId">magento-review-catalog-reviews-ratings-reviews-all</data>
+    </entity>
+    <entity name="AdminMenuUserContentPendingReviews">
+        <data key="pageTitle">Pending Reviews</data>
+        <data key="title">Pending Reviews</data>
+        <data key="dataUiId">magento-review-catalog-reviews-ratings-pending</data>
+        <data key="dataActiveClass">_active</data>
+    </entity>
+    <entity name="AdminMenuReportsReviewsByCustomers">
+        <data key="pageTitle">Customer Reviews Report</data>
+        <data key="title">By Customers</data>
+        <data key="dataUiId">magento-review-report-review-customer</data>
+    </entity>
+    <entity name="AdminMenuReportsReviewsByProducts">
+        <data key="pageTitle">Product Reviews Report</data>
+        <data key="title">By Products</data>
+        <data key="dataUiId">magento-review-report-review-product</data>
+    </entity>
+    <entity name="AdminMenuAttributesRating">
+        <data key="pageTitle">Ratings</data>
+        <data key="title">Rating</data>
+        <data key="dataUiId">magento-review-catalog-reviews-ratings-ratings</data>
+    </entity>
+</entities>

@@ -28,7 +28,7 @@ class FormTest extends AbstractController
         $this->prepareRequestData();
         $this->dispatch('sales/guest/view/');
         $content = $this->getResponse()->getBody();
-        $this->assertContains('Order # 100000001', $content);
+        $this->assertStringContainsString('Order # 100000001', $content);
     }
 
     /**
@@ -40,6 +40,7 @@ class FormTest extends AbstractController
     public function testViewOrderAsLoggedIn()
     {
         $this->login(1);
+        $this->getRequest()->setMethod(Request::METHOD_POST);
         $this->dispatch('sales/guest/view/');
         $this->assertRedirect($this->stringContains('sales/order/history/'));
     }
@@ -54,7 +55,7 @@ class FormTest extends AbstractController
     {
         $this->login(1);
         $this->dispatch('sales/guest/form/');
-        $this->assertRedirect($this->stringContains('customer/account'));
+        $this->assertRedirect($this->stringContains('sales/order/history'));
     }
 
     /**

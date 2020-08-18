@@ -18,4 +18,7 @@
         <data key="type">image/png</data>
         <data key="name" unique="prefix">magento-logo.png</data>
     </entity>
+    <entity name="MagentoLogoImageContentExportImport" extends="MagentoLogoImageContent" type="ImageContent">
+        <data key="name">magento-logo.png</data>
+    </entity>
 </entities>

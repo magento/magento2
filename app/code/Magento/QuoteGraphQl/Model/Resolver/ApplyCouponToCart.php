@@ -50,18 +50,19 @@ class ApplyCouponToCart implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
-        if (!isset($args['input']['cart_id']) || empty($args['input']['cart_id'])) {
+        if (empty($args['input']['cart_id'])) {
             throw new GraphQlInputException(__('Required parameter "cart_id" is missing'));
         }
         $maskedCartId = $args['input']['cart_id'];
 
-        if (!isset($args['input']['coupon_code']) || empty($args['input']['coupon_code'])) {
+        if (empty($args['input']['coupon_code'])) {
             throw new GraphQlInputException(__('Required parameter "coupon_code" is missing'));
         }
         $couponCode = $args['input']['coupon_code'];
 
         $currentUserId = $context->getUserId();
-        $cart = $this->getCartForUser->execute($maskedCartId, $currentUserId);
+        $storeId = (int)$context->getExtensionAttributes()->getStore()->getId();
+        $cart = $this->getCartForUser->execute($maskedCartId, $currentUserId, $storeId);
         $cartId = $cart->getId();
 
         /* Check current cart does not have coupon code applied */
@@ -75,7 +76,11 @@ class ApplyCouponToCart implements ResolverInterface
         try {
             $this->couponManagement->set($cartId, $couponCode);
         } catch (NoSuchEntityException $e) {
-            throw new GraphQlNoSuchEntityException(__($e->getMessage()), $e);
+            $message = $e->getMessage();
+            if (preg_match('/The "\d+" Cart doesn\'t contain products/', $message)) {
+                $message = 'Cart does not contain products.';
+            }
+            throw new GraphQlNoSuchEntityException(__($message), $e);
         } catch (CouldNotSaveException $e) {
             throw new LocalizedException(__($e->getMessage()), $e);
         }

@@ -271,7 +271,10 @@ define([
          */
         show: function () {
             this.visible = true;
-
+            //Check admin grid button has addedr not
+            if ($('.page-main-actions').length === 0) {
+                this.$sticky.style.top = 0;
+            }
             this.$sticky.style.display = '';
             this.$toolbar.style.visibility = 'hidden';
 

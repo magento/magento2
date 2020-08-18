@@ -585,9 +585,9 @@ Schedule,Schedule
                         "
 "Header Image URL","Header Image URL"
 "
-                            The image at the top left of the checkout page. Max size is 750x90-pixel. <strong style=""color:red"">https</strong> is highly encouraged.
+                            The image at the top left of the checkout page. Max size is 750x90-pixel. <strong class=""colorRed"">https</strong> is highly encouraged.
                         ","
-                            The image at the top left of the checkout page. Max size is 750x90-pixel. <strong style=""color:red"">https</strong> is highly encouraged.
+                            The image at the top left of the checkout page. Max size is 750x90-pixel. <strong class=""colorRed"">https</strong> is highly encouraged.
                         "
 "Header Background Color","Header Background Color"
 "
@@ -697,12 +697,16 @@ User,User
                                 The PayPal Advertising Program has been shown to generate additional purchases as well as increase consumer's average purchase sizes by 15%
                                 or more. <a href=""https://financing.paypal.com/ppfinportal/content/forrester"" target=""_blank"">See Details</a>.
                 "
+"PayPal Express Checkout Payflow Edition lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
+                            You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with PayPal Credit&#174;.
+                            <a href=""https://www.paypal.com/webapps/mpp/promotional-financing"" target=""_blank"">Learn More</a>","PayPal Express Checkout Payflow Edition lets you give customers access to financing through PayPal Credit&#174; - at no additional cost to you.
+                            You get paid up front, even though customers have more time to pay. A pre-integrated payment button lets customers pay quickly with PayPal Credit&#174;.
+                            <a href=""https://www.paypal.com/webapps/mpp/promotional-financing"" target=""_blank"">Learn More</a>"
 "Customize Smart Buttons","Customize Smart Buttons"
 "Checkout Page","Checkout Page"
 "Label","Label"
 "The installment feature is available only in these locales: en_MX, es_MX, en_BR, pt_BR.","The installment feature is available only in these locales: en_MX, es_MX, en_BR, pt_BR."
 "Checkout","Checkout"
-"Credit","Credit"
 "Pay","Pay"
 "Buy Now","Buy Now"
 "PayPal","PayPal"
@@ -713,8 +717,6 @@ User,User
 "Vertical","Vertical"
 "Horizontal","Horizontal"
 "Size","Size"
-"Medium","Medium"
-"Large","Large"
 "Responsive","Responsive"
 "Shape","Shape"
 "Pill","Pill"
@@ -732,3 +734,6 @@ User,User
 "PayPal Credit","PayPal Credit"
 "PayPal Guest Checkout Credit Card Icons","PayPal Guest Checkout Credit Card Icons"
 "Elektronisches Lastschriftverfahren - German ELV","Elektronisches Lastschriftverfahren - German ELV"
+"Please enter at least 0 and at most 65535","Please enter at least 0 and at most 65535"
+"Order is suspended as an account verification transaction is suspected to be fraudulent.","Order is suspended as an account verification transaction is suspected to be fraudulent."
+"Payment can't be accepted since transaction was rejected by merchant.","Payment can't be accepted since transaction was rejected by merchant."

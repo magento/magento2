@@ -9,6 +9,7 @@ use Magento\Framework\App\Config\ConfigSourceInterface;
 use Magento\Framework\App\DeploymentConfig;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Adapter\TableNotFoundException;
 
 /**
  * Config source. Retrieve all configuration for scopes from db
@@ -44,6 +45,7 @@ class RuntimeConfigSource implements ConfigSourceInterface
 
     /**
      * Return whole scopes config data from db.
+     *
      * Ignore $path argument due to config source must return all config data
      *
      * @param string $path
@@ -52,18 +54,26 @@ class RuntimeConfigSource implements ConfigSourceInterface
      */
     public function get($path = '')
     {
-        if ($this->canUseDatabase()) {
-            return [
-                'websites' => $this->getEntities('store_website', 'code'),
-                'groups' => $this->getEntities('store_group', 'group_id'),
-                'stores' => $this->getEntities('store', 'code'),
-            ];
+        $data = [];
+        try {
+            if ($this->canUseDatabase()) {
+                $data = [
+                    'websites' => $this->getEntities('store_website', 'code'),
+                    'groups' => $this->getEntities('store_group', 'group_id'),
+                    'stores' => $this->getEntities('store', 'code'),
+                ];
+            }
+        } catch (TableNotFoundException $exception) {
+            // database is empty or not setup
+            $data = [];
         }
 
-        return [];
+        return $data;
     }
 
     /**
+     * Retrieve default connection
+     *
      * @return AdapterInterface
      */
     private function getConnection()
@@ -83,10 +93,14 @@ class RuntimeConfigSource implements ConfigSourceInterface
      */
     private function getEntities($table, $keyField)
     {
-        $entities = $this->getConnection()->fetchAll(
-            $this->getConnection()->select()->from($this->resourceConnection->getTableName($table))
-        );
         $data = [];
+        $tableName = $this->resourceConnection->getTableName($table);
+        // Check if db table exists before fetch data
+
+        $entities = $this->getConnection()->fetchAll(
+            $this->getConnection()->select()->from($tableName)
+        );
+
         foreach ($entities as $entity) {
             $data[$entity[$keyField]] = $entity;
         }
@@ -101,6 +115,6 @@ class RuntimeConfigSource implements ConfigSourceInterface
      */
     private function canUseDatabase()
     {
-        return $this->deploymentConfig->get('db');
+        return $this->deploymentConfig->isDbAvailable();
     }
 }

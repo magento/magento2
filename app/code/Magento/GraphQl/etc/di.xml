@@ -8,9 +8,12 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
     <preference for="Magento\Framework\GraphQl\Schema\SchemaGeneratorInterface" type="Magento\Framework\GraphQl\Schema\SchemaGenerator" />
     <preference for="Magento\Framework\GraphQl\Query\Resolver\ContextInterface" type="Magento\GraphQl\Model\Query\Resolver\Context" />
+    <preference for="Magento\GraphQl\Model\Query\ContextInterface" type="Magento\GraphQl\Model\Query\Context" />
     <preference for="Magento\Framework\GraphQl\Schema\Type\Entity\MapperInterface" type="Magento\Framework\GraphQl\Schema\Type\Entity\DefaultMapper"/>
     <preference for="Magento\Framework\GraphQl\Schema\Type\Enum\DataMapperInterface" type="Magento\Framework\GraphQl\Schema\Type\Enum\DefaultDataMapper"/>
     <preference for="Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeMetaReaderInterface" type="Magento\Framework\GraphQlSchemaStitching\GraphQlReader\TypeReaderComposite"/>
+    <preference for="Magento\GraphQl\Model\Query\ContextFactoryInterface" type="Magento\GraphQl\Model\Query\ContextFactory"/>
+    <preference for="Magento\GraphQl\Model\Query\ContextParametersInterface" type="Magento\GraphQl\Model\Query\ContextParameters"/>
     <type name="Magento\Framework\App\AreaList">
         <arguments>
             <argument name="areas" xsi:type="array">
@@ -93,6 +96,33 @@
         <arguments>
             <argument name="queryDepth" xsi:type="number">20</argument>
             <argument name="queryComplexity" xsi:type="number">300</argument>
+        </arguments>
+    </type>
+
+    <preference for="Magento\GraphQl\Model\Cors\ConfigurationInterface" type="Magento\GraphQl\Model\Cors\Configuration" />
+    <type name="Magento\GraphQl\Controller\HttpResponse\Cors\CorsMaxAgeHeaderProvider">
+        <arguments>
+            <argument name="headerName" xsi:type="string">Access-Control-Max-Age</argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQl\Controller\HttpResponse\Cors\CorsAllowCredentialsHeaderProvider">
+        <arguments>
+            <argument name="headerName" xsi:type="string">Access-Control-Allow-Credentials</argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQl\Controller\HttpResponse\Cors\CorsAllowHeadersHeaderProvider">
+        <arguments>
+            <argument name="headerName" xsi:type="string">Access-Control-Allow-Headers</argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQl\Controller\HttpResponse\Cors\CorsAllowMethodsHeaderProvider">
+        <arguments>
+            <argument name="headerName" xsi:type="string">Access-Control-Allow-Methods</argument>
+        </arguments>
+    </type>
+    <type name="Magento\GraphQl\Controller\HttpResponse\Cors\CorsAllowOriginHeaderProvider">
+        <arguments>
+            <argument name="headerName" xsi:type="string">Access-Control-Allow-Origin</argument>
         </arguments>
     </type>
 </config>

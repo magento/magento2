@@ -3,8 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Mail;
+
+use Magento\Framework\ObjectManagerInterface;
 
 /**
  * Factory class for \Magento\Framework\Mail\TransportInterface
@@ -14,39 +17,39 @@ class TransportInterfaceFactory
     /**
      * Object Manager instance
      *
-     * @var \Magento\Framework\ObjectManagerInterface
+     * @var ObjectManagerInterface
      */
-    protected $_objectManager = null;
+    private $objectManager;
 
     /**
      * Instance name to create
      *
      * @var string
      */
-    protected $_instanceName = null;
+    private $instanceName;
 
     /**
      * Factory constructor
      *
-     * @param \Magento\Framework\ObjectManagerInterface $objectManager
+     * @param ObjectManagerInterface $objectManager
      * @param string $instanceName
      */
     public function __construct(
-        \Magento\Framework\ObjectManagerInterface $objectManager,
-        $instanceName = \Magento\Framework\Mail\TransportInterface::class
+        ObjectManagerInterface $objectManager,
+        $instanceName = TransportInterface::class
     ) {
-        $this->_objectManager = $objectManager;
-        $this->_instanceName = $instanceName;
+        $this->objectManager = $objectManager;
+        $this->instanceName = $instanceName;
     }
 
     /**
      * Create class instance with specified parameters
      *
      * @param array $data
-     * @return \Magento\Framework\Mail\TransportInterface
+     * @return TransportInterface
      */
-    public function create(array $data = [])
+    public function create(array $data = []): TransportInterface
     {
-        return $this->_objectManager->create($this->_instanceName, $data);
+        return $this->objectManager->create($this->instanceName, $data);
     }
 }

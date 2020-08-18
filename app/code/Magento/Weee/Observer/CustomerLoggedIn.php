@@ -14,6 +14,9 @@ use Magento\Tax\Api\TaxAddressManagerInterface;
 use Magento\Weee\Helper\Data;
 use Magento\Tax\Helper\Data as TaxHelper;
 
+/**
+ * Customer logged in.
+ */
 class CustomerLoggedIn implements ObserverInterface
 {
     /**
@@ -66,6 +69,8 @@ class CustomerLoggedIn implements ObserverInterface
     }
 
     /**
+     * Execute.
+     *
      * @param Observer $observer
      * @return void
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)

@@ -4,17 +4,17 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\SelectAttributes */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<div class="select-attributes-block <?= /* @noEscape */ $block->getData('config/dataScope') ?>" data-role="select-attributes-step">
+<div class="select-attributes-block <?= /* @noEscape */ $block->getData('config/dataScope') ?>"
+     data-role="select-attributes-step">
     <div class="select-attributes-actions" data-type="skipKO">
         <?= /* @noEscape */  $block->getAddNewAttributeButton() ?>
     </div>
     <h2 class="steps-wizard-title"><?= $block->escapeHtml(
-            __('Step 1: Select Attributes')
-        ); ?></h2>
+        __('Step 1: Select Attributes')
+    ); ?></h2>
     <div class="selected-attributes" data-bind="scope: '<?= /* @noEscape */  $block->getComponentName() ?>'">
         <?= $block->escapeHtml(
             __('Selected Attributes:')
@@ -39,9 +39,12 @@
         }
     }
 </script>
-<script>
+<?php $dataScope = /* @noEscape */ $block->getData('config/dataScope');
+$scriptString = <<<script
     require(['jquery'], function ($) {
-        $('.<?= /* @noEscape */ $block->getData('config/dataScope') ?>[data-role=select-attributes-step]').applyBindings();
+        $('.{$dataScope}[data-role=select-attributes-step]').applyBindings();
         $('body').trigger('contentUpdated');
     })
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

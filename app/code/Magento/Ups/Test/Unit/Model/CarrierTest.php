@@ -3,15 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
+
 namespace Magento\Ups\Test\Unit\Model;
 
 use Magento\Directory\Model\Country;
 use Magento\Directory\Model\CountryFactory;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\ClientFactory;
 use Magento\Framework\HTTP\ClientInterface;
 use Magento\Framework\Model\AbstractModel;
+use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Quote\Model\Quote\Address\RateResult\Error;
@@ -20,14 +23,19 @@ use Magento\Shipping\Model\Rate\Result;
 use Magento\Shipping\Model\Rate\ResultFactory;
 use Magento\Shipping\Model\Simplexml\Element;
 use Magento\Shipping\Model\Simplexml\ElementFactory;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Ups\Helper\Config;
 use Magento\Ups\Model\Carrier;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
+ * Unit tests for \Magento\Ups\Model\Carrier class.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class CarrierTest extends \PHPUnit\Framework\TestCase
+class CarrierTest extends TestCase
 {
     const FREE_METHOD_NAME = 'free_method';
 
@@ -92,16 +100,22 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      */
     private $logger;
 
-    protected function setUp()
+    /**
+     * @var Config|MockObject
+     */
+    private $configHelper;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
         $this->helper = new ObjectManager($this);
 
         $this->scope = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-
-        $this->scope->method('getValue')
-            ->willReturnCallback([$this, 'scopeConfigGetValue']);
+            ->setMethods(['getValue', 'isSetFlag'])
+            ->getMockForAbstractClass();
 
         $this->error = $this->getMockBuilder(Error::class)
             ->setMethods(['setCarrier', 'setCarrierTitle', 'setErrorMessage'])
@@ -143,6 +157,11 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
 
         $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
+        $this->configHelper = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['getCode'])
+            ->getMock();
+
         $this->model = $this->helper->getObject(
             Carrier::class,
             [
@@ -153,6 +172,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
                 'xmlElFactory' => $xmlFactory,
                 'logger' => $this->logger,
                 'httpClientFactory' => $httpClientFactory,
+                'configHelper' => $this->configHelper,
             ]
         );
     }
@@ -179,7 +199,7 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'carriers/ups/access_license_number' => 'acn',
         ];
 
-        return isset($pathMap[$path]) ? $pathMap[$path] : null;
+        return $pathMap[$path] ?? null;
     }
 
     /**
@@ -189,14 +209,17 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
      * @param bool $freeShippingEnabled
      * @param int $requestSubtotal
      * @param int $expectedPrice
+     * @return void
      */
     public function testGetMethodPrice(
-        $cost,
-        $shippingMethod,
-        $freeShippingEnabled,
-        $requestSubtotal,
-        $expectedPrice
-    ) {
+        int $cost,
+        string $shippingMethod,
+        bool $freeShippingEnabled,
+        int $requestSubtotal,
+        int $expectedPrice
+    ): void {
+        $this->scope->method('getValue')
+            ->willReturnCallback([$this, 'scopeConfigGetValue']);
         $path = 'carriers/' . $this->model->getCarrierCode() . '/';
         $this->scope->method('isSetFlag')
             ->with($path . 'free_shipping_enable')
@@ -244,8 +267,13 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    public function testCollectRatesErrorMessage()
+    /**
+     * @return void
+     */
+    public function testCollectRatesErrorMessage(): void
     {
+        $this->scope->method('getValue')
+            ->willReturnCallback([$this, 'scopeConfigGetValue']);
         $this->scope->method('isSetFlag')
             ->willReturn(false);
 
@@ -258,17 +286,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
         $request->setPackageWeight(1);
 
         $this->assertSame($this->error, $this->model->collectRates($request));
-    }
-
-    public function testCollectRatesFail()
-    {
-        $this->scope->method('isSetFlag')
-            ->willReturn(true);
-
-        $request = new RateRequest();
-        $request->setPackageWeight(1);
-
-        $this->assertSame($this->rate, $this->model->collectRates($request));
     }
 
     /**
@@ -350,13 +367,15 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     {
         /** @var RateRequest $request */
         $request = $this->helper->getObject(RateRequest::class);
-        $request->setData([
-            'orig_country' => 'USA',
-            'orig_region_code' => 'CA',
-            'orig_post_code' => 90230,
-            'orig_city' => 'Culver City',
-            'dest_country_id' => $countryCode,
-        ]);
+        $request->setData(
+            [
+                'orig_country' => 'USA',
+                'orig_region_code' => 'CA',
+                'orig_post_code' => 90230,
+                'orig_city' => 'Culver City',
+                'dest_country_id' => $countryCode,
+            ]
+        );
 
         $this->country->expects($this->at(1))
             ->method('load')
@@ -383,31 +402,84 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Checks a case when UPS processes request to create shipment.
-     *
+     * @dataProvider allowedMethodsDataProvider
+     * @param string $carrierType
+     * @param string $methodType
+     * @param string $methodCode
+     * @param string $methodTitle
+     * @param string $allowedMethods
+     * @param array $expectedMethods
      * @return void
      */
-    public function testRequestToShipment()
+    public function testGetAllowedMethods(
+        string $carrierType,
+        string $methodType,
+        string $methodCode,
+        string $methodTitle,
+        string $allowedMethods,
+        array $expectedMethods
+    ): void {
+        $this->scope->method('getValue')
+            ->willReturnMap(
+                [
+                    [
+                        'carriers/ups/allowed_methods',
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        $allowedMethods,
+                    ],
+                    [
+                        'carriers/ups/type',
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        $carrierType,
+                    ],
+                    [
+                        'carriers/ups/origin_shipment',
+                        ScopeInterface::SCOPE_STORE,
+                        null,
+                        'Shipments Originating in United States',
+                    ],
+                ]
+            );
+        $this->configHelper->method('getCode')
+            ->with($methodType)
+            ->willReturn([$methodCode => new Phrase($methodTitle)]);
+        $actualMethods = $this->model->getAllowedMethods();
+        $this->assertEquals($expectedMethods, $actualMethods);
+    }
+
+    /**
+     * @return array
+     */
+    public function allowedMethodsDataProvider(): array
     {
-        // the same tracking number is specified in the fixtures XML file.
-        $trackingNumber = '1Z207W886698856557';
-        $packages = $this->getPackages();
-        $request = new DataObject(['packages' => $packages]);
-        $shipmentResponse = simplexml_load_file(__DIR__ . '/../Fixtures/ShipmentConfirmResponse.xml');
-        $acceptResponse = simplexml_load_file(__DIR__ . '/../Fixtures/ShipmentAcceptResponse.xml');
-
-        $this->httpClient->method('getBody')
-            ->willReturnOnConsecutiveCalls($shipmentResponse->asXML(), $acceptResponse->asXML());
-
-        $this->logger->expects($this->atLeastOnce())
-            ->method('debug')
-            ->with($this->stringContains('<UserId>****</UserId>'));
-
-        $result = $this->model->requestToShipment($request);
-        $this->assertEmpty($result->getErrors());
-
-        $info = $result->getInfo()[0];
-        $this->assertEquals($trackingNumber, $info['tracking_number'], 'Tracking Number must match.');
+        return [
+            [
+                'UPS',
+                'method',
+                '1DM',
+                'Next Day Air Early AM',
+                '',
+                [],
+            ],
+            [
+                'UPS',
+                'method',
+                '1DM',
+                'Next Day Air Early AM',
+                '1DM,1DML,1DA',
+                ['1DM' => 'Next Day Air Early AM'],
+            ],
+            [
+                'UPS_XML',
+                'originShipment',
+                '01',
+                'UPS Next Day Air',
+                '01,02,03',
+                ['01' => 'UPS Next Day Air'],
+            ],
+        ];
     }
 
     /**
@@ -434,34 +506,6 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             );
 
         return $xmlElFactory;
-    }
-
-    /**
-     * @return array
-     */
-    private function getPackages(): array
-    {
-        $packages = [
-            'package' => [
-                'params' => [
-                    'width' => '3',
-                    'length' => '3',
-                    'height' => '3',
-                    'dimension_units' => 'INCH',
-                    'weight_units' => 'POUND',
-                    'weight' => '0.454000000001',
-                    'customs_value' => '10.00',
-                    'container' => 'Small Express Box',
-                ],
-                'items' => [
-                    'item1' => [
-                        'name' => 'item_name',
-                    ],
-                ],
-            ],
-        ];
-
-        return $packages;
     }
 
     /**

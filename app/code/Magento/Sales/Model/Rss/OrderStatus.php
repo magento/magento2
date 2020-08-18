@@ -6,10 +6,12 @@
 namespace Magento\Sales\Model\Rss;
 
 use Magento\Framework\App\Rss\DataProviderInterface;
+use Magento\Framework\App\ObjectManager;
 
 /**
- * Class OrderStatus
- * @package Magento\Sales\Model\Rss
+ * Rss renderer for order statuses.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class OrderStatus implements DataProviderInterface
 {
@@ -56,6 +58,11 @@ class OrderStatus implements DataProviderInterface
     protected $orderFactory;
 
     /**
+     * @var Signature
+     */
+    private $signature;
+
+    /**
      * @param \Magento\Framework\ObjectManagerInterface $objectManager
      * @param \Magento\Framework\UrlInterface $urlBuilder
      * @param \Magento\Framework\App\RequestInterface $request
@@ -63,6 +70,7 @@ class OrderStatus implements DataProviderInterface
      * @param \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate
      * @param \Magento\Sales\Model\OrderFactory $orderFactory
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+     * @param Signature|null $signature
      */
     public function __construct(
         \Magento\Framework\ObjectManagerInterface $objectManager,
@@ -71,7 +79,8 @@ class OrderStatus implements DataProviderInterface
         \Magento\Sales\Model\ResourceModel\Order\Rss\OrderStatusFactory $orderResourceFactory,
         \Magento\Framework\Stdlib\DateTime\TimezoneInterface $localeDate,
         \Magento\Sales\Model\OrderFactory $orderFactory,
-        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
+        \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
+        Signature $signature = null
     ) {
         $this->objectManager = $objectManager;
         $this->urlBuilder = $urlBuilder;
@@ -80,6 +89,7 @@ class OrderStatus implements DataProviderInterface
         $this->localeDate = $localeDate;
         $this->orderFactory = $orderFactory;
         $this->config = $scopeConfig;
+        $this->signature = $signature ?: ObjectManager::getInstance()->get(Signature::class);
     }
 
     /**
@@ -96,7 +106,10 @@ class OrderStatus implements DataProviderInterface
     }
 
     /**
+     * Get rss data.
+     *
      * @return array
+     * @throws \InvalidArgumentException
      */
     public function getRssData()
     {
@@ -108,6 +121,8 @@ class OrderStatus implements DataProviderInterface
     }
 
     /**
+     * Get cache key.
+     *
      * @return string
      */
     public function getCacheKey()
@@ -115,12 +130,16 @@ class OrderStatus implements DataProviderInterface
         $order = $this->getOrder();
         $key = '';
         if ($order !== null) {
+            // phpcs:ignore
             $key = md5($order->getId() . $order->getIncrementId() . $order->getCustomerId());
         }
+
         return 'rss_order_status_data_' . $key;
     }
 
     /**
+     * Get cache lifetime.
+     *
      * @return int
      */
     public function getCacheLifetime()
@@ -129,6 +148,8 @@ class OrderStatus implements DataProviderInterface
     }
 
     /**
+     * Get order.
+     *
      * @return \Magento\Sales\Model\Order
      */
     protected function getOrder()
@@ -137,8 +158,12 @@ class OrderStatus implements DataProviderInterface
             return $this->order;
         }
 
-        $data = null;
-        $json = base64_decode((string)$this->request->getParam('data'));
+        $data = (string)$this->request->getParam('data');
+        if (!$this->signature->isValid($data, (string)$this->request->getParam('signature'))) {
+            return null;
+        }
+        // phpcs:ignore
+        $json = base64_decode($data);
         if ($json) {
             $data = json_decode($json, true);
         }
@@ -154,12 +179,24 @@ class OrderStatus implements DataProviderInterface
         $order = $this->orderFactory->create();
         $order->load($data['order_id']);
 
-        if ($order->getIncrementId() !== $data['increment_id'] || $order->getCustomerId() !== $data['customer_id']) {
+        if (!$this->isOrderSuitable($order, $data)) {
             $order = null;
         }
         $this->order = $order;
 
         return $this->order;
+    }
+
+    /**
+     * Check if selected order data correspond incoming data.
+     *
+     * @param \Magento\Sales\Model\Order $order
+     * @param array $data
+     * @return bool
+     */
+    private function isOrderSuitable(\Magento\Sales\Model\Order $order, array $data): bool
+    {
+        return $order->getIncrementId() === $data['increment_id'] && $order->getCustomerId() === $data['customer_id'];
     }
 
     /**
@@ -180,11 +217,12 @@ class OrderStatus implements DataProviderInterface
                 if ($type && $type != 'order') {
                     $urlAppend = $type;
                 }
-                $type = __(ucwords($type));
-                $title = __('Details for %1 #%2', $type, $result['increment_id']);
-                $description = '<p>' . __('Notified Date: %1', $this->localeDate->formatDate($result['created_at']))
+                $type = __(ucwords($type))->render();
+                $title = __('Details for %1 #%2', $type, $result['increment_id'])->render();
+                $description = '<p>'
+                    . __('Notified Date: %1', $this->localeDate->formatDate($result['created_at']))->render()
                     . '<br/>'
-                    . __('Comment: %1<br/>', $result['comment']) . '</p>';
+                    . __('Comment: %1<br/>', $result['comment'])->render() . '</p>';
                 $url = $this->urlBuilder->getUrl(
                     'sales/order/' . $urlAppend,
                     ['order_id' => $this->order->getId()]
@@ -192,12 +230,14 @@ class OrderStatus implements DataProviderInterface
                 $entries[] = ['title' => $title, 'link' => $url, 'description' => $description];
             }
         }
-        $title = __('Order #%1 created at %2', $this->order->getIncrementId(), $this->localeDate->formatDate(
-            $this->order->getCreatedAt()
-        ));
+        $title = __(
+            'Order #%1 created at %2',
+            $this->order->getIncrementId(),
+            $this->localeDate->formatDate($this->order->getCreatedAt())
+        )->render();
         $url = $this->urlBuilder->getUrl('sales/order/view', ['order_id' => $this->order->getId()]);
-        $description = '<p>' . __('Current Status: %1<br/>', $this->order->getStatusLabel()) .
-            __('Total: %1<br/>', $this->order->formatPrice($this->order->getGrandTotal())) . '</p>';
+        $description = '<p>' . __('Current Status: %1<br/>', $this->order->getStatusLabel())->render() .
+            __('Total: %1<br/>', $this->order->formatPrice($this->order->getGrandTotal()))->render() . '</p>';
 
         $entries[] = ['title' => $title, 'link' => $url, 'description' => $description];
 
@@ -211,13 +251,15 @@ class OrderStatus implements DataProviderInterface
      */
     protected function getHeader()
     {
-        $title = __('Order # %1 Notification(s)', $this->order->getIncrementId());
+        $title = __('Order # %1 Notification(s)', $this->order->getIncrementId())->render();
         $newUrl = $this->urlBuilder->getUrl('sales/order/view', ['order_id' => $this->order->getId()]);
 
         return ['title' => $title, 'description' => $title, 'link' => $newUrl, 'charset' => 'UTF-8'];
     }
 
     /**
+     * Get feeds.
+     *
      * @return array
      */
     public function getFeeds()
@@ -226,7 +268,7 @@ class OrderStatus implements DataProviderInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function isAuthRequired()
     {

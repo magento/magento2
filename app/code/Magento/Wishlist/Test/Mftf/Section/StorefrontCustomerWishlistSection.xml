@@ -12,7 +12,7 @@
         <element name="pageTitle" type="text" selector="h1.page-title"/>
         <element name="successMsg" type="text" selector="div.message-success.success.message"/>
         <element name="productItemNameText" type="text" selector=".products-grid .product-item-name a"/>
-        <element name="removeWishlistButton" type="button" selector=".products-grid .btn-remove.action.delete>span" timeout="30"/>
+        <element name="removeWishlistButton" type="button" selector="//main//li[.//a[contains(text(), '{{prodName}}')]]//a[@data-role='remove']" parameterized="true" timeout="30"/>
         <element name="emptyWishlistText" type="text" selector=".message.info.empty>span"/>
     </section>
 </sections>

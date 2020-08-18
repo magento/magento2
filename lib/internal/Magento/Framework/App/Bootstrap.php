@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\App;
 
@@ -22,6 +23,7 @@ use Psr\Log\LoggerInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Bootstrap
 {
@@ -222,10 +224,12 @@ class Bootstrap
     /**
      * Factory method for creating application instances
      *
+     * In case of failure,
+     * the application will be terminated by "exit(1)"
+     *
      * @param string $type
      * @param array $arguments
-     * @return \Magento\Framework\AppInterface
-     * @throws \InvalidArgumentException
+     * @return \Magento\Framework\AppInterface | void
      */
     public function createApplication($type, $arguments = [])
     {
@@ -245,6 +249,8 @@ class Bootstrap
      *
      * @param \Magento\Framework\AppInterface $application
      * @return void
+     *
+     * phpcs:disable Magento2.Exceptions,Squiz.Commenting.FunctionCommentThrowTag
      */
     public function run(AppInterface $application)
     {
@@ -264,16 +270,18 @@ class Bootstrap
                     throw $e;
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->terminate($e);
         }
-    }
+    } // phpcs:enable
 
     /**
      * Asserts maintenance mode
      *
      * @return void
      * @throws \Exception
+     *
+     * phpcs:disable Magento2.Exceptions
      */
     protected function assertMaintenance()
     {
@@ -299,7 +307,7 @@ class Bootstrap
             $this->errorCode = self::ERR_MAINTENANCE;
             throw new \Exception('Unable to proceed: the maintenance mode must be enabled first. ');
         }
-    }
+    } // phpcs:enable
 
     /**
      * Asserts whether application is installed
@@ -316,10 +324,12 @@ class Bootstrap
         $isInstalled = $this->isInstalled();
         if (!$isInstalled && $isExpected) {
             $this->errorCode = self::ERR_IS_INSTALLED;
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Error: Application is not installed yet. ');
         }
         if ($isInstalled && !$isExpected) {
             $this->errorCode = self::ERR_IS_INSTALLED;
+            // phpcs:ignore Magento2.Exceptions.DirectThrow
             throw new \Exception('Error: Application is already installed. ');
         }
     }
@@ -411,12 +421,14 @@ class Bootstrap
     /**
      * Display an exception and terminate program execution
      *
-     * @param \Exception $e
+     * @param \Throwable $e
      * @return void
-     * @SuppressWarnings(PHPMD.ExitExpression)
+     *
+     * phpcs:disable Magento2.Security.LanguageConstruct, Squiz.Commenting.FunctionCommentThrowTag
      */
-    protected function terminate(\Exception $e)
+    protected function terminate(\Throwable $e)
     {
+
         if ($this->isDeveloperMode()) {
             echo $e;
         } else {
@@ -433,4 +445,5 @@ class Bootstrap
         }
         exit(1);
     }
+    // phpcs:enable
 }

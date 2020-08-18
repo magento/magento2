@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminReportsProductsInCartNavigateMenuTest">
+        <annotations>
+            <features value="Reports"/>
+            <stories value="Menu Navigation"/>
+            <title value="Admin reports products in cart navigate menu test"/>
+            <description value="Admin should be able to navigate to Reports > Products in Cart"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14158"/>
+            <group value="menu"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsProductsInCartPage">
+            <argument name="menuUiId" value="{{AdminMenuReports.dataUiId}}"/>
+            <argument name="submenuUiId" value="{{AdminMenuReportsMarketingProductsInCarts.dataUiId}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
+            <argument name="title" value="{{AdminMenuReportsMarketingProductsInCarts.pageTitle}}"/>
+        </actionGroup>
+    </test>
+</tests>

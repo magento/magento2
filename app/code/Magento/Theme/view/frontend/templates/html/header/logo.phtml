@@ -4,19 +4,21 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /**
  * @var \Magento\Theme\Block\Html\Header\Logo $block
  */
+$storeName = $block->getThemeName() ? $block->getThemeName() : $block->getLogoAlt()
 ?>
-<?php $storeName = $block->getThemeName() ? $block->getThemeName() : $block->getLogoAlt();?>
-<span data-action="toggle-nav" class="action nav-toggle"><span><?= /* @escapeNotVerified */ __('Toggle Nav') ?></span></span>
-<a class="logo" href="<?= $block->getUrl('') ?>" title="<?= /* @escapeNotVerified */ $storeName ?>">
-    <img src="<?= /* @escapeNotVerified */ $block->getLogoSrc() ?>"
+<span data-action="toggle-nav" class="action nav-toggle"><span><?= $block->escapeHtml(__('Toggle Nav')) ?></span></span>
+<a
+    class="logo"
+    href="<?= $block->escapeUrl($block->getUrl('')) ?>"
+    title="<?= $block->escapeHtmlAttr($storeName) ?>"
+    aria-label="store logo">
+    <img src="<?= $block->escapeUrl($block->getLogoSrc()) ?>"
          title="<?= $block->escapeHtmlAttr($block->getLogoAlt()) ?>"
          alt="<?= $block->escapeHtmlAttr($block->getLogoAlt()) ?>"
-         <?= $block->getLogoWidth() ? 'width="' . $block->getLogoWidth() . '"' : '' ?>
-         <?= $block->getLogoHeight() ? 'height="' . $block->getLogoHeight() . '"' : '' ?>
+            <?= $block->getLogoWidth() ? 'width="' . $block->escapeHtmlAttr($block->getLogoWidth()) . '"' : '' ?>
+            <?= $block->getLogoHeight() ? 'height="' . $block->escapeHtmlAttr($block->getLogoHeight()) . '"' : '' ?>
     />
 </a>

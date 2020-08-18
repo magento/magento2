@@ -55,6 +55,10 @@
             }
         }
 
+        .label {
+            .lib-visually-hidden();
+        }
+
         .field-tooltip-action {
             .lib-icon-font(
                 @checkout-tooltip-icon__content,
@@ -173,10 +177,10 @@
         width: 0;
     }
     .field-tooltip .field-tooltip-content::before {
-        border-bottom-color: @color-gray40;
+        .lib-css(border-bottom-color, @checkout-tooltip-content__border-color);
     }
     .field-tooltip .field-tooltip-content::after {
-        border-bottom-color: @color-gray-light01;
+        .lib-css(border-bottom-color, @checkout-tooltip-content__background-color);
         top: 1px;
     }
 }

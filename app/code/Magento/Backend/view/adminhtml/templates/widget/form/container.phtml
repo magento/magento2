@@ -4,13 +4,14 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var $block \Magento\Backend\Block\Widget\Form\Container */
- ?>
-<?= /* @escapeNotVerified */ $block->getFormInitScripts() ?>
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+?>
+<?= /* @noEscape */ $block->getFormInitScripts() ?>
 <?php if ($block->getButtonsHtml('header')): ?>
-    <div class="page-form-actions" <?= /* @escapeNotVerified */ $block->getUiId('content-header') ?>><?= $block->getButtonsHtml('header') ?></div>
+    <div class="page-form-actions" <?= /* @noEscape */ $block->getUiId('content-header') ?>>
+        <?= $block->getButtonsHtml('header') ?>
+    </div>
 <?php endif; ?>
 <?php if ($block->getButtonsHtml('toolbar')): ?>
     <div class="page-main-actions">
@@ -27,7 +28,8 @@
         <p class="form-buttons"><?= $block->getButtonsHtml('footer') ?></p>
     </div>
 <?php endif; ?>
-<script>
+<?php $scriptString = <<<script
+
 require([
     'jquery',
     'mage/backend/form',
@@ -36,7 +38,7 @@ require([
 
     $('#edit_form').form()
         .validation({
-            validationUrl: '<?= /* @escapeNotVerified */ $block->getValidationUrl() ?>',
+            validationUrl: '{$block->escapeJs($block->getValidationUrl())}',
             highlight: function(element) {
                 var detailsElement = $(element).closest('details');
                 if (detailsElement.length && detailsElement.is('.details')) {
@@ -50,5 +52,8 @@ require([
         });
 
 });
-</script>
-<?= /* @escapeNotVerified */ $block->getFormScripts() ?>
+
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+<?= /* @noEscape */ $block->getFormScripts() ?>

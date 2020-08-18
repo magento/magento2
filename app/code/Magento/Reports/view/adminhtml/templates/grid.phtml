@@ -3,17 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 <?php
-/** @var $block \Magento\Reports\Block\Adminhtml\Grid */
-$numColumns = sizeof($block->getColumns());
+/**
+ * @var $block \Magento\Reports\Block\Adminhtml\Grid
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
 <?php if ($block->getCollection()): ?>
     <?php if ($block->canDisplayContainer()): ?>
-    <div id="<?= /* @escapeNotVerified */ $block->getId() ?>">
+    <div id="<?= $block->escapeHtmlAttr($block->getId()) ?>">
         <?php else: ?>
             <?= $block->getLayout()->getMessagesBlock()->getGroupedHtml() ?>
         <?php endif; ?>
@@ -21,63 +20,75 @@ $numColumns = sizeof($block->getColumns());
             <div class="admin__data-grid-header admin__data-grid-toolbar">
                 <div class="admin__data-grid-header-row">
                     <?php if ($block->getDateFilterVisibility()): ?>
-                        <div class="admin__filter-actions" data-role="filter-form" id="<?= /* @escapeNotVerified */ $block->getSuffixId('period_date_range') ?>">
+                        <div class="admin__filter-actions" data-role="filter-form"
+                             id="<?= $block->escapeHtmlAttr($block->getSuffixId('period_date_range')) ?>">
                             <span class="field-row">
-                                <label for="<?= /* @escapeNotVerified */ $block->getSuffixId('period_date_from') ?>"
+                                <label for="<?= $block->escapeHtmlAttr($block->getSuffixId('period_date_from')) ?>"
                                        class="admin__control-support-text">
-                                    <span><?= /* @escapeNotVerified */ __('From') ?>:</span>
+                                    <span><?= $block->escapeHtml(__('From')) ?>:</span>
                                 </label>
                                 <input class="input-text no-changes required-entry admin__control-text"
                                        type="text"
-                                       id="<?= /* @escapeNotVerified */ $block->getSuffixId('period_date_from') ?>"
+                                       id="<?= $block->escapeHtmlAttr($block->getSuffixId('period_date_from')) ?>"
                                        name="report_from"
-                                       value="<?= $block->escapeHtml($block->getFilter('report_from')) ?>">
-                                <span id="<?= /* @escapeNotVerified */ $block->getSuffixId('period_date_from_advice') ?>"></span>
+                                       value="<?= $block->escapeHtmlAttr($block->getFilter('report_from')) ?>">
+                                <span id="<?= $block->escapeHtmlAttr($block->getSuffixId('period_date_from_advice'))?>">
+                                </span>
                             </span>
 
                             <span class="field-row">
-                                <label for="<?= /* @escapeNotVerified */ $block->getSuffixId('period_date_to') ?>"
+                                <label for="<?= $block->escapeHtmlAttr($block->getSuffixId('period_date_to')) ?>"
                                        class="admin__control-support-text">
-                                    <span><?= /* @escapeNotVerified */ __('To') ?>:</span>
+                                    <span><?= $block->escapeHtml(__('To')) ?>:</span>
                                 </label>
                                 <input class="input-text no-changes required-entry admin__control-text"
                                        type="text"
-                                       id="<?= /* @escapeNotVerified */ $block->getSuffixId('period_date_to') ?>"
+                                       id="<?= $block->escapeHtmlAttr($block->getSuffixId('period_date_to')) ?>"
                                        name="report_to"
-                                       value="<?= $block->escapeHtml($block->getFilter('report_to')) ?>"/>
-                                <span id="<?= /* @escapeNotVerified */ $block->getSuffixId('period_date_to_advice') ?>"></span>
+                                       value="<?= $block->escapeHtmlAttr($block->getFilter('report_to')) ?>"/>
+                                <span id="<?= $block->escapeHtmlAttr($block->getSuffixId('period_date_to_advice')) ?>">
+                                </span>
                             </span>
 
                             <span class="field-row admin__control-filter">
-                                 <label for="<?= /* @escapeNotVerified */ $block->getSuffixId('report_period') ?>"
+                                 <label for="<?= $block->escapeHtmlAttr($block->getSuffixId('report_period')) ?>"
                                         class="admin__control-support-text">
-                                     <span><?= /* @escapeNotVerified */ __('Show By') ?>:</span>
+                                     <span><?= $block->escapeHtml(__('Show By')) ?>:</span>
                                  </label>
-                                <select name="report_period" id="<?= /* @escapeNotVerified */ $block->getSuffixId('report_period') ?>" class="admin__control-select">
+                                <select name="report_period"
+                                        id="<?= $block->escapeHtmlAttr($block->getSuffixId('report_period')) ?>"
+                                        class="admin__control-select">
                                     <?php foreach ($block->getPeriods() as $_value => $_label): ?>
-                                        <option value="<?= /* @escapeNotVerified */ $_value ?>" <?php if ($block->getFilter('report_period') == $_value): ?> selected<?php endif; ?>><?= /* @escapeNotVerified */ $_label ?></option>
+                                        <option value="<?= $block->escapeHtmlAttr($_value) ?>"
+                                            <?php if ($block->getFilter('report_period') == $_value):
+                                                ?> selected<?php endif; ?>><?= $block->escapeHtml($_label) ?>
+                                        </option>
                                     <?php endforeach; ?>
                                 </select>
                                 <?= $block->getRefreshButtonHtml() ?>
                             </span>
-                            <script>
+                            <?php $scriptString = <<<script
+
                                 require([
                                     "jquery",
                                     "mage/calendar"
                                 ], function($){
 
-                                    $("#<?= /* @escapeNotVerified */ $block->getSuffixId('period_date_range') ?>").dateRange({
-                                        dateFormat:"<?= /* @escapeNotVerified */ $block->getDateFormat() ?>",
-                                        buttonText:"<?= /* @escapeNotVerified */ __('Select Date') ?>",
+                                    $("#{$block->escapeJs($block->getSuffixId('period_date_range'))}").dateRange({
+                                        dateFormat:"{$block->escapeJs($block->getDateFormat())}",
+                                        buttonText:"{$block->escapeJs(__('Select Date'))}",
                                         from:{
-                                            id:"<?= /* @escapeNotVerified */ $block->getSuffixId('period_date_from') ?>"
+                                            id:"{$block->escapeJs($block->getSuffixId('period_date_from'))}"
                                         },
                                         to:{
-                                            id:"<?= /* @escapeNotVerified */ $block->getSuffixId('period_date_to') ?>"
+                                            id:"{$block->escapeJs($block->getSuffixId('period_date_to'))}"
                                         }
                                     });
                                 });
-                            </script>
+
+script;
+                            ?>
+                            <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
                         </div>
                     <?php endif; ?>
                     <?php if ($block->getChildBlock('grid.export')): ?>
@@ -87,13 +98,18 @@ $numColumns = sizeof($block->getColumns());
             </div>
         <?php endif; ?>
         <div class="admin__data-grid-wrap admin__data-grid-wrap-static">
-            <table class="data-grid" id="<?= /* @escapeNotVerified */ $block->getId() ?>_table">
+            <table class="data-grid" id="<?= $block->escapeHtmlAttr($block->getId()) ?>_table">
                 <?= $block->getChildHtml('grid.columnSet') ?>
             </table>
         </div>
     </div>
     <?php if ($block->canDisplayContainer()): ?>
-        <script>
+        <?php $useAjax = '';
+        if ($block->getUseAjax()):
+            $useAjax = $block->escapeJs($block->getUseAjax());
+        endif;
+        $scriptString = <<<script
+
             require([
                 "jquery",
                 "validation",
@@ -102,29 +118,44 @@ $numColumns = sizeof($block->getColumns());
             ], function(jQuery){
 
                 //<![CDATA[
-                <?= /* @escapeNotVerified */ $block->getJsObjectName() ?> = new varienGrid('<?= /* @escapeNotVerified */ $block->getId() ?>', '<?= /* @escapeNotVerified */ $block->getGridUrl() ?>', '<?= /* @escapeNotVerified */ $block->getVarNamePage() ?>', '<?= /* @escapeNotVerified */ $block->getVarNameSort() ?>', '<?= /* @escapeNotVerified */ $block->getVarNameDir() ?>', '<?= /* @escapeNotVerified */ $block->getVarNameFilter() ?>');
-                <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.useAjax = '<?php if ($block->getUseAjax()): /* @escapeNotVerified */ echo $block->getUseAjax(); endif; ?>';
-                <?php if ($block->getDateFilterVisibility()): ?>
-                <?= /* @escapeNotVerified */ $block->getJsObjectName() ?>.doFilterCallback = validateFilterDate;
-                var period_date_from = $('<?= /* @escapeNotVerified */ $block->getSuffixId('period_date_from') ?>');
-                var period_date_to = $('<?= /* @escapeNotVerified */ $block->getSuffixId('period_date_to') ?>');
-                period_date_from.adviceContainer = $('<?= /* @escapeNotVerified */ $block->getSuffixId('period_date_from_advice') ?>');
-                period_date_to.adviceContainer = $('<?= /* @escapeNotVerified */ $block->getSuffixId('period_date_to_advice') ?>');
+                {$block->escapeJs($block->getJsObjectName())} = new varienGrid('{$block->escapeJs($block->getId())}',
+                 '{$block->escapeJs($block->getGridUrl())}', '{$block->escapeJs($block->getVarNamePage())}',
+                 '{$block->escapeJs($block->getVarNameSort())}', '{$block->escapeJs($block->getVarNameDir())}',
+                 '{$block->escapeJs($block->getVarNameFilter())}');
+                {$block->escapeJs($block->getJsObjectName())}.useAjax = '{$useAjax}';
 
-                var validateFilterDate = function() {
-                    if (period_date_from && period_date_to) {
-                        var valid = true;
-                        jQuery(period_date_from).add(period_date_to).each(function() {
-                            valid = Validation.validate(this) && valid;
-                        });
-                        return valid;
+script;
+        ?>
+                <?php if ($block->getDateFilterVisibility()): ?>
+                    <?php $scriptString .= <<<script
+
+                    {$block->escapeJs($block->getJsObjectName())}.doFilterCallback = validateFilterDate;
+                    var period_date_from = $('{$block->escapeJs($block->getSuffixId('period_date_from'))}');
+                    var period_date_to = $('{$block->escapeJs($block->getSuffixId('period_date_to'))}');
+                    period_date_from.adviceContainer =
+                     $('{$block->escapeJs($block->getSuffixId('period_date_from_advice'))}');
+                    period_date_to.adviceContainer =
+                     $('{$block->escapeJs($block->getSuffixId('period_date_to_advice'))}');
+
+                    var validateFilterDate = function() {
+                        if (period_date_from && period_date_to) {
+                            var valid = true;
+                            jQuery(period_date_from).add(period_date_to).each(function() {
+                                valid = Validation.validate(this) && valid;
+                            });
+                            return valid;
+                        }
+                        else {
+                            return true;
+                        }
                     }
-                    else {
-                        return true;
-                    }
-                }
+
+script;
+                    ?>
                 <?php endif;?>
                 <?php if ($block->getStoreSwitcherVisibility()): ?>
+                    <?php $scriptString .= <<<script
+
                 /* Overwrite function from switcher.phtml widget*/
                 switchStore = function(obj) {
                     if (obj.options[obj.selectedIndex].getAttribute('website') == 'true') {
@@ -138,9 +169,12 @@ $numColumns = sizeof($block->getColumns());
                     if (obj.switchParams) {
                         storeParam += obj.switchParams;
                     }
-                    var formParam = new Array('<?= /* @escapeNotVerified */ $block->getSuffixId('period_date_from') ?>', '<?= /* @escapeNotVerified */ $block->getSuffixId('period_date_to') ?>', '<?= /* @escapeNotVerified */ $block->getSuffixId('report_period') ?>');
+                    var formParam = new Array('{$block->escapeJs($block->getSuffixId('period_date_from'))}',
+                     '{$block->escapeJs($block->getSuffixId('period_date_to'))}',
+                     '{$block->escapeJs($block->getSuffixId('report_period'))}');
                     var paramURL = '';
-                    var switchURL = '<?= /* @escapeNotVerified */ $block->getAbsoluteGridUrl(['_current' => false]) ?>'.replace(/(store|group|website)\/\d+\//, '');
+                    var switchURL = '{$block->escapeJs($block->getAbsoluteGridUrl(['_current' => false]))}'
+                    .replace(/(store|group|website)\/\d+\//, '');
 
                     for (var i = 0; i < formParam.length; i++) {
                         if ($(formParam[i]).value && $(formParam[i]).name) {
@@ -149,10 +183,18 @@ $numColumns = sizeof($block->getColumns());
                     }
                     setLocation(switchURL + storeParam + '?' + paramURL);
                 }
+
+script;
+                    ?>
                 <?php endif; ?>
+        <?php $scriptString .= <<<script
+
                 //]]>
 
             });
-        </script>
+
+script;
+        ?>
+        <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
     <?php endif; ?>
 <?php endif; ?>

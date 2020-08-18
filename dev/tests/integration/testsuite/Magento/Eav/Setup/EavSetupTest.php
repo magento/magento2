@@ -22,7 +22,7 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->eavSetup = $objectManager->create(\Magento\Eav\Setup\EavSetup::class);
@@ -55,7 +55,7 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
     {
         return [
             ['eav_setup_test'],
-            ['_59_characters_59_characters_59_characters_59_characters_59'],
+            ['characters_59_characters_59_characters_59_characters_59_59_'],
         ];
     }
 
@@ -65,11 +65,12 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
      * @param string|null $attributeCode
      *
      * @dataProvider addAttributeThrowExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage An attribute code must not be less than 1 and more than 60 characters.
      */
     public function testAddAttributeThrowException($attributeCode)
     {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('An attribute code must not be less than 1 and more than 60 characters.');
+
         $attributeData = $this->getAttributeData();
 
         $this->eavSetup->addAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode, $attributeData);
@@ -87,6 +88,34 @@ class EavSetupTest extends \PHPUnit\Framework\TestCase
             [''],
             [' '],
             ['more_than_60_characters_more_than_more_than_60_characters_more'],
+        ];
+    }
+
+    /**
+     * Verify that add attribute throw exception if attribute_code is not valid.
+     *
+     * @param string|null $attributeCode
+     *
+     * @dataProvider addInvalidAttributeThrowExceptionDataProvider
+     */
+    public function testAddInvalidAttributeThrowException($attributeCode)
+    {
+        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
+        $this->expectExceptionMessage('Please use only letters (a-z or A-Z), numbers (0-9) or underscore (_) in this field,');
+
+        $attributeData = $this->getAttributeData();
+        $this->eavSetup->addAttribute(\Magento\Catalog\Model\Product::ENTITY, $attributeCode, $attributeData);
+    }
+    /**
+     * Data provider for testAddInvalidAttributeThrowException().
+     *
+     * @return array
+     */
+    public function addInvalidAttributeThrowExceptionDataProvider()
+    {
+        return [
+            ['1first_character_is_not_letter'],
+            ['attribute.with.dots'],
         ];
     }
 

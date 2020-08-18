@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDashboardNavigateMenuTest">
+        <annotations>
+            <features value="Backend"/>
+            <stories value="Menu Navigation"/>
+            <title value="Admin dashboard navigate menu test"/>
+            <description value="Admin should be able to navigate to Dashboard"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14116"/>
+            <group value="menu"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <click selector="{{AdminMenuSection.menuItem(AdminMenuDashboard.dataUiId)}}" stepKey="clickOnMenuItem"/>
+        <actionGroup ref="AdminAssertPageTitleActionGroup" stepKey="seePageTitle">
+            <argument name="title" value="{{AdminMenuDashboard.pageTitle}}"/>
+        </actionGroup>
+    </test>
+</tests>

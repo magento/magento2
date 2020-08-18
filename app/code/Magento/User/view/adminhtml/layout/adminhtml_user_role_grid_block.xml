@@ -11,7 +11,7 @@
             <block class="Magento\Backend\Block\Widget\Grid" name="adminhtml.role.grid" as="grid">
                 <arguments>
                     <argument name="id" xsi:type="string">roleGrid</argument>
-                    <argument name="dataSource" xsi:type="object">Magento\Authorization\Model\ResourceModel\Role\Grid\Collection</argument>
+                    <argument name="dataSource" xsi:type="object" shared="false">Magento\Authorization\Model\ResourceModel\Role\Grid\Collection</argument>
                     <argument name="save_parameters_in_session" xsi:type="string">1</argument>
                     <argument name="default_sort" xsi:type="string">role_id</argument>
                     <argument name="default_dir" xsi:type="string">asc</argument>

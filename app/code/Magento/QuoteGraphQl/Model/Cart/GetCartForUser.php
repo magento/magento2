@@ -46,11 +46,13 @@ class GetCartForUser
      *
      * @param string $cartHash
      * @param int|null $customerId
+     * @param int $storeId
      * @return Quote
      * @throws GraphQlAuthorizationException
      * @throws GraphQlNoSuchEntityException
+     * @throws NoSuchEntityException
      */
-    public function execute(string $cartHash, ?int $customerId): Quote
+    public function execute(string $cartHash, ?int $customerId, int $storeId): Quote
     {
         try {
             $cartId = $this->maskedQuoteIdToQuoteId->execute($cartHash);
@@ -70,15 +72,22 @@ class GetCartForUser
         }
 
         if (false === (bool)$cart->getIsActive()) {
+            throw new GraphQlNoSuchEntityException(__('The cart isn\'t active.'));
+        }
+
+        if ((int)$cart->getStoreId() !== $storeId) {
             throw new GraphQlNoSuchEntityException(
-                __('Current user does not have an active cart.')
+                __(
+                    'Wrong store code specified for cart "%masked_cart_id"',
+                    ['masked_cart_id' => $cartHash]
+                )
             );
         }
 
         $cartCustomerId = (int)$cart->getCustomerId();
 
         /* Guest cart, allow operations */
-        if (!$cartCustomerId && null === $customerId) {
+        if (0 === $cartCustomerId && (null === $customerId || 0 === $customerId)) {
             return $cart;
         }
 

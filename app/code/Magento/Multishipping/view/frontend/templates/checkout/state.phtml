@@ -4,7 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
+// phpcs:disable Magento2.Files.LineLength
 
 ?>
 <?php
@@ -15,7 +15,9 @@
  */
 ?>
 <ol class="block multicheckout progress items" id="checkout-progress-state">
-    <?php foreach ($block->getSteps() as $_step): ?>
-        <li title="<?= /* @escapeNotVerified */ $_step->getLabel() ?>" class="item<?= ($_step->getIsActive()) ? ' active' : '' ?>"><span><?= /* @escapeNotVerified */ $_step->getLabel() ?></span></li>
+    <?php foreach ($block->getSteps() as $_step) : ?>
+        <li title="<?= $block->escapeHtmlAttr($_step->getLabel()) ?>" class="item<?= ($_step->getIsActive()) ? ' active' : '' ?>">
+            <span><?= $block->escapeHtml($_step->getLabel()) ?></span>
+        </li>
     <?php endforeach; ?>
 </ol>

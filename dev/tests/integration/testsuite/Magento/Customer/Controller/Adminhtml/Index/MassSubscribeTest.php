@@ -8,6 +8,7 @@ declare(strict_types=1);
 namespace Magento\Customer\Controller\Adminhtml\Index;
 
 use Magento\Backend\Model\Session;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Newsletter\Model\Subscriber;
 use Magento\Newsletter\Model\SubscriberFactory;
@@ -27,7 +28,7 @@ class MassSubscribeTest extends \Magento\TestFramework\TestCase\AbstractBackendC
      */
     protected $baseControllerUrl = 'http://localhost/index.php/backend/customer/index/index';
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /**
          * Unset customer data
@@ -75,7 +76,8 @@ class MassSubscribeTest extends \Magento\TestFramework\TestCase\AbstractBackendC
             ],
             'namespace' => 'customer_listing',
         ];
-        $this->getRequest()->setParams($params);
+        $this->getRequest()->setParams($params)
+            ->setMethod(HttpRequest::METHOD_POST);
 
         $this->dispatch('backend/customer/index/massSubscribe');
 
@@ -109,7 +111,8 @@ class MassSubscribeTest extends \Magento\TestFramework\TestCase\AbstractBackendC
             'namespace' => 'customer_listing'
         ];
 
-        $this->getRequest()->setParams($params);
+        $this->getRequest()->setParams($params)
+            ->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/customer/index/massSubscribe');
 
         $this->assertRedirect($this->stringStartsWith($this->baseControllerUrl));

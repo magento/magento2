@@ -61,6 +61,10 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         $existingMediaGalleryEntries = $product->getMediaGalleryEntries();
         $existingEntryIds = [];
         if ($existingMediaGalleryEntries == null) {
+            // set all media types if not specified
+            if ($entry->getTypes() == null) {
+                $entry->setTypes(array_keys($product->getMediaAttributes()));
+            }
             $existingMediaGalleryEntries = [$entry];
         } else {
             foreach ($existingMediaGalleryEntries as $existingEntries) {
@@ -71,10 +75,12 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
         $product->setMediaGalleryEntries($existingMediaGalleryEntries);
         try {
             $product = $this->productRepository->save($product);
-        } catch (InputException $inputException) {
-            throw $inputException;
         } catch (\Exception $e) {
-            throw new StateException(__("The product can't be saved."));
+            if ($e instanceof InputException) {
+                throw $e;
+            } else {
+                throw new StateException(__("The product can't be saved."));
+            }
         }
 
         foreach ($product->getMediaGalleryEntries() as $entry) {
@@ -98,16 +104,13 @@ class GalleryManagement implements \Magento\Catalog\Api\ProductAttributeMediaGal
             );
         }
         $found = false;
+        $entryTypes = (array)$entry->getTypes();
         foreach ($existingMediaGalleryEntries as $key => $existingEntry) {
-            $entryTypes = (array)$entry->getTypes();
-            $existingEntryTypes = (array)$existingMediaGalleryEntries[$key]->getTypes();
-            $existingMediaGalleryEntries[$key]->setTypes(array_diff($existingEntryTypes, $entryTypes));
+            $existingEntryTypes = (array)$existingEntry->getTypes();
+            $existingEntry->setTypes(array_diff($existingEntryTypes, $entryTypes));
 
             if ($existingEntry->getId() == $entry->getId()) {
                 $found = true;
-                if ($entry->getFile()) {
-                    $entry->setId(null);
-                }
                 $existingMediaGalleryEntries[$key] = $entry;
             }
         }

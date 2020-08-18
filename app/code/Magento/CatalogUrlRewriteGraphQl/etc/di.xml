@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <type name="Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite\UrlResolverIdentity">
+        <arguments>
+            <argument name="urlResolverIdentities" xsi:type="array">
+                <item name="product" xsi:type="object">Magento\CatalogUrlRewriteGraphQl\Model\Resolver\UrlRewrite\CatalogUrlResolverIdentity</item>
+                <item name="category" xsi:type="object">Magento\CatalogUrlRewriteGraphQl\Model\Resolver\UrlRewrite\CatalogUrlResolverIdentity</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\CatalogGraphQl\Plugin\Search\Request\ConfigReader">
+        <arguments>
+            <argument name="exactMatchAttributes" xsi:type="array">
+                <item name="url_key" xsi:type="string">url_key</item>
+            </argument>
+        </arguments>
+    </type>
+
+    <type name="Magento\UrlRewriteGraphQl\Model\Resolver\UrlRewrite">
+        <arguments>
+            <argument name="entityTypeMapping" xsi:type="array">
+                <item name="catalog_product" xsi:type="const">Magento\CatalogUrlRewrite\Model\ProductUrlRewriteGenerator::ENTITY_TYPE</item>
+            </argument>
+        </arguments>
+    </type>
+</config>

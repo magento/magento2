@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCustomerActivitiesConfigureSection">
+        <element name="addAttribute" type="select" selector="//select[contains(concat(' ',normalize-space(@class),' '),' super-attribute-select ')]" timeout="30"/>
+        <element name="dropdownProductSelection" type="select" selector="//option[contains(text(), '{{productName}}')]" parameterized="true" timeout="30"/>
+        <element name="okButton" type="button" selector="//button[contains(concat(' ',normalize-space(@class),' '),' action-primary ')]" timeout="30"/>
+    </section>
+</sections>

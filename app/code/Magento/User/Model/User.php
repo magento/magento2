@@ -8,6 +8,7 @@ namespace Magento\User\Model;
 
 use Magento\Backend\Model\Auth\Credential\StorageInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Exception\AuthenticationException;
 use Magento\Framework\Serialize\Serializer\Json;
@@ -38,24 +39,28 @@ use Magento\Framework\App\DeploymentConfig;
 class User extends AbstractModel implements StorageInterface, UserInterface
 {
     /**
-     * @deprecated
+     * @deprecated New functionality has been added
      * @see \Magento\User\Model\Spi\NotificatorInterface
      */
     const XML_PATH_FORGOT_EMAIL_TEMPLATE = 'admin/emails/forgot_email_template';
 
     /**
-     * @deprecated
+     * @deprecated New functionality has been added
      * @see \Magento\User\Model\Spi\NotificatorInterface
      */
     const XML_PATH_FORGOT_EMAIL_IDENTITY = 'admin/emails/forgot_email_identity';
 
     /**
-     * @deprecated
+     * @deprecated New functionality has been added
      * @see \Magento\User\Model\Spi\NotificatorInterface
      */
     const XML_PATH_USER_NOTIFICATION_TEMPLATE = 'admin/emails/user_notification_template';
 
-    /** @deprecated */
+    /**
+     * Configuration paths for admin user reset password email template
+     *
+     * @deprecated New functionality has been added
+     */
     const XML_PATH_RESET_PASSWORD_TEMPLATE = 'admin/emails/reset_password_template';
 
     const MESSAGE_ID_PASSWORD_EXPIRED = 'magento_user_password_expired';
@@ -115,12 +120,12 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     protected $_encryptor;
 
     /**
-     * @deprecated
+     * @deprecated 101.1.0
      */
     protected $_transportBuilder;
 
     /**
-     * @deprecated
+     * @deprecated 101.1.0
      */
     protected $_storeManager;
 
@@ -140,7 +145,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     private $notificator;
 
     /**
-     * @deprecated
+     * @deprecated 101.1.0
      */
     private $deploymentConfig;
 
@@ -321,6 +326,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Existing user password confirmation will be validated only when password is set
      *
      * @return bool|string[]
+     * @throws \Exception
      */
     public function validate()
     {
@@ -341,6 +347,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * New password is compared to at least 4 previous passwords to prevent setting them again
      *
      * @return bool|string[]
+     * @throws \Exception
      * @since 100.0.3
      */
     protected function validatePasswordChange()
@@ -393,6 +400,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Retrieve user roles
      *
      * @return array
+     * @throws LocalizedException
      */
     public function getRoles()
     {
@@ -441,10 +449,10 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * Send email with reset password confirmation link.
      *
-     * @deprecated
-     * @see NotificatorInterface::sendForgotPassword()
-     *
      * @return $this
+     * @throws NotificationExceptionInterface
+     * @deprecated 101.1.0
+     * @see NotificatorInterface::sendForgotPassword()
      */
     public function sendPasswordResetConfirmationEmail()
     {
@@ -521,7 +529,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @throws NotificationExceptionInterface
      * @return $this
      * @since 100.1.0
-     * @deprecated
+     * @deprecated 101.1.0
      * @see NotificatorInterface::sendUpdated()
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
@@ -559,7 +567,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * @param string $username
      * @param string $password
      * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function authenticate($username, $password)
     {
@@ -581,7 +589,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
                 'admin_user_authenticate_after',
                 ['username' => $username, 'password' => $password, 'user' => $this, 'result' => $result]
             );
-        } catch (\Magento\Framework\Exception\LocalizedException $e) {
+        } catch (LocalizedException $e) {
             $this->unsetData();
             throw $e;
         }
@@ -622,9 +630,10 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * Login user
      *
-     * @param   string $username
-     * @param   string $password
-     * @return  $this
+     * @param string $username
+     * @param string $password
+     * @return $this
+     * @throws LocalizedException
      */
     public function login($username, $password)
     {
@@ -657,6 +666,10 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     {
         $data = $this->getResource()->loadByUsername($username);
         if ($data !== false) {
+            if (isset($data['extra']) && is_string($data['extra'])) {
+                $data['extra'] = $this->serializer->unserialize($data['extra']);
+            }
+
             $this->setData($data);
             $this->setOrigData();
         }
@@ -666,7 +679,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
     /**
      * Check if user is assigned to any role
      *
-     * @param int|\Magento\User\Model\User $user
+     * @param int|User $user
      * @return null|array
      */
     public function hasAssigned2Role($user)
@@ -692,12 +705,12 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      *
      * @param string $newToken
      * @return $this
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function changeResetPasswordLinkToken($newToken)
     {
         if (!is_string($newToken) || empty($newToken)) {
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __('The password reset token is incorrect. Verify the token and try again.')
             );
         }
@@ -711,6 +724,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      * Check if current reset password link token is expired
      *
      * @return bool
+     * @throws \Exception
      */
     public function isResetPasswordLinkTokenExpired()
     {

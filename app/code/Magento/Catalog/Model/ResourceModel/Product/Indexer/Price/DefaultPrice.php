@@ -18,7 +18,7 @@ use Magento\Framework\Indexer\DimensionalIndexerInterface;
  * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @since 100.0.2
- * @deprecated Not used anymore for price indexation. Class left for backward compatibility
+ * @deprecated 102.0.6 Not used anymore for price indexation. Class left for backward compatibility
  * @see DimensionalIndexerInterface
  */
 class DefaultPrice extends AbstractIndexer implements PriceInterface
@@ -240,7 +240,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
      * Prepare final price temporary index table
      *
      * @return $this
-     * @deprecated
+     * @deprecated 102.0.5
      * @see prepareFinalPriceTable()
      */
     protected function _prepareDefaultFinalPriceTable()
@@ -259,7 +259,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $tableName = $this->_getDefaultFinalPriceTable();
         $this->getConnection()->delete($tableName);
 
-        $finalPriceTable = $this->indexTableStructureFactory->create([
+        $finalPriceTable = $this->indexTableStructureFactory->create(
+            [
             'tableName' => $tableName,
             'entityField' => 'entity_id',
             'customerGroupField' => 'customer_group_id',
@@ -270,7 +271,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
             'minPriceField' => 'min_price',
             'maxPriceField' => 'max_price',
             'tierPriceField' => 'tier_price',
-        ]);
+            ]
+        );
 
         return $finalPriceTable;
     }
@@ -465,11 +467,13 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         );
         $tierPrice = $this->getTotalTierPriceExpression($price);
         $tierPriceExpr = $connection->getIfNullSql($tierPrice, $maxUnsignedBigint);
-        $finalPrice = $connection->getLeastSql([
+        $finalPrice = $connection->getLeastSql(
+            [
             $price,
             $specialPriceExpr,
             $tierPriceExpr,
-        ]);
+            ]
+        );
 
         $select->columns(
             [
@@ -848,7 +852,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
                 ]
             ),
             'NULL',
-            $this->getConnection()->getLeastSql([
+            $this->getConnection()->getLeastSql(
+                [
                 $this->getConnection()->getIfNullSql(
                     $this->getTierPriceExpressionForTable('tier_price_1', $priceExpression),
                     $maxUnsignedBigint
@@ -865,7 +870,8 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
                     $this->getTierPriceExpressionForTable('tier_price_4', $priceExpression),
                     $maxUnsignedBigint
                 ),
-            ])
+                ]
+            )
         );
     }
 

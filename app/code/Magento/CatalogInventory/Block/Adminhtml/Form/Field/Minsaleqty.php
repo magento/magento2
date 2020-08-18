@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
 
 /**
@@ -11,7 +13,7 @@ namespace Magento\CatalogInventory\Block\Adminhtml\Form\Field;
  * @api
  * @since 100.0.2
  *
- * @deprecated 2.3.0 Replaced with Multi Source Inventory
+ * @deprecated 100.3.0 Replaced with Multi Source Inventory
  * @link https://devdocs.magento.com/guides/v2.3/inventory/index.html
  * @link https://devdocs.magento.com/guides/v2.3/inventory/catalog-inventory-replacements.html
  */
@@ -33,7 +35,7 @@ class Minsaleqty extends \Magento\Config\Block\System\Config\Form\Field\FieldArr
             $this->_groupRenderer = $this->getLayout()->createBlock(
                 \Magento\CatalogInventory\Block\Adminhtml\Form\Field\Customergroup::class
             );
-            $this->_groupRenderer->setClass('customer_group_select');
+            $this->_groupRenderer->setClass('customer_group_select admin__control-select');
         }
         return $this->_groupRenderer;
     }
@@ -49,7 +51,13 @@ class Minsaleqty extends \Magento\Config\Block\System\Config\Form\Field\FieldArr
             'customer_group_id',
             ['label' => __('Customer Group'), 'renderer' => $this->_getGroupRenderer()]
         );
-        $this->addColumn('min_sale_qty', ['label' => __('Minimum Qty')]);
+        $this->addColumn(
+            'min_sale_qty',
+            [
+                'label' => __('Minimum Qty'),
+                'class' => 'required-entry validate-number validate-greater-than-zero admin__control-text'
+            ]
+        );
         $this->_addAfter = false;
         $this->_addButtonLabel = __('Add Minimum Qty');
     }

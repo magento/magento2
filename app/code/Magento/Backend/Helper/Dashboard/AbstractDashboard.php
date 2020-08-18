@@ -8,6 +8,7 @@ namespace Magento\Backend\Helper\Dashboard;
 /**
  * Adminhtml abstract  dashboard helper.
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  * @since 100.0.2
  */
@@ -28,6 +29,8 @@ abstract class AbstractDashboard extends \Magento\Framework\App\Helper\AbstractH
     protected $_params = [];
 
     /**
+     * Return collections
+     *
      * @return array|\Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     public function getCollection()
@@ -39,6 +42,8 @@ abstract class AbstractDashboard extends \Magento\Framework\App\Helper\AbstractH
     }
 
     /**
+     * Init collections
+     *
      * @return void
      */
     abstract protected function _initCollection();
@@ -54,14 +59,18 @@ abstract class AbstractDashboard extends \Magento\Framework\App\Helper\AbstractH
     }
 
     /**
+     * Return items count
+     *
      * @return int
      */
     public function getCount()
     {
-        return sizeof($this->getItems());
+        return count($this->getItems());
     }
 
     /**
+     * Return column
+     *
      * @param string $index
      * @return array
      */
@@ -85,6 +94,8 @@ abstract class AbstractDashboard extends \Magento\Framework\App\Helper\AbstractH
     }
 
     /**
+     * Set params with value
+     *
      * @param string $name
      * @param mixed $value
      * @return void
@@ -95,6 +106,8 @@ abstract class AbstractDashboard extends \Magento\Framework\App\Helper\AbstractH
     }
 
     /**
+     * Set params
+     *
      * @param array $params
      * @return void
      */
@@ -104,6 +117,8 @@ abstract class AbstractDashboard extends \Magento\Framework\App\Helper\AbstractH
     }
 
     /**
+     * Get params with name
+     *
      * @param string $name
      * @return mixed
      */
@@ -117,6 +132,8 @@ abstract class AbstractDashboard extends \Magento\Framework\App\Helper\AbstractH
     }
 
     /**
+     * Get params
+     *
      * @return array
      */
     public function getParams()

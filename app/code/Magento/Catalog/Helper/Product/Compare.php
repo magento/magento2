@@ -14,6 +14,7 @@ use Magento\Catalog\Model\ResourceModel\Product\Compare\Item\Collection;
  * @api
  * @SuppressWarnings(PHPMD.LongVariable)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @since 100.0.2
  */
 class Compare extends \Magento\Framework\Url\Helper\Data
@@ -145,16 +146,9 @@ class Compare extends \Magento\Framework\Url\Helper\Data
      */
     public function getListUrl()
     {
-        $itemIds = [];
-        foreach ($this->getItemCollection() as $item) {
-            $itemIds[] = $item->getId();
-        }
-
         $params = [
-            'items' => implode(',', $itemIds),
             \Magento\Framework\App\ActionInterface::PARAM_NAME_URL_ENCODED => $this->getEncodedUrl()
         ];
-
         return $this->_getUrl('catalog/product_compare', $params);
     }
 
@@ -285,7 +279,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
             // cannot be placed in constructor because of the cyclic dependency which cannot be fixed with proxy class
             // collection uses this helper in constructor when calling isEnabledFlat() method
             $this->_itemCollection = $this->_itemCollectionFactory->create();
-            $this->_itemCollection->useProductItem(true)->setStoreId($this->_storeManager->getStore()->getId());
+            $this->_itemCollection->useProductItem()->setStoreId($this->_storeManager->getStore()->getId());
 
             if ($this->_customerSession->isLoggedIn()) {
                 $this->_itemCollection->setCustomerId($this->_customerSession->getCustomerId());
@@ -319,7 +313,7 @@ class Compare extends \Magento\Framework\Url\Helper\Data
     {
         /** @var $collection Collection */
         $collection = $this->_itemCollectionFactory->create()
-            ->useProductItem(true);
+            ->useProductItem();
         if (!$logout && $this->_customerSession->isLoggedIn()) {
             $collection->setCustomerId($this->_customerSession->getCustomerId());
         } elseif ($this->_customerId) {

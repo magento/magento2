@@ -17,8 +17,10 @@ use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\DataObject;
 
 /**
- * Class ShipmentSender
+ * Sends order shipment email to the customer.
  *
+ * @deprecated 102.1.0 since this class works only with the concrete model and no data interface
+ * @see \Magento\Sales\Model\Order\Shipment\Sender\EmailSender
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ShipmentSender extends Sender
@@ -57,10 +59,10 @@ class ShipmentSender extends Sender
      * @param ShipmentIdentity $identityContainer
      * @param Order\Email\SenderBuilderFactory $senderBuilderFactory
      * @param \Psr\Log\LoggerInterface $logger
+     * @param Renderer $addressRenderer
      * @param PaymentHelper $paymentHelper
      * @param ShipmentResource $shipmentResource
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $globalConfig
-     * @param Renderer $addressRenderer
      * @param ManagerInterface $eventManager
      */
     public function __construct(
@@ -96,23 +98,33 @@ class ShipmentSender extends Sender
      * @param Shipment $shipment
      * @param bool $forceSyncMode
      * @return bool
+     * @throws \Exception
      */
     public function send(Shipment $shipment, $forceSyncMode = false)
     {
-        $shipment->setSendEmail(true);
+        $shipment->setSendEmail($this->identityContainer->isEnabled());
 
         if (!$this->globalConfig->getValue('sales_email/general/async_sending') || $forceSyncMode) {
             $order = $shipment->getOrder();
+            $this->identityContainer->setStore($order->getStore());
 
             $transport = [
                 'order' => $order,
+                'order_id' => $order->getId(),
                 'shipment' => $shipment,
+                'shipment_id' => $shipment->getId(),
                 'comment' => $shipment->getCustomerNoteNotify() ? $shipment->getCustomerNote() : '',
                 'billing' => $order->getBillingAddress(),
                 'payment_html' => $this->getPaymentHtml($order),
                 'store' => $order->getStore(),
                 'formattedShippingAddress' => $this->getFormattedShippingAddress($order),
-                'formattedBillingAddress' => $this->getFormattedBillingAddress($order)
+                'formattedBillingAddress' => $this->getFormattedBillingAddress($order),
+                'order_data' => [
+                    'customer_name' => $order->getCustomerName(),
+                    'is_not_virtual' => $order->getIsNotVirtual(),
+                    'email_customer_note' => $order->getEmailCustomerNote(),
+                    'frontend_status_label' => $order->getFrontendStatusLabel()
+                ]
             ];
             $transportObject = new DataObject($transport);
 
@@ -146,6 +158,7 @@ class ShipmentSender extends Sender
      *
      * @param Order $order
      * @return string
+     * @throws \Exception
      */
     protected function getPaymentHtml(Order $order)
     {

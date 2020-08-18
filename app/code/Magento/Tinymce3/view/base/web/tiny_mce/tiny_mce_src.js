@@ -918,7 +918,7 @@ tinymce.create('tinymce.util.Dispatcher', {
 
 		parse: function(s) {
 			try {
-				return eval('(' + s + ')');
+				return JSON.parse(s);
 			} catch (ex) {
 				// Ignore
 			}

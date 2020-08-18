@@ -3,9 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
-// @codingStandardsIgnoreFile
-
 ?>
 
 <?php
@@ -16,10 +13,10 @@ $tierPriceModel = $block->getPrice();
 $tierPrices = $tierPriceModel->getTierPriceList();
 ?>
 <?php if (count($tierPrices)) : ?>
-    <ul class="<?= /* @escapeNotVerified */ ($block->hasListClass() ? $block->getListClass() : 'prices-tier items') ?>">
+    <ul class="<?= $block->escapeHtmlAttr(($block->hasListClass() ? $block->getListClass() : 'prices-tier items')) ?>">
         <?php foreach ($tierPrices as $index => $price) : ?>
             <li class="item">
-                <?php /* @escapeNotVerified */ echo __(
+                <?= /* @noEscape */ __(
                     'Buy %1 with %2 discount each',
                     $price['price_qty'],
                     '<strong class="benefit">' . round($price['percentage_value']) . '%</strong>'

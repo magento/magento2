@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="GenerateConfigurationsByAttributeCodeActionGroup">
+        <annotations>
+            <description>Generates the Product Configurations for the provided Attribute Code on the Configurable Product creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="attributeCode" type="string" defaultValue="SomeString"/>
+        </arguments>
+
+        <click selector="{{AdminProductFormConfigurationsSection.createConfigurations}}" stepKey="clickCreateConfigurations"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.filters}}" stepKey="clickFilters"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.attributeCode}}" userInput="{{attributeCode}}" stepKey="fillFilterAttributeCodeField"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applyFilters}}" stepKey="clickApplyFiltersButton"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.firstCheckbox}}" stepKey="clickOnFirstCheckbox"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton1"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.selectAll}}" stepKey="clickOnSelectAll"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton2"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.applySingleQuantityToEachSkus}}" stepKey="clickOnApplySingleQuantityToEachSku"/>
+        <fillField selector="{{AdminCreateProductConfigurationsPanel.quantity}}" userInput="99" stepKey="enterAttributeQuantity"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton3"/>
+        <click selector="{{AdminCreateProductConfigurationsPanel.next}}" stepKey="clickOnNextButton4"/>
+    </actionGroup>
+</actionGroups>

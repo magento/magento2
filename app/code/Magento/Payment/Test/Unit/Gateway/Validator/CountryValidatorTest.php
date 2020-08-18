@@ -3,42 +3,51 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Payment\Test\Unit\Gateway\Validator;
 
-class CountryValidatorTest extends \PHPUnit\Framework\TestCase
+use Magento\Payment\Gateway\ConfigInterface;
+use Magento\Payment\Gateway\Validator\CountryValidator;
+use Magento\Payment\Gateway\Validator\Result;
+use Magento\Payment\Gateway\Validator\ResultInterfaceFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class CountryValidatorTest extends TestCase
 {
-    /** @var \Magento\Payment\Gateway\Validator\CountryValidator */
+    /** @var CountryValidator */
     protected $model;
 
     /**
-     * @var \Magento\Payment\Gateway\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Payment\Gateway\Validator\ResultInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResultInterfaceFactory|MockObject
      */
     protected $resultFactoryMock;
 
     /**
-     * @var \Magento\Payment\Gateway\Validator\Result|\PHPUnit_Framework_MockObject_MockObject
+     * @var Result|MockObject
      */
     protected $resultMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->configMock = $this->getMockBuilder(\Magento\Payment\Gateway\ConfigInterface::class)
+        $this->configMock = $this->getMockBuilder(ConfigInterface::class)
             ->getMockForAbstractClass();
         $this->resultFactoryMock = $this->getMockBuilder(
-            \Magento\Payment\Gateway\Validator\ResultInterfaceFactory::class
+            ResultInterfaceFactory::class
         )->setMethods(['create'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resultMock = $this->getMockBuilder(\Magento\Payment\Gateway\Validator\Result::class)
+        $this->resultMock = $this->getMockBuilder(Result::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->model = new \Magento\Payment\Gateway\Validator\CountryValidator(
+        $this->model = new CountryValidator(
             $this->resultFactoryMock,
             $this->configMock
         );

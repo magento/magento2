@@ -17,10 +17,12 @@ use Magento\Quote\Model\Quote;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * PayPal Express Module
+ * PayPal Express Module.
+ *
  * @method \Magento\Quote\Api\Data\PaymentMethodExtensionInterface getExtensionAttributes()
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Express extends \Magento\Payment\Model\Method\AbstractMethod
 {
@@ -180,6 +182,11 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
     protected $transactionBuilder;
 
     /**
+     * @var string
+     */
+    private static $authorizationExpiredCode = 10601;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\Api\ExtensionAttributesFactory $extensionFactory
@@ -269,6 +276,7 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
                 ApiProcessableException::API_MAXIMUM_AMOUNT_FILTER_DECLINE,
                 ApiProcessableException::API_OTHER_FILTER_DECLINE,
                 ApiProcessableException::API_ADDRESS_MATCH_FAIL,
+                self::$authorizationExpiredCode
             ]
         );
     }
@@ -540,7 +548,17 @@ class Express extends \Magento\Payment\Model\Method\AbstractMethod
      */
     public function cancel(\Magento\Payment\Model\InfoInterface $payment)
     {
-        $this->void($payment);
+        try {
+            $this->void($payment);
+        } catch (ApiProcessableException $e) {
+            if ((int)$e->getCode() === self::$authorizationExpiredCode) {
+                $payment->setTransactionId(null);
+                $payment->setIsTransactionClosed(true);
+                $payment->setShouldCloseParentTransaction(true);
+            } else {
+                throw $e;
+            }
+        }
 
         return $this;
     }

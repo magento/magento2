@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLockAdminUserEntityTest">
+        <annotations>
+            <features value="User"/>
+            <stories value="Lock admin user during login"/>
+            <title value="Lock admin  user after entering incorrect password specified number of times"/>
+            <description value="Lock admin  user after entering incorrect password specified number of times"/>
+            <testCaseId value="MC-14267"/>
+            <severity value="CRITICAL"/>
+            <group value="user"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set admin/captcha/enable 0" stepKey="disableAdminCaptcha"/>
+            <magentoCLI command="config:set admin/security/lockout_failures 2" stepKey="setDefaultMaximumLoginFailures"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches1">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set admin/captcha/enable 1" stepKey="enableAdminCaptcha"/>
+            <magentoCLI command="config:set admin/security/lockout_failures 6" stepKey="setDefaultMaximumLoginFailures"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!--Create New User-->
+        <actionGroup ref="AdminOpenNewUserPageActionGroup" stepKey="goToNewUserPage"/>
+        <actionGroup ref="AdminFillNewUserFormRequiredFieldsActionGroup" stepKey="fillNewUserForm">
+            <argument name="user" value="adminUserCorrectPassword"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserFormActionGroup" stepKey="saveNewUser"/>
+
+        <!-- Log in to Admin Panel with incorrect password specified number of times-->
+        <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAsDefaultUser"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUserFirstAttempt">
+            <argument name="username" value="{{adminUserIncorrectPassword.username}}"/>
+            <argument name="password" value="{{adminUserIncorrectPassword.password}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginErrorFirstAttempt"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUserSecondAttempt">
+            <argument name="username" value="{{adminUserIncorrectPassword.username}}"/>
+            <argument name="password" value="{{adminUserIncorrectPassword.password}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginErrorSecondAttempt"/>
+
+        <!-- Log in to Admin Panel with correct password-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUserThirdAttempt">
+            <argument name="username" value="{{adminUserCorrectPassword.username}}"/>
+            <argument name="password" value="{{adminUserCorrectPassword.password}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertMessageOnAdminLoginActionGroup" stepKey="checkLoginErrorThirdAttempt"/>
+
+        <!--Login as default admin user-->
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultAdminUser"/>
+
+        <!--Delete new User-->
+        <actionGroup ref="AdminDeleteCustomUserActionGroup" stepKey="deleteNewUser">
+            <argument name="user" value="adminUserCorrectPassword"/>
+        </actionGroup>
+
+    </test>
+</tests>

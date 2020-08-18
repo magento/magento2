@@ -6,8 +6,9 @@
 define([
     'underscore',
     'uiRegistry',
-    'Magento_Ui/js/dynamic-rows/dynamic-rows'
-], function (_, registry, dynamicRows) {
+    'Magento_Ui/js/dynamic-rows/dynamic-rows',
+    'jquery'
+], function (_, registry, dynamicRows, $) {
     'use strict';
 
     return dynamicRows.extend({
@@ -211,12 +212,14 @@ define([
             );
 
             tmpData = data.slice(this.pageSize * (this.currentPage() - 1),
-                                 this.pageSize * (this.currentPage() - 1) + this.pageSize);
+                                 this.pageSize * (this.currentPage() - 1) + parseInt(this.pageSize, 10));
 
             this.source.set(this.dataScope + '.' + this.index, []);
 
             _.each(tmpData, function (row, index) {
                 path = this.dataScope + '.' + this.index + '.' + (this.startIndex + index);
+                row.attributes = $('<i></i>').text(row.attributes).html();
+                row.sku = row.sku;
                 this.source.set(path, row);
             }, this);
 
@@ -401,7 +404,7 @@ define([
             product = {
                 'id': row.productId,
                 'product_link': row.productUrl,
-                'name': row.name,
+                'name': $('<i></i>').text(row.name).html(),
                 'sku': row.sku,
                 'status': row.status,
                 'price': row.price,

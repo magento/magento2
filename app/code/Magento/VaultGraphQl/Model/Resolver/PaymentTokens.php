@@ -8,10 +8,11 @@ declare(strict_types=1);
 namespace Magento\VaultGraphQl\Model\Resolver;
 
 use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Vault\Model\PaymentTokenManagement;
-use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
 
 /**
  * Customers Payment Tokens resolver, used for GraphQL request processing.
@@ -24,20 +25,12 @@ class PaymentTokens implements ResolverInterface
     private $paymentTokenManagement;
 
     /**
-     * @var GetCustomer
-     */
-    private $getCustomer;
-
-    /**
      * @param PaymentTokenManagement $paymentTokenManagement
-     * @param GetCustomer $getCustomer
      */
     public function __construct(
-        PaymentTokenManagement $paymentTokenManagement,
-        GetCustomer $getCustomer
+        PaymentTokenManagement $paymentTokenManagement
     ) {
         $this->paymentTokenManagement = $paymentTokenManagement;
-        $this->getCustomer = $getCustomer;
     }
 
     /**
@@ -50,9 +43,12 @@ class PaymentTokens implements ResolverInterface
         array $value = null,
         array $args = null
     ) {
-        $customer = $this->getCustomer->execute($context);
+        /** @var ContextInterface $context */
+        if (false === $context->getExtensionAttributes()->getIsCustomer()) {
+            throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
+        }
 
-        $tokens = $this->paymentTokenManagement->getVisibleAvailableTokens($customer->getId());
+        $tokens = $this->paymentTokenManagement->getVisibleAvailableTokens($context->getUserId());
         $result = [];
 
         foreach ($tokens as $token) {

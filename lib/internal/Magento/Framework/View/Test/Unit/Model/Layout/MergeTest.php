@@ -3,18 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Model\Layout;
 
 use Magento\Framework\App\State;
+use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Config\Dom\ValidationSchemaException;
 use Magento\Framework\Phrase;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Url\ScopeInterface;
 use Magento\Framework\View\Layout\LayoutCacheKeyInterface;
+use Magento\Framework\View\Model\Layout\Merge;
+use Magento\Framework\View\Model\Layout\Update\Validator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
-class MergeTest extends \PHPUnit\Framework\TestCase
+class MergeTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\Model\Layout\Merge
+     * @var Merge
      */
     private $model;
 
@@ -24,40 +34,52 @@ class MergeTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var \Magento\Framework\Url\ScopeInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeInterface|MockObject
      */
     private $scope;
 
     /**
-     * @var \Magento\Framework\View\Model\Layout\Update\Validator|\PHPUnit_Framework_MockObject_MockObject
+     * @var FrontendInterface|MockObject
+     */
+    private $cache;
+
+    /**
+     * @var Validator|MockObject
      */
     private $layoutValidator;
 
     /**
-     * @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|MockObject
+     */
+    private $serializer;
+
+    /**
+     * @var LoggerInterface|MockObject
      */
     private $logger;
 
     /**
-     * @var \Magento\Framework\App\State|\PHPUnit_Framework_MockObject_MockObject
+     * @var State|MockObject
      */
     private $appState;
 
     /**
-     * @var LayoutCacheKeyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutCacheKeyInterface|MockObject
      */
     protected $layoutCacheKeyMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
-        $this->scope = $this->getMockForAbstractClass(\Magento\Framework\Url\ScopeInterface::class);
-        $this->layoutValidator = $this->getMockBuilder(\Magento\Framework\View\Model\Layout\Update\Validator::class)
+        $this->scope = $this->getMockForAbstractClass(ScopeInterface::class);
+        $this->cache = $this->getMockForAbstractClass(FrontendInterface::class);
+        $this->layoutValidator = $this->getMockBuilder(Validator::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->logger = $this->getMockForAbstractClass(\Psr\Log\LoggerInterface::class);
-        $this->appState = $this->getMockBuilder(\Magento\Framework\App\State::class)
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
+        $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
+        $this->appState = $this->getMockBuilder(State::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -67,23 +89,23 @@ class MergeTest extends \PHPUnit\Framework\TestCase
             ->willReturn([]);
 
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\Framework\View\Model\Layout\Merge::class,
+            Merge::class,
             [
                 'scope' => $this->scope,
+                'cache' => $this->cache,
                 'layoutValidator' => $this->layoutValidator,
                 'logger' => $this->logger,
                 'appState' => $this->appState,
                 'layoutCacheKey' => $this->layoutCacheKeyMock,
+                'serializer' => $this->serializer,
             ]
         );
     }
 
-    /**
-     * @expectedException \Magento\Framework\Config\Dom\ValidationSchemaException
-     * @expectedExceptionMessage Processed schema file is not valid.
-     */
     public function testValidateMergedLayoutThrowsException()
     {
+        $this->expectException('Magento\Framework\Config\Dom\ValidationSchemaException');
+        $this->expectExceptionMessage('Processed schema file is not valid.');
         $messages = [
             'Please correct the XSD data and try again.',
         ];
@@ -101,6 +123,35 @@ class MergeTest extends \PHPUnit\Framework\TestCase
         $this->appState->expects($this->once())
             ->method('getMode')
             ->willReturn(State::MODE_DEVELOPER);
+
+        $this->model->load();
+    }
+
+    /**
+     * Test that merged layout is saved to cache if it wasn't cached before.
+     */
+    public function testSaveToCache()
+    {
+        $this->scope->expects($this->once())->method('getId')->willReturn(1);
+        $this->cache->expects($this->once())->method('save');
+
+        $this->model->load();
+    }
+
+    /**
+     * Test that merged layout is not re-saved to cache when it was loaded from cache.
+     */
+    public function testNoSaveToCacheWhenCachePresent()
+    {
+        $cacheValue = [
+            "pageLayout" => "1column",
+            "layout"     => "<body></body>"
+        ];
+
+        $this->scope->expects($this->once())->method('getId')->willReturn(1);
+        $this->cache->expects($this->once())->method('load')->willReturn(json_encode($cacheValue));
+        $this->serializer->expects($this->once())->method('unserialize')->willReturn($cacheValue);
+        $this->cache->expects($this->never())->method('save');
 
         $this->model->load();
     }

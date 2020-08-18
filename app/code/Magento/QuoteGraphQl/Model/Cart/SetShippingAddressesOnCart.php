@@ -7,10 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
-use Magento\CustomerGraphQl\Model\Customer\Address\GetCustomerAddress;
-use Magento\CustomerGraphQl\Model\Customer\GetCustomer;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
-use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
 
 /**
@@ -19,41 +17,25 @@ use Magento\Quote\Api\Data\CartInterface;
 class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
 {
     /**
-     * @var QuoteAddressFactory
-     */
-    private $quoteAddressFactory;
-
-    /**
-     * @var GetCustomer
-     */
-    private $getCustomer;
-
-    /**
-     * @var GetCustomerAddress
-     */
-    private $getCustomerAddress;
-
-    /**
      * @var AssignShippingAddressToCart
      */
     private $assignShippingAddressToCart;
 
     /**
-     * @param QuoteAddressFactory $quoteAddressFactory
-     * @param GetCustomer $getCustomer
-     * @param GetCustomerAddress $getCustomerAddress
+     * @var GetShippingAddress
+     */
+    private $getShippingAddress;
+
+    /**
      * @param AssignShippingAddressToCart $assignShippingAddressToCart
+     * @param GetShippingAddress $getShippingAddress
      */
     public function __construct(
-        QuoteAddressFactory $quoteAddressFactory,
-        GetCustomer $getCustomer,
-        GetCustomerAddress $getCustomerAddress,
-        AssignShippingAddressToCart $assignShippingAddressToCart
+        AssignShippingAddressToCart $assignShippingAddressToCart,
+        GetShippingAddress $getShippingAddress
     ) {
-        $this->quoteAddressFactory = $quoteAddressFactory;
-        $this->getCustomer = $getCustomer;
-        $this->getCustomerAddress = $getCustomerAddress;
         $this->assignShippingAddressToCart = $assignShippingAddressToCart;
+        $this->getShippingAddress = $getShippingAddress;
     }
 
     /**
@@ -66,30 +48,27 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
                 __('You cannot specify multiple shipping addresses.')
             );
         }
-        $shippingAddressInput = current($shippingAddressesInput);
+        $shippingAddressInput = current($shippingAddressesInput) ?? [];
         $customerAddressId = $shippingAddressInput['customer_address_id'] ?? null;
-        $addressInput = $shippingAddressInput['address'] ?? null;
 
-        if (null === $customerAddressId && null === $addressInput) {
-            throw new GraphQlInputException(
-                __('The shipping address must contain either "customer_address_id" or "address".')
-            );
+        if (!$customerAddressId
+            && isset($shippingAddressInput['address'])
+            && !isset($shippingAddressInput['address']['save_in_address_book'])
+        ) {
+            $shippingAddressInput['address']['save_in_address_book'] = true;
         }
 
-        if ($customerAddressId && $addressInput) {
-            throw new GraphQlInputException(
-                __('The shipping address cannot contain "customer_address_id" and "address" at the same time.')
-            );
-        }
+        $shippingAddress = $this->getShippingAddress->execute($context, $shippingAddressInput);
 
-        if (null === $customerAddressId) {
-            $shippingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
-        } else {
-            $customer = $this->getCustomer->execute($context);
-            $customerAddress = $this->getCustomerAddress->execute((int)$customerAddressId, (int)$customer->getId());
-            $shippingAddress = $this->quoteAddressFactory->createBasedOnCustomerAddress($customerAddress);
-        }
+        $errors = $shippingAddress->validate();
 
+        if (true !== $errors) {
+            $e = new GraphQlInputException(__('Shipping address errors'));
+            foreach ($errors as $error) {
+                $e->addError(new GraphQlInputException($error));
+            }
+            throw $e;
+        }
         $this->assignShippingAddressToCart->execute($cart, $shippingAddress);
     }
 }

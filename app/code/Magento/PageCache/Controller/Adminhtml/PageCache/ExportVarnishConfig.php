@@ -1,14 +1,17 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 namespace Magento\PageCache\Controller\Adminhtml\PageCache;
 
+use Magento\Framework\App\Action\HttpGetActionInterface;
 use Magento\Framework\App\Filesystem\DirectoryList;
 
-class ExportVarnishConfig extends \Magento\Backend\App\Action
+/**
+ * Class ExportVarnishConfig action which exports vcl config file
+ */
+class ExportVarnishConfig extends \Magento\Backend\App\Action implements HttpGetActionInterface
 {
     /**
      * Authorization level of a basic admin session
@@ -50,6 +53,9 @@ class ExportVarnishConfig extends \Magento\Backend\App\Action
         $fileName = 'varnish.vcl';
         $varnishVersion = $this->getRequest()->getParam('varnish');
         switch ($varnishVersion) {
+            case 6:
+                $content = $this->config->getVclFile(\Magento\PageCache\Model\Config::VARNISH_6_CONFIGURATION_PATH);
+                break;
             case 5:
                 $content = $this->config->getVclFile(\Magento\PageCache\Model\Config::VARNISH_5_CONFIGURATION_PATH);
                 break;

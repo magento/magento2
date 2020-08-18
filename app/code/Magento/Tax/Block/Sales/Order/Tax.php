@@ -12,6 +12,8 @@ namespace Magento\Tax\Block\Sales\Order;
 use Magento\Sales\Model\Order;
 
 /**
+ *  Tax totals modification block.
+ *
  * @api
  * @since 100.0.2
  */
@@ -80,7 +82,7 @@ class Tax extends \Magento\Framework\View\Element\Template
         $this->_order = $parent->getOrder();
         $this->_source = $parent->getSource();
 
-        $store = $this->getStore();
+        $store = $this->_order->getStore();
         $allowTax = $this->_source->getTaxAmount() > 0 || $this->_config->displaySalesZeroTax($store);
         $grandTotal = (double)$this->_source->getGrandTotal();
         if (!$grandTotal || $allowTax && !$this->_config->displaySalesTaxWithGrandTotal($store)) {
@@ -103,6 +105,10 @@ class Tax extends \Magento\Framework\View\Element\Template
     protected function _addTax($after = 'discount')
     {
         $taxTotal = new \Magento\Framework\DataObject(['code' => 'tax', 'block_name' => $this->getNameInLayout()]);
+        $totals = $this->getParentBlock()->getTotals();
+        if (isset($totals['grand_total_incl'])) {
+            $this->getParentBlock()->addTotal($taxTotal, 'grand_total');
+        }
         $this->getParentBlock()->addTotal($taxTotal, $after);
         return $this;
     }
@@ -118,12 +124,14 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Initialization grand total.
+     *
      * @return $this
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     protected function _initSubtotal()
     {
-        $store = $this->getStore();
+        $store = $this->_order->getStore();
         $parent = $this->getParentBlock();
         $subtotal = $parent->getTotal('subtotal');
         if (!$subtotal) {
@@ -199,11 +207,14 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Init shipping.
+     *
      * @return $this
      */
     protected function _initShipping()
     {
-        $store = $this->getStore();
+        $store = $this->_order->getStore();
+        /** @var \Magento\Sales\Block\Order\Totals $parent */
         $parent = $this->getParentBlock();
         $shipping = $parent->getTotal('shipping');
         if (!$shipping) {
@@ -222,12 +233,14 @@ class Tax extends \Magento\Framework\View\Element\Template
                 $baseShippingIncl = $baseShipping + (double)$this->_source->getBaseShippingTaxAmount();
             }
 
+            $couponDescription = $this->getCouponDescription();
+
             $totalExcl = new \Magento\Framework\DataObject(
                 [
                     'code' => 'shipping',
                     'value' => $shipping,
                     'base_value' => $baseShipping,
-                    'label' => __('Shipping & Handling (Excl.Tax)'),
+                    'label' => __('Shipping & Handling (Excl.Tax)') . $couponDescription,
                 ]
             );
             $totalIncl = new \Magento\Framework\DataObject(
@@ -235,7 +248,7 @@ class Tax extends \Magento\Framework\View\Element\Template
                     'code' => 'shipping_incl',
                     'value' => $shippingIncl,
                     'base_value' => $baseShippingIncl,
-                    'label' => __('Shipping & Handling (Incl.Tax)'),
+                    'label' => __('Shipping & Handling (Incl.Tax)') . $couponDescription,
                 ]
             );
             $parent->addTotal($totalExcl, 'shipping');
@@ -260,18 +273,24 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Init discount.
+     *
+     * phpcs:disable Magento2.CodeAnalysis.EmptyBlock
+     *
      * @return void
      */
     protected function _initDiscount()
     {
     }
-
+    //phpcs:enable
     /**
+     * Init grand total.
+     *
      * @return $this
      */
     protected function _initGrandTotal()
     {
-        $store = $this->getStore();
+        $store = $this->_order->getStore();
         $parent = $this->getParentBlock();
         $grandototal = $parent->getTotal('grand_total');
         if (!$grandototal || !(double)$this->_source->getGrandTotal()) {
@@ -303,14 +322,16 @@ class Tax extends \Magento\Framework\View\Element\Template
                     'label' => __('Grand Total (Incl.Tax)'),
                 ]
             );
-            $parent->addTotal($totalExcl, 'grand_total');
+            $parent->addTotal($totalIncl, 'grand_total');
+            $parent->addTotal($totalExcl, 'tax');
             $this->_addTax('grand_total');
-            $parent->addTotal($totalIncl, 'tax');
         }
         return $this;
     }
 
     /**
+     * Return order.
+     *
      * @return Order
      */
     public function getOrder()
@@ -319,6 +340,8 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Return label properties.
+     *
      * @return array
      */
     public function getLabelProperties()
@@ -327,10 +350,33 @@ class Tax extends \Magento\Framework\View\Element\Template
     }
 
     /**
+     * Retuen value properties.
+     *
      * @return array
      */
     public function getValueProperties()
     {
         return $this->getParentBlock()->getValueProperties();
+    }
+
+    /**
+     * Returns additional information about coupon code if it is not displayed in totals.
+     *
+     * @return string
+     */
+    private function getCouponDescription(): string
+    {
+        $couponDescription = "";
+
+        /** @var \Magento\Sales\Block\Order\Totals $parent */
+        $parent = $this->getParentBlock();
+        $couponCode = $parent->getSource()
+            ->getCouponCode();
+
+        if ($couponCode && !$parent->getTotal('discount')) {
+            $couponDescription = " ({$couponCode})";
+        }
+
+        return $couponDescription;
     }
 }

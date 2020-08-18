@@ -32,4 +32,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\QuoteGraphQl\Model\Cart\BuyRequest\BuyRequestBuilder">
+        <arguments>
+            <argument name="providers" xsi:type="array">
+                <item name="downloadable_links" xsi:type="object">Magento\DownloadableGraphQl\Model\Cart\BuyRequest\DownloadableLinksDataProvider</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

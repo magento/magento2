@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontAdvancedSearchEntitySimpleProductTest">
+        <annotations>
+            <stories value="Use Advanced Search"/>
+            <title value="Use Advanced Search to Find the Product"/>
+            <description value="Use Advanced Search to Find the Product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-12421"/>
+            <group value="searchFrontend"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Delete all products left by prev tests because it sensitive for search-->
+            <actionGroup ref="DeleteAllProductsUsingProductGridActionGroup" stepKey="deleteAllProducts"/>
+            <!-- Create Data -->
+            <createData entity="ABC_dfj_SimpleProduct" stepKey="createProduct"/>
+        </before>
+        <after>
+            <!-- Delete data -->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAdmin"/>
+        </after>
+
+        <!-- Perform reindex and flush cache -->
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+
+        <!-- 1. Navigate to Frontend -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>
+
+        <!-- 2. Click "Advanced Search" -->
+        <actionGroup ref="StorefrontOpenAdvancedSearchActionGroup" stepKey="openAdvancedSearch"/>
+
+        <!-- 3. Fill test data in to field(s) 4. Click "Search" button-->
+        <actionGroup ref="StorefrontFillFormAdvancedSearchActionGroup" stepKey="search">
+            <argument name="productName" value="$$createProduct.name$$"/>
+            <argument name="sku" value="abc_dfj"/>
+        </actionGroup>
+
+        <!-- 5. Perform all asserts -->
+        <actionGroup ref="StorefrontCheckAdvancedSearchResultActionGroup" stepKey="StorefrontCheckAdvancedSearchResult"/>
+        <see userInput="1 item" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.itemFound}}" stepKey="see"/>
+        <see userInput="$$createProduct.name$$" selector="{{StorefrontCatalogSearchAdvancedResultMainSection.productName}}" stepKey="seeProductName"/>
+    </test>
+</tests>

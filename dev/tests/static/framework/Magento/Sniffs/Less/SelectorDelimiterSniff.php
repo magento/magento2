@@ -14,7 +14,7 @@ use PHP_CodeSniffer\Files\File;
  * Ensure that a line break exists after each selector delimiter.
  * No spaces should be before or after delimiters.
  *
- * @link https://devdocs.magento.com/guides/v2.0/coding-standards/code-standard-less.html#selector-delimiters
+ * @link https://devdocs.magento.com/guides/v2.3/coding-standards/code-standard-less.html#selector-delimiters
  */
 class SelectorDelimiterSniff implements Sniff
 {

@@ -5,6 +5,10 @@
  */
 namespace Magento\Backend\Block\Widget\Form;
 
+use Magento\Backend\Block\Widget\Context;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
 /**
  * Backend form container block
  *
@@ -39,7 +43,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
      * @var string
      */
     protected $_blockGroup = 'Magento_Backend';
-    
+
     /**
      *  @var string
      */
@@ -56,6 +60,27 @@ class Container extends \Magento\Backend\Block\Widget\Container
     protected $_template = 'Magento_Backend::widget/form/container.phtml';
 
     /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
+     * @param Context $context
+     * @param array $data
+     * @param SecureHtmlRenderer|null $secureRenderer
+     */
+    public function __construct(
+        Context $context,
+        array $data = [],
+        ?SecureHtmlRenderer $secureRenderer = null
+    ) {
+        $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+        parent::__construct($context, $data);
+    }
+
+    /**
+     * Initialize form.
+     *
      * @return void
      */
     protected function _construct()
@@ -83,7 +108,7 @@ class Container extends \Magento\Backend\Block\Widget\Container
             -1
         );
 
-        $objId = $this->getRequest()->getParam($this->_objectId);
+        $objId = (int)$this->getRequest()->getParam($this->_objectId);
 
         if (!empty($objId)) {
             $this->addButton(
@@ -151,11 +176,13 @@ class Container extends \Magento\Backend\Block\Widget\Container
     }
 
     /**
+     * Get URL for delete button.
+     *
      * @return string
      */
     public function getDeleteUrl()
     {
-        return $this->getUrl('*/*/delete', [$this->_objectId => $this->getRequest()->getParam($this->_objectId)]);
+        return $this->getUrl('*/*/delete', [$this->_objectId => (int)$this->getRequest()->getParam($this->_objectId)]);
     }
 
     /**
@@ -183,6 +210,8 @@ class Container extends \Magento\Backend\Block\Widget\Container
     }
 
     /**
+     * Get form HTML.
+     *
      * @return string
      */
     public function getFormHtml()
@@ -192,28 +221,46 @@ class Container extends \Magento\Backend\Block\Widget\Container
     }
 
     /**
+     * Get form init scripts.
+     *
      * @return string
      */
     public function getFormInitScripts()
     {
         if (!empty($this->_formInitScripts) && is_array($this->_formInitScripts)) {
-            return '<script>' . implode("\n", $this->_formInitScripts) . '</script>';
+            return $this->secureRenderer->renderTag(
+                'script',
+                [],
+                implode("\n", $this->_formInitScripts),
+                false
+            );
         }
+
         return '';
     }
 
     /**
+     * Get form scripts.
+     *
      * @return string
      */
     public function getFormScripts()
     {
         if (!empty($this->_formScripts) && is_array($this->_formScripts)) {
-            return '<script>' . implode("\n", $this->_formScripts) . '</script>';
+            return $this->secureRenderer->renderTag(
+                'script',
+                [],
+                implode("\n", $this->_formScripts),
+                false
+            );
         }
+
         return '';
     }
 
     /**
+     * Get header width.
+     *
      * @return string
      */
     public function getHeaderWidth()
@@ -222,6 +269,8 @@ class Container extends \Magento\Backend\Block\Widget\Container
     }
 
     /**
+     * Get header css class.
+     *
      * @return string
      */
     public function getHeaderCssClass()
@@ -230,6 +279,8 @@ class Container extends \Magento\Backend\Block\Widget\Container
     }
 
     /**
+     * Get header HTML.
+     *
      * @return string
      */
     public function getHeaderHtml()

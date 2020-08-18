@@ -1,0 +1,30 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Store:etc/config.xsd">
+    <default>
+        <customer>
+            <captcha>
+                <shown_to_logged_in_user>
+                    <co-payment-form>1</co-payment-form>
+                </shown_to_logged_in_user>
+                <always_for>
+                    <co-payment-form>1</co-payment-form>
+                </always_for>
+            </captcha>
+        </customer>
+        <captcha translate="label">
+            <frontend>
+                <areas>
+                    <co-payment-form>
+                        <label>Payflow Pro</label>
+                    </co-payment-form>
+                </areas>
+            </frontend>
+        </captcha>
+    </default>
+</config>

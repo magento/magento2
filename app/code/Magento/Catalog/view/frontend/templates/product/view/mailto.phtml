@@ -4,11 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 ?>
 <?php $_product = $block->getProduct() ?>
-<?php if ($block->canEmailToFriend()): ?>
-    <a href="<?= /* @escapeNotVerified */ $this->helper('Magento\Catalog\Helper\Product')->getEmailToFriendUrl($_product) ?>"
-       class="action mailto friend"><span><?= /* @escapeNotVerified */ __('Email') ?></span></a>
+<?php if ($block->canEmailToFriend()) :?>
+    <a href="<?= $block->escapeUrl($this->helper(Magento\Catalog\Helper\Product::class)->getEmailToFriendUrl($_product)) ?>"
+       class="action mailto friend"><span><?= $block->escapeHtml(__('Email')) ?></span></a>
 <?php endif; ?>

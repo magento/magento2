@@ -3,20 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
-/**
- * Catalog Price rules observer model
- */
 namespace Magento\CatalogRule\Observer;
 
-use Magento\Catalog\Model\Product;
-use Magento\CatalogRule\Model\Rule;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
-use Magento\Customer\Model\Session as CustomerModelSession;
-use Magento\Framework\Event\Observer as EventObserver;
-use Magento\Framework\Registry;
 use Magento\Framework\Event\ObserverInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
+/**
+ * Observer for applying catalog rules on product for admin area
+ */
 class ProcessAdminFinalPriceObserver implements ObserverInterface
 {
     /**
@@ -25,6 +23,11 @@ class ProcessAdminFinalPriceObserver implements ObserverInterface
      * @var Registry
      */
     protected $coreRegistry;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    protected $storeManager;
 
     /**
      * @var \Magento\Framework\Stdlib\DateTime\TimezoneInterface
@@ -44,17 +47,20 @@ class ProcessAdminFinalPriceObserver implements ObserverInterface
     /**
      * @param RulePricesStorage $rulePricesStorage
      * @param Registry $coreRegistry
+     * @param StoreManagerInterface $storeManager
      * @param \Magento\CatalogRule\Model\ResourceModel\RuleFactory $resourceRuleFactory
      * @param TimezoneInterface $localeDate
      */
     public function __construct(
         RulePricesStorage $rulePricesStorage,
         Registry $coreRegistry,
+        StoreManagerInterface $storeManager,
         \Magento\CatalogRule\Model\ResourceModel\RuleFactory $resourceRuleFactory,
         TimezoneInterface $localeDate
     ) {
         $this->rulePricesStorage = $rulePricesStorage;
         $this->coreRegistry = $coreRegistry;
+        $this->storeManager = $storeManager;
         $this->resourceRuleFactory = $resourceRuleFactory;
         $this->localeDate = $localeDate;
     }
@@ -64,6 +70,7 @@ class ProcessAdminFinalPriceObserver implements ObserverInterface
      *
      * @param \Magento\Framework\Event\Observer $observer
      * @return $this
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
      */
     public function execute(\Magento\Framework\Event\Observer $observer)
     {
@@ -77,10 +84,14 @@ class ProcessAdminFinalPriceObserver implements ObserverInterface
             $wId = $ruleData->getWebsiteId();
             $gId = $ruleData->getCustomerGroupId();
             $pId = $product->getId();
-
             $key = "{$date->format('Y-m-d H:i:s')}|{$wId}|{$gId}|{$pId}";
         } elseif ($product->getWebsiteId() !== null && $product->getCustomerGroupId() !== null) {
             $wId = $product->getWebsiteId();
+            $gId = $product->getCustomerGroupId();
+            $pId = $product->getId();
+            $key = "{$date->format('Y-m-d H:i:s')}|{$wId}|{$gId}|{$pId}";
+        } elseif ($product->getWebsiteId() === null && $product->getCustomerGroupId() !== null) {
+            $wId = $this->storeManager->getStore($storeId)->getWebsiteId();
             $gId = $product->getCustomerGroupId();
             $pId = $product->getId();
             $key = "{$date->format('Y-m-d H:i:s')}|{$wId}|{$gId}|{$pId}";

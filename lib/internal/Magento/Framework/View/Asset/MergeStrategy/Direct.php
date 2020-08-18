@@ -6,6 +6,8 @@
 namespace Magento\Framework\View\Asset\MergeStrategy;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Math\Random;
 use Magento\Framework\View\Asset;
 
 /**
@@ -31,37 +33,45 @@ class Direct implements \Magento\Framework\View\Asset\MergeStrategyInterface
     private $cssUrlResolver;
 
     /**
+     * @var Random
+     */
+    private $mathRandom;
+
+    /**
      * @param \Magento\Framework\Filesystem $filesystem
      * @param \Magento\Framework\View\Url\CssResolver $cssUrlResolver
+     * @param Random|null $mathRandom
      */
     public function __construct(
         \Magento\Framework\Filesystem $filesystem,
-        \Magento\Framework\View\Url\CssResolver $cssUrlResolver
+        \Magento\Framework\View\Url\CssResolver $cssUrlResolver,
+        Random $mathRandom = null
     ) {
         $this->filesystem = $filesystem;
         $this->cssUrlResolver = $cssUrlResolver;
+        $this->mathRandom = $mathRandom ?: ObjectManager::getInstance()->get(Random::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function merge(array $assetsToMerge, Asset\LocalInterface $resultAsset)
     {
         $mergedContent = $this->composeMergedContent($assetsToMerge, $resultAsset);
         $filePath = $resultAsset->getPath();
+        $tmpFilePath = $filePath . $this->mathRandom->getUniqueHash('_');
         $staticDir = $this->filesystem->getDirectoryWrite(DirectoryList::STATIC_VIEW);
         $tmpDir = $this->filesystem->getDirectoryWrite(DirectoryList::TMP);
-        $tmpDir->writeFile($filePath, $mergedContent);
-        $tmpDir->renameFile($filePath, $filePath, $staticDir);
+        $tmpDir->writeFile($tmpFilePath, $mergedContent);
+        $tmpDir->renameFile($tmpFilePath, $filePath, $staticDir);
     }
 
     /**
      * Merge files together and modify content if needed
      *
-     * @param \Magento\Framework\View\Asset\MergeableInterface[] $assetsToMerge
-     * @param \Magento\Framework\View\Asset\LocalInterface $resultAsset
-     * @return string
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @param array $assetsToMerge
+     * @param Asset\LocalInterface $resultAsset
+     * @return array|string
      */
     private function composeMergedContent(array $assetsToMerge, Asset\LocalInterface $resultAsset)
     {

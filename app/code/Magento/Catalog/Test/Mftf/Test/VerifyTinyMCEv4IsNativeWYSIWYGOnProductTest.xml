@@ -18,8 +18,8 @@
             <testCaseId value="MAGETWO-81819"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
-            <actionGroup ref="EnabledWYSIWYG" stepKey="enableWYSIWYG"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
             <actionGroup ref="SwitchToVersion4ActionGroup" stepKey="switchToTinyMCE4" />
         </before>
         <amOnPage url="{{AdminProductCreatePage.url(AddToDefaultSet.attributeSetId, 'simple')}}" stepKey="navigateToNewProduct"/>
@@ -44,13 +44,13 @@
         <see selector="{{ProductDescriptionWYSIWYGToolbarSection.InsertImageBtn}}" userInput="Insert Image..." stepKey="seeInsertImage1"/>
         <dontSee selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="insertWidget1" />
         <dontSee selector="{{TinyMCESection.InsertVariableBtn}}" stepKey="insertVariable1" />
-        <scrollTo selector="{{ProductDescriptionWYSIWYGToolbarSection.showHideBtn}}" stepKey="scrollToDesShowHideBtn2" />
+        <scrollTo selector="{{ProductShortDescriptionWYSIWYGToolbarSection.showHideBtn}}" y="-150" x="0" stepKey="scrollToDesShowHideBtn2" />
         <click selector="{{ProductShortDescriptionWYSIWYGToolbarSection.showHideBtn}}" stepKey="clickShowHideBtn2" />
         <waitForElementVisible selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageBtn}}" stepKey="waitForInsertImage2" />
         <see selector="{{ProductShortDescriptionWYSIWYGToolbarSection.InsertImageBtn}}" userInput="Insert Image..." stepKey="seeInsertImage2"/>
         <dontSee selector="{{TinyMCESection.InsertWidgetBtn}}" stepKey="insertWidget2" />
         <dontSee selector="{{TinyMCESection.InsertVariableBtn}}" stepKey="insertVariable2" />
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
         <!-- Go to storefront product page, assert product content -->
         <amOnPage url="{{_defaultProduct.name}}.html" stepKey="navigateToProductPage"/>
         <waitForPageLoad stepKey="waitForPageLoad2"/>
@@ -58,8 +58,8 @@
         <see userInput="Hello World!" selector="{{StorefrontProductInfoMainSection.productDescription}}" stepKey="assertProductDescription"/>
         <see userInput="Hello World! Short Content" selector="{{StorefrontProductInfoMainSection.productShortDescription}}" stepKey="assertProductShortDescription"/>
         <after>
-            <actionGroup ref="DisabledWYSIWYG" stepKey="disableWYSIWYG"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
     </test>
 </tests>

@@ -20,6 +20,15 @@
         <data key="content">Sample page content. Yada yada yada.</data>
         <data key="identifier" unique="suffix">test-page-</data>
     </entity>
+    <entity name="customCmsPage" extends="_defaultCmsPage" type="cms_page">
+        <data key="content">Test content data1</data>
+        <data key="identifier">url_key</data>
+    </entity>
+    <entity name="customCmsPage2" extends="_defaultCmsPage" type="cms_page">
+        <data key="title">Test Second CMS Page</data>
+        <data key="content">Test content data2</data>
+        <data key="identifier">url_key</data>
+    </entity>
     <entity name="_duplicatedCMSPage" type="cms_page">
         <data key="title">testpage</data>
         <data key="content_heading">Test Content Heading</data>
@@ -50,6 +59,7 @@
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
         <data key="file">magento-again.jpg</data>
+        <data key="fileName">magento-again</data>
         <data key="value">magento-again.jpg</data>
         <data key="content">Image content. Yeah.</data>
         <data key="height">1000</data>
@@ -71,6 +81,7 @@
         <data key="file_type">Upload File</data>
         <data key="shareable">Yes</data>
         <data key="value">magento3.jpg</data>
+        <data key="file">magento3.jpg</data>
         <data key="fileName">magento3</data>
         <data key="extension">jpg</data>
         <data key="content">Image content. Yeah.</data>

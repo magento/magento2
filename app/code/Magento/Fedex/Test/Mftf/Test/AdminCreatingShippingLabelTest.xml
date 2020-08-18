@@ -1,0 +1,146 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreatingShippingLabelTest">
+        <annotations>
+            <features value="Fedex"/>
+            <stories value="Shipping label"/>
+            <title value="Creating shipping label"/>
+            <description value="Creating shipping label"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-20287"/>
+            <useCaseId value="MC-18215"/>
+            <group value="shipping"/>
+            <skip>
+                <issueId value="MQE-1578"/>
+            </skip>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!-- Create product -->
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="SimpleProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!--Set Fedex configs data-->
+            <magentoCLI command="config:set {{AdminFedexEnableForCheckoutConfigData.path}} {{AdminFedexEnableForCheckoutConfigData.value}}" stepKey="enableCheckout"/>
+            <magentoCLI command="config:set {{AdminFedexEnableSandboxModeConfigData.path}} {{AdminFedexEnableSandboxModeConfigData.value}}" stepKey="enableSandbox"/>
+            <magentoCLI command="config:set {{AdminFedexEnableDebugConfigData.path}} {{AdminFedexEnableDebugConfigData.value}}" stepKey="enableDebug"/>
+            <magentoCLI command="config:set {{AdminFedexEnableShowMethodConfigData.path}} {{AdminFedexEnableShowMethodConfigData.value}}" stepKey="enableShowMethod"/>
+            <!--TODO: add fedex credentials-->
+            <!--Set StoreInformation configs data-->
+            <magentoCLI command="config:set {{AdminGeneralSetStoreNameConfigData.path}} '{{AdminGeneralSetStoreNameConfigData.value}}'" stepKey="setStoreInformationName"/>
+            <magentoCLI command="config:set {{AdminGeneralSetStorePhoneConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.telephone}}" stepKey="setStoreInformationPhone"/>
+            <magentoCLI command="config:set {{AdminGeneralSetCountryConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.country_id}}" stepKey="setStoreInformationCountry"/>
+            <magentoCLI command="config:set {{AdminGeneralSetCityConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.city}}" stepKey="setStoreInformationCity"/>
+            <magentoCLI command="config:set {{AdminGeneralSetPostcodeConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.postcode}}" stepKey="setStoreInformationPostcode"/>
+            <magentoCLI command="config:set {{AdminGeneralSetStreetAddressConfigData.path}} '{{DE_Address_Berlin_Not_Default_Address.street[0]}}'" stepKey="setStoreInformationStreetAddress"/>
+            <magentoCLI command="config:set {{AdminGeneralSetStreetAddress2ConfigData.path}} '{{US_Address_California.street[0]}}'" stepKey="setStoreInformationStreetAddress2"/>
+            <magentoCLI command="config:set {{AdminGeneralSetVatNumberConfigData.path}} {{AdminGeneralSetVatNumberConfigData.value}}" stepKey="setStoreInformationVatNumber"/>
+            <!--Set Shipping settings origin data-->
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginCountryConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.country_id}}" stepKey="setOriginCountry"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginCityConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.city}}" stepKey="setOriginCity"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginZipCodeConfigData.path}} {{DE_Address_Berlin_Not_Default_Address.postcode}}" stepKey="setOriginZipCode"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddressConfigData.path}} '{{DE_Address_Berlin_Not_Default_Address.street[0]}}'" stepKey="setOriginStreetAddress"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddress2ConfigData.path}} '{{US_Address_California.street[0]}}'" stepKey="setOriginStreetAddress2"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Reset configs-->
+            <magentoCLI command="config:set {{AdminFedexDisableForCheckoutConfigData.path}} {{AdminFedexDisableForCheckoutConfigData.value}}" stepKey="disableCheckout"/>
+            <magentoCLI command="config:set {{AdminFedexDisableSandboxModeConfigData.path}} {{AdminFedexDisableSandboxModeConfigData.value}}" stepKey="disableSandbox"/>
+            <magentoCLI command="config:set {{AdminFedexDisableDebugConfigData.path}} {{AdminFedexDisableDebugConfigData.value}}" stepKey="disableDebug"/>
+            <magentoCLI command="config:set {{AdminFedexDisableShowMethodConfigData.path}} {{AdminFedexDisableShowMethodConfigData.value}}" stepKey="disableShowMethod"/>
+            <magentoCLI command="config:set {{AdminGeneralSetStoreNameConfigData.path}} ''" stepKey="setStoreInformationName"/>
+            <magentoCLI command="config:set {{AdminGeneralSetStorePhoneConfigData.path}} ''" stepKey="setStoreInformationPhone"/>
+            <magentoCLI command="config:set {{AdminGeneralSetCityConfigData.path}} ''" stepKey="setStoreInformationCity"/>
+            <magentoCLI command="config:set {{AdminGeneralSetPostcodeConfigData.path}} ''" stepKey="setStoreInformationPostcode"/>
+            <magentoCLI command="config:set {{AdminGeneralSetStreetAddressConfigData.path}} ''" stepKey="setStoreInformationStreetAddress"/>
+            <magentoCLI command="config:set {{AdminGeneralSetStreetAddress2ConfigData.path}} ''" stepKey="setStoreInformationStreetAddress2"/>
+            <magentoCLI command="config:set {{AdminGeneralSetVatNumberConfigData.path}} ''" stepKey="setStoreInformationVatNumber"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginCityConfigData.path}} ''" stepKey="setOriginCity"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginZipCodeConfigData.path}} ''" stepKey="setOriginZipCode"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddressConfigData.path}} ''" stepKey="setOriginStreetAddress"/>
+            <magentoCLI command="config:set {{AdminShippingSettingsOriginStreetAddress2ConfigData.path}} ''" stepKey="setOriginStreetAddress2"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <!--Delete created data-->
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Add country of manufacture to product-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="amOnEditPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForEditPage"/>
+        <actionGroup ref="AdminFillProductCountryOfManufactureActionGroup" stepKey="fillCountryOfManufacture">
+            <argument name="countryId" value="DE"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
+        <!--Place for order using FedEx shipping method-->
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.custom_attributes[url_key]$$)}}" stepKey="amOnStorefrontProductPage"/>
+        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+            <argument name="product" value="$$createProduct$$"/>
+            <argument name="productCount" value="1"/>
+        </actionGroup>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="addAddress">
+            <argument name="customerVar" value="Simple_US_Utah_Customer"/>
+            <argument name="customerAddressVar" value="US_Address_California"/>
+            <argument name="shippingMethod" value="Federal Express"/>
+        </actionGroup>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="customerPlaceOrder">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="grabOrderNumber"/>
+        <!--Open created order in admin-->
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="onOrdersPage"/>
+        <actionGroup ref="SearchAdminDataGridByKeywordActionGroup" stepKey="searchOrder">
+            <argument name="keyword" value="$grabOrderNumber"/>
+        </actionGroup>
+        <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
+        <!--Create Invoice-->
+        <actionGroup ref="AdminCreateInvoiceActionGroup" stepKey="createInvoice"/>
+        <!--Create shipping label-->
+        <actionGroup ref="GoToShipmentIntoOrderActionGroup" stepKey="goToShipmentIntoOrder"/>
+        <checkOption selector="{{AdminShipmentTotalSection.createShippingLabel}}" stepKey="checkCreateShippingLabel"/>
+        <click selector="{{AdminShipmentMainActionsSection.submitShipment}}" stepKey="clickSubmitShipment"/>
+        <actionGroup ref="AdminShipmentCreateShippingLabelActionGroup" stepKey="createPackage">
+            <argument name="productName" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AdminGoToShipmentTabActionGroup" stepKey="goToShipmentTab"/>
+        <click selector="{{AdminOrderShipmentsTabSection.viewGridRow('1')}}" stepKey="clickRowToViewShipment"/>
+        <waitForPageLoad stepKey="waitForShipmentItemsSection"/>
+        <seeElement selector="{{AdminShipmentTrackingInformationShippingSection.shippingInfoTable}}" stepKey="seeInformationTable"/>
+        <seeElement selector="{{AdminShipmentTrackingInformationShippingSection.shippingNumber}}" stepKey="seeShippingNumberElement"/>
+        <grabTextFrom selector="{{AdminShipmentTrackingInformationShippingSection.shippingMethod}}" stepKey="grabShippingMethod"/>
+        <grabTextFrom selector="{{AdminShipmentTrackingInformationShippingSection.shippingMethodTitle}}" stepKey="grabShippingMethodTitle"/>
+        <assertEquals stepKey="assertShippingMethodIsFedEx">
+			<actualResult type="const">$grabShippingMethod</actualResult>
+			<expectedResult type="string">Federal Express</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertShippingMethodTitleIsFedEx">
+			<actualResult type="const">$grabShippingMethodTitle</actualResult>
+			<expectedResult type="string">Federal Express</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

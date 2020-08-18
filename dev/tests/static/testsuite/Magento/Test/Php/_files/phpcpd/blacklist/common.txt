@@ -1,5 +1,4 @@
 Magento/Adminhtml
-Magento/Authorizenet/Model
 Magento/Backend
 Magento/Bundle
 Magento/Catalog/Block/Product/ProductList
@@ -214,3 +213,8 @@ Magento/Elasticsearch/Model/Layer/Search
 Magento/Elasticsearch/Model/Adapter/FieldMapper/Product/FieldProvider/FieldName/Resolver
 Magento/Elasticsearch6/Model/Client
 Magento/Config/App/Config/Type
+Magento/InventoryReservationCli/Test/Integration
+Magento/InventoryAdminUi/Controller/Adminhtml
+Magento/Newsletter/Model/Queue
+Magento/Framework/Mail/Template
+Magento/CheckoutAgreements/Model/Checkout/Plugin

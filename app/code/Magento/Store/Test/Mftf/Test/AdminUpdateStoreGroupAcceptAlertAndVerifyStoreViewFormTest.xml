@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<!-- Test XML Example -->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminUpdateStoreGroupAcceptAlertAndVerifyStoreViewFormTest">
+        <annotations>
+            <stories value="Update Store Group"/>
+            <title value="Update Store Group, Accept Alert and Verify Store View Form"/>
+            <description value="Test log in to Stores and Update Store Group Test"/>
+            <testCaseId value="MC-14296"/>
+            <severity value="CRITICAL"/>
+            <group value="store"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create root category-->
+            <createData entity="NewRootCategory" stepKey="rootCategory"/>
+            <createData entity="SimpleRootSubCategory" stepKey="category">
+                <requiredEntity createDataKey="rootCategory"/>
+            </createData>
+            <!--Create website-->
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <!--Create custom store group-->
+            <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStoreGroup">
+                <argument name="website" value="{{_defaultWebsite.name}}"/>
+                <argument name="store" value="{{staticStoreGroup.name}}"/>
+                <argument name="rootCategory" value="Default Category"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!--Delete website-->
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <!--Delete root category-->
+            <deleteData stepKey="deleteRootCategory" createDataKey="rootCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Open created Store group in grid-->
+        <actionGroup ref="AssertStoreGroupInGridActionGroup" stepKey="openCreatedStoreGroupInGrid">
+            <argument name="storeGroupName" value="{{staticStoreGroup.name}}"/>
+        </actionGroup>
+        <click selector="{{AdminStoresGridSection.firstRow}}" stepKey="clickFirstRow"/>
+        <waitForPageLoad stepKey="AdminSystemStoreGroupPageToOpen"/>
+        <!--Update created Store group as per requirement and accept alert message-->
+        <actionGroup ref="EditCustomStoreGroupAcceptWarningMessageActionGroup" stepKey="updateCustomStoreGroup">
+            <argument name="website" value="{{customWebsite.name}}"/>
+            <argument name="store" value="{{customStoreGroup.name}}"/>
+            <argument name="rootCategory" value="$$rootCategory.name$$"/>
+        </actionGroup>
+
+        <!--Search updated store group(from above step) in grid and verify AssertStoreGroupInGrid-->
+        <actionGroup ref="AssertStoreGroupInGridActionGroup" stepKey="seeUpdatedStoreGroupInGrid">
+            <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+        </actionGroup>
+
+        <!--Verify updated website name and updated websitecode on website form (AssertStoreGroupForm and AssertStoreGroupOnStoreViewForm)-->
+        <actionGroup ref="AssertStoreGroupFormActionGroup" stepKey="seeUpdatedStoreGroupForm">
+            <argument name="website" value="{{customWebsite.name}}"/>
+            <argument name="storeGroupName" value="{{customStoreGroup.name}}"/>
+            <argument name="storeGroupCode" value="{{customStoreGroup.code}}"/>
+            <argument name="rootCategory" value="$$rootCategory.name$$"/>
+        </actionGroup>
+    </test>
+</tests>

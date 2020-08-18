@@ -3,86 +3,100 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\GiftMessage\Test\Unit\Model;
 
+use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\InvalidTransitionException;
-use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GiftMessage\Api\Data\MessageInterface;
+use Magento\GiftMessage\Helper\Message;
+use Magento\GiftMessage\Model\MessageFactory;
+use Magento\GiftMessage\Model\OrderItemRepository;
+use Magento\GiftMessage\Model\Save;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Item;
+use Magento\Sales\Model\OrderFactory;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test class for \Magento\GiftMessage\Model\OrderItemRepository
  * * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
+class OrderItemRepositoryTest extends TestCase
 {
     /**
-     * @var \Magento\GiftMessage\Model\OrderItemRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderItemRepository|MockObject
      */
     private $orderItemRepository;
 
     /**
-     * @var \Magento\Sales\Model\OrderFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderFactory|MockObject
      */
     private $orderFactoryMock;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Sales\Model\Order|MockObject
      */
     private $orderMock;
 
     /**
-     * @var \Magento\GiftMessage\Helper\Message|\PHPUnit_Framework_MockObject_MockObject
+     * @var Message|MockObject
      */
     private $helperMock;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManagerMock;
 
     /**
-     * @var \Magento\Store\Api\Data\StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|MockObject
      */
     private $storeMock;
 
     /**
-     * @var \Magento\GiftMessage\Model\MessageFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var MessageFactory|MockObject
      */
     private $messageFactoryMock;
 
     /**
-     * @var \Magento\GiftMessage\Model\Save|\PHPUnit_Framework_MockObject_MockObject
+     * @var Save|MockObject
      */
     private $giftMessageSaveModelMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->orderMock = $this->getMockBuilder(\Magento\Sales\Model\Order::class)
+        $helper = new ObjectManager($this);
+        $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->setMethods(['load', 'getItemById', 'getIsVirtual'])
             ->getMock();
-        $this->orderFactoryMock = $this->getMockBuilder(\Magento\Sales\Model\OrderFactory::class)
+        $this->orderFactoryMock = $this->getMockBuilder(OrderFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->helperMock = $this->getMockBuilder(\Magento\GiftMessage\Helper\Message::class)
+        $this->helperMock = $this->getMockBuilder(Message::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManagerMock = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManagerMock = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getStore'])
             ->getMockForAbstractClass();
-        $this->storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+        $this->storeMock = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
-        $this->messageFactoryMock = $this->getMockBuilder(\Magento\GiftMessage\Model\MessageFactory::class)
+            ->getMockForAbstractClass();
+        $this->messageFactoryMock = $this->getMockBuilder(MessageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->giftMessageSaveModelMock = $this->getMockBuilder(\Magento\GiftMessage\Model\Save::class)
+        $this->giftMessageSaveModelMock = $this->getMockBuilder(Save::class)
             ->disableOriginalConstructor()
             ->setMethods(['setGiftmessages', 'saveAllInOrder'])
             ->getMock();
@@ -91,7 +105,7 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->storeMock);
 
         $this->orderItemRepository = $helper->getObject(
-            \Magento\GiftMessage\Model\OrderItemRepository::class,
+            OrderItemRepository::class,
             [
                 'orderFactory' => $this->orderFactoryMock,
                 'storeManager' => $this->storeManagerMock,
@@ -110,7 +124,7 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
         $orderId = 1;
         $orderItemId = 2;
         $messageId = 3;
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getGiftMessageId'])
             ->getMock();
@@ -184,7 +198,7 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $orderId = 1;
         $orderItemId = 2;
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getGiftMessageId'])
             ->getMock();
@@ -225,7 +239,7 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
         $orderId = 1;
         $orderItemId = 2;
         $messageId = null;
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getGiftMessageId'])
             ->getMock();
@@ -273,13 +287,13 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
             'recipient' => 'recipient_value',
             'message' => 'message_value',
         ];
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getGiftMessageId'])
             ->getMock();
-        $messageMock = $this->getMockBuilder(\Magento\GiftMessage\Api\Data\MessageInterface::class)
+        $messageMock = $this->getMockBuilder(MessageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->orderFactoryMock->expects($this->any())
             ->method('create')
@@ -323,9 +337,9 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $orderId = 1;
         $orderItemId = 2;
-        $messageMock = $this->getMockBuilder(\Magento\GiftMessage\Api\Data\MessageInterface::class)
+        $messageMock = $this->getMockBuilder(MessageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->orderFactoryMock->expects($this->any())
             ->method('create')
@@ -358,13 +372,13 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $orderId = 1;
         $orderItemId = 2;
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getGiftMessageId'])
             ->getMock();
-        $messageMock = $this->getMockBuilder(\Magento\GiftMessage\Api\Data\MessageInterface::class)
+        $messageMock = $this->getMockBuilder(MessageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->orderFactoryMock->expects($this->any())
             ->method('create')
@@ -397,13 +411,13 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $orderId = 1;
         $orderItemId = 2;
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getGiftMessageId'])
             ->getMock();
-        $messageMock = $this->getMockBuilder(\Magento\GiftMessage\Api\Data\MessageInterface::class)
+        $messageMock = $this->getMockBuilder(MessageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->orderFactoryMock->expects($this->any())
             ->method('create')
@@ -447,13 +461,13 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
             'message' => 'message_value',
         ];
         $excep = new \Exception('Exception message');
-        $orderItemMock = $this->getMockBuilder(\Magento\Sales\Model\Order\Item::class)
+        $orderItemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->setMethods(['getGiftMessageId'])
             ->getMock();
-        $messageMock = $this->getMockBuilder(\Magento\GiftMessage\Api\Data\MessageInterface::class)
+        $messageMock = $this->getMockBuilder(MessageInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->orderFactoryMock->expects($this->any())
             ->method('create')
@@ -486,7 +500,7 @@ class OrderItemRepositoryTest extends \PHPUnit\Framework\TestCase
             ->with($message);
         $this->giftMessageSaveModelMock->expects($this->once())
             ->method('saveAllInOrder')
-            ->will($this->throwException($excep));
+            ->willThrowException($excep);
 
         try {
             $this->orderItemRepository->save($orderId, $orderItemId, $messageMock);

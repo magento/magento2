@@ -13,5 +13,6 @@
         <element name="saveButton" type="button" selector="#save" timeout="90"/>
         <element name="backButton" type="button" selector="#back" timeout="30"/>
         <element name="deleteButton" type="button" selector="#delete" timeout="30"/>
+        <element name="errorMessage" type="text" selector="//div[@class='message message-error error']/div"/>
     </section>
 </sections>

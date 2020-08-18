@@ -12,6 +12,8 @@ use Magento\Framework\App\ActionInterface;
 
 /**
  * Marker for actions processing HEAD requests.
+ *
+ * @deprecated 102.0.2 Both GET and HEAD requests map to HttpGetActionInterface
  */
 interface HttpHeadActionInterface extends ActionInterface
 {

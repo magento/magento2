@@ -1,10 +1,9 @@
 <?php
 /**
- * HTTP response
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\App\Response;
 
 use Magento\Framework\App\Http\Context;
@@ -16,6 +15,11 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Session\Config\ConfigInterface;
 
+/**
+ * HTTP Response.
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
 {
     /** Cookie to store page vary string */
@@ -95,7 +99,9 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     /**
      * Send Vary cookie
      *
-     * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Stdlib\Cookie\CookieSizeLimitReachedException
+     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
      */
     public function sendVary()
     {
@@ -114,6 +120,7 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
 
     /**
      * Set headers for public cache
+     *
      * Accepts the time-to-live (max-age) parameter
      *
      * @param int $ttl
@@ -174,6 +181,8 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
     }
 
     /**
+     * Remove links to other objects.
+     *
      * @return string[]
      * @codeCoverageIgnore
      */

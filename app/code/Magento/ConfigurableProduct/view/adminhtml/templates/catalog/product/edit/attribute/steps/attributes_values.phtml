@@ -4,18 +4,20 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /* @var $block \Magento\ConfigurableProduct\Block\Adminhtml\Product\Steps\AttributeValues */
+$isAllowedToManageAttributes = $block->getPermissions()->isAllowedToManageAttributes();
+$attributesUrl = $block->getUrl('catalog/product_attribute/getAttributes');
+$optionsUrl = $block->getUrl('catalog/product_attribute/createOptions');
 ?>
 <div data-bind="scope: '<?= /* @noEscape */  $block->getComponentName() ?>'">
     <h2 class="steps-wizard-title"><?= $block->escapeHtml(
-            __('Step 2: Attribute Values')
-        ); ?></h2>
+        __('Step 2: Attribute Values')
+    ); ?></h2>
     <div class="steps-wizard-info">
         <span><?= $block->escapeHtml(
-                __('Select values from each attribute to include in this product. Each unique combination of values creates a unique product SKU.')
-            );?></span>
+            __('Select values from each attribute to include in this product. ' .
+                'Each unique combination of values creates a unique product SKU.')
+        );?></span>
     </div>
     <div data-bind="foreach: attributes, sortableList: attributes">
 
@@ -41,24 +43,24 @@
                             data-bind="click: $parent.selectAllAttributes"
                             title="<?= $block->escapeHtml(__('Select All')) ?>">
                         <span><?= $block->escapeHtml(
-                                __('Select All')
-                            ); ?></span>
+                            __('Select All')
+                        ); ?></span>
                     </button>
                     <button type="button"
                             class="action-deselect-all action-tertiary"
                             data-bind="click: $parent.deSelectAllAttributes"
                             title="<?= $block->escapeHtml(__('Deselect All')) ?>">
                         <span><?= $block->escapeHtml(
-                                __('Deselect All')
-                            ); ?></span>
+                            __('Deselect All')
+                        ); ?></span>
                     </button>
                     <button type="button"
                             class="action-remove-all action-tertiary"
                             data-bind="click: $parent.removeAttribute.bind($parent)"
                             title="<?= $block->escapeHtml(__('Remove Attribute')) ?>">
                         <span><?= $block->escapeHtml(
-                                __('Remove Attribute')
-                            ); ?></span>
+                            __('Remove Attribute')
+                        ); ?></span>
                     </button>
                 </div>
             </div>
@@ -74,7 +76,8 @@
                             <label data-bind="text: label, visible: label, attr:{for:id}"
                                    class="admin__field-label"></label>
                         </div>
-                        <div class="admin__field admin__field-create-new" data-bind="visible: !label">
+                        <div class="admin__field admin__field-create-new"
+                             data-bind="attr:{'data-role':id}, visible: !label">
                             <div class="admin__field-control">
                                 <input class="admin__control-text"
                                        name="label"
@@ -87,8 +90,8 @@
                                     data-action="save"
                                     data-bind="click: $parents[1].saveOption.bind($parent)">
                                 <span><?= $block->escapeHtml(
-                                        __('Save Option')
-                                    ); ?></span>
+                                    __('Save Option')
+                                ); ?></span>
                             </button>
                             <button type="button"
                                     class="action-remove"
@@ -96,21 +99,21 @@
                                     data-action="remove"
                                     data-bind="click: $parents[1].removeOption.bind($parent)">
                                 <span><?= $block->escapeHtml(
-                                        __('Remove Option')
-                                    ); ?></span>
+                                    __('Remove Option')
+                                ); ?></span>
                             </button>
                         </div>
                     </li>
                 </ul>
             </fieldset>
-            <button class="action-create-new action-tertiary"
-                    type="button"
-                    data-action="addOption"
-                    data-bind="click: $parent.createOption, visible: canCreateOption">
-                <span><?= $block->escapeHtml(
-                        __('Create New Value')
-                    ); ?></span>
-            </button>
+            <?php if ($isAllowedToManageAttributes): ?>
+                <button class="action-create-new action-tertiary"
+                        type="button"
+                        data-action="addOption"
+                        data-bind="click: $parent.createOption, visible: canCreateOption">
+                    <span><?= $block->escapeHtml(__('Create New Value')); ?></span>
+                </button>
+            <?php endif; ?>
         </div>
     </div>
 </div>
@@ -122,8 +125,8 @@
                     "<?= /* @noEscape */  $block->getComponentName() ?>": {
                         "component": "Magento_ConfigurableProduct/js/variations/steps/attributes_values",
                         "appendTo": "<?= /* @noEscape */  $block->getParentComponentName() ?>",
-                        "optionsUrl": "<?= /* @noEscape */  $block->getUrl('catalog/product_attribute/getAttributes') ?>",
-                        "createOptionsUrl": "<?= /* @noEscape */  $block->getUrl('catalog/product_attribute/createOptions') ?>"
+                        "optionsUrl": "<?= /* @noEscape */  $attributesUrl ?>",
+                        "createOptionsUrl": "<?= /* @noEscape */  $optionsUrl ?>"
                     }
                 }
             }

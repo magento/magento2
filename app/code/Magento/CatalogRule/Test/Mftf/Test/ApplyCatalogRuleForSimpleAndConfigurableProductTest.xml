@@ -1,0 +1,192 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="ApplyCatalogPriceRuleForSimpleProductAndConfigurableProductTest">
+        <annotations>
+            <features value="CatalogRule"/>
+            <stories value="Apply catalog price rule"/>
+            <title value="Admin should be able to apply the catalog price rule for simple product and configurable product"/>
+            <description value="Admin should be able to apply the catalog price rule for simple product and configurable product"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-14770"/>
+            <group value="CatalogRule"/>
+            <group value="mtf_migrated"/>
+         </annotations>
+        <before>
+            <!-- Login as Admin -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Create Simple Product  -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct">
+                <requiredEntity createDataKey="createCategory"/>
+                <field key="price">56.78</field>
+            </createData>
+
+            <!-- Create the configurable product based on the data in the /data folder -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- Make the configurable product have two options, that are children of the default attribute set -->
+            <createData entity="productAttributeWithTwoOptions" stepKey="createConfigProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createConfigProductAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <createData entity="AddToDefaultSet" stepKey="createConfigAddToAttributeSet">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getConfigAttributeOption1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getConfigAttributeOption2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+            </getData>
+
+            <!-- Create the 2 children that will be a part of the configurable product -->
+            <createData entity="ApiSimpleOne" stepKey="createConfigChildProduct1">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+            </createData>
+            <createData entity="ApiSimpleTwo" stepKey="createConfigChildProduct2">
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+
+            <!-- Assign the two products to the configurable product -->
+            <createData entity="ConfigurableProductTwoOptions" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigProductAttribute"/>
+                <requiredEntity createDataKey="getConfigAttributeOption1"/>
+                <requiredEntity createDataKey="getConfigAttributeOption2"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild1">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct1"/>
+            </createData>
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild2">
+                <requiredEntity createDataKey="createConfigProduct"/>
+                <requiredEntity createDataKey="createConfigChildProduct2"/>
+            </createData>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+        </before>
+        <after>
+            <!-- Delete the catalog price rule -->
+            <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage"/>
+            <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
+                <argument name="name" value="{{_defaultCatalogRule.name}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
+            </actionGroup>
+
+            <!-- Logout -->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+
+            <!-- Delete products and category -->
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createConfigProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createConfigChildProduct1" stepKey="deleteConfigChildProduct1"/>
+            <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
+            <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteApiCategory"/>
+
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+        </after>
+        <!-- Begin creating a new catalog price rule -->
+        <actionGroup ref="NewCatalogPriceRuleByUIWithConditionIsCategoryActionGroup" stepKey="newCatalogPriceRuleByUIWithConditionIsCategory">
+                <argument name ="categoryId" value="$createCategory.id$"/>
+        </actionGroup>
+
+        <!-- Select not logged in customer group -->
+        <actionGroup ref="SelectNotLoggedInCustomerGroupActionGroup" stepKey="selectNotLoggedInCustomerGroup"/>
+
+        <!-- Save and apply the new catalog price rule -->
+        <actionGroup ref="SaveAndApplyCatalogPriceRuleActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
+
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
+
+        <!-- Navigate to category on store front -->
+        <amOnPage url="{{StorefrontProductPage.url($createCategory.name$)}}" stepKey="goToCategoryPage"/>
+
+        <!-- Sort products By Price -->
+        <actionGroup ref="StorefrontCategoryPageSortProductActionGroup" stepKey="sortProductByPrice"/>
+        <!-- Set Ascending Direction -->
+        <actionGroup ref="StorefrontCategoryPageSortAscendingActionGroup" stepKey="setAscendingDirection"/>
+
+        <!-- Check simple product name on store front category page -->
+        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct1Name">
+            <argument name="productInfo" value="$createSimpleProduct.name$"/>
+            <argument name="productNumber" value="2"/>
+        </actionGroup>
+
+        <!-- Check simple product price on store front category page -->
+        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct1Price">
+            <argument name="productInfo" value="$51.10"/>
+            <argument name="productNumber" value="2"/>
+        </actionGroup>
+
+        <!-- Check simple product regular price on store front category page -->
+        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct1RegularPrice">
+            <argument name="productInfo" value="$56.78"/>
+            <argument name="productNumber" value="2"/>
+        </actionGroup>
+
+        <!-- Check configurable product name on store front category page -->
+        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct2Name">
+            <argument name="productInfo" value="$createConfigProduct.name$"/>
+            <argument name="productNumber" value="1"/>
+        </actionGroup>
+
+        <!-- Check configurable product price on store front category page -->
+        <actionGroup ref="AssertProductDetailsOnStorefrontActionGroup" stepKey="storefrontProduct2Price">
+            <argument name="productInfo" value="$110.70"/>
+            <argument name="productNumber" value="1"/>
+        </actionGroup>
+
+        <!-- Navigate to simple product on store front -->
+        <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct.name$)}}" stepKey="goToProductPage1"/>
+
+        <!-- Assert regular and special price after selecting ProductOptionValueDropdown1 -->
+        <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertStorefrontProductPrices">
+            <argument name="productPrice" value="$56.78"/>
+            <argument name="productFinalPrice" value="$51.10"/>
+        </actionGroup>
+
+        <!-- Add simple product to cart -->
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="cartAddSimpleProduct1ToCart">
+                    <argument name="productQty" value="1"/>
+        </actionGroup>
+
+        <!-- Open configurable product 1 select option 1 attribute -->
+        <amOnPage url="{{StorefrontProductPage.url($$createConfigProduct.custom_attributes[url_key]$$)}}" stepKey="amOnConfigurableProductPage"/>
+        <selectOption selector="{{StorefrontProductInfoMainSection.productOptionSelect('$$createConfigProductAttribute.attribute[frontend_labels][0][label]$$')}}"  userInput="$$createConfigProductAttributeOption1.option[store_labels][0][label]$$" stepKey="selectOption"/>
+        <actionGroup ref="AssertStorefrontProductPricesActionGroup" stepKey="assertStorefrontProductPrices2">
+            <argument name="productPrice" value="$123.00"/>
+            <argument name="productFinalPrice" value="$110.70"/>
+        </actionGroup>
+
+        <!-- Assert regular and special price after selecting ProductOptionValueDropdown1 -->
+        <actionGroup ref="StorefrontAddProductToCartWithQtyActionGroup" stepKey="cartAddConfigProduct1ToCart">
+            <argument name="productQty" value="1"/>
+        </actionGroup>
+
+        <!-- Assert sub total on mini shopping cart -->
+        <actionGroup ref="AssertSubTotalOnStorefrontMiniCartActionGroup" stepKey="assertSubTotalOnStorefrontMiniCart">
+            <argument name="subTotal" value="$161.80"/>
+        </actionGroup>
+    </test>
+</tests>

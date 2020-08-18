@@ -4,30 +4,39 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /** @var \Magento\Payment\Block\Transparent\Iframe $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
+
 $params = $block->getParams();
 ?>
 <html>
     <head>
-        <script>
+        <?php $scriptString = '' ?>
         <?php if (isset($params['redirect'])): ?>
-            window.location="<?= $block->escapeUrl($params['redirect']) ?>";
+            <?php $scriptString .= <<<script
+            window.location="{$block->escapeJs($params['redirect'])}";
+script;
+            ?>
         <?php elseif (isset($params['redirect_parent'])): ?>
-            var require = window.top.require;
+            <?php $scriptString .= <<<script
+            var require = window.parent.require;
             require(
                 [
                     'jquery'
                 ],
                 function($) {
-                    var parent = window.top;
+                    var parent = window.parent;
                     $(parent).trigger('clearTimeout');
-                    parent.location="<?= $block->escapeUrl($params['redirect_parent']) ?>";
+                    parent.location="{$block->escapeJs($params['redirect_parent'])}";
                 }
             );
+script;
+            ?>
         <?php elseif (isset($params['error_msg'])): ?>
-            var require = window.top.require;
+            <?php
+            $encodedMsg = /* @noEscape */ json_encode($params['error_msg']);
+            $scriptString .= <<<script
+            var require = window.parent.require;
             require(
                 [
                     'jquery',
@@ -35,31 +44,40 @@ $params = $block->getParams();
                     'mage/translate',
                     'Magento_Checkout/js/model/full-screen-loader'
                 ],
-                function($, globalMessageList, $t, fullScreenLoader) {
-                    var parent = window.top;
+                function($, globalMessageList, \$t, fullScreenLoader) {
+                    var parent = window.parent;
                     $(parent).trigger('clearTimeout');
                     fullScreenLoader.stopLoader();
                     globalMessageList.addErrorMessage({
-                        message: $t(<?= /* @escapeNotVerified */ json_encode($params['error_msg'])?>)
+                        message: \$t({$encodedMsg})
                     });
                 }
             );
+script;
+            ?>
         <?php elseif (isset($params['multishipping'])): ?>
-            var require = window.top.require;
+            <?php $scriptString .= <<<script
+            var require = window.parent.require;
             require(
                 [
                     'jquery'
                 ],
                 function($) {
-                    var parent = window.top;
+                    var parent = window.parent;
                     $(parent).trigger('clearTimeout');
                     $(parent.document).find('#multishipping-billing-form').submit();
                 }
             );
+script;
+            ?>
         <?php elseif (isset($params['order_success'])): ?>
-            window.top.location = "<?= $block->escapeUrl($params['order_success']) ?>";
+            <?php $scriptString .= <<<script
+            window.parent.location = "{$block->escapeJs($params['order_success'])}";
+script;
+            ?>
         <?php else: ?>
-            var require = window.top.require;
+            <?php $scriptString .= <<<script
+            var require = window.parent.require;
             require(
                 [
                     'jquery',
@@ -69,7 +87,7 @@ $params = $block->getParams();
                     'Magento_Checkout/js/model/full-screen-loader'
                 ],
                 function($, quote, placeOrderAction, redirectOnSuccessAction, fullScreenLoader) {
-                    var parent = window.top;
+                    var parent = window.parent;
 
                     $(parent).trigger('clearTimeout');
                     $.when(
@@ -80,15 +98,17 @@ $params = $block->getParams();
                         }
                     ).fail(
                         function () {
-                            var parent = window.top;
+                            var parent = window.parent;
                             $(parent).trigger('clearTimeout');
                             fullScreenLoader.stopLoader();
                         }
                     );
                 }
             );
+script;
+            ?>
         <?php endif; ?>
-        </script>
+        <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
     </head>
     <body></body>
 </html>

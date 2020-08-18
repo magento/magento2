@@ -5,10 +5,15 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Save Customer and Assert Success Message -->
-    <actionGroup name="AdminCustomerSaveAndContinue" >
+    <actionGroup name="AdminCustomerSaveAndContinue">
+        <annotations>
+            <description>Clicks on 'Save and Continue' on the Customer creation/edit page.</description>
+        </annotations>
+        
         <click selector="{{AdminCustomerMainActionsSection.saveAndContinue}}" stepKey="saveAndContinue"/>
     </actionGroup>
 </actionGroups>

@@ -3,9 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\Framework\Data;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Collection\EntityFactoryInterface;
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\AlreadyExistsException;
 use Magento\Framework\Option\ArrayInterface;
 
 /**
@@ -14,6 +18,7 @@ use Magento\Framework\Option\ArrayInterface;
  * TODO: Refactor use of \Magento\Framework\Option\ArrayInterface in library.
  *
  * @api
+ * @since 100.0.2
  */
 class Collection implements \IteratorAggregate, \Countable, ArrayInterface, CollectionDataSourceInterface
 {
@@ -24,7 +29,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Collection items
      *
-     * @var \Magento\Framework\DataObject[]
+     * @var DataObject[]
      */
     protected $_items = [];
 
@@ -33,7 +38,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @var string
      */
-    protected $_itemObjectClass = \Magento\Framework\DataObject::class;
+    protected $_itemObjectClass = DataObject::class;
 
     /**
      * Order configuration
@@ -45,7 +50,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Filters configuration
      *
-     * @var \Magento\Framework\DataObject[]
+     * @var DataObject[]
      */
     protected $_filters = [];
 
@@ -116,7 +121,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function addFilter($field, $value, $type = 'and')
     {
-        $filter = new \Magento\Framework\DataObject();
+        $filter = new DataObject();
         // implements ArrayAccess
         $filter['field'] = $field;
         $filter['value'] = $value;
@@ -162,9 +167,9 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      *
      * @param string|array $field
      * @param string|int|array $condition
-     * @throws \Magento\Framework\Exception\LocalizedException if some error in the input could be detected.
      * @return $this
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @throws \Magento\Framework\Exception\LocalizedException if some error in the input could be detected.
      */
     public function addFieldToFilter($field, $condition)
     {
@@ -181,7 +186,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * - array() -- get all filters
      *
      * @param string|string[] $field
-     * @return \Magento\Framework\DataObject|\Magento\Framework\DataObject[]|void
+     * @return DataObject|DataObject[]|void
      */
     public function getFilter($field)
     {
@@ -233,18 +238,16 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Get current collection page
      *
-     * @param  int $displacement
+     * @param int $displacement
      * @return int
      */
     public function getCurPage($displacement = 0)
     {
         if ($this->_curPage + $displacement < 1) {
             return 1;
-        } elseif ($this->_curPage + $displacement > $this->getLastPageNumber()) {
-            return $this->getLastPageNumber();
-        } else {
-            return $this->_curPage + $displacement;
         }
+
+        return $this->_curPage + $displacement;
     }
 
     /**
@@ -258,10 +261,10 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
         if (0 === $collectionSize) {
             return 1;
         } elseif ($this->_pageSize) {
-            return ceil($collectionSize / $this->_pageSize);
-        } else {
-            return 1;
+            return (int)ceil($collectionSize / $this->_pageSize);
         }
+
+        return 1;
     }
 
     /**
@@ -291,7 +294,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Retrieve collection first item
      *
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     public function getFirstItem()
     {
@@ -308,7 +311,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Retrieve collection last item
      *
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     public function getLastItem()
     {
@@ -324,7 +327,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Retrieve collection items
      *
-     * @return \Magento\Framework\DataObject[]
+     * @return DataObject[]
      */
     public function getItems()
     {
@@ -335,8 +338,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Retrieve field values from all items
      *
-     * @param   string $colName
-     * @return  array
+     * @param string $colName
+     * @return array
      */
     public function getColumnValues($colName)
     {
@@ -352,9 +355,9 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Search all items by field value
      *
-     * @param   string $column
-     * @param   mixed $value
-     * @return  array
+     * @param string $column
+     * @param array $value
+     * @return array
      */
     public function getItemsByColumnValue($column, $value)
     {
@@ -372,9 +375,9 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Search first item by field value
      *
-     * @param   string $column
-     * @param   mixed $value
-     * @return  \Magento\Framework\DataObject || null
+     * @param string $column
+     * @param string|int $value
+     * @return DataObject|null
      */
     public function getItemByColumnValue($column, $value)
     {
@@ -391,16 +394,17 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Adding item to item array
      *
-     * @param   \Magento\Framework\DataObject $item
+     * @param DataObject $item
      * @return $this
      * @throws \Exception
      */
-    public function addItem(\Magento\Framework\DataObject $item)
+    public function addItem(DataObject $item)
     {
         $itemId = $this->_getItemId($item);
 
         if ($itemId !== null) {
             if (isset($this->_items[$itemId])) {
+                //phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new \Exception(
                     'Item (' . get_class($item) . ') with the same ID "' . $item->getId() . '" already exists.'
                 );
@@ -415,7 +419,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Add item that has no id to collection
      *
-     * @param \Magento\Framework\DataObject $item
+     * @param DataObject $item
      * @return $this
      */
     protected function _addItem($item)
@@ -427,10 +431,10 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Retrieve item id
      *
-     * @param \Magento\Framework\DataObject $item
-     * @return mixed
+     * @param DataObject $item
+     * @return string|int
      */
-    protected function _getItemId(\Magento\Framework\DataObject $item)
+    protected function _getItemId(DataObject $item)
     {
         return $item->getId();
     }
@@ -452,7 +456,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Remove item from collection by item key
      *
-     * @param   mixed $key
+     * @param string $key
      * @return $this
      */
     public function removeItemByKey($key)
@@ -483,6 +487,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     {
         $this->_setIsLoaded(false);
         $this->_items = [];
+        $this->_totalRecords = null;
         return $this;
     }
 
@@ -535,12 +540,12 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
             }
         }
     }
-    
+
     /**
      * Setting data for all collection items
      *
-     * @param   mixed $key
-     * @param   mixed $value
+     * @param string $key
+     * @param string|int|null $value
      * @return $this
      */
     public function setDataToAll($key, $value = null)
@@ -560,7 +565,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Set current page
      *
-     * @param   int $page
+     * @param int $page
      * @return $this
      */
     public function setCurPage($page)
@@ -572,7 +577,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Set collection page size
      *
-     * @param   int $size
+     * @param int $size
      * @return $this
      */
     public function setPageSize($size)
@@ -584,8 +589,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Set select order
      *
-     * @param   string $field
-     * @param   string $direction
+     * @param string $field
+     * @param string $direction
      * @return $this
      */
     public function setOrder($field, $direction = self::SORT_ORDER_DESC)
@@ -597,13 +602,13 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Set collection item class name
      *
-     * @param  string $className
+     * @param string $className
      * @return $this
      * @throws \InvalidArgumentException
      */
     public function setItemObjectClass($className)
     {
-        if (!is_a($className, \Magento\Framework\DataObject::class, true)) {
+        if (!is_a($className, DataObject::class, true)) {
             throw new \InvalidArgumentException($className . ' does not extend \Magento\Framework\DataObject');
         }
         $this->_itemObjectClass = $className;
@@ -613,7 +618,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Retrieve collection empty item
      *
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     public function getNewEmptyItem()
     {
@@ -745,8 +750,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      * Return items array
      * array(
      *      $index => array(
-     *          'value' => mixed
-     *          'label' => mixed
+     *          'value' => string
+     *          'label' => string
      *      )
      * )
      *
@@ -812,8 +817,8 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
     /**
      * Retrieve item by id
      *
-     * @param mixed $idValue
-     * @return \Magento\Framework\DataObject
+     * @param string|int $idValue
+     * @return DataObject
      */
     public function getItemById($idValue)
     {
@@ -907,7 +912,7 @@ class Collection implements \IteratorAggregate, \Countable, ArrayInterface, Coll
      */
     public function __wakeup()
     {
-        $objectManager = \Magento\Framework\App\ObjectManager::getInstance();
+        $objectManager = ObjectManager::getInstance();
         $this->_entityFactory = $objectManager->get(EntityFactoryInterface::class);
     }
 }

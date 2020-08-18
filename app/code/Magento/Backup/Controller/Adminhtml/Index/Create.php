@@ -58,7 +58,9 @@ class Create extends \Magento\Backup\Controller\Adminhtml\Index implements HttpP
             $this->_coreRegistry->register('backup_manager', $backupManager);
 
             if ($this->getRequest()->getParam('maintenance_mode')) {
-                if (!$this->maintenanceMode->set(true)) {
+                $this->maintenanceMode->set(true);
+
+                if (!$this->maintenanceMode->isOn()) {
                     $response->setError(
                         __(
                             'You need more permissions to activate maintenance mode right now.'

@@ -28,6 +28,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
  * @method \Magento\Framework\DB\Select distinct($flag = true)
  * @method \Magento\Framework\DB\Select reset($part = null)
  * @method \Magento\Framework\DB\Select columns($cols = '*', $correlationName = null)
+ * @since 100.0.2
  */
 class Select extends \Zend_Db_Select
 {
@@ -42,7 +43,7 @@ class Select extends \Zend_Db_Select
     const STRAIGHT_JOIN = 'straightjoin';
 
     /**
-     * Sql straight join
+     * Straight join SQL directive.
      */
     const SQL_STRAIGHT_JOIN = 'STRAIGHT_JOIN';
 
@@ -91,6 +92,12 @@ class Select extends \Zend_Db_Select
      * $select->where('id = :id');
      * </code>
      *
+     * You may also construct IN statements:
+     *
+     * <code>
+     * $select->where('entity_id IN (?)', ['1', '2', '3']);
+     * </code>
+     *
      * Note that it is more correct to use named bindings in your
      * queries for values other than strings. When you use named
      * bindings, don't forget to pass the values when actually
@@ -101,7 +108,7 @@ class Select extends \Zend_Db_Select
      * </code>
      *
      * @param string $cond The WHERE condition.
-     * @param string $value OPTIONAL A single value to quote into the condition.
+     * @param string|array|null $value OPTIONAL An optional single or array value to quote into the condition.
      * @param string|int|null $type OPTIONAL The type of the given value
      * @return \Magento\Framework\DB\Select
      */
@@ -400,7 +407,7 @@ class Select extends \Zend_Db_Select
     /**
      * Render STRAIGHT_JOIN clause
      *
-     * @param string   $sql SQL query
+     * @param string $sql SQL query
      * @return string
      */
     protected function _renderStraightjoin($sql)
@@ -434,7 +441,7 @@ class Select extends \Zend_Db_Select
             }
         }
 
-        return parent::_tableCols($correlationName, $cols, $afterCorrelationName);
+        parent::_tableCols($correlationName, $cols, $afterCorrelationName);
     }
 
     /**
@@ -452,7 +459,7 @@ class Select extends \Zend_Db_Select
     /**
      * Render FOR UPDATE clause
      *
-     * @param string   $sql SQL query
+     * @param string $sql SQL query
      * @return string
      */
     protected function _renderForupdate($sql)
@@ -467,9 +474,9 @@ class Select extends \Zend_Db_Select
     /**
      * Add EXISTS clause
      *
-     * @param  Select $select
-     * @param  string           $joinCondition
-     * @param   bool            $isExists
+     * @param Select $select
+     * @param string $joinCondition
+     * @param bool $isExists
      * @return $this
      */
     public function exists($select, $joinCondition, $isExists = true)
@@ -509,6 +516,8 @@ class Select extends \Zend_Db_Select
     }
 
     /**
+     * Remove links to other objects.
+     *
      * @return string[]
      * @since 100.0.11
      */

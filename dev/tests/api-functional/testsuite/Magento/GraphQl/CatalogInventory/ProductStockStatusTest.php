@@ -12,6 +12,9 @@ use Magento\CatalogInventory\Api\StockRegistryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 
+/**
+ * Test for product status
+ */
 class ProductStockStatusTest extends GraphQlAbstract
 {
     /**
@@ -19,7 +22,7 @@ class ProductStockStatusTest extends GraphQlAbstract
      */
     private $stockRegistry;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->stockRegistry = Bootstrap::getObjectManager()->create(StockRegistryInterface::class);
     }
@@ -55,7 +58,6 @@ QUERY;
      */
     public function testQueryProductStockStatusOutOfStock()
     {
-        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/167');
         $productSku = 'simple';
 
         $query = <<<QUERY

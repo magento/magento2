@@ -9,9 +9,13 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminFilterCustomerGroupByNameActionGroup">
+        <annotations>
+            <description>Filters the Admin Customers grid by the provided Customer Group Name.</description>
+        </annotations>
         <arguments>
             <argument name="customerGroupName" type="string"/>
         </arguments>
+
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openFiltersSectionOnCustomerGroupIndexPage"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="cleanFiltersIfTheySet"/>
         <fillField userInput="{{customerGroupName}}" selector="{{AdminDataGridHeaderSection.filterFieldInput('customer_group_code')}}" stepKey="fillNameFieldOnFiltersSection"/>

@@ -3,27 +3,31 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\GroupedProduct\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\Data\ProductLinkExtensionInterface;
 use Magento\Catalog\Api\Data\ProductLinkInterface;
+use Magento\Catalog\Api\Data\ProductLinkInterfaceFactory;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\Image as ImageHelper;
 use Magento\Catalog\Model\Locator\LocatorInterface;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Test\Unit\Ui\DataProvider\Product\Form\Modifier\AbstractModifierTest;
 use Magento\Eav\Api\AttributeSetRepositoryInterface;
 use Magento\Eav\Api\Data\AttributeSetInterface;
 use Magento\Framework\Locale\CurrencyInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\GroupedProduct\Model\Product\Link\CollectionProvider\Grouped as GroupedProducts;
 use Magento\GroupedProduct\Model\Product\Type\Grouped as GroupedProductType;
 use Magento\GroupedProduct\Ui\DataProvider\Product\Form\Modifier\Grouped;
 use Magento\Store\Api\Data\StoreInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class GroupedTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class GroupedTest extends AbstractModifierTest
@@ -38,67 +42,82 @@ class GroupedTest extends AbstractModifierTest
     const LINKED_PRODUCT_PRICE = '1';
 
     /**
-     * @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductInterface|MockObject
      */
     protected $linkedProductMock;
 
     /**
-     * @var ProductLinkRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductLinkRepositoryInterface|MockObject
      */
     protected $linkRepositoryMock;
 
     /**
-     * @var ProductLinkInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductLinkInterface|MockObject
      */
     protected $linkMock;
 
     /**
-     * @var ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRepositoryInterface|MockObject
      */
     protected $productRepositoryMock;
 
     /**
-     * @var ProductLinkExtensionInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductLinkExtensionInterface|MockObject
      */
     protected $linkExtensionMock;
 
     /**
-     * @var CurrencyInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CurrencyInterface|MockObject
      */
     protected $currencyMock;
 
     /**
-     * @var ImageHelper|\PHPUnit_Framework_MockObject_MockObject
+     * @var ImageHelper|MockObject
      */
     protected $imageHelperMock;
 
     /**
-     * @var AttributeSetRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeSetRepositoryInterface|MockObject
      */
     protected $attributeSetRepositoryMock;
 
     /**
-     * @var StoreInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreInterface|MockObject
      */
     protected $storeMock;
 
-    protected function setUp()
+    /**
+     * @var GroupedProducts|MockObject
+     */
+    private $groupedProductsMock;
+
+    /**
+     * @var ProductLinkInterfaceFactory|MockObject
+     */
+    private $productLinkFactoryMock;
+
+    /**
+     * @inheritdoc
+     */
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->locatorMock = $this->getMockBuilder(LocatorInterface::class)
             ->getMockForAbstractClass();
-        $this->productMock = $this->getMockBuilder(ProductInterface::class)
+        $this->productMock = $this->getMockBuilder(Product::class)
             ->setMethods(['getId', 'getTypeId'])
-            ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productMock->expects($this->any())
             ->method('getId')
             ->willReturn(self::PRODUCT_ID);
         $this->productMock->expects($this->any())
             ->method('getTypeId')
             ->willReturn(GroupedProductType::TYPE_CODE);
-        $this->linkedProductMock = $this->getMockBuilder(ProductInterface::class)
+        $this->linkedProductMock = $this->getMockBuilder(Product::class)
             ->setMethods(['getId', 'getName', 'getPrice'])
-            ->getMockForAbstractClass();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->linkedProductMock->expects($this->any())
             ->method('getId')
             ->willReturn(self::LINKED_PRODUCT_ID);
@@ -135,7 +154,7 @@ class GroupedTest extends AbstractModifierTest
         $this->linkRepositoryMock->expects($this->any())
             ->method('getList')
             ->with($this->productMock)
-            ->willReturn([$this->linkMock]);
+            ->willReturn([$this->linkedProductMock]);
         $this->productRepositoryMock = $this->getMockBuilder(ProductRepositoryInterface::class)
             ->setMethods(['get'])
             ->getMockForAbstractClass();
@@ -155,7 +174,7 @@ class GroupedTest extends AbstractModifierTest
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     protected function createModel()
     {
@@ -169,6 +188,16 @@ class GroupedTest extends AbstractModifierTest
             ->setMethods(['init', 'getUrl'])
             ->disableOriginalConstructor()
             ->getMock();
+
+        $this->groupedProductsMock = $this->getMockBuilder(GroupedProducts::class)
+            ->setMethods(['getLinkedProducts'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->productLinkFactoryMock = $this->getMockBuilder(ProductLinkInterfaceFactory::class)
+            ->setMethods(['create'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+
         $this->imageHelperMock->expects($this->any())
             ->method('init')
             ->willReturn($this->imageHelperMock);
@@ -189,16 +218,23 @@ class GroupedTest extends AbstractModifierTest
             'localeCurrency' => $this->currencyMock,
             'imageHelper' => $this->imageHelperMock,
             'attributeSetRepository' => $this->attributeSetRepositoryMock,
+            'groupedProducts' => $this->groupedProductsMock,
+            'productLinkFactory' => $this->productLinkFactoryMock,
         ]);
     }
 
+    /**
+     * Assert array has key
+     *
+     * @return void
+     */
     public function testModifyMeta()
     {
         $this->assertArrayHasKey(Grouped::GROUP_GROUPED, $this->getModel()->modifyMeta([]));
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function testModifyData()
     {
@@ -226,6 +262,42 @@ class GroupedTest extends AbstractModifierTest
                 ],
             ],
         ];
-        $this->assertSame($expectedData, $this->getModel()->modifyData([]));
+        $model = $this->getModel();
+        $linkedProductMock = $this->getMockBuilder(Product::class)
+            ->setMethods(['getId', 'getName', 'getPrice', 'getSku', 'getImage', 'getPosition', 'getQty'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $linkedProductMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(self::LINKED_PRODUCT_ID);
+        $linkedProductMock->expects($this->once())
+            ->method('getName')
+            ->willReturn(self::LINKED_PRODUCT_NAME);
+        $linkedProductMock->expects($this->once())
+            ->method('getPrice')
+            ->willReturn(self::LINKED_PRODUCT_PRICE);
+        $linkedProductMock->expects($this->once())
+            ->method('getSku')
+            ->willReturn(self::LINKED_PRODUCT_SKU);
+        $linkedProductMock->expects($this->once())
+            ->method('getImage')
+            ->willReturn('');
+        $linkedProductMock->expects($this->exactly(2))
+            ->method('getPosition')
+            ->willReturn(self::LINKED_PRODUCT_POSITION);
+        $linkedProductMock->expects($this->once())
+            ->method('getQty')
+            ->willReturn(self::LINKED_PRODUCT_QTY);
+        $this->groupedProductsMock->expects($this->once())
+            ->method('getLinkedProducts')
+            ->willReturn([$linkedProductMock]);
+        $linkMock = $this->getMockBuilder(ProductLinkInterface::class)
+            ->getMockForAbstractClass();
+
+        $this->productLinkFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($linkMock);
+
+        $this->assertSame($expectedData, $model->modifyData([]));
     }
 }

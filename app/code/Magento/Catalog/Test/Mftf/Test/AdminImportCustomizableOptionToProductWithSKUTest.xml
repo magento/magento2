@@ -1,0 +1,78 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminImportCustomizableOptionToProductWithSKUTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Customizable options"/>
+            <title value="Import customizable options to a product with existing SKU"/>
+            <description value="Import customizable options to a product with existing SKU"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-16471"/>
+            <useCaseId value="MAGETWO-70232"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!--Create category-->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <!-- Create two products -->
+            <createData entity="SimpleProduct2" stepKey="createFirstProduct"/>
+            <updateData entity="ProductWithTwoTextFieldOptions" createDataKey="createFirstProduct" stepKey="updateFirstProductWithCustomOptions">
+                <requiredEntity createDataKey="createFirstProduct"/>
+            </updateData>
+            <createData entity="ApiSimpleProduct" stepKey="createSecondProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+
+            <!-- TODO: REMOVE AFTER FIX MC-21717 -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Delete created data-->
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createFirstProduct" stepKey="deleteFirstProduct"/>
+            <!--Delete second product with changed sku-->
+            <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteSecondProduct">
+                <argument name="sku" value="$$createFirstProduct.sku$$-1"/>
+            </actionGroup>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductGridFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+        <!--Change second product sku to first product sku-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage1">
+            <argument name="productId" value="$$createSecondProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForProductEditPageLoad1"/>
+        <fillField selector="{{AdminProductFormSection.productSku}}" userInput="$$createFirstProduct.sku$$" stepKey="fillProductSku1"/>
+        <!--Import customizable options and check-->
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.addOptionBtn}}" visible="false" stepKey="openCustomOptionSection"/>
+        <actionGroup ref="ImportProductCustomizableOptionsActionGroup" stepKey="importOptions">
+            <argument name="productName" value="$$createFirstProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="CheckCustomizableOptionImportActionGroup" stepKey="checkFirstOptionImport">
+            <argument name="option" value="ProductOptionField"/>
+            <argument name="optionIndex" value="0"/>
+        </actionGroup>
+        <actionGroup ref="CheckCustomizableOptionImportActionGroup" stepKey="checkSecondOptionImport">
+            <argument name="option" value="ProductOptionField2"/>
+            <argument name="optionIndex" value="1"/>
+        </actionGroup>
+        <!--Save product and check sku changed message-->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSecondProduct"/>
+        <see selector="{{AdminMessagesSection.notice}}" userInput="SKU for product $$createSecondProduct.name$$ has been changed to $$createFirstProduct.sku$$-1." stepKey="seeSkuChangedMessage"/>
+    </test>
+</tests>

@@ -19,7 +19,7 @@ class StoreCookieManagerTest extends \PHPUnit\Framework\TestCase
      */
     protected $existingCookies;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->storeCookieManager = Bootstrap::getObjectManager()->create(
             \Magento\Store\Model\StoreCookieManager::class
@@ -27,7 +27,7 @@ class StoreCookieManagerTest extends \PHPUnit\Framework\TestCase
         $this->existingCookies = $_COOKIE;
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $_COOKIE = $this->existingCookies;
     }

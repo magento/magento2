@@ -12,5 +12,6 @@
         <element name="subCategory" type="button" selector="//ul[contains(@class,'submenu')]//span[contains(text(),'{{var1}}')]" parameterized="true"/>
         <element name="breadcrumbs" type="textarea" selector=".items"/>
         <element name="categoryBreadcrumbs" type="textarea" selector=".breadcrumbs li"/>
+        <element name="categoryBreadcrumbsByNumber" type="textarea" selector=".breadcrumbs li:nth-of-type({{number}})" parameterized="true"/>
     </section>
 </sections>

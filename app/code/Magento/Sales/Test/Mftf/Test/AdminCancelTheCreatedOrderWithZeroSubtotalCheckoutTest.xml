@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCancelTheCreatedOrderWithZeroSubtotalCheckoutTest">
+        <annotations>
+            <group value="Sales"/>
+            <stories value="Cancel Created Order"/>
+            <title value="Cancel the created order with zero subtotal checkout"/>
+            <description value="Create an order with Zero Subtotal checkout and cancel the order"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-16067"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <!-- Enable Zero Subtotal Checkout -->
+            <magentoCLI command="config:set {{EnableZeroSubtotalCheckoutConfigData.path}} {{EnableZeroSubtotalCheckoutConfigData.value}}" stepKey="enableZeroSubtotalCheckout"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!--Set Free shipping method settings-->
+            <createData entity="FreeShippingMethodsSettingConfig" stepKey="freeShippingMethodsSettingConfig"/>
+
+            <!--Create simple customer-->
+            <createData entity="Simple_US_Customer_CA" stepKey="simpleCustomer"/>
+
+            <!-- Create Simple Product -->
+            <createData entity="SimpleProduct2" stepKey="simpleProduct">
+                <field key="price">10.00</field>
+            </createData>
+
+            <!-- Create a slaes rule with fixed discount -->
+            <createData entity="SalesRuleNoCouponWithFixedDiscount" stepKey="createSalesRule"/>
+        </before>
+        <after>
+            <!-- Disable Free Shipping -->
+            <createData entity="DefaultShippingMethodsConfig" stepKey="defaultShippingMethodsConfig"/>
+            <createData entity="DisableFreeShippingConfig" stepKey="disableFreeShippingConfig"/>
+            <deleteData createDataKey="createSalesRule" stepKey="deleteSalesRule"/>
+            <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Create new customer order-->
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+
+        <!--Add Simple product to order-->
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addSimpleProductToTheOrder">
+            <argument name="product" value="$$simpleProduct$$"/>
+        </actionGroup>
+
+        <!--Select FlatRate shipping method-->
+        <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
+
+        <!--Submit order-->
+        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
+
+        <!--Verify order information-->
+        <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
+        <grabTextFrom selector="|Order # (\d+)|" stepKey="orderId"/>
+
+        <!-- Cancel the Order -->
+        <actionGroup ref="CancelPendingOrderActionGroup" stepKey="cancelPendingOrder"/>
+
+        <!--Log in to Storefront as Customer  -->
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="signUp">
+            <argument name="Customer" value="$$simpleCustomer$$"/>
+        </actionGroup>
+
+        <!-- Assert Order status in frontend grid -->
+        <click selector="{{StorefrontCustomerSidebarSection.sidebarCurrentTab('My Orders')}}" stepKey="clickOnMyOrders"/>
+        <waitForPageLoad stepKey="waitForOrderDetailsToLoad"/>
+        <seeElement selector="{{StorefrontCustomerOrderViewSection.orderStatusInGrid('$orderId', 'Canceled')}}" stepKey="seeOrderStatusInGrid"/>
+    </test>
+</tests>

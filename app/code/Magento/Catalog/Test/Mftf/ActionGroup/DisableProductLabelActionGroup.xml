@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="DisableProductLabelActionGroup">
+        <annotations>
+            <description>Disable Product Label and Change Attribute Set.</description>
+        </annotations>
+        <arguments>
+            <argument name="createAttributeSet"/>
+        </arguments>
+
+        <checkOption selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="disableProduct"/>
+        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <waitForPageLoad time="30" stepKey="waitForChangeAttrSet"/>
+        <click selector="{{AdminProductFormSection.attributeSet}}" stepKey="startEditAttrSet"/>
+        <fillField selector="{{AdminProductFormSection.attributeSetFilter}}" userInput="{{createAttributeSet.attribute_set_name}}" stepKey="searchForAttrSet"/>
+        <click selector="{{AdminProductFormSection.attributeSetFilterResult}}" stepKey="selectAttrSet"/>
+         <dontSeeCheckboxIsChecked selector="{{AdminProductFormSection.productStatus}}" stepKey="dontSeeCheckboxEnableProductIsChecked"/>
+    </actionGroup>
+</actionGroups>

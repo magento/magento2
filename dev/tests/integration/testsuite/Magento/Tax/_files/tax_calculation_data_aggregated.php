@@ -3,14 +3,15 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
- * Global array that holds test scenarios data
+ * Global array that holds test scenarios data.
  *
  * @var array
  */
 $taxCalculationData = [];
-
+//phpcs:disable Magento2.Security.IncludeFile
 require_once __DIR__ . '/scenarios/excluding_tax_apply_tax_after_discount.php';
 require_once __DIR__ . '/scenarios/excluding_tax_apply_tax_after_discount_discount_tax.php';
 require_once __DIR__ . '/scenarios/excluding_tax_apply_tax_before_discount.php';
@@ -31,3 +32,4 @@ require_once __DIR__ . '/scenarios/multi_tax_rule_total_calculate_subtotal_yes.p
 require_once __DIR__ . '/scenarios/multi_tax_rule_two_row_calculate_subtotal_yes_row.php';
 require_once __DIR__ . '/scenarios/multi_tax_rule_two_row_calculate_subtotal_yes_total.php';
 require_once __DIR__ . '/scenarios/including_tax_apply_tax_after_discount.php';
+require_once __DIR__ . '/scenarios/including_tax_with_custom_price.php';

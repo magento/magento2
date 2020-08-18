@@ -8,6 +8,7 @@ namespace Magento\Framework\Message;
 use Magento\Framework\Event;
 use Psr\Log\LoggerInterface;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Debug;
 
 /**
  * Message manager model
@@ -250,7 +251,12 @@ class Manager implements ManagerInterface
             'Exception message: %s%sTrace: %s',
             $exception->getMessage(),
             "\n",
-            $exception->getTraceAsString()
+            Debug::trace(
+                $exception->getTrace(),
+                true,
+                true,
+                (bool)getenv('MAGE_DEBUG_SHOW_ARGS')
+            )
         );
 
         $this->logger->critical($message);
@@ -288,7 +294,12 @@ class Manager implements ManagerInterface
             'Exception message: %s%sTrace: %s',
             $exception->getMessage(),
             "\n",
-            $exception->getTraceAsString()
+            Debug::trace(
+                $exception->getTrace(),
+                true,
+                true,
+                (bool)getenv('MAGE_DEBUG_SHOW_ARGS')
+            )
         );
 
         $this->logger->critical($message);

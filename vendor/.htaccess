@@ -5,4 +5,3 @@
 <IfVersion >= 2.4>
     Require all denied
 </IfVersion>
-

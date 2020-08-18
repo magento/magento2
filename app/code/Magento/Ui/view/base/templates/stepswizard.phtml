@@ -4,20 +4,22 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 /** @var $block \Magento\Ui\Block\Component\StepsWizard */
 ?>
-<div data-role="steps-wizard-main" class="steps-wizard <?= /* @noEscape */ $block->getData('config/dataScope') ?>" data-bind="scope: '<?= /* @escapeNotVerified */  $block->getComponentName() ?>'">
+<div data-role="steps-wizard-main"
+     class="steps-wizard <?= /* @noEscape */ $block->getData('config/dataScope') ?>"
+     data-bind="scope: '<?= $block->escapeHtmlAttr($block->getComponentName()) ?>'">
     <div data-role="messages" class="messages"></div>
 
     <div data-role="steps-wizard-controls" class="steps-wizard-navigation">
         <ul class="nav-bar">
-            <?php foreach ($block->getSteps() as $step): ?>
-                <li data-role="collapsible" data-bind="css: { 'active': selectedStep() == '<?= /* @escapeNotVerified */  $step->getComponentName() ?>'}">
-                    <a href="#<?= /* @escapeNotVerified */  $step->getComponentName() ?>"
+            <?php foreach ($block->getSteps() as $step) : ?>
+                <li data-role="collapsible"
+                    data-bind="css: { 'active': selectedStep() == '<?= $block->escapeHtmlAttr($step->getComponentName()) ?>'}">
+                    <a href="#<?= $block->escapeHtmlAttr($step->getComponentName()) ?>"
                        data-bind="click: showSpecificStep">
-                        <?= /* @escapeNotVerified */  $step->getCaption() ?>
+                        <?= $block->escapeHtml($step->getCaption()) ?>
                     </a>
                 </li>
             <?php endforeach; ?>
@@ -26,30 +28,30 @@
             <div class="action-wrap" data-role="closeBtn">
                 <button type="button"
                         class="action-cancel action-tertiary" data-bind="click: close">
-                    <span><?= /* @escapeNotVerified */  __('Cancel') ?></span>
+                    <span><?= $block->escapeHtml(__('Cancel')) ?></span>
                 </button>
             </div>
             <div class="action-wrap action-wrap-prev" data-role="step-wizard-prev">
                 <button type="button"
                         class="action-default action-back-step"
                         data-bind="click: back, css: { 'disabled': disabled}">
-                    <span><?= /* @escapeNotVerified */  __('Back') ?></span>
+                    <span><?= $block->escapeHtml(__('Back')) ?></span>
                 </button>
             </div>
             <div class="action-wrap action-wrap-next" data-role="step-wizard-next">
                 <button type="button"
                         class="action-default action-primary action-next-step" data-bind="click: next">
-                    <span><?= /* @escapeNotVerified */  __('Next') ?></span>
+                    <span><?= $block->escapeHtml(__('Next')) ?></span>
                 </button>
             </div>
         </div>
     </div>
     <div data-role="steps-wizard-tab">
-        <?php foreach ($block->getSteps() as $step): ?>
+        <?php foreach ($block->getSteps() as $step) : ?>
             <div data-bind="visible: selectedStep() == $element.id, css: {'no-display':false}"
-                 class="content no-display" id="<?= /* @escapeNotVerified */ $step->getComponentName() ?>"
+                 class="content no-display" id="<?= $block->escapeHtmlAttr($step->getComponentName()) ?>"
                  data-role="content">
-                <?= /* @escapeNotVerified */  $step->getContent() ?>
+                <?= /* @noEscape */ $step->getContent() ?>
             </div>
         <?php endforeach; ?>
     </div>
@@ -60,10 +62,10 @@
         "*": {
             "Magento_Ui/js/core/app": {
                 "components": {
-                        "<?= /* @escapeNotVerified */  $block->getComponentName() ?>": {
+                        "<?= $block->escapeJs($block->getComponentName()) ?>": {
                             "component": "Magento_Ui/js/lib/step-wizard",
-                            "initData": <?= /* @escapeNotVerified */  $this->helper("Magento\Framework\Json\Helper\Data")->jsonEncode($block->getInitData()) ?>,
-                            "stepsNames": <?= /* @escapeNotVerified */  $this->helper("Magento\Framework\Json\Helper\Data")->jsonEncode($block->getStepComponents()) ?>,
+                            "initData": <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getInitData()) ?>,
+                            "stepsNames": <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getStepComponents()) ?>,
                             "modalClass": "<?= /* @noEscape */ $block->getData('config/dataScope') ?>"
                         }
                     }

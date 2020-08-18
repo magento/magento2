@@ -4,12 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
 /* @var $block \Magento\Theme\Block\Adminhtml\Design\Config\Edit\Scope */
 ?>
 
 <div class="store-view">
-    <span class="store-switcher-label"><?= /* @escapeNotVerified */ __('Scope:') ?></span>
-    <span class="store-switcher-value"><?= /* @escapeNotVerified */ $block->getScopeTitle() ?></span>
+    <span class="store-switcher-label"><?= $block->escapeHtml(__('Scope:')) ?></span>
+    <span class="store-switcher-value"><?= $block->escapeHtml($block->getScopeTitle()) ?></span>
 </div>

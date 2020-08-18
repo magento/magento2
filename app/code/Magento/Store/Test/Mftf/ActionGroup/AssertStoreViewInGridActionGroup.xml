@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStoreViewInGridActionGroup">
+        <annotations>
+            <description>Goes the Admin Stores grid page. Searches the grid for the provided Store View Name. Validates that the provided Store View Name is present and correct in the grid.</description>
+        </annotations>
+        <arguments>
+            <argument name="storeViewName" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnAdminSystemStorePage"/>
+        <waitForPageLoad stepKey="waitForAdminSystemStorePageLoad"/>
+        <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+        <fillField userInput="{{storeViewName}}" selector="{{AdminStoresGridSection.storeFilterTextField}}" stepKey="fillSearchStoreViewField"/>
+        <click selector="{{AdminStoresGridSection.searchButton}}" stepKey="clickSearchButton"/>
+        <waitForPageLoad stepKey="waitForStoreToLoad"/>
+        <see selector="{{AdminStoresGridSection.firstRow}}" userInput="{{storeViewName}}" stepKey="seeAssertStoreViewInGridMessage"/>
+    </actionGroup>
+</actionGroups>

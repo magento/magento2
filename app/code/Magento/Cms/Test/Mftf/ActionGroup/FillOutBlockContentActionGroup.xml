@@ -5,12 +5,17 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="FillOutBlockContent">
+        <annotations>
+            <description>Fills in the Block Title, Identifier, Store View and Content. PLEASE NOTE: The values are Hardcoded using '_defaultBlock'.</description>
+        </annotations>
+
         <fillField selector="{{BlockNewPageBasicFieldsSection.blockTitle}}" userInput="{{_defaultBlock.title}}" stepKey="fillFieldTitle1"/>
         <fillField selector="{{BlockNewPageBasicFieldsSection.identifier}}" userInput="{{_defaultBlock.identifier}}" stepKey="fillFieldIdentifier"/>
-        <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView" />
+        <selectOption selector="{{BlockNewPageBasicFieldsSection.storeView}}" userInput="All Store View" stepKey="selectAllStoreView"/>
         <fillField selector="{{BlockContentSection.TextArea}}" userInput="{{_defaultBlock.content}}" stepKey="fillContentField"/>
     </actionGroup>
 </actionGroups>

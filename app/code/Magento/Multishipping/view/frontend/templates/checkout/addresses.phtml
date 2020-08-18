@@ -4,8 +4,8 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+// phpcs:disable Generic.Files.LineLength
+// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
 ?>
 <?php
 /**
@@ -16,9 +16,9 @@
 ?>
 <form id="checkout_multishipping_form"
       data-mage-init='{
-          "multiShipping":{},
+          "multiShipping": {"itemsQty": <?= /* @noEscape */ (int)$block->getCheckout()->getQuote()->getItemsSummaryQty() ?>},
           "cartUpdate": {
-               "validationURL": "/multishipping/checkout/checkItems",
+               "validationURL": "<?= $block->escapeUrl($block->getUrl('multishipping/checkout/checkItems')) ?>",
                "eventName": "updateMulticartItemQty"
           }}'
       action="<?= $block->escapeUrl($block->getPostActionUrl()) ?>"
@@ -44,7 +44,7 @@
             </thead>
             <tbody>
             <?php foreach ($block->getItems() as $_index => $_item): ?>
-                <?php if ($_item->getQuoteItem()) : ?>
+                <?php if ($_item->getQuoteItem()): ?>
                     <tr>
                         <td class="col product" data-th="<?= $block->escapeHtml(__('Product')) ?>">
                             <?= $block->getItemHtml($_item->getQuoteItem()) ?>
@@ -62,8 +62,9 @@
                                            name="ship[<?= $block->escapeHtml($_index) ?>][<?= $block->escapeHtml($_item->getQuoteItemId()) ?>][qty]"
                                            value="<?= $block->escapeHtml($_item->getQty()) ?>"
                                            size="2"
+                                           min="0"
                                            class="input-text qty"
-                                           data-validate="{number: true}"/>
+                                           data-validate="{number: true, required:true, 'validate-greater-than-zero':true}"/>
                                 </div>
                             </div>
                         </td>
@@ -85,8 +86,12 @@
                             <?php endif; ?>
                         </td>
                         <td class="col actions" data-th="<?= $block->escapeHtml(__('Actions')) ?>">
-                            <a href="<?= $block->escapeUrl($block->getItemDeleteUrl($_item)) ?>"
+                            <a href="#"
                                title="<?= $block->escapeHtml(__('Remove Item')) ?>"
+                               data-post='<?= /* @noEscape */
+                                $this->helper(\Magento\Framework\Data\Helper\PostHelper::class)
+                                   ->getPostData($block->getItemDeleteUrl($_item))
+                                ?>'
                                class="action delete"
                                data-multiship-item-remove="">
                                 <span><?= $block->escapeHtml(__('Remove item')) ?></span>
@@ -102,10 +107,10 @@
         <div class="primary">
             <button type="submit"
                     title="<?= $block->escapeHtml(__('Go to Shipping Information')) ?>"
-                    class="action primary continue<?php if ($block->isContinueDisabled()):?> disabled<?php endif; ?>"
+                    class="action primary continue<?= $block->isContinueDisabled() ? ' disabled' : '' ?>"
                     data-role="can-continue"
                     data-flag="1"
-                <?php if ($block->isContinueDisabled()):?>
+                <?php if ($block->isContinueDisabled()): ?>
                     disabled="disabled"
                 <?php endif; ?>>
                 <span><?= $block->escapeHtml(__('Go to Shipping Information')) ?></span>

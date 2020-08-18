@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="MinimalQueryLengthForCatalogSearchTest">
+        <annotations>
+            <features value="CatalogSearch"/>
+            <stories value="Catalog search"/>
+            <title value="Minimal query length for catalog search"/>
+            <description value="Minimal query length for catalog search"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-6325"/>
+            <useCaseId value="MAGETWO-58764"/>
+            <group value="CatalogSearch"/>
+            <group value="SearchEngineElasticsearch"/>
+
+        </annotations>
+        <before>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <createData entity="productAlphabeticalB" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <createData entity="SetMinQueryLengthToDefault" stepKey="setMinimumQueryLengthToDefault"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <actionGroup ref="SetMinimalQueryLengthActionGroup" stepKey="setMinQueryLength"/>
+        <comment userInput="Go to Storefront and search for product" stepKey="searchProdUsingMinQueryLength"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
+        <comment userInput="Quick search by single character and avoid using ES stopwords" stepKey="commentQuickSearch"/>
+        <fillField selector="{{StorefrontQuickSearchResultsSection.searchTextBox}}" userInput="B" stepKey="fillAttribute"/>
+        <waitForPageLoad stepKey="waitForSearchTextBox"/>
+        <click selector="{{StorefrontQuickSearchResultsSection.searchTextBoxButton}}" stepKey="clickSearchTextBoxButton"/>
+        <waitForPageLoad stepKey="waitForSearch"/>
+        <see selector="{{StorefrontCategoryMainSection.productName}}" userInput="$$createProduct.name$$" stepKey="seeProductNameInCategoryPage"/>
+    </test>
+</tests>

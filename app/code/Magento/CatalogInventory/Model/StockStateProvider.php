@@ -14,7 +14,7 @@ use Magento\Framework\Locale\FormatInterface;
 use Magento\Framework\Math\Division as MathDivision;
 
 /**
- * Interface StockStateProvider
+ * Provider stocks state
  */
 class StockStateProvider implements StockStateProviderInterface
 {
@@ -119,14 +119,12 @@ class StockStateProvider implements StockStateProviderInterface
         $result->setItemIsQtyDecimal($stockItem->getIsQtyDecimal());
         if (!$stockItem->getIsQtyDecimal()) {
             $result->setHasQtyOptionUpdate(true);
-            $qty = (int) $qty;
+            $qty = (int) $qty ?: 1;
             /**
              * Adding stock data to quote item
              */
             $result->setItemQty($qty);
-            $qty = $this->getNumber($qty);
-            $origQty = (int) $origQty;
-            $result->setOrigQty($origQty);
+            $result->setOrigQty((int)$this->getNumber($origQty) ?: 1);
         }
 
         if ($stockItem->getMinSaleQty() && $qty < $stockItem->getMinSaleQty()) {
@@ -158,6 +156,7 @@ class StockStateProvider implements StockStateProviderInterface
 
         if (!$stockItem->getIsInStock()) {
             $result->setHasError(true)
+                ->setErrorCode('out_stock')
                 ->setMessage(__('This product is out of stock.'))
                 ->setQuoteMessage(__('Some of the products are out of stock.'))
                 ->setQuoteMessageIndex('stock');
@@ -167,7 +166,11 @@ class StockStateProvider implements StockStateProviderInterface
 
         if (!$this->checkQty($stockItem, $summaryQty) || !$this->checkQty($stockItem, $qty)) {
             $message = __('The requested qty is not available');
-            $result->setHasError(true)->setMessage($message)->setQuoteMessage($message)->setQuoteMessageIndex('qty');
+            $result->setHasError(true)
+                ->setErrorCode('qty_available')
+                ->setMessage($message)
+                ->setQuoteMessage($message)
+                ->setQuoteMessageIndex('qty');
             return $result;
         } else {
             if ($stockItem->getQty() - $summaryQty < 0) {

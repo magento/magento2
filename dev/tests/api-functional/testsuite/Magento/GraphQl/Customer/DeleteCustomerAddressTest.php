@@ -7,12 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Customer;
 
+use Exception;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\AddressRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 
+/**
+ * Delete customer address tests
+ */
 class DeleteCustomerAddressTest extends GraphQlAbstract
 {
     /**
@@ -30,13 +34,19 @@ class DeleteCustomerAddressTest extends GraphQlAbstract
      */
     private $addressRepository;
 
-    protected function setUp()
+    /**
+     * @var LockCustomer
+     */
+    private $lockCustomer;
+
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->customerTokenService = Bootstrap::getObjectManager()->get(CustomerTokenServiceInterface::class);
         $this->customerRepository = Bootstrap::getObjectManager()->get(CustomerRepositoryInterface::class);
         $this->addressRepository = Bootstrap::getObjectManager()->get(AddressRepositoryInterface::class);
+        $this->lockCustomer = Bootstrap::getObjectManager()->get(LockCustomer::class);
     }
 
     /**
@@ -55,17 +65,18 @@ mutation {
   deleteCustomerAddress(id: {$addressId})
 }
 MUTATION;
-        $response = $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $response = $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
         $this->assertArrayHasKey('deleteCustomerAddress', $response);
-        $this->assertEquals(true, $response['deleteCustomerAddress']);
+        $this->assertTrue($response['deleteCustomerAddress']);
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The current customer isn't authorized.
      */
     public function testDeleteCustomerAddressIfUserIsNotAuthorized()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The current customer isn\'t authorized.');
+
         $addressId = 1;
         $mutation
             = <<<MUTATION
@@ -73,18 +84,19 @@ mutation {
   deleteCustomerAddress(id: {$addressId})
 }
 MUTATION;
-        $this->graphQlQuery($mutation);
+        $this->graphQlMutation($mutation);
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Customer Address 2 is set as default shipping address and can not be deleted
      */
     public function testDeleteDefaultShippingCustomerAddress()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Customer Address 2 is set as default shipping address and can not be deleted');
+
         $userName = 'customer@example.com';
         $password = 'password';
         $addressId = 2;
@@ -99,18 +111,19 @@ mutation {
   deleteCustomerAddress(id: {$addressId})
 }
 MUTATION;
-        $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Customer Address 2 is set as default billing address and can not be deleted
      */
     public function testDeleteDefaultBillingCustomerAddress()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Customer Address 2 is set as default billing address and can not be deleted');
+
         $userName = 'customer@example.com';
         $password = 'password';
         $addressId = 2;
@@ -125,17 +138,18 @@ mutation {
   deleteCustomerAddress(id: {$addressId})
 }
 MUTATION;
-        $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      *
-     * @expectedException \Exception
-     * @expectedExceptionMessage Could not find a address with ID "9999"
      */
     public function testDeleteNonExistCustomerAddress()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a address with ID "9999"');
+
         $userName = 'customer@example.com';
         $password = 'password';
         $mutation
@@ -144,7 +158,104 @@ mutation {
   deleteCustomerAddress(id: 9999)
 }
 MUTATION;
-        $this->graphQlQuery($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+    }
+
+    /**
+     * Delete address with missing ID input.
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
+     * @throws Exception
+     */
+    public function testDeleteCustomerAddressWithMissingData()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Syntax Error: Expected Name, found )');
+
+        $userName = 'customer@example.com';
+        $password = 'password';
+        $mutation
+            = <<<MUTATION
+mutation {
+  deleteCustomerAddress()
+}
+MUTATION;
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+    }
+
+    /**
+     * Delete address with incorrect ID input type.
+     *
+     * @magentoApiDataFixture Magento/Customer/_files/customer_without_addresses.php
+     * @throws Exception
+     */
+    public function testDeleteCustomerAddressWithIncorrectIdType()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Expected type Int!, found "".');
+
+        $this->markTestSkipped(
+            'Type validation returns wrong message https://github.com/magento/graphql-ce/issues/735'
+        );
+        $userName = 'customer@example.com';
+        $password = 'password';
+        $mutation
+            = <<<MUTATION
+mutation {
+  deleteCustomerAddress(id: "string")
+}
+MUTATION;
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/two_customers.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
+     *
+     */
+    public function testDeleteAnotherCustomerAddress()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Current customer does not have permission to address with ID "2"');
+
+        $userName = 'customer_two@example.com';
+        $password = 'password';
+        $addressId = 2;
+
+        $mutation
+            = <<<MUTATION
+mutation {
+  deleteCustomerAddress(id: {$addressId})
+}
+MUTATION;
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer_two_addresses.php
+     *
+     */
+    public function testDeleteCustomerAddressIfAccountIsLocked()
+    {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The account is locked');
+
+        $this->markTestIncomplete('https://github.com/magento/graphql-ce/issues/750');
+
+        $userName = 'customer@example.com';
+        $password = 'password';
+        $addressId = 2;
+
+        $this->lockCustomer->execute(1);
+
+        $mutation
+            = <<<MUTATION
+mutation {
+  deleteCustomerAddress(id: {$addressId})
+}
+MUTATION;
+        $this->graphQlMutation($mutation, [], '', $this->getCustomerAuthHeaders($userName, $password));
     }
 
     /**

@@ -6,10 +6,11 @@
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
 use Magento\Customer\Controller\RegistryConstants;
+use Magento\Framework\Escaper;
 use Magento\TestFramework\Helper\Bootstrap;
 
 /**
- * Class OrdersTest
+ * Test for \Magento\Customer\Block\Adminhtml\Edit\Tab\Orders
  *
  * @magentoAppArea adminhtml
  */
@@ -30,9 +31,14 @@ class OrdersTest extends \PHPUnit\Framework\TestCase
     private $coreRegistry;
 
     /**
+     * @var Escaper
+     */
+    private $escaper;
+
+    /**
      * Execute per test initialization.
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $objectManager->get(\Magento\Framework\App\State::class)->setAreaCode('adminhtml');
@@ -48,12 +54,13 @@ class OrdersTest extends \PHPUnit\Framework\TestCase
             ['coreRegistry' => $this->coreRegistry]
         );
         $this->block->getPreparedCollection();
+        $this->escaper = $objectManager->get(Escaper::class);
     }
 
     /**
      * Execute post test cleanup.
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->coreRegistry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
         $this->block->setCollection(null);
@@ -65,7 +72,7 @@ class OrdersTest extends \PHPUnit\Framework\TestCase
     public function testGetRowUrl()
     {
         $row = new \Magento\Framework\DataObject(['id' => 1]);
-        $this->assertContains('sales/order/view/order_id/1', $this->block->getRowUrl($row));
+        $this->assertStringContainsString('sales/order/view/order_id/1', $this->block->getRowUrl($row));
     }
 
     /**
@@ -73,7 +80,7 @@ class OrdersTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetGridUrl()
     {
-        $this->assertContains('customer/index/orders', $this->block->getGridUrl());
+        $this->assertStringContainsString('customer/index/orders', $this->block->getGridUrl());
     }
 
     /**
@@ -81,6 +88,9 @@ class OrdersTest extends \PHPUnit\Framework\TestCase
      */
     public function testToHtml()
     {
-        $this->assertContains("We couldn't find any records.", $this->block->toHtml());
+        $this->assertStringContainsString(
+            $this->escaper->escapeHtml("We couldn't find any records."),
+            $this->block->toHtml()
+        );
     }
 }

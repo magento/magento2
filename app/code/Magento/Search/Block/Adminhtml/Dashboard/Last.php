@@ -53,6 +53,8 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
+     * Construct.
+     *
      * @return void
      */
     protected function _construct()
@@ -62,6 +64,8 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
+     * Prepare collection.
+     *
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -86,6 +90,8 @@ class Last extends \Magento\Backend\Block\Dashboard\Grid
     }
 
     /**
+     * Prepare columns.
+     *
      * @return $this
      * @throws \Exception
      */

@@ -4,8 +4,7 @@
  * See COPYING.txt for license details.
  */
 
-// @codingStandardsIgnoreFile
-
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
 <?php
@@ -13,54 +12,80 @@ $_htmlId = $block->getHtmlId() ? $block->getHtmlId() : '_' . uniqid();
 $_colspan = $block->isAddAfter() ? 2 : 1;
 ?>
 
-<div class="design_theme_ua_regexp" id="grid<?= /* @escapeNotVerified */ $_htmlId ?>">
+<div class="design_theme_ua_regexp" id="grid<?= $block->escapeHtmlAttr($_htmlId) ?>">
     <div class="admin__control-table-wrapper">
-        <table class="admin__control-table" id="<?= /* @escapeNotVerified */ $block->getElement()->getId() ?>">
+        <table class="admin__control-table" id="<?= $block->escapeHtmlAttr($block->getElement()->getId()) ?>">
             <thead>
             <tr>
                 <?php foreach ($block->getColumns() as $columnName => $column): ?>
-                    <th><?= /* @escapeNotVerified */ $column['label'] ?></th>
-                <?php endforeach;?>
-                <th class="col-actions" colspan="<?= /* @escapeNotVerified */ $_colspan ?>"><?= /* @escapeNotVerified */ __('Action') ?></th>
+                    <th><?= $block->escapeHtml($column['label']) ?></th>
+                <?php endforeach; ?>
+                <th class="col-actions" colspan="<?= (int)$_colspan ?>"><?= $block->escapeHtml(__('Action')) ?></th>
             </tr>
             </thead>
             <tfoot>
             <tr>
                 <td colspan="<?= count($block->getColumns())+$_colspan ?>" class="col-actions-add">
-                    <button id="addToEndBtn<?= /* @escapeNotVerified */ $_htmlId ?>" class="action-add" title="<?= /* @escapeNotVerified */ __('Add') ?>" type="button">
-                        <span><?= /* @escapeNotVerified */ $block->getAddButtonLabel() ?></span>
+                    <button id="addToEndBtn<?= $block->escapeHtmlAttr($_htmlId) ?>"
+                            class="action-add"
+                            title="<?= $block->escapeHtmlAttr(__('Add')) ?>"
+                            type="button">
+                        <span><?= $block->escapeHtml($block->getAddButtonLabel()) ?></span>
                     </button>
                 </td>
             </tr>
             </tfoot>
-            <tbody id="addRow<?= /* @escapeNotVerified */ $_htmlId ?>"></tbody>
+            <tbody id="addRow<?= $block->escapeHtmlAttr($_htmlId) ?>"></tbody>
         </table>
     </div>
-    <input type="hidden" name="<?= /* @escapeNotVerified */ $block->getElement()->getName() ?>[__empty]" value="" />
+    <input type="hidden" name="<?= $block->escapeHtmlAttr($block->getElement()->getName()) ?>[__empty]" value="" />
 
-    <script>
+    <?php $scriptString = <<<script
         require([
             'mage/template',
             'prototype'
         ], function (mageTemplate) {
         // create row creator
-        window.arrayRow<?= /* @escapeNotVerified */ $_htmlId ?> = {
+        window.arrayRow{$block->escapeJs($_htmlId)} = {
 
             // define row prototypeJS template
             template: mageTemplate(
                     '<tr id="<%- _id %>">'
-                    <?php foreach ($block->getColumns() as $columnName => $column): ?>
-                            + '<td>'
-                            + '<?= /* @escapeNotVerified */ $block->renderCellTemplate($columnName) ?>'
-                            + '<\/td>'
-                        <?php endforeach; ?>
+script;
+    foreach ($block->getColumns() as $columnName => $column):
+        $scriptString .= <<<script
 
-                    <?php if ($block->isAddAfter()): ?>
-                            + '<td><button class="action-add" type="button" id="addAfterBtn<%- _id %>"><span><?= /* @escapeNotVerified */ __('Add after') ?><\/span><\/button><\/td>'
-                        <?php endif; ?>
+                        + '<td>'
+                        + '{$block->escapeJs($block->renderCellTemplate($columnName))}'
+                        + '<\/td>'
+script;
+    endforeach;
 
-                            + '<td class="col-actions"><button onclick="arrayRow<?= /* @escapeNotVerified */ $_htmlId ?>.del(\'<%- _id %>\')" class="action-delete" type="button"><span><?= /* @escapeNotVerified */ __('Delete') ?><\/span><\/button><\/td>'
-                            +'<\/tr>'
+    if ($block->isAddAfter()):
+        $scriptString .= <<<script
+
+                        + '<td><button class="action-add" type="button" id="addAfterBtn<%- _id %>"><span>'
+                        + '{$block->escapeJs(__('Add after'))}'
+                        + '<\/span><\/button><\/td>'
+script;
+    endif;
+    $scriptString .= <<<script
+
+                    + '<td class="col-actions"><button '
+                    + 'class="action-delete" type="button">'
+                    + '<span>{$block->escapeJs(__('Delete'))}<\/span><\/button><\/td>'
+                    + '<\/tr>'
+
+script;
+    $scriptString1 = /* $noEscape */ $secureRenderer->renderEventListenerAsTag(
+        'onclick',
+        "arrayRow" . $block->escapeJs($_htmlId) . ".del('<%- _id %>')",
+        "tr#<%- _id %> button.action-delete"
+    );
+
+    $scriptString .= " + '" . $block->escapeJs($scriptString1) . "'" . PHP_EOL;
+
+    $scriptString .= <<<script
             ),
 
             add: function(rowData, insertAfterId) {
@@ -73,56 +98,86 @@ $_colspan = $block->isAddAfter() ? 2 : 1;
                 } else {
                     var d = new Date();
                     templateValues = {
-                <?php foreach ($block->getColumns() as $columnName => $column): ?>
-                    <?= /* @escapeNotVerified */ $columnName ?>: '',
-                        'option_extra_attrs': {},
-                    <?php endforeach; ?>
+script;
+    foreach ($block->getColumns() as $columnName => $column):
+        $scriptString .= <<<script
+
+                            {$block->escapeJs($columnName)}: '',
+                                'option_extra_attrs': {},
+script;
+    endforeach;
+    $scriptString .= <<<script
+
                         _id: '_' + d.getTime() + '_' + d.getMilliseconds()
                 };
             }
 
             // Insert new row after specified row or at the bottom
             if (insertAfterId) {
-            Element.insert($(insertAfterId), {after: this.template(templateValues)});
-        } else {
-            Element.insert($('addRow<?= /* @escapeNotVerified */ $_htmlId ?>'), {bottom: this.template(templateValues)});
-        }
+                Element.insert($(insertAfterId), {after: this.template(templateValues)});
+            } else {
+                Element.insert($('addRow{$block->escapeJs($_htmlId)}'), {bottom: this.template(templateValues)});
+            }
 
-        // Fill controls with data
-        if (rowData) {
-            var rowInputElementNames = Object.keys(rowData.column_values);
-            for (var i = 0; i < rowInputElementNames.length; i++) {
-                if ($(rowInputElementNames[i])) {
-                    $(rowInputElementNames[i]).setValue(rowData.column_values[rowInputElementNames[i]]);
+            // Fill controls with data
+            if (rowData) {
+                var rowInputElementNames = Object.keys(rowData.column_values);
+                for (var i = 0; i < rowInputElementNames.length; i++) {
+                    if ($(rowInputElementNames[i])) {
+                        $(rowInputElementNames[i]).setValue(rowData.column_values[rowInputElementNames[i]]);
+                    }
                 }
+            }
+
+            // Add event for {addAfterBtn} button
+
+script;
+    if ($block->isAddAfter()):
+        $scriptString .= <<<script
+
+            Event.observe('addAfterBtn' + templateValues._id, 'click', this.add.bind(this, false, templateValues._id));
+
+script;
+    endif;
+    $scriptString .= <<<script
+
+            },
+
+            del: function(rowId) {
+                $(rowId).remove();
             }
         }
 
-        // Add event for {addAfterBtn} button
-        <?php if ($block->isAddAfter()): ?>
-        Event.observe('addAfterBtn' + templateValues._id, 'click', this.add.bind(this, false, templateValues._id));
-            <?php endif; ?>
-        },
-
-        del: function(rowId) {
-            $(rowId).remove();
-        }
-        }
-
         // bind add action to "Add" button in last row
-        Event.observe('addToEndBtn<?= /* @escapeNotVerified */ $_htmlId ?>', 'click', arrayRow<?= /* @escapeNotVerified */ $_htmlId ?>.add.bind(arrayRow<?= /* @escapeNotVerified */ $_htmlId ?>, false, false));
+        Event.observe('addToEndBtn{$block->escapeJs($_htmlId)}',
+            'click',
+            arrayRow{$block->escapeJs($_htmlId)}.add.bind(
+                arrayRow{$block->escapeJs($_htmlId)}, false, false
+            )
+        );
 
         // add existing rows
-        <?php
-        foreach ($block->getArrayRows() as $_rowId => $_row) {
-            /* @escapeNotVerified */ echo "arrayRow{$_htmlId}.add(" . $_row->toJson() . ");\n";
-        }
-        ?>
+
+script;
+
+    foreach ($block->getArrayRows() as $_rowId => $_row) {
+        $scriptString .= /** @noEscape */ " arrayRow" .$block->escapeJs($_htmlId) .
+            ".add(" . /** @noEscape */ $_row->toJson() . ");\n";
+    }
+    $scriptString .= <<<script
 
         // Toggle the grid availability, if element is disabled (depending on scope)
-        <?php if ($block->getElement()->getDisabled()):?>
-        toggleValueElements({checked: true}, $('grid<?= /* @escapeNotVerified */ $_htmlId ?>').parentNode);
-            <?php endif;?>
+script;
+    if ($block->getElement()->getDisabled()):
+        $scriptString .= <<<script
+
+        toggleValueElements({checked: true}, $('grid{$block->escapeJs($_htmlId)}').parentNode);
+script;
+    endif;
+    $scriptString .= <<<script
+
         });
-    </script>
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 </div>

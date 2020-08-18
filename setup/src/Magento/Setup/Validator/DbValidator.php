@@ -42,7 +42,7 @@ class DbValidator
      * Check if database table prefix is valid
      *
      * @param string $prefix
-     * @return boolean
+     * @return bool
      * @throws \InvalidArgumentException
      */
     public function checkDatabaseTablePrefix($prefix)
@@ -72,19 +72,44 @@ class DbValidator
      * @param string $dbHost
      * @param string $dbUser
      * @param string $dbPass
-     * @return boolean
+     * @return bool
      * @throws \Magento\Setup\Exception
+     * @deprecated
      */
     public function checkDatabaseConnection($dbName, $dbHost, $dbUser, $dbPass = '')
     {
+        return $this->checkDatabaseConnectionWithDriverOptions($dbName, $dbHost, $dbUser, $dbPass, []);
+    }
+
+    /**
+     * Checks Database Connection with Driver Options
+     *
+     * @param string $dbName
+     * @param string $dbHost
+     * @param string $dbUser
+     * @param string $dbPass
+     * @param array $driverOptions
+     * @return bool
+     * @throws \Magento\Setup\Exception
+     */
+    public function checkDatabaseConnectionWithDriverOptions(
+        $dbName,
+        $dbHost,
+        $dbUser,
+        $dbPass = '',
+        $driverOptions = []
+    ) {
         // establish connection to information_schema view to retrieve information about user and table privileges
-        $connection = $this->connectionFactory->create([
-            ConfigOptionsListConstants::KEY_NAME => 'information_schema',
-            ConfigOptionsListConstants::KEY_HOST => $dbHost,
-            ConfigOptionsListConstants::KEY_USER => $dbUser,
-            ConfigOptionsListConstants::KEY_PASSWORD => $dbPass,
-            ConfigOptionsListConstants::KEY_ACTIVE => true,
-        ]);
+        $connection = $this->connectionFactory->create(
+            [
+                ConfigOptionsListConstants::KEY_NAME => 'information_schema',
+                ConfigOptionsListConstants::KEY_HOST => $dbHost,
+                ConfigOptionsListConstants::KEY_USER => $dbUser,
+                ConfigOptionsListConstants::KEY_PASSWORD => $dbPass,
+                ConfigOptionsListConstants::KEY_ACTIVE => true,
+                ConfigOptionsListConstants::KEY_DRIVER_OPTIONS => $driverOptions,
+            ]
+        );
 
         if (!$connection) {
             throw new \Magento\Setup\Exception('Database connection failure.');
@@ -159,6 +184,7 @@ class DbValidator
         ];
 
         // check global privileges
+        // phpcs:ignore Magento2.SQL.RawQuery
         $userPrivilegesQuery = "SELECT PRIVILEGE_TYPE FROM USER_PRIVILEGES "
             . "WHERE REPLACE(GRANTEE, '\'', '') = current_user()";
         $grantInfo = $connection->query($userPrivilegesQuery)->fetchAll(\PDO::FETCH_NUM);
@@ -167,6 +193,7 @@ class DbValidator
         }
 
         // check database privileges
+        // phpcs:ignore Magento2.SQL.RawQuery
         $schemaPrivilegesQuery = "SELECT PRIVILEGE_TYPE FROM SCHEMA_PRIVILEGES " .
             "WHERE '$dbName' LIKE TABLE_SCHEMA AND REPLACE(GRANTEE, '\'', '') = current_user()";
         $grantInfo = $connection->query($schemaPrivilegesQuery)->fetchAll(\PDO::FETCH_NUM);

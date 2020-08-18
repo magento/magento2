@@ -5,7 +5,7 @@
  */
 -->
 <div class="data-grid-search-control-wrap">
-    <label class="data-grid-search-label" attr="title: $t('Search'), for: index">
+    <label class="data-grid-search-label" attr="title: $t('Search'), for: index" data-bind="click: scrollTo">
         <span translate="'Search'"/>
     </label>
     <input class="admin__control-text data-grid-search-control" type="text"
@@ -16,6 +16,7 @@
                     placeholder: $t(placeholder)
                 },
                 textInput: inputValue,
+                hasFocus: focused,
                 keyboard: {
                     13: apply.bind($data, false),
                     27: cancel
