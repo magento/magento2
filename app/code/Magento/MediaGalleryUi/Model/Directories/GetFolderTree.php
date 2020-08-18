@@ -84,8 +84,9 @@ class GetFolderTree
             }
 
             $pathArray = explode('/', $path);
+            $displayName = strlen(end($pathArray)) > 50 ? substr(end($pathArray),0,50)."..." : end($pathArray);
             $directories[] = [
-                'data' => count($pathArray) > 0 ? end($pathArray) : $path,
+                'data' => count($pathArray) > 0 ? $displayName : $path,
                 'attr' => ['id' => $path],
                 'metadata' => [
                     'path' => $path
