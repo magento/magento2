@@ -228,13 +228,9 @@ class QuoteManagerTest extends TestCase
             ->method('removePersistentCookie')->willReturn($this->sessionMock);
         $this->quoteMock->expects($this->once())->method('isVirtual')->willReturn(false);
         $this->quoteMock->expects($this->once())->method('getItemsQty')->willReturn(1);
-        $extensionAttributes = $this->createPartialMock(
-            CartExtensionInterface::class,
-            [
-                'setShippingAssignments',
-                'getShippingAssignments'
-            ]
-        );
+        $extensionAttributes = $this->getMockBuilder(CartExtensionInterface::class)
+            ->addMethods(['getShippingAssignments', 'setShippingAssignments'])
+            ->getMockForAbstractClass();
         $shippingAssignment = $this->createMock(ShippingAssignmentInterface::class);
         $extensionAttributes->expects($this->once())
             ->method('setShippingAssignments')

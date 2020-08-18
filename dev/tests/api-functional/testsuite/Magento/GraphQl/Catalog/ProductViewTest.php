@@ -653,8 +653,10 @@ QUERY;
         $secondProduct = $productRepository->get($secondProductSku, false, null, true);
         self::assertNotNull($response['products']['items'][0]['price'], "price must be not null");
         self::assertCount(2, $response['products']['items']);
-        $this->assertBaseFields($firstProduct, $response['products']['items'][0]);
-        $this->assertBaseFields($secondProduct, $response['products']['items'][1]);
+
+        // by default sort order is: "newest id first"
+        $this->assertBaseFields($secondProduct, $response['products']['items'][0]);
+        $this->assertBaseFields($firstProduct, $response['products']['items'][1]);
     }
 
     /**
@@ -1048,6 +1050,8 @@ QUERY;
      */
     public function testProductInNonAnchoredSubCategories()
     {
+        $this->markTestSkipped('MC-30965: Product contains invalid categories');
+
         $query = <<<QUERY
 {
     products(filter: 
