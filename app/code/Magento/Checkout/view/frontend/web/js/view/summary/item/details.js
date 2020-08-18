@@ -19,7 +19,7 @@ define([
          * @return {String}
          */
         getNameUnsanitizedHtml: function (quoteItem) {
-            var txt = document.createElement("textarea");
+            var txt = document.createElement('textarea');
 
             txt.innerHTML = quoteItem.name;
             return txt.value.escapeHTML();
