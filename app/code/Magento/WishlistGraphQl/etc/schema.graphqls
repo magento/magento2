@@ -24,7 +24,7 @@ type WishlistOutput @doc(description: "Deprecated: `Wishlist` type should be use
 
 type Wishlist {
     id: ID @doc(description: "Wishlist unique identifier")
-    items: [WishlistItem] @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItemsResolver") @deprecated(description: "Use field `items_v2` from type `Wishlist` instead")
+    items: [WishlistItem] @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItemsResolver") @deprecated(reason: "Use field `items_v2` from type `Wishlist` instead")
     items_v2: [WishlistItemInterface] @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistItems") @doc(description: "An array of items in the customer's wishlist")
     items_count: Int @doc(description: "The number of items in the wish list")
     sharing_code: String @doc(description: "An encrypted code that Magento uses to link to the wish list")
