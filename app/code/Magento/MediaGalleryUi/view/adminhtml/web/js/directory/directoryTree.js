@@ -21,6 +21,7 @@ define([
             directoryTreeSelector: '#media-gallery-directory-tree',
             getDirectoryTreeUrl: 'media_gallery/directories/gettree',
             createDirectoryUrl: 'media_gallery/directories/create',
+            deleteDirectoryUrl: 'media_gallery/directories/delete',
             jsTreeReloaded: null,
             modules: {
                 directories: '${ $.name }_directories',
@@ -88,27 +89,23 @@ define([
          * @param {Array} directories
          */
         createFolderIfNotExists: function (directories) {
-            var isMediaBrowser = !_.isUndefined(window.MediabrowserUtility),
-                currentTreePath = isMediaBrowser ? window.MediabrowserUtility.pathId : null,
+            var requestedDirectory = this.getRequestedDirectory(),
                 deferred = $.Deferred(),
-                decodedPath,
                 pathArray;
 
-            if (!currentTreePath) {
+            if (_.isNull(requestedDirectory)) {
                 deferred.resolve(false);
 
                 return deferred.promise();
             }
 
-            decodedPath = Base64.idDecode(currentTreePath);
-
-            if (this.isDirectoryExist(directories[0], decodedPath)) {
+            if (this.isDirectoryExist(directories[0], requestedDirectory)) {
                 deferred.resolve(false);
 
                 return deferred.promise();
             }
 
-            pathArray = this.convertPathToPathsArray(decodedPath);
+            pathArray = this.convertPathToPathsArray(requestedDirectory);
 
             $.each(pathArray, function (i, val) {
                 if (this.isDirectoryExist(directories[0], val)) {
@@ -204,7 +201,7 @@ define([
         /**
          * Remove ability to multiple select on nodes
          */
-        overrideMultiselectBehavior: function () {
+        disableMultiselectBehavior : function () {
             $.jstree.defaults.ui['select_range_modifier'] = false;
             $.jstree.defaults.ui['select_multiple_modifier'] = false;
         },
@@ -213,8 +210,8 @@ define([
          *  Handle jstree events
          */
         initEvents: function () {
-            this.firejsTreeEvents();
-            this.overrideMultiselectBehavior();
+            this.initJsTreeEvents();
+            this.disableMultiselectBehavior();
 
             $(window).on('reload.MediaGallery', function () {
                 this.getJsonTree().then(function (data) {
@@ -222,7 +219,7 @@ define([
                         if (isCreated) {
                             this.renderDirectoryTree().then(function () {
                                 this.setJsTreeReloaded(true);
-                                this.firejsTreeEvents();
+                                this.initJsTreeEvents();
                             }.bind(this));
                         } else {
                             this.updateSelectedDirectory();
@@ -235,7 +232,7 @@ define([
         /**
          * Fire event for jstree component
          */
-        firejsTreeEvents: function () {
+        initJsTreeEvents: function () {
             $(this.directoryTreeSelector).on('select_node.jstree', function (element, data) {
                 this.setActiveNodeFilter($(data.rslt.obj).data('path'));
                 this.setJsTreeReloaded(false);
@@ -244,7 +241,6 @@ define([
             $(this.directoryTreeSelector).on('loaded.jstree', function () {
                 this.updateSelectedDirectory();
             }.bind(this));
-
         },
 
         /**
@@ -285,6 +281,11 @@ define([
             return false;
         },
 
+        /**
+         * Get requested directory from MediabrowserUtility
+         *
+         * @returns {String|null}
+         */
         getRequestedDirectory: function () {
             return (!_.isUndefined(window.MediabrowserUtility) && window.MediabrowserUtility.pathId !== '')
                 ? Base64.idDecode(window.MediabrowserUtility.pathId)
@@ -306,9 +307,7 @@ define([
          * @param {String} path
          */
         locateNode: function (path) {
-            var selectedId =  $(this.directoryTreeSelector).jstree('get_selected').attr('id');
-
-            if (path === selectedId) {
+            if (path === $(this.directoryTreeSelector).jstree('get_selected').attr('id')) {
                 return;
             }
             path = path.replace(/\//g, '\\/');
@@ -332,7 +331,6 @@ define([
          * @param {String} nodePath
          */
         setActiveNodeFilter: function (nodePath) {
-
             if (this.activeNode() === nodePath && !this.jsTreeReloaded) {
                 this.selectStorageRoot();
             } else {
@@ -361,7 +359,6 @@ define([
                     this.directories().setInActive();
                 }.bind(this)
             );
-
         },
 
         /**
