@@ -17,7 +17,7 @@ use Magento\Framework\ObjectManagerInterface;
  * @see ConfigSetCommand
  *
  * @api
- * @since 100.2.0
+ * @since 101.0.0
  */
 class ConfigSetProcessorFactory
 {
@@ -68,7 +68,7 @@ class ConfigSetProcessorFactory
      * @return ConfigSetProcessorInterface New processor instance
      * @throws ConfigurationMismatchException If processor type is not exists in processors array
      * or declared class has wrong implementation
-     * @since 100.2.0
+     * @since 101.0.0
      */
     public function create($processorName)
     {

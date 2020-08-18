@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
  * Class test block wish list on customer account page.
  *
  * @magentoAppArea frontend
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @magentoAppIsolation disabled
  */
 class WishlistTest extends TestCase

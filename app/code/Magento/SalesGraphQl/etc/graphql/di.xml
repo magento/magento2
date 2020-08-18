@@ -6,17 +6,39 @@
  */
 -->
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
-    <type name="Magento\SalesGraphQl\Model\OrderItemInterfaceTypeResolverComposite">
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\OrderItem">
         <arguments>
-            <argument name="orderItemTypeResolvers" xsi:type="array">
-                <item name="order_catalog_item_type_resolver" xsi:type="object">Magento\SalesGraphQl\Model\OrderItemTypeResolver</item>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="default" xsi:type="string">OrderItem</item>
             </argument>
         </arguments>
     </type>
-    <type name="Magento\SalesGraphQl\Model\InvoiceItemInterfaceTypeResolverComposite">
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\InvoiceItem">
         <arguments>
-            <argument name="invoiceItemTypeResolvers" xsi:type="array">
-                <item name="invoice_catalog_item_type_resolver" xsi:type="object">Magento\SalesGraphQl\Model\InvoiceItemTypeResolver</item>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="default" xsi:type="string">InvoiceItem</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\CreditMemoItem">
+        <arguments>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="default" xsi:type="string">CreditMemoItem</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\SalesGraphQl\Model\TypeResolver\ShipmentItem">
+        <arguments>
+            <argument name="productTypeMap" xsi:type="array">
+                <item name="default" xsi:type="string">ShipmentItem</item>
+            </argument>
+        </arguments>
+    </type>
+    <preference for="Magento\SalesGraphQl\Model\Shipment\Item\FormatterInterface" type="Magento\SalesGraphQl\Model\Shipment\Item\ShipmentItemFormatter"/>
+    <type name="Magento\SalesGraphQl\Model\Shipment\ItemProvider">
+        <arguments>
+            <argument name="formatters" xsi:type="array">
+                <item name="default" xsi:type="object">Magento\SalesGraphQl\Model\Shipment\Item\ShipmentItemFormatter\Proxy</item>
             </argument>
         </arguments>
     </type>

@@ -6,30 +6,41 @@
 
 /**
  * @var $block \Magento\Theme\Block\Html\Notices
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
-<?php if ($block->displayNoscriptNotice()) : ?>
+<?php if ($block->displayNoscriptNotice()): ?>
     <noscript>
         <div class="message global noscript">
             <div class="content">
                 <p>
                     <strong><?= $block->escapeHtml(__('JavaScript seems to be disabled in your browser.')) ?></strong>
-                    <span><?= $block->escapeHtml(__('For the best experience on our site, be sure to turn on Javascript in your browser.')) ?></span>
+                    <span>
+                        <?= $block->escapeHtml(
+                            __('For the best experience on our site, be sure to turn on Javascript in your browser.')
+                        ) ?>
+                    </span>
                 </p>
             </div>
         </div>
     </noscript>
 <?php endif; ?>
-<?php if ($block->displayNoLocalStorageNotice()) : ?>
-    <div class="notice global site local_storage" style="display: none;">
+<?php if ($block->displayNoLocalStorageNotice()): ?>
+    <div class="notice global site local_storage">
         <div class="content">
             <p>
-                <strong><?= $block->escapeHtml(__('Local Storage seems to be disabled in your browser.')) ?></strong><br />
-                <?= $block->escapeHtml(__('For the best experience on our site, be sure to turn on Local Storage in your browser.')) ?>
+                <strong><?= $block->escapeHtml(__('Local Storage seems to be disabled in your browser.')) ?></strong>
+                <br />
+                <?= $block->escapeHtml(
+                    __('For the best experience on our site, be sure to turn on Local Storage in your browser.')
+                ) ?>
             </p>
         </div>
     </div>
-    <script>
+    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display: none;', 'div.notice.global.site.local_storage') ?>
+
+    <?php $scriptString = <<<script
+
 require(['jquery'], function(jQuery){
 
         // <![CDATA[
@@ -45,9 +56,12 @@ require(['jquery'], function(jQuery){
         // ]]>
 
 });
-</script>
+
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <?php endif; ?>
-<?php if ($block->displayDemoNotice()) : ?>
+<?php if ($block->displayDemoNotice()): ?>
     <div class="message global demo">
         <div class="content">
             <p><?= $block->escapeHtml(__('This is a demo store. No orders will be fulfilled.')) ?></p>
