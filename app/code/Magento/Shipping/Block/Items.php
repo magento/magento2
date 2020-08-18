@@ -49,6 +49,8 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
+     * Print Shipment Url
+     *
      * @param object $shipment
      * @return string
      */
@@ -58,6 +60,8 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
     }
 
     /**
+     * All shipments Url
+     *
      * @param object $order
      * @return string
      */
@@ -77,7 +81,8 @@ class Items extends \Magento\Sales\Block\Items\AbstractItems
         $html = '';
         $comments = $this->getChildBlock('shipment_comments');
         if ($comments) {
-            $comments->setEntity($shipment)->setTitle(__('About Your Shipment'));
+            $message = 'About Your Shipment';
+            $comments->setEntity($shipment)->setTitle($this->_escaper->escapeHtmlAttr(__($message)));
             $html = $comments->toHtml();
         }
         return $html;
