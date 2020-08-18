@@ -215,7 +215,7 @@ class BulkManagementTest extends TestCase
         $operation = $this->getMockForAbstractClass(OperationInterface::class);
         $operationCollection->expects($this->once())->method('getItems')->willReturn([$operation]);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
-        $operation->expects($this->once())->method('getId')->willReturn($operationId);
+        $operation->expects($this->once())->method('getOperationKey')->willReturn($operationId);
         $this->resourceConnection->expects($this->once())
             ->method('getTableName')->with($operationTable)->willReturn($operationTable);
         $connection->expects($this->at(1))
@@ -265,7 +265,7 @@ class BulkManagementTest extends TestCase
         $operation = $this->getMockForAbstractClass(OperationInterface::class);
         $operationCollection->expects($this->once())->method('getItems')->willReturn([$operation]);
         $connection->expects($this->once())->method('beginTransaction')->willReturnSelf();
-        $operation->expects($this->once())->method('getId')->willReturn($operationId);
+        $operation->expects($this->once())->method('getOperationKey')->willReturn($operationId);
         $this->resourceConnection->expects($this->once())
             ->method('getTableName')->with($operationTable)->willReturn($operationTable);
         $connection->expects($this->at(1))
