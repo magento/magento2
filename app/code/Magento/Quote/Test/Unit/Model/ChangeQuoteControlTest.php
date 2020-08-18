@@ -49,11 +49,11 @@ class ChangeQuoteControlTest extends TestCase
     public function testIsAllowedIfTheQuoteIsBelongedToCustomer()
     {
         $quoteCustomerId = 1;
-        $this->quoteMock->expects($this->any())->method('getCustomerId')
+        $this->quoteMock->method('getCustomerId')
             ->willReturn($quoteCustomerId);
-        $this->userContextMock->expects($this->any())->method('getUserType')
+        $this->userContextMock->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
-        $this->userContextMock->expects($this->any())->method('getUserId')
+        $this->userContextMock->method('getUserId')
             ->willReturn($quoteCustomerId);
 
         $this->assertTrue($this->model->isAllowed($this->quoteMock));
@@ -64,11 +64,11 @@ class ChangeQuoteControlTest extends TestCase
         $currentCustomerId = 1;
         $quoteCustomerId = 2;
 
-        $this->quoteMock->expects($this->any())->method('getCustomerId')
+        $this->quoteMock->method('getCustomerId')
             ->willReturn($quoteCustomerId);
-        $this->userContextMock->expects($this->any())->method('getUserType')
+        $this->userContextMock->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_CUSTOMER);
-        $this->userContextMock->expects($this->any())->method('getUserId')
+        $this->userContextMock->method('getUserId')
             ->willReturn($currentCustomerId);
 
         $this->assertFalse($this->model->isAllowed($this->quoteMock));
@@ -77,9 +77,9 @@ class ChangeQuoteControlTest extends TestCase
     public function testIsAllowedIfQuoteIsBelongedToGuestAndContextIsGuest()
     {
         $quoteCustomerId = null;
-        $this->quoteMock->expects($this->any())->method('getCustomerId')
+        $this->quoteMock->method('getCustomerId')
             ->willReturn($quoteCustomerId);
-        $this->userContextMock->expects($this->any())->method('getUserType')
+        $this->userContextMock->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_GUEST);
         $this->assertTrue($this->model->isAllowed($this->quoteMock));
     }
@@ -87,23 +87,23 @@ class ChangeQuoteControlTest extends TestCase
     public function testIsAllowedIfQuoteIsBelongedToCustomerAndContextIsGuest()
     {
         $quoteCustomerId = 1;
-        $this->quoteMock->expects($this->any())->method('getCustomerId')
+        $this->quoteMock->method('getCustomerId')
             ->willReturn($quoteCustomerId);
-        $this->userContextMock->expects($this->any())->method('getUserType')
+        $this->userContextMock->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_GUEST);
         $this->assertFalse($this->model->isAllowed($this->quoteMock));
     }
 
     public function testIsAllowedIfContextIsAdmin()
     {
-        $this->userContextMock->expects($this->any())->method('getUserType')
+        $this->userContextMock->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_ADMIN);
         $this->assertTrue($this->model->isAllowed($this->quoteMock));
     }
 
     public function testIsAllowedIfContextIsIntegration()
     {
-        $this->userContextMock->expects($this->any())->method('getUserType')
+        $this->userContextMock->method('getUserType')
             ->willReturn(UserContextInterface::USER_TYPE_INTEGRATION);
         $this->assertTrue($this->model->isAllowed($this->quoteMock));
     }
