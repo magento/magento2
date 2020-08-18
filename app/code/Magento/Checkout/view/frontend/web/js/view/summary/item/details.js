@@ -5,7 +5,7 @@
 
 define([
     'uiComponent',
-    'prototype',
+    'prototype'
 ], function (Component) {
     'use strict';
 
@@ -18,8 +18,9 @@ define([
          * @param {Object} quoteItem
          * @return {String}
          */
-        getName: function (quoteItem) {
+        getNameUnsanitizedHtml: function (quoteItem) {
             var txt = document.createElement("textarea");
+
             txt.innerHTML = quoteItem.name;
             return txt.value.escapeHTML();
         },
