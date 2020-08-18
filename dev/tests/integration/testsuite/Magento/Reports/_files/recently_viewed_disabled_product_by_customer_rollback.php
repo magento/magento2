@@ -44,5 +44,5 @@ try {
     $config->setValue('reports/options/enabled', $originalValue);
 }
 
-Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/simple_product_disabled_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/second_product_simple_rollback.php');
 Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer_rollback.php');
