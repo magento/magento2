@@ -30,4 +30,7 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Mail\Template\TransportBuilder">
+        <plugin name="graphQlEmulateEmail" type="Magento\StoreGraphQl\Plugin\LocalizeEmail" />
+    </type>
 </config>
