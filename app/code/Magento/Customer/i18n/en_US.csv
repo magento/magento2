@@ -547,3 +547,4 @@ Addresses,Addresses
 "You must specify an email address.","You must specify an email address."
 "resetPasswordToken must be specified","resetPasswordToken must be specified"
 "newPassword must be specified","newPassword must be specified"
+"The specified customer group id does not exist.","The specified customer group id does not exist."

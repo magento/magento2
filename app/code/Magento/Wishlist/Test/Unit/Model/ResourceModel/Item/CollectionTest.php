@@ -54,7 +54,8 @@ class CollectionTest extends TestCase
 
     /** @var  string */
     protected $sql = "SELECT `main_table`.* FROM `testMainTableName` AS `main_table`
- INNER JOIN `testBackendTableName` AS `product_name_table` ON product_name_table.entity_id = main_table.product_id
+ INNER JOIN `testEntityTableName` AS `product_entity` ON product_entity.entity_id = main_table.product_id
+ INNER JOIN `testBackendTableName` AS `product_name_table` ON product_name_table.entity_id = product_entity.entity_id
  AND product_name_table.store_id = 1
  AND product_name_table.attribute_id = 12
  WHERE (INSTR(product_name_table.value, 'TestProductName'))";
@@ -92,16 +93,11 @@ class CollectionTest extends TestCase
             ->willReturn($connection);
         $resource
             ->expects($this->any())
-            ->method('getMainTable')
-            ->willReturn('testMainTableName');
-        $resource
-            ->expects($this->any())
-            ->method('getTableName')
-            ->willReturn('testMainTableName');
-        $resource
-            ->expects($this->any())
             ->method('getTable')
-            ->willReturn('testMainTableName');
+            ->willReturnOnConsecutiveCalls(
+                'testMainTableName',
+                'testEntityTableName'
+            );
 
         $catalogConfFactory = $this->createPartialMock(
             ConfigFactory::class,
