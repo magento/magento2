@@ -5,8 +5,9 @@
 
 define([
     'uiComponent',
-    'underscore'
-], function (Component, _) {
+    'underscore',
+    'jquery'
+], function (Component, _, $) {
     'use strict';
 
     return Component.extend({
@@ -36,7 +37,9 @@ define([
          * Apply filter
          */
         apply: function () {
-            var urlFilter = this.getFilterParam(this.searchString);
+            var urlFilter = this.getFilterParam(this.searchString),
+                applied,
+                filters = {};
 
             if (_.isUndefined(this.filterComponent())) {
                 setTimeout(function () {
@@ -47,8 +50,9 @@ define([
             }
 
             if (Object.keys(urlFilter).length) {
-                this.filterComponent().setData(urlFilter, false);
-                this.filterComponent().apply();
+                applied = this.filterComponent().get('applied');
+                filters = $.extend(true, urlFilter, applied);
+                this.filterComponent().set('applied', filters);
             }
         },
 
