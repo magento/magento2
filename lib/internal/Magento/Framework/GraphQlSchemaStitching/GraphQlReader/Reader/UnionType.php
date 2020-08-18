@@ -57,16 +57,19 @@ class UnionType implements TypeMetaReaderInterface
     {
         if ($typeMeta instanceof \GraphQL\Type\Definition\UnionType) {
             $typeName = $typeMeta->name;
-            $types = $typeMeta->getTypes();
             $result = [
                 'name' => $typeName,
                 'type' => self::GRAPHQL_UNION,
-                'types' => $types,
+                'types' => [],
             ];
 
             $unionTypeResolver = $this->getUnionTypeResolver($typeMeta);
             if (!empty($unionTypeResolver)) {
                 $result['typeResolver'] = $unionTypeResolver;
+            }
+
+            foreach ($typeMeta->getTypes() as $type) {
+                $result['types'][] = $type->name;
             }
 
             if ($this->docReader->read($typeMeta->astNode->directives)) {
