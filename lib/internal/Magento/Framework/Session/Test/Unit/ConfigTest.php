@@ -123,7 +123,7 @@ class ConfigTest extends TestCase
             ['hash_function', 'getHashFunction', 'md5'],
             ['hash_bits_per_character', 'getHashBitsPerCharacter', 5],
             ['url_rewriter_tags', 'getUrlRewriterTags', 'a=href'],
-            ['cookie_samesite', 'getCookieSameSite', 'Lax'],
+            ['cookie_samesite', 'getCookieSameSite', 'Lax']
         ];
     }
 
@@ -168,7 +168,7 @@ class ConfigTest extends TestCase
         $returnMap =
             [
                 ['foobar_bogus', false],
-                ['Lax', true],
+                ['Lax', true]
             ];
         $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
             ->disableOriginalConstructor()
@@ -187,7 +187,7 @@ class ConfigTest extends TestCase
         $returnMap =
             [
                 [-1, false],
-                ['Lax', true],
+                ['Lax', true]
             ];
         $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
             ->disableOriginalConstructor()
@@ -242,7 +242,7 @@ class ConfigTest extends TestCase
         $returnMap =
             [
                 [24, false],
-                ['Lax', true],
+                ['Lax', true]
             ];
         $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
             ->disableOriginalConstructor()
@@ -261,7 +261,7 @@ class ConfigTest extends TestCase
         $returnMap =
             [
                 ['D:\\WINDOWS\\System32\\drivers\\etc\\hosts', false],
-                ['Lax', true],
+                ['Lax', true]
             ];
         $validatorMock = $this->getMockBuilder(ValidatorInterface::class)
             ->disableOriginalConstructor()
