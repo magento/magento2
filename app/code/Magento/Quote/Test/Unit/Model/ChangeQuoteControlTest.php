@@ -16,57 +16,36 @@ use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Quote\Model\ChangeQuoteControl
- *
- * Class \Magento\Quote\Test\Unit\Model\ChangeQuoteControlTest
  */
 class ChangeQuoteControlTest extends TestCase
 {
-    /**
-     * @var ObjectManager
-     */
-    protected $objectManager;
-
     /**
      * @var ChangeQuoteControl
      */
     protected $model;
 
     /**
-     * @var MockObject
+     * @var MockObject|UserContextInterface
      */
     protected $userContextMock;
 
     /**
-     * @var MockObject
+     * @var MockObject|CartInterface
      */
     protected $quoteMock;
 
     protected function setUp(): void
     {
-        $this->objectManager = new ObjectManager($this);
         $this->userContextMock = $this->getMockForAbstractClass(UserContextInterface::class);
 
-        $this->model = $this->objectManager->getObject(
-            ChangeQuoteControl::class,
-            [
-                'userContext' => $this->userContextMock
-            ]
-        );
+        $this->model = new ChangeQuoteControl($this->userContextMock);
 
-        $this->quoteMock = $this->getMockForAbstractClass(
-            CartInterface::class,
-            [],
-            '',
-            false,
-            true,
-            true,
-            ['getCustomerId']
-        );
+        $this->quoteMock = $this->getMockBuilder(CartInterface::class)
+            ->disableOriginalConstructor()
+            ->addMethods(['getCustomerId'])
+            ->getMockForAbstractClass();
     }
 
-    /**
-     * Test if the quote is belonged to customer
-     */
     public function testIsAllowedIfTheQuoteIsBelongedToCustomer()
     {
         $quoteCustomerId = 1;
@@ -80,9 +59,6 @@ class ChangeQuoteControlTest extends TestCase
         $this->assertTrue($this->model->isAllowed($this->quoteMock));
     }
 
-    /**
-     * Test if the quote is not belonged to customer
-     */
     public function testIsAllowedIfTheQuoteIsNotBelongedToCustomer()
     {
         $currentCustomerId = 1;
@@ -98,9 +74,6 @@ class ChangeQuoteControlTest extends TestCase
         $this->assertFalse($this->model->isAllowed($this->quoteMock));
     }
 
-    /**
-     * Test if the quote is belonged to guest and the context is guest
-     */
     public function testIsAllowedIfQuoteIsBelongedToGuestAndContextIsGuest()
     {
         $quoteCustomerId = null;
@@ -111,9 +84,6 @@ class ChangeQuoteControlTest extends TestCase
         $this->assertTrue($this->model->isAllowed($this->quoteMock));
     }
 
-    /**
-     * Test if the quote is belonged to customer and the context is guest
-     */
     public function testIsAllowedIfQuoteIsBelongedToCustomerAndContextIsGuest()
     {
         $quoteCustomerId = 1;
@@ -124,9 +94,6 @@ class ChangeQuoteControlTest extends TestCase
         $this->assertFalse($this->model->isAllowed($this->quoteMock));
     }
 
-    /**
-     * Test if the context is admin
-     */
     public function testIsAllowedIfContextIsAdmin()
     {
         $this->userContextMock->expects($this->any())->method('getUserType')
@@ -134,9 +101,6 @@ class ChangeQuoteControlTest extends TestCase
         $this->assertTrue($this->model->isAllowed($this->quoteMock));
     }
 
-    /**
-     * Test if the context is integration
-     */
     public function testIsAllowedIfContextIsIntegration()
     {
         $this->userContextMock->expects($this->any())->method('getUserType')
