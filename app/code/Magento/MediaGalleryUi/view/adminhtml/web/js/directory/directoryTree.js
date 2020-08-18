@@ -201,7 +201,7 @@ define([
         /**
          * Remove ability to multiple select on nodes
          */
-        disableMultiselectBehavior : function () {
+        disableMultiselectBehavior: function () {
             $.jstree.defaults.ui['select_range_modifier'] = false;
             $.jstree.defaults.ui['select_multiple_modifier'] = false;
         },
@@ -287,7 +287,7 @@ define([
          * @returns {String|null}
          */
         getRequestedDirectory: function () {
-            return (!_.isUndefined(window.MediabrowserUtility) && window.MediabrowserUtility.pathId !== '')
+            return !_.isUndefined(window.MediabrowserUtility) && window.MediabrowserUtility.pathId !== ''
                 ? Base64.idDecode(window.MediabrowserUtility.pathId)
                 : null;
         },
