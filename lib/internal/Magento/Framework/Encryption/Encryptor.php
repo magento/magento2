@@ -156,11 +156,7 @@ class Encryptor implements EncryptorInterface
      */
     public function getLatestHashVersion(): int
     {
-        if (extension_loaded('sodium') && defined('SODIUM_CRYPTO_PWHASH_ALG_ARGON2ID13')) {
-            return self::HASH_VERSION_ARGON2ID13_AGNOSTIC;
-        }
-
-        return self::HASH_VERSION_SHA256;
+        return self::HASH_VERSION_ARGON2ID13_AGNOSTIC;
     }
 
     /**
@@ -175,9 +171,6 @@ class Encryptor implements EncryptorInterface
     public function validateCipher($version)
     {
         $types = [
-            self::CIPHER_BLOWFISH,
-            self::CIPHER_RIJNDAEL_128,
-            self::CIPHER_RIJNDAEL_256,
             self::CIPHER_AEAD_CHACHA20POLY1305,
         ];
 
@@ -418,15 +411,8 @@ class Encryptor implements EncryptorInterface
             $parts = explode(':', $data, 4);
             $partsCount = count($parts);
 
-            $initVector = null;
-            // specified key, specified crypt, specified iv
-            if (4 === $partsCount) {
-                list($keyVersion, $cryptVersion, $iv, $data) = $parts;
-                $initVector = $iv ? $iv : null;
-                $keyVersion = (int)$keyVersion;
-                $cryptVersion = self::CIPHER_RIJNDAEL_256;
-                // specified key, specified crypt
-            } elseif (3 === $partsCount) {
+            // specified key, specified crypt
+            if (3 === $partsCount) {
                 list($keyVersion, $cryptVersion, $data) = $parts;
                 $keyVersion = (int)$keyVersion;
                 $cryptVersion = (int)$cryptVersion;
@@ -436,10 +422,6 @@ class Encryptor implements EncryptorInterface
                 $keyVersion = 0;
                 $cryptVersion = (int)$cryptVersion;
                 // no key version = oldest key, no crypt version = oldest crypt
-            } elseif (1 === $partsCount) {
-                $keyVersion = 0;
-                $cryptVersion = self::CIPHER_BLOWFISH;
-                // not supported format
             } else {
                 return '';
             }
@@ -447,7 +429,7 @@ class Encryptor implements EncryptorInterface
             if (!isset($this->keys[$keyVersion])) {
                 return '';
             }
-            $crypt = $this->getCrypt($this->keys[$keyVersion], $cryptVersion, $initVector);
+            $crypt = $this->getCrypt($this->keys[$keyVersion], $cryptVersion);
             if (null === $crypt) {
                 return '';
             }
@@ -512,8 +494,7 @@ class Encryptor implements EncryptorInterface
      */
     private function getCrypt(
         string $key = null,
-        int $cipherVersion = null,
-        string $initVector = null
+        int $cipherVersion = null
     ): ?EncryptionAdapterInterface {
         if (null === $key && null === $cipherVersion) {
             $cipherVersion = $this->getCipherVersion();
@@ -530,24 +511,9 @@ class Encryptor implements EncryptorInterface
         if (null === $cipherVersion) {
             $cipherVersion = $this->cipher;
         }
-        $cipherVersion = $this->validateCipher($cipherVersion);
+        $this->validateCipher($cipherVersion);
 
-        if ($cipherVersion >= self::CIPHER_AEAD_CHACHA20POLY1305) {
-            return new SodiumChachaIetf($key);
-        }
-
-        if ($cipherVersion === self::CIPHER_RIJNDAEL_128) {
-            $cipher = MCRYPT_RIJNDAEL_128;
-            $mode = MCRYPT_MODE_ECB;
-        } elseif ($cipherVersion === self::CIPHER_RIJNDAEL_256) {
-            $cipher = MCRYPT_RIJNDAEL_256;
-            $mode = MCRYPT_MODE_CBC;
-        } else {
-            $cipher = MCRYPT_BLOWFISH;
-            $mode = MCRYPT_MODE_ECB;
-        }
-
-        return new Mcrypt($key, $cipher, $mode, $initVector);
+        return new SodiumChachaIetf($key);
     }
 
     /**
@@ -557,11 +523,7 @@ class Encryptor implements EncryptorInterface
      */
     private function getCipherVersion()
     {
-        if (extension_loaded('sodium')) {
-            return $this->cipher;
-        } else {
-            return self::CIPHER_RIJNDAEL_256;
-        }
+        return $this->cipher;
     }
 
     /**
