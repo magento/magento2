@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductCustomOptionsSavingStoreLevelTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Save a product with Custom Options"/>
+            <title value="Save a product with Custom Options for Store level."/>
+            <description value="Custom options Title should be with default value for Store Level."/>
+            <severity value="MINOR"/>
+            <group value="product"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+                <argument name="customStore" value="storeViewData"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
+                <argument name="customStore" value="storeViewData"/>
+            </actionGroup>
+            <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="resetSearchFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+        </after>
+
+        <!--Create a Simple Product with Custom Options -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToCatalogProductGrid"/>
+        <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductDropdown"/>
+        <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="clickAddSimpleProduct"/>
+        <fillField userInput="{{_defaultProduct.name}}" selector="{{AdminProductFormSection.productName}}" stepKey="fillName"/>
+        <fillField userInput="{{_defaultProduct.sku}}" selector="{{AdminProductFormSection.productSku}}" stepKey="fillSKU"/>
+        <fillField userInput="{{_defaultProduct.price}}" selector="{{AdminProductFormSection.productPrice}}" stepKey="fillPrice"/>
+        <fillField userInput="{{_defaultProduct.quantity}}" selector="{{AdminProductFormSection.productQuantity}}" stepKey="fillQuantity"/>
+
+        <!--Add Custom Option -->
+        <actionGroup ref="AddProductCustomOptionFileActionGroup" stepKey="createAddOptionFile">
+            <argument name="option" value="ProductOptionFile"/>
+        </actionGroup>
+
+        <!--Save the product with custom options -->
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
+        <seeElement selector="{{AdminProductMessagesSection.successMessage}}" stepKey="seeProductSavedMessage"/>
+
+        <waitForPageLoad stepKey="waitForFilterLoad"/>
+
+        <!--Switch Store View -->
+        <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToDefaultStoreView">
+            <argument name="storeView" value="_defaultStore.name"/>
+        </actionGroup>
+
+        <!--Edit Product -->
+        <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
+        <click selector="{{AdminProductFormSection.productNameUseDefault}}" stepKey="uncheckUseDefault"/>
+        <fillField selector="{{AdminProductFormSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="fillNewName"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveSimpleProduct"/>
+
+        <waitForPageLoad stepKey="waitForFilterLoad2"/>
+
+        <!--Assert that checkbox is checked -->
+        <conditionalClick selector="{{AdminProductCustomizableOptionsSection.customizableOptions}}" dependentSelector="{{AdminProductCustomizableOptionsSection.checkIfCustomizableOptionsTabOpen}}" visible="true" stepKey="clickIfContentTabCloses"/>
+        <seeElement selector="{{AdminProductCustomizableOptionsSection.customOption}}" stepKey="assertCustomOptions"/>
+        <seeCheckboxIsChecked selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitle}}" stepKey="seeCheckboxIsChecked"/>
+    </test>
+</tests>
