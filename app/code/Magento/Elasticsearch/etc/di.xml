@@ -153,6 +153,11 @@
     <type name="Magento\Elasticsearch\Model\Adapter\BatchDataMapper\ProductDataMapper">
         <arguments>
             <argument name="additionalFieldsProvider" xsi:type="object">additionalFieldsProviderForElasticsearch</argument>
+            <argument name="filterableAttributeTypes" xsi:type="array">
+                <item name="boolean" xsi:type="string">boolean</item>
+                <item name="multiselect" xsi:type="string">multiselect</item>
+                <item name="select" xsi:type="string">select</item>
+            </argument>
         </arguments>
     </type>
     <preference for="Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface" type="Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperResolver" />
@@ -470,6 +475,11 @@
             <argument name="fieldTypeConverter" xsi:type="object">Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\Product\FieldProvider\FieldType\Converter</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Elasticsearch\Model\Adapter\Elasticsearch">
+        <arguments>
+            <argument name="staticFieldProvider" xsi:type="object">elasticsearch5StaticFieldProvider</argument>
+        </arguments>
+    </type>
     <type name="Magento\Elasticsearch\Elasticsearch5\Model\Adapter\FieldMapper\ProductFieldMapper">
         <arguments>
             <argument name="fieldProvider" xsi:type="object">elasticsearch5FieldProvider</argument>
@@ -544,5 +554,13 @@
                 <item name="elasticsearch5" xsi:type="object">Magento\Elasticsearch\Setup\Validator</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Category\Product\Attribute">
+        <arguments>
+            <argument name="dimensionProvider" xsi:type="object" shared="false">Magento\Store\Model\StoreDimensionProvider</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\ResourceModel\Attribute">
+        <plugin name="updateElasticsearchIndexerMapping" type="Magento\Elasticsearch\Model\Indexer\Fulltext\Plugin\Category\Product\Attribute"/>
     </type>
 </config>

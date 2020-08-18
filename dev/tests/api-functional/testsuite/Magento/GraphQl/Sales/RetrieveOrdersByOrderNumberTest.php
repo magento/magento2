@@ -50,61 +50,17 @@ class RetrieveOrdersByOrderNumberTest extends GraphQlAbstract
      */
     public function testGetCustomerOrdersSimpleProductQuery()
     {
-        $query =
-            <<<QUERY
-{
-  customer
-  {
-   orders(filter:{number:{eq:"100000002"}}){
-    total_count
-    items
-    {
-      id
-      number
-      status
-      order_date
-      items{
-        quantity_ordered
-        product_sku
-        product_name
-        product_sale_price{currency value}
-      }
-      total {
-                    base_grand_total {
-                        value
-                        currency
-                    }
-                    grand_total {
-                        value
-                        currency
-                    }
-                    subtotal {
-                        value
-                        currency
-                    }
-
-                }
-    }
-   }
- }
-}
-QUERY;
-
-        $currentEmail = 'customer@example.com';
-        $currentPassword = 'password';
-        $response = $this->graphQlQuery(
-            $query,
-            [],
-            '',
-            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
-        );
-
+        $orderNumber = '100000002';
+        $response = $this->getCustomerOrderQueryOnSimpleProducts($orderNumber);
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         $this->assertNotEmpty($response['customer']['orders']['items']);
         $customerOrderItemsInResponse = $response['customer']['orders']['items'][0];
         $this->assertArrayHasKey('items', $customerOrderItemsInResponse);
         $this->assertNotEmpty($customerOrderItemsInResponse['items']);
+        $this->assertNotEmpty($response["customer"]["orders"]["items"][0]["billing_address"]);
+        $this->assertNotEmpty($response["customer"]["orders"]["items"][0]["shipping_address"]);
+        $this->assertNotEmpty($response["customer"]["orders"]["items"][0]["payment_methods"]);
 
         $searchCriteria = $this->searchCriteriaBuilder->addFilter('increment_id', '100000002')
             ->create();
@@ -154,10 +110,53 @@ QUERY;
         $this->setPaymentMethod($cartId, $paymentMethod);
         $orderNumber = $this->placeOrder($cartId);
         $customerOrderResponse = $this->getCustomerOrderQuery($orderNumber);
+        $billingAssertionMap = [
+            'firstname' => 'John',
+            'lastname' => 'Smith',
+            'city' => 'Texas City',
+            'company' => 'Test company',
+            'country_code' => 'US',
+            'postcode' => '78717',
+            'region' => 'Texas',
+            'region_id' => '57',
+            'street' => [
+                0 => 'test street 1',
+                1 => 'test street 2',
+            ],
+            'telephone' => '5123456677'
+        ];
+        $this->assertResponseFields($customerOrderResponse[0]["billing_address"], $billingAssertionMap);
+        $shippingAssertionMap = [
+            'firstname' => 'test shipFirst',
+            'lastname' => 'test shipLast',
+            'city' => 'Montgomery',
+            'company' => 'test company',
+            'country_code' => 'US',
+            'postcode' => '36013',
+            'street' => [
+                0 => 'test street 1',
+                1 => 'test street 2',
+            ],
+            'region_id' => '1',
+            'region' => 'Alabama',
+            'telephone' => '3347665522'
+        ];
+        $this->assertResponseFields($customerOrderResponse[0]["shipping_address"], $shippingAssertionMap);
+        $paymentMethodAssertionMap = [
+            [
+                'name' => 'Check / Money order',
+                'type' => 'checkmo',
+                'additional_data' => []
+            ]
+        ];
+        $this->assertResponseFields($customerOrderResponse[0]["payment_methods"], $paymentMethodAssertionMap);
         // Asserting discounts on order item level
         $this->assertEquals(4, $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']);
         $this->assertEquals('USD', $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']);
-        $this->assertEquals('Discount', $customerOrderResponse[0]['items'][0]['discounts'][0]['label']);
+        $this->assertEquals(
+            'Discount Label for 10% off',
+            $customerOrderResponse[0]['items'][0]['discounts'][0]['label']
+        );
         $customerOrderItem = $customerOrderResponse[0];
         $this->assertTotalsWithTaxesAndDiscounts($customerOrderItem['total']);
         $this->deleteOrder();
@@ -168,20 +167,13 @@ QUERY;
      */
     private function assertTotalsWithTaxesAndDiscounts(array $customerOrderItemTotal): void
     {
-        $this->assertCount(2, $customerOrderItemTotal['taxes']);
-        $expectedProductAndShippingTaxes = [2.7, 1.35];
-        $totalTaxes = [];
-        foreach ($customerOrderItemTotal['taxes'] as $totalTaxFromResponse) {
-            array_push($totalTaxes, $totalTaxFromResponse['amount']['value']);
-        }
-        foreach ($totalTaxes as $value) {
-            $this->assertTrue(in_array($value, $expectedProductAndShippingTaxes));
-        }
-        foreach ($customerOrderItemTotal['taxes'] as $taxData) {
-            $this->assertEquals('USD', $taxData['amount']['currency']);
-            $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
-            $this->assertEquals(7.5, $taxData['rate']);
-        }
+        $this->assertCount(1, $customerOrderItemTotal['taxes']);
+        $taxData = $customerOrderItemTotal['taxes'][0];
+        $this->assertEquals('USD', $taxData['amount']['currency']);
+        $this->assertEquals(4.05, $taxData['amount']['value']);
+        $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
+        $this->assertEquals(7.5, $taxData['rate']);
+
         unset($customerOrderItemTotal['taxes']);
         $assertionMap = [
             'base_grand_total' => ['value' => 58.05, 'currency' =>'USD'],
@@ -194,9 +186,7 @@ QUERY;
                 'amount_excluding_tax' => ['value' => 20],
                 'total_amount' => ['value' => 20, 'currency' =>'USD'],
                 'discounts' => [
-                    0 => ['amount'=>['value'=> 2, 'currency' =>'USD'],
-                        'label' => 'Discount'
-                    ]
+                    0 => ['amount'=>['value'=> 2, 'currency' =>'USD']]
                 ],
                 'taxes'=> [
                     0 => [
@@ -207,8 +197,96 @@ QUERY;
                 ]
             ],
             'discounts' => [
-                0 => ['amount' => [ 'value' => -6, 'currency' =>'USD'],
-                    'label' => 'Discount'
+                0 => ['amount' => [ 'value' => 6, 'currency' =>'USD'],
+                    'label' => 'Discount Label for 10% off'
+                ]
+            ]
+        ];
+        $this->assertResponseFields($customerOrderItemTotal, $assertionMap);
+    }
+
+    /**
+     *  Verify the customer order with tax, discount with shipping tax class set for calculation setting
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_with_url_key.php
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_1.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_rule_for_region_al.php
+     * @magentoApiDataFixture Magento/SalesRule/_files/cart_rule_10_percent_off_with_discount_on_shipping.php
+     * @magentoApiDataFixture Magento/GraphQl/Tax/_files/tax_calculation_shipping_excludeTax_order_display_settings.php
+     */
+    public function testCustomerOrdersSimpleProductWithTaxesAndDiscountsWithTwoRules()
+    {
+        $quantity = 4;
+        $sku = 'simple1';
+        $cartId = $this->createEmptyCart();
+        $this->addProductToCart($cartId, $quantity, $sku);
+        $this->setBillingAddress($cartId);
+        $shippingMethod = $this->setShippingAddress($cartId);
+        $paymentMethod = $this->setShippingMethod($cartId, $shippingMethod);
+        $this->setPaymentMethod($cartId, $paymentMethod);
+        $orderNumber = $this->placeOrder($cartId);
+        $customerOrderResponse = $this->getCustomerOrderQuery($orderNumber);
+        // Asserting discounts on order item level
+        $this->assertEquals(4, $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['value']);
+        $this->assertEquals('USD', $customerOrderResponse[0]['items'][0]['discounts'][0]['amount']['currency']);
+        $this->assertEquals(
+            'Discount Label for 10% off',
+            $customerOrderResponse[0]['items'][0]['discounts'][0]['label']
+        );
+        $customerOrderItem = $customerOrderResponse[0];
+        $this->assertTotalsWithTaxesAndDiscountsWithTwoRules($customerOrderItem['total']);
+        $this->deleteOrder();
+    }
+
+    /**
+     * @param array $customerOrderItemTotal
+     */
+    private function assertTotalsWithTaxesAndDiscountsWithTwoRules(array $customerOrderItemTotal): void
+    {
+        $this->assertCount(2, $customerOrderItemTotal['taxes']);
+        $taxData = $customerOrderItemTotal['taxes'][0];
+        $this->assertEquals('USD', $taxData['amount']['currency']);
+        $this->assertEquals(4.05, $taxData['amount']['value']);
+        $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
+        $this->assertEquals(7.5, $taxData['rate']);
+
+        $secondTaxData = $customerOrderItemTotal['taxes'][1];
+        $this->assertEquals('USD', $secondTaxData['amount']['currency']);
+        $this->assertEquals(2.97, $secondTaxData['amount']['value']);
+        $this->assertEquals('US-AL-*-Rate-1', $secondTaxData['title']);
+        $this->assertEquals(5.5, $secondTaxData['rate']);
+
+        unset($customerOrderItemTotal['taxes']);
+        $assertionMap = [
+            'base_grand_total' => ['value' => 61.02, 'currency' =>'USD'],
+            'grand_total' => ['value' => 61.02, 'currency' =>'USD'],
+            'subtotal' => ['value' => 40, 'currency' =>'USD'],
+            'total_tax' => ['value' => 7.02, 'currency' =>'USD'],
+            'total_shipping' => ['value' => 20, 'currency' =>'USD'],
+            'shipping_handling' => [
+                'amount_including_tax' => ['value' => 22.6],
+                'amount_excluding_tax' => ['value' => 20],
+                'total_amount' => ['value' => 20, 'currency' =>'USD'],
+                'discounts' => [
+                    0 => ['amount'=>['value'=> 2, 'currency' =>'USD']]
+                ],
+                'taxes'=> [
+                    0 => [
+                        'amount'=>['value' => 1.35],
+                        'title' => 'US-TEST-*-Rate-1',
+                        'rate' => 7.5
+                    ],
+                    1 => [
+                        'amount'=>['value' => 0.99],
+                        'title' => 'US-AL-*-Rate-1',
+                        'rate' => 5.5
+                    ]
+                ]
+            ],
+            'discounts' => [
+                0 => ['amount' => [ 'value' => 6, 'currency' =>'USD'],
+                    'label' => 'Discount Label for 10% off'
                 ]
             ]
         ];
@@ -744,21 +822,13 @@ QUERY;
      */
     private function assertTotalsAndShippingWithExcludedTaxSetting($customerOrderItemTotal): void
     {
-        $this->assertCount(2, $customerOrderItemTotal['taxes']);
-        $expectedProductAndShippingTaxes = [1.5, 0.75];
+        $this->assertCount(1, $customerOrderItemTotal['taxes']);
+        $taxData = $customerOrderItemTotal['taxes'][0];
+        $this->assertEquals('USD', $taxData['amount']['currency']);
+        $this->assertEquals(2.25, $taxData['amount']['value']);
+        $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
+        $this->assertEquals(7.5, $taxData['rate']);
 
-        $totalTaxes = [];
-        foreach ($customerOrderItemTotal['taxes'] as $totalTaxFromResponse) {
-            array_push($totalTaxes, $totalTaxFromResponse['amount']['value']);
-        }
-        foreach ($totalTaxes as $value) {
-            $this->assertTrue(in_array($value, $expectedProductAndShippingTaxes));
-        }
-        foreach ($customerOrderItemTotal['taxes'] as $taxData) {
-            $this->assertEquals('USD', $taxData['amount']['currency']);
-            $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
-            $this->assertEquals(7.5, $taxData['rate']);
-        }
         unset($customerOrderItemTotal['taxes']);
         $assertionMap = [
             'base_grand_total' => ['value' => 32.25, 'currency' =>'USD'],
@@ -819,20 +889,14 @@ QUERY;
      */
     private function assertTotalsAndShippingWithTaxes(array $customerOrderItemTotal): void
     {
-        $this->assertCount(2, $customerOrderItemTotal['taxes']);
-        $expectedProductAndShippingTaxes = [1.5, 0.75];
-        $totalTaxes = [];
-        foreach ($customerOrderItemTotal['taxes'] as $totalTaxFromResponse) {
-            array_push($totalTaxes, $totalTaxFromResponse['amount']['value']);
-        }
-        foreach ($totalTaxes as $value) {
-            $this->assertTrue(in_array($value, $expectedProductAndShippingTaxes));
-        }
-        foreach ($customerOrderItemTotal['taxes'] as $taxData) {
-            $this->assertEquals('USD', $taxData['amount']['currency']);
-            $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
-            $this->assertEquals(7.5, $taxData['rate']);
-        }
+        $this->assertCount(1, $customerOrderItemTotal['taxes']);
+
+        $taxData = $customerOrderItemTotal['taxes'][0];
+        $this->assertEquals('USD', $taxData['amount']['currency']);
+        $this->assertEquals(2.25, $taxData['amount']['value']);
+        $this->assertEquals('US-TEST-*-Rate-1', $taxData['title']);
+        $this->assertEquals(7.5, $taxData['rate']);
+
         unset($customerOrderItemTotal['taxes']);
         unset($customerOrderItemTotal['shipping_handling']['discounts']);
         $assertionMap = [
@@ -845,7 +909,6 @@ QUERY;
                 'amount_including_tax' => ['value' => 10.75],
                 'amount_excluding_tax' => ['value' => 10],
                 'total_amount' => ['value' => 10, 'currency' =>'USD'],
-
                 'taxes'=> [
                     0 => [
                         'amount'=>['value' => 0.75],
@@ -1147,6 +1210,22 @@ QUERY;
            number
            order_date
            status
+           payment_methods
+           {
+             name
+             type
+             additional_data
+             {
+              name
+              value
+              }
+           }
+           shipping_address {
+           ... address
+           }
+           billing_address {
+           ... address
+           }
            items{product_name product_sku quantity_ordered discounts {amount{value currency} label}}
            total {
              base_grand_total{value currency}
@@ -1162,7 +1241,7 @@ QUERY;
                amount_excluding_tax{value}
                total_amount{value currency}
                taxes {amount{value} title rate}
-               discounts {amount{value currency} label}
+               discounts {amount{value currency}}
              }
 
            }
@@ -1170,6 +1249,22 @@ QUERY;
        }
      }
    }
+
+   fragment address on OrderAddress {
+          firstname
+          lastname
+          city
+          company
+          country_code
+          fax
+          middlename
+          postcode
+          street
+          region
+          region_id
+          telephone
+          vat_id
+        }
 QUERY;
         $currentEmail = 'customer@example.com';
         $currentPassword = 'password';
@@ -1183,6 +1278,98 @@ QUERY;
         $this->assertArrayHasKey('orders', $response['customer']);
         $this->assertArrayHasKey('items', $response['customer']['orders']);
         return $response['customer']['orders']['items'];
+    }
+
+    /**
+     * Get customer order query
+     *
+     * @param string $orderNumber
+     * @return array
+     */
+    private function getCustomerOrderQueryOnSimpleProducts($orderNumber): array
+    {
+        $query =
+            <<<QUERY
+{
+  customer
+  {
+   orders(filter:{number:{eq:"{$orderNumber}"}}) {
+    total_count
+    items
+    {
+      id
+      number
+      status
+      order_date
+      payment_methods
+      {
+        name
+        type
+        additional_data
+        {
+         name
+         value
+         }
+      }
+      shipping_address {
+         ... address
+      }
+      billing_address {
+      ... address
+      }
+      items{
+        quantity_ordered
+        product_sku
+        product_name
+        product_sale_price{currency value}
+      }
+      total {
+             base_grand_total {
+                        value
+                        currency
+                    }
+                    grand_total {
+                        value
+                        currency
+                    }
+                    subtotal {
+                        value
+                        currency
+                    }
+                }
+    }
+   }
+ }
+}
+
+fragment address on OrderAddress {
+          firstname
+          lastname
+          city
+          company
+          country_code
+          fax
+          middlename
+          postcode
+          street
+          region
+          region_id
+          telephone
+          vat_id
+        }
+QUERY;
+        $currentEmail = 'customer@example.com';
+        $currentPassword = 'password';
+        $response = $this->graphQlQuery(
+            $query,
+            [],
+            '',
+            $this->customerAuthenticationHeader->execute($currentEmail, $currentPassword)
+        );
+
+        $this->assertArrayHasKey('orders', $response['customer']);
+        $this->assertArrayHasKey('items', $response['customer']['orders']);
+        return $response;
     }
 
     /**

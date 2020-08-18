@@ -55,8 +55,12 @@
             <!--Delete attribute-->
             <deleteData createDataKey="customAttribute" stepKey="deleteCustomAttribute"/>
             <!--Reindex and clear cache-->
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:clean" stepKey="cleanCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
         <!--Navigate to backend and update value for custom attribute -->
@@ -77,8 +81,12 @@
         </actionGroup>
 
         <!--Reindex and clear cache-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:clean" stepKey="cleanCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>
 
         <!-- Navigate to Storefront and search -->

@@ -8,7 +8,8 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="VerifyRegistredLinkDisplayedForGuestSubscriptionNoTest">
+    <test name="VerifyRegistredLinkDisplayedForGuestSubscriptionNoTest" deprecated="Use StorefrontNewsletterGuestSubscriptionWithDisallowedOptionTest">
+        <!-- Deprecated Due to inconsistency with the best practices -->
         <annotations>
             <features value="Newsletter"/>
             <stories value="Configure guest newsletter subscription to 'No'"/>
@@ -22,6 +23,11 @@
             <magentoCLI command="config:set newsletter/subscription/allow_guest_subscribe 0"
                         stepKey="setConfigGuestSubscriptionDisable"/>
         </before>
-        <actionGroup ref="StorefrontCreateNewSubscriberActionGroup" stepKey="createSubscriber"/>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
+        <submitForm selector="{{BasicFrontendNewsletterFormSection.subscribeForm}}"
+                    parameterArray="['email' => '{{_defaultNewsletter.senderEmail}}']"
+                    button="{{BasicFrontendNewsletterFormSection.subscribeButton}}" stepKey="submitForm"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible stepKey="waitForErrorAppears" selector="{{StorefrontMessagesSection.error}}"/>
     </test>
 </tests>

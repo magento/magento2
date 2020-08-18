@@ -7,7 +7,10 @@
 /**
  * Send to friend form
  */
-/** @var \Magento\SendFriend\Block\Send $block */
+/**
+ * @var \Magento\SendFriend\Block\Send $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 
 ?>
 <script id="add-recipient-tmpl" type="text/x-magento-template">
@@ -21,15 +24,20 @@
     </div>
     <fieldset class="fieldset">
         <div class="field name required">
-            <label for="recipients-name<%- data._index_ %>" class="label"><span><?= $block->escapeHtml(__('Name')) ?></span></label>
+            <label for="recipients-name<%- data._index_ %>" class="label">
+                <span><?= $block->escapeHtml(__('Name')) ?></span>
+            </label>
             <div class="control">
-                <input name="recipients[name][<%- data._index_ %>]" type="text" title="<?= $block->escapeHtmlAttr(__('Name')) ?>" class="input-text"
+                <input name="recipients[name][<%- data._index_ %>]" type="text"
+                       title="<?= $block->escapeHtmlAttr(__('Name')) ?>" class="input-text"
                        id="recipients-name<%- data._index_ %>" data-validate="{required:true}"/>
             </div>
         </div>
 
         <div class="field email required">
-            <label for="recipients-email<%- data._index_ %>" class="label"><span><?= $block->escapeHtml(__('Email')) ?></span></label>
+            <label for="recipients-email<%- data._index_ %>" class="label">
+                <span><?= $block->escapeHtml(__('Email')) ?></span>
+            </label>
             <div class="control">
                 <input name="recipients[email][<%- data._index_ %>]" title="<?= $block->escapeHtmlAttr(__('Email')) ?>"
                        id="recipients-email<%- data._index_ %>" type="email" class="input-text"
@@ -71,7 +79,8 @@
             <label for="sender-email" class="label"><span><?= $block->escapeHtml(__('Email')) ?></span></label>
             <div class="control">
                 <input name="sender[email]" value="<?= $block->escapeHtmlAttr($block->getEmail()) ?>"
-                       title="<?= $block->escapeHtmlAttr(__('Email')) ?>" id="sender-email" type="email" class="input-text"
+                       title="<?= $block->escapeHtmlAttr(__('Email')) ?>" id="sender-email" type="email"
+                       class="input-text"
                        data-mage-init='{"mage/trim-input":{}}'
                        data-validate="{required:true, 'validate-email':true}"/>
             </div>
@@ -91,14 +100,16 @@
         <legend class="legend"><span><?= $block->escapeHtml(__('Invitee')) ?></span></legend>
         <br />
         <div id="recipients-options"></div>
-        <?php if ($block->getMaxRecipients()) : ?>
-            <div id="max-recipient-message" style="display: none;" class="message notice limit" role="alert">
-                <span><?= $block->escapeHtml(__('Maximum %1 email addresses allowed.', $block->getMaxRecipients())) ?></span>
+        <?php if ($block->getMaxRecipients()): ?>
+            <div id="max-recipient-message" class="message notice limit" role="alert">
+                <span><?= $block->escapeHtml(__('Maximum %1 email addresses allowed.', $block->getMaxRecipients())) ?>
+                </span>
             </div>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display: none;", 'div#max-recipient-message') ?>
         <?php endif; ?>
         <div class="actions-toolbar">
             <div class="secondary">
-            <?php if (1 < $block->getMaxRecipients()) : ?>
+            <?php if (1 < $block->getMaxRecipients()): ?>
                 <button type="button" id="add-recipient-button" class="action add">
                     <span><?= $block->escapeHtml(__('Add Invitee')) ?></span></button>
             <?php endif; ?>
@@ -110,7 +121,7 @@
     <div class="actions-toolbar">
         <div class="primary">
             <button type="submit"
-                    class="action submit primary"<?php if (!$block->canSend()) : ?> disabled="disabled"<?php endif ?>>
+                    class="action submit primary"<?php if (!$block->canSend()): ?> disabled="disabled"<?php endif ?>>
                 <span><?= $block->escapeHtml(__('Send Email')) ?></span></button>
         </div>
         <div class="secondary">

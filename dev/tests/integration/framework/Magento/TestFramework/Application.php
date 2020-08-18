@@ -168,10 +168,12 @@ class Application
         $loadTestExtensionAttributes = false
     ) {
         if (getcwd() != BP . '/dev/tests/integration') {
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             chdir(BP . '/dev/tests/integration');
         }
         $this->_shell = $shell;
         $this->installConfigFile = $installConfigFile;
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         $this->_globalConfigDir = realpath($globalConfigDir);
         $this->_appMode = $appMode;
         $this->installDir = $installDir;
@@ -251,6 +253,7 @@ class Application
     protected function getInstallConfig()
     {
         if (null === $this->installConfig) {
+            // phpcs:ignore Magento2.Security.IncludeFile
             $this->installConfig = include $this->installConfigFile;
         }
         return $this->installConfig;
@@ -293,6 +296,7 @@ class Application
      */
     public function isInstalled()
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         return is_file($this->getLocalConfig());
     }
 
@@ -371,7 +375,7 @@ class Application
                 \Magento\Framework\Mail\TransportInterface::class =>
                     \Magento\TestFramework\Mail\TransportInterfaceMock::class,
                 \Magento\Framework\Mail\Template\TransportBuilder::class
-                    => \Magento\TestFramework\Mail\Template\TransportBuilderMock::class,
+                => \Magento\TestFramework\Mail\Template\TransportBuilderMock::class,
             ]
         ];
         if ($this->loadTestExtensionAttributes) {
@@ -552,8 +556,10 @@ class Application
         );
         foreach ($globalConfigFiles as $file) {
             $targetFile = $this->_configDir . str_replace($this->_globalConfigDir, '', $file);
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             $this->_ensureDirExists(dirname($targetFile));
             if ($file !== $targetFile) {
+                // phpcs:ignore Magento2.Functions.DiscouragedFunction
                 copy($file, $targetFile);
             }
         }
@@ -567,6 +573,7 @@ class Application
     private function copyGlobalConfigFile()
     {
         $targetFile = $this->_configDir . '/config.local.php';
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         copy($this->globalConfigFile, $targetFile);
     }
 
@@ -585,7 +592,7 @@ class Application
         $params['magento-init-params'] = $this->getInitParamsQuery();
         $result = [];
         foreach ($params as $key => $value) {
-            if (!empty($value)) {
+            if (isset($value)) {
                 $result["--{$key}=%s"] = $value;
             }
         }
@@ -636,10 +643,13 @@ class Application
      */
     protected function _ensureDirExists($dir)
     {
+        // phpcs:ignore Magento2.Functions.DiscouragedFunction
         if (!file_exists($dir)) {
             $old = umask(0);
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
             mkdir($dir, 0777, true);
             umask($old);
+            // phpcs:ignore Magento2.Functions.DiscouragedFunction
         } elseif (!is_dir($dir)) {
             throw new \Magento\Framework\Exception\LocalizedException(__("'%1' is not a directory.", $dir));
         }
@@ -704,6 +714,7 @@ class Application
         $customDirs = [
             DirectoryList::CONFIG => [$path => "{$this->installDir}/etc"],
             DirectoryList::VAR_DIR => [$path => $var],
+            DirectoryList::VAR_EXPORT => [$path => "{$var}/export"],
             DirectoryList::MEDIA => [$path => "{$this->installDir}/pub/media"],
             DirectoryList::STATIC_VIEW => [$path => "{$this->installDir}/pub/static"],
             DirectoryList::TMP_MATERIALIZATION_DIR => [$path => "{$var}/view_preprocessed/pub/static"],

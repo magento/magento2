@@ -27,8 +27,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPage"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickAddProductToggle"/>
         <waitForPageLoad stepKey="waitForProductToggleToSelectProduct"/>
         <click selector="{{AdminProductGridActionSection.addVirtualProduct}}" stepKey="clickVirtualProduct"/>
@@ -49,23 +48,20 @@
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="clickCategoriesDropDown"/>
         <fillField selector="{{AdminProductFormSection.searchCategory}}" userInput="$$categoryEntity.name$$" stepKey="fillSearchCategory" />
         <click selector="{{AdminProductFormSection.selectCategory($$categoryEntity.name$$)}}" stepKey="clickOnCategory"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneAdvancedCategorySelect"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneAdvancedCategorySelect"/>
         <selectOption selector="{{AdminProductFormSection.visibility}}" userInput="{{virtualProductBigQty.visibility}}" stepKey="selectVisibility"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection"/>
         <fillField selector="{{AdminProductSEOSection.urlKeyInput}}" userInput="{{virtualProductBigQty.urlKey}}" stepKey="fillUrlKey"/>
         <scrollToTopOfPage stepKey="scrollToTopOfAdminProductFormSection"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForVirtualProductSaved"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSaveButton"/>
 
         <!-- Verify we see success message -->
         <see selector="{{AdminProductFormSection.successMessage}}" userInput="You saved the product." stepKey="seeAssertVirtualProductSuccessMessage"/>
 
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="OpenProductCatalogPage1"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPage1"/>
-        <conditionalClick selector="{{AdminProductGridFilterSection.clearAll}}" dependentSelector="{{AdminProductGridFilterSection.clearAll}}" visible="true" stepKey="checkRetailCustomerTaxClass" />
-        <fillField selector="{{AdminProductGridFilterSection.keywordSearch}}" userInput="{{virtualProductBigQty.name}}" stepKey="fillProductName1"/>
-        <click selector="{{AdminProductGridFilterSection.keywordSearchButton}}" stepKey="clickKeywordSearchButton"/>
-        <waitForPageLoad stepKey="waitForProductSearch"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage1"/>
+        <actionGroup ref="SearchProductGridByKeywordActionGroup" stepKey="searchProductGrid">
+            <argument name="keyword" value="virtualProductBigQty.name"/>
+        </actionGroup>
         <click selector="{{AdminProductGridFilterSection.nthRow('1')}}" stepKey="clickFirstRowToVerifyCreatedVirtualProduct"/>
         <waitForPageLoad stepKey="waitUntilProductIsOpened" />
 
@@ -86,7 +82,7 @@
             <actualResult type="variable">selectedCategories</actualResult>
             <expectedResult type="array">[$$categoryEntity.name$$]</expectedResult>
         </assertEquals>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickOnDoneOnCategorySelect"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickOnDoneOnCategorySelect"/>
         <seeInField selector="{{AdminProductFormSection.visibility}}" userInput="{{virtualProductBigQty.visibility}}" stepKey="seeVisibility"/>
         <scrollTo selector="{{AdminProductSEOSection.sectionHeader}}" x="0" y="-80" stepKey="scrollToAdminProductSEOSection1"/>
         <click selector="{{AdminProductSEOSection.sectionHeader}}" stepKey="clickAdminProductSEOSection1"/>
@@ -98,8 +94,12 @@
         <see selector="{{StorefrontCategoryMainSection.productLink}}" userInput="{{virtualProductBigQty.name}}" stepKey="seeVirtualProductNameOnCategoryPage"/>
 
         <!--Run full reindex and clear caches -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!-- Verify customer see created virtual product with tier price(from above step) on storefront page and is searchable by sku -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage"/>

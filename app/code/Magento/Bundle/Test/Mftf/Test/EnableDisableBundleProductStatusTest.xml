@@ -44,9 +44,7 @@
         <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle"/>
         <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType"/>
-        <waitForElementVisible selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="waitForAddProductsToBundle"/>
-        <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProductsToOption"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterBundleProducts"/>
+        <actionGroup ref="AdminClickAddProductToOptionActionGroup" stepKey="clickAddProductsToOption"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
@@ -65,7 +63,7 @@
         </actionGroup>
 
         <!--Save the product-->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
 
         <!--Testing enabled view-->
@@ -76,15 +74,13 @@
         <seeElement stepKey="LookingForNameOfProduct" selector="{{StorefrontBundledSection.bundleProductName}}"/>
 
         <!--Testing disabled view-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="GoToProductCatalog"/>
-        <waitForPageLoad stepKey="WaitForCatalogProductPageToLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="GoToProductCatalog"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="FindProductEditPage">
             <argument name="product" value="BundleProduct"/>
         </actionGroup>
         <click selector="{{AdminDataGridTableSection.rowViewAction('1')}}" stepKey="ClickProductInGrid"/>
         <click stepKey="ClickOnEnableDisableToggle" selector="{{AdminProductFormBundleSection.enableDisableToggle}}"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButtonAgain"/>
-        <waitForPageLoad stepKey="PauseForSave"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButtonAgain"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShownAgain"/>
         <amOnPage url="{{BundleProduct.urlKey}}.html" stepKey="GoToProductPageAgain"/>
         <waitForPageLoad stepKey="WaitForProductPageToLoadToShowElement"/>
