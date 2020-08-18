@@ -29,7 +29,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $this->assertStringEndsWith('one', $block->getHeaderCssClass());
-        $this->assertContains('two', $block->getHeaderText());
+        $this->assertStringContainsString('two', $block->getHeaderText());
     }
 
     /**
@@ -41,9 +41,9 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         $block = $this->_buildBlock($titles);
         $html = $block->getButtonsHtml('header');
 
-        $this->assertContains('<button', $html);
+        $this->assertStringContainsString('<button', $html);
         foreach ($titles as $title) {
-            $this->assertContains($title, $html);
+            $this->assertStringContainsString($title, $html);
         }
     }
 
@@ -61,7 +61,7 @@ class ContainerTest extends \PHPUnit\Framework\TestCase
         }
         $html = $block->getButtonsHtml('header');
         foreach ($newTitles as $newTitle) {
-            $this->assertContains($newTitle, $html);
+            $this->assertStringContainsString($newTitle, $html);
         }
     }
 

@@ -27,7 +27,7 @@
             <createData entity="SimpleProduct4" stepKey="simpleProduct2">
                 <requiredEntity createDataKey="category1"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
@@ -37,8 +37,7 @@
         </after>
 
         <!-- Create product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageAdd"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="adminProductIndexPageAdd"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>

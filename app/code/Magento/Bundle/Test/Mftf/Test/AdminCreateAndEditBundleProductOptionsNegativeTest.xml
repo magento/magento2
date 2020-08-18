@@ -32,7 +32,7 @@
             <createData entity="SimpleProduct2" stepKey="createSecondSimpleProduct"/>
 
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Delete the simple product -->
@@ -111,7 +111,7 @@
 
         <!-- Save product form -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="clickSaveProduct"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveWithTwoOptions"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveWithTwoOptions"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
 
         <!-- Delete created bundle product -->

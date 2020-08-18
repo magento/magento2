@@ -13,13 +13,14 @@
             <stories value="Menu Navigation"/>
             <title value="Admin marketing pending reviews navigate menu"/>
             <description value="Admin able see navigate head menu Marketing is active, when open page Marketing > Pending Reviews"/>
+            <severity value="MAJOR"/>
             <group value="menu"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <actionGroup ref="AdminNavigateMenuActionGroup" stepKey="navigateToReportsViewsPage">
             <argument name="menuUiId" value="{{AdminMenuMarketing.dataUiId}}"/>

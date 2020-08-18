@@ -13,7 +13,7 @@
             <stories value="MC-17838: Shopping cart items added to the order created in the admin"/>
             <description value="Shopping cart items must not be added to the order unless they were moved manually"/>
             <features value="Sales"/>
-            <severity value="AVERAGE"/>
+            <severity value="BLOCKER"/>
             <group value="Sales"/>
         </annotations>
         <before>
@@ -37,7 +37,7 @@
             </createData>
 
             <!--Login as admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <!-- Step 1: Go to Storefront as Customer -->

@@ -17,17 +17,17 @@ class DocBlockTest extends \PHPUnit\Framework\TestCase
     protected $_object;
 
     /**
-     * @var \Magento\TestFramework\Application|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\TestFramework\Application|\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_application;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_object = new \Magento\TestFramework\Bootstrap\DocBlock(__DIR__);
         $this->_application = $this->createMock(\Magento\TestFramework\Application::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_object = null;
         $this->_application = null;

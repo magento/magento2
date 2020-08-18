@@ -3,80 +3,100 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Controller\Adminhtml\Order;
 
-class AddCommentTest extends \PHPUnit\Framework\TestCase
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Backend\Model\View\Result\RedirectFactory;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Controller\Adminhtml\Order\AddComment;
+use Magento\Sales\Model\Order;
+use Magento\Sales\Model\Order\Email\Sender\OrderCommentSender;
+use Magento\Sales\Model\Order\Status\History;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class AddCommentTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Controller\Adminhtml\Order\AddComment
+     * @var AddComment
      */
     private $addCommentController;
 
     /**
-     * @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
-     * @var \Magento\Sales\Model\Order|\PHPUnit_Framework_MockObject_MockObject
+     * @var Order|MockObject
      */
     private $orderMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\RedirectFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var RedirectFactory|MockObject
      */
     private $resultRedirectFactoryMock;
 
     /**
-     * @var \Magento\Backend\Model\View\Result\Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var Redirect|MockObject
      */
     private $resultRedirectMock;
 
     /**
-     * @var \Magento\Framework\App\Request\Http|\PHPUnit_Framework_MockObject_MockObject
+     * @var Http|MockObject
      */
     private $requestMock;
 
     /**
-     * @var \Magento\Sales\Api\OrderRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderRepositoryInterface|MockObject
      */
     private $orderRepositoryMock;
 
     /**
-     * @var \Magento\Framework\AuthorizationInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AuthorizationInterface|MockObject
      */
     private $authorizationMock;
 
     /**
-     * @var \Magento\Sales\Model\Order\Status\History|\PHPUnit_Framework_MockObject_MockObject
+     * @var History|MockObject
      */
     private $statusHistoryCommentMock;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     private $objectManagerMock;
 
     /**
      * Test setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->contextMock = $this->createMock(\Magento\Backend\App\Action\Context::class);
-        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->orderRepositoryMock = $this->createMock(\Magento\Sales\Api\OrderRepositoryInterface::class);
-        $this->orderMock = $this->createMock(\Magento\Sales\Model\Order::class);
-        $this->resultRedirectFactoryMock = $this->createMock(\Magento\Backend\Model\View\Result\RedirectFactory::class);
-        $this->resultRedirectMock = $this->createMock(\Magento\Backend\Model\View\Result\Redirect::class);
-        $this->authorizationMock = $this->createMock(\Magento\Framework\AuthorizationInterface::class);
-        $this->statusHistoryCommentMock = $this->createMock(\Magento\Sales\Model\Order\Status\History::class);
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->contextMock = $this->createMock(Context::class);
+        $this->requestMock = $this->createMock(Http::class);
+        $this->orderRepositoryMock = $this->getMockForAbstractClass(OrderRepositoryInterface::class);
+        $this->orderMock = $this->createMock(Order::class);
+        $this->resultRedirectFactoryMock = $this->createMock(RedirectFactory::class);
+        $this->resultRedirectMock = $this->createMock(Redirect::class);
+        $this->authorizationMock = $this->getMockForAbstractClass(AuthorizationInterface::class);
+        $this->statusHistoryCommentMock = $this->createMock(History::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
 
         $this->contextMock->expects($this->once())->method('getRequest')->willReturn($this->requestMock);
 
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->addCommentController = $objectManagerHelper->getObject(
-            \Magento\Sales\Controller\Adminhtml\Order\AddComment::class,
+            AddComment::class,
             [
                 'context' => $this->contextMock,
                 'orderRepository' => $this->orderRepositoryMock,
@@ -107,7 +127,7 @@ class AddCommentTest extends \PHPUnit\Framework\TestCase
             ->willReturn($this->statusHistoryCommentMock);
         $this->statusHistoryCommentMock->expects($this->once())->method('setIsCustomerNotified')->with($expectedNotify);
         $this->objectManagerMock->expects($this->once())->method('create')->willReturn(
-            $this->createMock(\Magento\Sales\Model\Order\Email\Sender\OrderCommentSender::class)
+            $this->createMock(OrderCommentSender::class)
         );
 
         $this->addCommentController->execute();

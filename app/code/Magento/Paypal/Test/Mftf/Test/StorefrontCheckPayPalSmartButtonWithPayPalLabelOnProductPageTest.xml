@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCheckPayPalSmartButtonWithPayPalLabelOnProductPageTest" extends="StorefrontCheckPayPalSmartButtonWithBuyNowLabelOnProductPageTest">
+        <annotations>
+            <features value="PayPal"/>
+            <stories value="PayPal Smart Button Configuration"/>
+            <title value="Check PayPal Smart Button configuration with PayPal label on Product page"/>
+            <description value="Admin is able to customize PayPal Smart Button with PayPal label on Product page"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-28711"/>
+            <group value="paypal"/>
+            <group value="paypalExpress"/>
+            <skip>
+                <issueId value="MC-33951"/>
+            </skip>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{StorefrontPaypalProductPageButtonPayPalLabelConfigData.path}} {{StorefrontPaypalProductPageButtonPayPalLabelConfigData.value}}" stepKey="setLabelForPayPalSmartButton"/>
+            <magentoCLI command="config:set {{StorefrontPaypalProductPageButtonHorizontalLayoutConfigData.path}} {{StorefrontPaypalProductPageButtonHorizontalLayoutConfigData.value}}" stepKey="setLayoutForPayPalSmartButton"/>
+            <magentoCLI command="config:set {{StorefrontPaypalProductPageButtonPillShapeConfigData.path}} {{StorefrontPaypalProductPageButtonPillShapeConfigData.value}}" stepKey="setShapeForPayPalSmartButton"/>
+            <magentoCLI command="config:set {{StorefrontPaypalProductPageButtonSilverColorConfigData.path}} {{StorefrontPaypalProductPageButtonSilverColorConfigData.value}}" stepKey="setColorForPayPalSmartButton"/>
+        </before>
+        <!-- Check PayPal smart button configurations -->
+        <remove keyForRemoval="seeButtonLabelText"/>
+        <actionGroup ref="AssertPayPalButtonLayoutInPaypalLabelActionGroup" stepKey="assertLayoutBtn">
+            <argument name="label" value="{{PayPalLabel.paypal}}"/>
+            <argument name="layout" value="{{PayPalLayout.horizontal}}"/>
+            <argument name="shape" value="{{PayPalShape.pill}}"/>
+            <argument name="color" value="{{PayPalColor.silver}}"/>
+        </actionGroup>
+    </test>
+</tests>

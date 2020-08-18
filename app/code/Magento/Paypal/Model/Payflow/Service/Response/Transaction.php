@@ -117,6 +117,7 @@ class Transaction
 
         $payment->setData(OrderPaymentInterface::CC_TYPE, $response->getData(OrderPaymentInterface::CC_TYPE));
         $payment->setAdditionalInformation(Payflowpro::PNREF, $response->getData(Payflowpro::PNREF));
+        $payment->setAdditionalInformation('result_code', $response->getData('result'));
 
         $expDate = $response->getData('expdate');
         $expMonth = $this->getCcExpMonth($expDate);

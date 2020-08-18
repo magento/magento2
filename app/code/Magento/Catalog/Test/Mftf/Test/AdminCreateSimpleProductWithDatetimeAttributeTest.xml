@@ -19,8 +19,9 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
+
         <after>
             <deleteData createDataKey="createDatetimeAttribute" stepKey="deleteDatetimeAttribute"/>
             <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
@@ -45,17 +46,21 @@
         <actionGroup ref="AddProductAttributeInProductModalActionGroup" stepKey="addDatetimeAttribute">
             <argument name="attributeCode" value="$createDatetimeAttribute.attribute_code$"/>
         </actionGroup>
-        <!-- Flush config cache to reset product attributes in attribute set -->
-        <magentoCLI command="cache:flush" arguments="config" stepKey="flushConfigCache"/>
         <!-- Save the product -->
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <!-- Flush config cache to reset product attributes in attribute set -->
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushConfigCache">
+            <argument name="tags" value="config"/>
+        </actionGroup>
+        <reloadPage stepKey="reloadProductEditPage"/>
         <!-- Check default value -->
-        <scrollTo selector="{{AdminProductAttributesSection.sectionHeader}}" stepKey="goToAttributesSection"/>
-        <click selector="{{AdminProductAttributesSection.sectionHeader}}" stepKey="openAttributesSection"/>
+        <waitForElementVisible selector="{{AdminProductAttributesSection.sectionHeader}}" stepKey="waitAttributesSectionAppears"/>
+        <conditionalClick selector="{{AdminProductAttributesSection.sectionHeader}}" dependentSelector="{{AdminProductAttributesSection.attributeTextInputByCode($createDatetimeAttribute.attribute_code$)}}" visible="false" stepKey="openAttributesSection"/>
+        <scrollTo selector="{{AdminProductAttributesSection.sectionHeader}}" stepKey="scrollToAttributesSection"/>
         <waitForElementVisible selector="{{AdminProductAttributesSection.attributeTextInputByCode($createDatetimeAttribute.attribute_code$)}}" stepKey="waitForSlideOutAttributes"/>
         <seeInField selector="{{AdminProductAttributesSection.attributeTextInputByCode($createDatetimeAttribute.attribute_code$)}}" userInput="$generateDefaultValue" stepKey="checkDefaultValue"/>
         <!-- Check datetime grid filter -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToAdminProductIndexPage"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToAdminProductIndexPage"/>
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
         <click selector="{{AdminDataGridHeaderSection.filters}}" stepKey="openProductFilters"/>
         <fillField selector="{{AdminProductGridFilterSection.inputByCodeRangeFrom($createDatetimeAttribute.attribute_code$)}}" userInput="{$generateDefaultValue}" stepKey="fillProductDatetimeFromFilter"/>

@@ -30,9 +30,9 @@ class CacheTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->frontendCacheMock = $this->createMock(FrontendInterface::class);
+        $this->frontendCacheMock = $this->getMockForAbstractClass(FrontendInterface::class);
 
         $objectManager = new ObjectManagerHelper($this);
 
@@ -53,12 +53,115 @@ class CacheTest extends TestCase
     {
         $identifier = 'lock_name';
 
+        $closure = \Closure::bind(function ($cacheInstance) {
+            return $cacheInstance->lockSign;
+        }, null, $this->cache);
+        $lockSign = $closure($this->cache);
+
+        $this->frontendCacheMock
+            ->expects($this->once())->method('load')
+            ->with(self::LOCK_PREFIX . $identifier)
+            ->willReturn($lockSign);
+
         $this->frontendCacheMock
             ->expects($this->once())
             ->method('remove')
             ->with(self::LOCK_PREFIX . $identifier)
             ->willReturn(true);
 
-        $this->assertEquals(true, $this->cache->unlock($identifier));
+        $this->assertTrue($this->cache->unlock($identifier));
+    }
+
+    /**
+     * Verify that lock will no be released without sign matches.
+     * Sign generates in Cache class constructor.
+     *
+     * @return void
+     */
+    public function testUnlockWithAnotherSign(): void
+    {
+        $identifier = 'lock_name';
+
+        $this->frontendCacheMock
+            ->expects($this->once())->method('load')
+            ->with(self::LOCK_PREFIX . $identifier)
+            ->willReturn(\uniqid('some_rand-', true));
+
+        $this->assertFalse($this->cache->unlock($identifier));
+    }
+
+    /**
+     * Verify that unlock method will be terminated if lockSign is empty.
+     *
+     * @return void
+     */
+    public function testUnlockWithEmptyLockSign(): void
+    {
+        $identifier = 'lock_name';
+
+        $closure = \Closure::bind(function ($cacheInstance) {
+            $cacheInstance->lockSign = null;
+        }, null, $this->cache);
+        $closure($this->cache);
+
+        $this->assertEquals(false, $this->cache->unlock($identifier));
+    }
+
+    /**
+     * Verify that lock will not be released when $data is empty
+     *
+     * @return void
+     */
+    public function testUnlockWithEmptyData(): void
+    {
+        $identifier = 'lock_name';
+
+        $this->frontendCacheMock
+            ->expects($this->once())->method('load')
+            ->with(self::LOCK_PREFIX . $identifier)
+            ->willReturn(false);
+
+        $this->assertEquals(false, $this->cache->unlock($identifier));
+    }
+
+    /**
+     * Verify that lockSign will be generated if empty during cache lock.
+     *
+     * @return void
+     */
+    public function testLockWithEmptyLockSign(): void
+    {
+        $identifier = 'lock_name';
+
+        $closure = \Closure::bind(function ($cacheInstance) {
+            $cacheInstance->lockSign = null;
+        }, null, $this->cache);
+        $closure($this->cache);
+
+        $this->cache->lock($identifier, 10);
+
+        $closure = \Closure::bind(function ($cacheInstance) {
+            return $cacheInstance->lockSign;
+        }, null, $this->cache);
+        $lockSign = $closure($this->cache);
+
+        $this->assertEquals(true, isset($lockSign));
+    }
+
+    /**
+     * Verify that lock will not be made when $data is not empty
+     *
+     * @return void
+     */
+    public function testLockWithNotEmptyData(): void
+    {
+        $identifier = 'lock_name';
+
+        $this->frontendCacheMock
+            ->expects($this->once())->method('load')
+            ->with(self::LOCK_PREFIX . $identifier)
+            ->willReturn(\uniqid('some_rand-', true));
+
+        $this->assertEquals(false, $this->cache->lock($identifier, 0));
     }
 }

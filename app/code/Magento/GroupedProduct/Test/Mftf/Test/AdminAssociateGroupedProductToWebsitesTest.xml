@@ -33,7 +33,7 @@
             </createData>
 
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create website-->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
@@ -53,7 +53,9 @@
             </actionGroup>
 
             <!-- Reindex -->
-            <magentoCLI command="indexer:reindex" stepKey="reindexAllIndexes"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexAllIndexes">
+                <argument name="indices" value=""/>
+            </actionGroup>
         </before>
 
         <after>

@@ -25,7 +25,7 @@
             <!--Create customer-->
             <createData entity="Simple_US_CA_Customer" stepKey="createCustomer"/>
             <!--Login to admin page-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!--Delete simple product-->

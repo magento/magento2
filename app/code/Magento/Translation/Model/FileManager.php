@@ -9,10 +9,11 @@ namespace Magento\Translation\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem\Driver\File;
+use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\View\Asset\Repository;
 
 /**
- * A service for handling Translation config files
+ * A service for handling Translation config files.
  */
 class FileManager
 {
@@ -37,22 +38,30 @@ class FileManager
     private $driverFile;
 
     /**
+     * @var Json
+     */
+    private $serializer;
+
+    /**
      * @param Repository $assetRepo
      * @param DirectoryList $directoryList
      * @param File $driverFile
+     * @param Json $serializer
      */
     public function __construct(
         Repository $assetRepo,
         DirectoryList $directoryList,
-        File $driverFile
+        File $driverFile,
+        Json $serializer
     ) {
         $this->assetRepo = $assetRepo;
         $this->directoryList = $directoryList;
         $this->driverFile = $driverFile;
+        $this->serializer = $serializer;
     }
 
     /**
-     * Create a view asset representing the requirejs config.config property for inline translation
+     * Create a view asset representing the RequireJS config.config property for inline translation.
      *
      * @return \Magento\Framework\View\Asset\File
      */
@@ -65,7 +74,7 @@ class FileManager
     }
 
     /**
-     * Gets current js-translation.json timestamp
+     * Get current js-translation.json timestamp.
      *
      * @return string|void
      */
@@ -81,7 +90,7 @@ class FileManager
     }
 
     /**
-     * Retrieve full path for translation file
+     * Retrieve full path for translation file.
      *
      * @return string
      */
@@ -95,7 +104,7 @@ class FileManager
     }
 
     /**
-     * Retrieve path for translation file
+     * Retrieve path for translation file.
      *
      * @return string
      */
@@ -105,10 +114,9 @@ class FileManager
     }
 
     /**
-     * Update translation file with content
+     * Update translation file with content.
      *
-     * @param string $content
-     *
+     * @param array $content
      * @return void
      */
     public function updateTranslationFileContent($content)
@@ -119,9 +127,18 @@ class FileManager
 
         if (!$this->driverFile->isExists($this->getTranslationFileFullPath())) {
             $this->driverFile->createDirectory($translationDir);
+            $originalFileContent = '';
+        } else {
+            $originalFileContent = $this->driverFile->fileGetContents($this->getTranslationFileFullPath());
         }
-
-        $this->driverFile->filePutContents($this->getTranslationFileFullPath(), $content);
+        $originalFileTranslationPhrases = !empty($originalFileContent)
+            ? $this->serializer->unserialize($originalFileContent)
+            : [];
+        $updatedTranslationPhrases = array_merge($originalFileTranslationPhrases, $content);
+        $this->driverFile->filePutContents(
+            $this->getTranslationFileFullPath(),
+            $this->serializer->serialize($updatedTranslationPhrases)
+        );
     }
 
     /**

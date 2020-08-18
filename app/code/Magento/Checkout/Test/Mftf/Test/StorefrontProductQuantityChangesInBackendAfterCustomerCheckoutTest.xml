@@ -18,7 +18,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <magentoCLI command="config:set {{EnablePaymentBankTransferConfigData.path}} {{EnablePaymentBankTransferConfigData.value}}" stepKey="enableBankTransferPayment"/>
             <magentoCLI command="config:set {{EnableCatalogInventoryConfigData.path}} {{EnableCatalogInventoryConfigData.value}}" stepKey="enableCatalogInventoryStock"/>
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct">
@@ -54,8 +54,7 @@
             <argument name="customer" value="UKCustomer"/>
             <argument name="customerAddress" value="updateCustomerUKAddress"/>
         </actionGroup>
-        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickOnNextButton"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.bankTransfer}}" stepKey="waitForPlaceOrderButton"/>
         <click selector="{{CheckoutPaymentSection.bankTransfer}}" stepKey="selectBankTransfer"/>
 
@@ -63,12 +62,11 @@
         <actionGroup ref="ClickPlaceOrderActionGroup" stepKey="clickOnPlaceOrder"/>
 
         <!-- Assert empty Mini Cart -->
-        <seeElement selector="{{StorefrontMiniCartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
+        <seeElement selector="{{StorefrontMinicartSection.emptyMiniCart}}"  stepKey="assertEmptyCart" />
         <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumberWithoutLink}}" stepKey="orderId"/>
 
         <!-- Open Order Index Page -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForPageLoad5"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
 
         <!-- Filter Order using orderId and assert order-->
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">

@@ -12,12 +12,12 @@
             <stories value="Create/configure Dropdown product attribute"/>
             <title value="Admin should be able to create dropdown product attribute"/>
             <description value="Admin should be able to create dropdown product attribute"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-4982"/>
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <!-- Remove attribute -->
@@ -27,8 +27,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
-        <amOnPage url="{{ProductAttributePage.url}}" stepKey="navigateToNewProductAttributePage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="navigateToNewProductAttributePage"/>
 
         <!-- Set attribute properties -->
         <fillField selector="{{AttributePropertiesSection.DefaultLabel}}"
@@ -66,7 +65,9 @@
         <!-- Check attribute data -->
         <grabValueFrom selector="{{DropdownAttributeOptionsSection.nthOptionAdminLabel('2')}}"
                        stepKey="secondOptionAdminLabel"/>
-        <assertEquals actual="$secondOptionAdminLabel" expected="'Fish &amp; Chips'"
-                      stepKey="assertSecondOption"/>
+        <assertEquals stepKey="assertSecondOption">
+			<actualResult type="const">$secondOptionAdminLabel</actualResult>
+			<expectedResult type="const">'Fish &amp; Chips'</expectedResult>
+        </assertEquals>
     </test>
 </tests>

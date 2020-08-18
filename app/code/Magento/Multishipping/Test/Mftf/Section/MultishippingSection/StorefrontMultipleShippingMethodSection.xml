@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="StorefrontMultipleShippingMethodSection">
+        <element name="orderId" type="text" selector=".shipping-list:nth-child({{rowNum}}) .order-id" parameterized="true"/>
+        <element name="goToReviewYourOrderButton" type="button" selector="#payment-continue"/>
+        <element name="continueToBillingInformationButton" type="button" selector=".action.primary.continue"/>
+        <element name="successMessage" type="text" selector=".multicheckout.success"/>
+    </section>
+</sections>

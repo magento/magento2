@@ -39,8 +39,10 @@
             <argument name="productVar" value="$$createProduct$$"/>
         </actionGroup>
         <openNewTab stepKey="openNewTab"/>
-        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
-        <amOnPage url="{{AdminProductEditPage.url($$createProduct.id$$)}}" stepKey="goToProductEditPage"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
         <actionGroup ref="AdminSetProductDisabledActionGroup" stepKey="disableProduct"/>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         <closeTab stepKey="closeSecondTab"/>

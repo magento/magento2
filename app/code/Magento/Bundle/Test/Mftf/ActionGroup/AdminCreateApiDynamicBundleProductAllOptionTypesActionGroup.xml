@@ -70,5 +70,6 @@
             <requiredEntity createDataKey="createBundleRadioButtonsOption"/>
             <requiredEntity createDataKey="simpleProduct2"/>
         </createData>
+        <magentoCron stepKey="runCronIndex" groups="index"/>
     </actionGroup>
 </actionGroups>

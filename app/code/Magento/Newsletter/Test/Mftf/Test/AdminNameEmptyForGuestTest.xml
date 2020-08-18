@@ -26,8 +26,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForCustomerPage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage"/>
         <scrollTo selector="{{StorefrontCustomerFooterSection.footerBlock}}" stepKey="scrollToFooter"/>
         <fillField userInput="{{Simple_US_Customer.email}}" selector="{{StorefrontCustomerFooterSection.formSubscribe}}"
                    stepKey="giveEmail"/>
