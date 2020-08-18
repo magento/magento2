@@ -48,7 +48,7 @@ class AddConfigurableProductToWishlistTest extends GraphQlAbstract
      *
      * @throws Exception
      */
-    public function testAddDownloadableProductWithOptions(): void
+    public function testAddConfigurableProductWithOptions(): void
     {
         $product = $this->getConfigurableProductInfo();
         $customerId = 1;
