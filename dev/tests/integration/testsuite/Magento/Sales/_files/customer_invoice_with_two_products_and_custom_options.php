@@ -5,6 +5,7 @@
  */
 
 use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use Magento\Sales\Api\InvoiceManagementInterface;
 
 Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer.php');
 Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/products_in_category.php');
@@ -97,12 +98,13 @@ $order->setBaseSubtotal(100);
 $order->setBaseGrandTotal(100);
 $order->setGrandTotal(100);
 $order->setOrderCurrencyCode('USD');
+$order->setBaseCurrencyCode('EUR');
 $order->setCustomerId(1)
     ->setCustomerIsGuest(false)
     ->save();
-
+/** @var InvoiceManagementInterface $orderService */
 $orderService = $objectManager->create(
-    \Magento\Sales\Api\InvoiceManagementInterface::class
+    InvoiceManagementInterface::class
 );
 $invoice = $orderService->prepareInvoice($order);
 $invoice->register();

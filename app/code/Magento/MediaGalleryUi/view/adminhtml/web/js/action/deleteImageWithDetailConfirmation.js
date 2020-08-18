@@ -51,13 +51,15 @@ define([
          */
         getRecordRelatedContentMessage: function (images) {
             var usedInMessage = $t('The selected assets are used in the content of the following entities: '),
-                usedIn = [];
+                usedIn = {};
 
             $.each(images, function (key, image) {
                 $.each(image.details, function (sectionIndex, section) {
                     if (section.title === 'Used In' && _.isObject(section) && !_.isEmpty(section.value)) {
                         $.each(section.value, function (entityTypeIndex, entityTypeData) {
-                            usedIn.push(entityTypeData.name + '(' + entityTypeData.number + ')');
+                            usedIn[entityTypeData.name] = entityTypeData.name in usedIn ?
+                                usedIn[entityTypeData.name] + entityTypeData.number :
+                                entityTypeData.number;
                         });
                     }
                 });
@@ -67,7 +69,23 @@ define([
                 return '';
             }
 
-            return usedInMessage + usedIn.join(', ') + '.';
+            return usedInMessage + this.usedInObjectToString(usedIn);
+        },
+
+        /**
+         * Fromats usedIn object to string
+         *
+         * @param {Object} usedIn
+         * @return {String}
+         */
+        usedInObjectToString: function (usedIn) {
+            var entities = [];
+
+            $.each(usedIn, function (entityName, number) {
+                entities.push(entityName + '(' + number + ')');
+            });
+
+            return entities.join(', ') + '.';
         }
     };
 });
