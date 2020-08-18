@@ -28,11 +28,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaGalleryUi\Model\Directories\FolderTree">
-        <arguments>
-            <argument name="path" xsi:type="string">media</argument>
-        </arguments>
-    </type>
     <type name="Magento\MediaGalleryUi\Model\AssetDetailsProvider\Type">
         <arguments>
             <argument name="types" xsi:type="array">

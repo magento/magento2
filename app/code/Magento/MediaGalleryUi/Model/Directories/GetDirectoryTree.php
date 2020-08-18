@@ -7,15 +7,16 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryUi\Model\Directories;
 
+use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\ValidatorException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\Read;
 use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 
 /**
- * Build folder tree structure by path
+ * Build media gallery folder tree structure by path
  */
-class FolderTree
+class GetDirectoryTree
 {
     /**
      * @var Filesystem
@@ -23,42 +24,44 @@ class FolderTree
     private $filesystem;
 
     /**
-     * @var string
-     */
-    private $path;
-
-    /**
      * @var IsPathExcludedInterface
      */
     private $isPathExcluded;
 
     /**
-     * Constructor
-     *
      * @param Filesystem $filesystem
-     * @param string $path
      * @param IsPathExcludedInterface $isPathExcluded
      */
     public function __construct(
         Filesystem $filesystem,
-        string $path,
         IsPathExcludedInterface $isPathExcluded
     ) {
         $this->filesystem = $filesystem;
-        $this->path = $path;
         $this->isPathExcluded = $isPathExcluded;
     }
 
     /**
      * Return directory folder structure in array
      *
-     * @param bool $skipRoot
      * @return array
      * @throws ValidatorException
      */
-    public function buildTree(bool $skipRoot = true): array
+    public function execute(): array
     {
-        return $this->buildFolderTree($this->getDirectories(), $skipRoot);
+        $tree = [
+            'name' => 'root',
+            'path' => '/',
+            'children' => []
+        ];
+        $directories = $this->getDirectories();
+        foreach ($directories as $idx => &$node) {
+            $node['children'] = [];
+            $result = $this->findParent($node, $tree);
+            $parent = &$result['treeNode'];
+
+            $parent['children'][] = &$directories[$idx];
+        }
+        return $tree['children'];
     }
 
     /**
@@ -72,7 +75,7 @@ class FolderTree
         $directories = [];
 
         /** @var Read $directory */
-        $directory = $this->filesystem->getDirectoryRead($this->path);
+        $directory = $this->filesystem->getDirectoryRead(DirectoryList::MEDIA);
 
         if (!$directory->isDirectory()) {
             return $directories;
@@ -94,30 +97,6 @@ class FolderTree
             ];
         }
         return $directories;
-    }
-
-    /**
-     * Build folder tree structure by provided directories path
-     *
-     * @param array $directories
-     * @param bool $skipRoot
-     * @return array
-     */
-    private function buildFolderTree(array $directories, bool $skipRoot): array
-    {
-        $tree = [
-            'name' => 'root',
-            'path' => '/',
-            'children' => []
-        ];
-        foreach ($directories as $idx => &$node) {
-            $node['children'] = [];
-            $result = $this->findParent($node, $tree);
-            $parent = & $result['treeNode'];
-
-            $parent['children'][] =& $directories[$idx];
-        }
-        return $skipRoot ? $tree['children'] : $tree;
     }
 
     /**
