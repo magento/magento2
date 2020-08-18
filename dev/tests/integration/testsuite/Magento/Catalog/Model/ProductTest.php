@@ -8,14 +8,19 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
 
-use Magento\Eav\Model\Config as EavConfig;
-use Magento\Catalog\Model\Product;
-use Magento\Framework\App\Filesystem\DirectoryList;
-use Magento\TestFramework\ObjectManager;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\Math\Random;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\ObjectManager;
 
 /**
  * Tests product model:
@@ -119,12 +124,60 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         )->setMetaDescription(
             'meta description'
         )->setVisibility(
-            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+            Visibility::VISIBILITY_BOTH
         )->setStatus(
-            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+            Status::STATUS_ENABLED
         );
         $crud = new \Magento\TestFramework\Entity($this->_model, ['sku' => uniqid()]);
         $crud->testCrud();
+    }
+
+    /**
+     * Test for Product Description field to be able to contain >64kb of data
+     *
+     * @magentoDbIsolation enabled
+     * @magentoAppIsolation enabled
+     * @magentoAppArea adminhtml
+     * @throws NoSuchEntityException
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws StateException
+     * @throws LocalizedException
+     */
+    public function testMaximumDescriptionLength()
+    {
+        $sku = uniqid();
+        $random = Bootstrap::getObjectManager()->get(Random::class);
+        $longDescription = $random->getRandomString(70000);
+
+        $this->_model->setTypeId(
+            'simple'
+        )->setAttributeSetId(
+            4
+        )->setName(
+            'Simple Product With Long Description'
+        )->setDescription(
+            $longDescription
+        )->setSku(
+            $sku
+        )->setPrice(
+            10
+        )->setMetaTitle(
+            'meta title'
+        )->setMetaKeyword(
+            'meta keyword'
+        )->setMetaDescription(
+            'meta description'
+        )->setVisibility(
+            Visibility::VISIBILITY_BOTH
+        )->setStatus(
+            Status::STATUS_ENABLED
+        );
+
+        $this->productRepository->save($this->_model);
+        $product = $this->productRepository->get($sku);
+
+        $this->assertEquals($longDescription, $product->getDescription());
     }
 
     /**
@@ -219,7 +272,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             $this->assertNotEquals($duplicate->getId(), $this->_model->getId());
             $this->assertNotEquals($duplicate->getSku(), $this->_model->getSku());
             $this->assertEquals(
-                \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED,
+                Status::STATUS_DISABLED,
                 $duplicate->getStatus()
             );
             $this->assertEquals(\Magento\Store\Model\Store::DEFAULT_STORE_ID, $duplicate->getStoreId());
@@ -275,35 +328,35 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     public function testVisibilityApi()
     {
         $this->assertEquals(
-            [\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED],
+            [Status::STATUS_ENABLED],
             $this->_model->getVisibleInCatalogStatuses()
         );
         $this->assertEquals(
-            [\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED],
+            [Status::STATUS_ENABLED],
             $this->_model->getVisibleStatuses()
         );
 
-        $this->_model->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED);
+        $this->_model->setStatus(Status::STATUS_DISABLED);
         $this->assertFalse($this->_model->isVisibleInCatalog());
 
-        $this->_model->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+        $this->_model->setStatus(Status::STATUS_ENABLED);
         $this->assertTrue($this->_model->isVisibleInCatalog());
 
         $this->assertEquals(
             [
-                \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH,
-                \Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG,
-                \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH,
+                Visibility::VISIBILITY_IN_SEARCH,
+                Visibility::VISIBILITY_IN_CATALOG,
+                Visibility::VISIBILITY_BOTH,
             ],
             $this->_model->getVisibleInSiteVisibilities()
         );
 
         $this->assertFalse($this->_model->isVisibleInSiteVisibility());
-        $this->_model->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_SEARCH);
+        $this->_model->setVisibility(Visibility::VISIBILITY_IN_SEARCH);
         $this->assertTrue($this->_model->isVisibleInSiteVisibility());
-        $this->_model->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_IN_CATALOG);
+        $this->_model->setVisibility(Visibility::VISIBILITY_IN_CATALOG);
         $this->assertTrue($this->_model->isVisibleInSiteVisibility());
-        $this->_model->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH);
+        $this->_model->setVisibility(Visibility::VISIBILITY_BOTH);
         $this->assertTrue($this->_model->isVisibleInSiteVisibility());
     }
 
@@ -509,9 +562,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
         )->setMetaDescription(
             'meta description'
         )->setVisibility(
-            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+            Visibility::VISIBILITY_BOTH
         )->setStatus(
-            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+            Status::STATUS_ENABLED
         )->setCollectExceptionMessages(
             true
         );
@@ -551,9 +604,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             $attribute->getAttributeCode(),
             'unique value'
         )->setVisibility(
-            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+            Visibility::VISIBILITY_BOTH
         )->setStatus(
-            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+            Status::STATUS_ENABLED
         )->setCollectExceptionMessages(
             true
         );
@@ -600,9 +653,9 @@ class ProductTest extends \PHPUnit\Framework\TestCase
             $attribute->getAttributeCode(),
             'unique value'
         )->setVisibility(
-            \Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH
+            Visibility::VISIBILITY_BOTH
         )->setStatus(
-            \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED
+            Status::STATUS_ENABLED
         )->setCollectExceptionMessages(
             true
         );
@@ -675,10 +728,10 @@ class ProductTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      *
      * @return void
-     * @throws \Magento\Framework\Exception\CouldNotSaveException
-     * @throws \Magento\Framework\Exception\InputException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     * @throws \Magento\Framework\Exception\StateException
+     * @throws CouldNotSaveException
+     * @throws InputException
+     * @throws NoSuchEntityException
+     * @throws StateException
      */
     public function testProductStatusWhenCatalogFlatProductIsEnabled()
     {
