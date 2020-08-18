@@ -90,7 +90,8 @@ class AttributeOptionProvider
                 Store::DEFAULT_STORE_ID
             );
 
-        $select->where('option_value.option_id IN (?)', $optionIds);
+        $select->where('option_value.option_id IN (?)', $optionIds)
+            ->group('option_id');
 
         if (!empty($attributeCodes)) {
             $select->orWhere(
