@@ -70,7 +70,6 @@ class ReadExif implements ReadMetadataInterface
         $description = null;
         $keywords = [];
 
-        $data = exif_read_data('data://image/jpeg;base64,' . base64_encode($segment->getData()));
 
         if ($data) {
             $title = isset($data['DocumentName']) ? $data['DocumentName'] : null;
@@ -92,6 +91,6 @@ class ReadExif implements ReadMetadataInterface
      */
     private function isExifSegment(SegmentInterface $segment): bool
     {
-        return $segment->getName() === self::EXIF_SEGMENT_NAME;
+        return strcmp($segment->getName(), self::EXIF_SEGMENT_NAME) === 0;
     }
 }
