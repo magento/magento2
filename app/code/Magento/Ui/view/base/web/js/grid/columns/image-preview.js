@@ -128,8 +128,6 @@ define([
          * @param {Object} record
          */
         show: function (record) {
-            var img;
-
             if (record._rowIndex === this.visibleRecord()) {
                 this.hide();
 
@@ -141,19 +139,31 @@ define([
             this._selectRow(record.rowNumber || null);
             this.visibleRecord(record._rowIndex);
 
-            img = $(this.previewImageSelector + ' img');
+            this.lastOpenedImage(record._rowIndex);
+            this.updateImageData();
+        },
 
-            if (img.get(0).complete) {
-                this.updateHeight();
-                this.scrollToPreview();
+        /**
+         * Update image data
+         */
+        updateImageData: function () {
+            var img = $(this.previewImageSelector + ' img');
+
+            if (!img.get(0)) {
+                setTimeout(function () {
+                    this.updateImageData();
+                }.bind(this), 100);
             } else {
-                img.load(function () {
+                if (img.get(0).complete) {
                     this.updateHeight();
                     this.scrollToPreview();
-                }.bind(this));
+                } else {
+                    img.load(function () {
+                        this.updateHeight();
+                        this.scrollToPreview();
+                    }.bind(this));
+                }
             }
-
-            this.lastOpenedImage(record._rowIndex);
         },
 
         /**
