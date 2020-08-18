@@ -70,6 +70,7 @@ class ReadExif implements ReadMetadataInterface
         $description = null;
         $keywords = [];
 
+        $data = exif_read_data('data://image/jpeg;base64,' . base64_encode($segment->getData()));
 
         if ($data) {
             $title = isset($data['DocumentName']) ? $data['DocumentName'] : null;
