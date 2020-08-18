@@ -24,19 +24,11 @@ define([
         invalidateCacheByCloseCookieSession,
         dataProvider,
         buffer,
-        customerData;
+        customerData,
+        deferred = $.Deferred();
 
     url.setBaseUrl(window.BASE_URL);
     options.sectionLoadUrl = url.build('customer/section/load');
-
-    //TODO: remove global change, in this case made for initNamespaceStorage
-    $.cookieStorage.setConf({
-        path: '/',
-        expires: 1
-    });
-
-    storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
-    storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
 
     /**
      * @param {Object} invalidateOptions
@@ -46,9 +38,9 @@ define([
 
         if (new Date($.localStorage.get('mage-cache-timeout')) < new Date()) {
             storage.removeAll();
-            date = new Date(Date.now() + parseInt(invalidateOptions.cookieLifeTime, 10) * 1000);
-            $.localStorage.set('mage-cache-timeout', date);
         }
+        date = new Date(Date.now() + parseInt(invalidateOptions.cookieLifeTime, 10) * 1000);
+        $.localStorage.set('mage-cache-timeout', date);
     };
 
     /**
@@ -222,6 +214,18 @@ define([
         },
 
         /**
+         * Storage init
+         */
+        initStorage: function () {
+            $.cookieStorage.setConf({
+                path: '/',
+                expires: new Date(Date.now() + parseInt(options.cookieLifeTime, 10) * 1000)
+            });
+            storage = $.initNamespaceStorage('mage-cache-storage').localStorage;
+            storageInvalidation = $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
+        },
+
+        /**
          * Retrieve the list of sections that has expired since last page reload.
          *
          * Sections can expire due to lifetime constraints or due to inconsistent storage information
@@ -342,14 +346,25 @@ define([
         },
 
         /**
+         * Checks if customer data is initialized.
+         *
+         * @returns {jQuery.Deferred}
+         */
+        getInitCustomerData: function () {
+            return deferred.promise();
+        },
+
+        /**
          * @param {Object} settings
          * @constructor
          */
         'Magento_Customer/js/customer-data': function (settings) {
             options = settings;
+            customerData.initStorage();
             invalidateCacheBySessionTimeOut(settings);
             invalidateCacheByCloseCookieSession();
             customerData.init();
+            deferred.resolve();
         }
     };
 

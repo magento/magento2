@@ -12,10 +12,12 @@
  */
 namespace Magento\Catalog\Block\Adminhtml\Product;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Escaper;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 
 /**
- * Class Edit
+ * Class for Product Edit.
  */
 class Edit extends \Magento\Backend\Block\Widget
 {
@@ -59,6 +61,7 @@ class Edit extends \Magento\Backend\Block\Widget
      * @param \Magento\Catalog\Helper\Product $productHelper
      * @param Escaper $escaper
      * @param array $data
+     * @param JsonHelper|null $jsonHelper
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -67,13 +70,15 @@ class Edit extends \Magento\Backend\Block\Widget
         \Magento\Framework\Registry $registry,
         \Magento\Catalog\Helper\Product $productHelper,
         Escaper $escaper,
-        array $data = []
+        array $data = [],
+        ?JsonHelper $jsonHelper = null
     ) {
         $this->_productHelper = $productHelper;
         $this->_attributeSetFactory = $attributeSetFactory;
         $this->_coreRegistry = $registry;
         $this->jsonEncoder = $jsonEncoder;
         $this->escaper = $escaper;
+        $data['jsonHelper'] = $jsonHelper ?? ObjectManager::getInstance()->get(JsonHelper::class);
         parent::__construct($context, $data);
     }
 
@@ -288,7 +293,7 @@ class Edit extends \Magento\Backend\Block\Widget
     /**
      * Retrieve product header
      *
-     * @deprecated 101.1.0
+     * @deprecated 102.0.0
      * @return string
      */
     public function getHeader()

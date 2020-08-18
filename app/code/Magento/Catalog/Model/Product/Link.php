@@ -58,7 +58,7 @@ class Link extends \Magento\Framework\Model\AbstractModel
 
     /**
      * @var \Magento\CatalogInventory\Helper\Stock
-     * @deprecated 101.0.1
+     * @deprecated 101.0.0
      */
     protected $stockHelper;
 
