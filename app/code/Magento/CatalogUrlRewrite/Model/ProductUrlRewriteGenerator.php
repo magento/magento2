@@ -26,50 +26,50 @@ class ProductUrlRewriteGenerator
     public const ENTITY_TYPE = 'product';
 
     /**
-     * @deprecated 100.1.4
-     * @var StoreViewService
+     * @deprecated 100.1.0
+     * @var \Magento\CatalogUrlRewrite\Service\V1\StoreViewService
      */
     protected $storeViewService;
 
     /**
-     * @var Product
-     * @deprecated 100.1.4
+     * @var \Magento\Catalog\Model\Product
+     * @deprecated 100.1.0
      */
     protected $product;
 
     /**
-     * @deprecated 100.1.4
-     * @var CurrentUrlRewritesRegenerator
+     * @deprecated 100.1.0
+     * @var \Magento\CatalogUrlRewrite\Model\Product\CurrentUrlRewritesRegenerator
      */
     protected $currentUrlRewritesRegenerator;
 
     /**
-     * @deprecated 100.1.4
-     * @var CategoriesUrlRewriteGenerator
+     * @deprecated 100.1.0
+     * @var \Magento\CatalogUrlRewrite\Model\Product\CategoriesUrlRewriteGenerator
      */
     protected $categoriesUrlRewriteGenerator;
 
     /**
-     * @deprecated 100.1.4
-     * @var CanonicalUrlRewriteGenerator
+     * @deprecated 100.1.0
+     * @var \Magento\CatalogUrlRewrite\Model\Product\CanonicalUrlRewriteGenerator
      */
     protected $canonicalUrlRewriteGenerator;
 
     /**
-     * @deprecated 100.1.4
-     * @var ObjectRegistryFactory
+     * @deprecated 100.1.0
+     * @var \Magento\CatalogUrlRewrite\Model\ObjectRegistryFactory
      */
     protected $objectRegistryFactory;
 
     /**
-     * @deprecated 100.1.4
-     * @var ObjectRegistry
+     * @deprecated 100.1.0
+     * @var \Magento\CatalogUrlRewrite\Model\ObjectRegistry
      */
     protected $productCategories;
 
     /**
-     * @deprecated 100.1.4
-     * @var StoreManagerInterface
+     * @deprecated 100.1.0
+     * @var \Magento\Store\Model\StoreManagerInterface
      */
     protected $storeManager;
 
