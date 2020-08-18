@@ -10,6 +10,7 @@ use Magento\Catalog\Api\Data\ProductAttributeMediaGalleryEntryInterface;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
@@ -202,7 +203,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Catalog product status
      *
-     * @var \Magento\Catalog\Model\Product\Attribute\Source\Status
+     * @var Status
      */
     protected $_catalogProductStatus;
 
@@ -408,7 +409,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         \Magento\CatalogInventory\Api\Data\StockItemInterfaceFactory $stockItemFactory,
         \Magento\Catalog\Model\Product\OptionFactory $catalogProductOptionFactory,
         \Magento\Catalog\Model\Product\Visibility $catalogProductVisibility,
-        \Magento\Catalog\Model\Product\Attribute\Source\Status $catalogProductStatus,
+        Status $catalogProductStatus,
         \Magento\Catalog\Model\Product\Media\Config $catalogProductMediaConfig,
         Product\Type $catalogProductType,
         \Magento\Framework\Module\Manager $moduleManager,
@@ -668,7 +669,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getStatus()
     {
         $status = $this->_getData(self::STATUS);
-        return $status !== null ? $status : \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED;
+        return $status !== null ? $status : Status::STATUS_ENABLED;
     }
 
     /**
@@ -1103,7 +1104,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     protected function _afterLoad()
     {
         if (!$this->hasData(self::STATUS)) {
-            $this->setData(self::STATUS, \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED);
+            $this->setData(self::STATUS, Status::STATUS_ENABLED);
         }
         parent::_afterLoad();
         return $this;
@@ -1780,7 +1781,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function isInStock()
     {
-        return $this->getStatus() == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED;
+        return $this->getStatus() == Status::STATUS_ENABLED;
     }
 
     /**
@@ -2341,7 +2342,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function isDisabled()
     {
-        return $this->getStatus() == \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED;
+        return $this->getStatus() == Status::STATUS_DISABLED;
     }
 
     /**
@@ -2365,17 +2366,21 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getIdentities()
     {
         $identities = [self::CACHE_TAG . '_' . $this->getId()];
-        if ($this->getIsChangedCategories()) {
-            foreach ($this->getAffectedCategoryIds() as $categoryId) {
-                $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
+
+        if (!$this->isObjectNew() || $this->getStatus() == Status::STATUS_ENABLED) {
+            if ($this->getIsChangedCategories()) {
+                foreach ($this->getAffectedCategoryIds() as $categoryId) {
+                    $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
+                }
+            }
+
+            if (($this->getOrigData('status') != $this->getData('status')) || $this->isStockStatusChanged()) {
+                foreach ($this->getCategoryIds() as $categoryId) {
+                    $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
+                }
             }
         }
 
-        if (($this->getOrigData('status') != $this->getData('status')) || $this->isStockStatusChanged()) {
-            foreach ($this->getCategoryIds() as $categoryId) {
-                $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
-            }
-        }
         if ($this->_appState->getAreaCode() == \Magento\Framework\App\Area::AREA_FRONTEND) {
             $identities[] = self::CACHE_TAG;
         }
