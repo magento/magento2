@@ -16,6 +16,9 @@ require_once __DIR__ . '/../../../../_files/full_discount_with_tax.php';
 
 /**
  * Class TaxTest
+ *
+ * Tests sales taxes with discounts/price rules during checkout.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TaxTest extends \Magento\TestFramework\Indexer\TestCase
