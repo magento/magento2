@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Captcha\Test\Unit\Model;
 
+use Magento\Authorization\Model\UserContextInterface;
 use Magento\Captcha\Block\Captcha\DefaultCaptcha;
 use Magento\Captcha\Helper\Data;
 use Magento\Captcha\Model\DefaultModel;
@@ -93,9 +94,14 @@ class DefaultTest extends TestCase
     protected $session;
 
     /**
-     * @var MockObject
+     * @var MockObject|LogFactory
      */
     protected $_resLogFactory;
+
+    /**
+     * @var UserContextInterface|MockObject
+     */
+    private $userContextMock;
 
     /**
      * Sets up the fixture, for example, opens a network connection.
@@ -139,11 +145,18 @@ class DefaultTest extends TestCase
             $this->_getResourceModelStub()
         );
 
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn('random-string');
+
+        $this->userContextMock = $this->getMockForAbstractClass(UserContextInterface::class);
+
         $this->_object = new DefaultModel(
             $this->session,
             $this->_getHelperStub(),
             $this->_resLogFactory,
-            'user_create'
+            'user_create',
+            $randomMock,
+            $this->userContextMock
         );
     }
 
@@ -161,6 +174,19 @@ class DefaultTest extends TestCase
     public function testIsRequired()
     {
         $this->assertTrue($this->_object->isRequired());
+    }
+
+    /**
+     * Validate that CAPTCHA is disabled for integrations.
+     *
+     * @return void
+     */
+    public function testIsRequiredForIntegration(): void
+    {
+        $this->userContextMock->method('getUserType')->willReturn(UserContextInterface::USER_TYPE_INTEGRATION);
+        $this->userContextMock->method('getUserId')->willReturn(1);
+
+        $this->assertFalse($this->_object->isRequired());
     }
 
     /**
