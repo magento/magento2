@@ -62,8 +62,7 @@
         </actionGroup>
         <click selector="{{CheckoutCartSummarySection.proceedToCheckout}}" stepKey="goToCheckout1"/>
         <waitForPageLoad stepKey="waitForShippingMethodSectionToLoad"/>
-        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickOnNextButton"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
 
         <!-- Verify order summary on payment page -->
         <actionGroup ref="VerifyCheckoutPaymentOrderSummaryActionGroup" stepKey="verifyCheckoutPaymentOrderSummary">

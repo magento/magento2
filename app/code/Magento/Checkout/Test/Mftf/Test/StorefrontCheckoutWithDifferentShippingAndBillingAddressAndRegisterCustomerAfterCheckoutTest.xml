@@ -57,8 +57,7 @@
                 <argument name="customer" value="UKCustomer"/>
                 <argument name="customerAddress" value="updateCustomerUKAddress"/>
         </actionGroup>
-        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.next}}" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickOnNextButton"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickOnNextButton"/>
         <waitForElementVisible selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="waitForElementToBeVisible"/>
         <uncheckOption selector="{{CheckoutPaymentSection.billingAddressNotSameCheckbox}}" stepKey="uncheckSameBillingAndShippingAddress"/>
         <conditionalClick selector="{{CheckoutShippingSection.editAddressButton}}" dependentSelector="{{CheckoutShippingSection.editAddressButton}}" visible="true" stepKey="clickEditButton"/>
