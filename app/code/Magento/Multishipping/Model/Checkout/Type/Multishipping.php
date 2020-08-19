@@ -695,7 +695,7 @@ class Multishipping extends \Magento\Framework\DataObject
         );
 
         $shippingMethodCode = $address->getShippingMethod();
-        if (isset($shippingMethodCode) && !empty($shippingMethodCode)) {
+        if ($shippingMethodCode) {
             $rate = $address->getShippingRateByCode($shippingMethodCode);
             $shippingPrice = $rate->getPrice();
         } else {
