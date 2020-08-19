@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGalleryCreateFolderWithLongNamesTest">
+        <annotations>
+            <features value="MediaGallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1758"/>
+            <stories value="Create new folder with long names in Media Gallery"/>
+            <title value="Create new folder with long names in Media Gallery"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1054245/scenarios/4456547"/>
+            <description value="Creating, deleting new folder functionality in Media Gallery"/>
+            <severity value="CRITICAL"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+        </before>
+
+        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolderWithNotValidName">
+            <argument name="name" value="{{AdminMediaGalleryFolderInvalidData.longName}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="AssertFolderName">
+            <argument name="name" value="{{AdminMediaGalleryFolderInvalidData.cutedName}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+
+
+        <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFolder">
+            <argument name="name" value="{{AdminMediaGalleryFolderInvalidData.cutedName}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFolder">
+            <argument name="name" value="{{AdminMediaGalleryFolderInvalidData.cutedName}}"/>
+        </actionGroup>
+    </test>
+</tests>
