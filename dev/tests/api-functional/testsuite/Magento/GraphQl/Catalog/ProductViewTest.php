@@ -653,8 +653,10 @@ QUERY;
         $secondProduct = $productRepository->get($secondProductSku, false, null, true);
         self::assertNotNull($response['products']['items'][0]['price'], "price must be not null");
         self::assertCount(2, $response['products']['items']);
-        $this->assertBaseFields($firstProduct, $response['products']['items'][0]);
-        $this->assertBaseFields($secondProduct, $response['products']['items'][1]);
+
+        // by default sort order is: "newest id first"
+        $this->assertBaseFields($secondProduct, $response['products']['items'][0]);
+        $this->assertBaseFields($firstProduct, $response['products']['items'][1]);
     }
 
     /**
@@ -665,7 +667,8 @@ QUERY;
     {
         $mediaGalleryEntries = $product->getMediaGalleryEntries();
         $this->assertCount(1, $mediaGalleryEntries, "Precondition failed, incorrect number of media gallery entries.");
-        $this->assertIsArray([$actualResponse['media_gallery_entries']],
+        $this->assertIsArray(
+            [$actualResponse['media_gallery_entries']],
             "Media galleries field must be of an array type."
         );
         $this->assertCount(1, $actualResponse['media_gallery_entries'], "There must be 1 record in media gallery.");
@@ -701,10 +704,10 @@ QUERY;
      */
     private function assertCustomAttribute($actualResponse)
     {
-        $customAttribute = null;
+        $customAttribute = 'customAttributeValue';
         $this->assertEquals($customAttribute, $actualResponse['attribute_code_custom']);
     }
-    
+
     /**
      * @param ProductInterface $product
      * @param $actualResponse
@@ -1047,6 +1050,8 @@ QUERY;
      */
     public function testProductInNonAnchoredSubCategories()
     {
+        $this->markTestSkipped('MC-30965: Product contains invalid categories');
+
         $query = <<<QUERY
 {
     products(filter: 

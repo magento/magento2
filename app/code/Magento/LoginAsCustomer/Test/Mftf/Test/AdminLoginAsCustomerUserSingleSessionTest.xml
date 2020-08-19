@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAsCustomerUserSingleSessionTest">
+        <annotations>
+            <features value="Login as Customer"/>
+            <stories value="Destroy impersonated customer sessions on admin logout"/>
+            <title value="Admin users can have only one 'Login as Customer' session at a time"/>
+            <description
+                value="Verify Admin users can have only one 'Login as Customer' session at a time"/>
+            <severity value="MAJOR"/>
+            <group value="login_as_customer"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1" stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
+            <createData entity="Simple_US_Customer_Assistance_Allowed" stepKey="createFirstCustomer"/>
+            <createData entity="Simple_US_CA_Customer_Assistance_Allowed" stepKey="createSecondCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsDefaultUser"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createFirstCustomer" stepKey="deleteFirstCustomer"/>
+            <deleteData createDataKey="createSecondCustomer" stepKey="deleteSecondCustomer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutAfter"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
+                        stepKey="disableLoginAsCustomer"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
+        </after>
+
+        <!-- Login into First Customer account -->
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
+                     stepKey="loginAsFirstCustomer">
+            <argument name="customerId" value="$$createFirstCustomer.id$$"/>
+        </actionGroup>
+
+        <!-- Assert correctly logged in as First Customer -->
+        <actionGroup ref="StorefrontAssertLoginAsCustomerLoggedInActionGroup" stepKey="assertLoggedInFromFirstCustomerPage">
+            <argument name="customerFullName" value="$$createFirstCustomer.firstname$$ $$createFirstCustomer.lastname$$"/>
+            <argument name="customerEmail" value="$$createFirstCustomer.email$$"/>
+        </actionGroup>
+
+        <!-- Login into Second Customer account -->
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
+                     stepKey="loginAsSecondCustomer">
+            <argument name="customerId" value="$$createSecondCustomer.id$$"/>
+        </actionGroup>
+
+        <!-- Assert correctly logged in as Second Customer -->
+        <actionGroup ref="StorefrontAssertLoginAsCustomerLoggedInActionGroup" stepKey="assertLoggedInFromSecondCustomerPage">
+            <argument name="customerFullName" value="$$createSecondCustomer.firstname$$ $$createSecondCustomer.lastname$$"/>
+            <argument name="customerEmail" value="$$createSecondCustomer.email$$"/>
+        </actionGroup>
+
+        <actionGroup ref="StorefrontSignOutAndCloseTabActionGroup" stepKey="signOutSecondCustomer"/>
+    </test>
+</tests>

@@ -30,8 +30,7 @@
         </after>
 
         <!--Open Product Index Page-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
 
         <!--Search products using keyword -->
         <actionGroup ref="SearchProductGridByKeyword2ActionGroup" stepKey="searchByKeyword">

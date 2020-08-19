@@ -18,7 +18,7 @@ use Magento\Framework\Cache\LockGuardedCacheLoader;
  * As Magento moves from inheritance-based APIs all such classes will be deprecated together with
  * the classes they were introduced for.
  *
- * @deprecated 101.1.0
+ * @deprecated 102.0.0
  * @SuppressWarnings(PHPMD)
  */
 class Context extends \Magento\Framework\View\Element\Template\Context

@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\TestFramework\Helper\CacheCleaner;
 
 $eavConfig = Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
 $attribute = $eavConfig->getAttribute('catalog_product', 'test_configurable');
@@ -59,6 +60,7 @@ if (!$attribute->getId()) {
 
     /* Assign attribute to attribute set */
     $installer->addAttributeToGroup('catalog_product', 'Default', 'General', $attribute->getId());
+    CacheCleaner::cleanAll();
 }
 
 $eavConfig->clear();
