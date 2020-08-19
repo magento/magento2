@@ -7,8 +7,6 @@ namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
-use PHPUnit\Framework\AssertionFailedError;
-use PHPUnit\Framework\ExpectationFailedException;
 
 /**
  * Implementation of the @magentoDbIsolation DocBlock annotation
@@ -23,76 +21,24 @@ class DbIsolation
     protected $_isIsolationActive = false;
 
     /**
+     * This variable was created to keep initial data cached
+     *
+     * @var array
+     */
+    private static $isolationCache = [];
+
+    /**
      * @var string[]
      */
-    private $dbStateTables = [
-        'catalog_product_entity' => 'assertIsEmpty',
-        'eav_attribute' => 'eavAttributeAssert',
-        'catalog_category_entity' => 'assertTwoRecords',
-        'eav_attribute_set' => 'attributeSetAssert',
-        'store' => 'assertTwoRecords'
+    private static $dbStateTables = [
+        'catalog_product_entity',
+        'eav_attribute',
+        'catalog_category_entity',
+        'eav_attribute_set',
+        'store',
+        'store_website',
+        'url_rewrite'
     ];
-
-    /**
-     * Assert number of attribute sets
-     *
-     * @param array $data
-     * @return array
-     */
-    private function attributeSetAssert(array $data): array
-    {
-        if (count($data) > 9) {
-            return array_slice($data, 9, count($data) - 9);
-        }
-
-        return [];
-    }
-
-    /**
-     * Assert that array has only 2 records
-     *
-     * @param array $data
-     * @return array
-     */
-    private function assertTwoRecords(array $data): array
-    {
-        //2 default records
-        if (count($data) > 2) {
-            return array_slice($data, 2, count($data) - 2);
-        }
-
-        return [];
-    }
-
-    /**
-     * Assert that EAV attributes are only 178
-     *
-     * @param array $data
-     * @return array
-     */
-    private function eavAttributeAssert(array $data): array
-    {
-        //178 - default number of attributes
-        if (count($data) > 178) {
-            return array_slice($data, 178, count($data) - 178);
-        }
-
-        return [];
-    }
-
-    /**
-     * Assert array is empty
-     *
-     * @param $data
-     */
-    private function assertIsEmpty(array $data): array
-    {
-        if (!empty($data)) {
-            return $data;
-        }
-
-        return [];
-    }
 
     /**
      * Pull data from specific table
@@ -119,6 +65,7 @@ class DbIsolation
         \PHPUnit\Framework\TestCase $test,
         \Magento\TestFramework\Event\Param\Transaction $param
     ) {
+        $this->warmUpIsolationCache();
         $methodIsolation = $this->_getIsolation($test);
         if ($this->_isIsolationActive) {
             if ($methodIsolation === false) {
@@ -127,6 +74,37 @@ class DbIsolation
         } elseif ($methodIsolation || ($methodIsolation === null && $this->_getIsolation($test))) {
             $param->requestTransactionStart();
         }
+    }
+
+    /**
+     * At the first run before test we need to warm up attributes list to have native attributes list
+     *
+     * @return void
+     */
+    private function warmUpIsolationCache(): void
+    {
+        if (empty(self::$isolationCache)) {
+            foreach (self::$dbStateTables as $table) {
+                self::$isolationCache[$table] = $this->pullDbState($table);
+            }
+        }
+    }
+
+    /**
+     * Compare data difference for m-dimensional array
+     *
+     * @param array $dataBefore
+     * @param array $dataAfter
+     * @return bool
+     */
+    private function dataDiff(array $dataBefore, array $dataAfter): array
+    {
+        $diff = [];
+        if (count($dataBefore) !== count($dataAfter)) {
+            $diff = array_slice($dataAfter, count($dataBefore));
+        }
+
+        return $diff;
     }
 
     /**
@@ -143,12 +121,14 @@ class DbIsolation
             $param->requestTransactionRollback();
         } else {
             $isolationProblem = [];
-            foreach ($this->dbStateTables as $dbStateTable => $method) {
-                $data = $this->pullDbState($dbStateTable);
-                $data = $this->{$method}($data);
+            foreach (self::$dbStateTables as $table) {
+                $diff = $this->dataDiff(
+                    self::$isolationCache[$table],
+                    $this->pullDbState($table)
+                );
 
-                if ($data) {
-                    $isolationProblem[$dbStateTable] = $data;
+                if (!empty($diff)) {
+                    $isolationProblem[$table] = $diff;
                 }
             }
 
