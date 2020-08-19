@@ -142,7 +142,7 @@ define([
                                 return;
                             }
                             $(window).trigger('terminateMassAction.MediaGallery');
-                        }.bind(this));
+                        });
                     }
                 }.bind(this));
             }
