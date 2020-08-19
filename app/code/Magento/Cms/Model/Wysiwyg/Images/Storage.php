@@ -22,6 +22,7 @@ use Magento\Framework\App\ObjectManager;
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ * @SuppressWarnings(PHPMD.CyclomaticComplexity)
  *
  * @api
  * @since 100.0.2
@@ -178,6 +179,7 @@ class Storage extends \Magento\Framework\DataObject
      * @param array $data
      * @param \Magento\Framework\Filesystem\DriverInterface $file
      * @param \Magento\Framework\Filesystem\Io\File|null $ioFile
+     * @param \Magento\Framework\File\Mime $mime
      * @param \Psr\Log\LoggerInterface|null $logger
      *
      * @throws \Magento\Framework\Exception\FileSystemException
