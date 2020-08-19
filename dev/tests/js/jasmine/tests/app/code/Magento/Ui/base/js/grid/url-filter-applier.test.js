@@ -5,9 +5,8 @@
 
 /*eslint max-nested-callbacks: 0*/
 define([
-    'Magento_Ui/js/grid/url-filter-applier',
-    'jquery'
-], function (UrlFilterApplier, $) {
+    'Magento_Ui/js/grid/url-filter-applier'
+], function (UrlFilterApplier) {
     'use strict';
 
     describe('Magento_Ui/js/grid/url-filter-applier', function () {
