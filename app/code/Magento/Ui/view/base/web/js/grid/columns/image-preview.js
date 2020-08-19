@@ -32,7 +32,8 @@ define([
             listens: {
                 '${ $.provider }:params.filters': 'hide',
                 '${ $.provider }:params.search': 'hide',
-                '${ $.provider }:params.paging': 'hide'
+                '${ $.provider }:params.paging': 'hide',
+                '${ $.provider }:data.items': 'updateDisplayedRecord'
             },
             exports: {
                 height: '${ $.parentName }.thumbnail_url:previewHeight'
@@ -47,6 +48,22 @@ define([
         initialize: function () {
             this._super();
             $(document).on('keydown', this.handleKeyDown.bind(this));
+
+            this.lastOpenedImage.subscribe(function (newValue) {
+                if (newValue === false && _.isNull(this.visibleRecord())) {
+                    return;
+                }
+                if (newValue === this.visibleRecord()) {
+                    return;
+                }
+
+                if (newValue === false) {
+                    this.hide();
+                    return;
+                }
+
+                this.show(this.masonry().rows()[newValue]);
+            }.bind(this));
 
             return this;
         },
@@ -163,6 +180,17 @@ define([
                         this.scrollToPreview();
                     }.bind(this));
                 }
+            }
+        },
+
+        /**
+         * Update displayed record
+         *
+         * @param items
+         */
+        updateDisplayedRecord: function (items) {
+            if (!_.isNull(this.visibleRecord())) {
+                this.displayedRecord(items[this.visibleRecord()]);
             }
         },
 
