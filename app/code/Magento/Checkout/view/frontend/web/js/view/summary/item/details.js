@@ -32,6 +32,6 @@ define([
          */
         getValue: function (quoteItem) {
             return quoteItem.name;
-        },
+        }
     });
 });
