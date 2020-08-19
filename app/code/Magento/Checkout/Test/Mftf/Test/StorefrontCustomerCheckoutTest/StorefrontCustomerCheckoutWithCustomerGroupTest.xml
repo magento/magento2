@@ -10,9 +10,9 @@
     <test name="StorefrontCustomerCheckoutWithCustomerGroupTest">
         <annotations>
             <features value="Customer Checkout"/>
-            <stories value="Checkout via Customer Checkout with Customer Group"/>
-            <title value="Create order by Customer with Customer Group"/>
-            <description value="Should be assign Customer Group to Order, when enabled setting fir Customer - Auto Group Assign"/>
+            <stories value="Customer checkout with Customer Group assigned"/>
+            <title value="Place order by Customer with Customer Group assigned"/>
+            <description value="Customer Group should be assigned to Order when setting Auto Group Assign is enabled for Customer"/>
             <severity value="MAJOR"/>
             <group value="checkout"/>
             <group value="customer"/>
