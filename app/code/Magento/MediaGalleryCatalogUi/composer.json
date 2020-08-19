@@ -8,8 +8,7 @@
         "magento/module-backend": "*",
         "magento/module-catalog": "*",
         "magento/module-store": "*",
-        "magento/module-ui": "*",
-        "magento/module-media-content-api": "*"
+        "magento/module-ui": "*"
     },
     "type": "magento2-module",
     "license": [
