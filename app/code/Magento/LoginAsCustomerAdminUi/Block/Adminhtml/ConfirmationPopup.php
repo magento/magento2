@@ -8,9 +8,10 @@ declare(strict_types=1);
 namespace Magento\LoginAsCustomerAdminUi\Block\Adminhtml;
 
 use Magento\Backend\Block\Template;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Serialize\Serializer\Json;
-use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 use Magento\LoginAsCustomerAdminUi\Ui\Customer\Component\ConfirmationPopup\Options;
+use Magento\LoginAsCustomerApi\Api\ConfigInterface;
 use Magento\Store\Ui\Component\Listing\Column\Store\Options as StoreOptions;
 
 /**
@@ -61,7 +62,7 @@ class ConfirmationPopup extends Template
         $this->storeOptions = $storeOptions;
         $this->config = $config;
         $this->json = $json;
-        $this->options = $options;
+        $this->options = $options ?? ObjectManager::getInstance()->get(Options::class);
     }
 
     /**
