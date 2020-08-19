@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminEnhancedMediaGallerySaveCustomViewActionGroup">
+        <annotations>
+            <description>Save custom view media gallery</description>
+        </annotations>
+        <arguments>
+            <argument name="viewName" type="string" defaultValue="Test View"/>
+        </arguments>
+        
+        <click selector="{{AdminDataGridHeaderSection.bookmarkToggle}}" stepKey="openViewBookmarks"/>
+        <click selector="{{AdminGridDefaultViewControls.saveViewAs}}" stepKey="saveView"/>
+        <fillField selector="{{AdminGridDefaultViewControls.viewName}}" userInput="{{viewName}}" stepKey="inputViewName"/>
+        <pressKey selector="{{AdminGridDefaultViewControls.viewName}}" parameterArray="[\Facebook\WebDriver\WebDriverKeys::ENTER]" stepKey="pressEnterKey"/>
+      </actionGroup>
+</actionGroups>

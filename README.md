@@ -1,10 +1,9 @@
 <p align="center">
-  <a href="https://magento.com">
-    <img src="https://static.magento.com/sites/all/themes/magento/logo.svg" width="300px" alt="Magento" />
-  </a>
-</p>
-<p align="center">
-    <br /><br />
+    <a href="https://magento.com">
+        <img src="https://static.magento.com/sites/all/themes/magento/logo.svg" width="300px" alt="Magento Commerce" />
+    </a>
+    <br />
+    <br />
     <a href="https://www.codetriage.com/magento/magento2">
         <img src="https://www.codetriage.com/magento/magento2/badges/users.svg" alt="Open Source Helpers" />
     </a>
