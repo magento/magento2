@@ -9,17 +9,17 @@ namespace Magento\MediaGallerySynchronization\Test\Integration\Model;
 
 use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem\DriverInterface;
-use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
+use Magento\MediaGallerySynchronization\Model\GetContentHash;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for GetContentHashInterface.
+ * Test for GetContentHash.
  */
 class GetContentHashTest extends TestCase
 {
     /**
-     * @var GetContentHashInterface
+     * @var GetContentHash
      */
     private $getContentHash;
 
@@ -33,12 +33,12 @@ class GetContentHashTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->getContentHash = Bootstrap::getObjectManager()->get(GetContentHashInterface::class);
+        $this->getContentHash = Bootstrap::getObjectManager()->get(GetContentHash::class);
         $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
     }
 
     /**
-     * Test for GetContentHashInterface::execute
+     * Test for GetContentHash::execute
      *
      * @dataProvider filesProvider
      * @param string $firstFile

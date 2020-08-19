@@ -12,23 +12,17 @@ use Magento\Framework\Exception\FileSystemException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Driver\File;
-use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
-use Magento\MediaGallerySynchronization\Model\Filesystem\SplFileInfoFactory;
-use Magento\MediaGallerySynchronizationApi\Model\GetContentHashInterface;
+use Magento\MediaGallerySynchronization\Model\Filesystem\GetFileInfo;
+use Magento\MediaGallerySynchronization\Model\GetContentHash;
 
 /**
  * Create media asset object based on the file information
  */
 class CreateAssetFromFile
 {
-    /**
-     * Date format
-     */
-    private const DATE_FORMAT = 'Y-m-d H:i:s';
-
     /**
      * @var Filesystem
      */
@@ -40,17 +34,12 @@ class CreateAssetFromFile
     private $driver;
 
     /**
-     * @var TimezoneInterface;
-     */
-    private $date;
-
-    /**
      * @var AssetInterfaceFactory
      */
     private $assetFactory;
 
     /**
-     * @var GetContentHashInterface
+     * @var GetContentHash
      */
     private $getContentHash;
 
@@ -60,35 +49,32 @@ class CreateAssetFromFile
     private $extractMetadata;
 
     /**
-     * @var SplFileInfoFactory
+     * @var GetFileInfo
      */
-    private $splFileInfoFactory;
+    private $getFileInfo;
 
     /**
      * @param Filesystem $filesystem
      * @param File $driver
-     * @param TimezoneInterface $date
      * @param AssetInterfaceFactory $assetFactory
-     * @param GetContentHashInterface $getContentHash
+     * @param GetContentHash $getContentHash
      * @param ExtractMetadataInterface $extractMetadata
-     * @param SplFileInfoFactory $splFileInfoFactory
+     * @param GetFileInfo $getFileInfo
      */
     public function __construct(
         Filesystem $filesystem,
         File $driver,
-        TimezoneInterface $date,
         AssetInterfaceFactory $assetFactory,
-        GetContentHashInterface $getContentHash,
+        GetContentHash $getContentHash,
         ExtractMetadataInterface $extractMetadata,
-        SplFileInfoFactory $splFileInfoFactory
+        GetFileInfo $getFileInfo
     ) {
         $this->filesystem = $filesystem;
         $this->driver = $driver;
-        $this->date = $date;
         $this->assetFactory = $assetFactory;
         $this->getContentHash = $getContentHash;
         $this->extractMetadata = $extractMetadata;
-        $this->splFileInfoFactory = $splFileInfoFactory;
+        $this->getFileInfo = $getFileInfo;
     }
 
     /**
@@ -101,7 +87,7 @@ class CreateAssetFromFile
     public function execute(string $path): AssetInterface
     {
         $absolutePath = $this->getMediaDirectory()->getAbsolutePath($path);
-        $file = $this->splFileInfoFactory->create($absolutePath);
+        $file = $this->getFileInfo->execute($absolutePath);
         [$width, $height] = getimagesize($absolutePath);
 
         $metadata = $this->extractMetadata->execute($absolutePath);
@@ -110,10 +96,8 @@ class CreateAssetFromFile
             [
                 'id' => null,
                 'path' => $path,
-                'title' => $metadata->getTitle() ?: $file->getBasename('.' . $file->getExtension()),
+                'title' => $metadata->getTitle() ?: $file->getBasename(),
                 'description' => $metadata->getDescription(),
-                'createdAt' => $this->date->date($file->getCTime())->format(self::DATE_FORMAT),
-                'updatedAt' => $this->date->date($file->getMTime())->format(self::DATE_FORMAT),
                 'width' => $width,
                 'height' => $height,
                 'hash' => $this->getHash($path),

@@ -62,8 +62,7 @@
 
         <!-- Select address -->
         <click stepKey="selectAddress" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
-        <waitForElement stepKey="waitNextButton" selector="{{CheckoutShippingMethodsSection.next}}" time="30"/>
-        <click stepKey="clickNextButton" selector="{{CheckoutShippingMethodsSection.next}}"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNextButton"/>
         <waitForPageLoad stepKey="waitBillingForm"/>
         <seeInCurrentUrl url="{{CheckoutPage.url}}/#payment" stepKey="assertCheckoutPaymentUrl"/>
         <dontSee selector="{{CheckoutPaymentSection.paymentMethodByName('Check / Money order')}}" stepKey="paymentMethodDoesNotAvailable"/>
