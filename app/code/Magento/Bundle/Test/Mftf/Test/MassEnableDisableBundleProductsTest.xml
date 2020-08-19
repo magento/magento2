@@ -29,7 +29,7 @@
         <after>
             <!--Clear Filters-->
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="ClearFiltersAfter"/>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
             <deleteData createDataKey="simpleProduct3" stepKey="deleteSimpleProduct3"/>
@@ -46,9 +46,7 @@
         <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle"/>
         <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType"/>
-        <waitForElementVisible selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="waitForAddProductsToBundle"/>
-        <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProductsToOption"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterBundleProducts"/>
+        <actionGroup ref="AdminClickAddProductToOptionActionGroup" stepKey="clickAddProductsToOption"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptions">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
@@ -64,7 +62,7 @@
         <actionGroup ref="AncillaryPrepBundleProductActionGroup" stepKey="createBundledProductForTwoSimpleProducts"/>
 
         <!--Save the product-->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="messageYouSavedTheProductIsShown"/>
 
         <!--Creating Second bundle product-->
@@ -78,9 +76,7 @@
         <waitForElementVisible selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" stepKey="waitForBundleOptions2"/>
         <fillField selector="{{AdminProductFormBundleSection.bundleOptionXTitle('0')}}" userInput="{{BundleProduct.optionTitle1}}" stepKey="fillOptionTitle2"/>
         <selectOption selector="{{AdminProductFormBundleSection.bundleOptionXInputType('0')}}" userInput="{{BundleProduct.optionInputType1}}" stepKey="selectInputType2"/>
-        <waitForElementVisible selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="waitForAddProductsToBundle2"/>
-        <click selector="{{AdminProductFormBundleSection.addProductsToOption}}" stepKey="clickAddProductsToOption2"/>
-        <waitForPageLoad stepKey="waitForPageLoadAfterBundleProducts2"/>
+        <actionGroup ref="AdminClickAddProductToOptionActionGroup" stepKey="clickAddProductsToOption2"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterBundleProductOptionsx2">
             <argument name="product" value="$$simpleProduct3$$"/>
         </actionGroup>
@@ -105,7 +101,7 @@
         <fillField userInput="{{BundleProduct.urlKey2}}" selector="{{AdminProductFormBundleSection.urlKey}}" stepKey="FillsinSEOlinkExtension2"/>
 
         <!--Save the product-->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton2"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton2"/>
         <see userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown2"/>
 
         <!--Clear Filters-->
@@ -130,16 +126,19 @@
         <dontSeeElement stepKey="LookingForNameOfProductDisabled" selector="{{StorefrontBundledSection.bundleProductName}}"/>
 
         <!--Enabling bundle products-->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="GoToCatalogPageChangingView"/>
-        <waitForPageLoad stepKey="WaitForPageToLoadFullyChangingView"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="goToCatalogPageChangingView"/>
         <click selector="{{AdminProductFiltersSection.allCheckbox}}" stepKey="ClickOnSelectAllCheckBoxChangingView"/>
         <click selector="{{AdminProductFiltersSection.actions}}" stepKey="ClickOnActionsChangingView"/>
         <click selector="{{AdminProductFiltersSection.changeStatus}}" stepKey="ClickOnChangeStatusChangingView"/>
         <click selector="{{AdminProductFiltersSection.enable}}" stepKey="ClickOnEnable"/>
 
         <!--Clear Cache - reindex - resets products according to enabled/disabled view-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex2"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache2"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!--Confirm bundle products have been enabled-->
         <amOnPage url="{{BundleProduct.urlKey2}}.html" stepKey="GoToProductPageEnabled"/>
