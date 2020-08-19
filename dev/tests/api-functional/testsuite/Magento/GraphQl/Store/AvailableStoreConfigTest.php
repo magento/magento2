@@ -87,6 +87,7 @@ class AvailableStoreConfigTest extends GraphQlAbstract
     secure_base_static_url,
     secure_base_media_url,
     store_name
+    use_store_in_url
   }
 }
 QUERY;
@@ -126,6 +127,7 @@ QUERY;
     secure_base_static_url,
     secure_base_media_url,
     store_name
+    use_store_in_url
   }
 }
 QUERY;
@@ -167,5 +169,99 @@ QUERY;
         $this->assertEquals($storeConfig->getSecureBaseStaticUrl(), $responseConfig['secure_base_static_url']);
         $this->assertEquals($storeConfig->getSecureBaseMediaUrl(), $responseConfig['secure_base_media_url']);
         $this->assertEquals($store->getName(), $responseConfig['store_name']);
+        $this->assertEquals($store->isUseStoreInUrl(), $responseConfig['use_store_in_url']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Store/_files/second_website_with_four_stores_divided_in_groups.php
+     * @magentoConfigFixture web/url/use_store 1
+     */
+    public function testAllStoreConfigsWithCodeInUrlEnabled(): void
+    {
+        $storeConfigs = $this->storeConfigManager->getStoreConfigs(
+            [
+                'fixture_second_store',
+                'fixture_third_store',
+                'fixture_fourth_store',
+                'fixture_fifth_store'
+            ]
+        );
+
+        $query
+            = <<<QUERY
+{
+  availableStores(useCurrentGroup:false) {
+    id,
+    code,
+    website_id,
+    locale,
+    base_currency_code,
+    default_display_currency_code,
+    timezone,
+    weight_unit,
+    base_url,
+    base_link_url,
+    base_static_url,
+    base_media_url,
+    secure_base_url,
+    secure_base_link_url,
+    secure_base_static_url,
+    secure_base_media_url,
+    store_name
+    use_store_in_url
+  }
+}
+QUERY;
+        $headerMap = ['Store' => 'fixture_fifth_store'];
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+
+        $this->assertArrayHasKey('availableStores', $response);
+        $this->assertCount(4, $response['availableStores']);
+        foreach ($response['availableStores'] as $key => $responseConfig) {
+            $this->validateStoreConfig($storeConfigs[$key], $responseConfig);
+            $this->assertEquals(true, $responseConfig['use_store_in_url']);
+        }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Store/_files/second_website_with_four_stores_divided_in_groups.php
+     */
+    public function testCurrentGroupStoreConfigs(): void
+    {
+        $storeConfigs = $this->storeConfigManager->getStoreConfigs(['fixture_fourth_store', 'fixture_fifth_store']);
+
+        $query
+            = <<<QUERY
+{
+  availableStores(useCurrentGroup:true) {
+    id,
+    code,
+    website_id,
+    locale,
+    base_currency_code,
+    default_display_currency_code,
+    timezone,
+    weight_unit,
+    base_url,
+    base_link_url,
+    base_static_url,
+    base_media_url,
+    secure_base_url,
+    secure_base_link_url,
+    secure_base_static_url,
+    secure_base_media_url,
+    store_name
+    use_store_in_url
+  }
+}
+QUERY;
+        $headerMap = ['Store' => 'fixture_fifth_store'];
+        $response = $this->graphQlQuery($query, [], '', $headerMap);
+
+        $this->assertArrayHasKey('availableStores', $response);
+        $this->assertCount(2, $response['availableStores']);
+        foreach ($response['availableStores'] as $key => $responseConfig) {
+            $this->validateStoreConfig($storeConfigs[$key], $responseConfig);
+        }
     }
 }
