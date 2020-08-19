@@ -22,7 +22,12 @@
             </skip>
         </annotations>
         <before>
-
+            <!--Set price scope global-->
+            <magentoCLI command="config:set {{CatalogPriceScopeGlobalConfigData.path}} {{CatalogPriceScopeGlobalConfigData.value}}" stepKey="setCatalogPriceScopeWebsite"/>
+            <!--Remove Currency options for Website-->
+            <remove keyForRemoval="setCurrencyBaseEURWebsites"/>
+            <remove keyForRemoval="setAllowedCurrencyWebsitesForEURandUSD"/>
+            <remove keyForRemoval="setCurrencyDefaultEURWebsites"/>
             <!--Enable Advanced Setting-->
             <magentoCLI command="config:set {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.value}}" stepKey="enableSkipOrderReview"/>
             <!--Set merchant country-->
@@ -31,10 +36,6 @@
             <magentoCLI command="config:set {{SetCurrencyAUDBaseConfig.path}} {{SetCurrencyAUDBaseConfig.value}}" stepKey="setCurrencyBaseEUR"/>
             <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForAUD.value}}" stepKey="setAllowedCurrencyEURandUSD"/>
             <magentoCLI command="config:set {{SetDefaultCurrencyAUDConfig.path}} {{SetDefaultCurrencyAUDConfig.value}}" stepKey="setCurrencyDefaultEUR"/>
-            <!--Set Currency options for Website-->
-            <magentoCLI command="config:set --scope={{SetCurrencyUSDBaseConfig.scope}} --scope-code={{SetCurrencyUSDBaseConfig.scope_code}} {{SetCurrencyUSDBaseConfig.path}} {{SetCurrencyUSDBaseConfig.value}}" stepKey="setCurrencyBaseEURWebsites"/>
-            <magentoCLI command="config:set --scope={{SetAllowedCurrenciesConfigForUSD.scope}} --scope-code={{SetAllowedCurrenciesConfigForUSD.scope_code}} {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForAUD.value}}" stepKey="setAllowedCurrencyWebsitesForEURandUSD"/>
-            <magentoCLI command="config:set --scope={{SetDefaultCurrencyAUDConfig.scope}} --scope-code={{SetDefaultCurrencyAUDConfig.scope_code}} {{SetDefaultCurrencyAUDConfig.path}} {{SetDefaultCurrencyAUDConfig.value}}" stepKey="setCurrencyDefaultEURWebsites"/>
         </before>
         <after>
             <magentoCLI command="config:set {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>

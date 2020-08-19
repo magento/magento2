@@ -8,8 +8,9 @@ namespace Magento\Tax\Controller\Adminhtml\Rate;
 
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 
-class Delete extends \Magento\Tax\Controller\Adminhtml\Rate
+class Delete extends \Magento\Tax\Controller\Adminhtml\Rate implements HttpPostActionInterface
 {
     /**
      * Delete Rate and Data

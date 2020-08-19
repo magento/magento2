@@ -67,7 +67,7 @@
 
             <actionGroup ref="AdminOrdersGridClearFiltersActionGroup" stepKey="clearOrdersGridFilter"/>
 
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="customerLogoutStorefront"/>
@@ -75,8 +75,7 @@
 
         <!-- Open Product Grid, Filter product and open -->
 
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad1"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="filterGroupedProductOptions">
             <argument name="product" value="_defaultProduct"/>
@@ -103,7 +102,7 @@
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('Custom Options 1', '1')}}" userInput="option2" stepKey="fillOptionValueTitle2"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValuePrice('Custom Options 1', '1')}}" userInput="50" stepKey="fillOptionValuePrice2"/>
         <selectOption selector="{{AdminProductCustomizableOptionsSection.clickSelectPriceType('Custom Options 1', '1')}}" userInput="percent" stepKey="clickSelectPriceType"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton1"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton1"/>
 
         <!-- Switcher to Store FR-->
         <actionGroup ref="AdminSwitchStoreViewActionGroup" stepKey="switchToStoreFR">
@@ -127,7 +126,7 @@
         <click selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('1')}}" stepKey="clickHiddenRequireMessage"/>
         <uncheckOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('1')}}" stepKey="uncheckUseDefaultOptionValueTitle2"/>
         <fillField selector="{{AdminProductCustomizableOptionsSection.fillOptionValueTitle('FR Custom Options 1', '1')}}" userInput="FR option2" stepKey="fillOptionValueTitle4"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton2"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton2"/>
 
         <!-- Login Customer Storefront -->
 
@@ -181,9 +180,7 @@
 
         <!--Select shipping method-->
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
-        <waitForElementVisible selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterClickNext"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext"/>
         <!--Select payment method-->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod"/>
         <!-- Place Order -->
@@ -258,9 +255,7 @@
 
         <!--Select shipping method-->
         <actionGroup ref="CheckoutSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod2"/>
-        <waitForElementVisible selector="{{CheckoutShippingSection.next}}" time="30" stepKey="waitForNextButton2"/>
-        <click selector="{{CheckoutShippingSection.next}}" stepKey="clickNext2"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskAfterClickNext2"/>
+        <actionGroup ref="StorefrontCheckoutClickNextOnShippingStepActionGroup" stepKey="clickNext2"/>
 
         <!--Select payment method-->
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectPaymentMethod2"/>
@@ -272,8 +267,7 @@
 
         <!-- Open Product Grid, Filter product and open -->
 
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage1"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoad15"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage1"/>
 
         <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="filterGroupedProductOptions1">
             <argument name="product" value="_defaultProduct"/>
@@ -304,7 +298,7 @@
 
         <waitForPageLoad time="30" stepKey="waitForPageLoad19"/>
         <checkOption selector="{{AdminProductCustomizableOptionsSection.useDefaultOptionTitleByIndex('1')}}" stepKey="checkUseDefaultOptionValueTitle2"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="clickSaveButton3"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickSaveButton3"/>
 
         <!--Go to Product Page-->
 
