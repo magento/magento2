@@ -7,12 +7,8 @@
 use Magento\Catalog\ViewModel\Product\Listing\PreparePostData;
 use Magento\Framework\App\ActionInterface;
 
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
-// phpcs:disable Generic.WhiteSpace.ScopeIndent.Incorrect
-// phpcs:disable Generic.Files.LineLength
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundHelper
-
 /* @var $block \Magento\Catalog\Block\Product\AbstractProduct */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
 <?php
@@ -164,11 +160,19 @@ $_item = null;
 
 <?php if ($exist):?>
 
-<?php if ($type == 'related' || $type == 'upsell'):?>
-<?php if ($type == 'related'):?>
-<div class="block <?= $block->escapeHtmlAttr($class) ?>" data-mage-init='{"relatedProducts":{"relatedCheckbox":".related.checkbox"}}' data-limit="<?= $block->escapeHtmlAttr($limit) ?>" data-shuffle="<?= /* @noEscape */ $shuffle ?>" data-shuffle-weighted="<?= /* @noEscape */ $isWeightedRandom ?>">
+    <?php if ($type == 'related' || $type == 'upsell'):?>
+        <?php if ($type == 'related'):?>
+<div class="block <?= $block->escapeHtmlAttr($class) ?>"
+     data-mage-init='{"relatedProducts":{"relatedCheckbox":".related.checkbox"}}'
+     data-limit="<?= $block->escapeHtmlAttr($limit) ?>"
+     data-shuffle="<?= /* @noEscape */ $shuffle ?>"
+     data-shuffle-weighted="<?= /* @noEscape */ $isWeightedRandom ?>">
     <?php else:?>
-    <div class="block <?= $block->escapeHtmlAttr($class) ?>" data-mage-init='{"upsellProducts":{}}' data-limit="<?= $block->escapeHtmlAttr($limit) ?>" data-shuffle="<?= /* @noEscape */ $shuffle ?>" data-shuffle-weighted="<?= /* @noEscape */ $isWeightedRandom ?>">
+    <div class="block <?= $block->escapeHtmlAttr($class) ?>"
+         data-mage-init='{"upsellProducts":{}}'
+         data-limit="<?= $block->escapeHtmlAttr($limit) ?>"
+         data-shuffle="<?= /* @noEscape */ $shuffle ?>"
+         data-shuffle-weighted="<?= /* @noEscape */ $isWeightedRandom ?>">
         <?php endif; ?>
         <?php else:?>
         <div class="block <?= $block->escapeHtmlAttr($class) ?>">
@@ -195,7 +199,13 @@ $_item = null;
                                 <?php endif; ?>
                             <?php endif; ?>
                             <?php if ($type == 'related' || $type == 'upsell'):?>
-                                <li class="item product product-item" style="display: none;"  data-shuffle-group="<?= $block->escapeHtmlAttr($_item->getPriority()) ?>" >
+                                <li class="item product product-item"
+                                id="product-item_<?= /* @noEscape */ $_item->getId() ?>"
+                                data-shuffle-group="<?= $block->escapeHtmlAttr($_item->getPriority()) ?>" >
+                                <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                    'display:none;',
+                                    'li#product-item_' . $_item->getId()
+                                ) ?>
                             <?php else:?>
                                 <li class="item product product-item">
                             <?php endif; ?>
@@ -222,17 +232,16 @@ $_item = null;
                                     <?php if ($canItemsAddToCart && !$_item->isComposite() && $_item->isSaleable()
                                         && $type == 'related'):?>
                                         <?php if (!$_item->getRequiredOptions()):?>
-                                            <div class="field choice related"><input
-                                                        type="checkbox"
-                                                        class="checkbox related"
-                                                        id="related-checkbox<?= $block->escapeHtmlAttr($_item->getId()) ?>"
-                                                        name="related_products[]"
-                                                        value="<?= $block->escapeHtmlAttr($_item->getId()) ?>" />
-                                                <label
-                                                        class="label"
-                                                        for="related-checkbox<?= $block->escapeHtmlAttr(
-                                                            $_item->getId()
-                                                        ) ?>"><span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
+                                            <div class="field choice related">
+                                                <input
+                                                    type="checkbox"
+                                                    class="checkbox related"
+                                                    id="related-checkbox<?= $block->escapeHtmlAttr($_item->getId()) ?>"
+                                                    name="related_products[]"
+                                                    value="<?= $block->escapeHtmlAttr($_item->getId()) ?>" />
+                                                <label class="label"
+                                                       for="related-checkbox<?= $block->escapeHtmlAttr($_item->getId())
+                                                        ?>"><span><?= $block->escapeHtml(__('Add to Cart')) ?></span>
                                                 </label>
                                             </div>
                                         <?php endif; ?>

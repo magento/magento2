@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminLoginAsCustomerDirectlyToCustomWebsiteTest">
+        <annotations>
+            <features value="Login as Customer"/>
+            <stories value="Login as Customer into additional website"/>
+            <title value="Admin user directly login into customer account on custom website"/>
+            <description
+                value="Verify admin user can directly login into customer account on custom website using 'Login as customer' functionality"/>
+            <severity value="BLOCKER"/>
+            <group value="login_as_customer"/>
+        </annotations>
+        <before>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 1"
+                        stepKey="enableLoginAsCustomer"/>
+            <magentoCLI command="config:set {{LoginAsCustomerStoreViewLogin.path}} 0"
+                        stepKey="enableLoginAsCustomerAutoDetection"/>
+            <magentoCLI
+                command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}"
+                stepKey="enableAddStoreCodeToUrls"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="adminLogin"/>
+            <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createCustomWebsite">
+                <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
+                <argument name="websiteCode" value="{{customWebsite.code}}"/>
+            </actionGroup>
+            <actionGroup ref="CreateCustomStoreActionGroup" stepKey="createCustomStore">
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="store" value="{{customStoreGroup.name}}"/>
+                <argument name="rootCategory" value="Default Category"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createCustomStoreView">
+                <argument name="StoreGroup" value="customStoreGroup"/>
+                <argument name="customStore" value="customStoreEN"/>
+            </actionGroup>
+            <actionGroup ref="AdminCreateCustomerWithWebSiteAndGroupActionGroup" stepKey="createCustomer">
+                <argument name="customerData" value="Simple_US_Customer_Assistance_Allowed"/>
+                <argument name="website" value="{{customWebsite.name}}"/>
+                <argument name="storeView" value="{{customStoreEN.name}}"/>
+            </actionGroup>
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteCustomerActionGroup" stepKey="deleteCustomer">
+                <argument name="customerEmail" value="Simple_US_Customer_Assistance_Allowed.email"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{customWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <magentoCLI command="config:set {{LoginAsCustomerConfigDataEnabled.path}} 0"
+                        stepKey="disableLoginAsCustomer"/>
+            <magentoCLI
+                command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}"
+                stepKey="disableAddStoreCodeToUrls"/>
+            <magentoCLI command="cache:flush config" stepKey="flushCacheAfterTestRun"/>
+        </after>
+
+        <!-- Login as Customer from Customer page -->
+        <actionGroup ref="OpenEditCustomerFromAdminActionGroup" stepKey="OpenEditCustomerFrom">
+            <argument name="customer" value="Simple_US_Customer_Assistance_Allowed"/>
+        </actionGroup>
+        <grabFromCurrentUrl regex="~id/(\d+)/~"  stepKey="customerId" />
+        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageActionGroup"
+                     stepKey="loginAsCustomerFromCustomerPage">
+            <argument name="customerId" value="${customerId}"/>
+        </actionGroup>
+
+        <!-- Assert Customer logged on Custom Website -->
+        <actionGroup ref="AssertStorefrontStoreCodeInUrlActionGroup" stepKey="seeStoreCodeInUrl">
+            <argument name="storeCode" value="{{customStoreEN.code}}"/>
+        </actionGroup>
+
+        <!-- Log out Customer and close tab -->
+        <actionGroup ref="StorefrontSignOutAndCloseTabActionGroup" stepKey="signOutAndCloseTab"/>
+    </test>
+</tests>

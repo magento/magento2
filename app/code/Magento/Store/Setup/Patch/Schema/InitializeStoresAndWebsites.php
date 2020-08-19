@@ -142,7 +142,7 @@ class InitializeStoresAndWebsites implements SchemaPatchInterface, PatchVersionI
     /**
      * Get default category.
      *
-     * @deprecated 100.1.0
+     * @deprecated 101.0.0
      * @return DefaultCategory
      */
     private function getDefaultCategory()
