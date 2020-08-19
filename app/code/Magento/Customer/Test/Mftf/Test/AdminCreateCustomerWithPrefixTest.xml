@@ -56,7 +56,7 @@
         <see userInput="Male" selector="{{AdminCustomerGridSection.customerGrid}}" stepKey="assertGender"/>
 
         <!--Assert Customer Form -->
-        <actionGroup ref="AdminCustomerClickFirstRowEditLinkActionGroup" stepKey="clickOnEditButton1"/>
+        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickOnEditButton1"/>
         <click selector="{{AdminCustomerAccountInformationSection.accountInformationButton}}" stepKey="clickOnAccountInformation"/>
         <waitForPageLoad stepKey="waitForCustomerInformationPageToLoad"/>
         <seeInField selector="{{AdminCustomerAccountInformationSection.namePrefix}}" userInput="{{CustomerEntityOne.prefix}}" stepKey="seeCustomerNamePrefix"/>
