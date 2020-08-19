@@ -87,7 +87,8 @@ define([
                 form = modalElement.find('#image-edit-details-form'),
                 imageId = this.imageModel().getSelected().id,
                 keywords = this.mediaGalleryEditDetails().selectedKeywords(),
-                imageDetails = this.mediaGalleryImageDetails();
+                imageDetails = this.mediaGalleryImageDetails(),
+                imageEditDetails = this.mediaGalleryEditDetails();
 
             if (form.validation('isValid')) {
                 saveDetails(
@@ -99,6 +100,7 @@ define([
                     this.closeModal();
                     this.imageModel().reloadGrid();
                     imageDetails.removeCached(imageId);
+                    imageEditDetails.removeCached(imageId);
 
                     if (imageDetails.isActive()) {
                         imageDetails.showImageDetailsById(imageId);
