@@ -176,7 +176,7 @@
         <waitForPageLoad stepKey="waitForShippingMethods"/>
         <click selector="{{AdminInvoicePaymentShippingSection.shippingMethod}}" stepKey="chooseShippingMethod"/>
         <waitForPageLoad stepKey="waitForShippingMethodLoad"/>
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="clickSubmitOrder" />
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="checkOrderSuccessfullyCreated"/>
     </test>
 </tests>

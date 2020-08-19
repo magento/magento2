@@ -152,7 +152,7 @@
 
         <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickReorder"/>
         <actionGroup ref="AdminCheckoutSelectCheckMoneyOrderBillingMethodActionGroup" stepKey="selectBillingMethod"/>
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="trySubmitOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="trySubmitOrder" />
 
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionField.title}}" stepKey="seeAdminOrderProductOptionField1" />
         <see selector="{{AdminOrderItemsOrderedSection.productNameOptions}}" userInput="{{ProductOptionArea.title}}" stepKey="seeAdminOrderProductOptionArea1"/>
