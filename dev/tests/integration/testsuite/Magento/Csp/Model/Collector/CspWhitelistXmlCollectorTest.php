@@ -24,7 +24,7 @@ class CspWhitelistXmlCollectorTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->collector = Bootstrap::getObjectManager()->get(CspWhitelistXmlCollector::class);
     }
@@ -53,7 +53,13 @@ class CspWhitelistXmlCollectorTest extends TestCase
             if ($policy->getId() === 'object-src') {
                 $this->assertInstanceOf(FetchPolicy::class, $policy);
                 $this->assertEquals(['http://magento.com', 'https://devdocs.magento.com'], $policy->getHostSources());
-                $this->assertEquals(['B2yPHKaXnvFWtRChIbabYmUBFZdVfKKXHbWtWidDVF8=' => 'sha256'], $policy->getHashes());
+                $this->assertEquals(
+                    [
+                        'B2yPHKaXnvFWtRChIbabYmUBFZdVfKKXHbWtWidDVF8=' => 'sha256',
+                        'B2yPHKaXnvFWtRChIbabYmUBFZdVfKKXHbWtWidDVF9=' => 'sha256'
+                    ],
+                    $policy->getHashes()
+                );
                 $objectSrcChecked = true;
             } elseif ($policy->getId() === 'media-src') {
                 $this->assertInstanceOf(FetchPolicy::class, $policy);

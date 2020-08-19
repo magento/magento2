@@ -10,13 +10,14 @@ use Magento\Framework\ObjectManagerInterface;
 use PHPUnit\Framework\Test;
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\TestListener;
+use PHPUnit\Framework\TestListenerDefaultImplementation;
 
 /**
  * The event listener which instantiates ObjectManager before test run
  */
 class ReplaceObjectManager implements TestListener
 {
-    use \PHPUnit\Framework\TestListenerDefaultImplementation;
+    use TestListenerDefaultImplementation;
     /**
      * Replaces ObjectManager before run for each test
      *

@@ -4,8 +4,10 @@
  * See COPYING.txt for license details.
  */
 
-require dirname(__DIR__, 2) . '/Catalog/_files/product_image.php';
-require dirname(__DIR__, 2) . '/Catalog/_files/product_simple.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_image.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */

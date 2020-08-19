@@ -14,6 +14,7 @@
             <stories value="System Integration"/>
             <title value="Reauthorise Integration's Tokens"/>
             <description value="ReAuthorising Tokens For Created Integration"/>
+            <severity value="MAJOR"/>
             <group value="integration"/>
             <group value="mtf_migrated"/>
             <testCaseId value="MC-14397"/>

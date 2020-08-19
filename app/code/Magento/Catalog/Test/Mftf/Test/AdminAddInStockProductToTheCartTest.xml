@@ -34,16 +34,14 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Open Product Index Page and filter the product-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
         <!-- Update product Advanced Inventory setting -->
         <click stepKey="openSelectedProduct" selector="{{AdminProductGridSection.productRowBySku($$createSimpleProduct.sku$$)}}"/>
         <waitForPageLoad stepKey="waitForProductToLoad"/>
-        <click selector="{{AdminProductFormSection.advancedInventoryLink}}" stepKey="clickOnAdvancedInventoryLink"/>
-        <waitForPageLoad stepKey="waitForAdvancedInventoryPageToLoad"/>
+        <actionGroup ref="AdminClickOnAdvancedInventoryLinkActionGroup" stepKey="clickOnAdvancedInventoryLink"/>
         <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.useConfigSettings}}" stepKey="uncheckConfigSetting"/>
         <selectOption selector="{{AdminProductFormAdvancedInventorySection.manageStock}}"  userInput="Yes" stepKey="clickOnManageStock"/>
         <fillField selector="{{AdminProductFormAdvancedInventorySection.advancedInventoryQty}}" userInput="5" stepKey="fillProductQty"/>
@@ -54,15 +52,19 @@
         <selectOption  selector="{{AdminProductFormAdvancedInventorySection.qtyUsesDecimals}}" userInput="Yes" stepKey="selectQuatityUsesDecimal"/>
         <uncheckOption selector="{{AdminProductFormAdvancedInventorySection.notifyBelowQtyConfigSetting}}" stepKey="uncheckNotifyBelowQtyheckBox"/>
         <fillField selector="{{AdminProductFormAdvancedInventorySection.notifyBelowQty}}" userInput="1" stepKey="fillNotifyBelowQty"/>
-        <selectOption selector="{{AdminProductFormAdvancedInventorySection.advancedInventoryStockStatus}}" userInput="In Stock" stepKey="selectOutOfStock"/>
-        <click stepKey="clickOnDoneButton" selector="{{AdminProductFormAdvancedInventorySection.doneButton}}"/>
-        <waitForPageLoad stepKey="waitForProductPageToLoad"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}"  stepKey="clickOnSaveButton"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
+        <actionGroup ref="AdminSetStockStatusConfigActionGroup" stepKey="selectOutOfStock">
+            <argument name="stockStatus" value="In Stock"/>
+        </actionGroup>
+        <actionGroup ref="AdminSubmitAdvancedInventoryFormActionGroup" stepKey="clickOnDoneButton"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
         <!--Clear cache and reindex-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!--Verify product is visible in category front page -->
         <amOnPage url="$$createCategory.name$$.html" stepKey="openCategoryStoreFrontPage"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
@@ -74,13 +76,13 @@
         <waitForPageLoad stepKey="waitForProductFrontPageToLoad"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="{{SimpleProduct.name}}" stepKey="seeProductNameInStoreFront"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="{{SimpleProduct.price}}" stepKey="seeProductPriceInStoreFront"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="{{SimpleProduct.sku}}" stepKey="seeProductSkuInStoreFront"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeProductSkuInStoreFront">
+            <argument name="productSku" value="{{SimpleProduct.sku}}"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductStatusInStoreFront"/>
         <!--Add Product to the cart-->
         <fillField selector="{{StorefrontProductPageSection.qtyInput}}" userInput="1" stepKey="fillProductQuantity"/>
-        <click selector="{{StorefrontProductActionSection.addToCart}}" stepKey="clickOnAddToCartButton"/>
-        <waitForPageLoad stepKey="waitForProductToAddInCart"/>
-        <waitForElementVisible selector="{{StorefrontMessagesSection.success}}" stepKey="waitForSuccessMessage"/>
+        <actionGroup ref="StorefrontClickAddToCartOnProductPageActionGroup" stepKey="addToCartFromStorefrontProductPage"/>
         <seeElement selector="{{StorefrontProductPageSection.successMsg}}" stepKey="seeSuccessSaveMessage"/>
         <seeElement selector="{{StorefrontMinicartSection.quantity(1)}}" stepKey="seeAddedProductQuantityInCart"/>
         <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="clickOnMiniCart"/>

@@ -66,8 +66,12 @@
 
             <!-- Logout Admin -->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCacheAfterDeletion"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterDeletion">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </after>
 
         <!--Create widget for recently viewed products-->
@@ -88,7 +92,9 @@
             <argument name="buttonToShowSection2" value="3"/>
         </actionGroup>
 
-        <magentoCLI command="cache:flush" stepKey="flushCacheAfterWidgetCreated"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterWidgetCreated">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!-- Navigate to product 3 on store front -->
         <amOnPage url="{{StorefrontProductPage.url($createSimpleProduct2.name$)}}" stepKey="goToStore1ProductPage2"/>
@@ -126,10 +132,10 @@
         </actionGroup>
 
         <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductName('2')}}" stepKey="grabDontSeeHomeProduct3"/>
-        <assertNotContains stepKey="assertNotSeeProduct3">
-            <actualResult type="const">$grabDontSeeHomeProduct3</actualResult>
-            <expectedResult type="const">$$createSimpleProduct3.name$$</expectedResult>
-        </assertNotContains>
+         <assertStringNotContainsString stepKey="assertNotSeeProduct3">
+			<actualResult type="const">$grabDontSeeHomeProduct3</actualResult>
+			<expectedResult type="const">$$createSimpleProduct3.name$$</expectedResult>
+        </assertStringNotContainsString>
 
         <actionGroup ref="StorefrontSwitchDefaultStoreViewActionGroup" stepKey="switchToDefualtStoreView"/>
 
@@ -144,9 +150,9 @@
         </actionGroup>
 
         <grabTextFrom selector="{{StoreFrontRecentlyViewedProductSection.ProductName('2')}}" stepKey="grabDontSeeHomeProduct1"/>
-        <assertNotContains stepKey="assertNotSeeProduct1">
-            <actualResult type="const">$grabDontSeeHomeProduct1</actualResult>
-            <expectedResult type="const">$$createSimpleProduct1.name$$</expectedResult>
-        </assertNotContains>
+        <assertStringNotContainsString stepKey="assertNotSeeProduct1">
+			<actualResult type="const">$grabDontSeeHomeProduct1</actualResult>
+			<expectedResult type="const">$$createSimpleProduct1.name$$</expectedResult>
+        </assertStringNotContainsString>
     </test>
 </tests>

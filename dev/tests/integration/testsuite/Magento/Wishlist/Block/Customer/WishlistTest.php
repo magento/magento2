@@ -18,7 +18,7 @@ use PHPUnit\Framework\TestCase;
  * Class test block wish list on customer account page.
  *
  * @magentoAppArea frontend
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @magentoAppIsolation disabled
  */
 class WishlistTest extends TestCase
@@ -38,7 +38,7 @@ class WishlistTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -50,7 +50,7 @@ class WishlistTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->customerSession->setCustomerId(null);
 

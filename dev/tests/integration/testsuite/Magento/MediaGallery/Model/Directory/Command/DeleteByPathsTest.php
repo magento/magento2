@@ -36,7 +36,7 @@ class DeleteByPathsTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->deleteByPaths = Bootstrap::getObjectManager()->get(DeleteDirectoriesByPathsInterface::class);
         $this->filesystem = Bootstrap::getObjectManager()->get(Filesystem::class);
@@ -60,11 +60,12 @@ class DeleteByPathsTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $paths
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
-     * @expectedException \Magento\Framework\Exception\CouldNotDeleteException
      * @dataProvider notAllowedPathsProvider
      */
     public function testDeleteDirectoryThatIsNotAllowed(array $paths): void
     {
+        $this->expectException(\Magento\Framework\Exception\CouldNotDeleteException::class);
+
         $this->deleteByPaths->execute($paths);
     }
 
@@ -91,7 +92,7 @@ class DeleteByPathsTest extends \PHPUnit\Framework\TestCase
     /**
      * @throws \Magento\Framework\Exception\FileSystemException
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $directory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         if ($directory->isExist($this->testDirectoryName)) {

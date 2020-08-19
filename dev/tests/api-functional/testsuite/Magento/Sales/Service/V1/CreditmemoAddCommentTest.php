@@ -38,7 +38,7 @@ class CreditmemoAddCommentTest extends WebapiAbstract
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }

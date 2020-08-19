@@ -25,7 +25,7 @@ use Magento\Framework\Stdlib\DateTime;
 use Magento\Store\Model\ScopeInterface;
 
 /**
- * Class Visitor
+ * Class Visitor responsible for initializing visitor's.
  *
  *  Used to track sessions of the logged in customers
  *
@@ -206,7 +206,9 @@ class Visitor extends AbstractModel
     public function saveByRequest($observer)
     {
         // prevent saving Visitor for safe methods, e.g. GET request
-        if ($this->skipRequestLogging || $this->requestSafety->isSafeMethod() || $this->isModuleIgnored($observer)) {
+        if (($this->skipRequestLogging || $this->requestSafety->isSafeMethod() || $this->isModuleIgnored($observer))
+            && !$this->sessionIdHasChanged()
+        ) {
             return $this;
         }
 
@@ -221,6 +223,23 @@ class Visitor extends AbstractModel
             $this->_logger->critical($e);
         }
         return $this;
+    }
+
+    /**
+     * Check if visitor session id was changed.
+     *
+     * @return bool
+     */
+    private function sessionIdHasChanged(): bool
+    {
+        $visitorData = $this->session->getVisitorData();
+        $hasChanged = false;
+
+        if (isset($visitorData['session_id'])) {
+            $hasChanged = $this->session->getSessionId() !== $visitorData['session_id'];
+        }
+
+        return $hasChanged;
     }
 
     /**
