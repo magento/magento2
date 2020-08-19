@@ -43,6 +43,7 @@ class GetAssetIdsByContentFieldTest extends TestCase
      * Test for getting asset id by category fields
      *
      * @dataProvider dataProvider
+     * @magentoConfigFixture system/media_gallery/enabled 1
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
      * @magentoDataFixture Magento/MediaContentCatalog/_files/category_with_asset.php
      *
@@ -63,9 +64,9 @@ class GetAssetIdsByContentFieldTest extends TestCase
      * Test for getting asset id by product fields
      *
      * @dataProvider dataProvider
+     * @magentoConfigFixture system/media_gallery/enabled 1
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
      * @magentoDataFixture Magento/MediaContentCatalog/_files/product_with_asset.php
-     *
      * @param string $field
      * @param string $value
      * @param array $expectedAssetIds
@@ -76,6 +77,22 @@ class GetAssetIdsByContentFieldTest extends TestCase
         $this->assertEquals(
             $expectedAssetIds,
             $this->getAssetIdsByContentField->execute($field, $value)
+        );
+    }
+
+    /**
+     * Test for getting asset when media gallery disabled
+     *
+     * @magentoConfigFixture system/media_gallery/enabled 0
+     * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
+     * @magentoDataFixture Magento/MediaContentCatalog/_files/product_with_asset.php
+     * @throws InvalidArgumentException
+     */
+    public function testProductFieldsWithDisabledMediaGallery(): void
+    {
+        $this->assertEquals(
+            [],
+            $this->getAssetIdsByContentField->execute(self::STATUS_FIELD, self::STATUS_ENABLED)
         );
     }
 
