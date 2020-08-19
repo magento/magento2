@@ -161,7 +161,7 @@ define([
         },
 
         /**
-         * Update image data
+         * Update image data when image preview is opened
          */
         updateImageData: function () {
             var img = $(this.previewImageSelector + ' img');
@@ -184,9 +184,9 @@ define([
         },
 
         /**
-         * Update displayed record
+         * Update opened image preview contents when the data provider is updated
          *
-         * @param items
+         * @param {Array} items
          */
         updateDisplayedRecord: function (items) {
             if (!_.isNull(this.visibleRecord())) {
