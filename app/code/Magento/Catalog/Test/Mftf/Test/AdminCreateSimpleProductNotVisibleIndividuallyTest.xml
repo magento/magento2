@@ -21,23 +21,25 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="_defaultCategory" stepKey="createPreReqCategory"/>
+            <!--Create Simple Product Not Visible Individually-->
+            <actionGroup ref="FillAdminSimpleProductFormActionGroup" stepKey="fillProductFieldsInAdmin">
+                <argument name="category" value="$$createPreReqCategory$$"/>
+                <argument name="simpleProduct" value="simpleProductNotVisibleIndividually"/>
+            </actionGroup>
         </before>
         <after>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <!--Deleting data-->
             <deleteData createDataKey="createPreReqCategory" stepKey="deletePreReqCategory"/>
+            <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteSimpleProductNotVisibleIndividually">
+                <argument name="product" value="simpleProductNotVisibleIndividually"/>
+            </actionGroup>
+            <!--Logging out-->
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-
-        <!--Create Simple Product Not Visible Individually-->
-        <actionGroup ref="FillAdminSimpleProductFormActionGroup" stepKey="fillProductFieldsInAdmin">
-            <argument name="category" value="$$createPreReqCategory$$"/>
-            <argument name="simpleProduct" value="simpleProductNotVisibleIndividually"/>
-        </actionGroup>
-
-        <!--Search and verify AssertUrlRewriteNotInGrid-->
-        <actionGroup ref="AdminSearchDeletedUrlRewriteActionGroup" stepKey="searchUrlRewriteForNotVisibleProductInGrid">
+        <!--Search and verify AssertUrlRewriteIsInGrid-->
+        <actionGroup ref="AdminSearchUrlRewriteByRequestPathActionGroup" stepKey="searchUrlRewriteForNotVisibleProductInGrid">
             <argument name="requestPath" value="{{simpleProductNotVisibleIndividually.urlKey}}.html"/>
         </actionGroup>
-
         <!--Verify AssertPageByUrlRewriteIsNotFound-->
         <actionGroup ref="AssertPageByUrlRewriteIsNotFoundActionGroup" stepKey="amOnPage">
             <argument name="requestPath" value="{{simpleProductNotVisibleIndividually.urlKey}}.html"/>
