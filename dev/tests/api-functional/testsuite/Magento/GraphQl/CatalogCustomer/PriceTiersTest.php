@@ -8,10 +8,10 @@ declare(strict_types=1);
 namespace Magento\GraphQl\CatalogCustomer;
 
 use Magento\GraphQl\GetCustomerAuthenticationHeader;
-use Magento\TestFramework\TestCase\GraphQlAbstract;
 use Magento\Store\Api\StoreRepositoryInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\TestCase\GraphQlAbstract;
 
 class PriceTiersTest extends GraphQlAbstract
 {
@@ -99,6 +99,20 @@ class PriceTiersTest extends GraphQlAbstract
         $this->assertEquals(round(9.25 * $rate, 2), $this->getValueForQuantity(2, $itemTiers));
         $this->assertEquals(round(8.25 * $rate, 2), $this->getValueForQuantity(3, $itemTiers));
         $this->assertEquals(round(7.25 * $rate, 2), $this->getValueForQuantity(5, $itemTiers));
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/simple_product_with_price_tiers_for_multiple_groups.php
+     */
+    public function testGetLowersPrices()
+    {
+        $productSku = 'simple';
+        $query = $this->getProductSearchQuery($productSku);
+        $response = $this->graphQlQuery($query);
+        $itemTiers = $response['products']['items'][0]['price_tiers'];
+        $this->assertCount(2, $itemTiers);
+        $this->assertEquals(round(8.25, 2), $this->getValueForQuantity(3, $itemTiers));
+        $this->assertEquals(round(7.25, 2), $this->getValueForQuantity(5, $itemTiers));
     }
 
     /**

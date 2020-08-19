@@ -169,11 +169,11 @@ class PriceTiers implements ResolverInterface
     private function filterTierPrices(array $tierPrices): array
     {
         $qtyCache = [];
-        foreach ($tierPrices as $item => &$price) {
+        foreach ($tierPrices as $item => $price) {
             $qty = $price->getQty();
             if (isset($qtyCache[$qty])) {
                 $priceQty = $qtyCache[$qty];
-                if ($this->isFirstPriceBetter((float)$price->getValue(), (float)$tierPrices[$priceQty]->getValue())) {
+                if ((float)$price->getValue() < (float)$tierPrices[$priceQty]->getValue()) {
                     unset($tierPrices[$priceQty]);
                     $qtyCache[$priceQty] = $item;
                 } else {
@@ -185,18 +185,5 @@ class PriceTiers implements ResolverInterface
         }
 
         return $tierPrices;
-    }
-
-    /**
-     * Returns true if first price is better
-     *
-     * @param float $firstPrice
-     * @param float $secondPrice
-     *
-     * @return bool
-     */
-    private function isFirstPriceBetter(float $firstPrice, float $secondPrice): bool
-    {
-        return $firstPrice < $secondPrice;
     }
 }
