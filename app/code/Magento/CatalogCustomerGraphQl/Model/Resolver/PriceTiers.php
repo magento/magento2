@@ -7,19 +7,19 @@ declare(strict_types=1);
 
 namespace Magento\CatalogCustomerGraphQl\Model\Resolver;
 
-use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\Framework\GraphQl\Query\ResolverInterface;
-use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
-use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Catalog\Api\Data\ProductTierPriceInterface;
+use Magento\CatalogCustomerGraphQl\Model\Resolver\Customer\GetCustomerGroup;
 use Magento\CatalogCustomerGraphQl\Model\Resolver\Product\Price\Tiers;
 use Magento\CatalogCustomerGraphQl\Model\Resolver\Product\Price\TiersFactory;
-use Magento\CatalogCustomerGraphQl\Model\Resolver\Customer\GetCustomerGroup;
-use Magento\Store\Api\Data\StoreInterface;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\Discount;
 use Magento\CatalogGraphQl\Model\Resolver\Product\Price\ProviderPool as PriceProviderPool;
-use Magento\Catalog\Api\Data\ProductTierPriceInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\GraphQl\Config\Element\Field;
+use Magento\Framework\GraphQl\Query\Resolver\ValueFactory;
+use Magento\Framework\GraphQl\Query\ResolverInterface;
+use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Store\Api\Data\StoreInterface;
 
 /**
  * Resolver for price_tiers
@@ -120,7 +120,7 @@ class PriceTiers implements ResolverInterface
 
                 $productPrice = $this->tiers->getProductRegularPrice($productId) ?? 0.0;
                 $tierPrices = $this->tiers->getProductTierPrices($productId) ?? [];
-
+                $tierPrices = $this->filterTierPrices($tierPrices);
                 return $this->formatProductTierPrices($tierPrices, $productPrice, $store);
             }
         );
@@ -157,5 +157,46 @@ class PriceTiers implements ResolverInterface
             ];
         }
         return $tiers;
+    }
+
+    /**
+     * Select a lower price for each quantity
+     *
+     * @param ProductTierPriceInterface[] $tierPrices
+     *
+     * @return array
+     */
+    private function filterTierPrices(array $tierPrices): array
+    {
+        $qtyCache = [];
+        foreach ($tierPrices as $item => &$price) {
+            $qty = $price->getQty();
+            if (isset($qtyCache[$qty])) {
+                $priceQty = $qtyCache[$qty];
+                if ($this->isFirstPriceBetter((float)$price->getValue(), (float)$tierPrices[$priceQty]->getValue())) {
+                    unset($tierPrices[$priceQty]);
+                    $qtyCache[$priceQty] = $item;
+                } else {
+                    unset($tierPrices[$item]);
+                }
+            } else {
+                $qtyCache[$qty] = $item;
+            }
+        }
+
+        return $tierPrices;
+    }
+
+    /**
+     * Returns true if first price is better
+     *
+     * @param float $firstPrice
+     * @param float $secondPrice
+     *
+     * @return bool
+     */
+    private function isFirstPriceBetter(float $firstPrice, float $secondPrice): bool
+    {
+        return $firstPrice < $secondPrice;
     }
 }
