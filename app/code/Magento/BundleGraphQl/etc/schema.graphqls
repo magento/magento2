@@ -119,5 +119,5 @@ type ItemSelectedBundleOptionValue @doc(description: "A list of values for the s
 }
 
 type BundleWishlistItem implements WishlistItemInterface {
-    bundle_options: [SelectedBundleOption!] @doc(description: "An array containing information about the selected bundled items") @resolver(class: "\\Magento\\BundleGraphQl\\Model\\Wishlist\\BundleOptions")
+    bundle_options: [SelectedBundleOption!] @doc(description: "An array containing information about the selected bundle items") @resolver(class: "\\Magento\\BundleGraphQl\\Model\\Wishlist\\BundleOptions")
 }
