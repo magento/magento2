@@ -180,7 +180,7 @@ class Links extends \Magento\Backend\Block\Template
             \Magento\Backend\Block\Widget\Button::class
         )->setData(
             [
-                'label' => __('Add New Link'),
+                'label' => $this->escapeHtmlAttr(__('Add New Link')),
                 'id' => 'add_link_item',
                 'class' => 'action-add',
                 'data_attribute' => ['action' => 'add-link'],

@@ -84,7 +84,13 @@ class Widget extends \Magento\Backend\Block\Template
         return $this->getLayout()->createBlock(
             \Magento\Backend\Block\Widget\Button::class
         )->setData(
-            ['label' => $label, 'onclick' => $onclick, 'class' => $class, 'type' => 'button', 'id' => $buttonId]
+            [
+                'label' => $label,
+                'onclick' => $onclick,
+                'class' => $class,
+                'type' => 'button',
+                'id' => $buttonId
+            ]
         )->setDataAttribute(
             $dataAttr
         )->toHtml();
