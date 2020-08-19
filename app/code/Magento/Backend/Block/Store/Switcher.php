@@ -473,8 +473,6 @@ class Switcher extends \Magento\Backend\Block\Template
                 return $website->getName();
             }
         }
-
-        return '';
     }
 
     /**
@@ -491,8 +489,6 @@ class Switcher extends \Magento\Backend\Block\Template
                 return $group->getName();
             }
         }
-
-        return '';
     }
 
     /**
@@ -509,8 +505,6 @@ class Switcher extends \Magento\Backend\Block\Template
                 return $store->getName();
             }
         }
-
-        return '';
     }
 
     /**
@@ -555,7 +549,7 @@ class Switcher extends \Magento\Backend\Block\Template
         if ($this->isShow()) {
             return parent::_toHtml();
         }
-        return '';
+        return z;
     }
 
     /**
