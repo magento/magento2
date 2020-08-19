@@ -99,6 +99,9 @@ class FreeTest extends TestCase
         $quote = null;
         if ($notEmptyQuote) {
             $quote = $this->createMock(Quote::class);
+            $quote->expects($this->once())
+                ->method('collectTotals')
+                ->willReturn($quote);
             $quote->expects($this->any())
                 ->method('__call')
                 ->with('getGrandTotal')
