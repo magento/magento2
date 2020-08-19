@@ -106,7 +106,7 @@
             <deleteData createDataKey="createSecondProductTaxClass" stepKey="deleteSecondProductTaxClass"/>
 
             <!-- Clear filter Product -->
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilterProduct"/>
 
             <!-- Delete Customer and clear filter -->

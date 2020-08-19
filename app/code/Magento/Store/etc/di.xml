@@ -65,7 +65,6 @@
     <preference for="Magento\Framework\App\Router\PathConfigInterface" type="Magento\Store\Model\PathConfig" />
     <type name="Magento\Framework\App\ActionInterface">
         <plugin name="storeCheck" type="Magento\Store\App\Action\Plugin\StoreCheck"/>
-        <plugin name="designLoader" type="Magento\Framework\App\Action\Plugin\LoadDesignPlugin"/>
         <plugin name="eventDispatch"  type="Magento\Framework\App\Action\Plugin\EventDispatchPlugin"/>
         <plugin name="actionFlagNoDispatch"  type="Magento\Framework\App\Action\Plugin\ActionFlagNoDispatchPlugin"/>
     </type>
