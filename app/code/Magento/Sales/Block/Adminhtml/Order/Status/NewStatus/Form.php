@@ -100,7 +100,7 @@ class Form extends \Magento\Backend\Block\Widget\Form\Generic
                     'fieldset_html_class' => 'store'
                 ]
             );
-            return ;
+            return;
         }
 
         $renderer = $this->getLayout()->createBlock(

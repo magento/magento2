@@ -3,9 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\HTTP\Test\Unit;
 
-class AuthenticationTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\HTTP\Authentication;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class AuthenticationTest extends TestCase
 {
     /**
      * @param array $server
@@ -15,10 +22,10 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCredentials($server, $expectedLogin, $expectedPass)
     {
-        $request = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $request->expects($this->once())->method('getServerValue')->will($this->returnValue($server));
+        $request = $this->createMock(Http::class);
+        $request->expects($this->once())->method('getServerValue')->willReturn($server);
         $response = $this->createMock(\Magento\Framework\App\Response\Http::class);
-        $authentication = new \Magento\Framework\HTTP\Authentication($request, $response);
+        $authentication = new Authentication($request, $response);
         $this->assertSame([$expectedLogin, $expectedPass], $authentication->getCredentials());
     }
 
@@ -68,13 +75,13 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
 
     public function testSetAuthenticationFailed()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $request = $objectManager->getObject(\Magento\Framework\App\Request\Http::class);
+        $request = $objectManager->getObject(Http::class);
         $response = $objectManager->getObject(\Magento\Framework\App\Response\Http::class);
 
         $authentication = $objectManager->getObject(
-            \Magento\Framework\HTTP\Authentication::class,
+            Authentication::class,
             [
                 'httpRequest' => $request,
                 'httpResponse' => $response
@@ -87,6 +94,6 @@ class AuthenticationTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($headers->has('WWW-Authenticate'));
         $header  = $headers->get('WWW-Authenticate');
         $this->assertEquals('Basic realm="' . $realm . '"', $header->current()->getFieldValue());
-        $this->assertContains('401', $response->getBody());
+        $this->assertStringContainsString('401', $response->getBody());
     }
 }

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminProductFormOpenAdvancedPricingDialogActionGroup">
+        <annotations>
+            <description>Open Advanced Pricing dialog from product form.</description>
+        </annotations>
+
+        <click selector="{{AdminProductFormSection.advancedPricingLink}}" stepKey="clickAdvancedPricingLink"/>
+        <waitForElementVisible selector="{{AdminProductFormAdvancedPricingSection.modalTitle}}" stepKey="waitForModalTitleAppears"/>
+        <see selector="{{AdminProductFormAdvancedPricingSection.modalTitle}}" userInput="Advanced Pricing" stepKey="checkModalTitle"/>
+    </actionGroup>
+</actionGroups>

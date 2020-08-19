@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
@@ -46,11 +46,11 @@ class VsCodeTest extends TestCase
      */
     private $objectManagerHelper;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
-        $currentDirReadMock = $this->createMock(ReadInterface::class);
+        $currentDirReadMock = $this->getMockForAbstractClass(ReadInterface::class);
         $currentDirReadMock->expects($this->any())
             ->method('getRelativePath')
             ->willReturnCallback(function ($xsdPath) {
@@ -266,12 +266,9 @@ class VsCodeTest extends TestCase
             [
                 $content,
                 [
-                    'urn:magento:framework:Acl/etc/acl.xsd' =>
-                        'vendor/magento/framework/Acl/etc/acl.xsd',
-                    'urn:magento:module:Magento_Store:etc/config.xsd' =>
-                        'vendor/magento/module-store/etc/config.xsd',
-                    'urn:magento:module:Magento_Cron:etc/crontab.xsd' =>
-                        'vendor/magento/module-cron/etc/crontab.xsd',
+                    'urn:magento:framework:Acl/etc/acl.xsd' => 'vendor/magento/framework/Acl/etc/acl.xsd',
+                    'urn:magento:module:Magento_Store:etc/config.xsd' => 'vendor/magento/module-store/etc/config.xsd',
+                    'urn:magento:module:Magento_Cron:etc/crontab.xsd' => 'vendor/magento/module-cron/etc/crontab.xsd',
                     'urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd' =>
                         'vendor/magento/framework/Setup/Declaration/Schema/etc/schema.xsd',
                 ],

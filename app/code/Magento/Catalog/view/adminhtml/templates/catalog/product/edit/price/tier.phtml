@@ -7,6 +7,7 @@
 // phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 
 /* @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit\Tab\Price\Tier */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 $element = $block->getElement();
 ?>
 <?php $_htmlId      = $block->getElement()->getHtmlId() ?>
@@ -20,33 +21,42 @@ $element = $block->getElement();
 
 <?php $_showWebsite = $block->isShowWebsiteColumn(); ?>
 <?php $_showWebsite = $block->isMultiWebsites(); ?>
-<div class="field" id="attribute-<?= /* @noEscape */ $_htmlId ?>-container" data-attribute-code="<?= /* @noEscape */ $_htmlId ?>"
+<?php /** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper'); ?>
+<div class="field" id="attribute-<?= /* @noEscape */ $_htmlId ?>-container"
+     data-attribute-code="<?= /* @noEscape */ $_htmlId ?>"
      data-apply-to="<?= $block->escapeHtml(
-         $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode(
-             $element->hasEntityAttribute() ? $element->getEntityAttribute()->getApplyTo() : []
-         )
+         $jsonHelper->jsonEncode($element->hasEntityAttribute() ? $element->getEntityAttribute()->getApplyTo() : [])
      )?>">
     <label class="label"><span><?= $block->escapeHtml($block->getElement()->getLabel()) ?></span></label>
     <div class="control">
         <table class="admin__control-table tiers_table" id="tiers_table">
             <thead>
                 <tr>
-                    <th class="col-websites" <?php if (!$_showWebsite) :?>style="display:none"<?php endif; ?>><?= $block->escapeHtml(__('Web Site')) ?></th>
+                    <th class="col-websites"><?= $block->escapeHtml(__('Web Site')) ?></th>
                     <th class="col-customer-group"><?= $block->escapeHtml(__('Customer Group')) ?></th>
                     <th class="col-qty required"><?= $block->escapeHtml(__('Quantity')) ?></th>
-                    <th class="col-price required"><?= $block->escapeHtml($block->getPriceColumnHeader(__('Item Price'))) ?></th>
+                    <th class="col-price required">
+                        <?= $block->escapeHtml($block->getPriceColumnHeader(__('Item Price'))) ?>
+                    </th>
                     <th class="col-delete"><?= $block->escapeHtml(__('Action')) ?></th>
                 </tr>
+                <?php if (!$_showWebsite): ?>
+                    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', 'th.col-websites'); ?>
+                <?php endif; ?>
             </thead>
             <tbody id="<?= /* @noEscape */ $_htmlId ?>_container"></tbody>
             <tfoot>
                 <tr>
-                    <td colspan="<?php if (!$_showWebsite) :?>4<?php else :?>5<?php endif; ?>" class="col-actions-add"><?= $block->getAddButtonHtml() ?></td>
+                    <td colspan="<?php if (!$_showWebsite):?>4<?php else:?>5<?php endif; ?>"
+                        class="col-actions-add"><?= $block->getAddButtonHtml() ?>
+                    </td>
                 </tr>
             </tfoot>
         </table>
 
-<script>
+<?php $htmlName = /* @noEscape */ $_htmlName;
+$scriptString = <<<script
 require([
     'mage/template',
     "prototype",
@@ -55,39 +65,81 @@ require([
 
 //<![CDATA[
 var tierPriceRowTemplate = '<tr>'
-    + '<td class="col-websites"<?php if (!$_showWebsite) :?> style="display:none"<?php endif; ?>>'
-    + '<select class="<?= $block->escapeHtmlAttr($_htmlClass) ?> required-entry" name="<?= /* @noEscape */ $_htmlName ?>[<%- data.index %>][website_id]" id="tier_price_row_<%- data.index %>_website">'
-    <?php foreach ($block->getWebsites() as $_websiteId => $_info) :?>
-    + '<option value="<?= $block->escapeHtmlAttr($_websiteId) ?>"><?= $block->escapeHtml($_info['name']) ?><?php if (!empty($_info['currency'])) :?> [<?= $block->escapeHtml($_info['currency']) ?>]<?php endif; ?></option>'
-    <?php endforeach ?>
+    + '<td class="col-websites">'
+    + '<select class="{$block->escapeHtmlAttr($_htmlClass)} required-entry"
+     name="{$htmlName}[<%- data.index %>][website_id]" id="tier_price_row_<%- data.index %>_website">'
+script;
+foreach ($block->getWebsites() as $_websiteId => $_info):
+    $scriptString .= <<<script
+    + '<option value="{$block->escapeHtmlAttr($_websiteId)}">{$block->escapeHtml($_info['name'])}
+script;
+    if (!empty($_info['currency'])):
+        $scriptString .= <<<script
+            [{$block->escapeHtml($_info['currency'])}]
+script;
+    endif;
+    $scriptString .= <<<script
+    </option>'
+script;
+    endforeach;
+    $scriptString .= <<<script
     + '</select></td>'
-    + '<td class="col-customer-group"><select class="<?= $block->escapeHtmlAttr($_htmlClass) ?> custgroup required-entry" name="<?= /* @noEscape */ $_htmlName ?>[<%- data.index %>][cust_group]" id="tier_price_row_<%- data.index %>_cust_group">'
-    <?php foreach ($block->getCustomerGroups() as $_groupId => $_groupName) :?>
-    + '<option value="<?= $block->escapeHtmlAttr($_groupId) ?>"><?= $block->escapeHtml($_groupName) ?></option>'
-    <?php endforeach ?>
+    + '<td class="col-customer-group"><select class="{$block->escapeJs($_htmlClass)} custgroup required-entry"
+     name="{$htmlName}[<%- data.index %>][cust_group]" id="tier_price_row_<%- data.index %>_cust_group">'
+script;
+foreach ($block->getCustomerGroups() as $_groupId => $_groupName):
+    $scriptString .= <<<script
+    + '<option value="{$block->escapeJs($_groupId)}">{$block->escapeJs($_groupName)}</option>'
+script;
+    endforeach;
+    $scriptString .= <<<script
     + '</select></td>'
     + '<td class="col-qty">'
-        + '<input class="<?= $block->escapeHtmlAttr($_htmlClass) ?> qty required-entry validate-greater-than-zero" type="text" name="<?= /* @noEscape */ $_htmlName ?>[<%- data.index %>][price_qty]" value="<%- data.qty %>" id="tier_price_row_<%- data.index %>_qty" />'
-        + '<span><?= $block->escapeHtml(__("and above")) ?></span>'
+        + '<input class="{$block->escapeJs($_htmlClass)} qty required-entry validate-greater-than-zero"
+         type="text" name="{$htmlName}[<%- data.index %>][price_qty]" value="<%- data.qty %>"
+          id="tier_price_row_<%- data.index %>_qty" />'
+        + '<span>{$block->escapeHtml(__("and above"))}</span>'
     + '</td>'
-    + '<td class="col-price"><input class="<?= $block->escapeHtmlAttr($_htmlClass) ?> required-entry <?= $block->escapeHtmlAttr($_priceValueValidation) ?>" type="text" name="<?= /* @noEscape */ $_htmlName ?>[<%- data.index %>][price]" value="<%- data.price %>" id="tier_price_row_<%- data.index %>_price" /></td>'
-    + '<td class="col-delete"><input type="hidden" name="<?= /* @noEscape */ $_htmlName ?>[<%- data.index %>][delete]" class="delete" value="" id="tier_price_row_<%- data.index %>_delete" />'
-    + '<button title="<?= $block->escapeHtml(__('Delete Tier')) ?>" type="button" class="action- scalable delete icon-btn delete-product-option" id="tier_price_row_<%- data.index %>_delete_button" onclick="return tierPriceControl.deleteItem(event);">'
-    + '<span><?= $block->escapeHtml(__("Delete")) ?></span></button></td>'
+    + '<td class="col-price"><input class="{$block->escapeJs($_htmlClass)} required-entry
+     {$block->escapeJs($_priceValueValidation)}" type="text" name="{$htmlName}[<%- data.index %>][price]"
+      value="<%- data.price %>" id="tier_price_row_<%- data.index %>_price" /></td>'
+    + '<td class="col-delete"><input type="hidden" name="{$htmlName}[<%- data.index %>][delete]" class="delete"
+     value="" id="tier_price_row_<%- data.index %>_delete" />'
+    + '<button title="{$block->escapeJs(__('Delete Tier'))}" type="button"
+     class="action- scalable delete icon-btn delete-product-option"
+      id="tier_price_row_<%- data.index %>_delete_button">'
+    + '<span>{$block->escapeJs(__("Delete"))}</span></button></td>'
     + '</tr>';
+script;
 
+if (!$_showWebsite):
+    $scriptString .= /* @noEscape */ $secureRenderer->renderStyleAsTag('display:none', 'td.col-websites');
+endif;
+    $scriptString .= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+        'onclick',
+        'return tierPriceControl.deleteItem(event);',
+        "'td#tier_price_row_<%- data.index %>_delete_button"
+    );
+
+    $defaultWesite = (int) $block->getDefaultWebsite();
+    $defaultCustomerGroup = (int) $block->getDefaultCustomerGroup();
+    $scriptString .= <<<script
 var tierPriceControl = {
     template: mageTemplate(tierPriceRowTemplate),
     itemsCount: 0,
     addItem : function () {
-        <?php if ($_readonly) :?>
+script;
+    if ($_readonly):
+        $scriptString .= <<<script
         if (arguments.length < 4) {
             return;
         }
-        <?php endif; ?>
+script;
+    endif;
+    $scriptString .= <<<script
         var data = {
-            website_id: '<?= (int) $block->getDefaultWebsite() ?>',
-            group: '<?= (int) $block->getDefaultCustomerGroup() ?>',
+            website_id: '{$defaultWesite}',
+            group: '{$defaultCustomerGroup}',
             qty: '',
             price: '',
             readOnly: false,
@@ -104,7 +156,7 @@ var tierPriceControl = {
             data.readOnly = arguments[4];
         }
 
-        Element.insert($('<?= $block->escapeJs($_htmlId) ?>_container'), {
+        Element.insert($('{$block->escapeJs($_htmlId)}_container'), {
             bottom : this.template({
                 data: data
             })
@@ -113,14 +165,17 @@ var tierPriceControl = {
         $('tier_price_row_' + data.index + '_cust_group').value = data.group;
         $('tier_price_row_' + data.index + '_website').value    = data.website_id;
 
-        <?php if ($block->isShowWebsiteColumn() && !$block->isAllowChangeWebsite()) :?>
+script;
+    if ($block->isShowWebsiteColumn() && !$block->isAllowChangeWebsite()):
+        $scriptString .= <<<script
         var wss = $('tier_price_row_' + data.index + '_website');
         var txt = wss.options[wss.selectedIndex].text;
 
         wss.insert({after:'<span class="website-name">' + txt + '</span>'});
         wss.hide();
-        <?php endif;?>
-
+script;
+    endif;
+    $scriptString .= <<<script
         if (data.readOnly == '1') {
             ['website', 'cust_group', 'qty', 'price', 'delete'].each(function(idx){
                 $('tier_price_row_'+data.index+'_'+idx).disabled = true;
@@ -128,12 +183,20 @@ var tierPriceControl = {
             $('tier_price_row_'+data.index+'_delete_button').hide();
         }
 
-        <?php if ($_readonly) :?>
-        $('<?= $block->escapeJs($_htmlId) ?>_container').select('input', 'select').each(this.disableElement);
-        $('<?= $block->escapeJs($_htmlId) ?>_container').up('table').select('button').each(this.disableElement);
-        <?php else :?>
-        $('<?= $block->escapeJs($_htmlId) ?>_container').select('input', 'select').each(function(el){ Event.observe(el, 'change', el.setHasChanges.bind(el)); });
-        <?php endif; ?>
+script;
+    if ($_readonly):
+        $scriptString .= <<<script
+        $('{$block->escapeJs($_htmlId)}_container').select('input', 'select').each(this.disableElement);
+        $('{$block->escapeJs($_htmlId)}_container').up('table').select('button').each(this.disableElement);
+script;
+    else:
+        $scriptString .= <<<script
+        $('{$block->escapeJs($_htmlId)}_container').select('input', 'select').each(function(el) {
+            Event.observe(el, 'change', el.setHasChanges.bind(el));
+        });
+script;
+        endif;
+        $scriptString .= <<<script
     },
     disableElement: function(el) {
         el.disabled = true;
@@ -150,18 +213,30 @@ var tierPriceControl = {
         return false;
     }
 };
-<?php foreach ($block->getValues() as $_item) :?>
-tierPriceControl.addItem('<?= $block->escapeJs($_item['website_id']) ?>', '<?= $block->escapeJs($_item['cust_group']) ?>', '<?= $_item['price_qty']*1 ?>', '<?= $block->escapeJs($_item['price']) ?>', <?= (int)!empty($_item['readonly']) ?>);
+script;
+    ?>
+<?php foreach ($block->getValues() as $_item):?>
+    <?php $readonly = (int)!empty($_item['readonly']);
+    $price_qty = $_item['price_qty']*1;
+     $scriptString .= <<<script
+tierPriceControl.addItem('{$block->escapeJs($_item['website_id'])}', '{$block->escapeJs($_item['cust_group'])}',
+ '{$price_qty}', '{$block->escapeJs($_item['price'])}', {$readonly});
+script;
+    ?>
 <?php endforeach; ?>
-<?php if ($_readonly) :?>
-$('<?= $block->escapeJs($_htmlId) ?>_container').up('table').select('button')
-    .each(tierPriceControl.disableElement);
+<?php if ($_readonly):?>
+    <?php $scriptString .= <<<script
+$('{$block->escapeJs($_htmlId)}_container').up('table').select('button').each(tierPriceControl.disableElement);
+script;
+    ?>
 <?php endif; ?>
-
+<?php $scriptString .= <<<script
 window.tierPriceControl = tierPriceControl;
 //]]>
 
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
     </div>
 </div>

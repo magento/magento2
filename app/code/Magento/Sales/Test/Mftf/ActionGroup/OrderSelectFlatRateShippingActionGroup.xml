@@ -14,7 +14,7 @@
         </annotations>
 
         <click selector="{{AdminOrderFormPaymentSection.header}}" stepKey="unfocus"/>
-        <waitForPageLoad stepKey="waitForJavascriptToFinish"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForJavascriptToFinish"/>
         <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickShippingMethods"/>
         <waitForElementVisible selector="{{AdminOrderFormPaymentSection.flatRateOption}}" stepKey="waitForShippingOptions"/>
         <selectOption selector="{{AdminOrderFormPaymentSection.flatRateOption}}" userInput="flatrate_flatrate" stepKey="checkFlatRate"/>

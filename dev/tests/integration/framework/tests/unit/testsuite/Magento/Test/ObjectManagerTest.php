@@ -142,7 +142,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return Config|\PHPUnit_Framework_MockObject_MockObject
+     * @return Config|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getObjectManagerConfigMock()
     {
@@ -160,7 +160,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return FactoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @return FactoryInterface|\PHPUnit\Framework\MockObject\MockObject
      */
     private function getObjectManagerFactoryMock()
     {
@@ -182,7 +182,7 @@ class ObjectManagerTest extends \PHPUnit\Framework\TestCase
      * Returns mock of instance.
      *
      * @param string $className
-     * @return \PHPUnit_Framework_MockObject_MockObject
+     * @return \PHPUnit\Framework\MockObject\MockObject
      */
     private function createInstanceMock($className)
     {

@@ -13,6 +13,7 @@
         </annotations>
 
         <scrollToTopOfPage stepKey="scrollToTop"/>
+        <waitForElementVisible selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="waitForSaveAndApplyButton"/>
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApplyRule"/>
         <waitForElementVisible selector="{{AdminMessagesSection.success}}" stepKey="waitForSuccessMessageAppears"/>
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the rule." stepKey="checkSuccessSaveMessage"/>

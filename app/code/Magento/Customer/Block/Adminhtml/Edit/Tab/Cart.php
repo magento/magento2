@@ -5,37 +5,51 @@
  */
 namespace Magento\Customer\Block\Adminhtml\Edit\Tab;
 
-use Magento\Catalog\Model\Product;
+use Magento\Backend\Block\Template\Context;
+use Magento\Backend\Block\Widget\Form;
+use Magento\Backend\Block\Widget\Grid\Extended;
+use Magento\Backend\Helper\Data;
+use Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item;
+use Magento\Customer\Block\Adminhtml\Grid\Renderer\Multiaction;
 use Magento\Customer\Controller\RegistryConstants;
-use Magento\Directory\Model\Currency;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Data\CollectionFactory;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\Registry;
+use Magento\Quote\Api\CartRepositoryInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Quote\Model\QuoteFactory;
+use Magento\Store\Model\System\Store as SystemStore;
 
 /**
  * Adminhtml customer orders grid block
  *
  * @api
  * @since 100.0.2
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
+class Cart extends Extended
 {
     /**
      * Core registry
      *
-     * @var \Magento\Framework\Registry
+     * @var Registry
      */
     protected $_coreRegistry = null;
 
     /**
-     * @var \Magento\Framework\Data\CollectionFactory
+     * @var CollectionFactory
      */
     protected $_dataCollectionFactory;
 
     /**
-     * @var \Magento\Quote\Api\CartRepositoryInterface
+     * @var CartRepositoryInterface
      */
     protected $quoteRepository;
 
     /**
-     * @var \Magento\Quote\Model\Quote
+     * @var Quote
      */
     protected $quote = null;
 
@@ -45,32 +59,46 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     protected $_parentTemplate;
 
     /**
-     * @var \Magento\Quote\Model\QuoteFactory
+     * @var QuoteFactory
      */
     protected $quoteFactory;
+    /**
+     * @var SystemStore
+     */
+    private $systemStore;
+    /**
+     * @var FormFactory
+     */
+    private $formFactory;
 
     /**
-     * @param \Magento\Backend\Block\Template\Context $context
-     * @param \Magento\Backend\Helper\Data $backendHelper
-     * @param \Magento\Quote\Api\CartRepositoryInterface $quoteRepository
-     * @param \Magento\Framework\Data\CollectionFactory $dataCollectionFactory
-     * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Quote\Model\QuoteFactory $quoteFactory
+     * @param Context $context
+     * @param Data $backendHelper
+     * @param CartRepositoryInterface $quoteRepository
+     * @param CollectionFactory $dataCollectionFactory
+     * @param Registry $coreRegistry
+     * @param QuoteFactory $quoteFactory
      * @param array $data
+     * @param SystemStore|null $systemStore
+     * @param FormFactory|null $formFactory
      */
     public function __construct(
-        \Magento\Backend\Block\Template\Context $context,
-        \Magento\Backend\Helper\Data $backendHelper,
-        \Magento\Quote\Api\CartRepositoryInterface $quoteRepository,
-        \Magento\Framework\Data\CollectionFactory $dataCollectionFactory,
-        \Magento\Framework\Registry $coreRegistry,
-        \Magento\Quote\Model\QuoteFactory $quoteFactory,
-        array $data = []
+        Context $context,
+        Data $backendHelper,
+        CartRepositoryInterface $quoteRepository,
+        CollectionFactory $dataCollectionFactory,
+        Registry $coreRegistry,
+        QuoteFactory $quoteFactory,
+        array $data = [],
+        ?SystemStore $systemStore = null,
+        ?FormFactory $formFactory = null
     ) {
         $this->_dataCollectionFactory = $dataCollectionFactory;
         $this->_coreRegistry = $coreRegistry;
         $this->quoteRepository = $quoteRepository;
         $this->quoteFactory = $quoteFactory;
+        $this->systemStore = $systemStore ?? ObjectManager::getInstance()->get(SystemStore::class);
+        $this->formFactory = $formFactory ?? ObjectManager::getInstance()->get(FormFactory::class);
         parent::__construct($context, $backendHelper, $data);
     }
 
@@ -92,8 +120,11 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
      */
     protected function _prepareGrid()
     {
-        $this->setId('customer_cart_grid' . $this->getWebsiteId());
+        $this->setId('customer_cart_grid');
         parent::_prepareGrid();
+        if (!$this->_storeManager->isSingleStoreMode()) {
+            $this->prepareWebsiteFilter();
+        }
     }
 
     /**
@@ -105,13 +136,12 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
     {
         $quote = $this->getQuote();
 
-        if ($quote) {
+        if ($quote && $quote->getId()) {
             $collection = $quote->getItemsCollection(false);
+            $collection->addFieldToFilter('parent_item_id', ['null' => true]);
         } else {
             $collection = $this->_dataCollectionFactory->create();
         }
-
-        $collection->addFieldToFilter('parent_item_id', ['null' => true]);
 
         $this->setCollection($collection);
 
@@ -130,7 +160,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
             [
                 'header' => __('Product'),
                 'index' => 'name',
-                'renderer' => \Magento\Customer\Block\Adminhtml\Edit\Tab\View\Grid\Renderer\Item::class
+                'renderer' => Item::class
             ]
         );
 
@@ -168,7 +198,7 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
             [
                 'header' => __('Action'),
                 'index' => 'quote_item_id',
-                'renderer' => \Magento\Customer\Block\Adminhtml\Grid\Renderer\Multiaction::class,
+                'renderer' => Multiaction::class,
                 'filter' => false,
                 'sortable' => false,
                 'actions' => [
@@ -246,10 +276,60 @@ class Cart extends \Magento\Backend\Block\Widget\Grid\Extended
 
             try {
                 $this->quote = $this->quoteRepository->getForCustomer($customerId, $storeIds);
-            } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
+            } catch (NoSuchEntityException $e) {
                 $this->quote = $this->quoteFactory->create()->setSharedStoreIds($storeIds);
             }
         }
         return $this->quote;
+    }
+
+    /**
+     * Add website filter block to the layout
+     *
+     * @return void
+     */
+    private function prepareWebsiteFilter(): void
+    {
+        $form = $this->formFactory->create();
+        $form->addField(
+            'website_filter',
+            'select',
+            [
+                'name' => 'website_id',
+                'values' => $this->systemStore->getWebsiteOptionHash(),
+                'value' => $this->getWebsiteId() ?? $this->_storeManager->getWebsite()->getId(),
+                'no_span' => true,
+                'onchange' => "{$this->getJsObjectName()}.loadByElement(this);",
+            ]
+        );
+        /**
+         * @var Form $formWidget
+         */
+        $formWidget = $this->getLayout()->createBlock(Form::class);
+        $formWidget->setForm($form);
+        $formWidget->setTemplate('Magento_Customer::tab/cart_website_filter_form.phtml');
+        $this->setChild(
+            'website_filter_block',
+            $formWidget
+        );
+    }
+
+    /**
+     * @inheritDoc
+     * @since 103.0.0
+     */
+    public function getMainButtonsHtml()
+    {
+        return $this->getWebsiteFilterHtml() . parent::getMainButtonsHtml();
+    }
+
+    /**
+     * Generate website filter
+     *
+     * @return string
+     */
+    private function getWebsiteFilterHtml(): string
+    {
+        return $this->getChildHtml('website_filter_block');
     }
 }

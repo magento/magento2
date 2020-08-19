@@ -230,7 +230,8 @@ class Quote extends AbstractDb
                 'items_qty' => new \Zend_Db_Expr(
                     $connection->quoteIdentifier('q.items_qty') . ' - ' . $connection->quoteIdentifier('qi.qty')
                 ),
-                'items_count' => new \Zend_Db_Expr($ifSql)
+                'items_count' => new \Zend_Db_Expr($ifSql),
+                'updated_at' => 'q.updated_at',
             ]
         )->join(
             ['qi' => $this->getTable('quote_item')],
@@ -257,7 +258,7 @@ class Quote extends AbstractDb
      *
      * @param \Magento\Catalog\Model\Product $product
      *
-     * @deprecated 101.0.1
+     * @deprecated 101.0.3
      * @see \Magento\Quote\Model\ResourceModel\Quote::subtractProductFromQuotes
      *
      * @return $this
@@ -277,21 +278,27 @@ class Quote extends AbstractDb
     {
         $tableQuote = $this->getTable('quote');
         $tableItem = $this->getTable('quote_item');
-        $subSelect = $this->getConnection()->select()->from(
-            $tableItem,
-            ['entity_id' => 'quote_id']
-        )->where(
-            'product_id IN ( ? )',
-            $productIds
-        )->group(
-            'quote_id'
-        );
-
-        $select = $this->getConnection()->select()->join(
-            ['t2' => $subSelect],
-            't1.entity_id = t2.entity_id',
-            ['trigger_recollect' => new \Zend_Db_Expr('1')]
-        );
+        $subSelect = $this->getConnection()
+            ->select()
+            ->from(
+                $tableItem,
+                ['entity_id' => 'quote_id']
+            )->where(
+                'product_id IN ( ? )',
+                $productIds
+            )->group(
+                'quote_id'
+            );
+        $select = $this->getConnection()
+            ->select()
+            ->join(
+                ['t2' => $subSelect],
+                't1.entity_id = t2.entity_id',
+                [
+                    'trigger_recollect' => new \Zend_Db_Expr('1'),
+                    'updated_at' => 't1.updated_at',
+                ]
+            );
         $updateQuery = $select->crossUpdateFromSelect(['t1' => $tableQuote]);
         $this->getConnection()->query($updateQuery);
 

@@ -61,7 +61,7 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->createHandler = $this->objectManager->create(CreateHandler::class);
@@ -102,14 +102,15 @@ class CreateHandlerTest extends \PHPUnit\Framework\TestCase
      * Check sanity of posted image file name.
      *
      * @param string $imageFileName
-     * @expectedException \Magento\Framework\Exception\FileSystemException
-     * @expectedExceptionMessageRegExp ".+ file doesn't exist."
-     * @expectedExceptionMessageRegExp "/^((?!\.\.\/).)*$/"
      * @dataProvider illegalFilenameDataProvider
      * @return void
      */
     public function testExecuteWithIllegalFilename(string $imageFileName): void
     {
+        $this->expectException(\Magento\Framework\Exception\FileSystemException::class);
+        $this->expectExceptionMessageMatches('".+ file doesn\'t exist."');
+        $this->expectExceptionMessageMatches('/^((?!\.\.\/).)*$/');
+
         $data = [
             'media_gallery' => ['images' => ['image' => ['file' => $imageFileName, 'label' => 'New image']]],
         ];

@@ -1069,12 +1069,12 @@ define([
             $.mage.__('This link is not allowed.')
         ],
         'validate-dob': [
-            function (value) {
+            function (value, param, params) {
                 if (value === '') {
                     return true;
                 }
 
-                return moment(value).isBefore(moment());
+                return moment.utc(value, params.dateFormat).isSameOrBefore(moment.utc());
             },
             $.mage.__('The Date of Birth should not be greater than today.')
         ]

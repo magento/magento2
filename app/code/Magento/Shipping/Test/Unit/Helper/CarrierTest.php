@@ -3,12 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Shipping\Test\Unit\Helper;
+
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Shipping\Helper\Carrier;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Carrier helper test
  */
-class CarrierTest extends \PHPUnit\Framework\TestCase
+class CarrierTest extends TestCase
 {
     /**
      * Shipping Carrier helper
@@ -18,16 +27,16 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
     protected $helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $scopeConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $className = \Magento\Shipping\Helper\Carrier::class;
+        $objectManagerHelper = new ObjectManager($this);
+        $className = Carrier::class;
         $arguments = $objectManagerHelper->getConstructArguments($className);
-        /** @var \Magento\Framework\App\Helper\Context $context */
+        /** @var Context $context */
         $context = $arguments['context'];
         $this->scopeConfig = $context->getScopeConfig();
         $this->helper = $objectManagerHelper->getObject($className, $arguments);
@@ -46,9 +55,9 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             'carriers',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )->will(
-            $this->returnValue($carriers)
+            ScopeInterface::SCOPE_STORE
+        )->willReturn(
+            $carriers
         );
         $this->assertEquals($result, $this->helper->getOnlineCarrierCodes());
     }
@@ -81,9 +90,9 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             sprintf('carriers/%s/%s', $carrierCode, $configPath),
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )->will(
-            $this->returnValue($configValue)
+            ScopeInterface::SCOPE_STORE
+        )->willReturn(
+            $configValue
         );
         $this->assertEquals($configValue, $this->helper->getCarrierConfigValue($carrierCode, $configPath));
     }
@@ -96,12 +105,12 @@ class CarrierTest extends \PHPUnit\Framework\TestCase
             'getValue'
         )->with(
             'general/country/eu_countries',
-            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
-        )->will(
-            $this->returnValue("GB")
+            ScopeInterface::SCOPE_STORE
+        )->willReturn(
+            "GB"
         );
 
-        $this->assertEquals(true, $this->helper->isCountryInEU("GB"));
-        $this->assertEquals(false, $this->helper->isCountryInEU("US"));
+        $this->assertTrue($this->helper->isCountryInEU("GB"));
+        $this->assertFalse($this->helper->isCountryInEU("US"));
     }
 }

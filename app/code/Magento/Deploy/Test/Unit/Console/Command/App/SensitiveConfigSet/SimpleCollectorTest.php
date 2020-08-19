@@ -3,19 +3,22 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Deploy\Test\Unit\Console\Command\App\SensitiveConfigSet;
 
 use Magento\Deploy\Console\Command\App\SensitiveConfigSet\SimpleCollector;
 use Magento\Deploy\Console\Command\App\SensitiveConfigSetCommand;
 use Magento\Framework\Exception\LocalizedException;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Symfony\Component\Console\Helper\QuestionHelper;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 use Symfony\Component\Console\Question\Question;
 use Symfony\Component\Console\Question\QuestionFactory;
-use Symfony\Component\Console\Helper\QuestionHelper;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
 
-class SimpleCollectorTest extends \PHPUnit\Framework\TestCase
+class SimpleCollectorTest extends TestCase
 {
     /**
      * @var QuestionFactory|MockObject
@@ -45,7 +48,7 @@ class SimpleCollectorTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->questionFactoryMock = $this->getMockBuilder(QuestionFactory::class)
             ->disableOriginalConstructor()
@@ -109,12 +112,10 @@ class SimpleCollectorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage A configuration with this path does not exist or is not sensitive
-     */
     public function testWrongConfigPath()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('A configuration with this path does not exist or is not sensitive');
         $configPaths = [
             'some/config/path1',
             'some/config/path2'
@@ -139,11 +140,9 @@ class SimpleCollectorTest extends \PHPUnit\Framework\TestCase
         );
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     */
     public function testEmptyValue()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
         $configPaths = [
             'some/config/path1',
             'some/config/path2'
