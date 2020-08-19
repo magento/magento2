@@ -222,7 +222,7 @@ class Bundle extends AbstractView
     {
         $optionBlock = $this->getChildBlock($option->getType());
         if (!$optionBlock) {
-            return $this->escapeHtml(__('There is no defined renderer for "%1" option type.', $option->getType()));
+            return __('There is no defined renderer for "%1" option type.', $this->escapeHtml($option->getType()));
         }
         return $optionBlock->setOption($option)->toHtml();
     }
