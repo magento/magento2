@@ -41,7 +41,7 @@
         </after>
 
         <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRuleIndex1"/>
-        <actionGroup ref="AdminClickButtonAddTaxRuleActionGroup" stepKey="clickAddNewTaxRuleButton"/>
+        <actionGroup ref="AdminClickAddTaxRuleButtonActionGroup" stepKey="clickAddNewTaxRuleButton"/>
 
         <!-- Create a tax rule with new and existing tax rate, customer tax class, product tax class -->
         <fillField selector="{{AdminTaxRuleFormSection.code}}" userInput="{{SimpleTaxRule.code}}" stepKey="fillTaxRuleCode1"/>
