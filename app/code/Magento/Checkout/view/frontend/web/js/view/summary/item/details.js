@@ -22,12 +22,13 @@ define([
             var txt = document.createElement('textarea');
 
             txt.innerHTML = quoteItem.name;
+
             return txt.value.escapeHTML();
         },
 
         /**
          * @param {Object} quoteItem
-         * @return {String}
+         * @return {String}Magento_Checkout/js/region-updater
          */
         getValue: function (quoteItem) {
             return quoteItem.name;
