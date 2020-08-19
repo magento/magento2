@@ -87,7 +87,7 @@ class GetFolderTree
 
             $pathArray = explode('/', $path);
             $displayName = strlen(end($pathArray)) > self::NAME_LENGTH ?
-                         substr(end($pathArray),0, self::NAME_LENGTH) . "..." :
+                         substr(end($pathArray), 0 , self::NAME_LENGTH) . "..." :
                          end($pathArray);
             $directories[] = [
                 'data' => count($pathArray) > 0 ? $displayName : $path,
