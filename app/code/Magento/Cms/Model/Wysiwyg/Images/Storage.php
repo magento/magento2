@@ -153,6 +153,11 @@ class Storage extends \Magento\Framework\DataObject
     private $ioFile;
 
     /**
+     * @var \Magento\Framework\File\Mime|null
+     */
+    private $mime;
+
+    /**
      * Construct
      *
      * @param \Magento\Backend\Model\Session $session
@@ -197,6 +202,7 @@ class Storage extends \Magento\Framework\DataObject
         array $data = [],
         \Magento\Framework\Filesystem\DriverInterface $file = null,
         \Magento\Framework\Filesystem\Io\File $ioFile = null,
+        \Magento\Framework\File\Mime $mime = null,
         \Psr\Log\LoggerInterface $logger = null
     ) {
         $this->_session = $session;
@@ -217,6 +223,7 @@ class Storage extends \Magento\Framework\DataObject
         $this->_dirs = $dirs;
         $this->file = $file ?: ObjectManager::getInstance()->get(\Magento\Framework\Filesystem\Driver\File::class);
         $this->ioFile = $ioFile ?: ObjectManager::getInstance()->get(\Magento\Framework\Filesystem\Io\File::class);
+        $this->mime = $mime ?: ObjectManager::getInstance()->get(\Magento\Framework\File\Mime::class);
         parent::__construct($data);
     }
 
@@ -362,7 +369,7 @@ class Storage extends \Magento\Framework\DataObject
             $item->setUrl($this->_cmsWysiwygImages->getCurrentUrl() . $item->getBasename());
             $itemStats = $this->file->stat($item->getFilename());
             $item->setSize($itemStats['size']);
-            $item->setMimeType(\mime_content_type($item->getFilename()));
+            $item->setMimeType($this->mime->getMimeType($item->getFilename()));
 
             if ($this->isImage($item->getBasename())) {
                 $thumbUrl = $this->getThumbnailUrl($item->getFilename(), true);
@@ -647,7 +654,7 @@ class Storage extends \Magento\Framework\DataObject
         $image->keepAspectRatio($keepRatio);
 
         list($imageWidth, $imageHeight) = $this->getResizedParams($source);
-        
+
         $image->resize($imageWidth, $imageHeight);
         $dest = $targetDir . '/' . $this->ioFile->getPathInfo($source)['basename'];
         $image->save($dest);
@@ -670,7 +677,7 @@ class Storage extends \Magento\Framework\DataObject
 
         //phpcs:ignore Generic.PHP.NoSilencedErrors
         list($imageWidth, $imageHeight) = @getimagesize($source);
-     
+
         if ($imageWidth && $imageHeight) {
             $imageWidth = $configWidth > $imageWidth ? $imageWidth : $configWidth;
             $imageHeight = $configHeight > $imageHeight ? $imageHeight : $configHeight;
@@ -679,7 +686,7 @@ class Storage extends \Magento\Framework\DataObject
         }
         return [$configWidth, $configHeight];
     }
-    
+
     /**
      * Resize images on the fly in controller action
      *
