@@ -229,6 +229,7 @@ class SubscriptionManager implements SubscriptionManagerInterface
     }
 
     /**
+     *  Don't need to save subscriber model
      *
      * @param Subscriber $subscriber
      * @param CustomerInterface $customer
