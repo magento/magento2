@@ -62,6 +62,14 @@
         <actionGroup ref="AdminMediaGalleryAssertImageInGridActionGroup" stepKey="assertImageInGrid">
             <argument name="title" value="ImageMetadata.title"/>
         </actionGroup>
+
+        <wait time="10" stepKey="waitForBookmarkToSaveView"/>
+        <reloadPage stepKey="reloadPage"/>
+        <waitForPageLoad stepKey="waitForGridReloaded"/>
+        <actionGroup ref="AdminAssertMediaGalleryFilterPlaceholderActionGroup" stepKey="assertFilterApplied">
+            <argument name="filterPlaceholder" value="$$product.name$$"/>
+        </actionGroup>
+
         <actionGroup ref="AdminEnhancedMediaGalleryEnableMassActionModeActionGroup" stepKey="enableMassActionToDeleteImages"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectFirstImageToDelete">
             <argument name="imageName" value="{{ImageMetadata.title}}"/>
