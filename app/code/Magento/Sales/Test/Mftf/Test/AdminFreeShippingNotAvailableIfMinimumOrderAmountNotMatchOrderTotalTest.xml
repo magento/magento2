@@ -58,8 +58,7 @@
         <!--Click *Get shipping methods and rates* and see that Free Shipping is absent-->
         <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="clickGetShippingMehods"/>
         <dontSeeElement selector="{{AdminOrderFormPaymentSection.freeShippingOption}}" stepKey="seeAbsentFreeShipping"/>
-        <!--Submit Order and verify that Order isn't placed-->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="clickSubmitOrder" />
 
         <dontSeeElement selector="{{AdminOrderFormMessagesSection.success}}" stepKey="seeSuccessMessage"/>
         <seeElement selector="{{AdminOrderFormMessagesSection.error}}" stepKey="seeErrorMessage"/>

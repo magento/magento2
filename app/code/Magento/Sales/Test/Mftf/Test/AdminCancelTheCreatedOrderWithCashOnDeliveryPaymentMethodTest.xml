@@ -59,9 +59,7 @@
         <!-- Select Cash On Delivery payment method -->
         <waitForElementVisible selector="{{AdminOrderFormPaymentSection.paymentBlock}}" stepKey="waitForPaymentOptions"/>
         <checkOption selector="{{AdminOrderFormPaymentSection.cashOnDeliveryOption}}" stepKey="selectCashOnDeliveryPaymentOption"/>
-
-        <!-- Submit order -->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
 
         <!--Verify order information-->
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
