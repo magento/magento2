@@ -47,12 +47,16 @@ class CustomerDataValidatePlugin
      *
      * @param Form $subject
      * @param RequestInterface $request
+     * @param null|string $scope
+     * @param bool $scopeOnly
      * @throws Exception
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeExtractData(
         Form $subject,
-        RequestInterface $request
+        RequestInterface $request,
+        $scope = null,
+        $scopeOnly = true
     ): void {
         if ($this->isSetAssistanceAllowedParam($request)
             && !$this->authorization->isAllowed('Magento_LoginAsCustomer::allow_shopping_assistance')
