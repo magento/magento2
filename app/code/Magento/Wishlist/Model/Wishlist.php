@@ -383,7 +383,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
                 $this
             )->addStoreFilter(
                 $this->getSharedStoreIds()
-            )->setVisibilityFilter();
+            )->setVisibilityFilter($this->_useCurrentWebsite);
         }
 
         return $this->_itemCollection;
@@ -477,6 +477,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
             $_buyRequest = $buyRequest;
         } elseif (is_string($buyRequest)) {
             $isInvalidItemConfiguration = false;
+            $buyRequestData = [];
             try {
                 $buyRequestData = $this->serializer->unserialize($buyRequest);
                 if (!is_array($buyRequestData)) {
@@ -493,6 +494,9 @@ class Wishlist extends AbstractModel implements IdentityInterface
             $_buyRequest = new DataObject($buyRequest);
         } else {
             $_buyRequest = new DataObject();
+        }
+        if ($_buyRequest->getData('action') !== 'updateItem') {
+            $_buyRequest->setData('action', 'add');
         }
 
         /* @var $product Product */
@@ -514,6 +518,7 @@ class Wishlist extends AbstractModel implements IdentityInterface
 
         $errors = [];
         $items = [];
+        $item = null;
 
         foreach ($cartCandidates as $candidate) {
             if ($candidate->getParentProductId()) {
@@ -752,15 +757,16 @@ class Wishlist extends AbstractModel implements IdentityInterface
             }
             $params->setCurrentConfig($item->getBuyRequest());
             $buyRequest = $this->_catalogProduct->addParamsToBuyRequest($buyRequest, $params);
+            $buyRequest->setData('action', 'updateItem');
 
             $product->setWishlistStoreId($item->getStoreId());
             $items = $this->getItemCollection();
             $isForceSetQuantity = true;
-            foreach ($items as $_item) {
-                /* @var $_item Item */
-                if ($_item->getProductId() == $product->getId() && $_item->representProduct(
-                    $product
-                ) && $_item->getId() != $item->getId()
+            foreach ($items as $wishlistItem) {
+                /* @var $wishlistItem Item */
+                if ($wishlistItem->getProductId() == $product->getId()
+                    && $wishlistItem->getId() != $item->getId()
+                    && $wishlistItem->representProduct($product)
                 ) {
                     // We do not add new wishlist item, but updating the existing one
                     $isForceSetQuantity = false;

@@ -53,4 +53,25 @@ interface ConsumerConfigItemInterface
      * @return int
      */
     public function getMaxMessages();
+
+    /**
+     * Get maximal time (in seconds) for waiting new messages from queue before terminating consumer.
+     *
+     * @return int|null
+     */
+    public function getMaxIdleTime();
+
+    /**
+     * Get time to sleep (in seconds) before checking if a new message is available in the queue.
+     *
+     * @return int|null
+     */
+    public function getSleep();
+
+    /**
+     * Get is consumer have to be spawned only if there are messages in the queue.
+     *
+     * @return boolean|null
+     */
+    public function getOnlySpawnWhenMessageAvailable();
 }

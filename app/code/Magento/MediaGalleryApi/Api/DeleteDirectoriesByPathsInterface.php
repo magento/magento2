@@ -10,6 +10,7 @@ namespace Magento\MediaGalleryApi\Api;
 /**
  * Delete folders by provided paths
  * @api
+ * @since 101.0.0
  */
 interface DeleteDirectoriesByPathsInterface
 {
@@ -19,6 +20,7 @@ interface DeleteDirectoriesByPathsInterface
      * @param string[] $paths
      * @return void
      * @throws \Magento\Framework\Exception\CouldNotDeleteException
+     * @since 101.0.0
      */
     public function execute(array $paths): void;
 }

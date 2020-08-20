@@ -4,21 +4,23 @@
  * See COPYING.txt for license details.
  */
 
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
-// @codingStandardsIgnoreFile
-?>
-<?php
 /**
  * Catalog advanced search form
  *
  * @var $block \Magento\CatalogSearch\Block\Advanced\Form
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
-<?php $maxQueryLength = $this->helper(\Magento\CatalogSearch\Helper\Data::class)->getMaxQueryLength();?>
-<form class="form search advanced" action="<?= $block->escapeUrl($block->getSearchPostUrl()) ?>" method="get" id="form-validate">
+
+<?php
+/** @var \Magento\CatalogSearch\Helper\Data $catalogSearchHelper */
+$catalogSearchHelper = $block->getData('catalogSearchHelper'); ?>
+<?php $maxQueryLength = $catalogSearchHelper->getMaxQueryLength();?>
+<form class="form search advanced" action="<?= $block->escapeUrl($block->getSearchPostUrl()) ?>" method="get"
+      id="form-validate">
 <fieldset class="fieldset">
     <legend class="legend"><span><?= $block->escapeHtml(__('Search Settings')) ?></span></legend><br />
-    <?php foreach ($block->getSearchableAttributes() as $_attribute) : ?>
+    <?php foreach ($block->getSearchableAttributes() as $_attribute): ?>
         <?php $_code = $_attribute->getAttributeCode() ?>
         <div class="field <?= $block->escapeHtmlAttr($_code) ?>">
             <label class="label" for="<?= $block->escapeHtmlAttr($_code) ?>">
@@ -26,7 +28,7 @@
             </label>
             <div class="control">
                 <?php
-                switch ($block->getAttributeInputType($_attribute)) :
+                switch ($block->getAttributeInputType($_attribute)):
                     case 'number':
                         ?>
                 <div class="range fields group group-2">
@@ -39,7 +41,8 @@
                                    title="<?= $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
                                    class="input-text"
                                    maxlength="<?= $block->escapeHtmlAttr($maxQueryLength) ?>"
-                                   data-validate="{number:true, 'less-than-equals-to':'#<?= $block->escapeHtmlAttr($_code) ?>_to'}" />
+                                   data-validate="{number:true, 'less-than-equals-to':'#<?=
+                                    $block->escapeHtmlAttr($_code) ?>_to'}" />
                         </div>
                     </div>
                     <div class="field no-label">
@@ -51,7 +54,8 @@
                                    title="<?= $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
                                    class="input-text"
                                    maxlength="<?= $block->escapeHtmlAttr($maxQueryLength) ?>"
-                                   data-validate="{number:true, 'greater-than-equals-to':'#<?= $block->escapeHtmlAttr($_code) ?>'}" />
+                                   data-validate="{number:true, 'greater-than-equals-to':'#<?=
+                                    $block->escapeHtmlAttr($_code) ?>'}" />
                         </div>
                     </div>
                 </div>
@@ -126,7 +130,7 @@
                        id="<?= $block->escapeHtmlAttr($_code) ?>"
                        value="<?= $block->escapeHtml($block->getAttributeValue($_attribute)) ?>"
                        title="<?= $block->escapeHtml($block->getAttributeLabel($_attribute)) ?>"
-                       class="input-text <?= $block->escapeHtmlAttr($block->getAttributeValidationClass($_attribute)) ?>"
+                       class="input-text <?= $block->escapeHtmlAttr($block->getAttributeValidationClass($_attribute))?>"
                        maxlength="<?= $block->escapeHtmlAttr($maxQueryLength) ?>" />
             <?php endswitch; ?>
             </div>
@@ -143,7 +147,7 @@
   </div>
 </div>
 </form>
-<script>
+<?php $scriptString = <<<script
 require([
     "jquery",
     "mage/mage",
@@ -159,9 +163,11 @@ require([
                 }
             },
             messages: {
-                'price[to]': {'greater-than-equals-to': '<?= $block->escapeJs(__('Please enter a valid price range.')) ?>'},
-                'price[from]': {'less-than-equals-to': '<?= $block->escapeJs(__('Please enter a valid price range.')) ?>'}
+                'price[to]': {'greater-than-equals-to': '{$block->escapeJs(__('Please enter a valid price range.'))}'},
+                'price[from]': {'less-than-equals-to': '{$block->escapeJs(__('Please enter a valid price range.'))}'}
             }
         });
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
