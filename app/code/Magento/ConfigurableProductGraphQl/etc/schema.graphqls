@@ -69,7 +69,7 @@ type SelectedConfigurableOption {
     value_label: String!
 }
 
-type ConfigurableWishlistItem implements WishlistItemInterface @doc(description: "A configurable product wishlist item"){
+type ConfigurableWishlistItem implements WishlistItemInterface @doc(description: "A configurable product wish list item"){
     child_sku: String! @doc(description: "The SKU of the simple product corresponding to a set of selected configurable options") @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Wishlist\\ChildSku")
     configurable_options: [SelectedConfigurableOption!] @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Wishlist\\ConfigurableOptions") @doc (description: "An array of selected configurable options")
 }

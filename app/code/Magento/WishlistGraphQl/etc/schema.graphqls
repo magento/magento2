@@ -9,9 +9,9 @@ type Customer {
     wishlists(
         pageSize: Int = 20 @doc(description: "Specifies the maximum number of results to return at once. This attribute is optional."),
         currentPage: Int = 1 @doc(description: "Specifies which page of results to return. The default value is 1.")
-    ): [Wishlist!]! @doc(description: "An array of wishlists. In Magento Open Source, customers are limited to one wishlist. The number of wishlists is not restricted for Magento Commerce") @resolver(class:"\\Magento\\WishlistGraphQl\\Model\\Resolver\\CustomerWishlists")
+    ): [Wishlist!]! @doc(description: "An array of wishlists. In Magento Open Source, customers are limited to one wish list. The number of wish lists is configurable for Magento Commerce") @resolver(class:"\\Magento\\WishlistGraphQl\\Model\\Resolver\\CustomerWishlists")
     wishlist: Wishlist! @deprecated(reason: "Use `Customer.wishlists` or `Customer.wishlist_v2`") @resolver(class:"\\Magento\\WishlistGraphQl\\Model\\Resolver\\CustomerWishlistResolver") @doc(description: "Contains a customer's wish lists")  @cache(cacheable: false)
-    wishlist_v2(id: ID!): Wishlist @doc(description: "Retrieve the specified wishlist") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistById")
+    wishlist_v2(id: ID!): Wishlist @doc(description: "Retrieve the specified wish list") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\WishlistById")
 }
 
 type WishlistOutput @doc(description: "Deprecated: `Wishlist` type should be used instead") {
@@ -32,10 +32,10 @@ type Wishlist {
 }
 
 interface WishlistItemInterface @typeResolver(class: "Magento\\WishlistGraphQl\\Model\\Resolver\\Type\\WishlistItemType") {
-    id: ID  @doc(description: "The ID of the wish list item")
-    quantity: Float  @doc(description: "The quantity of this wish list item")
+    id: ID!  @doc(description: "The ID of the wish list item")
+    quantity: Float!  @doc(description: "The quantity of this wish list item")
     description: String  @doc(description: "The description of the item")
-    added_at: String  @doc(description: "The date and time the item was added to the wish list")
+    added_at: String!  @doc(description: "The date and time the item was added to the wish list")
     product: ProductInterface @doc(description: "Product details of the wish list item") @resolver(class: "\\Magento\\WishlistGraphQl\\Model\\Resolver\\ProductResolver")
     customizable_options: [SelectedCustomizableOption] @doc(description: "Custom options selected for the wish list item")
 }

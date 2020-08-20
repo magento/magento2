@@ -493,8 +493,8 @@ type StoreConfig @doc(description: "The type contains information about a store 
     root_category_id: Int @doc(description: "The ID of the root category") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\RootCategoryId")
 }
 
-type SimpleWishlistItem implements WishlistItemInterface @doc(description: "A simple product wishlist Item") {
+type SimpleWishlistItem implements WishlistItemInterface @doc(description: "A simple product wish list Item") {
 }
 
-type VirtualWishlistItem implements WishlistItemInterface @doc(description: "A virtual product wishlist item") {
+type VirtualWishlistItem implements WishlistItemInterface @doc(description: "A virtual product wish list item") {
 }
