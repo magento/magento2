@@ -17,8 +17,6 @@ use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
  */
 class GetFolderTree
 {
-    private const NAME_LENGTH = 50;
-
     /**
      * @var Filesystem
      */
@@ -86,11 +84,8 @@ class GetFolderTree
             }
 
             $pathArray = explode('/', $path);
-            $displayName = strlen(end($pathArray)) > self::NAME_LENGTH ?
-                         substr(end($pathArray), 0, self::NAME_LENGTH) . "..." :
-                         end($pathArray);
             $directories[] = [
-                'data' => count($pathArray) > 0 ? $displayName : $path,
+                'data' => count($pathArray) > 0 ? end($pathArray) : $path,
                 'attr' => ['id' => $path],
                 'metadata' => [
                     'path' => $path
