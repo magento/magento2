@@ -4,8 +4,8 @@
  */
 
 var config = {
-    'waitSeconds': 0,
-    'map': {
+    waitSeconds: 0,
+    map: {
         '*': {
             'ko': 'knockoutjs/knockout',
             'knockout': 'knockoutjs/knockout',
@@ -13,7 +13,7 @@ var config = {
             'rjsResolver': 'mage/requirejs/resolver'
         }
     },
-    'shim': {
+    shim: {
         'jquery/jstree/jquery.hotkeys': ['jquery'],
         'jquery/hover-intent': ['jquery'],
         'mage/adminhtml/backup': ['prototype'],
@@ -27,7 +27,7 @@ var config = {
         },
         'magnifier/magnifier': ['jquery']
     },
-    'paths': {
+    paths: {
         'jquery/validate': 'jquery/jquery.validate',
         'jquery/hover-intent': 'jquery/jquery.hoverIntent',
         'jquery/file-uploader': 'jquery/fileUploader/jquery.fileupload-fp',
@@ -39,8 +39,8 @@ var config = {
         'tinycolor': 'jquery/spectrum/tinycolor',
         'jquery-ui-modules': 'jquery/ui-modules'
     },
-    'config': {
-        'mixins': {
+    config: {
+        mixins: {
             'jquery/jstree/jquery.jstree': {
                 'mage/backend/jstree-mixin': true
             },
@@ -48,7 +48,7 @@ var config = {
                 'jquery/patches/jquery': true
             }
         },
-        'text': {
+        text: {
             'headers': {
                 'X-Requested-With': 'XMLHttpRequest'
             }

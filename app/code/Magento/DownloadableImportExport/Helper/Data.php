@@ -8,7 +8,7 @@ namespace Magento\DownloadableImportExport\Helper;
 use Magento\DownloadableImportExport\Model\Import\Product\Type\Downloadable;
 
 /**
- * Class Data
+ * Helper for import-export downloadable product
  */
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
@@ -47,6 +47,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
      * @param array $option
      * @param array $existingOptions
      * @return array
+     * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      */
     public function fillExistOptions(array $base, array $option, array $existingOptions)
     {
@@ -59,6 +60,9 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
                 && $option['sample_file'] == $existingOption['sample_file']
                 && $option['sample_type'] == $existingOption['sample_type']
                 && $option['product_id'] == $existingOption['product_id']) {
+                if (empty($existingOption['website_id'])) {
+                    unset($existingOption['website_id']);
+                }
                 $result = array_replace($base, $option, $existingOption);
             }
         }

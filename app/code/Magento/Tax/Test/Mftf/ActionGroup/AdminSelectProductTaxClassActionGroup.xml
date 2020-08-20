@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSelectProductTaxClassActionGroup">
+        <annotations>
+            <description>Select "Product Tax Class" in tax rule edit form.</description>
+        </annotations>
+        <arguments>
+            <argument name="taxClass" type="string" defaultValue="{{productTaxClass.class_name}}"/>
+        </arguments>
+
+        <conditionalClick selector="{{AdminTaxRuleFormSection.additionalSettings}}" dependentSelector="{{AdminTaxRuleFormSection.additionalSettingsOpened}}" visible="false" stepKey="openAdditionalSettings"/>
+        <waitForElementVisible selector="{{AdminTaxRuleFormSection.productTaxClassOption(taxClass)}}" stepKey="waitForVisibleTaxClass"/>
+        <conditionalClick selector="{{AdminTaxRuleFormSection.productTaxClassOption(taxClass)}}" dependentSelector="{{AdminTaxRuleFormSection.productTaxClassSelected(taxClass)}}" visible="false" stepKey="assignProdTaxClass"/>
+    </actionGroup>
+</actionGroups>

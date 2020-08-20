@@ -26,7 +26,7 @@ class PasswordResetRequestEventTest extends \PHPUnit\Framework\TestCase
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -34,7 +34,7 @@ class PasswordResetRequestEventTest extends \PHPUnit\Framework\TestCase
         $this->resourceModel = $this->model->getResource();
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager = null;
         $this->resourceModel = null;

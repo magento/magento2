@@ -18,15 +18,4 @@
         <amOnPage url="{{StorefrontProductPage.url(productUrl)}}" stepKey="openProductPage"/>
         <waitForPageLoad stepKey="waitForProductPageLoaded"/>
     </actionGroup>
-    <actionGroup name="StorefrontOpenProductPageOnSecondStore">
-        <annotations>
-            <description>Goes to the Storefront Product page for the provided store code and Product URL.</description>
-        </annotations>
-        <arguments>
-            <argument name="storeCode" type="string"/>
-            <argument name="productUrl" type="string"/>
-        </arguments>
-
-        <amOnPage url="{{StorefrontStoreViewProductPage.url(storeCode,productUrl)}}" stepKey="openProductPage"/>
-    </actionGroup>
 </actionGroups>

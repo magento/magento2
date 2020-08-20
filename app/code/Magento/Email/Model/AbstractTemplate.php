@@ -339,7 +339,6 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     public function getProcessedTemplate(array $variables = [])
     {
         $processor = $this->getTemplateFilter()
-            ->setUseSessionInUrl(false)
             ->setPlainTemplateMode($this->isPlain())
             ->setIsChildTemplate($this->isChildTemplate())
             ->setTemplateProcessor([$this, 'getTemplateContent']);
@@ -547,7 +546,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected function cancelDesignConfig()
     {
         $this->appEmulation->stopEnvironmentEmulation();
+        $this->urlModel->setScope(null);
         $this->hasDesignBeenApplied = false;
+
         return $this;
     }
 

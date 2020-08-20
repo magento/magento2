@@ -3,50 +3,62 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Block\Form\Login;
 
-class InfoTest extends \PHPUnit\Framework\TestCase
+use Magento\Checkout\Helper\Data;
+use Magento\Customer\Block\Form\Login\Info;
+use Magento\Customer\Model\Url;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class InfoTest extends TestCase
 {
     /**
-     * @var \Magento\Customer\Block\Form\Login\Info
+     * @var Info
      */
     protected $block;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Url
+     * @var MockObject|\Magento\Customer\Model\Url
      */
     protected $customerUrl;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Checkout\Helper\Data
+     * @var MockObject|Data
      */
     protected $checkoutData;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Framework\Url\Helper\Data
+     * @var MockObject|\Magento\Framework\Url\Helper\Data
      */
     protected $coreUrl;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->customerUrl = $this->getMockBuilder(
-            \Magento\Customer\Model\Url::class
-        )->disableOriginalConstructor()->setMethods(
-            ['getRegisterUrl']
-        )->getMock();
+            Url::class
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['getRegisterUrl']
+            )->getMock();
         $this->checkoutData = $this->getMockBuilder(
-            \Magento\Checkout\Helper\Data::class
-        )->disableOriginalConstructor()->setMethods(
-            ['isContextCheckout']
-        )->getMock();
+            Data::class
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['isContextCheckout']
+            )->getMock();
         $this->coreUrl = $this->getMockBuilder(
             \Magento\Framework\Url\Helper\Data::class
-        )->disableOriginalConstructor()->setMethods(
-            ['addRequestParam']
-        )->getMock();
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['addRequestParam']
+            )->getMock();
 
-        $this->block = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))->getObject(
-            \Magento\Customer\Block\Form\Login\Info::class,
+        $this->block = (new ObjectManager($this))->getObject(
+            Info::class,
             [
                 'customerUrl' => $this->customerUrl,
                 'checkoutData' => $this->checkoutData,
@@ -60,7 +72,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $expectedUrl = 'Custom Url';
 
         $this->block->setCreateAccountUrl($expectedUrl);
-        $this->checkoutData->expects($this->any())->method('isContextCheckout')->will($this->returnValue(false));
+        $this->checkoutData->expects($this->any())->method('isContextCheckout')->willReturn(false);
         $this->assertEquals($expectedUrl, $this->block->getCreateAccountUrl());
     }
 
@@ -70,7 +82,7 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         $expectedUrl = 'Custom Url with context';
         $this->block->setCreateAccountUrl($url);
 
-        $this->checkoutData->expects($this->any())->method('isContextCheckout')->will($this->returnValue(true));
+        $this->checkoutData->expects($this->any())->method('isContextCheckout')->willReturn(true);
         $this->coreUrl->expects(
             $this->any()
         )->method(
@@ -78,8 +90,8 @@ class InfoTest extends \PHPUnit\Framework\TestCase
         )->with(
             $url,
             ['context' => 'checkout']
-        )->will(
-            $this->returnValue($expectedUrl)
+        )->willReturn(
+            $expectedUrl
         );
         $this->assertEquals($expectedUrl, $this->block->getCreateAccountUrl());
     }
@@ -88,8 +100,8 @@ class InfoTest extends \PHPUnit\Framework\TestCase
     {
         $expectedUrl = 'Custom Url';
 
-        $this->customerUrl->expects($this->any())->method('getRegisterUrl')->will($this->returnValue($expectedUrl));
-        $this->checkoutData->expects($this->any())->method('isContextCheckout')->will($this->returnValue(false));
+        $this->customerUrl->expects($this->any())->method('getRegisterUrl')->willReturn($expectedUrl);
+        $this->checkoutData->expects($this->any())->method('isContextCheckout')->willReturn(false);
         $this->assertEquals($expectedUrl, $this->block->getCreateAccountUrl());
     }
 }

@@ -23,6 +23,7 @@ use Psr\Log\LoggerInterface;
  *
  * @api
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @since 100.0.2
  */
 class Bootstrap
 {
@@ -223,10 +224,12 @@ class Bootstrap
     /**
      * Factory method for creating application instances
      *
+     * In case of failure,
+     * the application will be terminated by "exit(1)"
+     *
      * @param string $type
      * @param array $arguments
-     * @return \Magento\Framework\AppInterface
-     * @throws \InvalidArgumentException
+     * @return \Magento\Framework\AppInterface | void
      */
     public function createApplication($type, $arguments = [])
     {
@@ -267,7 +270,7 @@ class Bootstrap
                     throw $e;
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             $this->terminate($e);
         }
     } // phpcs:enable
@@ -418,12 +421,12 @@ class Bootstrap
     /**
      * Display an exception and terminate program execution
      *
-     * @param \Exception $e
+     * @param \Throwable $e
      * @return void
      *
      * phpcs:disable Magento2.Security.LanguageConstruct, Squiz.Commenting.FunctionCommentThrowTag
      */
-    protected function terminate(\Exception $e)
+    protected function terminate(\Throwable $e)
     {
 
         if ($this->isDeveloperMode()) {

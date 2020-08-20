@@ -30,7 +30,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
 
-        <actionGroup ref="AddSimpleProductToCart" stepKey="addToCartFromStorefrontProductPage">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="addToCartFromStorefrontProductPage">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
         <actionGroup ref="StorefrontOpenCheckoutPageActionGroup" stepKey="guestGoToCheckout"/>

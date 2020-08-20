@@ -31,17 +31,19 @@
             <!-- Set Magento back to default configuration -->
             <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockFalse"/>
             <magentoCLI command="config:set {{CatalogInventoryItemOptionsBackordersDisable.path}} {{CatalogInventoryItemOptionsBackordersDisable.value}}" stepKey="setConfigAllowBackordersFalse"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
         </after>
 
         <!-- Go to the storefront and add the product to the cart -->
-        <actionGroup ref="AddSimpleProductToCart" stepKey="gotoAndAddProductToCart">
+        <actionGroup ref="AddSimpleProductToCartActionGroup" stepKey="gotoAndAddProductToCart">
             <argument name="product" value="$$createProduct$$"/>
         </actionGroup>
 
         <!-- Go to the cart page and verify we see the product -->
-        <amOnPage url="{{CheckoutCartPage.url}}" stepKey="gotoCart"/>
-        <waitForPageLoad stepKey="waitForCartLoad"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="gotoCart"/>
         <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertProductItemInCheckOutCart">
             <argument name="productName" value="$$createProduct.name$$"/>
             <argument name="productSku" value="$$createProduct.sku$$"/>

@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminCardinalCommerceSection">
+        <element name="head" type="button" selector="#three_d_secure_cardinal_config-link"/>
+        <element name="enabled" type="input" selector="#three_d_secure_cardinal_config_enabled_authorize"/>
+        <element name="environment" type="input" selector="#three_d_secure_cardinal_config_environment"/>
+    </section>
+</sections>

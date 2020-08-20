@@ -10,7 +10,7 @@
 "var comment|escape|nl2br":"Credit Memo Comment",
 "var creditmemo.increment_id":"Credit Memo Id",
 "layout handle=\"sales_email_order_creditmemo_items\" creditmemo=$creditmemo order=$order":"Credit Memo Items Grid",
-"var billing.name":"Guest Customer Name (Billing)",
+"var order_data.customer_name":"Guest Customer Name (Billing)",
 "var order.increment_id":"Order Id",
 "var payment_html|raw":"Payment Details",
 "var formattedShippingAddress|raw":"Shipping Address",
@@ -19,6 +19,8 @@
 "var store_email":"Store Email",
 "var creditmemo":"Credit Memo",
 "var order":"Order",
+"var order_id": "Order DB Id",
+"var creditmemo_id": "Credit Memo DB Id",
 "var order_data.is_not_virtual":"Order Type"
 } @-->
 {{template config_path="design/email/header_template"}}
@@ -26,7 +28,7 @@
 <table>
     <tr class="email-intro">
         <td>
-            <p class="greeting">{{trans "%name," name=$billing.name}}</p>
+            <p class="greeting">{{trans "%name," name=$order_data.customer_name}}</p>
             <p>
                 {{trans "Thank you for your order from %store_name." store_name=$store.frontend_name}}
             </p>
@@ -77,7 +79,7 @@
                     {{/depend}}
                 </tr>
             </table>
-            {{layout handle="sales_email_order_creditmemo_items" creditmemo=$creditmemo order=$order}}
+            {{layout handle="sales_email_order_creditmemo_items" creditmemo_id=$creditmemo_id order_id=$order_id}}
         </td>
     </tr>
 </table>

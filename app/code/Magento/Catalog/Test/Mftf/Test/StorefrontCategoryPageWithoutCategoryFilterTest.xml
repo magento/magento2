@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCategoryPageWithoutCategoryFilterTest">
+        <annotations>
+            <title value="Category with Layered Navigation - verify absence of category filter"/>
+            <stories value="Category page: Layered Navigation without category filter"/>
+            <description value="Verify that the category filter is NOT present in layered navigation on category page"/>
+            <features value="Catalog"/>
+            <severity value="MINOR"/>
+            <group value="Catalog"/>
+        </annotations>
+
+        <before>
+            <!-- Create one category -->
+            <createData entity="_defaultCategory" stepKey="defaultCategory">
+                <field key="name">TopCategory</field>
+            </createData>
+            <!-- Create second category, having as parent the 1st one -->
+            <createData entity="SubCategoryWithParent" stepKey="subCategory">
+                <field key="name">SubCategory</field>
+                <field key="parent_id">$$defaultCategory.id$$</field>
+                <requiredEntity createDataKey="defaultCategory"/>
+            </createData>
+
+            <!-- Create a product assigned to the 1st category -->
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct1">
+                <requiredEntity createDataKey="defaultCategory"/>
+            </createData>
+
+            <!-- Create 2nd product assigned to the 2nd category -->
+            <!-- The "Category filter" item is not shown in layered navigation  -->
+            <!-- if there are not subcategories with products to show -->
+            <createData entity="_defaultProduct" stepKey="createSimpleProduct2">
+                <requiredEntity createDataKey="subCategory"/>
+            </createData>
+
+            <!-- Set the category filter to NOT be present on the category page layered navigation -->
+            <magentoCLI command="config:set {{DisableCategoryFilterOnCategoryPageConfigData.path}} {{DisableCategoryFilterOnCategoryPageConfigData.value}}" stepKey="hideCategoryFilterOnStorefront"/>
+
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteProduct2"/>
+            <deleteData createDataKey="subCategory" stepKey="deleteSubCategory"/>
+            <deleteData createDataKey="defaultCategory" stepKey="deleteCategoryMainCategory"/>
+        </after>
+
+        <actionGroup ref="StorefrontNavigateCategoryPageActionGroup" stepKey="navigateToCategoryPage">
+            <argument name="category" value="$$defaultCategory$$"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertStorefrontLayeredNavigationCategoryFilterNotVisibleActionGroup" stepKey="checkCategoryFilterIsNotPresent" />
+    </test>
+</tests>

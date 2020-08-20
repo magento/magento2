@@ -7,19 +7,18 @@ declare(strict_types=1);
 
 namespace Magento\Store\Model\StoreSwitcher;
 
+use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\App\ActionInterface;
+use Magento\Framework\App\DeploymentConfig as DeploymentConfig;
+use Magento\Framework\Config\ConfigOptionsListConstants;
+use Magento\Framework\Url\Helper\Data as UrlHelper;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreSwitcher\HashGenerator\HashData;
-use Magento\Store\Model\StoreSwitcherInterface;
-use \Magento\Framework\App\DeploymentConfig as DeploymentConfig;
-use Magento\Framework\Url\Helper\Data as UrlHelper;
-use Magento\Framework\Config\ConfigOptionsListConstants;
-use Magento\Authorization\Model\UserContextInterface;
-use \Magento\Framework\App\ActionInterface;
 
 /**
  * Generate one time token and build redirect url
  */
-class HashGenerator implements StoreSwitcherInterface
+class HashGenerator
 {
     /**
      * @var \Magento\Framework\App\DeploymentConfig
@@ -52,48 +51,40 @@ class HashGenerator implements StoreSwitcherInterface
     }
 
     /**
-     * Builds redirect url with token
+     * Generate hash data for customer
      *
-     * @param StoreInterface $fromStore store where we came from
-     * @param StoreInterface $targetStore store where to go to
-     * @param string $redirectUrl original url requested for redirect after switching
-     * @return string redirect url
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param StoreInterface $fromStore
+     * @return array
      */
-    public function switch(StoreInterface $fromStore, StoreInterface $targetStore, string $redirectUrl): string
+    public function generateHash(StoreInterface $fromStore): array
     {
-        $targetUrl = $redirectUrl;
+        $key = (string)$this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
+        $timeStamp = time();
+
         $customerId = null;
-        $encodedUrl = $this->urlHelper->getEncodedUrl($redirectUrl);
+        $result = [];
 
         if ($this->currentUser->getUserType() == UserContextInterface::USER_TYPE_CUSTOMER) {
             $customerId = $this->currentUser->getUserId();
+
+            $data = implode(
+                ',',
+                [
+                    $customerId,
+                    $timeStamp,
+                    $fromStore->getCode()
+                ]
+            );
+            $signature = hash_hmac('sha256', $data, $key);
+
+            $result = [
+                'customer_id' => $customerId,
+                'time_stamp' => $timeStamp,
+                'signature' => $signature
+            ];
         }
 
-        if ($customerId) {
-            // phpcs:ignore
-            $urlParts = parse_url($targetUrl);
-            $host = $urlParts['host'];
-            $scheme = $urlParts['scheme'];
-            $key = (string)$this->deploymentConfig->get(ConfigOptionsListConstants::CONFIG_PATH_CRYPT_KEY);
-            $timeStamp = time();
-            $fromStoreCode = $fromStore->getCode();
-            $data = implode(',', [$customerId, $timeStamp, $fromStoreCode]);
-            $signature = hash_hmac('sha256', $data, $key);
-            $targetUrl = $scheme . "://" . $host . '/stores/store/switchrequest';
-            $targetUrl = $this->urlHelper->addRequestParam(
-                $targetUrl,
-                ['customer_id' => $customerId]
-            );
-            $targetUrl = $this->urlHelper->addRequestParam($targetUrl, ['time_stamp' => $timeStamp]);
-            $targetUrl = $this->urlHelper->addRequestParam($targetUrl, ['signature' => $signature]);
-            $targetUrl = $this->urlHelper->addRequestParam($targetUrl, ['___from_store' => $fromStoreCode]);
-            $targetUrl = $this->urlHelper->addRequestParam(
-                $targetUrl,
-                [ActionInterface::PARAM_NAME_URL_ENCODED => $encodedUrl]
-            );
-        }
-        return $targetUrl;
+        return $result;
     }
 
     /**

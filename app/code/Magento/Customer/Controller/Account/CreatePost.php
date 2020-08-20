@@ -150,6 +150,11 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
     private $customerRepository;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    private $scopeConfig;
+
+    /**
      * @param Context $context
      * @param Session $customerSession
      * @param ScopeConfigInterface $scopeConfig
@@ -266,9 +271,15 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
         $addressData = [];
 
         $regionDataObject = $this->regionDataFactory->create();
+        $userDefinedAttr = $this->getRequest()->getParam('address') ?: [];
         foreach ($allowedAttributes as $attribute) {
             $attributeCode = $attribute->getAttributeCode();
-            $value = $this->getRequest()->getParam($attributeCode);
+            if ($attribute->isUserDefined()) {
+                $value = array_key_exists($attributeCode, $userDefinedAttr) ? $userDefinedAttr[$attributeCode] : null;
+            } else {
+                $value = $this->getRequest()->getParam($attributeCode);
+            }
+
             if ($value === null) {
                 continue;
             }
@@ -283,6 +294,9 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
                     $addressData[$attributeCode] = $value;
             }
         }
+        $addressData = $addressForm->compactData($addressData);
+        unset($addressData['region_id'], $addressData['region']);
+
         $addressDataObject = $this->addressDataFactory->create();
         $this->dataObjectHelper->populateWithArray(
             $addressDataObject,
@@ -327,7 +341,7 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
     /**
      * Create customer account action
      *
-     * @return void
+     * @return \Magento\Framework\Controller\Result\Redirect
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      */
@@ -381,9 +395,7 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
                 $resultRedirect->setUrl($this->_redirect->success($url));
             } else {
                 $this->session->setCustomerDataAsLoggedIn($customer);
-
                 $this->messageManager->addMessage($this->getMessageManagerSuccessMessage());
-
                 $requestedRedirect = $this->accountRedirect->getRedirectCookie();
                 if (!$this->scopeConfig->getValue('customer/startup/redirect_dashboard') && $requestedRedirect) {
                     $resultRedirect->setUrl($this->_redirect->success($requestedRedirect));
@@ -440,7 +452,7 @@ class CreatePost extends AbstractAccount implements CsrfAwareActionInterface, Ht
     /**
      * Retrieve success message
      *
-     * @deprecated
+     * @deprecated 102.0.4
      * @see getMessageManagerSuccessMessage()
      * @return string
      */

@@ -17,6 +17,7 @@
                 <field id="conversion_id" translate="label" type="text" sortOrder="11" showInDefault="1" showInWebsite="1" showInStore="1">
                     <label>Conversion ID</label>
                     <backend_model>Magento\GoogleAdwords\Model\Config\Backend\ConversionId</backend_model>
+                    <validate>required-entry validate-number</validate>
                     <depends>
                         <field id="*/*/active">1</field>
                     </depends>

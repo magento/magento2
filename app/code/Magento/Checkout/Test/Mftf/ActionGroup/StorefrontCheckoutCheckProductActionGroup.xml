@@ -19,6 +19,9 @@
 
         <see selector="{{CheckoutCartProductSection.productName}}" userInput="{{product.name}}" stepKey="seeProductName"/>
         <grabValueFrom selector="{{CheckoutCartProductSection.ProductQuantityByName(product.name)}}" stepKey="grabProductQty"/>
-        <assertEquals expected="{{cartItem.qty}}" actual="$grabProductQty" stepKey="assertQtyShoppingCart"/>
+        <assertEquals stepKey="assertQtyShoppingCart">
+			<actualResult type="const">$grabProductQty</actualResult>
+			<expectedResult type="const">{{cartItem.qty}}</expectedResult>
+        </assertEquals>
     </actionGroup>
 </actionGroups>

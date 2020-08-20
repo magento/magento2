@@ -11,9 +11,14 @@
     <entity name="WidgetWithBlock" type="widget">
         <data key="type">CMS Static Block</data>
         <data key="designTheme">Magento Luma</data>
+        <data key="design_theme">Magento Luma</data>
         <data key="name" unique="suffix">testName</data>
         <data key="store_id">All Store Views</data>
+        <array key="store_ids">
+            <item>All Store Views</item>
+        </array>
         <data key="display">All Pages</data>
         <data key="container">Page Top</data>
+        <data key="display_on">All Pages</data>
     </entity>
 </entities>

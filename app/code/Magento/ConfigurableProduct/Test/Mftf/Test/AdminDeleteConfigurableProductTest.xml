@@ -18,7 +18,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <createData entity="BaseConfigurableProduct" stepKey="createConfigurableProduct">
                 <requiredEntity createDataKey="createCategory"/>
@@ -26,9 +26,9 @@
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <actionGroup ref="deleteProductUsingProductGrid" stepKey="deleteConfigurableProductFilteredBySkuAndName">
+        <actionGroup ref="DeleteProductUsingProductGridActionGroup" stepKey="deleteConfigurableProductFilteredBySkuAndName">
             <argument name="product" value="$$createConfigurableProduct$$"/>
         </actionGroup>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="A total of 1 record(s) have been deleted." stepKey="deleteMessage"/>
@@ -36,10 +36,9 @@
         <amOnPage url="{{StorefrontProductPage.url($$createConfigurableProduct.name$$)}}" stepKey="amOnConfigurableProductPage"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="Whoops, our bad..." stepKey="seeWhoops"/>
         <!-- Search for the product by sku -->
-        <fillField selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="$$createConfigurableProduct.sku$$" stepKey="fillSearchBarByProductSku"/>
-        <waitForPageLoad stepKey="waitForSearchButton"/>
-        <click selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="clickSearchButton"/>
-        <waitForPageLoad stepKey="waitForSearchResults"/>
+        <actionGroup ref="StoreFrontQuickSearchActionGroup" stepKey="searchBarByProductSku">
+            <argument name="query" value="$$createConfigurableProduct.sku$$"/>
+        </actionGroup>
         <!-- Should not see any search results -->
         <dontSee userInput="$$createConfigurableProduct.sku$$" selector="{{StorefrontCatalogSearchMainSection.searchResults}}" stepKey="dontSeeProduct"/>
         <see selector="{{StorefrontCatalogSearchMainSection.message}}" userInput="Your search returned no results." stepKey="seeCantFindProductOneMessage"/>

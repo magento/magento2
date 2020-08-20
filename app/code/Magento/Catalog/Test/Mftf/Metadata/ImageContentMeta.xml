@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<operations xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+            xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataOperation.xsd">
+    <operation name="CreateImageContent" dataType="ImageContent" type="create">
+        <field key="base64_encoded_data" required="true">string</field>
+        <field key="type" required="true">string</field>
+        <field key="name" required="true">string</field>
+    </operation>
+    <operation name="UpdateImageContent" dataType="ImageContent" type="update">
+        <field key="base64_encoded_data" required="true">string</field>
+        <field key="type" required="true">string</field>
+        <field key="name" required="true">string</field>
+    </operation>
+</operations>

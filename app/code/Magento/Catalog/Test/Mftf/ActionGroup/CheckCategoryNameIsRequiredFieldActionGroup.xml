@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CheckCategoryNameIsRequiredFieldActionGroup">
+        <annotations>
+            <description>Navigates to category page, attempts to add subcategory without name. Expects required field prompt.</description>
+        </annotations>
+
+        <seeInCurrentUrl url="{{AdminCategoryPage.url}}" stepKey="seeOnCategoryPage"/>
+        <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategory"/>
+        <clearField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" stepKey="makeNameFieldEmpty"/>
+        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategory"/>
+        <seeInCurrentUrl url="{{AdminCategoryPage.url}}add" stepKey="seeBackOnCreateCategoryPage"/>
+        <see selector="{{AdminCategoryBasicFieldSection.FieldError('uid')}}" userInput="This is a required field." stepKey="seeErrorMessage"/>
+    </actionGroup>
+</actionGroups>

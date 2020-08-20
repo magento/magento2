@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCustomerSubscribeNewsletterPerWebsiteTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Customer Subscriptions"/>
+            <title value="Newsletter subscriptions per website"/>
+            <description value="Admin should be able to subscribe customer to newsletters on each website separately"/>
+            <testCaseId value="MC-22173"/>
+            <severity value="MAJOR"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <createData entity="CustomerAccountSharingGlobal" stepKey="setConfigCustomerAccountToGlobal"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
+                <argument name="customStore" value="NewStoreViewData"/>
+            </actionGroup>
+            <actionGroup ref="DeleteCustomerByEmailActionGroup" stepKey="deleteCustomer">
+                <argument name="email" value="{{CustomerEntityOne.email}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminDeleteWebsiteActionGroup" stepKey="deleteWebsite">
+                <argument name="websiteName" value="{{secondCustomWebsite.name}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <createData entity="CustomerAccountSharingDefault" stepKey="setConfigCustomerAccountDefault"/>
+        </after>
+
+        <!-- Create a new Store View -->
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createStoreView">
+            <argument name="customStore" value="NewStoreViewData"/>
+        </actionGroup>
+        <!-- Switch to the new Store View on storefront -->
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage"/>
+        <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToCustomStoreView">
+            <argument name="storeView" value="NewStoreViewData"/>
+        </actionGroup>
+        <!-- Create a new customer and sign up newsletter on the new Store View -->
+        <actionGroup ref="StorefrontCreateCustomerSignedUpNewsletterActionGroup" stepKey="createCustomer">
+            <argument name="customer" value="CustomerEntityOne" />
+        </actionGroup>
+        <!-- Go to the customer edit page on admin area -->
+        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCustomerGrid">
+            <argument name="email" value="{{CustomerEntityOne.email}}"/>
+        </actionGroup>
+        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickToEditCustomerPage"/>
+        <waitForPageLoad stepKey="waitForOpenCustomerPage"/>
+        <grabFromCurrentUrl regex="~(\d+)/~" stepKey="grabCustomerId"/>
+        <!-- Assert that created customer is subscribed to newsletter on the new Store View -->
+        <actionGroup ref="AdminAssertCustomerIsSubscribedToNewslettersAndSelectedStoreView" stepKey="assertSubscribedToNewsletter">
+            <argument name="storeView" value="NewStoreViewData"/>
+        </actionGroup>
+        <!-- Create second website -->
+        <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createSecondWebsite">
+            <argument name="newWebsiteName" value="{{secondCustomWebsite.name}}"/>
+            <argument name="websiteCode" value="{{secondCustomWebsite.code}}"/>
+        </actionGroup>
+        <!-- Create second store -->
+        <actionGroup ref="AdminCreateNewStoreGroupActionGroup" stepKey="createSecondStoreGroup">
+            <argument name="website" value="{{secondCustomWebsite.name}}"/>
+            <argument name="storeGroupName" value="{{SecondStoreGroupUnique.name}}"/>
+            <argument name="storeGroupCode" value="{{SecondStoreGroupUnique.code}}"/>
+        </actionGroup>
+        <!-- Create second store view -->
+        <actionGroup ref="AdminCreateStoreViewActionGroup" stepKey="createSecondStoreView">
+            <argument name="StoreGroup" value="SecondStoreGroupUnique"/>
+            <argument name="customStore" value="SecondStoreUnique"/>
+        </actionGroup>
+        <!-- Grab second website id into $grabFromCurrentUrlGetSecondWebsiteId -->
+        <actionGroup ref="AdminGetWebsiteIdActionGroup" stepKey="getSecondWebsiteId">
+            <argument name="website" value="secondCustomWebsite"/>
+        </actionGroup>
+        <!-- Go to the customer edit page on admin area -->
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPage">
+            <argument name="customerId" value="$grabCustomerId"/>
+        </actionGroup>
+        <!-- Assert that customer still subscribed to newsletter on default website -->
+        <actionGroup ref="AdminAssertCustomerIsSubscribedToNewsletters" stepKey="assertStillSubscribedToNewsletter"/>
+        <!-- Subscribe to newsletters customer on the second website -->
+        <actionGroup ref="AdminSubscribeCustomerToNewslettersAndSelectStoreView" stepKey="subscribeToNewsletterSecondWebsite">
+            <argument name="websiteId" value="$grabFromCurrentUrlGetSecondWebsiteId"/>
+            <argument name="storeView" value="SecondStoreUnique"/>
+        </actionGroup>
+        <!-- Assert that created customer is subscribed to newsletter on second website -->
+        <actionGroup ref="AdminAssertCustomerIsSubscribedToNewslettersAndSelectedStoreView" stepKey="assertSubscribedToNewsletterSecondWebsite">
+            <argument name="websiteId" value="$grabFromCurrentUrlGetSecondWebsiteId"/>
+            <argument name="storeView" value="SecondStoreUnique"/>
+        </actionGroup>
+    </test>
+</tests>
