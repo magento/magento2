@@ -34,4 +34,24 @@
         <plugin name="widget-layout-update-plugin"
                 type="Magento\Widget\Model\ResourceModel\Layout\Plugin" sortOrder="10"/>
     </type>
+    <virtualType name="WidgetValidationState" type="\Magento\Framework\Config\ValidationState\Configurable">
+        <arguments>
+            <argument name="required" xsi:type="boolean">true</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="WidgetXmlValidator" type="\Magento\Framework\View\Model\Layout\Update\Validator">
+        <arguments>
+            <argument name="validationState" xsi:type="object">WidgetValidationState</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="WidgetXmlValidatorFactory" type="Magento\Framework\View\Model\Layout\Update\ValidatorFactory">
+        <arguments>
+            <argument name="instanceName" xsi:type="string">WidgetXmlValidator</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\Widget\Model\Widget\Instance">
+        <arguments>
+            <argument name="xmlValidatorFactory" xsi:type="object">WidgetXmlValidatorFactory</argument>
+        </arguments>
+    </type>
 </config>
