@@ -106,7 +106,7 @@ class Stock implements \Magento\Framework\Indexer\ActionInterface, \Magento\Fram
     protected function getCacheContext()
     {
         if (!($this->cacheContext instanceof CacheContext)) {
-            return \Magento\Framework\App\ObjectManager::getInstance()->get(CacheContext::class);
+            return \Magento\Framework\App\ObjectManager::getInstance()->create(CacheContext::class);
         } else {
             return $this->cacheContext;
         }

@@ -69,7 +69,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
         IndexerRegistry $indexerRegistry = null
     ) {
         parent::__construct($resource, $storeManager, $config, $queryGenerator, $metadataPool);
-        $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->get(CacheContext::class);
+        $this->cacheContext = $cacheContext ?: ObjectManager::getInstance()->create(CacheContext::class);
         $this->eventManager = $eventManager ?: ObjectManager::getInstance()->get(EventManagerInterface::class);
         $this->indexerRegistry = $indexerRegistry ?: ObjectManager::getInstance()->get(IndexerRegistry::class);
     }

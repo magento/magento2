@@ -1840,4 +1840,5 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Framework\Indexer\CacheContext" shared="false" />
 </config>
