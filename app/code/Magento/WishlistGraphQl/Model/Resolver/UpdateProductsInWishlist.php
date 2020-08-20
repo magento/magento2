@@ -101,7 +101,7 @@ class UpdateProductsInWishlist implements ResolverInterface
         }
 
         $wishlistItems = $args['wishlistItems'];
-        $wishlistItems = $this->getWishlistItems($wishlistItems);
+        $wishlistItems = $this->getWishlistItems($wishlistItems, $wishlist);
         $wishlistOutput = $this->updateProductsInWishlist->execute($wishlist, $wishlistItems);
 
         if (count($wishlistOutput->getErrors()) !== count($wishlistItems)) {
@@ -126,14 +126,19 @@ class UpdateProductsInWishlist implements ResolverInterface
      * Get DTO wishlist items
      *
      * @param array $wishlistItemsData
+     * @param Wishlist $wishlist
      *
      * @return array
      */
-    private function getWishlistItems(array $wishlistItemsData): array
+    private function getWishlistItems(array $wishlistItemsData, Wishlist $wishlist): array
     {
         $wishlistItems = [];
 
         foreach ($wishlistItemsData as $wishlistItemData) {
+            if (!isset($wishlistItemData['quantity'])) {
+                $wishlistItem = $wishlist->getItem($wishlistItemData['wishlist_item_id']);
+                $wishlistItemData['quantity'] = (float) $wishlistItem->getQty();
+            }
             $wishlistItems[] = (new WishlistItemFactory())->create($wishlistItemData);
         }
 
