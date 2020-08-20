@@ -13,7 +13,5 @@
     </entity>
     <entity name="AdminMediaGalleryFolderInvalidData">
         <data key="name">,.?/:;'[{]}|~`!@#$%^*()_=+</data>
-        <data key="longName">mediagallerylongfoldernamemediagallerylongfoldername54</data>
-        <data key="cutedName">mediagallerylongfoldernamemediagallerylongfolderna...</data>
     </entity>
 </entities>
