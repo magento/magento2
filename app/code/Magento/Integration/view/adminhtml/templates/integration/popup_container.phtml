@@ -7,8 +7,12 @@
  *
  * @var \Magento\Backend\Block\Template $block
  */
+
+/** @var \Magento\Backend\Block\Template $block */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<script>
+
+<?php $scriptString = <<<script
     require([
         "jquery",
         'Magento_Ui/js/modal/confirm',
@@ -18,34 +22,34 @@
     ], function ($, Confirm) {
 
         window.integration = new Integration(
-            '<?= $block->escapeUrl(
+            '{$block->escapeJs(
                 $block->getUrl(
                     '*/*/permissionsDialog',
                     ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]
                 )
-            ) ?>',
-            '<?= $block->escapeUrl(
+            )}',
+            '{$block->escapeJs(
                 $block->getUrl(
                     '*/*/tokensDialog',
                     ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]
                 )
-            ) ?>',
-            '<?= $block->escapeUrl(
+            )}',
+            '{$block->escapeJs(
                 $block->getUrl(
                     '*/*/tokensExchange',
                     ['id' => ':id', 'reauthorize' => ':isReauthorize', '_escape_params' => false]
                 )
-            ) ?>',
-            '<?= $block->escapeUrl(
+            )}',
+            '{$block->escapeJs(
                 $block->getUrl(
                     '*/*'
                 )
-            ) ?>',
-            '<?= $block->escapeUrl(
+            )}',
+            '{$block->escapeJs(
                 $block->getUrl(
                     '*/*/loginSuccessCallback'
                 )
-            ) ?>'
+            )}'
         );
 
         /**
@@ -55,8 +59,9 @@
             $('div#integrationGrid').on('click', 'button#delete', function (e) {
 
                 new Confirm({
-                    title: '<?= $block->escapeHtml(__('Are you sure?')) ?>',
-                    content: "<?= $block->escapeHtml(__("Are you sure you want to delete this integration? You can't undo this action.")) ?>",
+                    title: '{$block->escapeJs(__('Are you sure?'))}',
+                    content: "{$block->escapeJs(__("Are you sure you want to delete this integration? " .
+                                                     "You can't undo this action."))}",
                     actions: {
                         confirm: function () {
                             $.mage.dataPost().postData({action: $(e.target).data('url'), data: {}});
@@ -67,6 +72,9 @@
             });
         });
     });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 
-<div id="integration-popup-container" style="display: none;"></div>
+<div id="integration-popup-container"></div>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag("display: none;", '#integration-popup-container') ?>
