@@ -14,6 +14,7 @@
                 <description value="Admin should be able to create a Store View with the same name"/>
                 <group value="storeView"/>
                 <severity value="AVERAGE"/>
+                <testCaseId value="MC-36863"/>
             </annotations>
             <before>
             <!--Create two store views with same name, but different codes-->
