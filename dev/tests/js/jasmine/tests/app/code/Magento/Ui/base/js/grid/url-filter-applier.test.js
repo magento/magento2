@@ -45,6 +45,14 @@ define([
                     'qty': '1'
                 });
             });
+            it('return object from url with multiple filters parameter and filter value as array', function () {
+                var urlSearch = '?filters[name]=[27,23]&filters[qty]=1&anotherparam=1';
+
+                expect(urlFilterApplierObj.getFilterParam(urlSearch)).toEqual({
+                    'name': ['27', '23'],
+                    'qty': '1'
+                });
+            });
             it('return object from url with another parameter', function () {
                 var urlSearch = '?anotherparam=1';
 
