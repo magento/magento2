@@ -124,9 +124,10 @@ class Options implements OptionSourceInterface
             foreach ($websiteCollection as $website) {
                 $groups = $this->fillStoreGroupOptions($website, $customer);
                 if (!empty($groups)) {
+                    $code = $website->getCode();
                     $name = $this->sanitizeName($website->getName());
-                    $options[$name]['label'] = $name;
-                    $options[$name]['value'] = array_values($groups);
+                    $options[$code]['label'] = $name;
+                    $options[$code]['value'] = $groups;
                 }
             }
         }
@@ -154,11 +155,12 @@ class Options implements OptionSourceInterface
             if ($group->getWebsiteId() == $websiteId) {
                 $storeViewIds = $group->getStoreIds();
                 if (!empty($storeViewIds)) {
+                    $code = $group->getCode();
                     $name = $this->sanitizeName($group->getName());
-                    $groups[$name]['label'] = str_repeat(' ', 4) . $name;
-                    $groups[$name]['value'] = array_values($storeViewIds)[0];
-                    $groups[$name]['disabled'] = !$isGlobalScope && $customerWebsiteId !== $websiteId;
-                    $groups[$name]['selected'] = in_array($customerStoreId, $storeViewIds) ? true : false;
+                    $groups[$code]['label'] = str_repeat(' ', 4) . $name;
+                    $groups[$code]['value'] = array_values($storeViewIds)[0];
+                    $groups[$code]['disabled'] = !$isGlobalScope && $customerWebsiteId !== $websiteId;
+                    $groups[$code]['selected'] = in_array($customerStoreId, $storeViewIds) ? true : false;
                 }
             }
         }
