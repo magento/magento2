@@ -51,6 +51,8 @@ class IsolationLogger
         'catalog_category_entity' => 'assertTwoRecords',
         'eav_attribute_set' => 'attributeSetAssert',
         'store' => 'assertTwoRecords',
+        'store_website' => 'assertTwoRecords',
+        'url_rewrite' => 'assertUrlRewrites',
         //'catalog_data_exporter_products' => 'assertIsEmpty',
         //'catalog_data_exporter_product_attributes' => 'assertIsEmpty',
         //'catalog_data_exporter_categories' => 'assertIsEmpty'
@@ -99,6 +101,17 @@ class IsolationLogger
     {
         if (!empty($data)) {
             $this->log('Data is not empty', $data);
+        }
+    }
+
+    /**
+     * @param array $data
+     * @throws \Exception
+     */
+    private function assertUrlRewrites(array $data)
+    {
+        if (count($data) > 8) {
+            $this->log('Extra url_rewrites', $data);
         }
     }
 
