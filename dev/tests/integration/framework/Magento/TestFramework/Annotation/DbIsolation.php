@@ -7,6 +7,7 @@ namespace Magento\TestFramework\Annotation;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
+use PHPUnit\Framework\AssertionFailedError;
 
 /**
  * Implementation of the @magentoDbIsolation DocBlock annotation
@@ -133,9 +134,12 @@ class DbIsolation
             }
 
             if (!empty($isolationProblem)) {
-                $test::assertTrue(
-                    false,
-                    "There was a problem with isolation: " . var_export($isolationProblem, true)
+                $test->getTestResultObject()->addFailure(
+                    $test,
+                    new AssertionFailedError(
+                        "There was a problem with isolation: " . var_export($isolationProblem, true)
+                    ),
+                    0
                 );
             }
         }
