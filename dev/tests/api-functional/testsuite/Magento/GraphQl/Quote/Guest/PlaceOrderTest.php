@@ -11,6 +11,7 @@ use Exception;
 use Magento\Framework\Registry;
 use Magento\GraphQl\Quote\GetMaskedQuoteIdByReservedOrderId;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Model\OrderFactory;
 use Magento\Sales\Model\ResourceModel\Order\CollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -41,6 +42,11 @@ class PlaceOrderTest extends GraphQlAbstract
     private $registry;
 
     /**
+     * @var OrderFactory
+     */
+    private $orderFactory;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -49,6 +55,7 @@ class PlaceOrderTest extends GraphQlAbstract
         $this->getMaskedQuoteIdByReservedOrderId = $objectManager->get(GetMaskedQuoteIdByReservedOrderId::class);
         $this->orderCollectionFactory = $objectManager->get(CollectionFactory::class);
         $this->orderRepository = $objectManager->get(OrderRepositoryInterface::class);
+        $this->orderFactory = $objectManager->get(OrderFactory::class);
         $this->registry = Bootstrap::getObjectManager()->get(Registry::class);
     }
 
@@ -80,6 +87,10 @@ class PlaceOrderTest extends GraphQlAbstract
         self::assertArrayHasKey('placeOrder', $response);
         self::assertArrayHasKey('order_number', $response['placeOrder']['order']);
         self::assertEquals($reservedOrderId, $response['placeOrder']['order']['order_number']);
+        $orderIncrementId = $response['placeOrder']['order']['order_number'];
+        $order = $this->orderFactory->create();
+        $order->loadByIncrementId($orderIncrementId);
+        $this->assertNotEmpty($order->getEmailSent());
     }
 
     /**

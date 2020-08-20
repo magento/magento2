@@ -284,7 +284,10 @@ QUERY;
      */
     public function testUpdateGiftMessageCartForItemNotAllow()
     {
-        $query = $this->getUpdateGiftMessageQuery();
+        $messageTo = "";
+        $messageFrom = "";
+        $message = "";
+        $query = $this->getUpdateGiftMessageQuery($messageTo, $messageFrom, $message);
         foreach ($this->graphQlMutation($query)['updateCartItems']['cart']['items'] as $item) {
             self::assertNull($item['gift_message']);
         }
@@ -297,16 +300,27 @@ QUERY;
      */
     public function testUpdateGiftMessageCartForItem()
     {
-        $query = $this->getUpdateGiftMessageQuery();
+        $messageTo = "Alex";
+        $messageFrom = "Mike";
+        $message = "Best regards";
+        $query = $this->getUpdateGiftMessageQuery($messageTo, $messageFrom, $message);
         foreach ($this->graphQlMutation($query)['updateCartItems']['cart']['items'] as $item) {
             self::assertArrayHasKey('gift_message', $item);
             self::assertSame('Alex', $item['gift_message']['to']);
             self::assertSame('Mike', $item['gift_message']['from']);
-            self::assertSame('Best regards.', $item['gift_message']['message']);
+            self::assertSame('Best regards', $item['gift_message']['message']);
+        }
+        $messageTo = "";
+        $messageFrom = "";
+        $message = "";
+        $query = $this->getUpdateGiftMessageQuery($messageTo, $messageFrom, $message);
+        foreach ($this->graphQlMutation($query)['updateCartItems']['cart']['items'] as $item) {
+            self::assertArrayHasKey('gift_message', $item);
+            self::assertSame(null, $item['gift_message']);
         }
     }
 
-    private function getUpdateGiftMessageQuery()
+    private function getUpdateGiftMessageQuery(string $messageTo, string $messageFrom, string $message)
     {
         $quote = $this->quoteFactory->create();
         $this->quoteResource->load($quote, 'test_guest_order_with_gift_message', 'reserved_order_id');
@@ -323,9 +337,9 @@ mutation {
          cart_item_id: $itemId
           quantity: 3
          gift_message: {
-            to: "Alex"
-            from: "Mike"
-            message: "Best regards."
+            to: "$messageTo"
+            from: "$messageFrom"
+            message: "$message"
           }
         }
       ]
