@@ -22,6 +22,7 @@ define([
                     category: {},
                     'category_id': 695,
                     'category_name': 'People',
+                    'comp_url': 'url',
                     'content_type': 'image/jpeg',
                     'country_name': 'Malaysia',
                     'creation_date': '2020-03-02 10:41:51',
@@ -37,6 +38,8 @@ define([
                     overlay: '',
                     path: '',
                     'premium_level_id': 0,
+                    'thumbnail_240_url': 'url',
+                    'thumbnail_500_ur': 'url',
                     title: 'Neon effect picture of man wearing medical mask for viral or pandemic disease',
                     width: 4896
                 }
