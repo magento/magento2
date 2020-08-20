@@ -317,7 +317,7 @@ class PhpRule implements RuleInterface
                 $retDependencies = [];
                 if (preg_match('#rest(?<service>/V1/\w+)#i', $path, $apiMatch)) {
                     $retDependencies = $this->processApiUrl($apiMatch['service']);
-                } elseif (strpos($path, "*") !== false) {
+                } elseif (strpos($path, '*') !== false) {
                     /**
                      * Skip processing wildcard urls since they always resolve to the current
                      * route_front_name/area_front_name/controller_name
@@ -343,6 +343,8 @@ class PhpRule implements RuleInterface
     }
 
     /**
+     * Helper method to get module dependencies used by a standard URL
+     *
      * @param string $path
      * @return string[]
      * @throws NoSuchActionException
@@ -365,6 +367,8 @@ class PhpRule implements RuleInterface
     }
 
     /**
+     * Helper method to get module dependencies used by an API URL
+     *
      * @param string $path
      * @return string[]
      */

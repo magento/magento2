@@ -8,7 +8,7 @@ namespace Magento\TestFramework\Dependency;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\TestFramework\Dependency\Reader\ClassScanner;
-use Magento\TestFramework\Exception\NoSuchActionException;
+use Magento\Webapi\Model\Config as WebApiConfig;
 
 /**
  * Test for PhpRule dependency check
@@ -31,6 +31,11 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
     private $classScanner;
 
     /**
+     * @var WebApiConfig
+     */
+    private $webApiConfig;
+
+    /**
      * @inheritDoc
      * @throws \Exception
      */
@@ -46,6 +51,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->classScanner = $this->createMock(ClassScanner::class);
+        $this->webApiConfig = $this->objectManagerHelper->getObject(WebApiConfig::class);
 
         $this->model = $this->objectManagerHelper->getObject(
             PhpRule::class,
@@ -53,6 +59,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 'mapRouters' => $mapRoutes,
                 'mapLayoutBlocks' => $mapLayoutBlocks,
                 'pluginMap' => $pluginMap,
+                'webApiConfig' => $this->webApiConfig,
                 'whitelists' => $whitelist,
                 'classScanner' => $this->classScanner
             ]
@@ -253,7 +260,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                     [
                         'modules' => ['Magento\Cms'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
-                        'source' => 'getUrl("cms/index/index"',
+                        'source' => 'getUrl("cms/index/index")',
                     ]
                 ]
             ],
@@ -309,7 +316,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
         ];
-        $this->model = new PhpRule([], $mapLayoutBlocks);
+        $this->model = new PhpRule([], $mapLayoutBlocks, $this->webApiConfig);
         $this->assertEquals($expected, $this->model->getDependencyInfo($module, 'template', 'any', $content));
     }
 
