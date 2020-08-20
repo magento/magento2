@@ -81,5 +81,5 @@ enum WishListUserInputErrorType {
 }
 
 type StoreConfig {
-    magento_wishlist_general_is_enabled: String @doc(description: "Wishlist functionality status: enabled/disabled")
+    magento_wishlist_general_is_enabled: String @doc(description: "Indicates whether wishlists are enabled (1) or disabled (0)")
 }
