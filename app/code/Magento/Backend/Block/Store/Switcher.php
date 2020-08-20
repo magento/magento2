@@ -449,20 +449,23 @@ class Switcher extends \Magento\Backend\Block\Template
      */
     public function getCurrentSelectionName()
     {
-        if (!($name = $this->getCurrentStoreName())) {
-            if (!($name = $this->getCurrentStoreGroupName())) {
-                if (!($name = $this->getCurrentWebsiteName())) {
-                    $name = $this->getDefaultSelectionName();
-                }
-            }
+        if ($this->getCurrentStoreName() !== '') {
+            return $this->getCurrentStoreName();
         }
-        return $name;
+        if ($this->getCurrentStoreGroupName()) {
+            return $this->getCurrentStoreGroupName();
+        }
+
+        if ($this->getCurrentWebsiteName() !== '') {
+            return $this->getCurrentWebsiteName();
+        }
+        return $this->getDefaultSelectionName();
     }
 
     /**
      * Get current website name
      *
-     * @return string|void
+     * @return string
      */
     public function getCurrentWebsiteName()
     {
@@ -473,12 +476,14 @@ class Switcher extends \Magento\Backend\Block\Template
                 return $website->getName();
             }
         }
+
+        return '';
     }
 
     /**
      * Get current store group name
      *
-     * @return string|void
+     * @return string
      */
     public function getCurrentStoreGroupName()
     {
@@ -489,12 +494,14 @@ class Switcher extends \Magento\Backend\Block\Template
                 return $group->getName();
             }
         }
+
+        return '';
     }
 
     /**
      * Get current store view name
      *
-     * @return string|void
+     * @return string
      */
     public function getCurrentStoreName()
     {
@@ -505,6 +512,8 @@ class Switcher extends \Magento\Backend\Block\Template
                 return $store->getName();
             }
         }
+
+        return '';
     }
 
     /**
