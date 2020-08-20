@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssertCategoryGridPageDetailsActionGroup">
+        <annotations>
+            <description>Assert category grid page basic columns values for default category</description>
+        </annotations>
+
+        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.image('1','image')}}" stepKey="assertImageColumn"/>
+        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.path('1')}}" stepKey="assertPathColumn"/>
+        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.name('1', 'Default Category')}}" stepKey="assertNameColumn"/>
+        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.displayMode('1', 'PRODUCTS')}}" stepKey="assertDisplayModeColumn"/>
+        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.products('1', '0')}}" stepKey="assertProductsColumn"/>
+        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.inMenu('1', 'Yes')}}" stepKey="assertInMenuColumn"/>
+        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.enabled('1', 'Yes')}}" stepKey="assertEnabledColumn"/>
+    </actionGroup>
+</actionGroups>

@@ -15,6 +15,7 @@ namespace Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Gallery;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Backend\Block\Media\Uploader;
+use Magento\Framework\Json\Helper\Data as JsonHelper;
 use Magento\Framework\View\Element\AbstractBlock;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
@@ -23,6 +24,8 @@ use Magento\MediaStorage\Helper\File\Storage\Database;
 
 /**
  * Block for gallery content.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Content extends \Magento\Backend\Block\Widget
 {
@@ -63,6 +66,7 @@ class Content extends \Magento\Backend\Block\Widget
      * @param array $data
      * @param ImageUploadConfigDataProvider $imageUploadConfigDataProvider
      * @param Database $fileStorageDatabase
+     * @param JsonHelper|null $jsonHelper
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
@@ -70,10 +74,12 @@ class Content extends \Magento\Backend\Block\Widget
         \Magento\Catalog\Model\Product\Media\Config $mediaConfig,
         array $data = [],
         ImageUploadConfigDataProvider $imageUploadConfigDataProvider = null,
-        Database $fileStorageDatabase = null
+        Database $fileStorageDatabase = null,
+        ?JsonHelper $jsonHelper = null
     ) {
         $this->_jsonEncoder = $jsonEncoder;
         $this->_mediaConfig = $mediaConfig;
+        $data['jsonHelper'] = $jsonHelper ?? ObjectManager::getInstance()->get(JsonHelper::class);
         parent::__construct($context, $data);
         $this->imageUploadConfigDataProvider = $imageUploadConfigDataProvider
             ?: ObjectManager::getInstance()->get(ImageUploadConfigDataProvider::class);

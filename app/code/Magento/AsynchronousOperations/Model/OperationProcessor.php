@@ -163,6 +163,7 @@ class OperationProcessor
 
         $serializedData = (isset($errorCode)) ? $operation->getSerializedData() : null;
         $this->operationManagement->changeOperationStatus(
+            $operation->getBulkUuid(),
             $operation->getId(),
             $status,
             $errorCode,

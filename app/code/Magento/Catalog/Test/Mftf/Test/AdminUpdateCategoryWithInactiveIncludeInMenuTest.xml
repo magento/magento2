@@ -31,7 +31,7 @@
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
 
         <!--Update Category name,description, urlKey, meta title and disable Include in Menu-->
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleRootSubCategory.name}}" stepKey="fillCategoryName"/>
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
@@ -44,8 +44,7 @@
         <click selector="{{AdminCategorySEOSection.SectionHeader}}" stepKey="selectSearchEngineOptimization"/>
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{SimpleRootSubCategory.url_key}}" stepKey="fillUpdatedUrlKey"/>
         <fillField selector="{{AdminCategorySEOSection.MetaTitleInput}}" userInput="{{SimpleRootSubCategory.name}}" stepKey="fillUpdatedMetaTitle"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForCategorySaved"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton"/>
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
 
         <!--Open UrlRewrite Page-->
@@ -65,7 +64,7 @@
 
         <!--Verify Updated fields in Category Page-->
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage1"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree1"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree1"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleRootSubCategory.name)}}" stepKey="selectCreatedCategory1"/>
         <waitForPageLoad stepKey="waitForCategoryPageToLoad"/>
         <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{SimpleRootSubCategory.name}}" stepKey="seeUpdatedCategoryTitle"/>
