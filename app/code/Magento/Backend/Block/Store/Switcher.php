@@ -462,7 +462,7 @@ class Switcher extends \Magento\Backend\Block\Template
     /**
      * Get current website name
      *
-     * @return string
+     * @return string|void
      */
     public function getCurrentWebsiteName()
     {
@@ -478,7 +478,7 @@ class Switcher extends \Magento\Backend\Block\Template
     /**
      * Get current store group name
      *
-     * @return string
+     * @return string|void
      */
     public function getCurrentStoreGroupName()
     {
@@ -494,7 +494,7 @@ class Switcher extends \Magento\Backend\Block\Template
     /**
      * Get current store view name
      *
-     * @return string
+     * @return string|void
      */
     public function getCurrentStoreName()
     {
@@ -549,7 +549,7 @@ class Switcher extends \Magento\Backend\Block\Template
         if ($this->isShow()) {
             return parent::_toHtml();
         }
-        return z;
+        return '';
     }
 
     /**
