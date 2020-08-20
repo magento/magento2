@@ -452,7 +452,7 @@ class Switcher extends \Magento\Backend\Block\Template
         if ($this->getCurrentStoreName() !== '') {
             return $this->getCurrentStoreName();
         }
-        if ($this->getCurrentStoreGroupName()) {
+        if ($this->getCurrentStoreGroupName() !== '') {
             return $this->getCurrentStoreGroupName();
         }
 
