@@ -185,7 +185,7 @@ define([
         },
 
         /**
-         * Update opened image preview contents when the data provider is updated
+         * Update preview displayed record data from the new items data if the preview is expanded
          *
          * @param {Array} items
          */
