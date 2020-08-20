@@ -50,15 +50,18 @@ define([
             $(document).on('keydown', this.handleKeyDown.bind(this));
 
             this.lastOpenedImage.subscribe(function (newValue) {
+
                 if (newValue === false && _.isNull(this.visibleRecord())) {
                     return;
                 }
+
                 if (newValue === this.visibleRecord()) {
                     return;
                 }
 
                 if (newValue === false) {
                     this.hide();
+
                     return;
                 }
 
@@ -170,16 +173,14 @@ define([
                 setTimeout(function () {
                     this.updateImageData();
                 }.bind(this), 100);
+            } else if (img.get(0).complete) {
+                this.updateHeight();
+                this.scrollToPreview();
             } else {
-                if (img.get(0).complete) {
+                img.load(function () {
                     this.updateHeight();
                     this.scrollToPreview();
-                } else {
-                    img.load(function () {
-                        this.updateHeight();
-                        this.scrollToPreview();
-                    }.bind(this));
-                }
+                }.bind(this));
             }
         },
 
