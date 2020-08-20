@@ -276,10 +276,12 @@ define([
          */
         focusInvalid: function () {
             var invalidField = _.find(this.delegate('checkInvalid'));
+
             if (!_.isUndefined(invalidField) && _.isFunction(invalidField.focused)) {
                 this.focusInvalidOnCollapsibleOpen(invalidField);
                 invalidField.focused(true);
             }
+
             return this;
         },
 
@@ -291,6 +293,7 @@ define([
          */
         focusInvalidOnCollapsibleOpen: function (invalidField) {
             var collapsibleContent = $('#' + invalidField.uid).closest(this.collapsibleSelector);
+
             if (collapsibleContent.length > 0) {
                 collapsibleContent.on('transitionend', () => {
                     invalidField.focused(true);
