@@ -16,7 +16,7 @@ define([
             visibleRecord: null,
             height: 0,
             displayedRecord: {},
-            lastOpenedImage: null,
+            lastOpenedImage: false,
             fields: {
                 previewUrl: 'preview_url',
                 title: 'title'
@@ -167,7 +167,7 @@ define([
          * Close image preview
          */
         hide: function () {
-            this.lastOpenedImage(null);
+            this.lastOpenedImage(false);
             this.visibleRecord(null);
             this.height(0);
             this._selectRow(null);
@@ -239,7 +239,7 @@ define([
         handleKeyDown: function (e) {
             var key = keyCodes[e.keyCode];
 
-            if (this.visibleRecord() !== null) {
+            if (this.visibleRecord() !== null && document.activeElement.tagName !== 'INPUT') {
                 if (key === 'pageLeftKey') {
                     this.prev(this.displayedRecord());
                 } else if (key === 'pageRightKey') {

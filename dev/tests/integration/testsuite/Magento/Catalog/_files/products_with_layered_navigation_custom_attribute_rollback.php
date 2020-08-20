@@ -5,14 +5,13 @@
  */
 declare(strict_types=1);
 
-// phpcs:ignore Magento2.Security.IncludeFile
-require __DIR__ . '/../../Eav/_files/empty_attribute_set_rollback.php';
-// phpcs:ignore Magento2.Security.IncludeFile
-require __DIR__ . '/../../Catalog/_files/categories_rollback.php';
-
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Eav\Api\AttributeRepositoryInterface;
 use Magento\TestFramework\Helper\CacheCleaner;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Eav/_files/empty_attribute_set_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/categories_rollback.php');
 
 $eavConfig = Bootstrap::getObjectManager()->get(\Magento\Eav\Model\Config::class);
 $attributesToDelete = ['test_configurable', 'second_test_configurable'];
@@ -44,3 +43,5 @@ $attributeSetCollection->load();
 /** @var \Magento\Eav\Model\Entity\Attribute\Set $attributeSet */
 $attributeSet = $attributeSetCollection->fetchItem();
 $attributeSet->delete();
+
+CacheCleaner::cleanAll();

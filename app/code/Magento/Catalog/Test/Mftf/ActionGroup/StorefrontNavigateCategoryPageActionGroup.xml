@@ -13,5 +13,6 @@
         </arguments>
         <!-- Open category page on storefront -->
         <amOnPage url="{{StorefrontCategoryPage.url(category.custom_attributes[url_key])}}" stepKey="navigateStorefrontCategoryPage"/>
+        <waitForPageLoad stepKey="waitForCategoryPageLoad"/>
     </actionGroup>
 </actionGroups>

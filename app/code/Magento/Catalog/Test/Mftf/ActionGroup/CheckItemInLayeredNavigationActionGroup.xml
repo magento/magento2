@@ -14,7 +14,6 @@
         </annotations>
         <arguments>
             <argument name="itemType"/>
-            <argument name="itemName"/>
         </arguments>
 
         <conditionalClick selector="{{StorefrontCategorySidebarSection.filterOptionsTitle('itemType')}}" dependentSelector="{{StorefrontCategorySidebarSection.filterOptions}}" visible="false" stepKey="expandFilterOptions"/>

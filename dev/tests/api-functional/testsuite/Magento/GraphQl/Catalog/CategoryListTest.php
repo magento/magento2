@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\GraphQl\Catalog;
 
+use Magento\Catalog\Model\ResourceModel\Category\Collection as CategoryCollection;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
@@ -17,11 +19,22 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
 class CategoryListTest extends GraphQlAbstract
 {
     /**
+     * @var ObjectManagerInterface
+     */
+    private $objectManager;
+
+    protected function setUp(): void
+    {
+        $this->objectManager = Bootstrap::getObjectManager();
+    }
+
+    /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
      * @dataProvider filterSingleCategoryDataProvider
-     * @param $field
-     * @param $condition
-     * @param $value
+     * @param string $field
+     * @param string $condition
+     * @param string $value
+     * @param array $expectedResult
      */
     public function testFilterSingleCategoryByField($field, $condition, $value, $expectedResult)
     {
@@ -174,8 +187,8 @@ QUERY;
         //Check base category products
         $expectedBaseCategoryProducts = [
             ['sku' => 'simple', 'name' => 'Simple Product'],
-            ['sku' => '12345', 'name' => 'Simple Product Two'],
-            ['sku' => 'simple-4', 'name' => 'Simple Product Three']
+            ['sku' => 'simple-4', 'name' => 'Simple Product Three'],
+            ['sku' => '12345', 'name' => 'Simple Product Two']
         ];
         $this->assertCategoryProducts($baseCategory, $expectedBaseCategoryProducts);
         //Check base category children
@@ -190,8 +203,8 @@ QUERY;
         $this->assertEquals('Category 1.1', $firstChildCategory['name']);
         $this->assertEquals('Category 1.1 description.', $firstChildCategory['description']);
         $firstChildCategoryExpectedProducts = [
-            ['sku' => 'simple', 'name' => 'Simple Product'],
             ['sku' => '12345', 'name' => 'Simple Product Two'],
+            ['sku' => 'simple', 'name' => 'Simple Product'],
         ];
         $this->assertCategoryProducts($firstChildCategory, $firstChildCategoryExpectedProducts);
         $firstChildCategoryChildren = [['name' =>'Category 1.1.1']];
@@ -201,8 +214,8 @@ QUERY;
         $this->assertEquals('Category 1.2', $secondChildCategory['name']);
         $this->assertEquals('Its a description of Test Category 1.2', $secondChildCategory['description']);
         $firstChildCategoryExpectedProducts = [
-            ['sku' => 'simple', 'name' => 'Simple Product'],
-            ['sku' => 'simple-4', 'name' => 'Simple Product Three']
+            ['sku' => 'simple-4', 'name' => 'Simple Product Three'],
+            ['sku' => 'simple', 'name' => 'Simple Product']
         ];
         $this->assertCategoryProducts($secondChildCategory, $firstChildCategoryExpectedProducts);
         $firstChildCategoryChildren = [];
@@ -265,8 +278,8 @@ QUERY;
         //Check base category products
         $expectedBaseCategoryProducts = [
             ['sku' => 'simple', 'name' => 'Simple Product'],
-            ['sku' => '12345', 'name' => 'Simple Product Two'],
-            ['sku' => 'simple-4', 'name' => 'Simple Product Three']
+            ['sku' => 'simple-4', 'name' => 'Simple Product Three'],
+            ['sku' => '12345', 'name' => 'Simple Product Two']
         ];
         $this->assertCategoryProducts($baseCategory, $expectedBaseCategoryProducts);
         //Check base category children
@@ -281,8 +294,8 @@ QUERY;
         $this->assertEquals('Its a description of Test Category 1.2', $firstChildCategory['description']);
 
         $firstChildCategoryExpectedProducts = [
-            ['sku' => 'simple', 'name' => 'Simple Product'],
-            ['sku' => 'simple-4', 'name' => 'Simple Product Three']
+            ['sku' => 'simple-4', 'name' => 'Simple Product Three'],
+            ['sku' => 'simple', 'name' => 'Simple Product']
         ];
         $this->assertCategoryProducts($firstChildCategory, $firstChildCategoryExpectedProducts);
         $firstChildCategoryChildren = [];
@@ -333,7 +346,7 @@ QUERY;
     }
 }
 QUERY;
-        $storeManager = Bootstrap::getObjectManager()->get(StoreManagerInterface::class);
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
         $storeRootCategoryId = $storeManager->getStore()->getRootCategoryId();
 
         $result = $this->graphQlQuery($query);
@@ -350,6 +363,9 @@ QUERY;
      */
     public function testMinimumMatchQueryLength()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid match filter. Minimum length is 3.');
+
         $query = <<<QUERY
 {
     categoryList(filters: {name: {match: "mo"}}){
@@ -363,10 +379,155 @@ QUERY;
     }
 }
 QUERY;
-        $result = $this->graphQlQuery($query);
-        $this->assertArrayNotHasKey('errors', $result);
-        $this->assertArrayHasKey('categoryList', $result);
-        $this->assertEquals([], $result['categoryList']);
+        $this->graphQlQuery($query);
+    }
+
+    /**
+     * Test category image full name is returned
+     *
+     * @magentoApiDataFixture Magento/Catalog/_files/catalog_category_with_long_image_name.php
+     */
+    public function testCategoryImageName()
+    {
+        /** @var CategoryCollection $categoryCollection */
+        $categoryCollection = $this->objectManager->get(CategoryCollection::class);
+        $categoryModel = $categoryCollection
+            ->addAttributeToSelect('image')
+            ->addAttributeToFilter('name', ['eq' => 'Parent Image Category'])
+            ->getFirstItem();
+        $categoryId = $categoryModel->getId();
+
+        $query = <<<QUERY
+    {
+categoryList(filters: {ids: {in: ["$categoryId"]}}) {
+  id
+  name
+  image
+ }
+}
+QUERY;
+        $storeManager = $this->objectManager->get(StoreManagerInterface::class);
+        $storeBaseUrl = $storeManager->getStore()->getBaseUrl('media');
+
+        $expected = "catalog/category/magento_long_image_name_magento_long_image_name_magento_long_image_name.jpg";
+        $expectedImageUrl = rtrim($storeBaseUrl, '/') . '/' . $expected;
+
+        $response = $this->graphQlQuery($query);
+        $categoryList = $response['categoryList'];
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertNotEmpty($response['categoryList']);
+        $expectedImageUrl = str_replace('index.php/', '', $expectedImageUrl);
+        $categoryList[0]['image'] = str_replace('index.php/', '', $categoryList[0]['image']);
+        $this->assertEquals('Parent Image Category', $categoryList[0]['name']);
+        $this->assertEquals($expectedImageUrl, $categoryList[0]['image']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterByUrlPathTopLevelCategory()
+    {
+        $urlPath = 'category-1';
+        $query = <<<QUERY
+{
+    categoryList(filters: {url_path: {eq: "$urlPath"}}){
+        id
+        name
+        url_key
+        url_path
+        path
+        position
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $categoryList = $response['categoryList'];
+        $this->assertCount(1, $categoryList);
+        $this->assertEquals($urlPath, $categoryList[0]['url_path']);
+        $this->assertEquals('Category 1', $categoryList[0]['name']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterByUrlPathNestedCategory()
+    {
+        $urlPath = 'category-1/category-1-1/category-1-1-1';
+        $query = <<<QUERY
+{
+    categoryList(filters: {url_path: {eq: "$urlPath"}}){
+        id
+        name
+        url_key
+        url_path
+        path
+        position
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $categoryList = $response['categoryList'];
+        $this->assertCount(1, $categoryList);
+        $this->assertEquals($urlPath, $categoryList[0]['url_path']);
+        $this->assertEquals('Category 1.1.1', $categoryList[0]['name']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterByUrlPathMultipleCategories()
+    {
+        $urlPaths = ['category-1/category-1-1', 'inactive', 'movable-position-2'];
+        $urlPathsString = '"' . implode('", "', $urlPaths) . '"';
+        $query = <<<QUERY
+{
+    categoryList(filters: {url_path: {in: [$urlPathsString]}}){
+        id
+        name
+        url_key
+        url_path
+        path
+        position
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $categoryList = $response['categoryList'];
+        $this->assertCount(2, $categoryList);
+        $this->assertEquals($urlPaths[0], $categoryList[0]['url_path']);
+        $this->assertEquals('Category 1.1', $categoryList[0]['name']);
+        $this->assertEquals($urlPaths[2], $categoryList[1]['url_path']);
+        $this->assertEquals('Movable Position 2', $categoryList[1]['name']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterByUrlPathNoResults()
+    {
+        $query = <<<QUERY
+{
+    categoryList(filters: {url_path: {in: ["not-a-category url path"]}}){
+        id
+        name
+        url_key
+        url_path
+        path
+        position
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $categoryList = $response['categoryList'];
+        $this->assertCount(0, $categoryList);
     }
 
     /**
@@ -469,15 +630,6 @@ QUERY;
                 '["category-1-2", "movable"]',
                 [
                     [
-                        'id' => '7',
-                        'name' => 'Movable',
-                        'url_key' => 'movable',
-                        'url_path' => 'movable',
-                        'children_count' => '0',
-                        'path' => '1/2/7',
-                        'position' => '3'
-                    ],
-                    [
                         'id' => '13',
                         'name' => 'Category 1.2',
                         'url_key' => 'category-1-2',
@@ -485,6 +637,15 @@ QUERY;
                         'children_count' => '0',
                         'path' => '1/2/3/13',
                         'position' => '2'
+                    ],
+                    [
+                        'id' => '7',
+                        'name' => 'Movable',
+                        'url_key' => 'movable',
+                        'url_path' => 'movable',
+                        'children_count' => '0',
+                        'path' => '1/2/7',
+                        'position' => '3'
                     ]
                 ]
             ],
@@ -552,5 +713,61 @@ QUERY;
         foreach ($expectedChildren as $i => $expectedChild) {
             $this->assertResponseFields($category['children'][$i], $expectedChild);
         }
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterCategoryInlineFragment()
+    {
+        $query = <<<QUERY
+{
+    categoryList(filters: {ids: {eq: "6"}}){
+        ... on CategoryTree {
+            id
+            name
+            url_key
+            url_path
+            children_count
+            path
+            position
+        }
+    }
+}
+QUERY;
+        $result = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertCount(1, $result['categoryList']);
+        $this->assertEquals($result['categoryList'][0]['name'], 'Category 2');
+        $this->assertEquals($result['categoryList'][0]['url_path'], 'category-2');
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/categories.php
+     */
+    public function testFilterCategoryNamedFragment()
+    {
+        $query = <<<QUERY
+{
+    categoryList(filters: {ids: {eq: "6"}}){
+        ...Cat
+    }
+}
+
+fragment Cat on CategoryTree {
+    id
+    name
+    url_key
+    url_path
+    children_count
+    path
+    position
+}
+QUERY;
+        $result = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $result);
+        $this->assertCount(1, $result['categoryList']);
+        $this->assertEquals($result['categoryList'][0]['name'], 'Category 2');
+        $this->assertEquals($result['categoryList'][0]['url_path'], 'category-2');
     }
 }

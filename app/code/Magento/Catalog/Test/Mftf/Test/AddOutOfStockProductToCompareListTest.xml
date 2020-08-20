@@ -20,9 +20,11 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockFalse"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <createData entity="SimpleSubCategory" stepKey="category"/>
             <createData entity="SimpleProduct4" stepKey="product">
                 <requiredEntity createDataKey="category"/>
@@ -30,10 +32,12 @@
         </before>
         <after>
             <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockDisable.path}} {{CatalogInventoryOptionsShowOutOfStockDisable.value}}" stepKey="setConfigShowOutOfStockFalse"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
         <!--Open product page-->
         <comment userInput="Open product page" stepKey="openProdPage"/>
@@ -47,8 +51,12 @@
         <magentoCLI command="config:set {{CatalogInventoryOptionsShowOutOfStockEnable.path}} {{CatalogInventoryOptionsShowOutOfStockEnable.value}}" stepKey="setConfigShowOutOfStockTrue"/>
         <!--Clear cache and reindex-->
         <comment userInput="Clear cache and reindex" stepKey="cleanCache"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+    <argument name="indices" value=""/>
+</actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+    <argument name="tags" value=""/>
+</actionGroup>
         <!--Open product page-->
         <comment userInput="Open product page" stepKey="openProductPage"/>
         <amOnPage url="{{StorefrontProductPage.url($$product.custom_attributes[url_key]$$)}}" stepKey="goToSimpleProductPage2"/>
@@ -60,8 +68,11 @@
         <waitForPageLoad stepKey="waitForProdAddToCmpList"/>
         <!--Assert success message-->
         <comment userInput="Assert success message" stepKey="assertSuccessMsg"/>
-        <grabTextFrom selector="{{AdminProductMessagesSection.successMessage}}" stepKey="grabTextFromSuccessMessage"/>
-        <assertEquals expected='You added product $$product.name$$ to the comparison list.' expectedType="string" actual="($grabTextFromSuccessMessage)" stepKey="assertSuccessMessage"/>
+        <grabTextFrom selector="{{StorefrontMessagesSection.success}}" stepKey="grabTextFromSuccessMessage"/>
+        <assertEquals stepKey="assertSuccessMessage">
+			<actualResult type="const">($grabTextFromSuccessMessage)</actualResult>
+			<expectedResult type="string">You added product $$product.name$$ to the comparison list.</expectedResult>
+        </assertEquals>
         <!--See product in the comparison list-->
         <comment userInput="See product in the comparison list" stepKey="seeProductInComparisonList"/>
         <amOnPage url="{{StorefrontProductComparePage.url}}" stepKey="navigateToComparePage"/>
@@ -82,8 +93,11 @@
         <waitForPageLoad stepKey="waitProdAddingToCmpList"/>
         <!--Assert success message-->
         <comment userInput="Assert success message" stepKey="assertSuccessMsg2"/>
-        <grabTextFrom selector="{{AdminProductMessagesSection.successMessage}}" stepKey="grabTextFromSuccessMessage2"/>
-        <assertEquals expected='You added product $$product.name$$ to the comparison list.' expectedType="string" actual="($grabTextFromSuccessMessage)" stepKey="assertSuccessMessage2"/>
+        <grabTextFrom selector="{{StorefrontMessagesSection.success}}" stepKey="grabTextFromSuccessMessage2"/>
+        <assertEquals stepKey="assertSuccessMessage2">
+			<actualResult type="const">($grabTextFromSuccessMessage)</actualResult>
+			<expectedResult type="string">You added product $$product.name$$ to the comparison list.</expectedResult>
+        </assertEquals>
         <!--Check that product displays on add to compare widget-->
         <comment userInput="Check that product displays on add to compare widget" stepKey="checkProdNameOnWidget"/>
         <seeElement selector="{{StorefrontComparisonSidebarSection.ProductTitleByName($$product.name$$)}}" stepKey="seeProdNameOnCmpWidget"/>

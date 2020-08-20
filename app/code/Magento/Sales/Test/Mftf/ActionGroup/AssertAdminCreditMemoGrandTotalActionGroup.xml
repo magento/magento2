@@ -16,6 +16,9 @@
             <argument name="expectedGrandTotal" type="string" defaultValue="$123.00"/>
         </arguments>
         <grabTextFrom selector="{{AdminCreditMemoTotalSection.grandTotal}}" stepKey="getGrandTotal"/>
-        <assertEquals expected='{{expectedGrandTotal}}' actualType="variable" expectedType="string" actual="getGrandTotal" stepKey="assertGrandTotalValue"/>
+        <assertEquals stepKey="assertGrandTotalValue">
+			<actualResult type="variable">getGrandTotal</actualResult>
+			<expectedResult type="string">{{expectedGrandTotal}}</expectedResult>
+        </assertEquals>
     </actionGroup>
 </actionGroups>

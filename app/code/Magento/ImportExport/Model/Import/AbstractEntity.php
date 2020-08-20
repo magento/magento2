@@ -15,6 +15,7 @@ use Magento\ImportExport\Model\Import\ErrorProcessing\ProcessingErrorAggregatorI
 /**
  * Import entity abstract model
  *
+ * phpcs:disable Magento2.Classes.AbstractApi
  * @api
  *
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -335,6 +336,8 @@ abstract class AbstractEntity
     }
 
     /**
+     * Returns Error aggregator
+     *
      * @return ProcessingErrorAggregatorInterface
      */
     public function getErrorAggregator()
@@ -413,7 +416,7 @@ abstract class AbstractEntity
 
         $source->rewind();
         $this->_dataSourceModel->cleanBunches();
-        $masterAttributeCode = $this->getMasterAttributeCode();
+        $mainAttributeCode = $this->getMasterAttributeCode();
 
         while ($source->valid() || count($bunchRows) || isset($entityGroup)) {
             if ($startNewBunch || !$source->valid()) {
@@ -453,7 +456,7 @@ abstract class AbstractEntity
                     continue;
                 }
 
-                if (isset($rowData[$masterAttributeCode]) && trim($rowData[$masterAttributeCode])) {
+                if (isset($rowData[$mainAttributeCode]) && trim($rowData[$mainAttributeCode])) {
                     /* Add entity group that passed validation to bunch */
                     if (isset($entityGroup)) {
                         foreach ($entityGroup as $key => $value) {
@@ -590,6 +593,7 @@ abstract class AbstractEntity
      * Get default import behavior
      *
      * @return string
+     * phpcs:disable Magento2.Functions.StaticFunction
      */
     public static function getDefaultBehavior()
     {
@@ -652,7 +656,9 @@ abstract class AbstractEntity
     }
 
     /**
-     * @return string the master attribute code to use in an import
+     * Returns the master attribute code to use in an import
+     *
+     * @return string
      */
     public function getMasterAttributeCode()
     {

@@ -11,6 +11,7 @@ use Magento\Framework\DB\Adapter\AdapterInterface;
  * Data Definition for table
  *
  * @api
+ * @since 100.0.2
  */
 class Table
 {

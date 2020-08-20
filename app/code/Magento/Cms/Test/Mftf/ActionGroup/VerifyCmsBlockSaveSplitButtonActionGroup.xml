@@ -17,6 +17,7 @@
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <!--Verify Save&Duplicate button and Save&Close button-->
         <click selector="{{BlockNewPagePageActionsSection.expandSplitButton}}"  stepKey="expandSplitBtn1" />
+        <waitForElementVisible selector="{{BlockNewPagePageActionsSection.saveAndDuplicate}}" stepKey="waitForButtonMenuOpened"/>
         <see selector="{{BlockNewPagePageActionsSection.saveAndDuplicate}}" userInput="Save &amp; Duplicate" stepKey="seeSaveAndDuplicate"/>
         <see selector="{{BlockNewPagePageActionsSection.saveAndClose}}" userInput="Save &amp; Close" stepKey="seeSaveAndClose"/>
     </actionGroup>

@@ -44,8 +44,6 @@ $product
     ->setVisibility(Visibility::VISIBILITY_BOTH)
     ->setStatus(Status::STATUS_ENABLED)
     ->setLinksPurchasedSeparately(true)
-    ->setLinksTitle('Links')
-    ->setSamplesTitle('Samples')
     ->setStockData(
         [
             'qty' => 100,
