@@ -29,8 +29,8 @@
                 command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}"
                 stepKey="disableAddStoreCodeToUrls" after="enableLoginAsCustomerAutoDetection"/>
         </after>
-        <actionGroup ref="AssertStorefrontStoreCodeInUrlActionGroup" stepKey="seeCustomStoreCodeInUrl" after="assertCustomStoreView">
-            <argument name="storeCode" value="{{customStore.code}}"/>
+        <actionGroup ref="AssertStorefrontStoreCodeInUrlActionGroup" stepKey="seeCustomStoreViewCodeInUrl" after="assertCustomStoreView">
+            <argument name="storeCode" value="{{customStoreEN.code}}"/>
         </actionGroup>
     </test>
 </tests>
