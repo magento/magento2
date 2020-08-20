@@ -133,7 +133,10 @@ class DbIsolation
             }
 
             if (!empty($isolationProblem)) {
-                $test::fail("There was a problem with isolation: " . var_export($isolationProblem, true));
+                $test::assertTrue(
+                    false,
+                    "There was a problem with isolation: " . var_export($isolationProblem, true)
+                );
             }
         }
     }
