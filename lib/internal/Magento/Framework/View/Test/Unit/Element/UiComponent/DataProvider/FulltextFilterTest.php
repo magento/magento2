@@ -5,9 +5,6 @@
  */
 declare(strict_types=1);
 
-/**
- * Test for full test filter
- */
 namespace Magento\Framework\View\Test\Unit\Element\UiComponent\DataProvider;
 
 use Magento\Framework\Api\Filter;
@@ -84,7 +81,8 @@ class FulltextFilterTest extends TestCase
         $this->selectMock = $this->createPartialMock(Select::class, ['getPart', 'where']);
 
         $this->collectionAbstractDbMock = $this->getMockBuilder(CollectionAbstractDb::class)
-            ->setMethods(['getConnection', 'getSelect', 'getMainTable'])
+            ->addMethods(['getMainTable'])
+            ->onlyMethods(['getConnection', 'getSelect'])
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
 
