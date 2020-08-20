@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create active cart price rule-->
             <actionGroup ref="AdminCreateCartPriceRuleWithCouponCodeActionGroup" stepKey="createActiveCartPriceRule">
                 <argument name="ruleName" value="ActiveSalesRuleWithPercentPriceDiscountCoupon"/>
@@ -28,7 +28,7 @@
             </actionGroup>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Delete active cart price rule-->

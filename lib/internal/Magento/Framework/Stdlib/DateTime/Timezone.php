@@ -206,25 +206,9 @@ class Timezone implements TimezoneInterface
             case ($date instanceof \DateTimeImmutable):
                 $date = $date->setTimezone($timezone);
                 break;
-            case (!is_numeric($date)):
-                $timeType = $includeTime ? \IntlDateFormatter::SHORT : \IntlDateFormatter::NONE;
-                $formatter = new \IntlDateFormatter(
-                    $this->_localeResolver->getLocale(),
-                    \IntlDateFormatter::SHORT,
-                    $timeType,
-                    $timezone
-                );
-                $timestamp = $formatter->parse($date);
-                $date = $timestamp
-                    ? (new \DateTime('@' . $timestamp))->setTimezone($timezone)
-                    : new \DateTime($date, $timezone);
-                break;
-            case (is_numeric($date)):
-                $date = new \DateTime('@' . $date);
-                $date = $date->setTimezone($timezone);
-                break;
             default:
-                $date = new \DateTime($date, $timezone);
+                $date = new \DateTime(is_numeric($date) ? '@' . $date : $date);
+                $date->setTimezone($timezone);
                 break;
         }
 
@@ -335,7 +319,7 @@ class Timezone implements TimezoneInterface
                 throw new LocalizedException(
                     new Phrase(
                         'The DateTime object timezone needs to be the same as the "%1" timezone in config.',
-                        $this->getConfigTimezone()
+                        [$this->getConfigTimezone()]
                     )
                 );
             }

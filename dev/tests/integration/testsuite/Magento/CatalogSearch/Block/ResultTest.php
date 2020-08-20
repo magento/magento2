@@ -12,6 +12,7 @@ use Magento\Framework\View\Element\Text;
 use Magento\Framework\View\LayoutInterface;
 use Magento\Search\Model\QueryFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\Search\ViewModel\ConfigProvider;
 
 class ResultTest extends \PHPUnit\Framework\TestCase
 {
@@ -26,15 +27,26 @@ class ResultTest extends \PHPUnit\Framework\TestCase
     private $layout;
 
     /**
+     * @var ConfigProvider
+     */
+    private $configProvider;
+
+    /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->layout = $this->objectManager->get(LayoutInterface::class);
+        $this->configProvider = $this->objectManager->get(ConfigProvider::class);
     }
 
-    public function testSetListOrders()
+    /**
+     * Set list orders test
+     *
+     * @return void
+     */
+    public function testSetListOrders(): void
     {
         $this->layout->addBlock(Text::class, 'head');
         // The tested block is using head block
@@ -62,6 +74,7 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $searchResultBlock = $this->layout->createBlock(Result::class);
         /** @var Template $searchBlock */
         $searchBlock = $this->layout->createBlock(Template::class);
+        $searchBlock->setData(['configProvider' => $this->configProvider]);
         $searchBlock->setTemplate('Magento_Search::form.mini.phtml');
         /** @var RequestInterface $request */
         $request = $this->objectManager->get(RequestInterface::class);
@@ -69,12 +82,12 @@ class ResultTest extends \PHPUnit\Framework\TestCase
         $request->setParam(QueryFactory::QUERY_VAR_NAME, $searchValue);
         $searchHtml = $searchBlock->toHtml();
 
-        $this->assertContains('value=' . '"' . $expectedOutput . '"', $searchHtml);
-        $this->assertNotContains($unexpectedOutput, $searchHtml);
+        $this->assertStringContainsString('value=' . '"' . $expectedOutput . '"', $searchHtml);
+        $this->assertStringNotContainsString($unexpectedOutput, $searchHtml);
 
         $resultTitle = $searchResultBlock->getSearchQueryText()->render();
-        $this->assertContains("Search results for: '{$expectedOutput}'", $resultTitle);
-        $this->assertNotContains($unexpectedOutput, $resultTitle);
+        $this->assertStringContainsString("Search results for: '{$expectedOutput}'", $resultTitle);
+        $this->assertStringNotContainsString($unexpectedOutput, $resultTitle);
     }
 
     /**

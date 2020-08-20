@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AddSimpleProductToCartActionGroup">
         <annotations>
-            <description>Navigates to the Storefront Product page. Then adds the Product to the Cart. Validates that the Success Message is present and correct.</description>
+            <description>Only works on Storefront Product Page - Add Simple Product to Cart</description>
         </annotations>
         <arguments>
             <argument name="product" defaultValue="product"/>

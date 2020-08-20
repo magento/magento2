@@ -15,7 +15,7 @@
         <arguments>
             <argument name="customStore" type="string"/>
         </arguments>
-        
+
         <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontPage"/>
         <waitForPageLoad stepKey="waitForStorefrontHomePageLoad"/>
         <click selector="{{StorefrontFooterSection.switchStoreButton}}" stepKey="clickSwitchStoreButton"/>

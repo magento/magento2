@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="EndToEndB2CLoggedInUserTest">
+        <!-- Search configurable product -->
+        <comment userInput="Search configurable product" stepKey="commentSearchConfigurableProduct" after="searchAssertSimpleProduct2ImageNotDefault" />
+        <actionGroup ref="StorefrontCheckCategoryConfigurableProductActionGroup" stepKey="searchAssertFilterCategoryConfigProduct" after="commentSearchConfigurableProduct">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontCategoryProductSection.ProductImageByName($$createConfigProduct.name$$)}}" userInput="src" stepKey="searchGrabConfigProductImageSrc" after="searchAssertFilterCategoryConfigProduct"/>
+        <assertNotRegExp stepKey="searchAssertConfigProductImageNotDefault" after="searchGrabConfigProductImageSrc">
+			<actualResult type="const">$searchGrabConfigProductImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/small_image\.jpg/'</expectedResult>
+        </assertNotRegExp>
+        <click selector="{{StorefrontCategoryProductSection.ProductTitleByName($$createConfigProduct.name$$)}}" stepKey="searchClickConfigProductView" after="searchAssertConfigProductImageNotDefault"/>
+        <actionGroup ref="StorefrontCheckConfigurableProductActionGroup" stepKey="searchAssertConfigProductPage" after="searchClickConfigProductView">
+            <argument name="product" value="$$createConfigProduct$$"/>
+            <argument name="optionProduct" value="$$createConfigChildProduct1$$"/>
+        </actionGroup>
+        <!-- @TODO: Move Image check to action group after MQE-697 is fixed -->
+        <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productImage}}" userInput="src" stepKey="searchGrabConfigProductPageImageSrc" after="searchAssertConfigProductPage"/>
+        <assertNotRegExp stepKey="searchAssertConfigProductPageImageNotDefault" after="searchGrabConfigProductPageImageSrc">
+			<actualResult type="const">$searchGrabConfigProductPageImageSrc</actualResult>
+			<expectedResult type="const">'/placeholder\/image\.jpg/'</expectedResult>
+        </assertNotRegExp>
+    </test>
+</tests>

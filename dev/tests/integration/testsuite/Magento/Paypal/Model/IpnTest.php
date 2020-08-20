@@ -23,7 +23,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
      */
     protected $_objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_objectManager = Bootstrap::getObjectManager();
     }
@@ -68,7 +68,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
         $creditmemo = current($creditmemoItems);
 
         $this->assertEquals(Order::STATE_CLOSED, $order->getState()) ;
-        $this->assertEquals(1, count($creditmemoItems));
+        $this->assertCount(1, $creditmemoItems);
         $this->assertEquals(Creditmemo::STATE_REFUNDED, $creditmemo->getState());
         $this->assertEquals(10, $order->getSubtotalRefunded());
         $this->assertEquals(10, $order->getBaseSubtotalRefunded());
@@ -119,7 +119,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
 
         $this->assertEquals(Order::STATE_PROCESSING, $order->getState()) ;
         $this->assertEmpty(count($creditmemoItems));
-        $this->assertEquals(1, count($comments));
+        $this->assertCount(1, $comments);
         $this->assertEquals($commentOrigin, $commentData->getComment());
     }
 
@@ -150,7 +150,7 @@ class IpnTest extends \PHPUnit\Framework\TestCase
         $creditmemoItems = $order->getCreditmemosCollection()->getItems();
 
         $this->assertEquals(Order::STATE_CLOSED, $order->getState()) ;
-        $this->assertEquals(1, count($creditmemoItems));
+        $this->assertCount(1, $creditmemoItems);
         $this->assertEquals(10, $order->getSubtotalRefunded());
         $this->assertEquals(10, $order->getBaseSubtotalRefunded());
         $this->assertEquals(20, $order->getShippingRefunded());
@@ -253,11 +253,11 @@ class IpnTest extends \PHPUnit\Framework\TestCase
         $factory = $this->createPartialMock(\Magento\Framework\HTTP\Adapter\CurlFactory::class, ['create']);
         $adapter = $this->createPartialMock(\Magento\Framework\HTTP\Adapter\Curl::class, ['read', 'write']);
 
-        $adapter->expects($this->once())->method('read')->with()->will($this->returnValue("\nVERIFIED"));
+        $adapter->expects($this->once())->method('read')->with()->willReturn("\nVERIFIED");
 
         $adapter->expects($this->once())->method('write');
 
-        $factory->expects($this->once())->method('create')->with()->will($this->returnValue($adapter));
+        $factory->expects($this->once())->method('create')->with()->willReturn($adapter);
         return $factory;
     }
 

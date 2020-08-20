@@ -3,34 +3,37 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Test\Unit\Model\Order\Creditmemo\Comment;
 
-/**
- * Class ValidatorTest
- */
-class ValidatorTest extends \PHPUnit\Framework\TestCase
+use Magento\Sales\Model\Order\Creditmemo\Comment;
+use Magento\Sales\Model\Order\Creditmemo\Comment\Validator;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ValidatorTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\Comment\Validator
+     * @var Validator
      */
     protected $validator;
 
     /**
-     * @var \Magento\Sales\Model\Order\Creditmemo\Comment|\PHPUnit_Framework_MockObject_MockObject
+     * @var Comment|MockObject
      */
     protected $commentModelMock;
 
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->commentModelMock = $this->createPartialMock(
-            \Magento\Sales\Model\Order\Creditmemo\Comment::class,
-            ['hasData', 'getData', '__wakeup']
+            Comment::class,
+            ['hasData', 'getData']
         );
-        $this->validator = new \Magento\Sales\Model\Order\Creditmemo\Comment\Validator();
+        $this->validator = new Validator();
     }
 
     /**
@@ -45,10 +48,10 @@ class ValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $this->commentModelMock->expects($this->any())
             ->method('hasData')
-            ->will($this->returnValueMap($commentDataMap));
+            ->willReturnMap($commentDataMap);
         $this->commentModelMock->expects($this->once())
             ->method('getData')
-            ->will($this->returnValue($commentData));
+            ->willReturn($commentData);
         $actualWarnings = $this->validator->validate($this->commentModelMock);
         $this->assertEquals($expectedWarnings, $actualWarnings);
     }

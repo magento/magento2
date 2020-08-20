@@ -19,11 +19,11 @@
             <group value="Cms"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginActionGroup" stepKey="loginGetFromGeneralFile"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="DisabledWYSIWYGActionGroup" stepKey="disableWYSIWYG"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
         <actionGroup ref="AdminNavigateToPageGridActionGroup" stepKey="navigateToCmsPageGrid" />
         <actionGroup ref="CreateNewPageWithBasicValues" stepKey="createNewPageWithBasicValues" />

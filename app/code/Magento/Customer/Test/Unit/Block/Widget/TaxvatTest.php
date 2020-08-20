@@ -3,13 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
-use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Block\Widget\Taxvat;
+use Magento\Customer\Helper\Address;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Element\Template\Context;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class TaxvatTest extends \PHPUnit\Framework\TestCase
+class TaxvatTest extends TestCase
 {
     /** Constants used in the unit tests */
     const CUSTOMER_ENTITY_TYPE = 'customer';
@@ -17,21 +24,21 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
     const TAXVAT_ATTRIBUTE_CODE = 'taxvat';
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\CustomerMetadataInterface
+     * @var MockObject|CustomerMetadataInterface
      */
     private $customerMetadata;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\Data\AttributeMetadataInterface */
+    /** @var MockObject|AttributeMetadataInterface */
     private $attribute;
 
     /** @var Taxvat */
     private $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->attribute = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
+        $this->attribute = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->getMockForAbstractClass();
-        $this->customerMetadata = $this->getMockBuilder(\Magento\Customer\Api\CustomerMetadataInterface::class)
+        $this->customerMetadata = $this->getMockBuilder(CustomerMetadataInterface::class)
             ->getMockForAbstractClass();
         $this->customerMetadata->expects(
             $this->any()
@@ -39,13 +46,13 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
             'getAttributeMetadata'
         )->with(
             self::TAXVAT_ATTRIBUTE_CODE
-        )->will(
-            $this->returnValue($this->attribute)
+        )->willReturn(
+            $this->attribute
         );
 
-        $this->_block = new \Magento\Customer\Block\Widget\Taxvat(
-            $this->createMock(\Magento\Framework\View\Element\Template\Context::class),
-            $this->createMock(\Magento\Customer\Helper\Address::class),
+        $this->_block = new Taxvat(
+            $this->createMock(Context::class),
+            $this->createMock(Address::class),
             $this->customerMetadata
         );
     }
@@ -59,7 +66,7 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsEnabled($isVisible, $expectedValue)
     {
-        $this->attribute->expects($this->once())->method('isVisible')->will($this->returnValue($isVisible));
+        $this->attribute->expects($this->once())->method('isVisible')->willReturn($isVisible);
         $this->assertSame($expectedValue, $this->_block->isEnabled());
     }
 
@@ -77,15 +84,15 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getAttributeMetadata'
-        )->will(
-            $this->throwException(new NoSuchEntityException(
+        )->willThrowException(
+            new NoSuchEntityException(
                 __(
                     'No such entity with %fieldName = %fieldValue',
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
-            ))
+            )
         );
-        $this->assertSame(false, $this->_block->isEnabled());
+        $this->assertFalse($this->_block->isEnabled());
     }
 
     /**
@@ -97,7 +104,7 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsRequired($isRequired, $expectedValue)
     {
-        $this->attribute->expects($this->once())->method('isRequired')->will($this->returnValue($isRequired));
+        $this->attribute->expects($this->once())->method('isRequired')->willReturn($isRequired);
         $this->assertSame($expectedValue, $this->_block->isRequired());
     }
 
@@ -115,14 +122,14 @@ class TaxvatTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getAttributeMetadata'
-        )->will(
-            $this->throwException(new NoSuchEntityException(
+        )->willThrowException(
+            new NoSuchEntityException(
                 __(
                     'No such entity with %fieldName = %fieldValue',
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
-            ))
+            )
         );
-        $this->assertSame(false, $this->_block->isRequired());
+        $this->assertFalse($this->_block->isRequired());
     }
 }

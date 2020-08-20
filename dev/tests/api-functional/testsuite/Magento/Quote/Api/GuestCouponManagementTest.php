@@ -20,12 +20,12 @@ class GuestCouponManagementTest extends WebapiAbstract
      */
     protected $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $createdQuotes = ['test_order_1', 'test01'];
         /** @var \Magento\Quote\Model\Quote $quote */
@@ -104,11 +104,12 @@ class GuestCouponManagementTest extends WebapiAbstract
 
     /**
      * @magentoApiDataFixture Magento/Checkout/_files/quote_with_address_saved.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage The coupon code isn't valid. Verify the code and try again.
      */
     public function testSetCouponThrowsExceptionIfCouponDoesNotExist()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('The coupon code isn\'t valid. Verify the code and try again.');
+
         /** @var \Magento\Quote\Model\Quote $quote */
         $quote = $this->objectManager->create(\Magento\Quote\Model\Quote::class);
         $quote->load('test_order_1', 'reserved_order_id');

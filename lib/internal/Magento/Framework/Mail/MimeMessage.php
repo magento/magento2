@@ -7,15 +7,15 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Mail;
 
-use Zend\Mime\Message as ZendMimeMessage;
+use Laminas\Mime\Message as LaminasMimeMessage;
 
 /**
- * Class MimeMessage
+ * Magento Framework Mime message
  */
 class MimeMessage implements MimeMessageInterface
 {
     /**
-     * @var ZendMimeMessage
+     * @var LaminasMimeMessage
      */
     private $mimeMessage;
 
@@ -26,7 +26,7 @@ class MimeMessage implements MimeMessageInterface
      */
     public function __construct(array $parts)
     {
-        $this->mimeMessage = new ZendMimeMessage();
+        $this->mimeMessage = new LaminasMimeMessage();
         $this->mimeMessage->setParts($parts);
     }
 

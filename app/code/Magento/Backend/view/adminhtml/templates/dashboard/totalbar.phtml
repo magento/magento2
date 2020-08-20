@@ -3,19 +3,28 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+use Magento\Backend\Block\Dashboard\Totals;
+use Magento\Framework\Escaper;
+
+/**
+ * @var Totals $block
+ * @var Escaper $escaper
+ */
 ?>
-<?php if (count($block->getTotals()) > 0) : ?>
-<div class="dashboard-totals" id="dashboard_diagram_totals">
-    <ul class="dashboard-totals-list">
-        <?php foreach ($block->getTotals() as $_total) : ?>
-            <li class="dashboard-totals-item">
-                <span class="dashboard-totals-label"><?= $block->escapeHtml($_total['label']) ?></span>
-                <strong class="dashboard-totals-value">
-                    <?= /* @noEscape */ $_total['value'] ?>
-                    <span class="dashboard-totals-decimals"><?= /* @noEscape */ $_total['decimals'] ?></span>
-                </strong>
-            </li>
-        <?php endforeach; ?>
-    </ul>
-</div>
+<?php if (count($block->getTotals()) > 0): ?>
+    <div class="dashboard-totals" id="dashboard_diagram_totals">
+        <ul class="dashboard-totals-list">
+            <?php foreach ($block->getTotals() as $total): ?>
+                <li class="dashboard-totals-item">
+                    <span class="dashboard-totals-label"><?= $escaper->escapeHtml($total['label']) ?></span>
+                    <strong class="dashboard-totals-value">
+                        <?= /* @noEscape */ $total['value'] ?>
+                        <span class="dashboard-totals-decimals"><?= /* @noEscape */ $total['decimals'] ?></span>
+                    </strong>
+                </li>
+            <?php endforeach; ?>
+        </ul>
+    </div>
+    <?= $block->getChildHtml() ?>
 <?php endif; ?>

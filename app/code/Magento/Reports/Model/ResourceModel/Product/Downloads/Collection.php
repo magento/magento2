@@ -100,11 +100,12 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
 
     /**
      * @inheritDoc
+     * @since 100.3.2
      */
     public function getSelectCountSql()
     {
         $countSelect = parent::getSelectCountSql();
-        $countSelect->reset(\Zend\Db\Sql\Select::GROUP);
+        $countSelect->reset(\Laminas\Db\Sql\Select::GROUP);
         return $countSelect;
     }
 }

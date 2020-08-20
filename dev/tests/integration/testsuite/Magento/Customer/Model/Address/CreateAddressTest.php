@@ -38,7 +38,7 @@ class CreateAddressTest extends TestCase
         AddressInterface::COUNTRY_ID => 'US',
         'custom_region_name' => 'Alabama',
         AddressInterface::CITY => 'CityM',
-        AddressInterface::STREET => 'Green str, 67',
+        AddressInterface::STREET => ['Green str, 67'],
         AddressInterface::LASTNAME => 'Smith',
         AddressInterface::FIRSTNAME => 'John',
     ];
@@ -46,17 +46,32 @@ class CreateAddressTest extends TestCase
     /**
      * @var ObjectManager
      */
-    private $objectManager;
-
-    /**
-     * @var GetRegionIdByName
-     */
-    private $getRegionIdByName;
+    protected $objectManager;
 
     /**
      * @var AddressInterfaceFactory
      */
-    private $addressFactory;
+    protected $addressFactory;
+
+    /**
+     * @var CustomerRegistry
+     */
+    protected $customerRegistry;
+
+    /**
+     * @var AddressRepositoryInterface
+     */
+    protected $addressRepository;
+
+    /**
+     * @var GetRegionIdByName
+     */
+    protected $getRegionIdByName;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    protected $customerRepository;
 
     /**
      * @var AddressRegistry
@@ -69,21 +84,6 @@ class CreateAddressTest extends TestCase
     private $addressResource;
 
     /**
-     * @var CustomerRegistry
-     */
-    private $customerRegistry;
-
-    /**
-     * @var AddressRepositoryInterface
-     */
-    private $addressRepository;
-
-    /**
-     * @var CustomerRepositoryInterface
-     */
-    private $customerRepository;
-
-    /**
      * @var int[]
      */
     private $createdAddressesIds = [];
@@ -91,23 +91,23 @@ class CreateAddressTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->getRegionIdByName = $this->objectManager->get(GetRegionIdByName::class);
         $this->addressFactory = $this->objectManager->get(AddressInterfaceFactory::class);
-        $this->addressRegistry = $this->objectManager->get(AddressRegistry::class);
-        $this->addressResource = $this->objectManager->get(Address::class);
         $this->customerRegistry = $this->objectManager->get(CustomerRegistry::class);
         $this->addressRepository = $this->objectManager->get(AddressRepositoryInterface::class);
+        $this->getRegionIdByName = $this->objectManager->get(GetRegionIdByName::class);
         $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
+        $this->addressRegistry = $this->objectManager->get(AddressRegistry::class);
+        $this->addressResource = $this->objectManager->get(Address::class);
         parent::setUp();
     }
 
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         foreach ($this->createdAddressesIds as $createdAddressesId) {
             $this->addressRegistry->remove($createdAddressesId);
@@ -310,10 +310,6 @@ class CreateAddressTest extends TestCase
                 array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::LASTNAME => '']),
                 InputException::requiredField('lastname'),
             ],
-            'required_field_empty_street_as_string' => [
-                array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::STREET => '']),
-                InputException::requiredField('street'),
-            ],
             'required_field_empty_street_as_array' => [
                 array_replace(self::STATIC_CUSTOMER_ADDRESS_DATA, [AddressInterface::STREET => []]),
                 InputException::requiredField('street'),
@@ -339,7 +335,7 @@ class CreateAddressTest extends TestCase
      * @param bool $isDefaultBilling
      * @return AddressInterface
      */
-    private function createAddress(
+    protected function createAddress(
         int $customerId,
         array $addressData,
         bool $isDefaultShipping = false,

@@ -20,7 +20,7 @@
             <group value="catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -82,10 +82,10 @@
             <deleteData createDataKey="createConfigChildProduct2" stepKey="deleteConfigChildProduct2"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
 
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!--Go to storefront product page an check price box css-->
@@ -93,6 +93,9 @@
         <waitForPageLoad stepKey="waitForStoreFrontLoad"/>
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$getConfigAttributeOption1.value$$" stepKey="selectOption"/>
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="class" stepKey="grabGrabPriceClass"/>
-        <assertNotContains actual="$grabGrabPriceClass" expected=".price-box .price-tier_price" expectedType="string"  stepKey="assertNotEquals"/>
+        <assertStringNotContainsString stepKey="assertNotEquals">
+			<actualResult type="const">$grabGrabPriceClass</actualResult>
+			<expectedResult type="string">.price-box .price-tier_price</expectedResult>
+        </assertStringNotContainsString>
     </test>
 </tests>
