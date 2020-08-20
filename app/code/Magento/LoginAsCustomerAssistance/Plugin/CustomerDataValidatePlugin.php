@@ -75,6 +75,7 @@ class CustomerDataValidatePlugin
                     ],
                 ];
 
+                // phpcs:ignore Magento2.Exceptions.DirectThrow
                 throw new Exception(null, null, $errorMessages);
             }
         }
