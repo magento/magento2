@@ -179,8 +179,8 @@ class Storage extends \Magento\Framework\DataObject
      * @param array $data
      * @param \Magento\Framework\Filesystem\DriverInterface $file
      * @param \Magento\Framework\Filesystem\Io\File|null $ioFile
-     * @param \Magento\Framework\File\Mime $mime
      * @param \Psr\Log\LoggerInterface|null $logger
+     * @param \Magento\Framework\File\Mime $mime
      *
      * @throws \Magento\Framework\Exception\FileSystemException
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -204,8 +204,8 @@ class Storage extends \Magento\Framework\DataObject
         array $data = [],
         \Magento\Framework\Filesystem\DriverInterface $file = null,
         \Magento\Framework\Filesystem\Io\File $ioFile = null,
-        \Magento\Framework\File\Mime $mime = null,
-        \Psr\Log\LoggerInterface $logger = null
+        \Psr\Log\LoggerInterface $logger = null,
+        \Magento\Framework\File\Mime $mime = null
     ) {
         $this->_session = $session;
         $this->_backendUrl = $backendUrl;
