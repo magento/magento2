@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\GroupedProduct\Model\Wishlist\Product;
 
+use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
 use Magento\Wishlist\Model\Item as WishlistItem;
 use Magento\GroupedProduct\Model\Product\Type\Grouped as TypeGrouped;
 use Magento\Catalog\Model\Product;
@@ -36,7 +37,7 @@ class Item
 
             $diff = array_diff_key($itemOptions, $productOptions);
 
-            if (!$diff) {
+            if (!$diff && $this->isAddAction($productOptions['info_buyRequest'])) {
                 $buyRequest = $subject->getBuyRequest();
                 $superGroupInfo = $buyRequest->getData('super_group');
 
@@ -78,10 +79,13 @@ class Item
         array $options2
     ): array {
         $diff = array_diff_key($options1, $options2);
+        $productOptions = isset($options1['info_buyRequest']['product']) ? $options1 : $options2;
 
         if (!$diff) {
             foreach (array_keys($options1) as $key) {
-                if (preg_match('/associated_product_\d+/', $key)) {
+                if (preg_match('/associated_product_\d+/', $key)
+                    && $this->isAddAction($productOptions['info_buyRequest'])
+                ) {
                     unset($options1[$key]);
                     unset($options2[$key]);
                 }
@@ -89,5 +93,19 @@ class Item
         }
 
         return [$options1, $options2];
+    }
+
+    /**
+     * Check that current request belongs to add to wishlist action.
+     *
+     * @param OptionInterface $buyRequest
+     *
+     * @return bool
+     */
+    private function isAddAction(OptionInterface $buyRequest): bool
+    {
+        $requestValue = json_decode($buyRequest->getValue(), true);
+
+        return $requestValue['action'] === 'add';
     }
 }

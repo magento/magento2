@@ -56,7 +56,7 @@ class InvalidateVarnishObserverTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->configMock = $this->createPartialMock(Config::class, ['getType', 'isEnabled']);
         $this->purgeCacheMock = $this->createMock(PurgeCache::class);
@@ -82,7 +82,7 @@ class InvalidateVarnishObserverTest extends TestCase
     public function testInvalidateVarnish()
     {
         $tags = ['cache_1', 'cache_group'];
-        $pattern = '((^|,)cache_1(,|$))|((^|,)cache_group(,|$))';
+        $pattern = ['((^|,)cache_1(,|$))', '((^|,)cache_group(,|$))'];
 
         $this->configMock->expects($this->once())->method('isEnabled')->willReturn(true);
         $this->configMock->expects(
@@ -93,7 +93,10 @@ class InvalidateVarnishObserverTest extends TestCase
             Config::VARNISH
         );
 
-        $eventMock = $this->createPartialMock(Event::class, ['getObject']);
+        $eventMock = $this->getMockBuilder(Event::class)
+            ->addMethods(['getObject'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $eventMock->expects($this->once())->method('getObject')->willReturn($this->observerObject);
         $this->observerMock->expects($this->once())->method('getEvent')->willReturn($eventMock);
         $this->tagResolverMock->expects($this->once())->method('getTags')->with($this->observerObject)

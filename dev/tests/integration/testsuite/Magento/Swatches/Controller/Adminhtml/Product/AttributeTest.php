@@ -27,7 +27,7 @@ class AttributeTest extends \Magento\TestFramework\TestCase\AbstractBackendContr
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 

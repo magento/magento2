@@ -24,7 +24,7 @@ class QuickSearchTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
@@ -64,6 +64,6 @@ class QuickSearchTest extends AbstractController
             $this->storeManager->setCurrentStore($defaultStore);
         }
 
-        $this->assertContains('search product 1', $responseBody);
+        $this->assertStringContainsString('search product 1', $responseBody);
     }
 }

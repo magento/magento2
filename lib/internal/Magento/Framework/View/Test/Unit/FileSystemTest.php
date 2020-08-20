@@ -3,71 +3,85 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test for view filesystem model
  */
 namespace Magento\Framework\View\Test\Unit;
 
-class FileSystemTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile;
+use Magento\Framework\View\Design\FileResolution\Fallback\File;
+use Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile;
+use Magento\Framework\View\Design\FileResolution\Fallback\StaticFile;
+use Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile;
+use Magento\Framework\View\Design\ThemeInterface;
+use Magento\Framework\View\FileSystem;
+use Magento\Setup\Module\I18n\Locale;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class FileSystemTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\View\FileSystem|\PHPUnit_Framework_MockObject_MockObject
+     * @var FileSystem|MockObject
      */
     protected $_model;
 
     /**
-     * @var \Magento\Framework\View\Design\FileResolution\Fallback\File|\PHPUnit_Framework_MockObject_MockObject
+     * @var File|MockObject
      */
     protected $_fileResolution;
 
     /**
-     * @var \Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile|\PHPUnit_Framework_MockObject_MockObject
+     * @var TemplateFile|MockObject
      */
     protected $_templateFileResolution;
 
     /**
-     * @var \Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocaleFile|MockObject
      */
     protected $_localeFileResolution;
 
     /**
-     * @var \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile|\PHPUnit_Framework_MockObject_MockObject
+     * @var StaticFile|MockObject
      */
     protected $_staticFileResolution;
 
     /**
-     * @var \Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile
-     * |\PHPUnit_Framework_MockObject_MockObject
+     * @var EmailTemplateFile
+     * |\PHPUnit\Framework\MockObject\MockObject
      */
     protected $_emailTemplateFileResolution;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository|\PHPUnit_Framework_MockObject_MockObject
+     * @var Repository|MockObject
      */
     protected $_assetRepo;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_fileResolution = $this->createMock(\Magento\Framework\View\Design\FileResolution\Fallback\File::class);
+        $this->_fileResolution = $this->createMock(File::class);
         $this->_templateFileResolution = $this->createMock(
-            \Magento\Framework\View\Design\FileResolution\Fallback\TemplateFile::class
+            TemplateFile::class
         );
         $this->_localeFileResolution = $this->createMock(
-            \Magento\Framework\View\Design\FileResolution\Fallback\LocaleFile::class
+            LocaleFile::class
         );
         $this->_staticFileResolution = $this->createMock(
-            \Magento\Framework\View\Design\FileResolution\Fallback\StaticFile::class
+            StaticFile::class
         );
         $this->_emailTemplateFileResolution = $this->createMock(
-            \Magento\Framework\View\Design\FileResolution\Fallback\EmailTemplateFile::class
+            EmailTemplateFile::class
         );
-        $this->_assetRepo = $this->createPartialMock(
-            \Magento\Framework\View\Asset\Repository::class,
-            ['extractScope', 'updateDesignParams', 'createAsset']
-        );
+        $this->_assetRepo = $this->getMockBuilder(Repository::class)
+            ->addMethods(['extractScope'])
+            ->onlyMethods(['updateDesignParams', 'createAsset'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
-        $this->_model = new \Magento\Framework\View\FileSystem(
+        $this->_model = new FileSystem(
             $this->_fileResolution,
             $this->_templateFileResolution,
             $this->_localeFileResolution,
@@ -81,9 +95,9 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
     {
         $params = [
             'area' => 'some_area',
-            'themeModel' => $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class),
+            'themeModel' => $this->getMockForAbstractClass(ThemeInterface::class),
             'module' => 'Some_Module',   //It should be set in \Magento\Framework\View\Asset\Repository::extractScope
-                                        // but PHPUnit has troubles with passing arguments by reference
+            // but PHPUnit has troubles with passing arguments by reference
         ];
         $file = 'Some_Module::some_file.ext';
         $expected = 'path/to/some_file.ext';
@@ -91,12 +105,12 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
         $this->_fileResolution->expects($this->once())
             ->method('getFile')
             ->with($params['area'], $params['themeModel'], 'some_file.ext', 'Some_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $this->_assetRepo->expects($this->any())
             ->method('extractScope')
             ->with($file, $params)
-            ->will($this->returnValue('some_file.ext'));
+            ->willReturn('some_file.ext');
 
         $actual = $this->_model->getFilename($file, $params);
         $this->assertEquals($expected, $actual);
@@ -106,9 +120,9 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
     {
         $params = [
             'area'       => 'some_area',
-            'themeModel' => $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class),
+            'themeModel' => $this->getMockForAbstractClass(ThemeInterface::class),
             'module'     => 'Some_Module', //It should be set in \Magento\Framework\View\Asset\Repository::extractScope
-                                           // but PHPUnit has troubles with passing arguments by reference
+            // but PHPUnit has troubles with passing arguments by reference
         ];
         $file = 'Some_Module::some_file.ext';
         $expected = 'path/to/some_file.ext';
@@ -116,12 +130,12 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
         $this->_templateFileResolution->expects($this->once())
             ->method('getFile')
             ->with($params['area'], $params['themeModel'], 'some_file.ext', 'Some_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $this->_assetRepo->expects($this->any())
             ->method('extractScope')
             ->with($file, $params)
-            ->will($this->returnValue('some_file.ext'));
+            ->willReturn('some_file.ext');
 
         $actual = $this->_model->getTemplateFileName($file, $params);
         $this->assertEquals($expected, $actual);
@@ -131,7 +145,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
     {
         $params = [
             'area' => 'some_area',
-            'themeModel' => $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class),
+            'themeModel' => $this->getMockForAbstractClass(ThemeInterface::class),
             'locale' => 'some_locale',
         ];
         $file = 'some_file.ext';
@@ -140,7 +154,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
         $this->_localeFileResolution->expects($this->once())
             ->method('getFile')
             ->with($params['area'], $params['themeModel'], $params['locale'], 'some_file.ext')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $actual = $this->_model->getLocaleFileName($file, $params);
         $this->assertEquals($expected, $actual);
@@ -150,7 +164,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
     {
         $params = [
             'area' => 'some_area',
-            'themeModel' => $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class),
+            'themeModel' => $this->getMockForAbstractClass(ThemeInterface::class),
             'locale' => 'some_locale',
             'module' => 'Some_Module',
         ];
@@ -160,7 +174,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
         $this->_staticFileResolution->expects($this->once())
             ->method('getFile')
             ->with($params['area'], $params['themeModel'], $params['locale'], 'some_file.ext', 'Some_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $actual = $this->_model->getStaticFileName($file, $params);
         $this->assertEquals($expected, $actual);
@@ -238,10 +252,10 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
 
     public function testGetEmailTemplateFile()
     {
-        $locale = \Magento\Setup\Module\I18n\Locale::DEFAULT_SYSTEM_LOCALE;
+        $locale = Locale::DEFAULT_SYSTEM_LOCALE;
         $params = [
             'area'       => 'some_area',
-            'themeModel' => $this->createMock(\Magento\Framework\View\Design\ThemeInterface::class),
+            'themeModel' => $this->getMockForAbstractClass(ThemeInterface::class),
             'module'     => 'Some_Module',
             'locale'     => $locale
         ];
@@ -251,7 +265,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
         $this->_emailTemplateFileResolution->expects($this->once())
             ->method('getFile')
             ->with($params['area'], $params['themeModel'], $locale, $file, 'Some_Module')
-            ->will($this->returnValue($expected));
+            ->willReturn($expected);
 
         $actual = $this->_model->getEmailTemplateFileName($file, $params, 'Some_Module');
         $this->assertEquals($expected, $actual);

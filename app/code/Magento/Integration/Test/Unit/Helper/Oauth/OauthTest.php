@@ -3,21 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Helper\Oauth;
 
+use Magento\Framework\Math\Random;
 use Magento\Framework\Oauth\Helper\Oauth;
+use PHPUnit\Framework\TestCase;
 
-class OauthTest extends \PHPUnit\Framework\TestCase
+class OauthTest extends TestCase
 {
     /** @var Oauth */
     protected $_oauthHelper;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_oauthHelper = new Oauth(new \Magento\Framework\Math\Random());
+        $this->_oauthHelper = new Oauth(new Random());
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_oauthHelper);
     }

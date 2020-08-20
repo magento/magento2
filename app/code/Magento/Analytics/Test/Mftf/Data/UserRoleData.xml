@@ -149,7 +149,6 @@
             <item>Magento_Backend::custom</item>
             <item>Magento_Backend::tools</item>
             <item>Magento_Backend::cache</item>
-            <item>Magento_Backend::setup_wizard</item>
             <item>Magento_Backup::backup</item>
             <item>Magento_Backup::rollback</item>
             <item>Magento_Indexer::index</item>

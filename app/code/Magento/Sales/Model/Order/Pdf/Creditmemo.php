@@ -21,6 +21,11 @@ class Creditmemo extends AbstractPdf
     protected $_storeManager;
 
     /**
+     * @var \Magento\Store\Model\App\Emulation
+     */
+    private $appEmulation;
+
+    /**
      * @param \Magento\Payment\Helper\Data $paymentData
      * @param \Magento\Framework\Stdlib\StringUtils $string
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
@@ -32,7 +37,7 @@ class Creditmemo extends AbstractPdf
      * @param \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation
      * @param \Magento\Sales\Model\Order\Address\Renderer $addressRenderer
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Locale\ResolverInterface $localeResolver
+     * @param \Magento\Store\Model\App\Emulation|null $appEmulation
      * @param array $data
      *
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
@@ -50,11 +55,11 @@ class Creditmemo extends AbstractPdf
         \Magento\Framework\Translate\Inline\StateInterface $inlineTranslation,
         \Magento\Sales\Model\Order\Address\Renderer $addressRenderer,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Locale\ResolverInterface $localeResolver,
+        \Magento\Store\Model\App\Emulation $appEmulation,
         array $data = []
     ) {
         $this->_storeManager = $storeManager;
-        $this->_localeResolver = $localeResolver;
+        $this->appEmulation = $appEmulation;
         parent::__construct(
             $paymentData,
             $string,
@@ -150,7 +155,11 @@ class Creditmemo extends AbstractPdf
 
         foreach ($creditmemos as $creditmemo) {
             if ($creditmemo->getStoreId()) {
-                $this->_localeResolver->emulate($creditmemo->getStoreId());
+                $this->appEmulation->startEnvironmentEmulation(
+                    $creditmemo->getStoreId(),
+                    \Magento\Framework\App\Area::AREA_FRONTEND,
+                    true
+                );
                 $this->_storeManager->setCurrentStore($creditmemo->getStoreId());
             }
             $page = $this->newPage();
@@ -185,7 +194,7 @@ class Creditmemo extends AbstractPdf
             /* Add totals */
             $this->insertTotals($page, $creditmemo);
             if ($creditmemo->getStoreId()) {
-                $this->_localeResolver->revert();
+                $this->appEmulation->stopEnvironmentEmulation();
             }
         }
         $this->_afterGetPdf();

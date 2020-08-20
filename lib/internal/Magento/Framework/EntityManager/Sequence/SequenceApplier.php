@@ -71,7 +71,8 @@ class SequenceApplier
         $entityType = $this->typeResolver->resolve($entity);
 
         /** @var \Magento\Framework\DB\Sequence\SequenceInterface|null $sequence */
-        $sequence = $this->sequenceRegistry->retrieve($entityType)['sequence'];
+        $sequence = $this->sequenceRegistry->retrieve($entityType) ?
+            $this->sequenceRegistry->retrieve($entityType)['sequence'] : null;
 
         if ($sequence) {
             $metadata = $this->metadataPool->getMetadata($entityType);

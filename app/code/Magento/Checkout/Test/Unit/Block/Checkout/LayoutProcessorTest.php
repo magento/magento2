@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Checkout\Test\Unit\Block\Checkout;
 
 use Magento\Checkout\Block\Checkout\AttributeMerger;
@@ -51,7 +53,7 @@ class LayoutProcessorTest extends TestCase
      */
     private $storeManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attributeDataProvider = $this->getMockBuilder(AttributeMetadataDataProvider::class)
             ->disableOriginalConstructor()
@@ -81,7 +83,7 @@ class LayoutProcessorTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->storeManager = $this->createMock(StoreManagerInterface::class);
+        $this->storeManager = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
         $this->layoutProcessor = new LayoutProcessor(
             $this->attributeDataProvider,

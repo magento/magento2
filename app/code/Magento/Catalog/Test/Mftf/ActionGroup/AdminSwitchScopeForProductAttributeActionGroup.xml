@@ -9,9 +9,6 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminSwitchScopeForProductAttributeActionGroup">
-        <arguments>
-            <argument name="scope" type="string" defaultValue="1"/>
-        </arguments>
         <click selector="{{AttributePropertiesSection.AdvancedProperties}}" stepKey="expandAdvancedProperties"/>
         <waitForElementVisible selector="{{AttributePropertiesSection.Scope}}" stepKey="waitOpenAdvancedProperties"/>
         <selectOption selector="{{AttributePropertiesSection.Scope}}" userInput="1" stepKey="selectNecessaryScope"/>

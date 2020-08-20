@@ -36,8 +36,12 @@
                 <requiredEntity createDataKey="bundleOption"/>
                 <requiredEntity createDataKey="createSimpleProduct"/>
             </createData>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="cacheFlush"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <!-- Delete category -->
@@ -63,7 +67,7 @@
         <openNewTab stepKey="openNewTab"/>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <!-- Find the first simple product that we just created using the product grid and go to its page-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPage"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPage"/>
         <!-- Disabled bundle product from grid -->
         <actionGroup ref="ChangeStatusProductUsingProductGridActionGroup" stepKey="disabledProductFromGrid">
             <argument name="product" value="$$createBundleDynamicProduct$$"/>

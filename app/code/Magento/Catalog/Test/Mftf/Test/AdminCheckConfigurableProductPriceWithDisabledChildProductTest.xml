@@ -131,7 +131,9 @@
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="seeCategoryInFrontPage"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="seeProductNameInStoreFront"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigChildProduct1.price$$" stepKey="seeInitialPriceInStoreFront"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="$$createConfigProduct.sku$$" stepKey="seeProductSkuInStoreFront"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeProductSkuInStoreFront">
+            <argument name="productSku" value="$$createConfigProduct.sku$$"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductStatusInStoreFront"/>
 
         <!-- Verify First Child Product attribute option is displayed -->
@@ -146,8 +148,7 @@
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigChildProduct3.price$$" stepKey="seeChildProduct3PriceInStoreFront"/>
 
         <!-- Open Product Index Page and Filter First Child product  -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
             <argument name="product" value="ApiSimpleOne"/>
         </actionGroup>
@@ -156,8 +157,7 @@
 
         <!-- Disable the product -->
         <click selector="{{AdminProductFormSection.enableProductLabel}}" stepKey="disableProduct"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}"  stepKey="clickOnSaveButton"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoading"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="clickOnSaveButton"/>
         <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the product." stepKey="messageYouSavedTheProductIsShown"/>
 
         <!-- Open Product Store Front Page -->
@@ -168,7 +168,9 @@
         <seeElement selector="{{StorefrontHeaderSection.NavigationCategoryByName($$createCategory.name$$)}}" stepKey="seeCategoryInFrontPage1"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="seeProductNameInStoreFront1"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigChildProduct2.price$$" stepKey="seeUpdatedProductPriceInStoreFront"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="$$createConfigProduct.sku$$" stepKey="seeProductSkuInStoreFront1"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeProductSkuInStoreFront1">
+            <argument name="productSku" value="$$createConfigProduct.sku$$"/>
+        </actionGroup>
         <see selector="{{StorefrontProductInfoMainSection.productStockStatus}}" userInput="In Stock" stepKey="seeProductStatusInStoreFront1"/>
 
         <!-- Verify product Attribute Option1 is not displayed  -->
