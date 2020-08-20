@@ -10,13 +10,13 @@
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminMediaGalleryCatalogUiCategoryGridSection">
         <element name="activeFilterPlaceholder" type="text" selector="//div[@class='admin__current-filters-list-wrap']//li//span[contains(text(), '{{filterPlaceholder}}')]" parameterized="true"/>
-        <element name="image" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Image')]/preceding-sibling::th) +1]//img[contains(@src, '{{imageName}}')]" parameterized="true"/>
-        <element name="path" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Path')]/preceding-sibling::th)]" parameterized="true"/>
-        <element name="name" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Name')]/preceding-sibling::th) +1 ]//*[text()='{{categoryName}}']" parameterized="true"/>
-        <element name="displayMode" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Display Mode')]/preceding-sibling::th) +1 ]//*[text()='{{productsText}}']" parameterized="true"/>
-        <element name="products" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Products')]/preceding-sibling::th) +1 ]//*[text()='{{productsQty}}']" parameterized="true"/>
-        <element name="inMenu" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'In Menu')]/preceding-sibling::th) +1 ]//*[text()='{{inMenuValue}}']" parameterized="true"/>
-        <element name="enabled" type="text" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Enabled')]/preceding-sibling::th) +1 ]//*[text()='{{enabledValue}}']" parameterized="true"/>
-        <element name="edit" type="button" selector="//tr[{{row}}]//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Action')]/preceding-sibling::th) +1 ]//*[text()='{{edit}}']" parameterized="true"/>
+        <element name="image" type="text" selector="//tr//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Image')]/preceding-sibling::th) +1]//img[contains(@src, '{{imageName}}')]" parameterized="true"/>
+        <element name="path" type="text" selector="//tr//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Path')]/preceding-sibling::th) +1 ]//*[contains(text(), '{{categoryName}}')]" parameterized="true"/>
+        <element name="name" type="text" selector="//tr//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Name')]/preceding-sibling::th) +1 ]//*[text()='{{categoryName}}']" parameterized="true"/>
+        <element name="displayMode" type="text" selector="//tr//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Display Mode')]/preceding-sibling::th) +1 ]//*[text()='{{productsText}}']" parameterized="true"/>
+        <element name="products" type="text" selector="//tr//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Products')]/preceding-sibling::th) +1 ]//*[text()='{{productsQty}}']" parameterized="true"/>
+        <element name="inMenu" type="text" selector="//tr//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'In Menu')]/preceding-sibling::th) +1 ]//*[text()='{{inMenuValue}}']" parameterized="true"/>
+        <element name="enabled" type="text" selector="//tr//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Enabled')]/preceding-sibling::th) +1 ]//*[text()='{{enabledValue}}']" parameterized="true"/>
+        <element name="edit" type="button" selector="//tr//td[count(//div[@data-role='grid-wrapper']//tr//th[contains(., 'Action')]/preceding-sibling::th) +1 ]//*[text()='{{edit}}']" parameterized="true"/>
     </section>
 </sections>

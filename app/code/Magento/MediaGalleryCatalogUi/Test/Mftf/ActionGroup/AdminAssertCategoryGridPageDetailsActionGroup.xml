@@ -8,16 +8,20 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="AdminAssertCategoryGridPageDetailsActionGroup">
+        <arguments>
+            <argument name="category"/>
+            <argument name="imageName" type="string" defaultValue="magento"/>
+        </arguments>
         <annotations>
-            <description>Assert category grid page basic columns values for default category</description>
+            <description>Assert category grid page basic columns values for a specific category</description>
         </annotations>
 
-        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.image('1','image')}}" stepKey="assertImageColumn"/>
-        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.path('1')}}" stepKey="assertPathColumn"/>
-        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.name('1', 'Default Category')}}" stepKey="assertNameColumn"/>
-        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.displayMode('1', 'PRODUCTS')}}" stepKey="assertDisplayModeColumn"/>
-        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.products('1', '0')}}" stepKey="assertProductsColumn"/>
-        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.inMenu('1', 'Yes')}}" stepKey="assertInMenuColumn"/>
-        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.enabled('1', 'Yes')}}" stepKey="assertEnabledColumn"/>
+        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.image(imageName)}}" stepKey="assertImageColumn"/>
+        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.path(category.name)}}" stepKey="assertPathColumn"/>
+        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.name(category.name)}}" stepKey="assertNameColumn"/>
+        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.displayMode('PRODUCTS')}}" stepKey="assertDisplayModeColumn"/>
+        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.products('0')}}" stepKey="assertProductsColumn"/>
+        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.inMenu(category.include_in_menu)}}" stepKey="assertInMenuColumn"/>
+        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.enabled(category.is_active)}}" stepKey="assertEnabledColumn"/>
     </actionGroup>
 </actionGroups>
