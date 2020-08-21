@@ -100,7 +100,7 @@ class InvoiceTest extends GraphQlAbstract
                     'discounts' => [],
                     'base_grand_total' => [
                         'value' => 100,
-                        'currency' => 'USD'
+                        'currency' => 'EUR'
                     ],
                     'total_tax' => [
                         'value' => 0,
@@ -154,7 +154,7 @@ class InvoiceTest extends GraphQlAbstract
                     ],
                     'base_grand_total' => [
                         'value' => 50,
-                        'currency' => 'USD'
+                        'currency' => 'EUR'
                     ],
                     'total_tax' => [
                         'value' => 0,
@@ -204,7 +204,7 @@ class InvoiceTest extends GraphQlAbstract
                     ],
                     'base_grand_total' => [
                         'value' => 0,
-                        'currency' => 'USD'
+                        'currency' => 'EUR'
                     ],
                     'total_tax' => [
                         'value' => 0,
@@ -466,12 +466,9 @@ QUERY;
                         'rate' => 7.5
                     ]
                 ],
-                'discounts'=> [
-                    0 => [
-                        'amount'=>['value' => 0.07, 'currency'=> 'USD'],
-                        'label' => 'Discount Label for 10% off'
-                    ]
-                ],
+                 'discounts'=> [
+                     0 => ['amount'=>['value' => 1, 'currency'=> 'USD']]
+                 ],
             ]
         ];
         $this->assertResponseFields($customerOrderItemTotal, $assertionMap);
@@ -509,12 +506,8 @@ QUERY;
                         'rate' => 7.5
                     ]
                 ],
-                'discounts'=> [
-                    0 => [
-                        'amount'=>['value' => 0.07, 'currency'=> 'USD'],
-                        'label' => 'Discount Label for 10% off'
-                    ]
-                ],
+                 'discounts'=> [['amount'=>['value' => 1, 'currency'=> 'USD']]
+                 ],
             ]
         ];
         $this->assertResponseFields($customerOrderItemTotal, $assertionMap);
@@ -827,7 +820,7 @@ QUERY;
                amount_excluding_tax{value currency}
                total_amount{value currency}
                taxes {amount{value} title rate}
-               discounts {amount{value currency} label}
+               discounts {amount{value currency}}
              }
            }
             }
