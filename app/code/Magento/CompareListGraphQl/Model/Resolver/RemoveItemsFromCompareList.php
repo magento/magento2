@@ -21,6 +21,9 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Store\Api\Data\StoreInterface;
 
+/**
+ * Remove items from compare list
+ */
 class RemoveItemsFromCompareList implements ResolverInterface
 {
     /**
@@ -34,11 +37,6 @@ class RemoveItemsFromCompareList implements ResolverInterface
     private $resourceCompareList;
 
     /**
-     * @var CompareListService
-     */
-    private $compareListService;
-
-    /**
      * Compare item factory
      *
      * @var ItemFactory
@@ -46,21 +44,26 @@ class RemoveItemsFromCompareList implements ResolverInterface
     private $compareItemFactory;
 
     /**
+     * @var CompareListService
+     */
+    private $compareListService;
+
+    /**
      * @param CompareListFactory $compareListFactory
      * @param ResourceCompareList $resourceCompareList
+     * @param ItemFactory $compareItemFactory
      * @param CompareListService $compareListService
-     * @param ItemFactory $compareItemFactory,
      */
     public function __construct(
         CompareListFactory $compareListFactory,
         ResourceCompareList $resourceCompareList,
-        CompareListService $compareListService,
-        ItemFactory $compareItemFactory
+        ItemFactory $compareItemFactory,
+        CompareListService $compareListService
     ) {
         $this->compareListFactory = $compareListFactory;
         $this->resourceCompareList = $resourceCompareList;
-        $this->compareListService = $compareListService;
         $this->compareItemFactory = $compareItemFactory;
+        $this->compareListService = $compareListService;
     }
 
     /**
@@ -107,10 +110,6 @@ class RemoveItemsFromCompareList implements ResolverInterface
             }
         }
 
-        return [
-            'list_id' => $listId,
-            'items' => $this->compareListService->getComparableItems($listId, $context, $store),
-            'attributes' => $this->compareListService->getComparableAttributes($listId, $context)
-        ];
+        return $this->compareListService->getCompareList($listId, $context, $store);
     }
 }

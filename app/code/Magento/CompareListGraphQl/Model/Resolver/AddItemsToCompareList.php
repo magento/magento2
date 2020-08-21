@@ -12,7 +12,6 @@ use Magento\Catalog\Model\CompareListFactory;
 use Magento\Catalog\Model\Product\Compare\CompareList;
 use Magento\Catalog\Model\ResourceModel\CompareList as ResourceCompareList;
 use Magento\CompareListGraphQl\Model\Service\AddToCompareListService;
-use Magento\CompareListGraphQl\Model\Service\CompareListService;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -20,6 +19,7 @@ use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Store\Api\Data\StoreInterface;
+use Magento\CompareListGraphQl\Model\Service\CompareListService;
 
 /**
  * Class add products to compare list
@@ -37,11 +37,6 @@ class AddItemsToCompareList implements ResolverInterface
     private $resourceCompareList;
 
     /**
-     * @var CompareListService
-     */
-    private $compareListService;
-
-    /**
      * @var CompareList
      */
     private $compareList;
@@ -52,24 +47,29 @@ class AddItemsToCompareList implements ResolverInterface
     private $addToCompareListService;
 
     /**
+     * @var CompareListService
+     */
+    private $compareListService;
+
+    /**
      * @param CompareListFactory $compareListFactory
      * @param ResourceCompareList $resourceCompareList
-     * @param CompareListService $compareListService
      * @param CompareList $compareList
      * @param AddToCompareListService $addToCompareListService
+     * @param CompareListService $compareListService
      */
     public function __construct(
         CompareListFactory $compareListFactory,
         ResourceCompareList $resourceCompareList,
-        CompareListService $compareListService,
         CompareList $compareList,
-        AddToCompareListService $addToCompareListService
+        AddToCompareListService $addToCompareListService,
+        CompareListService $compareListService
     ) {
         $this->compareListFactory = $compareListFactory;
         $this->resourceCompareList = $resourceCompareList;
-        $this->compareListService = $compareListService;
         $this->compareList = $compareList;
         $this->addToCompareListService = $addToCompareListService;
+        $this->compareListService = $compareListService;
     }
 
     /**
@@ -105,10 +105,6 @@ class AddItemsToCompareList implements ResolverInterface
 
         $this->addToCompareListService->addToCompareList($listId, $args);
 
-        return [
-            'list_id' => $listId,
-            'items' => $this->compareListService->getComparableItems($listId, $context, $store),
-            'attributes' => $this->compareListService->getComparableAttributes($listId, $context)
-        ];
+        return $this->compareListService->getCompareList($listId, $context, $store);
     }
 }

@@ -18,6 +18,9 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Store\Api\Data\StoreInterface;
 
+/**
+ * Get customer compare list
+ */
 class CustomerCompareList implements ResolverInterface
 {
     /**
@@ -36,9 +39,9 @@ class CustomerCompareList implements ResolverInterface
     private $compareListService;
 
     /**
-     * @param ResourceCompareList           $resourceCompareList
-     * @param CompareListFactory            $compareListFactory
-     * @param CompareListService            $compareListService
+     * @param ResourceCompareList        $resourceCompareList
+     * @param CompareListFactory         $compareListFactory
+     * @param CompareListService     $compareListService
      */
     public function __construct(
         ResourceCompareList $resourceCompareList,
@@ -78,11 +81,7 @@ class CustomerCompareList implements ResolverInterface
             return null;
         }
 
-        return [
-            'list_id' => $listId,
-            'items' => $this->compareListService->getComparableItems($listId, $context, $store),
-            'attributes' => $this->compareListService->getComparableAttributes($listId, $context)
-        ];
+        return $this->compareListService->getCompareList($listId, $context, $store);
     }
 
     /**

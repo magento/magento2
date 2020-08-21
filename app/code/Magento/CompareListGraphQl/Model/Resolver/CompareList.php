@@ -8,16 +8,19 @@ declare(strict_types=1);
 namespace Magento\CompareListGraphQl\Model\Resolver;
 
 use Magento\Catalog\Model\ResourceModel\CompareList as ResourceCompareList;
+use Magento\CompareListGraphQl\Model\Service\CompareListService;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
 use Magento\Framework\GraphQl\Query\Resolver\Value;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\CompareListGraphQl\Model\Service\CompareListService;
 use Magento\Catalog\Model\CompareList as ModelCompareList;
 use Magento\Catalog\Model\CompareListFactory;
 use Magento\Store\Api\Data\StoreInterface;
 
+/**
+ * Get compare list
+ */
 class CompareList implements ResolverInterface
 {
     /**
@@ -82,10 +85,6 @@ class CompareList implements ResolverInterface
             return null;
         }
 
-        return [
-            'list_id' => $listId,
-            'items' => $this->compareListService->getComparableItems($listId, $context, $store),
-            'attributes' => $this->compareListService->getComparableAttributes($listId, $context)
-        ];
+        return $this->compareListService->getCompareList($listId, $context, $store);
     }
 }
