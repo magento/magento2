@@ -80,54 +80,36 @@ class UsedInProducts extends Select
     {
         $options = [];
         $productIds = [];
-        $bookmarks = $this->bookmarkManagement->loadByNamespace($this->context->getNameSpace())->getItems();
-        foreach ($bookmarks as $bookmark) {
-            if ($bookmark->getIdentifier() === 'current') {
-                $applied = $bookmark->getConfig()['current']['filters']['applied'];
-                if (isset($applied[$this->getName()])) {
-                    $productIds = $applied[$this->getName()];
-                }
-            }
+        $bookmark = $this->bookmarkManagement->getByIdentifierNamespace(
+            'current',
+            $this->context->getNameSpace()
+        );
+        if ($bookmark === null) {
+            parent::prepare();
+            return;
+        }
+
+        $applied = $bookmark->getConfig()['current']['filters']['applied'];
+
+        if (isset($applied[$this->getName()])) {
+            $productIds = $applied[$this->getName()];
         }
 
         foreach ($productIds as $id) {
-            $product = $this->productRepository->getById($id);
-            $options[] = [
-                'value' => $id,
-                'label' => $product->getName(),
-                'is_active' => $product->getStatus(),
-                'path' => $product->getSku(),
-                'optgroup' => false
-
-            ];
+            try {
+                $product = $this->productRepository->getById($id);
+                $options[] = [
+                    'value' => $id,
+                    'label' => $product->getName(),
+                    'is_active' => $product->getStatus(),
+                    'path' => $product->getSku(),
+                    'optgroup' => false
+                ];
+            } catch (\Exception $e) {
+                continue;
+            }
         }
-
-        $this->wrappedComponent = $this->uiComponentFactory->create(
-            $this->getName(),
-            parent::COMPONENT,
-            [
-                'context' => $this->getContext(),
-                'options' => $options
-            ]
-        );
-
-        $this->wrappedComponent->prepare();
-        $productsFilterJsConfig = array_replace_recursive(
-            $this->getJsConfig($this->wrappedComponent),
-            $this->getJsConfig($this)
-        );
-        $this->setData('js_config', $productsFilterJsConfig);
-
-        $this->setData(
-            'config',
-            array_replace_recursive(
-                (array)$this->wrappedComponent->getData('config'),
-                (array)$this->getData('config')
-            )
-        );
-
-        $this->applyFilter();
-
+        $this->optionsProvider = $options;
         parent::prepare();
     }
 }
