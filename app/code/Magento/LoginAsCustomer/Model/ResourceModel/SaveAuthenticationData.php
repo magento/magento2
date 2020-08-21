@@ -41,10 +41,10 @@ class SaveAuthenticationData implements SaveAuthenticationDataInterface
     private $random;
 
     /**
-     * @param EncryptorInterface $encryptor
      * @param ResourceConnection $resourceConnection
      * @param DateTime $dateTime
      * @param Random $random
+     * @param EncryptorInterface $encryptor
      */
     public function __construct(
         ResourceConnection $resourceConnection,
