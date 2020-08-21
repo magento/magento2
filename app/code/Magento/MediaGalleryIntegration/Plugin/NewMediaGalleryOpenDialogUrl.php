@@ -5,15 +5,15 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryIntegration\Model;
+namespace Magento\MediaGalleryIntegration\Plugin;
 
-use Magento\Framework\DataObject;
 use Magento\MediaGalleryUiApi\Api\ConfigInterface;
+use Magento\Ui\Component\Form\Element\DataType\Media\OpenDialogUrl;
 
 /**
- * Provider to get open media gallery dialog URL for WYSIWYG and widgets
+ * Plugin to get open media gallery dialog URL for WYSIWYG and widgets
  */
-class OpenDialogUrlProvider extends DataObject
+class NewMediaGalleryOpenDialogUrl
 {
     /**
      * @var ConfigInterface
@@ -31,10 +31,13 @@ class OpenDialogUrlProvider extends DataObject
     /**
      * Get Url based on media gallery configuration
      *
+     * @param OpenDialogUrl $subject
+     * @param string $result
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @return string
      */
-    public function getUrl(): string
+    public function afterGet(OpenDialogUrl $subject, string $result)
     {
-        return $this->config->isEnabled() ? 'media_gallery/index/index' : 'cms/wysiwyg_images/index';
+        return $this->config->isEnabled() ? 'media_gallery/index/index' : $result;
     }
 }
