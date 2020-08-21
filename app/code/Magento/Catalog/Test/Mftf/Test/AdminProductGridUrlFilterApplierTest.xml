@@ -31,10 +31,11 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
 
-        <amOnPage url="{{AdminProductIndexPage.url}}?filters[name]=$createSimpleProduct.name$" stepKey="navigateToProductGridWithFilters"/>
+        <amOnPage url="{{AdminProductIndexPage.url}}?filters[sku]=$createSimpleProduct.sku$" stepKey="navigateToProductGridWithFilters"/>
         <waitForPageLoad stepKey="waitForProductGrid"/>
+        <see selector="{{AdminProductGridSection.productGridNameProduct($createSimpleProduct.name$)}}" userInput="$createSimpleProduct.name$" stepKey="seeProduct"/>
         <waitForElementVisible selector="{{AdminProductGridFilterSection.enabledFilters}}" stepKey="waitForEnabledFilters"/>
         <seeElement selector="{{AdminProductGridFilterSection.enabledFilters}}" stepKey="seeEnabledFilters"/>
-        <see selector="{{AdminProductGridFilterSection.enabledFilters}}" userInput="Name: $createSimpleProduct.name$" stepKey="seeProductNameFilter"/>
+        <see selector="{{AdminProductGridFilterSection.enabledFilters}}" userInput="SKU: $createSimpleProduct.sku$" stepKey="seeProductNameFilter"/>
     </test>
 </tests>

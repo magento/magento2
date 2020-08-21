@@ -39,7 +39,7 @@ define([
         apply: function () {
             var urlFilter = this.getFilterParam(this.searchString),
                 applied,
-                filters = {};
+                filters;
 
             if (_.isUndefined(this.filterComponent())) {
                 setTimeout(function () {
@@ -51,7 +51,7 @@ define([
 
             if (Object.keys(urlFilter).length) {
                 applied = this.filterComponent().get('applied');
-                filters = $.extend(true, urlFilter, applied);
+                filters = $.extend({}, applied, urlFilter);
                 this.filterComponent().set('applied', filters);
             }
         },
