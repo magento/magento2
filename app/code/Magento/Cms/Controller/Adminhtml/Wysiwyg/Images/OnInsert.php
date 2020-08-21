@@ -14,25 +14,26 @@ class OnInsert extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
     protected $resultRawFactory;
 
     /**
-     * @var \Magento\Cms\Model\Wysiwyg\Images\PrepareImage
+     * @var \Magento\Cms\Model\Wysiwyg\Images\GetInsertImageContent
      */
-    protected $prepareImage;
+    protected $getInsertImageContent;
 
     /**
      * @param \Magento\Backend\App\Action\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
      * @param \Magento\Framework\Controller\Result\RawFactory $resultRawFactory
-     * @param \Magento\Cms\Model\Wysiwyg\Images\PrepareImage $prepareImage
+     * @param \Magento\Cms\Model\Wysiwyg\Images\GetInsertImageContent $getInsertImageContent
      */
     public function __construct(
         \Magento\Backend\App\Action\Context $context,
         \Magento\Framework\Registry $coreRegistry,
         \Magento\Framework\Controller\Result\RawFactory $resultRawFactory,
-        \Magento\Cms\Model\Wysiwyg\Images\PrepareImage $prepareImage
+        ?\Magento\Cms\Model\Wysiwyg\Images\GetInsertImageContent $getInsertImageContent = null
     ) {
         $this->resultRawFactory = $resultRawFactory;
-        $this->prepareImage = $prepareImage;
         parent::__construct($context, $coreRegistry);
+        $this->getInsertImageContent = $getInsertImageContent ?: $this->_objectManager
+            ->get('Magento\Cms\Model\Wysiwyg\Images\GetInsertImageContent');
     }
 
     /**
@@ -42,13 +43,18 @@ class OnInsert extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
      */
     public function execute()
     {
-        $request = $this->getRequest();
-
-        /** @var \Magento\Cms\Model\Wysiwyg\Images\PrepareImage $image */
-        $image = $this->prepareImage->execute($request->getParams());
+        $data = $this->getRequest()->getParams();
 
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();
-        return $resultRaw->setContents($image);
+
+        return $resultRaw->setContents(
+            $this->getInsertImageContent->execute(
+                $data['filename'],
+                (int)$data['store_id'],
+                $data['force_static_path'],
+                $data['as_is']
+            )
+        );
     }
 }

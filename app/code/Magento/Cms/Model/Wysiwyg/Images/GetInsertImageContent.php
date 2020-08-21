@@ -11,7 +11,7 @@ namespace Magento\Cms\Model\Wysiwyg\Images;
 use Magento\Catalog\Helper\Data;
 use Magento\Cms\Helper\Wysiwyg\Images as ImagesHelper;
 
-class PrepareImage
+class GetInsertImageContent
 {
     /**
      * @var ImagesHelper
@@ -25,6 +25,7 @@ class PrepareImage
 
     /**
      * PrepareImage constructor.
+     *
      * @param ImagesHelper $imagesHelper
      * @param Data $catalogHelper
      */
@@ -37,24 +38,33 @@ class PrepareImage
     }
 
     /**
-     * @param array $data
+     * Prepare Image Contents for Insert
+     *
+     * @param string $encodedFilename
+     * @param int $storeId
+     * @param bool $forceStaticPath
+     * @param bool $renderAsTag
      * @return string
      */
-    public function execute(array $data): string
-    {
-        $filename = $this->imagesHelper->idDecode($data['filename']);
-        $storeId = (int)$data['store_id'];
+    public function execute(
+        string $encodedFilename,
+        int $storeId,
+        bool $forceStaticPath,
+        bool $renderAsTag
+    ): string {
+        $filename = $this->imagesHelper->idDecode($encodedFilename);
 
         $this->catalogHelper->setStoreId($storeId);
         $this->imagesHelper->setStoreId($storeId);
 
-        if ($data['force_static_path']) {
+        if ($forceStaticPath) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $image = parse_url($this->imagesHelper->getCurrentUrl() . $filename, PHP_URL_PATH);
-        } else {
-            $image = $this->imagesHelper->getImageHtmlDeclaration($filename, $data['as_is']);
+            return parse_url(
+                $this->imagesHelper->getCurrentUrl() . $filename,
+                PHP_URL_PATH
+            );
         }
 
-        return $image;
+        return $this->imagesHelper->getImageHtmlDeclaration($filename, $renderAsTag);
     }
 }
