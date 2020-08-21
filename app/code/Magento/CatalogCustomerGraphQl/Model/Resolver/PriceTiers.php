@@ -120,7 +120,7 @@ class PriceTiers implements ResolverInterface
 
                 $productPrice = $this->tiers->getProductRegularPrice($productId) ?? 0.0;
                 $tierPrices = $this->tiers->getProductTierPrices($productId) ?? [];
-                $tierPrices = $this->filterTierPrices($tierPrices);
+//                $tierPrices = $this->filterTierPrices($tierPrices);
                 return $this->formatProductTierPrices($tierPrices, $productPrice, $store);
             }
         );
@@ -137,8 +137,9 @@ class PriceTiers implements ResolverInterface
     private function formatProductTierPrices(array $tierPrices, float $productPrice, StoreInterface $store): array
     {
         $tiers = [];
+        $qtyCache = [];
 
-        foreach ($tierPrices as $tierPrice) {
+        foreach ($tierPrices as $key => $tierPrice) {
             $tierPrice->setValue($this->priceCurrency->convertAndRound($tierPrice->getValue()));
             $percentValue = $tierPrice->getExtensionAttributes()->getPercentageValue();
             if ($percentValue && is_numeric($percentValue)) {
@@ -155,35 +156,39 @@ class PriceTiers implements ResolverInterface
                     "currency" => $store->getCurrentCurrencyCode()
                 ]
             ];
+
+            $this->filterTierPrices($tierPrices, $key, $tierPrice, $qtyCache, $tiers);
         }
         return $tiers;
     }
 
     /**
-     * Select a lower price for each quantity
+     * Filter the lowest price for each quantity
      *
-     * @param ProductTierPriceInterface[] $tierPrices
-     *
-     * @return array
+     * @param array $tierPrices
+     * @param int $key
+     * @param ProductTierPriceInterface $tierPriceItem
+     * @param array $qtyCache
+     * @param array $tiers
      */
-    private function filterTierPrices(array $tierPrices): array
-    {
-        $qtyCache = [];
-        foreach ($tierPrices as $item => $price) {
-            $qty = $price->getQty();
-            if (isset($qtyCache[$qty])) {
-                $priceQty = $qtyCache[$qty];
-                if ((float)$price->getValue() < (float)$tierPrices[$priceQty]->getValue()) {
-                    unset($tierPrices[$priceQty]);
-                    $qtyCache[$priceQty] = $item;
-                } else {
-                    unset($tierPrices[$item]);
-                }
+    private function filterTierPrices(
+        array $tierPrices,
+        int $key,
+        ProductTierPriceInterface $tierPriceItem,
+        array &$qtyCache,
+        array &$tiers
+    ) {
+        $qty = $tierPriceItem->getQty();
+        if (isset($qtyCache[$qty])) {
+            $priceQty = $qtyCache[$qty];
+            if ((float)$tierPriceItem->getValue() < (float)$tierPrices[$priceQty]->getValue()) {
+                unset($tiers[$priceQty]);
+                $qtyCache[$priceQty] = $key;
             } else {
-                $qtyCache[$qty] = $item;
+                unset($tiers[$key]);
             }
+        } else {
+            $qtyCache[$qty] = $key;
         }
-
-        return $tierPrices;
     }
 }
