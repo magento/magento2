@@ -5,8 +5,8 @@
 
 define([
     'uiComponent',
-    'prototype'
-], function (Component) {
+    'underscore',
+], function (Component, _) {
     'use strict';
 
     return Component.extend({
@@ -23,7 +23,7 @@ define([
 
             txt.innerHTML = quoteItem.name;
 
-            return txt.value.escapeHTML();
+            return _.escape(txt.value);
         },
 
         /**
