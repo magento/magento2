@@ -41,16 +41,16 @@ class GetInsertImageContent
      * Prepare Image Contents for Insert
      *
      * @param string $encodedFilename
-     * @param int $storeId
      * @param bool $forceStaticPath
      * @param bool $renderAsTag
+     * @param int|null $storeId
      * @return string
      */
     public function execute(
         string $encodedFilename,
-        int $storeId,
         bool $forceStaticPath,
-        bool $renderAsTag
+        bool $renderAsTag,
+        ?int $storeId = null
     ): string {
         $filename = $this->imagesHelper->idDecode($encodedFilename);
 
