@@ -22,7 +22,9 @@ class Parameter extends \Magento\Framework\Filter\Template\Tokenizer\AbstractTok
         do {
             if ($this->isWhiteSpace()) {
                 continue;
-            } elseif ($this->char() != '=') {
+            }
+
+            if ($this->char() !== '=') {
                 $parameterName .= $this->char();
             } else {
                 $parameters[$parameterName] = $this->getValue();
