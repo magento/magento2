@@ -113,8 +113,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
             $this->eavAttributeRepositoryMock,
             $this->eavConfigMock,
             $this->validatorFactoryMock,
-            $this->searchCriteriaBuilderMock,
-            $this->optionManagementMock
+            $this->searchCriteriaBuilderMock
         );
     }
 
@@ -267,14 +266,17 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
     public function testSaveDoesNotSaveAttributeOptionsIfOptionsAreAbsentInPayload()
     {
         $attributeId = 1;
+        $backendModel = 'backend_model';
         $attributeCode = 'existing_attribute_code';
         $attributeMock = $this->createMock(Attribute::class);
         $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
         $attributeMock->expects($this->any())->method('getAttributeId')->willReturn($attributeId);
+        $attributeMock->expects($this->once())->method('setBackendModel')->with($backendModel)->willReturnSelf();
 
         $existingModelMock = $this->createMock(Attribute::class);
         $existingModelMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
         $existingModelMock->expects($this->any())->method('getAttributeId')->willReturn($attributeId);
+        $existingModelMock->expects($this->once())->method('getBackendModel')->willReturn($backendModel);
 
         $this->eavAttributeRepositoryMock->expects($this->any())
             ->method('get')
@@ -299,6 +301,7 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $labelMock->expects($this->any())->method('getLabel')->willReturn('Store Scope Label');
 
         $attributeId = 1;
+        $backendModel = 'backend_model';
         $attributeCode = 'existing_attribute_code';
         $attributeMock = $this->createMock(Attribute::class);
         $attributeMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
@@ -306,11 +309,13 @@ class RepositoryTest extends \PHPUnit\Framework\TestCase
         $attributeMock->expects($this->any())->method('getDefaultFrontendLabel')->willReturn(null);
         $attributeMock->expects($this->any())->method('getFrontendLabels')->willReturn([$labelMock]);
         $attributeMock->expects($this->any())->method('getOptions')->willReturn([]);
+        $attributeMock->expects($this->once())->method('setBackendModel')->with($backendModel)->willReturnSelf();
 
         $existingModelMock = $this->createMock(Attribute::class);
         $existingModelMock->expects($this->any())->method('getDefaultFrontendLabel')->willReturn('Default Label');
         $existingModelMock->expects($this->any())->method('getAttributeId')->willReturn($attributeId);
         $existingModelMock->expects($this->any())->method('getAttributeCode')->willReturn($attributeCode);
+        $existingModelMock->expects($this->once())->method('getBackendModel')->willReturn($backendModel);
 
         $this->eavAttributeRepositoryMock->expects($this->any())
             ->method('get')
