@@ -84,10 +84,16 @@ class DbIsolation
      */
     private function warmUpIsolationCache(): void
     {
-        if (empty(self::$isolationCache)) {
-            foreach (self::$dbStateTables as $table) {
-                self::$isolationCache[$table] = $this->pullDbState($table);
+        try {
+            if (empty(self::$isolationCache)) {
+                foreach (self::$dbStateTables as $table) {
+                    self::$isolationCache[$table] = $this->pullDbState($table);
+                }
             }
+        } catch (\Exception $e) {
+            //Do nothing...
+            //For some tests resource connection is not specified and we could not query
+            //anything from db
         }
     }
 
@@ -122,9 +128,9 @@ class DbIsolation
             $param->requestTransactionRollback();
         } else {
             $isolationProblem = [];
-            foreach (self::$dbStateTables as $table) {
+            foreach (self::$isolationCache as $table => $isolationData) {
                 $diff = $this->dataDiff(
-                    self::$isolationCache[$table],
+                    $isolationData,
                     $this->pullDbState($table)
                 );
 
