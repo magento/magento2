@@ -24,9 +24,9 @@ class IsActive extends Column
             $fieldName = $this->getData('name');
             foreach ($dataSource['data']['items'] as & $item) {
                 if (isset($item[$fieldName]) && $item[$fieldName] == 1) {
-                    $item[$fieldName] = 'Yes';
+                    $item[$fieldName] = '<span class="true">Yes</span>';
                 } else {
-                    $item[$fieldName] = 'No';
+                    $item[$fieldName] = '<span class="false">No</span>';
                 }
             }
         }
