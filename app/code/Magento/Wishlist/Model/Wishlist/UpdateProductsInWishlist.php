@@ -95,6 +95,9 @@ class UpdateProductsInWishlist
             $wishlistItem = $this->wishlistItemFactory->create();
             $this->wishlistItemResource->load($wishlistItem, $wishlistItemData->getId());
             $wishlistItem->setDescription($wishlistItemData->getDescription());
+            if ($wishlistItemData->getQuantity() == 0) {
+                throw new LocalizedException(__("The quantity of a wish list item cannot be 0"));
+            }
             $resultItem = $wishlist->updateItem($wishlistItem, $options);
 
             if (is_string($resultItem)) {

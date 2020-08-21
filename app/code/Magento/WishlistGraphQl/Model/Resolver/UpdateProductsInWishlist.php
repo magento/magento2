@@ -139,6 +139,10 @@ class UpdateProductsInWishlist implements ResolverInterface
                 $wishlistItem = $wishlist->getItem($wishlistItemData['wishlist_item_id']);
                 $wishlistItemData['quantity'] = (float) $wishlistItem->getQty();
             }
+            if (!isset($wishlistItemData['description'])) {
+                $wishlistItem = $wishlist->getItem($wishlistItemData['wishlist_item_id']);
+                $wishlistItemData['description'] = $wishlistItem->getDescription();
+            }
             $wishlistItems[] = (new WishlistItemFactory())->create($wishlistItemData);
         }
 
