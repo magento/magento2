@@ -129,13 +129,18 @@ class DbIsolation
         } else {
             $isolationProblem = [];
             foreach (self::$isolationCache as $table => $isolationData) {
-                $diff = $this->dataDiff(
-                    $isolationData,
-                    $this->pullDbState($table)
-                );
+                try {
+                    $diff = $this->dataDiff(
+                        $isolationData,
+                        $this->pullDbState($table)
+                    );
 
-                if (!empty($diff)) {
-                    $isolationProblem[$table] = $diff;
+                    if (!empty($diff)) {
+                        $isolationProblem[$table] = $diff;
+                    }
+                } catch (\Exception $e) {
+                    //ResourceConnection could be not specified in some specific tests that are not working with DB
+                    //We need to ignore it
                 }
             }
 
