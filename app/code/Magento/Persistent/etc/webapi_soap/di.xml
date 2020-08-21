@@ -13,4 +13,7 @@
         <plugin name="persistent_convert_customer_cart_to_guest_cart"
                 type="Magento\Persistent\Model\Checkout\GuestShippingInformationManagementPlugin"/>
     </type>
+    <type name="Magento\Framework\Authorization">
+        <plugin name="customerAuthorization" type="Magento\Persistent\Model\Plugin\CustomerAuthorization" />
+    </type>
 </config>
