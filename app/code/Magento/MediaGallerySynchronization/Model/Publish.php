@@ -33,7 +33,8 @@ class Publish
     }
 
     /**
-     * Publish media content synchronization message to the message queue.
+     * Publish media content synchronization message to the message queue
+     *
      * @param array $paths
      */
     public function execute(array $paths = []) : void

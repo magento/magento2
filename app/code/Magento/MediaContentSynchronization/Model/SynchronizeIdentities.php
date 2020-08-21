@@ -86,7 +86,9 @@ class SynchronizeIdentities implements SynchronizeIdentitiesInterface
             if ($identity[self::MEDIA_CONTENT_TYPE] === self::FIELD_CMS_PAGE
                 || $identity[self::MEDIA_CONTENT_TYPE] === self::FIELD_CMS_BLOCK
             ) {
-                $content = $this->getCmsMediaContent($identity[self::MEDIA_CONTENT_TYPE], $identity[self::MEDIA_CONTENT_ENTITY_ID]);
+                $content = $this->getCmsMediaContent(
+                    $identity[self::MEDIA_CONTENT_TYPE], $identity[self::MEDIA_CONTENT_ENTITY_ID]
+                );
             } else {
                 $content = implode(PHP_EOL, $this->getEntityContents->execute($contentIdentity));
             }

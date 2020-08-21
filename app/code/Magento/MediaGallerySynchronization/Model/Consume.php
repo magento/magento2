@@ -40,6 +40,7 @@ class Consume
 
     /**
      * Run media files synchronization.
+     *
      * @param array $paths
      * @throws LocalizedException
      */

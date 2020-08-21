@@ -50,6 +50,7 @@ class Consume
 
     /**
      * Run media files synchronization.
+     *
      * @param OperationInterface $operation
      * @throws LocalizedException
      */
