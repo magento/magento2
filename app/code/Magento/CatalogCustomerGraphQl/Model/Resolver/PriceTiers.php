@@ -120,7 +120,6 @@ class PriceTiers implements ResolverInterface
 
                 $productPrice = $this->tiers->getProductRegularPrice($productId) ?? 0.0;
                 $tierPrices = $this->tiers->getProductTierPrices($productId) ?? [];
-//                $tierPrices = $this->filterTierPrices($tierPrices);
                 return $this->formatProductTierPrices($tierPrices, $productPrice, $store);
             }
         );
