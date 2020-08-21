@@ -58,9 +58,7 @@
 
         <!--Select FlatRate shipping method-->
         <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
-
-        <!--Submit order-->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
 
         <!--Verify order information-->
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
@@ -109,7 +107,7 @@
         <!-- Reorder the product -->
         <click selector="{{AdminOrderDetailsMainActionsSection.reorder}}" stepKey="clickOnReorderButton"/>
         <waitForPageLoad stepKey="waitForReorderFormToLoad"/>
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder1"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder1" />
 
         <!-- Assert Simple Product Quantity in backend after Reorder -->
         <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterAndSelectTheProduct2">
