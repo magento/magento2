@@ -70,9 +70,9 @@ class SecureToken
         $request->setCurrency($quote->getBaseCurrencyCode());
         $request->setCreatesecuretoken('Y');
         $request->setSecuretokenid($this->mathRandom->getUniqueHash());
-        $request->setReturnurl($urls['return_url'] ?? $this->url->getUrl('paypal/transparent/response'));
-        $request->setErrorurl($urls['error_url'] ?? $this->url->getUrl('paypal/transparent/response'));
-        $request->setCancelurl($urls['cancel_url'] ?? $this->url->getUrl('paypal/transparent/response'));
+        $request->setReturnurl($urls['return_url'] ?? $this->url->getUrl('paypal/transparent/redirect'));
+        $request->setErrorurl($urls['error_url'] ?? $this->url->getUrl('paypal/transparent/redirect'));
+        $request->setCancelurl($urls['cancel_url'] ?? $this->url->getUrl('paypal/transparent/redirect'));
         $request->setDisablereceipt('TRUE');
         $request->setSilenttran('TRUE');
 

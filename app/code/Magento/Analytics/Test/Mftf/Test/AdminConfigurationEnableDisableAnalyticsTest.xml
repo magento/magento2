@@ -18,9 +18,9 @@
             <group value="analytics"/>
         </annotations>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
-        <actionGroup ref="LoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         <amOnPage url="{{AdminConfigGeneralAnalyticsPage.url}}" stepKey="amOnAdminConfig"/>
         <see selector="{{AdminConfigAdvancedReportingSection.advancedReportingServiceLabel}}" userInput="Advanced Reporting Service" stepKey="seeAdvancedReportingServiceLabelEnabled"/>
         <selectOption selector="{{AdminConfigAdvancedReportingSection.advancedReportingService}}" userInput="Enable" stepKey="selectAdvancedReportingServiceEnabled"/>

@@ -1,0 +1,23 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminNewsletterSubscriberGridSection">
+        <element name="email" type="text" selector="//table[contains(@class, 'data-grid')]/tbody/tr[{{row}}][@data-role='row']/td[@data-column='email']" parameterized="true"/>
+        <element name="type" type="text" selector="//table[contains(@class, 'data-grid')]/tbody/tr[{{row}}][@data-role='row']/td[@data-column='type']" parameterized="true"/>
+        <element name="firstName" type="text" selector="//table[contains(@class, 'data-grid')]/tbody/tr[{{row}}][@data-role='row']/td[@data-column='firstname']" parameterized="true"/>
+        <element name="lastName" type="text" selector="//table[contains(@class, 'data-grid')]/tbody/tr[{{row}}][@data-role='row']/td[@data-column='lastname']" parameterized="true"/>
+        <element name="resetFilter" type="button" selector=".action-default.scalable.action-reset.action-tertiary"/>
+        <element name="emailField" type="input" selector=".col-email #subscriberGrid_filter_email"/>
+        <element name="searchButton" type="button" selector="//*[@class='admin__filter-actions']//*[text()='Search']"/>
+        <element name="rowCheckbox" type="checkbox" selector="table.data-grid tbody > tr:nth-of-type({{row}}) td.data-grid-checkbox-cell input" parameterized="true"/>
+        <element name="actionsDropdown" type="select" selector=".admin__grid-massaction-form #subscriberGrid_massaction-select"/>
+        <element name="submit" type="button" selector="//*[@class='admin__grid-massaction-form']//*[text()='Submit']"/>
+        <element name="okButton" type="button" selector="//footer[@class='modal-footer']/button[contains(@class, 'action-accept')]" timeout="30"/>
+    </section>
+</sections>

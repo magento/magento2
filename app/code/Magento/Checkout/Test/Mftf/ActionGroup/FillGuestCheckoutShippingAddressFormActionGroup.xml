@@ -21,7 +21,4 @@
         <fillField selector="{{CheckoutShippingSection.postcode}}" userInput="{{customerAddress.postcode}}" stepKey="SetCustomerZipCode"/>
         <fillField selector="{{CheckoutShippingSection.telephone}}" userInput="{{customerAddress.telephone}}" stepKey="SetCustomerPhoneNumber"/>
     </actionGroup>
-    <actionGroup name="FillGuestCheckoutShippingAddressWithCountryActionGroup" extends="FillGuestCheckoutShippingAddressFormActionGroup">
-       <selectOption selector="{{CheckoutShippingSection.country}}" userInput="{{customerAddress.country_id}}" stepKey="selectCustomerCountry" after="SetCustomerCity"/>
-    </actionGroup>
 </actionGroups>

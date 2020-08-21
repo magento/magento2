@@ -22,5 +22,6 @@
         <element name="thumbnailCheckbox" type="checkbox" selector="#video_thumbnail"/>
         <element name="hideFromProductPageCheckbox" type="checkbox" selector="#new_video_disabled"/>
         <element name="errorElement" type="text" selector="#{{inputName}}-error" parameterized="true" />
+        <element name="previewImageUploader" type="file" selector=".field-new_video_screenshot #new_video_screenshot"/>
     </section>
 </sections>

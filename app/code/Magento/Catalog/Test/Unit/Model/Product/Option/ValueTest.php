@@ -3,39 +3,49 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-namespace Magento\Catalog\Test\Unit\Model\Product\Option;
+declare(strict_types=1);
 
-use \Magento\Catalog\Model\Product\Option\Value;
+namespace Magento\Catalog\Test\Unit\Model\Product\Option;
 
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Option;
-use Magento\Framework\Model\ActionValidator\RemoveAction;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Catalog\Model\Product\Option\Value;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory;
+use Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator;
 
-class ValueTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Pricing\Price\PriceInterface;
+use Magento\Framework\Pricing\PriceInfoInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+/**
+ * Test for \Magento\Catalog\Model\Product\Option\Value class.
+ */
+class ValueTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Product\Option\Value
+     * @var Value
      */
     private $model;
 
     /**
-     * @var \Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator
+     * @var CustomOptionPriceCalculator
      */
     private $customOptionPriceCalculatorMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $mockedResource = $this->getMockedResource();
         $mockedCollectionFactory = $this->getMockedValueCollectionFactory();
 
         $this->customOptionPriceCalculatorMock = $this->createMock(
-            \Magento\Catalog\Pricing\Price\CustomOptionPriceCalculator::class
+            CustomOptionPriceCalculator::class
         );
 
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
-            \Magento\Catalog\Model\Product\Option\Value::class,
+            Value::class,
             [
                 'resource' => $mockedResource,
                 'valueCollectionFactory' => $mockedCollectionFactory,
@@ -51,32 +61,32 @@ class ValueTest extends \PHPUnit\Framework\TestCase
             ->setData('option_type_id', -1)
             ->setDataChanges(false)
             ->isDeleted(false);
-        $this->assertInstanceOf(\Magento\Catalog\Model\Product\Option\Value::class, $this->model->saveValues());
+        $this->assertInstanceOf(Value::class, $this->model->saveValues());
 
         $this->model->setData('is_delete', 1)
             ->setData('option_type_id', 1)
             ->setValues([100]);
-        $this->assertInstanceOf(\Magento\Catalog\Model\Product\Option\Value::class, $this->model->saveValues());
+        $this->assertInstanceOf(Value::class, $this->model->saveValues());
     }
 
     public function testGetPrice()
     {
-        $price = 1000;
+        $price = 1000.0;
         $this->model->setPrice($price);
         $this->model->setPriceType(Value::TYPE_PERCENT);
         $this->assertEquals($price, $this->model->getPrice(false));
 
-        $percentPice = 100;
+        $percentPrice = 100.0;
         $this->customOptionPriceCalculatorMock->expects($this->atLeastOnce())
             ->method('getOptionPriceByPriceCode')
-            ->willReturn($percentPice);
-        $this->assertEquals($percentPice, $this->model->getPrice(true));
+            ->willReturn($percentPrice);
+        $this->assertEquals($percentPrice, $this->model->getPrice(true));
     }
 
     public function testGetValuesCollection()
     {
         $this->assertInstanceOf(
-            \Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection::class,
+            Collection::class,
             $this->model->getValuesCollection($this->getMockedOption())
         );
     }
@@ -84,72 +94,72 @@ class ValueTest extends \PHPUnit\Framework\TestCase
     public function testGetValuesByOption()
     {
         $this->assertInstanceOf(
-            \Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection::class,
+            Collection::class,
             $this->model->getValuesByOption([1], 1, 1)
         );
     }
 
     public function testGetProduct()
     {
-        $this->assertInstanceOf(\Magento\Catalog\Model\Product::class, $this->model->getProduct());
+        $this->assertInstanceOf(Product::class, $this->model->getProduct());
     }
 
     public function testDuplicate()
     {
-        $this->assertInstanceOf(\Magento\Catalog\Model\Product\Option\Value::class, $this->model->duplicate(1, 1));
+        $this->assertInstanceOf(Value::class, $this->model->duplicate(1, 1));
     }
 
     public function testDeleteValues()
     {
-        $this->assertInstanceOf(\Magento\Catalog\Model\Product\Option\Value::class, $this->model->deleteValues(1));
+        $this->assertInstanceOf(Value::class, $this->model->deleteValues(1));
     }
 
     public function testDeleteValue()
     {
-        $this->assertInstanceOf(\Magento\Catalog\Model\Product\Option\Value::class, $this->model->deleteValue(1));
+        $this->assertInstanceOf(Value::class, $this->model->deleteValue(1));
     }
 
     /**
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory
+     * @return CollectionFactory
      */
     private function getMockedValueCollectionFactory()
     {
         $mockedCollection = $this->getMockedValueCollection();
 
         $mockBuilder =
-            $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Option\Value\CollectionFactory::class)
+            $this->getMockBuilder(CollectionFactory::class)
                 ->setMethods(['create'])
                 ->disableOriginalConstructor();
         $mock = $mockBuilder->getMock();
 
         $mock->expects($this->any())
             ->method('create')
-            ->will($this->returnValue($mockedCollection));
+            ->willReturn($mockedCollection);
 
         return $mock;
     }
 
     /**
-     * @return \Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection
+     * @return Collection
      */
     private function getMockedValueCollection()
     {
         $mockBuilder = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Product\Option\Value\Collection::class
+            Collection::class
         )->setMethods(['addFieldToFilter', 'getValuesByOption', 'getValues'])->disableOriginalConstructor();
         $mock = $mockBuilder->getMock();
 
         $mock->expects($this->any())
             ->method('addFieldToFilter')
-            ->will($this->returnValue($mock));
+            ->willReturn($mock);
 
         $mock->expects($this->any())
             ->method('getValuesByOption')
-            ->will($this->returnValue($mock));
+            ->willReturn($mock);
 
         $mock->expects($this->any())
             ->method('getValues')
-            ->will($this->returnValue($mock));
+            ->willReturn($mock);
 
         return $mock;
     }
@@ -161,13 +171,13 @@ class ValueTest extends \PHPUnit\Framework\TestCase
     {
         $mockedProduct = $this->getMockedProduct();
 
-        $mockBuilder = $this->getMockBuilder(\Magento\Catalog\Model\Product\Option::class)
+        $mockBuilder = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor();
         $mock = $mockBuilder->getMock();
 
         $mock->expects($this->any())
             ->method('getProduct')
-            ->will($this->returnValue($mockedProduct));
+            ->willReturn($mockedProduct);
 
         return $mock;
     }
@@ -177,13 +187,13 @@ class ValueTest extends \PHPUnit\Framework\TestCase
      */
     private function getMockedProduct()
     {
-        $mockBuilder = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
-            ->setMethods(['getPriceInfo', '__wakeup'])
+        $mockBuilder = $this->getMockBuilder(Product::class)
+            ->setMethods(['getPriceInfo'])
             ->disableOriginalConstructor();
         $mock = $mockBuilder->getMock();
 
         $priceInfoMock = $this->getMockForAbstractClass(
-            \Magento\Framework\Pricing\PriceInfoInterface::class,
+            PriceInfoInterface::class,
             [],
             '',
             false,
@@ -192,7 +202,7 @@ class ValueTest extends \PHPUnit\Framework\TestCase
             ['getPrice']
         );
 
-        $priceMock = $this->getMockForAbstractClass(\Magento\Framework\Pricing\Price\PriceInterface::class);
+        $priceMock = $this->getMockForAbstractClass(PriceInterface::class);
 
         $priceInfoMock->expects($this->any())->method('getPrice')->willReturn($priceMock);
 
@@ -212,7 +222,6 @@ class ValueTest extends \PHPUnit\Framework\TestCase
             ->setMethods(
                 [
                     'duplicate',
-                    '__wakeup',
                     'getIdFieldName',
                     'deleteValues',
                     'deleteValue',
@@ -246,14 +255,14 @@ class ValueTest extends \PHPUnit\Framework\TestCase
 
         $mock->expects($this->any())
             ->method('addCommitCallback')
-            ->will($this->returnValue($mock));
+            ->willReturn($mock);
 
         $mock->expects($this->any())
             ->method('beginTransaction');
 
         $mock->expects($this->any())
             ->method('getIdFieldName')
-            ->will($this->returnValue('testField'));
+            ->willReturn('testField');
 
         return $mock;
     }

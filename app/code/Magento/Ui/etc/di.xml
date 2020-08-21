@@ -194,13 +194,11 @@
             <argument name="uiReader" xsi:type="object">uiDefinitionReader</argument>
         </arguments>
     </type>
-    <type name="Magento\Ui\Component\Filter\FilterPool">
+    <type name="Magento\Framework\View\Element\UiComponent\DataProvider\FilterPool">
         <arguments>
-            <argument name="filters" xsi:type="array">
-                <item name="filter_input" xsi:type="string">Magento\Ui\Component\Filter\Type\Input</item>
-                <item name="filter_select" xsi:type="string">Magento\Ui\Component\Filter\Type\Select</item>
-                <item name="filter_range" xsi:type="string">Magento\Ui\Component\Filter\Type\Range</item>
-                <item name="filter_store" xsi:type="string">Magento\Ui\Component\Filter\Type\Store</item>
+            <argument name="appliers" xsi:type="array">
+                <item name="regular" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\RegularFilter</item>
+                <item name="fulltext" xsi:type="object">Magento\Framework\View\Element\UiComponent\DataProvider\FulltextFilter</item>
             </argument>
         </arguments>
     </type>

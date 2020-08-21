@@ -9,7 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:framework:Setup/Declaration/Schema/etc/schema.xsd">
     <table name="admin_analytics_usage_version_log" resource="default" engine="innodb"
            comment="Admin Notification Viewer Log Table">
-        <column xsi:type="int" name="id" padding="10" unsigned="true" nullable="false" identity="true"
+        <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true"
                 comment="Log ID"/>
         <column xsi:type="varchar" name="last_viewed_in_version" nullable="false" length="50"
                 comment="Viewer last viewed on product version"/>

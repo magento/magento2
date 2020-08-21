@@ -12,23 +12,10 @@
         <annotations>
             <description>Goes to the Admin Cache Management page. Clicks on 'Flush Magento Cache'.</description>
         </annotations>
-        
-        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/cache/" stepKey="goToNewCustomVarialePage"/>
+
+        <amOnPage url="{{AdminCacheManagementPage.url}}" stepKey="goToCacheManagement"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
         <click selector="{{AdminCacheManagementSection.FlushMagentoCache}}" stepKey="clickFlushMagentoCache"/>
-        <waitForPageLoad stepKey="waitForCacheFlush"/>
-    </actionGroup>
-    
-    <actionGroup name="clearPageCache">
-        <annotations>
-            <description>Goes to the Admin Cache Management page. Selects 'Refresh'. Checks the 'Page Cache' row. Clicks on Submit.</description>
-        </annotations>
-
-        <amOnPage url="{{_ENV.MAGENTO_BACKEND_NAME}}/admin/cache/" stepKey="amOnCacheManagementPage"/>
-        <waitForPageLoad stepKey="waitForCacheManagement"/>
-        <selectOption selector="{{AdminCacheManagementSection.massActionSelect}}" userInput="refresh" stepKey="selectRefresh"/>
-        <click selector="{{AdminCacheManagementSection.pageCacheCheckbox}}" stepKey="selectPageCache"/>
-        <click selector="{{AdminCacheManagementSection.massActionSubmit}}" stepKey="submitCacheForm"/>
         <waitForPageLoad stepKey="waitForCacheFlush"/>
     </actionGroup>
 </actionGroups>

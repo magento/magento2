@@ -7,6 +7,7 @@
 namespace Magento\Customer\Setup;
 
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Framework\Indexer\StateInterface;
 use Magento\Framework\Setup\InstallDataInterface;
 use Magento\Framework\Setup\ModuleContextInterface;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
@@ -27,17 +28,34 @@ class RecurringData implements InstallDataInterface
      *
      * @param IndexerRegistry $indexerRegistry
      */
-    public function __construct(IndexerRegistry $indexerRegistry)
-    {
+    public function __construct(
+        IndexerRegistry $indexerRegistry
+    ) {
         $this->indexerRegistry = $indexerRegistry;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function install(ModuleDataSetupInterface $setup, ModuleContextInterface $context)
     {
-        $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
-        $indexer->reindexAll();
+        if ($this->isNeedToDoReindex($setup)) {
+            $indexer = $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID);
+            $indexer->reindexAll();
+        }
+    }
+
+    /**
+     * Check is re-index needed
+     *
+     * @param ModuleDataSetupInterface $setup
+     * @return bool
+     */
+    private function isNeedToDoReindex(ModuleDataSetupInterface $setup) : bool
+    {
+        return !$setup->tableExists('customer_grid_flat')
+            || $this->indexerRegistry->get(Customer::CUSTOMER_GRID_INDEXER_ID)
+                ->getState()
+                ->getStatus() == StateInterface::STATUS_INVALID;
     }
 }

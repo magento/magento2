@@ -3,22 +3,26 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\Dependency\Report\Framework\Data;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Setup\Module\Dependency\Report\Framework\Data\Module;
+use PHPUnit\Framework\TestCase;
 
-class ModuleTest extends \PHPUnit\Framework\TestCase
+class ModuleTest extends TestCase
 {
     /**
      * @param string $name
      * @param array $dependencies
-     * @return \Magento\Setup\Module\Dependency\Report\Framework\Data\Module
+     * @return Module
      */
     protected function createModule($name, $dependencies = [])
     {
         $objectManagerHelper = new ObjectManager($this);
         return $objectManagerHelper->getObject(
-            \Magento\Setup\Module\Dependency\Report\Framework\Data\Module::class,
+            Module::class,
             ['name' => $name, 'dependencies' => $dependencies]
         );
     }

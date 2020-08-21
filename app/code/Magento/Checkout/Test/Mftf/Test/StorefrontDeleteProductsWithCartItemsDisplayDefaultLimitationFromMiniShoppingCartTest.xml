@@ -19,7 +19,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <!--Create  10 simple products-->
             <createData entity="SimpleProduct2" stepKey="simpleProduct1">
                 <field key="price">10.00</field>
@@ -63,96 +63,96 @@
             <deleteData createDataKey="simpleProduct8" stepKey="deleteProduct8"/>
             <deleteData createDataKey="simpleProduct9" stepKey="deleteProduct9"/>
             <deleteData createDataKey="simpleProduct10" stepKey="deleteProduct10"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Open Product1 page in StoreFront-->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct1PageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProduct1PageAndVerifyProduct">
             <argument name="product" value="$$simpleProduct1$$"/>
         </actionGroup>
         <!--Add Product1 to the cart-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct1ToTheCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProduct1ToTheCart">
             <argument name="productName" value="$$simpleProduct1.name$$"/>
         </actionGroup>
 
         <!--Open Product2 page in StoreFront-->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct2PageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProduct2PageAndVerifyProduct">
             <argument name="product" value="$$simpleProduct2$$"/>
         </actionGroup>
         <!--Add Product2 to the cart-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct2ToTheCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProduct2ToTheCart">
             <argument name="productName" value="$$simpleProduct2.name$$"/>
         </actionGroup>
 
         <!--Open Product3 page in StoreFront-->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct3PageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProduct3PageAndVerifyProduct">
             <argument name="product" value="$$simpleProduct3$$"/>
         </actionGroup>
         <!--Add Product3 to the cart-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct3ToTheCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProduct3ToTheCart">
             <argument name="productName" value="$$simpleProduct3.name$$"/>
         </actionGroup>
 
         <!--Open Product4 page in StoreFront-->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct4PageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProduct4PageAndVerifyProduct">
             <argument name="product" value="$$simpleProduct4$$"/>
         </actionGroup>
         <!--Add Product4 to the cart-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct4ToTheCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProduct4ToTheCart">
             <argument name="productName" value="$$simpleProduct4.name$$"/>
         </actionGroup>
 
         <!--Open Product5 page in StoreFront-->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct5PageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProduct5PageAndVerifyProduct">
             <argument name="product" value="$$simpleProduct5$$"/>
         </actionGroup>
         <!--Add Product5 to the cart-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct5ToTheCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProduct5ToTheCart">
             <argument name="productName" value="$$simpleProduct5.name$$"/>
         </actionGroup>
 
         <!--Open Product6 page in StoreFront-->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct6PageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProduct6PageAndVerifyProduct">
             <argument name="product" value="$$simpleProduct6$$"/>
         </actionGroup>
         <!--Add Product6 to the cart-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct6ToTheCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProduct6ToTheCart">
             <argument name="productName" value="$$simpleProduct6.name$$"/>
         </actionGroup>
 
         <!--Open Product7 page in StoreFront-->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct7PageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProduct7PageAndVerifyProduct">
             <argument name="product" value="$$simpleProduct7$$"/>
         </actionGroup>
         <!--Add Product7 to the cart-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct7ToTheCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProduct7ToTheCart">
             <argument name="productName" value="$$simpleProduct7.name$$"/>
         </actionGroup>
 
         <!--Open Product8 page in StoreFront-->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct8PageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProduct8PageAndVerifyProduct">
             <argument name="product" value="$$simpleProduct8$$"/>
         </actionGroup>
         <!--Add Product8 to the cart-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct8ToTheCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProduct8ToTheCart">
             <argument name="productName" value="$$simpleProduct8.name$$"/>
         </actionGroup>
 
         <!--Open Product9 page in StoreFront-->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProduct9PageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProduct9PageAndVerifyProduct">
             <argument name="product" value="$$simpleProduct9$$"/>
         </actionGroup>
         <!--Add Product9 to the cart-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct9ToTheCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProduct9ToTheCart">
             <argument name="productName" value="$$simpleProduct9.name$$"/>
         </actionGroup>
 
         <!--Open Product10 page in StoreFront-->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPage10AndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPage10AndVerifyProduct">
             <argument name="product" value="$$simpleProduct10$$"/>
         </actionGroup>
         <!--Add Product10 to the cart-->
-        <actionGroup ref="addToCartFromStorefrontProductPage" stepKey="addProduct10ToTheCart">
+        <actionGroup ref="AddToCartFromStorefrontProductPageActionGroup" stepKey="addProduct10ToTheCart">
             <argument name="productName" value="$$simpleProduct10.name$$"/>
         </actionGroup>
 
@@ -237,40 +237,40 @@
         </actionGroup>
 
         <!--Remove products from minicart-->
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProduct1FromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct1FromMiniCart">
             <argument name="productName" value="$$simpleProduct10.name$$"/>
         </actionGroup>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProduct2FromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct2FromMiniCart">
             <argument name="productName" value="$$simpleProduct9.name$$"/>
         </actionGroup>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProduct3FromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct3FromMiniCart">
             <argument name="productName" value="$$simpleProduct8.name$$"/>
         </actionGroup>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProduct4FromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct4FromMiniCart">
             <argument name="productName" value="$$simpleProduct7.name$$"/>
         </actionGroup>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProduct5FromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct5FromMiniCart">
             <argument name="productName" value="$$simpleProduct6.name$$"/>
         </actionGroup>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProduct6FromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct6FromMiniCart">
             <argument name="productName" value="$$simpleProduct5.name$$"/>
         </actionGroup>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProduct7FromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct7FromMiniCart">
             <argument name="productName" value="$$simpleProduct4.name$$"/>
         </actionGroup>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProduct8FromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct8FromMiniCart">
             <argument name="productName" value="$$simpleProduct3.name$$"/>
         </actionGroup>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProduct9FromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct9FromMiniCart">
             <argument name="productName" value="$$simpleProduct2.name$$"/>
         </actionGroup>
-        <actionGroup ref="removeProductFromMiniCart" stepKey="removeProduct10FromMiniCart">
+        <actionGroup ref="RemoveProductFromMiniCartActionGroup" stepKey="removeProduct10FromMiniCart">
             <argument name="productName" value="$$simpleProduct1.name$$"/>
         </actionGroup>
         <reloadPage stepKey="reloadPage"/>
 
         <!--Check the minicart is empty and verify EmptyCartMessage and AssertProductAbsentInMiniShoppingCart-->
-        <actionGroup ref="assertMiniCartEmpty" stepKey="miniCartEnpty"/>
+        <actionGroup ref="AssertMiniCartEmptyActionGroup" stepKey="miniCartEnpty"/>
         <dontSee selector="{{StorefrontMinicartSection.productLinkByName($$simpleProduct1.name$$)}}" stepKey="verifyAssertProduct1AbsentInMiniShoppingCart"/>
         <dontSee selector="{{StorefrontMinicartSection.productLinkByName($$simpleProduct2.name$$)}}" stepKey="verifyAssertProduct2AbsentInMiniShoppingCart"/>
         <dontSee selector="{{StorefrontMinicartSection.productLinkByName($$simpleProduct3.name$$)}}" stepKey="verifyAssertProduct3AbsentInMiniShoppingCart"/>

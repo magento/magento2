@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminSearchUrlRewriteProductBySkuActionGroup">
+        <annotations>
+            <description>Goes to the Admin URL Rewrite grid page. Searches the grid based on the provided Product SKU. Clicks on the 1st row in the grid.</description>
+        </annotations>
+        <arguments>
+            <argument name="productSku" type="string"/>
+        </arguments>
+
+        <amOnPage url="{{AdminUrlRewriteProductPage.url}}" stepKey="openUrlRewriteProductPage"/>
+        <waitForPageLoad stepKey="waitForUrlRewriteProductPageToLoad"/>
+        <click selector="{{AdminUrlRewriteProductSection.resetFilter}}" stepKey="clickOnResetFilter"/>
+        <waitForPageLoad stepKey="waitForPageToLoad"/>
+        <fillField selector="{{AdminUrlRewriteProductSection.skuFilter}}" userInput="{{productSku}}" stepKey="fillProductSkuFilter"/>
+        <click selector="{{AdminUrlRewriteProductSection.searchFilter}}" stepKey="clickOnSearchFilter"/>
+        <waitForPageLoad stepKey="waitForProductToLoad"/>
+        <click selector="{{AdminUrlRewriteProductSection.productRow}}" stepKey="clickOnFirstRow"/>
+        <waitForPageLoad stepKey="waitForProductCategoryPageToLoad"/>
+    </actionGroup>
+</actionGroups>

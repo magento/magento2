@@ -80,13 +80,6 @@ class AttributeSet extends AbstractModifier
 
         $collectionData = $collection->getData() ?? [];
 
-        array_walk(
-            $collectionData,
-            function (&$attribute) {
-                $attribute['__disableTmpl'] = true;
-            }
-        );
-
         return $collectionData;
     }
 

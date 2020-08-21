@@ -47,13 +47,13 @@
                 <requiredEntity createDataKey="simpleProduct2"/>
             </createData>
 
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
-            <actionGroup ref="goToProductPageViaID" stepKey="goToProduct">
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProduct">
                 <argument name="productId" value="$$createBundleProduct.id$$"/>
             </actionGroup>
             <scrollTo selector="{{AdminProductFormBundleSection.contentDropDown}}" stepKey="scrollToBundleSection"/>
             <selectOption userInput="Separately" selector="{{AdminProductFormBundleSection.shipmentType}}" stepKey="selectSeparately"/>
-            <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+            <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
         </before>
         <after>
             <!-- Delete data -->
@@ -62,7 +62,7 @@
             <deleteData createDataKey="createBundleProduct" stepKey="deleteBundleProduct"/>
             <deleteData createDataKey="simpleProduct1" stepKey="deleteProduct1"/>
             <deleteData createDataKey="simpleProduct2" stepKey="deleteProduct2"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!-- Login as a customer -->
@@ -74,7 +74,7 @@
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductFromCategory">
             <argument name="productUrlKey" value="$$createBundleProduct.custom_attributes[url_key]$$"/>
         </actionGroup>
-        
+
         <!--  Add created product to Wishlist according to dataset and assert add product to wishlist success message -->
         <actionGroup ref="StorefrontCustomerAddProductToWishlistActionGroup" stepKey="addProductToWishlist">
             <argument name="productVar" value="$$createBundleProduct$$"/>
@@ -90,6 +90,6 @@
         <click selector="{{StorefrontCustomerWishlistProductSection.removeProduct}}" stepKey="clickRemoveButton"/>
 
         <!-- Assert Wishlist is empty -->
-        <actionGroup ref="StorefrontAssertCustomerWishlistIsEmpty" stepKey="assertWishlistIsEmpty"/>
+        <actionGroup ref="StorefrontAssertCustomerWishlistIsEmptyActionGroup" stepKey="assertWishlistIsEmpty"/>
     </test>
 </tests>

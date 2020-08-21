@@ -26,4 +26,23 @@
         <requiredEntity type="ValueIndex">ValueIndex2</requiredEntity>
         <requiredEntity type="ValueIndex">ValueIndex3</requiredEntity>
     </entity>
+    <entity name="ConfigurableProduct15Options" type="ConfigurableProductOption">
+        <var key="attribute_id" entityKey="attribute_id" entityType="ProductAttribute" />
+        <data key="label">option</data>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+        <requiredEntity type="ValueIndex">ValueIndex1</requiredEntity>
+    </entity>
 </entities>

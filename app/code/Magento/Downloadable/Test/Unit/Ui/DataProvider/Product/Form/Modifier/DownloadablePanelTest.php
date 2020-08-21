@@ -3,22 +3,24 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Downloadable\Test\Unit\Ui\DataProvider\Product\Form\Modifier;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Downloadable\Api\Data\ProductAttributeInterface;
 use Magento\Downloadable\Model\Product\Type;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Downloadable\Ui\DataProvider\Product\Form\Modifier\DownloadablePanel;
-use Magento\Catalog\Model\Locator\LocatorInterface;
 use Magento\Framework\Stdlib\ArrayManager;
-use Magento\Catalog\Api\Data\ProductInterface;
-use Magento\Ui\Component\Form;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class DownloadablePanelTest
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class DownloadablePanelTest extends \PHPUnit\Framework\TestCase
+class DownloadablePanelTest extends TestCase
 {
     /**
      * @var ObjectManagerHelper
@@ -26,17 +28,17 @@ class DownloadablePanelTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var LocatorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocatorInterface|MockObject
      */
     protected $locatorMock;
 
     /**
-     * @var ArrayManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ArrayManager|MockObject
      */
     protected $arrayManagerMock;
 
     /**
-     * @var ProductInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductInterface|MockObject
      */
     protected $productMock;
 
@@ -48,11 +50,11 @@ class DownloadablePanelTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        $this->productMock = $this->createMock(ProductInterface::class);
-        $this->locatorMock = $this->createMock(LocatorInterface::class);
+        $this->productMock = $this->getMockForAbstractClass(ProductInterface::class);
+        $this->locatorMock = $this->getMockForAbstractClass(LocatorInterface::class);
         $this->arrayManagerMock = $this->createMock(ArrayManager::class);
         $this->downloadablePanel = $this->objectManagerHelper->getObject(
             DownloadablePanel::class,

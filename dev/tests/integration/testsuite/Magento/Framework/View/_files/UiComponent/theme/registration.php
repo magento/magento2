@@ -4,6 +4,6 @@
  * See COPYING.txt for license details.
  */
 
-use \Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Component\ComponentRegistrar;
 
 ComponentRegistrar::register(ComponentRegistrar::THEME, 'adminhtml/FrameworkViewUiComponent/default', __DIR__);
