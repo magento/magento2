@@ -6,8 +6,6 @@
 
 declare(strict_types=1);
 
-require 'searchable_attribute.php';
-
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Catalog\Model\Product\Type;
@@ -15,9 +13,16 @@ use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use Magento\Eav\Model\Config;
+use Magento\Catalog\Model\Product;
+
+Resolver::getInstance()->requireDataFixture('Magento/CatalogSearch/_files/searchable_attribute.php');
 
 /** @var ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();
+$eavConfig = $objectManager->get(Config::class);
+$attribute = $eavConfig->getAttribute(Product::ENTITY, 'test_searchable_attribute');
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(ProductRepositoryInterface::class);
 /** @var ProductFactory $productFactory */

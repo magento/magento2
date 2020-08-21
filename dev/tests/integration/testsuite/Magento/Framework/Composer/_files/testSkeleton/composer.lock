@@ -290,53 +290,6 @@
             "time": "2018-06-11T17:15:25+00:00"
         },
         {
-            "name": "braintree/braintree_php",
-            "version": "3.35.0",
-            "source": {
-                "type": "git",
-                "url": "https://github.com/braintree/braintree_php.git",
-                "reference": "6c4388199ce379432804a5c18b88585157ef2ed7"
-            },
-            "dist": {
-                "type": "zip",
-                "url": "https://api.github.com/repos/braintree/braintree_php/zipball/6c4388199ce379432804a5c18b88585157ef2ed7",
-                "reference": "6c4388199ce379432804a5c18b88585157ef2ed7",
-                "shasum": ""
-            },
-            "require": {
-                "ext-curl": "*",
-                "ext-dom": "*",
-                "ext-hash": "*",
-                "ext-openssl": "*",
-                "ext-xmlwriter": "*",
-                "php": ">=5.4.0"
-            },
-            "require-dev": {
-                "phpunit/phpunit": "3.7.*"
-            },
-            "type": "library",
-            "autoload": {
-                "psr-0": {
-                    "Braintree": "lib/"
-                },
-                "psr-4": {
-                    "Braintree\\": "lib/Braintree"
-                }
-            },
-            "notification-url": "https://packagist.org/downloads/",
-            "license": [
-                "MIT"
-            ],
-            "authors": [
-                {
-                    "name": "Braintree",
-                    "homepage": "https://www.braintreepayments.com"
-                }
-            ],
-            "description": "Braintree PHP Client Library",
-            "time": "2018-07-26T14:37:38+00:00"
-        },
-        {
             "name": "christian-riesen/base32",
             "version": "1.3.2",
             "source": {
@@ -2319,7 +2272,6 @@
                 "shasum": "7877828bb63a7cfca5c62c6c6caf6a9c05ab154b"
             },
             "require": {
-                "braintree/braintree_php": "3.35.0",
                 "composer/composer": "^1.6",
                 "ext-intl": "*",
                 "ext-mbstring": "*",
@@ -2399,10 +2351,6 @@
                     [
                         ".php_cs.dist",
                         ".php_cs.dist"
-                    ],
-                    [
-                        ".travis.yml",
-                        ".travis.yml"
                     ],
                     [
                         ".user.ini",
@@ -2517,54 +2465,6 @@
                         "dev/tests/error_handler.php"
                     ],
                     [
-                        "dev/tests/functional/.gitignore",
-                        "dev/tests/functional/.gitignore"
-                    ],
-                    [
-                        "dev/tests/functional/.htaccess.sample",
-                        "dev/tests/functional/.htaccess.sample"
-                    ],
-                    [
-                        "dev/tests/functional/bootstrap.php",
-                        "dev/tests/functional/bootstrap.php"
-                    ],
-                    [
-                        "dev/tests/functional/composer.json",
-                        "dev/tests/functional/composer.json"
-                    ],
-                    [
-                        "dev/tests/functional/credentials.xml.dist",
-                        "dev/tests/functional/credentials.xml.dist"
-                    ],
-                    [
-                        "dev/tests/functional/etc",
-                        "dev/tests/functional/etc"
-                    ],
-                    [
-                        "dev/tests/functional/isolation.php",
-                        "dev/tests/functional/isolation.php"
-                    ],
-                    [
-                        "dev/tests/functional/lib",
-                        "dev/tests/functional/lib"
-                    ],
-                    [
-                        "dev/tests/functional/phpunit.xml.dist",
-                        "dev/tests/functional/phpunit.xml.dist"
-                    ],
-                    [
-                        "dev/tests/functional/tests",
-                        "dev/tests/functional/tests"
-                    ],
-                    [
-                        "dev/tests/functional/testsuites/Magento",
-                        "dev/tests/functional/testsuites/Magento"
-                    ],
-                    [
-                        "dev/tests/functional/utils",
-                        "dev/tests/functional/utils"
-                    ],
-                    [
                         "dev/tests/integration/.gitignore",
                         "dev/tests/integration/.gitignore"
                     ],
@@ -2651,10 +2551,6 @@
                     [
                         "dev/tools",
                         "dev/tools"
-                    ],
-                    [
-                        "dev/travis",
-                        "dev/travis"
                     ],
                     [
                         "generated",
@@ -3194,53 +3090,6 @@
                 ],
                 "psr-4": {
                     "Magento\\Backup\\": ""
-                }
-            },
-            "license": [
-                "OSL-3.0",
-                "AFL-3.0"
-            ],
-            "description": "N/A"
-        },
-        {
-            "name": "magento/module-braintree",
-            "version": "100.3.1",
-            "dist": {
-                "type": "zip",
-                "url": "https://repo.magento.com/archives/magento/module-braintree/magento-module-braintree-100.3.1.0.zip",
-                "reference": null,
-                "shasum": "bc99da6e5eef549dc2542cfe914aa7742361e2c6"
-            },
-            "require": {
-                "braintree/braintree_php": "3.35.0",
-                "magento/framework": "102.0.*",
-                "magento/magento-composer-installer": "*",
-                "magento/module-backend": "101.0.*",
-                "magento/module-catalog": "103.0.*",
-                "magento/module-checkout": "100.3.*",
-                "magento/module-config": "101.1.*",
-                "magento/module-customer": "102.0.*",
-                "magento/module-directory": "100.3.*",
-                "magento/module-instant-purchase": "100.3.*",
-                "magento/module-payment": "100.3.*",
-                "magento/module-paypal": "100.3.*",
-                "magento/module-quote": "101.1.*",
-                "magento/module-sales": "102.0.*",
-                "magento/module-ui": "101.1.*",
-                "magento/module-vault": "101.1.*",
-                "php": "~7.1.3||~7.2.0"
-            },
-            "suggest": {
-                "magento/module-checkout-agreements": "100.3.*",
-                "magento/module-theme": "101.0.*"
-            },
-            "type": "magento2-module",
-            "autoload": {
-                "files": [
-                    "registration.php"
-                ],
-                "psr-4": {
-                    "Magento\\Braintree\\": ""
                 }
             },
             "license": [
@@ -4918,7 +4767,7 @@
                 "shasum": "ed1da1137848560dde1a85f0f54dc2fac262359e"
             },
             "require": {
-                "elasticsearch/elasticsearch": "~7.6",
+                "elasticsearch/elasticsearch": "~7.7.0",
                 "magento/framework": "102.0.*",
                 "magento/module-advanced-search": "100.3.*",
                 "magento/module-catalog": "103.0.*",
@@ -4958,7 +4807,7 @@
                 "shasum": "a9da3243900390ad163efc7969b07116d2eb793f"
             },
             "require": {
-                "elasticsearch/elasticsearch": "~7.6",
+                "elasticsearch/elasticsearch": "~7.7.0",
                 "magento/framework": "102.0.*",
                 "magento/module-advanced-search": "100.3.*",
                 "magento/module-catalog-search": "101.0.*",
@@ -9545,14 +9394,13 @@
             "version": "2.3.1",
             "require": {
                 "amzn/amazon-pay-and-login-magento-2-module": "3.1.4",
-                "braintree/braintree_php": "3.35.0",
                 "colinmollenhour/cache-backend-file": "~1.4.1",
                 "colinmollenhour/cache-backend-redis": "1.10.6",
                 "colinmollenhour/credis": "1.10.0",
                 "colinmollenhour/php-redis-session-abstract": "~1.4.0",
                 "composer/composer": "^1.6",
                 "dotmailer/dotmailer-magento2-extension": "3.1.1",
-                "elasticsearch/elasticsearch": "~7.6",
+                "elasticsearch/elasticsearch": "~7.7.0",
                 "ext-bcmath": "*",
                 "ext-ctype": "*",
                 "ext-curl": "*",
@@ -9595,7 +9443,6 @@
                 "magento/module-authorization": "100.3.1",
                 "magento/module-backend": "101.0.1",
                 "magento/module-backup": "100.3.1",
-                "magento/module-braintree": "100.3.1",
                 "magento/module-bundle": "100.3.1",
                 "magento/module-bundle-graph-ql": "100.3.1",
                 "magento/module-bundle-import-export": "100.3.1",

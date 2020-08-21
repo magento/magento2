@@ -17,6 +17,7 @@ use Laminas\Code\Reflection\ClassReflection;
  * Data object converter
  *
  * @api
+ * @since 100.0.2
  */
 class ServiceOutputProcessor implements ServicePayloadConverterInterface
 {

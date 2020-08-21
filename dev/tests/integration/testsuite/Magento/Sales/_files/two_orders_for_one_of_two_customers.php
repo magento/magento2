@@ -4,13 +4,24 @@
  * See COPYING.txt for license details.
  */
 
-include __DIR__ . '/order.php';
-include __DIR__ . '/../../../Magento/Customer/_files/two_customers.php';
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
+use Magento\Sales\Model\Order;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-$customerIdFromFixture = 1;
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order.php');
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/two_customers.php');
 
-$order->setCustomerId($customerIdFromFixture)->setCustomerIsGuest(false)->save();
+$objectManager = Bootstrap::getObjectManager();
+/** @var Order $order */
+$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
 
+$order->setCustomerId(1)->setCustomerIsGuest(false)->save();
+
+$orderItems = $order->getItems();
+$orderItem = reset($orderItems);
+$billingAddress = $order->getBillingAddress();
+$shippingAddress = $order->getShippingAddress();
 $payment2 = $objectManager->create(\Magento\Sales\Model\Order\Payment::class);
 $payment2->setMethod('checkmo');
 
@@ -45,4 +56,4 @@ $order->setIncrementId('100000002')
 
 $order->save();
 
-$order->setCustomerId($customerIdFromFixture)->setCustomerIsGuest(false)->save();
+$order->setCustomerId(1)->setCustomerIsGuest(false)->save();

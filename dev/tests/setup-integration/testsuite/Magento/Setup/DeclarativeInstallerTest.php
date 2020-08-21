@@ -423,7 +423,7 @@ class DeclarativeInstallerTest extends SetupTestCase
         $this->cliCommand->upgrade();
         $tableStatements = $this->describeTable->describeShard('default');
         $tableSql = $tableStatements['test_table'];
-        $this->assertNotRegExp(
+        $this->assertDoesNotMatchRegularExpression(
             '/KEY\s+`TEST_TABLE_VARCHAR`\s+\(`varchar`\)/',
             $tableSql,
             'Index is not being disabled by external module'

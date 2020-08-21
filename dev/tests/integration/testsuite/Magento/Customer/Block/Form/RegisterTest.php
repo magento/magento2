@@ -139,6 +139,22 @@ class RegisterTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDataFixture Magento/Customer/_files/attribute_city_store_label_address.php
+     */
+    public function testCityWithStoreLabel(): void
+    {
+        /** @var \Magento\Customer\Block\Form\Register $block */
+        $block = Bootstrap::getObjectManager()->create(
+            Register::class
+        )->setTemplate('Magento_Customer::form/register.phtml')
+            ->setShowAddressFields(true);
+        $this->setAttributeDataProvider($block);
+
+        $this->assertStringNotContainsString('title="City"', $block->toHtml());
+        $this->assertStringContainsString('title="Suburb"', $block->toHtml());
+    }
+
+    /**
      * @inheritdoc
      */
     protected function tearDown(): void
