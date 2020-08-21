@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Bundle\Model\Product;
 
@@ -10,7 +11,7 @@ namespace Magento\Bundle\Model\Product;
  * Abstract class for testing bundle prices
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-abstract class BundlePriceAbstract extends \PHPUnit\Framework\TestCase
+abstract class BundlePriceCalculatorAbstract extends \PHPUnit\Framework\TestCase
 {
     /** Fixed price type for product custom option */
     const CUSTOM_OPTION_PRICE_TYPE_FIXED = 'fixed';
@@ -24,11 +25,12 @@ abstract class BundlePriceAbstract extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Catalog\Api\ProductRepositoryInterface */
     protected $productRepository;
 
-    /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
-     */
+    /** @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory */
     protected $productCollectionFactory;
 
+    /**
+     * @inheritdoc
+     */
     protected function setUp()
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
@@ -46,11 +48,14 @@ abstract class BundlePriceAbstract extends \PHPUnit\Framework\TestCase
 
     /**
      * Get test cases
+     *
      * @return array
      */
     abstract public function getTestCases();
 
     /**
+     * Prepares fixture.
+     *
      * @param array $strategyModifiers
      * @param string $productSku
      * @return void
@@ -113,6 +118,8 @@ abstract class BundlePriceAbstract extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * Adds custom option to product.
+     *
      * @param \Magento\Catalog\Model\Product $bundleProduct
      * @param array $optionsData
      * @return \Magento\Catalog\Model\Product

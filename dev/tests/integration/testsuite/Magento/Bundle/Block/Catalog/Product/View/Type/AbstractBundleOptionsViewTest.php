@@ -14,6 +14,7 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\Result\PageFactory;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use PHPUnit\Framework\TestCase;
@@ -24,7 +25,7 @@ use PHPUnit\Framework\TestCase;
 abstract class AbstractBundleOptionsViewTest extends TestCase
 {
     /** @var ObjectManagerInterface */
-    private $objectManager;
+    protected $objectManager;
 
     /** @var ProductRepositoryInterface */
     private $productRepository;
@@ -40,6 +41,9 @@ abstract class AbstractBundleOptionsViewTest extends TestCase
 
     /** @var ProductResource */
     private $productResource;
+
+    /** @var StoreManagerInterface */
+    private $storeManager;
 
     /** @var string */
     private $selectLabelXpath = "//fieldset[contains(@class, 'fieldset-bundle-options')]"
@@ -68,6 +72,7 @@ abstract class AbstractBundleOptionsViewTest extends TestCase
         $this->registry = $this->objectManager->get(Registry::class);
         $this->pageFactory = $this->objectManager->get(PageFactory::class);
         $this->productResource = $this->objectManager->get(ProductResource::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
     }
 
     /**
@@ -90,13 +95,13 @@ abstract class AbstractBundleOptionsViewTest extends TestCase
      * @param bool $requiredOption
      * @return void
      */
-    protected function processMultiSelectionsView(
+    public function processMultiSelectionsView(
         string $sku,
         string $optionsSelectLabel,
         array $expectedSelectionsNames,
         bool $requiredOption = false
     ): void {
-        $product = $this->productRepository->get($sku);
+        $product = $this->productRepository->get($sku, false, $this->storeManager->getStore()->getId(), true);
         $result = $this->renderProductOptionsBlock($product);
         $this->assertEquals(
             1,
@@ -132,7 +137,7 @@ abstract class AbstractBundleOptionsViewTest extends TestCase
      */
     protected function processSingleSelectionView(string $sku, string $optionsSelectLabel): void
     {
-        $product = $this->productRepository->get($sku);
+        $product = $this->productRepository->get($sku, false, $this->storeManager->getStore()->getId(), true);
         $result = $this->renderProductOptionsBlock($product);
         $this->assertEquals(1, Xpath::getElementsCountForXpath($this->backToProductDetailButtonXpath, $result));
         $this->assertEquals(
