@@ -14,6 +14,7 @@
             <title value="AdminAnalytics Check Tracking."/>
             <description value="AdminAnalytics Check Tracking."/>
             <severity value="MINOR"/>
+            <testCaseId value="MC-36869"/>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
