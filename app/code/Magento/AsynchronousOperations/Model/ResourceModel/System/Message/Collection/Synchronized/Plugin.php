@@ -11,6 +11,11 @@ namespace Magento\AsynchronousOperations\Model\ResourceModel\System\Message\Coll
 class Plugin
 {
     /**
+     * Maximal qty of bulk messages to display
+     */
+    const MAX_BULK_MESSAGES = 5;
+
+    /**
      * @var \Magento\AdminNotification\Model\System\MessageFactory
      */
     private $messageFactory;
@@ -90,37 +95,31 @@ class Plugin
             return $result;
         }
         $userId = $this->userContext->getUserId();
-        $userBulks = $this->bulkStatus->getBulksByUser($userId);
-        $acknowledgedBulks = $this->getAcknowledgedBulksUuid(
-            $this->bulkNotificationManagement->getAcknowledgedBulksByUser($userId)
-        );
+        // Limit bulks to display in messages to 5 items
+        $userBulks = $this->bulkNotificationManagement->getIgnoredBulksByUser($userId, self::MAX_BULK_MESSAGES);
         $bulkMessages = [];
         foreach ($userBulks as $bulk) {
             $bulkUuid = $bulk->getBulkId();
-            if (!in_array($bulkUuid, $acknowledgedBulks)) {
-                $details = $this->operationDetails->getDetails($bulkUuid);
-                $text = $this->getText($details);
-                $bulkStatus = $this->statusMapper->operationStatusToBulkSummaryStatus($bulk->getStatus());
-                if ($bulkStatus === \Magento\Framework\Bulk\BulkSummaryInterface::IN_PROGRESS) {
-                    $text = __('%1 item(s) are currently being updated.', $details['operations_total']) . $text;
-                }
-                $data = [
-                    'data' => [
-                        'text' => __('Task "%1": ', $bulk->getDescription()) . $text,
-                        'severity' => \Magento\Framework\Notification\MessageInterface::SEVERITY_MAJOR,
-                        'identity' => md5('bulk' . $bulkUuid),
-                        'uuid' => $bulkUuid,
-                        'status' => $bulkStatus,
-                        'created_at' => $bulk->getStartTime()
-                    ]
-                ];
-                $bulkMessages[] = $this->messageFactory->create($data)->toArray();
+            $details = $this->operationDetails->getDetails($bulkUuid);
+            $text = $this->getText($details);
+            $bulkStatus = $this->statusMapper->operationStatusToBulkSummaryStatus($bulk->getStatus());
+            if ($bulkStatus === \Magento\Framework\Bulk\BulkSummaryInterface::IN_PROGRESS) {
+                $text = __('%1 item(s) are currently being updated.', $details['operations_total']) . $text;
             }
+            $data = [
+                'data' => [
+                    'text' => __('Task "%1": ', $bulk->getDescription()) . $text,
+                    'severity' => \Magento\Framework\Notification\MessageInterface::SEVERITY_MAJOR,
+                    'identity' => md5('bulk' . $bulkUuid), //phpcs:ignore
+                    'uuid' => $bulkUuid,
+                    'status' => $bulkStatus,
+                    'created_at' => $bulk->getStartTime()
+                ]
+            ];
+            $bulkMessages[] = $this->messageFactory->create($data)->toArray();
         }
-
         if (!empty($bulkMessages)) {
-            $result['totalRecords'] += count($bulkMessages);
-            $bulkMessages = array_slice($bulkMessages, 0, 5);
+            $result['totalRecords'] += $this->bulkNotificationManagement->getIgnoredBulksCountByUser($userId);
             $result['items'] = array_merge($bulkMessages, $result['items']);
         }
         return $result;
@@ -152,20 +151,5 @@ class Plugin
                 . '</strong>';
         }
         return $summaryReport;
-    }
-
-    /**
-     * Get array with acknowledgedBulksUuid
-     *
-     * @param array $acknowledgedBulks
-     * @return array
-     */
-    private function getAcknowledgedBulksUuid($acknowledgedBulks)
-    {
-        $acknowledgedBulksArray = [];
-        foreach ($acknowledgedBulks as $bulk) {
-            $acknowledgedBulksArray[] = $bulk->getBulkId();
-        }
-        return $acknowledgedBulksArray;
     }
 }

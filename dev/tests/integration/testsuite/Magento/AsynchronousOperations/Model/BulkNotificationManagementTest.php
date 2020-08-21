@@ -77,5 +77,17 @@ class BulkNotificationManagementTest extends \PHPUnit\Framework\TestCase
         // 'bulk-uuid-5' and 'bulk-uuid-4' are marked as acknowledged in fixture. Fixture creates 5 bulks in total.
         $ignoredBulks = $this->model->getIgnoredBulksByUser(1);
         $this->assertCount(3, $ignoredBulks);
+        $ignoredBulksWithLimit = $this->model->getIgnoredBulksByUser(1, 2);
+        $this->assertCount(2, $ignoredBulksWithLimit);
+    }
+
+    /**
+     * @magentoDataFixture Magento/AsynchronousOperations/_files/acknowledged_bulk.php
+     */
+    public function testGetIgnoredBulksCount()
+    {
+        // 'bulk-uuid-5' and 'bulk-uuid-4' are marked as acknowledged in fixture. Fixture creates 5 bulks in total.
+        $ignoredBulksCount = $this->model->getIgnoredBulksCountByUser(1);
+        $this->assertEquals(3, $ignoredBulksCount);
     }
 }

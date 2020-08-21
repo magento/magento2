@@ -134,6 +134,7 @@ class PluginTest extends TestCase
         $userBulks = [$bulkMock];
         $userId = 1;
         $bulkUuid = 2;
+        $ignoredBulkLimit = 5;
         $bulkArray = [
             'status' => BulkSummaryInterface::NOT_STARTED
         ];
@@ -154,11 +155,15 @@ class PluginTest extends TestCase
         $this->userContextMock->expects($this->once())->method('getUserId')->willReturn($userId);
         $this->bulkNotificationMock
             ->expects($this->once())
-            ->method('getAcknowledgedBulksByUser')
+            ->method('getIgnoredBulksByUser')
+            ->with($userId, $ignoredBulkLimit)
+            ->willReturn($userBulks);
+        $this->bulkNotificationMock
+            ->expects($this->once())
+            ->method('getIgnoredBulksCountByUser')
             ->with($userId)
-            ->willReturn([]);
+            ->willReturn(1);
         $this->statusMapper->expects($this->once())->method('operationStatusToBulkSummaryStatus');
-        $this->bulkStatusMock->expects($this->once())->method('getBulksByUser')->willReturn($userBulks);
         $result2 = $this->plugin->afterToArray($this->collectionMock, $result);
         $this->assertEquals(2, $result2['totalRecords']);
     }

@@ -58,6 +58,7 @@ class BulkNotificationManagement
 
     /**
      * Mark given bulks as acknowledged.
+     *
      * Notifications related to these bulks will not appear in notification area.
      *
      * @param array $bulkUuids
@@ -83,6 +84,7 @@ class BulkNotificationManagement
 
     /**
      * Remove given bulks from acknowledged list.
+     *
      * Notifications related to these bulks will appear again in notification area.
      *
      * @param array $bulkUuids
@@ -129,9 +131,36 @@ class BulkNotificationManagement
      * Retrieve all bulks that were not acknowledged by given user.
      *
      * @param int $userId
+     * @param int|null $limit
      * @return BulkSummaryInterface[]
      */
-    public function getIgnoredBulksByUser($userId)
+    public function getIgnoredBulksByUser($userId, $limit = null)
+    {
+        /** @var BulkSummaryInterface[] $bulks */
+        $bulks = $this->getIgnoredBulksCollectionByUser($userId, $limit)->getItems();
+        return $bulks;
+    }
+
+    /**
+     * Returns count of all bulks that were not acknowledged by given user.
+     *
+     * @param int $userId
+     * @return int
+     */
+    public function getIgnoredBulksCountByUser($userId)
+    {
+        $bulksCollection = $this->getIgnoredBulksCollectionByUser($userId);
+        return $bulksCollection->getSize();
+    }
+
+    /**
+     * Returns collection of all bulks that were not acknowledged by given user.
+     *
+     * @param int $userId
+     * @param int|null $limit
+     * @return \Magento\AsynchronousOperations\Model\ResourceModel\Bulk\Collection
+     */
+    private function getIgnoredBulksCollectionByUser($userId, $limit = null)
     {
         /** @var \Magento\AsynchronousOperations\Model\ResourceModel\Bulk\Collection $bulkCollection */
         $bulkCollection = $this->bulkCollectionFactory->create();
@@ -140,11 +169,12 @@ class BulkNotificationManagement
             'main_table.uuid = acknowledged_bulk.bulk_uuid',
             ['acknowledged_bulk.bulk_uuid']
         );
-        $bulks = $bulkCollection->addFieldToFilter('user_id', $userId)
+        $bulkCollection->addFieldToFilter('user_id', $userId)
             ->addFieldToFilter('acknowledged_bulk.bulk_uuid', ['null' => true])
-            ->addOrder('start_time', Collection::SORT_ORDER_DESC)
-            ->getItems();
-
-        return $bulks;
+            ->addOrder('start_time', Collection::SORT_ORDER_DESC);
+        if ($limit !== null) {
+            $bulkCollection->setPageSize($limit)->setCurPage(1);
+        }
+        return $bulkCollection;
     }
 }
