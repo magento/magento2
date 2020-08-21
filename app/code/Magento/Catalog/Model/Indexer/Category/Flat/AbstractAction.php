@@ -425,7 +425,7 @@ class AbstractAction
         )->where(
             'e.entity_id IN (?)',
             $entityIds,
-            \Zend_Db::BIGINT_TYPE
+            \Zend_Db::INT_TYPE
         );
 
         return $this->connection->fetchCol($select);
@@ -471,11 +471,11 @@ class AbstractAction
         )->where(
             "e.entity_id IN (?)",
             $entityIds,
-            \Zend_Db::BIGINT_TYPE
+            \Zend_Db::INT_TYPE
         )->where(
             'def.store_id IN (?)',
             [Store::DEFAULT_STORE_ID, $storeId],
-            \Zend_Db::BIGINT_TYPE
+            \Zend_Db::INT_TYPE
         );
 
         return $this->connection->fetchAll($select);

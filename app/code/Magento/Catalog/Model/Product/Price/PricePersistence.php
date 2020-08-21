@@ -105,7 +105,7 @@ class PricePersistence
             ->select()
             ->from($this->attributeResource->getTable($this->table));
         return $this->attributeResource->getConnection()->fetchAll(
-            $select->where($this->getEntityLinkField() . ' IN (?)', $ids, \Zend_Db::BIGINT_TYPE)
+            $select->where($this->getEntityLinkField() . ' IN (?)', $ids, \Zend_Db::INT_TYPE)
                 ->where('attribute_id = ?', $this->getAttributeId())
         );
     }
@@ -214,13 +214,13 @@ class PricePersistence
      */
     private function retrieveAffectedIds(array $skus)
     {
-        $affectedIds = [[]];
+        $affectedIds = [];
 
         foreach ($this->productIdLocator->retrieveProductIdsBySkus($skus) as $productIds) {
             $affectedIds[] = array_keys($productIds);
         }
 
-        return array_unique(array_merge(...$affectedIds));
+        return array_unique(array_merge([], ...$affectedIds));
     }
 
     /**

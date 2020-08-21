@@ -233,7 +233,7 @@ class Collection extends AbstractCollection
                 ->where(
                     'entity_attribute.attribute_set_id IN (?)',
                     $setIds,
-                    \Zend_Db::BIGINT_TYPE
+                    \Zend_Db::INT_TYPE
                 )
                 ->group('entity_attribute.attribute_id')
                 ->having(new \Zend_Db_Expr('COUNT(*)') . ' = ' . count($setIds));
@@ -407,7 +407,7 @@ class Collection extends AbstractCollection
                 )->where(
                     'attribute_id IN (?)',
                     $attributeIds,
-                    \Zend_Db::BIGINT_TYPE
+                    \Zend_Db::INT_TYPE
                 );
                 $result = $connection->fetchAll($select);
 
@@ -439,7 +439,7 @@ class Collection extends AbstractCollection
     /**
      * Ad information about attribute sets to collection result data
      *
-     * @return $this
+     * @return \Magento\Framework\Model\ResourceModel\Db\Collection\AbstractCollection
      */
     protected function _afterLoadData()
     {

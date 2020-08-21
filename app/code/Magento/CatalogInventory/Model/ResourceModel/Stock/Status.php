@@ -340,7 +340,7 @@ class Status extends AbstractDb
 
         if ($storeId === null || $storeId == Store::DEFAULT_STORE_ID) {
             $select = $connection->select()->from($attributeTable, [$linkField, 'value'])
-                ->where("{$linkField} IN (?)", $productIds, \Zend_Db::BIGINT_TYPE)
+                ->where("{$linkField} IN (?)", $productIds, \Zend_Db::INT_TYPE)
                 ->where('attribute_id = ?', $attribute->getAttributeId())
                 ->where('store_id = ?', Store::DEFAULT_STORE_ID);
 

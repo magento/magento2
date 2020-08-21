@@ -126,7 +126,7 @@ class Website extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->where(
             'product_id IN (?)',
             $productIds,
-            \Zend_Db::BIGINT_TYPE
+            \Zend_Db::INT_TYPE
         );
         $rowset = $this->getConnection()->fetchAll($select);
 

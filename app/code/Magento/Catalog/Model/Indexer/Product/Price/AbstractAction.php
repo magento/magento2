@@ -436,7 +436,7 @@ abstract class AbstractAction
             $select = $this->getConnection()->select()->from(
                 ['index_price' => $this->tableMaintainer->getMainTableByDimensions($dimensions)],
                 null
-            )->where('index_price.entity_id IN (?)', $entityIds, \Zend_Db::BIGINT_TYPE);
+            )->where('index_price.entity_id IN (?)', $entityIds, \Zend_Db::INT_TYPE);
             $query = $select->deleteFromSelect('index_price');
             $this->getConnection()->query($query);
         }
@@ -547,7 +547,7 @@ abstract class AbstractAction
             ['entity_id', 'type_id']
         );
         if ($changedIds) {
-            $select->where('entity_id IN (?)', $changedIds, \Zend_Db::BIGINT_TYPE);
+            $select->where('entity_id IN (?)', $changedIds, \Zend_Db::INT_TYPE);
         }
         $pairs = $this->getConnection()->fetchPairs($select);
 

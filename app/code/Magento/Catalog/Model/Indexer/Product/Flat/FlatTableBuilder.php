@@ -354,7 +354,7 @@ class FlatTableBuilder
                         );
                     if (!empty($changedIds)) {
                         $select->where(
-                            $this->_connection->quoteInto('et.entity_id IN (?)', $changedIds, \Zend_Db::BIGINT_TYPE)
+                            $this->_connection->quoteInto('et.entity_id IN (?)', $changedIds, \Zend_Db::INT_TYPE)
                         );
                     }
                     $sql = $select->crossUpdateFromSelect(['et' => $temporaryFlatTableName]);
@@ -382,7 +382,7 @@ class FlatTableBuilder
                             $this->_connection->quoteInto(
                                 'et.entity_id IN (?)',
                                 $changedIds,
-                                \Zend_Db::BIGINT_TYPE
+                                \Zend_Db::INT_TYPE
                             )
                         );
                     }

@@ -508,7 +508,7 @@ abstract class AbstractAction
             $this->connection->quoteInto(
                 'cc2.parent_id = cc.entity_id AND cc.entity_id NOT IN (?)',
                 $rootCatIds,
-                \Zend_Db::BIGINT_TYPE
+                \Zend_Db::INT_TYPE
             ),
             []
         )->joinInner(

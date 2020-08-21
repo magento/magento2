@@ -242,7 +242,7 @@ class DataProvider
         $this->joinAttribute($select, 'status', $storeId, [Status::STATUS_ENABLED]);
 
         if ($productIds !== null) {
-            $select->where('e.entity_id IN (?)', $productIds, \Zend_Db::BIGINT_TYPE);
+            $select->where('e.entity_id IN (?)', $productIds, \Zend_Db::INT_TYPE);
         }
         $select->where('e.entity_id > ?', $lastProductId);
         $select->order('e.entity_id');
@@ -411,7 +411,7 @@ class DataProvider
             )->where(
                 'cpe.entity_id IN (?)',
                 $productIds,
-                \Zend_Db::BIGINT_TYPE
+                \Zend_Db::INT_TYPE
             )
         );
         foreach ($attributeTypes as $backendType => $attributeIds) {

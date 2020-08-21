@@ -120,7 +120,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Flat\AbstractAction
         )->where(
             "entity_id IN (?)",
             $ids,
-            \Zend_Db::BIGINT_TYPE
+            \Zend_Db::INT_TYPE
         );
 
         $resultIds = [];

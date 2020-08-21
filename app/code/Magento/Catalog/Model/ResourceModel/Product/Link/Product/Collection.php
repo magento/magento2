@@ -212,7 +212,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     /**
      * Retrieve collection link model
      *
-     * @return LinkModel
+     * @return \Magento\Catalog\Model\Product\Link
      */
     public function getLinkModel()
     {
@@ -262,7 +262,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $this->getSelect()->where(
                 'links.linked_product_id NOT IN (?)',
                 $products,
-                \Zend_Db::BIGINT_TYPE
+                \Zend_Db::INT_TYPE
             );
         }
         return $this;
@@ -284,7 +284,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $this->getSelect()->where(
                 "product_entity_table.$identifierField IN (?)",
                 $products,
-                \Zend_Db::BIGINT_TYPE
+                \Zend_Db::INT_TYPE
             );
             $this->_hasLinkFilter = true;
         }
@@ -350,14 +350,14 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 $this->getSelect()->where(
                     'links.product_id in (?)',
                     $this->productIds,
-                    \Zend_Db::BIGINT_TYPE
+                    \Zend_Db::INT_TYPE
                 );
             } else {
                 $joinType = 'joinLeft';
                 $joinCondition[] = $connection->quoteInto(
                     'links.product_id in (?)',
                     $this->productIds,
-                    \Zend_Db::BIGINT_TYPE
+                    \Zend_Db::INT_TYPE
                 );
             }
             if (count($this->productIds) === 1) {

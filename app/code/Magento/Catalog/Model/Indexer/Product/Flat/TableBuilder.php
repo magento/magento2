@@ -348,7 +348,7 @@ class TableBuilder
 
                 if (!empty($changedIds)) {
                     $select->where(
-                        $this->_connection->quoteInto('e.entity_id IN (?)', $changedIds, \Zend_Db::BIGINT_TYPE)
+                        $this->_connection->quoteInto('e.entity_id IN (?)', $changedIds, \Zend_Db::INT_TYPE)
                     );
                 }
 
@@ -358,7 +358,7 @@ class TableBuilder
                 if (count($valueColumns) > 1) {
                     if (!empty($changedIds)) {
                         $selectValue->where(
-                            $this->_connection->quoteInto('e.entity_id IN (?)', $changedIds, \Zend_Db::BIGINT_TYPE)
+                            $this->_connection->quoteInto('e.entity_id IN (?)', $changedIds, \Zend_Db::INT_TYPE)
                         );
                     }
                     $sql = $selectValue->insertFromSelect($temporaryValueTableName, $valueColumns, true);

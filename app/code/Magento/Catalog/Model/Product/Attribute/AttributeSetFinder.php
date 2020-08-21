@@ -37,7 +37,7 @@ class AttributeSetFinder implements AttributeSetFinderInterface
             ->getSelect()
             ->reset(Select::COLUMNS)
             ->columns(ProductInterface::ATTRIBUTE_SET_ID)
-            ->where('entity_id IN (?)', $productIds, \Zend_Db::BIGINT_TYPE)
+            ->where('entity_id IN (?)', $productIds, \Zend_Db::INT_TYPE)
             ->group(ProductInterface::ATTRIBUTE_SET_ID);
         $result = $collection->getConnection()->fetchCol($select);
         return $result;

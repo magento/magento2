@@ -287,7 +287,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
             )->where(
                 'def.product_super_attribute_id IN (?)',
                 array_keys($this->_items),
-                \Zend_Db::BIGINT_TYPE
+                \Zend_Db::INT_TYPE
             )->where(
                 'def.store_id = ?',
                 0

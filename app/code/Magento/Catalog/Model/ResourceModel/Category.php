@@ -667,7 +667,7 @@ class Category extends AbstractResource
             )->where(
                 'ce.entity_id IN (?)',
                 $entityIdsFilter,
-                \Zend_Db::BIGINT_TYPE
+                \Zend_Db::INT_TYPE
             );
             $this->entitiesWhereAttributesIs[$entityIdsFilterHash][$attribute->getId()][$expectedValue] =
                 $this->getConnection()->fetchCol($selectEntities, $bind);

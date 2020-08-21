@@ -488,7 +488,7 @@ class Gallery extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->where(
             'store_id IN (?)',
             $storeIds,
-            \Zend_Db::BIGINT_TYPE
+            \Zend_Db::INT_TYPE
         )->where(
             'attribute_code IN (?)',
             ['small_image', 'thumbnail', 'image']

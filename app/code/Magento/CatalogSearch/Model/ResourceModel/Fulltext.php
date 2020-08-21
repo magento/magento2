@@ -117,7 +117,7 @@ class Fulltext extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             )->where(
                 'relation.child_id IN (?)',
                 $childIds,
-                \Zend_Db::BIGINT_TYPE
+                \Zend_Db::INT_TYPE
             );
 
         return $connection->fetchCol($select);

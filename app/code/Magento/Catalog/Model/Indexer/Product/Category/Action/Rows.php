@@ -151,7 +151,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             ->select()
             ->from(['relation' => $this->getTable('catalog_product_relation')], [])
             ->distinct(true)
-            ->where('child_id IN (?)', $childProductIds, \Zend_Db::BIGINT_TYPE)
+            ->where('child_id IN (?)', $childProductIds, \Zend_Db::INT_TYPE)
             ->join(
                 ['cpe' => $this->getTable('catalog_product_entity')],
                 'relation.parent_id = cpe.' . $fieldForParent,
@@ -215,7 +215,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     protected function getNonAnchorCategoriesSelect(\Magento\Store\Model\Store $store)
     {
         $select = parent::getNonAnchorCategoriesSelect($store);
-        return $select->where('ccp.product_id IN (?)', $this->limitationByProducts, \Zend_Db::BIGINT_TYPE);
+        return $select->where('ccp.product_id IN (?)', $this->limitationByProducts, \Zend_Db::INT_TYPE);
     }
 
     /**
@@ -227,7 +227,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     protected function getAnchorCategoriesSelect(\Magento\Store\Model\Store $store)
     {
         $select = parent::getAnchorCategoriesSelect($store);
-        return $select->where('ccp.product_id IN (?)', $this->limitationByProducts, \Zend_Db::BIGINT_TYPE);
+        return $select->where('ccp.product_id IN (?)', $this->limitationByProducts, \Zend_Db::INT_TYPE);
     }
 
     /**
@@ -239,7 +239,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
     protected function getAllProducts(\Magento\Store\Model\Store $store)
     {
         $select = parent::getAllProducts($store);
-        return $select->where('cp.entity_id IN (?)', $this->limitationByProducts, \Zend_Db::BIGINT_TYPE);
+        return $select->where('cp.entity_id IN (?)', $this->limitationByProducts, \Zend_Db::INT_TYPE);
     }
 
     /**
@@ -265,7 +265,7 @@ class Rows extends \Magento\Catalog\Model\Indexer\Category\Product\AbstractActio
             $storeCategories = $this->connection->fetchCol(
                 $this->connection->select()
                     ->from($this->getIndexTable($store->getId()), ['category_id'])
-                    ->where('product_id IN (?)', $productIds, \Zend_Db::BIGINT_TYPE)
+                    ->where('product_id IN (?)', $productIds, \Zend_Db::INT_TYPE)
                     ->distinct()
             );
             $categoryIds[] = $storeCategories;

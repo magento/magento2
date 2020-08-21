@@ -42,7 +42,7 @@ class ConfigurableProductsProvider
                     ->select()
                     ->from(['e' => $this->resource->getTableName('catalog_product_entity')], ['e.entity_id'])
                     ->where('e.type_id = ?', \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE)
-                    ->where('e.entity_id IN (?)', $ids, \Zend_Db::BIGINT_TYPE)
+                    ->where('e.entity_id IN (?)', $ids, \Zend_Db::INT_TYPE)
             );
         }
         return $this->productIds[$key];
