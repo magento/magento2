@@ -7,13 +7,21 @@
 namespace Magento\CatalogRule\Model\Indexer;
 
 use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher;
 use Magento\CatalogRule\Model\ResourceModel\Rule\Collection as RuleCollection;
 use Magento\CatalogRule\Model\ResourceModel\Rule\CollectionFactory as RuleCollectionFactory;
 use Magento\CatalogRule\Model\Rule;
+use Magento\Eav\Model\Config;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Pricing\PriceCurrencyInterface;
 use Magento\CatalogRule\Model\Indexer\IndexBuilder\ProductLoader;
 use Magento\CatalogRule\Model\Indexer\IndexerTableSwapperInterface as TableSwapper;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Store\Model\StoreManagerInterface;
+use Psr\Log\LoggerInterface;
 
 /**
  * Catalog rule index builder
@@ -46,12 +54,12 @@ class IndexBuilder
     protected $_catalogRuleGroupWebsiteColumnsList = ['rule_id', 'customer_group_id', 'website_id'];
 
     /**
-     * @var \Magento\Framework\App\ResourceConnection
+     * @var ResourceConnection
      */
     protected $resource;
 
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface
+     * @var StoreManagerInterface
      */
     protected $storeManager;
 
@@ -61,7 +69,7 @@ class IndexBuilder
     protected $ruleCollectionFactory;
 
     /**
-     * @var \Psr\Log\LoggerInterface
+     * @var LoggerInterface
      */
     protected $logger;
 
@@ -71,22 +79,22 @@ class IndexBuilder
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Eav\Model\Config
+     * @var Config
      */
     protected $eavConfig;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime
+     * @var DateTime
      */
     protected $dateFormat;
 
     /**
-     * @var \Magento\Framework\Stdlib\DateTime\DateTime
+     * @var DateTime\DateTime
      */
     protected $dateTime;
 
     /**
-     * @var \Magento\Catalog\Model\ProductFactory
+     * @var ProductFactory
      */
     protected $productFactory;
 
@@ -136,30 +144,20 @@ class IndexBuilder
     private $pricesPersistor;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher
-     */
-    private $activeTableSwitcher;
-
-    /**
      * @var TableSwapper
      */
     private $tableSwapper;
 
     /**
-     * @var ProductLoader
-     */
-    private $productLoader;
-
-    /**
      * @param RuleCollectionFactory $ruleCollectionFactory
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Framework\App\ResourceConnection $resource
-     * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Psr\Log\LoggerInterface $logger
-     * @param \Magento\Eav\Model\Config $eavConfig
-     * @param \Magento\Framework\Stdlib\DateTime $dateFormat
-     * @param \Magento\Framework\Stdlib\DateTime\DateTime $dateTime
-     * @param \Magento\Catalog\Model\ProductFactory $productFactory
+     * @param ResourceConnection $resource
+     * @param StoreManagerInterface $storeManager
+     * @param LoggerInterface $logger
+     * @param Config $eavConfig
+     * @param DateTime $dateFormat
+     * @param DateTime\DateTime $dateTime
+     * @param ProductFactory $productFactory
      * @param int $batchCount
      * @param ProductPriceCalculator|null $productPriceCalculator
      * @param ReindexRuleProduct|null $reindexRuleProduct
@@ -167,21 +165,22 @@ class IndexBuilder
      * @param RuleProductsSelectBuilder|null $ruleProductsSelectBuilder
      * @param ReindexRuleProductPrice|null $reindexRuleProductPrice
      * @param RuleProductPricesPersistor|null $pricesPersistor
-     * @param \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher|null $activeTableSwitcher
+     * @param ActiveTableSwitcher|null $activeTableSwitcher
      * @param ProductLoader|null $productLoader
      * @param TableSwapper|null $tableSwapper
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         RuleCollectionFactory $ruleCollectionFactory,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\App\ResourceConnection $resource,
-        \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Psr\Log\LoggerInterface $logger,
-        \Magento\Eav\Model\Config $eavConfig,
-        \Magento\Framework\Stdlib\DateTime $dateFormat,
-        \Magento\Framework\Stdlib\DateTime\DateTime $dateTime,
-        \Magento\Catalog\Model\ProductFactory $productFactory,
+        ResourceConnection $resource,
+        StoreManagerInterface $storeManager,
+        LoggerInterface $logger,
+        Config $eavConfig,
+        DateTime $dateFormat,
+        DateTime\DateTime $dateTime,
+        ProductFactory $productFactory,
         $batchCount = 1000,
         ProductPriceCalculator $productPriceCalculator = null,
         ReindexRuleProduct $reindexRuleProduct = null,
@@ -189,7 +188,7 @@ class IndexBuilder
         RuleProductsSelectBuilder $ruleProductsSelectBuilder = null,
         ReindexRuleProductPrice $reindexRuleProductPrice = null,
         RuleProductPricesPersistor $pricesPersistor = null,
-        \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher $activeTableSwitcher = null,
+        ActiveTableSwitcher $activeTableSwitcher = null,
         ProductLoader $productLoader = null,
         TableSwapper $tableSwapper = null
     ) {
@@ -223,12 +222,6 @@ class IndexBuilder
         $this->pricesPersistor = $pricesPersistor ?? ObjectManager::getInstance()->get(
             RuleProductPricesPersistor::class
         );
-        $this->activeTableSwitcher = $activeTableSwitcher ?? ObjectManager::getInstance()->get(
-            \Magento\Catalog\Model\ResourceModel\Indexer\ActiveTableSwitcher::class
-        );
-        $this->productLoader = $productLoader ?? ObjectManager::getInstance()->get(
-            ProductLoader::class
-        );
         $this->tableSwapper = $tableSwapper ??
             ObjectManager::getInstance()->get(TableSwapper::class);
     }
@@ -237,6 +230,7 @@ class IndexBuilder
      * Reindex by id
      *
      * @param int $id
+     * @throws LocalizedException
      * @return void
      * @api
      */
@@ -246,7 +240,7 @@ class IndexBuilder
             $this->doReindexByIds([$id]);
         } catch (\Exception $e) {
             $this->critical($e);
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __("Catalog rule indexing failed. See details in exception log.")
             );
         }
@@ -256,7 +250,7 @@ class IndexBuilder
      * Reindex by ids
      *
      * @param array $ids
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return void
      * @api
      */
@@ -266,7 +260,7 @@ class IndexBuilder
             $this->doReindexByIds($ids);
         } catch (\Exception $e) {
             $this->critical($e);
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __("Catalog rule indexing failed. See details in exception log.")
             );
         }
@@ -300,7 +294,7 @@ class IndexBuilder
     /**
      * Full reindex
      *
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @return void
      * @api
      */
@@ -310,7 +304,7 @@ class IndexBuilder
             $this->doReindexFull();
         } catch (\Exception $e) {
             $this->critical($e);
-            throw new \Magento\Framework\Exception\LocalizedException(
+            throw new LocalizedException(
                 __("Catalog rule indexing failed. See details in exception log.")
             );
         }
@@ -376,65 +370,6 @@ class IndexBuilder
     }
 
     /**
-     * Assign product to rule
-     *
-     * @param Rule $rule
-     * @param int $productEntityId
-     * @param array $websiteIds
-     * @return void
-     * @throws \Exception
-     * @deprecated
-     * @see ReindexRuleProduct::execute
-     */
-    private function assignProductToRule(Rule $rule, int $productEntityId, array $websiteIds): void
-    {
-        $ruleId = (int) $rule->getId();
-        $ruleProductTable = $this->getTable('catalogrule_product');
-        $this->connection->delete(
-            $ruleProductTable,
-            [
-                'rule_id = ?' => $ruleId,
-                'product_id = ?' => $productEntityId,
-            ]
-        );
-
-        $customerGroupIds = $rule->getCustomerGroupIds();
-        $fromTime = strtotime($rule->getFromDate());
-        $toTime = strtotime($rule->getToDate());
-        $toTime = $toTime ? $toTime + self::SECONDS_IN_DAY - 1 : 0;
-        $sortOrder = (int)$rule->getSortOrder();
-        $actionOperator = $rule->getSimpleAction();
-        $actionAmount = $rule->getDiscountAmount();
-        $actionStop = $rule->getStopRulesProcessing();
-
-        $rows = [];
-        foreach ($websiteIds as $websiteId) {
-            foreach ($customerGroupIds as $customerGroupId) {
-                $rows[] = [
-                    'rule_id' => $ruleId,
-                    'from_time' => $fromTime,
-                    'to_time' => $toTime,
-                    'website_id' => $websiteId,
-                    'customer_group_id' => $customerGroupId,
-                    'product_id' => $productEntityId,
-                    'action_operator' => $actionOperator,
-                    'action_amount' => $actionAmount,
-                    'action_stop' => $actionStop,
-                    'sort_order' => $sortOrder,
-                ];
-
-                if (count($rows) == $this->batchCount) {
-                    $this->connection->insertMultiple($ruleProductTable, $rows);
-                    $rows = [];
-                }
-            }
-        }
-        if ($rows) {
-            $this->connection->insertMultiple($ruleProductTable, $rows);
-        }
-    }
-
-    /**
      * Apply rule
      *
      * @param Rule $rule
@@ -455,30 +390,6 @@ class IndexBuilder
         $this->reindexRuleGroupWebsite->execute();
 
         return $this;
-    }
-
-    /**
-     * Apply rules
-     *
-     * @param RuleCollection $ruleCollection
-     * @param Product $product
-     * @deprecated
-     * @see ReindexRuleProduct::execute
-     * @return void
-     */
-    private function applyRules(RuleCollection $ruleCollection, Product $product): void
-    {
-        foreach ($ruleCollection as $rule) {
-            if (!$rule->validate($product)) {
-                continue;
-            }
-
-            $websiteIds = array_intersect($product->getWebsiteIds(), $rule->getWebsiteIds());
-            $this->assignProductToRule($rule, $product->getId(), $websiteIds);
-        }
-
-        $this->cleanProductPriceIndex([$product->getId()]);
-        $this->reindexRuleProductPrice->execute($this->batchCount, $product->getId());
     }
 
     /**
@@ -580,7 +491,7 @@ class IndexBuilder
      * @param int $websiteId
      * @param Product|null $product
      * @return \Zend_Db_Statement_Interface
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      * @deprecated 100.2.0
      * @see RuleProductsSelectBuilder::build
      */
