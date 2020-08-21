@@ -764,22 +764,17 @@ class ProcessCronQueueObserverTest extends TestCase
             ->method('getCollection')->willReturn($this->scheduleCollectionMock);
         $scheduleMock->expects($this->any())
             ->method('getResource')->willReturn($this->scheduleResourceMock);
-        $this->scheduleFactoryMock->expects($this->once(2))
+        $this->scheduleFactoryMock->expects($this->once())
             ->method('create')->willReturn($scheduleMock);
 
         $testCronJob = $this->getMockBuilder('CronJob')
             ->setMethods(['execute'])->getMock();
         $testCronJob->expects($this->atLeastOnce())->method('execute')->with($schedule);
 
-        $this->objectManagerMock->expects(
-            $this->once()
-        )->method(
-            'create'
-        )->with(
-            'CronJob'
-        )->willReturn(
-            $testCronJob
-        );
+        $this->objectManagerMock->expects($this->once())
+            ->method('create')
+            ->with('CronJob')
+            ->willReturn($testCronJob);
 
         $this->cronQueueObserver->execute($this->observerMock);
     }
@@ -1055,26 +1050,11 @@ class ProcessCronQueueObserverTest extends TestCase
         $connectionMock->expects($this->exactly(5))
             ->method('delete')
             ->withConsecutive(
-                [
-                    $tableName,
-                    ['status = ?' => 'pending', 'job_code in (?)' => ['test_job1']]
-                ],
-                [
-                    $tableName,
-                    ['status = ?' => 'success', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]
-                ],
-                [
-                    $tableName,
-                    ['status = ?' => 'missed', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]
-                ],
-                [
-                    $tableName,
-                    ['status = ?' => 'error', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]
-                ],
-                [
-                    $tableName,
-                    ['status = ?' => 'pending', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]
-                ]
+                [$tableName, ['status = ?' => 'pending', 'job_code in (?)' => ['test_job1']]],
+                [$tableName, ['status = ?' => 'success', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]],
+                [$tableName, ['status = ?' => 'missed', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]],
+                [$tableName, ['status = ?' => 'error', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]],
+                [$tableName, ['status = ?' => 'pending', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]]
             )
             ->willReturn(1);
 
