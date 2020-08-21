@@ -172,7 +172,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $stockItemData = $response[self::KEY_EXTENSION_ATTRIBUTES][self::KEY_STOCK_ITEM];
 
         $this->assertEquals($qty, $stockItemData[self::KEY_QTY]);
-        $this->assertEquals(false, $stockItemData[self::KEY_IS_IN_STOCK]);
+        $this->assertFalse($stockItemData[self::KEY_IS_IN_STOCK]);
 
         // update a created product with catalog inventory
         $qty = 1;

@@ -3,8 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require 'rules_advanced.php';
+Resolver::getInstance()->requireDataFixture('Magento/SalesRule/_files/rules_advanced.php');
 
 $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
     \Magento\SalesRule\Model\ResourceModel\Rule\Collection::class

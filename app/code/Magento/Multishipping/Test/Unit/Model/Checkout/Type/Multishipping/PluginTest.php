@@ -3,36 +3,42 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Multishipping\Test\Unit\Model\Checkout\Type\Multishipping;
 
+use Magento\Checkout\Model\Cart;
 use Magento\Checkout\Model\Session;
+use Magento\Multishipping\Model\Checkout\Type\Multishipping\Plugin;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class PluginTest extends \PHPUnit\Framework\TestCase
+class PluginTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $checkoutSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $cartMock;
 
     /**
-     * @var \Magento\Multishipping\Model\Checkout\Type\Multishipping\Plugin
+     * @var Plugin
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->checkoutSessionMock = $this->createPartialMock(
-            \Magento\Checkout\Model\Session::class,
-            ['getCheckoutState', 'setCheckoutState']
-        );
-        $this->cartMock = $this->createMock(\Magento\Checkout\Model\Cart::class);
-        $this->model = new \Magento\Multishipping\Model\Checkout\Type\Multishipping\Plugin($this->checkoutSessionMock);
+        $this->checkoutSessionMock = $this->getMockBuilder(Session::class)
+            ->addMethods(['getCheckoutState', 'setCheckoutState'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->cartMock = $this->createMock(Cart::class);
+        $this->model = new Plugin($this->checkoutSessionMock);
     }
 
     public function testBeforeInitCaseTrue()

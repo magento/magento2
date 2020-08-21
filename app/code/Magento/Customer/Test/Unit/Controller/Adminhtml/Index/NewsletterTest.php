@@ -3,94 +3,119 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Controller\Adminhtml\Index;
+
+use Magento\Backend\App\Action\Context;
+use Magento\Backend\Helper\Data;
+use Magento\Backend\Model\Session;
+use Magento\Customer\Api\AccountManagementInterface;
+use Magento\Customer\Controller\Adminhtml\Index;
+use Magento\Customer\Controller\Adminhtml\Index\Newsletter;
+use Magento\Framework\App\ActionFlag;
+use Magento\Framework\App\FrontController;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\App\ResponseInterface;
+use Magento\Framework\App\ViewInterface;
+use Magento\Framework\Message\Manager;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\View\Page\Config;
+use Magento\Framework\View\Page\Title;
+use Magento\Framework\View\Result\Layout;
+use Magento\Framework\View\Result\LayoutFactory;
+use Magento\Newsletter\Model\Subscriber;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for \Magento\Customer\Controller\Adminhtml\Index controller
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class NewsletterTest extends \PHPUnit\Framework\TestCase
+class NewsletterTest extends TestCase
 {
     /**
      * Request mock instance
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\RequestInterface
+     * @var MockObject|RequestInterface
      */
     protected $_request;
 
     /**
      * Response mock instance
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ResponseInterface
+     * @var MockObject|ResponseInterface
      */
     protected $_response;
 
     /**
      * Instance of mocked tested object
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Controller\Adminhtml\Index
+     * @var MockObject|Index
      */
     protected $_testedObject;
 
     /**
      * ObjectManager mock instance
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\ObjectManager
+     * @var MockObject|\Magento\Framework\App\ObjectManager
      */
     protected $_objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Customer\Api\AccountManagementInterface
+     * @var MockObject|AccountManagementInterface
      */
     protected $customerAccountManagement;
 
     /**
      * Session mock instance
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Model\Session
+     * @var MockObject|\Magento\Backend\Model\Session
      */
     protected $_session;
 
     /**
      * Backend helper mock instance
      *
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Backend\Helper\Data
+     * @var MockObject|Data
      */
     protected $_helper;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\Message\ManagerInterface
+     * @var MockObject|ManagerInterface
      */
     protected $messageManager;
 
     /**
-     * @var \Magento\Framework\View\Result\Layout|\PHPUnit_Framework_MockObject_MockObject
+     * @var Layout|MockObject
      */
     protected $resultLayoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $pageConfigMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $titleMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $layoutInterfaceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $viewInterfaceMock;
 
     /**
-     * @var \Magento\Framework\View\Result\LayoutFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutFactory|MockObject
      */
     protected $resultLayoutFactoryMock;
 
@@ -100,9 +125,9 @@ class NewsletterTest extends \PHPUnit\Framework\TestCase
      * @return void
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_request = $this->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+        $this->_request = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -116,42 +141,47 @@ class NewsletterTest extends \PHPUnit\Framework\TestCase
         )->method(
             'getHeader'
         )->with(
-            $this->equalTo('X-Frame-Options')
-        )->will(
-            $this->returnValue(true)
+            'X-Frame-Options'
+        )->willReturn(
+            true
         );
 
         $this->_objectManager = $this->getMockBuilder(
-            \Magento\Framework\App\ObjectManager::class
-        )->disableOriginalConstructor()->setMethods(
-            ['get', 'create']
-        )->getMock();
+            ObjectManager::class
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['get', 'create']
+            )->getMock();
         $frontControllerMock = $this->getMockBuilder(
-            \Magento\Framework\App\FrontController::class
-        )->disableOriginalConstructor()->getMock();
+            FrontController::class
+        )->disableOriginalConstructor()
+            ->getMock();
 
-        $actionFlagMock = $this->getMockBuilder(\Magento\Framework\App\ActionFlag::class)
+        $actionFlagMock = $this->getMockBuilder(ActionFlag::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->_session = $this->getMockBuilder(
-            \Magento\Backend\Model\Session::class
-        )->disableOriginalConstructor()->setMethods(
-            ['setIsUrlNotice', '__wakeup']
-        )->getMock();
+            Session::class
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['setIsUrlNotice', '__wakeup']
+            )->getMock();
         $this->_session->expects($this->any())->method('setIsUrlNotice');
 
         $this->_helper = $this->getMockBuilder(
-            \Magento\Backend\Helper\Data::class
-        )->disableOriginalConstructor()->setMethods(
-            ['getUrl']
-        )->getMock();
+            Data::class
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['getUrl']
+            )->getMock();
 
         $this->messageManager = $this->getMockBuilder(
-            \Magento\Framework\Message\Manager::class
-        )->disableOriginalConstructor()->setMethods(
-            ['addSuccess', 'addMessage', 'addException']
-        )->getMock();
+            Manager::class
+        )->disableOriginalConstructor()
+            ->setMethods(
+                ['addSuccess', 'addMessage', 'addException']
+            )->getMock();
 
         $contextArgs = [
             'getHelper',
@@ -170,56 +200,58 @@ class NewsletterTest extends \PHPUnit\Framework\TestCase
             'getView'
         ];
         $contextMock = $this->getMockBuilder(
-            \Magento\Backend\App\Action\Context::class
-        )->disableOriginalConstructor()->setMethods(
-            $contextArgs
-        )->getMock();
-        $contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->_request));
-        $contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->_response));
+            Context::class
+        )->disableOriginalConstructor()
+            ->setMethods(
+                $contextArgs
+            )->getMock();
+        $contextMock->expects($this->any())->method('getRequest')->willReturn($this->_request);
+        $contextMock->expects($this->any())->method('getResponse')->willReturn($this->_response);
         $contextMock->expects(
             $this->any()
         )->method(
             'getObjectManager'
-        )->will(
-            $this->returnValue($this->_objectManager)
+        )->willReturn(
+            $this->_objectManager
         );
         $contextMock->expects(
             $this->any()
         )->method(
             'getFrontController'
-        )->will(
-            $this->returnValue($frontControllerMock)
+        )->willReturn(
+            $frontControllerMock
         );
-        $contextMock->expects($this->any())->method('getActionFlag')->will($this->returnValue($actionFlagMock));
+        $contextMock->expects($this->any())->method('getActionFlag')->willReturn($actionFlagMock);
 
-        $contextMock->expects($this->any())->method('getHelper')->will($this->returnValue($this->_helper));
-        $contextMock->expects($this->any())->method('getSession')->will($this->returnValue($this->_session));
+        $contextMock->expects($this->any())->method('getHelper')->willReturn($this->_helper);
+        $contextMock->expects($this->any())->method('getSession')->willReturn($this->_session);
         $contextMock->expects(
             $this->any()
         )->method(
             'getMessageManager'
-        )->will(
-            $this->returnValue($this->messageManager)
+        )->willReturn(
+            $this->messageManager
         );
-        $this->titleMock =  $this->getMockBuilder(\Magento\Framework\View\Page\Title::class)
-            ->disableOriginalConstructor()->getMock();
-        $contextMock->expects($this->any())->method('getTitle')->will($this->returnValue($this->titleMock));
-        $this->viewInterfaceMock =  $this->getMockBuilder(\Magento\Framework\App\ViewInterface::class)
+        $this->titleMock =  $this->getMockBuilder(Title::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $contextMock->expects($this->any())->method('getTitle')->willReturn($this->titleMock);
+        $this->viewInterfaceMock =  $this->getMockBuilder(ViewInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
-        $this->viewInterfaceMock->expects($this->any())->method('loadLayout')->will($this->returnSelf());
-        $contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewInterfaceMock));
-        $this->resultLayoutMock = $this->getMockBuilder(\Magento\Framework\View\Result\Layout::class)
+        $this->viewInterfaceMock->expects($this->any())->method('loadLayout')->willReturnSelf();
+        $contextMock->expects($this->any())->method('getView')->willReturn($this->viewInterfaceMock);
+        $this->resultLayoutMock = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->pageConfigMock = $this->getMockBuilder(\Magento\Framework\View\Page\Config::class)
+        $this->pageConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->customerAccountManagement = $this->getMockBuilder(
-            \Magento\Customer\Api\AccountManagementInterface::class
+            AccountManagementInterface::class
         )->getMock();
-        $this->resultLayoutFactoryMock = $this->getMockBuilder(\Magento\Framework\View\Result\LayoutFactory::class)
+        $this->resultLayoutFactoryMock = $this->getMockBuilder(LayoutFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -231,14 +263,14 @@ class NewsletterTest extends \PHPUnit\Framework\TestCase
 
         $helperObjectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
         $this->_testedObject = $helperObjectManager->getObject(
-            \Magento\Customer\Controller\Adminhtml\Index\Newsletter::class,
+            Newsletter::class,
             $args
         );
     }
 
     public function testNewsletterAction()
     {
-        $subscriberMock = $this->createMock(\Magento\Newsletter\Model\Subscriber::class);
+        $subscriberMock = $this->createMock(Subscriber::class);
         $this->resultLayoutFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($this->resultLayoutMock);
@@ -247,11 +279,11 @@ class NewsletterTest extends \PHPUnit\Framework\TestCase
         $this->_objectManager
             ->expects($this->any())
             ->method('create')
-            ->with(\Magento\Newsletter\Model\Subscriber::class)
+            ->with(Subscriber::class)
             ->willReturn($subscriberMock);
 
         $this->assertInstanceOf(
-            \Magento\Framework\View\Result\Layout::class,
+            Layout::class,
             $this->_testedObject->execute()
         );
     }

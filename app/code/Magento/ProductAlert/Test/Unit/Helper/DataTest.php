@@ -7,20 +7,24 @@ declare(strict_types=1);
 
 namespace Magento\ProductAlert\Test\Unit\Helper;
 
-use PHPUnit\Framework\TestCase;
-use Magento\ProductAlert\Helper\Data as HelperData;
-use Magento\Framework\App\Helper\Context;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\UrlInterface;
-use Magento\Framework\Url\EncoderInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\ProductAlert\Model\Observer;
-use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Helper\Context;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\Url\EncoderInterface;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\LayoutInterface;
 use Magento\ProductAlert\Block\Email\Price;
-use Magento\Framework\Exception\LocalizedException;
+use Magento\ProductAlert\Helper\Data as HelperData;
+use Magento\ProductAlert\Model\Observer;
+use Magento\Store\Model\ScopeInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
+/**
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class DataTest extends TestCase
 {
     /**
@@ -34,40 +38,40 @@ class DataTest extends TestCase
     private $objectManagerHelper;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
-     * @var UrlInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var UrlInterface|MockObject
      */
     private $urlBuilderMock;
 
     /**
-     * @var EncoderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EncoderInterface|MockObject
      */
     private $encoderMock;
 
     /**
-     * @var ScopeConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ScopeConfigInterface|MockObject
      */
     private $scopeConfigMock;
 
     /**
-     * @var LayoutInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LayoutInterface|MockObject
      */
     private $layoutMock;
 
     /**
      * Setup environment for testing
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
-        $this->urlBuilderMock = $this->createMock(UrlInterface::class);
-        $this->encoderMock = $this->createMock(EncoderInterface::class);
-        $this->scopeConfigMock = $this->createMock(ScopeConfigInterface::class);
-        $this->layoutMock = $this->createMock(LayoutInterface::class);
+        $this->urlBuilderMock = $this->getMockForAbstractClass(UrlInterface::class);
+        $this->encoderMock = $this->getMockForAbstractClass(EncoderInterface::class);
+        $this->scopeConfigMock = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
         $this->contextMock->expects($this->once())->method('getUrlBuilder')->willReturn($this->urlBuilderMock);
         $this->contextMock->expects($this->once())->method('getUrlEncoder')->willReturn($this->encoderMock);
         $this->contextMock->expects($this->once())->method('getScopeConfig')->willReturn($this->scopeConfigMock);

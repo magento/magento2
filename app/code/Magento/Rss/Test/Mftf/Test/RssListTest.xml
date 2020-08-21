@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="RssListTest">
+        <annotations>
+            <group value="Rss"/>
+            <stories value="RSS Feed available to view"/>
+            <title value="RSS Feed"/>
+            <description value="View selected RSS feed by link."/>
+            <testCaseId value="MC-36686"/>
+            <severity value="AVERAGE"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleProductWithNewFromDate" stepKey="createProduct"/>
+            <magentoCLI command="config:set rss/config/active 1" stepKey="enableRss"/>
+            <magentoCLI command="config:set rss/catalog/new 1" stepKey="enableRssForCatalogNewProducts"/>
+            <magentoCLI command="cache:clean" stepKey="cleanCache"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <magentoCLI command="config:set rss/config/active 0" stepKey="disableRss"/>
+            <magentoCLI command="config:set rss/catalog/new 0" stepKey="disableRssForCatalogNewProducts"/>
+            <magentoCLI command="cache:clean" stepKey="cleanCache"/>
+        </after>
+
+        <amOnPage url="{{StorefrontRssPage.url}}" stepKey="goToRssPage"/>
+        <seeElement selector="{{StorefrontRssListSection.rssTable}}" stepKey="seeRssList"/>
+        <click selector="{{StorefrontRssListSection.rssLink}}" stepKey="clickRssLink"/>
+        <seeInCurrentUrl url="rss/feed/index/type/new_products/" stepKey="seeInUrl"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <see userInput="New Products from Main Website Store" stepKey="seeText" />
+
+    </test>
+</tests>

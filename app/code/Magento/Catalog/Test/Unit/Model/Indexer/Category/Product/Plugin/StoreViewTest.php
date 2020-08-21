@@ -3,47 +3,53 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Indexer\Category\Product\Plugin;
 
+use Magento\Catalog\Model\Indexer\Category\Product;
 use Magento\Catalog\Model\Indexer\Category\Product\Plugin\StoreView;
+use Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer;
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Store\Model\ResourceModel\Group;
 use Magento\Store\Model\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StoreViewTest extends \PHPUnit\Framework\TestCase
+class StoreViewTest extends TestCase
 {
     /**
-     * @var Store|\PHPUnit_Framework_MockObject_MockObject
+     * @var Store|MockObject
      */
     private $storeMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|IndexerInterface
+     * @var MockObject|IndexerInterface
      */
-    protected $indexerMock;
+    private $indexerMock;
 
     /**
      * @var StoreView
      */
-    protected $model;
+    private $model;
 
     /**
-     * @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|MockObject
      */
-    protected $indexerRegistryMock;
+    private $indexerRegistryMock;
 
     /**
-     * @var \Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer|\PHPUnit_Framework_MockObject_MockObject
+     * @var TableMaintainer|MockObject
      */
-    protected $tableMaintainer;
+    private $tableMaintainerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var Group|MockObject
      */
-    protected $subject;
+    private $subjectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->indexerMock = $this->getMockForAbstractClass(
             IndexerInterface::class,
@@ -52,65 +58,73 @@ class StoreViewTest extends \PHPUnit\Framework\TestCase
             false,
             false,
             true,
-            ['getId', 'getState', '__wakeup']
+            ['getId', 'getState']
         );
-        $this->subject = $this->createMock(Group::class);
+        $this->subjectMock = $this->createMock(Group::class);
         $this->indexerRegistryMock = $this->createPartialMock(IndexerRegistry::class, ['get']);
         $this->storeMock = $this->createPartialMock(
             Store::class,
             [
                 'isObjectNew',
                 'getId',
-                'dataHasChangedFor',
-                '__wakeup'
+                'dataHasChangedFor'
             ]
         );
-        $this->tableMaintainer = $this->createPartialMock(
-            \Magento\Catalog\Model\Indexer\Category\Product\TableMaintainer::class,
+        $this->tableMaintainerMock = $this->createPartialMock(
+            TableMaintainer::class,
             [
                 'createTablesForStore'
             ]
         );
 
-        $this->model = new StoreView($this->indexerRegistryMock, $this->tableMaintainer);
+        $this->model = new StoreView($this->indexerRegistryMock, $this->tableMaintainerMock);
     }
 
-    public function testAroundSaveNewObject()
+    public function testAfterSaveNewObject(): void
     {
         $this->mockIndexerMethods();
         $this->storeMock->expects($this->atLeastOnce())->method('isObjectNew')->willReturn(true);
         $this->storeMock->expects($this->atLeastOnce())->method('getId')->willReturn(1);
-        $this->model->beforeSave($this->subject, $this->storeMock);
-        $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->storeMock));
+
+        $this->assertSame(
+            $this->subjectMock,
+            $this->model->afterSave($this->subjectMock, $this->subjectMock, $this->storeMock)
+        );
     }
 
-    public function testAroundSaveHasChanged()
+    public function testAfterSaveHasChanged(): void
     {
         $this->mockIndexerMethods();
         $this->storeMock->expects($this->once())
             ->method('dataHasChangedFor')
             ->with('group_id')
             ->willReturn(true);
-        $this->model->beforeSave($this->subject, $this->storeMock);
-        $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->storeMock));
+
+        $this->assertSame(
+            $this->subjectMock,
+            $this->model->afterSave($this->subjectMock, $this->subjectMock, $this->storeMock)
+        );
     }
 
-    public function testAroundSaveNoNeed()
+    public function testAfterSaveNoNeed(): void
     {
         $this->storeMock->expects($this->once())
             ->method('dataHasChangedFor')
             ->with('group_id')
             ->willReturn(false);
-        $this->model->beforeSave($this->subject, $this->storeMock);
-        $this->assertSame($this->subject, $this->model->afterSave($this->subject, $this->subject, $this->storeMock));
+
+        $this->assertSame(
+            $this->subjectMock,
+            $this->model->afterSave($this->subjectMock, $this->subjectMock, $this->storeMock)
+        );
     }
 
-    private function mockIndexerMethods()
+    private function mockIndexerMethods(): void
     {
         $this->indexerMock->expects($this->once())->method('invalidate');
         $this->indexerRegistryMock->expects($this->once())
             ->method('get')
-            ->with(\Magento\Catalog\Model\Indexer\Category\Product::INDEXER_ID)
+            ->with(Product::INDEXER_ID)
             ->willReturn($this->indexerMock);
     }
 }

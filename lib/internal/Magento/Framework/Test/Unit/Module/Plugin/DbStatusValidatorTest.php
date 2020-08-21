@@ -3,17 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Test\Unit\Module\Plugin;
 
-use Magento\Framework\Module\Plugin\DbStatusValidator as DbStatusValidatorPlugin;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Framework\Cache\FrontendInterface as FrontendCacheInterface;
-use Magento\Framework\Module\DbVersionInfo;
 use Magento\Framework\App\FrontController;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Cache\FrontendInterface as FrontendCacheInterface;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Module\DbVersionInfo;
+use Magento\Framework\Module\Plugin\DbStatusValidator as DbStatusValidatorPlugin;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
+class DbStatusValidatorTest extends TestCase
 {
     /**
      * @var DbStatusValidatorPlugin
@@ -26,26 +30,26 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
     private $objectManagerHelper;
 
     /**
-     * @var FrontendCacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var FrontendCacheInterface|MockObject
      */
     private $cacheMock;
 
     /**
-     * @var DbVersionInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var DbVersionInfo|MockObject
      */
     private $dbVersionInfoMock;
 
     /**
-     * @var FrontController|\PHPUnit_Framework_MockObject_MockObject
+     * @var FrontController|MockObject
      */
     private $frontControllerMock;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     private $requestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cacheMock = $this->getMockBuilder(FrontendCacheInterface::class)
             ->getMockForAbstractClass();

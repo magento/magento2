@@ -3,57 +3,67 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\ResourceModel\Product;
 
-class LinkTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\ResourceModel\Product\Link;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class LinkTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Link
+     * @var Link
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $resource;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $connection;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $dbSelect;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->resource = $this->createMock(\Magento\Framework\App\ResourceConnection::class);
+        $objectManager = new ObjectManager($this);
+        $this->resource = $this->createMock(ResourceConnection::class);
         $this->connection =
-            $this->createMock(\Magento\Framework\DB\Adapter\AdapterInterface::class);
+            $this->getMockForAbstractClass(AdapterInterface::class);
 
         $this->model = $objectManager->getObject(
-            \Magento\Catalog\Model\ResourceModel\Product\Link::class,
+            Link::class,
             ['resource' => $this->resource]
         );
     }
 
     protected function prepareAdapter()
     {
-        $this->dbSelect = $this->createMock(\Magento\Framework\DB\Select::class);
+        $this->dbSelect = $this->createMock(Select::class);
 
         // method flow
         $this->resource->expects(
             $this->at(0)
         )->method(
             'getConnection'
-        )->will(
-            $this->returnValue($this->connection)
+        )->willReturn(
+            $this->connection
         );
 
-        $this->connection->expects($this->once())->method('select')->will($this->returnValue($this->dbSelect));
+        $this->connection->expects($this->once())->method('select')->willReturn($this->dbSelect);
     }
 
     public function testGetAttributesByType()
@@ -62,7 +72,7 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         $result = [100, 200, 300, 400];
 
         $this->prepareAdapter();
-        $this->dbSelect->expects($this->once())->method('from')->will($this->returnValue($this->dbSelect));
+        $this->dbSelect->expects($this->once())->method('from')->willReturn($this->dbSelect);
         $this->dbSelect->expects(
             $this->atLeastOnce()
         )->method(
@@ -70,10 +80,10 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         )->with(
             'link_type_id = ?',
             $typeId
-        )->will(
-            $this->returnValue($this->dbSelect)
+        )->willReturn(
+            $this->dbSelect
         );
-        $this->connection->expects($this->once())->method('fetchAll')->will($this->returnValue($result));
+        $this->connection->expects($this->once())->method('fetchAll')->willReturn($result);
         $this->assertEquals($result, $this->model->getAttributesByType($typeId));
     }
 
@@ -88,8 +98,8 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             'getTableName'
         )->with(
             'catalog_product_link_attribute_' . $inputTable
-        )->will(
-            $this->returnValue($resultTable)
+        )->willReturn(
+            $resultTable
         );
         $this->assertEquals($resultTable, $this->model->getAttributeTypeTable($inputTable));
     }
@@ -107,8 +117,8 @@ class LinkTest extends \PHPUnit\Framework\TestCase
 
         // method flow
         $this->prepareAdapter();
-        $this->dbSelect->expects($this->once())->method('from')->will($this->returnValue($this->dbSelect));
-        $this->dbSelect->expects($this->atLeastOnce())->method('where')->will($this->returnValue($this->dbSelect));
+        $this->dbSelect->expects($this->once())->method('from')->willReturn($this->dbSelect);
+        $this->dbSelect->expects($this->atLeastOnce())->method('where')->willReturn($this->dbSelect);
         $this->connection->expects(
             $this->once()
         )->method(
@@ -116,8 +126,8 @@ class LinkTest extends \PHPUnit\Framework\TestCase
         )->with(
             $this->dbSelect,
             $bind
-        )->will(
-            $this->returnValue($fetchedData)
+        )->willReturn(
+            $fetchedData
         );
 
         $this->assertEquals($result, $this->model->getChildrenIds($parentId, $typeId));
@@ -132,8 +142,8 @@ class LinkTest extends \PHPUnit\Framework\TestCase
 
         // method flow
         $this->prepareAdapter();
-        $this->dbSelect->expects($this->once())->method('from')->will($this->returnValue($this->dbSelect));
-        $this->dbSelect->expects($this->any())->method('where')->will($this->returnValue($this->dbSelect));
+        $this->dbSelect->expects($this->once())->method('from')->willReturn($this->dbSelect);
+        $this->dbSelect->expects($this->any())->method('where')->willReturn($this->dbSelect);
 
         $this->connection->expects(
             $this->once()
@@ -141,8 +151,8 @@ class LinkTest extends \PHPUnit\Framework\TestCase
             'fetchAll'
         )->with(
             $this->dbSelect
-        )->will(
-            $this->returnValue($fetchedData)
+        )->willReturn(
+            $fetchedData
         );
 
         $this->assertEquals($result, $this->model->getParentIdsByChild($childId, $typeId));

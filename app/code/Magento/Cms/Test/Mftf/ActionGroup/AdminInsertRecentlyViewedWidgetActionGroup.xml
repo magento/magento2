@@ -13,7 +13,6 @@
             <argument name="attributeSelector2" type="string" defaultValue="show_buttons"/>
             <argument name="productAttributeSection1" type="string"  defaultValue="1"/>
             <argument name="productAttributeSection2" type="string" defaultValue="4" />
-            <argument name="buttonToShowSection1" type="string"  defaultValue="1"/>
             <argument name="buttonToShowSection2" type="string" defaultValue="3" />
         </arguments>
 

@@ -3,11 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
+use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Block\Widget\AbstractWidget;
+use Magento\Customer\Helper\Address;
+use Magento\Framework\View\Element\Template\Context;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AbstractWidgetTest extends \PHPUnit\Framework\TestCase
+class AbstractWidgetTest extends TestCase
 {
     /** Constants used in the various unit tests. */
     const KEY_FIELD_ID_FORMAT = 'field_id_format';
@@ -18,20 +25,21 @@ class AbstractWidgetTest extends \PHPUnit\Framework\TestCase
 
     const FORMAT_S = '%s';
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Helper\Address */
+    /** @var MockObject|Address */
     private $_addressHelper;
 
     /** @var AbstractWidget */
     private $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_addressHelper = $this->createMock(\Magento\Customer\Helper\Address::class);
+        $this->_addressHelper = $this->createMock(Address::class);
 
-        $this->_block = new \Magento\Customer\Block\Widget\AbstractWidget(
-            $this->createMock(\Magento\Framework\View\Element\Template\Context::class),
+        $this->_block = new AbstractWidget(
+            $this->createMock(Context::class),
             $this->_addressHelper,
-            $this->getMockBuilder(\Magento\Customer\Api\CustomerMetadataInterface::class)->getMockForAbstractClass()
+            $this->getMockBuilder(CustomerMetadataInterface::class)
+                ->getMockForAbstractClass()
         );
     }
 
@@ -49,8 +57,8 @@ class AbstractWidgetTest extends \PHPUnit\Framework\TestCase
             'getConfig'
         )->with(
             $key
-        )->will(
-            $this->returnValue($expectedValue)
+        )->willReturn(
+            $expectedValue
         );
         $this->assertEquals($expectedValue, $this->_block->getConfig($key));
     }

@@ -3,48 +3,47 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Indexer\Design\Config\Plugin;
 
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Store\Model\Store as StoreModel;
 use Magento\Theme\Model\Data\Design\Config;
 use Magento\Theme\Model\Indexer\Design\Config\Plugin\Store;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StoreTest extends \PHPUnit\Framework\TestCase
+class StoreTest extends TestCase
 {
     /** @var Store */
-    protected $model;
+    private $model;
 
-    /** @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject */
-    protected $indexerRegistryMock;
+    /** @var IndexerRegistry|MockObject */
+    private $indexerRegistryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->indexerRegistryMock = $this->getMockBuilder(\Magento\Framework\Indexer\IndexerRegistry::class)
+        $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->model = new Store($this->indexerRegistryMock);
     }
 
-    public function testAroundSave()
+    public function testAfterSave(): void
     {
-        $subjectId = 0;
-
-        /** @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject $subjectMock */
-        $subjectMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+        /** @var StoreModel|MockObject $subjectMock */
+        $subjectMock = $this->getMockBuilder(StoreModel::class)
             ->disableOriginalConstructor()
             ->getMock();
         $subjectMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($subjectId);
+            ->method('isObjectNew')
+            ->willReturn(true);
 
-        $closureMock = function () use ($subjectMock) {
-            return $subjectMock;
-        };
-
-        /** @var IndexerInterface|\PHPUnit_Framework_MockObject_MockObject $indexerMock */
-        $indexerMock = $this->getMockBuilder(\Magento\Framework\Indexer\IndexerInterface::class)
+        /** @var IndexerInterface|MockObject $indexerMock */
+        $indexerMock = $this->getMockBuilder(IndexerInterface::class)
             ->getMockForAbstractClass();
         $indexerMock->expects($this->once())
             ->method('invalidate');
@@ -54,40 +53,34 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->with(Config::DESIGN_CONFIG_GRID_INDEXER_ID)
             ->willReturn($indexerMock);
 
-        $this->assertEquals($subjectMock, $this->model->aroundSave($subjectMock, $closureMock));
+        $this->assertSame($subjectMock, $this->model->afterSave($subjectMock, $subjectMock));
     }
 
-    public function testAroundSaveWithExistentSubject()
+    public function testAfterSaveWithExistentSubject(): void
     {
-        $subjectId = 1;
-
-        /** @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject $subjectMock */
-        $subjectMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+        /** @var StoreModel|MockObject $subjectMock */
+        $subjectMock = $this->getMockBuilder(StoreModel::class)
             ->disableOriginalConstructor()
             ->getMock();
         $subjectMock->expects($this->once())
-            ->method('getId')
-            ->willReturn($subjectId);
-
-        $closureMock = function () use ($subjectMock) {
-            return $subjectMock;
-        };
+            ->method('isObjectNew')
+            ->willReturn(false);
 
         $this->indexerRegistryMock->expects($this->never())
             ->method('get');
 
-        $this->assertEquals($subjectMock, $this->model->aroundSave($subjectMock, $closureMock));
+        $this->assertSame($subjectMock, $this->model->afterSave($subjectMock, $subjectMock));
     }
 
-    public function testAfterDelete()
+    public function testAfterDelete(): void
     {
-        /** @var \Magento\Store\Model\Store|\PHPUnit_Framework_MockObject_MockObject $subjectMock */
-        $subjectMock = $this->getMockBuilder(\Magento\Store\Model\Store::class)
+        /** @var StoreModel|MockObject $subjectMock */
+        $subjectMock = $this->getMockBuilder(StoreModel::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var IndexerInterface|\PHPUnit_Framework_MockObject_MockObject $indexerMock */
-        $indexerMock = $this->getMockBuilder(\Magento\Framework\Indexer\IndexerInterface::class)
+        /** @var IndexerInterface|MockObject $indexerMock */
+        $indexerMock = $this->getMockBuilder(IndexerInterface::class)
             ->getMockForAbstractClass();
         $indexerMock->expects($this->once())
             ->method('invalidate');
@@ -97,6 +90,6 @@ class StoreTest extends \PHPUnit\Framework\TestCase
             ->with(Config::DESIGN_CONFIG_GRID_INDEXER_ID)
             ->willReturn($indexerMock);
 
-        $this->assertEquals($subjectMock, $this->model->afterDelete($subjectMock, $subjectMock));
+        $this->assertSame($subjectMock, $this->model->afterDelete($subjectMock, $subjectMock));
     }
 }
