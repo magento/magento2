@@ -99,7 +99,7 @@ class LoadBlockTest extends AbstractBackendController
                 'add_cart_item' => [
                     $oldQuote->getItemsCollection()->getFirstItem()->getId() => 1,
                 ],
-            ]
+            ],
         ]);
 
         $this->dispatchWitParams($params, $post);
@@ -146,7 +146,7 @@ class LoadBlockTest extends AbstractBackendController
         ]);
         $params = $this->hydrateParams();
 
-        $this->dispatchWitParams($this->hydrateParams(), $post);
+        $this->dispatchWitParams($params, $post);
 
         $this->checkHandles(explode(',', $params['block']));
         $this->checkQuotes($oldQuote);
@@ -189,8 +189,8 @@ class LoadBlockTest extends AbstractBackendController
                     'qty' => '1',
                     'use_discount' => '1',
                     'action' => 'cart',
-                ]
-            ]
+                ],
+            ],
         ]);
         $params = $this->hydrateParams(['blocks' => null]);
         $this->dispatchWitParams($params, $post);
@@ -216,7 +216,7 @@ class LoadBlockTest extends AbstractBackendController
         $newQuoteItemsCollection = $newQuote->getItemsCollection(false);
 
         if ($expectedSku !== null) {
-            $this->assertNotNull($newQuoteItemsCollection->getItemByColumnValue('sku', 'simple2'));
+            $this->assertNotNull($newQuoteItemsCollection->getItemByColumnValue('sku', $expectedSku));
         } else {
             $this->assertEmpty($newQuoteItemsCollection->getItems());
         }
@@ -249,7 +249,7 @@ class LoadBlockTest extends AbstractBackendController
     }
 
     /**
-     * Fill params array to proper state
+     * Fill post params array to proper state
      *
      * @param array $inputArray
      * @return array

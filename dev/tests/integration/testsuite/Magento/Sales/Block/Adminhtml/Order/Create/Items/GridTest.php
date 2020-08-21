@@ -49,7 +49,7 @@ class GridTest extends TestCase
         $this->getQuoteByReservedOrderId = $this->objectManager->get(GetQuoteByReservedOrderId::class);
         $this->session = $this->objectManager->get(Quote::class);
         $this->layout = $this->objectManager->get(LayoutInterface::class);
-        $this->block =$this->layout->createBlock(Grid::class);
+        $this->block = $this->layout->createBlock(Grid::class);
         $this->layout->createBlock(Items::class)->setChild('items_grid', $this->block);
     }
 
