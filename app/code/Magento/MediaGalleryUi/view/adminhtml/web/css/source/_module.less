@@ -274,16 +274,17 @@
 
         .media-directory-container {
             &::-webkit-scrollbar {
-                background: transparent;
-                width: 0;
+                background-color: @color-media-gallery-checkbox-background;
             }
-            -ms-overflow-style: none;
+            &::-webkit-scrollbar-thumb {
+                background-color: @color-masonry-grey;
+            }
             float: left;
             max-width: 50%;
             overflow-x: scroll;
             overflow-y: hidden;
             padding-right: 40px;
-            scrollbar-width: none;
+            scrollbar-color: @color-masonry-grey @color-media-gallery-checkbox-background;
         }
 
         .media-gallery-image-block {
