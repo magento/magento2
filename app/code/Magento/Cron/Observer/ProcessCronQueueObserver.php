@@ -711,7 +711,7 @@ class ProcessCronQueueObserver implements ObserverInterface
         $jobs = $this->_config->getJobs();
 
         $connection->update(
-            $scheduleResource->getMainTable(),
+            $scheduleResource->getTable('cron_schedule'),
             [
                 'status' => \Magento\Cron\Model\Schedule::STATUS_ERROR,
                 'messages' => 'Time out'
