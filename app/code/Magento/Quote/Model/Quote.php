@@ -10,6 +10,7 @@ use Magento\Customer\Api\Data\GroupInterface;
 use Magento\Directory\Model\AllowedCountries;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\Api\ExtensionAttribute\JoinProcessorInterface;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Model\AbstractExtensibleModel;
 use Magento\Quote\Api\Data\PaymentInterface;
 use Magento\Quote\Model\Quote\Address;
@@ -865,13 +866,15 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         }
 
         parent::beforeSave();
+
+        return $this;
     }
 
     /**
      * Loading quote data by customer
      *
      * @param \Magento\Customer\Model\Customer|int $customer
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @return $this
      */
     public function loadByCustomer($customer)
@@ -945,8 +948,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             } else {
                 try {
                     $defaultBillingAddress = $this->addressRepository->getById($customer->getDefaultBilling());
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                    //
                 }
                 if (isset($defaultBillingAddress)) {
                     /** @var \Magento\Quote\Model\Quote\Address $billingAddress */
@@ -959,8 +962,8 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
             if (null === $shippingAddress) {
                 try {
                     $defaultShippingAddress = $this->addressRepository->getById($customer->getDefaultShipping());
+                    // phpcs:ignore Magento2.CodeAnalysis.EmptyBlock
                 } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                    //
                 }
                 if (isset($defaultShippingAddress)) {
                     /** @var \Magento\Quote\Model\Quote\Address $shippingAddress */
@@ -1102,7 +1105,22 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
         //if (!$this->getData('customer_group_id') && !$this->getData('customer_tax_class_id')) {
         $groupId = $this->getCustomerGroupId();
         if ($groupId !== null) {
-            $taxClassId = $this->groupRepository->getById($this->getCustomerGroupId())->getTaxClassId();
+            $taxClassId = null;
+            try {
+                $taxClassId = $this->groupRepository->getById($this->getCustomerGroupId())->getTaxClassId();
+            } catch (NoSuchEntityException $e) {
+                /**
+                 * A customer MAY create a quote and AFTER that customer group MAY be deleted.
+                 * That breaks a quote because it still refers no a non-existent customer group.
+                 * In such a case we should load a new customer group id from the current customer
+                 * object and use it to retrieve tax class and update quote.
+                 */
+                $groupId = $this->getCustomer()->getGroupId();
+                $this->setCustomerGroupId($groupId);
+                if ($groupId !== null) {
+                    $taxClassId = $this->groupRepository->getById($groupId)->getTaxClassId();
+                }
+            }
             $this->setCustomerTaxClassId($taxClassId);
         }
 
@@ -1679,12 +1697,14 @@ class Quote extends AbstractExtensibleModel implements \Magento\Quote\Api\Data\C
 
             // collect errors instead of throwing first one
             if ($item->getHasError()) {
+                $this->deleteItem($item);
                 foreach ($item->getMessage(false) as $message) {
                     if (!in_array($message, $errors)) {
                         // filter duplicate messages
                         $errors[] = $message;
                     }
                 }
+                break;
             }
         }
         if (!empty($errors)) {

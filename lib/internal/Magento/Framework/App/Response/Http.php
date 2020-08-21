@@ -185,9 +185,6 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      *
      * @return string[]
      * @codeCoverageIgnore
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __sleep()
     {
@@ -199,9 +196,6 @@ class Http extends \Magento\Framework\HTTP\PhpEnvironment\Response
      *
      * @return void
      * @codeCoverageIgnore
-     *
-     * @SuppressWarnings(PHPMD.SerializationAware)
-     * @deprecated Do not use PHP serialization.
      */
     public function __wakeup()
     {

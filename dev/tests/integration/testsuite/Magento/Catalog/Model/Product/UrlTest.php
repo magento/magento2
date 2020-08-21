@@ -27,7 +27,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      */
     protected $urlPathGenerator;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Catalog\Model\Product\Url::class
@@ -53,8 +53,8 @@ class UrlTest extends \PHPUnit\Framework\TestCase
      * @magentoConfigFixture fixturestore_store web/unsecure/base_url http://sample-second.com/
      * @magentoConfigFixture fixturestore_store web/unsecure/base_link_url http://sample-second.com/
      * @magentoDataFixture Magento/Catalog/_files/product_simple_multistore.php
-     * @magentoDbIsolation disabled
      * @dataProvider getUrlsWithSecondStoreProvider
+     * @magentoDbIsolation disabled
      * @magentoAppArea adminhtml
      */
     public function testGetUrlInStoreWithSecondStore($storeCode, $expectedProductUrl)
@@ -87,6 +87,9 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
+    /**
+     * @magentoDbIsolation disabled
+     */
     public function testGetProductUrl()
     {
         $repository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -121,6 +124,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
+     * @magentoDbIsolation disabled
      * @magentoAppArea frontend
      */
     public function testGetUrl()
@@ -135,13 +139,14 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             \Magento\Catalog\Model\Product::class
         );
         $product->setId(100);
-        $this->assertContains('catalog/product/view/id/100/', $this->_model->getUrl($product));
+        $this->assertStringContainsString('catalog/product/view/id/100/', $this->_model->getUrl($product));
     }
 
     /**
      * Check that rearranging product url rewrites do not influence on whether to use category in product links
      *
      * @magentoConfigFixture current_store catalog/seo/product_use_categories 0
+     * @magentoDbIsolation disabled
      */
     public function testGetProductUrlWithRearrangedUrlRewrites()
     {
@@ -164,7 +169,7 @@ class UrlTest extends \PHPUnit\Framework\TestCase
         $product = $productRepository->get('simple');
         $category = $categoryRepository->get($product->getCategoryIds()[0]);
         $registry->register('current_category', $category);
-        $this->assertNotContains($category->getUrlPath(), $this->_model->getProductUrl($product));
+        $this->assertStringNotContainsString($category->getUrlPath(), $this->_model->getProductUrl($product));
 
         $rewrites = $urlFinder->findAllByData(
             [
@@ -179,6 +184,6 @@ class UrlTest extends \PHPUnit\Framework\TestCase
             }
         }
         $urlPersist->replace($rewrites);
-        $this->assertNotContains($category->getUrlPath(), $this->_model->getProductUrl($product));
+        $this->assertStringNotContainsString($category->getUrlPath(), $this->_model->getProductUrl($product));
     }
 }

@@ -18,7 +18,7 @@ class AddressDataGenerator
     public function generateAddress()
     {
         return [
-            'postcode' => random_int(10000, 99999)
+            'postcode' => mt_rand(10000, 99999)
         ];
     }
 }

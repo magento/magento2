@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderWithSimpleProductCustomOptionFileTest">
+        <annotations>
+            <stories value="Create Order with simple product with custom option"/>
+            <title value="Create Order with simple product with custom option."/>
+            <description value="Verify, admin able to change file for custom option during order creation."/>
+            <features value="Sales"/>
+            <severity value="MAJOR"/>
+            <group value="Sales"/>
+        </annotations>
+        <before>
+            <!--Create test data.-->
+            <createData entity="_defaultCategory" stepKey="category"/>
+            <createData entity="SimpleProduct" stepKey="simpleProduct">
+                <requiredEntity createDataKey="category"/>
+            </createData>
+            <createData entity="Simple_US_Customer_CA" stepKey="customer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <!--Clean up created test data.-->
+            <deleteData createDataKey="simpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="category" stepKey="deleteCategory"/>
+            <deleteData createDataKey="customer" stepKey="deleteCustomer" />
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Add option to product.-->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="navigateToProductEditPage">
+            <argument name="productId" value="$simpleProduct.id$"/>
+        </actionGroup>
+        <actionGroup ref="AddProductCustomOptionFileActionGroup" stepKey="addOption">
+            <argument name="option" value="ProductOptionFile"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <!--Create order.-->
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$customer$"/>
+        </actionGroup>
+        <actionGroup ref="AdminAddSimpleProductWithCustomOptionFileToOrderActionGroup" stepKey="addSimpleProductToOrder">
+            <argument name="product" value="$simpleProduct$"/>
+            <argument name="productQty" value="$simpleProduct.quantity$"/>
+        </actionGroup>
+        <!--Verify, admin able to change file for custom option.-->
+        <actionGroup ref="AdminChangeCustomerOptionFileActionGroup" stepKey="changeFile"/>
+    </test>
+</tests>

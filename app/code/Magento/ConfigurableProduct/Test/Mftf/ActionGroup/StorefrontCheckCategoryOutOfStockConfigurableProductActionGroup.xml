@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="StorefrontCheckCategoryOutOfStockConfigurableProductActionGroup">
+        <annotations>
+            <description>Validates that the provided Configurable Product is present and correct on a Category page.</description>
+        </annotations>
+        <arguments>
+            <argument name="product" type="entity"/>
+        </arguments>
+
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductTitleByName(product.name)}}" stepKey="assertProductName"/>
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(product.name)}}" stepKey="moveMouseOverProduct"/>
+        <seeElement selector="{{StorefrontCategoryProductSection.ProductStockUnavailable}}" stepKey="AssertOutOfStock"/>
+        <dontSeeElement selector="{{StorefrontCategoryProductSection.ProductAddToCartByName(product.name)}}" stepKey="AssertAddToCart"/>
+    </actionGroup>
+</actionGroups>

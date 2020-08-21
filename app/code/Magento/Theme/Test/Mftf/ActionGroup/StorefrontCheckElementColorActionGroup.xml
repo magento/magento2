@@ -19,6 +19,9 @@
         </arguments>
 
         <executeJS function="return window.getComputedStyle(document.querySelector('{{selector}}')).getPropertyValue('{{property}}')" stepKey="getElementColor"/>
-        <assertEquals expected="{{color}}" expectedType="string" actualType="variable" actual="getElementColor" message="pass" stepKey="assertElementColor"/>
+        <assertEquals message="pass" stepKey="assertElementColor">
+			<actualResult type="variable">getElementColor</actualResult>
+			<expectedResult type="string">{{color}}</expectedResult>
+        </assertEquals>
     </actionGroup>
 </actionGroups>

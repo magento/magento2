@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminChangeCustomerGenderInCustomersGridTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Update Customer"/>
+            <title value="Gender attribute blank value is saved in direct edits from customer grid"/>
+            <description value="Check that gender attribute blank value can be saved on customers grid"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-22025"/>
+            <useCaseId value="MC-17259"/>
+            <group value="customer"/>
+        </annotations>
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <!-- Reset customer grid filter -->
+            <amOnPage url="{{AdminCustomerPage.url}}" stepKey="goToCustomersGridPage"/>
+            <waitForPageLoad stepKey="waitForCustomersGrid"/>
+            <actionGroup ref="AdminResetFilterInCustomerGrid" stepKey="resetFilter"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!-- Open customers grid page, filter by created customer-->
+        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCustomerGridByEmail">
+            <argument name="email" value="$createCustomer.email$"/>
+        </actionGroup>
+        <!-- Check customer is in grid-->
+        <actionGroup ref="AdminAssertCustomerInCustomersGrid" stepKey="assertCustomerInCustomersGrid">
+            <argument name="text" value="$createCustomer.email$"/>
+            <argument name="row" value="1"/>
+        </actionGroup>
+        <!--Check customer Gender value in grid-->
+        <actionGroup ref="AssertAdminCustomerGenderInCustomersGridActionGroup" stepKey="assertCustomerGenderInCustomersGrid">
+            <argument name="customerEmail" value="$createCustomer.email$"/>
+        </actionGroup>
+        <!--Update customer Gender to Male-->
+        <actionGroup ref="AdminUpdateCustomerGenderInCustomersGridActionGroup" stepKey="updateCustomerGenderWithMaleValueInCustomersGrid">
+            <argument name="customerEmail" value="$createCustomer.email$"/>
+            <argument name="genderValue" value="{{Gender.male}}"/>
+        </actionGroup>
+        <!--Check customer Gender value in grid-->
+        <actionGroup ref="AssertAdminCustomerGenderInCustomersGridActionGroup" stepKey="assertCustomerGenderMaleInCustomersGrid">
+            <argument name="customerEmail" value="$createCustomer.email$"/>
+            <argument name="expectedGenderValue" value="{{Gender.male}}"/>
+        </actionGroup>
+        <!--Open customer edit page and check Gender value-->
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPageWithMaleGender">
+            <argument name="customerId" value="$createCustomer.id$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCustomerGenderOnCustomerFormActionGroup" stepKey="assertCustomerGenderValueIsMaleOnCustomerForm">
+            <argument name="customerGender" value="{{Gender.male}}"/>
+        </actionGroup>
+        <!--Filter customers grid by email-->
+        <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCustomerByEmailToUpdateWithEmptyGender">
+            <argument name="email" value="$createCustomer.email$"/>
+        </actionGroup>
+        <!--Update customer Gender to empty value-->
+        <actionGroup ref="AdminUpdateCustomerGenderInCustomersGridActionGroup" stepKey="updateCustomerGenderWithEmptyValueInCustomersGrid">
+            <argument name="customerEmail" value="$createCustomer.email$"/>
+        </actionGroup>
+        <!--Check customer Gender value in grid-->
+        <actionGroup ref="AssertAdminCustomerGenderInCustomersGridActionGroup" stepKey="assertCustomerGenderEmptyInCustomersGrid">
+            <argument name="customerEmail" value="$createCustomer.email$"/>
+        </actionGroup>
+        <!--Open customer edit page and check Gender value-->
+        <actionGroup ref="AdminOpenCustomerEditPageActionGroup" stepKey="openCustomerEditPageWithEmptyGender">
+            <argument name="customerId" value="$createCustomer.id$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCustomerGenderOnCustomerFormActionGroup" stepKey="assertCustomerGenderValueIsEmptyOnCustomerForm"/>
+    </test>
+</tests>

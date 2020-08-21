@@ -8,7 +8,24 @@
 
 namespace Magento\Framework\Translate;
 
-class Inline implements \Magento\Framework\Translate\InlineInterface
+use Magento\Framework\App\Area;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\ScopeInterface;
+use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\App\State;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Translate\Inline\ConfigInterface;
+use Magento\Framework\Translate\Inline\ParserInterface;
+use Magento\Framework\Translate\Inline\StateInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\LayoutInterface;
+
+/**
+ * Translate Inline Class
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
+class Inline implements InlineInterface
 {
     /**
      * Indicator to hold state of whether inline translation is allowed
@@ -18,7 +35,7 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
     protected $isAllowed;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\ParserInterface
+     * @var ParserInterface
      */
     protected $parser;
 
@@ -30,22 +47,22 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
     protected $isScriptInserted = false;
 
     /**
-     * @var \Magento\Framework\UrlInterface
+     * @var UrlInterface
      */
     protected $url;
 
     /**
-     * @var \Magento\Framework\View\LayoutInterface
+     * @var LayoutInterface
      */
     protected $layout;
 
     /**
-     * @var \Magento\Framework\Translate\Inline\ConfigInterface
+     * @var ConfigInterface
      */
     protected $config;
 
     /**
-     * @var \Magento\Framework\App\ScopeResolverInterface
+     * @var ScopeResolverInterface
      */
     protected $scopeResolver;
 
@@ -70,28 +87,39 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
     protected $state;
 
     /**
-     * Initialize inline translation model
-     *
-     * @param \Magento\Framework\App\ScopeResolverInterface $scopeResolver
-     * @param \Magento\Framework\UrlInterface $url
-     * @param \Magento\Framework\View\LayoutInterface $layout
+     * @var array
+     */
+    private $allowedAreas = [Area::AREA_FRONTEND, Area::AREA_ADMINHTML];
+
+    /**
+     * @var State
+     */
+    private $appState;
+
+    /**
+     * @param ScopeResolverInterface $scopeResolver
+     * @param UrlInterface $url
+     * @param LayoutInterface $layout
      * @param Inline\ConfigInterface $config
      * @param Inline\ParserInterface $parser
      * @param Inline\StateInterface $state
      * @param string $templateFileName
      * @param string $translatorRoute
-     * @param null $scope
+     * @param string|null $scope
+     * @param State|null $appState
+     * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
-        \Magento\Framework\App\ScopeResolverInterface $scopeResolver,
-        \Magento\Framework\UrlInterface $url,
-        \Magento\Framework\View\LayoutInterface $layout,
-        \Magento\Framework\Translate\Inline\ConfigInterface $config,
-        \Magento\Framework\Translate\Inline\ParserInterface $parser,
-        \Magento\Framework\Translate\Inline\StateInterface $state,
+        ScopeResolverInterface $scopeResolver,
+        UrlInterface $url,
+        LayoutInterface $layout,
+        ConfigInterface $config,
+        ParserInterface $parser,
+        StateInterface $state,
         $templateFileName = '',
         $translatorRoute = '',
-        $scope = null
+        $scope = null,
+        ?State $appState = null
     ) {
         $this->scopeResolver = $scopeResolver;
         $this->url = $url;
@@ -102,6 +130,7 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
         $this->templateFileName = $templateFileName;
         $this->translatorRoute = $translatorRoute;
         $this->scope = $scope;
+        $this->appState = $appState ?: ObjectManager::getInstance()->get(State::class);
     }
 
     /**
@@ -112,12 +141,13 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
     public function isAllowed()
     {
         if ($this->isAllowed === null) {
-            if (!$this->scope instanceof \Magento\Framework\App\ScopeInterface) {
-                $scope = $this->scopeResolver->getScope($this->scope);
-            }
+            $scope = $this->scope instanceof ScopeInterface ? null : $this->scopeResolver->getScope($this->scope);
+
             $this->isAllowed = $this->config->isActive($scope)
-                && $this->config->isDevAllowed($scope);
+                && $this->config->isDevAllowed($scope)
+                && $this->isAreaAllowed();
         }
+
         return $this->state->isEnabled() && $this->isAllowed;
     }
 
@@ -134,7 +164,7 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
     /**
      * Replace translation templates with HTML fragments
      *
-     * @param array|string &$body
+     * @param array|string $body
      * @param bool $isJson
      * @return $this
      */
@@ -189,7 +219,9 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
             return;
         }
         if (!$this->isScriptInserted) {
-            $this->getParser()->setContent(str_ireplace('</body>', $this->getInlineScript() . '</body>', $content));
+            $this->getParser()->setContent(
+                str_ireplace('</body>', $this->getInlineScript() . '</body>', $content)
+            );
             $this->isScriptInserted = true;
         }
     }
@@ -204,8 +236,8 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
      */
     protected function getInlineScript()
     {
-        /** @var $block \Magento\Framework\View\Element\Template */
-        $block = $this->layout->createBlock(\Magento\Framework\View\Element\Template::class);
+        /** @var $block Template */
+        $block = $this->layout->createBlock(Template::class);
 
         $block->setAjaxUrl($this->getAjaxUrl());
         $block->setTemplate($this->templateFileName);
@@ -238,15 +270,24 @@ class Inline implements \Magento\Framework\Translate\InlineInterface
             foreach ($body as &$part) {
                 $this->stripInlineTranslations($part);
             }
-        } else {
-            if (is_string($body)) {
-                $body = preg_replace(
-                    '#' . \Magento\Framework\Translate\Inline\ParserInterface::REGEXP_TOKEN . '#',
-                    '$1',
-                    $body
-                );
-            }
+        } elseif (is_string($body)) {
+            $body = preg_replace('#' . ParserInterface::REGEXP_TOKEN . '#', '$1', $body);
         }
+
         return $this;
+    }
+
+    /**
+     * Indicates whether the current area is valid for inline translation
+     *
+     * @return bool
+     */
+    private function isAreaAllowed(): bool
+    {
+        try {
+            return in_array($this->appState->getAreaCode(), $this->allowedAreas, true);
+        } catch (LocalizedException $e) {
+            return false;
+        }
     }
 }

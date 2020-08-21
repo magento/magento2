@@ -7,7 +7,7 @@
 -->
 
 <pages xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-        xsi:noNamespaceSchemaLocation="urn:magento:mftf:/Page/etc/PageObject.xsd">
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/PageObject.xsd">
     <page name="AdminEmailTemplatePreviewPage" url="/admin/email_template/preview/" area="admin" module="Magento_Email">
         <section name="AdminEmailTemplatePreviewSection"/>
     </page>

@@ -24,7 +24,7 @@ class SearchTest extends \Magento\TestFramework\TestCase\AbstractBackendControll
             ->setPostValue('limit', 50);
         $this->dispatch('backend/catalog/product/search');
         $responseBody = $this->getResponse()->getBody();
-        $this->assertContains(
+        $this->assertStringContainsString(
             '"options":{"1":{"value":"1","label":"Simple Product","is_active":1,"path":"simple","optgroup":false}',
             $responseBody
         );

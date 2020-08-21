@@ -20,7 +20,7 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="defaultSimpleProduct" stepKey="initialSimpleProduct"/>
             <!--Create inactive cart price rule-->
             <actionGroup ref="AdminInactiveCartPriceRuleActionGroup" stepKey="createInactiveCartPriceRule">
@@ -30,7 +30,7 @@
         </before>
         <after>
             <deleteData createDataKey="initialSimpleProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Delete inactive cart price rule-->
@@ -44,7 +44,7 @@
         </actionGroup>
 
         <!--Verify customer don't see updated virtual product link on category page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKey" stepKey="openProductPageAndVerifyProduct">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageByCustomAttributeUrlKeyActionGroup" stepKey="openProductPageAndVerifyProduct">
             <argument name="product" value="$$initialSimpleProduct$$"/>
         </actionGroup>
 

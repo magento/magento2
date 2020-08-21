@@ -7,52 +7,43 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model;
 
-use Magento\Backend\Model\Auth;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
-use Magento\Catalog\Api\Data\CategoryInterface;
-use Magento\Catalog\Api\Data\CategoryInterfaceFactory;
+use Magento\Catalog\Api\CategoryRepositoryInterfaceFactory;
 use Magento\Catalog\Model\ResourceModel\Category\CollectionFactory as CategoryCollectionFactory;
 use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
-use Magento\Framework\Acl\Builder;
-use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
-use Magento\TestFramework\Bootstrap as TestBootstrap;
 
 /**
  * Provide tests for CategoryRepository model.
  */
 class CategoryRepositoryTest extends TestCase
 {
-    /**
-     * Test subject.
-     *
-     * @var CategoryRepositoryInterface
-     */
-    private $repo;
+    private const FIXTURE_CATEGORY_ID = 333;
+    private const FIXTURE_TWO_STORES_CATEGORY_ID = 555;
+    private const FIXTURE_SECOND_STORE_CODE = 'fixturestore';
+    private const FIXTURE_FIRST_STORE_CODE = 'default';
 
     /**
-     * @var Auth
+     * @var CategoryLayoutUpdateManager
      */
-    private $auth;
+    private $layoutManager;
 
     /**
-     * @var Builder
+     * @var CategoryRepositoryInterfaceFactory
      */
-    private $aclBuilder;
+    private $repositoryFactory;
 
     /**
-     * @var CategoryInterfaceFactory
+     * @var CollectionFactory
      */
-    private $categoryFactory;
-
-    /** @var CollectionFactory */
     private $productCollectionFactory;
 
-    /** @var ObjectManagerInterface */
-    private $objectManager;
-
-    /** @var CategoryCollectionFactory */
+    /**
+     * @var CategoryCollectionFactory
+     */
     private $categoryCollectionFactory;
 
     /**
@@ -60,73 +51,67 @@ class CategoryRepositoryTest extends TestCase
      *
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = Bootstrap::getObjectManager();
-        $this->repo = $this->objectManager->create(CategoryRepositoryInterface::class);
-        $this->auth = $this->objectManager->get(Auth::class);
-        $this->aclBuilder = $this->objectManager->get(Builder::class);
-        $this->categoryFactory = $this->objectManager->get(CategoryInterfaceFactory::class);
-        $this->productCollectionFactory = $this->objectManager->get(CollectionFactory::class);
-        $this->categoryCollectionFactory = $this->objectManager->create(CategoryCollectionFactory::class);
+        Bootstrap::getObjectManager()->configure([
+            'preferences' => [
+                \Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager::class
+                => \Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager::class
+            ]
+        ]);
+        $this->repositoryFactory = Bootstrap::getObjectManager()->get(CategoryRepositoryInterfaceFactory::class);
+        $this->layoutManager = Bootstrap::getObjectManager()->get(CategoryLayoutUpdateManager::class);
+        $this->productCollectionFactory = Bootstrap::getObjectManager()->get(CollectionFactory::class);
+        $this->categoryCollectionFactory = Bootstrap::getObjectManager()->create(CategoryCollectionFactory::class);
     }
 
     /**
-     * @inheritDoc
-     */
-    protected function tearDown()
-    {
-        parent::tearDown();
-
-        $this->auth->logout();
-        $this->aclBuilder->resetRuntimeAcl();
-    }
-
-    /**
-     * Test authorization when saving category's design settings.
+     * Create subject object.
      *
+     * @return CategoryRepositoryInterface
+     */
+    private function createRepo(): CategoryRepositoryInterface
+    {
+        return $this->repositoryFactory->create();
+    }
+
+    /**
+     * Test that custom layout file attribute is saved.
+     *
+     * @return void
+     * @throws \Throwable
      * @magentoDataFixture Magento/Catalog/_files/category.php
-     * @magentoAppArea adminhtml
      * @magentoDbIsolation enabled
      * @magentoAppIsolation enabled
-     * @return void
      */
-    public function testSaveDesign(): void
+    public function testCustomLayout(): void
     {
-        $category = $this->repo->get(333);
-        $this->auth->login(TestBootstrap::ADMIN_NAME, TestBootstrap::ADMIN_PASSWORD);
+        //New valid value
+        $repo = $this->createRepo();
+        $category = $repo->get(self::FIXTURE_CATEGORY_ID);
+        $newFile = 'test';
+        $this->layoutManager->setCategoryFakeFiles(self::FIXTURE_CATEGORY_ID, [$newFile]);
+        $category->setCustomAttribute('custom_layout_update_file', $newFile);
+        $repo->save($category);
+        $repo = $this->createRepo();
+        $category = $repo->get(self::FIXTURE_CATEGORY_ID);
+        $this->assertEquals($newFile, $category->getCustomAttribute('custom_layout_update_file')->getValue());
 
-        //Admin doesn't have access to category's design.
-        $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_category_design');
-
-        $category->setCustomAttribute('custom_design', 2);
-        $category = $this->repo->save($category);
-        $customDesignAttribute = $category->getCustomAttribute('custom_design');
-        $this->assertTrue(!$customDesignAttribute || !$customDesignAttribute->getValue());
-
-        //Admin has access to category' design.
-        $this->aclBuilder->getAcl()
-            ->allow(null, ['Magento_Catalog::categories', 'Magento_Catalog::edit_category_design']);
-
-        $category->setCustomAttribute('custom_design', 2);
-        $category = $this->repo->save($category);
-        $this->assertNotEmpty($category->getCustomAttribute('custom_design'));
-        $this->assertEquals(2, $category->getCustomAttribute('custom_design')->getValue());
-
-        //Creating a new one
-        /** @var CategoryInterface $newCategory */
-        $newCategory = $this->categoryFactory->create();
-        $newCategory->setName('new category without design');
-        $newCategory->setParentId($category->getParentId());
-        $newCategory->setIsActive(true);
-        $this->aclBuilder->getAcl()->deny(null, 'Magento_Catalog::edit_category_design');
-        $newCategory->setCustomAttribute('custom_design', 2);
-        $newCategory = $this->repo->save($newCategory);
-        $customDesignAttribute = $newCategory->getCustomAttribute('custom_design');
-        $this->assertTrue(!$customDesignAttribute || !$customDesignAttribute->getValue());
+        //Setting non-existent value
+        $newFile = 'does not exist';
+        $category->setCustomAttribute('custom_layout_update_file', $newFile);
+        $caughtException = false;
+        try {
+            $repo->save($category);
+        } catch (LocalizedException $exception) {
+            $caughtException = true;
+        }
+        $this->assertTrue($caughtException);
     }
 
     /**
+     * Test removal of categories.
+     *
      * @magentoDbIsolation enabled
      * @magentoDataFixture Magento/Catalog/_files/categories.php
      * @magentoAppArea adminhtml
@@ -137,7 +122,7 @@ class CategoryRepositoryTest extends TestCase
         $productCollection = $this->productCollectionFactory->create();
         $deletedCategories = ['3', '4', '5', '13'];
         $categoryCollectionIds = $this->categoryCollectionFactory->create()->getAllIds();
-        $this->repo->deleteByIdentifier(3);
+        $this->createRepo()->deleteByIdentifier(3);
         $this->assertEquals(
             0,
             $productCollection->addCategoriesFilter(['in' => $deletedCategories])->getSize(),
@@ -151,5 +136,37 @@ class CategoryRepositoryTest extends TestCase
             $difference,
             'Wrong categories was deleted'
         );
+    }
+
+    /**
+     * Verifies whether `get()` method `$storeId` attribute works as expected.
+     *
+     * @magentoDbIsolation enabled
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Catalog/_files/category_with_two_stores.php
+     */
+    public function testGetCategoryForProvidedStore()
+    {
+        $categoryRepository = $this->repositoryFactory->create();
+
+        $categoryDefault = $categoryRepository->get(
+            self::FIXTURE_TWO_STORES_CATEGORY_ID
+        );
+
+        $this->assertSame('category-defaultstore', $categoryDefault->getUrlKey());
+
+        $categoryFirstStore = $categoryRepository->get(
+            self::FIXTURE_TWO_STORES_CATEGORY_ID,
+            self::FIXTURE_FIRST_STORE_CODE
+        );
+
+        $this->assertSame('category-defaultstore', $categoryFirstStore->getUrlKey());
+
+        $categorySecondStore = $categoryRepository->get(
+            self::FIXTURE_TWO_STORES_CATEGORY_ID,
+            self::FIXTURE_SECOND_STORE_CODE
+        );
+
+        $this->assertSame('category-fixturestore', $categorySecondStore->getUrlKey());
     }
 }

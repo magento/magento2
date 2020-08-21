@@ -1,6 +1,50 @@
 # Copyright © Magento, Inc. All rights reserved.
 # See COPYING.txt for license details.
 
+type Mutation {
+    addBundleProductsToCart(input: AddBundleProductsToCartInput): AddBundleProductsToCartOutput @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\AddSimpleProductsToCart")
+}
+
+input AddBundleProductsToCartInput {
+    cart_id: String!
+    cart_items: [BundleProductCartItemInput!]!
+}
+
+input BundleProductCartItemInput {
+    data: CartItemInput!
+    bundle_options:[BundleOptionInput!]!
+    customizable_options:[CustomizableOptionInput!]
+}
+
+input BundleOptionInput {
+    id: Int!
+    quantity: Float!
+    value: [String!]!
+}
+
+type AddBundleProductsToCartOutput {
+    cart: Cart!
+}
+
+type BundleCartItem implements CartItemInterface {
+    customizable_options: [SelectedCustomizableOption]! @resolver(class: "Magento\\QuoteGraphQl\\Model\\Resolver\\CustomizableOptions")
+    bundle_options: [SelectedBundleOption!]! @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\BundleOption")
+}
+
+type SelectedBundleOption {
+    id: Int!
+    label: String!
+    type: String!
+    values: [SelectedBundleOptionValue!]!
+}
+
+type SelectedBundleOptionValue {
+    id: Int!
+    label: String!
+    quantity: Float!
+    price: Float!
+}
+
 type BundleItem @doc(description: "BundleItem defines an individual item in a bundle product.") {
     option_id: Int @doc(description: "An ID assigned to each type of item in a bundle product.")
     title: String @doc(description: "The display name of the item.")
@@ -22,6 +66,7 @@ type BundleItemOption @doc(description: "BundleItemOption defines characteristic
     price_type: PriceTypeEnum @doc(description: "One of FIXED, PERCENT, or DYNAMIC.")
     can_change_quantity: Boolean @doc(description: "Indicates whether the customer can change the number of items for this option.")
     product: ProductInterface @doc(description: "Contains details about this product option.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product")
+    uid: ID! @doc(description: "A string that encodes option details.") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Options\\BundleItemOptionUid") # A Base64 string that encodes option details.
 }
 
 type BundleProduct implements ProductInterface, PhysicalProductInterface, CustomizableProductInterface @doc(description: "BundleProduct defines basic features of a bundle product and contains multiple BundleItems.") {
@@ -41,4 +86,34 @@ enum PriceViewEnum @doc(description: "This enumeration defines whether a bundle 
 enum ShipBundleItemsEnum @doc(description: "This enumeration defines whether bundle items must be shipped together.") {
     TOGETHER
     SEPARATELY
+}
+
+type BundleOrderItem implements OrderItemInterface {
+    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Order\\Item\\BundleOptions")
+}
+
+type BundleInvoiceItem implements InvoiceItemInterface{
+    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Order\\Item\\BundleOptions")
+}
+
+type BundleShipmentItem implements ShipmentItemInterface {
+    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Order\\Item\\BundleOptions")
+}
+
+type BundleCreditMemoItem implements CreditMemoItemInterface {
+    bundle_options: [ItemSelectedBundleOption] @doc(description: "A list of bundle options that are assigned to the bundle product") @resolver(class: "Magento\\BundleGraphQl\\Model\\Resolver\\Order\\Item\\BundleOptions")
+}
+
+type ItemSelectedBundleOption @doc(description: "A list of options of the selected bundle product") {
+    id: ID! @doc(description: "The unique identifier of the option")
+    label: String! @doc(description: "The label of the option")
+    values: [ItemSelectedBundleOptionValue] @doc(description: "A list of products that represent the values of the parent option")
+}
+
+type ItemSelectedBundleOptionValue @doc(description: "A list of values for the selected bundle product") {
+    id: ID! @doc(description: "The unique identifier of the value")
+    product_name: String! @doc(description: "The name of the child bundle product")
+    product_sku: String! @doc(description: "The SKU of the child bundle product")
+    quantity: Float! @doc(description: "Indicates how many of this bundle product were ordered")
+    price: Money! @doc(description: "The price of the child bundle product")
 }

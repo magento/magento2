@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreatePartialShipmentEntityTest">
+        <annotations>
+            <stories value="Create Partial Shipment Entity"/>
+            <title value="Create Partial Shipment for Offline Payment Methods"/>
+            <description value="Admin Should be Able to Create Partial Shipments"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-13331"/>
+            <group value="sales"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
+            <!-- Create Data -->
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct">
+            </createData>
+            <!-- Enable payment method one of "Check/Money Order" and  shipping method one of "Free Shipping" -->
+            <magentoCLI command="config:set {{enabledCheckMoneyOrder.label}} {{enabledCheckMoneyOrder.value}}" stepKey="enableCheckMoneyOrder"/>
+            <createData entity="FreeShippinMethodConfig" stepKey="enableFreeShipping"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
+                <argument name="tags" value="config"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Delete data -->
+            <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <createData entity="FreeShippinMethodDefault" stepKey="disableFreeShippingMethod"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- TEST BODY -->
+        <!-- Create Order -->
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="goToCreateOrderPage">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+        <actionGroup ref="AddSimpleProductToOrderActionGroup" stepKey="addProductToOrder">
+            <argument name="product" value="$$createSimpleProduct$$"/>
+            <argument name="productQty" value="2"/>
+        </actionGroup>
+        <!-- Select Free shipping -->
+        <actionGroup ref="OrderSelectFreeShippingActionGroup" stepKey="selectFreeShippingOption"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="clickSubmitOrder" />
+        <!-- Create Partial Shipment -->
+        <actionGroup ref="AdminCreateShipmentFromOrderPage" stepKey="createNewShipment">
+            <argument name="Qty" value="1"/>
+            <argument name="Title" value="Title"/>
+            <argument name="Number" value="199"/>
+            <argument name="Comment" value="comments for shipment"/>
+        </actionGroup>
+        <!-- Assert There is no "Ship Button" in Order Information -->
+        <actionGroup ref="AssertThereIsNoShipButtonActionGroup" stepKey="dontSeeShipButton"/>
+        <!-- Assert Created Shipment in Shipments Tab-->
+        <actionGroup ref="AdminAssertCreatedShipmentsInShipmentsTabActionGroup" stepKey="assertCreatedShipment"/>
+        <grabTextFrom selector="{{AdminShipmentsGridSection.shipmentId}}" stepKey="grabShipmentId"/>
+        <!-- Assert Shipment items -->
+        <actionGroup ref="AdminAssertShipmentItemsActionGroup" stepKey="assertShipmentItems">
+            <argument name="product" value="$$createSimpleProduct.name$$"/>
+            <argument name="qty" value="1"/>
+        </actionGroup>
+        <!-- Assert Created Shipment in Shipments Grid-->
+        <actionGroup ref="AdminAssertShipmentInShipmentsGrid" stepKey="assertShipmentInGrid">
+            <argument name="shipmentId" value="{$grabShipmentId}"/>
+        </actionGroup>
+    </test>
+</tests>

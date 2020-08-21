@@ -56,4 +56,18 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Eav\Model\Config">
+        <arguments>
+            <argument name="attributesForPreload" xsi:type="array">
+                <item name="catalog_product" xsi:type="array">
+                    <item name="url_key" xsi:type="string">catalog_product</item>
+                    <item name="url_path" xsi:type="string">catalog_product</item>
+                </item>
+                <item name="catalog_category" xsi:type="array">
+                    <item name="url_key" xsi:type="string">catalog_category</item>
+                    <item name="url_path" xsi:type="string">catalog_category</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
 </config>

@@ -6,8 +6,12 @@
  * See COPYING.txt for license details.
  */
 
-require 'order_paid_with_payflowpro.php';
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Sales/_files/order_paid_with_payflowpro.php');
 /** @var \Magento\Sales\Model\Order $order */
+$order = $objectManager->get(OrderInterfaceFactory::class)->create()->loadByIncrementId('100000001');
 
 $orderService = \Magento\TestFramework\ObjectManager::getInstance()->create(
     \Magento\Sales\Api\InvoiceManagementInterface::class

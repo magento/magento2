@@ -6,10 +6,19 @@
 
 namespace Magento\Catalog\Model;
 
-use Magento\Framework\Exception\InputException;
+use Magento\Catalog\Api\CategoryLinkRepositoryInterface;
+use Magento\Catalog\Api\CategoryListDeleteBySkuInterface;
+use Magento\Catalog\Api\CategoryRepositoryInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\CouldNotSaveException;
+use Magento\Framework\Exception\InputException;
 
-class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkRepositoryInterface
+/**
+ * @inheritdoc
+ */
+class CategoryLinkRepository implements CategoryLinkRepositoryInterface, CategoryListDeleteBySkuInterface
 {
     /**
      * @var CategoryRepository
@@ -17,24 +26,32 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
     protected $categoryRepository;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface
+     * @var ProductRepositoryInterface
      */
     protected $productRepository;
 
     /**
-     * @param \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository
-     * @param \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+     * @var Product
+     */
+    private $productResource;
+
+    /**
+     * @param CategoryRepositoryInterface $categoryRepository
+     * @param ProductRepositoryInterface $productRepository
+     * @param Product $productResource
      */
     public function __construct(
-        \Magento\Catalog\Api\CategoryRepositoryInterface $categoryRepository,
-        \Magento\Catalog\Api\ProductRepositoryInterface $productRepository
+        CategoryRepositoryInterface $categoryRepository,
+        ProductRepositoryInterface $productRepository,
+        Product $productResource = null
     ) {
         $this->categoryRepository = $categoryRepository;
         $this->productRepository = $productRepository;
+        $this->productResource = $productResource ?? ObjectManager::getInstance()->get(Product::class);
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function save(\Magento\Catalog\Api\Data\CategoryProductLinkInterface $productLink)
     {
@@ -60,7 +77,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function delete(\Magento\Catalog\Api\Data\CategoryProductLinkInterface $productLink)
     {
@@ -68,7 +85,7 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function deleteByIds($categoryId, $sku)
     {
@@ -99,6 +116,46 @@ class CategoryLinkRepository implements \Magento\Catalog\Api\CategoryLinkReposit
                 $e
             );
         }
+        return true;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function deleteBySkus(int $categoryId, array $productSkuList): bool
+    {
+        $category = $this->categoryRepository->get($categoryId);
+        $products = $this->productResource->getProductsIdsBySkus($productSkuList);
+
+        if (!$products) {
+            throw new InputException(__("The category doesn't contain the specified products."));
+        }
+
+        $productPositions = $category->getProductsPosition();
+
+        foreach ($products as $productId) {
+            if (isset($productPositions[$productId])) {
+                unset($productPositions[$productId]);
+            }
+        }
+
+        $category->setPostedProducts($productPositions);
+
+        try {
+            $category->save();
+        } catch (\Exception $e) {
+            throw new CouldNotSaveException(
+                __(
+                    'Could not save products "%products" to category %category',
+                    [
+                        "products" => implode(',', $productSkuList),
+                        "category" => $category->getId()
+                    ]
+                ),
+                $e
+            );
+        }
+
         return true;
     }
 }

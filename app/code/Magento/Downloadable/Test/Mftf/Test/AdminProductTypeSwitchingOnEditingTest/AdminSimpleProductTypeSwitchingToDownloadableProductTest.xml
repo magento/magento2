@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminSimpleProductTypeSwitchingToDownloadableProductTest">
+        <annotations>
+            <features value="Downloadable"/>
+            <stories value="Product type switching"/>
+            <title value="Simple product type switching on editing to downloadable product"/>
+            <description value="Simple product type switching on editing to downloadable product"/>
+            <testCaseId value="MC-17956"/>
+            <useCaseId value="MAGETWO-44170"/>
+            <severity value="MAJOR"/>
+            <group value="catalog"/>
+        </annotations>
+        <before>
+            <!-- Add downloadable domains -->
+            <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add example.com static.magento.com"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <!--Create product-->
+            <comment userInput="Create product" stepKey="commentCreateProduct"/>
+            <createData entity="SimpleProduct2" stepKey="createProduct"/>
+        </before>
+        <after>
+            <!-- Remove downloadable domains -->
+            <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove example.com static.magento.com"/>
+            <!--Delete product-->
+            <comment userInput="Delete product" stepKey="commentDeleteProduct"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <!--Change product type to Downloadable-->
+        <comment userInput="Change product type to Downloadable" stepKey="commentCreateDownloadable"/>
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="gotToDownloadableProductPage">
+            <argument name="productId" value="$$createProduct.id$$"/>
+        </actionGroup>
+        <waitForPageLoad stepKey="waitForDownloadableProductPageLoad"/>
+        <selectOption selector="{{AdminProductFormSection.productWeightSelect}}" userInput="This item has no weight" stepKey="selectNoWeightForProduct"/>
+        <actionGroup ref="AdminAddDownloadableLinkInformationActionGroup" stepKey="addDownloadableLinkInformation"/>
+        <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOptionPurchaseSeparately"/>
+        <actionGroup ref="AddDownloadableProductLinkWithMaxDownloadsActionGroup" stepKey="addDownloadableProductLink">
+            <argument name="link" value="downloadableLinkWithMaxDownloads"/>
+        </actionGroup>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveDownloadableProductForm"/>
+        <!--Assert downloadable product on Admin product page grid-->
+        <comment userInput="Assert configurable product in Admin product page grid" stepKey="commentAssertDownloadableProductOnAdmin"/>
+        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
+        <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySku">
+            <argument name="sku" value="$$createProduct.sku$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeDownloadableProductNameInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Name"/>
+            <argument name="value" value="$$createProduct.name$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeDownloadableProductTypeInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Type"/>
+            <argument name="value" value="Downloadable Product"/>
+        </actionGroup>
+        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearDownloadableProductFilters"/>
+        <!--Assert downloadable product on storefront-->
+        <comment userInput="Assert downloadable product on storefront" stepKey="commentAssertDownloadableProductOnStorefront"/>
+        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="openDownloadableProductPage"/>
+        <waitForPageLoad stepKey="waitForStorefrontDownloadableProductPageLoad"/>
+        <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertDownloadableProductInStock"/>
+        <scrollTo selector="{{StorefrontDownloadableProductSection.downloadableLinkBlock}}" stepKey="scrollToLinksInStorefront"/>
+        <seeElement selector="{{StorefrontDownloadableProductSection.downloadableLinkLabel(downloadableLinkWithMaxDownloads.title)}}" stepKey="seeDownloadableLink"/>
+    </test>
+</tests>

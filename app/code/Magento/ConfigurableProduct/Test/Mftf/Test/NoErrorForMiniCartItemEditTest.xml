@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="NoErrorForMiniCartItemEditTest">
+        <annotations>
+            <features value="ConfigurableProduct"/>
+            <stories value="Storefront Minicart Update"/>
+            <title value="No error for minicart item edit test"/>
+            <description value="Already selected configurable option should be selected when configurable product is edited from minicart"/>
+            <severity value="MAJOR"/>
+            <group value="ConfigurableProduct"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <!-- Create Configurable product -->
+            <actionGroup ref="CreateConfigurableProductActionGroup" stepKey="createProduct">
+                <argument name="product" value="_defaultProduct"/>
+                <argument name="category" value="$$createCategory$$"/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <!-- Delete the first simple product -->
+            <actionGroup stepKey="deleteProduct1" ref="DeleteProductBySkuActionGroup">
+                <argument name="sku" value="{{_defaultProduct.sku}}"/>
+            </actionGroup>
+            <conditionalClick selector="{{AdminProductGridFilterSection.clearFilters}}"
+                              dependentSelector="{{AdminProductGridFilterSection.clearFilters}}" visible="true"
+                              stepKey="clickClearFilters"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!-- Go To Created Product Page -->
+        <amOnPage stepKey="goToCreatedProductPage" url="{{_defaultProduct.urlKey}}.html"/>
+        <waitForPageLoad stepKey="waitForProductPageLoad2"/>
+
+        <!-- Add Product to Cart -->
+        <seeElement selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}"
+                    stepKey="checkDropDownProductOption"/>
+        <selectOption userInput="{{colorProductAttribute1.name}}"
+                      selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}"
+                      stepKey="selectOption1"/>
+        <selectOption userInput="{{colorProductAttribute2.name}}"
+                      selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}"
+                      stepKey="selectOption2"/>
+        <click selector="{{StorefrontProductInfoMainSection.productAttributeOptions1}}"
+               stepKey="clickDropDownProductOption"/>
+        <selectOption userInput="{{colorProductAttribute1.name}}"
+                      selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}"
+                      stepKey="selectOptionForAddingToCart"/>
+        <click selector="{{StorefrontProductInfoMainSection.AddToCart}}" stepKey="clickAddToCart"/>
+        <waitForPageLoad stepKey="waitForMiniCart"/>
+
+        <!-- Edit Item in Cart -->
+        <actionGroup ref="StorefrontClickOnMiniCartActionGroup" stepKey="openMiniCart"/>
+        <click selector="{{StorefrontMinicartSection.editMiniCartItem}}" stepKey="clickEditCartItem"/>
+
+        <!-- Check if Product Configuration is still selected -->
+        <see selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}"
+             userInput="{{colorProductAttribute1.name}}" stepKey="seeConfigurationSelected"/>
+    </test>
+</tests>

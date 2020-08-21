@@ -14,27 +14,26 @@
             <stories value="Update SEO-friendly URL via the Admin"/>
             <title value="SEO-friendly URL should update regardless of scope or redirect change."/>
             <description value="SEO-friendly URL should update regardless of scope or redirect change."/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-92338"/>
             <group value="category"/>
         </annotations>
         <after>
-            <actionGroup ref="DeleteCategory" stepKey="deleteCategory">
+            <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
                 <argument name="categoryEntity" value="_defaultCategory"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="adminLogout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <!-- Create category, change store view to default -->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
-        <actionGroup ref="CreateCategory" stepKey="createCategory">
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage"/>
+        <actionGroup ref="CreateCategoryActionGroup" stepKey="createCategory">
             <argument name="categoryEntity" value="_defaultCategory"/>
         </actionGroup>
 
         <!--Switch to "Default Store View" scope-->
-        <actionGroup ref="switchCategoryStoreView" stepKey="SwitchStoreView">
+        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="SwitchStoreView">
             <argument name="Store" value="_defaultStore.name"/>
             <argument name="CatName" value="_defaultCategory.name"/>
         </actionGroup>
@@ -47,7 +46,7 @@
         <uncheckOption selector="{{AdminCategorySEOSection.UrlKeyDefaultValueCheckbox}}" stepKey="uncheckUseDefaultUrlKey"/>
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{_defaultCategory.name_lwr}}-hattest" stepKey="enterURLKey"/>
         <uncheckOption selector="{{AdminCategorySEOSection.UrlKeyRedirectCheckbox}}"  stepKey="uncheckRedirect1"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategoryAfterFirstSeoUpdate"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategoryAfterFirstSeoUpdate"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessage"/>
         <amOnPage url="" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForFrontendLoad"/>
@@ -58,14 +57,14 @@
 
         <!-- Update SEO key to original, uncheck "Create Redirect", confirm in frontend, delete category -->
         <!--Switch to "Default Store View" scope-->
-        <actionGroup ref="switchCategoryStoreView" stepKey="SwitchStoreView2">
+        <actionGroup ref="SwitchCategoryStoreViewActionGroup" stepKey="SwitchStoreView2">
             <argument name="Store" value="_defaultStore.name"/>
             <argument name="CatName" value="_defaultCategory.name"/>
         </actionGroup>
         <click selector="{{AdminCategorySEOSection.SectionHeader}}"  stepKey="openSeoSection2"/>
         <fillField selector="{{AdminCategorySEOSection.UrlKeyInput}}" userInput="{{_defaultCategory.name_lwr}}" stepKey="enterOriginalURLKey"/>
         <uncheckOption selector="{{AdminCategorySEOSection.UrlKeyRedirectCheckbox}}"  stepKey="uncheckRedirect2"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategoryAfterOriginalSeoKey"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategoryAfterOriginalSeoKey"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="assertSuccessMessageAfterOriginalSeoKey"/>
         <amOnPage url="" stepKey="goToStorefrontAfterOriginalSeoKey"/>
         <waitForPageLoad stepKey="waitForFrontendLoadAfterOriginalSeoKey"/>
