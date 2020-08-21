@@ -1082,8 +1082,8 @@ class ProcessCronQueueObserverTest extends TestCase
             ->method('quoteInto')
             ->with(
                 'status = ? AND job_code IN (?) AND (scheduled_at < UTC_TIMESTAMP() - INTERVAL 1 DAY)',
-                ['test_job1'],
-                'running'
+                'running',
+                ['test_job1']
             )
             ->willReturn('');
 
