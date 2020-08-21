@@ -22,9 +22,11 @@ use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Price;
 use Magento\Catalog\Block\Adminhtml\Product\Helper\Form\Weight;
 use Magento\Catalog\Helper\Product\Edit\Action\Attribute;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Data\Form\Element\AbstractElement;
 use Magento\Framework\Data\FormFactory;
 use Magento\Framework\Registry;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * Attributes tab block
@@ -52,6 +54,11 @@ class Attributes extends Form implements TabInterface
     private $excludeFields;
 
     /**
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
      * @param Context $context
      * @param Registry $registry
      * @param FormFactory $formFactory
@@ -59,6 +66,7 @@ class Attributes extends Form implements TabInterface
      * @param Attribute $attributeAction
      * @param array $data
      * @param array|null $excludeFields
+     * @param SecureHtmlRenderer|null $secureRenderer
      */
     public function __construct(
         Context $context,
@@ -67,13 +75,15 @@ class Attributes extends Form implements TabInterface
         ProductFactory $productFactory,
         Attribute $attributeAction,
         array $data = [],
-        array $excludeFields = null
+        array $excludeFields = null,
+        ?SecureHtmlRenderer $secureRenderer = null
     ) {
         $this->_attributeAction = $attributeAction;
         $this->_productFactory = $productFactory;
         $this->excludeFields = $excludeFields ?: [];
 
         parent::__construct($context, $registry, $formFactory, $data);
+        $this->secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
     }
 
     /**
@@ -146,12 +156,19 @@ class Attributes extends Form implements TabInterface
         // @codingStandardsIgnoreStart
         $html = <<<HTML
 <span class="attribute-change-checkbox">
-    <input type="checkbox" id="$dataCheckboxName" name="$dataCheckboxName" class="checkbox" $nameAttributeHtml onclick="toogleFieldEditMode(this, '{$elementId}')" $dataAttribute />
+    <input type="checkbox" id="$dataCheckboxName" name="$dataCheckboxName"
+           class="checkbox" $nameAttributeHtml $dataAttribute />
     <label class="label" for="$dataCheckboxName">
         {$checkboxLabel}
     </label>
 </span>
 HTML;
+
+        $html .= /* @noEscape */ $this->secureRenderer->renderEventListenerAsTag(
+            'onclick',
+            "toogleFieldEditMode(this, '{$elementId}')",
+            "#". $dataCheckboxName
+        );
 
         // @codingStandardsIgnoreEnd
         return $html;

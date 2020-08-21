@@ -3,19 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/**
+ * @var \Magento\Search\Block\Term $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
+ */
 ?>
-<?php if (count($block->getTerms()) > 0) : ?>
+<?php if (count($block->getTerms()) > 0): ?>
     <ul class="search-terms">
-        <?php foreach ($block->getTerms() as $_term) : ?>
-            <li class="item">
-                <a href="<?= $block->escapeUrl($block->getSearchUrl($_term)) ?>"
-                   style="font-size:<?= /* @noEscape */ $_term->getRatio()*70+75 ?>%;">
+        <?php foreach ($block->getTerms() as $_term): ?>
+            <li id="term-<?= /* @noEscape */ $_term->getId() ?>" class="item">
+                <a href="<?= $block->escapeUrl($block->getSearchUrl($_term)) ?>">
                     <?= $block->escapeHtml($_term->getQueryText()) ?>
                 </a>
             </li>
+            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                "font-size:" . ($_term->getRatio()*70+75) . "%;",
+                'li#term-' . $_term->getId()
+            ) ?>
         <?php endforeach; ?>
     </ul>
-<?php else : ?>
+<?php else: ?>
     <div class="message notice">
         <div><?= $block->escapeHtml(__('There are no search terms available.')) ?></div>
     </div>

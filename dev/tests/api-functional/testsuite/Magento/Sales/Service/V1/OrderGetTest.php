@@ -76,7 +76,7 @@ class OrderGetTest extends WebapiAbstract
             'city' => 'Los Angeles',
             'email' => 'customer@null.com',
             'postcode' => '11111',
-            'region' => 'CA'
+            'region' => 'California'
         ];
 
         $result = $this->makeServiceCall(self::ORDER_INCREMENT_ID);
