@@ -46,6 +46,8 @@ foreach ($categories as $category) {
 $urlRewrite = $objectManager->create(UrlRewrite::class);
 $urlRewrite->load('non-exist-product.html', 'request_path');
 $urlRewrite->delete();
+$urlRewrite->load('.html', 'request_path');
+$urlRewrite->delete();
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', false);
