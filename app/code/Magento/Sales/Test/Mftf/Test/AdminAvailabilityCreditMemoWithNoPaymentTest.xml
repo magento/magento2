@@ -72,9 +72,7 @@
 
         <!-- Select Free shipping -->
         <actionGroup ref="OrderSelectFreeShippingActionGroup" stepKey="selectFreeShippingOption"/>
-
-        <!--Click *Submit Order* button-->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="clickSubmitOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="clickSubmitOrder" />
 
         <!--Click *Invoice* button-->
         <actionGroup ref="StartCreateInvoiceFromOrderPageActionGroup" stepKey="startCreateInvoice"/>
