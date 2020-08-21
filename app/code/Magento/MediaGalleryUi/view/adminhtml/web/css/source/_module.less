@@ -18,7 +18,7 @@
 @color-media-gallery-buttons-border: #adadad;
 @color-media-gallery-buttons-text: #514943;
 @color-media-gallery-checkbox-background: #eee;
-
+@color-media-gallery-scrollbar-background: white;
 & when (@media-common = true) {
 
     .media-gallery-delete-image-action,
@@ -274,7 +274,7 @@
 
         .media-directory-container {
             &::-webkit-scrollbar {
-                background-color: @color-media-gallery-checkbox-background;
+                background-color: @color-media-gallery-scrollbar-background;
             }
             &::-webkit-scrollbar-thumb {
                 background-color: @color-masonry-grey;
@@ -284,7 +284,7 @@
             overflow-x: scroll;
             overflow-y: hidden;
             padding-right: 40px;
-            scrollbar-color: @color-masonry-grey @color-media-gallery-checkbox-background;
+            scrollbar-color: @color-masonry-grey @color-media-gallery-scrollbar-background;
         }
 
         .media-gallery-image-block {
