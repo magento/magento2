@@ -46,7 +46,7 @@ class ParameterTest extends TestCase
      * @param array $params
      * @return void
      */
-    public function testTokenize($string, $params): void
+    public function testTokenize(string $string, array $params): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $parameter = $objectManager->create(Parameter::class);
