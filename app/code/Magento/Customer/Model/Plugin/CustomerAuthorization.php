@@ -6,11 +6,9 @@
 
 namespace Magento\Customer\Model\Plugin;
 
-use Magento\Authorization\Model\UserContextInterface;
-use Magento\Customer\Model\CustomerFactory;
-use Magento\Customer\Model\ResourceModel\Customer as CustomerResource;
-use Magento\Integration\Api\AuthorizationServiceInterface as AuthorizationService;
-use Magento\Store\Model\StoreManagerInterface;
+use Closure;
+use Magento\Customer\Model\Customer\AuthorizationComposite;
+use Magento\Framework\Authorization;
 
 /**
  * Plugin around \Magento\Framework\Authorization::isAllowed
@@ -20,74 +18,36 @@ use Magento\Store\Model\StoreManagerInterface;
 class CustomerAuthorization
 {
     /**
-     * @var UserContextInterface
+     * @var AuthorizationComposite
      */
-    private $userContext;
-
-    /**
-     * @var CustomerFactory
-     */
-    private $customerFactory;
-
-    /**
-     * @var CustomerResource
-     */
-    private $customerResource;
-
-    /**
-     * @var StoreManagerInterface
-     */
-    private $storeManager;
+    private $authorizationComposite;
 
     /**
      * Inject dependencies.
-     *
-     * @param UserContextInterface $userContext
-     * @param CustomerFactory $customerFactory
-     * @param CustomerResource $customerResource
-     * @param StoreManagerInterface $storeManager
+     * @param AuthorizationComposite $composite
      */
     public function __construct(
-        UserContextInterface $userContext,
-        CustomerFactory $customerFactory,
-        CustomerResource $customerResource,
-        StoreManagerInterface $storeManager
+        AuthorizationComposite $composite
     ) {
-        $this->userContext = $userContext;
-        $this->customerFactory = $customerFactory;
-        $this->customerResource = $customerResource;
-        $this->storeManager = $storeManager;
+        $this->authorizationComposite = $composite;
     }
 
     /**
-     * Check if resource for which access is needed has self permissions defined in webapi config.
-     *
-     * @param \Magento\Framework\Authorization $subject
-     * @param callable $proceed
-     * @param string $resource
-     * @param string $privilege
-     *
-     * @return bool true If resource permission is self, to allow
-     * customer access without further checks in parent method
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @param Authorization $subject
+     * @param Closure $proceed
+     * @param $resource
+     * @param null $privilege
+     * @return bool|mixed
      */
     public function aroundIsAllowed(
-        \Magento\Framework\Authorization $subject,
-        \Closure $proceed,
+        Authorization $subject,
+        Closure $proceed,
         $resource,
         $privilege = null
     ) {
-        if ($resource == AuthorizationService::PERMISSION_SELF
-            && $this->userContext->getUserId()
-            && $this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER
-        ) {
-            $customer = $this->customerFactory->create();
-            $this->customerResource->load($customer, $this->userContext->getUserId());
-            $currentStoreId = $this->storeManager->getStore()->getId();
-            $sharedStoreIds = $customer->getSharedStoreIds();
-            if (in_array($currentStoreId, $sharedStoreIds)) {
-                return true;
-            }
+        if ($this->authorizationComposite->isAllowed($resource, $privilege)) {
+            return true;
         }
 
         return $proceed($resource, $privilege);
