@@ -33,7 +33,7 @@ class OnInsert extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
         $this->resultRawFactory = $resultRawFactory;
         parent::__construct($context, $coreRegistry);
         $this->getInsertImageContent = $getInsertImageContent ?: $this->_objectManager
-            ->get('Magento\Cms\Model\Wysiwyg\Images\GetInsertImageContent');
+            ->get(\Magento\Cms\Model\Wysiwyg\Images\GetInsertImageContent::class);
     }
 
     /**
