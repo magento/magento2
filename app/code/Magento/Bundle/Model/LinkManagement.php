@@ -421,17 +421,4 @@ class LinkManagement implements ProductLinkManagementInterface
 
         return $optionCollection->appendSelections($selectionCollection, true);
     }
-
-    /**
-     * Get MetadataPool instance
-     *
-     * @return MetadataPool
-     */
-    private function getMetadataPool()
-    {
-        if (!$this->metadataPool) {
-            $this->metadataPool = ObjectManager::getInstance()->get(MetadataPool::class);
-        }
-        return $this->metadataPool;
-    }
 }
