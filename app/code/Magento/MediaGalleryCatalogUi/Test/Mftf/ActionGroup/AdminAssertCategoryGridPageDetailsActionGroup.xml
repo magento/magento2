@@ -19,7 +19,6 @@
         <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.image(imageName)}}" stepKey="assertImageColumn"/>
         <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.path(category.name)}}" stepKey="assertPathColumn"/>
         <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.name(category.name)}}" stepKey="assertNameColumn"/>
-        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.displayMode('PRODUCTS')}}" stepKey="assertDisplayModeColumn"/>
         <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.products('0')}}" stepKey="assertProductsColumn"/>
         <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.inMenu(category.include_in_menu)}}" stepKey="assertInMenuColumn"/>
         <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.enabled(category.is_active)}}" stepKey="assertEnabledColumn"/>
