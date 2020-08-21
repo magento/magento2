@@ -33,7 +33,6 @@
 
         <amOnPage url="{{AdminProductIndexPage.url}}?filters[name]=$createSimpleProduct.name$" stepKey="navigateToProductGridWithFilters"/>
         <waitForPageLoad stepKey="waitForProductGrid"/>
-        <see selector="{{AdminProductGridSection.productGridNameProduct($createSimpleProduct.name$)}}" userInput="$createSimpleProduct.name$" stepKey="seeProduct"/>
         <waitForElementVisible selector="{{AdminProductGridFilterSection.enabledFilters}}" stepKey="waitForEnabledFilters"/>
         <seeElement selector="{{AdminProductGridFilterSection.enabledFilters}}" stepKey="seeEnabledFilters"/>
         <see selector="{{AdminProductGridFilterSection.enabledFilters}}" userInput="Name: $createSimpleProduct.name$" stepKey="seeProductNameFilter"/>
