@@ -15,6 +15,7 @@
             <title value="Check error when cart contains virtual product"/>
             <description value="Check error when cart contains only virtual product"/>
             <severity value="MAJOR"/>
+            <testCaseId value="MC-36921"/>
             <group value="Multishipment"/>
         </annotations>
         <before>
