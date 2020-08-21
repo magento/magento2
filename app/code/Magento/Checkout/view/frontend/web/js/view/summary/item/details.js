@@ -5,7 +5,7 @@
 
 define([
     'uiComponent',
-    'underscore',
+    'underscore'
 ], function (Component, _) {
     'use strict';
 
