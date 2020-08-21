@@ -9,6 +9,7 @@ namespace Magento\CatalogGraphQl\Model\Resolver\Products\DataProvider\Product;
 
 use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\GraphQl\Model\Query\ContextInterface;
 
 /**
  * Add additional joins, attributes, and clauses to a product collection.
@@ -21,11 +22,13 @@ interface CollectionProcessorInterface
      * @param Collection $collection
      * @param SearchCriteriaInterface $searchCriteria
      * @param array $attributeNames
+     * @param ContextInterface|null $context
      * @return Collection
      */
     public function process(
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
-        array $attributeNames
+        array $attributeNames,
+        ContextInterface $context = null
     ): Collection;
 }
