@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontBundlePlaceOrderWithMultipleOptionsSuccessTest">
+        <annotations>
+            <features value="Bundle"/>
+            <stories value="Bundle product details page"/>
+            <title value="Customer should be able to see all the bundle items in invoice view"/>
+            <description value="Customer should be able to see all the bundle items in invoice view"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-500"/>
+            <group value="Bundle"/>
+        </annotations>
+
+        <!-- Actions before test execution -->
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct1"/>
+            <createData entity="SimpleProduct2" stepKey="simpleProduct2"/>
+        </before>
+
+        <!-- Actions after test execution -->
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="simpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="simpleProduct2" stepKey="deleteSimpleProduct2"/>
+        </after>
+
+        <!-- Start creating a bundle product -->
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductList"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProduct">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+        <actionGroup ref="FillProductNameAndSkuInProductFormActionGroup" stepKey="fillNameAndSku">
+            <argument name="product" value="BundleProduct"/>
+        </actionGroup>
+
+        <!-- Add Option Three, a "Checkbox" type option -->
+        <actionGroup ref="AddBundleOptionWithTwoProductsActionGroup" stepKey="addBundleOptionWithTwoProducts1">
+            <argument name="x" value="0"/>
+            <argument name="n" value="1"/>
+            <argument name="prodOneSku" value="$$simpleProduct1.sku$$"/>
+            <argument name="prodTwoSku" value="$$simpleProduct2.sku$$"/>
+            <argument name="optionTitle" value="Option one"/>
+            <argument name="inputType" value="checkbox"/>
+        </actionGroup>
+
+        <!-- Save product and go to storefront -->
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <amOnPage url="{{BundleProduct.sku}}.html" stepKey="goToStorefront"/>
+        <waitForPageLoad stepKey="waitForStorefront"/>
+        <click selector="{{StorefrontBundledSection.addToCart}}" stepKey="clickCustomize"/>
+
+        <!-- Select both checkbox options -->
+        <checkOption selector="div:nth-child(1) > input[type='checkbox']" stepKey="selectOption1"/>
+        <checkOption selector="div:nth-child(2) > input[type='checkbox']" stepKey="selectOption2"/>
+
+        <!-- Customize and add the bundle product to our cart -->
+        <click selector="{{StorefrontBundledSection.addToCartConfigured}}" stepKey="clickAddToCart1"/>
+        <dontSee selector="{{StorefrontBundledSection.nthOptionDiv('1')}}" userInput="This is a required field." stepKey="validForm1"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added {{BundleProduct.name}} to your shopping cart." stepKey="seeAddToCartSuccessMessage"/>
+
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart"/>
+
+        <actionGroup ref="GuestCheckoutFillingShippingSectionActionGroup" stepKey="fillShippingSectionAsGuest">
+            <argument name="customerVar" value="CustomerEntityOne"/>
+            <argument name="customerAddressVar" value="CustomerAddressSimple"/>
+        </actionGroup>
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <actionGroup ref="CheckoutPlaceOrderActionGroup" stepKey="placeOrder">
+            <argument name="orderNumberMessage" value="CONST.successGuestCheckoutOrderNumberMessage"/>
+            <argument name="emailYouMessage" value="CONST.successCheckoutEmailYouMessage"/>
+        </actionGroup>
+        <grabTextFrom selector="{{CheckoutSuccessRegisterSection.orderNumber}}" stepKey="grabOrderNumber"/>
+
+        <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrdersGridById">
+            <argument name="orderId" value="{$grabOrderNumber}"/>
+        </actionGroup>
+        
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoice"/>
+        <waitForPageLoad stepKey="waitForNewInvoicePageToLoad"/>
+
+        <see selector="{{AdminInvoiceItemsSection.bundleItem}}" userInput="50 x $$simpleProduct1.sku$$" stepKey="seeOptionValue1"/>
+        <see selector="{{AdminInvoiceItemsSection.bundleItem}}" userInput="50 x $$simpleProduct1.sku$$" stepKey="seeOptionValue2"/>
+
+    </test>
+</tests>
