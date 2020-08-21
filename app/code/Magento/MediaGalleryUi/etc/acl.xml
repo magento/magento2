@@ -1,0 +1,26 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:Acl/etc/acl.xsd">
+    <acl>
+        <resources>
+            <resource id="Magento_Backend::admin">
+                <resource id="Magento_Backend::content">
+                    <resource id="Magento_Backend::content_elements">
+                        <resource id="Magento_Cms::media_gallery">
+                            <resource id="Magento_Cms::upload_assets" title="Upload Assets" translate="title" sortOrder="70"/>
+                            <resource id="Magento_Cms::delete_assets" title="Delete Assets" translate="title" sortOrder="60"/>
+                            <resource id="Magento_Cms::insert_assets" title="Insert Assets into the content" translate="title" sortOrder="50"/>
+                            <resource id="Magento_Cms::create_folder" title="Create Folder" translate="title" sortOrder="40"/>
+                            <resource id="Magento_Cms::delete_folder" title="Delete Folder" translate="title" sortOrder="40"/>
+                        </resource>
+                    </resource>
+                </resource>
+            </resource>
+        </resources>
+    </acl>
+</config>
