@@ -9,14 +9,10 @@ namespace Magento\CompareListGraphQl\Model\Resolver;
 
 use Magento\Catalog\Model\CompareList as ModelCompareList;
 use Magento\Catalog\Model\CompareListFactory;
-use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Compare\CompareList;
-use Magento\Catalog\Model\Product\Compare\Item;
-use Magento\Catalog\Model\Product\Compare\ItemFactory;
-use Magento\Catalog\Model\ProductRepository;
 use Magento\Catalog\Model\ResourceModel\CompareList as ResourceCompareList;
+use Magento\CompareListGraphQl\Model\Service\AddToCompareListService;
 use Magento\CompareListGraphQl\Model\Service\CompareListService;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\Resolver\ContextInterface;
@@ -25,6 +21,9 @@ use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Store\Api\Data\StoreInterface;
 
+/**
+ * Class add products to compare list
+ */
 class AddItemsToCompareList implements ResolverInterface
 {
     /**
@@ -43,44 +42,34 @@ class AddItemsToCompareList implements ResolverInterface
     private $compareListService;
 
     /**
-     * Compare item factory
-     *
-     * @var ItemFactory
-     */
-    private $compareItemFactory;
-
-    /**
      * @var CompareList
      */
     private $compareList;
 
     /**
-     * @var ProductRepository
+     * @var AddToCompareListService
      */
-    private $productRepository;
+    private $addToCompareListService;
 
     /**
      * @param CompareListFactory $compareListFactory
      * @param ResourceCompareList $resourceCompareList
      * @param CompareListService $compareListService
-     * @param ItemFactory $compareItemFactory
      * @param CompareList $compareList
-     * @param ProductRepository $productRepository
+     * @param AddToCompareListService $addToCompareListService
      */
     public function __construct(
         CompareListFactory $compareListFactory,
         ResourceCompareList $resourceCompareList,
         CompareListService $compareListService,
-        ItemFactory $compareItemFactory,
         CompareList $compareList,
-        ProductRepository $productRepository
+        AddToCompareListService $addToCompareListService
     ) {
         $this->compareListFactory = $compareListFactory;
         $this->resourceCompareList = $resourceCompareList;
         $this->compareListService = $compareListService;
-        $this->compareItemFactory = $compareItemFactory;
         $this->compareList = $compareList;
-        $this->productRepository = $productRepository;
+        $this->addToCompareListService = $addToCompareListService;
     }
 
     /**
@@ -114,42 +103,12 @@ class AddItemsToCompareList implements ResolverInterface
             throw new GraphQlInputException(__('Can\'t load compare list.'));
         }
 
-        foreach ($args['items'] as $key) {
-            /* @var $item Item */
-            $item = $this->compareItemFactory->create();
-            $item->loadByProduct($key);
-            if (!$item->getId() && $this->productExists($key)) {
-                $item->addProductData($key);
-                $item->setListId($listId);
-                $item->save();
-            }
-        }
+        $this->addToCompareListService->addToCompareList($listId, $args);
 
         return [
             'list_id' => $listId,
             'items' => $this->compareListService->getComparableItems($listId, $context, $store),
             'attributes' => $this->compareListService->getComparableAttributes($listId, $context)
         ];
-    }
-
-    /**
-     * Check product exists.
-     *
-     * @param int|Product $product
-     *
-     * @return bool
-     */
-    private function productExists($product)
-    {
-        if ($product instanceof Product && $product->getId()) {
-            return true;
-        }
-
-        try {
-            $product = $this->productRepository->getById((int)$product);
-            return !empty($product->getId());
-        } catch (NoSuchEntityException $e) {
-            return false;
-        }
     }
 }
