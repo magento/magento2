@@ -149,7 +149,7 @@
         <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
         <!-- Submit order -->
         <comment userInput="Submit order" stepKey="submitOrderComment"/>
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
         <!-- Verify order information -->
         <comment userInput="Verify order information" stepKey="verifyOrderInformationComment"/>
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
