@@ -33,8 +33,8 @@ class GiftMessage implements ResolverInterface
     private $giftMessageHelper;
 
     /**
-     * @param OrderItemRepositoryInterface  $itemRepository
-     * @param GiftMessageHelper             $giftMessageHelper
+     * @param OrderItemRepositoryInterface $itemRepository
+     * @param GiftMessageHelper $giftMessageHelper
      */
     public function __construct(
         OrderItemRepositoryInterface $itemRepository,
@@ -47,11 +47,11 @@ class GiftMessage implements ResolverInterface
     /**
      * Return information about Gift message for order item
      *
-     * @param Field            $field
+     * @param Field $field
      * @param ContextInterface $context
-     * @param ResolveInfo      $info
-     * @param array|null       $value
-     * @param array|null       $args
+     * @param ResolveInfo $info
+     * @param array|null $value
+     * @param array|null $args
      *
      * @return array|Value|mixed
      * @throws GraphQlInputException
