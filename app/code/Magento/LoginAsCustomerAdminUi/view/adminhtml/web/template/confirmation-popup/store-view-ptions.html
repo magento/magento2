@@ -18,10 +18,10 @@
                     <% _.each(data.storeViewOptions, function(website) { %>
                     <optgroup label="<%= website.label %>"></optgroup>
                     <% _.each(website.value, function(group) { %>
-                    <optgroup label="<%= group.label %>"></optgroup>
-                    <% _.each(group.value, function(storeview) { %>
-                    <option value="<%= storeview.value %>"><%= storeview.label %></option>
-                    <% }); %>
+                    <option
+                    <% if(group.disabled){ %>disabled <% } %>
+                    <% if(group.selected){ %>selected <% } %>
+                    value="<%= group.value %>"><%= group.label %></option>
                     <% }); %>
                     <% }); %>
                 </select>

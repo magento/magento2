@@ -11,7 +11,7 @@
     <test name="AdminLoginAsCustomerManualChooseStoreCodeInUrlTest" extends="AdminLoginAsCustomerManualChooseTest">
         <annotations>
             <features value="Login as Customer"/>
-            <stories value="Select Store View based on 'Store View To Login In' setting"/>
+            <stories value="Select Store based on 'Store View To Login In' setting"/>
             <title
                 value="Admin user directly login into customer account with store View To Login In = Manual Choose when store code is added to url"/>
             <description
@@ -29,8 +29,8 @@
                 command="config:set {{StorefrontDisableAddStoreCodeToUrls.path}} {{StorefrontDisableAddStoreCodeToUrls.value}}"
                 stepKey="disableAddStoreCodeToUrls" after="enableLoginAsCustomerAutoDetection"/>
         </after>
-        <actionGroup ref="AssertStorefrontStoreCodeInUrlActionGroup" stepKey="seeCustomStoreCodeInUrl" after="assertCustomStoreView">
-            <argument name="storeCode" value="{{customStore.code}}"/>
+        <actionGroup ref="AssertStorefrontStoreCodeInUrlActionGroup" stepKey="seeCustomStoreViewCodeInUrl" after="assertCustomStoreView">
+            <argument name="storeCode" value="{{customStoreEN.code}}"/>
         </actionGroup>
     </test>
 </tests>
