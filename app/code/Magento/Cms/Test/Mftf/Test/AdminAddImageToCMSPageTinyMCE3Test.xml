@@ -37,8 +37,7 @@
             <magentoCLI command="config:set cms/wysiwyg/editor mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter" stepKey="enableTinyMCE4"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage2"/>
-        <waitForPageLoad stepKey="wait5"/>
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToPage2"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle2"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab2" />
         <comment userInput="removing deprecated element" stepKey="waitForTinyMCE3"/>
