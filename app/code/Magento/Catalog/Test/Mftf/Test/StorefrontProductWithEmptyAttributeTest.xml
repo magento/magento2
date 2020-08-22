@@ -34,7 +34,7 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
-        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="amOnAttributeSetPage"/>
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="amOnAttributeSetPage"/>
         <click selector="{{AdminProductAttributeSetGridSection.AttributeSetName('Default')}}" stepKey="chooseDefaultAttributeSet"/>
         <waitForPageLoad stepKey="waitForAttributeSetPageLoad"/>
         <dragAndDrop selector1="{{UnassignedAttributes.ProductAttributeName('testattribute')}}" selector2="{{Group.FolderName('Product Details')}}" stepKey="moveProductAttributeToGroup"/>

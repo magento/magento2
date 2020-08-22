@@ -31,8 +31,7 @@
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
-        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="goToAttributeSets"/>
         <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="filterProductAttributeSetGridByLabel">
             <argument name="name" value="$$createAttributeSet.attribute_set_name$$"/>
         </actionGroup>
@@ -47,8 +46,7 @@
         </actionGroup>
         <see userInput="$$createProductAttribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="seeAttributeInGroup"/>
         <actionGroup ref="SaveAttributeSetActionGroup" stepKey="SaveAttributeSet"/>
-        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets2"/>
-        <waitForPageLoad stepKey="waitForPageLoad2"/>
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="goToAttributeSets2"/>
 
         <!-- Assert an attribute in the group-->
         <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="filterProductAttributeSetGridByLabel2">

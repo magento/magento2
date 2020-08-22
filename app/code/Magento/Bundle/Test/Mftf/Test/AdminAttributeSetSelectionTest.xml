@@ -25,8 +25,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
         <!-- Create a new attribute set -->
-        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="goToAttributeSets"/>
         <click selector="{{AdminProductAttributeSetGridSection.addAttributeSetBtn}}" stepKey="clickAddAttributeSet"/>
         <fillField selector="{{AdminProductAttributeSetSection.name}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillName"/>
         <selectOption selector="{{AdminProductAttributeSetSection.basedOn}}" userInput="Default" stepKey="selectDefaultSet"/>

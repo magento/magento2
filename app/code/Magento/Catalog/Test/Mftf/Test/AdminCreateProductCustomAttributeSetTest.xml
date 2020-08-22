@@ -25,8 +25,7 @@
 
         <after>
             <!-- Delete the new attribute set -->
-            <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
-            <waitForPageLoad stepKey="wait1"/>
+            <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="goToAttributeSets"/>
             <fillField selector="{{AdminProductAttributeSetGridSection.filter}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="filterByName"/>
             <click selector="{{AdminProductAttributeSetGridSection.searchBtn}}" stepKey="clickSearch"/>
             <click selector="{{AdminProductAttributeSetGridSection.nthRow('1')}}" stepKey="clickFirstRow"/>
@@ -39,8 +38,7 @@
         </after>
 
         <!-- Create a new attribute set -->
-        <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenAttributeSetGridPageActionGroup" stepKey="goToAttributeSets"/>
         <click selector="{{AdminProductAttributeSetGridSection.addAttributeSetBtn}}" stepKey="clickAddAttributeSet"/>
         <fillField selector="{{AdminProductAttributeSetSection.name}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillName"/>
         <selectOption selector="{{AdminProductAttributeSetSection.basedOn}}" userInput="Default" stepKey="selectDefaultSet"/>
