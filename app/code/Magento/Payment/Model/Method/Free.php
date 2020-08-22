@@ -103,7 +103,7 @@ class Free extends \Magento\Payment\Model\Method\AbstractMethod
         return parent::isAvailable(
             $quote
         ) && null !== $quote && $this->priceCurrency->round(
-            $quote->collectTotals()->getGrandTotal()
+            $quote->getGrandTotal()
         ) == 0;
     }
 

@@ -10,6 +10,7 @@ namespace Magento\QuoteGraphQl\Model\Cart;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
+use Magento\Quote\Model\QuoteRepository;
 
 /**
  * Set single shipping address for a specified shopping cart
@@ -27,15 +28,22 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
     private $getShippingAddress;
 
     /**
+     * @var QuoteRepository
+     */
+    private $quoteRepository;
+
+    /**
      * @param AssignShippingAddressToCart $assignShippingAddressToCart
      * @param GetShippingAddress $getShippingAddress
      */
     public function __construct(
         AssignShippingAddressToCart $assignShippingAddressToCart,
-        GetShippingAddress $getShippingAddress
+        GetShippingAddress $getShippingAddress,
+        QuoteRepository $quoteRepository
     ) {
         $this->assignShippingAddressToCart = $assignShippingAddressToCart;
         $this->getShippingAddress = $getShippingAddress;
+        $this->quoteRepository = $quoteRepository;
     }
 
     /**
@@ -70,5 +78,7 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
             throw $e;
         }
         $this->assignShippingAddressToCart->execute($cart, $shippingAddress);
+        // trigger quote re-evaluation after address change
+        $this->quoteRepository->save($cart);
     }
 }
