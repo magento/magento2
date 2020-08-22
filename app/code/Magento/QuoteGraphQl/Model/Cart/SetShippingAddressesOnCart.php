@@ -35,6 +35,7 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
     /**
      * @param AssignShippingAddressToCart $assignShippingAddressToCart
      * @param GetShippingAddress $getShippingAddress
+     * @param QuoteRepository $quoteRepository
      */
     public function __construct(
         AssignShippingAddressToCart $assignShippingAddressToCart,
