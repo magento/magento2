@@ -76,8 +76,7 @@
             <argument name="tags" value=""/>
         </actionGroup>
         <!--Open Index Management Page -->
-        <amOnPage url="{{AdminIndexManagementPage.url}}" stepKey="openIndexManagementPage"/>
-        <waitForPageLoad stepKey="waitForIndexPageToBeLoaded"/>
+        <actionGroup ref="AdminOpenIndexManagementPageActionGroup" stepKey="openIndexManagementPage"/>
         <see stepKey="seeIndexStatus"  selector="{{AdminIndexManagementSection.indexerStatus('Category Flat Data')}}" userInput="Ready"/>
         <!--Verify Category In Store Front-->
         <amOnPage url="/$$createCategory.name$$.html"  stepKey="openCategoryPage1"/>

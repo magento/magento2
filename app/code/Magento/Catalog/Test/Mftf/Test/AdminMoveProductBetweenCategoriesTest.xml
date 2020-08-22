@@ -25,8 +25,7 @@
             <createData entity="_defaultCategory" stepKey="createSecondCategory"/>
 
             <!-- Switch "Category Product" and "Product Category" indexers to "Update by Schedule" mode -->
-            <amOnPage url="{{AdminIndexManagementPage.url}}" stepKey="onIndexManagement"/>
-            <waitForPageLoad stepKey="waitForManagementPage"/>
+            <actionGroup ref="AdminOpenIndexManagementPageActionGroup" stepKey="onIndexManagement"/>
 
             <actionGroup ref="AdminSwitchIndexerToActionModeActionGroup" stepKey="switchCategoryProduct">
                 <argument name="indexerValue" value="catalog_category_product"/>
@@ -38,8 +37,7 @@
 
         <after>
             <!-- Switch "Category Product" and "Product Category" indexers to "Update by Save" mode -->
-            <amOnPage url="{{AdminIndexManagementPage.url}}" stepKey="onIndexManagement"/>
-            <waitForPageLoad stepKey="waitForManagementPage"/>
+            <actionGroup ref="AdminOpenIndexManagementPageActionGroup" stepKey="onIndexManagement"/>
 
             <actionGroup ref="AdminSwitchIndexerToActionModeActionGroup" stepKey="switchCategoryProduct">
                 <argument name="indexerValue" value="catalog_category_product"/>
