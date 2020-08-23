@@ -113,6 +113,9 @@ class AddProductsToWishlist
         }
 
         try {
+            if ($wishlistItem->getQuantity() == 0) {
+                throw new LocalizedException(__("The quantity of a wish list item cannot be 0"));
+            }
             $options = $this->buyRequestBuilder->build($wishlistItem, (int) $product->getId());
             $result = $wishlist->addNewItem($product, $options);
 
