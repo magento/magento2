@@ -25,8 +25,7 @@
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginGetFromGeneralFile"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
         </before>
-        <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage1"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenConfigurationStoresPageActionGroup" stepKey="navigateToWYSIWYGConfigPage1"/>
         <conditionalClick stepKey="expandWYSIWYGOptions1" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
         <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="waitForCheckbox1" />
         <uncheckOption selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="uncheckUseSystemValue1"/>
@@ -53,8 +52,7 @@
         <waitForPageLoad stepKey="wait3" />
         <!--see widget on Storefront-->
         <see userInput="Hello TinyMCE4!" stepKey="seeContent1"/>
-        <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="navigateToWYSIWYGConfigPage2"/>
-        <waitForPageLoad stepKey="wait4"/>
+        <actionGroup ref="AdminOpenConfigurationStoresPageActionGroup" stepKey="navigateToWYSIWYGConfigPage2"/>
         <conditionalClick stepKey="expandWYSIWYGOptions" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true" />
         <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="waitForCheckbox2" />
         <uncheckOption selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="uncheckUseSystemValue2"/>
