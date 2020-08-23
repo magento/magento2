@@ -11,9 +11,7 @@ use Magento\Framework\DB\Ddl\Trigger;
 use Magento\Framework\Mview\View\StateInterface;
 
 /**
- * Class Subscription
- *
- * @package Magento\Framework\Mview\View
+ * Class Subscription for handling partial indexation triggers
  */
 class Subscription implements SubscriptionInterface
 {
