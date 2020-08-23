@@ -694,12 +694,12 @@ define([
 
             if (this.relatedData.length && this.relatedData.length % this.pageSize === 0) {
                 this.validate();
-                if (this.valid) {
-                    this.pages(this.pages() + 1);
-                    this.nextPage();
-                } else {
+
+                if (!this.valid) {
                     return;
                 }
+                this.pages(this.pages() + 1);
+                this.nextPage();
             } else if (~~this.currentPage() !== this.pages()) {
                 this.currentPage(this.pages());
             }
@@ -724,8 +724,10 @@ define([
          */
         changePage: function (page) {
             this.validate();
+
             if (!this.valid) {
                 this.currentPage(this.lastVisitedPage);
+
                 return false
             }
             this.lastVisitedPage = page;
@@ -1168,6 +1170,7 @@ define([
         validate: function () {
             this.valid = true;
             this.elems().forEach(this.checkRows, this);
+
             return {
                 valid: this.valid,
                 target: this
@@ -1180,13 +1183,11 @@ define([
          * @return void
          */
         checkRows: function (elem) {
-            if (typeof elem === 'undefined') {
+            if (_.isUndefined(elem)) {
                 return;
-            }
-            if (typeof elem.validate === 'function') {
+            } else if (_.isFunction(elem.validate)) {
                 this.valid = this.valid & elem.validate().valid;
-            }
-            else if (elem.elems) {
+            } else if (elem.elems) {
                 elem.elems().forEach(this.checkRows, this);
             }
         }
