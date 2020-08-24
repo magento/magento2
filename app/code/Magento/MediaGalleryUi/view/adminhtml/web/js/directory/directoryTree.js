@@ -257,16 +257,15 @@ define([
                 return;
             }
 
-            currentTreePath = this.isFilterApplied(currentFilterPath) || _.isNull(requestedDirectory)
-                ? currentFilterPath
-                : requestedDirectory;
+            currentTreePath = this.isFilterApplied(currentFilterPath) || _.isNull(requestedDirectory) ?
+                currentFilterPath : requestedDirectory;
 
             if (this.folderExistsInTree(currentTreePath)) {
                 this.locateNode(currentTreePath);
             } else {
                 this.selectStorageRoot();
             }
-        },
+        },g
 
         /**
          * Verify if directory exists in folder tree
