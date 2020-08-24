@@ -157,6 +157,12 @@ class InitParamListener implements ListenerAggregateInterface, FactoryInterface
                 );
                 /** @var \Magento\Backend\Model\Auth $auth */
                 $authentication = $objectManager->get(\Magento\Backend\Model\Auth::class);
+                $authUser = $authentication->getUser();
+
+                if ($authUser) {
+                    $authUser->setReloadAclFlag(1);
+                    $adminSession->refreshAcl($authUser);
+                }
 
                 if (!$authentication->isLoggedIn() ||
                     !$adminSession->isAllowed('Magento_Backend::setup_wizard')
