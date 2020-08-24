@@ -131,7 +131,7 @@
         <see selector="{{StorefrontMinicartSection.productCount}}" userInput="2" stepKey="miniCartContainsTwoProductForGuest"/>
 
         <!-- 10. Go to My Account section  -->
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="amOnCustomerAccountPage"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="amOnCustomerAccountPage"/>
         <seeInCurrentUrl url="{{StorefrontCustomerSignInPage.url}}" stepKey="redirectToCustomerAccountLoginPage"/>
         <seeElement selector="{{StorefrontCustomerSignInFormSection.customerLoginBlock}}" stepKey="checkSystemRequiresToLogIn"/>
 

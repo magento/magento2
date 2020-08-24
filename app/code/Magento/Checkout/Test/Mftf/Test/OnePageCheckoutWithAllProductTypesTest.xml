@@ -214,8 +214,7 @@
         </assertEquals>
 
         <!-- Assert order total -->
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="navigateToCustomerDashboardPage"/>
-        <waitForPageLoad stepKey="waitForCustomerDashboardPageLoad"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="navigateToCustomerDashboardPage"/>
         <see selector="{{StorefrontCustomerRecentOrdersSection.orderTotal}}" userInput="$613.23" stepKey="checkOrderTotalInStorefront"/>
 
         <!-- Go to Address Book -->

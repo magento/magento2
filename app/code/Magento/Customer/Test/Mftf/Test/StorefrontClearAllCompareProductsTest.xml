@@ -186,8 +186,7 @@
             <argument name="productVar" value="$$createDownloadableProduct1$$"/>
         </actionGroup>
 
-        <amOnPage url="{{StorefrontCustomerDashboardPage.url}}" stepKey="amOnMyAccountDashboard1"/>
-        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="amOnMyAccountDashboard1"/>
 
         <actionGroup ref="StorefrontClearCompareActionGroup" stepKey="clearComparedProducts1"/>
     </test>

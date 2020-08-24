@@ -124,8 +124,7 @@
         <waitForPageLoad stepKey="waitForCustomerLogin"/>
 
         <!-- Open My Account > My Orders -->
-        <amOnPage stepKey="goToMyAccountPage" url="{{StorefrontCustomerDashboardPage.url}}"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <actionGroup ref="StorefrontOpenMyAccountPageActionGroup" stepKey="goToMyAccountPage"/>
         <actionGroup ref="StorefrontCustomerGoToSidebarMenu" stepKey="goToSidebarMenu">
             <argument name="menu" value="My Orders"/>
         </actionGroup>
