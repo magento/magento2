@@ -125,6 +125,78 @@ QUERY;
     }
 
     /**
+     * Add product to wishlist with quantity 0
+     * 
+     * @magentoConfigFixture default_store wishlist/general/active 1
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Catalog/_files/product_simple_duplicated.php
+     */
+    public function testAddProductToWishlistWithZeroQty()
+    {
+        $customerWishlistQuery =
+            <<<QUERY
+{
+  customer {
+    wishlist {
+      id
+    }
+  }
+}
+QUERY;
+
+        $response = $this->graphQlQuery(
+            $customerWishlistQuery,
+            [],
+            '',
+            $this->getCustomerAuthHeaders('customer@example.com', 'password')
+        );
+        $qty = 0;
+        $sku = 'simple-1';
+        $wishlistId = $response['customer']['wishlist']['id'];
+        $addProductToWishlistQuery =
+            <<<QUERY
+mutation{
+   addProductsToWishlist(
+     wishlistId:{$wishlistId}
+     wishlistItems:[
+      {
+        sku:"{$sku}"
+        quantity:{$qty}
+      }
+    ])
+  {
+     wishlist{
+     id
+     items_count
+     items{product{name sku} description qty}
+    }
+    user_errors{code message}
+  }
+}
+
+QUERY;
+        $addToWishlistResponse = $this->graphQlMutation(
+            $addProductToWishlistQuery,
+            [],
+            '',
+            $this->getCustomerAuthHeaders('customer@example.com', 'password')
+        );
+        $this->assertArrayHasKey('user_errors', $addToWishlistResponse['addProductsToWishlist']);
+        $this->assertCount(1, $addToWishlistResponse['addProductsToWishlist']['user_errors']);
+        $this->assertEmpty($addToWishlistResponse['addProductsToWishlist']['wishlist']['items']);
+        $this->assertEquals(
+            0,
+            $addToWishlistResponse['addProductsToWishlist']['wishlist']['items_count'],
+            'Count is greater than 0'
+        );
+        $message = 'The quantity of a wish list item cannot be 0';
+        $this->assertEquals(
+            $message,
+            $addToWishlistResponse['addProductsToWishlist']['user_errors'][0]['message']
+        );
+    }
+
+    /**
      * @magentoConfigFixture default_store wishlist/general/active 0
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      */
