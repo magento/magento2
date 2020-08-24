@@ -2,6 +2,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+/* eslint-disable no-undef */
 define([
     'jquery',
     'Magento_Ui/js/grid/columns/column',
