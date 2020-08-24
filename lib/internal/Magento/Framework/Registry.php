@@ -9,7 +9,7 @@ namespace Magento\Framework;
  * Registry model. Used to manage values in registry
  *
  * Registry usage as a shared service introduces temporal, hard to detect coupling into system.
- * It's usage should be avoid. Use service classes or data providers instead.
+ * Its usage should be avoided. Use service classes or data providers instead.
  *
  * @api
  * @deprecated 102.0.0
