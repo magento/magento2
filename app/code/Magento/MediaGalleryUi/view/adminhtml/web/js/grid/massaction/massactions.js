@@ -141,10 +141,8 @@ define([
                             if (response.status === 'canceled') {
                                 return;
                             }
-                            this.imageModel().selected({});
-                            this.massActionMode(false);
-                            this.switchMode();
-                        }.bind(this));
+                            $(window).trigger('terminateMassAction.MediaGallery');
+                        });
                     }
                 }.bind(this));
             }
