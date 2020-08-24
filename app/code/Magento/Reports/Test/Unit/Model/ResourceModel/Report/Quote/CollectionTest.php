@@ -15,6 +15,7 @@ use Magento\Framework\DB\Select;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Quote\Model\ResourceModel\Quote;
+use Magento\Reports\Model\ResourceModel\Quote\Collection;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
@@ -42,7 +43,7 @@ class CollectionTest extends TestCase
     public function testGetSelectCountSql()
     {
         /** @var MockObject $collection */
-        $collection = $this->getMockBuilder(\Magento\Reports\Model\ResourceModel\Quote\Collection::class)
+        $collection = $this->getMockBuilder(Collection::class)
             ->setMethods(['getSelect'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -62,12 +63,12 @@ class CollectionTest extends TestCase
         $constructArgs = $this->objectManager
             ->getConstructArguments(\Magento\Reports\Model\ResourceModel\Quote\Item\Collection::class);
         $collection = $this->getMockBuilder(\Magento\Reports\Model\ResourceModel\Quote\Item\Collection::class)
-            ->setMethods(['getSelect', 'getTable'])
+            ->setMethods(['getSelect', 'getTable', 'getFlag', 'setFlag'])
             ->disableOriginalConstructor()
             ->setConstructorArgs($constructArgs)
             ->getMock();
 
-        $collection->expects($this->once())->method('getSelect')->willReturn($this->selectMock);
+        $collection->expects($this->exactly(2))->method('getSelect')->willReturn($this->selectMock);
         $this->selectMock->expects($this->once())->method('reset')->willReturnSelf();
         $this->selectMock->expects($this->once())->method('from')->willReturnSelf();
         $this->selectMock->expects($this->atLeastOnce())->method('columns')->willReturnSelf();
@@ -75,7 +76,12 @@ class CollectionTest extends TestCase
         $this->selectMock->expects($this->once())->method('where')->willReturnSelf();
         $this->selectMock->expects($this->once())->method('group')->willReturnSelf();
         $collection->expects($this->exactly(2))->method('getTable')->willReturn('table');
+        $collection->expects($this->once())->method('setFlag')
+            ->with('reports_collection_prepared')->willReturnSelf();
         $collection->prepareActiveCartItems();
+        $collection->method('getFlag')
+            ->with('reports_collection_prepared')->willReturn(true);
+        $this->assertEquals($this->selectMock, $collection->prepareActiveCartItems());
     }
 
     public function testLoadWithFilter()

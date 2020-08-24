@@ -69,9 +69,7 @@
         <fillField selector="{{AdminOrderFormPaymentSection.purchaseOrderNumber}}" userInput="{{PurchaseOrderNumber.number}}" stepKey="fillPurchaseOrderNumber"/>
         <click selector="{{AdminOrderFormActionSection.pageHeader}}" stepKey="clickOnHeader"/>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
-
-        <!--Submit order-->
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
 
         <!--Verify order information-->
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
