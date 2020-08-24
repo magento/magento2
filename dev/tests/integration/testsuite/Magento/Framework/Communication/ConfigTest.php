@@ -31,7 +31,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetTopicsNumeric()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Service method specified in the definition of topic "customerDeletedNumbers" is not av');
+        $this->expectExceptionMessage(
+            'Service method specified in the definition of topic "customerDeletedNumbers" is not av'
+        );
 
         $this->getConfigInstance([__DIR__ . '/_files/valid_communication_numeric.xml'])->getTopics();
     }
@@ -92,7 +94,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetTopicsExceptionMissingRequest()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Either "request" or "schema" attribute must be specified for topic "customerUpdated"');
+        $this->expectExceptionMessage(
+            'Either "request" or "schema" attribute must be specified for topic "customerUpdated"'
+        );
 
         $this->getConfigInstance([__DIR__ . '/_files/communication_missing_request.xml'])->getTopics();
     }
@@ -122,7 +126,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetTopicsExceptionNoAttributes()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Either "request" or "schema" attribute must be specified for topic "customerRetrieved"');
+        $this->expectExceptionMessage(
+            'Either "request" or "schema" attribute must be specified for topic "customerRetrieved"'
+        );
 
         $this->getConfigInstance([__DIR__ . '/_files/communication_no_attributes.xml'])->getTopics();
     }
@@ -132,7 +138,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetTopicsExceptionInvalidResponseSchema()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Response schema definition for topic "customerUpdated" should reference existing');
+        $this->expectExceptionMessage(
+            'Response schema definition for topic "customerUpdated" should reference existing'
+        );
 
         $this->getConfigInstance([__DIR__ . '/_files/communication_response_not_existing_service.xml'])->getTopics();
     }
@@ -142,7 +150,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetTopicsExceptionInvalidRequestSchema()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Request schema definition for topic "customerUpdated" should reference existing');
+        $this->expectExceptionMessage(
+            'Request schema definition for topic "customerUpdated" should reference existing'
+        );
 
         $this->getConfigInstance([__DIR__ . '/_files/communication_request_not_existing_service.xml'])->getTopics();
     }
@@ -152,7 +162,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetTopicsExceptionMultipleHandlersSynchronousMode()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Topic "customerDeleted" is configured for synchronous requests, that is why it must');
+        $this->expectExceptionMessage(
+            'Topic "customerDeleted" is configured for synchronous requests, that is why it must'
+        );
 
         $this->getConfigInstance([__DIR__ . '/_files/communication_multiple_handlers_synchronous_mode.xml'])->getTopics();
     }
@@ -162,7 +174,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetTopicsExceptionInvalidHandler()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Service method specified in the definition of handler "customHandler" for topic "custo');
+        $this->expectExceptionMessage(
+            'Service method specified in the definition of handler "customHandler" for topic "custo'
+        );
 
         $this->getConfigInstance([__DIR__ . '/_files/communication_not_existing_handler_method.xml'])->getTopics();
     }
@@ -172,7 +186,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetTopicsExceptionInvalidTopicNameInEnv()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Topic name "customerAdded" and attribute "name" = "customerCreated" must be equal');
+        $this->expectExceptionMessage(
+            'Topic name "customerAdded" and attribute "name" = "customerCreated" must be equal'
+        );
 
         $this->getConfigInstance(
             [__DIR__ . '/_files/valid_communication.xml'],
@@ -224,7 +240,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetTopicsExceptionTopicWithNonMatchedNameInEnv()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Topic name "customerDeleted" and attribute "name" = "customerRemoved" must be equal');
+        $this->expectExceptionMessage(
+            'Topic name "customerDeleted" and attribute "name" = "customerRemoved" must be equal'
+        );
 
         $this->getConfigInstance(
             [__DIR__ . '/_files/valid_communication.xml'],
@@ -237,7 +255,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetTopicsExceptionMultipleHandlersSynchronousModeInEnv()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Topic "customerDeleted" is configured for synchronous requests, that is why it must');
+        $this->expectExceptionMessage(
+            'Topic "customerDeleted" is configured for synchronous requests, that is why it must'
+        );
 
         $this->getConfigInstance(
             [__DIR__ . '/_files/valid_communication.xml'],
@@ -250,7 +270,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetTopicsExceptionInvalidRequestSchemaInEnv()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Request schema definition for topic "customerCreated" should reference existing service');
+        $this->expectExceptionMessage(
+            'Request schema definition for topic "customerCreated" should reference existing service'
+        );
 
         $this->getConfigInstance(
             [__DIR__ . '/_files/valid_communication.xml'],
@@ -263,7 +285,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetTopicsExceptionInvalidResponseSchemaInEnv()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Response schema definition for topic "customerCreated" should reference existing type o');
+        $this->expectExceptionMessage(
+            'Response schema definition for topic "customerCreated" should reference existing type o'
+        );
 
         $this->getConfigInstance(
             [__DIR__ . '/_files/valid_communication.xml'],
@@ -276,7 +300,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetTopicsExceptionInvalidMethodInHandlerInEnv()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Service method specified in the definition of handler "customerCreatedFirst" for topic');
+        $this->expectExceptionMessage(
+            'Service method specified in the definition of handler "customerCreatedFirst" for topic'
+        );
 
         $this->getConfigInstance(
             [__DIR__ . '/_files/valid_communication.xml'],
@@ -289,7 +315,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetTopicsExceptionWithDisabledHandlerInEnv()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Disabled handler "default" for topic "customerCreated" cannot be added to the config fi');
+        $this->expectExceptionMessage(
+            'Disabled handler "default" for topic "customerCreated" cannot be added to the config fi'
+        );
 
         $this->getConfigInstance(
             [__DIR__ . '/_files/valid_communication.xml'],
@@ -302,7 +330,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetTopicsExceptionIncorrectRequestSchemaTypeInEnv()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('Request schema type for topic "customerCreated" must be "object_interface" or "service_');
+        $this->expectExceptionMessage(
+            'Request schema type for topic "customerCreated" must be "object_interface" or "service_'
+        );
 
         $this->getConfigInstance(
             [__DIR__ . '/_files/valid_communication.xml'],
@@ -315,7 +345,9 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
     public function testGetTopicsExceptionIsNotBooleanTypeOfIsSynchronousInEnv()
     {
         $this->expectException(\LogicException::class);
-        $this->expectExceptionMessage('The attribute "is_synchronous" for topic "customerCreated" should have the value of the');
+        $this->expectExceptionMessage(
+            'The attribute "is_synchronous" for topic "customerCreated" should have the value of the'
+        );
 
         $this->getConfigInstance(
             [__DIR__ . '/_files/valid_communication.xml'],
