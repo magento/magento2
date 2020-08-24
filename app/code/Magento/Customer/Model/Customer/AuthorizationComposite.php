@@ -19,12 +19,20 @@ class AuthorizationComposite implements AuthorizationInterface
      */
     private $authorizationChecks;
 
+    /**
+     * AuthorizationComposite constructor.
+     *
+     * @param array $authorizationChecks
+     */
     public function __construct(
         array $authorizationChecks
     ) {
         $this->authorizationChecks = $authorizationChecks;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function isAllowed($resource, $privilege = null)
     {
         $result = false;

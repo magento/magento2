@@ -10,6 +10,11 @@ use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Framework\AuthorizationInterface;
 use Magento\Persistent\Helper\Session as PersistentSession;
 
+/**
+ * Authorization logic for persistent customers
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
+ */
 class Authorization implements AuthorizationInterface
 {
     /**
@@ -34,6 +39,11 @@ class Authorization implements AuthorizationInterface
         $this->persistentSession = $persistentSession;
     }
 
+    /**
+     * @inheritdoc
+     *
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
     public function isAllowed(
         $resource,
         $privilege = null

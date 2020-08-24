@@ -40,6 +40,8 @@ class Authorization implements AuthorizationInterface
     private $storeManager;
 
     /**
+     * Authorization constructor.
+     *
      * @param UserContextInterface $userContext
      * @param CustomerFactory $customerFactory
      * @param CustomerResource $customerResource
@@ -57,6 +59,9 @@ class Authorization implements AuthorizationInterface
         $this->storeManager = $storeManager;
     }
 
+    /**
+     * @inheritdoc
+     */
     public function isAllowed($resource, $privilege = null)
     {
         if ($resource == AuthorizationService::PERMISSION_SELF

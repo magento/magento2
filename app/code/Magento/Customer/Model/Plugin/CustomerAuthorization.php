@@ -33,17 +33,19 @@ class CustomerAuthorization
     }
 
     /**
+     * Verify if to allow customer users to access resources with self permission
+     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      * @param Authorization $subject
      * @param Closure $proceed
-     * @param $resource
-     * @param null $privilege
+     * @param string $resource
+     * @param $privilege
      * @return bool|mixed
      */
     public function aroundIsAllowed(
         Authorization $subject,
         Closure $proceed,
-        $resource,
+        string $resource,
         $privilege = null
     ) {
         if ($this->authorizationComposite->isAllowed($resource, $privilege)) {
