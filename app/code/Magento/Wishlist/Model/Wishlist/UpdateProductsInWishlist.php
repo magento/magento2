@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Wishlist\Model\Wishlist;
 
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Wishlist\Model\Item as WishlistItem;
 use Magento\Wishlist\Model\ItemFactory as WishlistItemFactory;
@@ -97,6 +98,9 @@ class UpdateProductsInWishlist
             $wishlistItem->setDescription($wishlistItemData->getDescription());
             if ($wishlistItemData->getQuantity() == 0) {
                 throw new LocalizedException(__("The quantity of a wish list item cannot be 0"));
+            }
+            if ($wishlistItem->getProduct()->getStatus() == Status::STATUS_DISABLED) {
+                throw new LocalizedException(__("The product is disabled"));
             }
             $resultItem = $wishlist->updateItem($wishlistItem, $options);
 
