@@ -4,8 +4,9 @@
  */
 
 define([
-    'uiComponent'
-], function (Component) {
+    'uiComponent',
+    'underscore'
+], function (Component, _) {
     'use strict';
 
     return Component.extend({
@@ -16,6 +17,18 @@ define([
         /**
          * @param {Object} quoteItem
          * @return {String}
+         */
+        getNameUnsanitizedHtml: function (quoteItem) {
+            var txt = document.createElement('textarea');
+
+            txt.innerHTML = quoteItem.name;
+
+            return _.escape(txt.value);
+        },
+
+        /**
+         * @param {Object} quoteItem
+         * @return {String}Magento_Checkout/js/region-updater
          */
         getValue: function (quoteItem) {
             return quoteItem.name;
