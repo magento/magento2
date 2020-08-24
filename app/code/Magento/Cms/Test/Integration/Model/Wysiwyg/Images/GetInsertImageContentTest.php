@@ -8,8 +8,10 @@ declare(strict_types=1);
 
 namespace Magento\Cms\Test\Integration\Model\Wysiwyg\Images;
 
+use Magento\Backend\Helper\Data as BackendHelper;
 use Magento\Cms\Helper\Wysiwyg\Images as ImagesHelper;
 use Magento\Cms\Model\Wysiwyg\Images\GetInsertImageContent;
+use Magento\Framework\Url\EncoderInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -28,12 +30,24 @@ class GetInsertImageContentTest extends TestCase
     private $imagesHelper;
 
     /**
+     * @var EncoderInterface
+     */
+    private $urlEncoder;
+
+    /**
+     * @var BackendHelper
+     */
+    protected $_backendData;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
         $this->getInsertImageContent = Bootstrap::getObjectManager()->get(GetInsertImageContent::class);
         $this->imagesHelper = Bootstrap::getObjectManager()->get(ImagesHelper::class);
+        $this->urlEncoder = Bootstrap::getObjectManager()->get(EncoderInterface::class);
+        $this->_backendData = Bootstrap::getObjectManager()->get(BackendHelper::class);
     }
 
     /**
@@ -44,12 +58,14 @@ class GetInsertImageContentTest extends TestCase
      * @param bool $forceStaticPath
      * @param bool $renderAsTag
      * @param int|null $storeId
+     * @param string|null $expectedResult
      */
     public function testExecute(
         string $encodedFilename,
         bool $forceStaticPath,
         bool $renderAsTag,
-        ?int $storeId = null
+        ?int $storeId = null,
+        ?string $expectedResult = null
     ): void {
         $getImageForInsert = $this->getInsertImageContent->execute(
             $encodedFilename,
@@ -58,35 +74,21 @@ class GetInsertImageContentTest extends TestCase
             $storeId
         );
 
-        if (!$forceStaticPath) {
-            if ($renderAsTag) {
-                $html = $this->imagesHelper->getImageHtmlDeclaration(
-                    self::TEST_IMAGE_FILE,
-                    true
-                );
-                $this->assertEquals(
-                    $getImageForInsert,
-                    $html
-                );
-            } else {
-                $html = $this->imagesHelper->getImageHtmlDeclaration(
-                    self::TEST_IMAGE_FILE,
-                    false
-                );
-                $this->assertEquals(
-                    $getImageForInsert,
-                    $html
+        if (!$forceStaticPath && !$renderAsTag) {
+            if (!$this->imagesHelper->isUsingStaticUrlsAllowed()) {
+
+                $encodedDirective = $this->urlEncoder->encode($expectedResult);
+                $expectedResult = $this->_backendData->getUrl(
+                    'cms/wysiwyg/directive',
+                    [
+                        '___directive' => $encodedDirective,
+                        '_escape_params' => false,
+                    ]
                 );
             }
-        } else {
-            $this->assertEquals(
-                $getImageForInsert,
-                parse_url(
-                    $this->imagesHelper->getCurrentUrl() . self::TEST_IMAGE_FILE,
-                    PHP_URL_PATH
-                )
-            );
         }
+
+        $this->assertEquals($getImageForInsert, $expectedResult);
     }
 
     /**
@@ -102,30 +104,35 @@ class GetInsertImageContentTest extends TestCase
                 false,
                 true,
                 1,
+                '<img src="{{media url=&quot;' . self::TEST_IMAGE_FILE . '&quot;}}" alt="" />'
             ],
             [
                 'L3Rlc3QtaW1hZ2UuanBn',
                 true,
                 false,
                 1,
+                '/pub/media/' . self::TEST_IMAGE_FILE
             ],
             [
                 'L3Rlc3QtaW1hZ2UuanBn',
                 false,
                 false,
                 1,
+                '{{media url="' . self::TEST_IMAGE_FILE . '"}}'
             ],
             [
                 'L3Rlc3QtaW1hZ2UuanBn',
                 false,
                 true,
                 2,
+                '<img src="{{media url=&quot;' . self::TEST_IMAGE_FILE . '&quot;}}" alt="" />'
             ],
             [
                 'L3Rlc3QtaW1hZ2UuanBn',
                 false,
                 true,
                 null,
+                '<img src="{{media url=&quot;' . self::TEST_IMAGE_FILE . '&quot;}}" alt="" />'
             ],
         ];
     }

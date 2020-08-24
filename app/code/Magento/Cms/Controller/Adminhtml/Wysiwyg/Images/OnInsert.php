@@ -45,15 +45,20 @@ class OnInsert extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
     {
         $data = $this->getRequest()->getParams();
 
+        $fileName = $data['filename'];
+        $forceStaticPath = $data['force_static_path'];
+        $renderAsTag = $data['as_is'];
+        $storeId = isset($data['store_id']) ? (int) $data['store_id'] : null;
+
         /** @var \Magento\Framework\Controller\Result\Raw $resultRaw */
         $resultRaw = $this->resultRawFactory->create();
 
         return $resultRaw->setContents(
             $this->getInsertImageContent->execute(
-                $data['filename'],
-                $data['force_static_path'],
-                $data['as_is'],
-                isset($data['store_id']) ? (int) $data['store_id'] : null
+                $fileName,
+                $forceStaticPath,
+                $renderAsTag,
+                $storeId
             )
         );
     }
