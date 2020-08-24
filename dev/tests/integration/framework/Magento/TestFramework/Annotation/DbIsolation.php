@@ -90,7 +90,7 @@ class DbIsolation
                     self::$isolationCache[$table] = $this->pullDbState($table);
                 }
             }
-        } catch (\Exception $e) {
+        } catch (\Throwable $e) {
             //Do nothing...
             //For some tests resource connection is not specified and we could not query
             //anything from db
@@ -138,7 +138,7 @@ class DbIsolation
                     if (!empty($diff)) {
                         $isolationProblem[$table] = $diff;
                     }
-                } catch (\Exception $e) {
+                } catch (\Throwable $e) {
                     //ResourceConnection could be not specified in some specific tests that are not working with DB
                     //We need to ignore it
                 }
