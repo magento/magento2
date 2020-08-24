@@ -7,7 +7,7 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminAssertCategoryGridPageDetailsActionGroup">
+    <actionGroup name="AssertAdminCategoryGridPageDetailsActionGroup">
         <arguments>
             <argument name="category"/>
             <argument name="imageName" type="string" defaultValue="magento"/>
