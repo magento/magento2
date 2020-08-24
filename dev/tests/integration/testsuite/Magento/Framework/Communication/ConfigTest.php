@@ -166,7 +166,8 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
             'Topic "customerDeleted" is configured for synchronous requests, that is why it must'
         );
 
-        $this->getConfigInstance([__DIR__ . '/_files/communication_multiple_handlers_synchronous_mode.xml'])->getTopics();
+        $this->getConfigInstance([__DIR__ . '/_files/communication_multiple_handlers_synchronous_mode.xml'])
+            ->getTopics();
     }
 
     /**
