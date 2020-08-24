@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGallerySortingTest">
+        <annotations>
+            <features value="MediaGallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1776"/>
+            <title value="User uses Sorting in Standalone Media Gallery"/>
+            <stories value="User uses Sorting in Standalone Media Gallery"/>
+            <testCaseId value="https://github.com/magento/adobe-stock-integration/issues/1776"/>
+            <description value="User uses Sorting in Standalone Media Gallery"/>
+            <severity value="CRITICAL"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGalleryPage"/>
+        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder">
+            <argument name="name" value="a"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertNewFolderCreated"/>
+    </test>
+</tests>
