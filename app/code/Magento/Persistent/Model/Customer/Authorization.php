@@ -48,15 +48,15 @@ class Authorization implements AuthorizationInterface
         $resource,
         $privilege = null
     ) {
-        if ($resource == AuthorizationService::PERMISSION_SELF
+        if ($this->persistentSession->isPersistent()
+            && $resource == AuthorizationService::PERMISSION_SELF
             && $this->userContext->getUserId()
             && $this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER
-            && $this->customerSession->isLoggedIn()
-            && $this->persistentSession->isPersistent()
+            && !$this->customerSession->isLoggedIn()
         ) {
-            return true;
+            return false;
         }
 
-        return false;
+        return true;
     }
 }
