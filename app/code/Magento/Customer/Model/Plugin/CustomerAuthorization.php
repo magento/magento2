@@ -39,7 +39,7 @@ class CustomerAuthorization
      * @param Authorization $subject
      * @param Closure $proceed
      * @param string $resource
-     * @param $privilege
+     * @param null $privilege
      * @return bool|mixed
      */
     public function aroundIsAllowed(
