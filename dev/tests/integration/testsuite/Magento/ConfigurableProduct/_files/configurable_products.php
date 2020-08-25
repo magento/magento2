@@ -113,7 +113,7 @@ foreach ($options as $option) {
         ->setId($productId)
         ->setAttributeSetId($attributeSetId)
         ->setWebsiteIds([1])
-        ->setName('Configurable Option' . $option->getLabel())
+        ->setName('Configurable Option second' . $option->getLabel())
         ->setSku('simple_' . $productId)
         ->setPrice($productId)
         ->setTestConfigurable($option->getValue())
