@@ -223,9 +223,6 @@
                                                                         </item>
                                                                     </item>
                                                                     <item name="telephone" xsi:type="array">
-                                                                        <item name="validation" xsi:type="array">
-                                                                            <item name="validate-phoneStrict" xsi:type="number">0</item>
-                                                                        </item>
                                                                         <item name="config" xsi:type="array">
                                                                             <item name="tooltip" xsi:type="array">
                                                                                 <item name="description" xsi:type="string" translate="true">For delivery questions.</item>
