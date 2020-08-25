@@ -10,6 +10,7 @@ namespace Magento\Theme\Test\Unit\Controller\Result;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\Response\Http;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Result\Layout;
 use Magento\Store\Model\ScopeInterface;
 use Magento\Theme\Controller\Result\JsFooterPlugin;
 use PHPUnit\Framework\MockObject\MockObject;
@@ -22,20 +23,17 @@ class JsFooterPluginTest extends TestCase
 {
     const STUB_XML_PATH_DEV_MOVE_JS_TO_BOTTOM = 'dev/js/move_script_to_bottom';
 
-    /**
-     * @var JsFooterPlugin
-     */
+    /** @var JsFooterPlugin */
     private $plugin;
 
-    /**
-     * @var ScopeConfigInterface|MockObject
-     */
+    /** @var ScopeConfigInterface|MockObject */
     private $scopeConfigMock;
 
-    /**
-     * @var Http|MockObject
-     */
+    /** @var Http|MockObject */
     private $httpMock;
+
+    /** @var Layout|MockObject */
+    private $layoutMock;
 
     /**
      * @inheritdoc
@@ -48,6 +46,7 @@ class JsFooterPluginTest extends TestCase
             ->getMockForAbstractClass();
 
         $this->httpMock = $this->createMock(Http::class);
+        $this->layoutMock = $this->createMock(Layout::class);
 
         $objectManager = new ObjectManagerHelper($this);
         $this->plugin = $objectManager->getObject(
@@ -59,11 +58,11 @@ class JsFooterPluginTest extends TestCase
     }
 
     /**
-     * Data Provider for testBeforeSendResponse()
+     * Data Provider for testAfterRenderResult()
      *
      * @return array
      */
-    public function sendResponseDataProvider(): array
+    public function renderResultDataProvider(): array
     {
         return [
             'content_with_script_tag' => [
@@ -74,9 +73,9 @@ class JsFooterPluginTest extends TestCase
                 "flag" => true,
                 "result" => "<body><h1>Test Title</h1>" .
                     "<script type=\"text/x-magento-template\">test</script>" .
-                    "<p>Test Content</p>" .
-                    "<script type=\"text/x-magento-init\">test</script>" .
-                    "\n</body>"
+                    "<p>Test Content</p>\n" .
+                    "<script type=\"text/x-magento-init\">test</script>\n" .
+                    "</body>"
             ],
             'content_with_config_disable' => [
                 "content" => "<body><p>Test Content</p></body>",
@@ -98,40 +97,35 @@ class JsFooterPluginTest extends TestCase
      * @param bool $isSetFlag
      * @param string $result
      * @return void
-     * @dataProvider sendResponseDataProvider
+     * @dataProvider renderResultDataProvider
      */
-    public function testBeforeSendResponse($content, $isSetFlag, $result): void
+    public function testAfterRenderResult($content, $isSetFlag, $result): void
     {
-        $this->httpMock->expects($this->once())
-            ->method('getContent')
+        // Given (context)
+        $this->httpMock->method('getContent')
             ->willReturn($content);
 
-        $this->scopeConfigMock->expects($this->once())
-            ->method('isSetFlag')
-            ->with(
-                self::STUB_XML_PATH_DEV_MOVE_JS_TO_BOTTOM,
-                ScopeInterface::SCOPE_STORE
-            )
+        $this->scopeConfigMock->method('isSetFlag')
+            ->with(self::STUB_XML_PATH_DEV_MOVE_JS_TO_BOTTOM, ScopeInterface::SCOPE_STORE)
             ->willReturn($isSetFlag);
 
+        // Expects
         $this->httpMock->expects($this->any())
             ->method('setContent')
             ->with($result);
 
-        $this->plugin->beforeSendResponse($this->httpMock);
+        // When
+        $this->plugin->afterRenderResult($this->layoutMock, $this->layoutMock, $this->httpMock);
     }
 
     /**
-     * Data Provider for testBeforeSendResponseIfGetContentIsNotAString()
+     * Data Provider for testAfterRenderResultIfGetContentIsNotAString()
      *
      * @return array
      */
     public function ifGetContentIsNotAStringDataProvider(): array
     {
         return [
-            'empty_array' => [
-                'content' => []
-            ],
             'null' => [
                 'content' => null
             ]
@@ -139,26 +133,25 @@ class JsFooterPluginTest extends TestCase
     }
 
     /**
-     * Test BeforeSendResponse if content is not a string
+     * Test AfterRenderResult if content is not a string
      *
      * @param string $content
      * @return void
      * @dataProvider ifGetContentIsNotAStringDataProvider
      */
-    public function testBeforeSendResponseIfGetContentIsNotAString($content): void
+    public function testAfterRenderResultIfGetContentIsNotAString($content): void
     {
+        $this->scopeConfigMock->method('isSetFlag')
+            ->with(self::STUB_XML_PATH_DEV_MOVE_JS_TO_BOTTOM, ScopeInterface::SCOPE_STORE)
+            ->willReturn(true);
+
         $this->httpMock->expects($this->once())
             ->method('getContent')
             ->willReturn($content);
 
-        $this->scopeConfigMock->expects($this->never())
-            ->method('isSetFlag')
-            ->with(
-                self::STUB_XML_PATH_DEV_MOVE_JS_TO_BOTTOM,
-                ScopeInterface::SCOPE_STORE
-            )
-            ->willReturn(false);
+        $this->httpMock->expects($this->never())
+            ->method('setContent');
 
-        $this->plugin->beforeSendResponse($this->httpMock);
+        $this->plugin->afterRenderResult($this->layoutMock, $this->layoutMock, $this->httpMock);
     }
 }

@@ -136,11 +136,8 @@ class SubscriptionManagerTest extends TestCase
             ->with(Subscriber::XML_PATH_CONFIRMATION_FLAG, ScopeInterface::SCOPE_STORE, $storeId)
             ->willReturn($isConfirmNeed);
 
-        $this->assertEquals(
-            $subscriber,
-            $this->subscriptionManager->subscribe($email, $storeId)
-        );
-        $this->assertEquals($subscriber->getData(), $expectedData);
+        $this->assertEquals($subscriber, $this->subscriptionManager->subscribe($email, $storeId));
+        $this->assertEquals($expectedData, $subscriber->getData());
     }
 
     /**
@@ -308,7 +305,7 @@ class SubscriptionManagerTest extends TestCase
             $subscriber,
             $this->subscriptionManager->subscribeCustomer($customerId, $storeId)
         );
-        $this->assertEquals($subscriber->getData(), $expectedData);
+        $this->assertEquals($expectedData, $subscriber->getData());
     }
 
     /**
@@ -553,7 +550,7 @@ class SubscriptionManagerTest extends TestCase
             $subscriber,
             $this->subscriptionManager->unsubscribeCustomer($customerId, $storeId)
         );
-        $this->assertEquals($subscriber->getData(), $expectedData);
+        $this->assertEquals($expectedData, $subscriber->getData());
     }
 
     /**

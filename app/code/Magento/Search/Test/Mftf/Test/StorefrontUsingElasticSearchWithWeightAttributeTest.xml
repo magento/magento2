@@ -49,7 +49,9 @@
         <!-- Step 3 -->
         <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         <!-- Step 4 -->
-        <magentoCLI command="cache:clean" arguments="full_page" stepKey="clearFPC"/>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="clearFPC">
+            <argument name="tags" value="full_page"/>
+        </actionGroup>
         <!-- Step 5 -->
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToStorefront"/>
         <!-- Step 6 -->

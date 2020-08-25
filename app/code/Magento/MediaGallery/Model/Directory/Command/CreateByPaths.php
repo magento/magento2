@@ -10,7 +10,7 @@ namespace Magento\MediaGallery\Model\Directory\Command;
 use Magento\Cms\Model\Wysiwyg\Images\Storage;
 use Magento\Framework\Exception\CouldNotSaveException;
 use Magento\MediaGalleryApi\Api\CreateDirectoriesByPathsInterface;
-use Magento\MediaGalleryApi\Api\IsPathBlacklistedInterface;
+use Magento\MediaGalleryApi\Api\IsPathExcludedInterface;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -29,23 +29,23 @@ class CreateByPaths implements CreateDirectoriesByPathsInterface
     private $storage;
 
     /**
-     * @var IsPathBlacklistedInterface
+     * @var IsPathExcludedInterface
      */
-    private $isPathBlacklisted;
+    private $isPathExcluded;
 
     /**
      * @param LoggerInterface $logger
      * @param Storage $storage
-     * @param IsPathBlacklistedInterface $isPathBlacklisted
+     * @param IsPathExcludedInterface $isPathExcluded
      */
     public function __construct(
         LoggerInterface $logger,
         Storage $storage,
-        IsPathBlacklistedInterface $isPathBlacklisted
+        IsPathExcludedInterface $isPathExcluded
     ) {
         $this->logger = $logger;
         $this->storage = $storage;
-        $this->isPathBlacklisted = $isPathBlacklisted;
+        $this->isPathExcluded = $isPathExcluded;
     }
 
     /**
@@ -55,7 +55,7 @@ class CreateByPaths implements CreateDirectoriesByPathsInterface
     {
         $failedPaths = [];
         foreach ($paths as $path) {
-            if ($this->isPathBlacklisted->execute($path)) {
+            if ($this->isPathExcluded->execute($path)) {
                 $failedPaths[] = $path;
                 continue;
             }

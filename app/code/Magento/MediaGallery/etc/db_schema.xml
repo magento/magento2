@@ -10,7 +10,9 @@
         <column xsi:type="int" name="id" unsigned="true" nullable="false" identity="true" comment="Entity ID"/>
         <column xsi:type="varchar" name="path" length="255" nullable="true" comment="Path"/>
         <column xsi:type="varchar" name="title" length="255" nullable="true" comment="Title"/>
+        <column xsi:type="text" name="description" nullable="true" comment="Description"/>
         <column xsi:type="varchar" name="source" length="255" nullable="true" comment="Source"/>
+        <column xsi:type="varchar" name="hash" length="255" nullable="true" comment="File hash"/>
         <column xsi:type="varchar" name="content_type" length="255" nullable="true" comment="Content Type"/>
         <column xsi:type="int" name="width" unsigned="true" nullable="false" identity="false" default="0" comment="Width"/>
         <column xsi:type="int" name="height" unsigned="true" nullable="false" identity="false" default="0" comment="Height"/>

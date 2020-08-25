@@ -35,6 +35,8 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
+ * Test for TokensConfigProvider
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class TokensConfigProviderTest extends TestCase
@@ -578,12 +580,15 @@ class TokensConfigProviderTest extends TestCase
             '2015-01-01 00:00:00',
             3
         );
+
+        $isVisibleFilter = $this->createExpectedFilter(PaymentTokenInterface::IS_VISIBLE, 1, 4);
+
         $this->filterBuilder->expects(static::once())
             ->method('setConditionType')
             ->with('gt')
             ->willReturnSelf();
 
-        $this->searchCriteriaBuilder->expects(self::exactly(4))
+        $this->searchCriteriaBuilder->expects(self::exactly(5))
             ->method('addFilters')
             ->willReturnMap(
                 [
@@ -591,6 +596,7 @@ class TokensConfigProviderTest extends TestCase
                     [$codeFilter, $this->searchCriteriaBuilder],
                     [$expiresAtFilter, $this->searchCriteriaBuilder],
                     [$isActiveFilter, $this->searchCriteriaBuilder],
+                    [$isVisibleFilter, $this->searchCriteriaBuilder],
                 ]
             );
 

@@ -76,7 +76,7 @@ class OperationRepository implements OperationRepositoryInterface
      * @param string $operationId
      * @return OperationInterface
      * @throws LocalizedException
-     * @deprecated No longer used.
+     * @deprecated 100.4.0 No longer used.
      * @see create()
      */
     public function createByTopic($topicName, $entityParams, $groupId, $operationId)
