@@ -57,7 +57,7 @@
             <argument name="entityName" value="Products"/>
         </actionGroup>
 
-        <actionGroup ref="AdminAssertMediaGalleryFilterPlaceHolderProductGridActionGroup" stepKey="assertFilterApplied">
+        <actionGroup ref="AdminAssertMediaGalleryFilterPlaceHolderGridActionGroup" stepKey="assertFilterApplied">
             <argument name="filterPlaceholder" value="$$product.name$$"/>
         </actionGroup>
 
