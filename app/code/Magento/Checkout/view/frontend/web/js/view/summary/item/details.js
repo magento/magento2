@@ -5,13 +5,14 @@
 
 define([
     'uiComponent',
-    'underscore'
-], function (Component, _) {
+    'escaper'
+], function (Component, escaper) {
     'use strict';
 
     return Component.extend({
         defaults: {
-            template: 'Magento_Checkout/summary/item/details'
+            template: 'Magento_Checkout/summary/item/details',
+            allowedTags: ['b', 'strong', 'i', 'em', 'u']
         },
 
         /**
@@ -23,7 +24,7 @@ define([
 
             txt.innerHTML = quoteItem.name;
 
-            return _.escape(txt.value);
+            return escaper.escapeHtml(txt.value);
         },
 
         /**
