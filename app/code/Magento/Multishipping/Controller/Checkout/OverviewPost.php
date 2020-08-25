@@ -5,6 +5,9 @@
  */
 namespace Magento\Multishipping\Controller\Checkout;
 
+use Magento\Checkout\Api\PaymentProcessingRateLimiterInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Multishipping\Model\Checkout\Type\Multishipping\State;
 use Magento\Customer\Api\AccountManagementInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
@@ -12,14 +15,15 @@ use Magento\Framework\Exception\PaymentException;
 use Magento\Framework\Session\SessionManagerInterface;
 
 /**
- * Class OverviewPost
+ * Placing orders.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class OverviewPost extends \Magento\Multishipping\Controller\Checkout
+class OverviewPost extends \Magento\Multishipping\Controller\Checkout implements HttpPostActionInterface
 {
     /**
      * @var \Magento\Framework\Data\Form\FormKey\Validator
+     * @deprecated Form key validation is handled on the framework level.
      */
     protected $formKeyValidator;
 
@@ -39,6 +43,11 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
     private $session;
 
     /**
+     * @var PaymentProcessingRateLimiterInterface
+     */
+    private $paymentRateLimiter;
+
+    /**
      * @param \Magento\Framework\App\Action\Context $context
      * @param \Magento\Customer\Model\Session $customerSession
      * @param CustomerRepositoryInterface $customerRepository
@@ -47,6 +56,7 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
      * @param \Psr\Log\LoggerInterface $logger
      * @param \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator
      * @param SessionManagerInterface $session
+     * @param PaymentProcessingRateLimiterInterface|null $paymentRateLimiter
      */
     public function __construct(
         \Magento\Framework\App\Action\Context $context,
@@ -56,12 +66,15 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
         \Magento\Framework\Data\Form\FormKey\Validator $formKeyValidator,
         \Psr\Log\LoggerInterface $logger,
         \Magento\Checkout\Api\AgreementsValidatorInterface $agreementValidator,
-        SessionManagerInterface $session
+        SessionManagerInterface $session,
+        ?PaymentProcessingRateLimiterInterface $paymentRateLimiter = null
     ) {
         $this->formKeyValidator = $formKeyValidator;
         $this->logger = $logger;
         $this->agreementsValidator = $agreementValidator;
         $this->session = $session;
+        $this->paymentRateLimiter = $paymentRateLimiter
+            ?? ObjectManager::getInstance()->get(PaymentProcessingRateLimiterInterface::class);
 
         parent::__construct(
             $context,
@@ -79,15 +92,12 @@ class OverviewPost extends \Magento\Multishipping\Controller\Checkout
      */
     public function execute()
     {
-        if (!$this->formKeyValidator->validate($this->getRequest())) {
-            $this->_forward('backToAddresses');
-            return;
-        }
-        if (!$this->_validateMinimumAmount()) {
-            return;
-        }
-
         try {
+            $this->paymentRateLimiter->limit();
+            if (!$this->_validateMinimumAmount()) {
+                return;
+            }
+
             if (!$this->agreementsValidator->isValid(array_keys($this->getRequest()->getPost('agreement', [])))) {
                 $this->messageManager->addError(
                     __('Please agree to all Terms and Conditions before placing the order.')
