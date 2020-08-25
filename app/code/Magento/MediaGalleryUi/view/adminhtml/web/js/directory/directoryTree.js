@@ -265,7 +265,7 @@ define([
             } else {
                 this.selectStorageRoot();
             }
-        },g
+        },
 
         /**
          * Verify if directory exists in folder tree
