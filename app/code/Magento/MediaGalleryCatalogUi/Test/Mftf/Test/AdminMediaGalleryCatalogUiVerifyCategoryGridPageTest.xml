@@ -26,6 +26,11 @@
             <deleteData createDataKey="category" stepKey="deleteCategory"/>
         </after>
         <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openCategoryPage"/>
+
+        <actionGroup ref="AdminSearchCategoryGridPageByCategoryNameActionGroup" stepKey="searchByCategoryName">
+            <argument name="categoryName" value="$$category.name$$"/>
+        </actionGroup>
+
         <actionGroup ref="AssertAdminCategoryGridPageDetailsActionGroup" stepKey="assertCategoryGridPageRendered">
             <argument name="category" value="$$category$$"/>
         </actionGroup>

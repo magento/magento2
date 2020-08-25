@@ -17,10 +17,40 @@
         </annotations>
 
         <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.image(imageName)}}" stepKey="assertImageColumn"/>
-        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.path(category.name)}}" stepKey="assertPathColumn"/>
-        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.name(category.name)}}" stepKey="assertNameColumn"/>
-        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.products('0')}}" stepKey="assertProductsColumn"/>
-        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.inMenu(category.include_in_menu)}}" stepKey="assertInMenuColumn"/>
-        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.enabled(category.is_active)}}" stepKey="assertEnabledColumn"/>
+
+        <!--Name Column-->
+        <grabTextFrom selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.columnValue('Name')}}" stepKey="grabNameColumnValue"/>
+        <assertEquals stepKey="assertNameColumn">
+            <expectedResult type="string">$$category.name$$</expectedResult>
+            <actualResult type="variable">grabNameColumnValue</actualResult>
+        </assertEquals>
+
+        <!--Path Column-->
+        <grabTextFrom selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.columnValue('Path')}}" stepKey="grabPathColumnValue"/>
+        <assertStringContainsString stepKey="assertPathColumn">
+            <expectedResult type="string">$$category.name$$</expectedResult>
+            <actualResult type="variable">grabPathColumnValue</actualResult>
+        </assertStringContainsString>
+
+        <!--Products Column-->
+        <grabTextFrom selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.columnValue('Products')}}" stepKey="grabProductsColumnValue"/>
+        <assertEquals stepKey="assertProductsColumn">
+            <expectedResult type="string">0</expectedResult>
+            <actualResult type="variable">grabProductsColumnValue</actualResult>
+        </assertEquals>
+
+        <!--In Menu Column-->
+        <grabTextFrom selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.columnValue('In Menu')}}" stepKey="grabInMenuColumnValue"/>
+        <assertEquals stepKey="assertInMenuColumn">
+            <expectedResult type="string">Yes</expectedResult>
+            <actualResult type="variable">grabInMenuColumnValue</actualResult>
+        </assertEquals>
+
+        <!--Enabled Column-->
+        <grabTextFrom selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.columnValue('Enabled')}}" stepKey="grabEnabledColumnValue"/>
+        <assertEquals stepKey="assertEnabledColumn">
+            <expectedResult type="string">Yes</expectedResult>
+            <actualResult type="variable">grabEnabledColumnValue</actualResult>
+        </assertEquals>
     </actionGroup>
 </actionGroups>

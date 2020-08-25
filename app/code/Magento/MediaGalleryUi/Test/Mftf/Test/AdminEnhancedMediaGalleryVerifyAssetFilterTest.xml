@@ -65,6 +65,7 @@
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
         <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openCategoryGridPage"/>
 
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="firstResetAdminDataGridToDefaultView"/>
         <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridExpandFilterActionGroup" stepKey="expandFilters"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="setUsedInFilter">
             <argument name="filterName" value="Asset"/>
@@ -72,9 +73,11 @@
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridApplyFiltersActionGroup" stepKey="applyFilters"/>
 
-        <actionGroup ref="AdminMediaGalleryAssertCategoryNameInCategoryGridActionGroup" stepKey="assertCategoryInGrid">
-            <argument name="categoryName" value="$$category.name$$"/>
-        </actionGroup>
-        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+        <grabTextFrom selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.columnValue('Name')}}" stepKey="grabCategoryNameFromGrid"/>
+        <assertEquals stepKey="assertEqualCategoryName">
+            <expectedResult type="string">$$category.name$$</expectedResult>
+            <actualResult type="variable">grabCategoryNameFromGrid</actualResult>
+        </assertEquals>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="secondResetAdminDataGridToDefaultView"/>
     </test>
 </tests>

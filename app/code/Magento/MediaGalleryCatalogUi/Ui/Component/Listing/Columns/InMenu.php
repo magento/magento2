@@ -24,9 +24,9 @@ class InMenu extends Column
             $fieldName = $this->getData('name');
             foreach ($dataSource['data']['items'] as & $item) {
                 if (isset($item[$fieldName]) && $item[$fieldName] == 1) {
-                    $item[$fieldName] = '<span class="1">Yes</span>';
+                    $item[$fieldName] = 'Yes';
                 } else {
-                    $item[$fieldName] = '<span class="0">No</span>';
+                    $item[$fieldName] = 'No';
                 }
             }
         }
