@@ -1045,36 +1045,7 @@ class ProcessCronQueueObserverTest extends TestCase
         $scheduleMock->expects($this->exactly(10))->method('getResource')->willReturn($this->scheduleResourceMock);
         $this->scheduleFactoryMock->expects($this->exactly(11))->method('create')->willReturn($scheduleMock);
 
-        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
-
-        $connectionMock->expects($this->exactly(5))
-            ->method('delete')
-            ->withConsecutive(
-                [$tableName, ['status = ?' => 'pending', 'job_code in (?)' => ['test_job1']]],
-                [$tableName, ['status = ?' => 'success', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]],
-                [$tableName, ['status = ?' => 'missed', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]],
-                [$tableName, ['status = ?' => 'error', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]],
-                [$tableName, ['status = ?' => 'pending', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]]
-            )
-            ->willReturn(1);
-
-        $connectionMock->expects($this->once())
-            ->method('quoteInto')
-            ->with(
-                'status = ? AND job_code IN (?) AND (scheduled_at < UTC_TIMESTAMP() - INTERVAL 1 DAY)',
-                'running',
-                ['test_job1']
-            )
-            ->willReturn('');
-
-        $connectionMock->expects($this->once())
-            ->method('update')
-            ->with(
-                $tableName,
-                ['status' => 'error', 'messages' => 'Time out'],
-                ''
-            )
-            ->willReturn(0);
+        $connectionMock = $this->prepareConnectionMock($tableName);
 
         $this->scheduleResourceMock->expects($this->exactly(6))
             ->method('getTable')
@@ -1093,5 +1064,66 @@ class ProcessCronQueueObserverTest extends TestCase
             );
 
         $this->cronQueueObserver->execute($this->observerMock);
+    }
+
+    /**
+     * @param string $tableName
+     * @return AdapterInterface|MockObject
+     */
+    private function prepareConnectionMock(string $tableName)
+    {
+        $connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
+
+        $connectionMock->expects($this->exactly(5))
+            ->method('delete')
+            ->withConsecutive(
+                [
+                    $tableName,
+                    ['status = ?' => 'pending', 'job_code in (?)' => ['test_job1']]
+                ],
+                [
+                    $tableName,
+                    ['status = ?' => 'success', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]
+                ],
+                [
+                    $tableName,
+                    ['status = ?' => 'missed', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]
+                ],
+                [
+                    $tableName,
+                    ['status = ?' => 'error', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]
+                ],
+                [
+                    $tableName,
+                    ['status = ?' => 'pending', 'job_code in (?)' => ['test_job1'], 'scheduled_at < ?' => null]
+                ]
+            )
+            ->willReturn(1);
+
+        $connectionMock->expects($this->any())
+            ->method('quoteInto')
+            ->withConsecutive(
+                ['status = ?', \Magento\Cron\Model\Schedule::STATUS_RUNNING],
+                ['job_code IN (?)', ['test_job1']],
+            )
+            ->willReturnOnConsecutiveCalls(
+                "status = 'running'",
+                "job_code IN ('test_job1')"
+            );
+
+        $connectionMock->expects($this->once())
+            ->method('update')
+            ->with(
+                $tableName,
+                ['status' => 'error', 'messages' => 'Time out'],
+                [
+                    "status = 'running'",
+                    "job_code IN ('test_job1')",
+                    'scheduled_at < UTC_TIMESTAMP() - INTERVAL 1 DAY'
+                ]
+            )
+            ->willReturn(0);
+
+        return $connectionMock;
     }
 }
