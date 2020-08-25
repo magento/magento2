@@ -28,7 +28,7 @@ class GetInsertImageContent
     }
 
     /**
-     * Prepare Image Contents for Insert
+     * Create a content (just a link or an html block) for inserting image to the content
      *
      * @param string $encodedFilename
      * @param bool $forceStaticPath
@@ -48,10 +48,7 @@ class GetInsertImageContent
 
         if ($forceStaticPath) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            return parse_url(
-                $this->imagesHelper->getCurrentUrl() . $filename,
-                PHP_URL_PATH
-            );
+            return parse_url($this->imagesHelper->getCurrentUrl() . $filename, PHP_URL_PATH);
         }
 
         return $this->imagesHelper->getImageHtmlDeclaration($filename, $renderAsTag);
