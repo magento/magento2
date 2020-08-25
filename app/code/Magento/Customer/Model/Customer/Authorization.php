@@ -4,6 +4,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Model\Customer;
 
@@ -64,7 +65,7 @@ class Authorization implements AuthorizationInterface
      */
     public function isAllowed($resource, $privilege = null)
     {
-        if ($resource == AuthorizationService::PERMISSION_SELF
+        if ($resource === AuthorizationService::PERMISSION_SELF
             && $this->userContext->getUserId()
             && $this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER
         ) {
@@ -72,9 +73,8 @@ class Authorization implements AuthorizationInterface
             $this->customerResource->load($customer, $this->userContext->getUserId());
             $currentStoreId = $this->storeManager->getStore()->getId();
             $sharedStoreIds = $customer->getSharedStoreIds();
-            if (in_array($currentStoreId, $sharedStoreIds)) {
-                return true;
-            }
+
+            return in_array($currentStoreId, $sharedStoreIds);
         }
 
         return false;
