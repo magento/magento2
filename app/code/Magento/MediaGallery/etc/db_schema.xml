@@ -25,9 +25,6 @@
         <index referenceId="MEDIA_GALLERY_ID" indexType="btree">
             <column name="id"/>
         </index>
-        <constraint xsi:type="unique" referenceId="MEDIA_GALLERY_ID_PATH_TITLE_CONTENT_TYPE_WIDTH_HEIGHT">
-            <column name="path"/>
-        </constraint>
         <index referenceId="MEDIA_GALLERY_ASSET_TITLE" indexType="fulltext">
             <column name="title"/>
         </index>
