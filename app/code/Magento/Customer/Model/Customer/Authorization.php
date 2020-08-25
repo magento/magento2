@@ -15,7 +15,7 @@ use Magento\Integration\Api\AuthorizationServiceInterface as AuthorizationServic
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class to invalidate user credentials
+ * Checks if customer is logged in and authorized in the current store
  */
 class Authorization implements AuthorizationInterface
 {

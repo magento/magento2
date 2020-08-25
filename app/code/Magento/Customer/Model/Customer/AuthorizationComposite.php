@@ -22,7 +22,7 @@ class AuthorizationComposite implements AuthorizationInterface
     /**
      * AuthorizationComposite constructor.
      *
-     * @param array $authorizationChecks
+     * @param AuthorizationInterface[] $authorizationChecks
      */
     public function __construct(
         array $authorizationChecks
