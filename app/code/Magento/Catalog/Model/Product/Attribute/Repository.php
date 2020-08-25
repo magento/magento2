@@ -220,7 +220,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
     protected function generateCode($label)
     {
         $code = substr(preg_replace('/[^a-zA-Z_0-9]/', '_', $this->filterManager->translitUrl($label)), 0, Attribute::ATTRIBUTE_CODE_MAX_LENGTH);
-        $validatorAttrCode = new \Zend_Validate_Regex(['pattern' => '/^[a-zA-Z][a-zA-Z_0-9]{0,29}[a-zA-Z0-9]$/']);    
+        $validatorAttrCode = new \Zend_Validate_Regex(['pattern' => '/^[a-zA-Z][a-zA-Z_0-9]{0,29}[a-zA-Z0-9]$/']);
         if (!$validatorAttrCode->isValid($code)) {
             $code = 'attr_' . ($code ?: substr(md5(time()), 0, 8));
         }
