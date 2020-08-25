@@ -4,102 +4,103 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesInventory\Test\Unit\Model\Plugin\Order;
 
 use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\SalesInventory\Model\Order\ReturnProcessor;
-use Magento\SalesInventory\Model\Plugin\Order\ReturnToStockOrder;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
-use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
 use Magento\Sales\Api\Data\CreditmemoCreationArgumentsExtensionInterface;
+use Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface;
 use Magento\Sales\Api\Data\CreditmemoInterface;
 use Magento\Sales\Api\Data\OrderInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
 use Magento\Sales\Api\RefundOrderInterface;
+use Magento\SalesInventory\Model\Order\ReturnProcessor;
+use Magento\SalesInventory\Model\Plugin\Order\ReturnToStockOrder;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class ReturnToStockOrderTest
- */
-class ReturnToStockOrderTest extends \PHPUnit\Framework\TestCase
+class ReturnToStockOrderTest extends TestCase
 {
     /** @var  ReturnToStockOrder */
     private $returnTOStock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ReturnProcessor
+     * @var MockObject|ReturnProcessor
      */
     private $returnProcessorMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoRepositoryInterface
+     * @var MockObject|CreditmemoRepositoryInterface
      */
     private $creditmemoRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|OrderRepositoryInterface
+     * @var MockObject|OrderRepositoryInterface
      */
     private $orderRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|RefundOrderInterface
+     * @var MockObject|RefundOrderInterface
      */
     private $refundOrderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoCreationArgumentsInterface
+     * @var MockObject|CreditmemoCreationArgumentsInterface
      */
     private $creditmemoCreationArgumentsMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|OrderInterface
+     * @var MockObject|OrderInterface
      */
     private $orderMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoInterface
+     * @var MockObject|CreditmemoInterface
      */
     private $creditmemoMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|StockConfigurationInterface
+     * @var MockObject|StockConfigurationInterface
      */
     private $stockConfigurationMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|CreditmemoCreationArgumentsInterface
+     * @var MockObject|CreditmemoCreationArgumentsInterface
      */
     private $extensionAttributesMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->returnProcessorMock = $this->getMockBuilder(ReturnProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->creditmemoRepositoryMock = $this->getMockBuilder(CreditmemoRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->orderRepositoryMock = $this->getMockBuilder(OrderRepositoryInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->refundOrderMock = $this->getMockBuilder(RefundOrderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->creditmemoCreationArgumentsMock = $this->getMockBuilder(CreditmemoCreationArgumentsInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->extensionAttributesMock = $this->getMockBuilder(CreditmemoCreationArgumentsExtensionInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['getReturnToStockItems'])
             ->getMockForAbstractClass();
         $this->orderMock = $this->getMockBuilder(OrderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->creditmemoMock = $this->getMockBuilder(CreditmemoInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->stockConfigurationMock = $this->getMockBuilder(StockConfigurationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->returnTOStock = new ReturnToStockOrder(
             $this->returnProcessorMock,

@@ -44,8 +44,7 @@
         </after>
 
         <!--Move category one to category two-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToAdminCategoryPage"/>
-        <waitForPageLoad stepKey="waitForAdminCategoryPageLoad1"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToAdminCategoryPage"/>
         <actionGroup ref="MoveCategoryActionGroup" stepKey="moveSimpleSubCategoryOneToSimpleSubCategoryTwo">
             <argument name="childCategory" value="$simpleSubCategoryOne.name$"/>
             <argument name="parentCategory" value="$simpleSubCategoryTwo.name$"/>
@@ -85,8 +84,7 @@
         <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$simpleSubCategoryOne.name$" stepKey="seeSubCategoryWithParentInBreadcrumbsOnSubCategoryWithParent"/>
         <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$productOne.name$" stepKey="seeProductInBreadcrumbsOnSubCategoryWithParent"/>
         <!--Move category one to the same level as category two-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToAdminCategoryPage2"/>
-        <waitForPageLoad stepKey="waitForAdminCategoryPageLoad2"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToAdminCategoryPage2"/>
         <actionGroup ref="MoveCategoryActionGroup" stepKey="moveSimpleSubCategoryOneToDefaultCategory">
             <argument name="childCategory" value="$simpleSubCategoryOne.name$"/>
             <argument name="parentCategory" value="Default Category"/>

@@ -24,7 +24,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     protected $_auth;
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_session = null;
         $this->_auth = null;
@@ -181,7 +181,7 @@ class AuthTest extends \Magento\TestFramework\TestCase\AbstractController
         )->getHomePageUrl();
         $expected = '<script>parent.window.location =';
         $this->assertStringStartsWith($expected, $this->getResponse()->getBody());
-        $this->assertContains($homeUrl, $this->getResponse()->getBody());
+        $this->assertStringContainsString($homeUrl, $this->getResponse()->getBody());
         $this->_logout();
     }
 

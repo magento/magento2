@@ -3,9 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/template.php';
-require __DIR__ . '/subscribers.php';
+Resolver::getInstance()->requireDataFixture('Magento/Newsletter/_files/template.php');
+Resolver::getInstance()->requireDataFixture('Magento/Newsletter/_files/subscribers.php');
 
 /** @var $objectManager \Magento\TestFramework\ObjectManager */
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();

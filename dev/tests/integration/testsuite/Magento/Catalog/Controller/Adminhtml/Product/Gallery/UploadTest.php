@@ -56,7 +56,7 @@ class UploadTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->httpMethod = HttpRequest::METHOD_POST;
@@ -167,7 +167,7 @@ class UploadTest extends AbstractBackendController
         $this->assertEquals($expectation['errorcode'], $jsonBody['errorcode']);
 
         if (!empty($expectation['tmp_media_path'])) {
-            $this->assertFileNotExists(
+            $this->assertFileDoesNotExist(
                 $this->getFileAbsolutePath($expectation['tmp_media_path'])
             );
         }
@@ -216,7 +216,7 @@ class UploadTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $_FILES = [];
         $this->mediaDirectory->delete('tmp');

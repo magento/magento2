@@ -39,7 +39,7 @@ class UserExpirationManagerTest extends \PHPUnit\Framework\TestCase
      */
     private $userExpirationManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->auth = $this->objectManager->create(\Magento\Backend\Model\Auth::class);

@@ -41,14 +41,14 @@ class PolicyRendererPoolTest extends TestCase
     /**
      * Set Up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->simplePolicyHeaderRendererMock = $this->createPartialMock(
             SimplePolicyHeaderRenderer::class,
             ['canRender']
         );
-        $this->policyMock = $this->createMock(PolicyInterface::class);
+        $this->policyMock = $this->getMockForAbstractClass(PolicyInterface::class);
 
         $this->model = $objectManager->getObject(
             PolicyRendererPool::class,

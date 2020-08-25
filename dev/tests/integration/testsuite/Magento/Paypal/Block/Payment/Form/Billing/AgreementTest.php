@@ -12,7 +12,7 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\Paypal\Block\Payment\Form\Billing\Agreement */
     protected $_block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $quote = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Quote\Model\ResourceModel\Quote\Collection::class
@@ -25,10 +25,10 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getBlock'
-        )->will(
-            $this->returnValue(new \Magento\Framework\DataObject(['quote' => $quote]))
+        )->willReturn(
+            new \Magento\Framework\DataObject(['quote' => $quote])
         );
-        $layout->expects($this->once())->method('getParentName')->will($this->returnValue('billing_agreement_form'));
+        $layout->expects($this->once())->method('getParentName')->willReturn('billing_agreement_form');
 
         $this->_block = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Paypal\Block\Payment\Form\Billing\Agreement::class
@@ -43,7 +43,7 @@ class AgreementTest extends \PHPUnit\Framework\TestCase
     public function testGetBillingAgreements()
     {
         $billingAgreements = $this->_block->getBillingAgreements();
-        $this->assertEquals(1, count($billingAgreements));
+        $this->assertCount(1, $billingAgreements);
         $this->assertEquals('REF-ID-TEST-678', array_shift($billingAgreements));
     }
 }

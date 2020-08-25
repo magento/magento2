@@ -15,6 +15,7 @@
             <title value="Sitemap Deleting Test"/>
             <description value="Admin Should Delete Sitemap Entity"/>
             <testCaseId value="MC-14315"/>
+            <severity value="MAJOR"/>
             <group value="sitemap"/>
             <group value="mtf_migrated"/>
         </annotations>

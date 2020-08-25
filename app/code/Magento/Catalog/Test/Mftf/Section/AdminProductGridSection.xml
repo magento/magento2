@@ -9,6 +9,7 @@
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
     <section name="AdminProductGridSection">
         <element name="productRowBySku" type="block" selector="//td[count(../../..//th[./*[.='SKU']]/preceding-sibling::th) + 1][./*[.='{{sku}}']]" parameterized="true" />
+        <element name="productRowByName" type="block" selector="//td[count(../../..//th[./*[.='Name']]/preceding-sibling::th) + 1][./*[.='{{sku}}']]" parameterized="true" />
         <element name="productRowCheckboxBySku" type="block" selector="//td[count(../../..//th[./*[.='SKU']]/preceding-sibling::th) + 1][./*[.='{{sku}}']]/../td//input[@data-action='select-row']" parameterized="true" />
         <element name="loadingMask" type="text" selector=".admin__data-grid-loading-mask[data-component*='product_listing']"/>
         <element name="columnHeader" type="button" selector="//div[@data-role='grid-wrapper']//table[contains(@class, 'data-grid')]/thead/tr/th[contains(@class, 'data-grid-th')]/span[text() = '{{label}}']" parameterized="true" timeout="30"/>
@@ -35,5 +36,6 @@
         <element name="productGridContentsOnRow" type="checkbox" selector="//*[@id='container']//tr[{{row}}]/td" parameterized="true"/>
         <element name="selectRowBasedOnName" type="input" selector="//td/div[text()='{{var1}}']" parameterized="true"/>
         <element name="changeStatus" type="button" selector="//div[contains(@class,'admin__data-grid-header-row') and contains(@class, 'row')]//div[contains(@class, 'action-menu-item')]//ul/li/span[text() = '{{status}}']" parameterized="true"/>
+        <element name="productRowByTypeAndName" type="block" selector="//div[@data-role='grid-wrapper']//table[contains(@class, 'data-grid')]//td[count(../../..//th[./*[.='Type']]/preceding-sibling::th) + 1][./*[.='{{type}}']]/../td[contains(.,'{{name}}')]" parameterized="true" />
     </section>
 </sections>
