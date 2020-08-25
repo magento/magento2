@@ -7,41 +7,30 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminMediaGalleryCatalogUiVerifyUsedInLinkProductGridTest">
+    <test name="AdminMediaGalleryAssertUsedInLinkBlocksGridTest">
         <annotations>
-            <features value="AdminMediaGalleryUsedInProductsFilter"/>
+            <features value="AdminMediaGalleryUsedInBlocksFilter"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1168"/>
-            <title value="Used in products filter"/>
+            <title value="Used in blocks link"/>
             <stories value="Story 58: User sees entities where asset is used in" />
             <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4951848"/>
-            <description value="User filters assets used in products"/>
+            <description value="User filters assets used in blocks"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
         </annotations>
         <before>
-            <magentoCLI command="config:set cms/wysiwyg/enabled enabled" stepKey="enableWYSIWYG"/>
-            <createData entity="SimpleSubCategory" stepKey="category"/>
-            <createData entity="SimpleProduct" stepKey="product">
-                <requiredEntity createDataKey="category"/>
-            </createData>
-            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="_defaultBlock" stepKey="block" />
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
-            <magentoCLI command="config:set cms/wysiwyg/enabled disabled" stepKey="disableWYSIWYG"/>
             <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
-            <deleteData createDataKey="category" stepKey="deleteCategory"/>
         </after>
-        <actionGroup ref="SearchForProductOnBackendActionGroup" stepKey="searchProduct">
-            <argument name="product" value="$$product$$"/>
+
+         <actionGroup ref="NavigateToCreatedCMSBlockPageActionGroup" stepKey="navigateToCreatedCMSBlockPage1">
+            <argument name="CMSBlockPage" value="$$block$$"/>
         </actionGroup>
-        <actionGroup ref="OpenEditProductOnBackendActionGroup" stepKey="openEditProduct">
-            <argument name="product" value="$$product$$"/>
-        </actionGroup>
-        <click selector="{{AdminProductFormSection.contentTab}}" stepKey="clickContentTab"/>
-        <waitForElementVisible selector="{{CatalogWYSIWYGSection.TinyMCE4}}" stepKey="waitForTinyMCE4" />
-        <click selector="{{CatalogWYSIWYGSection.InsertImageIcon}}" stepKey="clickInsertImageIcon" />
+        <click selector="{{CmsWYSIWYGSection.InsertImageBtn}}" stepKey="clickInsertImageIcon" />
         <waitForPageLoad stepKey="waitForPageLoad" />
-        <actionGroup ref="ClickBrowseBtnOnUploadPopupActionGroup" stepKey="clickBrowserBtn"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload3"/>
         </actionGroup>
@@ -49,30 +38,29 @@
             <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
         <actionGroup ref="AdminMediaGalleryClickAddSelectedActionGroup" stepKey="clickAddSelectedContentImage"/>
-        <actionGroup ref="AdminMediaGalleryClickOkButtonTinyMce4ActionGroup" stepKey="clickOkButton"/>
-        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+        <click selector="{{BlockNewPagePageActionsSection.saveBlock}}" stepKey="saveBlock"/>
 
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGallery"/>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="openViewImageDetails"/>
-        <actionGroup ref="AdminEnhancedMediaGalleryClickEntityUsedInActionGroup" stepKey="clickUsedInProducts">
-            <argument name="entityName" value="Products"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryClickEntityUsedInActionGroup" stepKey="clickUsedInPages">
+            <argument name="entityName" value="Blocks"/>
         </actionGroup>
         <actionGroup ref="AdminAssertMediaGalleryFilterPlaceHolderGridActionGroup" stepKey="assertFilterApplied">
             <argument name="filterPlaceholder" value="{{ImageMetadata.title}}"/>
         </actionGroup>
 
-        <deleteData createDataKey="product" stepKey="deleteProduct"/>
-        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
+        <deleteData createDataKey="block" stepKey="deleteBlock"/>
 
+        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="openViewImageDetailsToVerfifyEmptyUsedIn"/>
         <actionGroup ref="AssertAdminEnhancedMediaGalleryUsedInSectionNotDisplayedActionGroup" stepKey="assertThereIsNoUsedInSection"/>
         <actionGroup ref="AdminEnhancedMediaGalleryCloseViewDetailsActionGroup" stepKey="closeDetails"/>
+
         <actionGroup ref="AdminEnhancedMediaGalleryEnableMassActionModeActionGroup" stepKey="enableMassActionToDeleteImages"/>
         <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectFirstImageToDelete">
             <argument name="imageName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clikDeleteSelectedButton"/>
         <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImages"/>
-
    </test>
 </tests>

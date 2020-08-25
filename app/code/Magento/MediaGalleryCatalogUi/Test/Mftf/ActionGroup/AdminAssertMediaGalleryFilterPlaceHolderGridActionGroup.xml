@@ -7,7 +7,7 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminAssertMediaGalleryFilterPlaceHolderProductGridActionGroup">
+    <actionGroup name="AdminAssertMediaGalleryFilterPlaceHolderGridActionGroup">
         <annotations>
             <description>Assert asset filter placeholder value</description>
         </annotations>
@@ -15,6 +15,6 @@
             <argument name="filterPlaceholder" type="string"/>
         </arguments>
 
-        <see selector="{{AdminProductGridFilterSection.enabledFilters}}" userInput="{{filterPlaceholder}}" stepKey="seeProductNameFilter"/>
+        <see selector="{{AdminProductGridFilterSection.enabledFilters}}" userInput="{{filterPlaceholder}}" stepKey="seeFilter"/>
     </actionGroup>
 </actionGroups>
