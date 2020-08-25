@@ -76,14 +76,13 @@ class Media extends Action implements HttpGetActionInterface
             $productMedia = [];
             if ($product->getId() && $product->getStatus() == Status::STATUS_ENABLED) {
                 $productMedia = $this->swatchHelper->getProductMediaGallery($product);
-
             }
             $resultJson->setHeader('X-Magento-Tags', implode(',', $product->getIdentities()));
 
             $response->setPublicHeaders($this->config->getTtl());
         }
-
         $resultJson->setData($productMedia);
+
         return $resultJson;
     }
 }
