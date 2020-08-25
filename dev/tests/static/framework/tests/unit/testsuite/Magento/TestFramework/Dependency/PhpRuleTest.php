@@ -8,7 +8,7 @@ namespace Magento\TestFramework\Dependency;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\TestFramework\Dependency\Reader\ClassScanner;
-use Magento\Webapi\Model\Config as WebApiConfig;
+use \Magento\Webapi\Model\Config\Reader;
 
 /**
  * Test for PhpRule dependency check
@@ -31,9 +31,9 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
     private $classScanner;
 
     /**
-     * @var WebApiConfig
+     * @var Reader
      */
-    private $webApiConfig;
+    private $webApiConfigReader;
 
     /**
      * @inheritDoc
@@ -51,7 +51,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->classScanner = $this->createMock(ClassScanner::class);
-        $this->webApiConfig = $this->objectManagerHelper->getObject(WebApiConfig::class);
+        $this->webApiConfigReader = $this->objectManagerHelper->getObject(Reader::class);
 
         $this->model = $this->objectManagerHelper->getObject(
             PhpRule::class,
@@ -59,7 +59,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 'mapRouters' => $mapRoutes,
                 'mapLayoutBlocks' => $mapLayoutBlocks,
                 'pluginMap' => $pluginMap,
-                'webApiConfig' => $this->webApiConfig,
+                'webApiConfig' => $this->webApiConfigReader,
                 'whitelists' => $whitelist,
                 'classScanner' => $this->classScanner
             ]
@@ -260,7 +260,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                     [
                         'modules' => ['Magento\Cms'],
                         'type' => \Magento\TestFramework\Dependency\RuleInterface::TYPE_HARD,
-                        'source' => 'getUrl("cms/index/index")',
+                        'source' => 'getUrl("cms/index/index"',
                     ]
                 ]
             ],

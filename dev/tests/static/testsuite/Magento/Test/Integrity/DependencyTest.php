@@ -22,7 +22,7 @@ use Magento\TestFramework\Dependency\PhpRule;
 use Magento\TestFramework\Dependency\ReportsConfigRule;
 use Magento\TestFramework\Dependency\Route\RouteMapper;
 use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
-use Magento\Webapi\Model\Config;
+use \Magento\Webapi\Model\Config\Reader;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -281,13 +281,12 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         // In case primary module declaring the table cannot be identified, use any module referencing this table
         $tableToModuleMap = array_merge($tableToAnyModuleMap, $tableToPrimaryModuleMap);
         $objectManager = Bootstrap::create(BP, $_SERVER)->getObjectManager();
-        $webApiConfig = $objectManager->create(Config::class);
-
+        $webApiConfigReader = $objectManager->create(Reader::class);
         self::$_rulesInstances = [
             new PhpRule(
                 self::$routeMapper->getRoutes(),
                 self::$_mapLayoutBlocks,
-                $webApiConfig,
+                $webApiConfigReader,
                 [],
                 ['routes' => self::getRoutesWhitelist()]
             ),

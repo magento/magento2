@@ -15,7 +15,7 @@ use Magento\Framework\UrlInterface;
 use Magento\TestFramework\Dependency\Reader\ClassScanner;
 use Magento\TestFramework\Dependency\Route\RouteMapper;
 use Magento\TestFramework\Exception\NoSuchActionException;
-use Magento\Webapi\Model\Config as WebApiConfig;
+use Magento\Framework\Config\Reader\Filesystem as ConfigReader;
 use Magento\Webapi\Model\Config\Converter;
 
 /**
@@ -62,9 +62,9 @@ class PhpRule implements RuleInterface
 
     /**
      * Used to retrieve information from WebApi urls
-     * @var WebApiConfig
+     * @var ConfigReader
      */
-    protected $webApiConfig;
+    protected $configReader;
 
     /**
      * Default modules list.
@@ -96,7 +96,7 @@ class PhpRule implements RuleInterface
     /**
      * @param array $mapRouters
      * @param array $mapLayoutBlocks
-     * @param WebApiConfig $webApiConfig
+     * @param ConfigReader $configReader
      * @param array $pluginMap
      * @param array $whitelists
      * @param ClassScanner|null $classScanner
@@ -104,14 +104,14 @@ class PhpRule implements RuleInterface
     public function __construct(
         array $mapRouters,
         array $mapLayoutBlocks,
-        WebApiConfig $webApiConfig,
+        ConfigReader $configReader,
         array $pluginMap = [],
         array $whitelists = [],
         ClassScanner $classScanner = null
     ) {
         $this->_mapRouters = $mapRouters;
         $this->_mapLayoutBlocks = $mapLayoutBlocks;
-        $this->webApiConfig = $webApiConfig;
+        $this->configReader = $configReader;
         $this->pluginMap = $pluginMap ?: null;
         $this->routeMapper = new RouteMapper();
         $this->whitelists = $whitelists;
@@ -307,28 +307,28 @@ class PhpRule implements RuleInterface
     protected function _caseGetUrl(string $currentModule, string &$contents): array
     {
         $dependencies = [];
-        $pattern = '#(\->|:)(?<source>getUrl\([\'\"](?<path>[a-zA-Z0-9\-_\*\/]+)[\'\"]\))#';
+        $pattern = '#(\->|:)(?<source>getUrl\(([\'"])(?<path>[a-zA-Z0-9\-_*\/]+)\3)\s*[,)]#';
         if (!preg_match_all($pattern, $contents, $matches, PREG_SET_ORDER)) {
             return $dependencies;
         }
         try {
             foreach ($matches as $item) {
                 $path = $item['path'];
-                $retDependencies = [];
-                if (preg_match('#rest(?<service>/V1/\w+)#i', $path, $apiMatch)) {
-                    $retDependencies = $this->processApiUrl($apiMatch['service']);
-                } elseif (strpos($path, '*') !== false) {
+                $returnedDependencies = [];
+                if (strpos($path, '*') !== false) {
                     /**
                      * Skip processing wildcard urls since they always resolve to the current
                      * route_front_name/area_front_name/controller_name
                      */
                     continue;
+                } elseif (preg_match('#rest(?<service>/V1/\w+)#i', $path, $apiMatch)) {
+                    $returnedDependencies = $this->processApiUrl($apiMatch['service']);
                 } else {
-                    $retDependencies = $this->processStandardUrl($path);
+                    $returnedDependencies = $this->processStandardUrl($path);
                 }
-                if ($retDependencies && !in_array($currentModule, $retDependencies)) {
+                if ($returnedDependencies && !in_array($currentModule, $returnedDependencies)) {
                     $dependencies[] = [
-                        'modules' => $retDependencies,
+                        'modules' => $returnedDependencies,
                         'type' => RuleInterface::TYPE_HARD,
                         'source' => $item['source'],
                     ];
@@ -374,10 +374,9 @@ class PhpRule implements RuleInterface
      */
     private function processApiUrl(string $path): array
     {
-        $serviceMethods = $this->webApiConfig->getServices()[Converter::KEY_ROUTES][$path];
-
+        $serviceMethods = $this->configReader->read()[Converter::KEY_ROUTES][$path];
         //assume that all HTTP methods use the same class
-        $method =  $serviceMethods['GET'] ?? $serviceMethods['POST'] ?? $serviceMethods['PUT'];
+        $method =  $serviceMethods['GET'] ?? $serviceMethods['POST'] ?? $serviceMethods['PUT'] ?? $serviceMethods['DELETE'];
         $className = $method['service']['class'];
         //get module from className
         preg_match('#(?<module>Magento(\\\\)\w+).*#', $className, $match);
