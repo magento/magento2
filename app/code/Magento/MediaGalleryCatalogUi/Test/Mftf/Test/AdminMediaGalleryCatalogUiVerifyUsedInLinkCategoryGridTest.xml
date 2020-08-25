@@ -54,6 +54,9 @@
         <actionGroup ref="AdminEnhancedMediaGalleryClickEntityUsedInActionGroup" stepKey="clickUsedInCategories">
             <argument name="entityName" value="Categories"/>
         </actionGroup>
+        <actionGroup ref="AssertAdminMediaGalleryAssetFilterPlaceHolderActionGroup" stepKey="assertFilterApplied">
+            <argument name="filterPlaceholder" value="{{UpdatedImageDetails.title}}"/>
+        </actionGroup>
         <actionGroup ref="AdminMediaGalleryAssertCategoryNameInCategoryGridActionGroup" stepKey="assertCategoryInGrid">
             <argument name="categoryName" value="$$category.name$$"/>
         </actionGroup>
