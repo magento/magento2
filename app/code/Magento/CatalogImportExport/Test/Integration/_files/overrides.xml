@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<overrides>
+    <test class="Magento\CatalogImportExport\Model\ProductTest">
+        <method name="testImportExport">
+            <!--Skipped due to https://github.com/magento/catalog-storefront/issues/200-->
+            <dataSet name="simple-product-multistore" skip="true"/>
+        </method>
+    </test>
+</overrides>
