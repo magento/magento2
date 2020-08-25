@@ -232,8 +232,10 @@ define([
                     break;
 
                 case $.ui.keyCode.ENTER:
-                    this.searchForm.trigger('submit');
-                    e.preventDefault();
+                    if (this.element.val().length >= parseInt(this.options.minSearchLength, 10)) {
+                        this.searchForm.trigger('submit');
+                        e.preventDefault();
+                    }
                     break;
 
                 case $.ui.keyCode.DOWN:
