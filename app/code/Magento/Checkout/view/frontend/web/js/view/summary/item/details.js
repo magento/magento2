@@ -24,7 +24,7 @@ define([
 
             txt.innerHTML = quoteItem.name;
 
-            return escaper.escapeHtml(txt.value);
+            return escaper.escapeHtml(txt.value, this.allowedTags);
         },
 
         /**
