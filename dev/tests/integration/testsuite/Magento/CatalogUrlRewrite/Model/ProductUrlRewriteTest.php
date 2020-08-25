@@ -124,7 +124,12 @@ class ProductUrlRewriteTest extends AbstractUrlRewriteTest
                         'price' => 150,
                         'url_key' => 'test-product-url-key',
                     ],
-                    'expected_data' => [],
+                    'expected_data' => [
+                        [
+                            'request_path' => 'test-product-url-key%suffix%',
+                            'target_path' => 'catalog/product/view/id/%id%',
+                        ],
+                    ],
                 ],
             ],
         ];
