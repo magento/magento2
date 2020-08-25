@@ -44,7 +44,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             // exclude children of configurable products
             $connection->quoteInto(
                 "(e.type_id <> ? OR {$tableAlias}.entity_id = {$tableAlias}.source_id)",
-                'configurable'
+                \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
             ),
             $connection->quoteInto("{$tableAlias}.attribute_id = ?", $attribute->getAttributeId()),
             $connection->quoteInto("{$tableAlias}.store_id = ?", $collection->getStoreId()),
@@ -85,7 +85,7 @@ class Attribute extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
             // exclude children of configurable products
             $connection->quoteInto(
                 "(e.type_id <> ? OR {$tableAlias}.entity_id = {$tableAlias}.source_id)",
-                'configurable'
+                \Magento\ConfigurableProduct\Model\Product\Type\Configurable::TYPE_CODE
             ),
             $connection->quoteInto("{$tableAlias}.attribute_id = ?", $attribute->getAttributeId()),
             $connection->quoteInto("{$tableAlias}.store_id = ?", $filter->getStoreId()),
