@@ -8,12 +8,12 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 use Magento\Backend\App\Action\Context;
 use Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 use Magento\Cms\Model\Wysiwyg\Images\GetInsertImageContent;
-use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\Controller\Result\RawFactory;
 use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\Registry;
 
-class OnInsert extends Images implements HttpGetActionInterface
+class OnInsert extends Images implements HttpPostActionInterface
 {
     /**
      * @var RawFactory
