@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontVerifySearchButtonNotDisabledAfterMinimumSearchLengthHit">
+    <test name="StorefrontVerifySearchButtonEnabledAfterMinimumSearchLengthHitTest">
         <annotations>
             <stories value="Search Button Not Disabled"/>
             <title value="Verify search button is not disabled if search term is equal or greater than minimum search length"/>
@@ -24,6 +24,6 @@
             <argument name="query" value="Magento"/>
         </actionGroup>
 
-        <actionGroup ref="AssertStorefrontVerifySearchButtonIsNotDisabledActionGroup" stepKey="assertSearchButtonIsNotDisabled"/>
+        <actionGroup ref="AssertStorefrontVerifySearchButtonIsEnabledActionGroup" stepKey="assertSearchButtonIsNotDisabled"/>
     </test>
 </tests>

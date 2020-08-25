@@ -9,9 +9,9 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- Filter by search query and select -->
-    <actionGroup name="AssertStorefrontVerifySearchButtonIsNotDisabledActionGroup">
+    <actionGroup name="AssertStorefrontVerifySearchButtonIsEnabledActionGroup">
         <annotations>
-            <description>Fills in the provided Search Query on the Admin Search Term grid page.</description>
+            <description>Verify search button does not disabled attribute</description>
         </annotations>
 
         <grabAttributeFrom selector="{{StorefrontQuickSearchSection.searchButton}}" userInput="disabled" stepKey="grabSearchButtonAttribute"/>
