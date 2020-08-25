@@ -58,10 +58,22 @@
         <actionGroup ref="AdminMediaGalleryAssertCategoryNameInCategoryGridActionGroup" stepKey="assertCategoryInGrid">
             <argument name="categoryName" value="$$category.name$$"/>
         </actionGroup>
+     
         <deleteData createDataKey="category" stepKey="deleteCategory"/>
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="openViewImageDetailsToVerfifyEmptyUsedIn"/>
         <actionGroup ref="AssertAdminEnhancedMediaGalleryUsedInSectionNotDisplayedActionGroup" stepKey="assertThereIsNoUsedInSection"/>
         <actionGroup ref="AdminEnhancedMediaGalleryCloseViewDetailsActionGroup" stepKey="closeDetails"/>
+        
+        <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridExpandFilterActionGroup" stepKey="expandFilters"/>
+        <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="setAssetFilter">
+            <argument name="filterName" value="Asset"/>
+            <argument name="optionName" value="{{UpdatedImageDetails.title}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridApplyFiltersActionGroup" stepKey="applyFilters"/>
+        <actionGroup ref="AssertAdminMediaGalleryAssetFilterPlaceHolderActionGroup" stepKey="assertFilterAppliedAfterUrlFilterApplier">
+            <argument name="filterPlaceholder" value="{{UpdatedImageDetails.title}}"/>
+        </actionGroup>
+
    </test>
 </tests>
