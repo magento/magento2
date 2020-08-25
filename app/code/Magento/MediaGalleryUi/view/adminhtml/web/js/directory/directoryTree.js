@@ -286,9 +286,8 @@ define([
          * @returns {String|null}
          */
         getRequestedDirectory: function () {
-            return !_.isUndefined(window.MediabrowserUtility) && window.MediabrowserUtility.pathId !== ''
-                ? Base64.idDecode(window.MediabrowserUtility.pathId)
-                : null;
+            return !_.isUndefined(window.MediabrowserUtility) && window.MediabrowserUtility.pathId !== '' ?
+                Base64.idDecode(window.MediabrowserUtility.pathId) : null;
         },
 
         /**
