@@ -73,6 +73,14 @@ class DeleteCustomOptionsTest extends AbstractBackendController
         $option->setProductSku($product->getSku());
         $product->setOptions([$option]);
         $this->productRepository->save($product);
+        $this->getRequest()->setPostValue(
+            [
+                'product' => [
+                    //Allow saving custom options
+                    'affect_product_custom_options' => 1,
+                ]
+            ]
+        );
         $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
         $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
         $this->assertSessionMessages(

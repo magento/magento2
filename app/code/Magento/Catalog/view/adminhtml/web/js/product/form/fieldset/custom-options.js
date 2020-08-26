@@ -9,6 +9,8 @@ define([
 ], function (Component, uiRegistry) {
     'use strict';
 
+    var componentName = 'product_form.product_form.custom_options.affect_product_custom_options';
+
     return Component.extend({
         /**
          * Handler of the "opened" property changes.
@@ -21,7 +23,7 @@ define([
             // Once the Custom Options tab is opened change "affect_product_custom_options" value to 1
             // in order custom options be processed on backend.
             if (this.opened()) {
-                uiRegistry.get('product_form.product_form.custom_options.affect_product_custom_options', function(component) {
+                uiRegistry.get(componentName, function (component) {
                     component.value(1);
                 });
             }

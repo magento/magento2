@@ -81,6 +81,8 @@ class UpdateCustomOptionsTest extends AbstractBackendController
         $currentOption = reset($currentProductOptions);
         $postData = [
             'product' => [
+                //Allow saving custom options
+                'affect_product_custom_options' => 1,
                 'options' => [
                     [
                         'option_id' => $currentOption->getOptionId(),

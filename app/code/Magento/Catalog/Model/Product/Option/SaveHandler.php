@@ -10,9 +10,6 @@ namespace Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Api\ProductCustomOptionRepositoryInterface as OptionRepository;
 use Magento\Framework\EntityManager\Operation\ExtensionInterface;
 
-/**
- * Class SaveHandler
- */
 class SaveHandler implements ExtensionInterface
 {
     /**
