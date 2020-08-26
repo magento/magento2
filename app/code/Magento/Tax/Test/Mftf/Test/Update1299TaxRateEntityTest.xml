@@ -27,8 +27,7 @@
         </after>
 
         <!-- Search the tax identifier on tax grid page -->
-        <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRateIndex1"/>
-        <waitForPageLoad stepKey="waitForTaxRateIndex1"/>
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex1"/>
         <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters1"/>
         <fillField selector="{{AdminTaxRateGridSection.filterByTaxIdentifier}}" userInput="$$initialTaxRate.code$$" stepKey="fillCode1"/>
         <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch1"/>
@@ -45,8 +44,7 @@
         <see selector="{{AdminMessagesSection.success}}" userInput="You saved the tax rate." stepKey="seeSuccess"/>
 
         <!-- Verify we see updated tax rate(from the above step) on the tax rate grid page -->
-        <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRateIndex2"/>
-        <waitForPageLoad stepKey="waitForTaxRateIndex2"/>
+        <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex2"/>
         <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters2"/>
         <fillField selector="{{AdminTaxRateGridSection.filterByTaxIdentifier}}" userInput="{{taxRateCustomRateUK.code}}" stepKey="fillTaxIdentifierField2"/>
         <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch2"/>
