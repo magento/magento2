@@ -28,11 +28,6 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaGalleryUi\Model\Directories\GetFolderTree">
-        <arguments>
-            <argument name="path" xsi:type="string">media</argument>
-        </arguments>
-    </type>
     <type name="Magento\MediaGallerySynchronizationApi\Model\ImportFilesComposite">
         <plugin name="createMediaGalleryThumbnails" type="Magento\MediaGalleryUi\Plugin\CreateThumbnails"/>
     </type>
