@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGallerySynchronizationApi\Model;
+namespace Magento\MediaGallerySynchronization\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
@@ -15,12 +15,12 @@ use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use Magento\MediaGallerySynchronization\Model\Filesystem\GetFileInfo;
-use Magento\MediaGallerySynchronization\Model\GetContentHash;
+use Magento\MediaGallerySynchronizationApi\Model\CreateAssetFromFileInterface;
 
 /**
  * Create media asset object based on the file information
  */
-class CreateAssetFromFile
+class CreateAssetFromFile implements CreateAssetFromFileInterface
 {
     /**
      * @var Filesystem
@@ -69,11 +69,7 @@ class CreateAssetFromFile
     }
 
     /**
-     * Create and format media asset object
-     *
-     * @param string $path
-     * @return AssetInterface
-     * @throws FileSystemException
+     * @inheridoc
      */
     public function execute(string $path): AssetInterface
     {
