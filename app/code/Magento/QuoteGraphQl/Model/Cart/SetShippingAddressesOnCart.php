@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\QuoteGraphQl\Model\Cart;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Api\Data\CartInterface;
@@ -35,16 +36,17 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
     /**
      * @param AssignShippingAddressToCart $assignShippingAddressToCart
      * @param GetShippingAddress $getShippingAddress
-     * @param QuoteRepository $quoteRepository
+     * @param QuoteRepository|null $quoteRepository
      */
     public function __construct(
         AssignShippingAddressToCart $assignShippingAddressToCart,
         GetShippingAddress $getShippingAddress,
-        QuoteRepository $quoteRepository
+        QuoteRepository $quoteRepository = null
     ) {
         $this->assignShippingAddressToCart = $assignShippingAddressToCart;
         $this->getShippingAddress = $getShippingAddress;
-        $this->quoteRepository = $quoteRepository;
+        $this->quoteRepository = $quoteRepository
+            ?? ObjectManager::getInstance()->get(QuoteRepository::class);
     }
 
     /**
