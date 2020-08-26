@@ -22,6 +22,7 @@ use Magento\Eav\Model\Entity\Attribute\Source\SpecificSourceInterface;
 use Magento\Eav\Model\Entity\Type;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
+use Magento\Framework\AuthorizationInterface;
 use Magento\Framework\Config\DataInterfaceFactory;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -33,7 +34,6 @@ use Magento\Store\Model\StoreManagerInterface;
 use Magento\Ui\Component\Form\Field;
 use Magento\Ui\DataProvider\EavValidationRules;
 use Magento\Ui\DataProvider\Modifier\PoolInterface;
-use Magento\Framework\AuthorizationInterface;
 use Magento\Ui\DataProvider\ModifierPoolDataProvider;
 
 /**
@@ -671,22 +671,21 @@ class DataProvider extends ModifierPoolDataProvider
                 continue;
             }
 
-            $fieldsMap[$group] = [];
+            $fields = [];
 
             foreach ($node['children'] as $childName => $childNode) {
                 if (!empty($childNode['children'])) {
                     // <container/> nodes need special handling
-                    foreach ($childNode['children'] as $grandchildName => $grandchildNode) {
-                        $fieldsMap[$group][] = $grandchildName;
+                    foreach (array_keys($childNode['children']) as $grandchildName) {
+                        $fields[] = $grandchildName;
                     }
                 } else {
-                    $fieldsMap[$group][] = $childName;
+                    $fields[] = $childName;
                 }
             }
 
-            // Remove empty groups
-            if (empty($fieldsMap[$group])) {
-                unset($fieldsMap[$group]);
+            if (count($fields)) {
+                $fieldsMap[$group] = $fields;
             }
         }
 
