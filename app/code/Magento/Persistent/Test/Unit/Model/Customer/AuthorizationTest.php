@@ -92,21 +92,21 @@ class AuthorizationTest extends TestCase
     public function persistentLoggedInCombinations(): array
     {
         return [
-          [
-            true,
-            false,
-            false
-          ],
-          [
-              true,
-              true,
-              true
-          ],
-          [
-              false,
-              false,
-              true
-          ],
+            [
+                true,
+                false,
+                false
+            ],
+            [
+                true,
+                true,
+                true
+            ],
+            [
+                false,
+                false,
+                true
+            ],
         ];
     }
 }
