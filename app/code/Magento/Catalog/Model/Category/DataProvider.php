@@ -199,7 +199,6 @@ class DataProvider extends ModifierPoolDataProvider
      * @param Config $eavConfig
      * @param RequestInterface $request
      * @param CategoryFactory $categoryFactory
-     * @param DataInterfaceFactory $uiConfigFactory
      * @param array $meta
      * @param array $data
      * @param PoolInterface|null $pool
@@ -209,6 +208,7 @@ class DataProvider extends ModifierPoolDataProvider
      * @param ArrayManager|null $arrayManager
      * @param FileInfo|null $fileInfo
      * @param Image|null $categoryImage
+     * @param DataInterfaceFactory|null $uiConfigFactory
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
