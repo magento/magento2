@@ -57,8 +57,11 @@
         <actionGroup ref="AssertAdminMediaGalleryAssetFilterPlaceHolderActionGroup" stepKey="assertFilterApplied">
             <argument name="filterPlaceholder" value="{{UpdatedImageDetails.title}}"/>
         </actionGroup>
-        <actionGroup ref="AdminMediaGalleryAssertCategoryNameInCategoryGridActionGroup" stepKey="assertCategoryInGrid">
-            <argument name="categoryName" value="$$category.name$$"/>
+        <actionGroup ref="AssertAdminCategoryGridPageNumberOfRecordsActionGroup" stepKey="assertOneRecordInGrid">
+            <argument name="numberOfRecords" value="1 records found"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCategoryGridPageDetailsActionGroup" stepKey="assertCategoryInGrid">
+            <argument name="category" value="$$category$$"/>
         </actionGroup>
    </test>
 </tests>

@@ -12,7 +12,9 @@
         <!--Search by category name element-->
         <element name="search" type="input" selector=".admin__data-grid-header[data-bind='afterRender: \$data.setToolbarNode'] input[placeholder='Search by category name']"/>
         <element name="submitSearch" type="button" selector=".data-grid-search-control-wrap > button.action-submit" timeout="30"/>
-        <!--Active filter element-->
+        <!--Records element-->
+        <element name="recordsLabel" type="text" selector=".admin__data-grid-header .admin__control-support-text"/>
+        <!--Filter element-->
         <element name="clearFilters" type="button" selector=".admin__data-grid-header [data-action='grid-filter-reset']" timeout="30"/>
         <element name="activeFilterPlaceholder" type="text" selector="//div[@class='admin__current-filters-list-wrap']//li//span[contains(text(), '{{filterPlaceholder}}')]" parameterized="true"/>
         <!--Category Grid Page Columns-->
