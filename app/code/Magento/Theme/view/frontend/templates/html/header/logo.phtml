@@ -18,7 +18,7 @@ $storeName = $block->getThemeName() ? $block->getThemeName() : $block->getLogoAl
     <img src="<?= $block->escapeUrl($block->getLogoSrc()) ?>"
          title="<?= $block->escapeHtmlAttr($block->getLogoAlt()) ?>"
          alt="<?= $block->escapeHtmlAttr($block->getLogoAlt()) ?>"
-            <?= $block->getLogoWidth() ? 'width="' . $block->escapeHtmlAttr($block->getLogoWidth()) . '"' : '' ?>
+            <?= $block->getLogoImageWidth() ? 'width="' . $block->escapeHtmlAttr($block->getLogoImageWidth()) . '"' : '' ?>
             <?= $block->getLogoHeight() ? 'height="' . $block->escapeHtmlAttr($block->getLogoHeight()) . '"' : '' ?>
     />
 </a>

@@ -87,7 +87,8 @@ class Logo extends \Magento\Framework\View\Element\Template
 
     /**
      * Retrieve logo width
-     *
+     * @deprecated
+     * @see getLogoImageWidth()
      * @return int
      */
     public function getLogoWidth()
@@ -99,6 +100,19 @@ class Logo extends \Magento\Framework\View\Element\Template
             );
         }
         return (int)$this->_data['logo_width'];
+    }
+
+    /**
+     * Retrieve logo width
+     * @return int
+     */
+    public function getLogoImageWidth()
+    {
+        $logoWidth = $this->_scopeConfig->getValue(
+            'design/header/logo_width',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+        return $logoWidth ? (int) $logoWidth : $this->_data['logo_width'];
     }
 
     /**

@@ -89,4 +89,34 @@ class LogoTest extends TestCase
 
         $this->assertEquals('170', $block->getLogoHeight());
     }
+
+    /**
+     * @covers \Magento\Theme\Block\Html\Header\Logo::getLogoImageWidth
+     */
+    public function testGetLogoImageWidth()
+    {
+        $scopeConfigWithLogoWidthArgument = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigWithLogoWidthArgument->expects($this->any())->method('getValue')->willReturn(null);
+
+        $scopeConfigWithoutLogoWidthArgument = $this->getMockForAbstractClass(ScopeConfigInterface::class);
+        $scopeConfigWithoutLogoWidthArgument->expects($this->once())->method('getValue')->willReturn(800);
+
+        $objectManager = new ObjectManager($this);
+        $argumentsWithLogoWidth = [
+            'scopeConfig' => $scopeConfigWithLogoWidthArgument,
+            '_data' => [
+                'logo_width' => 200
+            ]
+        ];
+        $blockWithLogoWidthArgument = $objectManager->getObject(Logo::class, $argumentsWithLogoWidth);
+
+        $this->assertEquals('200', $blockWithLogoWidthArgument->getLogoWidth());
+
+        $argumentsWithoutLogoWidth = [
+            'scopeConfig' => $scopeConfigWithoutLogoWidthArgument
+        ];
+        $blockWithoutLogoWidthArgument = $objectManager->getObject(Logo::class, $argumentsWithoutLogoWidth);
+
+        $this->assertEquals('800', $blockWithoutLogoWidthArgument->getLogoWidth());
+    }
 }
