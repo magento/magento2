@@ -12,7 +12,7 @@ use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
-use Magento\MediaGallerySynchronizationApi\Model\CreateAssetFromFile;
+use Magento\MediaGallerySynchronizationApi\Model\CreateAssetFromFileInterface;
 
 /**
  * Add metadata to the asset created from file
@@ -52,12 +52,12 @@ class CreateAssetFromFileMetadata
     /**
      * Add metadata to the asset
      *
-     * @param CreateAssetFromFile $createAssetFromFile
+     * @param CreateAssetFromFileInterface $subject
      * @param AssetInterface $asset
      * @return AssetInterface
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function afterExecute(CreateAssetFromFile $createAssetFromFile, AssetInterface $asset): AssetInterface
+    public function afterExecute(CreateAssetFromFileInterface $subject, AssetInterface $asset): AssetInterface
     {
         $metadata = $this->extractMetadata->execute(
             $this->filesystem->getDirectoryRead(DirectoryList::MEDIA)->getAbsolutePath($asset->getPath())
