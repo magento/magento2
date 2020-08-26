@@ -24,7 +24,7 @@ class FileTest extends TestCase
      * To cover the issue on GitHub: #27866
      * @throws LocalizedException
      */
-    public function testReadShouldCopyTheSourceFileToTheGivenGileResource()
+    public function testReadShouldCopyTheSourceFileToTheGivenFileResource()
     {
         $content = \mt_rand();
         $sourceFileName = "source-file.txt";
@@ -33,9 +33,9 @@ class FileTest extends TestCase
 
         $file = new File();
         $targetFileName = "target-file.txt";
-        $targetFileHandle = \fopen("{$tmpDir}/{$targetFileName}" , 'w');
+        $targetFileHandle = \fopen("{$tmpDir}/{$targetFileName}", 'w');
         $file->cd($tmpDir);
-        $result = $file->read($sourceFileName, $targetFileHandle);
+        $file->read($sourceFileName, $targetFileHandle);
 
         $targetContent = file_get_contents("{$tmpDir}/{$targetFileName}");
         $this->assertEquals($content, $targetContent);
