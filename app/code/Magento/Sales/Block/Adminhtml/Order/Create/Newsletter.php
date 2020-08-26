@@ -15,7 +15,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Create;
 class Newsletter extends AbstractCreate
 {
     /**
-     * @return void
+     * @inheritdoc
      */
     protected function _construct()
     {
