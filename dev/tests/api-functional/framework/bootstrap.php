@@ -94,9 +94,19 @@ try {
             $themePackageList
         )
     );
-    unset($bootstrap, $application, $settings, $shell);
+    $overrideConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+        Magento\TestFramework\WebapiWorkaround\Override\Config::class
+    );
+    $overrideConfig->init();
+    Magento\TestFramework\Workaround\Override\Fixture\Resolver::setInstance(
+        new  \Magento\TestFramework\WebapiWorkaround\Override\Fixture\Resolver($overrideConfig)
+    );
+    \Magento\TestFramework\Workaround\Override\Config::setInstance($overrideConfig);
+    unset($bootstrap, $application, $settings, $shell, $overrideConfig);
 } catch (\Exception $e) {
+    // phpcs:ignore Magento2.Security.LanguageConstruct.DirectOutput
     echo $e . PHP_EOL;
+    // phpcs:ignore Magento2.Security.LanguageConstruct.ExitUsage
     exit(1);
 }
 

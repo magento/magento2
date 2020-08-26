@@ -28,14 +28,14 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
      */
     protected $_productType;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->_productType = $this->objectManager->get(\Magento\Catalog\Model\Product\Type::class);
         $this->reinitableConfig = $this->objectManager->get(ReinitableConfigInterface::class);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->dropConfigValue(Configuration::XML_PATH_SHOW_OUT_OF_STOCK);
     }
@@ -77,14 +77,14 @@ class GroupedTest extends \PHPUnit\Framework\TestCase
             1 => [
                 'sku' => 'simple',
                 'name' => 'Simple Product',
-                'price' => '10',
+                'price' => '10.000000',
                 'qty' => '1',
                 'position' => '1'
             ],
             21 => [
                 'sku' => 'virtual-product',
                 'name' => 'Virtual Product',
-                'price' => '10',
+                'price' => '10.000000',
                 'qty' => '2',
                 'position' => '2'
             ]

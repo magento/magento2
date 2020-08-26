@@ -3,77 +3,102 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Fixtures\Quote;
+
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\ConfigurableProduct\Api\Data\OptionValueInterface;
+use Magento\ConfigurableProduct\Api\LinkManagementInterface;
+use Magento\ConfigurableProduct\Api\OptionRepositoryInterface;
+use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\DB\Statement\Pdo\Mysql;
+use Magento\Framework\Model\ResourceModel\Db\AbstractDb;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Setup\Fixtures\FixtureModel;
+use Magento\Setup\Fixtures\Quote\QuoteConfiguration;
+use Magento\Setup\Fixtures\Quote\QuoteGenerator;
+use Magento\Store\Api\Data\GroupInterface;
+use Magento\Store\Api\Data\StoreInterface;
+use Magento\Store\Api\Data\WebsiteInterface;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for Magento\Setup\Fixtures\Quote\QuoteGenerator class.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class QuoteGeneratorTest extends \PHPUnit\Framework\TestCase
+class QuoteGeneratorTest extends TestCase
 {
     /**
-     * @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StoreManagerInterface|MockObject
      */
     private $storeManager;
 
     /**
-     * @var \Magento\Catalog\Api\ProductRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ProductRepositoryInterface|MockObject
      */
     private $productRepository;
 
     /**
-     * @var \Magento\ConfigurableProduct\Api\OptionRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var OptionRepositoryInterface|MockObject
      */
     private $optionRepository;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory|MockObject
      */
     private $productCollectionFactory;
 
     /**
-     * @var \Magento\ConfigurableProduct\Api\LinkManagementInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var LinkManagementInterface|MockObject
      */
     private $linkManagement;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializer;
 
     /**
-     * @var \Magento\Setup\Fixtures\Quote\QuoteConfiguration|\PHPUnit_Framework_MockObject_MockObject
+     * @var QuoteConfiguration|MockObject
      */
     private $config;
 
     /**
-     * @var \Magento\Setup\Fixtures\FixtureModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var FixtureModel|MockObject
      */
     private $fixtureModelMock;
 
     /**
-     * @var \Magento\Setup\Fixtures\Quote\QuoteGenerator
+     * @var QuoteGenerator
      */
     private $fixture;
 
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->fixtureModelMock = $this->getMockBuilder(\Magento\Setup\Fixtures\FixtureModel::class)
+        $this->fixtureModelMock = $this->getMockBuilder(FixtureModel::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->productRepository = $this->getMockBuilder(\Magento\Catalog\Api\ProductRepositoryInterface::class)
+        $this->productRepository = $this->getMockBuilder(ProductRepositoryInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->optionRepository = $this->getMockBuilder(
-            \Magento\ConfigurableProduct\Api\OptionRepositoryInterface::class
+            OptionRepositoryInterface::class
         )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -83,13 +108,13 @@ class QuoteGeneratorTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $this->linkManagement = $this->getMockBuilder(\Magento\ConfigurableProduct\Api\LinkManagementInterface::class)
+        $this->linkManagement = $this->getMockBuilder(LinkManagementInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->serializer = $this->getMockBuilder(\Magento\Framework\Serialize\SerializerInterface::class)
+        $this->serializer = $this->getMockBuilder(SerializerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->config = $this->getMockBuilder(\Magento\Setup\Fixtures\Quote\QuoteConfiguration::class)
+        $this->config = $this->getMockBuilder(QuoteConfiguration::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
@@ -102,10 +127,10 @@ class QuoteGeneratorTest extends \PHPUnit\Framework\TestCase
                 ]
             )
             ->getMock();
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
         $this->fixture = $objectManager->getObject(
-            \Magento\Setup\Fixtures\Quote\QuoteGenerator::class,
+            QuoteGenerator::class,
             [
                 'fixtureModel' => $this->fixtureModelMock,
                 'storeManager' => $this->storeManager,
@@ -133,19 +158,19 @@ class QuoteGeneratorTest extends \PHPUnit\Framework\TestCase
         $configurableProductId = [3];
         $bigConfigurableProductId = [4];
         $dir = str_replace('Test/Unit/', '', dirname(__DIR__));
-        $store = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+        $store = $this->getMockBuilder(StoreInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $website = $this->getMockBuilder(\Magento\Store\Api\Data\WebsiteInterface::class)
+        $website = $this->getMockBuilder(WebsiteInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $storeGroup = $this->getMockBuilder(\Magento\Store\Api\Data\GroupInterface::class)
+        $storeGroup = $this->getMockBuilder(GroupInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $productCollection = $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\Collection::class)
+        $productCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $select = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $select = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->config->expects($this->atLeastOnce())->method('getSimpleCountTo')->willReturn(2);
@@ -199,19 +224,19 @@ class QuoteGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     private function prepareProducts()
     {
-        $product = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
+        $product = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $configurableChild = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
+        $configurableChild = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $childProduct = $this->getMockBuilder(\Magento\Catalog\Api\Data\ProductInterface::class)
+        $childProduct = $this->getMockBuilder(ProductInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $option = $this->getMockBuilder(\Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute::class)
+        $option = $this->getMockBuilder(Attribute::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $optionValue = $this->getMockBuilder(\Magento\ConfigurableProduct\Api\Data\OptionValueInterface::class)
+        $optionValue = $this->getMockBuilder(OptionValueInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
         $this->productRepository->expects($this->atLeastOnce())
@@ -257,16 +282,16 @@ class QuoteGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     private function mockConnection()
     {
-        $objectManager = $this->getMockBuilder(\Magento\Framework\ObjectManagerInterface::class)
+        $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $resource = $this->getMockBuilder(\Magento\Framework\Model\ResourceModel\Db\AbstractDb::class)
+        $resource = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)
+        $connection = $this->getMockBuilder(AdapterInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $statement = $this->getMockBuilder(\Magento\Framework\DB\Statement\Pdo\Mysql::class)
+        $statement = $this->getMockBuilder(Mysql::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->fixtureModelMock->expects($this->atLeastOnce())->method('getObjectManager')->willReturn($objectManager);

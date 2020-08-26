@@ -14,6 +14,7 @@
             <testCaseId value="MC-14657" />
             <stories value="Create a CMS block via the Admin, disable, add to category, verify on frontend"/>
             <title value="Create disabled CMS block entity and assign to category"/>
+            <description value="Create disabled CMS block entity and assign to category"/>
             <severity value="MAJOR"/>
             <group value="cMSContent"/>
             <group value="mtf_migrated"/>
@@ -35,7 +36,7 @@
         <actionGroup ref="AdminSetCMSBlockDisabledActionGroup" stepKey="disableBlock"/>
         <actionGroup ref="SaveCMSBlockActionGroup" stepKey="saveCMSBlock"/>
 
-        <actionGroup ref="AdminOpenCategoriesPageActionGroup" stepKey="openCategoriesPage"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openCategoriesPage"/>
         <actionGroup ref="AdminCategoriesExpandAllActionGroup" stepKey="expandAll"/>
         <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
             <argument name="category" value="$$newDefaultCategory$$"/>
@@ -46,6 +47,7 @@
             <argument name="value" value="Static block only"/>
         </actionGroup>
         <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
 
         <actionGroup ref="AssertStorefrontNoTextOnCategoryPageActionGroup" stepKey="assertBlockOnCategoryFrontPage">
             <argument name="category" value="$$newDefaultCategory$$"/>

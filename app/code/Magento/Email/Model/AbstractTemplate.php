@@ -546,7 +546,9 @@ abstract class AbstractTemplate extends AbstractModel implements TemplateTypesIn
     protected function cancelDesignConfig()
     {
         $this->appEmulation->stopEnvironmentEmulation();
+        $this->urlModel->setScope(null);
         $this->hasDesignBeenApplied = false;
+
         return $this;
     }
 
