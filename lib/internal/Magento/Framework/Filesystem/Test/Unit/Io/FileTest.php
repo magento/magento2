@@ -7,11 +7,6 @@ use PHPUnit\Framework\TestCase;
 
 class FileTest extends TestCase
 {
-    protected function setUp()
-    {
-
-    }
-
     private function getTmpDir()
     {
         $tmpDir = '/tmp/magento-' . \microtime(true);
@@ -23,10 +18,9 @@ class FileTest extends TestCase
 
     /**
      * To cover the issue on GitHub: #27866
-     * @test
      * @throws LocalizedException
      */
-    public function read_should_copy_the_source_file_to_the_given_file_resource()
+    public function testReadShouldCopyTheSourceFileToTheGivenGileResource()
     {
         $content = \mt_rand();
         $sourceFileName = "source-file.txt";
