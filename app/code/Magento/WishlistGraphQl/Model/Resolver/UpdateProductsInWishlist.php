@@ -137,13 +137,13 @@ class UpdateProductsInWishlist implements ResolverInterface
         foreach ($wishlistItemsData as $wishlistItemData) {
             if (!isset($wishlistItemData['quantity'])) {
                 $wishlistItem = $wishlist->getItem($wishlistItemData['wishlist_item_id']);
-                if (isset($wishlistItem)) {
+                if ($wishlistItem !== null) {
                     $wishlistItemData['quantity'] = (float) $wishlistItem->getQty();
                 }
             }
             if (!isset($wishlistItemData['description'])) {
                 $wishlistItem = $wishlist->getItem($wishlistItemData['wishlist_item_id']);
-                if (isset($wishlistItem)) {
+                if ($wishlistItem !== null) {
                     $wishlistItemData['description'] = $wishlistItem->getDescription();
                 }
             }
