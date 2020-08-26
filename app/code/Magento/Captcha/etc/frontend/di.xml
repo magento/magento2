@@ -34,4 +34,12 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\Captcha\Model\Filter\QuoteDataConfigFilter">
+        <arguments>
+            <argument name="filterList" xsi:type="array">
+                <item name="remote_ip" xsi:type="string">remote_ip</item>
+                <item name="x_forwarded_for" xsi:type="string">x_forwarded_for</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
