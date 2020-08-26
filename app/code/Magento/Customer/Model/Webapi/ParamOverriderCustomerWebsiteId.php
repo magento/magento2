@@ -41,7 +41,7 @@ class ParamOverriderCustomerWebsiteId implements ParamOverriderInterface
      */
     public function getOverriddenValue()
     {
-        if ($this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER) {
+        if ((int) $this->userContext->getUserType() === UserContextInterface::USER_TYPE_CUSTOMER) {
             return $this->customerRepository->getById($this->userContext->getUserId())->getWebsiteId();
         }
 
