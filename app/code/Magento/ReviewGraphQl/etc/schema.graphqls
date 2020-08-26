@@ -46,7 +46,7 @@ type ProductReviewRatingMetadata {
 
 type ProductReviewRatingValueMetadata {
     value_id: String! @doc(description: "An encoded rating value id.")
-    value: String! @doc(description: "e.g Good, Perfect, 3, 4, 5")
+    value: String! @doc(description: "A ratings scale, such as the number of stars awarded")
 }
 
 type Customer {
