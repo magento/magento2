@@ -75,7 +75,7 @@ class SaveAssetLinksTest extends TestCase
         $expectedCalls = (int) (count($keywordIds));
 
         if ($expectedCalls) {
-            $this->resourceConnectionMock->expects($this->once())
+            $this->resourceConnectionMock->expects($this->exactly(2))
                 ->method('getConnection')
                 ->willReturn($this->connectionMock);
             $this->resourceConnectionMock->expects($this->once())

@@ -103,6 +103,7 @@ define([
          */
         updateSelected: function () {
             this.selected({});
+            this.hideAddSelectedAndDeleteButon();
         },
 
         /**
