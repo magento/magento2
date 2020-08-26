@@ -5,16 +5,18 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGallerySynchronization\Test\Integration\Model;
+namespace Magento\MediaGallerySynchronizationMetadata\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Exception\FileSystemException;
-use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
 use Magento\Framework\Filesystem\DriverInterface;
+use Magento\MediaGalleryApi\Api\Data\AssetInterface;
+use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
 use Magento\MediaGallerySynchronizationApi\Api\SynchronizeFilesInterface;
+use Magento\MediaGalleryApi\Api\GetAssetsKeywordsInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
@@ -44,6 +46,11 @@ class SynchronizeFilesTest extends TestCase
     private $mediaDirectory;
 
     /**
+     * @var GetAssetsKeywordsInterface
+     */
+    private $getAssetKeywords;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -51,6 +58,7 @@ class SynchronizeFilesTest extends TestCase
         $this->driver = Bootstrap::getObjectManager()->get(DriverInterface::class);
         $this->synchronizeFiles = Bootstrap::getObjectManager()->get(SynchronizeFilesInterface::class);
         $this->getAssetsByPath = Bootstrap::getObjectManager()->get(GetAssetsByPathsInterface::class);
+        $this->getAssetKeywords = Bootstrap::getObjectManager()->get(GetAssetsKeywordsInterface::class);
         $this->mediaDirectory = Bootstrap::getObjectManager()->get(Filesystem::class)
             ->getDirectoryWrite(DirectoryList::MEDIA);
     }
@@ -59,16 +67,18 @@ class SynchronizeFilesTest extends TestCase
      * Test for SynchronizeFiles::execute
      *
      * @dataProvider filesProvider
-     * @param string $file
-     * @param string $title
-     * @param string $source
+     * @param null|string $file
+     * @param null|string $title
+     * @param null|string $description
+     * @param null|array $keywords
      * @throws FileSystemException
-     * @throws LocalizedException
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function testExecute(
-        string $file,
-        string $title,
-        string $source
+        ?string $file,
+        ?string $title,
+        ?string $description,
+        ?array $keywords
     ): void {
         $path = realpath(__DIR__ . '/../_files/' . $file);
         $modifiableFilePath = $this->mediaDirectory->getAbsolutePath($file);
@@ -79,10 +89,12 @@ class SynchronizeFilesTest extends TestCase
 
         $this->synchronizeFiles->execute([$file]);
 
-        $loadedAsset = $this->getAssetsByPath->execute([$file])[0];
+        $loadedAssets = $this->getAssetsByPath->execute([$file])[0];
+        $loadedKeywords = $this->getKeywords($loadedAssets) ?: null;
 
-        $this->assertEquals($title, $loadedAsset->getTitle());
-        $this->assertEquals($source, $loadedAsset->getSource());
+        $this->assertEquals($title, $loadedAssets->getTitle());
+        $this->assertEquals($description, $loadedAssets->getDescription());
+        $this->assertEquals($keywords, $loadedKeywords);
 
         $this->driver->deleteFile($modifiableFilePath);
     }
@@ -98,8 +110,42 @@ class SynchronizeFilesTest extends TestCase
             [
                 '/magento.jpg',
                 'magento',
-                'Local'
+                null,
+                null
+            ],
+            [
+                '/magento_metadata.jpg',
+                'Title of the magento image',
+                'Description of the magento image',
+                [
+                    'magento',
+                    'mediagallerymetadata'
+                ]
             ]
         ];
+    }
+
+    /**
+     * Key asset keywords
+     *
+     * @param AssetInterface $asset
+     * @return string[]
+     */
+    private function getKeywords(AssetInterface $asset): array
+    {
+        $assetKeywords = $this->getAssetKeywords->execute([$asset->getId()]);
+
+        if (empty($assetKeywords)) {
+            return [];
+        }
+
+        $keywords = current($assetKeywords)->getKeywords();
+
+        return array_map(
+            function (KeywordInterface $keyword) {
+                return $keyword->getKeyword();
+            },
+            $keywords
+        );
     }
 }

@@ -12,6 +12,7 @@ use Magento\Framework\Exception\ValidatorException;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use Magento\MediaGalleryApi\Api\GetAssetsByPathsInterface;
+use Magento\MediaGallerySynchronizationApi\Model\CreateAssetFromFile;
 
 /**
  * Create media asset object based on the file information

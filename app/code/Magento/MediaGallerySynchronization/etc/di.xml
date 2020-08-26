@@ -12,8 +12,7 @@
     <type name="Magento\MediaGallerySynchronizationApi\Model\ImportFilesComposite">
         <arguments>
             <argument name="importers" xsi:type="array">
-                <item name="0" xsi:type="object">Magento\MediaGallerySynchronization\Model\ImportMediaAsset</item>
-                <item name="1" xsi:type="object">Magento\MediaGallerySynchronization\Model\ImportImageFileKeywords</item>
+                <item name="10" xsi:type="object">Magento\MediaGallerySynchronization\Model\ImportMediaAsset</item>
             </argument>
         </arguments>
     </type>
