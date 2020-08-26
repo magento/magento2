@@ -19,10 +19,6 @@ class SynchronizeIdentities implements SynchronizeIdentitiesInterface
     private const ENTITY_ID = 'entityId';
     private const FIELD = 'field';
 
-    private const MEDIA_CONTENT_TYPE = 'entity_type';
-    private const MEDIA_CONTENT_ENTITY_ID = 'entity_id';
-    private const MEDIA_CONTENT_FIELD = 'field';
-
     private const FIELD_CMS_PAGE = 'cms_page';
     private const FIELD_CMS_BLOCK = 'cms_block';
 
@@ -77,18 +73,18 @@ class SynchronizeIdentities implements SynchronizeIdentitiesInterface
         foreach ($mediaContentIdentities as $identity) {
             $contentIdentity = $this->contentIdentityFactory->create(
                 [
-                    self::ENTITY_TYPE => $identity[self::MEDIA_CONTENT_TYPE],
-                    self::ENTITY_ID => $identity[self::MEDIA_CONTENT_ENTITY_ID],
-                    self::FIELD => $identity[self::MEDIA_CONTENT_FIELD]
+                    self::ENTITY_TYPE => $identity[self::ENTITY_TYPE],
+                    self::ENTITY_ID => $identity[self::ENTITY_ID],
+                    self::FIELD => $identity[self::FIELD]
                 ]
             );
 
-            if ($identity[self::MEDIA_CONTENT_TYPE] === self::FIELD_CMS_PAGE
-                || $identity[self::MEDIA_CONTENT_TYPE] === self::FIELD_CMS_BLOCK
+            if ($identity[self::ENTITY_TYPE] === self::FIELD_CMS_PAGE
+                || $identity[self::ENTITY_TYPE] === self::FIELD_CMS_BLOCK
             ) {
                 $content = $this->getCmsMediaContent(
-                    $identity[self::MEDIA_CONTENT_TYPE],
-                    $identity[self::MEDIA_CONTENT_ENTITY_ID]
+                    $identity[self::ENTITY_TYPE],
+                    $identity[self::ENTITY_ID]
                 );
             } else {
                 $content = implode(PHP_EOL, $this->getEntityContents->execute($contentIdentity));
@@ -105,10 +101,10 @@ class SynchronizeIdentities implements SynchronizeIdentitiesInterface
      * Get cms media content from database
      *
      * @param string $tableName
-     * @param string $cmsId
+     * @param int $cmsId
      * @return string
      */
-    private function getCmsMediaContent(string $tableName, string $cmsId): string
+    private function getCmsMediaContent(string $tableName, int $cmsId): string
     {
         $connection = $this->resourceConnection->getConnection();
         $tableName = $this->resourceConnection->getTableName($tableName);
