@@ -9,9 +9,10 @@ namespace Magento\Persistent\Test\Unit\Model\Customer;
 
 use Magento\Customer\Model\Session as CustomerSession;
 use Magento\Persistent\Helper\Session as PersistentSession;
-use Magento\Persistent\Model\Customer\Authorization;
+use Magento\Persistent\Model\Customer\Authorization as PersistentAuthorization;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Magento\Customer\Model\Customer\AuthorizationComposite as CustomerAuthorizationComposite;
 
 /**
  * A test class for the persistent customers authorization
@@ -26,14 +27,19 @@ class AuthorizationTest extends TestCase
     private $persistentSessionMock;
 
     /**
-     * @var Authorization
+     * @var PersistentAuthorization
      */
-    private $authorization;
+    private $persistentCustomerAuthorization;
 
     /**
      * @var CustomerSession|MockObject
      */
     private $customerSessionMock;
+
+    /**
+     * @var CustomerAuthorizationComposite
+     */
+    private $customerAuthorizationComposite;
 
     /**
      * @inheritdoc
@@ -50,9 +56,13 @@ class AuthorizationTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->authorization = new Authorization(
+        $this->persistentCustomerAuthorization = new PersistentAuthorization(
             $this->customerSessionMock,
             $this->persistentSessionMock
+        );
+
+        $this->customerAuthorizationComposite = new CustomerAuthorizationComposite(
+            [$this->persistentCustomerAuthorization]
         );
     }
 
@@ -71,7 +81,7 @@ class AuthorizationTest extends TestCase
     ): void {
         $this->persistentSessionMock->method('isPersistent')->willReturn($isPersistent);
         $this->customerSessionMock->method('isLoggedIn')->willReturn($isLoggedIn);
-        $isAllowedResult = $this->authorization->isAllowed('self');
+        $isAllowedResult = $this->customerAuthorizationComposite->isAllowed('self');
 
         $this->assertEquals($isAllowedExpectation, $isAllowedResult);
     }
