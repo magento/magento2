@@ -15,10 +15,10 @@
             <description>Assert the number of records in the category grid page.</description>
         </annotations>
 
-        <grabTextFrom selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.recordsLabel}}" stepKey="grabRecordsLabel"/>
+        <grabTextFrom selector="{{AdminMediaGalleryCatalogUiCategoryGridSearchSection.numberOfRecordsFound}}" stepKey="grabNumberOfRecordsFound"/>
         <assertEquals stepKey="assertStringIsEqual">
             <expectedResult type="string">{{numberOfRecords}}</expectedResult>
-            <actualResult type="variable">grabRecordsLabel</actualResult>
+            <actualResult type="variable">grabNumberOfRecordsFound</actualResult>
         </assertEquals>
     </actionGroup>
 </actionGroups>

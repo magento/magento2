@@ -60,8 +60,13 @@
         <actionGroup ref="AssertAdminCategoryGridPageNumberOfRecordsActionGroup" stepKey="assertOneRecordInGrid">
             <argument name="numberOfRecords" value="1 records found"/>
         </actionGroup>
+        <actionGroup ref="AssertAdminCategoryGridPageImageColumnActionGroup" stepKey="assertCategoryGridPageImageColumn">
+            <argument name="file" value="{{UpdatedImageDetails.file}}"/>
+        </actionGroup>
         <actionGroup ref="AssertAdminCategoryGridPageDetailsActionGroup" stepKey="assertCategoryInGrid">
             <argument name="category" value="$$category$$"/>
         </actionGroup>
+        <actionGroup ref="AssertAdminCategoryGridPageProductsInMenuEnabledColumnsActionGroup" stepKey="assertCategoryGridPageProductsInMenuEnabledColumns"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
    </test>
 </tests>

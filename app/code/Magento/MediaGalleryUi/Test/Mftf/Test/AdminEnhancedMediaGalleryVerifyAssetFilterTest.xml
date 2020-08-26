@@ -72,12 +72,14 @@
             <argument name="optionName" value="{{ImageMetadata.title}}"/>
         </actionGroup>
         <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridApplyFiltersActionGroup" stepKey="applyFilters"/>
-
-        <grabTextFrom selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.columnValue('Name')}}" stepKey="grabCategoryNameFromGrid"/>
-        <assertEquals stepKey="assertEqualCategoryName">
-            <expectedResult type="string">$$category.name$$</expectedResult>
-            <actualResult type="variable">grabCategoryNameFromGrid</actualResult>
-        </assertEquals>
+        <actionGroup ref="AssertAdminCategoryGridPageNumberOfRecordsActionGroup" stepKey="assertOneRecordInGrid">
+            <argument name="numberOfRecords" value="1 records found"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCategoryGridPageImageColumnActionGroup" stepKey="assertCategoryGridPageImageColumn"/>
+        <actionGroup ref="AssertAdminCategoryGridPageDetailsActionGroup" stepKey="assertCategoryInGrid">
+            <argument name="category" value="$$category$$"/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminCategoryGridPageProductsInMenuEnabledColumnsActionGroup" stepKey="assertCategoryGridPageProductsInMenuEnabledColumns"/>
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="secondResetAdminDataGridToDefaultView"/>
     </test>
 </tests>

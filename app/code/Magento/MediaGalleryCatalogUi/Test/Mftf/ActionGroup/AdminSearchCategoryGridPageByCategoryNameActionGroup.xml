@@ -17,7 +17,8 @@
         </arguments>
 
         <conditionalClick selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.clearFilters}}" dependentSelector="{{AdminMediaGalleryCatalogUiCategoryGridSection.clearFilters}}" visible="true" stepKey="clickClearFilters"/>
-        <fillField selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.search}}" userInput="{{categoryName}}" stepKey="fillKeywordSearchField"/>
-        <click selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.submitSearch}}" stepKey="clickKeywordSearch"/>
+        <fillField selector="{{AdminMediaGalleryCatalogUiCategoryGridSearchSection.searchInput}}" userInput="{{categoryName}}" stepKey="fillKeywordSearchField"/>
+        <click selector="{{AdminMediaGalleryCatalogUiCategoryGridSearchSection.submitSearch}}" stepKey="clickKeywordSearch"/>
+        <waitForLoadingMaskToDisappear stepKey="waitingForLoading" />
     </actionGroup>
 </actionGroups>
