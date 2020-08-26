@@ -167,12 +167,12 @@
                 <label translate="true">Products</label>
             </settings>
         </column>
-        <column name="include_in_menu" component="Magento_Ui/js/grid/columns/select">
+        <column name="include_in_menu" class="Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Columns\InMenu">
             <settings>
                 <label translate="true">In Menu</label>
             </settings>
         </column>
-        <column name="is_active" component="Magento_Ui/js/grid/columns/select" >
+        <column name="is_active" class="Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Columns\IsActive">
             <settings>
                 <label translate="true">Enabled</label>
             </settings>
