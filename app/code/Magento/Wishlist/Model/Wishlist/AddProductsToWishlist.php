@@ -114,7 +114,7 @@ class AddProductsToWishlist
         }
 
         try {
-            if ($wishlistItem->getQuantity() == 0) {
+            if ((int)$wishlistItem->getQuantity() === 0) {
                 throw new LocalizedException(__("The quantity of a wish list item cannot be 0"));
             }
             if ($product->getStatus() == Status::STATUS_DISABLED) {
