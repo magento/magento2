@@ -1,11 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
-  * Copyright © Magento, Inc. All rights reserved.
-  * See COPYING.txt for license details.
-  */
+ * Copyright (©) 2020 Pinpoint Designs LTD. All right's reserved.
+ *
+ * Author: abdarrahman.abouzaid@gmail.com
+ * Website: http://www.pinpointdesigns.co.uk
+ */
 -->
-<!-- Test XML Example -->
+<!-- Test XML #28687 PR -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminGridFilterRemoveErrorMessageBeforeApplyFilters">
         <annotations>
@@ -28,7 +30,6 @@
             <createData entity="defaultSimpleProduct" stepKey="createProduct2">
                 <requiredEntity createDataKey="rootCategory" />
             </createData>
-            <!-- <createData entity="_defaultStore" stepKey="defaultStore"/> -->
 
             <!--Create website-->
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
