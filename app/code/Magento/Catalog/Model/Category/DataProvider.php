@@ -222,7 +222,6 @@ class DataProvider extends ModifierPoolDataProvider
         Config $eavConfig,
         RequestInterface $request,
         CategoryFactory $categoryFactory,
-        DataInterfaceFactory $uiConfigFactory,
         array $meta = [],
         array $data = [],
         PoolInterface $pool = null,
@@ -231,7 +230,8 @@ class DataProvider extends ModifierPoolDataProvider
         ScopeOverriddenValue $scopeOverriddenValue = null,
         ArrayManager $arrayManager = null,
         FileInfo $fileInfo = null,
-        ?Image $categoryImage = null
+        ?Image $categoryImage = null,
+        ?DataInterfaceFactory $uiConfigFactory = null
     ) {
         $this->eavValidationRules = $eavValidationRules;
         $this->collection = $categoryCollectionFactory->create();
@@ -241,7 +241,6 @@ class DataProvider extends ModifierPoolDataProvider
         $this->storeManager = $storeManager;
         $this->request = $request;
         $this->categoryFactory = $categoryFactory;
-        $this->uiConfigFactory = $uiConfigFactory;
         $this->auth = $auth ?? ObjectManager::getInstance()->get(AuthorizationInterface::class);
         $this->arrayUtils = $arrayUtils ?? ObjectManager::getInstance()->get(ArrayUtils::class);
         $this->scopeOverriddenValue = $scopeOverriddenValue ?:
@@ -249,6 +248,10 @@ class DataProvider extends ModifierPoolDataProvider
         $this->arrayManager = $arrayManager ?: ObjectManager::getInstance()->get(ArrayManager::class);
         $this->fileInfo = $fileInfo ?: ObjectManager::getInstance()->get(FileInfo::class);
         $this->categoryImage = $categoryImage ?? ObjectManager::getInstance()->get(Image::class);
+        $this->uiConfigFactory = $uiConfigFactory ?? ObjectManager::getInstance()->create(
+            DataInterfaceFactory::class,
+            ['instanceName' => \Magento\Ui\Config\Data::class]
+        );
 
         parent::__construct($name, $primaryFieldName, $requestFieldName, $meta, $data, $pool);
     }
