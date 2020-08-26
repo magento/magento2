@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontPaypalSmartButtonWithAUDCurrencyTest" extends="AdminOrderRateDisplayedInOneLineTest">
+        <annotations>
+            <features value="Paypal"/>
+            <stories value="PayPal Express Checkout"/>
+            <title value="Mainflow of Paypal Smart Button with Australian currency"/>
+            <description value="Users are able to place order using Paypal Smart Button using Australian currency"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-33274"/>
+            <group value="paypalExpress"/>
+            <skip>
+                <issueId value="MC-33951"/>
+            </skip>
+        </annotations>
+        <before>
+            <!--Set price scope global-->
+            <magentoCLI command="config:set {{CatalogPriceScopeGlobalConfigData.path}} {{CatalogPriceScopeGlobalConfigData.value}}" stepKey="setCatalogPriceScopeWebsite"/>
+            <!--Remove Currency options for Website-->
+            <remove keyForRemoval="setCurrencyBaseEURWebsites"/>
+            <remove keyForRemoval="setAllowedCurrencyWebsitesForEURandUSD"/>
+            <remove keyForRemoval="setCurrencyDefaultEURWebsites"/>
+            <!--Enable Advanced Setting-->
+            <magentoCLI command="config:set {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalEnableSkipOrderReviewStepConfigData.value}}" stepKey="enableSkipOrderReview"/>
+            <!--Set merchant country-->
+            <magentoCLI command="config:set {{MerchantAustralia.path}} {{MerchantAustralia.value}}" stepKey="setMerchantCountryUK"/>
+            <!--Set Currency options for Default Config-->
+            <magentoCLI command="config:set {{SetCurrencyAUDBaseConfig.path}} {{SetCurrencyAUDBaseConfig.value}}" stepKey="setCurrencyBaseEUR"/>
+            <magentoCLI command="config:set {{SetAllowedCurrenciesConfigForUSD.path}} {{SetAllowedCurrenciesConfigForUSD.value}},{{SetAllowedCurrenciesConfigForAUD.value}}" stepKey="setAllowedCurrencyEURandUSD"/>
+            <magentoCLI command="config:set {{SetDefaultCurrencyAUDConfig.path}} {{SetDefaultCurrencyAUDConfig.value}}" stepKey="setCurrencyDefaultEUR"/>
+        </before>
+        <after>
+            <magentoCLI command="config:set {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.path}} {{StorefrontPaypalDisableSkipOrderReviewStepConfigData.value}}" stepKey="disableSkipOrderReview"/>
+            <!--Set merchant country-->
+            <magentoCLI command="config:set {{MerchantUnitedStates.path}} {{MerchantUnitedStates.value}}" stepKey="setMerchantCountryDefault"/>
+        </after>
+        <!-- click on PayPal payment radio button -->
+        <waitForElement selector="{{CheckoutPaymentSection.paymentSectionTitle}}" after="guestCheckoutFillingShippingSection" stepKey="waitForPlaceOrderButton"/>
+        <click selector="{{CheckoutPaymentSection.PayPalPaymentRadio}}" after="waitForPlaceOrderButton" stepKey="guestSelectCheckMoneyOrderPayment"/>
+
+        <!--Click Paypal button-->
+        <actionGroup ref="SwitchToPayPalGroupBtnActionGroup" after="guestSelectCheckMoneyOrderPayment" stepKey="guestPlaceOrder">
+            <argument name="elementNumber" value="0"/>
+        </actionGroup>
+
+        <!--Login to Paypal in-context-->
+        <actionGroup ref="StorefrontLoginToPayPalPaymentAccountOneStepActionGroup" after="guestPlaceOrder" stepKey="LoginToPayPal">
+            <argument name="payerName" value="{{Payer.firstName}}"/>
+        </actionGroup>
+
+        <!--Submit payment on PayPal site-->
+        <actionGroup ref="StorefrontPaypalSwitchBackToMagentoFromCheckoutPageActionGroup" after="LoginToPayPal" stepKey="submitPayment"/>
+        <waitForElement after="submitPayment" selector="{{CheckoutSuccessMainSection.orderNumber}}" stepKey="waitForOrderNumber"/>
+
+        <actionGroup ref="AdminAssertCurrencyInOrderActionGroup" stepKey="seeEURandUSDRate">
+            <argument name="rate" value="AUD / USD rate"/>
+        </actionGroup>
+
+        <assertEquals after ="grabRate" stepKey="assertSelectedCategories">
+            <actualResult type="variable">grabRate</actualResult>
+            <expectedResult type="array">[AUD / USD rate:]</expectedResult>
+        </assertEquals>
+    </test>
+</tests>

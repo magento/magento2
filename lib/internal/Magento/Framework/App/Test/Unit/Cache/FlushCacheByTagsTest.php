@@ -13,36 +13,38 @@ use Magento\Framework\App\Cache\Tag\Resolver;
 use Magento\Framework\App\Cache\Type\FrontendPool;
 use Magento\Framework\Model\AbstractModel;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit tests for the \Magento\Framework\App\Cache\FlushCacheByTags class.
  */
-class FlushCacheByTagsTest extends \PHPUnit\Framework\TestCase
+class FlushCacheByTagsTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\StateInterface
+     * @var MockObject|StateInterface
      */
     private $cacheState;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\Type\FrontendPool
+     * @var MockObject|FrontendPool
      */
     private $frontendPool;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Framework\App\Cache\Tag\Resolver
+     * @var MockObject|Resolver
      */
     private $tagResolver;
 
     /**
-     * @var \Magento\Framework\App\Cache\FlushCacheByTags
+     * @var FlushCacheByTags
      */
     private $plugin;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cacheState = $this->getMockForAbstractClass(StateInterface::class);
         $this->frontendPool = $this->createMock(FrontendPool::class);

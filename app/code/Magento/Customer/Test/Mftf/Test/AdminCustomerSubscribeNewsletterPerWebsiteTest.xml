@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <createData entity="CustomerAccountSharingGlobal" stepKey="setConfigCustomerAccountToGlobal"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="AdminDeleteStoreViewActionGroup" stepKey="deleteStoreView">
@@ -41,8 +41,7 @@
             <argument name="customStore" value="NewStoreViewData"/>
         </actionGroup>
         <!-- Switch to the new Store View on storefront -->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnHomePage"/>
-        <waitForPageLoad stepKey="waitForNavigateHomePage"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnHomePage"/>
         <actionGroup ref="StorefrontSwitchStoreViewActionGroup" stepKey="switchToCustomStoreView">
             <argument name="storeView" value="NewStoreViewData"/>
         </actionGroup>
@@ -54,8 +53,7 @@
         <actionGroup ref="AdminFilterCustomerByEmail" stepKey="filterCustomerGrid">
             <argument name="email" value="{{CustomerEntityOne.email}}"/>
         </actionGroup>
-        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickToEditCustomerPage"/>
-        <waitForPageLoad stepKey="waitForOpenCustomerPage"/>
+        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickToEditCustomerPage"/>
         <grabFromCurrentUrl regex="~(\d+)/~" stepKey="grabCustomerId"/>
         <!-- Assert that created customer is subscribed to newsletter on the new Store View -->
         <actionGroup ref="AdminAssertCustomerIsSubscribedToNewslettersAndSelectedStoreView" stepKey="assertSubscribedToNewsletter">

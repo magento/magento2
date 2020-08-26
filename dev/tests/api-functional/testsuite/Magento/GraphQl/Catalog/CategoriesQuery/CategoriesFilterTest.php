@@ -188,8 +188,8 @@ QUERY;
         //Check base category products
         $expectedBaseCategoryProducts = [
             ['sku' => 'simple', 'name' => 'Simple Product'],
+            ['sku' => 'simple-4', 'name' => 'Simple Product Three'],
             ['sku' => '12345', 'name' => 'Simple Product Two'],
-            ['sku' => 'simple-4', 'name' => 'Simple Product Three']
         ];
         $this->assertCategoryProducts($baseCategory, $expectedBaseCategoryProducts);
         //Check base category children
@@ -204,8 +204,8 @@ QUERY;
         $this->assertEquals('Category 1.1', $firstChildCategory['name']);
         $this->assertEquals('Category 1.1 description.', $firstChildCategory['description']);
         $firstChildCategoryExpectedProducts = [
-            ['sku' => 'simple', 'name' => 'Simple Product'],
             ['sku' => '12345', 'name' => 'Simple Product Two'],
+            ['sku' => 'simple', 'name' => 'Simple Product']
         ];
         $this->assertCategoryProducts($firstChildCategory, $firstChildCategoryExpectedProducts);
         $firstChildCategoryChildren = [['name' =>'Category 1.1.1']];
@@ -215,8 +215,8 @@ QUERY;
         $this->assertEquals('Category 1.2', $secondChildCategory['name']);
         $this->assertEquals('Its a description of Test Category 1.2', $secondChildCategory['description']);
         $firstChildCategoryExpectedProducts = [
-            ['sku' => 'simple', 'name' => 'Simple Product'],
-            ['sku' => 'simple-4', 'name' => 'Simple Product Three']
+            ['sku' => 'simple-4', 'name' => 'Simple Product Three'],
+            ['sku' => 'simple', 'name' => 'Simple Product']
         ];
         $this->assertCategoryProducts($secondChildCategory, $firstChildCategoryExpectedProducts);
         $firstChildCategoryChildren = [];
@@ -281,8 +281,8 @@ QUERY;
         //Check base category products
         $expectedBaseCategoryProducts = [
             ['sku' => 'simple', 'name' => 'Simple Product'],
-            ['sku' => '12345', 'name' => 'Simple Product Two'],
-            ['sku' => 'simple-4', 'name' => 'Simple Product Three']
+            ['sku' => 'simple-4', 'name' => 'Simple Product Three'],
+            ['sku' => '12345', 'name' => 'Simple Product Two']
         ];
         $this->assertCategoryProducts($baseCategory, $expectedBaseCategoryProducts);
         //Check base category children
@@ -297,8 +297,8 @@ QUERY;
         $this->assertEquals('Its a description of Test Category 1.2', $firstChildCategory['description']);
 
         $firstChildCategoryExpectedProducts = [
-            ['sku' => 'simple', 'name' => 'Simple Product'],
-            ['sku' => 'simple-4', 'name' => 'Simple Product Three']
+            ['sku' => 'simple-4', 'name' => 'Simple Product Three'],
+            ['sku' => 'simple', 'name' => 'Simple Product']
         ];
         $this->assertCategoryProducts($firstChildCategory, $firstChildCategoryExpectedProducts);
         $firstChildCategoryChildren = [];
@@ -367,11 +367,12 @@ QUERY;
      * Filtering with match value less than minimum query should return empty result
      *
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage Invalid match filter. Minimum length is 3.
      */
     public function testMinimumMatchQueryLength()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Invalid match filter. Minimum length is 3.');
+
         $query = <<<QUERY
 {
     categories(filters: {name: {match: "mo"}}){
@@ -648,15 +649,6 @@ QUERY;
                 '["category-1-2", "movable"]',
                 [
                     [
-                        'id' => '7',
-                        'name' => 'Movable',
-                        'url_key' => 'movable',
-                        'url_path' => 'movable',
-                        'children_count' => '0',
-                        'path' => '1/2/7',
-                        'position' => '3'
-                    ],
-                    [
                         'id' => '13',
                         'name' => 'Category 1.2',
                         'url_key' => 'category-1-2',
@@ -664,6 +656,15 @@ QUERY;
                         'children_count' => '0',
                         'path' => '1/2/3/13',
                         'position' => '2'
+                    ],
+                    [
+                        'id' => '7',
+                        'name' => 'Movable',
+                        'url_key' => 'movable',
+                        'url_path' => 'movable',
+                        'children_count' => '0',
+                        'path' => '1/2/7',
+                        'position' => '3'
                     ]
                 ]
             ],

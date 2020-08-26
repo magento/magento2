@@ -18,7 +18,7 @@ class SuggestionsTest extends \PHPUnit\Framework\TestCase
     /** @var \Magento\AdvancedSearch\Block\Suggestions */
     protected $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $suggestedQueries = $this->createMock(SuggestedQueriesInterface::CLASS);
         $suggestedQueries->expects($this->any())->method('getItems')->willReturn([
@@ -36,11 +36,11 @@ class SuggestionsTest extends \PHPUnit\Framework\TestCase
     {
         $html = $this->block->toHtml();
 
-        $this->assertContains('test+item', $html);
-        $this->assertContains('test item', $html);
+        $this->assertStringContainsString('test+item', $html);
+        $this->assertStringContainsString('test item', $html);
 
-        $this->assertNotContains('<script>', $html);
-        $this->assertContains('%3Cscript%3Ealert%28%27Test%27%29%3B%3C%2Fscript%3E', $html);
-        $this->assertContains("&lt;script&gt;alert(&#039;Test&#039;);&lt;/script&gt;", $html);
+        $this->assertStringNotContainsString('<script>', $html);
+        $this->assertStringContainsString('%3Cscript%3Ealert%28%27Test%27%29%3B%3C%2Fscript%3E', $html);
+        $this->assertStringContainsString("&lt;script&gt;alert(&#039;Test&#039;);&lt;/script&gt;", $html);
     }
 }

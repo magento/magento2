@@ -3,28 +3,35 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\View\Test\Unit\Layout\Reader;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\View\Layout\ReaderFactory;
+use Magento\Framework\View\Layout\ReaderInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class FactoryTest extends \PHPUnit\Framework\TestCase
+class FactoryTest extends TestCase
 {
     public function testCreateInvalidArgument()
     {
         $className = 'class_name';
         $data = ['data'];
 
-        $object = (new ObjectManager($this))->getObject(\Magento\Framework\DataObject::class);
+        $object = (new ObjectManager($this))->getObject(DataObject::class);
 
-        /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManager */
-        $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        /** @var ObjectManagerInterface|MockObject $objectManager */
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $objectManager->expects($this->once())->method('create')->with($className, $data)
-            ->will($this->returnValue($object));
+            ->willReturn($object);
 
-        /** @var \Magento\Framework\View\Layout\ReaderFactory|\PHPUnit_Framework_MockObject_MockObject $factory */
-        $factory = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject(\Magento\Framework\View\Layout\ReaderFactory::class, ['objectManager' => $objectManager]);
+        /** @var ReaderFactory|MockObject $factory */
+        $factory = (new ObjectManager($this))
+            ->getObject(ReaderFactory::class, ['objectManager' => $objectManager]);
 
         $this->expectException('\InvalidArgumentException');
         $this->expectExceptionMessage(
@@ -38,17 +45,17 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         $className = 'class_name';
         $data = ['data'];
 
-        /** @var \Magento\Framework\View\Layout\ReaderInterface|\PHPUnit_Framework_MockObject_MockObject $object */
-        $object = $this->createMock(\Magento\Framework\View\Layout\ReaderInterface::class);
+        /** @var ReaderInterface|MockObject $object */
+        $object = $this->getMockForAbstractClass(ReaderInterface::class);
 
-        /** @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManager */
-        $objectManager = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        /** @var ObjectManagerInterface|MockObject $objectManager */
+        $objectManager = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $objectManager->expects($this->once())->method('create')->with($className, $data)
-            ->will($this->returnValue($object));
+            ->willReturn($object);
 
-        /** @var \Magento\Framework\View\Layout\ReaderFactory|\PHPUnit_Framework_MockObject_MockObject $factory */
-        $factory = (new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this))
-            ->getObject(\Magento\Framework\View\Layout\ReaderFactory::class, ['objectManager' => $objectManager]);
+        /** @var ReaderFactory|MockObject $factory */
+        $factory = (new ObjectManager($this))
+            ->getObject(ReaderFactory::class, ['objectManager' => $objectManager]);
 
         $this->assertSame($object, $factory->create($className, $data));
     }

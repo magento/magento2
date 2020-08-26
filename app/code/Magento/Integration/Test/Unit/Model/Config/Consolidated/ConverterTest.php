@@ -3,32 +3,38 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Integration\Test\Unit\Model\Config\Consolidated;
 
-use \Magento\Integration\Model\Config\Consolidated\Converter;
+use Magento\Framework\Acl\AclResource\ProviderInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Integration\Model\Config\Consolidated\Converter;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test for conversion of integration XML config into array representation.
  */
-class ConverterTest extends \PHPUnit\Framework\TestCase
+class ConverterTest extends TestCase
 {
     /**
      * @var Converter
      */
     protected $model;
 
-    /** @var \Magento\Framework\Acl\AclResource\ProviderInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ProviderInterface|MockObject */
     protected $resourceProviderMock;
 
-    public function setUp()
+    protected function setUp(): void
     {
-        $this->resourceProviderMock = $this->getMockBuilder(\Magento\Framework\Acl\AclResource\ProviderInterface::class)
+        $this->resourceProviderMock = $this->getMockBuilder(ProviderInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+            ->getMockForAbstractClass();
+        $objectManagerHelper = new ObjectManager($this);
         $this->model = $objectManagerHelper->getObject(
-            \Magento\Integration\Model\Config\Consolidated\Converter::class,
+            Converter::class,
             [
                 'resourceProvider' => $this->resourceProviderMock
             ]

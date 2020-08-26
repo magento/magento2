@@ -17,6 +17,6 @@ class VariableTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
     {
         $this->dispatch('backend/admin/system_variable/edit');
         $body = $this->getResponse()->getBody();
-        $this->assertContains('window.toggleValueElement = function(element) {', $body);
+        $this->assertStringContainsString('window.toggleValueElement = function(element) {', $body);
     }
 }

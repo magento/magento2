@@ -3,78 +3,94 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Test\Unit\Controller\Adminhtml\Promo\Quote;
 
+use Magento\Backend\App\Action\Context;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\App\Request\Http;
+use Magento\Framework\App\Response\Http\FileFactory;
+use Magento\Framework\App\ViewInterface;
+use Magento\Framework\Json\Helper\Data;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Registry;
+use Magento\Framework\Stdlib\DateTime\Filter\Date;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\SalesRule\Model\CouponGenerator;
+use Magento\Framework\View\Element\Messages;
+use Magento\Framework\View\Layout;
 use Magento\SalesRule\Api\Data\CouponGenerationSpecInterfaceFactory;
+use Magento\SalesRule\Controller\Adminhtml\Promo\Quote\Generate;
+use Magento\SalesRule\Model\CouponGenerator;
+use Magento\SalesRule\Model\Rule;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GenerateTest extends \PHPUnit\Framework\TestCase
+class GenerateTest extends TestCase
 {
-    /** @var \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\Generate */
+    /** @var Generate */
     protected $model;
 
     /** @var ObjectManagerHelper */
     protected $objectManagerHelper;
 
-    /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Context|MockObject */
     protected $contextMock;
 
-    /** @var \Magento\Framework\Registry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Registry|MockObject */
     protected $registryMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  MockObject */
     private $requestMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  MockObject */
     private $messageManager;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  MockObject */
     private $responseMock;
 
-    /** @var \Magento\Framework\App\Response\Http\FileFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FileFactory|MockObject */
     protected $fileFactoryMock;
 
-    /** @var  \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  MockObject */
     private $view;
 
-    /** @var \Magento\Framework\Stdlib\DateTime\Filter\Date|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Date|MockObject */
     protected $dateMock;
 
-    /** @var  ObjectManager | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  ObjectManager|MockObject */
     private $objectManagerMock;
 
-    /** @var  CouponGenerator | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  CouponGenerator|MockObject */
     private $couponGenerator;
 
-    /** @var  CouponGenerationSpecInterfaceFactory | \PHPUnit_Framework_MockObject_MockObject */
+    /** @var  CouponGenerationSpecInterfaceFactory|MockObject */
     private $couponGenerationSpec;
 
     /**
      * Test setup
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->contextMock = $this->getMockBuilder(\Magento\Backend\App\Action\Context::class)
+        $this->contextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->requestMock = $this
-            ->getMockBuilder(\Magento\Framework\App\Request\Http::class)
+            ->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->responseMock = $this
             ->getMockBuilder(\Magento\Framework\App\Response\Http::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->messageManager = $this->createMock(\Magento\Framework\Message\ManagerInterface::class);
+        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
         $this->objectManagerMock = $this->getMockBuilder(ObjectManager::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->view = $this->createMock(\Magento\Framework\App\ViewInterface::class);
+        $this->view = $this->getMockForAbstractClass(ViewInterface::class);
         $this->contextMock->expects($this->once())
             ->method('getView')
             ->willReturn($this->view);
@@ -90,13 +106,13 @@ class GenerateTest extends \PHPUnit\Framework\TestCase
         $this->contextMock->expects($this->once())
             ->method('getResponse')
             ->willReturn($this->responseMock);
-        $this->registryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
+        $this->registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->fileFactoryMock = $this->getMockBuilder(\Magento\Framework\App\Response\Http\FileFactory::class)
+        $this->fileFactoryMock = $this->getMockBuilder(FileFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->dateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\Filter\Date::class)
+        $this->dateMock = $this->getMockBuilder(Date::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->couponGenerator = $this->getMockBuilder(CouponGenerator::class)
@@ -108,7 +124,7 @@ class GenerateTest extends \PHPUnit\Framework\TestCase
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\SalesRule\Controller\Adminhtml\Promo\Quote\Generate::class,
+            Generate::class,
             [
                 'context' => $this->contextMock,
                 'coreRegistry' => $this->registryMock,
@@ -125,12 +141,12 @@ class GenerateTest extends \PHPUnit\Framework\TestCase
      */
     public function testExecute()
     {
-        $helperData = $this->getMockBuilder(\Magento\Framework\Json\Helper\Data::class)
+        $helperData = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->objectManagerMock->expects($this->any())
             ->method('get')
-            ->with(\Magento\Framework\Json\Helper\Data::class)
+            ->with(Data::class)
             ->willReturn($helperData);
         $requestData = [
             'qty' => 2,
@@ -140,7 +156,7 @@ class GenerateTest extends \PHPUnit\Framework\TestCase
         $this->requestMock->expects($this->once())
             ->method('isAjax')
             ->willReturn(true);
-        $ruleMock = $this->getMockBuilder(\Magento\SalesRule\Model\Rule::class)
+        $ruleMock = $this->getMockBuilder(Rule::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->registryMock->expects($this->once())
@@ -167,13 +183,13 @@ class GenerateTest extends \PHPUnit\Framework\TestCase
             ->with([
                 'messages' => __('%1 coupon(s) have been generated.', 2)
             ]);
-        $layout = $this->getMockBuilder(\Magento\Framework\View\Layout::class)
+        $layout = $this->getMockBuilder(Layout::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->view->expects($this->any())
             ->method('getLayout')
             ->willReturn($layout);
-        $messageBlock = $this->getMockBuilder(\Magento\Framework\View\Element\Messages::class)
+        $messageBlock = $this->getMockBuilder(Messages::class)
             ->disableOriginalConstructor()
             ->getMock();
         $layout->expects($this->once())

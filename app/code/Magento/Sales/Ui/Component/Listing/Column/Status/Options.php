@@ -9,7 +9,7 @@ use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory;
 
 /**
- * Class Options
+ * Class Options for Listing Column Status
  */
 class Options implements OptionSourceInterface
 {
@@ -42,14 +42,6 @@ class Options implements OptionSourceInterface
     {
         if ($this->options === null) {
             $options = $this->collectionFactory->create()->toOptionArray();
-
-            array_walk(
-                $options,
-                function (&$option) {
-                    $option['__disableTmpl'] = true;
-                }
-            );
-
             $this->options = $options;
         }
         return $this->options;

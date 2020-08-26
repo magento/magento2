@@ -10,7 +10,7 @@
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <actionGroup name="NewCatalogPriceRuleByUIWithConditionIsSKUActionGroup" extends="NewCatalogPriceRuleByUIActionGroup">
         <annotations>
-            <description>DEPRECATED. Please use set of AG: AdminOpenNewCatalogPriceRuleFormPageActionGroup, AdminCatalogPriceRuleFillMainInfoActionGroup, AdminCatalogPriceRuleFillActionsActionGroup, AdminCatalogPriceRuleAddSkuConditionActionGroup, AdminCatalogPriceRuleSaveAndApplyActionGroup
+            <description>Consider using set of AG: AdminOpenNewCatalogPriceRuleFormPageActionGroup, AdminCatalogPriceRuleFillMainInfoActionGroup, AdminCatalogPriceRuleFillActionsActionGroup, AdminCatalogPriceRuleAddSkuConditionActionGroup, AdminCatalogPriceRuleSaveAndApplyActionGroup
                 EXTENDS: newCatalogPriceRuleByUI. Add a Catalog Price Rule Condition based on the provided SKU.</description>
         </annotations>
         <arguments>

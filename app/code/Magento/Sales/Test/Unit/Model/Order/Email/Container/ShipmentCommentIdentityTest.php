@@ -3,47 +3,58 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Email\Container;
 
-use \Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ShipmentCommentIdentityTest extends \PHPUnit\Framework\TestCase
+class ShipmentCommentIdentityTest extends TestCase
 {
     /**
-     * @var \Magento\Sales\Model\Order\Email\Container\ShipmentCommentIdentity
+     * @var ShipmentCommentIdentity
      */
     protected $identity;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $storeManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $scopeConfigInterfaceMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $storeMock;
 
     protected $storeId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->scopeConfigInterfaceMock = $this->createMock(
-            \Magento\Framework\App\Config\ScopeConfigInterface::class
+            ScopeConfigInterface::class
         );
-        $this->storeManagerMock = $this->createMock(\Magento\Store\Model\StoreManagerInterface::class);
+        $this->storeManagerMock = $this->getMockForAbstractClass(StoreManagerInterface::class);
 
-        $this->storeMock = $this->createPartialMock(\Magento\Store\Model\Store::class, ['getStoreId', '__wakeup']);
+        $this->storeMock = $this->getMockBuilder(Store::class)
+            ->addMethods(['getStoreId'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->storeId = 999999999999;
         $this->storeMock->expects($this->any())
             ->method('getStoreId')
-            ->will($this->returnValue($this->storeId));
+            ->willReturn($this->storeId);
 
         $this->identity = new ShipmentCommentIdentity($this->scopeConfigInterfaceMock, $this->storeManagerMock);
     }
@@ -53,11 +64,11 @@ class ShipmentCommentIdentityTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigInterfaceMock->expects($this->once())
             ->method('isSetFlag')
             ->with(
-                $this->equalTo(ShipmentCommentIdentity::XML_PATH_EMAIL_ENABLED),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-                $this->equalTo($this->storeId)
+                ShipmentCommentIdentity::XML_PATH_EMAIL_ENABLED,
+                ScopeInterface::SCOPE_STORE,
+                $this->storeId
             )
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->isEnabled();
         $this->assertTrue($result);
@@ -68,11 +79,11 @@ class ShipmentCommentIdentityTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigInterfaceMock->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->equalTo(ShipmentCommentIdentity::XML_PATH_EMAIL_COPY_TO),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-                $this->equalTo($this->storeId)
+                ShipmentCommentIdentity::XML_PATH_EMAIL_COPY_TO,
+                ScopeInterface::SCOPE_STORE,
+                $this->storeId
             )
-            ->will($this->returnValue('test_value,test_value2'));
+            ->willReturn('test_value,test_value2');
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getEmailCopyTo();
         $this->assertEquals(['test_value', 'test_value2'], $result);
@@ -83,11 +94,11 @@ class ShipmentCommentIdentityTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigInterfaceMock->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->equalTo(ShipmentCommentIdentity::XML_PATH_EMAIL_COPY_TO),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-                $this->equalTo($this->storeId)
+                ShipmentCommentIdentity::XML_PATH_EMAIL_COPY_TO,
+                ScopeInterface::SCOPE_STORE,
+                $this->storeId
             )
-            ->will($this->returnValue('test_value, test_value2'));
+            ->willReturn('test_value, test_value2');
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getEmailCopyTo();
         $this->assertEquals(['test_value', 'test_value2'], $result);
@@ -98,11 +109,11 @@ class ShipmentCommentIdentityTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigInterfaceMock->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->equalTo(ShipmentCommentIdentity::XML_PATH_EMAIL_COPY_TO),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-                $this->equalTo($this->storeId)
+                ShipmentCommentIdentity::XML_PATH_EMAIL_COPY_TO,
+                ScopeInterface::SCOPE_STORE,
+                $this->storeId
             )
-            ->will($this->returnValue(null));
+            ->willReturn(null);
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getEmailCopyTo();
         $this->assertFalse($result);
@@ -113,11 +124,11 @@ class ShipmentCommentIdentityTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigInterfaceMock->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->equalTo(ShipmentCommentIdentity::XML_PATH_EMAIL_COPY_METHOD),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-                $this->equalTo($this->storeId)
+                ShipmentCommentIdentity::XML_PATH_EMAIL_COPY_METHOD,
+                ScopeInterface::SCOPE_STORE,
+                $this->storeId
             )
-            ->will($this->returnValue('copy_method'));
+            ->willReturn('copy_method');
 
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getCopyMethod();
@@ -129,11 +140,11 @@ class ShipmentCommentIdentityTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigInterfaceMock->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->equalTo(ShipmentCommentIdentity::XML_PATH_EMAIL_GUEST_TEMPLATE),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-                $this->equalTo($this->storeId)
+                ShipmentCommentIdentity::XML_PATH_EMAIL_GUEST_TEMPLATE,
+                ScopeInterface::SCOPE_STORE,
+                $this->storeId
             )
-            ->will($this->returnValue('template_id'));
+            ->willReturn('template_id');
 
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getGuestTemplateId();
@@ -145,11 +156,11 @@ class ShipmentCommentIdentityTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigInterfaceMock->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->equalTo(ShipmentCommentIdentity::XML_PATH_EMAIL_TEMPLATE),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-                $this->equalTo($this->storeId)
+                ShipmentCommentIdentity::XML_PATH_EMAIL_TEMPLATE,
+                ScopeInterface::SCOPE_STORE,
+                $this->storeId
             )
-            ->will($this->returnValue('template_id'));
+            ->willReturn('template_id');
 
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getTemplateId();
@@ -167,7 +178,7 @@ class ShipmentCommentIdentityTest extends \PHPUnit\Framework\TestCase
     {
         $this->storeManagerMock->expects($this->once())
             ->method('getStore')
-            ->will($this->returnValue($this->storeMock));
+            ->willReturn($this->storeMock);
         $result = $this->identity->getStore();
         $this->assertEquals($this->storeMock, $result);
     }
@@ -192,11 +203,11 @@ class ShipmentCommentIdentityTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfigInterfaceMock->expects($this->once())
             ->method('getValue')
             ->with(
-                $this->equalTo(ShipmentCommentIdentity::XML_PATH_EMAIL_IDENTITY),
-                $this->equalTo(\Magento\Store\Model\ScopeInterface::SCOPE_STORE),
-                $this->equalTo($this->storeId)
+                ShipmentCommentIdentity::XML_PATH_EMAIL_IDENTITY,
+                ScopeInterface::SCOPE_STORE,
+                $this->storeId
             )
-            ->will($this->returnValue($emailIdentity));
+            ->willReturn($emailIdentity);
 
         $this->identity->setStore($this->storeMock);
         $result = $this->identity->getEmailIdentity();

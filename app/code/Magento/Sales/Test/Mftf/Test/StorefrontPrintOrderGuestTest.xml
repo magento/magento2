@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <magentoCLI command="downloadable:domains:add" arguments="example.com static.magento.com" stepKey="addDownloadableDomain"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
             <createData entity="ApiCategory" stepKey="createCategory"/>
 
             <!-- Create downloadable Product -->
@@ -44,8 +44,8 @@
             <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkOption"/>
             <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
             <grabValueFrom selector="{{AdminProductDownloadableSection.addLinkTitleInput('0')}}" stepKey="grabLink"/>
-            <click selector="{{AdminProductFormSection.save}}" stepKey="clickSave"/>
-            <waitForLoadingMaskToDisappear stepKey="waitForSave"/>
+
+            <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSave"/>
 
             <!-- Create configurable Product -->
             <createData entity="ApiConfigurableProduct" stepKey="createConfigProduct">
@@ -164,8 +164,12 @@
             <!-- Create Customer Account -->
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
 
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
 
             <!-- Place order with options according to dataset -->
             <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="newOrder">

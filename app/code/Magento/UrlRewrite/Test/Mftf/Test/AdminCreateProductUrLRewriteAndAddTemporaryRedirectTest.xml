@@ -15,11 +15,10 @@
             <testCaseId value="MC-5340"/>
             <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
-            <group value="urlRewrite"/>
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <createData entity="defaultSimpleProduct" stepKey="createSimpleProduct"/>
         </before>
         <after>
