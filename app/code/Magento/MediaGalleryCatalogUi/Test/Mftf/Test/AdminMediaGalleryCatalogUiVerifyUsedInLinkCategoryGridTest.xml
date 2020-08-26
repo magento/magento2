@@ -57,6 +57,17 @@
         <actionGroup ref="AssertAdminMediaGalleryAssetFilterPlaceHolderActionGroup" stepKey="assertFilterApplied">
             <argument name="filterPlaceholder" value="{{UpdatedImageDetails.title}}"/>
         </actionGroup>
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilters"/>
+        <actionGroup ref="AdminOpenCategoryGridPageActionGroup" stepKey="openCategoryPageToVerifyIfFilterCanBeApplied"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridExpandFilterActionGroup" stepKey="expandFilters"/>
+        <actionGroup ref="AdminEnhancedMediaGallerySelectUsedInFilterActionGroup" stepKey="setAssetFilter">
+            <argument name="filterName" value="Asset"/>
+            <argument name="optionName" value="{{UpdatedImageDetails.title}}"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryCategoryGridApplyFiltersActionGroup" stepKey="applyFilters"/>
+        <actionGroup ref="AssertAdminMediaGalleryAssetFilterPlaceHolderActionGroup" stepKey="assertFilterAppliedAfterUrlFilterApplier">
+            <argument name="filterPlaceholder" value="{{UpdatedImageDetails.title}}"/>
+        </actionGroup>
         <actionGroup ref="AssertAdminCategoryGridPageNumberOfRecordsActionGroup" stepKey="assertOneRecordInGrid">
             <argument name="numberOfRecords" value="1 records found"/>
         </actionGroup>
