@@ -87,6 +87,7 @@ class Logo extends \Magento\Framework\View\Element\Template
 
     /**
      * Retrieve logo width
+     *
      * @deprecated
      * @see getLogoImageWidth()
      * @return int
@@ -104,6 +105,7 @@ class Logo extends \Magento\Framework\View\Element\Template
 
     /**
      * Retrieve logo width
+     *
      * @return int
      */
     public function getLogoImageWidth() :int
