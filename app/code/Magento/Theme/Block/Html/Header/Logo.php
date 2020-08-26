@@ -3,7 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
+declare(strict_types=1);
 namespace Magento\Theme\Block\Html\Header;
 
 /**
@@ -106,13 +106,13 @@ class Logo extends \Magento\Framework\View\Element\Template
      * Retrieve logo width
      * @return int
      */
-    public function getLogoImageWidth()
+    public function getLogoImageWidth() :int
     {
         $logoWidth = $this->_scopeConfig->getValue(
             'design/header/logo_width',
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
-        return $logoWidth ? (int) $logoWidth : $this->_data['logo_width'];
+        return (int)$logoWidth ? $logoWidth : $this->_data['logo_width'];
     }
 
     /**
