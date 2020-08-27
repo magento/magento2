@@ -14,7 +14,7 @@ use Magento\Ui\Component\Container;
 /**
  * Directories tree component
  */
-class DirectoriesTree extends Container
+class DirectoryTree extends Container
 {
     /**
      * @var UrlInterface
@@ -50,9 +50,9 @@ class DirectoriesTree extends Container
             array_replace_recursive(
                 (array) $this->getData('config'),
                 [
-                    'getDirectoryTreeUrl' => $this->url->getUrl("media_gallery/directories/gettree"),
-                    'deleteDirectoryUrl' => $this->url->getUrl("media_gallery/directories/delete"),
-                    'createDirectoryUrl' => $this->url->getUrl("media_gallery/directories/create")
+                    'getDirectoryTreeUrl' => $this->url->getUrl('media_gallery/directories/gettree'),
+                    'deleteDirectoryUrl' => $this->url->getUrl('media_gallery/directories/delete'),
+                    'createDirectoryUrl' => $this->url->getUrl('media_gallery/directories/create')
                 ]
             )
         );
