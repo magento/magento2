@@ -11,7 +11,7 @@ namespace Magento\Framework\Amqp\Topology;
 use InvalidArgumentException;
 
 /**
- * @deprecated 100.0.0
+ * @deprecated 103.0.0
  * see: https://github.com/php-amqplib/php-amqplib/issues/405
  */
 trait ArgumentProcessor

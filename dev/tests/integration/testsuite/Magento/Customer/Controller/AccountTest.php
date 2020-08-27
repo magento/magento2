@@ -16,20 +16,23 @@ use Magento\Framework\App\Http;
 use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Data\Form\FormKey;
 use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\Phrase;
 use Magento\Framework\Serialize\Serializer\Json;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Store\Model\StoreManager;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Helper\Xpath;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\Request;
+use Magento\TestFramework\TestCase\AbstractController;
 use Magento\Theme\Controller\Result\MessagePlugin;
 use PHPUnit\Framework\Constraint\StringContains;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
+class AccountTest extends AbstractController
 {
     /**
      * @var TransportBuilderMock
@@ -39,7 +42,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->transportBuilderMock = $this->_objectManager->get(TransportBuilderMock::class);
@@ -53,9 +56,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      */
     protected function login($customerId)
     {
-        /** @var \Magento\Customer\Model\Session $session */
-        $session = Bootstrap::getObjectManager()
-            ->get(\Magento\Customer\Model\Session::class);
+        /** @var Session $session */
+        $session = Bootstrap::getObjectManager()->get(Session::class);
         $session->loginById($customerId);
     }
 
@@ -69,7 +71,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/account/index');
 
         $body = $this->getResponse()->getBody();
-        $this->assertContains('Green str, 67', $body);
+        $this->assertStringContainsString('Green str, 67', $body);
     }
 
     /**
@@ -80,12 +82,12 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $this->dispatch('customer/account/create');
         $body = $this->getResponse()->getBody();
 
-        $this->assertRegExp('~<input type="text"[^>]*id="firstname"~', $body);
-        $this->assertRegExp('~<input type="text"[^>]*id="lastname"~', $body);
-        $this->assertRegExp('~<input type="checkbox"[^>]*id="is_subscribed"~', $body);
-        $this->assertRegExp('~<input type="email"[^>]*id="email_address"~', $body);
-        $this->assertRegExp('~<input type="password"[^>]*id="password"~', $body);
-        $this->assertRegExp('~<input type="password"[^>]*id="password-confirmation"~', $body);
+        $this->assertMatchesRegularExpression('~<input type="text"[^>]*id="firstname"~', $body);
+        $this->assertMatchesRegularExpression('~<input type="text"[^>]*id="lastname"~', $body);
+        $this->assertMatchesRegularExpression('~<input type="checkbox"[^>]*id="is_subscribed"~', $body);
+        $this->assertMatchesRegularExpression('~<input type="email"[^>]*id="email_address"~', $body);
+        $this->assertMatchesRegularExpression('~<input type="password"[^>]*id="password"~', $body);
+        $this->assertMatchesRegularExpression('~<input type="password"[^>]*id="password-confirmation"~', $body);
     }
 
     /**
@@ -128,7 +130,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var Session $customer */
         $session = Bootstrap::getObjectManager()->get(Session::class);
         $this->assertEquals($token, $session->getRpToken());
-        $this->assertNotContains($token, $response->getHeader('Location')->getFieldValue());
+        $this->assertStringNotContainsString($token, $response->getHeader('Location')->getFieldValue());
         $this->assertCustomerConfirmationEquals(1, null);
     }
 
@@ -147,8 +149,8 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $customer->setData('confirmation', 'confirmation');
         $customer->save();
 
-        /** @var \Magento\Customer\Model\Session $customer */
-        $session = Bootstrap::getObjectManager()->get(\Magento\Customer\Model\Session::class);
+        /** @var Session $customer */
+        $session = Bootstrap::getObjectManager()->get(Session::class);
         $session->setRpToken($token);
         $session->setRpCustomerId($customer->getId());
 
@@ -183,19 +185,22 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         // should be redirected to forgotpassword page
         $response = $this->getResponse();
         $this->assertEquals(302, $response->getHttpResponseCode());
-        $this->assertContains('customer/account/forgotpassword', $response->getHeader('Location')->getFieldValue());
+        $this->assertStringContainsString(
+            'customer/account/forgotpassword',
+            $response->getHeader('Location')->getFieldValue()
+        );
         $this->assertCustomerConfirmationEquals(1, 'confirmation');
     }
 
     /**
-     * @param int         $customerId
+     * @param int $customerId
      * @param string|null $confirmation
      */
     private function assertCustomerConfirmationEquals(int $customerId, string $confirmation = null)
     {
         /** @var \Magento\Customer\Model\Customer $customer */
         $customer = Bootstrap::getObjectManager()
-                             ->create(\Magento\Customer\Model\Customer::class)->load($customerId);
+            ->create(\Magento\Customer\Model\Customer::class)->load($customerId);
         $this->assertEquals($confirmation, $customer->getConfirmation());
     }
 
@@ -227,6 +232,10 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $this->assertNull($this->getCustomerByEmail('test1@email.com'));
         $this->assertRedirect($this->stringEndsWith('customer/account/create/'));
+        $this->assertSessionMessages(
+            $this->equalTo([new Phrase('Invalid Form Key. Please refresh the page.')]),
+            MessageInterface::TYPE_ERROR
+        );
     }
 
     /**
@@ -394,19 +403,18 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $body = $this->getResponse()->getBody();
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode(), $body);
-        $this->assertContains('<div class="field field-name-firstname required">', $body);
+        $this->assertStringContainsString('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is not checked
-        $this->assertContains(
-            '<input type="checkbox" name="change_password" id="change-password" '
-            . 'data-role="change-password" value="1" title="Change&#x20;Password" class="checkbox" />',
-            $body
-        );
+        $checkboxXpath = '//input[@type="checkbox"][@name="change_password"][@id="change-password"][not (@checked)]' .
+            '[@data-role="change-password"][@value="1"][@title="Change Password"][@class="checkbox"]';
+
+        $this->assertEquals(1, Xpath::getElementsCountForXpath($checkboxXpath, $body));
     }
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      */
-    public function testChangePasswordEditAction()
+    public function testChangePasswordEditAction(): void
     {
         $this->login(1);
 
@@ -414,14 +422,13 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
 
         $body = $this->getResponse()->getBody();
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode(), $body);
-        $this->assertContains('<div class="field field-name-firstname required">', $body);
+        $this->assertStringContainsString('<div class="field field-name-firstname required">', $body);
         // Verify the password check box is checked
-        $this->assertContains(
-            '<input type="checkbox" name="change_password" id="change-password" '
-            . 'data-role="change-password" value="1" title="Change&#x20;Password" checked="checked" '
-            . 'class="checkbox" />',
-            $body
-        );
+        $checkboxXpath = '//input[@type="checkbox"][@name="change_password"][@id="change-password"]' .
+            '[@data-role="change-password"][@value="1"][@title="Change Password"][@checked="checked"]' .
+            '[@class="checkbox"]';
+
+        $this->assertEquals(1, Xpath::getElementsCountForXpath($checkboxXpath, $body));
     }
 
     /**
@@ -491,14 +498,14 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
             ->setMethod('POST')
             ->setPostValue(
                 [
-                    'form_key'         => $this->_objectManager->get(FormKey::class)->getFormKey(),
-                    'firstname'        => 'John',
-                    'lastname'         => 'Doe',
-                    'email'            => 'johndoe@email.com',
-                    'change_password'  => 1,
-                    'change_email'     => 1,
+                    'form_key' => $this->_objectManager->get(FormKey::class)->getFormKey(),
+                    'firstname' => 'John',
+                    'lastname' => 'Doe',
+                    'email' => 'johndoe@email.com',
+                    'change_password' => 1,
+                    'change_email' => 1,
                     'current_password' => 'password',
-                    'password'         => 'new-Password1',
+                    'password' => 'new-Password1',
                     'password_confirmation' => 'new-Password1',
                 ]
             );
@@ -611,6 +618,10 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      *
      * @magentoDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
      * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Stdlib\Cookie\FailureToSendException
      */
     public function testRegisterCustomerWithEmailConfirmation(): void
     {
@@ -644,6 +655,7 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         /** @var CookieManagerInterface $cookieManager */
         $cookieManager = $this->_objectManager->get(CookieManagerInterface::class);
         $cookieManager->deleteCookie(MessagePlugin::MESSAGES_COOKIES_NAME);
+
         $this->_objectManager->removeSharedInstance(Http::class);
         $this->_objectManager->removeSharedInstance(Request::class);
         $this->_request = null;
@@ -690,19 +702,19 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $message = $this->transportBuilderMock->getSentMessage();
         $rawMessage = $message->getRawMessage();
 
-        /** @var \Zend\Mime\Part $messageBodyPart */
+        /** @var \Laminas\Mime\Part $messageBodyPart */
         $messageBodyParts = $message->getBody()->getParts();
         $messageBodyPart = reset($messageBodyParts);
         $messageEncoding = $messageBodyPart->getCharset();
         $name = 'John Smith';
 
         if (strtoupper($messageEncoding) !== 'ASCII') {
-            $name = \Zend\Mail\Header\HeaderWrap::mimeEncodeValue($name, $messageEncoding);
+            $name = \Laminas\Mail\Header\HeaderWrap::mimeEncodeValue($name, $messageEncoding);
         }
 
         $nameEmail = sprintf('%s <%s>', $name, $email);
 
-        $this->assertContains('To: ' . $nameEmail, $rawMessage);
+        $this->assertStringContainsString('To: ' . $nameEmail, $rawMessage);
 
         $content = $messageBodyPart->getRawContent();
         $confirmationUrl = $this->getConfirmationUrlFromMessageContent($content);
@@ -724,6 +736,10 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
      * @magentoConfigFixture current_store customer/captcha/enable 0
      *
      * @return void
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws \Magento\Framework\Exception\State\InputMismatchException
      */
     public function testResetPasswordWhenEmailChanged(): void
     {
@@ -760,8 +776,9 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
         $customer->setEmail($newEmail);
         $customerRepository->save($customer);
 
-        /* Goes through the link in a mail */
         $this->resetRequest();
+
+        /* Goes through the link in a mail */
         $this->getRequest()
             ->setParam('token', $token)
             ->setParam('id', $customerData->getId());
@@ -841,15 +858,13 @@ class AccountTest extends \Magento\TestFramework\TestCase\AbstractController
     }
 
     /**
-     * Clear request object.
-     *
-     * @return void
+     * @inheritDoc
      */
-    private function resetRequest(): void
+    protected function resetRequest(): void
     {
         $this->_objectManager->removeSharedInstance(Http::class);
         $this->_objectManager->removeSharedInstance(Request::class);
-        $this->_request = null;
+        parent::resetRequest();
     }
 
     /**

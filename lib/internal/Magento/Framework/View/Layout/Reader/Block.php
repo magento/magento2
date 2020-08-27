@@ -81,7 +81,7 @@ class Block implements Layout\ReaderInterface
     private $conditionReader;
 
     /**
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @var string
      */
     private $deprecatedAttributeAcl = 'acl';

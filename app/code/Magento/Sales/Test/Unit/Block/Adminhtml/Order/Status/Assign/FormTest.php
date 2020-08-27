@@ -3,15 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Block\Adminhtml\Order\Status\Assign;
 
+use Magento\Framework\Data\Form\Element\Fieldset;
+use Magento\Framework\Data\FormFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Sales\Block\Adminhtml\Order\Status\Assign\Form;
+use Magento\Sales\Model\Order\Config;
+use Magento\Sales\Model\ResourceModel\Order\Status\Collection;
+use Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class FormTest
- * @package Magento\Sales\Block\Adminhtml\Order\Status\Assign
- */
-class FormTest extends \PHPUnit\Framework\TestCase
+class FormTest extends TestCase
 {
     /**
      * @var Form
@@ -19,33 +25,33 @@ class FormTest extends \PHPUnit\Framework\TestCase
     protected $block;
 
     /**
-     * @var \Magento\Framework\Data\FormFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var FormFactory|MockObject
      */
     protected $formFactory;
 
     /**
-     * @var \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $collectionFactory;
 
     /**
-     * @var \Magento\Sales\Model\Order\Config | \PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     protected $orderConfig;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $this->formFactory = $this->createPartialMock(\Magento\Framework\Data\FormFactory::class, ['create']);
+        $this->formFactory = $this->createPartialMock(FormFactory::class, ['create']);
         $this->collectionFactory = $this->createPartialMock(
-            \Magento\Sales\Model\ResourceModel\Order\Status\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
-        $this->orderConfig = $this->createMock(\Magento\Sales\Model\Order\Config::class);
+        $this->orderConfig = $this->createMock(Config::class);
 
         $this->block = $objectManager->getObject(
-            \Magento\Sales\Block\Adminhtml\Order\Status\Assign\Form::class,
+            Form::class,
             [
                 'formFactory' => $this->formFactory,
                 'collectionFactory' => $this->collectionFactory,
@@ -65,26 +71,26 @@ class FormTest extends \PHPUnit\Framework\TestCase
         $statesForField = array_merge(['' => ''], $states);
 
         $form = $this->createMock(\Magento\Framework\Data\Form::class);
-        $fieldset = $this->createMock(\Magento\Framework\Data\Form\Element\Fieldset::class);
-        $collection = $this->createMock(\Magento\Sales\Model\ResourceModel\Order\Status\Collection::class);
+        $fieldset = $this->createMock(Fieldset::class);
+        $collection = $this->createMock(Collection::class);
 
         $form->expects($this->once())
             ->method('addFieldset')
-            ->will($this->returnValue($fieldset));
+            ->willReturn($fieldset);
         $this->formFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($form));
+            ->willReturn($form);
 
         $collection->expects($this->once())
             ->method('toOptionArray')
-            ->will($this->returnValue($statuses));
+            ->willReturn($statuses);
         $this->collectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($collection));
+            ->willReturn($collection);
 
         $this->orderConfig->expects($this->once())
             ->method('getStates')
-            ->will($this->returnValue($states));
+            ->willReturn($states);
 
         $fieldset->expects($this->at(0))
             ->method('addField')

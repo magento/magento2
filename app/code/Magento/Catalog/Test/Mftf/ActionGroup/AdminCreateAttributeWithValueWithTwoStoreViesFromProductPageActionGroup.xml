@@ -15,7 +15,6 @@
         </annotations>
         <arguments>
             <argument name="firstStoreViewName" type="string"/>
-            <argument name="secondStoreViewName" type="string"/>
         </arguments>
 
         <click selector="{{AdminProductFormNewAttributeSection.addValue}}" stepKey="addValue" after="selectAttributeType"/>

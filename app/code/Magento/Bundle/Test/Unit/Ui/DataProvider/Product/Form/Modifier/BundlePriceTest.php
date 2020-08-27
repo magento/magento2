@@ -68,8 +68,9 @@ class BundlePriceTest extends AbstractModifierTest
         ];
         $priceParams = [
             'imports' => [
-                    'disabled' => 'ns = ${ $.ns }, index = ' . BundlePrice::CODE_PRICE_TYPE . ':checked'
-                ]
+                'disabled' => 'ns = ${ $.ns }, index = ' . BundlePrice::CODE_PRICE_TYPE . ':checked',
+                '__disableTmpl' => ['disabled' => false],
+            ]
         ];
         $priceMeta = [
             'product-details' => [

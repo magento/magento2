@@ -36,7 +36,7 @@ class ProductPriceWithDimensionTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = Bootstrap::getObjectManager()->create(Product::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
