@@ -80,7 +80,6 @@ abstract class AbstractInvoiceControllerTest extends AbstractBackendController
     /**
      * Prepare request
      *
-     * @param int|null $orderId
      * @param array $postParams
      * @param array $params
      * @return void

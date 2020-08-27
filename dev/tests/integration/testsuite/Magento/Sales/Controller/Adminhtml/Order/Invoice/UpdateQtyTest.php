@@ -11,7 +11,7 @@ use Magento\Framework\Serialize\SerializerInterface;
 use Magento\TestFramework\Helper\Xpath;
 
 /**
- * Class tests invoice items update.
+ * Class tests invoice items qty update.
  *
  * @magentoDbIsolation enabled
  * @magentoAppArea adminhtml
