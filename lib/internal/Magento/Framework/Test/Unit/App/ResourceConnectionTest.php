@@ -84,7 +84,7 @@ class ResourceConnectionTest extends TestCase
 
     public function testGetTablePrefix()
     {
-        $this->deploymentConfigMock->expects(self::once())
+        $this->deploymentConfigMock->expects($this->once())
             ->method('get')
             ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX)
             ->willReturn('pref_');
@@ -93,10 +93,10 @@ class ResourceConnectionTest extends TestCase
 
     public function testGetConnectionByName()
     {
-        $this->deploymentConfigMock->expects(self::once())->method('get')
+        $this->deploymentConfigMock->expects($this->once())->method('get')
             ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_CONNECTIONS . '/default')
             ->willReturn(['config']);
-        $this->connectionFactoryMock->expects(self::once())->method('create')
+        $this->connectionFactoryMock->expects($this->once())->method('create')
             ->with(['config'])
             ->willReturn('connection');
 
@@ -112,15 +112,38 @@ class ResourceConnectionTest extends TestCase
                 'connections' => ['default_process_' . getmypid() => 'existing_connection']
             ]
         );
-        $this->deploymentConfigMock->expects(self::never())->method('get');
+        $this->deploymentConfigMock->expects($this->never())->method('get');
 
         self::assertEquals('existing_connection', $unit->getConnectionByName('default'));
     }
 
     public function testCloseConnection()
     {
-        $this->configMock->expects(self::once())->method('getConnectionName')->with('default');
+        $this->configMock->expects($this->once())->method('getConnectionName')->with('default');
 
         $this->unit->closeConnection('default');
+    }
+
+    public function testGetTableNameWithBoolParam()
+    {
+        $this->deploymentConfigMock->expects($this->at(0))
+            ->method('get')
+            ->with(ConfigOptionsListConstants::CONFIG_PATH_DB_PREFIX)
+            ->willReturn('pref_');
+        $this->deploymentConfigMock->expects($this->at(1))->method('get')
+            ->with('db/connection/default')
+            ->willReturn(['config']);
+        $this->configMock->expects($this->atLeastOnce())
+            ->method('getConnectionName')
+            ->with('default')
+            ->willReturn('default');
+
+        $connection = $this->getMockBuilder(\Magento\Framework\DB\Adapter\AdapterInterface::class)->getMock();
+        $connection->expects($this->once())->method('getTableName')->with('pref_1');
+        $this->connectionFactoryMock->expects($this->once())->method('create')
+            ->with(['config'])
+            ->willReturn($connection);
+
+        $this->unit->getTableName(true);
     }
 }
