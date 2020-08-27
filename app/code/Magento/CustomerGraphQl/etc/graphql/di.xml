@@ -39,4 +39,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\GraphQl\Controller\HttpRequestProcessor">
+        <arguments>
+            <argument name="graphQlHeaders" xsi:type="array">
+                <item name="Authorization" xsi:type="object">Magento\CustomerGraphQl\Controller\HttpRequestProcessor\CustomerProcessor</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
