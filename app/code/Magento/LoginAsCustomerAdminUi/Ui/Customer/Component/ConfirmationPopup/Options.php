@@ -10,14 +10,9 @@ namespace Magento\LoginAsCustomerAdminUi\Ui\Customer\Component\ConfirmationPopup
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\Config\Share;
-use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\Escaper;
-use Magento\Sales\Api\CreditmemoRepositoryInterface;
-use Magento\Sales\Api\InvoiceRepositoryInterface;
-use Magento\Sales\Api\OrderRepositoryInterface;
-use Magento\Sales\Api\ShipmentRepositoryInterface;
 use Magento\Store\Model\Group;
 use Magento\Store\Model\System\Store as SystemStore;
 use Magento\Store\Model\Website;
@@ -58,60 +53,24 @@ class Options implements OptionSourceInterface
     private $options;
 
     /**
-     * @var OrderRepositoryInterface
-     */
-    private $orderRepository;
-
-    /**
-     * @var InvoiceRepositoryInterface
-     */
-    private $invoiceRepository;
-
-    /**
-     * @var ShipmentRepositoryInterface
-     */
-    private $shipmentRepository;
-
-    /**
-     * @var CreditmemoRepositoryInterface
-     */
-    private $creditmemoRepository;
-
-    /**
      * @param CustomerRepositoryInterface $customerRepository
      * @param Escaper $escaper
      * @param RequestInterface $request
      * @param Share $share
      * @param SystemStore $systemStore
-     * @param OrderRepositoryInterface|null $orderRepository
-     * @param InvoiceRepositoryInterface|null $invoiceRepository
-     * @param ShipmentRepositoryInterface|null $shipmentRepository
-     * @param CreditmemoRepositoryInterface|null $creditmemoRepository
      */
     public function __construct(
         CustomerRepositoryInterface $customerRepository,
         Escaper $escaper,
         RequestInterface $request,
         Share $share,
-        SystemStore $systemStore,
-        ?OrderRepositoryInterface $orderRepository = null,
-        ?InvoiceRepositoryInterface $invoiceRepository = null,
-        ?ShipmentRepositoryInterface $shipmentRepository = null,
-        ?CreditmemoRepositoryInterface $creditmemoRepository = null
+        SystemStore $systemStore
     ) {
         $this->customerRepository = $customerRepository;
         $this->escaper = $escaper;
         $this->request = $request;
         $this->share = $share;
         $this->systemStore = $systemStore;
-        $this->orderRepository = $orderRepository
-            ?? ObjectManager::getInstance()->get(OrderRepositoryInterface::class);
-        $this->invoiceRepository = $invoiceRepository
-            ?? ObjectManager::getInstance()->get(InvoiceRepositoryInterface::class);
-        $this->shipmentRepository = $shipmentRepository
-            ?? ObjectManager::getInstance()->get(ShipmentRepositoryInterface::class);
-        $this->creditmemoRepository = $creditmemoRepository
-            ?? ObjectManager::getInstance()->get(CreditmemoRepositoryInterface::class);
     }
 
     /**
@@ -123,7 +82,7 @@ class Options implements OptionSourceInterface
             return $this->options;
         }
 
-        $customerId = $this->getCustomerId();
+        $customerId = (int)$this->request->getParam('id');
         $this->options = $this->generateCurrentOptions($customerId);
 
         return $this->options;
@@ -207,31 +166,5 @@ class Options implements OptionSourceInterface
         }
 
         return $groups;
-    }
-
-    /**
-     * Get Customer id from request param.
-     *
-     * @return int
-     */
-    private function getCustomerId(): int
-    {
-        $customerId = $this->request->getParam('id');
-        if (!$customerId) {
-            $orderId = $this->request->getParam('order_id');
-            $shipmentId = $this->request->getParam('shipment_id');
-            $creditmemoId = $this->request->getParam('creditmemo_id');
-            $invoiceId = $this->request->getParam('invoice_id');
-            if ($invoiceId) {
-                $orderId = $this->invoiceRepository->get($invoiceId)->getOrderId();
-            } elseif ($shipmentId) {
-                $orderId = $this->shipmentRepository->get($shipmentId)->getOrderId();
-            } elseif ($creditmemoId) {
-                $orderId = $this->creditmemoRepository->get($creditmemoId)->getOrderId();
-            }
-            $customerId = $this->orderRepository->get($orderId)->getCustomerId();
-        }
-
-        return (int)$customerId;
     }
 }
