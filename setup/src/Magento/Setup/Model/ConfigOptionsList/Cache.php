@@ -308,10 +308,10 @@ class Cache implements ConfigOptionsListInterface
      *
      * @param mixed $option
      *
-     * @return int|null
+     * @return bool
      */
-    private function boolVal($option): ?int
+    private function boolVal($option): bool
     {
-        return (int)in_array(strtolower((string)$option), BooleanConfigOption::OPTIONS_POSITIVE);
+        return in_array(strtolower((string)$option), BooleanConfigOption::OPTIONS_POSITIVE);
     }
 }

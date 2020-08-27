@@ -65,7 +65,7 @@ class DirectoryTest extends TestCase
             $this->deploymentConfigMock
         );
 
-        $this->assertEquals($config, $configData->getData());
+        $this->assertSame($config, $configData->getData());
     }
 
     /**

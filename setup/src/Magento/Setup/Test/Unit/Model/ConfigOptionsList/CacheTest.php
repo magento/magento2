@@ -8,8 +8,8 @@ declare(strict_types=1);
 namespace Magento\Setup\Test\Unit\Model\ConfigOptionsList;
 
 use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Cache\Backend\Redis;
 use Magento\Framework\Setup\Option\BooleanConfigOption;
-use Magento\Framework\Setup\Option\FlagConfigOption;
 use Magento\Framework\Setup\Option\SelectConfigOption;
 use Magento\Framework\Setup\Option\TextConfigOption;
 use Magento\Setup\Model\ConfigOptionsList\Cache as CacheConfigOptionsList;
@@ -19,7 +19,7 @@ use PHPUnit\Framework\TestCase;
 class CacheTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Model\ConfigOptionsList\Cache
+     * @var CacheConfigOptionsList
      */
     private $configOptionsList;
 
@@ -47,7 +47,7 @@ class CacheTest extends TestCase
     /**
      * testGetOptions
      */
-    public function testGetOptions()
+    public function testGetOptions(): void
     {
         $options = $this->configOptionsList->getOptions();
         $this->assertCount(9, $options);
@@ -92,7 +92,7 @@ class CacheTest extends TestCase
     /**
      * testCreateConfigCacheRedis
      */
-    public function testCreateConfigCacheRedis()
+    public function testCreateConfigCacheRedis(): void
     {
         $this->deploymentConfigMock->method('get')->willReturn('');
 
@@ -100,16 +100,16 @@ class CacheTest extends TestCase
             'cache' => [
                 'frontend' => [
                     'default' => [
-                        'backend' => \Magento\Framework\Cache\Backend\Redis::class,
+                        'id_prefix' => $this->expectedIdPrefix(),
+                        'backend' => Redis::class,
                         'backend_options' => [
                             'server' => '',
-                            'port' => '',
                             'database' => '',
+                            'port' => '',
                             'password' => '',
                             'compress_data' => '',
                             'compression_lib' => '',
                         ],
-                        'id_prefix' => $this->expectedIdPrefix(),
                     ]
                 ],
             ]
@@ -118,28 +118,28 @@ class CacheTest extends TestCase
         $configData = $this->configOptionsList
             ->createConfig(['cache-backend' => 'redis'], $this->deploymentConfigMock);
 
-        $this->assertEquals($expectedConfigData, $configData->getData());
+        $this->assertSame($expectedConfigData, $configData->getData());
     }
 
     /**
      * testCreateConfigWithRedisConfig
      */
-    public function testCreateConfigWithRedisConfig()
+    public function testCreateConfigWithRedisConfig(): void
     {
         $expectedConfigData = [
             'cache' => [
                 'frontend' => [
                     'default' => [
-                        'backend' => \Magento\Framework\Cache\Backend\Redis::class,
+                        'id_prefix' => $this->expectedIdPrefix(),
+                        'backend' => Redis::class,
                         'backend_options' => [
                             'server' => 'localhost',
-                            'port' => '1234',
                             'database' => '5',
-                            'password' => '',
+                            'port' => '1234',
+                            'password' => null,
                             'compress_data' => '1',
                             'compression_lib' => 'gzip',
                         ],
-                        'id_prefix' => $this->expectedIdPrefix(),
                     ]
                 ],
             ]
@@ -156,13 +156,13 @@ class CacheTest extends TestCase
 
         $configData = $this->configOptionsList->createConfig($options, $this->deploymentConfigMock);
 
-        $this->assertEquals($expectedConfigData, $configData->getData());
+        $this->assertSame($expectedConfigData, $configData->getData());
     }
 
     /**
      * testCreateConfigCacheRedis
      */
-    public function testCreateConfigWithFileCache()
+    public function testCreateConfigWithFileCache(): void
     {
         $this->deploymentConfigMock->method('get')->willReturn('');
 
@@ -178,13 +178,13 @@ class CacheTest extends TestCase
 
         $configData = $this->configOptionsList->createConfig([], $this->deploymentConfigMock);
 
-        $this->assertEquals($expectedConfigData, $configData->getData());
+        $this->assertSame($expectedConfigData, $configData->getData());
     }
 
     /**
      * testCreateConfigCacheRedis
      */
-    public function testCreateConfigWithIdPrefix()
+    public function testCreateConfigWithIdPrefix(): void
     {
         $this->deploymentConfigMock->method('get')->willReturn('');
 
@@ -204,13 +204,42 @@ class CacheTest extends TestCase
             $this->deploymentConfigMock
         );
 
-        $this->assertEquals($expectedConfigData, $configData->getData());
+        $this->assertSame($expectedConfigData, $configData->getData());
+    }
+
+    /**
+     * @dataProvider allowParallelGenerationDataProvider
+     *
+     * @param string|null $value
+     * @param bool $expectedValue
+     */
+    public function testCreateConfigWithAllowParallelGeneration(?string $value, bool $expectedValue): void
+    {
+        $this->deploymentConfigMock->method('get')->willReturn('');
+
+        $expectedConfigData = [
+            'cache' => [
+                'frontend' => [
+                    'default' => [
+                        'id_prefix' => $this->expectedIdPrefix(),
+                    ]
+                ],
+                'allow_parallel_generation' => $expectedValue
+            ]
+        ];
+
+        $configData = $this->configOptionsList->createConfig(
+            ['allow-parallel-generation' => $value],
+            $this->deploymentConfigMock
+        );
+
+        $this->assertSame($expectedConfigData, $configData->getData());
     }
 
     /**
      * testValidateWithValidInput
      */
-    public function testValidateWithValidInput()
+    public function testValidateWithValidInput(): void
     {
         $options = [
             'cache-backend' => 'redis',
@@ -229,7 +258,7 @@ class CacheTest extends TestCase
     /**
      * testValidateWithInvalidInput
      */
-    public function testValidateWithInvalidInput()
+    public function testValidateWithInvalidInput(): void
     {
         $invalidCacheOption = 'clay-tablet';
         $options = ['cache-backend' => $invalidCacheOption];
@@ -238,6 +267,21 @@ class CacheTest extends TestCase
 
         $this->assertCount(1, $errors);
         $this->assertEquals("Invalid cache handler 'clay-tablet'", $errors[0]);
+    }
+
+    /**
+     * @return array[]
+     */
+    public function allowParallelGenerationDataProvider(): array
+    {
+        return [
+            ['0', false],
+            ['false', false],
+            ['no', false],
+            ['1', true],
+            ['true', true],
+            ['yes', true],
+        ];
     }
 
     /**

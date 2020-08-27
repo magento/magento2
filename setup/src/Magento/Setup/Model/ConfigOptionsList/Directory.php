@@ -50,7 +50,7 @@ class Directory implements ConfigOptionsListInterface
             if (!isset($options[$inputKey])) {
                 continue;
             }
-            $configData->set($configPath, (int)$this->boolVal($options[$inputKey]));
+            $configData->set($configPath, $this->boolVal($options[$inputKey]));
         }
 
         return $configData;
