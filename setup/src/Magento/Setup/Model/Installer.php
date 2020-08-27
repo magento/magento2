@@ -8,6 +8,7 @@ namespace Magento\Setup\Model;
 
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Framework\App\Cache\Manager;
+use Magento\Framework\App\Cache\StateInterface;
 use Magento\Framework\App\Cache\Type\Block as BlockCache;
 use Magento\Framework\App\Cache\Type\Config as ConfigCache;
 use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
@@ -30,6 +31,7 @@ use Magento\Framework\Model\ResourceModel\Db\Context;
 use Magento\Framework\Module\ModuleList\Loader as ModuleLoader;
 use Magento\Framework\Module\ModuleListInterface;
 use Magento\Framework\Mview\TriggerCleaner;
+use Magento\Framework\Registry;
 use Magento\Framework\Setup\Declaration\Schema\DryRunLogger;
 use Magento\Framework\Setup\FilePermissions;
 use Magento\Framework\Setup\InstallDataInterface;
@@ -878,8 +880,8 @@ class Installer
      */
     public function installSchema(array $request)
     {
-        /** @var \Magento\Framework\Registry $registry */
-        $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
+        /** @var Registry $registry */
+        $registry = $this->objectManagerProvider->get()->get(Registry::class);
         //For backward compatibility in install and upgrade scripts with enabled parallelization.
         $registry->register('setup-mode-enabled', true);
 
@@ -926,15 +928,16 @@ class Installer
      */
     public function installDataFixtures(array $request = [])
     {
-        $cacheState = $this->objectManagerProvider->get()->create(\Magento\Framework\App\Cache\StateInterface::class);
+        /** @var StateInterface $cacheState */
+        $cacheState = $this->objectManagerProvider->get()->get(StateInterface::class);
         $frontendCaches = [
             PageCache::TYPE_IDENTIFIER => $cacheState->isEnabled(PageCache::TYPE_IDENTIFIER),
             BlockCache::TYPE_IDENTIFIER => $cacheState->isEnabled(BlockCache::TYPE_IDENTIFIER),
             LayoutCache::TYPE_IDENTIFIER => $cacheState->isEnabled(LayoutCache::TYPE_IDENTIFIER)
         ];
 
-        /** @var \Magento\Framework\Registry $registry */
-        $registry = $this->objectManagerProvider->get()->get(\Magento\Framework\Registry::class);
+        /** @var Registry $registry */
+        $registry = $this->objectManagerProvider->get()->get(Registry::class);
         //For backward compatibility in install and upgrade scripts with enabled parallelization.
         $registry->register('setup-mode-enabled', true);
 
@@ -1356,7 +1359,7 @@ class Installer
      * @return void
      * @throws Exception
      */
-    private function updateCaches($isEnabled, $types = [])
+    private function updateCaches(bool $isEnabled, array $types = []): void
     {
         /** @var Manager $cacheManager */
         $cacheManager = $this->objectManagerProvider->get()->create(Manager::class);
@@ -1364,17 +1367,20 @@ class Installer
         $cacheTypes = array_keys($types);
         $availableTypes = $cacheManager->getAvailableTypes();
         $cacheTypes = empty($cacheTypes) ? $availableTypes : array_intersect($availableTypes, $cacheTypes);
-        if ($isEnabled == true) {
-            foreach ($types as $type => $status) {
-                $enabledTypes = $cacheManager->setEnabled((array)$type, $status);
-            }
-        }
-        else
-        {
-            $enabledTypes = $cacheManager->setEnabled($cacheTypes, $isEnabled);
-        }
+
         if ($isEnabled) {
+            $enabledTypes = [];
+
+            foreach ($types as $type => $status) {
+                $enabledTypes[] = $cacheManager->setEnabled((array)$type, $status);
+            }
+
+            $enabledTypes = array_merge([], ...$enabledTypes);
+
             $cacheManager->clean($enabledTypes);
+
+        } else {
+            $cacheManager->setEnabled($cacheTypes, $isEnabled);
         }
 
         // Only get statuses of specific cache types
