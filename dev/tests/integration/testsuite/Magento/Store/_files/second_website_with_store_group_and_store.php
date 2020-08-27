@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 
+use Magento\Catalog\Helper\DefaultCategory;
 use Magento\CatalogSearch\Model\Indexer\Fulltext;
 use Magento\Framework\Indexer\IndexerRegistry;
 use Magento\Store\Api\Data\GroupInterface;
@@ -28,6 +29,8 @@ $websiteResource = $objectManager->get(WebsiteResource::class);
 $storeResource = $objectManager->get(StoreResource::class);
 /** @var GroupResource $groupResource */
 $groupResource = $objectManager->get(GroupResource::class);
+/** @var DefaultCategory $defaultCategory */
+$defaultCategory = $objectManager->get(DefaultCategory::class);
 /** @var WebsiteInterface $website */
 $website = $objectManager->get(WebsiteInterfaceFactory::class)->create();
 $website->setCode('test')->setName('Test Website');
@@ -35,6 +38,7 @@ $websiteResource->save($website);
 /** @var GroupInterface $storeGroup */
 $storeGroup = $objectManager->get(GroupInterfaceFactory::class)->create();
 $storeGroup->setCode('second_group')
+    ->setRootCategoryId($defaultCategory->getId())
     ->setName('second store group')
     ->setWebsite($website);
 $groupResource->save($storeGroup);

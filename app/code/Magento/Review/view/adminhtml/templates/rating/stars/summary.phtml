@@ -11,7 +11,7 @@
 ?>
 <?php if ($block->getRatingSummary()->getCount()): ?>
     <div class="rating-box">
-        <div class="rating"/>
+        <div class="rating"></div>
     </div>
     <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
         "width:" . /* @noEscape */ ceil($block->getRatingSummary()->getSum() /

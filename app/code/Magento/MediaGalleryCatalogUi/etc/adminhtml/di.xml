@@ -1,0 +1,48 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:framework:ObjectManager/etc/config.xsd">
+    <virtualType name="Magento\MediaGalleryUi\Model\Api\SearchCriteria\CollectionProcessor\FilterProcessor">
+        <arguments>
+            <argument name="customFilters" xsi:type="array">
+                <item name="product_id" xsi:type="object">Magento\MediaGalleryCatalogUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\Product</item>
+                <item name="category_id" xsi:type="object">Magento\MediaGalleryCatalogUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\Category</item>
+            </argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaGalleryCatalogUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\Product" type="Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\Entity">
+        <arguments>
+            <argument name="entityType" xsi:type="string">catalog_product</argument>
+        </arguments>
+    </virtualType>
+    <virtualType name="Magento\MediaGalleryCatalogUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\Category" type="Magento\MediaGalleryUi\Model\SearchCriteria\CollectionProcessor\FilterProcessor\Entity">
+        <arguments>
+            <argument name="entityType" xsi:type="string">catalog_category</argument>
+        </arguments>
+    </virtualType>
+    <type name="Magento\MediaGalleryUi\Model\GetAssetUsageDetails">
+        <arguments>
+            <argument name="contentTypes" xsi:type="array">
+                <item name="catalog_category" xsi:type="array">
+                    <item name="name" xsi:type="string">Categories</item>
+                    <item name="link" xsi:type="string">media_gallery_catalog/category/index</item>
+                </item>
+                <item name="catalog_product" xsi:type="array">
+                    <item name="name" xsi:type="string">Products</item>
+                    <item name="link" xsi:type="string">catalog/product/index</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\MediaGalleryCatalogUi\Ui\Component\Listing\Columns\Thumbnail">
+        <arguments>
+            <argument name="defaultPlaceholder" xsi:type="array">
+                <item name="image" xsi:type="string">Magento_MediaGalleryCatalogUi::images/category/placeholder/image.jpg</item>
+            </argument>
+        </arguments>
+    </type>
+</config>
