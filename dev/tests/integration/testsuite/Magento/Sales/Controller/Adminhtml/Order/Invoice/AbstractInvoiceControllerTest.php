@@ -67,10 +67,10 @@ abstract class AbstractInvoiceControllerTest extends AbstractBackendController
     /**
      * Get firs order invoice
      *
-     * @param OrderInterface $order
+     * @param OrderInterface|int $order
      * @return InvoiceInterface
      */
-    protected function getInvoiceByOrder(OrderInterface $order): InvoiceInterface
+    protected function getInvoiceByOrder($order): InvoiceInterface
     {
         $invoiceCollection = $this->invoiceCollectionFactory->create();
 
@@ -82,12 +82,13 @@ abstract class AbstractInvoiceControllerTest extends AbstractBackendController
      *
      * @param int|null $orderId
      * @param array $postParams
+     * @param array $params
      * @return void
      */
-    protected function prepareRequest(int $orderId = null, array $postParams = []): void
+    protected function prepareRequest(array $postParams = [], array $params = []): void
     {
         $this->getRequest()->setMethod(Http::METHOD_POST);
-        $this->getRequest()->setParams(['order_id' => $orderId]);
+        $this->getRequest()->setParams($params);
         $this->getRequest()->setPostValue($postParams);
     }
 

@@ -47,7 +47,7 @@ class UpdateQtyTest extends AbstractInvoiceControllerTest
             $qtyToInvoice
         );
         $post = $this->hydratePost([$itemId => $qtyToInvoice]);
-        $this->prepareRequest((int)$order->getEntityId(), $post);
+        $this->prepareRequest($post, ['order_id' => $order->getEntityId()]);
         $this->dispatch('backend/sales/order_invoice/updateQty');
         $this->assertEquals(
             1,
@@ -65,7 +65,7 @@ class UpdateQtyTest extends AbstractInvoiceControllerTest
         $order = $this->getOrder('100000001');
         $itemId = $order->getItemsCollection()->getFirstItem()->getId();
         $post = $this->hydratePost([$itemId => '1']);
-        $this->prepareRequest((int)$order->getEntityId(), $post);
+        $this->prepareRequest($post, ['order_id' => $order->getEntityId()]);
         $this->dispatch('backend/sales/order_invoice/updateQty');
         $this->assertErrorResponse('The order does not allow an invoice to be created.');
     }
@@ -80,7 +80,7 @@ class UpdateQtyTest extends AbstractInvoiceControllerTest
         $order = $this->getOrder('100000001');
         $itemId = $order->getItemsCollection()->getFirstItem()->getId();
         $post = $this->hydratePost([$itemId => '0']);
-        $this->prepareRequest((int)$order->getEntityId(), $post);
+        $this->prepareRequest($post, ['order_id' => $order->getEntityId()]);
         $this->dispatch('backend/sales/order_invoice/updateQty');
         $this->assertErrorResponse(
             'The invoice can\'t be created without products. Add products and try again.'
@@ -99,7 +99,7 @@ class UpdateQtyTest extends AbstractInvoiceControllerTest
                 ],
             ],
         ]);
-        $this->prepareRequest(987665, $post);
+        $this->prepareRequest($post, ['order_id' => 6543265]);
         $this->dispatch('backend/sales/order_invoice/updateQty');
         $this->assertErrorResponse('The order no longer exists.');
     }

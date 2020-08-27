@@ -48,11 +48,12 @@ class SaveTest extends AbstractInvoiceControllerTest
         $order = $this->getOrder('100000001');
         $itemId = $order->getItemsCollection()->getFirstItem()->getId();
         $post = $this->hydratePost([$itemId => 2]);
-        $this->prepareRequest((int)$order->getEntityId(), $post);
+        $this->prepareRequest($post, ['order_id' => $order->getEntityId()]);
         $this->dispatch('backend/sales/order_invoice/save');
         $invoice = $this->getInvoiceByOrder($order);
         $this->checkSuccess($invoice, 2);
         $message = $this->transportBuilder->getSentMessage();
+        $this->assertNotNull($message);
         $subject = __('Invoice for your %1 order', $order->getStore()->getFrontendName())->render();
         $messageConstraint = $this->logicalAnd(
             new StringContains($invoice->getBillingAddress()->getName()),
@@ -79,7 +80,7 @@ class SaveTest extends AbstractInvoiceControllerTest
     {
         $order = $this->getOrder('100000001');
         $post = $this->hydratePost([$order->getItemsCollection()->getFirstItem()->getId() => 2]);
-        $this->prepareRequest((int)$order->getEntityId(), $post);
+        $this->prepareRequest($post, ['order_id' => $order->getEntityId()]);
         $this->dispatch('backend/sales/order_invoice/save');
         $this->checkSuccess($this->getInvoiceByOrder($order), 2);
         $this->assertNull($this->transportBuilder->getSentMessage());
@@ -106,7 +107,7 @@ class SaveTest extends AbstractInvoiceControllerTest
             $commentMessage,
             $doShipment
         );
-        $this->prepareRequest((int)$order->getEntityId(), $post);
+        $this->prepareRequest($post, ['order_id' => $order->getEntityId()]);
         $this->dispatch('backend/sales/order_invoice/save');
         $this->checkSuccess($this->getInvoiceByOrder($order), $invoicedItemsQty, $commentMessage, $doShipment);
     }
@@ -138,7 +139,7 @@ class SaveTest extends AbstractInvoiceControllerTest
     public function testWitNoExistingOrder(): void
     {
         $expectedMessage = (string)__('The order no longer exists.');
-        $this->prepareRequest(7989836);
+        $this->prepareRequest(['order_id' => 899989]);
         $this->dispatch('backend/sales/order_invoice/save');
         $this->assertErrorResponse($expectedMessage);
     }
@@ -152,7 +153,7 @@ class SaveTest extends AbstractInvoiceControllerTest
     {
         $expectedMessage = (string)__('The order does not allow an invoice to be created.');
         $order = $this->getOrder('100000001');
-        $this->prepareRequest((int)$order->getEntityId());
+        $this->prepareRequest([], ['order_id' => $order->getEntityId()]);
         $this->dispatch('backend/sales/order_invoice/save');
         $this->assertErrorResponse($expectedMessage);
     }
@@ -167,7 +168,7 @@ class SaveTest extends AbstractInvoiceControllerTest
         $expectedMessage = (string)__('The invoice can\'t be created without products. Add products and try again.');
         $order = $this->getOrder('100000001');
         $post = $this->hydratePost([$order->getItemsCollection()->getFirstItem()->getId() => '0']);
-        $this->prepareRequest((int)$order->getEntityId(), $post);
+        $this->prepareRequest($post, ['order_id' => $order->getEntityId()]);
         $this->dispatch('backend/sales/order_invoice/save');
         $this->assertErrorResponse($this->escaper->escapeHtml($expectedMessage));
     }
