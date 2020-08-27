@@ -13,8 +13,8 @@
             <stories value="Create Product Attributes"/>
             <title value="Attributess with reserved codes should not be created"/>
             <description value="Admin should not be able to create product attribute with reserved codes"/>
-            <severity value="BLOCKER"/>
-            <group value="Catalog"/>
+            <severity value="AVERAGE"/>
+            <group value="catalog"/>
         </annotations>
 
         <before>
