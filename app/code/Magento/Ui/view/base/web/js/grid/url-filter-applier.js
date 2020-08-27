@@ -5,8 +5,9 @@
 
 define([
     'uiComponent',
-    'underscore'
-], function (Component, _) {
+    'underscore',
+    'jquery'
+], function (Component, _, $) {
     'use strict';
 
     return Component.extend({
@@ -36,7 +37,9 @@ define([
          * Apply filter
          */
         apply: function () {
-            var urlFilter = this.getFilterParam(this.searchString);
+            var urlFilter = this.getFilterParam(this.searchString),
+                applied,
+                filters;
 
             if (_.isUndefined(this.filterComponent())) {
                 setTimeout(function () {
@@ -47,8 +50,9 @@ define([
             }
 
             if (Object.keys(urlFilter).length) {
-                this.filterComponent().setData(urlFilter, false);
-                this.filterComponent().apply();
+                applied = this.filterComponent().get('applied');
+                filters = $.extend({}, applied, urlFilter);
+                this.filterComponent().set('applied', filters);
             }
         },
 
@@ -63,8 +67,13 @@ define([
 
             return _.chain(searchString.slice(1).split('&'))
                 .map(function (item) {
+
                     if (item && item.search(this.filterKey) !== -1) {
                         itemArray = item.split('=');
+
+                        if (itemArray[1].search('\\[') === 0) {
+                            itemArray[1] = itemArray[1].replace(/[\[\]]/g, '').split(',');
+                        }
 
                         itemArray[0] = itemArray[0].replace(this.filterKey, '')
                                 .replace(/[\[\]]/g, '');

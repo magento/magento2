@@ -13,6 +13,7 @@ use Magento\Framework\Event\Observer;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Payment\Observer\AbstractDataAssignObserver;
 use Magento\Quote\Api\Data\PaymentInterface;
+use Magento\Quote\Model\Quote\Payment;
 
 /**
  * Class PayflowProSetCcData set CcData to quote payment
@@ -50,21 +51,23 @@ class PayflowProSetCcData extends AbstractDataAssignObserver
     {
         $dataObject = $this->readDataArgument($observer);
         $additionalData = $dataObject->getData(PaymentInterface::KEY_ADDITIONAL_DATA);
+        /**
+         * @var Payment $paymentModel
+         */
         $paymentModel = $this->readPaymentModelArgument($observer);
+        $customerId = (int)$paymentModel->getQuote()->getCustomer()->getId();
 
         if (!isset($additionalData['cc_details'])) {
             return;
         }
 
-        if ($this->isPayflowProVaultEnable()) {
-            if (!isset($additionalData[self::IS_ACTIVE_PAYMENT_TOKEN_ENABLER])) {
-                $paymentModel->setData(self::IS_ACTIVE_PAYMENT_TOKEN_ENABLER, false);
+        if ($this->isPayflowProVaultEnable() && $customerId !== 0) {
+            if (isset($additionalData[self::IS_ACTIVE_PAYMENT_TOKEN_ENABLER])) {
+                $paymentModel->setData(
+                    self::IS_ACTIVE_PAYMENT_TOKEN_ENABLER,
+                    $additionalData[self::IS_ACTIVE_PAYMENT_TOKEN_ENABLER]
+                );
             }
-
-            $paymentModel->setData(
-                self::IS_ACTIVE_PAYMENT_TOKEN_ENABLER,
-                $additionalData[self::IS_ACTIVE_PAYMENT_TOKEN_ENABLER]
-            );
         } else {
             $paymentModel->setData(self::IS_ACTIVE_PAYMENT_TOKEN_ENABLER, false);
         }

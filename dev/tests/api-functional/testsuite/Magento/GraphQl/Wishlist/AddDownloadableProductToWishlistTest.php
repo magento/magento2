@@ -181,7 +181,7 @@ mutation {
       }
     ]
 ) {
-    userInputErrors {
+    user_errors {
       code
       message
     }
