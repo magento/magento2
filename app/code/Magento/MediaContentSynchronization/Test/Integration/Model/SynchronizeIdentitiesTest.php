@@ -72,19 +72,17 @@ class SynchronizeIdentitiesTest extends TestCase
 
         foreach ($mediaContentIdentities as $contentIdentity) {
             $assetId = 2020;
-            $categoryId = 28767;
-            $productId = 1567;
-            $pageId = 5;
-            $blockId = 1;
             $identity = $this->contentIdentityFactory->create($contentIdentity);
             $this->assertEquals([$assetId], $this->getAssetIds->execute($identity));
 
             $synchronizedContentIdentities = $this->getContentIdentities->execute([$assetId]);
             $this->assertEquals(4, count($synchronizedContentIdentities));
-            $this->assertEquals($categoryId, $synchronizedContentIdentities[0]->getEntityId());
-            $this->assertEquals($productId, $synchronizedContentIdentities[1]->getEntityId());
-            $this->assertEquals($pageId, $synchronizedContentIdentities[2]->getEntityId());
-            $this->assertEquals($blockId, $synchronizedContentIdentities[3]->getEntityId());
+
+            $syncedIds = [];
+            foreach ($synchronizedContentIdentities as $syncedContentIdentity) {
+                $syncedIds[] = (int)$syncedContentIdentity->getEntityId();
+            }
+            $this->assertContains($contentIdentity['entityId'], $syncedIds);
         }
     }
 
