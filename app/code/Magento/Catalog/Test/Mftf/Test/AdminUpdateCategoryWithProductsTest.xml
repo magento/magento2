@@ -55,8 +55,7 @@
         <waitForPageLoad stepKey="waitFroPageToLoad1"/>
         <scrollTo  selector="{{AdminCategoryContentSection.productTableRow}}"  stepKey="scrollToTableRow"/>
         <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProduct1FromTableRow"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForCategorySaved"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton"/>
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
         <waitForPageLoad stepKey="waitForPageTitleToBeSaved"/>
 

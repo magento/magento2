@@ -9,13 +9,13 @@ namespace Magento\MediaContentSynchronizationCms\Model\Synchronizer;
 
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
-use Magento\MediaContentSynchronizationApi\Api\SynchronizerInterface;
+use Magento\MediaContentSynchronizationApi\Api\SynchronizeInterface;
 use Magento\MediaGallerySynchronizationApi\Model\FetchBatchesInterface;
 
 /**
  * Synchronize block content with assets
  */
-class Block implements SynchronizerInterface
+class Block implements SynchronizeInterface
 {
     private const CONTENT_TYPE = 'cms_block';
     private const TYPE = 'entityType';

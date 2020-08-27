@@ -58,7 +58,7 @@ abstract class AbstractConfig implements ConfigInterface
     /**
      * @var string
      */
-    private static $bnCode = 'Magento_Cart_%s';
+    private static $bnCode = 'Magento_2_%s';
 
     /**
      * @var \Magento\Framework\App\Config\ScopeConfigInterface

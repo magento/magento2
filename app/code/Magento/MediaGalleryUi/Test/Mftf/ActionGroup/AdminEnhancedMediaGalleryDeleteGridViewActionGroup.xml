@@ -17,9 +17,9 @@
         </arguments>
 
         <click selector="{{AdminDataGridHeaderSection.bookmarkToggle}}" stepKey="openViewBookmarks"/>
-        <click selector="{{AdminGridDefaultViewControls.viewByName(viewToDelete)}}{{AdminAdobeStockSection.editViewButtonPartial}}" stepKey="clickEditButton"/>
-        <seeElement selector="{{AdminAdobeStockSection.deleteViewButton}}" stepKey="seeDeleteButton"/>
-        <click selector="{{AdminAdobeStockSection.deleteViewButton}}" stepKey="clickDeleteButton"/>
+        <click selector="{{AdminGridDefaultViewControls.viewByName(viewToDelete)}}{{AdminEnhancedMediaGalleryActionsSection.editViewButtonPartial}}" stepKey="clickEditButton"/>
+        <seeElement selector="{{AdminEnhancedMediaGalleryActionsSection.deleteViewButton}}" stepKey="seeDeleteButton"/>
+        <click selector="{{AdminEnhancedMediaGalleryActionsSection.deleteViewButton}}" stepKey="clickDeleteButton"/>
         <waitForPageLoad stepKey="waitForDeletion" time="10"/>
     </actionGroup>
 </actionGroups>
