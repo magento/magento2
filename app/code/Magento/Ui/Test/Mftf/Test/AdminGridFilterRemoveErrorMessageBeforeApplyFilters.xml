@@ -1,27 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!--
  /**
- * Copyright (©) 2020 Pinpoint Designs LTD. All right's reserved.
- *
- * Author: abdarrahman.abouzaid@gmail.com
- * Website: http://www.pinpointdesigns.co.uk
- */
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
 -->
-<!-- Test XML #28687 PR -->
+
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="AdminGridFilterRemoveErrorMessageBeforeApplyFilters">
         <annotations>
             <stories value="Reset Error Messages"/>
             <title value="Remove Error Message Before Apply Filters"/>
-            <description value="Test log in to uI and Remove Error Message Before Apply Filters"/>
-            <testCaseId value="MC-142721"/>
+            <description value="Test login to Admin UI and Remove Error Message Before Apply Filters"/>
             <severity value="CRITICAL"/>
-            <group value="uI"/>
-            <group value="mtf_migrated"/>
+            <group value="ui"/>
         </annotations>
 
         <before>
-            <magentoCLI command="config:set system/backup/functionality_enabled 1" stepKey="setEnableBackupToYes"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="NewRootCategory" stepKey="rootCategory"/>
             <createData entity="defaultSimpleProduct" stepKey="createProduct">
@@ -49,7 +44,6 @@
             </actionGroup>
         </before>
         <after>
-            <magentoCLI command="config:set system/backup/functionality_enabled 0" stepKey="setEnableBackupToNo"/>
             <deleteData stepKey="deleteRootCategory" createDataKey="rootCategory"/>
             <deleteData stepKey="deleteProduct" createDataKey="createProduct"/>
             <deleteData stepKey="deleteProduct2" createDataKey="createProduct2"/>
