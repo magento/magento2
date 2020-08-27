@@ -92,6 +92,8 @@ define([
             });
 
             it('Does not throw before component is initialized', function () {
+                obj.initStorage();
+
                 expect(function () {
                     obj.init();
                 }).not.toThrow();
