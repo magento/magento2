@@ -787,6 +787,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     public function getCustomerGroupId()
     {
         $groupId = $this->getQuote()->getCustomerGroupId();
+        // @phpstan-ignore-next-line
         if (!isset($groupId)) {
             $groupId = $this->getSession()->getCustomerGroupId();
         }
@@ -1445,9 +1446,10 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
              */
             $saveInAddressBook = (int)(!empty($address['save_in_address_book']));
             $shippingAddress->setData('save_in_address_book', $saveInAddressBook);
-        }
-        if ($address instanceof \Magento\Quote\Model\Quote\Address) {
+        } elseif ($address instanceof \Magento\Quote\Model\Quote\Address) {
             $shippingAddress = $address;
+        } else {
+            $shippingAddress = null;
         }
 
         $this->setRecollect(true);

@@ -684,7 +684,6 @@ class CreateTest extends \PHPUnit\Framework\TestCase
     public function testGetCustomerCartNewCart()
     {
         $customerIdFromFixture = 1;
-        $customerEmailFromFixture = 'customer@example.com';
 
         /** Preconditions */
         /** @var SessionQuote $session */
