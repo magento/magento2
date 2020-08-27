@@ -15,7 +15,6 @@ use Magento\Framework\View\Element\UiComponentFactory;
 use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
 use Magento\Ui\Component\Filters\FilterModifier;
 use Magento\Ui\Component\Filters\Type\Select;
-use Magento\MediaGalleryApi\Api\GetAssetsByIdsInterface;
 
 /**
  * Asset filter
@@ -28,11 +27,6 @@ class Asset extends Select
     private $getContentIdentities;
 
     /**
-     * @var GetAssetsByIdsInterface
-     */
-    private $getAssetsByIds;
-
-    /**
      * Constructor
      *
      * @param ContextInterface $context
@@ -40,6 +34,7 @@ class Asset extends Select
      * @param FilterBuilder $filterBuilder
      * @param FilterModifier $filterModifier
      * @param OptionSourceInterface $optionsProvider
+     * @param GetContentByAssetIdsInterface $getContentIdentities
      * @param array $components
      * @param array $data
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)

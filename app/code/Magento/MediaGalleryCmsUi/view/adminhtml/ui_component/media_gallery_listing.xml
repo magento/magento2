@@ -13,7 +13,6 @@
                     name="page_id"
                     provider="${ $.parentName }"
                     sortOrder="120"
-                    class="Magento\MediaGalleryCmsUi\Ui\Component\Listing\Filters\UsedInPages"
                     component="Magento_Ui/js/grid/filters/elements/ui-select"
                     template="ui/grid/filters/elements/ui-select">
                 <argument name="data" xsi:type="array">
@@ -39,7 +38,6 @@
                     name="block_id"
                     provider="${ $.parentName }"
                     sortOrder="130"
-                    class="Magento\MediaGalleryCmsUi\Ui\Component\Listing\Filters\UsedInBlocks"
                     component="Magento_Ui/js/grid/filters/elements/ui-select"
                     template="ui/grid/filters/elements/ui-select">
                 <argument name="data" xsi:type="array">

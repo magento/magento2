@@ -42,41 +42,44 @@ define([
          * Validate initial value actually exists
          */
         validateInitialValue: function () {
-            if (!_.isEmpty(this.value())) {
-                $.ajax({
-                    url: this.validationUrl,
-                    type: 'GET',
-                    dataType: 'json',
-                    context: this,
-                    data: {
-                        ids: this.value()
-                    },
-
-                    /** @param {Object} response */
-                    success: function (response) {
-                        if (!_.isEmpty(response)) {
-                            this.options([]);
-                            this.success({
-                                options: response
-                            });
-                        }
-                        this.filterChips().updateActive();
-                    },
-
-                    /** set empty array if error occurs */
-                    error: function () {
-                        this.options([]);
-                    },
-
-                    /** stop loader */
-                    complete: function () {
-                        this.validationLoading(false);
-                        this.setCaption();
-                    }
-                });
-            } else {
+            if (_.isEmpty(this.value())) {
                 this.validationLoading(false);
+
+                return;
             }
+
+            $.ajax({
+                url: this.validationUrl,
+                type: 'GET',
+                dataType: 'json',
+                context: this,
+                data: {
+                    ids: this.value()
+                },
+
+                /** @param {Object} response */
+                success: function (response) {
+                    if (!_.isEmpty(response)) {
+                        this.options([]);
+                        this.success({
+                            options: response
+                        });
+                    }
+                    this.filterChips().updateActive();
+                },
+
+                /** set empty array if error occurs */
+                error: function () {
+                    this.options([]);
+                },
+
+                /** stop loader */
+                complete: function () {
+                    this.validationLoading(false);
+                    this.setCaption();
+                }
+            });
+
         }
     });
 });
