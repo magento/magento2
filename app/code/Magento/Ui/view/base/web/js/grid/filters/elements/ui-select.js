@@ -83,7 +83,6 @@ define([
                     this.setCaption();
                 }
             });
-
         }
     });
 });
