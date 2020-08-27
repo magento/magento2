@@ -687,7 +687,7 @@ class DataProvider extends ModifierPoolDataProvider
                 }
             }
 
-            if (count($fields)) {
+            if (!empty($fields)) {
                 $fieldsMap[$group] = $fields;
             }
         }
