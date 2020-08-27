@@ -52,7 +52,7 @@ class GetSelected extends Action implements HttpGetActionInterface
     }
 
     /**
-     * Execute pages search.
+     * Return selected blocks options.
      *
      * @return ResultInterface
      */

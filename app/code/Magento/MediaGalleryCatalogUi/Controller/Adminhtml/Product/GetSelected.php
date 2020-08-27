@@ -53,6 +53,7 @@ class GetSelected extends Action implements HttpGetActionInterface
     }
 
     /**
+     * Return selected products options
      *
      * @return ResultInterface
      */
@@ -60,7 +61,6 @@ class GetSelected extends Action implements HttpGetActionInterface
     {
         $productIds = $this->getRequest()->getParam('ids');
         $options = [];
-
 
         if (!is_array($productIds)) {
             return $this->resultJsonFactory->create()->setData('parameter ids must be type of array');
