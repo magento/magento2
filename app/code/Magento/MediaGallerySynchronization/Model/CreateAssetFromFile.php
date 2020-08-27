@@ -69,7 +69,7 @@ class CreateAssetFromFile implements CreateAssetFromFileInterface
     }
 
     /**
-     * @inheridoc
+     * @inheritdoc
      */
     public function execute(string $path): AssetInterface
     {
