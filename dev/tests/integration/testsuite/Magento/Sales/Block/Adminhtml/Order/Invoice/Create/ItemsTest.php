@@ -10,7 +10,7 @@ namespace Magento\Sales\Block\Adminhtml\Order\Invoice\Create;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutInterface;
-use Magento\Sales\Model\OrderFactory;
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Model\ResourceModel\Order\Invoice\CollectionFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
@@ -31,7 +31,7 @@ class ItemsTest extends TestCase
     /** @var Items */
     private $block;
 
-    /** @var OrderFactory */
+    /** @var OrderInterfaceFactory */
     private $orderFactory;
 
     /** @var Registry */
@@ -49,7 +49,7 @@ class ItemsTest extends TestCase
 
         $this->objectManager = Bootstrap::getObjectManager();
         $this->block = $this->objectManager->get(LayoutInterface::class)->createBlock(Items::class);
-        $this->orderFactory = $this->objectManager->get(OrderFactory::class);
+        $this->orderFactory = $this->objectManager->get(OrderInterfaceFactory::class);
         $this->registry = $this->objectManager->get(Registry::class);
         $this->invoiceCollectionFactory = $this->objectManager->get(CollectionFactory::class);
     }

@@ -36,7 +36,7 @@ class AddCommentTest extends AbstractInvoiceControllerTest
             ['comment' => ['comment' => $comment, 'is_customer_notified' => true]],
             ['id' => $invoice->getEntityId()]
         );
-        $this->dispatch('backend/sales/order_invoice/addComment');
+        $this->dispatch($this->uri);
 
         $html = $this->getResponse()->getBody();
         $this->assertContains($comment, $html);

@@ -10,7 +10,7 @@ namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 use Magento\Framework\App\Request\Http;
 use Magento\Framework\Escaper;
 use Magento\Framework\Message\MessageInterface;
-use Magento\Sales\Model\OrderFactory;
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\TestFramework\TestCase\AbstractBackendController;
 
 /**
@@ -23,7 +23,7 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  */
 class NewActionTest extends AbstractBackendController
 {
-    /** @var OrderFactory */
+    /** @var OrderInterfaceFactory */
     private $orderFactory;
 
     /** @var Escaper */
@@ -36,7 +36,7 @@ class NewActionTest extends AbstractBackendController
     {
         parent::setUp();
 
-        $this->orderFactory = $this->_objectManager->get(OrderFactory::class);
+        $this->orderFactory = $this->_objectManager->get(OrderInterfaceFactory::class);
         $this->escaper = $this->_objectManager->get(Escaper::class);
     }
 

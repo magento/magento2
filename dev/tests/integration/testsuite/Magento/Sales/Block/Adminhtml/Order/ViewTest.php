@@ -12,8 +12,7 @@ use Magento\Framework\Authorization;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutInterface;
-use Magento\Sales\Api\Data\OrderInterface;
-use Magento\Sales\Model\OrderFactory;
+use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\Helper\Xpath;
 use PHPUnit\Framework\TestCase;
@@ -37,7 +36,7 @@ class ViewTest extends TestCase
     /** @var Registry */
     private $registry;
 
-    /** @var OrderFactory */
+    /** @var OrderInterfaceFactory */
     private $orderFactory;
 
     /**
@@ -53,7 +52,7 @@ class ViewTest extends TestCase
             Authorization::class
         );
         $this->registry = $this->objectManager->get(Registry::class);
-        $this->orderFactory = $this->objectManager->get(OrderFactory::class);
+        $this->orderFactory = $this->objectManager->get(OrderInterfaceFactory::class);
         $this->layout = $this->objectManager->get(LayoutInterface::class);
     }
 
@@ -103,7 +102,7 @@ class ViewTest extends TestCase
     /**
      * Register order
      *
-     * @param OrderInterface $order
+     * @param string $orderIncrementId
      * @return void
      */
     private function registerOrder(string $orderIncrementId): void

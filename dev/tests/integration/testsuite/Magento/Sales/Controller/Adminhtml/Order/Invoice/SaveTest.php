@@ -49,7 +49,7 @@ class SaveTest extends AbstractInvoiceControllerTest
         $itemId = $order->getItemsCollection()->getFirstItem()->getId();
         $post = $this->hydratePost([$itemId => 2]);
         $this->prepareRequest($post, ['order_id' => $order->getEntityId()]);
-        $this->dispatch('backend/sales/order_invoice/save');
+        $this->dispatch($this->uri);
         $invoice = $this->getInvoiceByOrder($order);
         $this->checkSuccess($invoice, 2);
         $message = $this->transportBuilder->getSentMessage();
@@ -81,7 +81,7 @@ class SaveTest extends AbstractInvoiceControllerTest
         $order = $this->getOrder('100000001');
         $post = $this->hydratePost([$order->getItemsCollection()->getFirstItem()->getId() => 2]);
         $this->prepareRequest($post, ['order_id' => $order->getEntityId()]);
-        $this->dispatch('backend/sales/order_invoice/save');
+        $this->dispatch($this->uri);
         $this->checkSuccess($this->getInvoiceByOrder($order), 2);
         $this->assertNull($this->transportBuilder->getSentMessage());
     }
@@ -108,7 +108,7 @@ class SaveTest extends AbstractInvoiceControllerTest
             $doShipment
         );
         $this->prepareRequest($post, ['order_id' => $order->getEntityId()]);
-        $this->dispatch('backend/sales/order_invoice/save');
+        $this->dispatch($this->uri);
         $this->checkSuccess($this->getInvoiceByOrder($order), $invoicedItemsQty, $commentMessage, $doShipment);
     }
 
@@ -140,7 +140,7 @@ class SaveTest extends AbstractInvoiceControllerTest
     {
         $expectedMessage = (string)__('The order no longer exists.');
         $this->prepareRequest(['order_id' => 899989]);
-        $this->dispatch('backend/sales/order_invoice/save');
+        $this->dispatch($this->uri);
         $this->assertErrorResponse($expectedMessage);
     }
 
@@ -154,7 +154,7 @@ class SaveTest extends AbstractInvoiceControllerTest
         $expectedMessage = (string)__('The order does not allow an invoice to be created.');
         $order = $this->getOrder('100000001');
         $this->prepareRequest([], ['order_id' => $order->getEntityId()]);
-        $this->dispatch('backend/sales/order_invoice/save');
+        $this->dispatch($this->uri);
         $this->assertErrorResponse($expectedMessage);
     }
 
@@ -169,7 +169,7 @@ class SaveTest extends AbstractInvoiceControllerTest
         $order = $this->getOrder('100000001');
         $post = $this->hydratePost([$order->getItemsCollection()->getFirstItem()->getId() => '0']);
         $this->prepareRequest($post, ['order_id' => $order->getEntityId()]);
-        $this->dispatch('backend/sales/order_invoice/save');
+        $this->dispatch($this->uri);
         $this->assertErrorResponse($this->escaper->escapeHtml($expectedMessage));
     }
 
