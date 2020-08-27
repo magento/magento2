@@ -5,6 +5,18 @@
  */
 namespace Magento\Widget\Model;
 
+use Magento\Framework\App\Cache\Type\Config;
+use Magento\Framework\App\ObjectManager;
+use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
+use Magento\Framework\Math\Random;
+use Magento\Framework\Simplexml\Element;
+use Magento\Framework\View\Asset\Repository;
+use Magento\Framework\View\Asset\Source;
+use Magento\Framework\View\FileSystem;
+use Magento\Widget\Helper\Conditions;
+use Magento\Widget\Model\Config\Data;
+
 /**
  * Widget model for different purposes
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -15,32 +27,32 @@ namespace Magento\Widget\Model;
 class Widget
 {
     /**
-     * @var \Magento\Widget\Model\Config\Data
+     * @var Data
      */
     protected $dataStorage;
 
     /**
-     * @var \Magento\Framework\App\Cache\Type\Config
+     * @var Config
      */
     protected $configCacheType;
 
     /**
-     * @var \Magento\Framework\View\Asset\Repository
+     * @var Repository
      */
     protected $assetRepo;
 
     /**
-     * @var \Magento\Framework\View\Asset\Source
+     * @var Source
      */
     protected $assetSource;
 
     /**
-     * @var \Magento\Framework\View\FileSystem
+     * @var FileSystem
      */
     protected $viewFileSystem;
 
     /**
-     * @var \Magento\Framework\Escaper
+     * @var Escaper
      */
     protected $escaper;
 
@@ -50,30 +62,35 @@ class Widget
     protected $widgetsArray = [];
 
     /**
-     * @var \Magento\Widget\Helper\Conditions
+     * @var Conditions
      */
     protected $conditionsHelper;
 
     /**
-     * @var \Magento\Framework\Math\Random
+     * @var Random
      */
     private $mathRandom;
 
     /**
-     * @param \Magento\Framework\Escaper $escaper
-     * @param \Magento\Widget\Model\Config\Data $dataStorage
-     * @param \Magento\Framework\View\Asset\Repository $assetRepo
-     * @param \Magento\Framework\View\Asset\Source $assetSource
-     * @param \Magento\Framework\View\FileSystem $viewFileSystem
-     * @param \Magento\Widget\Helper\Conditions $conditionsHelper
+     * @var string[]
+     */
+    private $reservedChars = ['}', '{'];
+
+    /**
+     * @param Escaper $escaper
+     * @param Data $dataStorage
+     * @param Repository $assetRepo
+     * @param Source $assetSource
+     * @param FileSystem $viewFileSystem
+     * @param Conditions $conditionsHelper
      */
     public function __construct(
-        \Magento\Framework\Escaper $escaper,
-        \Magento\Widget\Model\Config\Data $dataStorage,
-        \Magento\Framework\View\Asset\Repository $assetRepo,
-        \Magento\Framework\View\Asset\Source $assetSource,
-        \Magento\Framework\View\FileSystem $viewFileSystem,
-        \Magento\Widget\Helper\Conditions $conditionsHelper
+        Escaper $escaper,
+        Data $dataStorage,
+        Repository $assetRepo,
+        Source $assetSource,
+        FileSystem $viewFileSystem,
+        Conditions $conditionsHelper
     ) {
         $this->escaper = $escaper;
         $this->dataStorage = $dataStorage;
@@ -86,15 +103,14 @@ class Widget
     /**
      * Get math random
      *
-     * @return \Magento\Framework\Math\Random
+     * @return Random
      *
      * @deprecated 100.0.10
      */
     private function getMathRandom()
     {
         if ($this->mathRandom === null) {
-            $this->mathRandom = \Magento\Framework\App\ObjectManager::getInstance()
-                ->get(\Magento\Framework\Math\Random::class);
+            $this->mathRandom = ObjectManager::getInstance()->get(Random::class);
         }
         return $this->mathRandom;
     }
@@ -110,14 +126,11 @@ class Widget
         $widgets = $this->getWidgets();
         /** @var array $widget */
         foreach ($widgets as $widget) {
-            if (isset($widget['@'])) {
-                if (isset($widget['@']['type'])) {
-                    if ($type === $widget['@']['type']) {
-                        return $widget;
-                    }
-                }
+            if (isset($widget['@']['type']) && $type === $widget['@']['type']) {
+                return $widget;
             }
         }
+
         return null;
     }
 
@@ -125,12 +138,13 @@ class Widget
      * Return widget XML configuration as \Magento\Framework\DataObject and makes some data preparations
      *
      * @param string $type Widget type
-     * @return null|\Magento\Framework\Simplexml\Element
+     * @return null|Element
      *
      * @deprecated 101.0.0
      */
     public function getConfigAsXml($type)
     {
+        // phpstan:ignore "Call to an undefined method Magento\Widget\Model\Widget::getXmlElementByType()"
         return $this->getXmlElementByType($type);
     }
 
@@ -138,13 +152,13 @@ class Widget
      * Return widget XML configuration as \Magento\Framework\DataObject and makes some data preparations
      *
      * @param string $type Widget type
-     * @return \Magento\Framework\DataObject
+     * @return DataObject
      */
     public function getConfigAsObject($type)
     {
         $widget = $this->getWidgetByClassType($type);
 
-        $object = new \Magento\Framework\DataObject();
+        $object = new DataObject();
         if ($widget === null) {
             return $object;
         }
@@ -164,10 +178,10 @@ class Widget
     /**
      * Prepare widget parameters
      *
-     * @param \Magento\Framework\DataObject $object
+     * @param DataObject $object
      * @return array
      */
-    protected function prepareWidgetParameters(\Magento\Framework\DataObject $object)
+    protected function prepareWidgetParameters(DataObject $object)
     {
         $params = $object->getData('parameters');
         $newParams = [];
@@ -178,7 +192,7 @@ class Widget
                     $data = $this->prepareDropDownValues($data, $key, $sortOrder);
                     $data = $this->prepareHelperBlock($data);
 
-                    $newParams[$key] = new \Magento\Framework\DataObject($data);
+                    $newParams[$key] = new DataObject($data);
                     $sortOrder++;
                 }
             }
@@ -223,7 +237,7 @@ class Widget
     protected function prepareHelperBlock(array $data)
     {
         if (isset($data['helper_block'])) {
-            $helper = new \Magento\Framework\DataObject();
+            $helper = new DataObject();
             if (isset($data['helper_block']['data']) && is_array($data['helper_block']['data'])) {
                 $helper->addData($data['helper_block']['data']);
             }
@@ -296,42 +310,66 @@ class Widget
      */
     public function getWidgetDeclaration($type, $params = [], $asIs = true)
     {
-        $directive = '{{widget type="' . $type . '"';
         $widget = $this->getConfigAsObject($type);
 
+        $directiveItems = '';
         foreach ($params as $name => $value) {
             // Retrieve default option value if pre-configured
-            if ($name == 'conditions') {
-                $name = 'conditions_encoded';
-                $value = $this->conditionsHelper->encode($value);
-            } elseif (is_array($value)) {
-                $value = implode(',', $value);
-            } elseif (trim($value) == '') {
-                $parameters = $widget->getParameters();
-                if (isset($parameters[$name]) && is_object($parameters[$name])) {
-                    $value = $parameters[$name]->getValue();
-                }
-            }
-            if (isset($value)) {
-                $directive .= sprintf(' %s="%s"', $name, $this->escaper->escapeHtmlAttr($value, false));
-            }
+            $directiveItems .= $this->getDirectiveItem($widget, $name, $value);
         }
 
-        $directive .= $this->getWidgetPageVarName($params);
-
-        $directive .= '}}';
+        $directive = sprintf('{{widget type="%s"%s%s}}', $type, $directiveItems, $this->getWidgetPageVarName($params));
 
         if ($asIs) {
             return $directive;
         }
 
-        $html = sprintf(
+        return sprintf(
             '<img id="%s" src="%s" title="%s">',
             $this->idEncode($directive),
             $this->getPlaceholderImageUrl($type),
             $this->escaper->escapeUrl($directive)
         );
-        return $html;
+    }
+
+    /**
+     * Returns directive
+     *
+     * @param DataObject $widget
+     * @param string $name
+     * @param string|array $value
+     * @return string
+     */
+    private function getDirectiveItem(DataObject $widget, string $name, $value): string
+    {
+        if ($name === 'conditions') {
+            $name = 'conditions_encoded';
+            $value = $this->conditionsHelper->encode($value);
+        } elseif (is_array($value)) {
+            $value = implode(',', $value);
+        } elseif (trim($value) === '') {
+            $parameters = $widget->getParameters();
+            if (isset($parameters[$name]) && is_object($parameters[$name])) {
+                $value = $parameters[$name]->getValue();
+            }
+        } else {
+            $value = $this->getPreparedValue($value);
+        }
+
+        return $value ? sprintf(' %s="%s"', $name, $this->escaper->escapeHtmlAttr($value, false)) : '';
+    }
+
+    /**
+     * Returns encoded value if it contains reserved chars
+     *
+     * @param string $value
+     * @return string
+     */
+    private function getPreparedValue(string $value): string
+    {
+        $pattern = sprintf('/%s/', implode('|', $this->reservedChars));
+
+        return preg_match($pattern, $value) ? rawurlencode($value) : $value;
     }
 
     /**
@@ -348,7 +386,7 @@ class Widget
             $pageVarName = sprintf(
                 ' %s="%s"',
                 'page_var_name',
-                'p' . $this->getMathRandom()->getRandomString(5, \Magento\Framework\Math\Random::CHARS_LOWERS)
+                'p' . $this->getMathRandom()->getRandomString(5, Random::CHARS_LOWERS)
             );
         }
         return $pageVarName;
@@ -446,8 +484,8 @@ class Widget
     /**
      * Widget parameters sort callback
      *
-     * @param \Magento\Framework\DataObject $firstElement
-     * @param \Magento\Framework\DataObject $secondElement
+     * @param DataObject $firstElement
+     * @param DataObject $secondElement
      * @return int
      */
     protected function sortParameters($firstElement, $secondElement)
