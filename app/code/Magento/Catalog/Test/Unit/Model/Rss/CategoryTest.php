@@ -3,19 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Rss;
 
+use Magento\Catalog\Model\Layer;
+use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Catalog\Model\Rss\Category;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class CategoryTest
- *
- * @package Magento\Catalog\Model\Rss
- */
-class CategoryTest extends \PHPUnit\Framework\TestCase
+class CategoryTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Rss\Category
+     * @var Category
      */
     protected $model;
 
@@ -25,48 +31,50 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
     protected $objectManagerHelper;
 
     /**
-     * @var \Magento\Catalog\Model\Layer\Category|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Catalog\Model\Layer\Category|MockObject
      */
     protected $categoryLayer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $collectionFactory;
 
     /**
-     * @var \Magento\Catalog\Model\Product\Visibility|\PHPUnit_Framework_MockObject_MockObject
+     * @var Visibility|MockObject
      */
     protected $visibility;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->categoryLayer = $this->createPartialMock(
-            \Magento\Catalog\Model\Layer\Category::class,
-            ['setStore', '__wakeup']
-        );
+        $this->categoryLayer = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Category::class)
+            ->addMethods(['setStore'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->collectionFactory = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class,
+            CollectionFactory::class,
             ['create']
         );
-        $this->visibility = $this->createPartialMock(\Magento\Catalog\Model\Product\Visibility::class, [
-                'getVisibleInCatalogIds',
-                '__wakeup'
-            ]);
+        $this->visibility = $this->createPartialMock(
+            Visibility::class,
+            [
+                'getVisibleInCatalogIds'
+            ]
+        );
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
-        $layerResolver = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Resolver::class)
+        /** @var MockObject|Resolver $layerResolver */
+        $layerResolver = $this->getMockBuilder(Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'create'])
             ->getMock();
         $layerResolver->expects($this->any())
             ->method($this->anything())
-            ->will($this->returnValue($this->categoryLayer));
+            ->willReturn($this->categoryLayer);
 
         $this->objectManagerHelper = new ObjectManagerHelper($this);
-        /** @var \Magento\Catalog\Model\Rss\Category model */
+        /** @var Category model */
         $this->model = $this->objectManagerHelper->getObject(
-            \Magento\Catalog\Model\Rss\Category::class,
+            Category::class,
             [
                 'layerResolver' => $layerResolver,
                 'collectionFactory' => $this->collectionFactory,
@@ -87,104 +95,98 @@ class CategoryTest extends \PHPUnit\Framework\TestCase
         $this->visibility
             ->expects($this->once())
             ->method('getVisibleInCatalogIds')
-            ->will($this->returnValue($visibleInCatalogIds));
-        $products = $this->createPartialMock(\Magento\Catalog\Model\ResourceModel\Product\Collection::class, [
+            ->willReturn($visibleInCatalogIds);
+        $products = $this->createPartialMock(
+            Collection::class,
+            [
                 'setStoreId',
                 'addAttributeToSort',
                 'setVisibility',
                 'setCurPage',
                 'setPageSize',
                 'addCountToCategories',
-            ]);
-        $resourceCollection = $this->createPartialMock(
-            \Magento\Catalog\Model\ResourceModel\Collection\AbstractCollection::class,
-            [
-                'addAttributeToSelect',
-                'addAttributeToFilter',
-                'addIdFilter',
-                'load'
             ]
         );
+        $resourceCollection = $this->getMockBuilder(AbstractCollection::class)
+            ->addMethods(['addIdFilter'])
+            ->onlyMethods(['addAttributeToSelect', 'addAttributeToFilter', 'load'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $resourceCollection->expects($this->exactly(3))
-            ->method('addAttributeToSelect')
-            ->will($this->returnSelf());
+            ->method('addAttributeToSelect')->willReturnSelf();
         $resourceCollection->expects($this->once())
-            ->method('addAttributeToFilter')
-            ->will($this->returnSelf());
+            ->method('addAttributeToFilter')->willReturnSelf();
         $resourceCollection->expects($this->once())
             ->method('addIdFilter')
-            ->with($categoryChildren)
-            ->will($this->returnSelf());
+            ->with($categoryChildren)->willReturnSelf();
         $resourceCollection->expects($this->once())
-            ->method('load')
-            ->will($this->returnSelf());
+            ->method('load')->willReturnSelf();
         $products->expects($this->once())
             ->method('addCountToCategories')
             ->with($resourceCollection);
         $products->expects($this->once())
             ->method('addAttributeToSort')
-            ->with('updated_at', 'desc')
-            ->will($this->returnSelf());
+            ->with('updated_at', 'desc')->willReturnSelf();
         $products->expects($this->once())
             ->method('setVisibility')
-            ->with($visibleInCatalogIds)
-            ->will($this->returnSelf());
+            ->with($visibleInCatalogIds)->willReturnSelf();
         $products->expects($this->once())
             ->method('setCurPage')
-            ->with(1)
-            ->will($this->returnSelf());
+            ->with(1)->willReturnSelf();
         $products->expects($this->once())
             ->method('setPageSize')
-            ->with(50)
-            ->will($this->returnSelf());
+            ->with(50)->willReturnSelf();
         $products->expects($this->once())
             ->method('setStoreId')
             ->with($storeId);
         $this->collectionFactory->expects($this->once())
             ->method('create')
-            ->will($this->returnValue($products));
-        $category = $this->createPartialMock(\Magento\Catalog\Model\Category::class, [
+            ->willReturn($products);
+        $category = $this->createPartialMock(
+            \Magento\Catalog\Model\Category::class,
+            [
                 'getResourceCollection',
                 'getChildren',
-                'getProductCollection',
-                '__wakeup'
-            ]);
+                'getProductCollection'
+            ]
+        );
         $category->expects($this->once())
             ->method('getResourceCollection')
-            ->will($this->returnValue($resourceCollection));
+            ->willReturn($resourceCollection);
         $category->expects($this->once())
             ->method('getChildren')
-            ->will($this->returnValue($categoryChildren));
+            ->willReturn($categoryChildren);
         $category->expects($this->once())
             ->method('getProductCollection')
-            ->will($this->returnValue($products));
-        $layer = $this->createPartialMock(\Magento\Catalog\Model\Layer::class, [
+            ->willReturn($products);
+        $layer = $this->createPartialMock(
+            Layer::class,
+            [
                 'setCurrentCategory',
                 'prepareProductCollection',
                 'getProductCollection',
-                '__wakeup',
-            ]);
+            ]
+        );
         $layer->expects($this->once())
             ->method('setCurrentCategory')
-            ->with($category)
-            ->will($this->returnSelf());
+            ->with($category)->willReturnSelf();
         $layer->expects($this->once())
             ->method('getProductCollection')
-            ->will($this->returnValue($products));
+            ->willReturn($products);
 
-        /** @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Catalog\Model\Layer\Resolver $layerResolver */
-        $layerResolver = $this->getMockBuilder(\Magento\Catalog\Model\Layer\Resolver::class)
+        /** @var MockObject|Resolver $layerResolver */
+        $layerResolver = $this->getMockBuilder(Resolver::class)
             ->disableOriginalConstructor()
             ->setMethods(['get', 'create'])
             ->getMock();
         $layerResolver->expects($this->any())
             ->method($this->anything())
-            ->will($this->returnValue($layer));
+            ->willReturn($layer);
 
         $this->categoryLayer->expects($this->once())
             ->method('setStore')
             ->with($storeId)
-            ->will($this->returnValue($layer));
+            ->willReturn($layer);
         $this->assertEquals($products, $this->model->getProductCollection($category, $storeId));
     }
 }

@@ -90,7 +90,7 @@
                 <requiredEntity createDataKey="createConfigurableProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct3"/>
             </createData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--SKU Product Attribute is enabled for Promo Rule Conditions-->
             <actionGroup ref="NavigateToEditProductAttributeActionGroup" stepKey="navigateToSkuProductAttribute">
                 <argument name="ProductAttribute" value="sku"/>
@@ -98,9 +98,8 @@
             <actionGroup ref="ChangeUseForPromoRuleConditionsProductAttributeActionGroup" stepKey="changeUseForPromoRuleConditionsProductAttributeToYes">
                 <argument name="option" value="Yes"/>
             </actionGroup>
-            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllRules"/>
 
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </before>
 
         <after>
@@ -120,11 +119,13 @@
             <actionGroup ref="ChangeUseForPromoRuleConditionsProductAttributeActionGroup" stepKey="changeUseForPromoRuleConditionsProductAttributeToNo">
                 <argument name="option" value="No"/>
             </actionGroup>
-            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllRules"/>
+            <actionGroup ref="RemoveCatalogPriceRuleActionGroup" stepKey="deleteCatalogPriceRule">
+                <argument name="ruleName" value="{{_defaultCatalogRule.name}}"/>
+            </actionGroup>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!--Open category with products and Sort by price desc-->
@@ -152,8 +153,12 @@
             <argument name="discountAmount" value="{{CatalogRuleByPercentWith96Amount.discount_amount}}"/>
         </actionGroup>
         <actionGroup ref="AdminCatalogPriceRuleSaveAndApplyActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
-        <magentoCLI command="indexer:reindex" arguments="catalogsearch_fulltext catalog_category_product catalog_product_price catalogrule_rule" stepKey="reindexIndices"/>
-        <magentoCLI command="cache:clean" arguments="full_page" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindexIndices">
+            <argument name="indices" value="catalogsearch_fulltext catalog_category_product catalog_product_price catalogrule_rule"/>
+        </actionGroup>
+        <actionGroup ref="CliCacheCleanActionGroup" stepKey="fullCache">
+            <argument name="tags" value="full_page"/>
+        </actionGroup>
 
         <!--Reopen category with products and Sort by price desc-->
         <actionGroup ref="GoToStorefrontCategoryPageByParametersActionGroup" stepKey="goToStorefrontCategoryPage2">

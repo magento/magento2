@@ -44,7 +44,7 @@ class OrderTest extends \PHPUnit\Framework\TestCase
         foreach ($expectedResult as $itemIndex => $expectedItem) {
             /** Validate URL to item */
             $orderIncrementId = substr($expectedItem['id'], strlen('order/1/#'));
-            $this->assertContains(
+            $this->assertStringContainsString(
                 "order/view/order_id/{$orderIdByIncrementId[$orderIncrementId]}",
                 $searchResults[$itemIndex]['url'],
                 'Item URL is invalid.'

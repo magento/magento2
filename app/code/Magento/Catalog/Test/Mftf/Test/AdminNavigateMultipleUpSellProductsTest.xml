@@ -14,7 +14,7 @@
             <title value="Promote Multiple Products (Simple, Configurable) as Up-Sell Products"/>
             <description value="Login as admin and add simple and configurable Products as Up-Sell products"/>
             <testCaseId value="MC-8902"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
         </annotations>
 
@@ -74,7 +74,7 @@
             </createData>
 
             <!--Login as admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <!--Logout as admin-->
@@ -92,12 +92,11 @@
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteConfigProductAttribute"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!--Open Product Index Page-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
 
         <!--Select SimpleProduct -->
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="findCreatedProduct">

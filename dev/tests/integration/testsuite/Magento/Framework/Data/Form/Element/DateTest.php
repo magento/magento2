@@ -22,7 +22,7 @@ class DateTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->elementFactory = $objectManager->create(ElementFactory::class);

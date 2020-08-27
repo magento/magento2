@@ -60,7 +60,7 @@ class CheckoutCartAddProductObserverTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->eventSaverMock = $this->createMock(EventSaver::class);
         $this->reportStatusMock = $this->createMock(ReportStatus::class);

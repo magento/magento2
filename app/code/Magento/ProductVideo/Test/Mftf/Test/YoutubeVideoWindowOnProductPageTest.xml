@@ -11,17 +11,21 @@
     <test name="YoutubeVideoWindowOnProductPageTest">
         <annotations>
             <features value="ProductVideo"/>
-            <stories value="MAGETWO-91707: [Sigma Beauty]Cannot pause Youtube video in IE 11"/>
-            <testCaseId value="MAGETWO-95254"/>
+            <stories value="Check product video on storefront"/>
             <title value="Youtube video window on the product page"/>
             <description value="Check Youtube video window on the product page"/>
             <severity value="MAJOR"/>
-            <group value="ProductVideo"/>
+            <testCaseId value="MAGETWO-95254"/>
+            <useCaseId value="MAGETWO-91707"/>
+            <group value="productVideo"/>
+            <skip>
+                <issueId value="MC-33903"/>
+            </skip>
         </annotations>
 
         <before>
             <!--Log In-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <!--Create category-->
             <createData entity="_defaultCategory" stepKey="createCategory"/>
             <!--Create product-->
@@ -33,8 +37,7 @@
         </before>
 
         <!--Open simple product-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="goToProductIndex"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGrid"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridBySku">
             <argument name="product" value="$$createProduct$$"/>
@@ -47,8 +50,7 @@
         <actionGroup ref="AssertProductVideoAdminProductPageActionGroup" stepKey="assertProductVideoAdminProductPage" after="addProductVideo"/>
 
         <!-- Save the product -->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveFirstProduct"/>
-        <waitForPageLoad stepKey="waitForFirstProductSaved"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveFirstProduct"/>
 
         <!-- Assert product video in storefront product page -->
         <amOnPage url="$$createProduct.name$$.html" stepKey="goToStorefrontCategoryPage"/>

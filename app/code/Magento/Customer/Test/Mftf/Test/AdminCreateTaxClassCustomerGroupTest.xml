@@ -25,7 +25,7 @@
             <getData entity="customerTaxClass" stepKey="customerTaxClassData">
                 <requiredEntity createDataKey="createCustomerTaxClass"/>
             </getData>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="AdminDeleteCustomerGroupActionGroup" stepKey="deleteCustomerGroup">

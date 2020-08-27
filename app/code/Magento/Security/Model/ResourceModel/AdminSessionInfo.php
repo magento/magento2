@@ -23,7 +23,7 @@ class AdminSessionInfo extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\Stdlib\DateTime $dateTime
-     * @param null $connectionName
+     * @param null|string $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -83,9 +83,11 @@ class AdminSessionInfo extends \Magento\Framework\Model\ResourceModel\Db\Abstrac
         $updateOlderThen = null
     ) {
         $whereStatement = [
-            'updated_at > ?' => $this->dateTime->formatDate($updateOlderThen),
             'user_id = ?' => (int) $userId,
         ];
+        if ($updateOlderThen) {
+            $whereStatement['updated_at > ?'] = $this->dateTime->formatDate($updateOlderThen);
+        }
         if (!empty($excludedSessionIds)) {
             $whereStatement['session_id NOT IN (?)'] = $excludedSessionIds;
         }

@@ -53,6 +53,7 @@ class ConfigOptionsList implements ConfigOptionsListInterface
         \Magento\Setup\Model\ConfigOptionsList\Cache::class,
         \Magento\Setup\Model\ConfigOptionsList\PageCache::class,
         \Magento\Setup\Model\ConfigOptionsList\Lock::class,
+        \Magento\Setup\Model\ConfigOptionsList\Directory::class,
     ];
 
     /**

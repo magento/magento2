@@ -69,7 +69,7 @@ class Flat extends \Magento\Indexer\Model\ResourceModel\AbstractResource
      * Category collection factory
      *
      * @var \Magento\Catalog\Model\ResourceModel\Category\CollectionFactory
-     * @deprecated 100.0.12
+     * @deprecated 100.0.2
      */
     protected $_categoryCollectionFactory;
 

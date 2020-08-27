@@ -16,12 +16,15 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
+use Magento\Framework\App\ObjectManager;
+use Magento\Config\Model\Config\PathValidatorFactory;
 
 /**
  * Command provides possibility to show saved system configuration.
  *
  * @api
- * @since 100.2.0
+ * @since 101.0.0
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class ConfigShowCommand extends Command
 {
@@ -79,28 +82,46 @@ class ConfigShowCommand extends Command
     private $inputPath;
 
     /**
+     * @var PathValidatorFactory
+     */
+    private $pathValidatorFactory;
+
+    /**
+     * @var EmulatedAdminhtmlAreaProcessor
+     */
+    private $emulatedAreaProcessor;
+
+    /**
      * @param ValidatorInterface $scopeValidator
      * @param ConfigSourceInterface $configSource
      * @param ConfigPathResolver $pathResolver
      * @param ValueProcessor $valueProcessor
+     * @param PathValidatorFactory|null $pathValidatorFactory
+     * @param EmulatedAdminhtmlAreaProcessor|null $emulatedAreaProcessor
      * @internal param ScopeConfigInterface $appConfig
      */
     public function __construct(
         ValidatorInterface $scopeValidator,
         ConfigSourceInterface $configSource,
         ConfigPathResolver $pathResolver,
-        ValueProcessor $valueProcessor
+        ValueProcessor $valueProcessor,
+        ?PathValidatorFactory $pathValidatorFactory = null,
+        ?EmulatedAdminhtmlAreaProcessor $emulatedAreaProcessor = null
     ) {
         parent::__construct();
         $this->scopeValidator = $scopeValidator;
         $this->configSource = $configSource;
         $this->pathResolver = $pathResolver;
         $this->valueProcessor = $valueProcessor;
+        $this->pathValidatorFactory = $pathValidatorFactory
+            ?: ObjectManager::getInstance()->get(PathValidatorFactory::class);
+        $this->emulatedAreaProcessor = $emulatedAreaProcessor
+            ?: ObjectManager::getInstance()->get(EmulatedAdminhtmlAreaProcessor::class);
     }
 
     /**
      * @inheritdoc
-     * @since 100.2.0
+     * @since 101.0.0
      */
     protected function configure()
     {
@@ -136,8 +157,8 @@ class ConfigShowCommand extends Command
      * Shows error message if configuration for given path doesn't exist
      * or scope/scope-code doesn't pass validation.
      *
-     * {@inheritdoc}
-     * @since 100.2.0
+     * @inheritdoc
+     * @since 101.0.0
      */
     protected function execute(InputInterface $input, OutputInterface $output)
     {
@@ -146,17 +167,17 @@ class ConfigShowCommand extends Command
             $this->scopeCode = $input->getOption(self::INPUT_OPTION_SCOPE_CODE);
             $this->inputPath = trim($input->getArgument(self::INPUT_ARGUMENT_PATH), '/');
 
-            $this->scopeValidator->isValid($this->scope, $this->scopeCode);
-            $configPath = $this->pathResolver->resolve($this->inputPath, $this->scope, $this->scopeCode);
-            $configValue = $this->configSource->get($configPath);
+            $configValue = $this->emulatedAreaProcessor->process(function () {
+                $this->scopeValidator->isValid($this->scope, $this->scopeCode);
+                if ($this->inputPath) {
+                    $pathValidator = $this->pathValidatorFactory->create();
+                    $pathValidator->validate($this->inputPath);
+                }
 
-            if (empty($configValue)) {
-                $output->writeln(sprintf(
-                    '<error>%s</error>',
-                    __('Configuration for path: "%1" doesn\'t exist', $this->inputPath)->render()
-                ));
-                return Cli::RETURN_FAILURE;
-            }
+                $configPath = $this->pathResolver->resolve($this->inputPath, $this->scope, $this->scopeCode);
+
+                return $this->configSource->get($configPath);
+            });
 
             $this->outputResult($output, $configValue, $this->inputPath);
             return Cli::RETURN_SUCCESS;

@@ -9,7 +9,6 @@
  * @magentoConfigFixture default_store payment/cashondelivery/active 1
  * @magentoConfigFixture default_store payment/checkmo/active 1
  * @magentoConfigFixture default_store payment/purchaseorder/active 1
- * @magentoConfigFixture default_store payment/authorizenet_acceptjs/active 1
  */
 declare(strict_types=1);
 
@@ -26,7 +25,6 @@ $configWriter->save('payment/banktransfer/active', 1);
 $configWriter->save('payment/cashondelivery/active', 1);
 $configWriter->save('payment/checkmo/active', 1);
 $configWriter->save('payment/purchaseorder/active', 1);
-$configWriter->save('payment/authorizenet_acceptjs/active', 1);
 
 $scopeConfig = $objectManager->get(ScopeConfigInterface::class);
 $scopeConfig->clean();

@@ -43,7 +43,9 @@ $collection = $urlRewriteCollection
             'http://example.com/external',
             'https://example.com/external2/',
             'http://example.com/external?param1=value1',
-            'https://example.com/external2/?param2=value2'
+            'https://example.com/external2/?param2=value2',
+            '/',
+            'contact?param1=1'
         ]
     )
     ->load()

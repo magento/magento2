@@ -48,8 +48,14 @@ class SendEmailToFriend implements ResolverInterface
      */
     public function resolve(Field $field, $context, ResolveInfo $info, array $value = null, array $args = null)
     {
+        $storeId = $context->getExtensionAttributes()->getStore()->getId();
+
+        if (!$this->sendFriendHelper->isEnabled($storeId)) {
+            throw new GraphQlInputException(__('"Email to a Friend" is not enabled.'));
+        }
+
         /** @var ContextInterface $context */
-        if (!$this->sendFriendHelper->isAllowForGuest()
+        if (!$this->sendFriendHelper->isAllowForGuest($storeId)
             && false === $context->getExtensionAttributes()->getIsCustomer()
         ) {
             throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));

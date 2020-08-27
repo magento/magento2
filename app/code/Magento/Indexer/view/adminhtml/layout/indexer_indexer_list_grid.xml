@@ -81,6 +81,15 @@
                             <argument name="column_css_class" xsi:type="string">indexer-status</argument>
                         </arguments>
                     </block>
+                    <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.indexer.grid.columnSet.indexer_schedule_status" as="indexer_schedule_status">
+                        <arguments>
+                            <argument name="header" xsi:type="string" translate="true">Schedule Status</argument>
+                            <argument name="index" xsi:type="string">schedule_status</argument>
+                            <argument name="renderer" xsi:type="string">Magento\Indexer\Block\Backend\Grid\Column\Renderer\ScheduleStatus</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
+                            <argument name="column_css_class" xsi:type="string">indexer-schedule-status</argument>
+                        </arguments>
+                    </block>
                     <block class="Magento\Backend\Block\Widget\Grid\Column" name="adminhtml.indexer.grid.columnSet.indexer_updated" as="indexer_updated">
                         <arguments>
                             <argument name="header" xsi:type="string" translate="true">Updated</argument>
