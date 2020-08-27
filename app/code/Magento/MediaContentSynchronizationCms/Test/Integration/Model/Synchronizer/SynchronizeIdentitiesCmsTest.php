@@ -5,9 +5,10 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaContentSynchronization\Test\Integration\Model;
+namespace Magento\MediaContentSynchronizationCms\Test\Integration\Model\Synchronizer;
 
 use Magento\Framework\Exception\IntegrationException;
+use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\GetAssetIdsByContentIdentityInterface;
 use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
@@ -17,10 +18,14 @@ use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test for SynchronizeIdentities.
+ * Test for CMS SynchronizeIdentities.
  */
-class SynchronizeIdentitiesTest extends TestCase
+class SynchronizeIdentitiesCmsTest extends TestCase
 {
+    private const ENTITY_TYPE = 'entityType';
+    private const ENTITY_ID = 'entityId';
+    private const FIELD = 'field';
+
     /**
      * @var ContentIdentityInterfaceFactory
      */
@@ -57,32 +62,39 @@ class SynchronizeIdentitiesTest extends TestCase
 
     /**
      * @dataProvider filesProvider
-     * @magentoDataFixture Magento/MediaContentCatalog/_files/category_with_asset.php
-     * @magentoDataFixture Magento/MediaContentCatalog/_files/product_with_asset.php
      * @magentoDataFixture Magento/MediaContentCms/_files/page_with_asset.php
      * @magentoDataFixture Magento/MediaContentCms/_files/block_with_asset.php
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
-     * @param array $mediaContentIdentities
+     * @param ContentIdentityInterface[] $mediaContentIdentities
      * @throws IntegrationException
      */
     public function testExecute(array $mediaContentIdentities): void
     {
-        $this->assertNotEmpty($mediaContentIdentities);
-        $this->synchronizeIdentities->execute($mediaContentIdentities);
+        $contentIdentities = [];
+        foreach ($mediaContentIdentities as $mediaContentIdentity) {
+            $contentIdentities[] = $this->contentIdentityFactory->create(
+                [
+                    self::ENTITY_TYPE => $mediaContentIdentity[self::ENTITY_TYPE],
+                    self::ENTITY_ID => $mediaContentIdentity[self::ENTITY_ID],
+                    self::FIELD => $mediaContentIdentity[self::FIELD]
+                ]
+            );
+        }
 
-        foreach ($mediaContentIdentities as $contentIdentity) {
+        $this->assertNotEmpty($contentIdentities);
+        $this->synchronizeIdentities->execute($contentIdentities);
+
+        foreach ($contentIdentities as $contentIdentity) {
             $assetId = 2020;
-            $identity = $this->contentIdentityFactory->create($contentIdentity);
-            $this->assertEquals([$assetId], $this->getAssetIds->execute($identity));
-
+            $this->assertEquals([$assetId], $this->getAssetIds->execute($contentIdentity));
             $synchronizedContentIdentities = $this->getContentIdentities->execute([$assetId]);
-            $this->assertEquals(4, count($synchronizedContentIdentities));
+            $this->assertEquals(2, count($synchronizedContentIdentities));
 
             $syncedIds = [];
             foreach ($synchronizedContentIdentities as $syncedContentIdentity) {
-                $syncedIds[] = (int)$syncedContentIdentity->getEntityId();
+                $syncedIds[] = $syncedContentIdentity->getEntityId();
             }
-            $this->assertContains($contentIdentity['entityId'], $syncedIds);
+            $this->assertContains($contentIdentity->getEntityId(), $syncedIds);
         }
     }
 
@@ -96,64 +108,18 @@ class SynchronizeIdentitiesTest extends TestCase
         return [
             [
                 [
-                    $this->getCategoryIdentities(),
-                    $this->getProductIdentities(),
-                    $this->getCmsPageIdentities(),
-                    $this->getCmsBlockIdentities()
+                    [
+                        'entityType' => 'cms_page',
+                        'field' => 'content',
+                        'entityId' => 5
+                    ],
+                    [
+                        'entityType' => 'cms_block',
+                        'field' => 'content',
+                        'entityId' => 1
+                    ]
                 ]
             ]
-        ];
-    }
-
-    /**
-     * Format category media content identities
-     */
-    public function getCategoryIdentities()
-    {
-        $categoryId = 28767;
-        return [
-            'entityType' => 'catalog_category',
-            'field' => 'description',
-            'entityId' => $categoryId
-        ];
-    }
-
-    /**
-     * Format product media content identities
-     */
-    public function getProductIdentities()
-    {
-        $productId = 1567;
-        return [
-            'entityType' => 'catalog_product',
-            'field' => 'description',
-            'entityId' => $productId
-        ];
-    }
-
-    /**
-     * Format cms page media content identities
-     */
-    public function getCmsPageIdentities()
-    {
-        $pageId = 5;
-        return [
-            'entityType' => 'cms_page',
-            'field' => 'content',
-            'entityId' => $pageId
-        ];
-    }
-
-    /**
-     * Format cms block media content identities
-     */
-    public function getCmsBlockIdentities()
-    {
-        $blockId = 1;
-        return [
-            'entityType' => 'cms_block',
-            'field' => 'content',
-            'entityId' => $blockId
         ];
     }
 }

@@ -5,37 +5,25 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaContentSynchronization\Model;
+namespace Magento\MediaContentSynchronizationCms\Model\Synchronizer;
 
 use Magento\Framework\App\ResourceConnection;
-use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizeIdentitiesInterface;
 
-class SynchronizeIdentities implements SynchronizeIdentitiesInterface
+class SynchronizeIdentitiesCms implements SynchronizeIdentitiesInterface
 {
-    private const ENTITY_TYPE = 'entityType';
-    private const ENTITY_ID = 'entityId';
-    private const FIELD = 'field';
-
     private const FIELD_CMS_PAGE = 'cms_page';
     private const FIELD_CMS_BLOCK = 'cms_block';
-
     private const ID_CMS_PAGE = 'page_id';
     private const ID_CMS_BLOCK = 'block_id';
-
     private const COLUMN_CMS_CONTENT = 'content';
 
     /**
      * @var ResourceConnection
      */
     private $resourceConnection;
-
-    /**
-     * @var ContentIdentityInterfaceFactory
-     */
-    private $contentIdentityFactory;
 
     /**
      * @var UpdateContentAssetLinksInterface
@@ -49,18 +37,15 @@ class SynchronizeIdentities implements SynchronizeIdentitiesInterface
 
     /**
      * @param ResourceConnection $resourceConnection
-     * @param ContentIdentityInterfaceFactory $contentIdentityFactory
      * @param UpdateContentAssetLinksInterface $updateContentAssetLinks
      * @param GetEntityContentsInterface $getEntityContents
      */
     public function __construct(
         ResourceConnection $resourceConnection,
-        ContentIdentityInterfaceFactory $contentIdentityFactory,
         UpdateContentAssetLinksInterface $updateContentAssetLinks,
         GetEntityContentsInterface $getEntityContents
     ) {
         $this->resourceConnection = $resourceConnection;
-        $this->contentIdentityFactory = $contentIdentityFactory;
         $this->updateContentAssetLinks = $updateContentAssetLinks;
         $this->getEntityContents = $getEntityContents;
     }
@@ -71,29 +56,14 @@ class SynchronizeIdentities implements SynchronizeIdentitiesInterface
     public function execute(array $mediaContentIdentities): void
     {
         foreach ($mediaContentIdentities as $identity) {
-            $contentIdentity = $this->contentIdentityFactory->create(
-                [
-                    self::ENTITY_TYPE => $identity[self::ENTITY_TYPE],
-                    self::ENTITY_ID => $identity[self::ENTITY_ID],
-                    self::FIELD => $identity[self::FIELD]
-                ]
-            );
-
-            if ($identity[self::ENTITY_TYPE] === self::FIELD_CMS_PAGE
-                || $identity[self::ENTITY_TYPE] === self::FIELD_CMS_BLOCK
+            if ($identity->getEntityType() === self::FIELD_CMS_PAGE
+                || $identity->getEntityType() === self::FIELD_CMS_BLOCK
             ) {
-                $content = $this->getCmsMediaContent(
-                    $identity[self::ENTITY_TYPE],
-                    $identity[self::ENTITY_ID]
+                $this->updateContentAssetLinks->execute(
+                    $identity,
+                    $this->getCmsMediaContent($identity->getEntityType(), (int)$identity->getEntityId())
                 );
-            } else {
-                $content = implode(PHP_EOL, $this->getEntityContents->execute($contentIdentity));
             }
-
-            $this->updateContentAssetLinks->execute(
-                $contentIdentity,
-                $content
-            );
         }
     }
 

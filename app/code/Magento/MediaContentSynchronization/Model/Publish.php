@@ -68,14 +68,11 @@ class Publish
      */
     public function execute(array $contentIdentities = []) : void
     {
-        $bulkUuid = $this->identityService->generateId();
-        $dataToEncode = $this->serializer->serialize($contentIdentities);
-
         $data = [
             'data' => [
-                'bulk_uuid' => $bulkUuid,
+                'bulk_uuid' => $this->identityService->generateId(),
                 'topic_name' => self::TOPIC_MEDIA_CONTENT_SYNCHRONIZATION,
-                'serialized_data' => $dataToEncode,
+                'serialized_data' => $this->serializer->serialize($contentIdentities),
                 'status' => OperationInterface::STATUS_TYPE_OPEN,
             ]
         ];
