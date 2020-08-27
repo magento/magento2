@@ -111,7 +111,7 @@ class SynchronizeIdentitiesTest extends TestCase
     public function getCategoryIdentities()
     {
         $categoryId = 28767;
-        return $contentIdentity = [
+        return [
             'entityType' => 'catalog_category',
             'field' => 'description',
             'entityId' => $categoryId
@@ -124,7 +124,7 @@ class SynchronizeIdentitiesTest extends TestCase
     public function getProductIdentities()
     {
         $productId = 1567;
-        return $contentIdentity = [
+        return [
             'entityType' => 'catalog_product',
             'field' => 'description',
             'entityId' => $productId
@@ -137,7 +137,7 @@ class SynchronizeIdentitiesTest extends TestCase
     public function getCmsPageIdentities()
     {
         $pageId = 5;
-        return $contentIdentity = [
+        return [
             'entityType' => 'cms_page',
             'field' => 'content',
             'entityId' => $pageId
@@ -150,7 +150,7 @@ class SynchronizeIdentitiesTest extends TestCase
     public function getCmsBlockIdentities()
     {
         $blockId = 1;
-        return $contentIdentity = [
+        return [
             'entityType' => 'cms_block',
             'field' => 'content',
             'entityId' => $blockId
