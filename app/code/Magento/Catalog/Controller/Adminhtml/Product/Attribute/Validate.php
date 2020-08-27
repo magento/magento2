@@ -23,6 +23,7 @@ use Magento\Framework\Serialize\Serializer\FormData;
 class Validate extends AttributeAction implements HttpGetActionInterface, HttpPostActionInterface
 {
     const DEFAULT_MESSAGE_KEY = 'message';
+    const RESERVED_CODES = ['product_type', 'type_id'];
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
@@ -127,8 +128,8 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
             $attributeCode
         );
 
-        if ($attribute->getId() && !$attributeId || $attributeCode === 'product_type' || $attributeCode === 'type_id') {
-            if ($attributeCode === 'product_type' || $attributeCode === 'type_id') {
+        if ($attribute->getId() && !$attributeId || in_array($attributeCode, static::RESERVED_CODES)) {
+            if (in_array($attributeCode, static::RESERVED_CODES)) {
                 $message = __('Code (%1) is a reserved key and cannot be used as attribute code.', $attributeCode);
             } else {
                 $message = strlen($this->getRequest()->getParam('attribute_code'))
