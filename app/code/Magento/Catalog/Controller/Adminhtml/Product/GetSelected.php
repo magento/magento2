@@ -8,67 +8,77 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Controller\Adminhtml\Product;
 
-use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Framework\Controller\ResultInterface;
+use Magento\Backend\App\Action\Context;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Backend\App\Action;
 
-/** Returns information about selected product by product id. Returns empty array if product don't exist */
-class GetSelected extends \Magento\Backend\App\Action
+/**
+ * Returns  selected product by product id. for ui-select filter
+ */
+class GetSelected extends Action implements HttpGetActionInterface
 {
     /**
-     * Authorization level of a basic admin session
-     *
      * @see _isAllowed()
      */
     const ADMIN_RESOURCE = 'Magento_Catalog::products';
 
     /**
-     * @var \Magento\Framework\Controller\Result\JsonFactory
+     * @var JsonFactory
      */
     private $resultJsonFactory;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory
+     * @var ProductRepositoryInterface
      */
-    private $productCollectionFactory;
+    private $productRepository;
 
     /**
-     * Search constructor.
-     * @param \Magento\Framework\Controller\Result\JsonFactory $jsonFactory
-     * @param \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory
-     * @param \Magento\Backend\App\Action\Context $context
+     *  GetSelected constructor.
+     *
+     * @param JsonFactory $jsonFactory
+     * @param ProductRepositoryInterface $productRepository
+     * @param Context $context
      */
     public function __construct(
-        \Magento\Framework\Controller\Result\JsonFactory $jsonFactory,
-        \Magento\Catalog\Model\ResourceModel\Product\CollectionFactory $productCollectionFactory,
-        \Magento\Backend\App\Action\Context $context
+        JsonFactory $jsonFactory,
+        ProductRepositoryInterface $productRepository,
+        Context $context
     ) {
         $this->resultJsonFactory = $jsonFactory;
-        $this->productCollectionFactory = $productCollectionFactory;
+        $this->productRepository = $productRepository;
         parent::__construct($context);
     }
 
     /**
-     * @return \Magento\Framework\Controller\ResultInterface
+     *
+     * @return ResultInterface
      */
-    public function execute() : \Magento\Framework\Controller\ResultInterface
+    public function execute() : ResultInterface
     {
-        $productId = $this->getRequest()->getParam('productId');
-        /** @var \Magento\Catalog\Model\ResourceModel\Product\Collection $productCollection */
-        $productCollection = $this->productCollectionFactory->create();
-        $productCollection->addAttributeToSelect(ProductInterface::NAME);
-        $productCollection->addIdFilter($productId);
-        $option = [];
-        /** @var ProductInterface $product */
-        if (!empty($productCollection->getFirstItem()->getData())) {
-            $product = $productCollection->getFirstItem();
-            $option = [
-                'value' => $productId,
-                'label' => $product->getName(),
-                'is_active' => $product->getStatus(),
-                'path' => $product->getSku(),
-            ];
+        $productIds = $this->getRequest()->getParam('ids');
+        $options = [];
+
+
+        if (!is_array($productIds)) {
+            return $this->resultJsonFactory->create()->setData('parameter ids must be type of array');
         }
-        /** @var \Magento\Framework\Controller\Result\Json $resultJson */
-        $resultJson = $this->resultJsonFactory->create();
-        return $resultJson->setData($option);
+        foreach ($productIds as $id) {
+            try {
+                $product = $this->productRepository->getById($id);
+                $options[] = [
+                    'value' => $product->getId(),
+                    'label' => $product->getName(),
+                    'is_active' => $product->getSatus(),
+                    'path' => $product->getSku()
+                ];
+            } catch (\Exception $e) {
+                continue;
+            }
+        }
+
+        return $this->resultJsonFactory->create()->setData($options);
     }
 }
