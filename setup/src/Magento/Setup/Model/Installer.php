@@ -8,6 +8,7 @@ namespace Magento\Setup\Model;
 
 use Magento\Backend\Setup\ConfigOptionsList as BackendConfigOptionsList;
 use Magento\Framework\App\Cache\Manager;
+use Magento\Framework\App\Cache\Manager as CacheManager;
 use Magento\Framework\App\Cache\Type\Block as BlockCache;
 use Magento\Framework\App\Cache\Type\Config as ConfigCache;
 use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
@@ -934,14 +935,9 @@ class Installer
         ];
 
         if ($keepCacheStatuses) {
-            $cacheManager = $this->objectManagerProvider->get()->create(\Magento\Framework\App\Cache\Manager::class);
-            $disabledCaches = array_filter(
-                $cacheManager->getStatus(),
-                function ($value, string $key) use ($frontendCaches) {
-                    return $value == false && in_array($key, $frontendCaches);
-                },
-                ARRAY_FILTER_USE_BOTH
-            );
+            $disabledCaches = $this->getDisabledCacheTypes($frontendCaches);
+
+            $frontendCaches = array_diff($frontendCaches, $disabledCaches);
         }
 
         /** @var \Magento\Framework\Registry $registry */
@@ -954,14 +950,19 @@ class Installer
         $setup = $this->dataSetupFactory->create();
         $this->checkFilePermissionsForDbUpgrade();
         $this->log->log('Data install/update:');
-        $this->log->log('Disabling caches:');
-        $this->updateCaches(false, $frontendCaches);
-        $this->handleDBSchemaData($setup, 'data', $request);
-        $this->log->log('Enabling caches:');
-        $this->updateCaches(true, $frontendCaches);
-        if ($keepCacheStatuses && !empty($disabledCaches)) {
-            $this->log->log('Disabling pre-disabled caches:');
-            $this->updateCaches(false, array_keys($disabledCaches));
+
+        if ($frontendCaches) {
+            $this->log->log('Disabling caches:');
+            $this->updateCaches(false, $frontendCaches);
+        }
+
+        try {
+            $this->handleDBSchemaData($setup, 'data', $request);
+        } finally {
+            if ($frontendCaches) {
+                $this->log->log('Enabling caches:');
+                $this->updateCaches(true, $frontendCaches);
+            }
         }
 
         $registry->unregister('setup-mode-enabled');
@@ -1741,5 +1742,26 @@ class Installer
     {
         $this->triggerCleaner->removeTriggers();
         $this->cleanCaches();
+    }
+
+    /**
+     * @param array $cacheTypesToCheck
+     * @return array
+     */
+    private function getDisabledCacheTypes(array $cacheTypesToCheck): array
+    {
+        $disabledCaches = [];
+
+        /** @var CacheManager $cacheManager */
+        $cacheManager = $this->objectManagerProvider->get()->create(CacheManager::class);
+        $cacheStatus = $cacheManager->getStatus();
+
+        foreach ($cacheTypesToCheck as $cacheType) {
+            if (isset($cacheStatus[$cacheType]) && $cacheStatus[$cacheType] === 0) {
+                $disabledCaches[] = $cacheType;
+            }
+        }
+        
+        return $disabledCaches;
     }
 }
