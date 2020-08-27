@@ -21,11 +21,83 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
+
+        <after>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGalleryPage"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFirstFolderForDelete">
+                <argument name="name" value="firstFolder"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFirstFolder"/>
+            <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertFirstFolderWasDeleted">
+                <argument name="name" value="firstFolder"/>
+            </actionGroup>
+            <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectSecondFolderForDelete">
+                <argument name="name" value="secondFolder"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteSecondFolder"/>
+            <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertSecondFolderWasDeleted">
+                <argument name="name" value="secondFolder"/>
+            </actionGroup>
+        </after>
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGalleryPage"/>
-        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
-        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createNewFolder">
-            <argument name="name" value="a"/>
+        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openFirstNewFolderForm"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createFirstNewFolder">
+            <argument name="name" value="firstFolder"/>
         </actionGroup>
-        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertNewFolderCreated"/>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertFirstNewFolderCreated">
+            <argument name="name" value="firstFolder"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
+            <argument name="image" value="ImageUpload"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadSecondImage">
+            <argument name="image" value="ImageUpload_1"/>
+        </actionGroup>
+
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+        <waitForPageLoad stepKey="waitForGridToLoad"/>
+        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openSecondNewFolderForm"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createSecondNewFolder">
+            <argument name="name" value="secondFolder"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertSecondNewFolderCreated">
+            <argument name="name" value="secondFolder"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadThirdImage">
+            <argument name="image" value="ImageUpload3"/>
+        </actionGroup>
+
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="secondResetAdminDataGridToDefaultView"/>
+        <waitForPageLoad stepKey="secondWaitForGridToLoad"/>
+        <grabAttributeFrom selector="{{AdminEnhancedMediaGalleryGridImagePositionSection.nthImageInGrid('0')}}" userInput="src"
+                           stepKey="getFirstImageBeforeNewestFirstSort"/>
+        <grabAttributeFrom selector="{{AdminEnhancedMediaGalleryGridImagePositionSection.nthImageInGrid('1')}}" userInput="src"
+                           stepKey="getSecondImageBeforeNewestFirstSort"/>
+        <grabAttributeFrom selector="{{AdminEnhancedMediaGalleryGridImagePositionSection.nthImageInGrid('2')}}" userInput="src"
+                           stepKey="getThirdImageBeforeNewestFirstSort"/>
+        <actionGroup ref="AdminEnhancedMediaGalleryClickSortActionGroup" stepKey="sortByNewestFirst">
+            <argument name="sortName" value="newest_first"/>
+        </actionGroup>
+        <grabAttributeFrom selector="{{AdminEnhancedMediaGalleryGridImagePositionSection.nthImageInGrid('0')}}" userInput="src"
+                           stepKey="getFirstImageAfterNewestFirstSort"/>
+        <grabAttributeFrom selector="{{AdminEnhancedMediaGalleryGridImagePositionSection.nthImageInGrid('1')}}" userInput="src"
+                           stepKey="getSecondImageAfterNewestFirstSort"/>
+        <grabAttributeFrom selector="{{AdminEnhancedMediaGalleryGridImagePositionSection.nthImageInGrid('2')}}" userInput="src"
+                           stepKey="getThirdImageAfterNewestFirstSort"/>
+        <assertEquals stepKey="assertFirstImagePositionAfterNewestFirstSort">
+            <actualResult type="string">{$getFirstImageAfterNewestFirstSort}</actualResult>
+            <expectedResult type="string">{$getFirstImageBeforeNewestFirstSort}</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertSecondImagePositionAfterNewestFirstSort">
+            <actualResult type="string">{$getSecondImageAfterNewestFirstSort}</actualResult>
+            <expectedResult type="string">{$getSecondImageBeforeNewestFirstSort}</expectedResult>
+        </assertEquals>
+        <assertEquals stepKey="assertThirdImagePositionAfterNewestFirstSort">
+            <actualResult type="string">{$getThirdImageAfterNewestFirstSort}</actualResult>
+            <expectedResult type="string">{$getThirdImageBeforeNewestFirstSort}</expectedResult>
+        </assertEquals>
     </test>
 </tests>
