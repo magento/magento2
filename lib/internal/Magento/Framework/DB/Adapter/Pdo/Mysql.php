@@ -47,31 +47,31 @@ class Mysql extends \Zend_Db_Adapter_Pdo_Mysql implements AdapterInterface
 {
     // @codingStandardsIgnoreEnd
 
-    const TIMESTAMP_FORMAT      = 'Y-m-d H:i:s';
-    const DATETIME_FORMAT       = 'Y-m-d H:i:s';
-    const DATE_FORMAT           = 'Y-m-d';
+    public const TIMESTAMP_FORMAT      = 'Y-m-d H:i:s';
+    public const DATETIME_FORMAT       = 'Y-m-d H:i:s';
+    public const DATE_FORMAT           = 'Y-m-d';
 
-    const DDL_DESCRIBE          = 1;
-    const DDL_CREATE            = 2;
-    const DDL_INDEX             = 3;
-    const DDL_FOREIGN_KEY       = 4;
-    const DDL_EXISTS            = 5;
-    const DDL_CACHE_PREFIX      = 'DB_PDO_MYSQL_DDL';
-    const DDL_CACHE_TAG         = 'DB_PDO_MYSQL_DDL';
+    public const DDL_DESCRIBE          = 1;
+    public const DDL_CREATE            = 2;
+    public const DDL_INDEX             = 3;
+    public const DDL_FOREIGN_KEY       = 4;
+    public const DDL_EXISTS            = 5;
+    public const DDL_CACHE_PREFIX      = 'DB_PDO_MYSQL_DDL';
+    public const DDL_CACHE_TAG         = 'DB_PDO_MYSQL_DDL';
 
-    const LENGTH_TABLE_NAME     = 64;
-    const LENGTH_INDEX_NAME     = 64;
-    const LENGTH_FOREIGN_NAME   = 64;
+    public const LENGTH_TABLE_NAME     = 64;
+    public const LENGTH_INDEX_NAME     = 64;
+    public const LENGTH_FOREIGN_NAME   = 64;
 
     /**
      * MEMORY engine type for MySQL tables
      */
-    const ENGINE_MEMORY = 'MEMORY';
+    public const ENGINE_MEMORY = 'MEMORY';
 
     /**
      * Maximum number of connection retries
      */
-    const MAX_CONNECTION_RETRIES = 10;
+    public const MAX_CONNECTION_RETRIES = 10;
 
     /**
      * Default class name for a DB statement.
