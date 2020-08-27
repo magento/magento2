@@ -84,6 +84,8 @@ class GetCustomerByToken
         }
 
         //Unique customer found.
-        return $found->getItems()[0];
+        $items = $found->getItems();
+
+        return reset($items);
     }
 }
