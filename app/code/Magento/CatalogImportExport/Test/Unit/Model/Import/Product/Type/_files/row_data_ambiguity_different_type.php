@@ -5,8 +5,6 @@
  */
 declare(strict_types=1);
 
-declare(strict_types=1);
-
 return [
     'sku' => 'simple',
     '_custom_option_type' => 'date_time',

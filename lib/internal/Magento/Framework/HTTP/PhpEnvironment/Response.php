@@ -28,6 +28,9 @@ class Response extends \Laminas\Http\PhpEnvironment\Response implements \Magento
         $headers = $this->getHeaders();
         if ($headers->has($name)) {
             $header = $headers->get($name);
+            if (is_iterable($header)) {
+                $header = $header[0];
+            }
         }
         return $header;
     }
@@ -94,8 +97,13 @@ class Response extends \Laminas\Http\PhpEnvironment\Response implements \Magento
     {
         $headers = $this->getHeaders();
         if ($headers->has($name)) {
-            $header = $headers->get($name);
-            $headers->removeHeader($header);
+            $headerValues = $headers->get($name);
+            if (!is_iterable($headerValues)) {
+                $headerValues = [$headerValues];
+            }
+            foreach ($headerValues as $headerValue) {
+                $headers->removeHeader($headerValue);
+            }
         }
 
         return $this;

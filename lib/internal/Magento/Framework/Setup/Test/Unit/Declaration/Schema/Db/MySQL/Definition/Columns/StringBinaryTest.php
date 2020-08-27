@@ -114,6 +114,24 @@ class StringBinaryTest extends TestCase
     }
 
     /**
+     * @param array $definition
+     * @param bool $expectedLength
+     * @dataProvider definitionDataProvider()
+     */
+    public function testGetBinaryDefaultValueFromDefinition($definition)
+    {
+        $defaultValue = 'test';
+        if (preg_match('/^(binary|varbinary)/', $definition)) {
+            $default = '0x' . bin2hex($defaultValue);
+        } else {
+            $default = $defaultValue;
+        }
+
+        $result = $this->stringBinary->fromDefinition(['definition' => $definition, 'default' => $default]);
+        $this->assertEquals($result['default'], $defaultValue);
+    }
+
+    /**
      * Test from definition conversion.
      *
      * @param array $definition

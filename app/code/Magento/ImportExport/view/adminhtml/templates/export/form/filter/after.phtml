@@ -7,9 +7,13 @@
 /**
  * @deprecated Not used since export filter grid has been moved to Ui components.
  * @see Magento_ImportExport::view/adminhtml/ui_component/export_filter_grid.xml
+ *
+ * @var \Magento\Backend\Block\Template $block
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
-<script>
+
+<?php $scriptString = <<<script
 require([
     'mage/adminhtml/grid'
 ], function(){
@@ -22,4 +26,6 @@ require([
         };
     }
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

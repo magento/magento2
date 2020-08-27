@@ -286,7 +286,7 @@ class ShippingMethodManagement implements
      * @param ExtensibleDataInterface|null $address
      * @return ShippingMethodInterface[] An array of shipping methods.
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
-     * @deprecated 100.2.0
+     * @deprecated 100.1.6
      */
     protected function getEstimatedRates(
         Quote $quote,
@@ -366,7 +366,7 @@ class ShippingMethodManagement implements
      * Gets the data object processor
      *
      * @return DataObjectProcessor
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private function getDataObjectProcessor()
     {

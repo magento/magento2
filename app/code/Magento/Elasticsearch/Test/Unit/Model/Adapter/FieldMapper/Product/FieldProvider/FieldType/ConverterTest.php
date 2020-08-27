@@ -56,7 +56,7 @@ class ConverterTest extends TestCase
     {
         return [
             ['string', 'string'],
-            ['float', 'float'],
+            ['float', 'double'],
             ['integer', 'integer'],
         ];
     }

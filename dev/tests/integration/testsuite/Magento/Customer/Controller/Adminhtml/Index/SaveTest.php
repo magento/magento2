@@ -22,6 +22,7 @@ use Magento\Newsletter\Model\SubscriberFactory;
 use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\TestCase\AbstractBackendController;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
  * Tests for save customer via backend/customer/index/save controller.
@@ -222,6 +223,32 @@ class SaveTest extends AbstractBackendController
                 ],
             ]
         ];
+    }
+
+    /**
+     * Update customer with exceptions
+     *
+     * @magentoDbIsolation enabled
+     *
+     * @return void
+     */
+    public function testUpdateCustomerErrors(): void
+    {
+        $postData = [
+            'customer' => [
+                CustomerData::FIRSTNAME => 'John',
+                CustomerData::LASTNAME => 'Doe',
+            ],
+            'subscription' => '1',
+        ];
+        $expectedMessages = [(string)__('Something went wrong while saving the customer.')];
+        $postData['customer']['entity_id'] = -1;
+        $params = ['back' => true];
+        $this->dispatchCustomerSave($postData, $params);
+        $this->assertSessionMessages(
+            $this->equalTo($expectedMessages),
+            MessageInterface::TYPE_ERROR
+        );
     }
 
     /**
@@ -512,7 +539,7 @@ class SaveTest extends AbstractBackendController
      * @param array $sender
      * @param int $customerId
      * @param string|null $newEmail
-     * @return \PHPUnit\Framework\MockObject\MockObject
+     * @return MockObject
      */
     private function prepareEmailMock(
         int $occurrenceNumber,
@@ -520,7 +547,7 @@ class SaveTest extends AbstractBackendController
         array $sender,
         int $customerId,
         $newEmail = null
-    ) : \PHPUnit\Framework\MockObject\MockObject {
+    ) : MockObject {
         $area = Area::AREA_FRONTEND;
         $customer = $this->customerRepository->getById($customerId);
         $storeId = $customer->getStoreId();
@@ -568,12 +595,12 @@ class SaveTest extends AbstractBackendController
     /**
      * Add email mock to class
      *
-     * @param \PHPUnit\Framework\MockObject\MockObject $transportBuilderMock
+     * @param MockObject $transportBuilderMock
      * @param string $className
      * @return void
      */
     private function addEmailMockToClass(
-        \PHPUnit\Framework\MockObject\MockObject $transportBuilderMock,
+        MockObject $transportBuilderMock,
         $className
     ): void {
         $mocked = $this->_objectManager->create(

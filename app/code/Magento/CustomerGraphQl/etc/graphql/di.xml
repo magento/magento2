@@ -29,4 +29,14 @@
             </argument>
         </arguments>
     </type>
+    <!-- Validate input customer data -->
+    <type name="Magento\CustomerGraphQl\Model\Customer\ValidateCustomerData">
+        <arguments>
+            <argument name="validators" xsi:type="array">
+                <item name="validateRequiredArguments" xsi:type="object">Magento\CustomerGraphQl\Model\Customer\ValidateCustomerData\ValidateRequiredArguments</item>
+                <item name="validateEmail" xsi:type="object">Magento\CustomerGraphQl\Model\Customer\ValidateCustomerData\ValidateEmail</item>
+                <item name="validateGender" xsi:type="object">Magento\CustomerGraphQl\Model\Customer\ValidateCustomerData\ValidateGender</item>
+            </argument>
+        </arguments>
+    </type>
 </config>

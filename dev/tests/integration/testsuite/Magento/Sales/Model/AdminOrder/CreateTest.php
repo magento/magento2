@@ -249,6 +249,7 @@ class CreateTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Catalog/_files/product_simple.php
      * @magentoAppIsolation enabled
+     * @magentoDbIsolation disabled
      */
     public function testGetCustomerWishlist()
     {
