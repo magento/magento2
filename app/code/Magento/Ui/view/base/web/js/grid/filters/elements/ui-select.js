@@ -29,7 +29,11 @@ define([
 
         },
 
-        /** @inheritdoc */
+        /**
+         * Initializes UiSelect component.
+         *
+         * @returns {UiSelect} Chainable.
+         */
         initialize: function () {
             this._super();
 
