@@ -623,7 +623,7 @@ class DataProvider extends ModifierPoolDataProvider
 
                     $categoryData[$attributeCode][0]['url'] = $this->categoryImage->getUrl($category, $attributeCode);
 
-                    $categoryData[$attributeCode][0]['size'] = isset($stat) ? $stat['size'] : 0;
+                    $categoryData[$attributeCode][0]['size'] = $stat['size'];
                     $categoryData[$attributeCode][0]['type'] = $mime;
                 }
             }
