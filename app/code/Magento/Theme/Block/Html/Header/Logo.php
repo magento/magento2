@@ -108,7 +108,7 @@ class Logo extends \Magento\Framework\View\Element\Template
      *
      * @return int
      */
-    public function getLogoImageWidth() :int
+    public function getLogoImageWidth(): int
     {
         $logoWidth = $this->_scopeConfig->getValue(
             'design/header/logo_width',
