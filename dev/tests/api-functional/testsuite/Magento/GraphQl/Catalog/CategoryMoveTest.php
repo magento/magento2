@@ -55,7 +55,7 @@ use Magento\TestFramework\TestCase\GraphQlAbstract;
  *           {
  *             "name": "Category 1.2",
  *             "path": "1/2/3/13",
- *             "product_count": 2
+ *             "product_count": 1
  *           }
  *         ]
  *       }
@@ -155,7 +155,7 @@ QUERY;
                         [
                             'name' => 'Category 1.2',
                             'path' => '1/2/3/13',
-                            'product_count' => '2'
+                            'product_count' => '1'
                         ]
                     ]
                 ]
