@@ -105,7 +105,7 @@
         <dontSeeElement selector="{{AdminProductMessagesSection.errorMessage}}" stepKey="dontSeeErrorPng"/>
 
         <!-- Save the first product and go to the storefront -->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
         <amOnPage url="$$firstProduct.name$$.html" stepKey="goToStorefront"/>
         <waitForPageLoad stepKey="waitForStorefront"/>
 
