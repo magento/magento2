@@ -693,12 +693,8 @@ class CreateTest extends \PHPUnit\Framework\TestCase
 
         /** SUT execution */
         $customerQuote = $this->model->getCustomerCart();
-        self::assertNotEmpty($customerQuote->getId(), 'Quote ID is invalid.');
-        self::assertEquals(
-            $customerEmailFromFixture,
-            $customerQuote->getCustomerEmail(),
-            'Customer data is preserved incorrectly in a newly quote.'
-        );
+        self::assertInstanceOf(Quote::class, $customerQuote);
+        self::assertEmpty($customerQuote->getData());
     }
 
     /**

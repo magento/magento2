@@ -745,10 +745,12 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             try {
                 $this->_cart = $this->quoteRepository->getForCustomer($customerId, [$storeId]);
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                $this->_cart->setStore($this->getSession()->getStore());
-                $customerData = $this->customerRepository->getById($customerId);
-                $this->_cart->assignCustomer($customerData);
-                $this->quoteRepository->save($this->_cart);
+                if ($this->getQuote()->hasItems()) {
+                    $this->_cart->setStore($this->getSession()->getStore());
+                    $customerData = $this->customerRepository->getById($customerId);
+                    $this->_cart->assignCustomer($customerData);
+                    $this->quoteRepository->save($this->_cart);
+                }
             }
         }
 
