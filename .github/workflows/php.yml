@@ -61,9 +61,9 @@ jobs:
       elasticsearch:
         image: magento/magento-cloud-docker-elasticsearch:7.6-1.2
         env:
-          - discovery.type=single-node
-          - xpack.security.enabled=false
-          - "ES_JAVA_OPTS=-Xms64m -Xmx512m"
+          discovery.type: single-node
+          xpack.security.enabled: false
+          ES_JAVA_OPTS: "-Xms64m -Xmx512m"
         ports:
           - 9200
     steps:
