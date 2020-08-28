@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -8,8 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Swatches\Test\Unit\Controller\Ajax;
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product;
-use Magento\Catalog\Model\ProductFactory;
 use Magento\Framework\App\Action\Context;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
@@ -24,14 +23,16 @@ use PHPUnit\Framework\TestCase;
 
 class MediaTest extends TestCase
 {
+    private const STUB_PRODUCT_ID = 59;
+
     /** @var array */
     private $mediaGallery;
 
     /** @var Data|MockObject */
     private $swatchHelperMock;
 
-    /** @var ProductFactory|MockObject */
-    private $productModelFactoryMock;
+    /** @var ProductRepositoryInterface|MockObject */
+    private $productRepositoryMock;
 
     /** @var Config|MockObject */
     private $config;
@@ -72,21 +73,18 @@ class MediaTest extends TestCase
         $this->objectManager = new ObjectManager($this);
 
         $this->swatchHelperMock = $this->createMock(Data::class);
-        $this->productModelFactoryMock = $this->createPartialMock(
-            ProductFactory::class,
-            ['create']
-        );
+        $this->productRepositoryMock = $this->getMockForAbstractClass(ProductRepositoryInterface::class);
         $this->config = $this->createMock(Config::class);
         $this->config->method('getTtl')->willReturn(1);
-
         $this->productMock = $this->createMock(Product::class);
+
         $this->contextMock = $this->createMock(Context::class);
 
         $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->contextMock->method('getRequest')->willReturn($this->requestMock);
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
-            ->setMethods(['setPublicHeaders'])
+            ->addMethods(['setPublicHeaders'])
             ->getMockForAbstractClass();
         $this->responseMock->method('setPublicHeaders')->willReturnSelf();
         $this->contextMock->method('getResponse')->willReturn($this->responseMock);
@@ -94,14 +92,17 @@ class MediaTest extends TestCase
         $this->contextMock->method('getResultFactory')->willReturn($this->resultFactory);
 
         $this->jsonMock = $this->createMock(Json::class);
-        $this->resultFactory->expects($this->once())->method('create')->with('json')->willReturn($this->jsonMock);
+        $this->resultFactory->expects($this->once())
+            ->method('create')
+            ->with('json')
+            ->willReturn($this->jsonMock);
 
         $this->controller = $this->objectManager->getObject(
             Media::class,
             [
                 'context' => $this->contextMock,
                 'swatchHelper' => $this->swatchHelperMock,
-                'productModelFactory' => $this->productModelFactoryMock,
+                'productRepository' => $this->productRepositoryMock,
                 'config' => $this->config
             ]
         );
@@ -109,21 +110,18 @@ class MediaTest extends TestCase
 
     public function testExecute()
     {
-        $this->requestMock->expects($this->any())->method('getParam')->with('product_id')->willReturn(59);
-        $this->productMock
-            ->expects($this->once())
-            ->method('load')
-            ->with(59)
+        $this->requestMock->method('getParam')
+            ->with('product_id')
+            ->willReturn(self::STUB_PRODUCT_ID);
+
+        $this->productRepositoryMock->method('get')
+            ->with(self::STUB_PRODUCT_ID)
             ->willReturn($this->productMock);
+
         $this->productMock
             ->expects($this->once())
             ->method('getIdentities')
             ->willReturn(['tags']);
-
-        $this->productModelFactoryMock
-            ->expects($this->once())
-            ->method('create')
-            ->willReturn($this->productMock);
 
         $this->swatchHelperMock
             ->expects($this->once())
