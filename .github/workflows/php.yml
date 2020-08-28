@@ -20,8 +20,8 @@ jobs:
         php-version: 7.4
         extensions: bcmath, ctype, curl, dom, gd, hash, iconv, intl, mbstring, openssl, pdo_mysql, simplexml, soap, xsl, zip
 
-    - name: Validate composer.json and composer.lock
-      run: composer validate
+    #- name: Validate composer.json and composer.lock
+    #  run: composer validate
 
     - name: Cache Composer packages
       id: composer-cache
