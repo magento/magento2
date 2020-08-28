@@ -39,7 +39,7 @@ jobs:
     name: Integration Tests CE
     runs-on: ubuntu-latest
     container:
-        image: magento/magento-cloud-docker-php:7.4-cli-1.2
+        image: magento/magento-cloud-docker-php:7.4-cli-1.1
         env:
             ENABLE_SENDMAIL: true
     services:
