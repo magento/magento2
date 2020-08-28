@@ -103,8 +103,6 @@ QUERY;
 
     public function testQueryTestUnionResults()
     {
-        $id = 1;
-
         $query = <<<QUERY
 {
     testUnion {
