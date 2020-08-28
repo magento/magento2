@@ -87,7 +87,7 @@ jobs:
         run: sed -e "s/'db-host' => 'localhost'/'db-host' => 'mysql'/g" -e "s/'amqp-host' => 'localhost'/'amqp-host' => 'rabbitmq'/g" -e "s/'elasticsearch-host' => 'localhost'/'elasticsearch-host' => 'elasticsearch'/g" dev/tests/integration/etc/install-config-mysql.php.dist > dev/tests/integration/etc/install-config-mysql.php
 
       - name: Run tests
-        run: vendor/bin/phpunit -c dev/tests/integration/phpunit.xml.dist
+        run: vendor/bin/phpunit -c $(pwd)/dev/tests/integration/phpunit.xml.dist
 
   static-tests:
     name: Static Tests CE
