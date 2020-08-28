@@ -89,7 +89,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * @var bool
      */
-        protected $_canAffectOptions = false;
+    protected $_canAffectOptions = false;
 
     /**
      * Product type singleton instance
