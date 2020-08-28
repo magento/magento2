@@ -136,7 +136,6 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
      * @return \Magento\Framework\Data\Form\Element\AbstractElement
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
-     * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
     protected function _addField($parameter)
     {
@@ -157,10 +156,6 @@ class Options extends \Magento\Backend\Block\Widget\Form\Generic
             $data['value'] = isset($values[$fieldName]) ? $values[$fieldName] : '';
         } else {
             $data['value'] = $parameter->getValue();
-        }
-
-        if ($parameter->getType() == 'text' && $data['value'] != '') {
-            $data['value'] = $this->_widget->decodeReservedChars($data['value']);
         }
 
         //prepare unique id value
