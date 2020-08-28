@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-      
+
     - name: Setup PHP
       uses: shivammathur/setup-php@master
       with:
@@ -27,7 +27,7 @@ jobs:
         key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
         restore-keys: |
           ${{ runner.os }}-php-
-          
+
     - name: Install dependencies
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
@@ -39,7 +39,7 @@ jobs:
     name: Integration Tests CE
     runs-on: ubuntu-latest
     container:
-        image: magento/magento-cloud-docker-php:7.4-cli-1.1
+        image: magento/magento-cloud-docker-php:7.4-cli-1.2
         env:
             ENABLE_SENDMAIL: true
     services:
