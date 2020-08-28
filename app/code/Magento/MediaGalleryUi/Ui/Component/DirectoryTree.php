@@ -17,7 +17,9 @@ use Magento\Framework\AuthorizationInterface;
  */
 class DirectoryTree extends Container
 {
-    private const ACL_DELETE_FOLDER = 'Magento_MediaGallery::delete_folder';
+    private const ACL_IMAGE_ACTIONS = [
+        'delete_folder' => 'Magento_MediaGallery::delete_folder'
+    ];
 
     /**
      * @var UrlInterface
@@ -70,15 +72,17 @@ class DirectoryTree extends Container
         );
     }
 
+
     /**
      * Return allowed actions for media gallery
      */
     private function getAllowedActions(): array
     {
         $allowedActions = [];
-
-        if ($this->authorization->isAllowed(self::ACL_DELETE_FOLDER)) {
-            $allowedActions[] = 'delete_folder';
+        foreach (self::ACL_IMAGE_ACTIONS as $key => $action) {
+            if ($this->authorization->isAllowed($action)) {
+                $allowedActions[] = $key;
+            }
         }
 
         return $allowedActions;

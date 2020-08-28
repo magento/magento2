@@ -57,9 +57,7 @@ define([
 
             if (!this.allowedActions.includes('delete_assets')) {
                 $.async('.media-gallery-delete-assets', function () {
-                    $('.media-gallery-delete-assets').attr('click', '#')
-                        .unbind('click')
-                        .addClass('action-disabled');
+                    $('.media-gallery-delete-assets').unbind('click').addClass('action-disabled');
                 });
             }
 
