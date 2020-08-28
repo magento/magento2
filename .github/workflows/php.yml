@@ -116,5 +116,5 @@ jobs:
       - name: PHPCS check
         uses: Mediotype/phpcs-action@v2
         with:
-          phpcs_bin_path: './vendor/bin/phpcs --standard=Magento2 --extensions=php,phtml'
+          phpcs_bin_path: 'set -x; ./vendor/bin/phpcs --standard=Magento2 --extensions=php,phtml'
           installed_paths: '../../magento/magento-coding-standard,../../phpcompatibility/php-compatibility,../../../dev/tests/static/testsuite/Magento/Test/Php/_files/PHPCompatibilityMagento,../../../dev/tests/static/framework/Magento'
