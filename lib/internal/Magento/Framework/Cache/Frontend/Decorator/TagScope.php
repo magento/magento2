@@ -61,7 +61,7 @@ class TagScope extends \Magento\Framework\Cache\Frontend\Decorator\Bare
     {
         if ($mode == \Zend_Cache::CLEANING_MODE_MATCHING_ANY_TAG) {
             $result = false;
-            foreach ($tags as $tag) {
+            foreach (array_unique($tags) as $tag) {
                 if (parent::clean(\Zend_Cache::CLEANING_MODE_MATCHING_TAG, [$tag, $this->getTag()])) {
                     $result = true;
                 }
