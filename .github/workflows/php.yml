@@ -11,37 +11,37 @@ jobs:
     name: Unit Tests CE
     runs-on: ubuntu-latest
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Setup PHP
-      uses: shivammathur/setup-php@master
-      with:
-        php-version: 7.4
-        extensions: bcmath, ctype, curl, dom, gd, hash, iconv, intl, mbstring, openssl, pdo_mysql, simplexml, soap, xsl, zip
+      - name: Setup PHP
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: 7.4
+          extensions: bcmath, ctype, curl, dom, gd, hash, iconv, intl, mbstring, openssl, pdo_mysql, simplexml, soap, xsl, zip
 
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v2
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
 
-    - name: Install dependencies
-      if: steps.composer-cache.outputs.cache-hit != 'true'
-      run: composer install --prefer-dist --no-progress --no-suggest
+      - name: Install dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install --prefer-dist --no-progress --no-suggest
 
-    - name: Run tests
-      run: vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist
+      - name: Run tests
+        run: vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist
 
   integration-tests:
     name: Integration Tests CE
     runs-on: ubuntu-latest
     container:
-        image: magento/magento-cloud-docker-php:7.4-cli-1.2
-        env:
-            ENABLE_SENDMAIL: true
+      image: magento/magento-cloud-docker-php:7.4-cli-1.2
+      env:
+        ENABLE_SENDMAIL: true
     services:
       mysql:
         image: mysql:8.0
@@ -49,33 +49,41 @@ jobs:
           MYSQL_ROOT_PASSWORD: 123123q
           MYSQL_DATABASE: magento_integration_tests
         ports:
-          - 3306:3306
+          - 3306
         options: >-
           --health-cmd="mysqladmin ping" --health-interval=10s --health-timeout=5s --health-retries=3
           --mount type=tmpfs,destination=/var/lib/mysql
       rabbitmq:
         image: rabbitmq:3.8-management
         ports:
-          - 5672:5672
+          - 5672
         options: --health-cmd "rabbitmqctl node_health_check" --health-interval 10s --health-timeout 5s --health-retries 5
+      elasticsearch:
+        image: magento/magento-cloud-docker-elasticsearch:7.6-1.2
+        env:
+          - discovery.type=single-node
+          - xpack.security.enabled=false
+          - "ES_JAVA_OPTS=-Xms64m -Xmx512m"
+        ports:
+          - 9200
     steps:
-    - uses: actions/checkout@v2
+      - uses: actions/checkout@v2
 
-    - name: Cache Composer packages
-      id: composer-cache
-      uses: actions/cache@v2
-      with:
-        path: vendor
-        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
-        restore-keys: |
-          ${{ runner.os }}-php-
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
 
-    - name: Install dependencies
-      if: steps.composer-cache.outputs.cache-hit != 'true'
-      run: composer install --prefer-dist --no-progress --no-suggest
+      - name: Install dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install --prefer-dist --no-progress --no-suggest
 
-    - name: Prepare config
-      run: sed -e "s/'db-host' => 'localhost'/'db-host' => 'mysql'/g" -e "s/'amqp-host' => 'localhost'/'amqp-host' => 'rabbitmq'/g" dev/tests/integration/etc/install-config-mysql.php.dist > dev/tests/integration/etc/install-config-mysql.php
+      - name: Prepare config
+        run: sed -e "s/'db-host' => 'localhost'/'db-host' => 'mysql'/g" -e "s/'amqp-host' => 'localhost'/'amqp-host' => 'rabbitmq'/g" -e "s/'elasticsearch-host' => 'localhost'/'elasticsearch-host' => 'elasticsearch'/g" dev/tests/integration/etc/install-config-mysql.php.dist > dev/tests/integration/etc/install-config-mysql.php
 
-    - name: Run tests
-      run: vendor/bin/phpunit -c dev/tests/integration/phpunit.xml.dist
+      - name: Run tests
+        run: vendor/bin/phpunit -c dev/tests/integration/phpunit.xml.dist
