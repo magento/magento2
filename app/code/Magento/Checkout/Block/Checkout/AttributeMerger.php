@@ -176,7 +176,7 @@ class AttributeMerger
         }
 
         if ($attributeConfig['formElement'] == 'multiline') {
-            return $this->getMultilineFieldConfig(
+            return $this->getMultilineFieldConfigWithAdditionalConfig(
                 $attributeCode,
                 $attributeConfig,
                 $providerName,
@@ -280,7 +280,66 @@ class AttributeMerger
     }
 
     /**
+     * @deprecated This method is not intended for usage
+     * @see getMultilineFieldConfigWithAutocomplete($attributeCode, array $attributeConfig, $providerName, $dataScopePrefix, array $additionalConfig)
+     *
+     * @param string $attributeCode
+     * @param array $attributeConfig
+     * @param string $providerName name of the storage container used by UI component
+     * @param string $dataScopePrefix
+     * @return array
+     */
+    protected function getMultilineFieldConfig($attributeCode, array $attributeConfig, $providerName, $dataScopePrefix)
+    {
+        $lines = [];
+        unset($attributeConfig['validation']['required-entry']);
+        for ($lineIndex = 0; $lineIndex < (int)$attributeConfig['size']; $lineIndex++) {
+            $isFirstLine = $lineIndex === 0;
+            $line = [
+                'label' => __("%1: Line %2", $attributeConfig['label'], $lineIndex + 1),
+                'component' => 'Magento_Ui/js/form/element/abstract',
+                'config' => [
+                    // customScope is used to group elements within a single form e.g. they can be validated separately
+                    'customScope' => $dataScopePrefix,
+                    'template' => 'ui/form/field',
+                    'elementTmpl' => 'ui/form/element/input'
+                ],
+                'dataScope' => $lineIndex,
+                'provider' => $providerName,
+                'validation' => $isFirstLine
+                    // phpcs:ignore Magento2.Performance.ForeachArrayMerge
+                    ? array_merge(
+                        ['required-entry' => (bool)$attributeConfig['required']],
+                        $attributeConfig['validation']
+                    )
+                    : $attributeConfig['validation'],
+                'additionalClasses' => $isFirstLine ? 'field' : 'additional'
+
+            ];
+            if ($isFirstLine && isset($attributeConfig['default']) && $attributeConfig['default'] != null) {
+                $line['value'] = $attributeConfig['default'];
+            }
+            $lines[] = $line;
+        }
+        return [
+            'component' => 'Magento_Ui/js/form/components/group',
+            'label' => $attributeConfig['label'],
+            'required' => (bool)$attributeConfig['required'],
+            'dataScope' => $dataScopePrefix . '.' . $attributeCode,
+            'provider' => $providerName,
+            'sortOrder' => $attributeConfig['sortOrder'],
+            'type' => 'group',
+            'config' => [
+                'template' => 'ui/group/group',
+                'additionalClasses' => $attributeCode
+            ],
+            'children' => $lines,
+        ];
+    }
+
+    /**
      * Retrieve field configuration for street address attribute
+     * with autocomplete additional config
      *
      * @param string $attributeCode
      * @param array $attributeConfig
@@ -289,7 +348,7 @@ class AttributeMerger
      * @param array $additionalConfig
      * @return array
      */
-    protected function getMultilineFieldConfig(
+    protected function getMultilineFieldConfigWithAdditionalConfig(
         $attributeCode,
         array $attributeConfig,
         $providerName,
