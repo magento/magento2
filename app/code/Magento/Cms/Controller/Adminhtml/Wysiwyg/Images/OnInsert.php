@@ -8,7 +8,6 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
 class OnInsert extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
-
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory
      */

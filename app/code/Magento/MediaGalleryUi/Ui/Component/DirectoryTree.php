@@ -72,7 +72,6 @@ class DirectoryTree extends Container
         );
     }
 
-
     /**
      * Return allowed actions for media gallery
      */
