@@ -63,7 +63,8 @@ jobs:
         env:
           discovery.type: single-node
           xpack.security.enabled: false
-          ES_JAVA_OPTS: "-Xms64m -Xmx512m"
+          bootstrap.memory_lock: true
+          ES_JAVA_OPTS: "-Xms512m -Xmx512m"
         ports:
           - 9200
     steps:
