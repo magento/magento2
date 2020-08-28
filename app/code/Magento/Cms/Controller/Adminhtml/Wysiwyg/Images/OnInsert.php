@@ -8,10 +8,6 @@ namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
 class OnInsert extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images
 {
-    /**
-     * @see _isAllowed()
-     */
-    public const ADMIN_RESOURCE = 'Magento_Cms::insert_assets';
 
     /**
      * @var \Magento\Framework\Controller\Result\RawFactory

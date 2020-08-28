@@ -10,18 +10,12 @@ declare(strict_types=1);
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
 use Magento\Framework\App\Action\HttpPostActionInterface;
-use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Delete image folder.
  */
 class DeleteFolder extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images implements HttpPostActionInterface
 {
-    /**
-     * @see _isAllowed()
-     */
-    public const ADMIN_RESOURCE = 'Magento_Cms::delete_folder';
-
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */

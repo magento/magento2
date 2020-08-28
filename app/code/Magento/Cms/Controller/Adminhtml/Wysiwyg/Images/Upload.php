@@ -18,11 +18,6 @@ use Magento\Framework\App\Filesystem\DirectoryList;
 class Upload extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images implements HttpPostActionInterface
 {
     /**
-     * @see _isAllowed()
-     */
-    public const ADMIN_RESOURCE = 'Magento_Cms::upload_assets';
-
-    /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
      */
     protected $resultJsonFactory;
