@@ -10,27 +10,12 @@ namespace Magento\TestModuleGraphQlQuery\Model\Resolver;
 use Magento\Framework\GraphQl\Config\Element\Field;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
-use Magento\Sales\Model\ResourceModel\Order\CollectionFactoryInterface;
 
 /**
- * Resolver for Union Type 1
+ * Resolver for Union type TestUnion
  */
-class UnionType1 implements ResolverInterface
+class TestUnion implements ResolverInterface
 {
-    /**
-     * @var CollectionFactoryInterface
-     */
-    private $collectionFactory;
-
-    /**
-     * @param CollectionFactoryInterface $collectionFactory
-     */
-    public function __construct(
-        CollectionFactoryInterface $collectionFactory
-    ) {
-        $this->collectionFactory = $collectionFactory;
-    }
-
     /**
      * @inheritDoc
      */

@@ -42,6 +42,6 @@ class FormatterComposite implements FormatterInterface
             $formattedConfig[] = $formatter->format($configElement, $outputType);
         }
 
-        return  array_merge($defaultConfig, ...$formattedConfig);
+        return array_merge($defaultConfig, ...$formattedConfig);
     }
 }

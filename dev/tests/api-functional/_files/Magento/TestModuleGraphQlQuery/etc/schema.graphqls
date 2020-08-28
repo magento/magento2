@@ -3,7 +3,7 @@
 
 type Query {
     testItem(id: Int!) : Item @resolver(class: "Magento\\TestModuleGraphQlQuery\\Model\\Resolver\\Item")
-    testUnion: UnionType1 @resolver(class: "Magento\\TestModuleGraphQlQuery\\Model\\Resolver\\UnionType1")
+    testUnion: TestUnion @resolver(class: "Magento\\TestModuleGraphQlQuery\\Model\\Resolver\\TestUnion")
 }
 
 type Mutation {
@@ -20,7 +20,7 @@ type MutationItem {
     name: String
 }
 
-union UnionType1 @doc(description: "some kind of union") @typeResolver(class: "Magento\\TestModuleGraphQlQuery\\Model\\Resolver\\UnionTypeResolver")  =
+union TestUnion @doc(description: "some kind of union") @typeResolver(class: "Magento\\TestModuleGraphQlQuery\\Model\\Resolver\\UnionTypeResolver")  =
     TypeCustom1 | TypeCustom2
 
 type TypeCustom1 {

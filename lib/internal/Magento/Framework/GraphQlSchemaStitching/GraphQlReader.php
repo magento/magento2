@@ -330,13 +330,14 @@ class GraphQlReader implements ReaderInterface
      */
     private function addModuleNameToTypes(array $source, string $filePath): array
     {
-        foreach ($source as $typeName => $type) {
-            if ((!isset($type['module']))
-                && (($type['type'] ?? '' === InterfaceType::GRAPHQL_INTERFACE && isset($type['typeResolver']))
-                    || isset($type['implements'])
-                )
-            ) {
-                $source[$typeName]['module'] = self::getModuleNameForRelevantFile($filePath);
+        foreach ($source as $typeName => $typeDefinition) {
+            if (!isset($typeDefinition['module'])) {
+                $hasTypeResolver = (bool)$typeDefinition['typeResolver'] ?? false;
+                $hasImplements = (bool)$typeDefinition['implements'] ?? false;
+                $typeDefinition = (bool)$typeDefinition['type'] ?? false;
+                if ((($typeDefinition === InterfaceType::GRAPHQL_INTERFACE && $hasTypeResolver) || $hasImplements)) {
+                    $source[$typeName]['module'] = self::getModuleNameForRelevantFile($filePath);
+                }
             }
         }
 

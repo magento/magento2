@@ -92,15 +92,18 @@ class Fields implements FormatterInterface
      */
     public function format(ConfigElementInterface $configElement, OutputTypeInterface $outputType): array
     {
-        $typeConfig = [
-            'fields' => function () use ($configElement, $outputType) {
-                $fieldsConfig = [];
-                foreach ($configElement->getFields() as $field) {
-                    $fieldsConfig[$field->getName()] = $this->getFieldConfig($configElement, $outputType, $field);
+        $typeConfig = [];
+        if ($configElement instanceof TypeInterface) {
+            $typeConfig = [
+                'fields' => function () use ($configElement, $outputType) {
+                    $fieldsConfig = [];
+                    foreach ($configElement->getFields() as $field) {
+                        $fieldsConfig[$field->getName()] = $this->getFieldConfig($configElement, $outputType, $field);
+                    }
+                    return $fieldsConfig;
                 }
-                return $fieldsConfig;
-            }
-        ];
+            ];
+        }
         return $typeConfig;
     }
 
