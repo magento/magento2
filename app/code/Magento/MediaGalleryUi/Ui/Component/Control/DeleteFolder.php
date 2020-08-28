@@ -36,16 +36,17 @@ class DeleteFolder implements ButtonProviderInterface
      */
     public function getButtonData()
     {
-        if (!$this->authorization->isAllowed(self::ACL_DELETE_FOLDER)) {
-            return [];
-        }
-
-        return [
+        $buttonData = [
             'label' => __('Delete Folder'),
             'disabled' => 'disabled',
             'on_click' => 'jQuery("#delete_folder").trigger("delete_folder");',
             'class' => 'action-default scalable add media-gallery-actions-buttons',
             'sort_order' => 30,
         ];
+        if (!$this->authorization->isAllowed(self::ACL_DELETE_FOLDER)) {
+            $buttonData['disabled'] = 'disabled';
+        }
+
+        return $buttonData;
     }
 }

@@ -179,6 +179,10 @@ define([
          * @param {String} folderId
          */
         setActive: function (folderId) {
+            if (!$.inArray('delete_folder', this.allowedActions)) {
+                return;
+            }
+
             this.selectedFolder(folderId);
             $(this.deleteButtonSelector).removeAttr('disabled').removeClass('disabled');
         }

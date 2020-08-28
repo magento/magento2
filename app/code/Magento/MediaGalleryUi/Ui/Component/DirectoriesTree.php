@@ -50,6 +50,7 @@ class DirectoriesTree extends Container
             array_replace_recursive(
                 (array) $this->getData('config'),
                 [
+                    'allowedActions' => [],
                     'getDirectoryTreeUrl' => $this->url->getUrl("media_gallery/directories/gettree"),
                     'deleteDirectoryUrl' => $this->url->getUrl("media_gallery/directories/delete"),
                     'createDirectoryUrl' => $this->url->getUrl("media_gallery/directories/create")

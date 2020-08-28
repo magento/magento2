@@ -36,15 +36,17 @@ class CreateFolder implements ButtonProviderInterface
      */
     public function getButtonData()
     {
-        if (!$this->authorization->isAllowed(self::ACL_CREATE_FOLDER)) {
-            return [];
-        }
-
-        return [
+        $buttonData = [
             'label' => __('Create Folder'),
             'on_click' => 'jQuery("#create_folder").trigger("create_folder");',
             'class' => 'action-default scalable add media-gallery-actions-buttons',
             'sort_order' => 10,
         ];
+
+        if (!$this->authorization->isAllowed(self::ACL_CREATE_FOLDER)) {
+            $buttonData['disabled'] = 'disabled';
+        }
+
+        return $buttonData;
     }
 }

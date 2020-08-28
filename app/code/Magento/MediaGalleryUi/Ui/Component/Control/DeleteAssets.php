@@ -34,17 +34,19 @@ class DeleteAssets implements ButtonProviderInterface
     /**
      * @return array
      */
-    public function getButtonData()
+    public function getButtonData(): array
     {
-        if (!$this->authorization->isAllowed(self::ACL_DELETE_ASSETS)) {
-            return [];
-        }
-
-        return [
+        $buttonData = [
             'label' => __('Delete Images...'),
             'on_click' => 'jQuery(window).trigger("massAction.MediaGallery")',
             'class' => 'action-default scalable add media-gallery-actions-buttons',
             'sort_order' => 50,
         ];
+
+        if (!$this->authorization->isAllowed(self::ACL_DELETE_ASSETS)) {
+            $buttonData['disabled'] = 'disabled';
+        }
+
+        return $buttonData;
     }
 }

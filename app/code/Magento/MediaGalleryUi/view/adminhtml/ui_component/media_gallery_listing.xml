@@ -16,12 +16,7 @@
     </argument>
     <settings>
         <buttons>
-            <button name="add_selected">
-                <param name="on_click" xsi:type="string">return false;</param>
-                <param name="sort_order" xsi:type="number">110</param>
-                <class>action-primary no-display media-gallery-add-selected</class>
-                <label translate="true">Add Selected</label>
-            </button>
+            <button name="add_selected" class="Magento\MediaGalleryUi\Ui\Component\Control\InsertAsstes"/>
             <button name="cancel">
                 <param name="on_click" xsi:type="string">MediabrowserUtility.closeDialog();</param>
                 <param name="sort_order" xsi:type="number">1</param>

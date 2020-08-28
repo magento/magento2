@@ -9,11 +9,11 @@ use Magento\Framework\View\Element\UiComponent\Control\ButtonProviderInterface;
 use Magento\Framework\AuthorizationInterface;
 
 /**
- * Upload Image button
+ * Add selected button
  */
-class UploadAssets implements ButtonProviderInterface
+class InsertAsstes implements ButtonProviderInterface
 {
-    private const ACL_UPLOAD_ASSETS= 'Magento_MediaGallery::upload_assets';
+    private const ACL_INSERT_ASSETS = 'Magento_MediaGallery::insert_assets';
 
     /**
      * @var AuthorizationInterface
@@ -32,19 +32,18 @@ class UploadAssets implements ButtonProviderInterface
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function getButtonData()
     {
         $buttonData = [
-            'label' => __('Upload Image'),
-            'disabled' => 'disabled',
-            'on_click' => 'jQuery("#image-uploader-input").click();',
-            'class' => 'action-default scalable add media-gallery-actions-buttons',
-            'sort_order' => 20,
+            'label' => __('Add Selected'),
+            'on_click' => 'return false;");',
+            'class' => 'action-primary no-display media-gallery-add-selected',
+            'sort_order' => 110,
         ];
 
-        if (!$this->authorization->isAllowed(self::ACL_UPLOAD_ASSETS)) {
+        if (!$this->authorization->isAllowed(self::ACL_INSERT_ASSETS)) {
             $buttonData['disabled'] = 'disabled';
         }
 
