@@ -1,49 +1,67 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Swatches\Controller\Ajax;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\ProductFactory;
+use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\PageCache\Model\Config as PageCacheConfig;
+use Magento\Swatches\Helper\Data as SwatchesHelper;
 
-/**
- * Class Media
- */
-class Media extends \Magento\Framework\App\Action\Action implements \Magento\Framework\App\Action\HttpGetActionInterface
+class Media extends Action implements HttpGetActionInterface
 {
     /**
-     * @var \Magento\Catalog\Model\Product Factory
+     * @deprecated Products should be loaded using Repository
+     * @var ProductFactory
      */
     protected $productModelFactory;
 
     /**
-     * @var \Magento\Swatches\Helper\Data
+     * @var SwatchesHelper
      */
     private $swatchHelper;
 
     /**
-     * @var \Magento\PageCache\Model\Config
+     * @var PageCacheConfig
      */
     protected $config;
 
     /**
+     * @var ProductRepositoryInterface|null
+     */
+    private $productRepository;
+
+    /**
      * @param Context $context
-     * @param \Magento\Catalog\Model\ProductFactory $productModelFactory
-     * @param \Magento\Swatches\Helper\Data $swatchHelper
-     * @param \Magento\PageCache\Model\Config $config
+     * @param ProductFactory $productModelFactory
+     * @param SwatchesHelper $swatchHelper
+     * @param PageCacheConfig $config
+     * @param ProductRepositoryInterface|null $productRepository
      */
     public function __construct(
         Context $context,
-        \Magento\Catalog\Model\ProductFactory $productModelFactory,
-        \Magento\Swatches\Helper\Data $swatchHelper,
-        \Magento\PageCache\Model\Config $config
+        ProductFactory $productModelFactory,
+        SwatchesHelper $swatchHelper,
+        PageCacheConfig $config,
+        ProductRepositoryInterface $productRepository = null
     ) {
         $this->productModelFactory = $productModelFactory;
         $this->swatchHelper = $swatchHelper;
         $this->config = $config;
+        $this->productRepository = $productRepository
+            ?? ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
 
         parent::__construct($context);
     }
@@ -56,25 +74,36 @@ class Media extends \Magento\Framework\App\Action\Action implements \Magento\Fra
      */
     public function execute()
     {
-        $productMedia = [];
-
         /** @var \Magento\Framework\Controller\Result\Json $resultJson */
         $resultJson = $this->resultFactory->create(ResultFactory::TYPE_JSON);
 
-        /** @var \Magento\Framework\App\ResponseInterface $response */
-        $response = $this->getResponse();
+        try {
+            /** @var ProductInterface|Product $product */
+            $product = $this->getProductRequested();
+            $productMedia = $this->swatchHelper->getProductMediaGallery($product);
 
-        if ($productId = (int)$this->getRequest()->getParam('product_id')) {
-            $product = $this->productModelFactory->create()->load($productId);
-            $productMedia = $this->swatchHelper->getProductMediaGallery(
-                $product
-            );
             $resultJson->setHeader('X-Magento-Tags', implode(',', $product->getIdentities()));
 
+            /** @var \Magento\Framework\App\ResponseInterface $response */
+            $response = $this->getResponse();
             $response->setPublicHeaders($this->config->getTtl());
+        } catch (NoSuchEntityException $e) {
+            $productMedia = [];
         }
 
         $resultJson->setData($productMedia);
         return $resultJson;
+    }
+
+    /**
+     * Returns the requested Product
+     *
+     * @return ProductInterface
+     * @throws NoSuchEntityException
+     */
+    private function getProductRequested(): ProductInterface
+    {
+        $productId = (int)$this->_request->getParam('product_id');
+        return $this->productRepository->get($productId);
     }
 }
