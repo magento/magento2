@@ -13,6 +13,9 @@ use Magento\MediaContentSynchronizationApi\Api\SynchronizeIdentitiesInterface;
 
 class SynchronizeIdentitiesCatalog implements SynchronizeIdentitiesInterface
 {
+    private const FIELD_CATALOG_PRODUCT = 'catalog_product';
+    private const FIELD_CATALOG_CATEGORY = 'catalog_category';
+
     /**
      * @var UpdateContentAssetLinksInterface
      */
@@ -41,10 +44,14 @@ class SynchronizeIdentitiesCatalog implements SynchronizeIdentitiesInterface
     public function execute(array $mediaContentIdentities): void
     {
         foreach ($mediaContentIdentities as $identity) {
-            $this->updateContentAssetLinks->execute(
-                $identity,
-                implode(PHP_EOL, $this->getEntityContents->execute($identity))
-            );
+            if ($identity->getEntityType() === self::FIELD_CATALOG_PRODUCT
+                || $identity->getEntityType() === self::FIELD_CATALOG_CATEGORY
+            ) {
+                $this->updateContentAssetLinks->execute(
+                    $identity,
+                    implode(PHP_EOL, $this->getEntityContents->execute($identity))
+                );
+            }
         }
     }
 }
