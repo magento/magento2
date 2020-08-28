@@ -10,6 +10,7 @@ use Magento\Framework\Filesystem\DriverInterface;
 use Monolog\Formatter\LineFormatter;
 use Monolog\Handler\StreamHandler;
 use Monolog\Logger;
+use Monolog\Processor\PsrLogMessageProcessor;
 
 /**
  * Base stream handler
@@ -52,6 +53,7 @@ class Base extends StreamHandler
         );
 
         $this->setFormatter(new LineFormatter(null, null, true));
+        $this->pushProcessor(new PsrLogMessageProcessor());
     }
 
     /**

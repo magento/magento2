@@ -9,6 +9,7 @@ namespace Magento\Framework\Logger\Handler;
 
 use Monolog\Handler\SyslogHandler;
 use Monolog\Logger;
+use Monolog\Processor\PsrLogMessageProcessor;
 
 /**
  * @inheritdoc
@@ -24,5 +25,6 @@ class Syslog extends SyslogHandler
     public function __construct(string $ident)
     {
         parent::__construct($ident, self::FACILITY, self::LEVEL);
+        $this->pushProcessor(new PsrLogMessageProcessor());
     }
 }
