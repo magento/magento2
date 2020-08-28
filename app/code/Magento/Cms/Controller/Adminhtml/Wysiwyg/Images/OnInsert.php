@@ -23,7 +23,7 @@ class OnInsert extends Images implements HttpPostActionInterface
     /**
      * @var GetInsertImageContent
      */
-    protected $getInsertImageContent;
+    private $getInsertImageContent;
 
     /**
      * @param Context $context
