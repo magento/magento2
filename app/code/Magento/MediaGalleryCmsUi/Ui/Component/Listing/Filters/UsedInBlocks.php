@@ -80,52 +80,36 @@ class UsedInBlocks extends Select
     {
         $options = [];
         $blockIds = [];
-        $bookmarks = $this->bookmarkManagement->loadByNamespace($this->context->getNameSpace())->getItems();
-        foreach ($bookmarks as $bookmark) {
-            if ($bookmark->getIdentifier() === 'current') {
-                $applied = $bookmark->getConfig()['current']['filters']['applied'];
-                if (isset($applied[$this->getName()])) {
-                    $blockIds = $applied[$this->getName()];
-                }
-            }
+        $bookmark = $this->bookmarkManagement->getByIdentifierNamespace(
+            'current',
+            $this->context->getNameSpace()
+        );
+        if ($bookmark === null) {
+            parent::prepare();
+            return;
+        }
+
+        $applied = $bookmark->getConfig()['current']['filters']['applied'];
+
+        if (isset($applied[$this->getName()])) {
+            $blockIds = $applied[$this->getName()];
         }
 
         foreach ($blockIds as $id) {
-            $block = $this->blockRepository->getById($id);
-            $options[] = [
-                'value' => $id,
-                'label' => $block->getTitle(),
-                'is_active' => $block->isActive(),
-                'optgroup' => false
-              ];
+            try {
+                $block = $this->blockRepository->getById($id);
+                $options[] = [
+                    'value' => $id,
+                    'label' => $block->getTitle(),
+                    'is_active' => $block->isActive(),
+                    'optgroup' => false
+                ];
+            } catch (\Exception $e) {
+                continue;
+            }
         }
 
-        $this->wrappedComponent = $this->uiComponentFactory->create(
-            $this->getName(),
-            parent::COMPONENT,
-            [
-                'context' => $this->getContext(),
-                'options' => $options
-            ]
-        );
-
-        $this->wrappedComponent->prepare();
-        $jsConfig = array_replace_recursive(
-            $this->getJsConfig($this->wrappedComponent),
-            $this->getJsConfig($this)
-        );
-        $this->setData('js_config', $jsConfig);
-
-        $this->setData(
-            'config',
-            array_replace_recursive(
-                (array)$this->wrappedComponent->getData('config'),
-                (array)$this->getData('config')
-            )
-        );
-
-        $this->applyFilter();
-
+        $this->optionsProvider = $options;
         parent::prepare();
     }
 }

@@ -112,6 +112,7 @@
             <argument name="segmentReaders" xsi:type="array">
                 <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\Segment\ReadXmp</item>
                 <item name="iptc" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\Segment\ReadIptc</item>
+                <item name="exif" xsi:type="object">Magento\MediaGalleryMetadata\Model\Png\Segment\ReadExif</item>
             </argument>
         </arguments>
     </virtualType>
@@ -121,6 +122,7 @@
             <argument name="segmentReaders" xsi:type="array">
                 <item name="xmp" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\ReadXmp</item>
                 <item name="iptc" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\ReadIptc</item>
+                <item name="exif" xsi:type="object">Magento\MediaGalleryMetadata\Model\Jpeg\Segment\ReadExif</item>
             </argument>
         </arguments>
     </virtualType>

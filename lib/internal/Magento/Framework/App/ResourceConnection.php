@@ -178,7 +178,7 @@ class ResourceConnection
             list($modelEntity, $tableSuffix) = $modelEntity;
         }
 
-        $tableName = $modelEntity;
+        $tableName = (string)$modelEntity;
 
         $mappedTableName = $this->getMappedTableName($tableName);
         if ($mappedTableName) {
