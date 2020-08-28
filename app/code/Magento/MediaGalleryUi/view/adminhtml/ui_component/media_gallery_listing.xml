@@ -181,6 +181,7 @@
         <container name="media_gallery_massactions"
                    displayArea="sorting"
                    sortOrder="10"
+                   class="Magento\MediaGalleryUi\Ui\Component\Listing\Massactions\Massaction"
                    component="Magento_MediaGalleryUi/js/grid/massaction/massactions"
                    template="Magento_MediaGalleryUi/grid/massactions/count" >
               <argument name="data" xsi:type="array">

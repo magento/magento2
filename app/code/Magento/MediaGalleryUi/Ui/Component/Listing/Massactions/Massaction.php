@@ -5,24 +5,20 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGalleryUi\Ui\Component;
+namespace Magento\MediaGalleryUi\Ui\Component\Listing\Massactions;
 
-use Magento\Framework\UrlInterface;
-use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Ui\Component\Container;
+use Magento\Framework\View\Element\UiComponent\ContextInterface;
 use Magento\Framework\AuthorizationInterface;
 
 /**
- * Directories tree component
+ * Massaction comntainer
  */
-class DirectoryTree extends Container
+class Massaction extends Container
 {
-    private const ACL_DELETE_FOLDER = 'Magento_MediaGallery::delete_folder';
-
-    /**
-     * @var UrlInterface
-     */
-    private $url;
+    private const ACL_IMAGE_ACTIONS = [
+        'delete_assets' => 'Magento_MediaGallery::delete_assets'
+    ];
 
     /**
      * @var AuthorizationInterface
@@ -33,20 +29,17 @@ class DirectoryTree extends Container
      * Constructor
      *
      * @param ContextInterface $context
-     * @param UrlInterface $url
      * @param AuthorizationInterface $authorization
      * @param array $components
      * @param array $data
      */
     public function __construct(
         ContextInterface $context,
-        UrlInterface $url,
         AuthorizationInterface $authorization,
         array $components = [],
         array $data = []
     ) {
         parent::__construct($context, $components, $data);
-        $this->url = $url;
         $this->authorization = $authorization;
     }
 
@@ -59,12 +52,9 @@ class DirectoryTree extends Container
         $this->setData(
             'config',
             array_replace_recursive(
-                (array) $this->getData('config'),
+                (array)$this->getData('config'),
                 [
-                    'allowedActions' => $this->getAllowedActions(),
-                    'getDirectoryTreeUrl' => $this->url->getUrl('media_gallery/directories/gettree'),
-                    'deleteDirectoryUrl' => $this->url->getUrl('media_gallery/directories/delete'),
-                    'createDirectoryUrl' => $this->url->getUrl('media_gallery/directories/create')
+                    'allowedActions' => $this->getAllowedActions()
                 ]
             )
         );
@@ -76,9 +66,10 @@ class DirectoryTree extends Container
     private function getAllowedActions(): array
     {
         $allowedActions = [];
-
-        if ($this->authorization->isAllowed(self::ACL_DELETE_FOLDER)) {
-            $allowedActions[] = 'delete_folder';
+        foreach (self::ACL_IMAGE_ACTIONS as $key => $action) {
+            if ($this->authorization->isAllowed($action)) {
+                $allowedActions[] = $key;
+            }
         }
 
         return $allowedActions;
