@@ -124,7 +124,10 @@ class Result implements ResultInterface
             $this->appendLayoutConfiguration();
             $result = $this->compiler->postprocessing($this->template->__toString());
         } catch (\Throwable $e) {
-            $this->logger->critical($e);
+            $this->logger->critical("Error while rendering template: {message}", [
+                "exception" => $e,
+                "message" => $e->getMessage()
+            ]);
             $result = $e->getMessage();
             if ($this->state->getMode() === State::MODE_DEVELOPER) {
                 $result .= "<pre><code>Exception in {$e->getFile()}:{$e->getLine()}</code></pre>";
