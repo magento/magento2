@@ -87,3 +87,34 @@ jobs:
 
       - name: Run tests
         run: vendor/bin/phpunit -c dev/tests/integration/phpunit.xml.dist
+
+  static-tests:
+    name: Static Tests CE
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Setup PHP
+        uses: shivammathur/setup-php@master
+        with:
+          php-version: 7.4
+          extensions: bcmath, ctype, curl, dom, gd, hash, iconv, intl, mbstring, openssl, pdo_mysql, simplexml, soap, xsl, zip
+
+      - name: Cache Composer packages
+        id: composer-cache
+        uses: actions/cache@v2
+        with:
+          path: vendor
+          key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-php-
+
+      - name: Install dependencies
+        if: steps.composer-cache.outputs.cache-hit != 'true'
+        run: composer install --prefer-dist --no-progress --no-suggest
+
+      - name: PHPCS check
+        uses: Mediotype/phpcs-action@v2
+        with:
+          phpcs_bin_path: './vendor/bin/phpcs --standard=Magento2 --extensions=php,phtml'
+          installed_paths: '../../magento/magento-coding-standard,../../phpcompatibility/php-compatibility,../../../dev/tests/static/testsuite/Magento/Test/Php/_files/PHPCompatibilityMagento,../../../dev/tests/static/framework/Magento'
