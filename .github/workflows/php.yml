@@ -1,0 +1,40 @@
+name: CI
+
+on:
+  push:
+    branches: [ 2.4-develop ]
+  pull_request:
+    branches: [ 2.4-develop ]
+
+jobs:
+  unit-tests:
+
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v2
+      
+    - name: Setup PHP
+      uses: shivammathur/setup-php@master
+      with:
+        php-version: 7.4
+        extensions: bcmath, ctype, curl, dom, gd, hash, iconv, intl, mbstring, openssl, pdo_mysql, simplexml, soap, xsl, zip
+
+    - name: Validate composer.json and composer.lock
+      run: composer validate
+
+    - name: Cache Composer packages
+      id: composer-cache
+      uses: actions/cache@v2
+      with:
+        path: vendor
+        key: ${{ runner.os }}-php-${{ hashFiles('**/composer.lock') }}
+        restore-keys: |
+          ${{ runner.os }}-php-
+
+    - name: Install dependencies
+      if: steps.composer-cache.outputs.cache-hit != 'true'
+      run: composer install --prefer-dist --no-progress --no-suggest
+
+    - name: Run tests
+      run: vendor/bin/phpunit -c dev/tests/unit/phpunit.xml.dist
