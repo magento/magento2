@@ -60,12 +60,6 @@ jobs:
         options: --health-cmd "rabbitmqctl node_health_check" --health-interval 10s --health-timeout 5s --health-retries 5
     steps:
     - uses: actions/checkout@v2
-      
-    - name: Setup PHP
-      uses: shivammathur/setup-php@master
-      with:
-        php-version: 7.4
-        extensions: bcmath, ctype, curl, dom, gd, hash, iconv, intl, mbstring, openssl, pdo_mysql, simplexml, soap, xsl, zip
 
     - name: Cache Composer packages
       id: composer-cache
