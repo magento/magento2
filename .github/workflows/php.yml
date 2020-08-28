@@ -38,6 +38,10 @@ jobs:
   integration-tests:
     name: Integration Tests CE
     runs-on: ubuntu-latest
+    container:
+        image: magento/magento-cloud-docker-php:7.4-cli-1.2
+        env:
+            ENABLE_SENDMAIL: true
     services:
       mysql:
         image: mysql:8.0
@@ -75,6 +79,9 @@ jobs:
     - name: Install dependencies
       if: steps.composer-cache.outputs.cache-hit != 'true'
       run: composer install --prefer-dist --no-progress --no-suggest
+
+    - name: Prepare config
+      run: sed -e "s/'db-host' => 'localhost'/'db-host' => 'mysql'/g" -e "s/'amqp-host' => 'localhost'/'amqp-host' => 'rabbitmq'/g" dev/tests/integration/etc/install-config-mysql.php.dist > dev/tests/integration/etc/install-config-mysql.php
 
     - name: Run tests
       run: vendor/bin/phpunit -c dev/tests/integration/phpunit.xml.dist
