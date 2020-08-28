@@ -133,7 +133,7 @@ class Application
     /**
      * @var bool
      */
-    protected $dumpDb = true;
+    protected $dumpDb = false;
 
     /**
      * @var bool
