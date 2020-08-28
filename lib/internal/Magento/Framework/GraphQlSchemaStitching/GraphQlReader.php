@@ -332,9 +332,9 @@ class GraphQlReader implements ReaderInterface
     {
         foreach ($source as $typeName => $typeDefinition) {
             if (!isset($typeDefinition['module'])) {
-                $hasTypeResolver = (bool)$typeDefinition['typeResolver'] ?? false;
-                $hasImplements = (bool)$typeDefinition['implements'] ?? false;
-                $typeDefinition = (bool)$typeDefinition['type'] ?? false;
+                $hasTypeResolver = (bool)($typeDefinition['typeResolver'] ?? false);
+                $hasImplements = (bool)($typeDefinition['implements'] ?? false);
+                $typeDefinition = (bool)($typeDefinition['type'] ?? false);
                 if ((($typeDefinition === InterfaceType::GRAPHQL_INTERFACE && $hasTypeResolver) || $hasImplements)) {
                     $source[$typeName]['module'] = self::getModuleNameForRelevantFile($filePath);
                 }
