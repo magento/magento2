@@ -117,5 +117,5 @@ jobs:
         uses: Mediotype/phpcs-action@v2
         with:
           only_changed_files: true
-          phpcs_bin_path: './vendor/bin/phpcs --standard=Magento2 --extensions=php,phtml'
+          phpcs_bin_path: './vendor/bin/phpcs --standard=Magento,PHPCompatibilityMagento --extensions=php,phtml --runtime-set testVersion 7.3-7.4'
           installed_paths: '../../magento/magento-coding-standard,../../phpcompatibility/php-compatibility,../../../dev/tests/static/testsuite/Magento/Test/Php/_files/PHPCompatibilityMagento,../../../dev/tests/static/framework/Magento'
