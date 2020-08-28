@@ -10,8 +10,6 @@ use Magento\Framework\Exception\LocalizedException;
 
 /**
  * Image adapter from ImageMagick.
- *
- * @property \Imagick $_imageHandler
  */
 class ImageMagick extends AbstractAdapter
 {
@@ -39,17 +37,22 @@ class ImageMagick extends AbstractAdapter
     ];
 
     /**
+     * @var \Imagick
+     */
+    protected $_imageHandler;
+
+    /**
      * Colorspace of the image
      *
      * @var int
      */
-    protected $colorspace = -1;
+    private $colorspace = -1;
     /**
      * Original colorspace of the image
      *
      * @var int
      */
-    protected $originalColorspace = -1;
+    private $originalColorspace = -1;
 
     /**
      * Set/get background color. Check Imagick::COLOR_* constants
@@ -589,7 +592,8 @@ class ImageMagick extends AbstractAdapter
     public function getColorspace(): int
     {
         if ($this->colorspace === -1) {
-            $this->originalColorspace = $this->colorspace = $this->_imageHandler->getImageColorspace();
+            $this->colorspace = $this->_imageHandler->getImageColorspace();
+            $this->originalColorspace = $this->colorspace;
         }
 
         return $this->colorspace;
