@@ -34,11 +34,11 @@ class InsertAsstes implements ButtonProviderInterface
     /**
      * @inheritdoc
      */
-    public function getButtonData()
+    public function getButtonData(): array
     {
         $buttonData = [
             'label' => __('Add Selected'),
-            'on_click' => 'return false;");',
+            'on_click' => 'return false;',
             'class' => 'action-primary no-display media-gallery-add-selected',
             'sort_order' => 110,
         ];

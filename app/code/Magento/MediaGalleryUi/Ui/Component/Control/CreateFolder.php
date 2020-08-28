@@ -34,7 +34,7 @@ class CreateFolder implements ButtonProviderInterface
     /**
      * @inheritdoc
      */
-    public function getButtonData()
+    public function getButtonData(): array
     {
         $buttonData = [
             'label' => __('Create Folder'),

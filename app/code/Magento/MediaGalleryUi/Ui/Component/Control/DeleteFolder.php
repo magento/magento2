@@ -32,9 +32,9 @@ class DeleteFolder implements ButtonProviderInterface
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
-    public function getButtonData()
+    public function getButtonData(): array
     {
         $buttonData = [
             'label' => __('Delete Folder'),

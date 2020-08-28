@@ -107,7 +107,7 @@ define([
          * If images records less than one, disable "delete images" button
          */
         checkButtonVisibility: function () {
-            if (!$.inArray('delete_assets', this.allowedActions)) {
+            if (!this.allowedActions.includes('delete_assets')) {
                 return;
             }
 

@@ -32,7 +32,7 @@ class DeleteAssets implements ButtonProviderInterface
     }
 
     /**
-     * @return array
+     * @inheritdoc
      */
     public function getButtonData(): array
     {

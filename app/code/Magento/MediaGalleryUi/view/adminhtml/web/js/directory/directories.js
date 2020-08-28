@@ -19,6 +19,7 @@ define([
 
     return Component.extend({
         defaults: {
+            allowedActions: [],
             directoryTreeSelector: '#media-gallery-directory-tree',
             deleteButtonSelector: '#delete_folder',
             createFolderButtonSelector: '#create_folder',
@@ -179,7 +180,7 @@ define([
          * @param {String} folderId
          */
         setActive: function (folderId) {
-            if (!$.inArray('delete_folder', this.allowedActions)) {
+            if (!this.allowedActions.includes('delete_folder')) {
                 return;
             }
 
