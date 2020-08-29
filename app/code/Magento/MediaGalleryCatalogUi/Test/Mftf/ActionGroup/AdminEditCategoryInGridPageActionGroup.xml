@@ -11,7 +11,12 @@
         <annotations>
             <description>Clicks the Edit action from the Media Gallery Category Grid</description>
         </annotations>
-        <click selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.edit('2', 'Edit')}}" stepKey="clickOnCategoryRow"/>
+
+         <arguments>
+            <argument name="categoryName" type="string"/>
+        </arguments>
+
+        <click selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.edit(categoryName, 'Edit')}}" stepKey="clickOnCategoryRow"/>
         <waitForPageLoad time="30" stepKey="waitForCategoryDetailsPageLoad"/>
     </actionGroup>
 </actionGroups>
