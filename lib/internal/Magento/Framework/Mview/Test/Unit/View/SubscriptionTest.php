@@ -220,8 +220,6 @@ class SubscriptionTest extends TestCase
         $this->viewMock->expects($this->exactly(3))
             ->method('getId')
             ->willReturn('this_id');
-        $this->viewMock->expects($this->never())
-            ->method('getSubscriptions');
 
         $this->viewCollectionMock->expects($this->exactly(1))
             ->method('getViewsByStateMode')
@@ -290,9 +288,7 @@ class SubscriptionTest extends TestCase
         $otherViewMock->expects($this->exactly(1))
             ->method('getId')
             ->willReturn('other_id');
-        $otherViewMock->expects($this->exactly(1))
-            ->method('getSubscriptions')
-            ->willReturn([['name' => $this->tableName], ['name' => 'otherTableName']]);
+
         $otherViewMock->expects($this->exactly(3))
             ->method('getChangelog')
             ->willReturn($otherChangelogMock);
@@ -300,8 +296,6 @@ class SubscriptionTest extends TestCase
         $this->viewMock->expects($this->exactly(3))
             ->method('getId')
             ->willReturn('this_id');
-        $this->viewMock->expects($this->never())
-            ->method('getSubscriptions');
 
         $this->viewCollectionMock->expects($this->exactly(1))
             ->method('getViewsByStateMode')
