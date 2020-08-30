@@ -1126,13 +1126,15 @@ define([
          * Update whether value differs from default value
          */
         setDifferedFromDefault: function () {
-            var recordData = utils.copy(this.recordData());
+            if (this.default) {
+                var recordData = utils.copy(this.recordData());
 
-            Array.isArray(recordData) && recordData.forEach(function (item) {
-                delete item['record_id'];
-            });
+                Array.isArray(recordData) && recordData.forEach(function (item) {
+                    delete item['record_id'];
+                });
 
-            this.isDifferedFromDefault(!_.isEqual(recordData, this.default));
+                this.isDifferedFromDefault(!_.isEqual(recordData, this.default));
+            }
         },
 
         /**
