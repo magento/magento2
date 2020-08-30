@@ -24,7 +24,7 @@
             <argument name="entityType" xsi:type="string">catalog_category</argument>
         </arguments>
     </virtualType>
-    <type name="Magento\MediaGalleryUi\Model\AssetDetailsProvider\UsedIn">
+    <type name="Magento\MediaGalleryUi\Model\GetAssetUsageDetails">
         <arguments>
             <argument name="contentTypes" xsi:type="array">
                 <item name="catalog_category" xsi:type="array">

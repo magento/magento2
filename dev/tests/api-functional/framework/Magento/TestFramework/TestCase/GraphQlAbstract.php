@@ -184,4 +184,61 @@ abstract class GraphQlAbstract extends WebapiAbstract
             );
         }
     }
+
+    /**
+     * Compare arrays recursively regardless of nesting.
+     *
+     * Can compare arrays that have both one level and n-level nesting.
+     * ```
+     *  [
+     * 'products' => [
+     *      'items' => [
+     *      [
+     *          'sku'       => 'bundle-product',
+     *          'type_id'   => 'bundle',
+     *          'items'     => [
+     *          [
+     *              'title'     => 'Bundle Product Items',
+     *              'sku'       => 'bundle-product',
+     *              'options'   => [
+     *              [
+     *                  'price' => 2.75,
+     *                  'label' => 'Simple Product',
+     *                  'product' => [
+     *                      'name'    => 'Simple Product',
+     *                      'sku'     => 'simple',
+     *                  ]
+     *              ]
+     *          ]
+     *      ]
+     *  ];
+     * ```
+     *
+     * @param array $expected
+     * @param array $actual
+     * @return array
+     */
+    public function compareArraysRecursively(array $expected, array $actual): array
+    {
+        $diffResult = [];
+
+        foreach ($expected as $key => $value) {
+            if (array_key_exists($key, $actual)) {
+                if (is_array($value)) {
+                    $recursiveDiff = $this->compareArraysRecursively($value, $actual[$key]);
+                    if (!empty($recursiveDiff)) {
+                        $diffResult[$key] = $recursiveDiff;
+                    }
+                } else {
+                    if (!in_array($value, $actual, true)) {
+                        $diffResult[$key] = $value;
+                    }
+                }
+            } else {
+                $diffResult[$key] = $value;
+            }
+        }
+
+        return $diffResult;
+    }
 }
