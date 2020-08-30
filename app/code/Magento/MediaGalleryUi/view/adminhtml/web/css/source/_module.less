@@ -18,7 +18,7 @@
 @color-media-gallery-buttons-border: #adadad;
 @color-media-gallery-buttons-text: #514943;
 @color-media-gallery-checkbox-background: #eee;
-
+@color-media-gallery-scrollbar-background: #fff;
 & when (@media-common = true) {
 
     .media-gallery-delete-image-action,
@@ -170,8 +170,9 @@
             height: 30px;
             margin: 1px;
             padding-left: 6px;
+            padding-right: 10px;
             padding-top: 6px;
-            width: 100%;
+            width: max-content;
         }
 
         .jstree-default .jstree-clicked {
@@ -272,8 +273,18 @@
         }
 
         .media-directory-container {
+            &::-webkit-scrollbar {
+                background-color: @color-media-gallery-scrollbar-background;
+            }
+            &::-webkit-scrollbar-thumb {
+                background-color: @color-masonry-grey;
+            }
             float: left;
+            max-width: 50%;
+            overflow-x: scroll;
+            overflow-y: hidden;
             padding-right: 40px;
+            scrollbar-color: @color-masonry-grey @color-media-gallery-scrollbar-background;
         }
 
         .media-gallery-image-block {
