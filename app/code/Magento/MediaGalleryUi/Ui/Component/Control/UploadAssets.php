@@ -38,7 +38,6 @@ class UploadAssets implements ButtonProviderInterface
     {
         $buttonData = [
             'label' => __('Upload Image'),
-            'disabled' => 'disabled',
             'on_click' => 'jQuery("#image-uploader-input").click();',
             'class' => 'action-default scalable add media-gallery-actions-buttons',
             'sort_order' => 20,
