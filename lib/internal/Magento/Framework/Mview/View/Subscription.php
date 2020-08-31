@@ -178,7 +178,7 @@ class Subscription implements SubscriptionInterface
                     continue;
                 }
                 // Search in view subscriptions
-                foreach ($view->getSubscriptions() as $subscription) {
+                foreach ($view->getSubscriptions() ?? [] as $subscription) {
                     if ($subscription['name'] != $this->getTableName()) {
                         continue;
                     }
@@ -200,7 +200,12 @@ class Subscription implements SubscriptionInterface
     {
         // Get the subscription for the specific view and specific table.
         // We will use column name from it.
-        $subscription = $view->getSubscriptions()[$this->getTableName()];
+        $subscriptions = $view->getSubscriptions() ?? [];
+        if (empty($subscriptions[$this->getTableName()])) {
+          return '';
+        }
+
+        $subscription = $subscriptions[$this->getTableName()];
 
         // Get the changelog from View to get changelog column name.
         $changelog = $view->getChangelog();
