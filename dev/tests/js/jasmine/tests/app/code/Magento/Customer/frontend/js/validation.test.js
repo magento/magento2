@@ -17,24 +17,14 @@ define([
         dataProvider = [
             {
                 format: 'M/d/Y',
-                date: '9/2/18',
+                date: '09/2/18',
                 expects: true
             },
             {
                 format: 'M/DD/Y',
-                date: '9/2/18',
-                expects: false
-            },
-            {
-                format: 'MM/DD/Y',
-                date: '09/02/18',
-                expects: true
-            },
-            {
-                format: 'MM/DD/YYYY',
                 date: '09/2/18',
                 expects: false
-            }
+            },
         ];
 
         dataProvider.forEach(function (data) {
