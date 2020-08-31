@@ -13,11 +13,11 @@ use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\DocReader;
 use Magento\Framework\GraphQlSchemaStitching\GraphQlReader\MetaReader\CacheAnnotationReader;
 
 /**
- * Composite configuration reader to handle the interface object type meta
+ * Composite configuration reader to handle the union object type meta
  */
-class InterfaceType implements TypeMetaReaderInterface
+class UnionType implements TypeMetaReaderInterface
 {
-    public const GRAPHQL_INTERFACE = 'graphql_interface';
+    public const GRAPHQL_UNION = 'graphql_union';
 
     /**
      * @var FieldMetaReader
@@ -53,32 +53,27 @@ class InterfaceType implements TypeMetaReaderInterface
     /**
      * @inheritDoc
      */
-    public function read(\GraphQL\Type\Definition\Type $typeMeta) : array
+    public function read(\GraphQL\Type\Definition\Type $typeMeta): array
     {
-        if ($typeMeta instanceof \GraphQL\Type\Definition\InterfaceType) {
+        if ($typeMeta instanceof \GraphQL\Type\Definition\UnionType) {
             $typeName = $typeMeta->name;
             $result = [
                 'name' => $typeName,
-                'type' => self::GRAPHQL_INTERFACE,
-                'fields' => []
+                'type' => self::GRAPHQL_UNION,
+                'types' => [],
             ];
 
-            $interfaceTypeResolver = $this->getInterfaceTypeResolver($typeMeta);
-            if (!empty($interfaceTypeResolver)) {
-                $result['typeResolver'] = $interfaceTypeResolver;
+            $unionTypeResolver = $this->getUnionTypeResolver($typeMeta);
+            if (!empty($unionTypeResolver)) {
+                $result['typeResolver'] = $unionTypeResolver;
             }
 
-            $fields = $typeMeta->getFields();
-            foreach ($fields as $fieldName => $fieldMeta) {
-                $result['fields'][$fieldName] = $this->fieldMetaReader->read($fieldMeta);
+            foreach ($typeMeta->getTypes() as $type) {
+                $result['types'][] = $type->name;
             }
 
             if ($this->docReader->read($typeMeta->astNode->directives)) {
                 $result['description'] = $this->docReader->read($typeMeta->astNode->directives);
-            }
-
-            if ($this->docReader->read($typeMeta->astNode->directives)) {
-                $result['cache'] = $this->cacheAnnotationReader->read($typeMeta->astNode->directives);
             }
 
             return $result;
@@ -88,15 +83,15 @@ class InterfaceType implements TypeMetaReaderInterface
     }
 
     /**
-     * Retrieve the interface type resolver if it exists from the meta data
+     * Retrieve the union type resolver if it exists from the meta data
      *
-     * @param \GraphQL\Type\Definition\InterfaceType $interfaceTypeMeta
+     * @param \GraphQL\Type\Definition\UnionType $unionTypeMeta
      * @return string
      */
-    private function getInterfaceTypeResolver(\GraphQL\Type\Definition\InterfaceType $interfaceTypeMeta) : string
+    private function getUnionTypeResolver(\GraphQL\Type\Definition\UnionType $unionTypeMeta): string
     {
         /** @var \GraphQL\Language\AST\NodeList $directives */
-        $directives = $interfaceTypeMeta->astNode->directives;
+        $directives = $unionTypeMeta->astNode->directives;
         foreach ($directives as $directive) {
             if ($directive->name->value == 'typeResolver') {
                 foreach ($directive->arguments as $directiveArgument) {
