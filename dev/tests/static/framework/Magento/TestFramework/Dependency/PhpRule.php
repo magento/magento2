@@ -10,12 +10,12 @@ declare(strict_types=1);
 namespace Magento\TestFramework\Dependency;
 
 use Magento\Framework\App\Utility\Files;
+use Magento\Framework\Config\Reader\Filesystem as ConfigReader;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
 use Magento\TestFramework\Dependency\Reader\ClassScanner;
 use Magento\TestFramework\Dependency\Route\RouteMapper;
 use Magento\TestFramework\Exception\NoSuchActionException;
-use Magento\Framework\Config\Reader\Filesystem as ConfigReader;
 use Magento\Webapi\Model\Config\Converter;
 
 /**
@@ -92,6 +92,11 @@ class PhpRule implements RuleInterface
      * @var ClassScanner
      */
     private $classScanner;
+
+    /**
+     * @var array
+     */
+    private $serviceMethods;
 
     /**
      * @param array $mapRouters
@@ -374,13 +379,33 @@ class PhpRule implements RuleInterface
      */
     private function processApiUrl(string $path): array
     {
-        $serviceMethods = $this->configReader->read()[Converter::KEY_ROUTES][$path];
-        //assume that all HTTP methods use the same class
-        $method =  $serviceMethods['GET'] ?? $serviceMethods['POST'] ?? $serviceMethods['PUT'] ?? $serviceMethods['DELETE'];
-        $className = $method['service']['class'];
-        //get module from className
-        preg_match('#(?<module>Magento(\\\\)\w+).*#', $className, $match);
-        return [$match['module']];
+        if (!$this->serviceMethods) {
+            $this->serviceMethods = [];
+            $serviceRoutes = $this->configReader->read()[Converter::KEY_ROUTES];
+            foreach ($serviceRoutes as $serviceRouteUrl => $methods) {
+                $pattern = '#:\w+#';
+                $replace = '\w';
+                $serviceRouteUrlRegex = $serviceRouteUrl;
+                preg_replace($pattern, $replace, $serviceRouteUrlRegex);
+                $serviceRouteUrlRegex = '#' . $serviceRouteUrlRegex . '#';
+                $this->serviceMethods[$serviceRouteUrlRegex] = $methods;
+            }
+        }
+        foreach ($this->serviceMethods as $serviceMethodUrlRegex => $methods) {
+            //assume that all HTTP methods use the same class
+            if (preg_match($serviceMethodUrlRegex, $path)) {
+                $method = $methods['GET']
+                    ?? $methods['POST']
+                    ?? $methods['PUT']
+                    ?? $methods['DELETE'];
+
+                $className = $method['service']['class'];
+                //get module from className
+                preg_match('#(?<module>\w+[\\\]\w+).*#', $className, $match);
+                return [$match['module']];
+            }
+        }
+        throw new NoSuchActionException();
     }
 
     /**

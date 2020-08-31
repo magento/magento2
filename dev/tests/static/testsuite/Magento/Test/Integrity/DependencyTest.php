@@ -11,9 +11,13 @@ namespace Magento\Test\Integrity;
 use Magento\Framework\App\Bootstrap;
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Component\ComponentRegistrar;
+use Magento\Framework\Config\Reader\Filesystem as Reader;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Test\Integrity\Dependency\Converter;
 use Magento\Test\Integrity\Dependency\DeclarativeSchemaDependencyProvider;
 use Magento\Test\Integrity\Dependency\GraphQlSchemaDependencyProvider;
+use Magento\Test\Integrity\Dependency\SchemaLocator;
+use Magento\Test\Integrity\Dependency\WebapiFileResolver;
 use Magento\TestFramework\Dependency\AnalyticsConfigRule;
 use Magento\TestFramework\Dependency\DbRule;
 use Magento\TestFramework\Dependency\DiRule;
@@ -22,7 +26,6 @@ use Magento\TestFramework\Dependency\PhpRule;
 use Magento\TestFramework\Dependency\ReportsConfigRule;
 use Magento\TestFramework\Dependency\Route\RouteMapper;
 use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
-use \Magento\Webapi\Model\Config\Reader;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -280,8 +283,28 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         $tableToAnyModuleMap = self::getTableToAnyModuleMap();
         // In case primary module declaring the table cannot be identified, use any module referencing this table
         $tableToModuleMap = array_merge($tableToAnyModuleMap, $tableToPrimaryModuleMap);
+
         $objectManager = Bootstrap::create(BP, $_SERVER)->getObjectManager();
-        $webApiConfigReader = $objectManager->create(Reader::class);
+
+        $webApiConfigReader = $objectManager->create(
+            Reader::class,
+            [
+                'fileResolver' => new WebapiFileResolver(
+                    self::getComponentRegistrar()
+                ),
+                'converter' => new Converter(),
+                'schemaLocator' => new SchemaLocator(
+                    self::getComponentRegistrar()
+                ),
+                'fileName' => 'webapi.xml',
+                'idAttributes' => [
+                        '/routes/route' => ['url', 'method'],
+                        '/routes/route/resources/resource' => 'ref',
+                        '/routes/route/data/parameter' => 'name'
+                    ],
+            ]
+        );
+
         self::$_rulesInstances = [
             new PhpRule(
                 self::$routeMapper->getRoutes(),
@@ -319,6 +342,17 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
             self::$routesWhitelist = $routesWhitelist;
         }
         return self::$routesWhitelist;
+    }
+
+    /**
+     * @return ComponentRegistrar
+     */
+    private static function getComponentRegistrar()
+    {
+        if (!isset(self::$componentRegistrar)) {
+            self::$componentRegistrar = new ComponentRegistrar();
+        }
+        return self::$componentRegistrar;
     }
 
     /**
@@ -559,18 +593,16 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
      */
     private function getModuleNameForRelevantFile($file)
     {
-        if (!isset(self::$componentRegistrar)) {
-            self::$componentRegistrar = new ComponentRegistrar();
-        }
+        $componentRegistrar = self::getComponentRegistrar();
         // Validates file when it belongs to default themes
-        foreach (self::$componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::THEME) as $themeDir) {
             if (strpos($file, $themeDir . '/') !== false) {
                 return '';
             }
         }
 
         $foundModuleName = '';
-        foreach (self::$componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
+        foreach ($componentRegistrar->getPaths(ComponentRegistrar::MODULE) as $moduleName => $moduleDir) {
             if (strpos($file, $moduleDir . '/') !== false) {
                 $foundModuleName = str_replace('_', '\\', $moduleName);
                 break;
