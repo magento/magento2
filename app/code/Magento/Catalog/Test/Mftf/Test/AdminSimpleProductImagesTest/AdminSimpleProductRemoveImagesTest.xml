@@ -84,7 +84,7 @@
         <waitForPageLoad stepKey="waitForHide3"/>
 
         <!-- Save the product with all 3 images -->
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct"/>
 
         <!-- Go to the product page and see the Base image -->
         <amOnPage url="$$product.name$$.html" stepKey="goToProductPage"/>
@@ -117,7 +117,7 @@
         <click selector="{{AdminProductImagesSection.nthRemoveImageBtn('1')}}" stepKey="removeImage1"/>
         <click selector="{{AdminProductImagesSection.nthRemoveImageBtn('2')}}" stepKey="removeImage2"/>
         <click selector="{{AdminProductImagesSection.nthRemoveImageBtn('3')}}" stepKey="removeImage3"/>
-        <click selector="{{AdminProductFormActionSection.saveButton}}" stepKey="saveProduct2"/>
+        <actionGroup ref="AdminProductFormSaveActionGroup" stepKey="saveProduct2"/>
 
         <!-- Check admin grid for placeholder -->
         <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="goToProductIndex4"/>

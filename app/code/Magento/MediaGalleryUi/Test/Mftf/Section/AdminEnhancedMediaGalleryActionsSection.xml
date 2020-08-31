@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminEnhancedMediaGalleryActionsSection">
+        <element name="editViewButtonPartial" type="button" selector="/following-sibling::div/button[@class='action-edit']"/>
+        <element name="deleteViewButton" type="button" selector="//div[@data-bind='afterRender: \$data.setToolbarNode']//input/following-sibling::div/button[@class='action-delete']"/>
+        <element name="upload" type="input" selector="#image-uploader-input"/>
+        <element name="cancel" type="button" selector="[data-ui-id='cancel-button']"/>
+        <element name="createFolder" type="button" selector="[data-ui-id='create-folder-button']"/>
+        <element name="deleteFolder" type="button" selector="[data-ui-id='delete-folder-button']"/>
+        <element name="imageSrc" type="text" selector="//div[@class='masonry-image-column' and contains(@data-repeat-index, '0')]//img[contains(@src,'{{src}}')]" parameterized="true"/>
+    </section>
+</sections>
