@@ -358,17 +358,18 @@ class PhpRule implements RuleInterface
     {
         $pattern = '#(?<route_id>[a-z0-9\-_]{3,})'
                    . '\/?(?<controller_name>[a-z0-9\-_]+)?\/?(?<action_name>[a-z0-9\-_]+)?#i';
-        preg_match($pattern, $path, $match);
+        if (preg_match($pattern, $path, $match)) {
+            $routeId = $match['route_id'];
+            $controllerName = $match['controller_name'] ?? UrlInterface::DEFAULT_CONTROLLER_NAME;
+            $actionName = $match['action_name'] ?? UrlInterface::DEFAULT_ACTION_NAME;
 
-        $routeId = $match['route_id'];
-        $controllerName = $match['controller_name'] ?? UrlInterface::DEFAULT_CONTROLLER_NAME;
-        $actionName = $match['action_name'] ?? UrlInterface::DEFAULT_ACTION_NAME;
-
-        return $this->routeMapper->getDependencyByRoutePath(
-            $routeId,
-            $controllerName,
-            $actionName
-        );
+            return $this->routeMapper->getDependencyByRoutePath(
+                $routeId,
+                $controllerName,
+                $actionName
+            );
+        }
+        throw new NoSuchActionException();
     }
 
     /**
@@ -379,6 +380,9 @@ class PhpRule implements RuleInterface
      */
     private function processApiUrl(string $path): array
     {
+        /**
+         * Create regex patterns from service url paths
+         */
         if (!$this->serviceMethods) {
             $this->serviceMethods = [];
             $serviceRoutes = $this->configReader->read()[Converter::KEY_ROUTES];
@@ -392,7 +396,10 @@ class PhpRule implements RuleInterface
             }
         }
         foreach ($this->serviceMethods as $serviceMethodUrlRegex => $methods) {
-            //assume that all HTTP methods use the same class
+            /**
+             * Since we expect that every service method should be within the same module, we can use the class from
+             * any method
+             */
             if (preg_match($serviceMethodUrlRegex, $path)) {
                 $method = $methods['GET']
                     ?? $methods['POST']
@@ -401,8 +408,10 @@ class PhpRule implements RuleInterface
 
                 $className = $method['service']['class'];
                 //get module from className
-                preg_match('#(?<module>\w+[\\\]\w+).*#', $className, $match);
-                return [$match['module']];
+                if (preg_match('#(?<module>\w+[\\\]\w+).*#', $className, $match)) {
+                    return [$match['module']];
+                }
+                break;
             }
         }
         throw new NoSuchActionException();

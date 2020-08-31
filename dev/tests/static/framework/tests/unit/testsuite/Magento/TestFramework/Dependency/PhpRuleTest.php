@@ -316,7 +316,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                 ],
             ],
         ];
-        $this->model = new PhpRule([], $mapLayoutBlocks, $this->webApiConfig);
+        $this->model = new PhpRule([], $mapLayoutBlocks, $this->webApiConfigReader);
         $this->assertEquals($expected, $this->model->getDependencyInfo($module, 'template', 'any', $content));
     }
 
