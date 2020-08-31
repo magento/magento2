@@ -17,8 +17,17 @@
             <argument name="storeName" type="string" defaultValue="default"/>
         </arguments>
 
-        <amOnPage url="{{AdminOrderPage.url(orderId)}}" stepKey="gotoOrderPage"/>
-        <waitForPageLoad stepKey="waitForCustomerPageLoad"/>
+        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="navigateToOrderGridPage"/>
+        <waitForPageLoad stepKey="waitForOrdersPage"/>
+        <conditionalClick selector="{{AdminOrdersGridSection.clearFilters}}" dependentSelector="{{AdminOrdersGridSection.clearFilters}}" visible="true" stepKey="clearExistingOrderFilters"/>
+        <waitForPageLoad stepKey="waitForClearFilters"/>
+        <click selector="{{AdminOrdersGridSection.filters}}" stepKey="openOrderGridFilters"/>
+        <waitForPageLoad stepKey="waitForClickFilters"/>
+        <fillField selector="{{AdminOrdersGridSection.idFilter}}" userInput="{{orderId}}" stepKey="fillOrderIdFilter"/>
+        <click selector="{{AdminOrdersGridSection.applyFilters}}" stepKey="clickOrderApplyFilters"/>
+        <waitForPageLoad stepKey="waitForApplyFilters"/>
+        <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickOrderRow"/>
+        <waitForPageLoad stepKey="waitForOrderPageOpened"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.loginAsCustomer}}" stepKey="clickLoginAsCustomerLink"/>
         <see selector="{{AdminConfirmationModalSection.title}}" userInput="Login as Customer: Select Store" stepKey="seeModal"/>
         <see selector="{{AdminConfirmationModalSection.message}}" userInput="Actions taken while in &quot;Login as Customer&quot; will affect actual customer data." stepKey="seeModalMessage"/>
