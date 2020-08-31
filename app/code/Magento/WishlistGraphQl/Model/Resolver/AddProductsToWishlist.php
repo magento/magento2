@@ -97,7 +97,7 @@ class AddProductsToWishlist implements ResolverInterface
         $wishlist = $this->getWishlist($wishlistId, $customerId);
 
         if (null === $wishlist->getId() || $customerId !== (int) $wishlist->getCustomerId()) {
-            throw new GraphQlInputException(__('The wishlist was not found.'));
+            throw new GraphQlInputException(__('The wishlist configuration is currently disabled.'));
         }
 
         $wishlistItems = $this->getWishlistItems($args['wishlistItems']);
