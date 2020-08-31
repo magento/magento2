@@ -295,10 +295,11 @@ define([
             var collapsibleContent = $('#' + invalidField.uid).closest(this.collapsibleSelector);
 
             if (collapsibleContent.length > 0) {
-                collapsibleContent.on('transitionend', () => {
-                    invalidField.focused(true);
-                    collapsibleContent.off('transitionend');
-                });
+                collapsibleContent
+                    .off('transitionend')
+                    .one('transitionend', function () {
+                        invalidField.focused(true);
+                    });
             }
         },
 
