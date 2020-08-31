@@ -43,18 +43,18 @@ class UpdateProductsFromWishlistTest extends GraphQlAbstract
         $qty = 5;
         $description = 'New Description';
         $wishlistId = $wishlist['customer']['wishlist']['id'];
-        $wishlistItem = $wishlist['customer']['wishlist']['items'][0];
-        self::assertNotEquals($description, $wishlistItem['description']);
-        self::assertNotEquals($qty, $wishlistItem['qty']);
+        $wishlistItem = $wishlist['customer']['wishlist']['items_v2'][0];
+        $this->assertNotEquals($description, $wishlistItem['description']);
+        $this->assertNotEquals($qty, $wishlistItem['quantity']);
 
         $query = $this->getQuery((int) $wishlistId, (int) $wishlistItem['id'], $qty, $description);
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
 
-        self::assertArrayHasKey('updateProductsInWishlist', $response);
-        self::assertArrayHasKey('wishlist', $response['updateProductsInWishlist']);
+        $this->assertArrayHasKey('updateProductsInWishlist', $response);
+        $this->assertArrayHasKey('wishlist', $response['updateProductsInWishlist']);
         $wishlistResponse = $response['updateProductsInWishlist']['wishlist'];
-        self::assertEquals($qty, $wishlistResponse['items'][0]['qty']);
-        self::assertEquals($description, $wishlistResponse['items'][0]['description']);
+        $this->assertEquals($qty, $wishlistResponse['items_v2'][0]['quantity']);
+        $this->assertEquals($description, $wishlistResponse['items_v2'][0]['description']);
     }
 
     /**
@@ -110,10 +110,10 @@ mutation {
       id
       sharing_code
       items_count
-      items {
+      items_v2 {
         id
         description
-        qty
+        quantity
       }
     }
   }
@@ -146,9 +146,9 @@ query {
     wishlist {
       id
       items_count
-      items {
+      items_v2 {
         id
-        qty
+        quantity
         description
       }
     }
