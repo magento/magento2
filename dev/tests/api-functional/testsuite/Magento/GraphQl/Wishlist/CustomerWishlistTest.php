@@ -131,7 +131,7 @@ QUERY;
     public function testCustomerCannotGetWishlistWhenDisabled()
     {
         $this->expectException(\Exception::class);
-        $this->expectExceptionMessage('The wishlist is not currently available.');
+        $this->expectExceptionMessage('The wishlist configuration is currently disabled.');
 
         $query =
             <<<QUERY
