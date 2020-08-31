@@ -14,6 +14,7 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Data\OptionSourceInterface;
 use Magento\Framework\Escaper;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Sales\Api\CreditmemoRepositoryInterface;
 use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
@@ -116,6 +117,7 @@ class Options implements OptionSourceInterface
 
     /**
      * @inheritdoc
+     * @throws LocalizedException
      */
     public function toOptionArray(): array
     {
@@ -213,25 +215,45 @@ class Options implements OptionSourceInterface
      * Get Customer id from request param.
      *
      * @return int
+     * @throws LocalizedException
      */
     private function getCustomerId(): int
     {
         $customerId = $this->request->getParam('id');
-        if (!$customerId) {
-            $orderId = $this->request->getParam('order_id');
-            $shipmentId = $this->request->getParam('shipment_id');
-            $creditmemoId = $this->request->getParam('creditmemo_id');
-            $invoiceId = $this->request->getParam('invoice_id');
-            if ($invoiceId) {
-                $orderId = $this->invoiceRepository->get($invoiceId)->getOrderId();
-            } elseif ($shipmentId) {
-                $orderId = $this->shipmentRepository->get($shipmentId)->getOrderId();
-            } elseif ($creditmemoId) {
-                $orderId = $this->creditmemoRepository->get($creditmemoId)->getOrderId();
-            }
-            $customerId = $this->orderRepository->get($orderId)->getCustomerId();
+        if ($customerId) {
+            return (int)$customerId;
+        }
+        try {
+            $orderId = $this->getOrderId();
+        } catch (LocalizedException $exception) {
+            throw new LocalizedException(__('Unable to get Customer ID.'));
         }
 
-        return (int)$customerId;
+        return (int)$this->orderRepository->get($orderId)->getCustomerId();
+    }
+
+    /**
+     * Get Order id from request param
+     *
+     * @return int
+     * @throws LocalizedException
+     */
+    private function getOrderId(): int
+    {
+        $orderId = $this->request->getParam('order_id');
+        if ($orderId) {
+            return (int)$orderId;
+        }
+        $shipmentId = $this->request->getParam('shipment_id');
+        $creditmemoId = $this->request->getParam('creditmemo_id');
+        $invoiceId = $this->request->getParam('invoice_id');
+        if ($invoiceId) {
+            return $this->invoiceRepository->get($invoiceId)->getOrderId();
+        } elseif ($shipmentId) {
+            return $this->shipmentRepository->get($shipmentId)->getOrderId();
+        } elseif ($creditmemoId) {
+            return $this->creditmemoRepository->get($creditmemoId)->getOrderId();
+        }
+        throw new LocalizedException(__('Unable to get Order ID.'));
     }
 }
