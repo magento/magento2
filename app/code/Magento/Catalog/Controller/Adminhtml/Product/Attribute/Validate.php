@@ -23,7 +23,7 @@ use Magento\Framework\Serialize\Serializer\FormData;
 class Validate extends AttributeAction implements HttpGetActionInterface, HttpPostActionInterface
 {
     const DEFAULT_MESSAGE_KEY = 'message';
-    const RESERVED_CODES = ['product_type', 'type_id'];
+   private const RESERVED_ATTRIBUTE_CODES = ['product_type', 'type_id'];
 
     /**
      * @var \Magento\Framework\Controller\Result\JsonFactory
