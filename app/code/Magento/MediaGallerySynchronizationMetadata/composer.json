@@ -1,12 +1,12 @@
 {
-    "name": "magento/module-media-gallery-synchronization",
-    "description": "Magento module provides implementation of the media gallery data synchronization.",
+    "name": "magento/module-media-gallery-synchronization-metadata",
+    "description": "Magento module responsible for images metadata synchronization",
     "require": {
         "php": "~7.3.0||~7.4.0",
         "magento/framework": "*",
         "magento/module-media-gallery-api": "*",
-        "magento/module-media-gallery-synchronization-api": "*",
-        "magento/framework-message-queue": "*"
+        "magento/module-media-gallery-metadata-api": "*",
+        "magento/module-media-gallery-synchronization-api": "*"
     },
     "type": "magento2-module",
     "license": [
@@ -18,7 +18,7 @@
             "registration.php"
         ],
         "psr-4": {
-            "Magento\\MediaGallerySynchronization\\": ""
+            "Magento\\MediaGallerySynchronizationMetadata\\": ""
         }
     }
 }
