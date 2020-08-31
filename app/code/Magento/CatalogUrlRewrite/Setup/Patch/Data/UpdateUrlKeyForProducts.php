@@ -58,7 +58,7 @@ class UpdateUrlKeyForProducts implements DataPatchInterface, PatchVersionInterfa
         $table = $this->moduleDataSetup->getTable('catalog_product_entity_varchar');
         $select = $this->moduleDataSetup->getConnection()->select()->from(
             $table,
-            ['value_id', 'value']
+            ['entity_id', 'attribute_id', 'store_id', 'value_id', 'value']
         )->where(
             'attribute_id = ?',
             $this->eavSetup->getAttributeId($productTypeId, 'url_key')
