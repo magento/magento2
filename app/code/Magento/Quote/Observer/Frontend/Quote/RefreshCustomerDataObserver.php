@@ -14,6 +14,7 @@ use Magento\Framework\Stdlib\Cookie\PhpCookieManager;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 
 /**
  * Class responsible for refreshing customer data when trigger recollect flag was set to the quote
@@ -40,19 +41,27 @@ class RefreshCustomerDataObserver implements ObserverInterface
     private $cookieMetadataFactory;
 
     /**
+     * @var QuoteResource
+     */
+    private $quoteResource;
+
+    /**
      * RefreshCustomerDataObserver constructor.
      * @param Session $checkoutSession
      * @param PhpCookieManager $cookieManager
      * @param CookieMetadataFactory $cookieMetadataFactory
+     * @param QuoteResource $quoteResource
      */
     public function __construct(
         Session $checkoutSession,
         PhpCookieManager $cookieManager,
-        CookieMetadataFactory $cookieMetadataFactory
+        CookieMetadataFactory $cookieMetadataFactory,
+        QuoteResource $quoteResource
     ) {
         $this->checkoutSession = $checkoutSession;
         $this->cookieManager = $cookieManager;
         $this->cookieMetadataFactory = $cookieMetadataFactory;
+        $this->quoteResource = $quoteResource;
     }
 
     /**
@@ -67,11 +76,13 @@ class RefreshCustomerDataObserver implements ObserverInterface
     public function execute(Observer $observer)
     {
         $quote = $this->checkoutSession->getQuote();
-        /* Check if original quote object loaded from the database had trigger_recollect flag */
-        if ($quote->getOrigData('trigger_recollect')) {
+        /* Check if quote has trigger_private_content_update flag and flush customer private data if needed. */
+        if ($quote->getData('trigger_private_content_update')) {
             $metadata = $this->cookieMetadataFactory->createCookieMetadata();
             $metadata->setPath('/');
             $this->cookieManager->deleteCookie('mage-cache-sessid', $metadata);
+            $quote->setData('trigger_private_content_update', 0);
+            $this->quoteResource->save($quote);
         }
     }
 }

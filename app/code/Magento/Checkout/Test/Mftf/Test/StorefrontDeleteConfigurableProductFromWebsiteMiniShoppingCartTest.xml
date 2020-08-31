@@ -106,7 +106,7 @@
             <argument name="qty" value="2"/>
         </actionGroup>
 
-        <!-- Delete Configurable Product from admin -->
+        <!-- Delete Configurable Product via API -->
         <deleteData createDataKey="createConfigProduct1" stepKey="deleteConfigProduct"/>
 
         <!-- Go to the shopping cart -->

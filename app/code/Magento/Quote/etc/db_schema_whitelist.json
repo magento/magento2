@@ -49,7 +49,8 @@
             "base_subtotal_with_discount": true,
             "is_changed": true,
             "trigger_recollect": true,
-            "ext_shipping_info": true
+            "ext_shipping_info": true,
+            "trigger_private_content_update": true
         },
         "index": {
             "QUOTE_CUSTOMER_ID_STORE_ID_IS_ACTIVE": true,
@@ -121,7 +122,9 @@
             "vat_is_valid": true,
             "vat_request_id": true,
             "vat_request_date": true,
-            "vat_request_success": true
+            "vat_request_success": true,
+            "validated_country_code": true,
+            "validated_vat_number": true
         },
         "index": {
             "QUOTE_ADDRESS_QUOTE_ID": true

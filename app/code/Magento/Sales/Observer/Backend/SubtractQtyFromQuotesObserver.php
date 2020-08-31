@@ -35,5 +35,6 @@ class SubtractQtyFromQuotesObserver implements ObserverInterface
         $product = $observer->getEvent()->getProduct();
         $this->_quote->subtractProductFromQuotes($product);
         $this->_quote->markQuotesRecollect([$product->getId()]);
+        $this->_quote->markQuotesWithFlag([$product->getId()], 'trigger_private_content_update', 1);
     }
 }

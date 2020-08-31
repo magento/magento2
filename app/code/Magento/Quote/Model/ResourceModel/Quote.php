@@ -276,8 +276,24 @@ class Quote extends AbstractDb
      */
     public function markQuotesRecollect($productIds)
     {
+        $this->markQuotesWithFlag($productIds, 'trigger_recollect', 1);
+
+        return $this;
+    }
+
+    /**
+     * Mark quotes which contain specified product(s) with flag.
+     *
+     * @param array|int|\Zend_Db_Expr $productIds
+     * @param string $flag
+     * @param int $value
+     * @return $this
+     */
+    public function markQuotesWithFlag($productIds, $flag, $value)
+    {
         $tableQuote = $this->getTable('quote');
         $tableItem = $this->getTable('quote_item');
+        $connection = $this->getConnection();
         $subSelect = $this->getConnection()
             ->select()
             ->from(
@@ -295,7 +311,7 @@ class Quote extends AbstractDb
                 ['t2' => $subSelect],
                 't1.entity_id = t2.entity_id',
                 [
-                    'trigger_recollect' => new \Zend_Db_Expr('1'),
+                    $flag => new \Zend_Db_Expr($value),
                     'updated_at' => 't1.updated_at',
                 ]
             );

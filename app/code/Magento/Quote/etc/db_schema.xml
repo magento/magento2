@@ -84,6 +84,8 @@
                 nullable="true" comment="Base Subtotal With Discount"/>
         <column xsi:type="int" name="is_changed" unsigned="true" nullable="true" identity="false"
                 comment="Is Changed"/>
+        <column xsi:type="tinyint" name="trigger_private_content_update" unsigned="true" nullable="true" identity="false"
+                comment="Trigger Private Content Update"/>
         <column xsi:type="smallint" name="trigger_recollect" unsigned="false" nullable="false"
                 identity="false" default="0" comment="Trigger Recollect"/>
         <column xsi:type="text" name="ext_shipping_info" nullable="true" comment="Ext Shipping Info"/>
