@@ -13,6 +13,7 @@ namespace Magento\Framework\App;
  * Please use plugins to prevent action dispatching instead.
  *
  * @api
+ * @since 100.0.2
  */
 class ActionFlag
 {

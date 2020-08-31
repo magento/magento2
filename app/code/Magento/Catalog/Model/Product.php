@@ -11,7 +11,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductLinkRepositoryInterface;
 use Magento\Catalog\Model\Product\Attribute\Backend\Media\EntryConverterPool;
 use Magento\Catalog\Model\Product\Configuration\Item\Option\OptionInterface;
-use Magento\Catalog\Model\FilterProductCustomAttribute;
 use Magento\Framework\Api\AttributeValueFactory;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\ObjectManager;
@@ -73,9 +72,9 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     const STORE_ID = 'store_id';
 
     /**
-     * @var string
+     * @var string|bool
      */
-    protected $_cacheTag = self::CACHE_TAG;
+    protected $_cacheTag = false;
 
     /**
      * @var string
@@ -122,6 +121,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @var ResourceModel\Product
+     * @since 102.0.6
      */
     protected $_resource;
 
@@ -278,7 +278,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
 
     /**
      * @var \Magento\Catalog\Api\ProductAttributeRepositoryInterface
-     * @deprecated Not used anymore due to performance issue (loaded all product attributes)
+     * @deprecated 102.0.6 Not used anymore due to performance issue (loaded all product attributes)
      */
     protected $metadataService;
 
@@ -315,7 +315,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * List of attributes in ProductInterface
      *
-     * @deprecated
+     * @deprecated 103.0.0
      * @see ProductInterface::ATTRIBUTES
      * @var array
      */
@@ -493,7 +493,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return \Magento\Catalog\Model\ResourceModel\Product
-     * @deprecated because resource models should be used directly
+     * @deprecated 102.0.6 because resource models should be used directly
+     * @since 102.0.6
      */
     protected function _getResource()
     {
@@ -640,7 +641,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @param bool $calculate
      * @return void
-     * @deprecated
+     * @deprecated 102.0.4
      */
     public function setPriceCalculation($calculate = true)
     {
@@ -725,9 +726,14 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function getCategoryId()
     {
+        if ($this->hasData('category_id')) {
+            return $this->getData('category_id');
+        }
         $category = $this->_registry->registry('current_category');
-        if ($category && in_array($category->getId(), $this->getCategoryIds())) {
-            return $category->getId();
+        $categoryId = $category ? $category->getId() : null;
+        if ($categoryId && in_array($categoryId, $this->getCategoryIds())) {
+            $this->setData('category_id', $categoryId);
+            return $categoryId;
         }
         return false;
     }
@@ -873,7 +879,6 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      */
     public function beforeSave()
     {
-        $this->cleanCache();
         $this->setTypeHasOptions(false);
         $this->setTypeHasRequiredOptions(false);
         $this->setHasOptions(false);
@@ -971,6 +976,17 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $this->reloadPriceInfo();
 
         return $result;
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function getCacheTags()
+    {
+        $identities = $this->getIdentities();
+        $cacheTags = !empty($identities) ? (array) $identities : parent::getCacheTags();
+
+        return $cacheTags;
     }
 
     /**
@@ -1164,6 +1180,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * Get formatted by currency product price
      *
      * @return  array|double
+     * @since 102.0.6
      */
     public function getFormattedPrice()
     {
@@ -1175,7 +1192,7 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @return array|double
      *
-     * @deprecated
+     * @deprecated 102.0.6
      * @see getFormattedPrice()
      */
     public function getFormatedPrice()
@@ -2148,13 +2165,13 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     /**
      * Get cache tags associated with object id
      *
-     * @deprecated
+     * @deprecated 102.0.5
      * @see \Magento\Catalog\Model\Product::getIdentities
      * @return string[]
      */
     public function getCacheIdTags()
     {
-        // phpstan:ignore
+        // phpstan:ignore "Call to an undefined static method"
         $tags = parent::getCacheIdTags();
         $affectedCategoryIds = $this->getAffectedCategoryIds();
         if (!$affectedCategoryIds) {
@@ -2335,7 +2352,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     public function getImage()
     {
         $this->getTypeInstance()->setImageFromChildProduct($this);
-        // phpstan:ignore
+
+        // phpstan:ignore "Call to an undefined static method"
         return parent::getImage();
     }
 
@@ -2399,6 +2417,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         }
     }
 
+    //phpcs:disable PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.MethodDoubleUnderscore
+
     /**
      * Return Data Object data in array format.
      *
@@ -2425,6 +2445,8 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         }
         return $data;
     }
+
+    //phpcs:enable PHPCompatibility.FunctionNameRestrictions.ReservedFunctionNames.MethodDoubleUnderscore
 
     /**
      * Convert Category model into flat array.
@@ -2722,11 +2744,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @return array|null
      *
-     * @deprecated 101.1.0 as Product model shouldn't be responsible for stock status
+     * @deprecated 102.0.0 as Product model shouldn't be responsible for stock status
      * @see StockItemInterface when you want to change the stock data
      * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
      * @see StockItemRepositoryInterface::save as extension point for customization of saving process
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getQuantityAndStockStatus()
     {
@@ -2739,11 +2761,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param array $quantityAndStockStatusData
      * @return $this
      *
-     * @deprecated 101.1.0 as Product model shouldn't be responsible for stock status
+     * @deprecated 102.0.0 as Product model shouldn't be responsible for stock status
      * @see StockItemInterface when you want to change the stock data
      * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
      * @see StockItemRepositoryInterface::save as extension point for customization of saving process
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setQuantityAndStockStatus($quantityAndStockStatusData)
     {
@@ -2756,11 +2778,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      *
      * @return array|null
      *
-     * @deprecated 101.1.0 as Product model shouldn't be responsible for stock status
+     * @deprecated 102.0.0 as Product model shouldn't be responsible for stock status
      * @see StockItemInterface when you want to change the stock data
      * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
      * @see StockItemRepositoryInterface::save as extension point for customization of saving process
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function getStockData()
     {
@@ -2773,11 +2795,11 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
      * @param array $stockData
      * @return $this
      *
-     * @deprecated 101.1.0 as Product model shouldn't be responsible for stock status
+     * @deprecated 102.0.0 as Product model shouldn't be responsible for stock status
      * @see StockItemInterface when you want to change the stock data
      * @see StockStatusInterface when you want to read the stock data for representation layer (storefront)
      * @see StockItemRepositoryInterface::save as extension point for customization of saving process
-     * @since 101.1.0
+     * @since 102.0.0
      */
     public function setStockData($stockData)
     {

@@ -38,7 +38,7 @@ class SaveInventoryDataObserverTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->productRepository = Bootstrap::getObjectManager()
             ->get(ProductRepositoryInterface::class);
@@ -81,6 +81,6 @@ class SaveInventoryDataObserverTest extends TestCase
         $parentProductStockItem = $this->stockItemRepository->get(
             $parentProduct->getExtensionAttributes()->getStockItem()->getItemId()
         );
-        $this->assertSame(false, $parentProductStockItem->getIsInStock());
+        $this->assertFalse($parentProductStockItem->getIsInStock());
     }
 }

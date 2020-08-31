@@ -3,29 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Model\Indexer;
 
-class AbstractProcessorTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Indexer\IndexerRegistry;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AbstractProcessorTest extends TestCase
 {
     const INDEXER_ID = 'stub_indexer_id';
 
     /**
-     * @var \Magento\Indexer\Test\Unit\Model\Indexer\AbstractProcessorStub
+     * @var AbstractProcessorStub
      */
     protected $model;
 
     /**
-     * @var \Magento\Framework\Indexer\IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject
+     * @var IndexerRegistry|MockObject
      */
     protected $_indexerRegistryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_indexerRegistryMock = $this->createPartialMock(
-            \Magento\Framework\Indexer\IndexerRegistry::class,
-            ['isScheduled', 'get', 'reindexRow', 'reindexList', 'reindexAll', 'invalidate']
-        );
-        $this->model = new \Magento\Indexer\Test\Unit\Model\Indexer\AbstractProcessorStub(
+        $this->_indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
+            ->addMethods(['isScheduled', 'reindexRow', 'reindexList', 'reindexAll', 'invalidate'])
+            ->onlyMethods(['get'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->model = new AbstractProcessorStub(
             $this->_indexerRegistryMock
         );
     }
@@ -73,14 +80,14 @@ class AbstractProcessorTest extends \PHPUnit\Framework\TestCase
                 self::INDEXER_ID
             )->willReturnSelf();
             $this->_indexerRegistryMock->expects($this->once())->method('isScheduled')->willReturn($scheduled);
-            $this->assertEquals(null, $this->model->reindexRow($id));
+            $this->assertNull($this->model->reindexRow($id));
         } else {
             $this->_indexerRegistryMock->expects($this->exactly(2))->method('get')->with(
                 self::INDEXER_ID
             )->willReturnSelf();
             $this->_indexerRegistryMock->expects($this->once())->method('isScheduled')->willReturn($scheduled);
             $this->_indexerRegistryMock->expects($this->once())->method('reindexRow')->with($id)->willReturnSelf();
-            $this->assertEquals(null, $this->model->reindexRow($id));
+            $this->assertNull($this->model->reindexRow($id));
         }
     }
 
@@ -96,14 +103,14 @@ class AbstractProcessorTest extends \PHPUnit\Framework\TestCase
                 self::INDEXER_ID
             )->willReturnSelf();
             $this->_indexerRegistryMock->expects($this->once())->method('isScheduled')->willReturn($scheduled);
-            $this->assertEquals(null, $this->model->reindexList($ids));
+            $this->assertNull($this->model->reindexList($ids));
         } else {
             $this->_indexerRegistryMock->expects($this->exactly(2))->method('get')->with(
                 self::INDEXER_ID
             )->willReturnSelf();
             $this->_indexerRegistryMock->expects($this->once())->method('isScheduled')->willReturn($scheduled);
             $this->_indexerRegistryMock->expects($this->once())->method('reindexList')->with($ids)->willReturnSelf();
-            $this->assertEquals(null, $this->model->reindexList($ids));
+            $this->assertNull($this->model->reindexList($ids));
         }
     }
 
@@ -124,7 +131,7 @@ class AbstractProcessorTest extends \PHPUnit\Framework\TestCase
     public function testIsIndexerScheduled()
     {
         $this->_indexerRegistryMock->expects($this->once())->method('get')->with(
-            \Magento\Indexer\Test\Unit\Model\Indexer\AbstractProcessorStub::INDEXER_ID
+            AbstractProcessorStub::INDEXER_ID
         )->willReturnSelf();
         $this->_indexerRegistryMock->expects($this->once())->method('isScheduled')->willReturn(false);
         $this->model->isIndexerScheduled();

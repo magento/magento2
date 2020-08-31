@@ -9,14 +9,17 @@ namespace Magento\Framework\Amqp\Test\Unit\Connection;
 
 use Magento\Framework\Amqp\Connection\Factory;
 use Magento\Framework\Amqp\Connection\FactoryOptions;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PhpAmqpLib\Connection\AMQPSSLConnection;
 use PhpAmqpLib\Connection\AMQPStreamConnection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Tests \Magento\Framework\Amqp\Connection\Factory.
  */
-class FactoryTest extends \PHPUnit\Framework\TestCase
+class FactoryTest extends TestCase
 {
     /**
      * @var Factory
@@ -34,18 +37,18 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
     private $objectManagerInterface;
 
     /**
-     * @var FactoryOptions|\PHPUnit_Framework_MockObject_MockObject
+     * @var FactoryOptions|MockObject
      */
     private $optionsMock;
 
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
 
-        $className = \Magento\Framework\ObjectManagerInterface::class;
+        $className = ObjectManagerInterface::class;
         $this->objectManagerInterface = $this->createMock($className);
 
         $this->optionsMock = $this->getMockBuilder(FactoryOptions::class)
@@ -125,7 +128,7 @@ class FactoryTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->objectManager->setBackwardCompatibleProperty(
             null,

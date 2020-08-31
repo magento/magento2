@@ -29,8 +29,7 @@
         </after>
 
         <!--Open New Customer Page -->
-        <amOnPage url="{{AdminNewCustomerPage.url}}" stepKey="navigateToNewCustomerPage"/>
-        <waitForPageLoad stepKey="waitToCustomerPageLoad"/>
+        <actionGroup ref="AdminNavigateNewCustomerActionGroup" stepKey="waitToCustomerPageLoad"/>
         <fillField userInput="{{CustomerEntityOne.firstname}}" selector="{{AdminCustomerAccountInformationSection.firstName}}" stepKey="fillFirstName"/>
         <fillField userInput="{{CustomerEntityOne.lastname}}" selector="{{AdminCustomerAccountInformationSection.lastName}}" stepKey="fillLastName"/>
         <fillField userInput="{{CustomerEntityOne.email}}" selector="{{AdminCustomerAccountInformationSection.email}}" stepKey="fillEmail"/>
@@ -43,8 +42,7 @@
             <argument name="email" value="{{CustomerEntityOne.email}}"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForPageToLoad"/>
-        <click selector="{{AdminCustomerGridSection.firstRowEditLink}}" stepKey="clickOnEditButton1"/>
-        <waitForPageLoad stepKey="waitForCustomerEditPageToLoad"/>
+        <actionGroup ref="AdminClickFirstRowEditLinkOnCustomerGridActionGroup" stepKey="clickOnEditButton1"/>
 
         <!-- Assert Customer Title -->
         <click selector="{{AdminCustomerAccountInformationSection.accountInformationButton}}" stepKey="clickOnAccountInformation"/>

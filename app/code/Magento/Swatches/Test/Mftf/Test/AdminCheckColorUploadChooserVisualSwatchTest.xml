@@ -19,7 +19,7 @@
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
-        <amOnPage url="{{ProductAttributePage.url}}" stepKey="addNewProductAttribute"/>
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="addNewProductAttribute"/>
         <selectOption selector="{{AttributePropertiesSection.InputType}}"
                       userInput="{{visualSwatchAttribute.input_type}}" stepKey="fillInputType"/>
 

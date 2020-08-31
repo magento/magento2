@@ -93,13 +93,15 @@ class CustomerExtractor
             $customerData,
             \Magento\Customer\Api\Data\CustomerInterface::class
         );
-        
+
         $store = $this->storeManager->getStore();
         $storeId = $store->getId();
-        
+
         if ($isGroupIdEmpty) {
+            $groupId = isset($customerData['group_id']) ? $customerData['group_id']
+                : $this->customerGroupManagement->getDefaultGroup($storeId)->getId();
             $customerDataObject->setGroupId(
-                $this->customerGroupManagement->getDefaultGroup($storeId)->getId()
+                $groupId
             );
         }
 

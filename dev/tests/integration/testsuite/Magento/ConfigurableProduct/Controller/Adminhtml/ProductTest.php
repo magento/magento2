@@ -17,7 +17,6 @@ use Magento\Catalog\Model\Product\Type\Virtual;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable;
 use Magento\Eav\Model\Config;
 use Magento\Framework\App\Request\Http as HttpRequest;
-use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\Serialize\SerializerInterface;
@@ -60,7 +59,7 @@ class ProductTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->productRepository = $this->_objectManager->get(ProductRepositoryInterface::class);
@@ -120,7 +119,7 @@ class ProductTest extends AbstractBackendController
                     'simple_1' => [
                         'name' => 'simple_1',
                         'sku' => 'simple_1',
-                        'price' => '200',
+                        'price' => 200,
                         'weight' => '1',
                         'qty' => '100',
                         'attributes' => ['test_configurable' => 'Option 1'],
@@ -128,7 +127,7 @@ class ProductTest extends AbstractBackendController
                     'simple_2' => [
                         'name' => 'simple_2',
                         'sku' => 'simple_2',
-                        'price' => '100',
+                        'price' => 100,
                         'weight' => '1',
                         'qty' => '200',
                         'attributes' => ['test_configurable' => 'Option 2'],
@@ -140,14 +139,14 @@ class ProductTest extends AbstractBackendController
                     'simple_1' => [
                         'name' => 'simple_1',
                         'sku' => 'simple_1',
-                        'price' => '100',
+                        'price' => 100,
                         'qty' => '100',
                         'attributes' => ['test_configurable' => 'Option 1'],
                     ],
                     'simple_2' => [
                         'name' => 'simple_2',
                         'sku' => 'simple_2',
-                        'price' => '100',
+                        'price' => 100,
                         'qty' => '100',
                         'attributes' => ['test_configurable' => 'Option 2'],
                     ],
@@ -189,7 +188,7 @@ class ProductTest extends AbstractBackendController
                     'simple_2' => [
                         'name' => 'simple_2',
                         'sku' => 'simple_2',
-                        'price' => '100',
+                        'price' => 100,
                         'weight' => '1',
                         'qty' => '200',
                         'attributes' => ['test_configurable' => 'Option 2'],
@@ -202,7 +201,7 @@ class ProductTest extends AbstractBackendController
                     'simple_2' => [
                         'name' => 'simple_2',
                         'sku' => 'simple_2',
-                        'price' => '100',
+                        'price' => 100,
                         'qty' => '100',
                         'attributes' => ['test_configurable' => 'Option 2'],
                     ],
@@ -218,7 +217,7 @@ class ProductTest extends AbstractBackendController
                     'simple_1_1' => [
                         'name' => 'simple_1_1',
                         'sku' => 'simple_1_1',
-                        'price' => '100',
+                        'price' => 100,
                         'weight' => '1',
                         'qty' => '200',
                         'attributes' => [
@@ -229,7 +228,7 @@ class ProductTest extends AbstractBackendController
                     'simple_1_2' => [
                         'name' => 'simple_1_2',
                         'sku' => 'simple_1_2',
-                        'price' => '100',
+                        'price' => 100,
                         'weight' => '1',
                         'qty' => '200',
                         'attributes' => [
@@ -245,14 +244,14 @@ class ProductTest extends AbstractBackendController
                     'simple_2_1' => [
                         'name' => 'simple_2_1',
                         'sku' => 'simple_2_1',
-                        'price' => '100',
+                        'price' => 100,
                         'qty' => '100',
                         'attributes' => ['test_configurable_2' => 'Option 1'],
                     ],
                     'simple_2_2' => [
                         'name' => 'simple_2_2',
                         'sku' => 'simple_2_2',
-                        'price' => '100',
+                        'price' => 100,
                         'qty' => '100',
                         'attributes' => ['test_configurable_2' => 'Option 2'],
                     ],
