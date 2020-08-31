@@ -42,32 +42,16 @@
             <argument name="restrictedRole" value="Media Gallery"/>
         </actionGroup>
         <actionGroup ref="AdminUserClickRoleResourceTabActionGroup" stepKey="switchToRoleResourceTab"/>
-        <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="AddMediaGalleryResource">
-            <argument name="User" value="adminRole"/>
-            <argument name="restrictedRole" value="Media Gallery"/>
-        </actionGroup>
-        <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="uncheckDeleteFolder">
-            <argument name="User" value="adminRole"/>
-            <argument name="restrictedRole" value="Create Folder"/>
-        </actionGroup>
-        <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="UncheckAddSelected">
-            <argument name="User" value="adminRole"/>
-            <argument name="restrictedRole" value="Insert Assets into the content"/>
-        </actionGroup>
-        <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="UncheckUploadAssets">
-            <argument name="User" value="adminRole"/>
-            <argument name="restrictedRole" value="Delete Assets"/>
-        </actionGroup>
         <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="AddMediaGalleryUnchekDeleteAssets">
             <argument name="User" value="adminRole"/>
-            <argument name="restrictedRole" value="Delete Folder"/>
+            <argument name="restrictedRole" value="Upload Assets"/>
         </actionGroup>
 
-         <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="AddMediaGalleryPagesResource">
+        <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="AddMediaGalleryPagesResource">
             <argument name="User" value="adminRole"/>
             <argument name="restrictedRole" value="Pages"/>
-         </actionGroup>
-         <actionGroup ref="AdminUserSaveRoleActionGroup" stepKey="saveRole"/>
+        </actionGroup>
+        <actionGroup ref="AdminUserSaveRoleActionGroup" stepKey="saveRole"/>
 
         <actionGroup ref="AdminCreateUserActionGroup" stepKey="createAdminUser">
             <argument name="role" value="adminRole"/>
