@@ -128,7 +128,7 @@ class Validate extends AttributeAction implements HttpGetActionInterface, HttpPo
             $attributeCode
         );
 
-        if (in_array($attributeCode, self::RESERVED_CODES, true)) {
+        if (in_array($attributeCode, self:: RESERVED_ATTRIBUTE_CODES, true)) {
             $message = __('Code (%1) is a reserved key and cannot be used as attribute code.', $attributeCode);
             $this->setMessageToResponse($response, [$message]);
             $response->setError(true);
