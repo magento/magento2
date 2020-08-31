@@ -12,7 +12,7 @@
         <element name="collapseAll" type="button" selector=".tree-actions a:first-child"/>
         <element name="expandAll" type="button" selector=".tree-actions a:last-child"/>
         <element name="categoryHighlighted" type="text" selector="//div[@id='store.menu']//span[contains(text(),'{{name}}')]/ancestor::li" parameterized="true" timeout="30"/>
-        <element name="categoryNotHighlighted" type="text" selector="ul[id=\'ui-id-2\'] li[class~=\'active\']" timeout="30"/>
+        <element name="categoryNotHighlighted" type="text" selector="[id=\'store.menu\'] ul li.active" timeout="30"/>
         <element name="categoryTreeRoot" type="text" selector="div.x-tree-root-node>li.x-tree-node:first-of-type>div.x-tree-node-el:first-of-type" timeout="30"/>
         <element name="categoryInTree" type="text" selector="//a/span[contains(text(), '{{name}}')]" parameterized="true" timeout="30"/>
         <element name="categoryInTreeUnderRoot" type="text" selector="//li/ul/li[@class='x-tree-node']/div/a/span[contains(text(), '{{name}}')]" parameterized="true"/>
