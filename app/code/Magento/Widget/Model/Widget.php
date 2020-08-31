@@ -313,7 +313,7 @@ class Widget
         $directiveParams = '';
         foreach ($params as $name => $value) {
             // Retrieve default option value if pre-configured
-            $directiveParams .= $this->getDirectiveParam($widget, $name, $value);
+            $directiveParams .= $value === null ? '' : $this->getDirectiveParam($widget, $name, $value);
         }
 
         $directive = sprintf('{{widget type="%s"%s%s}}', $type, $directiveParams, $this->getWidgetPageVarName($params));
@@ -354,9 +354,7 @@ class Widget
             $value = $this->getPreparedValue($value);
         }
 
-        return $value !== null
-            ? sprintf(' %s="%s"', $name, $this->escaper->escapeHtmlAttr($value, false))
-            : '';
+        return sprintf(' %s="%s"', $name, $this->escaper->escapeHtmlAttr($value, false));
     }
 
     /**
