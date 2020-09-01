@@ -342,7 +342,7 @@ class Encryptor implements EncryptorInterface
                 end($hashVersions)
             );
         } else {
-            $validVersion = end($hashVersions) === $this->getLatestHashVersion();
+            $validVersion = (int)end($hashVersions) === $this->getLatestHashVersion();
         }
 
         return $validVersion && (!$validateCount || count($hashVersions) === 1);

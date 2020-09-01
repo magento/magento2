@@ -329,9 +329,7 @@ class User extends AbstractModel implements StorageInterface, UserInterface
      */
     public function validate()
     {
-        /** @var $validator \Magento\Framework\Validator\DataObject */
-        $validator = $this->_validatorObject->create();
-        $this->validationRules->addUserInfoRules($validator);
+        $validator = $this->_getValidationRulesBeforeSave();
 
         if (!$validator->isValid($this)) {
             return $validator->getMessages();

@@ -71,7 +71,7 @@ class Save extends \Magento\Backend\Controller\Adminhtml\System\Account
             $user->performIdentityCheck($currentUserPassword);
             if ($password !== '') {
                 $user->setPassword($password);
-                $user->setPasswordConfirmation($passwordConfirmation);
+                $user->setData('password_confirmation', $passwordConfirmation);
             }
             $errors = $user->validate();
             if ($errors !== true && !empty($errors)) {
