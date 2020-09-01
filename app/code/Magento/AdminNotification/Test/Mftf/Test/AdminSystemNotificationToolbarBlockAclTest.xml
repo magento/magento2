@@ -11,6 +11,7 @@
     <test name="AdminSystemNotificationToolbarBlockAclTest">
         <annotations>
             <features value="AdminNotification"/>
+            <stories value="Acl notification toolbar"/>
             <title value="Admin system notification toolbar block acl test"/>
             <description value="Admin should not see system notification toolbar block if acl not restricted"/>
             <severity value="MAJOR"/>
