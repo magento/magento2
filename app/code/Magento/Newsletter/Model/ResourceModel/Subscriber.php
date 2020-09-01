@@ -116,6 +116,7 @@ class Subscriber extends AbstractDb
      * @param string $email
      * @param int $websiteId
      * @return array
+     * @since 100.4.0
      * @throws LocalizedException
      */
     public function loadBySubscriberEmail(string $email, int $websiteId): array
@@ -141,6 +142,7 @@ class Subscriber extends AbstractDb
      * @param int $customerId
      * @param int $websiteId
      * @return array
+     * @since 100.4.0
      */
     public function loadByCustomerId(int $customerId, int $websiteId): array
     {
@@ -200,7 +202,7 @@ class Subscriber extends AbstractDb
      *
      * @param string $subscriberEmail
      * @return array
-     * @deprecated The subscription should be loaded by website id
+     * @deprecated 100.4.0 The subscription should be loaded by website id
      * @see loadBySubscriberEmail
      */
     public function loadByEmail($subscriberEmail)
@@ -214,7 +216,7 @@ class Subscriber extends AbstractDb
      *
      * @param CustomerInterface $customer
      * @return array
-     * @deprecated The subscription should be loaded by website id
+     * @deprecated 100.4.0 The subscription should be loaded by website id
      * @see loadByCustomerId
      */
     public function loadByCustomerData(CustomerInterface $customer)

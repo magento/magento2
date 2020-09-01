@@ -223,7 +223,7 @@ class Stock extends AbstractDb implements QtyCounterInterface
     /**
      * Set items out of stock basing on their quantities and config settings
      *
-     * @deprecated
+     * @deprecated 100.2.5
      * @see \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::updateSetOutOfStock
      * @param string|int $website
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -260,7 +260,7 @@ class Stock extends AbstractDb implements QtyCounterInterface
     /**
      * Set items in stock basing on their quantities and config settings
      *
-     * @deprecated
+     * @deprecated 100.2.5
      * @see \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::updateSetInStock
      * @param int|string $website
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
@@ -295,7 +295,7 @@ class Stock extends AbstractDb implements QtyCounterInterface
     /**
      * Update items low stock date basing on their quantities and config settings
      *
-     * @deprecated
+     * @deprecated 100.2.5
      * @see \Magento\CatalogInventory\Model\ResourceModel\Stock\Item::updateLowStockDate
      * @param int|string $website
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)

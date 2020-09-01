@@ -63,8 +63,7 @@
         <!-- Create subcategory <Sub1> of the anchored category -->
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{SimpleSubCategory.name}}" stepKey="addSubCategoryName"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveSubCategory1"/>
-        <waitForPageLoad stepKey="waitForSecondCategoryToSave"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveSubCategory1"/>
         <seeElement selector="{{AdminCategoryMessagesSection.SuccessMessage}}" stepKey="seeSaveSuccessMessage"/>
 
         <!-- Assign <product1> to the <Sub1> -->
@@ -76,10 +75,8 @@
         <fillField userInput="{{SimpleSubCategory.name}}" selector="{{AdminProductFormSection.searchCategory}}" stepKey="fillSearch"/>
         <waitForPageLoad stepKey="waitForSubCategory"/>
         <click selector="{{AdminProductFormSection.selectCategory(SimpleSubCategory.name)}}" stepKey="selectSub1Category"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickDone"/>
-        <waitForPageLoad stepKey="waitForApplyCategory"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickSave"/>
-        <waitForPageLoad stepKey="waitForSavingChanges"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickDone"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickSave"/>
 
         <!-- Enable `Use Categories Path for Product URLs` on Stores -> Configuration -> Catalog -> Catalog -> Search Engine Optimization -->
         <amOnPage url="{{AdminCatalogSearchConfigurationPage.url}}" stepKey="onConfigPage"/>
@@ -107,10 +104,8 @@
         <click selector="{{AdminProductFormSection.unselectCategories(SimpleSubCategory.name)}}" stepKey="removeCategory"/>
         <click selector="{{AdminProductFormSection.categoriesDropdown}}" stepKey="openDropDown"/>
         <checkOption selector="{{AdminProductFormSection.selectCategory($$createSecondCategory.name$$)}}" stepKey="selectCategory"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="pressButtonDone"/>
-        <waitForPageLoad stepKey="waitForApplyCategory2"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="pushButtonSave"/>
-        <waitForPageLoad stepKey="waitForSavingProduct"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="pressButtonDone"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="pushButtonSave"/>
 
         <!--Product is saved -->
         <see userInput="You saved the product." selector="{{CatalogProductsSection.messageSuccessSavedProduct}}" stepKey="seeSuccessMessage"/>
@@ -179,10 +174,8 @@
         <fillField userInput="{$grabNameSubCategory}" selector="{{AdminProductFormSection.searchCategory}}" stepKey="fillSearchField"/>
         <waitForPageLoad stepKey="waitForSearchSubCategory"/>
         <click selector="{{AdminProductFormSection.selectCategory({$grabNameSubCategory})}}" stepKey="selectSubCategory"/>
-        <click selector="{{AdminProductFormSection.done}}" stepKey="clickButtonDone"/>
-        <waitForPageLoad stepKey="waitForCategoryApply"/>
-        <click selector="{{AdminProductFormSection.save}}" stepKey="clickButtonSave"/>
-        <waitForPageLoad stepKey="waitForSaveChanges"/>
+        <actionGroup ref="AdminSubmitCategoriesPopupActionGroup" stepKey="clickButtonDone"/>
+        <actionGroup ref="AdminProductFormSaveButtonClickActionGroup" stepKey="clickButtonSave"/>
 
         <!-- Product is saved successfully -->
         <see userInput="You saved the product." selector="{{CatalogProductsSection.messageSuccessSavedProduct}}" stepKey="seeSaveMessage"/>
