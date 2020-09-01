@@ -162,7 +162,7 @@ class RefundInvoice implements RefundInvoiceInterface
                     __("Creditmemo Document Validation Error(s):\n" . implode("\n", $validationMessages->getMessages()))
                 );
             }
-            
+
             $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);
             $order->setCustomerNoteNotify($notify);
             $order = $this->refundAdapter->refund($creditmemo, $order, $isOnline);
