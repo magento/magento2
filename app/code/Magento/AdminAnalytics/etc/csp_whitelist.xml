@@ -13,5 +13,19 @@
                     <value id="adobedtm" type="host">assets.adobedtm.com</value>
                 </values>
             </policy>
+            <policy id="img-src">
+                <values>
+                    <value id="adobedtm" type="host">assets.adobedtm.com</value>
+                    <value id="omtrdc" type="host">amcglobal.sc.omtrdc.net</value>
+                    <value id="data" type="host">data:</value>
+                </values>
+            </policy>
+            <policy id="connect-src">
+                <value id="dpmdemdex" type="host">dpm.demdex.net</value>
+                <value id="omtrdc" type="host">amcglobal.sc.omtrdc.net</value>
+            </policy>
+            <policy id="frame-src">
+                <value id="amcdemdex" type="host">fast.amc.demdex.net</value>
+            </policy>
         </policies>
 </csp_whitelist>
