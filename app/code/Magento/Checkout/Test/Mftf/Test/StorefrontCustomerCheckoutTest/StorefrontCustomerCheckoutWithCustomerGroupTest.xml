@@ -13,6 +13,7 @@
             <stories value="Customer checkout with Customer Group assigned"/>
             <title value="Place order by Customer with Customer Group assigned"/>
             <description value="Customer Group should be assigned to Order when setting Auto Group Assign is enabled for Customer"/>
+            <testCaseId value="MC-37259"/>
             <severity value="MAJOR"/>
             <group value="checkout"/>
             <group value="customer"/>
