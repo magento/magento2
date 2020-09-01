@@ -547,6 +547,7 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * @param integer $modelId
      * @param null|string $field
      * @return $this
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     public function loadForUpdate($modelId, $field = null)
     {
