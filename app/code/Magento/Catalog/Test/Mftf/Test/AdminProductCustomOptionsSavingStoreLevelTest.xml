@@ -15,6 +15,7 @@
             <title value="Save a product with Custom Options for Store level."/>
             <description value="Custom options Title should be with default value for Store Level."/>
             <severity value="MINOR"/>
+            <testCaseId value="MC-37265"/>
             <group value="product"/>
         </annotations>
 
