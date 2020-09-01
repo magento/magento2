@@ -106,16 +106,16 @@ class ClassesTest extends \PHPUnit\Framework\TestCase
         foreach ($names as $name) {
             try {
                 if ($softComparison) {
-                    $this->assertNotRegExp('/\//', $name);
+                    $this->assertDoesNotMatchRegularExpression('/\//', $name);
                 } elseif ($moduleBlock) {
                     $this->assertFalse(false === strpos($name, '_'));
-                    $this->assertRegExp('/^([A-Z][A-Za-z\d_]+)+$/', $name);
+                    $this->assertMatchesRegularExpression('/^([A-Z][A-Za-z\d_]+)+$/', $name);
                 } else {
                     if (strpos($name, 'Magento') === false) {
                         continue;
                     }
                     $this->assertFalse(false === strpos($name, '\\'));
-                    $this->assertRegExp('/^([A-Z\\\\][A-Za-z\d\\\\]+)+$/', $name);
+                    $this->assertMatchesRegularExpression('/^([A-Z\\\\][A-Za-z\d\\\\]+)+$/', $name);
                 }
             } catch (\PHPUnit\Framework\AssertionFailedError $e) {
                 $factoryNames[] = $name;

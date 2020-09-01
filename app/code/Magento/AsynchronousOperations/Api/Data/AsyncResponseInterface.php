@@ -13,6 +13,7 @@ namespace Magento\AsynchronousOperations\Api\Data;
  * Temporary data object to give response from webapi async router
  *
  * @api
+ * @since 100.2.3
  */
 interface AsyncResponseInterface
 {
@@ -24,6 +25,7 @@ interface AsyncResponseInterface
      * Gets the bulk uuid.
      *
      * @return string Bulk Uuid.
+     * @since 100.2.3
      */
     public function getBulkUuid();
 
@@ -32,6 +34,7 @@ interface AsyncResponseInterface
      *
      * @param string $bulkUuid
      * @return $this
+     * @since 100.2.3
      */
     public function setBulkUuid($bulkUuid);
 
@@ -39,6 +42,7 @@ interface AsyncResponseInterface
      * Gets the list of request items with status data.
      *
      * @return \Magento\AsynchronousOperations\Api\Data\ItemStatusInterface[]
+     * @since 100.2.3
      */
     public function getRequestItems();
 
@@ -47,12 +51,14 @@ interface AsyncResponseInterface
      *
      * @param \Magento\AsynchronousOperations\Api\Data\ItemStatusInterface[] $requestItems
      * @return $this
+     * @since 100.2.3
      */
     public function setRequestItems($requestItems);
 
     /**
      * @param bool $isErrors
      * @return $this
+     * @since 100.2.3
      */
     public function setErrors($isErrors = false);
 
@@ -60,6 +66,7 @@ interface AsyncResponseInterface
      * Is there errors during processing bulk
      *
      * @return boolean
+     * @since 100.2.3
      */
     public function isErrors();
 
@@ -67,6 +74,7 @@ interface AsyncResponseInterface
      * Retrieve existing extension attributes object.
      *
      * @return \Magento\AsynchronousOperations\Api\Data\AsyncResponseExtensionInterface|null
+     * @since 100.2.3
      */
     public function getExtensionAttributes();
 
@@ -75,6 +83,7 @@ interface AsyncResponseInterface
      *
      * @param \Magento\AsynchronousOperations\Api\Data\AsyncResponseExtensionInterface $extensionAttributes
      * @return $this
+     * @since 100.2.3
      */
     public function setExtensionAttributes(
         \Magento\AsynchronousOperations\Api\Data\AsyncResponseExtensionInterface $extensionAttributes

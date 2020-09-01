@@ -3,24 +3,29 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Theme\Test\Unit\Model\Indexer\Design\Config\Plugin;
 
 use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerRegistry;
+use Magento\Store\Model\Group;
 use Magento\Theme\Model\Data\Design\Config;
 use Magento\Theme\Model\Indexer\Design\Config\Plugin\StoreGroup;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class StoreGroupTest extends \PHPUnit\Framework\TestCase
+class StoreGroupTest extends TestCase
 {
     /** @var StoreGroup */
     protected $model;
 
-    /** @var IndexerRegistry|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var IndexerRegistry|MockObject */
     protected $indexerRegistryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->indexerRegistryMock = $this->getMockBuilder(\Magento\Framework\Indexer\IndexerRegistry::class)
+        $this->indexerRegistryMock = $this->getMockBuilder(IndexerRegistry::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -29,13 +34,13 @@ class StoreGroupTest extends \PHPUnit\Framework\TestCase
 
     public function testAfterDelete()
     {
-        /** @var \Magento\Store\Model\Group|\PHPUnit_Framework_MockObject_MockObject $subjectMock */
-        $subjectMock = $this->getMockBuilder(\Magento\Store\Model\Group::class)
+        /** @var Group|MockObject $subjectMock */
+        $subjectMock = $this->getMockBuilder(Group::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var IndexerInterface|\PHPUnit_Framework_MockObject_MockObject $indexerMock */
-        $indexerMock = $this->getMockBuilder(\Magento\Framework\Indexer\IndexerInterface::class)
+        /** @var IndexerInterface|MockObject $indexerMock */
+        $indexerMock = $this->getMockBuilder(IndexerInterface::class)
             ->getMockForAbstractClass();
         $indexerMock->expects($this->once())
             ->method('invalidate');

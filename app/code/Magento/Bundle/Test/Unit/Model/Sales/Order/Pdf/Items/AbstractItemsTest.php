@@ -33,12 +33,13 @@ class AbstractItemsTest extends TestCase
      */
     private $orderItemMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->orderItemMock = $this->createPartialMock(
-            Item::class,
-            ['getProductOptions', '__wakeup', 'getParentItem', 'getOrderItem', 'getOrderItemId', 'getId']
-        );
+        $this->orderItemMock = $this->getMockBuilder(Item::class)
+            ->addMethods(['getOrderItem', 'getOrderItemId'])
+            ->onlyMethods(['getProductOptions', 'getParentItem', 'getId'])
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $objectManager = new ObjectManager($this);
         $this->serializerMock = $this->createMock(Json::class);
@@ -59,10 +60,16 @@ class AbstractItemsTest extends TestCase
      */
     public function testGetChildrenEmptyItems($class, $method, $returnClass)
     {
-        $salesModel = $this->createPartialMock($returnClass, ['getAllItems', '__wakeup']);
+        $salesModel = $this->getMockBuilder($returnClass)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['getAllItems'])
+            ->getMock();
         $salesModel->expects($this->once())->method('getAllItems')->willReturn([]);
 
-        $item = $this->createPartialMock($class, [$method, 'getOrderItem', '__wakeup']);
+        $item = $this->getMockBuilder($class)
+            ->disableOriginalConstructor()
+            ->onlyMethods([$method, 'getOrderItem'])
+            ->getMock();
         $item->expects($this->once())->method($method)->willReturn($salesModel);
         $item->expects($this->once())->method('getOrderItem')->willReturn($this->orderItemMock);
         $this->orderItemMock->method('getId')->willReturn(1);
@@ -102,7 +109,7 @@ class AbstractItemsTest extends TestCase
     public function testGetChildren($parentItem)
     {
         if ($parentItem) {
-            $parentItem = $this->createPartialMock(Item::class, ['getId', '__wakeup']);
+            $parentItem = $this->createPartialMock(Item::class, ['getId']);
             $parentItem->method('getId')->willReturn(1);
         }
         $this->orderItemMock->method('getOrderItem')->willReturnSelf();
@@ -110,12 +117,12 @@ class AbstractItemsTest extends TestCase
         $this->orderItemMock->method('getOrderItemId')->willReturn(2);
         $this->orderItemMock->method('getId')->willReturn(1);
 
-        $salesModel = $this->createPartialMock(Invoice::class, ['getAllItems', '__wakeup']);
+        $salesModel = $this->createPartialMock(Invoice::class, ['getAllItems']);
         $salesModel->expects($this->once())->method('getAllItems')->willReturn([$this->orderItemMock]);
 
         $item = $this->createPartialMock(
             Invoice\Item::class,
-            ['getInvoice', 'getOrderItem', '__wakeup']
+            ['getInvoice', 'getOrderItem']
         );
         $item->expects($this->once())->method('getInvoice')->willReturn($salesModel);
         $item->method('getOrderItem')->willReturn($this->orderItemMock);
@@ -172,7 +179,7 @@ class AbstractItemsTest extends TestCase
         if ($parentItem) {
             $parentItem = $this->createPartialMock(
                 Item::class,
-                ['getProductOptions', '__wakeup']
+                ['getProductOptions']
             );
             $parentItem->method('getProductOptions')->willReturn($productOptions);
         } else {
@@ -236,7 +243,7 @@ class AbstractItemsTest extends TestCase
         if ($parentItem) {
             $parentItem = $this->createPartialMock(
                 Item::class,
-                ['getProductOptions', '__wakeup']
+                ['getProductOptions']
             );
             $parentItem->method('getProductOptions')->willReturn($productOptions);
         } else {

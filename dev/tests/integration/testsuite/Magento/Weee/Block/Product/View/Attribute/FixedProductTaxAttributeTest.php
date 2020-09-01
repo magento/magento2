@@ -70,7 +70,7 @@ class FixedProductTaxAttributeTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -98,7 +98,7 @@ class FixedProductTaxAttributeTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->registry->unregister('product');
         $this->registry->unregister('current_product');
@@ -132,7 +132,7 @@ class FixedProductTaxAttributeTest extends TestCase
         $this->prepareLayoutCategoryPage();
         $product = $this->updateProduct('simple2', $this->textTaxData);
         $productPrice = $this->productListBlock->getProductPrice($product);
-        $this->assertContains('data-label="fixed&#x20;product&#x20;tax"', $productPrice);
+        $this->assertStringContainsString('data-label="fixed&#x20;product&#x20;tax"', $productPrice);
         $this->assertEquals('$15.00$5.00', preg_replace('/\s+/', '', strip_tags($productPrice)));
     }
 
@@ -147,7 +147,7 @@ class FixedProductTaxAttributeTest extends TestCase
         $this->prepareLayoutCategoryPage();
         $product = $this->updateProduct('simple2', $this->textTaxData);
         $productPrice = $this->productListBlock->getProductPrice($product);
-        $this->assertContains('data-label="fixed&#x20;product&#x20;tax"', $productPrice);
+        $this->assertStringContainsString('data-label="fixed&#x20;product&#x20;tax"', $productPrice);
         $this->assertEquals('$10.00$5.00$15.00', preg_replace('/\s+/', '', strip_tags($productPrice)));
     }
 
@@ -192,7 +192,7 @@ class FixedProductTaxAttributeTest extends TestCase
         $this->registerProduct($product);
         $block = $this->prepareLayoutProductPage();
         $productPrice = $block->toHtml();
-        $this->assertContains('data-label="fixed&#x20;product&#x20;tax"', $productPrice);
+        $this->assertStringContainsString('data-label="fixed&#x20;product&#x20;tax"', $productPrice);
         $this->assertEquals('$15.00$5.00', preg_replace('/\s+/', '', strip_tags($productPrice)));
     }
 
@@ -208,7 +208,7 @@ class FixedProductTaxAttributeTest extends TestCase
         $this->registerProduct($product);
         $block = $this->prepareLayoutProductPage();
         $productPrice = $block->toHtml();
-        $this->assertContains('data-label="fixed&#x20;product&#x20;tax"', $productPrice);
+        $this->assertStringContainsString('data-label="fixed&#x20;product&#x20;tax"', $productPrice);
         $this->assertEquals('$10.00$5.00$15.00', preg_replace('/\s+/', '', strip_tags($productPrice)));
     }
 
