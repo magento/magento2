@@ -5,6 +5,7 @@
  */
 namespace Magento\Checkout\Model;
 
+use Magento\Captcha\Api\CaptchaConfigFilterInterface;
 use Magento\Catalog\Helper\Product\ConfigurationPool;
 use Magento\Checkout\Helper\Data as CheckoutHelper;
 use Magento\Checkout\Model\Session as CheckoutSession;
@@ -31,7 +32,7 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Ui\Component\Form\Element\Multiline;
 
 /**
- * Default Config Provider
+ * Default Config Provider for checkout
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -185,6 +186,11 @@ class DefaultConfigProvider implements ConfigProviderInterface
     private $customerAddressData;
 
     /**
+     * @var CaptchaConfigFilterInterface
+     */
+    private $configFilter;
+
+    /**
      * @param CheckoutHelper $checkoutHelper
      * @param Session $checkoutSession
      * @param CustomerRepository $customerRepository
@@ -211,6 +217,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
      * @param \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement
      * @param UrlInterface $urlBuilder
+     * @param CaptchaConfigFilterInterface $configFilter
      * @param AddressMetadataInterface $addressMetadata
      * @param AttributeOptionManagementInterface $attributeOptionManager
      * @param CustomerAddressDataProvider|null $customerAddressData
@@ -244,6 +251,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         \Magento\Store\Model\StoreManagerInterface $storeManager,
         \Magento\Quote\Api\PaymentMethodManagementInterface $paymentMethodManagement,
         UrlInterface $urlBuilder,
+        CaptchaConfigFilterInterface $configFilter,
         AddressMetadataInterface $addressMetadata = null,
         AttributeOptionManagementInterface $attributeOptionManager = null,
         CustomerAddressDataProvider $customerAddressData = null
@@ -279,6 +287,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
             ObjectManager::getInstance()->get(AttributeOptionManagementInterface::class);
         $this->customerAddressData = $customerAddressData ?:
             ObjectManager::getInstance()->get(CustomerAddressDataProvider::class);
+        $this->configFilter = $configFilter;
     }
 
     /**
@@ -352,7 +361,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $output['paymentMethods'] = $this->getPaymentMethods();
         $output['autocomplete'] = $this->isAutocompleteEnabled();
         $output['displayBillingOnPaymentMethod'] = $this->checkoutHelper->isDisplayBillingOnPaymentMethodAvailable();
-        return $output;
+        return $this->configFilter->filter($output);
     }
 
     /**
