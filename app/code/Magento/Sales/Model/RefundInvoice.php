@@ -134,8 +134,9 @@ class RefundInvoice implements RefundInvoiceInterface
         \Magento\Sales\Api\Data\CreditmemoCreationArgumentsInterface $arguments = null
     ) {
         $connection = $this->resourceConnection->getConnection('sales');
+        $connection->beginTransaction();
         $invoice = $this->invoiceRepository->get($invoiceId);
-        $order = $this->orderRepository->get($invoice->getOrderId());
+        $order = $this->orderRepository->getForUpdate($invoice->getOrderId());
         $creditmemo = $this->creditmemoDocumentFactory->createFromInvoice(
             $invoice,
             $items,
@@ -156,11 +157,11 @@ class RefundInvoice implements RefundInvoiceInterface
             $arguments
         );
         if ($validationMessages->hasMessages()) {
+            $connection->rollBack();
             throw new \Magento\Sales\Exception\DocumentValidationException(
                 __("Creditmemo Document Validation Error(s):\n" . implode("\n", $validationMessages->getMessages()))
             );
         }
-        $connection->beginTransaction();
         try {
             $creditmemo->setState(\Magento\Sales\Model\Order\Creditmemo::STATE_REFUNDED);
             $order->setCustomerNoteNotify($notify);

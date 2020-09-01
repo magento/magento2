@@ -368,18 +368,70 @@ abstract class AbstractDb extends AbstractResource
     }
 
     /**
+     * Load an object for update (locks record)
+     *
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @param mixed $value
+     * @param string $field field to load by (defaults to model id)
+     * @return $this
+     */
+    public function loadForUpdate(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
+    {
+        $object->beforeLoad($value, $field);
+        if ($field === null) {
+            $field = $this->getIdFieldName();
+        }
+
+        $connection = $this->getConnection();
+        if ($connection && $value !== null) {
+            $select = $this->_getLoadSelectForUpdate($field, $value, $object);
+            $data = $connection->fetchRow($select);
+
+            if ($data) {
+                $object->setData($data);
+            }
+        }
+
+        $this->unserializeFields($object);
+        $this->_afterLoad($object);
+        $object->afterLoad();
+        $object->setOrigData();
+        $object->setHasDataChanges(false);
+
+        return $this;
+    }
+
+    /**
      * Retrieve select object for load object data
      *
      * @param string $field
      * @param mixed $value
      * @param \Magento\Framework\Model\AbstractModel $object
      * @return \Magento\Framework\DB\Select
+     * @throws LocalizedException
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     protected function _getLoadSelect($field, $value, $object)
     {
         $field = $this->getConnection()->quoteIdentifier(sprintf('%s.%s', $this->getMainTable(), $field));
         $select = $this->getConnection()->select()->from($this->getMainTable())->where($field . '=?', $value);
+        return $select;
+    }
+
+    /**
+     * Retrieve select object for load object data (locks record)
+     *
+     * @param string $field
+     * @param mixed $value
+     * @param \Magento\Framework\Model\AbstractModel $object
+     * @return \Magento\Framework\DB\Select
+     * @throws LocalizedException
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     */
+    protected function _getLoadSelectForUpdate($field, $value, $object)
+    {
+        $field = $this->getConnection()->quoteIdentifier(sprintf('%s.%s', $this->getMainTable(), $field));
+        $select = $this->getConnection()->select()->forUpdate()->from($this->getMainTable())->where($field . '=?', $value);
         return $select;
     }
 

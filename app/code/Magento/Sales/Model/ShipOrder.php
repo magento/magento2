@@ -149,7 +149,8 @@ class ShipOrder implements ShipOrderInterface
         ShipmentCreationArgumentsInterface $arguments = null
     ) {
         $connection = $this->resourceConnection->getConnection('sales');
-        $order = $this->orderRepository->get($orderId);
+        $connection->beginTransaction();
+        $order = $this->orderRepository->getForUpdate($orderId);
         $shipment = $this->shipmentDocumentFactory->create(
             $order,
             $items,
@@ -170,11 +171,11 @@ class ShipOrder implements ShipOrderInterface
             $packages
         );
         if ($validationMessages->hasMessages()) {
+            $connection->rollback();
             throw new DocumentValidationException(
                 __("Shipment Document Validation Error(s):\n" . implode("\n", $validationMessages->getMessages()))
             );
         }
-        $connection->beginTransaction();
         try {
             $this->orderRegistrar->register($order, $shipment);
             $order->setState(

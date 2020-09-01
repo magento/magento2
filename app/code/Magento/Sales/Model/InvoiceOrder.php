@@ -139,7 +139,8 @@ class InvoiceOrder implements InvoiceOrderInterface
         InvoiceCreationArgumentsInterface $arguments = null
     ) {
         $connection = $this->resourceConnection->getConnection('sales');
-        $order = $this->orderRepository->get($orderId);
+        $connection->beginTransaction();
+        $order = $this->orderRepository->getForUpdate($orderId);
         $invoice = $this->invoiceDocumentFactory->create(
             $order,
             $items,
@@ -158,11 +159,11 @@ class InvoiceOrder implements InvoiceOrderInterface
             $arguments
         );
         if ($errorMessages->hasMessages()) {
+            $connection->rollBack();
             throw new \Magento\Sales\Exception\DocumentValidationException(
                 __("Invoice Document Validation Error(s):\n" . implode("\n", $errorMessages->getMessages()))
             );
         }
-        $connection->beginTransaction();
         try {
             $order = $this->paymentAdapter->pay($order, $invoice, $capture);
             $order->setState(

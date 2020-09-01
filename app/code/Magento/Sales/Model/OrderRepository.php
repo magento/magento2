@@ -145,6 +145,35 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
             $this->setPaymentAdditionalInfo($entity);
             $this->registry[$id] = $entity;
         }
+        return  $this->registry[$id];
+    }
+
+    /**
+     * Load entity for update (locks record)
+     *
+     * @param int $id
+     * @return \Magento\Sales\Api\Data\OrderInterface
+     * @throws \Magento\Framework\Exception\InputException
+     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     */
+    public function getForUpdate($id)
+    {
+        if (!$id) {
+            throw new InputException(__('An ID is needed. Set the ID and try again.'));
+        }
+        if (!isset($this->registry[$id])) {
+            /** @var OrderInterface $entity */
+            $entity = $this->metadata->getNewInstance()->loadForUpdate($id);
+            if (!$entity->getEntityId()) {
+                throw new NoSuchEntityException(
+                    __("The entity that was requested doesn't exist. Verify the entity and try again.")
+                );
+            }
+            $this->setOrderTaxDetails($entity);
+            $this->setShippingAssignments($entity);
+            $this->setPaymentAdditionalInfo($entity);
+            $this->registry[$id] = $entity;
+        }
         return $this->registry[$id];
     }
 

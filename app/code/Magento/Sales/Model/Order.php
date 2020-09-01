@@ -549,6 +549,19 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
+     * Load order by custom attribute value for update (locks record). Attribute value should be unique
+     *
+     * @param string $attribute
+     * @param string $value
+     * @return $this
+     */
+    public function loadByAttributeForUpdate($attribute, $value)
+    {
+        $this->loadForUpdate($value, $attribute);
+        return $this;
+    }
+
+    /**
      * Retrieve store model instance
      *
      * @return \Magento\Store\Model\Store
@@ -1818,7 +1831,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $total = $this->priceCurrency->round($total);
         return max($total, 0);
     }
-    
+
     /**
      * Retrieve order total due value
      *
