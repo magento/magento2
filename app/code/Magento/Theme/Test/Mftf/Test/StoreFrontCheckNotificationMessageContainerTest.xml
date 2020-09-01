@@ -10,6 +10,8 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StoreFrontCheckNotificationMessageContainerTest">
         <annotations>
+            <features value="Message container"/>
+            <stories value="Message container selector"/>
             <title value="Check notification message container"/>
             <description value="Check aria-atomic property on notification container message"/>
             <severity value="AVERAGE"/>
