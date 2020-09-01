@@ -170,13 +170,14 @@ class ShipOrder implements ShipOrderInterface
             $tracks,
             $packages
         );
-        if ($validationMessages->hasMessages()) {
-            $connection->rollback();
-            throw new DocumentValidationException(
-                __("Shipment Document Validation Error(s):\n" . implode("\n", $validationMessages->getMessages()))
-            );
-        }
+
         try {
+            if ($validationMessages->hasMessages()) {
+                throw new DocumentValidationException(
+                    __("Shipment Document Validation Error(s):\n" . implode("\n", $validationMessages->getMessages()))
+                );
+            }
+
             $this->orderRegistrar->register($order, $shipment);
             $order->setState(
                 $this->orderStateResolver->getStateForOrder($order, [OrderStateResolverInterface::IN_PROGRESS])
