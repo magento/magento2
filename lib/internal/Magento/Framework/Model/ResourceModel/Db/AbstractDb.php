@@ -421,6 +421,8 @@ abstract class AbstractDb extends AbstractResource
     /**
      * Retrieve select object for load object data (locks record)
      *
+     * NOTE: $field MUST be a primary key
+     *
      * @param string $field
      * @param mixed $value
      * @param \Magento\Framework\Model\AbstractModel $object
