@@ -430,9 +430,7 @@ abstract class AbstractDb extends AbstractResource
      */
     protected function _getLoadSelectForUpdate($field, $value, $object)
     {
-        $field = $this->getConnection()->quoteIdentifier(sprintf('%s.%s', $this->getMainTable(), $field));
-        $select = $this->getConnection()->select()->forUpdate()->from($this->getMainTable())->where($field . '=?', $value);
-        return $select;
+        return $this->_getLoadSelect($field, $value, $object)->forUpdate();
     }
 
     /**
