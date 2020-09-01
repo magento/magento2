@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -22,7 +21,6 @@ use Magento\Framework\App\Action\HttpPostActionInterface;
 use Magento\Framework\App\ActionInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Controller\Result\ForwardFactory;
-use Magento\Framework\Controller\ResultInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
@@ -261,9 +259,12 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
                 ->addBodyClass('category-' . $category->getUrlKey());
 
             return $page;
-        } elseif (!$this->getResponse()->isRedirect()) {
+        }
+
+        if (!$this->getResponse()->isRedirect()) {
             $result = $this->resultForwardFactory->create()->forward('noroute');
         }
+
         return $result;
     }
 
@@ -271,6 +272,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
      * Get page type based on category
      *
      * @param Category $category
+     *
      * @return string
      */
     private function getPageType(Category $category) : string
@@ -288,6 +290,7 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
      *
      * @param Page $page
      * @param DataObject $settings
+     *
      * @return void
      */
     private function applyLayoutUpdates(
@@ -309,6 +312,8 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
     }
 
     /**
+     * Check if current page is homepage
+     *
      * @return bool
      */
     private function isHomepage(): bool
