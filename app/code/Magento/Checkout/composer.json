@@ -21,7 +21,6 @@
         "magento/module-quote": "*",
         "magento/module-sales": "*",
         "magento/module-sales-rule": "*",
-        "magento/module-security": "*",
         "magento/module-shipping": "*",
         "magento/module-store": "*",
         "magento/module-tax": "*",
