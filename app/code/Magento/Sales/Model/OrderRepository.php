@@ -165,10 +165,12 @@ class OrderRepository implements \Magento\Sales\Api\OrderRepositoryInterface
         }
         if (!isset($this->registry[$id])) {
             try {
+                /** @var Order $metadata */
+                $metadata = $this->metadata->getNewInstance();
                 /** @var OrderInterface $entity */
-                $entity = $this->metadata->getNewInstance()->loadForUpdate($id);
+                $entity = $metadata->loadForUpdate($id);
             }
-            catch(\Magento\Framework\Exception\LockWaitException $e) {
+            catch(\Magento\Framework\DB\Adapter\LockWaitException $e) {
                 throw new LocalizedException(__('Database lock wait timeout exceeded. Please retry the transaction.'), $e, $e->getCode());
             }
             if (!$entity->getEntityId()) {
