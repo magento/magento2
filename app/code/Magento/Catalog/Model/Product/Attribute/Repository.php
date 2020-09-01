@@ -125,6 +125,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
             $attribute->setAttributeId($existingModel->getAttributeId());
             $attribute->setIsUserDefined($existingModel->getIsUserDefined());
             $attribute->setFrontendInput($existingModel->getFrontendInput());
+            $attribute->setBackendModel($existingModel->getBackendModel());
 
             $this->updateDefaultFrontendLabel($attribute, $existingModel);
         } else {
@@ -221,6 +222,7 @@ class Repository implements \Magento\Catalog\Api\ProductAttributeRepositoryInter
         $code = substr(preg_replace('/[^a-z_0-9]/', '_', $this->filterManager->translitUrl($label)), 0, 30);
         $validatorAttrCode = new \Zend_Validate_Regex(['pattern' => '/^[a-z][a-z_0-9]{0,29}[a-z0-9]$/']);
         if (!$validatorAttrCode->isValid($code)) {
+            // phpcs:ignore Magento2.Security.InsecureFunction
             $code = 'attr_' . ($code ?: substr(md5(time()), 0, 8));
         }
         return $code;
