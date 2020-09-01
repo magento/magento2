@@ -384,7 +384,7 @@ abstract class AbstractDb extends AbstractResource
         }
 
         if($field !== $this->getIdFieldName()) {
-            throw new LocalizedException(__('Unable to lock record. The field passed is not a primary key "%s"', $field));
+            throw new LocalizedException(__('Unable to lock record. The field passed is not a primary key "%"', $field));
         }
 
         $connection = $this->getConnection();
