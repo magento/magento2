@@ -18,7 +18,6 @@ use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Class AttributeMetadataResolverTest
  *
  * Validate attributeMetadata contains correct values in meta data array
  */
@@ -47,18 +46,19 @@ class AttributeMetadataResolverTest extends TestCase
     /**
      * @inheritdoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->eavValidationRulesMock = $this->getMockBuilder(EavValidationRules::class)
-            ->setMethods(['build'])
+            ->onlyMethods(['build'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->fileUploaderDataResolverMock = $this->getMockBuilder(FileUploaderDataResolver::class)
-            ->setMethods(['overrideFileUploaderMetadata'])
+            ->onlyMethods(['overrideFileUploaderMetadata'])
             ->disableOriginalConstructor()
             ->getMock();
         $this->groupManagementMock = $this->getMockBuilder(GroupManagement::class)
-            ->setMethods(['getId', 'getDefaultGroup'])
+            ->onlyMethods(['getDefaultGroup'])
+            ->addMethods(['getId'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -81,7 +81,7 @@ class AttributeMetadataResolverTest extends TestCase
     public function testGetAttributesMetaHasDefaultAttributeValue(): void
     {
         $attributeMock = $this->getMockBuilder(Attribute::class)
-            ->setMethods([
+            ->onlyMethods([
                 'usesSource',
                 'getDataUsingMethod',
                 'getAttributeCode',
@@ -101,36 +101,36 @@ class AttributeMetadataResolverTest extends TestCase
         $entityType = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $attributeMock->expects($this->once())
+        $attributeMock->expects(self::once())
             ->method('usesSource')
             ->willReturn($usesSource);
-        $attributeMock->expects($this->exactly(2))
+        $attributeMock->expects(self::exactly(2))
             ->method('getAttributeCode')
             ->willReturn('group_id');
-        $this->groupManagementMock->expects($this->once())
+        $this->groupManagementMock->expects(self::once())
             ->method('getDefaultGroup')
             ->willReturnSelf();
-        $this->groupManagementMock->expects($this->once())
+        $this->groupManagementMock->expects(self::once())
             ->method('getId')
             ->willReturn($defaultGroupId);
-        $attributeMock->expects($this->at(9))
+        $attributeMock->expects(self::at(9))
             ->method('getDataUsingMethod')
             ->with('default_value')
             ->willReturn($defaultGroupId);
-        $attributeMock->expects($this->once())
+        $attributeMock->expects(self::once())
             ->method('setDataUsingMethod')
             ->willReturnSelf();
-        $this->eavValidationRulesMock->expects($this->once())
+        $this->eavValidationRulesMock->expects(self::once())
             ->method('build')
             ->with($attributeMock)
             ->willReturn($rules);
-        $this->fileUploaderDataResolverMock->expects($this->once())
+        $this->fileUploaderDataResolverMock->expects(self::once())
             ->method('overrideFileUploaderMetadata')
             ->with($entityType, $attributeMock)
             ->willReturnSelf();
 
         $meta = $this->model->getAttributesMeta($attributeMock, $entityType, $allowToShowHiddenAttributes);
-        $this->assertArrayHasKey('default', $meta['arguments']['data']['config']);
-        $this->assertEquals($defaultGroupId, $meta['arguments']['data']['config']['default']);
+        self::assertArrayHasKey('default', $meta['arguments']['data']['config']);
+        self::assertEquals($defaultGroupId, $meta['arguments']['data']['config']['default']);
     }
 }

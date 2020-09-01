@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\Index;
 
 use Magento\Elasticsearch\Model\Adapter\Index\Builder;
-use Magento\Framework\Locale\Resolver as LocaleResolver;
 use Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface;
+use Magento\Framework\Locale\Resolver as LocaleResolver;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BuilderTest extends \PHPUnit\Framework\TestCase
+class BuilderTest extends TestCase
 {
     /**
      * @var Builder
@@ -18,12 +22,12 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var LocaleResolver|\PHPUnit_Framework_MockObject_MockObject
+     * @var LocaleResolver|MockObject
      */
     protected $localeResolver;
 
     /**
-     * @var EsConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var EsConfigInterface|MockObject
      */
     protected $esConfig;
 
@@ -31,7 +35,7 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
      * Setup method
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->localeResolver = $this->getMockBuilder(\Magento\Framework\Locale\Resolver::class)
             ->disableOriginalConstructor()
@@ -41,14 +45,14 @@ class BuilderTest extends \PHPUnit\Framework\TestCase
             ])
             ->getMock();
         $this->esConfig = $this->getMockBuilder(
-            \Magento\Elasticsearch\Model\Adapter\Index\Config\EsConfigInterface::class
+            EsConfigInterface::class
         )
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new ObjectManagerHelper($this);
         $this->model = $objectManager->getObject(
-            \Magento\Elasticsearch\Model\Adapter\Index\Builder::class,
+            Builder::class,
             [
                 'localeResolver' => $this->localeResolver,
                 'esConfig' => $this->esConfig

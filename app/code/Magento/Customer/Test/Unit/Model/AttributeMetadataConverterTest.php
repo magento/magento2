@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Customer\Test\Unit\Model;
 
 use Magento\Customer\Api\Data\AttributeMetadataInterfaceFactory;
@@ -56,7 +58,7 @@ class AttributeMetadataConverterTest extends TestCase
      */
     private $attribute;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->optionFactory = $this->getMockBuilder(OptionInterfaceFactory::class)
             ->setMethods(['create'])
@@ -129,8 +131,8 @@ class AttributeMetadataConverterTest extends TestCase
         $optionDataObjectForSimpleValue2 = $this->getMockBuilder(Option::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $optionObject1 = $this->createMock(OptionInterface::class);
-        $optionObject2 = $this->createMock(OptionInterface::class);
+        $optionObject1 = $this->getMockForAbstractClass(OptionInterface::class);
+        $optionObject2 = $this->getMockForAbstractClass(OptionInterface::class);
         $this->optionFactory->expects($this->exactly(4))
             ->method('create')
             ->will(
@@ -168,8 +170,8 @@ class AttributeMetadataConverterTest extends TestCase
                 [$optionObject1, ['1'], OptionInterface::class],
                 [$optionObject2, ['2'], OptionInterface::class]
             );
-        $validationRule1 = $this->createMock(ValidationRuleInterface::class);
-        $validationRule2 = $this->createMock(ValidationRuleInterface::class);
+        $validationRule1 = $this->getMockForAbstractClass(ValidationRuleInterface::class);
+        $validationRule2 = $this->getMockForAbstractClass(ValidationRuleInterface::class);
         $this->validationRuleFactory->expects($this->exactly(2))
             ->method('create')
             ->will($this->onConsecutiveCalls($validationRule1, $validationRule2));

@@ -16,7 +16,7 @@ use Magento\TestFramework\Wishlist\Model\GetWishlistByCustomerId;
 /**
  * Test for remove product from wish list.
  *
- * @magentoDbIsolation enabled
+ * @magentoDbIsolation disabled
  * @magentoAppArea frontend
  * @magentoDataFixture Magento/Wishlist/_files/wishlist.php
  */
@@ -31,7 +31,7 @@ class RemoveTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -42,7 +42,7 @@ class RemoveTest extends AbstractController
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->customerSession->setCustomerId(null);
 

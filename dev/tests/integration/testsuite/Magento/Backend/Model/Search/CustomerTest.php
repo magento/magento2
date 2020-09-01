@@ -37,7 +37,7 @@ class CustomerTest extends \PHPUnit\Framework\TestCase
         foreach ($expectedResult as $itemIndex => $expectedItem) {
             /** Validate URL to item */
             $customerId = substr($expectedItem['id'], 11); // 'customer/1/' is added to all actual customer IDs
-            $this->assertContains(
+            $this->assertStringContainsString(
                 "customer/index/edit/id/$customerId",
                 $searchResults[$itemIndex]['url'],
                 'Item URL is invalid.'

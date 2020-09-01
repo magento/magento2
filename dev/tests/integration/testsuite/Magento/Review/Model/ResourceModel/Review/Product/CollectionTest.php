@@ -22,7 +22,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Review/_files/different_reviews.php
      */
     public function testGetResultingIds(
-        ?string $status,
+        ?int $status,
         int $expectedCount,
         string $sortAttribute,
         string $dir,

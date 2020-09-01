@@ -63,7 +63,7 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
      */
     private $productRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connectionManager = Bootstrap::getObjectManager()->create(ConnectionManager::class);
         $this->client = $this->connectionManager->getConnection();
@@ -76,7 +76,7 @@ class ReindexAllTest extends \PHPUnit\Framework\TestCase
     /**
      * Make sure that correct engine is set
      */
-    protected function assertPreConditions()
+    protected function assertPreConditions(): void
     {
         $currentEngine = Bootstrap::getObjectManager()->get(EngineResolverInterface::class)->getCurrentSearchEngine();
         $this->assertEquals($this->getInstalledSearchEngine(), $currentEngine);

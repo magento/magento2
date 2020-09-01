@@ -5,6 +5,7 @@
  */
 
 /** @var $block \Magento\Sales\Block\Adminhtml\Order\View\Tab\Info */
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 <?php $_order = $block->getOrder() ?>
 
@@ -20,14 +21,17 @@
         <span class="title"><?= $block->escapeHtml(__('Payment &amp; Shipping Method')) ?></span>
     </div>
     <div class="admin__page-section-content">
-        <div class="admin__page-section-item order-payment-method<?= ($_order->getIsVirtual() ? ' order-payment-method-virtual' : '') ?>">
+        <div class="admin__page-section-item order-payment-method<?= ($_order->getIsVirtual() ?
+            ' order-payment-method-virtual' : '') ?>">
             <?php /* Payment Method */ ?>
             <div class="admin__page-section-item-title">
                 <span class="title"><?= $block->escapeHtml(__('Payment Information')) ?></span>
             </div>
             <div class="admin__page-section-item-content">
                 <div class="order-payment-method-title"><?= $block->getPaymentHtml() ?></div>
-                <div class="order-payment-currency"><?= $block->escapeHtml(__('The order was placed using %1.', $_order->getOrderCurrencyCode())) ?></div>
+                <div class="order-payment-currency">
+                    <?= $block->escapeHtml(__('The order was placed using %1.', $_order->getOrderCurrencyCode())) ?>
+                </div>
                 <div class="order-payment-additional">
                     <?= $block->getChildHtml('order_payment_additional') ?>
                     <?= $block->getChildHtml('payment_additional_info') ?>
@@ -72,7 +76,7 @@
 
 <?= $block->getChildHtml('popup_window') ?>
 
-<script>
+<?php $scriptString = <<<script
 require([
     "prototype",
     "Magento_Sales/order/giftoptions_tooltip"
@@ -87,7 +91,7 @@ require([
         var headerLine = null;
         var contentLine = null;
 
-        $$('#gift_options_data_' + itemId + ' .gift-options-tooltip-content').each(function (element) {
+        \$$('#gift_options_data_' + itemId + ' .gift-options-tooltip-content').each(function (element) {
             if (element.down(0)) {
                 headerLine = element.down(0).innerHTML;
                 contentLine = element.down(0).next().innerHTML;
@@ -104,4 +108,6 @@ require([
 //]]>
 
 });
-</script>
+script;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>

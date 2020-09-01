@@ -50,7 +50,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
@@ -60,7 +60,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public static function tearDownAfterClass()
+    public static function tearDownAfterClass(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         /** @var \Magento\Catalog\Model\Product\Media\Config $config */
@@ -653,7 +653,7 @@ class ProductTest extends \PHPUnit\Framework\TestCase
     {
         $product = $this->productRepository->get('simple-out-of-stock', true, null, true);
         $stockItem = $product->getExtensionAttributes()->getStockItem();
-        $this->assertEquals(false, $stockItem->getIsInStock());
+        $this->assertFalse($stockItem->getIsInStock());
         $stockData = [
             'backorders' => 1,
             'qty' => $qty,

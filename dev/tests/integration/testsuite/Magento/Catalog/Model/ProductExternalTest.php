@@ -33,7 +33,7 @@ class ProductExternalTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 
@@ -241,8 +241,8 @@ class ProductExternalTest extends \PHPUnit\Framework\TestCase
         $this->assertStringEndsWith('catalog/product/view/', $this->_model->getUrlInStore());
         $this->_model->setId(999);
         $url = $this->_model->getProductUrl();
-        $this->assertContains('catalog/product/view', $url);
-        $this->assertContains('id/999', $url);
+        $this->assertStringContainsString('catalog/product/view', $url);
+        $this->assertStringContainsString('id/999', $url);
         $storeUrl = $this->_model->getUrlInStore();
         $this->assertEquals($storeUrl, $url);
     }
@@ -319,7 +319,7 @@ class ProductExternalTest extends \PHPUnit\Framework\TestCase
         $this->assertTrue($this->_model->hasCustomOptions());
 
         $this->_model->setCustomOptions(['test']);
-        $this->assertTrue(is_array($this->_model->getCustomOptions()));
+        $this->assertIsArray($this->_model->getCustomOptions());
     }
 
     public function testCanBeShowInCategory()

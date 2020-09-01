@@ -18,7 +18,7 @@ class RequestGeneratorTest extends \PHPUnit\Framework\TestCase
      */
     protected $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
             ->create(\Magento\CatalogSearch\Model\Search\RequestGenerator::class);
