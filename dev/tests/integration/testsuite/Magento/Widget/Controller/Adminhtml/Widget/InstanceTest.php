@@ -50,6 +50,7 @@ class InstanceTest extends \Magento\TestFramework\TestCase\AbstractBackendContro
 
     public function testTemplateAction()
     {
+        $this->getRequest()->setMethod('POST');
         $this->dispatch('backend/admin/widget_instance/template');
         $this->assertStringStartsWith('<select name="template" id=""', $this->getResponse()->getBody());
     }
