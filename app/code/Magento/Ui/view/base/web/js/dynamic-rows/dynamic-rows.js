@@ -1127,6 +1127,7 @@ define([
          */
         setDifferedFromDefault: function () {
             var recordData;
+
             if (this.default) {
                 recordData = utils.copy(this.recordData());
 

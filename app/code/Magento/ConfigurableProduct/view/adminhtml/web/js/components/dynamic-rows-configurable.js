@@ -242,6 +242,11 @@ define([
             this.generateAssociatedProducts();
         },
 
+        /**
+         * Set initial property to records data
+         *
+         * @returns {Object} Chainable.
+         */
         setInitialProperty: function () {
             return this;
         },
