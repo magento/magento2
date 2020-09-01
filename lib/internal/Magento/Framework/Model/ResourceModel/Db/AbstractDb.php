@@ -358,12 +358,7 @@ abstract class AbstractDb extends AbstractResource
             }
         }
 
-        $this->unserializeFields($object);
-        $this->_afterLoad($object);
-        $object->afterLoad();
-        $object->setOrigData();
-        $object->setHasDataChanges(false);
-
+        $this->_afterObjectLoad($object);
         return $this;
     }
 
@@ -397,13 +392,17 @@ abstract class AbstractDb extends AbstractResource
             }
         }
 
+        $this->_afterObjectLoad($object);
+        return $this;
+    }
+
+    protected function _afterObjectLoad(\Magento\Framework\Model\AbstractModel $object)
+    {
         $this->unserializeFields($object);
         $this->_afterLoad($object);
         $object->afterLoad();
         $object->setOrigData();
         $object->setHasDataChanges(false);
-
-        return $this;
     }
 
     /**
