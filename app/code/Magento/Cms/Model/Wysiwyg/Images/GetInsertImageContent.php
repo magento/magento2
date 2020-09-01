@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Cms\Model\Wysiwyg\Images;
 
+use Magento\Catalog\Helper\Data as CatalogHelper;
 use Magento\Cms\Helper\Wysiwyg\Images as ImagesHelper;
 
 class GetInsertImageContent
@@ -18,13 +19,18 @@ class GetInsertImageContent
     private $imagesHelper;
 
     /**
-     * PrepareImage constructor.
-     *
-     * @param ImagesHelper $imagesHelper
+     * @var CatalogHelper
      */
-    public function __construct(ImagesHelper $imagesHelper)
+    private $catalogHelper;
+
+    /**
+     * @param ImagesHelper $imagesHelper
+     * @param CatalogHelper $catalogHelper
+     */
+    public function __construct(ImagesHelper $imagesHelper, CatalogHelper $catalogHelper)
     {
         $this->imagesHelper = $imagesHelper;
+        $this->catalogHelper = $catalogHelper;
     }
 
     /**
@@ -44,6 +50,7 @@ class GetInsertImageContent
     ): string {
         $filename = $this->imagesHelper->idDecode($encodedFilename);
 
+        $this->catalogHelper->setStoreId($storeId);
         $this->imagesHelper->setStoreId($storeId);
 
         if ($forceStaticPath) {
