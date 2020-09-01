@@ -372,7 +372,7 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @param mixed $value
-     * @param string $field field to load by (defaults to model id)
+     * @param string $field field to load by (defaults to model id) (field must be primary key)
      * @return $this
      * @throws LocalizedException
      */
