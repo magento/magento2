@@ -51,7 +51,8 @@ define([
             '': '',
             'US': 'United States',
             'GB': 'United Kingdom',
-            'DE': 'Germany'
+            'DE': 'Germany',
+            'IT': 'Italy'
         },
         regions = {
             '': 'Please select a region, state or province.'
@@ -201,6 +202,42 @@ define([
             $(countryEl).val('DE').change();
             expect($(regionSelectEl).is(':visible')).toBe(false);
             expect($(regionInputEl).is(':visible')).toBe(false);
+        });
+        it('Check that initial values are not overwritten - region input', function () {
+            $(countryEl).val('GB');
+            $(regionInputEl).val('Liverpool');
+            $(postalCodeEl).val('L13 0AL');
+            init();
+            expect($(countryEl).val()).toBe('GB');
+            expect($(regionInputEl).val()).toBe('Liverpool');
+            expect($(postalCodeEl).val()).toBe('L13 0AL');
+        });
+        it('Check that initial values are not overwritten - region select', function () {
+            $(countryEl).val('US');
+            $(postalCodeEl).val('99501');
+            init({
+                defaultRegion: '2'
+            });
+            expect($(countryEl).val()).toBe('US');
+            expect($(regionSelectEl).find('option:selected').text()).toBe('Alaska');
+            expect($(postalCodeEl).val()).toBe('99501');
+        });
+        it('Check that region values are cleared out on country change - region input', function () {
+            $(countryEl).val('GB');
+            $(regionInputEl).val('Liverpool');
+            init();
+            $(countryEl).val('IT').change();
+            expect($(countryEl).val()).toBe('IT');
+            expect($(regionInputEl).val()).toBe('');
+        });
+        it('Check that region values are cleared out on country change - region select', function () {
+            $(countryEl).val('US');
+            init({
+                defaultRegion: '2'
+            });
+            $(countryEl).val('DE').change();
+            expect($(countryEl).val()).toBe('DE');
+            expect($(regionSelectEl).val()).toBe('');
         });
     });
 });
