@@ -86,7 +86,7 @@ class PublisherTest extends TestCase
             $contentIdentityObject = $this->contentIdentityFactory->create($contentIdentity);
             $this->assertEquals([$assetId], $this->getAssetIds->execute($contentIdentityObject));
             $synchronizedContentIdentities = $this->getContentIdentities->execute([$assetId]);
-            $this->assertEquals(4, count($synchronizedContentIdentities));
+            $this->assertEquals(2, count($synchronizedContentIdentities));
 
             $syncedIds = [];
             foreach ($synchronizedContentIdentities as $syncedContentIdentity) {
@@ -117,16 +117,6 @@ class PublisherTest extends TestCase
                         'entityType' => 'catalog_product',
                         'field' => 'description',
                         'entityId' => 1567
-                    ],
-                    [
-                        'entityType' => 'cms_page',
-                        'field' => 'content',
-                        'entityId' => 5
-                    ],
-                    [
-                        'entityType' => 'cms_block',
-                        'field' => 'content',
-                        'entityId' => 1
                     ]
                 ]
             ]
