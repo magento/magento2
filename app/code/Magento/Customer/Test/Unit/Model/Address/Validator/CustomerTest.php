@@ -82,7 +82,15 @@ class CustomerTest extends TestCase
             ->with(1)
             ->willReturn($originalAddressMock);
 
-        $this->assertEmpty($this->model->validate($addressMock));
+        $this->assertEquals(
+            [
+                __(
+                    'Provided customer ID "%customer_id" isn\'t related to current customer address.',
+                    ['customer_id' => null]
+                )
+            ],
+            $this->model->validate($addressMock)
+        );
     }
 
     /**
