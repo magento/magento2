@@ -75,6 +75,6 @@
         <waitForPageLoad stepKey="waitForFilteredCategoryPageLoad"/>
 
         <executeJS function="return window.location.host" stepKey="hostname"/>
-        <seeCurrentUrlEquals url="https://{$hostname}{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}?$createProductAttribute.attribute_code$=$getProductAttributeOption1.value$" stepKey="seeFilteredCategoryPage"/>
+        <seeCurrentUrlEquals url="http://{$hostname}{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}?$createProductAttribute.attribute_code$=$getProductAttributeOption1.value$" stepKey="seeFilteredCategoryPage"/>
     </test>
 </tests>
