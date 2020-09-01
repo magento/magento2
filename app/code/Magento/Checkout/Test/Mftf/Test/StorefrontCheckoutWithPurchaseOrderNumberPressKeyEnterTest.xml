@@ -15,6 +15,7 @@
             <title value="Create Checkout with purchase order payment method test. Press key Enter on field Purchase Order Number for create Order."/>
             <description value="Create Checkout with purchase order payment method. Press key Enter on field Purchase Order Number for create Order."/>
             <severity value="MAJOR"/>
+            <testCaseId value="MC-37227"/>
             <group value="checkout"/>
         </annotations>
 
