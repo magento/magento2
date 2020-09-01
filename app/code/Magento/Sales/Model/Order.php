@@ -549,19 +549,6 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
     }
 
     /**
-     * Load order by custom attribute value for update (locks record). Attribute value should be unique. Attribute should be a primary key
-     *
-     * @param string $attribute
-     * @param string $value
-     * @return $this
-     */
-    public function loadByAttributeForUpdate($attribute, $value)
-    {
-        $this->loadForUpdate($value, $attribute);
-        return $this;
-    }
-
-    /**
      * Retrieve store model instance
      *
      * @return \Magento\Store\Model\Store

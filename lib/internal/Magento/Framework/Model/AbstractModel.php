@@ -545,13 +545,12 @@ abstract class AbstractModel extends \Magento\Framework\DataObject
      * Load object data for update (locks record)
      *
      * @param integer $modelId
-     * @param null|string $field
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
      */
-    public function loadForUpdate($modelId, $field = null)
+    public function loadForUpdate($modelId)
     {
-        $this->_getResource()->loadForUpdate($this, $modelId, $field);
+        $this->_getResource()->loadForUpdate($this, $modelId);
         return $this;
     }
 

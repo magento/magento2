@@ -367,16 +367,13 @@ abstract class AbstractDb extends AbstractResource
      *
      * @param \Magento\Framework\Model\AbstractModel $object
      * @param mixed $value
-     * @param string $field field to load by (defaults to model id) (field must be primary key)
      * @return $this
      * @throws LocalizedException
      */
-    public function loadForUpdate(\Magento\Framework\Model\AbstractModel $object, $value, $field = null)
+    public function loadForUpdate(\Magento\Framework\Model\AbstractModel $object, $value)
     {
+        $field = $this->getIdFieldName();
         $object->beforeLoad($value, $field);
-        if ($field === null) {
-            $field = $this->getIdFieldName();
-        }
 
         if($field !== $this->getIdFieldName()) {
             throw new LocalizedException(__('Unable to lock record. The field passed is not a primary key "%"', $field));
