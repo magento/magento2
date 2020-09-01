@@ -242,6 +242,10 @@ define([
             this.generateAssociatedProducts();
         },
 
+        setInitialProperty: function () {
+            return this;
+        },
+
         /**
          * Parsed data
          *
