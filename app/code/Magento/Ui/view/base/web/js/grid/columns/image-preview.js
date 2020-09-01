@@ -18,13 +18,15 @@ define([
             height: 0,
             displayedRecord: {},
             lastOpenedImage: false,
+            bookmarksProvider: 'componentType = bookmark, ns = ${ $.ns }',
             fields: {
                 previewUrl: 'preview_url',
                 title: 'title'
             },
             modules: {
                 masonry: '${ $.parentName }',
-                thumbnailComponent: '${ $.parentName }.thumbnail_url'
+                thumbnailComponent: '${ $.parentName }.thumbnail_url',
+                bookmarks: '${ $.bookmarksProvider }'
             },
             statefull: {
                 sorting: true,
@@ -34,7 +36,11 @@ define([
                 '${ $.provider }:params.filters': 'hide',
                 '${ $.provider }:params.search': 'hide',
                 '${ $.provider }:params.paging': 'hide',
+                '${ $.bookmarksProvider }:activeIndex': 'hide',
                 '${ $.provider }:data.items': 'updateDisplayedRecord'
+            },
+            imports: {
+                current: '${ $.provider }:params.paging.current'
             },
             exports: {
                 height: '${ $.parentName }.thumbnail_url:previewHeight'
@@ -207,6 +213,16 @@ define([
          * Close image preview
          */
         hide: function () {
+            var bookmarksLastOpenedImage = this.bookmarks().getActiveView().data.columns.preview.lastOpenedImage,
+                bookmarksActiveViewIndex = this.bookmarks().getActiveView().index,
+                bookmarksActiveViewCurrentPage = this.bookmarks().getActiveView().data.paging.current,
+                currentPage = this.current;
+            if (bookmarksLastOpenedImage && bookmarksActiveViewIndex !== 'default'
+                && bookmarksActiveViewCurrentPage === currentPage) {
+                this.lastOpenedImage(bookmarksLastOpenedImage);
+                return;
+            }
+
             this.lastOpenedImage(false);
             this.visibleRecord(null);
             this.height(0);
