@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontLayeredNavigationOnHomePageTest">
+        <annotations>
+            <features value="LayeredNavigation"/>
+            <stories value="Layered Navigation on Home Page"/>
+            <title value="Set up category page as home url, go to Home Page and check layered navigation urls"/>
+            <description value="Verify that filter urls on layered navigation are using correct category url with rewrites"/>
+            <severity value="AVERAGE"/>
+            <group value="layeredNavigation"/>
+        </annotations>
+
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="createCategory"/>
+            <createData entity="productAttributeWithTwoOptions" stepKey="createProductAttribute"/>
+            <createData entity="productAttributeOption" stepKey="createProductAttributeOption1">
+                <requiredEntity createDataKey="createProductAttribute"/>
+            </createData>
+            <createData entity="productAttributeOption" stepKey="createProductAttributeOption2">
+                <requiredEntity createDataKey="createProductAttribute"/>
+            </createData>
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getProductAttributeOption1">
+                <requiredEntity createDataKey="createProductAttribute"/>
+            </getData>
+            <getData entity="ProductAttributeOptionGetter" index="2" stepKey="getProductAttributeOption2">
+                <requiredEntity createDataKey="createProductAttribute"/>
+            </getData>
+            <createData entity="AddToDefaultSet" stepKey="createProductAddToAttributeSet">
+                <requiredEntity createDataKey="createProductAttribute"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createSimpleProduct1">
+                <requiredEntity createDataKey="createProductAttribute"/>
+                <requiredEntity createDataKey="getProductAttributeOption1"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <createData entity="ApiSimpleProductWithCategory" stepKey="createSimpleProduct2">
+                <requiredEntity createDataKey="createProductAttribute"/>
+                <requiredEntity createDataKey="getProductAttributeOption2"/>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <magentoCLI command="config:set web/default/front catalog/category/view/id/$createCategory.id$" stepKey="setHomepageConfig"/>
+
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </before>
+
+        <after>
+            <magentoCLI command="config:set web/default/front cms" stepKey="unsetHomepageConfig"/>
+            <deleteData createDataKey="createSimpleProduct2" stepKey="deleteSimpleProduct2"/>
+            <deleteData createDataKey="createSimpleProduct1" stepKey="deleteSimpleProduct1"/>
+            <deleteData createDataKey="createProductAttribute" stepKey="deleteAttribute"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="config full_page"/>
+            </actionGroup>
+        </after>
+
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontHomePage"/>
+        <waitForPageLoad stepKey="waitForStorefrontHomePageLoad"/>
+
+        <conditionalClick selector="{{StorefrontCategorySidebarSection.filterOptionsTitle($createProductAttribute.default_frontend_label$)}}" dependentSelector="{{StorefrontCategorySidebarSection.activeFilterOptions}}" visible="false" stepKey="clickToExpandDropdownAttribute"/>
+        <click selector="{{StorefrontCategorySidebarSection.enabledFilterOptionItemByLabel($getProductAttributeOption1.label$)}}" stepKey="goToCategoryPageFilteredByFirstAttributeOption"/>
+        <waitForPageLoad stepKey="waitForFilteredCategoryPageLoad"/>
+
+        <executeJS function="return window.location.host" stepKey="hostname"/>
+        <seeCurrentUrlEquals url="https://{$hostname}{{StorefrontCategoryPage.url($createCategory.custom_attributes[url_key]$)}}?$createProductAttribute.attribute_code$=$getProductAttributeOption1.value$" stepKey="seeFilteredCategoryPage"/>
+    </test>
+</tests>

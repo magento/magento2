@@ -27,6 +27,7 @@ use Magento\Framework\DataObject;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Registry;
+use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Result\Page;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Store\Model\StoreManagerInterface;
@@ -189,6 +190,15 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         $this->_catalogSession->setLastVisitedCategoryId($category->getId());
         $this->_coreRegistry->register('current_category', $category);
         $this->toolbarMemorizer->memorizeParams();
+        // If category is used as homepage - set its url as alias for layered navigation links
+        if ($this->isHomepage() &&
+            !$this->_request->getAlias(UrlInterface::REWRITE_REQUEST_PATH_ALIAS)) {
+            $this->_request->setAlias(
+                UrlInterface::REWRITE_REQUEST_PATH_ALIAS,
+                str_replace($this->_url->getBaseUrl(), '', $category->getUrl())
+            );
+        }
+
         try {
             $this->_eventManager->dispatch(
                 'catalog_controller_category_init_after',
@@ -296,5 +306,15 @@ class View extends Action implements HttpGetActionInterface, HttpPostActionInter
         if ($settings->getPageLayoutHandles()) {
             $page->addPageLayoutHandles($settings->getPageLayoutHandles());
         }
+    }
+
+    /**
+     * @return bool
+     */
+    private function isHomepage(): bool
+    {
+        $pathInfo = $this->_request->getPathInfo();
+
+        return $pathInfo === '/' || !$pathInfo;
     }
 }
