@@ -13,22 +13,10 @@ class Converter implements \Magento\Framework\Config\ConverterInterface
     /**#@+
      * Array keys for config internal representation.
      */
-    const KEY_SERVICE_CLASS = 'class';
-    const KEY_URL = 'url';
-    const KEY_SERVICE_METHOD = 'method';
-    const KEY_SECURE = 'secure';
-    const KEY_ROUTES = 'routes';
-    const KEY_ACL_RESOURCES = 'resources';
-    const KEY_SERVICE = 'service';
-    const KEY_SERVICES = 'services';
-    const KEY_FORCE = 'force';
-    const KEY_VALUE = 'value';
-    const KEY_DATA_PARAMETERS = 'parameters';
-    const KEY_SOURCE = 'source';
-    const KEY_METHOD = 'method';
-    const KEY_METHODS = 'methods';
-    const KEY_DESCRIPTION = 'description';
-    const KEY_REAL_SERVICE_METHOD = 'realMethod';
+    private const KEY_SERVICE_CLASS = 'class';
+    private const KEY_SERVICE_METHOD = 'method';
+    private const KEY_ROUTES = 'routes';
+    private const KEY_SERVICE = 'service';
     /**#@-*/
 
     /**

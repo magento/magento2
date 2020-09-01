@@ -113,7 +113,8 @@ class PhpRule implements RuleInterface
         array $pluginMap = [],
         array $whitelists = [],
         ClassScanner $classScanner = null
-    ) {
+    )
+    {
         $this->_mapRouters = $mapRouters;
         $this->_mapLayoutBlocks = $mapLayoutBlocks;
         $this->configReader = $configReader;
@@ -146,7 +147,7 @@ class PhpRule implements RuleInterface
         );
         $dependenciesInfo = $this->considerCaseDependencies(
             $dependenciesInfo,
-            $this->_caseGetUrl($currentModule, $contents)
+            $this->_caseGetUrl($currentModule, $contents, $file)
         );
         $dependenciesInfo = $this->considerCaseDependencies(
             $dependenciesInfo,
@@ -304,12 +305,13 @@ class PhpRule implements RuleInterface
      *
      * @param string $currentModule
      * @param string $contents
+     * @param string $file
      * @return array
      * @throws LocalizedException
      * @throws \Exception
      * @SuppressWarnings(PMD.CyclomaticComplexity)
      */
-    protected function _caseGetUrl(string $currentModule, string &$contents): array
+    protected function _caseGetUrl(string $currentModule, string &$contents, string $file): array
     {
         $dependencies = [];
         $pattern = '#(\->|:)(?<source>getUrl\(([\'"])(?<path>[a-zA-Z0-9\-_*\/]+)\3)\s*[,)]#';
@@ -321,11 +323,7 @@ class PhpRule implements RuleInterface
                 $path = $item['path'];
                 $returnedDependencies = [];
                 if (strpos($path, '*') !== false) {
-                    /**
-                     * Skip processing wildcard urls since they always resolve to the current
-                     * route_front_name/area_front_name/controller_name
-                     */
-                    continue;
+                    $returnedDependencies = $this->processWildcardUrl($path, $file);
                 } elseif (preg_match('#rest(?<service>/V1/\w+)#i', $path, $apiMatch)) {
                     $returnedDependencies = $this->processApiUrl($apiMatch['service']);
                 } else {
@@ -348,6 +346,66 @@ class PhpRule implements RuleInterface
     }
 
     /**
+     * Helper method to get module dependencies used by a wildcard Url
+     *
+     * @param string $urlPath
+     * @param string $filePath
+     * @return string[]
+     * @throws NoSuchActionException
+     */
+    private function processWildcardUrl(string $urlPath, string $filePath)
+    {
+        $filePath = strtolower($filePath);
+        $urlRoutePieces = explode('/', $urlPath);
+        $routeId = array_shift($urlRoutePieces);
+
+        //Skip route wildcard processing as this requires using the routeMapper
+        if ('*' === $routeId) {
+            return [];
+        }
+        $filePathInfo = pathinfo($filePath);
+        $fileActionName = $filePathInfo['filename'];
+        $filePathPieces = explode('/', $filePathInfo['dirname']);
+
+        /**
+         * Only handle Controllers. ie: Ignore Blocks, Templates, and Models due to complexity in static resolution
+         * of route
+         */
+        if (in_array('block', $filePathPieces)
+            || in_array('model', $filePathPieces)
+            || $filePathInfo['extension'] === 'phtml'
+        ) {
+            return [];
+        }
+        $fileControllerIndex = array_search('adminhtml', $filePathPieces)
+            ?? array_search('controller', $filePathPieces);
+
+        $controllerName = array_shift($urlRoutePieces);
+        if ('*' === $controllerName) {
+            $fileControllerName = implode("_", array_slice($filePathPieces, $fileControllerIndex + 1));
+            $controllerName = $fileControllerName;
+        }
+
+        if (empty($urlRoutePieces) || !$urlRoutePieces[0]) {
+            return $this->routeMapper->getDependencyByRoutePath(
+                $routeId,
+                $controllerName,
+                UrlInterface::DEFAULT_ACTION_NAME
+            );
+        }
+
+        $actionName = array_shift($urlRoutePieces);
+        if ('*' === $actionName) {
+            $actionName = $fileActionName;
+        }
+        return $this->routeMapper->getDependencyByRoutePath(
+            $routeId,
+            $controllerName,
+            $actionName
+        );
+    }
+
+    /**
      * Helper method to get module dependencies used by a standard URL
      *
      * @param string $path
@@ -357,7 +415,7 @@ class PhpRule implements RuleInterface
     private function processStandardUrl(string $path)
     {
         $pattern = '#(?<route_id>[a-z0-9\-_]{3,})'
-                   . '\/?(?<controller_name>[a-z0-9\-_]+)?\/?(?<action_name>[a-z0-9\-_]+)?#i';
+            . '\/?(?<controller_name>[a-z0-9\-_]+)?\/?(?<action_name>[a-z0-9\-_]+)?#i';
         if (preg_match($pattern, $path, $match)) {
             $routeId = $match['route_id'];
             $controllerName = $match['controller_name'] ?? UrlInterface::DEFAULT_CONTROLLER_NAME;

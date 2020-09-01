@@ -26,6 +26,7 @@ use Magento\TestFramework\Dependency\PhpRule;
 use Magento\TestFramework\Dependency\ReportsConfigRule;
 use Magento\TestFramework\Dependency\Route\RouteMapper;
 use Magento\TestFramework\Dependency\VirtualType\VirtualTypeMapper;
+use Magento\TestFramework\Workaround\Override\Config\ValidationState;
 
 /**
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
@@ -284,25 +285,17 @@ class DependencyTest extends \PHPUnit\Framework\TestCase
         // In case primary module declaring the table cannot be identified, use any module referencing this table
         $tableToModuleMap = array_merge($tableToAnyModuleMap, $tableToPrimaryModuleMap);
 
-        $objectManager = Bootstrap::create(BP, $_SERVER)->getObjectManager();
-
-        $webApiConfigReader = $objectManager->create(
-            Reader::class,
+        $webApiConfigReader = new Reader(
+            new WebapiFileResolver(self::getComponentRegistrar()),
+            new Converter(),
+            new SchemaLocator(self::getComponentRegistrar()),
+            new ValidationState(),
+            'webapi.xml',
             [
-                'fileResolver' => new WebapiFileResolver(
-                    self::getComponentRegistrar()
-                ),
-                'converter' => new Converter(),
-                'schemaLocator' => new SchemaLocator(
-                    self::getComponentRegistrar()
-                ),
-                'fileName' => 'webapi.xml',
-                'idAttributes' => [
-                        '/routes/route' => ['url', 'method'],
-                        '/routes/route/resources/resource' => 'ref',
-                        '/routes/route/data/parameter' => 'name'
-                    ],
-            ]
+                '/routes/route' => ['url', 'method'],
+                '/routes/route/resources/resource' => 'ref',
+                '/routes/route/data/parameter' => 'name'
+            ],
         );
 
         self::$_rulesInstances = [
