@@ -24,7 +24,7 @@ define([
                 format: 'M/DD/Y',
                 date: '09/2/18',
                 expects: false
-            },
+            }
         ];
 
         dataProvider.forEach(function (data) {
