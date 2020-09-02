@@ -251,7 +251,7 @@
                     <label>Show Address Information</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>
-                        Enable this for adding address information fields on the registration form.
+                        Enables address information fields on the registration form.
                     </comment>
                 </field>
                 <field id="telephone_show" translate="label" type="select" sortOrder="100" showInDefault="1" showInWebsite="1" canRestore="1">

@@ -15,11 +15,6 @@ $addressHelper = $block->getData('addressHelper');
 /** @var \Magento\Directory\Helper\Data $directoryHelper */
 $directoryHelper = $block->getData('directoryHelper');
 $formData = $block->getFormData();
-$showAddressFields = false;
-if ($block->getShowAddressFields() || $block->getConfig('customer/address/show_address_fields')) {
-    $showAddressFields = true;
-}
-
 ?>
 <?php $displayAll = $block->getConfig('general/region/display_all'); ?>
 <?= $block->getChildHtml('form_fields_before') ?>
@@ -74,7 +69,7 @@ if ($block->getShowAddressFields() || $block->getConfig('customer/address/show_a
         <?php endif ?>
         <?= $block->getChildHtml('fieldset_create_info_additional') ?>
     </fieldset>
-    <?php if ($showAddressFields): ?>
+    <?php if ($block->isShowAddressFields()): ?>
         <?php $cityValidationClass = $addressHelper->getAttributeValidationClass('city'); ?>
         <?php $postcodeValidationClass = $addressHelper->getAttributeValidationClass('postcode'); ?>
         <?php $regionValidationClass = $addressHelper->getAttributeValidationClass('region'); ?>
@@ -321,7 +316,7 @@ $scriptString .= <<<script
 script;
 ?>
 <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
-<?php if ($showAddressFields): ?>
+<?php if ($block->isShowAddressFields()): ?>
     <?php
     $regionJson = /* @noEscape */ $directoryHelper->getRegionJson();
     $regionId = (int) $formData->getRegionId();

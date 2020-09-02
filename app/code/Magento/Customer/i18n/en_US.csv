@@ -544,4 +544,4 @@ Addresses,Addresses
 "Add/Update Address","Add/Update Address"
 "The specified customer group id does not exist.","The specified customer group id does not exist."
 "Show Address Information","Show Address Information"
-"Enable this for adding address information fields on the registration form.","Enable this for adding address information fields on the registration form."
+"Enables address information fields on the registration form.","Enables address information fields on the registration form."
