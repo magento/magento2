@@ -120,45 +120,60 @@ class PriceTiers implements ResolverInterface
 
                 $productPrice = $this->tiers->getProductRegularPrice($productId) ?? 0.0;
                 $tierPrices = $this->tiers->getProductTierPrices($productId) ?? [];
-                return $this->formatProductTierPrices($tierPrices, $productPrice, $store);
+                return $this->filterAndFormatProductTierPrices($tierPrices, $productPrice, $store);
             }
         );
     }
 
     /**
-     * Format tier prices for output
+     * Filter and format tier prices for output
      *
      * @param ProductTierPriceInterface[] $tierPrices
      * @param float $productPrice
      * @param StoreInterface $store
      * @return array
      */
-    private function formatProductTierPrices(array $tierPrices, float $productPrice, StoreInterface $store): array
-    {
+    private function filterAndFormatProductTierPrices(
+        array $tierPrices,
+        float $productPrice,
+        StoreInterface $store
+    ): array {
         $tiers = [];
         $qtyCache = [];
 
         foreach ($tierPrices as $key => $tierPrice) {
-            $tierPrice->setValue($this->priceCurrency->convertAndRound($tierPrice->getValue()));
-            $percentValue = $tierPrice->getExtensionAttributes()->getPercentageValue();
-            if ($percentValue && is_numeric($percentValue)) {
-                $discount = $this->discount->getDiscountByPercent($productPrice, (float)$percentValue);
-            } else {
-                $discount = $this->discount->getDiscountByDifference($productPrice, (float)$tierPrice->getValue());
-            }
-
-            $tiers[] = [
-                "discount" => $discount,
-                "quantity" => $tierPrice->getQty(),
-                "final_price" => [
-                    "value" => $tierPrice->getValue(),
-                    "currency" => $store->getCurrentCurrencyCode()
-                ]
-            ];
-
+            $this->formatProductTierPrices($productPrice, $store, $tierPrice, $tiers);
             $this->filterTierPrices($tierPrices, $key, $tierPrice, $qtyCache, $tiers);
         }
         return $tiers;
+    }
+
+    /**
+     * Format tier prices for output
+     *
+     * @param float $productPrice
+     * @param StoreInterface $store
+     * @param $tierPrice
+     * @param $tiers
+     */
+    private function formatProductTierPrices(float $productPrice, StoreInterface $store, &$tierPrice, &$tiers)
+    {
+        $tierPrice->setValue($this->priceCurrency->convertAndRound($tierPrice->getValue()));
+        $percentValue = $tierPrice->getExtensionAttributes()->getPercentageValue();
+        if ($percentValue && is_numeric($percentValue)) {
+            $discount = $this->discount->getDiscountByPercent($productPrice, (float)$percentValue);
+        } else {
+            $discount = $this->discount->getDiscountByDifference($productPrice, (float)$tierPrice->getValue());
+        }
+
+        $tiers[] = [
+            "discount" => $discount,
+            "quantity" => $tierPrice->getQty(),
+            "final_price" => [
+                "value" => $tierPrice->getValue(),
+                "currency" => $store->getCurrentCurrencyCode()
+            ]
+        ];
     }
 
     /**
