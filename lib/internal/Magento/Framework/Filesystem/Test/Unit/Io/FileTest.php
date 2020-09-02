@@ -26,7 +26,7 @@ class FileTest extends TestCase
      */
     public function testReadShouldCopyTheSourceFileToTheGivenFileResource()
     {
-        $content = \mt_rand();
+        $content = \random_int(0, 1000);
         $sourceFileName = "source-file.txt";
         $tmpDir = $this->getTmpDir();
         \file_put_contents("{$tmpDir}/{$sourceFileName}", $content);

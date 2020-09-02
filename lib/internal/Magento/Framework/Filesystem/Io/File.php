@@ -440,6 +440,8 @@ class File extends AbstractIo
      */
     public function read($filename, $dest = null)
     {
+        $result = false;
+        
         $this->_cwd();
         if ($dest === null) {
             $result = @file_get_contents($filename);
