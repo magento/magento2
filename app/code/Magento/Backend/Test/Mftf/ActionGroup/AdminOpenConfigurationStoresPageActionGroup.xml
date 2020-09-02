@@ -12,7 +12,7 @@
             <description>Open configuration stores page.</description>
         </annotations>
 
-        <amOnPage url="{{ConfigurationStoresPage.url}}" stepKey="goToConfigurationStoresPage"/>
+        <amOnPage url="{{AdminConfigurationStoresPage.url}}" stepKey="goToConfigurationStoresPage"/>
         <waitForPageLoad stepKey="waitPageLoad"/>
     </actionGroup>
 </actionGroups>
