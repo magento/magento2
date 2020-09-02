@@ -17,6 +17,8 @@
                 <values>
                     <value id="adobedtm" type="host">assets.adobedtm.com</value>
                     <value id="omtrdc" type="host">amcglobal.sc.omtrdc.net</value>
+                    <value id="dpmdemdex" type="host">dpm.demdex.net</value>
+                    <value id="everesttech" type="host">cm.everesttech.net</value>
                     <value id="data" type="host">data:</value>
                 </values>
             </policy>
