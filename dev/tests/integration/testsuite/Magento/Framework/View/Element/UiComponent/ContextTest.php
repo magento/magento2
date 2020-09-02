@@ -40,7 +40,7 @@ class ContextTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->request = Bootstrap::getObjectManager()->get(RequestInterface::class);
         $this->contextFactory = Bootstrap::getObjectManager()->get(ContextFactory::class);

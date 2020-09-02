@@ -5,6 +5,9 @@
  */
 namespace Magento\Shipping\Block\Adminhtml\Order\Tracking;
 
+use Magento\Framework\App\ObjectManager;
+use Magento\Shipping\Helper\Data as ShippingHelper;
+
 /**
  * Shipment tracking control form
  *
@@ -24,14 +27,17 @@ class View extends \Magento\Shipping\Block\Adminhtml\Order\Tracking
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Shipping\Model\CarrierFactory $carrierFactory
      * @param array $data
+     * @param ShippingHelper|null $shippingHelper
      */
     public function __construct(
         \Magento\Backend\Block\Template\Context $context,
         \Magento\Shipping\Model\Config $shippingConfig,
         \Magento\Framework\Registry $registry,
         \Magento\Shipping\Model\CarrierFactory $carrierFactory,
-        array $data = []
+        array $data = [],
+        ?ShippingHelper $shippingHelper = null
     ) {
+        $data['shippingHelper'] = $shippingHelper ?? ObjectManager::getInstance()->get(ShippingHelper::class);
         parent::__construct($context, $shippingConfig, $registry, $data);
         $this->_carrierFactory = $carrierFactory;
     }

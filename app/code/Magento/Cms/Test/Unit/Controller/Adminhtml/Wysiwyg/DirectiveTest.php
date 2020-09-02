@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Wysiwyg;
 
 use Magento\Backend\App\Action\Context;
@@ -19,8 +21,8 @@ use Magento\Framework\Image\AdapterFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\Url\DecoderInterface;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use PHPUnit_Framework_MockObject_MockObject;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -37,84 +39,84 @@ class DirectiveTest extends TestCase
     protected $wysiwygDirective;
 
     /**
-     * @var Context|PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     protected $actionContextMock;
 
     /**
-     * @var RequestInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     protected $requestMock;
 
     /**
-     * @var DecoderInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var DecoderInterface|MockObject
      */
     protected $urlDecoderMock;
 
     /**
-     * @var ObjectManagerInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManagerMock;
 
     /**
-     * @var Filter|PHPUnit_Framework_MockObject_MockObject
+     * @var Filter|MockObject
      */
     protected $templateFilterMock;
 
     /**
-     * @var AdapterFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterFactory|MockObject
      */
     protected $imageAdapterFactoryMock;
 
     /**
-     * @var AdapterInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     protected $imageAdapterMock;
 
     /**
-     * @var ResponseInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseInterface|MockObject
      */
     protected $responseMock;
 
     /**
-     * @var File|PHPUnit_Framework_MockObject_MockObject
+     * @var File|MockObject
      */
     protected $fileMock;
 
     /**
-     * @var Config|PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     protected $wysiwygConfigMock;
 
     /**
-     * @var LoggerInterface|PHPUnit_Framework_MockObject_MockObject
+     * @var LoggerInterface|MockObject
      */
     protected $loggerMock;
 
     /**
-     * @var RawFactory|PHPUnit_Framework_MockObject_MockObject
+     * @var RawFactory|MockObject
      */
     protected $rawFactoryMock;
 
     /**
-     * @var Raw|PHPUnit_Framework_MockObject_MockObject
+     * @var Raw|MockObject
      */
     protected $rawMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->actionContextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->requestMock = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->urlDecoderMock = $this->getMockBuilder(DecoderInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->objectManagerMock = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->templateFilterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -139,11 +141,11 @@ class DirectiveTest extends TestCase
                     'rotate'
                 ]
             )
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->responseMock = $this->getMockBuilder(ResponseInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['setHeader', 'setBody', 'sendResponse'])
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->fileMock = $this->getMockBuilder(File::class)
             ->disableOriginalConstructor()
             ->setMethods(['fileGetContents'])
@@ -153,7 +155,7 @@ class DirectiveTest extends TestCase
             ->getMock();
         $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->rawFactoryMock = $this->getMockBuilder(RawFactory::class)
             ->setMethods(['create'])
             ->disableOriginalConstructor()

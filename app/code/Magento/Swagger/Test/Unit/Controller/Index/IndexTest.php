@@ -8,6 +8,7 @@ declare(strict_types=1);
 
 namespace Magento\Swagger\Test\Unit\Controller\Index;
 
+use Magento\Framework\App\Action\Context;
 use Magento\Framework\View\Page\Config as PageConfig;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Swagger\Controller\Index\Index;
@@ -18,6 +19,9 @@ class IndexTest extends TestCase
 {
     public function testExecute()
     {
+        /** @var MockObject|Context $pageConfigMock */
+        $contextMock = $this->createMock(Context::class);
+
         /** @var MockObject|PageConfig $pageConfigMock */
         $pageConfigMock = $this->getMockBuilder(PageConfig::class)
             ->disableOriginalConstructor()
@@ -30,7 +34,7 @@ class IndexTest extends TestCase
         $pageConfigMock->expects($this->once())->method('addBodyClass')->with('swagger-section');
         $resultPageFactory->expects($this->once())->method('create');
 
-        $indexAction = new Index($pageConfigMock, $resultPageFactory);
+        $indexAction = new Index($contextMock, $pageConfigMock, $resultPageFactory);
         $indexAction->execute();
     }
 }

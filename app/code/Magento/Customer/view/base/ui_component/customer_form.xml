@@ -474,7 +474,7 @@
         <modal name="customer_address_update_modal">
             <settings>
                 <options>
-                    <option name="title" xsi:type="string">Add/Update Address</option>
+                    <option name="title" xsi:type="string" translate="true">Add/Update Address</option>
                 </options>
             </settings>
             <insertForm name="update_customer_address_form_loader" component="Magento_Customer/js/form/components/insert-form">

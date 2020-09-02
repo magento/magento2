@@ -18,13 +18,13 @@
 
         <waitForPageLoad stepKey="waitForPageLoad" time="120"/>
         <grabTextFrom selector="{{StorefrontMinicartSection.miniCartSubtotalField}}" stepKey="grabMiniCartTotal"/>
-        <assertContains stepKey="assertMiniCartTotal">
+        <assertStringContainsString stepKey="assertMiniCartTotal">
             <actualResult type="variable">$grabMiniCartTotal</actualResult>
             <expectedResult type="string">{{dataQuote.subtotal}}</expectedResult>
-        </assertContains>
-        <assertContains stepKey="assertMiniCartCurrency">
+        </assertStringContainsString>
+        <assertStringContainsString stepKey="assertMiniCartCurrency">
             <actualResult type="variable">$grabMiniCartTotal</actualResult>
             <expectedResult type="string">{{dataQuote.currency}}</expectedResult>
-        </assertContains>
+        </assertStringContainsString>
     </actionGroup>
 </actionGroups>

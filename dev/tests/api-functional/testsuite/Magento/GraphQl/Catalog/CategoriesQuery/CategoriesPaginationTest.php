@@ -155,15 +155,16 @@ QUERY;
         $lastPageQuery = sprintf($baseQuery, $page1Result['categories']['page_info']['total_pages']);
         $lastPageResult = $this->graphQlQuery($lastPageQuery);
         $this->assertCount(1, $lastPageResult['categories']['items']);
-        $this->assertEquals('Category 1.2', $lastPageResult['categories']['items'][0]['name']);
+        $this->assertEquals('Category 12', $lastPageResult['categories']['items'][0]['name']);
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage currentPage value must be greater than 0.
      */
     public function testCurrentPageZero()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('currentPage value must be greater than 0.');
+
         $query = <<<QUERY
 {
   categories(
@@ -186,11 +187,12 @@ QUERY;
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage pageSize value must be greater than 0.
      */
     public function testPageSizeZero()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('pageSize value must be greater than 0.');
+
         $query = <<<QUERY
 {
   categories(
@@ -214,11 +216,12 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Catalog/_files/categories.php
-     * @expectedException \Exception
-     * @expectedExceptionMessage currentPage value 6 specified is greater than the 2 page(s) available.
      */
     public function testCurrentPageTooLarge()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('currentPage value 6 specified is greater than the 2 page(s) available.');
+
         $query = <<<QUERY
 {
   categories(
