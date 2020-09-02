@@ -81,6 +81,8 @@ class CustomerTest extends TestCase
             ->method('load')
             ->with(1)
             ->willReturn($originalAddressMock);
+        $originalAddressMock->expects($this->once())->method('getId')->willReturn(2);
+        $originalAddressMock->expects($this->once())->method('getParentId')->willReturn(2);
 
         $this->assertEquals(
             [
@@ -134,6 +136,7 @@ class CustomerTest extends TestCase
             ->willReturn($originalAddressMock);
 
         $addressMock->expects($this->once())->method('getParentId')->willReturn(1);
+        $originalAddressMock->expects($this->once())->method('getId')->willReturn(2);
         $originalAddressMock->expects($this->once())->method('getParentId')->willReturn(1);
 
         $this->assertEmpty($this->model->validate($addressMock));
@@ -163,6 +166,7 @@ class CustomerTest extends TestCase
             ->willReturn($originalAddressMock);
 
         $addressMock->expects($this->once())->method('getParentId')->willReturn(2);
+        $originalAddressMock->expects($this->once())->method('getId')->willReturn(2);
         $originalAddressMock->expects($this->once())->method('getParentId')->willReturn(1);
 
         $this->assertEquals(

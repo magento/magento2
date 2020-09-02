@@ -40,7 +40,9 @@ class Customer implements ValidatorInterface
             $addressCustomerId = $address->getParentId();
             $originalAddressModel = $this->addressFactory->create()->load($address->getId());
 
-            if ((int) $originalAddressModel->getParentId() !== $addressCustomerId) {
+            if ($originalAddressModel->getId() !== null
+                && (int) $originalAddressModel->getParentId() !== $addressCustomerId
+            ) {
                 $errors[] = __(
                     'Provided customer ID "%customer_id" isn\'t related to current customer address.',
                     ['customer_id' => $addressCustomerId]
