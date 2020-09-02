@@ -260,7 +260,7 @@ class EncryptorTest extends \PHPUnit\Framework\TestCase
         $actual = $this->encryptor->decrypt($data);
 
         // Extract the initialization vector and encrypted data
-        [, , $iv, $encrypted] = explode(':', $data, 4);
+        [$iv, $encrypted] = array_slice(explode(':', $data, 4), 2, 2);
 
         // Decrypt returned data with RIJNDAEL_256 cipher, cbc mode
         $crypt = new Crypt(self::CRYPT_KEY_1, MCRYPT_RIJNDAEL_256, MCRYPT_MODE_CBC, $iv);
