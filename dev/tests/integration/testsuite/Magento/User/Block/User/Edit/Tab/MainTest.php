@@ -20,7 +20,7 @@ class MainTest extends \Magento\TestFramework\TestCase\AbstractBackendController
      */
     protected $_user;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         /** @var $objectManager \Magento\TestFramework\ObjectManager */
@@ -33,7 +33,7 @@ class MainTest extends \Magento\TestFramework\TestCase\AbstractBackendController
         $objectManager->get(\Magento\Framework\Registry::class)->register('permissions_user', $this->_user);
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->_block = null;
         $this->_user = null;

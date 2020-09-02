@@ -37,7 +37,7 @@ class FileTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->io = new File();
         $this->absolutePath = Bootstrap::getInstance()->getAppTempDir();
@@ -64,7 +64,7 @@ class FileTest extends TestCase
     {
         $path = $this->generatedPath . '/file_three.txt';
         $this->assertEquals(0, $this->io->write($path, '', 0444));
-        $this->assertEquals(false, is_writable($path));
+        $this->assertFalse(is_writable($path));
     }
 
     /**

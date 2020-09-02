@@ -23,7 +23,8 @@
         <before>
             <createData entity="DefaultValueForMaxSaleQty" stepKey="setDefaultValueForMaxSaleQty"/>
             <createData entity="SimpleProduct2" stepKey="createdProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <createData entity="DefaultValueForMaxSaleQty" stepKey="setDefaultValueForMaxSaleQty"/>

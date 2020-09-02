@@ -77,7 +77,6 @@ class ColumnFactory
                 'component' => $this->getJsComponent(
                     $this->getDataType($attributeData[AttributeMetadata::FRONTEND_INPUT])
                 ),
-                '__disableTmpl' => 'true'
             ],
             $config
         );

@@ -7,10 +7,10 @@ define([
     'mage/utils/wrapper',
     'Magento_Checkout/js/model/quote',
     'Magento_SalesRule/js/model/payment/discount-messages',
-    'Magento_Checkout/js/action/set-payment-information',
+    'Magento_Checkout/js/action/set-payment-information-extended',
     'Magento_Checkout/js/action/get-totals',
     'Magento_SalesRule/js/model/coupon'
-], function ($, wrapper, quote, messageContainer, setPaymentInformationAction, getTotalsAction, coupon) {
+], function ($, wrapper, quote, messageContainer, setPaymentInformationExtended, getTotalsAction, coupon) {
     'use strict';
 
     return function (selectPaymentMethodAction) {
@@ -19,12 +19,17 @@ define([
 
             originalSelectPaymentMethodAction(paymentMethod);
 
+            if (paymentMethod === null) {
+                return;
+            }
+
             $.when(
-                setPaymentInformationAction(
+                setPaymentInformationExtended(
                     messageContainer,
                     {
                         method: paymentMethod.method
-                    }
+                    },
+                    true
                 )
             ).done(
                 function () {

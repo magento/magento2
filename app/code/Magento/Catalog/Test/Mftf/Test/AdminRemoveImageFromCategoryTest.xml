@@ -19,7 +19,7 @@
             <group value="Catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="DeleteCategoryActionGroup" stepKey="DeleteCategory">
@@ -34,12 +34,12 @@
             <argument name="categoryEntity" value="SimpleSubCategory"/>
         </actionGroup>
         <actionGroup ref="AddCategoryImageActionGroup" stepKey="addCategoryImage"/>
-        <actionGroup ref="SaveCategoryFormActionGroup" stepKey="saveCategoryForm"/>
+        <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategoryForm"/>
         <actionGroup ref="CheckCategoryImageInAdminActionGroup" stepKey="checkCategoryImageInAdmin"/>
 
         <!-- Remove image from category -->
         <actionGroup ref="RemoveCategoryImageActionGroup" stepKey="removeCategoryImage"/>
-        <actionGroup ref="SaveCategoryFormActionGroup" stepKey="saveCategoryFormAfterRemove"/>
+        <actionGroup ref="AdminSaveCategoryFormActionGroup" stepKey="saveCategoryFormAfterRemove"/>
 
         <actionGroup ref="CheckCategoryOnStorefrontActionGroup" stepKey="CheckCategoryOnStorefront">
             <argument name="categoryEntity" value="SimpleSubCategory"/>

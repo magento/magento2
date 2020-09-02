@@ -79,7 +79,7 @@ class DownloadTest extends TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->requestMock = $this->getMockBuilder(Http::class)
             ->disableOriginalConstructor()
@@ -91,7 +91,7 @@ class DownloadTest extends TestCase
 
         $this->directoryMock = $this->getMockBuilder(ReadInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->fileFactoryMock = $this->getMockBuilder(FileFactory::class)
             ->disableOriginalConstructor()
@@ -99,7 +99,7 @@ class DownloadTest extends TestCase
 
         $this->messageManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->contextMock = $this->createPartialMock(
             Context::class,
@@ -153,7 +153,7 @@ class DownloadTest extends TestCase
 
         $this->fileSystemMock->expects($this->once())
             ->method('getDirectoryRead')
-            ->will($this->returnValue($this->directoryMock));
+            ->willReturn($this->directoryMock);
         $this->directoryMock->expects($this->once())->method('isFile')->willReturn(true);
         $this->fileFactoryMock->expects($this->once())->method('create');
 
@@ -171,7 +171,7 @@ class DownloadTest extends TestCase
 
         $this->fileSystemMock->expects($this->once())
             ->method('getDirectoryRead')
-            ->will($this->returnValue($this->directoryMock));
+            ->willReturn($this->directoryMock);
         $this->directoryMock->expects($this->once())->method('isFile')->willReturn(false);
         $this->messageManagerMock->expects($this->once())->method('addErrorMessage');
 

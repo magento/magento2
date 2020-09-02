@@ -9,6 +9,8 @@
  */
 namespace Magento\Framework\TestFramework\Unit\Helper;
 
+use function PHPUnit\Framework\once;
+
 class ProxyTesting
 {
     /**
@@ -16,7 +18,7 @@ class ProxyTesting
      * appropriate parameters.
      *
      * @param mixed $object Proxy
-     * @param \PHPUnit_Framework_MockObject_MockObject $proxiedObject
+     * @param \PHPUnit\Framework\MockObject\MockObject $proxiedObject
      * @param string $method Proxy's method to invoke
      * @param array $params Parameters to be passed to proxy
      * @param null $proxiedResult Result, that must be returned by the proxied object
@@ -26,7 +28,7 @@ class ProxyTesting
      */
     public function invokeWithExpectations(
         $object,
-        \PHPUnit_Framework_MockObject_MockObject $proxiedObject,
+        \PHPUnit\Framework\MockObject\MockObject $proxiedObject,
         $method,
         $params = [],
         $proxiedResult = null,
@@ -40,7 +42,7 @@ class ProxyTesting
             $expectedParams = $params;
         }
         $builder = $proxiedObject->expects(
-            new \PHPUnit\Framework\MockObject\Matcher\InvokedCount(1)
+            once()
         )->method(
             $expectedMethod
         );

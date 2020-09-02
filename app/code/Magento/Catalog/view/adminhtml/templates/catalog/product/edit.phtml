@@ -3,12 +3,10 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-?>
-<?php
-// phpcs:disable Magento2.Templates.ThisInTemplate.FoundThis
 
 /**
  * @var $block \Magento\Catalog\Block\Adminhtml\Product\Edit
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
 ?>
 <div class="admin__scope-old">
@@ -34,30 +32,40 @@
                    title="<?= $block->escapeHtmlAttr(__('Product online status')) ?>"></label>
         </div>
 
-        <?php if ($block->getProductId()) :?>
+        <?php if ($block->getProductId()):?>
             <?= $block->getDeleteButtonHtml() ?>
         <?php endif; ?>
-        <?php if ($block->getProductSetId()) :?>
+        <?php if ($block->getProductSetId()):?>
             <?= $block->getChangeAttributeSetButtonHtml() ?>
             <?= $block->getSaveSplitButtonHtml() ?>
         <?php endif; ?>
         <?= $block->getBackButtonHtml() ?>
     </div>
 </div>
-<?php if ($block->getUseContainer()) :?>
+<?php if ($block->getUseContainer()): ?>
 <form action="<?= $block->escapeUrl($block->getSaveUrl()) ?>" method="post" enctype="multipart/form-data"
       data-form="edit-product" data-product-id="<?= $block->escapeHtmlAttr($block->getProduct()->getId()) ?>">
 <?php endif; ?>
     <?= $block->getBlockHtml('formkey') ?>
-    <div data-role="tabs" id="product-edit-form-tabs"></div> <?php /* @TODO: remove id after elimination of setDestElementId('product-edit-form-tabs') */?>
+    <div data-role="tabs" id="product-edit-form-tabs"></div>
+    <?php /* @TODO: remove id after elimination of setDestElementId('product-edit-form-tabs') */?>
     <?= $block->getChildHtml('product-type-tabs') ?>
-    <input type="hidden" id="product_type_id" value="<?= $block->escapeHtmlAttr($block->getProduct()->getTypeId()) ?>"/>
-    <input type="hidden" id="attribute_set_id" value="<?= $block->escapeHtmlAttr($block->getProduct()->getAttributeSetId()) ?>"/>
+    <input type="hidden" id="product_type_id"
+           value="<?= $block->escapeHtmlAttr($block->getProduct()->getTypeId()) ?>"/>
+    <input type="hidden" id="attribute_set_id"
+           value="<?= $block->escapeHtmlAttr($block->getProduct()->getAttributeSetId()) ?>"/>
     <button type="submit" class="hidden"></button>
-<?php if ($block->getUseContainer()) :?>
+<?php if ($block->getUseContainer()):?>
 </form>
 <?php endif; ?>
-<script>
+<?php
+/** @var \Magento\Framework\Json\Helper\Data $jsonHelper */
+$jsonHelper = $block->getData('jsonHelper');
+$jsonFieldsAutogenerationMasks  = /* @noEscape */ $jsonHelper->jsonEncode($block->getFieldsAutogenerationMasks());
+$jsonAttributesAllowedForAutogeneration = /* @noEscape */ $jsonHelper->jsonEncode(
+    $block->getAttributesAllowedForAutogeneration()
+);
+$scriptString = <<<scriptStr
 require([
     "jquery",
     "Magento_Catalog/catalog/type-events",
@@ -66,8 +74,8 @@ require([
     "mage/backend/tabs",
     "domReady!"
 ], function($, TypeSwitcher){
-    var $form = $('[data-form=edit-product]');
-    $form.data('typeSwitcher', TypeSwitcher.init());
+    var \$form = $('[data-form=edit-product]');
+    \$form.data('typeSwitcher', TypeSwitcher.init());
 
     var scriptTagManager = (function($) {
         var hiddenPrefix = 'hidden',
@@ -109,7 +117,7 @@ require([
             $(this).val($(this).val().substr(0, maxLength));
         }
     });
-    $form.mage('form', {
+    \$form.mage('form', {
         handlersData: {
             save: {},
             saveAndContinueEdit: {
@@ -129,10 +137,10 @@ require([
             }
         }
     });
-    $form.mage('validation', {validationUrl: '<?= $block->escapeJs($block->escapeUrl($block->getValidationUrl())) ?>'});
+    \$form.mage('validation', {validationUrl: '{$block->escapeJs($block->getValidationUrl())}'});
 
-    var masks = <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getFieldsAutogenerationMasks()) ?>;
-    var availablePlaceholders = <?= /* @noEscape */ $this->helper(Magento\Framework\Json\Helper\Data::class)->jsonEncode($block->getAttributesAllowedForAutogeneration()) ?>;
+    var masks = {$jsonFieldsAutogenerationMasks};
+    var availablePlaceholders = {$jsonAttributesAllowedForAutogeneration};
     var Autogenerator = function(masks) {
         this._masks = masks || {};
         this._fieldReverseIndex = this._buildReverseIndex(this._masks);
@@ -155,13 +163,13 @@ require([
                     'change init',
                     elementSelector,
                     $.proxy(function(event) {
-                        var $element = $(event.target);
-                        if (event.type == 'init' && $element.data('disablerInited')) {
+                        var \$element = $(event.target);
+                        if (event.type == 'init' && \$element.data('disablerInited')) {
                             return;
                         } else {
-                            $element.data('disablerInited', true);
+                            \$element.data('disablerInited', true);
                         }
-                        $element.data(this.data.disabled, $element.val().replace(/\s/g, '') != '');
+                        \$element.data(this.data.disabled, \$element.val().replace(/\s/g, '') != '');
                     }, this)
                 ).find(elementSelector).trigger('init');
             };
@@ -169,19 +177,19 @@ require([
             $("#product_info_tabs").on("tabscreate tabsactivate", $.proxy(disabler, this));
 
             $.each(this._masks, function(field, mask) {
-                var $field = $('#' + field);
-                if (!$field.val() && mask && mask.length > 0 && !self.varRegexp.test(mask)) {
-                    $field.val(mask);
+                var \$field = $('#' + field);
+                if (!\$field.val() && mask && mask.length > 0 && !self.varRegexp.test(mask)) {
+                    \$field.val(mask);
                 }
-                $field.trigger('change');
+                \$field.trigger('change');
             });
 
             $.each(self._fieldReverseIndex, function(field) {
-                var fields = this, $field = $('#' + field);
+                var fields = this, \$field = $('#' + field);
                 var filler = function(onlyText) {
                     $.each(fields, function() {
-                        var $el = $('#' + this);
-                        if ($el.data(self.data.disabled)) {
+                        var \$el = $('#' + this);
+                        if (\$el.data(self.data.disabled)) {
                             return;
                         }
                         if (onlyText === true && self.varRegexp.test(self._masks[this])) {
@@ -190,12 +198,12 @@ require([
                         var value = self._masks[this].replace(self.varsRegexp, function(maskfieldName) {
                             return $('#' + maskfieldName.slice(2, -2)).val();
                         });
-                        $el.val(value);
+                        \$el.val(value);
                     });
                 };
-                if ($field.length) {
+                if (\$field.length) {
                     self.form.on('keyup change blur click paste', '#' + field, filler);
-                    $field.trigger('change');
+                    \$field.trigger('change');
                 }
             });
         },
@@ -217,7 +225,7 @@ require([
         }
     });
 
-    $form.data('autogenerator', new Autogenerator(masks).bindAll());
+    \$form.data('autogenerator', new Autogenerator(masks).bindAll());
 
     $('.widget-button-save .item-default').parent().hide();
 
@@ -229,7 +237,7 @@ require([
         $('#status').val($(this).prop('checked') ? '1' : '2');
     });
 
-    $form.on('changeAttributeSet', function(event, data) {
+    \$form.on('changeAttributeSet', function(event, data) {
         if (data.label) {
             $('#product-template-suggest-container .action-toggle>span').text(data.label);
             $('[data-role=affected-attribute-set-selector] [data-role=name-container]').text(data.label);
@@ -240,13 +248,13 @@ require([
         uri += /\?/.test(uri) ? '&' : '?';
         uri += 'set=' + window.encodeURIComponent(data.id);
 
-        var $form = $('[data-form=edit-product]');
-        $form.attr('action', $form.attr('action').replace(/(\/|&|\?)?\bset(\/|=)\d+/g, ''));
-        $form.find('#attribute_set_id').attr('name', 'set').val(data.id);
+        var \$form = $('[data-form=edit-product]');
+        \$form.attr('action', \$form.attr('action').replace(/(\/|&|\?)?\bset(\/|=)\d+/g, ''));
+        \$form.find('#attribute_set_id').attr('name', 'set').val(data.id);
         $.ajax({
             url: uri.replace('/edit/', '/new/') + '&popup=1',
             type: 'post',
-            data: $form.serializeArray(),
+            data: \$form.serializeArray(),
             dataType: 'html',
             context: $('body'),
             showLoader: true
@@ -255,67 +263,68 @@ require([
             data = scriptTagManager.disableScripts(data);
             var removedElementClass = 'removed';
 
-            var $page = $('body');
-            var $newPage = $(data);
+            var \$page = $('body');
+            var \$newPage = $(data);
 
             var nameMapper = function() {
                 return $(this).attr('name');
             };
             var activeTabId = $('.ui-tabs-active>a').attr('id');
             //add new tab tabs or reorder
-            $page.find('#product_info_tabs .tabs').each(function(i, tabContainer) {
-                $newPage.find('#product_info_tabs .tabs').each(function(j, newTabContainer) {
+            \$page.find('#product_info_tabs .tabs').each(function(i, tabContainer) {
+                \$newPage.find('#product_info_tabs .tabs').each(function(j, newTabContainer) {
                     if (i != j) {
                         return;
                     }
-                    var $tabContainer = $(tabContainer);
+                    var \$tabContainer = $(tabContainer);
                     $(tabContainer).find('li').removeClass(removedElementClass);
-                    var $tabs = $(tabContainer)
+                    var \$tabs = $(tabContainer)
                         .find('li:not(.' + removedElementClass + ')  .tab-item-link.user-defined:not(.ajax)');
-                    var $newTabs = $(newTabContainer).find('.tab-item-link.user-defined:not(.ajax)'),
-                        tabsNames = $tabs.map(nameMapper).toArray();
+                    var \$newTabs = $(newTabContainer).find('.tab-item-link.user-defined:not(.ajax)'),
+                        tabsNames = \$tabs.map(nameMapper).toArray();
 
                     //hide not exists elements
                     $.each(
-                        _.difference(tabsNames, $newTabs.map(nameMapper).toArray()),
+                        _.difference(tabsNames, \$newTabs.map(nameMapper).toArray()),
                         function(index, tabName) {
-                            $tabContainer.find('[name=' + tabName + ']').closest('li')
+                            \$tabContainer.find('[name=' + tabName + ']').closest('li')
                                 .addClass(removedElementClass);
-                            $page.find('#' + tabName)
+                            \$page.find('#' + tabName)
                                 .addClass(removedElementClass)
                                 .addClass('ignore-validate');
                         }
                     );
 
                     $(newTabContainer).find('.tab-item-link.user-defined:not(.ajax)').each(function(index, tab) {
-                        var $tab = $(tab),
-                            tabName = nameMapper.apply($tab),
-                            $tabsContent = $tab.closest('li').clone();
-                        $tabsContent.find('.fieldset>.field').remove();
-                        if (nameMapper.apply($tabs.eq(index)) == tabName) {
+                        var \$tab = $(tab),
+                            tabName = nameMapper.apply(\$tab),
+                            \$tabsContent = \$tab.closest('li').clone();
+                        \$tabsContent.find('.fieldset>.field').remove();
+                        if (nameMapper.apply(\$tabs.eq(index)) == tabName) {
                             return true;
                         }
-                        var $tabToMove = $.inArray(tabName, tabsNames) !== -1
-                            ? $tabs.filter(function() {
+                        var \$tabToMove = $.inArray(tabName, tabsNames) !== -1
+                            ? \$tabs.filter(function() {
                             return nameMapper.apply(this) === tabName;
                         }).closest('li')
-                            : $tabsContent;
+                            : \$tabsContent;
                         if (index === 0) {
-                            $tabToMove.prependTo($tabContainer);
+                            \$tabToMove.prependTo(\$tabContainer);
                         } else {
-                            $tabToMove.insertAfter($tabs.eq(index - 1).closest('li'));
+                            \$tabToMove.insertAfter(\$tabs.eq(index - 1).closest('li'));
                         }
-                        $tabToMove.removeClass(removedElementClass).removeClass('ignore-validate');
-                        $tabs = $tabContainer.find('li:not(.' + removedElementClass + ')  .tab-item-link.user-defined:not(.ajax)');
+                        \$tabToMove.removeClass(removedElementClass).removeClass('ignore-validate');
+                        \$tabs = \$tabContainer
+                        .find('li:not(.' + removedElementClass + ')  .tab-item-link.user-defined:not(.ajax)');
                     });
                 });
             });
 
             //add new fieldsets or reorder
-            $newPage.find('#product_info_tabs .fieldset.user-defined').each(function(index, newFieldset) {
+            \$newPage.find('#product_info_tabs .fieldset.user-defined').each(function(index, newFieldset) {
                 var fieldsetContainer, newFieldsetContainer, sourceContainer, destinationContainer;
                 newFieldsetContainer = $(newFieldset).parents('[data-ui-id*=-tab-content-]').first();
-                if ($page.find('[data-ui-id=' + newFieldsetContainer.data('uiId') + ']').length === 0) {
+                if (\$page.find('[data-ui-id=' + newFieldsetContainer.data('uiId') + ']').length === 0) {
                     fieldsetContainer = newFieldsetContainer
                         .clone()
                         .removeClass(removedElementClass)
@@ -323,10 +332,10 @@ require([
                     //Enable hidden js scripts in node. These scripts will be performed after inserting into page
                     fieldsetContainer = scriptTagManager.enableScripts(fieldsetContainer);
                 } else {
-                    fieldsetContainer = $page.find('[data-ui-id=' + newFieldsetContainer.data('uiId') + ']').first();
+                    fieldsetContainer = \$page.find('[data-ui-id=' + newFieldsetContainer.data('uiId') + ']').first();
                 }
                 sourceContainer = newFieldsetContainer.parents('[data-ui-id*=-tab-content-]').first();
-                destinationContainer = $page.find('[data-ui-id=' + sourceContainer.data('uiId') + ']').first();
+                destinationContainer = \$page.find('[data-ui-id=' + sourceContainer.data('uiId') + ']').first();
                 fieldsetContainer.appendTo(destinationContainer);
             });
 
@@ -334,7 +343,7 @@ require([
                 return $(this).data('attributeCode');
             };
             //add new element elements or reorder
-            $page.find('[data-form=edit-product] [data-role=tabs] .fieldset, #product_info_tabs .fieldset')
+            \$page.find('[data-form=edit-product] [data-role=tabs] .fieldset, #product_info_tabs .fieldset')
                 .removeClass('ignore-validate')
                 .removeClass(removedElementClass)
                 .each(function(i, fieldSet) {
@@ -342,49 +351,49 @@ require([
                     if ($(fieldSet).attr('id') != $(newFieldSet).attr('id')) {
                         return
                     }
-                    var $elements = $(fieldSet).find('>.field:not(.' + removedElementClass + ')');
-                    var $newFieldSet = $(newFieldSet);
-                    var $newElements = $newFieldSet.find('>.field');
+                    var \$elements = $(fieldSet).find('>.field:not(.' + removedElementClass + ')');
+                    var \$newFieldSet = $(newFieldSet);
+                    var \$newElements = \$newFieldSet.find('>.field');
 
-                    $elements.removeClass(removedElementClass);
+                    \$elements.removeClass(removedElementClass);
 
-                    var elementNames = $elements.map(nameDataMapper).toArray();
+                    var elementNames = \$elements.map(nameDataMapper).toArray();
 
                     //hide not exists elements
                     $.each(
-                        _.difference(elementNames, $newElements.map(nameDataMapper).toArray()),
+                        _.difference(elementNames, \$newElements.map(nameDataMapper).toArray()),
                         function(index, elementId) {
-                            $page.find('#attribute-' + elementId + '-container')
+                            \$page.find('#attribute-' + elementId + '-container')
                                 .addClass(removedElementClass)
                                 .addClass('ignore-validate');
                         }
                     );
 
-                    $newElements.each(function(index, element) {
-                        var $element = $(element),
-                            elementId = nameDataMapper.apply($element);
-                        if (nameDataMapper.apply($elements.get(index)) == elementId) {
+                    \$newElements.each(function(index, element) {
+                        var \$element = $(element),
+                            elementId = nameDataMapper.apply(\$element);
+                        if (nameDataMapper.apply(\$elements.get(index)) == elementId) {
                             return true;
                         }
-                        var $elementToMove = $('.fieldset>.field[data-attribute-code="' + elementId + '"]');
-                        if ($elementToMove.length === 0) {
-                            $elementToMove = $element.clone();
+                        var \$elementToMove = $('.fieldset>.field[data-attribute-code="' + elementId + '"]');
+                        if (\$elementToMove.length === 0) {
+                            \$elementToMove = \$element.clone();
                         }
                         if (index === 0) {
-                            $elementToMove.prependTo(fieldSet);
+                            \$elementToMove.prependTo(fieldSet);
                         } else {
-                            $elementToMove.insertAfter($elements.get(index - 1))
+                            \$elementToMove.insertAfter(\$elements.get(index - 1))
                         }
-                        $elementToMove.trigger('contentUpdated');
-                        $elementToMove.removeClass(removedElementClass).removeClass('.ignore-validate');
-                        $elements = $(fieldSet).find('>.field:not(.' + removedElementClass + ')');
+                        \$elementToMove.trigger('contentUpdated');
+                        \$elementToMove.removeClass(removedElementClass).removeClass('.ignore-validate');
+                        \$elements = $(fieldSet).find('>.field:not(.' + removedElementClass + ')');
                     });
                 };
 
-                $newPage.find('#product_info_tabs .fieldset').each(updateFieldsetElements);
+                \$newPage.find('#product_info_tabs .fieldset').each(updateFieldsetElements);
 
                 fieldsetContainer = $(fieldSet).parents('[data-ui-id*=-tab-content-]').first();
-                var newFieldsetContainer = $newPage.find('[data-ui-id=' + $(fieldsetContainer).data('uiId') + ']');
+                var newFieldsetContainer = \$newPage.find('[data-ui-id=' + $(fieldsetContainer).data('uiId') + ']');
                 if (newFieldsetContainer.length == 0) {
                     $(fieldsetContainer).find('fieldset .field')
                         .addClass('ignore-validate')
@@ -405,7 +414,9 @@ require([
 
     });
 });
-</script>
+scriptStr;
+?>
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
 <script type="text/x-magento-init">
     {
         "*": {

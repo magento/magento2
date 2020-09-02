@@ -15,7 +15,7 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\AsynchronousOperations\Model\BulkStatus::class
@@ -41,7 +41,7 @@ class BulkStatusTest extends \PHPUnit\Framework\TestCase
         /** @var \Magento\AsynchronousOperations\Model\BulkSummary[] $bulks */
         $bulksUuidArray = ['bulk-uuid-1', 'bulk-uuid-2', 'bulk-uuid-3', 'bulk-uuid-4', 'bulk-uuid-5'];
         $bulks =  $this->model->getBulksByUser(1);
-        $this->assertEquals(5, count($bulks));
+        $this->assertCount(5, $bulks);
         foreach ($bulks as $bulk) {
             $this->assertTrue(in_array($bulk->getBulkId(), $bulksUuidArray));
         }

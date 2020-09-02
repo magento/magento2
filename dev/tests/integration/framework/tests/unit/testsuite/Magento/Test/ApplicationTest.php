@@ -37,11 +37,11 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        /** @var Shell|\PHPUnit_Framework_MockObject_MockObject $shell */
+        /** @var Shell|\PHPUnit\Framework\MockObject\MockObject $shell */
         $shell = $this->createMock(Shell::class);
-        /** @var ClassLoaderWrapper|\PHPUnit_Framework_MockObject_MockObject $autoloadWrapper */
+        /** @var ClassLoaderWrapper|\PHPUnit\Framework\MockObject\MockObject $autoloadWrapper */
         $autoloadWrapper = $this->getMockBuilder(ClassLoaderWrapper::class)
             ->disableOriginalConstructor()->getMock();
         $this->tempDir = '/temp/dir';
@@ -68,7 +68,7 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($this->tempDir, $this->subject->getTempDir(), 'Temp directory is not set in Application');
 
         $initParams = $this->subject->getInitParams();
-        $this->assertInternalType('array', $initParams, 'Wrong initialization parameters type');
+        $this->assertIsArray($initParams, 'Wrong initialization parameters type');
         $this->assertArrayHasKey(
             Bootstrap::INIT_PARAM_FILESYSTEM_DIR_PATHS,
             $initParams,
@@ -121,10 +121,10 @@ class ApplicationTest extends \PHPUnit\Framework\TestCase
             ->with($this->identicalTo($areaCode))
             ->willReturn($area);
 
-        /** @var ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject $objectManager */
+        /** @var ObjectManagerInterface|\PHPUnit\Framework\MockObject\MockObject $objectManager */
         $objectManager = $this->getMockBuilder(ObjectManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $objectManager->expects($this->once())
             ->method('configure')
             ->with($this->identicalTo([]));

@@ -3,14 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Test\Unit\Model\Export\Entity;
 
-class AbstractEavTest extends \PHPUnit\Framework\TestCase
+use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
+use Magento\Eav\Model\Entity\Collection\AbstractCollection;
+use Magento\Framework\Model\AbstractModel;
+use Magento\ImportExport\Model\Export\Entity\AbstractEav;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AbstractEavTest extends TestCase
 {
     /**
      * Abstract eav export model
      *
-     * @var \Magento\ImportExport\Model\Export\Entity\AbstractEav|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractEav|MockObject
      */
     protected $_model;
 
@@ -21,10 +30,10 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
      */
     protected $_expectedAttributes = ['firstname', 'lastname'];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = $this->getMockForAbstractClass(
-            \Magento\ImportExport\Model\Export\Entity\AbstractEav::class,
+            AbstractEav::class,
             [],
             '',
             false,
@@ -37,12 +46,12 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             '_getExportAttributeCodes'
-        )->will(
-            $this->returnValue($this->_expectedAttributes)
+        )->willReturn(
+            $this->_expectedAttributes
         );
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }
@@ -57,7 +66,7 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
         $method = new \ReflectionMethod($this->_model, '_addAttributesToCollection');
         $method->setAccessible(true);
         $stubCollection = $this->createPartialMock(
-            \Magento\Eav\Model\Entity\Collection\AbstractCollection::class,
+            AbstractCollection::class,
             ['addAttributeToSelect']
         );
         $stubCollection->expects($this->once())->method('addAttributeToSelect')->with($this->_expectedAttributes);
@@ -77,13 +86,12 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
         $testAttributeOptions = ['value' => 'option'];
         /** @var $testAttribute \Magento\Eav\Model\Entity\Attribute */
         $testAttribute = $this->getMockForAbstractClass(
-            \Magento\Eav\Model\Entity\Attribute\AbstractAttribute::class,
+            AbstractAttribute::class,
             [],
             '',
             false,
             false,
-            false,
-            ['__wakeup']
+            false
         );
         $testAttribute->setAttributeCode($testAttributeCode);
 
@@ -91,21 +99,21 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getAttributeCollection'
-        )->will(
-            $this->returnValue([$testAttribute])
+        )->willReturn(
+            [$testAttribute]
         );
 
         $this->_model->expects(
             $this->any()
         )->method(
             'getAttributeOptions'
-        )->will(
-            $this->returnValue($testAttributeOptions)
+        )->willReturn(
+            $testAttributeOptions
         );
 
-        /** @var $item \Magento\Framework\Model\AbstractModel|\PHPUnit_Framework_MockObject_MockObject */
+        /** @var AbstractModel|MockObject $item */
         $item = $this->getMockForAbstractClass(
-            \Magento\Framework\Model\AbstractModel::class,
+            AbstractModel::class,
             [],
             '',
             false,
@@ -113,7 +121,7 @@ class AbstractEavTest extends \PHPUnit\Framework\TestCase
             true,
             ['getData', '__wakeup']
         );
-        $item->expects($this->any())->method('getData')->will($this->returnValue($testAttributeValue));
+        $item->expects($this->any())->method('getData')->willReturn($testAttributeValue);
 
         $method = new \ReflectionMethod($this->_model, '_initAttributeValues');
         $method->setAccessible(true);

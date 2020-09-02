@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 return [
     'add_action_attribute_empty_value' => [
         '<?xml version="1.0"?><config><menu><add action="" id="Test_Value::some_value"' .

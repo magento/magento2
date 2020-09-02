@@ -4,20 +4,31 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+use Magento\Customer\Model\CustomerRegistry;
+use Magento\TestFramework\Helper\Bootstrap;
 
-require __DIR__ . '/../../../Magento/Customer/_files/customer.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/product_simple_without_custom_options.php';
+Resolver::getInstance()->requireDataFixture('Magento/Customer/_files/customer.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple_without_custom_options.php');
 
-/** \Magento\Customer\Model\Customer $customer */
+$objectManager = Bootstrap::getObjectManager();
+/** @var CustomerRegistry $customerRegistry */
+$customerRegistry = Bootstrap::getObjectManager()->create(CustomerRegistry::class);
+$customer = $customerRegistry->retrieve(1);
+/** @var ProductRepositoryInterface $productRepository */
+$productRepository = $objectManager->create(ProductRepositoryInterface::class);
+$product = $productRepository->get('simple');
+$secondProduct = $productRepository->get('simple-2');
+
 $addressData = include __DIR__ . '/../../../Magento/Sales/_files/address_data.php';
 $billingAddress = $objectManager->create(\Magento\Sales\Model\Order\Address::class, ['data' => $addressData]);
 $billingAddress->setAddressType('billing');
 $shippingAddress = clone $billingAddress;
 $shippingAddress->setId(null)->setAddressType('shipping');
 
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 $payment = $objectManager->create(\Magento\Sales\Model\Order\Payment::class);
 $payment->setMethod('checkmo');
 $customerIdFromFixture = 1;
@@ -71,7 +82,7 @@ $orderItem2->setProductId($secondProduct->getId())
     ->setSku($secondProduct->getSku())
     ->setStoreId(0)
     ->setProductId($secondProduct->getId())
-    ->setSku($secondProductSku)
+    ->setSku($secondProduct->getSku())
     ->setProductOptions(['info_buyRequest' => $requestInfo]);
 
 /** @var \Magento\Sales\Model\Order $order */
