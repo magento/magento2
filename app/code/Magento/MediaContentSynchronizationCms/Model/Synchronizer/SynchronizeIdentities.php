@@ -12,7 +12,7 @@ use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizeIdentitiesInterface;
 
-class SynchronizeIdentitiesCms implements SynchronizeIdentitiesInterface
+class SynchronizeIdentities implements SynchronizeIdentitiesInterface
 {
     private const FIELD_CMS_PAGE = 'cms_page';
     private const FIELD_CMS_BLOCK = 'cms_block';

@@ -81,20 +81,19 @@ class PublisherTest extends TestCase
         $consumer->process($maxNumberOfMessages);
 
         // verify synchronized media content
+        $assetId = 2020;
+        $entityIds = [];
         foreach ($contentIdentities as $contentIdentity) {
-            $assetId = 2020;
             $contentIdentityObject = $this->contentIdentityFactory->create($contentIdentity);
             $this->assertEquals([$assetId], $this->getAssetIds->execute($contentIdentityObject));
-            $synchronizedContentIdentities = $this->getContentIdentities->execute([$assetId]);
-            $this->assertEquals(2, count($synchronizedContentIdentities));
+            $entityIds[] = $contentIdentityObject->getEntityId();
+        }
 
-            $syncedIds = [];
-            foreach ($synchronizedContentIdentities as $syncedContentIdentity) {
-                $syncedIds[] = $syncedContentIdentity->getEntityId();
-            }
-            foreach ($contentIdentityObject as $identityObject) {
-                $this->assertContains($identityObject->getEntityId(), $syncedIds);
-            }
+        $synchronizedContentIdentities = $this->getContentIdentities->execute([$assetId]);
+        $this->assertEquals(2, count($synchronizedContentIdentities));
+
+        foreach ($synchronizedContentIdentities as $syncedContentIdentity) {
+            $this->assertContains($syncedContentIdentity->getEntityId(), $entityIds);
         }
     }
 

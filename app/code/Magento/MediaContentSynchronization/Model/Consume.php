@@ -70,20 +70,22 @@ class Consume
     public function execute(OperationInterface $operation) : void
     {
         $identities = $this->serializer->unserialize($operation->getSerializedData());
-        if (!empty($identities)) {
-            $contentIdentity = [];
-            foreach ($identities as $identity) {
-                $contentIdentity[] = $this->contentIdentityFactory->create(
-                    [
-                        self::ENTITY_TYPE => $identity[self::ENTITY_TYPE],
-                        self::ENTITY_ID => $identity[self::ENTITY_ID],
-                        self::FIELD => $identity[self::FIELD]
-                    ]
-                );
-            }
-            $this->synchronizeIdentities->execute($contentIdentity);
-        } else {
+
+        if (empty($identities)) {
             $this->synchronize->execute();
+            return;
         }
+
+        $contentIdentities = [];
+        foreach ($identities as $identity) {
+            $contentIdentities[] = $this->contentIdentityFactory->create(
+                [
+                    self::ENTITY_TYPE => $identity[self::ENTITY_TYPE],
+                    self::ENTITY_ID => $identity[self::ENTITY_ID],
+                    self::FIELD => $identity[self::FIELD]
+                ]
+            );
+        }
+        $this->synchronizeIdentities->execute($contentIdentities);
     }
 }

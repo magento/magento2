@@ -11,7 +11,7 @@ use Magento\MediaContentApi\Api\UpdateContentAssetLinksInterface;
 use Magento\MediaContentApi\Model\GetEntityContentsInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizeIdentitiesInterface;
 
-class SynchronizeIdentitiesCatalog implements SynchronizeIdentitiesInterface
+class SynchronizeIdentities implements SynchronizeIdentitiesInterface
 {
     private const FIELD_CATALOG_PRODUCT = 'catalog_product';
     private const FIELD_CATALOG_CATEGORY = 'catalog_category';

@@ -84,17 +84,18 @@ class SynchronizeIdentitiesCatalogTest extends TestCase
         $this->assertNotEmpty($contentIdentities);
         $this->synchronizeIdentities->execute($contentIdentities);
 
+        $assetId = 2020;
+        $entityIds = [];
         foreach ($contentIdentities as $contentIdentity) {
-            $assetId = 2020;
             $this->assertEquals([$assetId], $this->getAssetIds->execute($contentIdentity));
-            $synchronizedContentIdentities = $this->getContentIdentities->execute([$assetId]);
-            $this->assertEquals(2, count($synchronizedContentIdentities));
+            $entityIds[] = $contentIdentity->getEntityId();
+        }
 
-            $syncedIds = [];
-            foreach ($synchronizedContentIdentities as $syncedContentIdentity) {
-                $syncedIds[] = $syncedContentIdentity->getEntityId();
-            }
-            $this->assertContains($contentIdentity->getEntityId(), $syncedIds);
+        $synchronizedContentIdentities = $this->getContentIdentities->execute([$assetId]);
+        $this->assertEquals(2, count($synchronizedContentIdentities));
+
+        foreach ($synchronizedContentIdentities as $syncedContentIdentity) {
+            $this->assertContains($syncedContentIdentity->getEntityId(), $entityIds);
         }
     }
 

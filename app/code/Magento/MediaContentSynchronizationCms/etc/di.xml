@@ -17,8 +17,8 @@
     <type name="Magento\MediaContentSynchronizationApi\Model\SynchronizerIdentitiesPool">
         <arguments>
             <argument name="synchronizers" xsi:type="array">
-                <item name="media_content_cms_synchronizeIdentity"
-                      xsi:type="object">Magento\MediaContentSynchronizationCms\Model\Synchronizer\SynchronizeIdentitiesCms
+                <item name="media_content_cms"
+                      xsi:type="object">Magento\MediaContentSynchronizationCms\Model\Synchronizer\SynchronizeIdentities
                 </item>
             </argument>
         </arguments>
