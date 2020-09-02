@@ -94,8 +94,7 @@
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
             <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductGridFilters"/>
         <!--Sort by custom attribute DESC using grabbed value-->
         <conditionalClick selector="{{AdminProductGridSection.columnHeader($$createDropdownAttribute.attribute[frontend_labels][0][label]$$)}}" dependentSelector="{{AdminProductGridSection.columnHeader($$createDropdownAttribute.attribute[frontend_labels][0][label]$$)}}" visible="true" stepKey="ascendSortByCustomAttribute"/>

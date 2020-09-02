@@ -127,7 +127,11 @@ class Resolver implements ResolverInterface
      */
     public function applyConfigFixtures(TestCase $test, array $fixtures, string $fixtureType): array
     {
-        return $this->getApplier($test, $fixtureType)->apply($fixtures);
+        $skipConfig = $this->config->getSkipConfiguration($test);
+
+        return $skipConfig['skip']
+            ? []
+            : $this->getApplier($test, $fixtureType)->apply($fixtures);
     }
 
     /**
@@ -136,10 +140,14 @@ class Resolver implements ResolverInterface
     public function applyDataFixtures(TestCase $test, array $fixtures, string $fixtureType): array
     {
         $result = [];
-        $fixtures = $this->getApplier($test, $fixtureType)->apply($fixtures);
+        $skipConfig = $this->config->getSkipConfiguration($test);
 
-        foreach ($fixtures as $fixture) {
-            $result[] = $this->processFixturePath($test, $fixture);
+        if (!$skipConfig['skip']) {
+            $fixtures = $this->getApplier($test, $fixtureType)->apply($fixtures);
+
+            foreach ($fixtures as $fixture) {
+                $result[] = $this->processFixturePath($test, $fixture);
+            }
         }
 
         return $result;
@@ -195,6 +203,7 @@ class Resolver implements ResolverInterface
         }
         /** @var Base $applier */
         $applier = $this->appliersList[$fixtureType];
+        $applier->setGlobalConfig($this->config->getGlobalConfig($fixtureType));
         $applier->setClassConfig($this->config->getClassConfig($test, $fixtureType));
         $applier->setMethodConfig($this->config->getMethodConfig($test, $fixtureType));
         $applier->setDataSetConfig(
