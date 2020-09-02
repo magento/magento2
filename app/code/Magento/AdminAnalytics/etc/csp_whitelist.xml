@@ -23,11 +23,15 @@
                 </values>
             </policy>
             <policy id="connect-src">
-                <value id="dpmdemdex" type="host">dpm.demdex.net</value>
-                <value id="omtrdc" type="host">amcglobal.sc.omtrdc.net</value>
+                <values>
+                    <value id="dpmdemdex" type="host">dpm.demdex.net</value>
+                    <value id="omtrdc" type="host">amcglobal.sc.omtrdc.net</value>
+                </values>
             </policy>
             <policy id="frame-src">
-                <value id="amcdemdex" type="host">fast.amc.demdex.net</value>
+                <values>
+                    <value id="amcdemdex" type="host">fast.amc.demdex.net</value>
+                </values>
             </policy>
         </policies>
 </csp_whitelist>
