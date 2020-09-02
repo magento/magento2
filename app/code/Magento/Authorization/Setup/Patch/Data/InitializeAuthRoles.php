@@ -6,6 +6,9 @@
 
 namespace Magento\Authorization\Setup\Patch\Data;
 
+use Magento\Authorization\Model\ResourceModel\Role;
+use Magento\Authorization\Model\Rules;
+use Magento\Authorization\Setup\AuthorizationFactory;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
@@ -14,8 +17,7 @@ use Magento\Authorization\Model\Acl\Role\Group as RoleGroup;
 use Magento\Authorization\Model\UserContextInterface;
 
 /**
- * Class InitializeAuthRoles
- * @package Magento\Authorization\Setup\Patch
+ * Class for Initialize Auth Roles
  */
 class InitializeAuthRoles implements DataPatchInterface, PatchVersionInterface
 {
@@ -25,25 +27,24 @@ class InitializeAuthRoles implements DataPatchInterface, PatchVersionInterface
     private $moduleDataSetup;
 
     /**
-     * @var \Magento\Authorization\Setup\AuthorizationFactory
+     * @var AuthorizationFactory
      */
     private $authFactory;
 
     /**
-     * InitializeAuthRoles constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
-     * @param \Magento\Authorization\Setup\AuthorizationFactory $authorizationFactory
+     * @param AuthorizationFactory $authorizationFactory
      */
     public function __construct(
         ModuleDataSetupInterface $moduleDataSetup,
-        \Magento\Authorization\Setup\AuthorizationFactory $authorizationFactory
+        AuthorizationFactory $authorizationFactory
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
         $this->authFactory = $authorizationFactory;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -68,7 +69,7 @@ class InitializeAuthRoles implements DataPatchInterface, PatchVersionInterface
                 ]
             )->save();
         } else {
-            /** @var \Magento\Authorization\Model\ResourceModel\Role $item */
+            /** @var Role $item */
             foreach ($roleCollection as $item) {
                 $admGroupRole = $item;
                 break;
@@ -89,7 +90,7 @@ class InitializeAuthRoles implements DataPatchInterface, PatchVersionInterface
                 ]
             )->save();
         } else {
-            /** @var \Magento\Authorization\Model\Rules $rule */
+            /** @var Rules $rule */
             foreach ($rulesCollection as $rule) {
                 $rule->setData('resource_id', 'Magento_Backend::all')->save();
             }
@@ -108,7 +109,7 @@ class InitializeAuthRoles implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -116,7 +117,7 @@ class InitializeAuthRoles implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -124,7 +125,7 @@ class InitializeAuthRoles implements DataPatchInterface, PatchVersionInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {
