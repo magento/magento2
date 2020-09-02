@@ -248,11 +248,11 @@ class Options implements OptionSourceInterface
         $creditmemoId = $this->request->getParam('creditmemo_id');
         $invoiceId = $this->request->getParam('invoice_id');
         if ($invoiceId) {
-            return $this->invoiceRepository->get($invoiceId)->getOrderId();
+            return (int)$this->invoiceRepository->get($invoiceId)->getOrderId();
         } elseif ($shipmentId) {
-            return $this->shipmentRepository->get($shipmentId)->getOrderId();
+            return (int)$this->shipmentRepository->get($shipmentId)->getOrderId();
         } elseif ($creditmemoId) {
-            return $this->creditmemoRepository->get($creditmemoId)->getOrderId();
+            return (int)$this->creditmemoRepository->get($creditmemoId)->getOrderId();
         }
         throw new LocalizedException(__('Unable to get Order ID.'));
     }
