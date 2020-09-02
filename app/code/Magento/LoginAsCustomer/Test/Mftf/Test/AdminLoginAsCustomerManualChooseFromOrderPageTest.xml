@@ -60,26 +60,15 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
 
-        <!-- Login as Customer from Customer page -->
-        <actionGroup ref="AdminLoginAsCustomerLoginFromCustomerPageManualChooseActionGroup"
-                     stepKey="loginAsCustomerFromCustomerPage">
-            <argument name="customerId" value="$$createCustomer.id$$"/>
-            <argument name="storeName" value="{{customStoreGroup.name}}"/>
-        </actionGroup>
-
-        <!-- Place Order as Customer -->
-        <actionGroup ref="StorefrontOpenProductPageActionGroup" stepKey="openProductPage">
-            <argument name="productUrl" value="$$createProduct.sku$$"/>
-        </actionGroup>
-        <actionGroup ref="StorefrontAddProductToCartActionGroup" stepKey="addProductToCart">
+        <!-- Create order -->
+        <actionGroup ref="CreateOrderInStoreActionGroup" stepKey="createOrder">
             <argument name="product" value="$$createProduct$$"/>
-            <argument name="productCount" value="1"/>
+            <argument name="customer" value="$$createCustomer$$"/>
+            <argument name="storeView" value="customStoreFR"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="openCart"/>
-        <actionGroup ref="PlaceOrderWithLoggedUserActionGroup" stepKey="placeOrder"/>
-        <grabTextFrom selector="{{CheckoutSuccessMainSection.orderNumber22}}" stepKey="grabOrderId"/>
+        <grabFromCurrentUrl regex="~/order_id/(\d+)/~" stepKey="grabOrderId"/>
 
-        <!-- Login as Customer from Customer page -->
+        <!-- Login as Customer from Order page -->
         <actionGroup ref="AdminLoginAsCustomerLoginFromOrderPageManualChooseActionGroup"
                      stepKey="loginAsCustomerFromOrderPage">
             <argument name="orderId" value="{$grabOrderId}"/>
