@@ -7,13 +7,13 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenCmsPageActionGroup">
+    <actionGroup name="AdminOpenCmsBlockActionGroup">
         <annotations>
-            <description>Open CMS edit page.</description>
+            <description>DEPRECATED. Use AdminOpenCmsPageActionGroup instead.</description>
         </annotations>
         <arguments>
-            <argument name="page_id" type="string"/>
+            <argument name="block_id" type="string"/>
         </arguments>
-        <amOnPage url="{{AdminCmsPageEditPage.url(page_id)}}" stepKey="openEditCmsPage"/>
+        <amOnPage url="{{AdminEditBlockPage.url(block_id)}}" stepKey="openEditCmsBlock"/>
     </actionGroup>
 </actionGroups>
