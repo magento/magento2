@@ -5,17 +5,16 @@
   * See COPYING.txt for license details.
   */
 -->
-
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminMediaGalleryAssertCategoryNameInCategoryGridActionGroup">
+    <actionGroup name="AdminAssertMediaGalleryFilterPlaceHolderGridActionGroup">
         <annotations>
-            <description>Asserts category name in category grid page</description>
+            <description>Assert asset filter placeholder value</description>
         </annotations>
         <arguments>
-            <argument name="categoryName" type="string"/>
+            <argument name="filterPlaceholder" type="string"/>
         </arguments>
 
-        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.name('1', categoryName)}}" stepKey="assertNameColumn"/>
-     </actionGroup>
+        <see selector="{{AdminProductGridFilterSection.enabledFilters}}" userInput="{{filterPlaceholder}}" stepKey="seeFilter"/>
+    </actionGroup>
 </actionGroups>
