@@ -9,8 +9,6 @@ use Magento\Framework\Event\ObserverInterface;
 
 /**
  * AdminNotification observer
- *
- * @author      Magento Core Team <core@magentocommerce.com>
  */
 class PredispatchAdminActionControllerObserver implements ObserverInterface
 {
