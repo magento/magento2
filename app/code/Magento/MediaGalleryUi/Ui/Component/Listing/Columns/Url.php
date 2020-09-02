@@ -23,8 +23,8 @@ use Magento\Framework\AuthorizationInterface;
 class Url extends Column
 {
     private const ACL_IMAGE_ACTIONS = [
-        'insert_assets' => 'Magento_MediaGallery::insert_assets',
-        'delete_assets' => 'Magento_MediaGallery::delete_assets'
+        'insert_assets' => 'Magento_MediaGalleryApi::insert_assets',
+        'delete_assets' => 'Magento_MediaGalleryApi::delete_assets'
     ];
 
     /**

@@ -18,7 +18,7 @@ use Magento\Framework\AuthorizationInterface;
 class DirectoryTree extends Container
 {
     private const ACL_IMAGE_ACTIONS = [
-        'delete_folder' => 'Magento_MediaGallery::delete_folder'
+        'delete_folder' => 'Magento_MediaGalleryApi::delete_folder'
     ];
 
     /**

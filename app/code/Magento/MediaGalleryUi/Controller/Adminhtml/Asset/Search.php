@@ -34,7 +34,7 @@ class Search extends Action implements HttpGetActionInterface
     /**
      * @see _isAllowed()
      */
-    public const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
+    public const ADMIN_RESOURCE = 'Magento_MediaGalleryApi::media_gallery';
 
     /**
      * @var SearchAssetsInterface

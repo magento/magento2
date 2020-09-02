@@ -13,7 +13,7 @@ use Magento\Framework\AuthorizationInterface;
  */
 class CreateFolder implements ButtonProviderInterface
 {
-    private const ACL_CREATE_FOLDER = 'Magento_MediaGallery::create_folder';
+    private const ACL_CREATE_FOLDER = 'Magento_MediaGalleryApi::create_folder';
 
     /**
      * @var AuthorizationInterface
