@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminMediaGallerySortByDirectoryDescendingTest">
+        <annotations>
+            <features value="MediaGallery"/>
+            <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1776"/>
+            <title value="User uses Sort by Directory Descending in Standalone Media Gallery"/>
+            <stories value="User uses Sort by Directory Descending in Standalone Media Gallery"/>
+            <testCaseId value="https://github.com/magento/adobe-stock-integration/issues/1776"/>
+            <description value="User uses Sort by Directory Descending in Standalone Media Gallery"/>
+            <severity value="CRITICAL"/>
+            <group value="media_gallery_ui"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+
+        <after>
+            <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGalleryPage"/>
+            <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectFirstFolderForDelete">
+                <argument name="name" value="firstFolder"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteFirstFolder"/>
+            <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertFirstFolderWasDeleted">
+                <argument name="name" value="firstFolder"/>
+            </actionGroup>
+            <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+            <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectSecondFolderForDelete">
+                <argument name="name" value="secondFolder"/>
+            </actionGroup>
+            <actionGroup ref="AdminMediaGalleryFolderDeleteActionGroup" stepKey="deleteSecondFolder"/>
+            <actionGroup ref="AdminMediaGalleryAssertFolderDoesNotExistActionGroup" stepKey="assertSecondFolderWasDeleted">
+                <argument name="name" value="secondFolder"/>
+            </actionGroup>
+        </after>
+        <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openStandaloneMediaGalleryPage"/>
+        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openFirstNewFolderForm"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createFirstNewFolder">
+            <argument name="name" value="firstFolder"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertFirstNewFolderCreated">
+            <argument name="name" value="firstFolder"/>
+        </actionGroup>
+
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
+            <argument name="image" value="ImageUpload"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadSecondImage">
+            <argument name="image" value="ImageUpload_1"/>
+        </actionGroup>
+
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+        <waitForPageLoad stepKey="waitForGridToLoad"/>
+        <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openSecondNewFolderForm"/>
+        <actionGroup ref="AdminMediaGalleryCreateNewFolderActionGroup" stepKey="createSecondNewFolder">
+            <argument name="name" value="secondFolder"/>
+        </actionGroup>
+        <actionGroup ref="AdminMediaGalleryAssertFolderNameActionGroup" stepKey="assertSecondNewFolderCreated">
+            <argument name="name" value="secondFolder"/>
+        </actionGroup>
+        <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadThirdImage">
+            <argument name="image" value="ImageUpload1"/>
+        </actionGroup>
+
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="secondResetAdminDataGridToDefaultView"/>
+        <waitForPageLoad stepKey="secondWaitForGridToLoad"/>
+
+        <actionGroup ref="AdminEnhancedMediaGalleryClickSortActionGroup" stepKey="sortByDirectoryDescending">
+            <argument name="sortName" value="directory_desc"/>
+        </actionGroup>
+
+        <actionGroup ref="AssertAdminEnhancedMediaGallerySortByActionGroup" stepKey="assertImagePositionAfterSortByDirectoryDescending">
+            <argument name="firstImageFile" value="{{ImageUpload1.value}}"/>
+            <argument name="secondImageFile" value="{{ImageUpload.file}}"/>
+            <argument name="thirdImageFile" value="{{ImageUpload_1.file}}"/>
+        </actionGroup>
+    </test>
+</tests>
