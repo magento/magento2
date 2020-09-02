@@ -21,6 +21,8 @@ use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 
 /**
+ * Redirect for customer account
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Redirect
