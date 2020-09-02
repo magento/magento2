@@ -55,7 +55,6 @@ class SynchronizePersistentOnLoginObserverTest extends TestCase
      */
     private $persistentSessionFactory;
 
-
     /**
      * @var CookieManagerInterface
      */
