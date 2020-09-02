@@ -2367,14 +2367,15 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     {
         $identities = [self::CACHE_TAG . '_' . $this->getId()];
 
-        if (!$this->isObjectNew() || $this->getStatus() == Status::STATUS_ENABLED) {
+        $isStatusChanged = $this->getOrigData(self::STATUS) != $this->getData(self::STATUS) && !$this->isObjectNew();
+        if ($isStatusChanged || $this->getStatus() == Status::STATUS_ENABLED) {
             if ($this->getIsChangedCategories()) {
                 foreach ($this->getAffectedCategoryIds() as $categoryId) {
                     $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
                 }
             }
 
-            if (($this->getOrigData('status') != $this->getData('status')) || $this->isStockStatusChanged()) {
+            if ($isStatusChanged || $this->isStockStatusChanged()) {
                 foreach ($this->getCategoryIds() as $categoryId) {
                     $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
                 }
