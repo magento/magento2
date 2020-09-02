@@ -17,6 +17,7 @@ use Magento\TestFramework\Dependency\Reader\ClassScanner;
 use Magento\TestFramework\Dependency\Route\RouteMapper;
 use Magento\TestFramework\Exception\NoSuchActionException;
 use Magento\Webapi\Model\Config\Converter;
+use PHPUnit\Framework\Exception;
 
 /**
  * Rule to check the dependencies between modules based on references, getUrl and layout blocks
@@ -113,8 +114,7 @@ class PhpRule implements RuleInterface
         array $pluginMap = [],
         array $whitelists = [],
         ClassScanner $classScanner = null
-    )
-    {
+    ) {
         $this->_mapRouters = $mapRouters;
         $this->_mapLayoutBlocks = $mapLayoutBlocks;
         $this->configReader = $configReader;
@@ -416,18 +416,18 @@ class PhpRule implements RuleInterface
     {
         $pattern = '#(?<route_id>[a-z0-9\-_]{3,})'
             . '\/?(?<controller_name>[a-z0-9\-_]+)?\/?(?<action_name>[a-z0-9\-_]+)?#i';
-        if (preg_match($pattern, $path, $match)) {
-            $routeId = $match['route_id'];
-            $controllerName = $match['controller_name'] ?? UrlInterface::DEFAULT_CONTROLLER_NAME;
-            $actionName = $match['action_name'] ?? UrlInterface::DEFAULT_ACTION_NAME;
-
-            return $this->routeMapper->getDependencyByRoutePath(
-                $routeId,
-                $controllerName,
-                $actionName
-            );
+        if (!preg_match($pattern, $path, $match)) {
+            throw new NoSuchActionException('Failed to parse standard url path: ' . $path);
         }
-        throw new NoSuchActionException();
+        $routeId = $match['route_id'];
+        $controllerName = $match['controller_name'] ?? UrlInterface::DEFAULT_CONTROLLER_NAME;
+        $actionName = $match['action_name'] ?? UrlInterface::DEFAULT_ACTION_NAME;
+
+        return $this->routeMapper->getDependencyByRoutePath(
+            $routeId,
+            $controllerName,
+            $actionName
+        );
     }
 
     /**
@@ -435,6 +435,8 @@ class PhpRule implements RuleInterface
      *
      * @param string $path
      * @return string[]
+     *
+     * @throws NoSuchActionException
      */
     private function processApiUrl(string $path): array
     {
@@ -459,20 +461,17 @@ class PhpRule implements RuleInterface
              * any method
              */
             if (preg_match($serviceMethodUrlRegex, $path)) {
-                $method = $methods['GET']
-                    ?? $methods['POST']
-                    ?? $methods['PUT']
-                    ?? $methods['DELETE'];
+                $method = reset($methods);
 
                 $className = $method['service']['class'];
                 //get module from className
                 if (preg_match('#(?<module>\w+[\\\]\w+).*#', $className, $match)) {
                     return [$match['module']];
                 }
-                break;
+                throw new Exception('Failed to parse class from className' . $className);
             }
         }
-        throw new NoSuchActionException();
+        throw new NoSuchActionException('Failed to match service with url path: ' . $path);
     }
 
     /**
