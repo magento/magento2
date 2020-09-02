@@ -11,16 +11,22 @@ use Magento\Backend\App\Action\Context;
 use Magento\Catalog\Api\CategoryRepositoryInterface;
 use Magento\Catalog\Controller\Category\View;
 use Magento\Catalog\Helper\Category;
+use Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager;
 use Magento\Catalog\Model\Design;
+use Magento\Catalog\Model\Layer\Resolver;
+use Magento\Catalog\Model\Product\ProductList\ToolbarMemorizer;
+use Magento\Catalog\Model\Session;
+use Magento\CatalogUrlRewrite\Model\CategoryUrlPathGenerator;
 use Magento\Framework\App\Action\Action;
 use Magento\Framework\App\RequestInterface;
 use Magento\Framework\App\ResponseInterface;
 use Magento\Framework\App\ViewInterface;
+use Magento\Framework\Controller\Result\ForwardFactory;
 use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Framework\ObjectManagerInterface;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Framework\Registry;
 use Magento\Framework\View\Layout;
 use Magento\Framework\View\Layout\ProcessorInterface;
 use Magento\Framework\View\Page\Config;
@@ -30,6 +36,7 @@ use Magento\Store\Model\Store;
 use Magento\Store\Model\StoreManagerInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -123,7 +130,7 @@ class ViewTest extends TestCase
     private $pageMock;
 
     /**
-     * @var Config
+     * @var Config|MockObject
      */
     private $pageConfigMock;
 
@@ -191,24 +198,29 @@ class ViewTest extends TestCase
 
         $this->catalogDesignMock = $this->createMock(Design::class);
 
-        $resultPageFactory = $this->getMockBuilder(PageFactory::class)
+        $resultPageFactoryMock = $this->getMockBuilder(PageFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
-        $resultPageFactory->expects(self::atLeastOnce())
+        $resultPageFactoryMock->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($this->pageMock);
 
-        $this->action = (new ObjectManager($this))->getObject(
-            View::class,
-            [
-                'context' => $this->contextMock,
-                'catalogDesign' => $this->catalogDesignMock,
-                'categoryRepository' => $this->categoryRepositoryMock,
-                'storeManager' => $this->storeManagerMock,
-                'resultPageFactory' => $resultPageFactory,
-                'categoryHelper' => $this->categoryHelperMock
-            ]
+        $this->action = new View(
+            $this->contextMock,
+            $this->catalogDesignMock,
+            $this->createMock(Session::class),
+            new Registry(),
+            $this->storeManagerMock,
+            $this->createMock(CategoryUrlPathGenerator::class),
+            $resultPageFactoryMock,
+            $this->createMock(ForwardFactory::class),
+            $this->createMock(Resolver::class),
+            $this->categoryRepositoryMock,
+            $this->createMock(ToolbarMemorizer::class),
+            $this->createMock(LayoutUpdateManager::class),
+            $this->categoryHelperMock,
+            $this->getMockForAbstractClass(LoggerInterface::class)
         );
     }
 
@@ -217,6 +229,7 @@ class ViewTest extends TestCase
      *
      * @dataProvider getInvocationData
      * @param array $expectedData
+     *
      * @return void
      */
     public function testApplyCustomLayoutUpdate(array $expectedData): void
@@ -234,7 +247,7 @@ class ViewTest extends TestCase
         $this->categoryRepositoryMock->method('get')->with($categoryId)
             ->willReturn($this->categoryMock);
 
-        $this->categoryHelperMock->expects(self::once())
+        $this->categoryHelperMock->expects($this->once())
             ->method('canShow')
             ->with($this->categoryMock)
             ->willReturn(true);
@@ -243,18 +256,18 @@ class ViewTest extends TestCase
             ->addMethods(['getPageLayout', 'getLayoutUpdates'])
             ->disableOriginalConstructor()
             ->getMock();
-        $this->categoryMock->expects(self::at(1))
+        $this->categoryMock->expects($this->at(1))
             ->method('hasChildren')
             ->willReturn(true);
-        $this->categoryMock->expects(self::at(2))
+        $this->categoryMock->expects($this->at(2))
             ->method('hasChildren')
             ->willReturn($expectedData[1][0]['type'] === 'default');
-        $this->categoryMock->expects(self::once())
+        $this->categoryMock->expects($this->once())
             ->method('getDisplayMode')
             ->willReturn($expectedData[2][0]['displaymode']);
         $this->expectationForPageLayoutHandles($expectedData);
-        $settings->expects(self::atLeastOnce())->method('getPageLayout')->willReturn($pageLayout);
-        $settings->expects(self::once())->method('getLayoutUpdates')->willReturn(['update1', 'update2']);
+        $settings->expects($this->atLeastOnce())->method('getPageLayout')->willReturn($pageLayout);
+        $settings->expects($this->once())->method('getLayoutUpdates')->willReturn(['update1', 'update2']);
         $this->catalogDesignMock->method('getDesignSettings')->willReturn($settings);
 
         $this->action->execute();
@@ -264,6 +277,7 @@ class ViewTest extends TestCase
      * Expected invocation for Layout Handles
      *
      * @param array $data
+     *
      * @return void
      */
     private function expectationForPageLayoutHandles($data): void

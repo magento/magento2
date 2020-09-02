@@ -67,9 +67,7 @@
             </actionGroup>
         </after>
 
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="goToStorefrontHomePage"/>
-        <waitForPageLoad stepKey="waitForStorefrontHomePageLoad"/>
-
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomepage"/>
         <conditionalClick selector="{{StorefrontCategorySidebarSection.filterOptionsTitle($createProductAttribute.default_frontend_label$)}}" dependentSelector="{{StorefrontCategorySidebarSection.activeFilterOptions}}" visible="false" stepKey="clickToExpandDropdownAttribute"/>
         <click selector="{{StorefrontCategorySidebarSection.enabledFilterOptionItemByLabel($getProductAttributeOption1.label$)}}" stepKey="goToCategoryPageFilteredByFirstAttributeOption"/>
         <waitForPageLoad stepKey="waitForFilteredCategoryPageLoad"/>
