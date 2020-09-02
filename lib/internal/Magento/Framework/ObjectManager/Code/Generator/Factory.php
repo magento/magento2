@@ -100,13 +100,24 @@ class Factory extends \Magento\Framework\Code\Generator\EntityAbstract
             $sourceClassName = $this->getSourceClassName();
             $resultClassName = $this->_getResultClassName();
 
-            if ($resultClassName !== $sourceClassName . 'Factory') {
+            if ($resultClassName !== $sourceClassName . $this->getResultClassSuffix()) {
                 $this->_addError(
-                    'Invalid Factory class name [' . $resultClassName . ']. Use ' . $sourceClassName . 'Factory'
+                    'Invalid Factory class name [' . $resultClassName . ']. Use ' .
+                    $sourceClassName . $this->getResultClassSuffix()
                 );
                 $result = false;
             }
         }
         return $result;
+    }
+
+    /**
+     * Suffix for generated class
+     *
+     * @return string
+     */
+    protected function getResultClassSuffix()
+    {
+        return 'Factory';
     }
 }

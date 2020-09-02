@@ -16,6 +16,8 @@ use PHPUnit\Framework\TestCase;
 require_once __DIR__ . '/GeneratorTest/SourceClassWithNamespace.php';
 require_once __DIR__ . '/GeneratorTest/ParentClassWithNamespace.php';
 require_once __DIR__ . '/GeneratorTest/SourceClassWithNamespaceExtension.php';
+require_once __DIR__ . '/GeneratorTest/NestedNamespace/SourceClassWithNestedNamespace.php';
+require_once __DIR__ . '/GeneratorTest/NestedNamespace/SourceClassWithNestedNamespaceExtension.php';
 
 /**
  * @magentoAppIsolation enabled
@@ -24,6 +26,7 @@ require_once __DIR__ . '/GeneratorTest/SourceClassWithNamespaceExtension.php';
 class GeneratorTest extends TestCase
 {
     const CLASS_NAME_WITH_NAMESPACE = GeneratorTest\SourceClassWithNamespace::class;
+    const CLASS_NAME_WITH_NESTED_NAMESPACE = GeneratorTest\NestedNamespace\SourceClassWithNestedNamespace::class;
 
     /**
      * @var Generator
@@ -112,6 +115,45 @@ class GeneratorTest extends TestCase
         );
         $expectedContent = $this->_clearDocBlock(
             file_get_contents(__DIR__ . '/_expected/SourceClassWithNamespaceFactory.php.sample')
+        );
+        $this->assertEquals($expectedContent, $content);
+    }
+
+    /**
+     * Generates a new file with Factory class and compares with the sample from the
+     * SourceClassWithNestedNamespaceFactory.php.sample file.
+     */
+    public function testGenerateClassFactoryWithNestedNamespace()
+    {
+        $factoryClassName = self::CLASS_NAME_WITH_NESTED_NAMESPACE . 'Factory';
+        $this->assertEquals(Generator::GENERATION_SUCCESS, $this->_generator->generateClass($factoryClassName));
+        $factory = Bootstrap::getObjectManager()->create($factoryClassName);
+        $this->assertInstanceOf(self::CLASS_NAME_WITH_NESTED_NAMESPACE, $factory->create());
+        $content = $this->_clearDocBlock(
+            file_get_contents($this->_ioObject->generateResultFileName($factoryClassName))
+        );
+        $expectedContent = $this->_clearDocBlock(
+            file_get_contents(__DIR__ . '/_expected/SourceClassWithNestedNamespaceFactory.php.sample')
+        );
+        $this->assertEquals($expectedContent, $content);
+    }
+
+    /**
+     * Generates a new file with ExtensionInterfaceFactory class and compares with the sample from the
+     * SourceClassWithNestedNamespaceExtensionInterfaceFactory.php.sample file.
+     */
+    public function testGenerateClassExtensionAttributesInterfaceFactoryWithNestedNamespace()
+    {
+        $factoryClassName = self::CLASS_NAME_WITH_NESTED_NAMESPACE . 'ExtensionInterfaceFactory';
+        $this->generatedDirectory->create($this->testRelativePath);
+        $this->assertEquals(Generator::GENERATION_SUCCESS, $this->_generator->generateClass($factoryClassName));
+        $factory = Bootstrap::getObjectManager()->create($factoryClassName);
+        $this->assertInstanceOf(self::CLASS_NAME_WITH_NESTED_NAMESPACE . 'Extension', $factory->create());
+        $content = $this->_clearDocBlock(
+            file_get_contents($this->_ioObject->generateResultFileName($factoryClassName))
+        );
+        $expectedContent = $this->_clearDocBlock(
+            file_get_contents(__DIR__ . '/_expected/SourceClassWithNestedNamespaceExtensionInterfaceFactory.php.sample')
         );
         $this->assertEquals($expectedContent, $content);
     }
