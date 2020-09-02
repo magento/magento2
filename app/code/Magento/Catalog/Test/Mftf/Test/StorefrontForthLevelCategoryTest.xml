@@ -34,6 +34,9 @@
             <deleteData createDataKey="category3" stepKey="deleteCategory3"/>
             <deleteData createDataKey="category2" stepKey="deleteCategory2"/>
             <deleteData createDataKey="category1" stepKey="deleteCategory1"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="cleanInvalidatedCaches">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
         </after>
         <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage"/>
         <moveMouseOver
