@@ -181,7 +181,7 @@ class StockItemTest extends TestCase
         $stockItem->expects($this->once())->method('setIsChildItem')->with(true)->willReturnSelf();
         $stockItem->expects($this->once())->method('hasIsChildItem')->willReturn(true);
         $stockItem->expects($this->once())->method('unsIsChildItem');
-        $result->expects($this->exactly(2))->method('getItemIsQtyDecimal')->willReturn(true);
+        $result->expects($this->exactly(3))->method('getItemIsQtyDecimal')->willReturn(true);
         $quoteItem->expects($this->once())->method('setIsQtyDecimal')->with(true)->willReturnSelf();
         $parentItem->expects($this->once())->method('setIsQtyDecimal')->with(true)->willReturnSelf();
         $parentItem->expects($this->any())->method('getProduct')->willReturn($parentProduct);
@@ -198,7 +198,7 @@ class StockItemTest extends TestCase
         $quoteItem->expects($this->once())->method('setUseOldQty')->with('item')->willReturnSelf();
         $result->expects($this->exactly(2))->method('getMessage')->willReturn('message');
         $quoteItem->expects($this->once())->method('setMessage')->with('message')->willReturnSelf();
-        $result->expects($this->exactly(3))->method('getItemBackorders')->willReturn('backorders');
+        $result->expects($this->exactly(2))->method('getItemBackorders')->willReturn('backorders');
         $quoteItem->expects($this->once())->method('setBackorders')->with('backorders')->willReturnSelf();
         $quoteItem->expects($this->once())->method('setStockStateResult')->with($result)->willReturnSelf();
 
