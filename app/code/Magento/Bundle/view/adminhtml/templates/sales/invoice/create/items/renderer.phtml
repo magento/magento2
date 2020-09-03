@@ -130,8 +130,8 @@ $catalogHelper = $block->getData('catalogHelper');
                         <?php endif; ?>
         </td>
         <td class="col-qty-invoice">
-            <?php if ($block->canShowPriceInfo($_item) || $shipTogether) : ?>
-                <?php if ($block->canEditQty() && $canEditItemQty) : ?>
+            <?php if ($block->canShowPriceInfo($_item) || $shipTogether): ?>
+                <?php if ($block->canEditQty() && $canEditItemQty): ?>
                     <input type="text"
                            class="input-text admin__control-text qty-input"
                            name="invoice[items][<?= $block->escapeHtmlAttr($_item->getOrderItemId()) ?>]"
