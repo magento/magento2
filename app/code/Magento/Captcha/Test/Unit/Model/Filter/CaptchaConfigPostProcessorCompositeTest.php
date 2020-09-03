@@ -9,17 +9,17 @@ namespace Magento\Captcha\Test\Unit\Model\Filter;
 
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use PHPUnit\Framework\TestCase;
-use Magento\Captcha\Api\CaptchaConfigFilterInterface;
-use Magento\Captcha\Model\Filter\CaptchaConfigFilterComposite;
+use Magento\Captcha\Api\CaptchaConfigPostProcessorInterface;
+use Magento\Captcha\Model\Filter\CaptchaConfigPostProcessorComposite;
 use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Test for Class \Magento\Captcha\Model\Filter\CaptchaConfigFilterComposite
+ * Test for Class \Magento\Captcha\Model\Filter\CaptchaConfigPostProcessorComposite
  */
-class CaptchaConfigFilterCompositeTest extends TestCase
+class CaptchaConfigPostProcessorCompositeTest extends TestCase
 {
     /**
-     * @var CaptchaConfigFilterComposite
+     * @var CaptchaConfigPostProcessorComposite
      */
     private $model;
 
@@ -45,11 +45,11 @@ class CaptchaConfigFilterCompositeTest extends TestCase
     {
         $this->objectManager = new ObjectManager($this);
 
-        $this->filterMock1 = $this->getMockBuilder(CaptchaConfigFilterInterface::class)
+        $this->filterMock1 = $this->getMockBuilder(CaptchaConfigPostProcessorInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['filter'])
             ->getMock();
-        $this->filterMock2 = $this->getMockBuilder(CaptchaConfigFilterInterface::class)
+        $this->filterMock2 = $this->getMockBuilder(CaptchaConfigPostProcessorInterface::class)
             ->disableOriginalConstructor()
             ->setMethods(['filter'])
             ->getMock();
@@ -57,7 +57,7 @@ class CaptchaConfigFilterCompositeTest extends TestCase
         $filterList = [$this->filterMock1, $this->filterMock2];
 
         $this->model = $this->objectManager->getObject(
-            CaptchaConfigFilterComposite::class,
+            CaptchaConfigPostProcessorComposite::class,
             [
                 'filters' => $filterList,
             ]

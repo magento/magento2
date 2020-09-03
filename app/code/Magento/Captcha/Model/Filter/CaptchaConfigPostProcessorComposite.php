@@ -7,20 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\Captcha\Model\Filter;
 
-use Magento\Captcha\Api\CaptchaConfigFilterInterface;
+use Magento\Captcha\Api\CaptchaConfigPostProcessorInterface;
 
 /**
  * Composite filter class for filtering configuration
  */
-class CaptchaConfigFilterComposite implements CaptchaConfigFilterInterface
+class CaptchaConfigPostProcessorComposite implements CaptchaConfigPostProcessorInterface
 {
     /**
-     * @var CaptchaConfigFilterInterface[] $filters
+     * @var CaptchaConfigPostProcessorInterface[] $filters
      */
     private $filters = [];
 
     /**
-     * @param CaptchaConfigFilterInterface[] $filters
+     * @param CaptchaConfigPostProcessorInterface[] $filters
      */
     public function __construct(
         $filters = []
@@ -34,7 +34,7 @@ class CaptchaConfigFilterComposite implements CaptchaConfigFilterInterface
      * @param array $config
      * @return array
      */
-    public function filter($config): array
+    public function filter(array $config): array
     {
         $result = [];
         foreach ($this->filters as $filter) {

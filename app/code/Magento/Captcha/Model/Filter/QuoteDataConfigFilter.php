@@ -7,12 +7,12 @@ declare(strict_types=1);
 
 namespace Magento\Captcha\Model\Filter;
 
-use Magento\Captcha\Api\CaptchaConfigFilterInterface;
+use Magento\Captcha\Api\CaptchaConfigPostProcessorInterface;
 
 /**
  * Class QuoteDataConfigFilter used for filtering config quote data based on filter list
  */
-class QuoteDataConfigFilter implements CaptchaConfigFilterInterface
+class QuoteDataConfigFilter implements CaptchaConfigPostProcessorInterface
 {
     /**
      * @var array $filterList
@@ -34,7 +34,7 @@ class QuoteDataConfigFilter implements CaptchaConfigFilterInterface
      * @param array $config
      * @return array
      */
-    public function filter($config): array
+    public function filter(array $config): array
     {
         foreach ($this->filterList as $filterKey) {
             /** @var string $filterKey */
