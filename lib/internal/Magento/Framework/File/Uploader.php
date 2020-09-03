@@ -290,6 +290,11 @@ class Uploader
      */
     private function validateDestination(string $destinationFolder): void
     {
+        if (strlen($destinationFolder) > 255) {
+            throw new \InvalidArgumentException(
+                'Destination folder path is too long; must be 255 characters or less'
+            );
+        }
         if ($this->_allowCreateFolders) {
             $this->createDestinationFolder($destinationFolder);
         } elseif (!$this->getFileDriver()->isWritable($destinationFolder)) {
