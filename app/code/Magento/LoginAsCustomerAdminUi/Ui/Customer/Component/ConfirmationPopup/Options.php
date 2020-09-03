@@ -25,6 +25,8 @@ use Magento\Store\Model\Website;
 
 /**
  * Store group options for Login As Customer confirmation pop-up.
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class Options implements OptionSourceInterface
 {
