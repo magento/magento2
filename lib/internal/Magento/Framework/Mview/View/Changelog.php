@@ -7,7 +7,9 @@
 namespace Magento\Framework\Mview\View;
 
 use Magento\Framework\DB\Adapter\ConnectionException;
+use Magento\Framework\DB\Sql\Expression;
 use Magento\Framework\Exception\RuntimeException;
+use Magento\Framework\Mview\Config;
 use Magento\Framework\Phrase;
 
 /**
@@ -24,6 +26,11 @@ class Changelog implements ChangelogInterface
      * Column name of changelog entity
      */
     const COLUMN_NAME = 'entity_id';
+
+    /**
+     * Version ID column name
+     */
+    const VERSION_ID_COLUMN_NAME = 'version_id';
 
     /**
      * Database connection
@@ -45,14 +52,23 @@ class Changelog implements ChangelogInterface
     protected $resource;
 
     /**
+     * @var Config
+     */
+    private $mviewConfig;
+
+    /**
      * @param \Magento\Framework\App\ResourceConnection $resource
+     * @param Config $mviewConfig
      * @throws ConnectionException
      */
-    public function __construct(\Magento\Framework\App\ResourceConnection $resource)
-    {
+    public function __construct(
+        \Magento\Framework\App\ResourceConnection $resource,
+        Config $mviewConfig
+    ) {
         $this->connection = $resource->getConnection();
         $this->resource = $resource;
         $this->checkConnection();
+        $this->mviewConfig = $mviewConfig;
     }
 
     /**
@@ -78,12 +94,13 @@ class Changelog implements ChangelogInterface
      */
     public function create()
     {
+        $config = $this->mviewConfig->getView($this->getViewId());
         $changelogTableName = $this->resource->getTableName($this->getName());
         if (!$this->connection->isTableExists($changelogTableName)) {
             $table = $this->connection->newTable(
                 $changelogTableName
             )->addColumn(
-                'version_id',
+                self::VERSION_ID_COLUMN_NAME,
                 \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                 null,
                 ['identity' => true, 'unsigned' => true, 'nullable' => false, 'primary' => true],
@@ -95,6 +112,25 @@ class Changelog implements ChangelogInterface
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
                 'Entity ID'
             );
+            if ($config[self::ATTRIBUTE_SCOPE_SUPPORT]) {
+                $table->addColumn(
+                    self::ATTRIBUTE_COLUMN,
+                    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                    null,
+                    ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                    'Attribute ID'
+                );
+            }
+            if ($config[self::STORE_SCOPE_SUPPORT]) {
+                $table->addColumn(
+                    self::STORE_COLUMN,
+                    \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
+                    null,
+                    ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                    'Store ID'
+                );
+            }
+
             $this->connection->createTable($table);
         }
     }
@@ -139,7 +175,7 @@ class Changelog implements ChangelogInterface
      *
      * @param int $fromVersionId
      * @param int $toVersionId
-     * @return int[]
+     * @return array
      * @throws ChangelogTableNotExistsException
      */
     public function getList($fromVersionId, $toVersionId)
