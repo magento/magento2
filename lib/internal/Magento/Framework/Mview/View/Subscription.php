@@ -6,8 +6,10 @@
 
 namespace Magento\Framework\Mview\View;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Ddl\Trigger;
+use Magento\Framework\Mview\Config;
 use Magento\Framework\Mview\View\StateInterface;
 
 /**
@@ -68,12 +70,17 @@ class Subscription implements SubscriptionInterface
      * @var Resource
      */
     protected $resource;
+    /**
+     * @var Config
+     */
+    private $mviewConfig;
 
     /**
      * @param ResourceConnection $resource
      * @param \Magento\Framework\DB\Ddl\TriggerFactory $triggerFactory
      * @param \Magento\Framework\Mview\View\CollectionInterface $viewCollection
      * @param \Magento\Framework\Mview\ViewInterface $view
+     * @param Config $mviewConfig
      * @param string $tableName
      * @param string $columnName
      * @param array $ignoredUpdateColumns
@@ -85,7 +92,8 @@ class Subscription implements SubscriptionInterface
         \Magento\Framework\Mview\ViewInterface $view,
         $tableName,
         $columnName,
-        $ignoredUpdateColumns = []
+        $ignoredUpdateColumns = [],
+        Config $mviewConfig = null
     ) {
         $this->connection = $resource->getConnection();
         $this->triggerFactory = $triggerFactory;
@@ -95,6 +103,7 @@ class Subscription implements SubscriptionInterface
         $this->columnName = $columnName;
         $this->resource = $resource;
         $this->ignoredUpdateColumns = $ignoredUpdateColumns;
+        $this->mviewConfig = $mviewConfig ?? ObjectManager::getInstance()->get(Config::class);
     }
 
     /**
@@ -198,13 +207,10 @@ class Subscription implements SubscriptionInterface
      */
     protected function buildStatement($event, $changelog)
     {
+        $trigger = "INSERT IGNORE INTO %s (%s) VALUES (%s);";
         switch ($event) {
-            case Trigger::EVENT_INSERT:
-                $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
-                break;
             case Trigger::EVENT_UPDATE:
                 $tableName = $this->resource->getTableName($this->getTableName());
-                $trigger = "INSERT IGNORE INTO %s (%s) VALUES (NEW.%s);";
                 if ($this->connection->isTableExists($tableName) &&
                     $describe = $this->connection->describeTable($tableName)
                 ) {
@@ -226,18 +232,52 @@ class Subscription implements SubscriptionInterface
                     }
                 }
                 break;
-            case Trigger::EVENT_DELETE:
-                $trigger = "INSERT IGNORE INTO %s (%s) VALUES (OLD.%s);";
-                break;
-            default:
-                return '';
         }
+        list($columnNames, $columnValues) = $this->prepareTriggerBody($changelog, $event);
         return sprintf(
             $trigger,
             $this->connection->quoteIdentifier($this->resource->getTableName($changelog->getName())),
-            $this->connection->quoteIdentifier($changelog->getColumnName()),
-            $this->connection->quoteIdentifier($this->getColumnName())
+            $columnNames,
+            $columnValues
         );
+    }
+
+    /**
+     * Prepare column names and column values for trigger body
+     *
+     * @param ChangelogInterface $changelog
+     * @param string $eventType
+     * @return array
+     */
+    public function prepareTriggerBody(ChangelogInterface $changelog, string $eventType)
+    {
+        $prefix = $eventType === Trigger::EVENT_DELETE ? 'OLD.' : 'NEW.';
+        $describedSubscribedColumns = array_column(
+            $this->connection->describeTable($this->getTableName()),
+            'COLUMN_NAME'
+        );
+        $viewConfig = $this->mviewConfig->getView($this->getView()->getId());
+        $columnNames = [$this->connection->quoteIdentifier($changelog->getColumnName())];
+        $columnValues = [$this->connection->quoteIdentifier($this->getColumnName())];
+        //If we need to add attributes
+        if ($viewConfig[ChangelogInterface::ATTRIBUTE_SCOPE_SUPPORT] &&
+            array_search(Changelog::ATTRIBUTE_COLUMN, $describedSubscribedColumns)
+        ) {
+            $columnValues[] = $prefix . $this->connection->quoteIdentifier(Changelog::ATTRIBUTE_COLUMN);
+            $columnNames[] = $this->connection->quoteIdentifier(Changelog::ATTRIBUTE_COLUMN);
+        }
+        //If we need to add stores
+        if ($viewConfig[ChangelogInterface::STORE_SCOPE_SUPPORT] &&
+            array_search(Changelog::STORE_COLUMN, $describedSubscribedColumns)
+        ) {
+            $columnValues[] = $prefix . $this->connection->quoteIdentifier(Changelog::STORE_COLUMN);
+            $columnNames[] = $this->connection->quoteIdentifier(Changelog::STORE_COLUMN);
+        }
+
+        return [
+            implode(",", $columnNames),
+            implode(",", $columnValues)
+        ];
     }
 
     /**
