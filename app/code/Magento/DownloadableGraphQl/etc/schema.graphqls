@@ -82,3 +82,8 @@ type DownloadableItemsLinks @doc(description: "DownloadableProductLinks defines 
     sort_order: Int @doc(description: "A number indicating the sort order")
     uid: ID! @doc(description: "A string that encodes option details.") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\DownloadableLinksValueUid")
 }
+
+type DownloadableWishlistItem implements WishlistItemInterface @doc(description: "A downloadable product wish list item") {
+    links_v2: [DownloadableProductLinks] @doc(description: "An array containing information about the selected links") @resolver(class: "\\Magento\\DownloadableGraphQl\\Model\\Wishlist\\ItemLinks")
+    samples: [DownloadableProductSamples] @doc(description: "An array containing information about the selected samples") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\Samples")
+}

@@ -64,8 +64,7 @@
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingCheckoutPageWithShippingMethod"/>
         <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod"/>
         <waitForLoadingMaskToDisappear stepKey="waitForLoadingMask1"/>
-        <waitForElement selector="{{CheckoutShippingMethodsSection.next}}" time="30" stepKey="waitForNextButton"/>
-        <click selector="{{CheckoutShippingMethodsSection.next}}" stepKey="clickNext"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNext"/>
         <!-- Checkout select Check/Money Order payment -->
         <comment userInput="Select Check/Money payment" stepKey="checkoutSelectCheckMoneyPayment"/>
         <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>

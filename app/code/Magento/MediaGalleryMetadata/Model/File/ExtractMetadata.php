@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryMetadata\Model\File;
 
-use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterface;
 use Magento\MediaGalleryMetadataApi\Api\Data\MetadataInterfaceFactory;
 use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
@@ -90,7 +89,12 @@ class ExtractMetadata implements ExtractMetadataInterface
                 );
             }
 
-            $data = $segmentReader->execute($file);
+            try {
+                $data = $segmentReader->execute($file);
+            } catch (\Exception $exception) {
+                continue;
+            }
+
             $title = !empty($data->getTitle()) ? $data->getTitle() : $title;
             $description = !empty($data->getDescription()) ? $data->getDescription() : $description;
 
