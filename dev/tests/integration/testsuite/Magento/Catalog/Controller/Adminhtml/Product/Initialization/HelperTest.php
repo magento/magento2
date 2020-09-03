@@ -43,7 +43,7 @@ class HelperTest extends \PHPUnit\Framework\TestCase
 
         $product = $this->initializationHelper->initializeFromData($product, $productData);
         $extensionAttributes = $product->getExtensionAttributes();
-        $linkedCategoryIds = array_map(function(CategoryLinkInterface $categoryLink) {
+        $linkedCategoryIds = array_map(function (CategoryLinkInterface $categoryLink) {
             return $categoryLink->getCategoryId();
         }, (array) $extensionAttributes->getCategoryLinks());
         $this->assertEquals($categoryIds, $linkedCategoryIds);
@@ -66,6 +66,10 @@ class HelperTest extends \PHPUnit\Framework\TestCase
             'update categories' => [
                 'simple-3',
                 [10, 12, 13],
+            ],
+            'change all categories' => [
+                'simple-3',
+                [4, 5]
             ],
             'unassign all categories' => [
                 'simple-3',

@@ -2359,6 +2359,22 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
     }
 
     /**
+     * Get identities for related to product categories
+     *
+     * @param array $categoryIds
+     * @return array
+     */
+    private function getProductCategoryIdentities(array $categoryIds): array
+    {
+        $identities = [];
+        foreach ($categoryIds as $categoryId) {
+            $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
+        }
+
+        return $identities;
+    }
+
+    /**
      * Get identities
      *
      * @return array
@@ -2370,15 +2386,17 @@ class Product extends \Magento\Catalog\Model\AbstractModel implements
         $isStatusChanged = $this->getOrigData(self::STATUS) != $this->getData(self::STATUS) && !$this->isObjectNew();
         if ($isStatusChanged || $this->getStatus() == Status::STATUS_ENABLED) {
             if ($this->getIsChangedCategories()) {
-                foreach ($this->getAffectedCategoryIds() as $categoryId) {
-                    $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
-                }
+                $identities = array_merge(
+                    $identities,
+                    $this->getProductCategoryIdentities($this->getAffectedCategoryIds())
+                );
             }
 
             if ($isStatusChanged || $this->isStockStatusChanged()) {
-                foreach ($this->getCategoryIds() as $categoryId) {
-                    $identities[] = self::CACHE_PRODUCT_CATEGORY_TAG . '_' . $categoryId;
-                }
+                $identities = array_merge(
+                    $identities,
+                    $this->getProductCategoryIdentities($this->getCategoryIds())
+                );
             }
         }
 
