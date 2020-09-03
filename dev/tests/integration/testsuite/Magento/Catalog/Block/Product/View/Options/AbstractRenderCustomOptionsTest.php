@@ -57,7 +57,7 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
     protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
-        $this->productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productCustomOptionFactory = $this->objectManager->get(ProductCustomOptionInterfaceFactory::class);
         $this->productCustomOptionValuesFactory = $this->objectManager->get(
             ProductCustomOptionValuesInterfaceFactory::class

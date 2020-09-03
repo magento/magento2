@@ -68,7 +68,7 @@ class OptionsTest extends AbstractRenderCustomOptionsTest
     public function testRenderCustomOptionsFromTextGroup(array $optionData, array $checkArray): void
     {
         $this->assertTextOptionRenderingOnProduct('simple', $optionData, $checkArray);
-    }//test bez opcij
+    }
 
     /**
      * Provides test data to verify the display of text type options.

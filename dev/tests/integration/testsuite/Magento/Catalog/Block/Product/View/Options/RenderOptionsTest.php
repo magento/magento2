@@ -12,7 +12,6 @@ use Magento\Catalog\Api\Data\ProductInterface;
 /**
  * Test cases related to check that simple product custom option renders as expected.
  *
- * @magentoDbIsolation disabled
  * @magentoAppArea frontend
  */
 class RenderOptionsTest extends AbstractRenderCustomOptionsTest

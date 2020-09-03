@@ -13,7 +13,6 @@ use Magento\Catalog\Block\Product\View\Options\AbstractRenderCustomOptionsTest;
 /**
  * Test cases related to check that configurable product custom option renders as expected.
  *
- * @magentoDbIsolation disabled
  * @magentoAppArea frontend
  */
 class RenderOptionsTest extends AbstractRenderCustomOptionsTest
