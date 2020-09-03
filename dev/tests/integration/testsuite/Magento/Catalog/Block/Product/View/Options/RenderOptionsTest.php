@@ -7,6 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Block\Product\View\Options;
 
+use Magento\Catalog\Api\Data\ProductInterface;
+
 /**
  * Test cases related to check that simple product custom option renders as expected.
  *
@@ -82,11 +84,27 @@ class RenderOptionsTest extends AbstractRenderCustomOptionsTest
     /**
      * @inheritdoc
      */
-    protected function getHandlesList(): array
+    protected function getHandlesList(ProductInterface $product): array
     {
         return [
             'default',
             'catalog_product_view',
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getMaxCharactersCssClass(): string
+    {
+        return 'class="character-counter';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getOptionsBlockName(): string
+    {
+        return 'product.info.options';
     }
 }

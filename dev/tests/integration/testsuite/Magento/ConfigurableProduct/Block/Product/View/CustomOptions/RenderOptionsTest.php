@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Block\Product\View\CustomOptions;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Block\Product\View\Options\AbstractRenderCustomOptionsTest;
 
 /**
@@ -85,12 +86,28 @@ class RenderOptionsTest extends AbstractRenderCustomOptionsTest
     /**
      * @inheritdoc
      */
-    protected function getHandlesList(): array
+    protected function getHandlesList(ProductInterface $product): array
     {
         return [
             'default',
             'catalog_product_view',
             'catalog_product_view_type_configurable',
         ];
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getMaxCharactersCssClass(): string
+    {
+        return 'class="character-counter';
+    }
+
+    /**
+     * @inheritdoc
+     */
+    protected function getOptionsBlockName(): string
+    {
+        return 'product.info.options';
     }
 }
