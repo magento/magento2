@@ -7,8 +7,13 @@ declare(strict_types=1);
 
 namespace Magento\MediaContentSynchronizationCms\Test\Integration\Model\Synchronizer;
 
+use Magento\Cms\Api\BlockRepositoryInterface;
+use Magento\Cms\Api\Data\BlockInterface;
+use Magento\Cms\Api\Data\PageInterface;
+use Magento\Cms\Api\PageRepositoryInterface;
+use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\Exception\IntegrationException;
-use Magento\MediaContentApi\Api\Data\ContentIdentityInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\GetAssetIdsByContentIdentityInterface;
 use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
@@ -54,16 +59,29 @@ class SynchronizeIdentitiesTest extends TestCase
     }
 
     /**
-     * @dataProvider filesProvider
      * @magentoDataFixture Magento/MediaContentCms/_files/page_with_asset.php
      * @magentoDataFixture Magento/MediaContentCms/_files/block_with_asset.php
      * @magentoDataFixture Magento/MediaGallery/_files/media_asset.php
-     * @param ContentIdentityInterface[] $mediaContentIdentities
      * @throws IntegrationException
+     * @throws LocalizedException
      */
-    public function testExecute(array $mediaContentIdentities): void
+    public function testExecute(): void
     {
         $assetId = 2020;
+        $pageId = $this->getPage('fixture_page_with_asset')->getId();
+        $blockId = $this->getBlock('fixture_block_with_asset')->getId();
+        $mediaContentIdentities = [
+            [
+                'entityType' => 'cms_page',
+                'field' => 'content',
+                'entityId' => $pageId
+            ],
+            [
+                'entityType' => 'cms_block',
+                'field' => 'content',
+                'entityId' => $blockId
+            ]
+        ];
 
         $contentIdentities = [];
         foreach ($mediaContentIdentities as $mediaContentIdentity) {
@@ -82,6 +100,7 @@ class SynchronizeIdentitiesTest extends TestCase
 
         $entityIds = [];
         foreach ($contentIdentities as $contentIdentity) {
+            $this->assertEquals([$assetId], $this->getAssetIds->execute($contentIdentity));
             $entityIds[] = $contentIdentity->getEntityId();
         }
 
@@ -94,27 +113,46 @@ class SynchronizeIdentitiesTest extends TestCase
     }
 
     /**
-     * Data provider
+     * Get fixture block
      *
-     * @return array
+     * @param string $identifier
+     * @return BlockInterface
+     * @throws LocalizedException
      */
-    public function filesProvider(): array
+    private function getBlock(string $identifier): BlockInterface
     {
-        return [
-            [
-                [
-                    [
-                        'entityType' => 'cms_page',
-                        'field' => 'content',
-                        'entityId' => 5
-                    ],
-                    [
-                        'entityType' => 'cms_block',
-                        'field' => 'content',
-                        'entityId' => 1
-                    ]
-                ]
-            ]
-        ];
+        $objectManager = Bootstrap::getObjectManager();
+
+        /** @var BlockRepositoryInterface $blockRepository */
+        $blockRepository = $objectManager->get(BlockRepositoryInterface::class);
+
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
+        $searchCriteria = $searchCriteriaBuilder->addFilter(BlockInterface::IDENTIFIER, $identifier)
+            ->create();
+
+        return current($blockRepository->getList($searchCriteria)->getItems());
+    }
+
+    /**
+     * Get fixture page
+     *
+     * @param string $identifier
+     * @return PageInterface
+     * @throws LocalizedException
+     */
+    private function getPage(string $identifier): PageInterface
+    {
+        $objectManager = Bootstrap::getObjectManager();
+
+        /** @var PageRepositoryInterface $repository */
+        $repository = $objectManager->get(PageRepositoryInterface::class);
+
+        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
+        $searchCriteriaBuilder = $objectManager->get(SearchCriteriaBuilder::class);
+        $searchCriteria = $searchCriteriaBuilder->addFilter(PageInterface::IDENTIFIER, $identifier)
+            ->create();
+
+        return current($repository->getList($searchCriteria)->getItems());
     }
 }
