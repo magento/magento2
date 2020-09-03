@@ -5,12 +5,11 @@
  */
 declare(strict_types=1);
 
-namespace Magento\MediaGallerySynchronization\Model;
+namespace Magento\MediaGallerySynchronizationMetadata\Model;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\ReadInterface;
-use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaGalleryApi\Api\Data\AssetKeywordsInterfaceFactory;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterface;
 use Magento\MediaGalleryApi\Api\Data\KeywordInterfaceFactory;
@@ -22,17 +21,12 @@ use Magento\MediaGallerySynchronizationApi\Model\ImportFilesInterface;
 /**
  * import image keywords from file metadata
  */
-class ImportImageFileKeywords implements ImportFilesInterface
+class ImportKeywords implements ImportFilesInterface
 {
     /**
      * @var Filesystem
      */
     private $filesystem;
-
-    /**
-     * @var File
-     */
-    private $driver;
 
     /**
      * @var KeywordInterfaceFactory
@@ -60,7 +54,6 @@ class ImportImageFileKeywords implements ImportFilesInterface
     private $getAssetsByPaths;
 
     /**
-     * @param File $driver
      * @param Filesystem $filesystem
      * @param KeywordInterfaceFactory $keywordFactory
      * @param ExtractMetadataInterface $extractMetadata
@@ -69,7 +62,6 @@ class ImportImageFileKeywords implements ImportFilesInterface
      * @param GetAssetsByPathsInterface $getAssetsByPaths
      */
     public function __construct(
-        File $driver,
         Filesystem $filesystem,
         KeywordInterfaceFactory $keywordFactory,
         ExtractMetadataInterface $extractMetadata,
@@ -77,7 +69,6 @@ class ImportImageFileKeywords implements ImportFilesInterface
         AssetKeywordsInterfaceFactory $assetKeywordsFactory,
         GetAssetsByPathsInterface $getAssetsByPaths
     ) {
-        $this->driver = $driver;
         $this->filesystem = $filesystem;
         $this->keywordFactory = $keywordFactory;
         $this->extractMetadata = $extractMetadata;
@@ -123,6 +114,7 @@ class ImportImageFileKeywords implements ImportFilesInterface
     {
         $metadataKeywords = $this->extractMetadata->execute($this->getMediaDirectory()->getAbsolutePath($path))
             ->getKeywords();
+
         if ($metadataKeywords === null) {
             return null;
         }
