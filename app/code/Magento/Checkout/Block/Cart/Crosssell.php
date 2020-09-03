@@ -320,7 +320,7 @@ class Crosssell extends AbstractProduct
                 /* @var $quoteItem \Magento\Quote\Model\Quote\Item */
                 $product = $quoteItem->getProduct();
                 if ($product) {
-                    $this->cartProducts[$product->getEntityId()] = $product;
+                    $this->cartProducts[$product->getRowId()] = $product;
                 }
             }
         }
