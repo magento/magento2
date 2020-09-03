@@ -36,7 +36,7 @@ class StockItem
      * @param ConfigInterface $typeConfig
      * @param QuoteItemQtyList $quoteItemQtyList
      * @param StockStateInterface $stockState
-     * @param StockStateProviderInterface|null $stockStateProvider
+     * @param StockStateProviderInterface|null $stockStateProvider @deprecated
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
