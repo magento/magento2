@@ -13,14 +13,13 @@ use Magento\MediaContentApi\Api\Data\ContentIdentityInterfaceFactory;
 use Magento\MediaContentApi\Api\GetAssetIdsByContentIdentityInterface;
 use Magento\MediaContentApi\Api\GetContentByAssetIdsInterface;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizeIdentitiesInterface;
-use Magento\MediaContentSynchronizationApi\Api\SynchronizeInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 
 /**
  * Test for CMS SynchronizeIdentities.
  */
-class SynchronizeIdentitiesCmsTest extends TestCase
+class SynchronizeIdentitiesTest extends TestCase
 {
     private const ENTITY_TYPE = 'entityType';
     private const ENTITY_ID = 'entityId';
@@ -46,17 +45,11 @@ class SynchronizeIdentitiesCmsTest extends TestCase
      */
     private $synchronizeIdentities;
 
-    /**
-     * @var SynchronizeInterface
-     */
-    private $synchronize;
-
     protected function setUp(): void
     {
         $this->contentIdentityFactory = Bootstrap::getObjectManager()->get(ContentIdentityInterfaceFactory::class);
         $this->getAssetIds = Bootstrap::getObjectManager()->get(GetAssetIdsByContentIdentityInterface::class);
         $this->synchronizeIdentities = Bootstrap::getObjectManager()->get(SynchronizeIdentitiesInterface::class);
-        $this->synchronize = Bootstrap::getObjectManager()->get(SynchronizeInterface::class);
         $this->getContentIdentities = Bootstrap::getObjectManager()->get(GetContentByAssetIdsInterface::class);
     }
 
@@ -70,6 +63,8 @@ class SynchronizeIdentitiesCmsTest extends TestCase
      */
     public function testExecute(array $mediaContentIdentities): void
     {
+        $assetId = 2020;
+
         $contentIdentities = [];
         foreach ($mediaContentIdentities as $mediaContentIdentity) {
             $contentIdentities[] = $this->contentIdentityFactory->create(
@@ -82,12 +77,11 @@ class SynchronizeIdentitiesCmsTest extends TestCase
         }
 
         $this->assertNotEmpty($contentIdentities);
+        $this->assertEmpty($this->getContentIdentities->execute([$assetId]));
         $this->synchronizeIdentities->execute($contentIdentities);
 
-        $assetId = 2020;
         $entityIds = [];
         foreach ($contentIdentities as $contentIdentity) {
-            $this->assertEquals([$assetId], $this->getAssetIds->execute($contentIdentity));
             $entityIds[] = $contentIdentity->getEntityId();
         }
 
