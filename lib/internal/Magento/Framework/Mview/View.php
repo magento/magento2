@@ -10,6 +10,7 @@ namespace Magento\Framework\Mview;
 
 use InvalidArgumentException;
 use Magento\Framework\DataObject;
+use Magento\Framework\Mview\View\ChangeLogBatchIteratorInterface;
 use Magento\Framework\Mview\View\ChangelogTableNotExistsException;
 use Magento\Framework\Mview\View\SubscriptionFactory;
 use Exception;
@@ -68,6 +69,11 @@ class View extends DataObject implements ViewInterface
     private $changelogBatchSize;
 
     /**
+     * @var ChangeLogBatchIteratorInterface[]
+     */
+    private $strategies;
+
+    /**
      * @param ConfigInterface $config
      * @param ActionFactory $actionFactory
      * @param View\StateInterface $state
@@ -75,6 +81,7 @@ class View extends DataObject implements ViewInterface
      * @param SubscriptionFactory $subscriptionFactory
      * @param array $data
      * @param array $changelogBatchSize
+     * @param array $strategies
      */
     public function __construct(
         ConfigInterface $config,
@@ -83,7 +90,8 @@ class View extends DataObject implements ViewInterface
         View\ChangelogInterface $changelog,
         SubscriptionFactory $subscriptionFactory,
         array $data = [],
-        array $changelogBatchSize = []
+        array $changelogBatchSize = [],
+        array $strategies = []
     ) {
         $this->config = $config;
         $this->actionFactory = $actionFactory;
@@ -92,6 +100,7 @@ class View extends DataObject implements ViewInterface
         $this->subscriptionFactory = $subscriptionFactory;
         $this->changelogBatchSize = $changelogBatchSize;
         parent::__construct($data);
+        $this->strategies = $strategies;
     }
 
     /**
@@ -196,7 +205,7 @@ class View extends DataObject implements ViewInterface
      */
     public function subscribe()
     {
-        if ($this->getState()->getMode() !== View\StateInterface::MODE_ENABLED) {
+        //if ($this->getState()->getMode() !== View\StateInterface::MODE_ENABLED) {
             // Create changelog table
             $this->getChangelog()->create();
 
@@ -206,7 +215,7 @@ class View extends DataObject implements ViewInterface
 
             // Update view state
             $this->getState()->setMode(View\StateInterface::MODE_ENABLED)->save();
-        }
+       // }
 
         return $this;
     }
@@ -240,7 +249,7 @@ class View extends DataObject implements ViewInterface
      */
     public function update()
     {
-        if (!$this->isIdle() || !$this->isEnabled()) {
+        if (!$this->isEnabled()) {
             return;
         }
 
@@ -256,7 +265,7 @@ class View extends DataObject implements ViewInterface
         try {
             $this->getState()->setStatus(View\StateInterface::STATUS_WORKING)->save();
 
-            $this->executeAction($action, $lastVersionId, $currentVersionId);
+            $this->executeAction($action, 0, 1);
 
             $this->getState()->loadByView($this->getId());
             $statusToRestore = $this->getState()->getStatus() === View\StateInterface::STATUS_SUSPENDED
@@ -297,13 +306,24 @@ class View extends DataObject implements ViewInterface
 
         $vsFrom = $lastVersionId;
         while ($vsFrom < $currentVersionId) {
-            $ids = $this->getBatchOfIds($vsFrom, $currentVersionId);
-            // We run the actual indexer in batches.
-            // Chunked AFTER loading to avoid duplicates in separate chunks.
-            $chunks = array_chunk($ids, $batchSize);
-            foreach ($chunks as $ids) {
+            if (isset($this->strategies[$this->changelog->getViewId()])) {
+                $changelogData = [
+                    'name' => $this->changelog->getName(),
+                    'column_name' => $this->changelog->getColumnName(),
+                    'view_id' => $this->changelog->getViewId()
+                ];
+                $ids = $this->strategies[$this->changelog->getViewId()]->walk($changelogData, $vsFrom, $batchSize);
                 $action->execute($ids);
+            } else {
+                $ids = $this->getBatchOfIds($vsFrom, $currentVersionId);
+                // We run the actual indexer in batches.
+                // Chunked AFTER loading to avoid duplicates in separate chunks.
+                $chunks = array_chunk($ids, $batchSize);
+                foreach ($chunks as $ids) {
+                    $action->execute($ids);
+                }
             }
+
         }
     }
 
