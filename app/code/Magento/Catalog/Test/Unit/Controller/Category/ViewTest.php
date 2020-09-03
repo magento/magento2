@@ -210,7 +210,7 @@ class ViewTest extends TestCase
             $this->contextMock,
             $this->catalogDesignMock,
             $this->createMock(Session::class),
-            new Registry(),
+            $this->createMock(Registry::class),
             $this->storeManagerMock,
             $this->createMock(CategoryUrlPathGenerator::class),
             $resultPageFactoryMock,
