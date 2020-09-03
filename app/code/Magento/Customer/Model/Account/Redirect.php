@@ -24,6 +24,7 @@ use Magento\Framework\Stdlib\CookieManagerInterface;
  * Redirect for customer account
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Redirect
 {
