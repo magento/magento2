@@ -15,6 +15,7 @@
             <title value="Check notification message container"/>
             <description value="Check aria-atomic property on notification container message"/>
             <severity value="AVERAGE"/>
+            <testCaseId value="MC-37339"/>
             <group value="Theme"/>
         </annotations>
         <before>
