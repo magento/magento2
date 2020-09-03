@@ -12,6 +12,6 @@
         <element name="viewDetails" type="button" selector="[data-ui-id='action-image-details']"/>
         <element name="delete" type="button" selector="[data-ui-id='action-delete']"/>
         <element name="edit" type="button" selector="[data-ui-id='action-edit']"/>
-        <element name="imageInGrid" type="button" selector="//li[@data-ui-id='title'and text()='{{imageTitle}}']/parent::*/parent::*/parent::div//img[@class='media-gallery-image-column']" parameterized="true"/>
+        <element name="imageInGrid" type="text" selector="//div[@class='masonry-image-description']//ul[@class='media-gallery-image-details']//li[@class='name' and contains(text(), '{{title}}')]" parameterized="true"/>
     </section>
 </sections>

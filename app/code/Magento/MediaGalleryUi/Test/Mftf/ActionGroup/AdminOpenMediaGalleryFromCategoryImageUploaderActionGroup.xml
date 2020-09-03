@@ -16,6 +16,5 @@
         <waitForElementVisible selector="{{AdminCategoryContentSection.selectFromGalleryButton}}" stepKey="waitForSelectFromGallery" />
         <click selector="{{AdminCategoryContentSection.selectFromGalleryButton}}" stepKey="clickSelectFromGallery" />
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
     </actionGroup>
 </actionGroups>
