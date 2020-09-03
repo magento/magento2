@@ -8,9 +8,9 @@ declare(strict_types=1);
 namespace Magento\Framework\GraphQl\Config\Element;
 
 /**
- * Class representing 'type' GraphQL config element.
+ * Class representing 'union' GraphQL config element.
  */
-class Type implements TypeInterface
+class UnionType implements UnionInterface
 {
     /**
      * @var string
@@ -18,14 +18,14 @@ class Type implements TypeInterface
     private $name;
 
     /**
-     * @var Field[]
-     */
-    private $fields;
-
-    /**
      * @var string[]
      */
-    private $interfaces;
+    private $types;
+
+    /**
+     * @var string
+     */
+    private $typeResolver;
 
     /**
      * @var string
@@ -34,19 +34,19 @@ class Type implements TypeInterface
 
     /**
      * @param string $name
-     * @param Field[] $fields
-     * @param string[] $interfaces
+     * @param string $typeResolver
+     * @param string[] $types
      * @param string $description
      */
     public function __construct(
         string $name,
-        array $fields,
-        array $interfaces,
+        string $typeResolver,
+        array $types,
         string $description
     ) {
         $this->name = $name;
-        $this->fields = $fields;
-        $this->interfaces = $interfaces;
+        $this->types = $types;
+        $this->typeResolver = $typeResolver;
         $this->description = $description;
     }
 
@@ -55,7 +55,7 @@ class Type implements TypeInterface
      *
      * @return string
      */
-    public function getName() : string
+    public function getName(): string
     {
         return $this->name;
     }
@@ -63,29 +63,21 @@ class Type implements TypeInterface
     /**
      * Get a list of fields that make up the possible return or input values of a type.
      *
-     * @return Field[]
+     * @return string[]
      */
-    public function getFields() : array
+    public function getTypes(): array
     {
-        return $this->fields;
+        return $this->types;
     }
 
     /**
-     * Get interfaces the type implements, if any. Return an empty array if none are configured.
+     * Return the name of the resolver class that determines the concrete type to display in the result.
      *
-     * Example return array(
-     *     array(
-     *         'interface' => 'SomeDefinedTypeInterface',
-     *         'copyFields' => true
-     *     ),
-     *     ...
-     * ),
-     *
-     * @return array
+     * @return string
      */
-    public function getInterfaces() : array
+    public function getTypeResolver(): string
     {
-        return $this->interfaces;
+        return $this->typeResolver;
     }
 
     /**
@@ -93,7 +85,7 @@ class Type implements TypeInterface
      *
      * @return string
      */
-    public function getDescription() : string
+    public function getDescription(): string
     {
         return $this->description;
     }
