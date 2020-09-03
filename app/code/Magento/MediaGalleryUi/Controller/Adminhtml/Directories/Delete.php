@@ -30,7 +30,7 @@ class Delete extends Action implements HttpPostActionInterface
     /**
      * @see _isAllowed()
      */
-    public const ADMIN_RESOURCE = 'Magento_MediaGalleryApi::delete_folder';
+    public const ADMIN_RESOURCE = 'Magento_MediaGalleryUiApi::delete_folder';
 
     /**
      * @var DeleteAssetsByPathsInterface

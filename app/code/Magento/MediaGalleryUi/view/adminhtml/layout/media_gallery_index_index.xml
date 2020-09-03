@@ -11,7 +11,7 @@
         <block name="media.gallery.container"
                class="Magento\Backend\Block\Template"
                template="Magento_MediaGalleryUi::container.phtml"
-               aclResource="Magento_MediaGalleryApi::media_gallery">
+               aclResource="Magento_Cms::media_gallery">
             <container name="gallery.actions" htmlTag="div" htmlClass="page-main-actions">
                 <block name="page.actions.toolbar" template="Magento_Backend::pageactions.phtml"/>
             </container>

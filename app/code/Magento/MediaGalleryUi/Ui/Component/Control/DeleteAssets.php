@@ -13,7 +13,7 @@ use Magento\Framework\AuthorizationInterface;
  */
 class DeleteAssets implements ButtonProviderInterface
 {
-    private const ACL_DELETE_ASSETS= 'Magento_MediaGalleryApi::delete_assets';
+    private const ACL_DELETE_ASSETS= 'Magento_MediaGalleryUiApi::delete_assets';
 
     /**
      * @var AuthorizationInterface

@@ -13,7 +13,7 @@ use Magento\Framework\AuthorizationInterface;
  */
 class UploadAssets implements ButtonProviderInterface
 {
-    private const ACL_UPLOAD_ASSETS= 'Magento_MediaGalleryApi::upload_assets';
+    private const ACL_UPLOAD_ASSETS= 'Magento_MediaGalleryUiApi::upload_assets';
 
     /**
      * @var AuthorizationInterface

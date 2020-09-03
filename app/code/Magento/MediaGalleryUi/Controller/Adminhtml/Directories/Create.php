@@ -29,7 +29,7 @@ class Create extends Action implements HttpPostActionInterface
     /**
      * @see _isAllowed()
      */
-    public const ADMIN_RESOURCE = 'Magento_MediaGalleryApi::create_folder';
+    public const ADMIN_RESOURCE = 'Magento_MediaGalleryUiApi::create_folder';
 
     /**
      * @var CreateDirectoriesByPathsInterface

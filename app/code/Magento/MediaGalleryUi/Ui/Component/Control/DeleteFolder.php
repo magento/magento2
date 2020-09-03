@@ -13,7 +13,7 @@ use Magento\Framework\AuthorizationInterface;
  */
 class DeleteFolder implements ButtonProviderInterface
 {
-    private const ACL_DELETE_FOLDER = 'Magento_MediaGalleryApi::delete_folder';
+    private const ACL_DELETE_FOLDER = 'Magento_MediaGalleryUiApi::delete_folder';
 
     /**
      * @var AuthorizationInterface

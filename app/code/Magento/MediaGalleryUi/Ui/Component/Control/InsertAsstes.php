@@ -13,7 +13,7 @@ use Magento\Framework\AuthorizationInterface;
  */
 class InsertAsstes implements ButtonProviderInterface
 {
-    private const ACL_INSERT_ASSETS = 'Magento_MediaGalleryApi::insert_assets';
+    private const ACL_INSERT_ASSETS = 'Magento_MediaGalleryUiApi::insert_assets';
 
     /**
      * @var AuthorizationInterface

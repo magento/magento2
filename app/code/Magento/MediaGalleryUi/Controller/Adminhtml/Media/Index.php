@@ -21,7 +21,7 @@ use Magento\Backend\Model\View\Result\Forward;
  */
 class Index extends Action implements HttpGetActionInterface
 {
-    public const ADMIN_RESOURCE = 'Magento_MediaGalleryApi::media_gallery';
+    public const ADMIN_RESOURCE = 'Magento_Cms::media_gallery';
 
     /**
      * @var Config

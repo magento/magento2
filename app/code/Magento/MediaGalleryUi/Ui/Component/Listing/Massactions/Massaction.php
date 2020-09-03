@@ -17,7 +17,7 @@ use Magento\Framework\AuthorizationInterface;
 class Massaction extends Container
 {
     private const ACL_IMAGE_ACTIONS = [
-        'delete_assets' => 'Magento_MediaGalleryApi::delete_assets'
+        'delete_assets' => 'Magento_MediaGalleryUiApi::delete_assets'
     ];
 
     /**

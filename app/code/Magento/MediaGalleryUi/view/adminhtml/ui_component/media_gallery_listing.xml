@@ -40,7 +40,7 @@
             </storageConfig>
             <updateUrl path="mui/index/render"/>
         </settings>
-        <aclResource>Magento_MediaGalleryApi::media_gallery</aclResource>
+        <aclResource>Magento_Cms::media_gallery</aclResource>
         <dataProvider class="Magento\MediaGalleryUi\Model\Listing\DataProvider" name="media_gallery_listing_data_source">
             <settings>
                 <requestFieldName>id</requestFieldName>
