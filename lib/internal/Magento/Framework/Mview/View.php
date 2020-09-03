@@ -205,7 +205,7 @@ class View extends DataObject implements ViewInterface
      */
     public function subscribe()
     {
-        //if ($this->getState()->getMode() !== View\StateInterface::MODE_ENABLED) {
+        if ($this->getState()->getMode() !== View\StateInterface::MODE_ENABLED) {
             // Create changelog table
             $this->getChangelog()->create();
 
@@ -215,7 +215,7 @@ class View extends DataObject implements ViewInterface
 
             // Update view state
             $this->getState()->setMode(View\StateInterface::MODE_ENABLED)->save();
-       // }
+        }
 
         return $this;
     }
