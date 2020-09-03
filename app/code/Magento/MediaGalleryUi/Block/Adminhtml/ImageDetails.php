@@ -66,7 +66,7 @@ class ImageDetails extends Template
             ]
         ];
 
-        if ($this->authorization->isAllowed('MediaGalleryUiApi::edit_assets')) {
+        if ($this->authorization->isAllowed('Magento_MediaGalleryUiApi::edit_assets')) {
             $actions[] = [
                 'title' => __('Edit Details'),
                 'handler' => 'editImageAction',
@@ -75,7 +75,7 @@ class ImageDetails extends Template
             ];
         }
 
-        if ($this->authorization->isAllowed('MediaGalleryUiApi::delete_assets')) {
+        if ($this->authorization->isAllowed('Magento_MediaGalleryUiApi::delete_assets')) {
             $actions[] = [
                 'title' => __('Delete Image'),
                 'handler' => 'deleteImageAction',
@@ -84,7 +84,7 @@ class ImageDetails extends Template
             ];
         }
 
-        if ($this->authorization->isAllowed('MediaGalleryUiApi::insert_assets')) {
+        if ($this->authorization->isAllowed('Magento_MediaGalleryUiApi::insert_assets')) {
             $actions[] = [
                 'title' => __('Add Image'),
                 'handler' => 'addImage',
