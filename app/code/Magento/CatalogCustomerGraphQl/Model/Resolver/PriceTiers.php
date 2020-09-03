@@ -153,8 +153,8 @@ class PriceTiers implements ResolverInterface
      *
      * @param float $productPrice
      * @param StoreInterface $store
-     * @param $tierPrice
-     * @param $tiers
+     * @param ProductTierPriceInterface $tierPrice
+     * @param array $tiers
      */
     private function formatProductTierPrices(float $productPrice, StoreInterface $store, &$tierPrice, &$tiers)
     {
