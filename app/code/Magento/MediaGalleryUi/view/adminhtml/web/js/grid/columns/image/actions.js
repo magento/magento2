@@ -55,7 +55,11 @@ define([
             this._super();
             this.initEvents();
 
-            if (!this.allowedActions.includes('delete_assets')) {
+            this.actionsList = this.actionsList.filter(function(item) {
+                return this.allowedActions.includes(item.name);
+            }.bind(this));
+
+            if (!this.allowedActions.includes('delete')) {
                 $.async('.media-gallery-delete-assets', function () {
                     $('.media-gallery-delete-assets').unbind('click').addClass('action-disabled');
                 });

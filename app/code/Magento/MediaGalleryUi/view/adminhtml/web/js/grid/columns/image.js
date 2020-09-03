@@ -228,11 +228,11 @@ define([
                 return;
             }
 
-            if (this.allowedActions.includes('insert_assets')) {
+            if (this.allowedActions.includes('insert')) {
                 $(this.addSelectedBtnSelector).removeClass('no-display');
             }
 
-            if (this.allowedActions.includes('delete_assets')) {
+            if (this.allowedActions.includes('delete')) {
                 $(this.deleteSelectedBtnSelector).removeClass('no-display');
             }
         },
