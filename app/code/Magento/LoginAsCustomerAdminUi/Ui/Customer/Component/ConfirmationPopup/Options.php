@@ -117,6 +117,7 @@ class Options implements OptionSourceInterface
 
     /**
      * @inheritdoc
+     *
      * @throws LocalizedException
      */
     public function toOptionArray(): array
