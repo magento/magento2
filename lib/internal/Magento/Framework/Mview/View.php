@@ -265,7 +265,7 @@ class View extends DataObject implements ViewInterface
         try {
             $this->getState()->setStatus(View\StateInterface::STATUS_WORKING)->save();
 
-            $this->executeAction($action, 0, 1);
+            $this->executeAction($action, $lastVersionId, $currentVersionId);
 
             $this->getState()->loadByView($this->getId());
             $statusToRestore = $this->getState()->getStatus() === View\StateInterface::STATUS_SUSPENDED
