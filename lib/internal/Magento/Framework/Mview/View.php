@@ -249,7 +249,7 @@ class View extends DataObject implements ViewInterface
      */
     public function update()
     {
-        if (!$this->isEnabled()) {
+        if (!$this->isIdle() || !$this->isEnabled()) {
             return;
         }
 
