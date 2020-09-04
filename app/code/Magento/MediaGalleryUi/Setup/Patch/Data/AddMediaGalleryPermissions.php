@@ -78,12 +78,14 @@ class AddMediaGalleryPermissions implements
                 ];
             }
         }
+
+        return $data;
     }
 
     /**
      * @inheritdoc
      */
-    public function getAliases()
+    public function getAliases(): array
     {
         return [];
     }
@@ -91,7 +93,7 @@ class AddMediaGalleryPermissions implements
     /**
      * @inheritdoc
      */
-    public static function getDependencies()
+    public static function getDependencies(): array
     {
         return [];
     }
@@ -99,7 +101,7 @@ class AddMediaGalleryPermissions implements
     /**
      * @inheritdoc
      */
-    public static function getVersion()
+    public static function getVersion(): string
     {
         return '2.4.2';
     }
