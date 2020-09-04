@@ -13,7 +13,8 @@
             <stories value="Save settings 'Access Token Expiration'."/>
             <title value="Save settings 'Access Token Expiration' with empty values."/>
             <description value="Save settings 'Customer Token Lifetime' and 'Admin Token Lifetime' with empty values without validations."/>
-            <severity value="MINOR"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-37382"/>
             <group value="configuration"/>
         </annotations>
         <before>
