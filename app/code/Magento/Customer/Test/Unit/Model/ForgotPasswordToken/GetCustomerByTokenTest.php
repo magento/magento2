@@ -27,7 +27,7 @@ class GetCustomerByTokenTest extends TestCase
 {
     private const EXPECTED_CUSTOMER_ID = 42;
     private const OTHER_CUSTOMER_ID = 64;
-    const MOCKED_TOKEN = 'mocked-token-42';
+    private const MOCKED_TOKEN = 'mocked-token-42';
 
     /**
      * @var CustomerRepositoryInterface|MockObject
