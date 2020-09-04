@@ -123,9 +123,10 @@ class Observer
                     true
                 );
                 $sitemap->generateXml();
-                $this->appEmulation->stopEnvironmentEmulation();
             } catch (\Exception $e) {
                 $errors[] = $e->getMessage();
+            } finally {
+                $this->appEmulation->stopEnvironmentEmulation();
             }
         }
         if ($errors && $recipient) {
