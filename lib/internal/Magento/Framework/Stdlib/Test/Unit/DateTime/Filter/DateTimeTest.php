@@ -7,35 +7,65 @@ declare(strict_types=1);
 
 namespace Magento\Framework\Stdlib\Test\Unit\DateTime\Filter;
 
+use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime\Filter\DateTime;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
 class DateTimeTest extends TestCase
 {
     /**
+     * @var DateTime
+     */
+    protected $model;
+
+    /**
+     * @var TimezoneInterface|MockObject
+     */
+    protected $localeDateMock;
+
+    /**
+     * @var ResolverInterface|MockObject
+     */
+    protected $localeResolverMock;
+
+    protected function setUp(): void
+    {
+        $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->localeResolverMock = $this->getMockForAbstractClass(ResolverInterface::class);
+        $this->localeResolverMock->expects($this->any())->method('getLocale')->willReturn('en_US');
+
+        $objectManager = new ObjectManager($this);
+        $this->model = $objectManager->getObject(
+            DateTime::class,
+            [
+                'localeDate' => $this->localeDateMock,
+                'localeResolver' => $this->localeResolverMock
+            ]
+        );
+    }
+
+    /**
      * @param string $inputData
      * @param string $expectedDate
-     *
      * @dataProvider dateTimeFilterDataProvider
      */
     public function testFilter($inputData, $expectedDate)
     {
-        $localeMock = $this->getMockForAbstractClass(TimezoneInterface::class);
-        $localeMock->expects(
-            $this->once()
-        )->method(
-            'getDateTimeFormat'
-        )->with(
-            \IntlDateFormatter::SHORT
-        )->willReturn(
-            'HH:mm:ss MM-dd-yyyy'
-        );
+        $this->localeDateMock->expects($this->once())
+            ->method('formatDateTime')
+            ->with(
+                $inputData,
+                \IntlDateFormatter::SHORT,
+                \IntlDateFormatter::SHORT,
+                'en_US'
+            )->willReturn($inputData);
 
-        $model = new DateTime($localeMock);
-        $localeMock->expects($this->once())->method('date')->willReturn(new \DateTime($inputData));
+        $this->localeDateMock->expects($this->once())->method('date')->willReturn(new \DateTime($inputData));
 
-        $this->assertEquals($expectedDate, $model->filter($inputData));
+        $this->assertEquals($expectedDate, $this->model->filter($inputData));
     }
 
     /**
@@ -57,21 +87,8 @@ class DateTimeTest extends TestCase
     public function testFilterWithException($inputData)
     {
         $this->expectException('\Exception');
-
-        $localeMock = $this->getMockForAbstractClass(TimezoneInterface::class);
-        $localeMock->expects(
-            $this->once()
-        )->method(
-            'getDateFormat'
-        )->with(
-            \IntlDateFormatter::SHORT
-        )->willReturn(
-            'MM-dd-yyyy'
-        );
-        $model = new DateTime($localeMock);
-
-        $localeMock->expects($this->any())->method('date')->willReturn(new \DateTime($inputData));
-        $model->filter($inputData);
+        $this->localeDateMock->expects($this->any())->method('date')->willReturn(new \DateTime($inputData));
+        $this->model->filter($inputData);
     }
 
     /**
