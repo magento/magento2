@@ -10,35 +10,35 @@ namespace Magento\Captcha\Model\Filter;
 use Magento\Captcha\Api\CaptchaConfigPostProcessorInterface;
 
 /**
- * Composite filter class for filtering configuration
+ * Composite class for post processing captcha configuration
  */
 class CaptchaConfigPostProcessorComposite implements CaptchaConfigPostProcessorInterface
 {
     /**
-     * @var CaptchaConfigPostProcessorInterface[] $filters
+     * @var CaptchaConfigPostProcessorInterface[] $processors
      */
-    private $filters = [];
+    private $processors = [];
 
     /**
-     * @param CaptchaConfigPostProcessorInterface[] $filters
+     * @param CaptchaConfigPostProcessorInterface[] $processors
      */
     public function __construct(
-        $filters = []
+        $processors = []
     ) {
-        $this->filters = $filters;
+        $this->processors = $processors;
     }
 
     /**
-     * Loops through all leafs of the composite and calls filter method
+     * Loops through all leafs of the composite and calls process method
      *
      * @param array $config
      * @return array
      */
-    public function filter(array $config): array
+    public function process(array $config): array
     {
         $result = [];
-        foreach ($this->filters as $filter) {
-            $result = array_merge_recursive($result, $filter->filter($config));
+        foreach ($this->processors as $processor) {
+            $result = array_merge_recursive($result, $processor->process($config));
         }
         return $result;
     }

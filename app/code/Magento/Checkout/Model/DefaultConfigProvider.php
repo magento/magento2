@@ -361,7 +361,7 @@ class DefaultConfigProvider implements ConfigProviderInterface
         $output['paymentMethods'] = $this->getPaymentMethods();
         $output['autocomplete'] = $this->isAutocompleteEnabled();
         $output['displayBillingOnPaymentMethod'] = $this->checkoutHelper->isDisplayBillingOnPaymentMethodAvailable();
-        return $this->configPostProcessor->filter($output);
+        return $this->configPostProcessor->process($output);
     }
 
     /**

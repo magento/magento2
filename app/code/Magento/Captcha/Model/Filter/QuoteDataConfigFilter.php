@@ -34,7 +34,7 @@ class QuoteDataConfigFilter implements CaptchaConfigPostProcessorInterface
      * @param array $config
      * @return array
      */
-    public function filter(array $config): array
+    public function process(array $config): array
     {
         foreach ($this->filterList as $filterKey) {
             /** @var string $filterKey */

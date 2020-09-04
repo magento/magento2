@@ -43,11 +43,11 @@ class QuoteDataConfigFilterTest extends TestCase
     }
 
     /**
-     * Test Filter method
+     * Test Process method
      *
      * @return void
      */
-    public function testFilter(): void
+    public function testProcess(): void
     {
         $config = [
             'quoteData' =>
@@ -65,6 +65,6 @@ class QuoteDataConfigFilterTest extends TestCase
                 ]
         ];
 
-        $this->assertEquals($expected, $this->model->filter($config));
+        $this->assertEquals($expected, $this->model->process($config));
     }
 }

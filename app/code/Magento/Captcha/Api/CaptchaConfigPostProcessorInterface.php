@@ -8,7 +8,7 @@ declare(strict_types=1);
 namespace Magento\Captcha\Api;
 
 /**
- * Interface contains methods for post processing and filtering config based on a list
+ * Interface contains methods for post processing and filtering client-side CAPTCHA config based on a list
  */
 interface CaptchaConfigPostProcessorInterface
 {
@@ -18,5 +18,5 @@ interface CaptchaConfigPostProcessorInterface
      * @param array $config
      * @return array
      */
-    public function filter(array $config): array;
+    public function process(array $config): array;
 }
