@@ -310,10 +310,14 @@ class Widget
     {
         $widget = $this->getConfigAsObject($type);
 
+        $params = array_filter($params, function ($value) {
+            return $value !== null;
+        });
+
         $directiveParams = '';
         foreach ($params as $name => $value) {
             // Retrieve default option value if pre-configured
-            $directiveParams .= $value === null ? '' : $this->getDirectiveParam($widget, $name, $value);
+            $directiveParams .= $this->getDirectiveParam($widget, $name, $value);
         }
 
         $directive = sprintf('{{widget type="%s"%s%s}}', $type, $directiveParams, $this->getWidgetPageVarName($params));
