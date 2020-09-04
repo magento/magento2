@@ -15,6 +15,6 @@
             <argument name="filterPlaceholder" type="string"/>
         </arguments>
 
-        <see selector="{{AdminProductGridFilterSection.enabledFilters}}" userInput="SKU: {{filterPlaceholder}}" stepKey="seeFilter"/>
+        <see selector="{{AdminProductGridFilterSection.enabledFilters}}" userInput="{{filterPlaceholder}}" stepKey="seeFilter"/>
     </actionGroup>
 </actionGroups>
