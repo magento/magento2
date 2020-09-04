@@ -775,7 +775,7 @@ class DefaultPrice extends AbstractIndexer implements PriceInterface
         $select = $connection->select()->from($table, $columns);
 
         if ($entityIds !== null) {
-            $select->where('entity_id in (?)', count($entityIds) > 0 ? $entityIds : 0);
+            $select->where('entity_id in (?)', count($entityIds) > 0 ? $entityIds : 0, \Zend_Db::INT_TYPE);
         }
 
         $query = $select->insertFromSelect($this->getIdxTable(), [], false);

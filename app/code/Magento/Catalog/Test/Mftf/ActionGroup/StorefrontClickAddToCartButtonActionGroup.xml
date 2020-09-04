@@ -5,14 +5,14 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenCreateNewCMSPageActionGroup">
+    <actionGroup name="StorefrontClickAddToCartButtonActionGroup">
         <annotations>
-            <description>Open create new CMS Page.</description>
+            <description>Click "Add to Cart" button.</description>
         </annotations>
-
-        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToCreateNewPage"/>
-        <waitForPageLoad stepKey="waitForNewPagePageLoad"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addToCart"/>
+        <waitForPageLoad stepKey="waitAddToCart"/>
     </actionGroup>
 </actionGroups>
