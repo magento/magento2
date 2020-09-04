@@ -12,6 +12,11 @@
             <description>Assert category grid page products, in menu, and enabled column values for a specific category</description>
         </annotations>
 
+        <grabTextFrom selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.columnValue('Display Mode')}}" stepKey="grabDisplayModeColumnValue"/>
+        <assertEquals stepKey="assertDisplayModeColumn">
+            <expectedResult type="string">PRODUCTS</expectedResult>
+            <actualResult type="variable">grabDisplayModeColumnValue</actualResult>
+        </assertEquals>
         <grabTextFrom selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.columnValue('Products')}}" stepKey="grabProductsColumnValue"/>
         <assertEquals stepKey="assertProductsColumn">
             <expectedResult type="string">0</expectedResult>

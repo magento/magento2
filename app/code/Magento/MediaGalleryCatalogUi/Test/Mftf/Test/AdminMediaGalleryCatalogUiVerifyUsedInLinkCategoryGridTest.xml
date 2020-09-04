@@ -19,7 +19,7 @@
             <group value="media_gallery_ui"/>
         </annotations>
         <before>
-            <createData entity="SimpleSubCategory" stepKey="category"/>
+            <createData entity="TestSubCategory" stepKey="category"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
