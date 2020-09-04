@@ -5,10 +5,14 @@
  */
 namespace Magento\Sitemap\Model;
 
+use Exception;
 use Magento\Sitemap\Model\EmailNotification as SitemapEmail;
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Sitemap\Model\ResourceModel\Sitemap\Collection;
 use Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory;
+use Magento\Store\Model\App\Emulation;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Framework\App\Area;
 
 /**
  * Sitemap module observer
@@ -47,12 +51,12 @@ class Observer
     /**
      * Core store config
      *
-     * @var \Magento\Framework\App\Config\ScopeConfigInterface
+     * @var ScopeConfigInterface
      */
     private $scopeConfig;
 
     /**
-     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory
+     * @var CollectionFactory
      */
     private $collectionFactory;
 
@@ -62,26 +66,36 @@ class Observer
     private $emailNotification;
 
     /**
+     * @var Emulation
+     */
+    private $appEmulation;
+
+    /**
      * Observer constructor.
      * @param ScopeConfigInterface $scopeConfig
      * @param CollectionFactory $collectionFactory
      * @param EmailNotification $emailNotification
+     * @param Emulation $appEmulation
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,
         CollectionFactory $collectionFactory,
-        SitemapEmail $emailNotification
+        SitemapEmail $emailNotification,
+        Emulation $appEmulation
+
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->collectionFactory = $collectionFactory;
         $this->emailNotification = $emailNotification;
+        $this->appEmulation = $appEmulation;
+
     }
 
     /**
      * Generate sitemaps
      *
      * @return void
-     * @throws \Exception
+     * @throws Exception
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function scheduledGenerateSitemaps()
@@ -101,12 +115,18 @@ class Observer
         }
 
         $collection = $this->collectionFactory->create();
-        /* @var $collection \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection */
+        /* @var $collection Collection */
         foreach ($collection as $sitemap) {
-            /* @var $sitemap \Magento\Sitemap\Model\Sitemap */
+            /* @var $sitemap Sitemap */
             try {
+                $this->appEmulation->startEnvironmentEmulation(
+                    $sitemap->getStoreId(),
+                    Area::AREA_FRONTEND,
+                    true
+                );
                 $sitemap->generateXml();
-            } catch (\Exception $e) {
+                $this->appEmulation->stopEnvironmentEmulation();
+            } catch (Exception $e) {
                 $errors[] = $e->getMessage();
             }
         }
