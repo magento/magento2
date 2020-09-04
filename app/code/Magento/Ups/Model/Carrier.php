@@ -1538,7 +1538,7 @@ XMLAuth;
             }
         }
 
-        if (isset($deliveryConfirmation) && $deliveryConfirmationLevel === self::DELIVERY_CONFIRMATION_SHIPMENT) {
+        if (!empty($deliveryConfirmation) && $deliveryConfirmationLevel === self::DELIVERY_CONFIRMATION_SHIPMENT) {
             $serviceOptionsNode = $shipmentPart->addChild('ShipmentServiceOptions');
             $serviceOptionsNode->addChild(
                 'DeliveryConfirmation'
