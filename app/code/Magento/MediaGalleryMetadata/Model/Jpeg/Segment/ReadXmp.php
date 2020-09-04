@@ -54,9 +54,9 @@ class ReadXmp implements ReadMetadataInterface
             }
         }
         return $this->metadataFactory->create([
-            'title' => '',
-            'description' => '',
-            'keywords' => []
+            'title' => null,
+            'description' => null,
+            'keywords' => null
         ]);
     }
 

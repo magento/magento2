@@ -60,4 +60,11 @@
             </argument>
         </arguments>
     </type>
+    <type name="Magento\WishlistGraphQl\Model\Resolver\Type\WishlistItemType">
+        <arguments>
+            <argument name="supportedTypes" xsi:type="array">
+                <item name="downloadable" xsi:type="string">DownloadableWishlistItem</item>
+            </argument>
+        </arguments>
+    </type>
 </config>
