@@ -6,12 +6,12 @@
 namespace Magento\Framework\Code\Generator;
 
 /**
- * Interface method generator.
+ * Interface method code generator
  */
-class InterfaceMethodGenerator extends \Zend\Code\Generator\MethodGenerator
+class InterfaceMethodGenerator extends \Laminas\Code\Generator\MethodGenerator
 {
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     public function generate()
     {

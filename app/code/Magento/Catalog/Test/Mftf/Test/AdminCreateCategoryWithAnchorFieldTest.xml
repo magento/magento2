@@ -18,7 +18,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminPanel"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminPanel"/>
             <createData entity="_defaultBlock" stepKey="createDefaultCMSBlock"/>
             <createData entity="defaultSimpleProduct" stepKey="simpleProduct" />
         </before>
@@ -29,8 +29,7 @@
             <deleteData stepKey="deleteSimpleProduct" createDataKey="simpleProduct"/>
         </after>
         <!--Create  SubCategory-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="openAdminCategoryIndexPage"/>
-        <waitForPageLoad stepKey="waitForPageToLoaded"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
         <click selector="{{AdminCategorySidebarActionSection.AddSubcategoryButton}}" stepKey="clickOnAddSubCategoryButton"/>
         <fillField selector="{{AdminCategoryBasicFieldSection.CategoryNameInput}}" userInput="{{_defaultCategory.name}}" stepKey="fillCategoryName"/>
         <checkOption selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="enableCategory"/>
@@ -58,9 +57,8 @@
         <fillField selector="{{AdminCategoryContentSection.productTableColumnName}}" userInput="$$simpleProduct.name$$"  stepKey="selectProduct"/>
         <click selector="{{AdminCategoryContentSection.productSearch}}" stepKey="clickSearchButton"/>
         <click selector="{{AdminCategoryContentSection.productTableRow}}" stepKey="selectProductFromTableRow"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForCategorySaved"/>
-        <see selector="{{AdminCategoryMessagesSection.SuccessMessage}}" userInput="You saved the category." stepKey="assertSuccessMessage"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
         <waitForPageLoad stepKey="waitForPageTitleToBeSaved"/>
         <!--Verify the Category Title-->
         <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seePageTitle" />
@@ -73,8 +71,12 @@
         </actionGroup>
 
         <!--Clear cache and reindex-->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
         <!--Verify Product in store front page-->
         <amOnPage url="{{StorefrontCategoryPage.url(_defaultCategory.name_lwr)}}"  stepKey="amOnCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageToBeLoaded"/>

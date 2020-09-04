@@ -5,6 +5,9 @@
  */
 namespace Magento\Indexer\Block\Backend\Grid\Column\Renderer;
 
+/**
+ * Renderer for 'Updated' column in indexer grid
+ */
 class Updated extends \Magento\Backend\Block\Widget\Grid\Column\Renderer\Datetime
 {
     /**

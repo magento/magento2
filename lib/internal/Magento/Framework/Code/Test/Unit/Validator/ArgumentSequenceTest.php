@@ -5,11 +5,15 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Validator;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Code\Validator\ArgumentSequence;
+use Magento\Framework\Exception\ValidatorException;
+
 require_once '_files/ClassesForArgumentSequence.php';
-class ArgumentSequenceTest extends \PHPUnit\Framework\TestCase
+class ArgumentSequenceTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Code\Validator\ArgumentSequence
+     * @var ArgumentSequence
      */
     protected $_validator;
 
@@ -18,11 +22,11 @@ class ArgumentSequenceTest extends \PHPUnit\Framework\TestCase
      */
     protected $_fixturePath;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $path = realpath(__DIR__) . '/_files/ClassesForArgumentSequence.php';
         $this->_fixturePath = str_replace('\\', '/', $path);
-        $this->_validator = new \Magento\Framework\Code\Validator\ArgumentSequence();
+        $this->_validator = new ArgumentSequence();
 
         /** Build internal cache */
         $this->_validator->validate('\ArgumentSequence\ParentClass');
@@ -51,7 +55,7 @@ class ArgumentSequenceTest extends \PHPUnit\Framework\TestCase
             'Actual  : %s' .
             PHP_EOL;
         $message = sprintf($message, '\ArgumentSequence\InvalidChildClass', $expectedSequence, $actualSequence);
-        $this->expectException(\Magento\Framework\Exception\ValidatorException::class);
+        $this->expectException(ValidatorException::class);
         $this->expectExceptionMessage($message);
         $this->_validator->validate('\ArgumentSequence\InvalidChildClass');
     }

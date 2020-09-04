@@ -13,13 +13,13 @@
             <stories value="Delete product attributes"/>
             <title value="Delete Product Attribute, Dropdown Type, from Attribute Set"/>
             <description value="Login as admin and delete dropdown type product attribute from attribute set"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-10885"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!-- Create Dropdown Product Attribute -->
             <createData entity="productDropDownAttribute" stepKey="attribute"/>
             <!-- Create Attribute set -->
@@ -31,7 +31,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!-- Open Product Attribute Set Page -->
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>

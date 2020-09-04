@@ -10,6 +10,7 @@
     <test name="StoreFrontSimpleProductWithSpecialAndTierDiscountPriceTest">
         <annotations>
             <features value="Catalog"/>
+            <stories value="Apply discount tier price and custom price values for simple product"/>
             <title value="Apply discount tier price and custom price values for simple product"/>
             <description value="Apply discount tier price and custom price values for simple product"/>
             <severity value="MAJOR"/>
@@ -32,9 +33,9 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
         </after>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
 
-        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="openAdminProductEditPage">
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openAdminProductEditPage">
             <argument name="productId" value="$createProduct.id$"/>
         </actionGroup>
 

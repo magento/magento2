@@ -3,27 +3,32 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Integration\Test\Unit\Controller\Adminhtml\Integration;
 
-use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
-use Magento\Integration\Model\Integration as IntegrationModel;
+use Magento\Backend\Model\View\Result\Redirect;
+use Magento\Framework\Controller\ResultFactory;
 use Magento\Framework\Exception\IntegrationException;
+use Magento\Integration\Block\Adminhtml\Integration\Edit\Tab\Info;
+use Magento\Integration\Controller\Adminhtml\Integration\Delete;
+use Magento\Integration\Model\Integration as IntegrationModel;
+use Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest;
 
-class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\IntegrationTest
+class DeleteTest extends IntegrationTest
 {
     /**
-     * @var \Magento\Integration\Controller\Adminhtml\Integration\Delete
+     * @var Delete
      */
     protected $integrationController;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
         $this->integrationController = $this->_createIntegrationController('Delete');
 
-        $resultRedirect = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
+        $resultRedirect = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
         $resultRedirect->expects($this->any())
@@ -33,7 +38,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
 
         $this->resultFactory->expects($this->any())
             ->method('create')
-            ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
+            ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($resultRedirect);
     }
 
@@ -179,7 +184,7 @@ class DeleteTest extends \Magento\Integration\Test\Unit\Controller\Adminhtml\Int
         // Use real translate model
         $this->_translateModelMock = null;
         $exceptionMessage = __('The integration with ID "%1" doesn\'t exist.', $intData[Info::DATA_ID]);
-        $invalidIdException = new \Exception($exceptionMessage);
+        $invalidIdException = new \Exception($exceptionMessage->getText());
         $this->_integrationSvcMock->expects($this->once())
             ->method('delete')
             ->willThrowException($invalidIdException);

@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="PayPalExpressCheckoutConfigSection">
+        <element name="configureBtn" type="button" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}-head" parameterized="true"/>
+        <element name="email" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_express_checkout_required_express_checkout_business_account" parameterized="true"/>
+        <element name="apiMethod" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_express_checkout_required_express_checkout_api_authentication" parameterized="true"/>
+        <element name="username" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_express_checkout_required_express_checkout_api_username" parameterized="true"/>
+        <element name="password" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_express_checkout_required_express_checkout_api_password" parameterized="true"/>
+        <element name="signature" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_express_checkout_required_express_checkout_api_signature" parameterized="true"/>
+        <element name="sandboxMode" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_express_checkout_required_express_checkout_sandbox_flag" parameterized="true"/>
+        <element name="enableSolution" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_enable_express_checkout" parameterized="true"/>
+        <element name="merchantID" type="input" selector="#payment_{{countryCode}}_paypal_alternative_payment_methods_express_checkout_{{countryCode}}_express_checkout_required_merchant_id" parameterized="true"/>
+    </section>
+</sections>

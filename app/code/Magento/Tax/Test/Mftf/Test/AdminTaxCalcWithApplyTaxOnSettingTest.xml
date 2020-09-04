@@ -69,12 +69,18 @@
         <click selector="{{AdminOrderFormPaymentSection.getShippingMethods}}" stepKey="getShippingMethods"/>
         <waitForPageLoad stepKey="waitForApplyingShippingMethods"/>
         <grabTextFrom selector="{{AdminOrderFormTotalSection.subtotalRow('3')}}" stepKey="grabTaxCost"/>
-        <assertEquals expected='$6.00' expectedType="string" actual="($grabTaxCost)" stepKey="assertTax"/>
+        <assertEquals stepKey="assertTax">
+			<actualResult type="const">($grabTaxCost)</actualResult>
+			<expectedResult type="string">$6.00</expectedResult>
+        </assertEquals>
         <scrollTo selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="scrollToSubmitButton"/>
         <waitForElementVisible selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="waitElementToBeVisble"/>
         <click selector="{{AdminOrderFormItemsSection.customPriceCheckbox}}" stepKey="clickOnCustomPriceCheckbox"/>
         <fillField selector="{{AdminOrderFormItemsSection.customPriceField}}" userInput="{{SimpleProductNameWithDoubleQuote.price}}" stepKey="changePrice"/>
         <click selector="{{AdminOrderFormItemsSection.updateItemsAndQuantities}}" stepKey="updateItemsAndQunatities"/>
-        <assertEquals expected='$6.00' expectedType="string" actual="($grabTaxCost)" stepKey="assertTaxAfterCustomPrice"/>
+        <assertEquals stepKey="assertTaxAfterCustomPrice">
+			<actualResult type="const">($grabTaxCost)</actualResult>
+			<expectedResult type="string">$6.00</expectedResult>
+        </assertEquals>
     </test>
 </tests>

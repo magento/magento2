@@ -17,6 +17,9 @@ use Magento\Elasticsearch6\Model\Client\Elasticsearch as ElasticsearchClient;
 use Magento\Elasticsearch\Model\Config;
 use Magento\Elasticsearch\SearchAdapter\SearchIndexNameResolver;
 use Magento\Indexer\Model\Indexer;
+use Magento\Framework\Search\EngineResolverInterface;
+use Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Important: Please make sure that each integration test file works with unique elastic search index. In order to
@@ -27,8 +30,13 @@ use Magento\Indexer\Model\Indexer;
  * @magentoDataFixture Magento/Elasticsearch/_files/indexer.php
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class IndexHandlerTest extends \PHPUnit\Framework\TestCase
+class IndexHandlerTest extends TestCase
 {
+    /**
+     * @var string
+     */
+    private $searchEngine;
+
     /**
      * @var ProductRepositoryInterface
      */
@@ -67,7 +75,7 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * {@inheritdoc}
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $connectionManager = Bootstrap::getObjectManager()->create(ConnectionManager::class);
         $this->client = $connectionManager->getConnection();
@@ -87,7 +95,15 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
+     * Make sure that correct engine is set
+     */
+    protected function assertPreConditions(): void
+    {
+        $currentEngine = Bootstrap::getObjectManager()->get(EngineResolverInterface::class)->getCurrentSearchEngine();
+        $this->assertEquals($this->getInstalledSearchEngine(), $currentEngine);
+    }
+
+    /**
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      * @return void
      */
@@ -101,12 +117,14 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
 
             $products = $this->searchByName('Simple Product', $storeId);
             $this->assertCount(5, $products);
+
+            $this->assertCount(2, $this->searchByBoolAttribute(0, $storeId));
+            $this->assertCount(3, $this->searchByBoolAttribute(1, $storeId));
         }
     }
 
     /**
      * @magentoAppIsolation enabled
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      * @return void
      */
@@ -131,7 +149,6 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      * @return void
      */
@@ -170,7 +187,6 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      * @magentoAppArea adminhtml
      * @return void
@@ -192,7 +208,6 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @magentoDbIsolation enabled
      * @magentoAppArea adminhtml
-     * @magentoConfigFixture default/catalog/search/engine elasticsearch6
      * @magentoConfigFixture current_store catalog/search/elasticsearch_index_prefix indexerhandlertest
      * @magentoDataFixture Magento/Elasticsearch/_files/configurable_products.php
      * @return void
@@ -253,5 +268,46 @@ class IndexHandlerTest extends \PHPUnit\Framework\TestCase
         $products = isset($queryResult['hits']['hits']) ? $queryResult['hits']['hits'] : [];
 
         return $products;
+    }
+
+    /**
+     * Search docs in Elasticsearch by boolean attribute.
+     *
+     * @param int $value
+     * @param int $storeId
+     * @return array
+     */
+    private function searchByBoolAttribute(int $value, int $storeId): array
+    {
+        $index = $this->searchIndexNameResolver->getIndexName($storeId, $this->indexer->getId());
+        $searchQuery = [
+            'index' => $index,
+            'type' => $this->entityType,
+            'body' => [
+                'query' => [
+                    'query_string' => [
+                        'query' => $value,
+                        'default_field' => 'boolean_attribute',
+                    ],
+                ],
+            ],
+        ];
+        $queryResult = $this->client->query($searchQuery);
+        return isset($queryResult['hits']['hits']) ? $queryResult['hits']['hits'] : [];
+    }
+
+    /**
+     * Returns installed on server search service
+     *
+     * @return string
+     */
+    private function getInstalledSearchEngine()
+    {
+        if (!$this->searchEngine) {
+            // phpstan:ignore "Class Magento\TestModuleCatalogSearch\Model\ElasticsearchVersionChecker not found."
+            $version = Bootstrap::getObjectManager()->get(ElasticsearchVersionChecker::class)->getVersion();
+            $this->searchEngine = 'elasticsearch' . $version;
+        }
+        return $this->searchEngine;
     }
 }

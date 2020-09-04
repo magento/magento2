@@ -25,12 +25,11 @@
         </after>
 
         <!--Login to Admin Area-->
-        <actionGroup ref="LoginAsAdmin" stepKey="loginToAdminArea"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginToAdminArea"/>
 
         <!--Admin creates product-->
         <!--Create Simple Product-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageSimple"/>
-        <waitForPageLoad time="30" stepKey="waitForProductPageLoadSimple"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPageSimple"/>
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateSimpleProduct">
                 <argument name="product" value="SimpleProduct"/>
@@ -48,14 +47,16 @@
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
         <grabAttributeFrom selector="{{AdminProductGridSection.productThumbnail('1')}}" userInput="src" stepKey="getSimpleProductThumbnail"/>
-        <assertNotRegExp expected="'/placeholder\/thumbnail\.jpg/'" actual="$getSimpleProductThumbnail" stepKey="simpleThumbnailIsNotDefault"/>
+        <assertNotRegExp stepKey="simpleThumbnailIsNotDefault">
+			<actualResult type="const">$getSimpleProductThumbnail</actualResult>
+			<expectedResult type="const">'/placeholder\/thumbnail\.jpg/'</expectedResult>
+        </assertNotRegExp>
         <actionGroup ref="ViewProductInAdminGridActionGroup" stepKey="seeSimpleProductInGrid">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
 
         <!--Create Virtual Product-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageVirtual"/>
-        <waitForPageLoad time="30" stepKey="waitForProductPageLoadVirtual"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPageVirtual"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateVirtualProduct">
             <argument name="product" value="VirtualProduct"/>
         </actionGroup>
@@ -70,8 +71,7 @@
 
         <!--Admin uses product grid-->
         <!--Start with default view-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="visitAdminProductPageGrid"/>
-        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="visitAdminProductPageGrid"/>
 
         <!--Search by keyword-->
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetGridToDefaultKeywordSearch"/>
@@ -79,7 +79,11 @@
             <argument name="keyword" value="SimpleProduct.name"/>
         </actionGroup>
         <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" userInput="1" stepKey="seeOnlyOneProductInGrid"/>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="{{SimpleProduct.name}}" stepKey="seeOnlySimpleProductInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeOnlySimpleProductInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Name"/>
+            <argument name="value" value="{{SimpleProduct.name}}"/>
+        </actionGroup>
 
         <!--Paging works-->
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="setProductGridToDefaultPagination"/>
@@ -105,7 +109,11 @@
             <argument name="product" value="GroupedProduct"/>
         </actionGroup>
         <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" userInput="1" stepKey="seeOneMatchingSkuInProductGrid"/>
-        <see selector="{{AdminProductGridSection.productGridCell('1','SKU')}}" userInput="{{GroupedProduct.sku}}" stepKey="seeProductInFilteredGridSku"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeProductInFilteredGridSku">
+            <argument name="row" value="1"/>
+            <argument name="column" value="SKU"/>
+            <argument name="value" value="{{GroupedProduct.sku}}"/>
+        </actionGroup>
         <!--Filter by price-->
         <actionGroup ref="FilterProductGridByPriceRangeActionGroup" stepKey="filterProductGridByPrice">
             <argument name="filter" value="PriceFilterRange"/>
@@ -114,9 +122,18 @@
         <grabTextFrom selector="{{AdminProductGridSection.productGridCell('1', 'Price')}}" stepKey="getMinimumPriceInGrid"/>
         <click selector="{{AdminProductGridSection.columnHeader('Price')}}" stepKey="clickPriceHeaderToSortDescForFilter"/>
         <grabTextFrom selector="{{AdminProductGridSection.productGridCell('1', 'Price')}}" stepKey="getMaximumPriceInGrid"/>
-        <assertRegExp expected="'/\$[0-9]{2}\.[0-9]{2}/'" actual="$getMinimumPriceInGrid" stepKey="assertMinimumPriceIsCorrect"/>
-        <assertRegExp expected="'/\$[0-9]{2}\.[0-9]{2}/'" actual="$getMaximumPriceInGrid" stepKey="assertMaximumPriceIsCorrect"/>
-        <assertLessThan expected="$getMaximumPriceInGrid" actual="$getMinimumPriceInGrid" stepKey="checkPriceSortCorrect"/>
+        <assertRegExp stepKey="assertMinimumPriceIsCorrect">
+			<actualResult type="const">$getMinimumPriceInGrid</actualResult>
+			<expectedResult type="const">'/\$[0-9]{2}\.[0-9]{2}/'</expectedResult>
+        </assertRegExp>
+        <assertRegExp stepKey="assertMaximumPriceIsCorrect">
+			<actualResult type="const">$getMaximumPriceInGrid</actualResult>
+			<expectedResult type="const">'/\$[0-9]{2}\.[0-9]{2}/'</expectedResult>
+        </assertRegExp>
+        <assertLessThan stepKey="checkPriceSortCorrect">
+			<actualResult type="const">$getMinimumPriceInGrid</actualResult>
+			<expectedResult type="const">$getMaximumPriceInGrid</expectedResult>
+        </assertLessThan>
         <!--Filter by status-->
         <actionGroup ref="FilterProductGridByEnabledStatusActionGroup" stepKey="filterGridByEnabledProducts"/>
         <seeNumberOfElements selector="{{AdminProductGridSection.productGridRows}}" parameterArray="[1,20]" stepKey="seeEnabledProductsNotEmpty"/>
@@ -135,23 +152,35 @@
         <click selector="{{AdminProductGridSection.columnHeader('Price')}}" stepKey="clickPriceHeaderToSortAsc"/>
         <grabTextFrom selector="{{AdminProductGridSection.productGridCell('1', 'Price')}}" stepKey="getFirstPriceSortAsc"/>
         <grabTextFrom selector="{{AdminProductGridSection.productGridCell('2', 'Price')}}" stepKey="getSecondPriceSortAsc"/>
-        <assertLessThanOrEqual expected="$getSecondPriceSortAsc" actual="$getFirstPriceSortAsc" stepKey="checkPriceAscSortCorrect"/>
+        <assertLessThanOrEqual stepKey="checkPriceAscSortCorrect">
+			<actualResult type="const">$getFirstPriceSortAsc</actualResult>
+			<expectedResult type="const">$getSecondPriceSortAsc</expectedResult>
+        </assertLessThanOrEqual>
         <!--Sort Descending-->
         <click selector="{{AdminProductGridSection.columnHeader('Price')}}" stepKey="clickPriceHeaderToSortDesc"/>
         <grabTextFrom selector="{{AdminProductGridSection.productGridCell('1', 'Price')}}" stepKey="getFirstPriceSortDesc"/>
         <grabTextFrom selector="{{AdminProductGridSection.productGridCell('2', 'Price')}}" stepKey="getSecondPriceSortDesc"/>
-        <assertGreaterThanOrEqual expected="$getSecondPriceSortDesc" actual="$getFirstPriceSortDesc" stepKey="checkPriceDescSortCorrect"/>
+        <assertGreaterThanOrEqual stepKey="checkPriceDescSortCorrect">
+			<actualResult type="const">$getFirstPriceSortDesc</actualResult>
+			<expectedResult type="const">$getSecondPriceSortDesc</expectedResult>
+        </assertGreaterThanOrEqual>
         <!--By Product ID-->
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="setProductGridToDefaultSortingId"/>
         <!--Sort Ascending-->
         <grabTextFrom selector="{{AdminProductGridSection.productGridCell('1', 'ID')}}" stepKey="getFirstProductIdSortAsc"/>
         <grabTextFrom selector="{{AdminProductGridSection.productGridCell('2', 'ID')}}" stepKey="getSecondProductIdSortAsc"/>
-        <assertLessThan expected="$getSecondProductIdSortAsc" actual="$getFirstProductIdSortAsc" stepKey="checkProductIdAscSortCorrect"/>
+        <assertLessThan stepKey="checkProductIdAscSortCorrect">
+			<actualResult type="const">$getFirstProductIdSortAsc</actualResult>
+			<expectedResult type="const">$getSecondProductIdSortAsc</expectedResult>
+        </assertLessThan>
         <!--Sort Descending-->
         <click selector="{{AdminProductGridSection.columnHeader('ID')}}" stepKey="clickIdHeaderToSortDesc"/>
         <grabTextFrom selector="{{AdminProductGridSection.productGridCell('1', 'ID')}}" stepKey="getFirstProductIdSortDesc"/>
         <grabTextFrom selector="{{AdminProductGridSection.productGridCell('2', 'ID')}}" stepKey="getSecondProductIdSortDesc"/>
-        <assertGreaterThan expected="$getSecondProductIdSortDesc" actual="$getFirstProductIdSortDesc" stepKey="checkProductIdDescSortCorrect"/>
+        <assertGreaterThan stepKey="checkProductIdDescSortCorrect">
+			<actualResult type="const">$getFirstProductIdSortDesc</actualResult>
+			<expectedResult type="const">$getSecondProductIdSortDesc</expectedResult>
+        </assertGreaterThan>
 
         <!--Adding column works-->
         <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="setProductGridToDefaultColumns"/>
@@ -173,13 +202,16 @@
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProductGridToCheckWeightColumn">
             <argument name="product" value="SimpleProduct"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1','Weight')}}" userInput="{{SimpleProduct.weight}}" stepKey="seeCorrectProductWeightInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeCorrectProductWeightInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="Weight"/>
+            <argument name="value" value="{{SimpleProduct.weight}}"/>
+        </actionGroup>
         <!--END Admin uses product grid-->
 
         <!--Admin creates category-->
         <comment userInput="Admin creates category." stepKey="adminCreatesCategoryComment" before="navigateToCategoryPage"/>
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToCategoryPage"/>
-        <waitForPageLoad time="30" stepKey="waitForCategoryPageLoad"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToCategoryPage"/>
         <!--Create category under Default Category-->
         <click selector="{{AdminCategorySidebarTreeSection.categoryTreeRoot}}" stepKey="clickDefaultCategory"/>
         <actionGroup ref="CheckCategoryNameIsRequiredFieldActionGroup" stepKey="checkCategoryNameIsRequired"/>
@@ -194,9 +226,8 @@
 
         <!--Admin moves category-->
         <comment userInput="Admin moves category." stepKey="adminMovesCategoryComment" before="onCategoryPageToMoveCategory"/>
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="onCategoryPageToMoveCategory"/>
-        <waitForPageLoad time="30" stepKey="waitForPageLoadMoveCategory"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandTree"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="onCategoryPageToMoveCategory"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandTree"/>
         <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}"
                      selector2="{{AdminCategorySidebarTreeSection.categoryTreeRoot}}"
                      stepKey="dragAndDropCategory"/>
@@ -209,8 +240,7 @@
 
         <!--Admin deletes category-->
         <comment userInput="Admin deletes category" stepKey="deleteCategoryComment"/>
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="onCategoryPageToDeleteCategory"/>
-        <waitForPageLoad time="30" stepKey="waitForCategoryPageDelete"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="onCategoryPageToDeleteCategory"/>
         <actionGroup ref="DeleteCategoryActionGroup" stepKey="deleteCategory">
             <argument name="categoryEntity" value="_defaultCategory"/>
         </actionGroup>
