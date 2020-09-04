@@ -252,6 +252,8 @@ class CarrierTest extends TestCase
                             'weight' => '0.55',
                             'customs_value' => '20.00',
                             'container' => 'Large Express Box',
+                            'delivery_confirmation_level' => 1,
+                            'delivery_confirmation' => 0,
                         ],
                         'items' => [
                             'item2' => [
@@ -262,6 +264,7 @@ class CarrierTest extends TestCase
                 ]
             ]
         );
+        $request->setRecipientAddressCountryCode('UK');
 
         $result = $this->carrier->requestToShipment($request);
 
