@@ -9,22 +9,30 @@ namespace Magento\Quote\Model;
 
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Model\Product\Type;
-use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\StateException;
+use Magento\Framework\ObjectManagerInterface;
 use Magento\Quote\Api\CartManagementInterface;
-use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Sales\Api\OrderManagementInterface;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
-use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\Quote\Model\GetQuoteByReservedOrderId;
 use PHPUnit\Framework\ExpectationFailedException;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Class for testing QuoteManagement model
+ *
+ * @see \Magento\Quote\Model\QuoteManagement
+ * @magentoDbIsolation enabled
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class QuoteManagementTest extends \PHPUnit\Framework\TestCase
+class QuoteManagementTest extends TestCase
 {
     /**
-     * @var ObjectManager
+     * @var ObjectManagerInterface
      */
     private $objectManager;
 
@@ -34,13 +42,45 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     private $cartManagement;
 
     /**
+     * @var OrderRepositoryInterface
+     */
+    private $orderRepository;
+
+    /**
+     * @var GetQuoteByReservedOrderId
+     */
+    private $getQuoteByReservedOrderId;
+
+    /**
+     * @var ProductRepositoryInterface
+     */
+    private $productRepository;
+
+    /**
+     * @var CustomerRepositoryInterface
+     */
+    private $customerRepository;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
-        $this->objectManager = Bootstrap::getObjectManager();
+        parent::setUp();
 
-        $this->cartManagement = $this->objectManager->create(CartManagementInterface::class);
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->cartManagement = $this->objectManager->get(CartManagementInterface::class);
+        $this->orderRepository = $this->objectManager->get(OrderRepositoryInterface::class);
+        $this->getQuoteByReservedOrderId = $this->objectManager->get(GetQuoteByReservedOrderId::class);
+        $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
+        $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
+        $this->storeManager = $this->objectManager->get(StoreManagerInterface::class);
     }
 
     /**
@@ -48,22 +88,20 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Sales/_files/quote_with_bundle.php
+     *
+     * @return void
      */
-    public function testSubmit()
+    public function testSubmit(): void
     {
-        $quote = $this->getQuote('test01');
+        $quote = $this->getQuoteByReservedOrderId->execute('test01');
         $orderId = $this->cartManagement->placeOrder($quote->getId());
-
-        /** @var OrderRepositoryInterface $orderRepository */
-        $orderRepository = $this->objectManager->create(OrderRepositoryInterface::class);
-        $order = $orderRepository->get($orderId);
-
+        $order = $this->orderRepository->get($orderId);
         $orderItems = $order->getItems();
-        self::assertCount(3, $orderItems);
+        $this->assertCount(3, $orderItems);
         foreach ($orderItems as $orderItem) {
             if ($orderItem->getProductType() == Type::TYPE_SIMPLE) {
-                self::assertNotEmpty($orderItem->getParentItem(), 'Parent is not set for child product');
-                self::assertNotEmpty($orderItem->getParentItemId(), 'Parent is not set for child product');
+                $this->assertNotEmpty($orderItem->getParentItem(), 'Parent is not set for child product');
+                $this->assertNotEmpty($orderItem->getParentItemId(), 'Parent is not set for child product');
             }
         }
     }
@@ -75,17 +113,13 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
      * @magentoAppIsolation enabled
      * @magentoDataFixture Magento/Sales/_files/quote_with_bundle.php
      */
-    public function testSubmitWithDeletedItem()
+    public function testSubmitWithDeletedItem(): void
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('Some of the products below do not have all the required options.');
-
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        $product = $productRepository->get('simple-2');
-        $productRepository->delete($product);
-        $quote = $this->getQuote('test01');
-
+        $this->productRepository->deleteById('simple-2');
+        $quote = $this->getQuoteByReservedOrderId->execute('test01');
+        $this->expectExceptionObject(
+            new LocalizedException(__('Some of the products below do not have all the required options.'))
+        );
         $this->cartManagement->placeOrder($quote->getId());
     }
 
@@ -95,13 +129,11 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
      * @magentoDataFixture Magento/Sales/_files/quote.php
      * @magentoDbIsolation enabled
      */
-    public function testSubmitWithItemOutOfStock()
+    public function testSubmitWithItemOutOfStock(): void
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('Some of the products are out of stock.');
-
         $this->makeProductOutOfStock('simple');
-        $quote = $this->getQuote('test01');
+        $quote = $this->getQuoteByReservedOrderId->execute('test01');
+        $this->expectExceptionObject(new LocalizedException(__('Some of the products are out of stock.')));
         $this->cartManagement->placeOrder($quote->getId());
     }
 
@@ -111,21 +143,20 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
      * Order should not start placing if order validation is failed.
      *
      * @magentoDataFixture Magento/Quote/Fixtures/quote_without_customer_email.php
+     *
+     * @return void
      */
-    public function testSubmitWithEmptyCustomerEmail()
+    public function testSubmitWithEmptyCustomerEmail(): void
     {
-        $this->expectException(\Magento\Framework\Exception\LocalizedException::class);
-        $this->expectExceptionMessage('Email has a wrong format');
-
-        $quote = $this->getQuote('test01');
-        $orderManagement = $this->getMockForAbstractClass(OrderManagementInterface::class);
+        $quote = $this->getQuoteByReservedOrderId->execute('test01');
+        $orderManagement = $this->createMock(OrderManagementInterface::class);
         $orderManagement->expects($this->never())
             ->method('place');
         $cartManagement = $this->objectManager->create(
             CartManagementInterface::class,
             ['orderManagement' => $orderManagement]
         );
-
+        $this->expectExceptionObject(new LocalizedException(__('Email has a wrong format')));
         try {
             $cartManagement->placeOrder($quote->getId());
         } catch (ExpectationFailedException $e) {
@@ -134,24 +165,56 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * Gets quote by reserved order ID.
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoDataFixture Magento/Customer/_files/customer.php
      *
-     * @param string $reservedOrderId
-     * @return Quote
+     * @return void
      */
-    private function getQuote(string $reservedOrderId): Quote
+    public function testAssignCustomerToQuote(): void
     {
-        /** @var SearchCriteriaBuilder $searchCriteriaBuilder */
-        $searchCriteriaBuilder = $this->objectManager->get(SearchCriteriaBuilder::class);
-        $searchCriteria = $searchCriteriaBuilder->addFilter('reserved_order_id', $reservedOrderId)
-            ->create();
+        $customer = $this->customerRepository->get('customer@example.com');
+        $quote = $this->getQuoteByReservedOrderId->execute('test_order_with_simple_product_without_address');
+        $result = $this->cartManagement->assignCustomer($quote->getId(), $customer->getId(), $customer->getStoreId());
+        $this->assertTrue($result);
+        $customerQuote = $this->cartManagement->getCartForCustomer($customer->getId());
+        $this->assertEquals($quote->getId(), $customerQuote->getId());
+        $this->assertEquals($customer->getId(), $customerQuote->getCustomerId());
+        $this->assertEquals($customer->getEmail(), $customerQuote->getCustomerEmail());
+    }
 
-        /** @var CartRepositoryInterface $quoteRepository */
-        $quoteRepository = $this->objectManager->get(CartRepositoryInterface::class);
-        $items = $quoteRepository->getList($searchCriteria)
-            ->getItems();
+    /**
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
+     * @magentoDataFixture Magento/Customer/_files/customer_for_second_website.php
+     *
+     * @return void
+     */
+    public function testAssignCustomerFromAnotherWebsiteToQuote(): void
+    {
+        $websiteId = $this->storeManager->getWebsite('test')->getId();
+        $customer = $this->customerRepository->get('customer@example.com', $websiteId);
+        $quote = $this->getQuoteByReservedOrderId->execute('test_order_with_simple_product_without_address');
+        $this->expectExceptionObject(
+            new StateException(
+                __('The customer can\'t be assigned to the cart. The cart belongs to a different store.')
+            )
+        );
+        $this->cartManagement->assignCustomer($quote->getId(), $customer->getId(), $quote->getStoreId());
+    }
 
-        return array_pop($items);
+    /**
+     * @magentoDataFixture Magento/Checkout/_files/quote_with_customer_without_address.php
+     * @magentoDataFixture Magento/Customer/_files/customer_with_uk_address.php
+     *
+     * @return void
+     */
+    public function testAssignCustomerToQuoteAlreadyHaveCustomer(): void
+    {
+        $customer = $this->customerRepository->get('customer_uk_address@test.com');
+        $quote = $this->getQuoteByReservedOrderId->execute('test_order_with_customer_without_address');
+        $this->expectExceptionObject(
+            new StateException(__('The customer can\'t be assigned to the cart because the cart isn\'t anonymous.'))
+        );
+        $this->cartManagement->assignCustomer($quote->getId(), $customer->getId(), $quote->getStoreId());
     }
 
     /**
@@ -160,14 +223,12 @@ class QuoteManagementTest extends \PHPUnit\Framework\TestCase
      * @param string $sku
      * @return void
      */
-    private function makeProductOutOfStock(string $sku)
+    private function makeProductOutOfStock(string $sku): void
     {
-        /** @var ProductRepositoryInterface $productRepository */
-        $productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
-        $product = $productRepository->get($sku);
+        $product = $this->productRepository->get($sku);
         $extensionAttributes = $product->getExtensionAttributes();
         $stockItem = $extensionAttributes->getStockItem();
         $stockItem->setIsInStock(false);
-        $productRepository->save($product);
+        $this->productRepository->save($product);
     }
 }

@@ -37,14 +37,14 @@ class ExtractMetadataTest extends TestCase
      * @param string $fileName
      * @param string $title
      * @param string $description
-     * @param array $keywords
+     * @param null|array $keywords
      * @throws LocalizedException
      */
     public function testExecute(
         string $fileName,
         string $title,
         string $description,
-        array $keywords
+        ?array $keywords
     ): void {
         $path = realpath(__DIR__ . '/../../_files/' . $fileName);
         $metadata = $this->extractMetadata->execute($path);
@@ -62,6 +62,18 @@ class ExtractMetadataTest extends TestCase
     public function filesProvider(): array
     {
         return [
+            [
+                'exif_image.png',
+                'Exif title png imge',
+                'Exif description png imge',
+                null
+            ],
+            [
+                'exif-image.jpeg',
+                'Exif Magento title',
+                'Exif description metadata',
+                 null
+            ],
             [
                 'macos-photos.jpeg',
                 'Title of the magento image',
