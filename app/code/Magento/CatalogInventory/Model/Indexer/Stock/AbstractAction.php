@@ -12,8 +12,6 @@ use Magento\Framework\EntityManager\MetadataPool;
 
 /**
  * Abstract action reindex class
- *
- * @package Magento\CatalogInventory\Model\Indexer\Stock
  */
 abstract class AbstractAction
 {
@@ -281,6 +279,8 @@ abstract class AbstractAction
     }
 
     /**
+     * Get cache cleaner object
+     *
      * @return CacheCleaner
      */
     private function getCacheCleaner()

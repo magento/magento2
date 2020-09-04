@@ -514,6 +514,7 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      */
     protected function getTierPrices(array $listSku, $table)
     {
+        $selectFields = [];
         if (isset($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP])) {
             $exportFilter = $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP];
         }
@@ -570,12 +571,11 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                 if (isset($updatedAtTo) && !empty($updatedAtTo)) {
                     $select->where('cpe.updated_at <= ?', $updatedAtTo);
                 }
-                $exportData = $this->_connection->fetchAll($select);
+                return $this->_connection->fetchAll($select);
             } catch (\Exception $e) {
                 return false;
             }
         }
-        return $exportData;
     }
 
     /**
