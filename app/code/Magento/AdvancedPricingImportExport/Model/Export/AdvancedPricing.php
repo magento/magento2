@@ -14,6 +14,7 @@ use Magento\Store\Model\Store;
 /**
  * Export Advanced Pricing
  *
+ * @author      Magento Core Team <core@magentocommerce.com>
  * @SuppressWarnings(PHPMD.TooManyFields)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
@@ -514,7 +515,6 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
      */
     protected function getTierPrices(array $listSku, $table)
     {
-        $selectFields = [];
         if (isset($this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP])) {
             $exportFilter = $this->_parameters[\Magento\ImportExport\Model\Export::FILTER_ELEMENT_GROUP];
         }
@@ -571,11 +571,12 @@ class AdvancedPricing extends \Magento\CatalogImportExport\Model\Export\Product
                 if (isset($updatedAtTo) && !empty($updatedAtTo)) {
                     $select->where('cpe.updated_at <= ?', $updatedAtTo);
                 }
-                return $this->_connection->fetchAll($select);
+                $exportData = $this->_connection->fetchAll($select);
             } catch (\Exception $e) {
                 return false;
             }
         }
+        return $exportData;
     }
 
     /**
