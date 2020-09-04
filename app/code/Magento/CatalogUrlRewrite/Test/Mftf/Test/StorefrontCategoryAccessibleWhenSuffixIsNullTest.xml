@@ -9,9 +9,11 @@
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
     <test name="StorefrontCategoryAccessibleWhenSuffixIsNullTest">
         <annotations>
+            <stories value="Url rewrites"/>
             <title value="Storefront category is accessible when url suffix is set to null test"/>
             <description value="Check no crash occurs on Category page when catalog/seo/category_url_suffix is set to null"/>
             <features value="CatalogUrlRewrite"/>
+            <stories value="Url rewrites"/>
             <severity value="MAJOR"/>
             <group value="CatalogUrlRewrite"/>
         </annotations>
@@ -19,7 +21,9 @@
             <magentoCLI command="config:set catalog/seo/category_url_suffix ''" stepKey="setCategoryUrlSuffix"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 0"
                         stepKey="setCategoryProductRewrites"/>
-            <magentoCLI command="cache:flush" stepKey="flushCacheBefore"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheBefore">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <createData entity="_defaultCategory" stepKey="createCategory"/>
         </before>
         <after>
@@ -28,7 +32,9 @@
                         stepKey="restoreCategoryUrlSuffix"/>
             <magentoCLI command="config:set catalog/seo/generate_category_product_rewrites 1"
                         stepKey="restoreCategoryProductRewrites"/>
-            <magentoCLI command="cache:flush" stepKey="flushCacheAfter"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfter">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </after>
 
         <amOnPage url="/$$createCategory.name$$" stepKey="onCategoryPage"/>

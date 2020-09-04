@@ -5,5 +5,7 @@
  */
 declare(strict_types = 1);
 
-require dirname(__DIR__, 2) . '/Catalog/_files/product_image_rollback.php';
-require dirname(__DIR__, 2) . '/Catalog/_files/product_simple_rollback.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_image_rollback.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple_rollback.php');

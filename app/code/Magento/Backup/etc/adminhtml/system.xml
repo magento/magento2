@@ -8,21 +8,21 @@
 <config xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Config:etc/system_file.xsd">
     <system>
         <section id="system">
-            <group id="backup" translate="label" type="text" sortOrder="500" showInDefault="1" showInWebsite="0" showInStore="0">
+            <group id="backup" translate="label" type="text" sortOrder="500" showInDefault="1">
                 <label>Backup Settings</label>
-                <field id="functionality_enabled" translate="label" type="select" sortOrder="5" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="functionality_enabled" translate="label" type="select" sortOrder="5" showInDefault="1">
                     <label>Enable Backup</label>
                     <comment>Disabled by default for security reasons.</comment>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                 </field>
-                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="enabled" translate="label" type="select" sortOrder="10" showInDefault="1">
                     <label>Enable Scheduled Backup</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <depends>
                         <field id="functionality_enabled">1</field>
                     </depends>
                 </field>
-                <field id="type" translate="label" type="select" sortOrder="20" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="type" translate="label" type="select" sortOrder="20" showInDefault="1">
                     <label>Scheduled Backup Type</label>
                     <depends>
                         <field id="enabled">1</field>
@@ -30,14 +30,14 @@
                     </depends>
                     <source_model>Magento\Backup\Model\Config\Source\Type</source_model>
                 </field>
-                <field id="time" translate="label" type="time" sortOrder="30" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="time" translate="label" type="time" sortOrder="30" showInDefault="1">
                     <label>Start Time</label>
                     <depends>
                         <field id="enabled">1</field>
                         <field id="functionality_enabled">1</field>
                     </depends>
                 </field>
-                <field id="frequency" translate="label" type="select" sortOrder="40" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="frequency" translate="label" type="select" sortOrder="40" showInDefault="1">
                     <label>Frequency</label>
                     <depends>
                         <field id="enabled">1</field>
@@ -46,7 +46,7 @@
                     <source_model>Magento\Cron\Model\Config\Source\Frequency</source_model>
                     <backend_model>Magento\Backup\Model\Config\Backend\Cron</backend_model>
                 </field>
-                <field id="maintenance" translate="label comment" type="select" sortOrder="50" showInDefault="1" showInWebsite="0" showInStore="0">
+                <field id="maintenance" translate="label comment" type="select" sortOrder="50" showInDefault="1">
                     <label>Maintenance Mode</label>
                     <comment>Please put your store into maintenance mode during backup.</comment>
                     <depends>

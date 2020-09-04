@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateUserRoleEntityTest">
+        <annotations>
+            <features value="User"/>
+            <stories value="Create User Role"/>
+            <title value="Creating a new role with different data sets"/>
+            <description value="Creating a new role with different data sets"/>
+            <testCaseId value="MC-14258"/>
+            <group value="user"/>
+            <group value="mtf_migrated"/>
+            <severity value="MAJOR"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="logIn"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logOut"/>
+        </after>
+
+        <!--Create a new role with custom access-->
+        <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="goToNewRolePage"/>
+        <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillNewRoleForm">
+            <argument name="role" value="roleSales"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveNewRole"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessage">
+            <argument name="message" value="You saved the role."/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRoleInGridActionGroup" stepKey="assertRoleInGrid">
+            <argument name="roleName" value="{{roleSales.name}}"/>
+        </actionGroup>
+        <!--Delete the new role with custom access-->
+        <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteSaleRole">
+            <argument name="roleName" value="{{roleSales.name}}"/>
+        </actionGroup>
+
+        <!--Create a new role with full access-->
+        <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="goToNewRolePageSecondTime"/>
+        <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillNewRoleFormSecondTime">
+            <argument name="role" value="roleAdministrator"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveNewRoleSecondTime"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertSuccessMessageSecondTime">
+            <argument name="message" value="You saved the role."/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRoleInGridActionGroup" stepKey="assertRoleInGridSecondTime">
+            <argument name="roleName" value="{{roleAdministrator.name}}"/>
+        </actionGroup>
+        <!--Delete the new role with full access-->
+        <actionGroup ref="AdminDeleteUserRoleActionGroup" stepKey="deleteAdministratorRole">
+            <argument name="roleName" value="{{roleAdministrator.name}}"/>
+        </actionGroup>
+
+        <!--Create a new role using incorrect current_password-->
+        <actionGroup ref="AdminOpenCreateRolePageActionGroup" stepKey="goToNewRolePageThirdTime"/>
+        <actionGroup ref="AdminFillUserRoleFormActionGroup" stepKey="fillNewRoleFormThirdTime">
+            <argument name="role" value="roleAdministrator"/>
+            <argument name="currentAdminPassword" value="{{_ENV.MAGENTO_ADMIN_PASSWORD}}INVALID"/>
+        </actionGroup>
+        <actionGroup ref="AdminClickSaveButtonOnUserRoleFormActionGroup" stepKey="saveNewRoleThirdTime"/>
+        <actionGroup ref="AssertMessageInAdminPanelActionGroup" stepKey="assertErrorMessage">
+            <argument name="messageType" value="error"/>
+            <argument name="message" value="The password entered for the current user is invalid. Verify the password and try again."/>
+        </actionGroup>
+        <actionGroup ref="AssertAdminRoleNotInGridActionGroup" stepKey="assertRoleNotInGrid">
+            <argument name="roleName" value="{{roleAdministrator.name}}"/>
+        </actionGroup>
+
+    </test>
+</tests>

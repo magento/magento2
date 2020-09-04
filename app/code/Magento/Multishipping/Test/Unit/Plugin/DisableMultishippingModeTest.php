@@ -14,19 +14,21 @@ use Magento\Multishipping\Plugin\DisableMultishippingMode;
 use Magento\Quote\Api\Data\CartExtensionInterface;
 use Magento\Quote\Api\Data\ShippingAssignmentInterface;
 use Magento\Quote\Model\Quote;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class DisableMultishippingModeTest
+ * Set of Unit Tets to cover DisableMultishippingMode
  */
-class DisableMultishippingModeTest extends \PHPUnit\Framework\TestCase
+class DisableMultishippingModeTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $cartMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $quoteMock;
 
@@ -38,16 +40,17 @@ class DisableMultishippingModeTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->cartMock = $this->createMock(Cart::class);
-        $this->quoteMock = $this->createPartialMock(
-            Quote::class,
-            ['__wakeUp', 'setIsMultiShipping', 'getIsMultiShipping', 'getExtensionAttributes']
-        );
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['setIsMultiShipping', 'getIsMultiShipping'])
+            ->onlyMethods(['__wakeUp', 'getExtensionAttributes'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->cartMock->expects($this->once())
             ->method('getQuote')
-            ->will($this->returnValue($this->quoteMock));
+            ->willReturn($this->quoteMock);
         $this->object = new DisableMultishippingMode($this->cartMock);
     }
 
@@ -59,13 +62,13 @@ class DisableMultishippingModeTest extends \PHPUnit\Framework\TestCase
     public function testExecuteTurnsOffMultishippingModeOnMultishippingQuote(): void
     {
         $subject = $this->createMock(Index::class);
-        $extensionAttributes = $this->createPartialMock(
-            CartExtensionInterface::class,
-            ['setShippingAssignments', 'getShippingAssignments']
-        );
+        $extensionAttributes = $this->getMockBuilder(CartExtensionInterface::class)
+            ->disableOriginalConstructor()
+            ->setMethods(['setShippingAssignments', 'getShippingAssignments'])
+            ->getMockForAbstractClass();
         $extensionAttributes->method('getShippingAssignments')
             ->willReturn(
-                $this->createMock(ShippingAssignmentInterface::class)
+                $this->getMockForAbstractClass(ShippingAssignmentInterface::class)
             );
         $extensionAttributes->expects($this->once())
             ->method('setShippingAssignments')

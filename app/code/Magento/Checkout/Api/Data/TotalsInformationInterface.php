@@ -8,6 +8,7 @@ namespace Magento\Checkout\Api\Data;
 /**
  * Interface TotalsInformationInterface
  * @api
+ * @since 100.0.2
  */
 interface TotalsInformationInterface extends \Magento\Framework\Api\CustomAttributesDataInterface
 {

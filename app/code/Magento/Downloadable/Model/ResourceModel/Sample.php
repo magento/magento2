@@ -24,7 +24,7 @@ class Sample extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
     /**
      * @param \Magento\Framework\Model\ResourceModel\Db\Context $context
      * @param \Magento\Framework\EntityManager\MetadataPool $metadataPool
-     * @param null $connectionName
+     * @param string|null $connectionName
      */
     public function __construct(
         \Magento\Framework\Model\ResourceModel\Db\Context $context,
@@ -126,7 +126,7 @@ class Sample extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
         )->join(
             ['cpe' => $this->getTable('catalog_product_entity')],
             sprintf(
-                'cpe.entity_id = m.product_id',
+                'cpe.%s = m.product_id',
                 $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField()
             ),
             []

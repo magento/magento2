@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="VerifyRegistredLinkDisplayedForGuestSubscriptionNoTest" deprecated="Use StorefrontNewsletterGuestSubscriptionWithDisallowedOptionTest">
+        <!-- Deprecated Due to inconsistency with the best practices -->
+        <annotations>
+            <features value="Newsletter"/>
+            <stories value="Configure guest newsletter subscription to 'No'"/>
+            <group value="Newsletter"/>
+            <title value="Configure guest newsletter subscription to 'No'"/>
+            <description value="Configure guest newsletter subscription to 'No'"/>
+            <severity value="MAJOR"/>
+        </annotations>
+
+        <before>
+            <magentoCLI command="config:set newsletter/subscription/allow_guest_subscribe 0"
+                        stepKey="setConfigGuestSubscriptionDisable"/>
+        </before>
+        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage"/>
+        <submitForm selector="{{BasicFrontendNewsletterFormSection.subscribeForm}}"
+                    parameterArray="['email' => '{{_defaultNewsletter.senderEmail}}']"
+                    button="{{BasicFrontendNewsletterFormSection.subscribeButton}}" stepKey="submitForm"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <waitForElementVisible stepKey="waitForErrorAppears" selector="{{StorefrontMessagesSection.error}}"/>
+    </test>
+</tests>

@@ -25,21 +25,33 @@
                 <requiredEntity createDataKey="createCategory1"/>
             </createData>
 
-            <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage1"/>
-            <waitForPageLoad stepKey="waitForPageLoad1"/>
+            <!-- Perform reindex and flush cache -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage1"/>
         </before>
         <after>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin1"/>
-
             <deleteData createDataKey="createProduct1" stepKey="deleteSimpleProduct1"/>
             <deleteData createDataKey="createCategory1" stepKey="deleteCategory1"/>
+
+            <!-- Delete all search terms -->
+            <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage"/>
+            <waitForPageLoad stepKey="waitForAdminCatalogSearchTermIndexPageLoad"/>
+            <comment userInput="Delete all search terms" stepKey="deleteAllSearchTermsComment"/>
+            <actionGroup ref="AdminDeleteAllSearchTermsActionGroup" stepKey="deleteAllSearchTerms"/>
+
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin1"/>
         </after>
 
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName1">
             <argument name="phrase" value="$$createProduct1.name$$"/>
         </actionGroup>
 
-        <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+        <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
 
         <amOnPage url="{{AdminCatalogSearchTermIndexPage.url}}" stepKey="openAdminCatalogSearchTermIndexPage1"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
@@ -62,8 +74,7 @@
             <argument name="searchQuery" value="{{UpdatedSearchTermData1.query_text}}"/>
         </actionGroup>
 
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage2"/>
-        <waitForPageLoad stepKey="waitForPageLoad4"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="amOnStorefrontPage2"/>
 
         <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="quickSearchByProductName2">
             <argument name="phrase" value="{{UpdatedSearchTermData1.query_text}}"/>

@@ -3,26 +3,36 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Tests for \Magento\Framework\Data\Form\Field\Notification
  */
 namespace Magento\Config\Test\Unit\Block\System\Config\Form\Field;
 
-class NotificationTest extends \PHPUnit\Framework\TestCase
+use Magento\Config\Block\System\Config\Form\Field\Notification;
+use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Locale\Resolver;
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatter;
+use Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
+
+class NotificationTest extends TestCase
 {
     public function testRender()
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
 
-        $testCacheValue = '1433259723';
-        $testDatetime = (new \DateTime(null, new \DateTimeZone('UTC')))->setTimestamp($testCacheValue);
+        $testCacheValue = 1433259723;
+        $testDatetime = (new \DateTime('now', new \DateTimeZone('UTC')))->setTimestamp($testCacheValue);
 
-        /** @var \Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface $dateTimeFormatter */
-        $dateTimeFormatter = $objectManager->getObject(\Magento\Framework\Stdlib\DateTime\DateTimeFormatter::class);
-        $localeResolver = $objectManager->getObject(\Magento\Framework\Locale\Resolver::class);
+        /** @var DateTimeFormatterInterface $dateTimeFormatter */
+        $dateTimeFormatter = $objectManager->getObject(DateTimeFormatter::class);
+        $localeResolver = $objectManager->getObject(Resolver::class);
 
-        $reflection = new \ReflectionClass(\Magento\Framework\Stdlib\DateTime\DateTimeFormatter::class);
+        $reflection = new \ReflectionClass(DateTimeFormatter::class);
         $reflectionProperty = $reflection->getProperty('localeResolver');
         $reflectionProperty->setAccessible(true);
         $reflectionProperty->setValue($dateTimeFormatter, $localeResolver);
@@ -32,28 +42,28 @@ class NotificationTest extends \PHPUnit\Framework\TestCase
         $htmlId = 'test_HTML_id';
         $label = 'test_label';
 
-        $localeDateMock = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
+        $localeDateMock = $this->getMockBuilder(TimezoneInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $localeDateMock->expects($this->any())->method('date')->willReturn($testDatetime);
         $localeDateMock->expects($this->any())->method('getDateTimeFormat')->willReturn(null);
 
-        $elementMock = $this->getMockBuilder(\Magento\Framework\Data\Form\Element\AbstractElement::class)
+        $elementMock = $this->getMockBuilder(AbstractElement::class)
             ->disableOriginalConstructor()
             ->setMethods(['getHtmlId', 'getLabel'])
             ->getMock();
         $elementMock->expects($this->any())->method('getHtmlId')->willReturn($htmlId);
         $elementMock->expects($this->any())->method('getLabel')->willReturn($label);
 
-        $dateTimeFormatter = $this->createMock(\Magento\Framework\Stdlib\DateTime\DateTimeFormatterInterface::class);
+        $dateTimeFormatter = $this->getMockForAbstractClass(DateTimeFormatterInterface::class);
         $dateTimeFormatter->expects($this->once())
             ->method('formatObject')
             ->with($testDatetime)
             ->willReturn($formattedDate);
 
-        /** @var \Magento\Config\Block\System\Config\Form\Field\Notification $notification */
+        /** @var Notification $notification */
         $notification = $objectManager->getObject(
-            \Magento\Config\Block\System\Config\Form\Field\Notification::class,
+            Notification::class,
             [
                 'localeDate' => $localeDateMock,
                 'dateTimeFormatter' => $dateTimeFormatter,

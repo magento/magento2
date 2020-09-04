@@ -5,6 +5,8 @@
  */
 namespace Magento\CatalogSearch\Model\Adminhtml\System\Config\Backend;
 
+use Magento\Framework\App\ObjectManager;
+
 /**
  * Backend model for catalog search engine system config
  *
@@ -19,6 +21,11 @@ class Engine extends \Magento\Framework\App\Config\Value
     protected $indexerRegistry;
 
     /**
+     * @var \Magento\Framework\Search\EngineResolverInterface
+     */
+    private $engineResolver;
+
+    /**
      * @param \Magento\Framework\Model\Context $context
      * @param \Magento\Framework\Registry $registry
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $config
@@ -27,6 +34,7 @@ class Engine extends \Magento\Framework\App\Config\Value
      * @param \Magento\Framework\Model\ResourceModel\AbstractResource $resource
      * @param \Magento\Framework\Data\Collection\AbstractDb $resourceCollection
      * @param array $data
+     * @param \Magento\Framework\Search\EngineResolverInterface|null $engineResolver
      */
     public function __construct(
         \Magento\Framework\Model\Context $context,
@@ -36,10 +44,27 @@ class Engine extends \Magento\Framework\App\Config\Value
         \Magento\Framework\Indexer\IndexerRegistry $indexerRegistry,
         \Magento\Framework\Model\ResourceModel\AbstractResource $resource = null,
         \Magento\Framework\Data\Collection\AbstractDb $resourceCollection = null,
-        array $data = []
+        array $data = [],
+        \Magento\Framework\Search\EngineResolverInterface $engineResolver = null
     ) {
         $this->indexerRegistry = $indexerRegistry;
+        $this->engineResolver = $engineResolver
+            ?? ObjectManager::getInstance()->get(\Magento\Framework\Search\EngineResolverInterface::class);
         parent::__construct($context, $registry, $config, $cacheTypeList, $resource, $resourceCollection, $data);
+    }
+
+    /**
+     * @inheritDoc
+     */
+    public function beforeSave()
+    {
+        parent::beforeSave();
+        $value = (string)$this->getValue();
+        if (empty($value)) {
+            $defaultCountry = $this->engineResolver->getCurrentSearchEngine();
+            $this->setValue($defaultCountry);
+        }
+        return $this;
     }
 
     /**
