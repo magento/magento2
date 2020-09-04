@@ -25,18 +25,18 @@ class InitializeAuthRoles implements DataPatchInterface, PatchVersionInterface
     private $moduleDataSetup;
 
     /**
-     * @var \Magento\Authorization\Setup\AuthorizationFactor
+     * @var \Magento\Authorization\Setup\AuthorizationFactory
      */
     private $authFactory;
 
     /**
      * InitializeAuthRoles constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
-     * @param \Magento\Authorization\Setup\AuthorizationFactor $authorizationFactory
+     * @param \Magento\Authorization\Setup\AuthorizationFactory $authorizationFactory
      */
     public function __construct(
         ModuleDataSetupInterface $moduleDataSetup,
-        \Magento\Authorization\Setup\AuthorizationFactor $authorizationFactory
+        \Magento\Authorization\Setup\AuthorizationFactory $authorizationFactory
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
         $this->authFactory = $authorizationFactory;
