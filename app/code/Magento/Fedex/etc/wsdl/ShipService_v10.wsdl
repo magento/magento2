@@ -497,7 +497,7 @@
       <xs:complexType name="Commodity">
         <xs:annotation>
           <xs:documentation>
-            For international multiple piece shipments, commodity information must be passed in the Master and on each child transaction.
+            For international multiple piece shipments, commodity information must be passed in the Main and on each child transaction.
             If this shipment contains more than four commodity line items, the four highest valued should be included in the first 4 occurrences for this request.
           </xs:documentation>
         </xs:annotation>
@@ -724,7 +724,7 @@
           </xs:element>
           <xs:element name="MasterTrackingId" type="ns:TrackingId" minOccurs="0">
             <xs:annotation>
-              <xs:documentation>The master tracking number and form id of this multiple piece shipment. This information is to be provided for each subsequent of a multiple piece shipment.</xs:documentation>
+              <xs:documentation>The main tracking number and form id of this multiple piece shipment. This information is to be provided for each subsequent of a multiple piece shipment.</xs:documentation>
             </xs:annotation>
           </xs:element>
           <xs:element name="ServiceTypeDescription" type="xs:string" minOccurs="0">

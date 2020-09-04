@@ -82,7 +82,7 @@ class RenderOrdersTabTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->store = $this->objectManager->get(Store::class);
@@ -97,7 +97,7 @@ class RenderOrdersTabTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->registry->unregister(RegistryConstants::CURRENT_CUSTOMER_ID);
         parent::tearDown();

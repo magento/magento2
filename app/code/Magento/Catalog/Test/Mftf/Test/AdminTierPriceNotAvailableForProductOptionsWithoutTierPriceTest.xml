@@ -20,7 +20,7 @@
             <group value="catalog"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!--Create category-->
             <createData entity="SimpleSubCategory" stepKey="createCategory"/>
@@ -93,6 +93,9 @@
         <waitForPageLoad stepKey="waitForStoreFrontLoad"/>
         <selectOption selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" userInput="$$getConfigAttributeOption1.value$$" stepKey="selectOption"/>
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="class" stepKey="grabGrabPriceClass"/>
-        <assertNotContains actual="$grabGrabPriceClass" expected=".price-box .price-tier_price" expectedType="string"  stepKey="assertNotEquals"/>
+        <assertStringNotContainsString stepKey="assertNotEquals">
+			<actualResult type="const">$grabGrabPriceClass</actualResult>
+			<expectedResult type="string">.price-box .price-tier_price</expectedResult>
+        </assertStringNotContainsString>
     </test>
 </tests>

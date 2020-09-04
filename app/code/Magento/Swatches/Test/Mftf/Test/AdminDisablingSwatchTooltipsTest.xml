@@ -22,12 +22,11 @@
             <createData entity="ApiCategory" stepKey="createCategory"/>
 
             <!-- Log in -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <!-- Clean up our modifications to the existing color attribute -->
-            <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
-            <waitForPageLoad stepKey="waitForProductAttributes"/>
+            <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
             <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="color"
                        stepKey="fillFilter"/>
             <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearch"/>
@@ -44,12 +43,13 @@
 
             <!-- Enable swatch tooltips -->
             <magentoCLI command="config:set catalog/frontend/show_swatch_tooltip 1" stepKey="disableTooltips"/>
-            <magentoCLI command="cache:flush" stepKey="flushCacheAfterEnabling"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterEnabling">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </after>
 
         <!-- Go to the edit page for the "color" attribute -->
-        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="goToProductAttributes"/>
-        <waitForPageLoad stepKey="waitForProductAttributes"/>
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="goToProductAttributes"/>
         <fillField selector="{{AdminProductAttributeGridSection.FilterByAttributeCode}}" userInput="color"
                    stepKey="fillFilter"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="clickSearch"/>
@@ -83,8 +83,7 @@
         </actionGroup>
 
         <!-- Create a configurable product to verify the storefront with -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad stepKey="waitForProductGridPage"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="clickOnAddProductToggle"/>
         <click selector="{{AdminProductGridActionSection.addConfigurableProduct}}"
                stepKey="clickOnAddConfigurableProduct"/>
@@ -149,7 +148,9 @@
 
         <!-- Disable swatch tooltips -->
         <magentoCLI command="config:set catalog/frontend/show_swatch_tooltip 0" stepKey="disableTooltips"/>
-        <magentoCLI command="cache:flush" stepKey="flushCacheAfterDisabling"/>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCacheAfterDisabling">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!-- Verify swatch tooltips are not visible -->
         <reloadPage stepKey="refreshPage"/>

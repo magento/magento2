@@ -7,9 +7,11 @@
 namespace Magento\Setup\Module\Di\Code\Reader;
 
 /**
+ * FileScanner code reader
+ *
  * @SuppressWarnings(PHPMD)
  */
-class FileScanner extends \Zend\Code\Scanner\FileScanner
+class FileScanner extends \Laminas\Code\Scanner\FileScanner
 {
     /**
      * @var int
@@ -17,7 +19,7 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
     private $tokenType;
 
     /**
-     * {@inheritdoc}
+     * @inheritDoc
      */
     protected function scan()
     {
@@ -26,7 +28,7 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
         }
 
         if (!$this->tokens) {
-            throw new \Zend\Code\Exception\RuntimeException('No tokens were provided');
+            throw new \Laminas\Code\Exception\RuntimeException('No tokens were provided');
         }
 
         /**
@@ -106,6 +108,7 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
             return $infoIndex;
         };
 
+        // phpcs:disable
         /**
          * START FINITE STATE MACHINE FOR SCANNING TOKENS
          */
@@ -357,5 +360,6 @@ class FileScanner extends \Zend\Code\Scanner\FileScanner
          * END FINITE STATE MACHINE FOR SCANNING TOKENS
          */
         $this->isScanned = true;
+        // phpcs:enable
     }
 }

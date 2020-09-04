@@ -624,6 +624,24 @@ define([
                 expect(obj.options).toHaveBeenCalledWith([]);
                 expect(obj.processRequest).toHaveBeenCalledWith(searchKey, 1);
             });
+            it('Should update cacheOptions if response was cached', function () {
+                var searchKey = 'cake',
+                    searchResult = 'piece a cake';
+
+                obj.deviation = 30;
+                obj.cachedSearchResults = {
+                    cake: {
+                        options: [searchResult],
+                        lastPage: 1,
+                        total: 1
+                    }
+                };
+
+                spyOn(obj, 'options');
+                obj.loadOptions(searchKey);
+                expect(obj.options).toHaveBeenCalledWith([searchResult]);
+                expect(obj.cacheOptions.plain).toContain(searchResult);
+            });
         });
         describe('"isSearchKeyCached" method', function () {
             it('Should return false if searchKey has already been cached and total covers > 1 page', function () {
@@ -672,7 +690,7 @@ define([
             });
         });
         describe('"processRequest" method', function () {
-            it('Should store options successfully fetched from ajax request', function () {
+            it('Should store options and update cache successfully after fetched from ajax request', function () {
                 var ajaxRequest,
                     successfulAjaxResponse = {
                     options: {
@@ -686,6 +704,24 @@ define([
                     }
                 };
 
+                // place a number of options to cache prior fetch
+                obj.cacheOptions.plain = [{
+                    '2053': {
+                        value: '2057',
+                        label: 'testProductName5a8ddfd933b5c',
+                        'is_active': 1,
+                        path: 'testSku5a8ddfd933b5c',
+                        optgroup: false
+                    },
+                    '2054': {
+                        value: '2058',
+                        label: 'testProductName5a8ddfd933b5c',
+                        'is_active': 1,
+                        path: 'testSku5a8ddfd933b5c',
+                        optgroup: false
+                    }
+                }];
+
                 $.ajax = jasmine.createSpy().and.callFake(function (request) {
                     ajaxRequest = request.success.bind(obj);
                 });
@@ -693,7 +729,18 @@ define([
                 expect(obj.processRequest()).toBeUndefined();
 
                 ajaxRequest(successfulAjaxResponse);
-                expect(JSON.stringify(obj.options())).toEqual(JSON.stringify([successfulAjaxResponse.options['2053']]));
+
+                expect(
+                    JSON.stringify(obj.options())
+                ).toEqual(
+                    JSON.stringify([successfulAjaxResponse.options['2053']])
+                );
+
+                expect(
+                    JSON.stringify(obj.cacheOptions.plain)
+                ).toEqual(
+                    JSON.stringify([successfulAjaxResponse.options['2053']])
+                );
             });
         });
     });

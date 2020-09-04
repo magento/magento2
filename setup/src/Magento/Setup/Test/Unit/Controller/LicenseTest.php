@@ -3,15 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Controller;
 
-use \Magento\Setup\Controller\License;
+use Laminas\View\Model\ViewModel;
+use Magento\Setup\Controller\License;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class LicenseTest extends \PHPUnit\Framework\TestCase
+class LicenseTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|\Magento\Setup\Model\License
+     * @var MockObject|\Magento\Setup\Model\License
      */
     private $licenseModel;
 
@@ -20,7 +24,7 @@ class LicenseTest extends \PHPUnit\Framework\TestCase
      */
     private $controller;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->licenseModel = $this->createMock(\Magento\Setup\Model\License::class);
         $this->controller = new License($this->licenseModel);
@@ -30,7 +34,7 @@ class LicenseTest extends \PHPUnit\Framework\TestCase
     {
         $this->licenseModel->expects($this->once())->method('getContents')->willReturn('some license string');
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
         $this->assertArrayHasKey('license', $viewModel->getVariables());
     }
 
@@ -38,7 +42,7 @@ class LicenseTest extends \PHPUnit\Framework\TestCase
     {
         $this->licenseModel->expects($this->once())->method('getContents')->willReturn(false);
         $viewModel = $this->controller->indexAction();
-        $this->assertInstanceOf(\Zend\View\Model\ViewModel::class, $viewModel);
+        $this->assertInstanceOf(ViewModel::class, $viewModel);
         $this->assertArrayHasKey('message', $viewModel->getVariables());
         $this->assertEquals('error/404', $viewModel->getTemplate());
     }

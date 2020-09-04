@@ -14,8 +14,9 @@ use Magento\Catalog\Model\Product\Type as BundleProductType;
 use Magento\Catalog\Model\Product\Visibility;
 use Magento\Catalog\Model\ProductFactory;
 use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/multiple_products.php';
+Resolver::getInstance()->requireDataFixture('Magento/Bundle/_files/multiple_products.php');
 
 $objectManager = Bootstrap::getObjectManager();
 

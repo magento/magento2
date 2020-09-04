@@ -55,8 +55,8 @@ class MethodsTest extends \PHPUnit\Framework\TestCase
                 $this->any()
             )->method(
                 'getAdditionalInformation'
-            )->will(
-                $this->returnValue('Additional data mock')
+            )->willReturn(
+                'Additional data mock'
             );
             $model->setInfoInstance($paymentInfo);
         }

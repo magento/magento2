@@ -68,7 +68,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->readHandler = $this->objectManager->create(ReadHandler::class);
@@ -273,7 +273,7 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         parent::tearDown();
         $this->galleryResource->getConnection()
@@ -338,7 +338,11 @@ class ReadHandlerTest extends \PHPUnit\Framework\TestCase
     {
         /** @var ProductInterface $product */
         $product = $this->productFactory->create();
-        $product->setId($this->getProduct()->getId());
+        $product->setData(
+            $this->productLinkField,
+            $this->getProduct()->getData($this->productLinkField)
+        );
+
         if ($storeId) {
             $product->setStoreId($storeId);
         }

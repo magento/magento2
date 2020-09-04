@@ -23,7 +23,7 @@
         <before>
             <magentoCLI command="config:set {{StorefrontEnableAddStoreCodeToUrls.path}} {{StorefrontEnableAddStoreCodeToUrls.value}}" stepKey="addStoreCodeToUrlEnable"/>
             <createData entity="SimpleProduct2" stepKey="createProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminCreateWebsiteActionGroup" stepKey="createWebsite">
                 <argument name="newWebsiteName" value="{{customWebsite.name}}"/>
                 <argument name="websiteCode" value="{{customWebsite.code}}"/>
@@ -37,7 +37,7 @@
                 <argument name="StoreGroup" value="customStoreGroup"/>
                 <argument name="customStore" value="customStore"/>
             </actionGroup>
-            <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToProductEditPage">
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToProductEditPage">
                 <argument name="productId" value="$$createProduct.id$$"/>
             </actionGroup>
             <actionGroup ref="ProductSetWebsiteActionGroup" stepKey="assignProductToSecondWebsite">

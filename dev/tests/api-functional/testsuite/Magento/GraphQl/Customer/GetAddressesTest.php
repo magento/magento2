@@ -58,22 +58,22 @@ class GetAddressesTest extends GraphQlAbstract
         $response = $this->graphQlQuery($query, [], '', $headerMap);
         $this->assertArrayHasKey('customer', $response);
         $this->assertArrayHasKey('addresses', $response['customer']);
-        $this->assertTrue(
-            is_array([$response['customer']['addresses']]),
+        $this->assertIsArray([$response['customer']['addresses']],
             " Addresses field must be of an array type."
         );
-        self::assertEquals(null, $response['customer']['id']);
+        self::assertNull($response['customer']['id']);
         $this->assertCustomerAddressesFields($customer, $response);
     }
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @expectedException Exception
-     * @expectedExceptionMessage GraphQL response contains errors: The account is locked.
      */
     public function testGetCustomerAddressIfAccountIsLocked()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: The account is locked.');
+
         $query = $this->getQuery();
 
         $userName = 'customer@example.com';
@@ -89,11 +89,12 @@ class GetAddressesTest extends GraphQlAbstract
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/Customer/_files/customer_address.php
-     * @expectedException Exception
-     * @expectedExceptionMessage GraphQL response contains errors: The current customer isn't authorized.
      */
     public function testGetCustomerAddressIfUserIsNotAuthorized()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('GraphQL response contains errors: The current customer isn\'t authorized.');
+
         $query = $this->getQuery();
 
         $this->graphQlQuery($query);
