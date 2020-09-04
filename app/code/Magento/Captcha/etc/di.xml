@@ -42,8 +42,8 @@
     </type>
     <type name="Magento\Captcha\Model\Filter\CaptchaConfigPostProcessorComposite">
         <arguments>
-            <argument name="filters" xsi:type="array">
-                <item name="filter" xsi:type="object">Magento\Captcha\Model\Filter\QuoteDataConfigFilter</item>
+            <argument name="processors" xsi:type="array">
+                <item name="processor" xsi:type="object">Magento\Captcha\Model\Filter\QuoteDataConfigFilter</item>
             </argument>
         </arguments>
     </type>
