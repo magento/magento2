@@ -31,16 +31,17 @@ class ImageDetails extends Template
     private $json;
 
     /**
-     * @param AuthorizationInterface $authorization
      * @param Template\Context $context
+     * @param AuthorizationInterface $authorization
+     * @param Json $json
      * @param array $data
      * @param JsonHelper|null $jsonHelper
      * @param DirectoryHelper|null $directoryHelper
      */
     public function __construct(
+        Template\Context $context,
         AuthorizationInterface $authorization,
         Json $json,
-        Template\Context $context,
         array $data = [],
         ?JsonHelper $jsonHelper = null,
         ?DirectoryHelper $directoryHelper = null

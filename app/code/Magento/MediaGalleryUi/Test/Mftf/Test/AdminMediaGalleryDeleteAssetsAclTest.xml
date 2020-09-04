@@ -44,7 +44,7 @@
         <actionGroup ref="AdminUserClickRoleResourceTabActionGroup" stepKey="switchToRoleResourceTab"/>
         <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="uncheckDeleteFolder">
             <argument name="User" value="adminRole"/>
-            <argument name="restrictedRole" value="Delete Assets"/>
+            <argument name="restrictedRole" value="Delete assets"/>
         </actionGroup>
 
         <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="AddMediaGalleryPagesResource">
@@ -59,7 +59,7 @@
         </actionGroup>
 
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
-        
+
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUser">
             <argument name="username" value="{{admin2.username}}"/>
             <argument name="password" value="{{admin2.password}}"/>

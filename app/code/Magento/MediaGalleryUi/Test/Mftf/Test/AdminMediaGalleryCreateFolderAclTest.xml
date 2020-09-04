@@ -44,7 +44,7 @@
         <actionGroup ref="AdminUserClickRoleResourceTabActionGroup" stepKey="switchToRoleResourceTab"/>
         <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="AddMediaGalleryResource">
             <argument name="User" value="adminRole"/>
-            <argument name="restrictedRole" value="Create Folder"/>
+            <argument name="restrictedRole" value="Create folder"/>
         </actionGroup>
         <actionGroup ref="AdminAddRestrictedRoleActionGroup" stepKey="AddMediaGalleryPagesResource">
             <argument name="User" value="adminRole"/>
@@ -58,7 +58,7 @@
         </actionGroup>
 
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
-        
+
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsNewUser">
             <argument name="username" value="{{admin2.username}}"/>
             <argument name="password" value="{{admin2.password}}"/>

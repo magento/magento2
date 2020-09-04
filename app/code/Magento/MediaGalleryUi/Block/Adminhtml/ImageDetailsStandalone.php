@@ -31,16 +31,17 @@ class ImageDetailsStandalone extends Template
     private $json;
 
     /**
-     * @param AuthorizationInterface $authorization
      * @param Template\Context $context
+     * @param AuthorizationInterface $authorization
+     * @param Json $json
      * @param array $data
      * @param JsonHelperData|null $jsonHelper
      * @param DirectoryHelperData|null $directoryHelper
      */
     public function __construct(
+        Template\Context $context,
         AuthorizationInterface $authorization,
         Json $json,
-        Template\Context $context,
         array $data = [],
         ?JsonHelperData $jsonHelper = null,
         ?DirectoryHelperData $directoryHelper = null
@@ -57,7 +58,7 @@ class ImageDetailsStandalone extends Template
      */
     public function getActionsJson(): string
     {
-        $actions = [
+        $standaloneActions = [
             [
                 'title' => __('Cancel'),
                 'handler' => 'closeModal',
@@ -67,7 +68,7 @@ class ImageDetailsStandalone extends Template
         ];
 
         if ($this->authorization->isAllowed('Magento_MediaGalleryUiApi::delete_assets')) {
-            $actions[] = [
+            $standaloneActions[] = [
                 'title' => __('Delete Image'),
                 'handler' => 'deleteImageAction',
                 'name' => 'delete',
@@ -76,7 +77,7 @@ class ImageDetailsStandalone extends Template
         }
 
         if ($this->authorization->isAllowed('Magento_MediaGalleryUiApi::edit_assets')) {
-            $actions[] = [
+            $standaloneActions[] = [
                 'title' => __('Edit Details'),
                 'handler' => 'editImageAction',
                 'name' => 'edit',
@@ -84,6 +85,6 @@ class ImageDetailsStandalone extends Template
             ];
         }
 
-        return $this->json->serialize($actions);
+        return $this->json->serialize($standaloneActions);
     }
 }

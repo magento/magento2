@@ -55,7 +55,7 @@ define([
             this._super();
             this.initEvents();
 
-            this.actionsList = this.actionsList.filter(function(item) {
+            this.actionsList = this.actionsList.filter(function (item) {
                 return this.allowedActions.includes(item.name);
             }.bind(this));
 
