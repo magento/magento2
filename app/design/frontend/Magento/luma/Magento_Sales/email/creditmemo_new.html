@@ -20,6 +20,8 @@
 "var store_email":"Store Email",
 "var creditmemo":"Credit Memo",
 "var order":"Order",
+"var order_id": "Order DB Id",
+"var creditmemo_id": "Credit Memo DB Id",
 "var order_data.is_not_virtual":"Order Type"
 } @-->
 {{template config_path="design/email/header_template"}}
@@ -79,7 +81,7 @@
                     {{/depend}}
                 </tr>
             </table>
-            {{layout handle="sales_email_order_creditmemo_items" creditmemo=$creditmemo order=$order}}
+            {{layout handle="sales_email_order_creditmemo_items" creditmemo_id=$creditmemo_id order_id=$order_id}}
         </td>
     </tr>
 </table>

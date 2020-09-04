@@ -10,8 +10,9 @@ use Magento\Customer\Model\Address;
 use Magento\Customer\Model\Customer;
 use Magento\Store\Model\Website;
 use Magento\Store\Model\Store;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-include __DIR__ . '/../../Store/_files/websites_different_countries.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/websites_different_countries.php');
 
 //Creating two customers for different websites.
 $objectManager = Bootstrap::getObjectManager();

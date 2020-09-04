@@ -47,11 +47,40 @@ class NewActionHtml extends Quote implements HttpPostActionInterface
         if ($model instanceof AbstractCondition) {
             $model->setJsFormObject($formName);
             $model->setFormName($formName);
+            $this->setJsFormObject($model);
             $html = $model->asHtmlRecursive();
         } else {
             $html = '';
         }
         $this->getResponse()
             ->setBody($html);
+    }
+
+    /**
+     * Set jsFormObject for the model object
+     *
+     * @return void
+     * @param AbstractCondition $model
+     */
+    private function setJsFormObject(AbstractCondition $model): void
+    {
+        $requestJsFormName = $this->getRequest()->getParam('form');
+        $actualJsFormName = $this->getJsFormObjectName($model->getFormName());
+        if ($requestJsFormName === $actualJsFormName) { //new
+            $model->setJsFormObject($actualJsFormName);
+        } else { //edit
+            $model->setJsFormObject($requestJsFormName);
+        }
+    }
+
+    /**
+     * Get jsFormObject name
+     *
+     * @param string $formName
+     * @return string
+     */
+    private function getJsFormObjectName(string $formName): string
+    {
+        return $formName . 'rule_actions_fieldset_';
     }
 }

@@ -3,11 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Module\Test\Unit;
 
-use \Magento\Framework\Module\ModuleList;
+use Magento\Framework\App\DeploymentConfig;
+use Magento\Framework\Module\ModuleList;
+use Magento\Framework\Module\ModuleList\Loader;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ModuleListTest extends \PHPUnit\Framework\TestCase
+/**
+ * Test for module list
+ */
+class ModuleListTest extends TestCase
 {
     /**
      * Fixture for all modules' meta-information
@@ -24,12 +33,12 @@ class ModuleListTest extends \PHPUnit\Framework\TestCase
     private static $enabledFixture = ['foo' => 1, 'bar' => 0];
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $config;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $loader;
 
@@ -38,16 +47,15 @@ class ModuleListTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->config = $this->createMock(\Magento\Framework\App\DeploymentConfig::class);
-        $this->loader = $this->createMock(\Magento\Framework\Module\ModuleList\Loader::class);
+        $this->config = $this->createMock(DeploymentConfig::class);
+        $this->loader = $this->createMock(Loader::class);
         $this->model = new ModuleList($this->config, $this->loader);
     }
 
     public function testGetAll()
     {
-        $this->config->expects($this->exactly(2))->method('resetData');
         $this->setLoadAllExpectation();
         $this->setLoadConfigExpectation();
         $expected = ['foo' => self::$allFixture['foo']];
@@ -65,7 +73,6 @@ class ModuleListTest extends \PHPUnit\Framework\TestCase
 
     public function testGetOne()
     {
-        $this->config->expects($this->exactly(2))->method('resetData');
         $this->setLoadAllExpectation();
         $this->setLoadConfigExpectation();
         $this->assertSame(['key' => 'value'], $this->model->getOne('foo'));
@@ -74,7 +81,6 @@ class ModuleListTest extends \PHPUnit\Framework\TestCase
 
     public function testGetNames()
     {
-        $this->config->expects($this->exactly(2))->method('resetData');
         $this->setLoadAllExpectation(false);
         $this->setLoadConfigExpectation();
         $this->assertSame(['foo'], $this->model->getNames());
@@ -83,7 +89,6 @@ class ModuleListTest extends \PHPUnit\Framework\TestCase
 
     public function testHas()
     {
-        $this->config->expects($this->exactly(2))->method('resetData');
         $this->setLoadAllExpectation(false);
         $this->setLoadConfigExpectation();
         $this->assertTrue($this->model->has('foo'));
@@ -92,7 +97,6 @@ class ModuleListTest extends \PHPUnit\Framework\TestCase
 
     public function testIsModuleInfoAvailable()
     {
-        $this->config->expects($this->once())->method('resetData');
         $this->setLoadConfigExpectation(true);
         $this->assertTrue($this->model->isModuleInfoAvailable());
     }

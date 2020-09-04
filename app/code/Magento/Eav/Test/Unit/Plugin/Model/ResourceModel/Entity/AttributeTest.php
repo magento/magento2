@@ -3,36 +3,40 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Plugin\Model\ResourceModel\Entity;
 
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\Serialize\SerializerInterface;
-use Magento\Framework\App\CacheInterface;
-use Magento\Framework\App\Cache\StateInterface;
-use Magento\Eav\Model\ResourceModel\Entity\Attribute as AttributeResource;
-use Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute as AttributeResourcePlugin;
 use Magento\Eav\Model\Cache\Type;
 use Magento\Eav\Model\Entity\Attribute;
+use Magento\Eav\Model\ResourceModel\Entity\Attribute as AttributeResource;
+use Magento\Eav\Plugin\Model\ResourceModel\Entity\Attribute as AttributeResourcePlugin;
+use Magento\Framework\App\Cache\StateInterface;
+use Magento\Framework\App\CacheInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class AttributeTest extends \PHPUnit\Framework\TestCase
+class AttributeTest extends TestCase
 {
     /**
-     * @var CacheInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var CacheInterface|MockObject
      */
     protected $cacheMock;
 
     /**
-     * @var StateInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var StateInterface|MockObject
      */
     protected $cacheStateMock;
 
     /**
-     * @var SerializerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var SerializerInterface|MockObject
      */
     private $serializerMock;
 
     /**
-     * @var AttributeResource|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeResource|MockObject
      */
     private $attributeResourceMock;
 
@@ -41,13 +45,13 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     private $attributeResourcePlugin;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
-        $this->cacheMock = $this->createMock(CacheInterface::class);
-        $this->cacheStateMock = $this->createMock(StateInterface::class);
+        $this->cacheMock = $this->getMockForAbstractClass(CacheInterface::class);
+        $this->cacheStateMock = $this->getMockForAbstractClass(StateInterface::class);
         $this->attributeResourceMock = $this->createMock(AttributeResource::class);
-        $this->serializerMock = $this->createMock(SerializerInterface::class);
+        $this->serializerMock = $this->getMockForAbstractClass(SerializerInterface::class);
         $this->attributeResourcePlugin = $objectManager->getObject(
             AttributeResourcePlugin::class,
             [

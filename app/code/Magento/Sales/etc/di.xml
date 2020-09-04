@@ -832,6 +832,12 @@
             </argument>
         </arguments>
     </type>
+    <virtualType name="Magento\Sales\Model\ResourceModel\Order\Invoice\Grid\Collection" type="Magento\Framework\View\Element\UiComponent\DataProvider\SearchResult">
+        <arguments>
+            <argument name="mainTable" xsi:type="string">sales_invoice_grid</argument>
+            <argument name="resourceModel" xsi:type="string">Magento\Sales\Model\ResourceModel\Order\Invoice</argument>
+        </arguments>
+    </virtualType>
     <type name="Magento\Sales\Model\Order\Config">
         <arguments>
             <argument name="state" xsi:type="object">Magento\Framework\App\State\Proxy</argument>
@@ -935,6 +941,11 @@
             <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\CaptureCommand</argument>
         </arguments>
     </type>
+    <type name="Magento\Sales\Model\Order\Payment\Operations\ProcessInvoiceOperation">
+        <arguments>
+            <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\CaptureCommand</argument>
+        </arguments>
+    </type>
     <type name="Magento\Sales\Model\Order\Payment\Operations\OrderOperation">
         <arguments>
             <argument name="stateCommand" xsi:type="object">Magento\Sales\Model\Order\Payment\State\OrderCommand</argument>
@@ -999,9 +1010,6 @@
                 <item name="sales_email/order_comment/copy_to" xsi:type="string">1</item>
                 <item name="sales_email/shipment/copy_to" xsi:type="string">1</item>
                 <item name="sales_email/shipment_comment/copy_to" xsi:type="string">1</item>
-            </argument>
-            <argument name="environment" xsi:type="array">
-                <item name="customer/create_account/email_domain" xsi:type="string">1</item>
             </argument>
         </arguments>
     </type>

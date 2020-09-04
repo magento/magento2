@@ -38,7 +38,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->shipmentRepository = $this->objectManager->get(ShipmentRepositoryInterface::class);
@@ -123,7 +123,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
             },
             $comments
         );
-        self::assertEquals(2, count($actual));
+        self::assertCount(2, $actual);
         self::assertEquals([$message1, $message2], $actual);
     }
 
@@ -165,7 +165,7 @@ class ShipmentTest extends \PHPUnit\Framework\TestCase
             ->create($order, $items);
 
         $tracks = $shipment->getTracksCollection();
-        self::assertTrue(empty($tracks->getItems()));
+        self::assertEmpty($tracks->getItems());
 
         /** @var ShipmentTrackInterface $track */
         $track = $this->objectManager->create(ShipmentTrackInterface::class);

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup">
+        <annotations>
+            <description>Opens Enhanced MediaGallery from image uploader on category page</description>
+        </annotations>
+
+        <conditionalClick stepKey="clickExpandContent" selector="{{AdminCategoryContentSection.sectionHeader}}" dependentSelector="{{AdminCategoryContentSection.selectFromGalleryButton}}" visible="false" />
+        <waitForElementVisible selector="{{AdminCategoryContentSection.selectFromGalleryButton}}" stepKey="waitForSelectFromGallery" />
+        <click selector="{{AdminCategoryContentSection.selectFromGalleryButton}}" stepKey="clickSelectFromGallery" />
+        <waitForPageLoad stepKey="waitForPageLoad" />
+    </actionGroup>
+</actionGroups>

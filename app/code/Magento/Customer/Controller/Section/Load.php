@@ -23,7 +23,7 @@ class Load extends \Magento\Framework\App\Action\Action implements HttpGetAction
 
     /**
      * @var Identifier
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected $sectionIdentifier;
 
@@ -78,8 +78,8 @@ class Load extends \Magento\Framework\App\Action\Action implements HttpGetAction
             $response = $this->sectionPool->getSectionsData($sectionNames, (bool)$forceNewSectionTimestamp);
         } catch (\Exception $e) {
             $resultJson->setStatusHeader(
-                \Zend\Http\Response::STATUS_CODE_400,
-                \Zend\Http\AbstractMessage::VERSION_11,
+                \Laminas\Http\Response::STATUS_CODE_400,
+                \Laminas\Http\AbstractMessage::VERSION_11,
                 'Bad Request'
             );
             $response = ['message' => $this->escaper->escapeHtml($e->getMessage())];

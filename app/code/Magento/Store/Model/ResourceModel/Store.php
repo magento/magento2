@@ -166,16 +166,10 @@ class Store extends \Magento\Framework\Model\ResourceModel\Db\AbstractDb
      */
     public function readAllStores()
     {
-        $stores = [];
-        if ($this->getConnection()->isTableExists($this->getMainTable())) {
-            $select = $this->getConnection()
-                ->select()
-                ->from($this->getTable($this->getMainTable()));
-
-            $stores = $this->getConnection()->fetchAll($select);
-        }
-
-        return $stores;
+        $select = $this->getConnection()
+            ->select()
+            ->from($this->getTable($this->getMainTable()));
+        return $this->getConnection()->fetchAll($select);
     }
 
     /**

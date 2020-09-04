@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminConfigDefaultCMSPageLayoutFromConfigurationSettingTest">
+        <annotations>
+            <features value="Cms"/>
+            <stories value="Default layout configuration MAGETWO-88793"/>
+            <title value="Admin should be able to configure the default layout for CMS Page from System Configuration"/>
+            <description value="Admin should be able to configure the default layout for CMS Page from System Configuration"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MAGETWO-89025"/>
+            <group value="Cms"/>
+        </annotations>
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="RestoreLayoutSetting" stepKey="sampleActionGroup"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+        <amOnPage url="{{WebConfigurationPage.url}}" stepKey="navigateToWebConfigurationPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <conditionalClick stepKey="expandDefaultLayouts" selector="{{WebSection.DefaultLayoutsTab}}" dependentSelector="{{WebSection.CheckIfTabExpand}}" visible="true" />
+        <waitForElementVisible selector="{{DefaultLayoutsSection.pageLayout}}" stepKey="DefaultProductLayout" />
+        <seeOptionIsSelected selector="{{DefaultLayoutsSection.pageLayout}}" userInput="1 column" stepKey="seeOneColumnSelected" />
+        <seeOptionIsSelected selector="{{DefaultLayoutsSection.productLayout}}" userInput="No layout updates" stepKey="seeNoLayoutUpdatesSelected1" />
+        <seeOptionIsSelected selector="{{DefaultLayoutsSection.categoryLayout}}" userInput="No layout updates" stepKey="seeNoLayoutUpdatesSelected2" />
+        <selectOption selector="{{DefaultLayoutsSection.pageLayout}}" userInput="2 columns with right bar" stepKey="selectColumnsWithRightBar"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="clickSaveConfig" />
+        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="amOnPagePagesGrid"/>
+        <waitForPageLoad stepKey="waitForPageLoad1"/>
+        <waitForLoadingMaskToDisappear stepKey="wait2" />
+        <click selector="{{CmsDesignSection.DesignTab}}" stepKey="clickOnDesignTab"/>
+        <waitForElementVisible selector="{{CmsDesignSection.LayoutDropdown}}" stepKey="waitForLayoutDropDown" />
+        <seeOptionIsSelected selector="{{CmsDesignSection.LayoutDropdown}}" userInput="2 columns with right bar" stepKey="seeColumnsWithRightBar" />
+    </test>
+</tests>

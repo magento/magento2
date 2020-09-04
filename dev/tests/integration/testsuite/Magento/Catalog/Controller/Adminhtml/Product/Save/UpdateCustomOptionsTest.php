@@ -22,9 +22,15 @@ use Magento\TestFramework\TestCase\AbstractBackendController;
  *
  * @magentoAppArea adminhtml
  * @magentoDbIsolation enabled
+ * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
  */
 class UpdateCustomOptionsTest extends AbstractBackendController
 {
+    /**
+     * @var string
+     */
+    protected $productSku = 'simple';
+
     /**
      * @var ProductRepositoryInterface
      */
@@ -43,7 +49,7 @@ class UpdateCustomOptionsTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -55,8 +61,6 @@ class UpdateCustomOptionsTest extends AbstractBackendController
     /**
      * Test add to product custom option with type "field".
      *
-     * @magentoDataFixture Magento/Catalog/_files/product_without_options.php
-     *
      * @dataProvider \Magento\TestFramework\Catalog\Model\Product\Option\DataProvider\Type\Field::getDataForUpdateOptions
      *
      * @param array $optionData
@@ -65,7 +69,7 @@ class UpdateCustomOptionsTest extends AbstractBackendController
      */
     public function testUpdateCustomOptionWithTypeField(array $optionData, array $updateData): void
     {
-        $product = $this->productRepository->get('simple');
+        $product = $this->productRepository->get($this->productSku);
         /** @var ProductCustomOptionInterface|Option $option */
         $option = $this->optionRepositoryFactory->create(['data' => $optionData]);
         $option->setProductSku($product->getSku());
@@ -112,7 +116,7 @@ class UpdateCustomOptionsTest extends AbstractBackendController
             $this->getRequest()->setMethod(HttpRequest::METHOD_POST);
             $this->dispatch('backend/catalog/product/save/id/' . $product->getEntityId());
             $this->assertSessionMessages(
-                $this->contains('You saved the product.'),
+                $this->containsEqual('You saved the product.'),
                 MessageInterface::TYPE_SUCCESS
             );
             $updatedOptions = $this->optionRepository->getProductOptions($product);

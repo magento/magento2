@@ -16,7 +16,7 @@ use Magento\TestFramework\ObjectManager;
 use PHPUnit\Framework\TestCase;
 
 /**
- * Test cases related to find configurable product via quick search using mysql search engine.
+ * Test cases related to find configurable product via quick search using search engine.
  *
  * @magentoDataFixture Magento/ConfigurableProduct/_files/configurable_product_with_two_child_products.php
  * @magentoDataFixture Magento/CatalogSearch/_files/full_reindex.php
@@ -44,7 +44,7 @@ class QuickSearchTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->quickSearchByQuery = $this->objectManager->get(QuickSearchByQuery::class);
@@ -54,8 +54,6 @@ class QuickSearchTest extends TestCase
 
     /**
      * Assert that configurable child products has not found by query using mysql search engine.
-     *
-     * @magentoConfigFixture default/catalog/search/engine mysql
      *
      * @return void
      */
@@ -68,7 +66,6 @@ class QuickSearchTest extends TestCase
      * Assert that child product of configurable will be available by search after
      * set to product visibility by catalog and search using mysql search engine.
      *
-     * @magentoConfigFixture default/catalog/search/engine mysql
      * @dataProvider productAvailabilityInSearchByVisibilityDataProvider
      *
      * @param int $visibility
@@ -113,7 +110,6 @@ class QuickSearchTest extends TestCase
     /**
      * Assert that configurable product was found by option value using mysql search engine.
      *
-     * @magentoConfigFixture default/catalog/search/engine mysql
      *
      * @return void
      */

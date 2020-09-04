@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontConfigurableProductSwatchMinimumPriceCategoryPageTest" extends="StorefrontConfigurableProductSwatchMinimumPriceProductPageTest">
+        <annotations>
+            <features value="Swatches"/>
+            <stories value="Configurable product with swatch attribute"/>
+            <title value="Swatch option should show the lowest price possible on category page"/>
+            <description value="Swatch option should show the lowest price possible on category page"/>
+            <severity value="CRITICAL"/>
+            <testCaseId value="MC-19683"/>
+            <group value="Swatches"/>
+        </annotations>
+
+        <!--Go to category page-->
+        <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="amOnConfigurableProductPage"/>
+        <waitForPageLoad stepKey="waitForConfigurableProductPage"/>
+
+        <!--Verify that the minimum price is 10-->
+        <actionGroup ref="StorefrontAssertProductPriceOnCategoryPageActionGroup" stepKey="assertProductPrice">
+            <argument name="productName" value="{{_defaultProduct.name}}"/>
+            <argument name="productPrice" value="10.00"/>
+        </actionGroup>
+    </test>
+</tests>

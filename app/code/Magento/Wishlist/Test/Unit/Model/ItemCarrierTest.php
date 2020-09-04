@@ -3,72 +3,90 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Wishlist\Test\Unit\Model;
 
+use Magento\Catalog\Model\Product;
+use Magento\Checkout\Model\Cart;
+use Magento\Customer\Model\Session;
+use Magento\Framework\App\Response\RedirectInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\UrlInterface;
+use Magento\Quote\Model\Quote;
+use Magento\Wishlist\Helper\Data;
+use Magento\Wishlist\Model\Item;
+use Magento\Wishlist\Model\ItemCarrier;
+use Magento\Wishlist\Model\LocaleQuantityProcessor;
 use Magento\Wishlist\Model\ResourceModel\Item\Collection;
+use Magento\Wishlist\Model\Wishlist;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Psr\Log\LoggerInterface;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class ItemCarrierTest extends \PHPUnit\Framework\TestCase
+class ItemCarrierTest extends TestCase
 {
-    /** @var \Magento\Wishlist\Model\ItemCarrier */
+    /** @var ItemCarrier */
     protected $model;
 
-    /** @var \Magento\Customer\Model\Session|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Session|MockObject */
     protected $sessionMock;
 
-    /** @var \Magento\Wishlist\Model\LocaleQuantityProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var LocaleQuantityProcessor|MockObject */
     protected $quantityProcessorMock;
 
-    /** @var \Magento\Checkout\Model\Cart|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Cart|MockObject */
     protected $cartMock;
 
-    /** @var \Psr\Log\LoggerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var LoggerInterface|MockObject */
     protected $loggerMock;
 
-    /** @var \Magento\Wishlist\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Data|MockObject */
     protected $wishlistHelperMock;
 
-    /** @var \Magento\Checkout\Helper\Cart|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Checkout\Helper\Cart|MockObject */
     protected $cartHelperMock;
 
-    /** @var \Magento\Framework\UrlInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var UrlInterface|MockObject */
     protected $urlBuilderMock;
 
-    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ManagerInterface|MockObject */
     protected $managerMock;
 
-    /** @var \Magento\Framework\App\Response\RedirectInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RedirectInterface|MockObject */
     protected $redirectMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->sessionMock = $this->getMockBuilder(\Magento\Customer\Model\Session::class)
+        $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->quantityProcessorMock = $this->getMockBuilder(\Magento\Wishlist\Model\LocaleQuantityProcessor::class)
+        $this->quantityProcessorMock = $this->getMockBuilder(LocaleQuantityProcessor::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->cartMock = $this->getMockBuilder(\Magento\Checkout\Model\Cart::class)
+        $this->cartMock = $this->getMockBuilder(Cart::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->loggerMock = $this->getMockBuilder(\Psr\Log\LoggerInterface::class)
+        $this->loggerMock = $this->getMockBuilder(LoggerInterface::class)
             ->getMockForAbstractClass();
-        $this->wishlistHelperMock = $this->getMockBuilder(\Magento\Wishlist\Helper\Data::class)
+        $this->wishlistHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->cartHelperMock = $this->getMockBuilder(\Magento\Checkout\Helper\Cart::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->urlBuilderMock = $this->getMockBuilder(\Magento\Framework\UrlInterface::class)
+        $this->urlBuilderMock = $this->getMockBuilder(UrlInterface::class)
             ->getMockForAbstractClass();
-        $this->managerMock = $this->getMockBuilder(\Magento\Framework\Message\ManagerInterface::class)
+        $this->managerMock = $this->getMockBuilder(ManagerInterface::class)
             ->getMockForAbstractClass();
-        $this->redirectMock = $this->getMockBuilder(\Magento\Framework\App\Response\RedirectInterface::class)
+        $this->redirectMock = $this->getMockBuilder(RedirectInterface::class)
             ->getMockForAbstractClass();
 
-        $this->model = new \Magento\Wishlist\Model\ItemCarrier(
+        $this->model = new ItemCarrier(
             $this->sessionMock,
             $this->quantityProcessorMock,
             $this->cartMock,
@@ -97,24 +115,24 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
         $indexUrl = 'index_url';
         $redirectUrl = 'redirect_url';
 
-        /** @var \Magento\Wishlist\Model\Item|\PHPUnit_Framework_MockObject_MockObject $itemOneMock */
-        $itemOneMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item::class)
+        /** @var Item|MockObject $itemOneMock */
+        $itemOneMock = $this->getMockBuilder(Item::class)
             ->setMethods(['getProduct', 'unsProduct', 'getId', 'setQty', 'addToCart', 'delete', 'getProductUrl'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Wishlist\Model\Item|\PHPUnit_Framework_MockObject_MockObject $itemTwoMock */
-        $itemTwoMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item::class)
+        /** @var Item|MockObject $itemTwoMock */
+        $itemTwoMock = $this->getMockBuilder(Item::class)
             ->setMethods(['getProduct', 'unsProduct', 'getId', 'setQty', 'addToCart', 'delete', 'getProductUrl'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $productOneMock */
-        $productOneMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        /** @var Product|MockObject $productOneMock */
+        $productOneMock = $this->getMockBuilder(Product::class)
             ->setMethods(['getDisableAddToCart', 'setDisableAddToCart', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $productTwoMock */
-        $productTwoMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        /** @var Product|MockObject $productTwoMock */
+        $productTwoMock = $this->getMockBuilder(Product::class)
             ->setMethods(['getDisableAddToCart', 'setDisableAddToCart', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -128,8 +146,8 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
 
         $collection = [$itemOneMock, $itemTwoMock];
 
-        /** @var \Magento\Wishlist\Model\Wishlist|\PHPUnit_Framework_MockObject_MockObject $wishlistMock */
-        $wishlistMock = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)
+        /** @var Wishlist|MockObject $wishlistMock */
+        $wishlistMock = $this->getMockBuilder(Wishlist::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -145,8 +163,8 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn($wishlistId);
 
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(\Magento\Wishlist\Model\ResourceModel\Item\Collection::class)
+        /** @var Collection|MockObject $collectionMock */
+        $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -236,8 +254,8 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->willReturnSelf();
 
-        /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
-        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
+        /** @var Quote|MockObject $collectionMock */
+        $quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -272,24 +290,24 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
         $redirectUrl = 'redirect_url';
         $sharingCode = 'sharingcode';
 
-        /** @var \Magento\Wishlist\Model\Item|\PHPUnit_Framework_MockObject_MockObject $itemOneMock */
-        $itemOneMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item::class)
+        /** @var Item|MockObject $itemOneMock */
+        $itemOneMock = $this->getMockBuilder(Item::class)
             ->setMethods(['getProduct', 'unsProduct', 'getId', 'setQty', 'addToCart', 'delete', 'getProductUrl'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Wishlist\Model\Item|\PHPUnit_Framework_MockObject_MockObject $itemTwoMock */
-        $itemTwoMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item::class)
+        /** @var Item|MockObject $itemTwoMock */
+        $itemTwoMock = $this->getMockBuilder(Item::class)
             ->setMethods(['getProduct', 'unsProduct', 'getId', 'setQty', 'addToCart', 'delete', 'getProductUrl'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $productOneMock */
-        $productOneMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        /** @var Product|MockObject $productOneMock */
+        $productOneMock = $this->getMockBuilder(Product::class)
             ->setMethods(['getDisableAddToCart', 'setDisableAddToCart', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $productTwoMock */
-        $productTwoMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        /** @var Product|MockObject $productTwoMock */
+        $productTwoMock = $this->getMockBuilder(Product::class)
             ->setMethods(['getDisableAddToCart', 'setDisableAddToCart', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -303,8 +321,8 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
 
         $collection = [$itemOneMock, $itemTwoMock];
 
-        /** @var \Magento\Wishlist\Model\Wishlist|\PHPUnit_Framework_MockObject_MockObject $wishlistMock */
-        $wishlistMock = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)
+        /** @var Wishlist|MockObject $wishlistMock */
+        $wishlistMock = $this->getMockBuilder(Wishlist::class)
             ->setMethods(['isOwner', 'getItemCollection', 'getId', 'getSharingCode', 'save'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -318,8 +336,8 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->with($sessionCustomerId)
             ->willReturn($isOwner);
 
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(\Magento\Wishlist\Model\ResourceModel\Item\Collection::class)
+        /** @var Collection|MockObject $collectionMock */
+        $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -380,10 +398,10 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
         $itemTwoMock->expects($this->once())
             ->method('addToCart')
             ->with($this->cartMock, $isOwner)
-            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('Localized Exception.')));
+            ->willThrowException(new LocalizedException(__('Localized Exception.')));
 
-        /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
-        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
+        /** @var Quote|MockObject $collectionMock */
+        $quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -391,7 +409,7 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->method('getQuote')
             ->willReturn($quoteMock);
 
-        /** @var \Magento\Quote\Model\Quote\Item|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
+        /** @var \Magento\Quote\Model\Quote\Item|MockObject $collectionMock */
         $itemMock = $this->getMockBuilder(\Magento\Quote\Model\Quote\Item::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -467,24 +485,24 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
         $isOwner = true;
         $indexUrl = 'index_url';
 
-        /** @var \Magento\Wishlist\Model\Item|\PHPUnit_Framework_MockObject_MockObject $itemOneMock */
-        $itemOneMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item::class)
+        /** @var Item|MockObject $itemOneMock */
+        $itemOneMock = $this->getMockBuilder(Item::class)
             ->setMethods(['getProduct', 'unsProduct', 'getId', 'setQty', 'addToCart', 'delete', 'getProductUrl'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Wishlist\Model\Item|\PHPUnit_Framework_MockObject_MockObject $itemTwoMock */
-        $itemTwoMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item::class)
+        /** @var Item|MockObject $itemTwoMock */
+        $itemTwoMock = $this->getMockBuilder(Item::class)
             ->setMethods(['getProduct', 'unsProduct', 'getId', 'setQty', 'addToCart', 'delete', 'getProductUrl'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $productOneMock */
-        $productOneMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        /** @var Product|MockObject $productOneMock */
+        $productOneMock = $this->getMockBuilder(Product::class)
             ->setMethods(['getDisableAddToCart', 'setDisableAddToCart', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
-        /** @var \Magento\Catalog\Model\Product|\PHPUnit_Framework_MockObject_MockObject $productTwoMock */
-        $productTwoMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        /** @var Product|MockObject $productTwoMock */
+        $productTwoMock = $this->getMockBuilder(Product::class)
             ->setMethods(['getDisableAddToCart', 'setDisableAddToCart', 'getName'])
             ->disableOriginalConstructor()
             ->getMock();
@@ -498,8 +516,8 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
 
         $collection = [$itemOneMock, $itemTwoMock];
 
-        /** @var \Magento\Wishlist\Model\Wishlist|\PHPUnit_Framework_MockObject_MockObject $wishlistMock */
-        $wishlistMock = $this->getMockBuilder(\Magento\Wishlist\Model\Wishlist::class)
+        /** @var Wishlist|MockObject $wishlistMock */
+        $wishlistMock = $this->getMockBuilder(Wishlist::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -515,8 +533,8 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->method('getId')
             ->willReturn($wishlistId);
 
-        /** @var Collection|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
-        $collectionMock = $this->getMockBuilder(\Magento\Wishlist\Model\ResourceModel\Item\Collection::class)
+        /** @var Collection|MockObject $collectionMock */
+        $collectionMock = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -623,8 +641,8 @@ class ItemCarrierTest extends \PHPUnit\Framework\TestCase
             ->method('save')
             ->willReturnSelf();
 
-        /** @var \Magento\Quote\Model\Quote|\PHPUnit_Framework_MockObject_MockObject $collectionMock */
-        $quoteMock = $this->getMockBuilder(\Magento\Quote\Model\Quote::class)
+        /** @var Quote|MockObject $collectionMock */
+        $quoteMock = $this->getMockBuilder(Quote::class)
             ->disableOriginalConstructor()
             ->getMock();
 

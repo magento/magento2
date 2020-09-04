@@ -78,11 +78,7 @@ class Collection
     public function getOptionsByParentId(int $parentId) : array
     {
         $options = $this->fetch();
-        if (!isset($options[$parentId])) {
-            return [];
-        }
-
-        return $options[$parentId];
+        return $options[$parentId] ?? [];
     }
 
     /**
@@ -115,7 +111,7 @@ class Collection
 
         $this->extensionAttributesJoinProcessor->process($optionsCollection);
         if (empty($optionsCollection->getData())) {
-            return null;
+            return [];
         }
 
         /** @var \Magento\Bundle\Model\Option $option */

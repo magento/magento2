@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<listing xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:module:Magento_Ui:etc/ui_configuration.xsd">
+ <listingToolbar name="listing_top">
+     <filters name="listing_filters">
+             <filterSelect
+                name="asset_id"
+                provider="${ $.parentName }"
+                sortOrder="10"
+                class="Magento\MediaGalleryUi\Ui\Component\Listing\Filters\Asset"
+                component="Magento_Ui/js/grid/filters/elements/ui-select"
+                template="Magento_MediaGalleryUi/grid/filters/elements/ui-select">
+                <argument name="data" xsi:type="array">
+                    <item name="config" xsi:type="array">
+                        <item name="entityType" xsi:type="string">cms_page</item>
+                        <item name="identityColumn" xsi:type="string">page_id</item>
+                        <item name="filterOptions" xsi:type="boolean">true</item>
+                        <item name="searchOptions" xsi:type="boolean">true</item>
+                        <item name="filterPlaceholder" xsi:type="string" translate="true">Asset Title</item>
+                        <item name="emptyOptionsHtml" xsi:type="string" translate="true">Start typing to find assets</item>
+                        <item name="searchUrl" xsi:type="url" path="media_gallery/asset/search" />
+                        <item name="validationUrl" xsi:type="url" path="media_gallery/asset/getSelected"/>
+                        <item name="levelsVisibility" xsi:type="number">1</item>
+                    </item>
+                </argument>
+                <settings>
+                    <caption translate="true">– Please Select assets –</caption>
+                    <label translate="true">Asset</label>
+                    <dataScope>asset_id</dataScope>
+                    </settings>
+            </filterSelect>
+        </filters>
+    </listingToolbar>
+</listing>

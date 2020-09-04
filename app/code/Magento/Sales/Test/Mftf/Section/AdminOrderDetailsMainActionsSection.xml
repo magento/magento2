@@ -11,6 +11,7 @@
     <section name="AdminOrderDetailsMainActionsSection">
         <element name="back" type="button" selector="#back" timeout="30"/>
         <element name="cancel" type="button" selector="#order-view-cancel-button" timeout="30"/>
+        <element name="orderEntityId" type="input" selector="#sales_order_view input[name='order_id']" timeout="30"/>
         <element name="sendEmail" type="button" selector="#send_notification" timeout="30"/>
         <element name="creditMemo" type="button" selector="#order_creditmemo" timeout="30"/>
         <element name="hold" type="button" selector="#order-view-hold-button" timeout="30"/>
@@ -24,5 +25,6 @@
         <element name="invoiceBtn" type="button" selector="//button[@title='Invoice']"/>
         <element name="shipBtn" type="button" selector="//button[@title='Ship']"/>
         <element name="shipmentsTab" type="button" selector="#sales_order_view_tabs_order_shipments"/>
+        <element name="authorize" type="button" selector="#order_authorize"/>
     </section>
 </sections>

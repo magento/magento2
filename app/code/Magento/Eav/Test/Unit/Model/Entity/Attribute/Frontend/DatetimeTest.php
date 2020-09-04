@@ -3,19 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Model\Entity\Attribute\Frontend;
 
 use Magento\Eav\Model\Entity\Attribute\AbstractAttribute;
 use Magento\Eav\Model\Entity\Attribute\Frontend\Datetime;
 use Magento\Eav\Model\Entity\Attribute\Source\BooleanFactory;
 use Magento\Framework\DataObject;
+use Magento\Framework\Phrase;
 use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class to test Entity datetime frontend attribute
- */
 class DatetimeTest extends TestCase
 {
     /**
@@ -41,14 +41,15 @@ class DatetimeTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->booleanFactoryMock = $this->createMock(BooleanFactory::class);
-        $this->localeDateMock = $this->createMock(TimezoneInterface::class);
-        $this->attributeMock = $this->createPartialMock(
-            AbstractAttribute::class,
-            ['getAttributeCode', 'getFrontendLabel', 'getFrontendInput']
-        );
+        $this->localeDateMock = $this->getMockForAbstractClass(TimezoneInterface::class);
+        $this->attributeMock = $this->getMockBuilder(AbstractAttribute::class)
+            ->addMethods(['getFrontendLabel'])
+            ->onlyMethods(['getAttributeCode', 'getFrontendInput'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
         $this->model = new Datetime($this->booleanFactoryMock, $this->localeDateMock);
         $this->model->setAttribute($this->attributeMock);
@@ -110,7 +111,7 @@ class DatetimeTest extends TestCase
             ->method('getAttributeCode')
             ->willReturn($attributeCode);
 
-        $this->assertInstanceOf(\Magento\Framework\Phrase::class, $this->model->getLocalizedLabel());
+        $this->assertInstanceOf(Phrase::class, $this->model->getLocalizedLabel());
         $this->assertSame($expectedResult, (string)$this->model->getLocalizedLabel());
     }
 

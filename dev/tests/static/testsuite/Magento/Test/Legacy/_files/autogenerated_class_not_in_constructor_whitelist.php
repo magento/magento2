@@ -9,5 +9,6 @@ return [
     'Symfony\Component\Console\Application',
     'Customer\Address\Attributes',
     'Order\Address\Type',
-    'Order\Address\Attributes'
+    'Order\Address\Attributes',
+    'This\Is\Another\Ns',
 ];
