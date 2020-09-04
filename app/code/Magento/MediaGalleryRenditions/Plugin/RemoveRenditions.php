@@ -52,15 +52,15 @@ class RemoveRenditions
      * Remove renditions when assets are removed
      *
      * @param DeleteAssetsByPathsInterface $deleteAssetsByPaths
-     * @param \Closure $proceed
+     * @param null $result
      * @param array $paths
+     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
-    public function aroundExecute(
+    public function afterExecute(
         DeleteAssetsByPathsInterface $deleteAssetsByPaths,
-        \Closure $proceed,
+        $result,
         array $paths
     ): void {
-        $proceed($paths);
         $this->removeRenditions($paths);
     }
 

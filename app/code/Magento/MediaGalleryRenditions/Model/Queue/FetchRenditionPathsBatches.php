@@ -44,7 +44,7 @@ class FetchRenditionPathsBatches
     /**
      * @param LoggerInterface $log
      * @param Filesystem $filesystem
-     * @param GetFilesIterator $assetsIterator
+     * @param GetFilesIterator $getFilesIterator
      * @param int $batchSize
      * @param array $fileExtensions
      */

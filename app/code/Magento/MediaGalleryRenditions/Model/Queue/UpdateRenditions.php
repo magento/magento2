@@ -69,7 +69,7 @@ class UpdateRenditions
     /**
      * Update renditions and log exceptions
      *
-     * @param string[] $paths
+     * @param string[] $renditionPaths
      */
     private function updateRenditions(array $renditionPaths): void
     {

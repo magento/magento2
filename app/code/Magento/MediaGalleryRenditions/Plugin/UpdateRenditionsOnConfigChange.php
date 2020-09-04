@@ -54,7 +54,7 @@ class UpdateRenditionsOnConfigChange
      * @param Value $value
      * @return bool
      */
-    private function isRenditionsValue(Value $value)
+    private function isRenditionsValue(Value $value): bool
     {
         return $value->getPath() === self::XML_PATH_MEDIA_GALLERY_RENDITIONS_WIDTH_PATH
             || $value->getPath() === self::XML_PATH_MEDIA_GALLERY_RENDITIONS_HEIGHT_PATH;

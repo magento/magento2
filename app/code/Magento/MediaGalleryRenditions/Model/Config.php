@@ -34,6 +34,7 @@ class Config
 
     /**
      * @param ScopeConfigInterface $scopeConfig
+     * @param ResourceConnection $resourceConnection
      */
     public function __construct(
         ScopeConfigInterface $scopeConfig,

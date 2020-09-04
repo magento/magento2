@@ -64,6 +64,8 @@ class GenerateRenditions implements GenerateRenditionsInterface
      * @param GetRenditionPathInterface $getRenditionPath
      * @param Filesystem $filesystem
      * @param File $driver
+     * @param IsPathExcludedInterface $isPathExcluded
+     * @param LoggerInterface $log
      */
     public function __construct(
         AdapterFactory $imageFactory,
@@ -121,6 +123,8 @@ class GenerateRenditions implements GenerateRenditionsInterface
      */
     private function generateRendition(string $path): void
     {
+        $this->validateAsset($path);
+
         $renditionPath = $this->getRenditionPath->execute($path);
         $this->createDirectory($renditionPath);
 
@@ -137,6 +141,8 @@ class GenerateRenditions implements GenerateRenditionsInterface
     }
 
     /**
+     * Ensure valid media asset path is provided for renditions generation
+     *
      * @param string $path
      * @throws FileSystemException
      * @throws LocalizedException
