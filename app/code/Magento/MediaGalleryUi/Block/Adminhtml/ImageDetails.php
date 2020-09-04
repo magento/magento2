@@ -66,21 +66,21 @@ class ImageDetails extends Template
             ]
         ];
 
-        if ($this->authorization->isAllowed('Magento_MediaGalleryUiApi::edit_assets')) {
-            $actions[] = [
-                'title' => __('Edit Details'),
-                'handler' => 'editImageAction',
-                'name' => 'edit',
-                'classes' => 'action-default scalable edit action-quaternary'
-            ];
-        }
-
         if ($this->authorization->isAllowed('Magento_MediaGalleryUiApi::delete_assets')) {
             $actions[] = [
                 'title' => __('Delete Image'),
                 'handler' => 'deleteImageAction',
                 'name' => 'delete',
                 'classes' => 'action-default scalable delete action-quaternary'
+            ];
+        }
+
+        if ($this->authorization->isAllowed('Magento_MediaGalleryUiApi::edit_assets')) {
+            $actions[] = [
+                'title' => __('Edit Details'),
+                'handler' => 'editImageAction',
+                'name' => 'edit',
+                'classes' => 'action-default scalable edit action-quaternary'
             ];
         }
 
