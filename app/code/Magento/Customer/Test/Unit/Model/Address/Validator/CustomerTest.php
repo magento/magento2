@@ -47,13 +47,12 @@ class CustomerTest extends TestCase
     public function testValidateNewCustomerWithNewCustomerAddress(): void
     {
         $addressMock = $this->getMockBuilder(Address::class)
-            ->addMethods(['getParentId'])
-            ->onlyMethods(['getId'])
+            ->onlyMethods(['getId', 'getCustomerId'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $addressMock->expects($this->once())->method('getId')->willReturn(null);
-        $addressMock->expects($this->never())->method('getParentId');
+        $addressMock->expects($this->never())->method('getCustomerId');
 
         $this->assertEmpty($this->model->validate($addressMock));
     }
@@ -64,25 +63,22 @@ class CustomerTest extends TestCase
     public function testValidateNewCustomerWithExistingCustomerAddress(): void
     {
         $addressMock = $this->getMockBuilder(Address::class)
-            ->addMethods(['getParentId'])
-            ->onlyMethods(['getId'])
+            ->onlyMethods(['getId', 'getCustomerId'])
             ->disableOriginalConstructor()
             ->getMock();
         $originalAddressMock = $this->getMockBuilder(Address::class)
-            ->addMethods(['getParentId'])
-            ->onlyMethods(['getId', 'load'])
+            ->onlyMethods(['getId', 'load', 'getCustomerId'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $addressMock->expects($this->exactly(2))->method('getId')->willReturn(1);
-        $addressMock->expects($this->once())->method('getParentId')->willReturn(null);
+        $addressMock->expects($this->once())->method('getCustomerId')->willReturn(null);
         $this->addressFactoryMock->expects($this->once())->method('create')->willReturn($originalAddressMock);
         $originalAddressMock->expects($this->once())
             ->method('load')
             ->with(1)
             ->willReturn($originalAddressMock);
-        $originalAddressMock->expects($this->once())->method('getId')->willReturn(2);
-        $originalAddressMock->expects($this->once())->method('getParentId')->willReturn(2);
+        $originalAddressMock->expects($this->once())->method('getCustomerId')->willReturn(2);
 
         $this->assertEquals(
             [
@@ -101,13 +97,12 @@ class CustomerTest extends TestCase
     public function testValidateExistingCustomerWithNewCustomerAddress(): void
     {
         $addressMock = $this->getMockBuilder(Address::class)
-            ->addMethods(['getParentId'])
-            ->onlyMethods(['getId'])
+            ->onlyMethods(['getId', 'getCustomerId'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $addressMock->expects($this->once())->method('getId')->willReturn(null);
-        $addressMock->expects($this->never())->method('getParentId');
+        $addressMock->expects($this->never())->method('getCustomerId');
 
         $this->assertEmpty($this->model->validate($addressMock));
     }
@@ -118,13 +113,11 @@ class CustomerTest extends TestCase
     public function testValidateExistingCustomerWithRelevantCustomerAddress(): void
     {
         $addressMock = $this->getMockBuilder(Address::class)
-            ->addMethods(['getParentId'])
-            ->onlyMethods(['getId'])
+            ->onlyMethods(['getId', 'getCustomerId'])
             ->disableOriginalConstructor()
             ->getMock();
         $originalAddressMock = $this->getMockBuilder(Address::class)
-            ->addMethods(['getParentId'])
-            ->onlyMethods(['getId', 'load'])
+            ->onlyMethods(['getId', 'load', 'getCustomerId'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -135,9 +128,8 @@ class CustomerTest extends TestCase
             ->with(1)
             ->willReturn($originalAddressMock);
 
-        $addressMock->expects($this->once())->method('getParentId')->willReturn(1);
-        $originalAddressMock->expects($this->once())->method('getId')->willReturn(2);
-        $originalAddressMock->expects($this->once())->method('getParentId')->willReturn(1);
+        $addressMock->expects($this->once())->method('getCustomerId')->willReturn(1);
+        $originalAddressMock->expects($this->once())->method('getCustomerId')->willReturn(1);
 
         $this->assertEmpty($this->model->validate($addressMock));
     }
@@ -148,13 +140,11 @@ class CustomerTest extends TestCase
     public function testValidateExistingCustomerAddressWithNotRelevantCustomer(): void
     {
         $addressMock = $this->getMockBuilder(Address::class)
-            ->addMethods(['getParentId'])
-            ->onlyMethods(['getId'])
+            ->onlyMethods(['getId', 'getCustomerId'])
             ->disableOriginalConstructor()
             ->getMock();
         $originalAddressMock = $this->getMockBuilder(Address::class)
-            ->addMethods(['getParentId'])
-            ->onlyMethods(['getId', 'load'])
+            ->onlyMethods(['getId', 'load', 'getCustomerId'])
             ->disableOriginalConstructor()
             ->getMock();
 
@@ -165,9 +155,8 @@ class CustomerTest extends TestCase
             ->with(1)
             ->willReturn($originalAddressMock);
 
-        $addressMock->expects($this->once())->method('getParentId')->willReturn(2);
-        $originalAddressMock->expects($this->once())->method('getId')->willReturn(2);
-        $originalAddressMock->expects($this->once())->method('getParentId')->willReturn(1);
+        $addressMock->expects($this->once())->method('getCustomerId')->willReturn(2);
+        $originalAddressMock->expects($this->once())->method('getCustomerId')->willReturn(1);
 
         $this->assertEquals(
             [
