@@ -98,22 +98,24 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         $fileName = 'magento_image.jpg';
         $imagePath = realpath(__DIR__ . '/../../../../Catalog/_files/' . $fileName);
         $mediaDirectory = $this->filesystem->getDirectoryWrite(DirectoryList::MEDIA);
-        $modifiableFilePath = $mediaDirectory->getAbsolutePath($fileName);
+        $modifiableFilePath = $mediaDirectory->getAbsolutePath('MagentoCmsModelWysiwygImagesStorageTest/' . $fileName);
         $this->driver->copy(
             $imagePath,
             $modifiableFilePath
         );
-        $collection = $this->storage->getFilesCollection(self::$_baseDir, 'media');
+        $this->storage->resizeFile($modifiableFilePath);
+        $collection = $this->storage->getFilesCollection(self::$_baseDir, 'image');
         $this->assertInstanceOf(\Magento\Cms\Model\Wysiwyg\Images\Storage\Collection::class, $collection);
         foreach ($collection as $item) {
             $this->assertInstanceOf(\Magento\Framework\DataObject::class, $item);
             $this->assertStringEndsWith('/' . $fileName, $item->getUrl());
-            $this->assertStringMatchesFormat(
-                'http://%s/static/%s/adminhtml/%s/%s/Magento_Cms/images/magento_image.jpg',
+            $this->assertMatchesRegularExpression(
+                '/.thumbsMagentoCmsModelWysiwygImagesStorageTest/',
+                'http://%s/pub/%s/.thumbsMagentoCmsModelWysiwygImagesStorageTest/magento_image.jpg',
                 $item->getThumbUrl()
             );
             $this->assertEquals(
-                'jpg',
+                'image/jpeg',
                 $item->getMimeType()
             );
             return;
