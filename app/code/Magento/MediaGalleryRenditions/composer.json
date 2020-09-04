@@ -6,9 +6,11 @@
         "magento/framework": "*",
         "magento/module-media-gallery-renditions-api": "*",
         "magento/module-media-gallery-api": "*",
-        "magento/module-media-content-api": "*",
         "magento/framework-message-queue": "*",
         "magento/module-cms": "*"
+    },
+    "suggest": {
+        "magento/module-media-content-api": "*"
     },
     "type": "magento2-module",
     "license": [
