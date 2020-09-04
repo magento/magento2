@@ -10,6 +10,7 @@ namespace Magento\Customer\Model\ForgotPasswordToken;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Exception\State\ExpiredException;
 use Magento\Framework\Phrase;
@@ -21,20 +22,18 @@ use Magento\Framework\Phrase;
 class GetCustomerByToken
 {
     /**
-     * @var \Magento\Customer\Api\CustomerRepositoryInterface
+     * @var CustomerRepositoryInterface
      */
     private $customerRepository;
 
     /**
-     * @var \Magento\Framework\Api\SearchCriteriaBuilder
+     * @var SearchCriteriaBuilder
      */
     private $searchCriteriaBuilder;
 
     /**
-     * ForgotPassword constructor.
-     *
-     * @param \Magento\Customer\Api\CustomerRepositoryInterface $customerRepository
-     * @param \Magento\Framework\Api\SearchCriteriaBuilder $searchCriteriaBuilder
+     * @param CustomerRepositoryInterface $customerRepository
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         CustomerRepositoryInterface $customerRepository,
@@ -49,10 +48,10 @@ class GetCustomerByToken
      *
      * @param string $resetPasswordToken
      *
-     * @return \Magento\Customer\Api\Data\CustomerInterface
+     * @return CustomerInterface
      * @throws ExpiredException
      * @throws NoSuchEntityException
-     * @throws \Magento\Framework\Exception\LocalizedException
+     * @throws LocalizedException
      */
     public function execute(string $resetPasswordToken):CustomerInterface
     {
@@ -73,7 +72,7 @@ class GetCustomerByToken
         }
         if ($found->getTotalCount() === 0) {
             //Customer with such token not found.
-            new NoSuchEntityException(
+            throw new NoSuchEntityException(
                 new Phrase(
                     'No such entity with rp_token = %value',
                     [
