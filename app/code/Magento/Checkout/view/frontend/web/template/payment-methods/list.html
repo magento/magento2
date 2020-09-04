@@ -8,7 +8,7 @@
      class="items payment-methods">
     <div repeat="foreach: paymentGroupsList, item: '$group'"
          class="payment-group">
-        <div if="getRegion($group().displayArea)().length"
+        <div if="regionHasElements($group().displayArea)"
              translate="getGroupTitle($group)"
              class="step-title"
              data-role="title">

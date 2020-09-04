@@ -19,24 +19,24 @@
 
         <before>
             <createData entity="defaultSimpleProduct" stepKey="createProduct"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
         </before>
         <after>
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="AdminDeleteUrlRewrite" stepKey="deleteCustomUrlRewrite">
+            <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteCustomUrlRewrite">
                 <argument name="requestPath" value="{{_defaultProduct.name}}.html"/>
             </actionGroup>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Filter Product in product page and get the Product ID -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="filterProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterProduct">
             <argument name="productSku" value="$$createProduct.sku$$"/>
         </actionGroup>
         <grabFromCurrentUrl stepKey="productId" regex="#\/([0-9]*)?\/$#"/>
 
         <!-- Open UrlRewrite Edit page and update the fields and fill the created product Target Path  -->
-        <actionGroup ref="AdminAddCustomUrlRewrite" stepKey="addCustomUrlRewrite">
+        <actionGroup ref="AdminAddCustomUrlRewriteActionGroup" stepKey="addCustomUrlRewrite">
             <argument name="customUrlRewriteValue" value="Custom"/>
             <argument name="storeValue" value="Default Store View"/>
             <argument name="requestPath" value="{{_defaultProduct.name}}.html"/>
@@ -46,28 +46,28 @@
         </actionGroup>
 
         <!--Assert updated product Url Rewrite in Grid -->
-        <actionGroup ref="AdminSearchByRequestPath" stepKey="searchByRequestPath">
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath">
             <argument name="redirectPath" value="{{_defaultProduct.name}}.html" />
             <argument name="redirectType" value="Temporary (302)" />
             <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>
         </actionGroup>
 
         <!-- Assert initial product Url rewrite in grid -->
-        <actionGroup ref="AdminSearchByRequestPath" stepKey="searchByRequestPath1">
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath1">
             <argument name="redirectPath" value="$$createProduct.name$$.html" />
             <argument name="redirectType" value="No"/>
             <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>
         </actionGroup>
 
         <!-- Assert updated product redirect in Store Front-->
-        <actionGroup ref="AssertStorefrontProductRedirect" stepKey="verifyProductInStoreFront">
+        <actionGroup ref="AssertStorefrontProductRedirectActionGroup" stepKey="verifyProductInStoreFront">
             <argument name="productName" value="$$createProduct.name$$"/>
             <argument name="productSku" value="$$createProduct.sku$$"/>
             <argument name="productRequestPath" value="{{_defaultProduct.name}}.html"/>
         </actionGroup>
 
         <!-- Assert initial product redirect in Store Front-->
-        <actionGroup ref="AssertStorefrontProductRedirect" stepKey="verifyProductInStoreFront1">
+        <actionGroup ref="AssertStorefrontProductRedirectActionGroup" stepKey="verifyProductInStoreFront1">
             <argument name="productName" value="$$createProduct.name$$"/>
             <argument name="productSku" value="$$createProduct.sku$$"/>
             <argument name="productRequestPath" value="$$createProduct.name$$.html"/>

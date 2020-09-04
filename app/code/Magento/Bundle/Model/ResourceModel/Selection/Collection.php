@@ -61,7 +61,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
      * @param \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper
      * @param \Magento\Framework\Validator\UniversalFactory $universalFactory
      * @param \Magento\Store\Model\StoreManagerInterface $storeManager
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState
      * @param \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig
      * @param \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory
@@ -88,7 +88,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
         \Magento\Catalog\Model\ResourceModel\Helper $resourceHelper,
         \Magento\Framework\Validator\UniversalFactory $universalFactory,
         \Magento\Store\Model\StoreManagerInterface $storeManager,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         \Magento\Catalog\Model\Indexer\Product\Flat\State $catalogProductFlatState,
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Catalog\Model\Product\OptionFactory $productOptionFactory,
@@ -215,7 +215,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function setOptionIdsFilter($optionIds)
     {
         if (!empty($optionIds)) {
-            $this->getSelect()->where('selection.option_id IN (?)', $optionIds);
+            $this->getSelect()->where('selection.option_id IN (?)', $optionIds, \Zend_Db::INT_TYPE);
         }
         return $this;
     }
@@ -229,7 +229,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
     public function setSelectionIdsFilter($selectionIds)
     {
         if (!empty($selectionIds)) {
-            $this->getSelect()->where('selection.selection_id IN (?)', $selectionIds);
+            $this->getSelect()->where('selection.selection_id IN (?)', $selectionIds, \Zend_Db::INT_TYPE);
         }
         return $this;
     }

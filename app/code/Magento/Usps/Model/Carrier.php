@@ -8,7 +8,6 @@ namespace Magento\Usps\Model;
 
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Async\CallbackDeferred;
-use Magento\Framework\Async\ProxyDeferredFactory;
 use Magento\Framework\HTTP\AsyncClient\Request;
 use Magento\Framework\HTTP\AsyncClientInterface;
 use Magento\Framework\Xml\Security;
@@ -16,6 +15,7 @@ use Magento\Quote\Model\Quote\Address\RateRequest;
 use Magento\Shipping\Helper\Carrier as CarrierHelper;
 use Magento\Shipping\Model\Carrier\AbstractCarrierOnline;
 use Magento\Shipping\Model\Rate\Result;
+use Magento\Shipping\Model\Rate\Result\ProxyDeferredFactory;
 use Magento\Usps\Helper\Data as DataHelper;
 
 /**
@@ -239,16 +239,17 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
         //Saving current result to use the right one in the callback.
         $this->_result = $result = $this->_getQuotes();
 
-        return $this->proxyDeferredFactory->createFor(
-            Result::class,
-            new CallbackDeferred(
-                function () use ($request, $result) {
-                    $this->_result = $result;
-                    $this->_updateFreeMethodQuote($request);
+        return $this->proxyDeferredFactory->create(
+            [
+                'deferred' => new CallbackDeferred(
+                    function () use ($request, $result) {
+                        $this->_result = $result;
+                        $this->_updateFreeMethodQuote($request);
 
-                    return $this->getResult();
-                }
-            )
+                        return $this->getResult();
+                    }
+                )
+            ]
         );
     }
 
@@ -555,18 +556,19 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
                 )
             );
 
-            return $this->proxyDeferredFactory->createFor(
-                Result::class,
-                new CallbackDeferred(
-                    function () use ($deferredResponse, $request, $debugData) {
-                        $responseBody = $deferredResponse->get()->getBody();
-                        $debugData['result'] = $responseBody;
-                        $this->_setCachedQuotes($request, $responseBody);
-                        $this->_debug($debugData);
+            return $this->proxyDeferredFactory->create(
+                [
+                    'deferred' => new CallbackDeferred(
+                        function () use ($deferredResponse, $request, $debugData) {
+                            $responseBody = $deferredResponse->get()->getBody();
+                            $debugData['result'] = $responseBody;
+                            $this->_setCachedQuotes($request, $responseBody);
+                            $this->_debug($debugData);
 
-                        return $this->_parseXmlResponse($responseBody);
-                    }
-                )
+                            return $this->_parseXmlResponse($responseBody);
+                        }
+                    )
+                ]
             );
         }
 
@@ -1468,7 +1470,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      *
      * @param \Magento\Framework\DataObject $request
      * @return string
-     * @deprecated This method should not be used anymore.
+     * @deprecated 100.2.1 This method should not be used anymore.
      * @see \Magento\Usps\Model\Carrier::_doShipmentRequest method doc block.
      */
     protected function _formUsExpressShipmentRequest(\Magento\Framework\DataObject $request)
@@ -1645,7 +1647,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
      * @SuppressWarnings(PHPMD.NPathComplexity)
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
-     * @deprecated Should not be used anymore.
+     * @deprecated 100.2.1 Should not be used anymore.
      * @see \Magento\Usps\Model\Carrier::_doShipmentRequest doc block.
      */
     protected function _formIntlShipmentRequest(\Magento\Framework\DataObject $request)
@@ -1900,7 +1902,7 @@ class Carrier extends AbstractCarrierOnline implements \Magento\Shipping\Model\C
      * @param \Magento\Framework\DataObject $request
      * @return \Magento\Framework\DataObject
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
-     * @deprecated This method must not be used anymore. Starting from 23.02.2018 USPS elimates API usage for
+     * @deprecated 100.2.1 This method must not be used anymore. Starting from 23.02.2018 USPS elimates API usage for
      * free shipping labels generating.
      */
     protected function _doShipmentRequest(\Magento\Framework\DataObject $request)

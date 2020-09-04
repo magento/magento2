@@ -20,6 +20,8 @@ use Magento\Framework\EntityManager\EntityManager;
  *
  * Service which allows to sync product widget information, such as product id with db. In order to reuse this info
  * on different devices
+ *
+ * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  */
 class Synchronizer
 {
@@ -94,6 +96,7 @@ class Synchronizer
      *
      * @param string $namespace
      * @return int
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function getLifeTimeByNamespace($namespace)
     {
@@ -119,15 +122,23 @@ class Synchronizer
      * @param array $productsData (product action data, that came from frontend)
      * @param string $typeId namespace (type of action)
      * @return array
+     * @throws \Magento\Framework\Exception\LocalizedException
      */
     private function filterNewestActions(array $productsData, $typeId)
     {
         $lifetime = $this->getLifeTimeByNamespace($typeId);
         $actionsNumber = $lifetime * self::TIME_TO_DO_ONE_ACTION;
 
-        uasort($productsData, function (array $firstProduct, array $secondProduct) {
-            return $firstProduct['added_at'] > $secondProduct['added_at'];
-        });
+        uasort(
+            $productsData,
+            function (array $firstProduct, array $secondProduct) {
+                if (isset($firstProduct['added_at'], $secondProduct['added_at'])) {
+                    return $firstProduct['added_at'] > $secondProduct['added_at'];
+                }
+
+                return false;
+            }
+        );
 
         return array_slice($productsData, 0, $actionsNumber, true);
     }
@@ -159,6 +170,7 @@ class Synchronizer
      * @param array $productsData
      * @param string $typeId
      * @return void
+     * @throws \Exception
      */
     public function syncActions(array $productsData, $typeId)
     {
@@ -182,18 +194,19 @@ class Synchronizer
             foreach ($collection as $item) {
                 $this->entityManager->delete($item);
             }
-
-            foreach ($productsData as $productId => $productData) {
+            foreach ($productsData as $productData) {
                 /** @var ProductFrontendActionInterface $action */
-                $action = $this->productFrontendActionFactory->create([
-                    'data' => [
-                        'visitor_id' => $customerId ? null : $visitorId,
-                        'customer_id' => $this->session->getCustomerId(),
-                        'added_at' => $productData['added_at'],
-                        'product_id' => $productId,
-                        'type_id' => $typeId
+                $action = $this->productFrontendActionFactory->create(
+                    [
+                        'data' => [
+                            'visitor_id' => $customerId ? null : $visitorId,
+                            'customer_id' => $this->session->getCustomerId(),
+                            'added_at' => $productData['added_at'],
+                            'product_id' => $productData['product_id'],
+                            'type_id' => $typeId
+                        ]
                     ]
-                ]);
+                );
 
                 $this->entityManager->save($action);
             }

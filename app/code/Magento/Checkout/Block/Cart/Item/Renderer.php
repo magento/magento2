@@ -24,6 +24,7 @@ use Magento\Catalog\Model\Product\Configuration\Item\ItemResolverInterface;
  * @method \Magento\Checkout\Block\Cart\Item\Renderer setDeleteUrl(string)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  * @SuppressWarnings(PHPMD.ExcessiveClassComplexity)
+ * @since 100.0.2
  */
 class Renderer extends \Magento\Framework\View\Element\Template implements
     \Magento\Framework\DataObject\IdentityInterface
@@ -85,7 +86,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
     protected $priceCurrency;
 
     /**
-     * @var \Magento\Framework\Module\ModuleManagerInterface
+     * @var \Magento\Framework\Module\Manager
      */
     public $moduleManager;
 
@@ -105,7 +106,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
      * @param \Magento\Framework\Url\Helper\Data $urlHelper
      * @param \Magento\Framework\Message\ManagerInterface $messageManager
      * @param PriceCurrencyInterface $priceCurrency
-     * @param \Magento\Framework\Module\ModuleManagerInterface $moduleManager
+     * @param \Magento\Framework\Module\Manager $moduleManager
      * @param InterpretationStrategyInterface $messageInterpretationStrategy
      * @param array $data
      * @param ItemResolverInterface|null $itemResolver
@@ -120,7 +121,7 @@ class Renderer extends \Magento\Framework\View\Element\Template implements
         \Magento\Framework\Url\Helper\Data $urlHelper,
         \Magento\Framework\Message\ManagerInterface $messageManager,
         PriceCurrencyInterface $priceCurrency,
-        \Magento\Framework\Module\ModuleManagerInterface $moduleManager,
+        \Magento\Framework\Module\Manager $moduleManager,
         InterpretationStrategyInterface $messageInterpretationStrategy,
         array $data = [],
         ItemResolverInterface $itemResolver = null

@@ -30,7 +30,7 @@ define([
     $.widget('mage.quickSearch', {
         options: {
             autocomplete: 'off',
-            minSearchLength: 2,
+            minSearchLength: 3,
             responseFieldElements: 'ul li',
             selectClass: 'selected',
             template:

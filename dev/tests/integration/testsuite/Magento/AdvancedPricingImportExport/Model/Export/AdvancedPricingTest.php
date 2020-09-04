@@ -3,9 +3,11 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
 namespace Magento\AdvancedPricingImportExport\Model\Export;
 
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\File\Csv;
 use Magento\TestFramework\Indexer\TestCase;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Framework\Filesystem;
@@ -18,7 +20,8 @@ use Magento\ImportExport\Model\Import\Source\Csv as ImportSourceCsv;
 use Magento\ImportExport\Model\Import;
 
 /**
- * Advanced pricing test
+ * Test for \Magento\AdvancedPricingImportExport\Model\Export\AdvancedPricing
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class AdvancedPricingTest extends TestCase
 {
@@ -38,7 +41,7 @@ class AdvancedPricingTest extends TestCase
     protected $fileSystem;
 
     // @codingStandardsIgnoreStart
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         $db = Bootstrap::getInstance()
             ->getBootstrap()
@@ -51,9 +54,10 @@ class AdvancedPricingTest extends TestCase
 
         parent::setUpBeforeClass();
     }
+
     // @codingStandardsIgnoreEnd
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -109,11 +113,11 @@ class AdvancedPricingTest extends TestCase
      */
     private function assertDiscountTypes($exportContent)
     {
-        $this->assertContains(
+        $this->assertStringContainsString(
             '2.0000,8.000000,Fixed',
             $exportContent
         );
-        $this->assertContains(
+        $this->assertStringContainsString(
             '10.0000,50.00,Discount',
             $exportContent
         );
@@ -145,7 +149,7 @@ class AdvancedPricingTest extends TestCase
         $csvfile = uniqid('importexport_') . '.csv';
 
         $exportContent = $this->exportData($csvfile);
-        $this->assertContains(
+        $this->assertStringContainsString(
             '"AdvancedPricingSimple 2",test,"ALL GROUPS",3.0000,5.0000',
             $exportContent
         );
@@ -159,6 +163,108 @@ class AdvancedPricingTest extends TestCase
             $this->assertEquals(count($origPricingData[$index]), count($newPricingData));
             $this->assertEqualsOtherThanSkippedAttributes($origPricingData[$index], $newPricingData, []);
         }
+    }
+
+    /**
+     * Export and Import of Advanced Pricing with different Price Types.
+     *
+     * @magentoDataFixture Magento/Catalog/_files/two_simple_products_with_tier_price.php
+     * @return void
+     */
+    public function testExportImportOfAdvancedPricing(): void
+    {
+        $csvfile = uniqid('importexport_') . '.csv';
+        $exportContent = $this->exportData($csvfile);
+        $this->assertStringContainsString(
+            'second_simple,"All Websites [USD]","ALL GROUPS",10.0000,3.00,Discount',
+            $exportContent
+        );
+        $this->assertStringContainsString(
+            'simple,"All Websites [USD]",General,5.0000,95.000000,Fixed',
+            $exportContent
+        );
+        $this->updateTierPriceDataInCsv($csvfile);
+        $this->importData($csvfile);
+
+        /** @var  ProductRepositoryInterface $productRepository */
+        $productRepository = $this->objectManager->create(ProductRepositoryInterface::class);
+        $firstProductTierPrices = $productRepository->get('simple')->getTierPrices();
+        $secondProductTierPrices = $productRepository->get('second_simple')->getTierPrices();
+
+        $this->assertSame(
+            ['0', '1'],
+            [
+                $firstProductTierPrices[0]->getExtensionAttributes()->getWebsiteId(),
+                $firstProductTierPrices[0]->getCustomerGroupId(),
+            ]
+        );
+
+        $this->assertEqualsWithDelta(
+            ['5.0000', '90.000000'],
+            [
+                $firstProductTierPrices[0]->getQty(),
+                $firstProductTierPrices[0]->getValue(),
+            ],
+            0.1
+        );
+
+        $this->assertSame(
+            ['0', \Magento\Customer\Model\Group::CUST_GROUP_ALL],
+            [
+                $secondProductTierPrices[0]->getExtensionAttributes()->getWebsiteId(),
+                $secondProductTierPrices[0]->getCustomerGroupId(),
+            ]
+        );
+
+        $this->assertEqualsWithDelta(
+            ['5.00', '10.0000'],
+            [
+                $secondProductTierPrices[0]->getExtensionAttributes()->getPercentageValue(),
+                $secondProductTierPrices[0]->getQty(),
+            ],
+            0.1
+        );
+    }
+
+    /**
+     * Update tier price data in CSV.
+     *
+     * @param string $csvfile
+     * @return void
+     */
+    private function updateTierPriceDataInCsv(string $csvfile): void
+    {
+        $csvNewData = [
+            0 => [
+                0 => 'sku',
+                1 => 'tier_price_website',
+                2 => 'tier_price_customer_group',
+                3 => 'tier_price_qty',
+                4 => 'tier_price',
+                5 => 'tier_price_value_type',
+            ],
+            1 => [
+                0 => 'simple',
+                1 => 'All Websites [USD]',
+                2 => 'General',
+                3 => '5',
+                4 => '90',
+                5 => 'Fixed',
+            ],
+            2 => [
+                0 => 'second_simple',
+                1 => 'All Websites [USD]',
+                2 => 'ALL GROUPS',
+                3 => '10',
+                4 => '5',
+                5 => 'Discount',
+            ],
+        ];
+
+        /** @var Csv $csv */
+        $csv = $this->objectManager->get(Csv::class);
+        $varDirectory = $this->fileSystem->getDirectoryWrite(DirectoryList::VAR_DIR);
+        $csv->appendData($varDirectory->getAbsolutePath($csvfile), $csvNewData);
     }
 
     /**

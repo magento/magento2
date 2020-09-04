@@ -24,7 +24,7 @@ class OptionListTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
     }
@@ -43,7 +43,7 @@ class OptionListTest extends \PHPUnit\Framework\TestCase
          */
         $optionList = $this->objectManager->create(\Magento\Bundle\Model\Product\OptionList::class);
         $options = $optionList->getItems($this->product);
-        $this->assertEquals(1, count($options));
+        $this->assertCount(1, $options);
         $this->assertEquals('Bundle Product Items', $options[0]->getTitle());
     }
 }

@@ -3,53 +3,70 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\MessageQueue\Test\Unit\Bulk\Rpc;
+
+use Magento\Framework\Amqp\Bulk\Exchange;
+use Magento\Framework\MessageQueue\Bulk\ExchangeRepository;
+use Magento\Framework\MessageQueue\Bulk\Rpc\Publisher;
+use Magento\Framework\MessageQueue\EnvelopeFactory;
+use Magento\Framework\MessageQueue\EnvelopeInterface;
+use Magento\Framework\MessageQueue\MessageEncoder;
+use Magento\Framework\MessageQueue\MessageIdGeneratorInterface;
+use Magento\Framework\MessageQueue\MessageValidator;
+use Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItemInterface;
+use Magento\Framework\MessageQueue\Publisher\Config\PublisherConnectionInterface;
+use Magento\Framework\MessageQueue\Publisher\ConfigInterface;
+use Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Unit test for Publisher.
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class PublisherTest extends \PHPUnit\Framework\TestCase
+class PublisherTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\MessageQueue\Bulk\ExchangeRepository|\PHPUnit_Framework_MockObject_MockObject
+     * @var ExchangeRepository|MockObject
      */
     private $exchangeRepository;
 
     /**
-     * @var \Magento\Framework\MessageQueue\EnvelopeFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var EnvelopeFactory|MockObject
      */
     private $envelopeFactory;
 
     /**
-     * @var \Magento\Framework\MessageQueue\MessageEncoder|\PHPUnit_Framework_MockObject_MockObject
+     * @var MessageEncoder|MockObject
      */
     private $messageEncoder;
 
     /**
-     * @var \Magento\Framework\MessageQueue\MessageValidator|\PHPUnit_Framework_MockObject_MockObject
+     * @var MessageValidator|MockObject
      */
     private $messageValidator;
 
     /**
-     * @var \Magento\Framework\MessageQueue\Publisher\ConfigInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigInterface|MockObject
      */
     private $publisherConfig;
 
     /**
-     * @var \Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var ResponseQueueNameBuilder|MockObject
      */
     private $responseQueueNameBuilder;
 
     /**
-     * @var \Magento\Framework\MessageQueue\MessageIdGeneratorInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var MessageIdGeneratorInterface|MockObject
      */
     private $messageIdGenerator;
 
     /**
-     * @var \Magento\Framework\MessageQueue\Bulk\Rpc\Publisher
+     * @var Publisher
      */
     private $publisher;
 
@@ -58,31 +75,38 @@ class PublisherTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->exchangeRepository = $this
-            ->getMockBuilder(\Magento\Framework\MessageQueue\Bulk\ExchangeRepository::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->envelopeFactory = $this->getMockBuilder(\Magento\Framework\MessageQueue\EnvelopeFactory::class)
+            ->getMockBuilder(ExchangeRepository::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->envelopeFactory = $this->getMockBuilder(EnvelopeFactory::class)
             ->setMethods(['create'])
-            ->disableOriginalConstructor()->getMock();
-        $this->messageEncoder = $this->getMockBuilder(\Magento\Framework\MessageQueue\MessageEncoder::class)
-            ->disableOriginalConstructor()->getMock();
-        $this->messageValidator = $this->getMockBuilder(\Magento\Framework\MessageQueue\MessageValidator::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->messageEncoder = $this->getMockBuilder(MessageEncoder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->messageValidator = $this->getMockBuilder(MessageValidator::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->publisherConfig = $this
-            ->getMockBuilder(\Magento\Framework\MessageQueue\Publisher\ConfigInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->getMockBuilder(ConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->responseQueueNameBuilder = $this
-            ->getMockBuilder(\Magento\Framework\MessageQueue\Rpc\ResponseQueueNameBuilder::class)
-            ->disableOriginalConstructor()->getMock();
+            ->getMockBuilder(ResponseQueueNameBuilder::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->messageIdGenerator = $this
-            ->getMockBuilder(\Magento\Framework\MessageQueue\MessageIdGeneratorInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->getMockBuilder(MessageIdGeneratorInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->publisher = $objectManager->getObject(
-            \Magento\Framework\MessageQueue\Bulk\Rpc\Publisher::class,
+            Publisher::class,
             [
                 'exchangeRepository' => $this->exchangeRepository,
                 'envelopeFactory' => $this->envelopeFactory,
@@ -113,30 +137,34 @@ class PublisherTest extends \PHPUnit\Framework\TestCase
         $this->messageValidator->expects($this->once())->method('validate')->with($topicName, $message);
         $this->messageEncoder->expects($this->once())
             ->method('encode')->with($topicName, $message)->willReturn($encodedMessage);
-        $envelope = $this->getMockBuilder(\Magento\Framework\MessageQueue\EnvelopeInterface::class)
-            ->disableOriginalConstructor()->getMock();
+        $envelope = $this->getMockBuilder(EnvelopeInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->messageIdGenerator->expects($this->once())
             ->method('generate')->with($topicName)->willReturn($messageId);
         $this->envelopeFactory->expects($this->once())->method('create')->with(
             $this->logicalAnd(
                 $this->arrayHasKey('body'),
                 $this->arrayHasKey('properties'),
-                $this->contains($encodedMessage)
+                $this->containsEqual($encodedMessage)
             )
         )->willReturn($envelope);
         $publisher = $this
-            ->getMockBuilder(\Magento\Framework\MessageQueue\Publisher\Config\PublisherConfigItemInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->getMockBuilder(PublisherConfigItemInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $this->publisherConfig->expects($this->once())
             ->method('getPublisher')->with($topicName)->willReturn($publisher);
         $connection = $this
-            ->getMockBuilder(\Magento\Framework\MessageQueue\Publisher\Config\PublisherConnectionInterface::class)
-            ->disableOriginalConstructor()->getMock();
+            ->getMockBuilder(PublisherConnectionInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $publisher->expects($this->once())->method('getConnection')->with()->willReturn($connection);
         $connection->expects($this->once())->method('getName')->with()->willReturn($connectionName);
         $exchange = $this
-            ->getMockBuilder(\Magento\Framework\Amqp\Bulk\Exchange::class)
-            ->disableOriginalConstructor()->getMock();
+            ->getMockBuilder(Exchange::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->exchangeRepository->expects($this->once())
             ->method('getByConnectionName')->with($connectionName)->willReturn($exchange);
         $exchange->expects($this->once())->method('enqueue')->with($topicName, [$envelope])->willReturn(null);

@@ -9,6 +9,8 @@ namespace Magento\Paypal\Test\Unit\Model\Payflow;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\State\InvalidTransitionException;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
 use Magento\Payment\Model\Method\ConfigInterface as PaymentConfigInterface;
 use Magento\Payment\Model\Method\ConfigInterfaceFactory as PaymentConfigInterfaceFactory;
@@ -26,14 +28,15 @@ use Magento\Store\Model\ScopeInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterface;
 use Magento\Vault\Api\Data\PaymentTokenInterfaceFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Paypal transparent test class
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class TransparentTest extends \PHPUnit\Framework\TestCase
+class TransparentTest extends TestCase
 {
     /**
      * @var PayPalPayflowTransparent
@@ -75,7 +78,7 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
      */
     private $order;
 
-    public function setUp()
+    protected function setUp(): void
     {
         $this->initPayment();
 
@@ -99,8 +102,8 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
      *
      * @dataProvider validAuthorizeRequestDataProvider
      * @param DataObject $validAuthorizeRequest
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\State\InvalidTransitionException
+     * @throws LocalizedException
+     * @throws InvalidTransitionException
      */
     public function testValidAuthorizeRequest(DataObject $validAuthorizeRequest)
     {
@@ -130,7 +133,7 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
 
         $this->payPalPayflowGateway->expects($this->once())
             ->method('postRequest')
-            ->with($this->equalTo($validAuthorizeRequest));
+            ->with($validAuthorizeRequest);
 
         $this->subject->authorize($this->payment, 10);
     }
@@ -196,9 +199,11 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
             ->disableOriginalConstructor()
             ->getMock();
         $orderPaymentExtension = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
-            ->setMethods(['setVaultPaymentToken', 'getVaultPaymentToken'])
+            ->setMethods(
+                ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
+            )
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $paymentExtensionInterfaceFactory->method('create')->willReturn($orderPaymentExtension);
 
@@ -290,12 +295,17 @@ class TransparentTest extends \PHPUnit\Framework\TestCase
         $this->order = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
             ->getMock();
-
+        $paymentExtensionAttributes  = $this->getMockBuilder(OrderPaymentExtensionInterface::class)
+            ->setMethods(
+                ['setVaultPaymentToken', 'getVaultPaymentToken', 'setNotificationMessage', 'getNotificationMessage']
+            )
+            ->getMockForAbstractClass();
         $this->payment->method('getOrder')->willReturn($this->order);
         $this->payment->method('setTransactionId')->willReturnSelf();
         $this->payment->method('setIsTransactionClosed')->willReturnSelf();
         $this->payment->method('getCcExpYear')->willReturn('2019');
         $this->payment->method('getCcExpMonth')->willReturn('05');
+        $this->payment->method('getExtensionAttributes')->willReturn($paymentExtensionAttributes);
 
         return $this->payment;
     }

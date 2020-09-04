@@ -3,69 +3,85 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Cms\Test\Unit\Controller\Adminhtml\Page;
 
+use Magento\Backend\App\Action\Context;
+use Magento\Cms\Api\PageRepositoryInterface;
 use Magento\Cms\Controller\Adminhtml\Page\InlineEdit;
+use Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor;
+use Magento\Cms\Model\Page;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\Result\JsonFactory;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Message\Collection;
+use Magento\Framework\Message\ManagerInterface;
+use Magento\Framework\Message\MessageInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class InlineEditTest extends \PHPUnit\Framework\TestCase
+class InlineEditTest extends TestCase
 {
-    /** @var \Magento\Framework\App\RequestInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var RequestInterface|MockObject */
     protected $request;
 
-    /** @var \Magento\Framework\Message\ManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ManagerInterface|MockObject */
     protected $messageManager;
 
-    /** @var \Magento\Framework\Message\MessageInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var MessageInterface|MockObject */
     protected $message;
 
-    /** @var \Magento\Framework\Message\Collection|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Collection|MockObject */
     protected $messageCollection;
 
-    /** @var \Magento\Cms\Model\Page|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var \Magento\Cms\Model\Page|MockObject */
     protected $cmsPage;
 
-    /** @var \Magento\Backend\App\Action\Context|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Context|MockObject */
     protected $context;
 
-    /** @var \Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var PostDataProcessor|MockObject */
     protected $dataProcessor;
 
-    /** @var \Magento\Cms\Api\PageRepositoryInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var PageRepositoryInterface|MockObject */
     protected $pageRepository;
 
-    /** @var \Magento\Framework\Controller\Result\JsonFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var JsonFactory|MockObject */
     protected $jsonFactory;
 
-    /** @var \Magento\Framework\Controller\Result\Json|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Json|MockObject */
     protected $resultJson;
 
     /** @var InlineEdit */
     protected $controller;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $helper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $helper = new ObjectManager($this);
 
-        $this->request = $this->getMockForAbstractClass(\Magento\Framework\App\RequestInterface::class);
-        $this->messageManager = $this->getMockForAbstractClass(\Magento\Framework\Message\ManagerInterface::class);
-        $this->messageCollection = $this->createMock(\Magento\Framework\Message\Collection::class);
-        $this->message = $this->getMockForAbstractClass(\Magento\Framework\Message\MessageInterface::class);
-        $this->cmsPage = $this->createMock(\Magento\Cms\Model\Page::class);
+        $this->request = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->messageManager = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->messageCollection = $this->createMock(Collection::class);
+        $this->message = $this->getMockForAbstractClass(MessageInterface::class);
+        $this->cmsPage = $this->createMock(Page::class);
         $this->context = $helper->getObject(
-            \Magento\Backend\App\Action\Context::class,
+            Context::class,
             [
                 'request' => $this->request,
                 'messageManager' => $this->messageManager
             ]
         );
-        $this->dataProcessor = $this->createMock(\Magento\Cms\Controller\Adminhtml\Page\PostDataProcessor::class);
-        $this->pageRepository = $this->getMockForAbstractClass(\Magento\Cms\Api\PageRepositoryInterface::class);
-        $this->resultJson = $this->createMock(\Magento\Framework\Controller\Result\Json::class);
+        $this->dataProcessor = $this->createMock(PostDataProcessor::class);
+        $this->pageRepository = $this->getMockForAbstractClass(PageRepositoryInterface::class);
+        $this->resultJson = $this->createMock(Json::class);
         $this->jsonFactory = $this->createPartialMock(
-            \Magento\Framework\Controller\Result\JsonFactory::class,
+            JsonFactory::class,
             ['create']
         );
         $this->controller = new InlineEdit(
@@ -102,10 +118,6 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             ->method('filter')
             ->with($postData[1])
             ->willReturnArgument(0);
-        $this->dataProcessor->expects($this->once())
-            ->method('validate')
-            ->with($postData[1])
-            ->willReturn(false);
         $this->messageManager->expects($this->once())
             ->method('getMessages')
             ->with(true)
@@ -122,19 +134,23 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             ->willReturn('1');
         $this->cmsPage->expects($this->atLeastOnce())
             ->method('getData')
-            ->willReturn([
-                'layout' => '1column',
-                'identifier' => 'test-identifier'
-            ]);
+            ->willReturn(
+                [
+                    'layout' => '1column',
+                    'identifier' => 'test-identifier'
+                ]
+            );
         $this->cmsPage->expects($this->once())
             ->method('setData')
-            ->with([
-                'layout' => '1column',
-                'title' => '404 Not Found',
-                'identifier' => 'no-route',
-                'custom_theme' => '1',
-                'custom_root_template' => '2'
-            ]);
+            ->with(
+                [
+                    'layout' => '1column',
+                    'title' => '404 Not Found',
+                    'identifier' => 'no-route',
+                    'custom_theme' => '1',
+                    'custom_root_template' => '2'
+                ]
+            );
         $this->jsonFactory->expects($this->once())
             ->method('create')
             ->willReturn($this->resultJson);
@@ -146,16 +162,18 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
         $this->pageRepository->expects($this->once())
             ->method('save')
             ->with($this->cmsPage)
-            ->willThrowException(new \Magento\Framework\Exception\LocalizedException(__('LocalizedException')));
+            ->willThrowException(new LocalizedException(__('LocalizedException')));
         $this->resultJson->expects($this->once())
             ->method('setData')
-            ->with([
-                'messages' => [
-                    '[Page ID: 1] Error message',
-                    '[Page ID: 1] LocalizedException'
-                ],
-                'error' => true
-            ])
+            ->with(
+                [
+                    'messages' => [
+                        '[Page ID: 1] Error message',
+                        '[Page ID: 1] LocalizedException'
+                    ],
+                    'error' => true
+                ]
+            )
             ->willReturnSelf();
 
         $this->assertSame($this->resultJson, $this->controller->execute());
@@ -167,16 +185,18 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
         $this->pageRepository->expects($this->once())
             ->method('save')
             ->with($this->cmsPage)
-            ->willThrowException(new \RuntimeException(__('RuntimeException')));
+            ->willThrowException(new \RuntimeException('RuntimeException'));
         $this->resultJson->expects($this->once())
             ->method('setData')
-            ->with([
-                'messages' => [
-                    '[Page ID: 1] Error message',
-                    '[Page ID: 1] RuntimeException'
-                ],
-                'error' => true
-            ])
+            ->with(
+                [
+                    'messages' => [
+                        '[Page ID: 1] Error message',
+                        '[Page ID: 1] RuntimeException'
+                    ],
+                    'error' => true
+                ]
+            )
             ->willReturnSelf();
 
         $this->assertSame($this->resultJson, $this->controller->execute());
@@ -188,16 +208,18 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
         $this->pageRepository->expects($this->once())
             ->method('save')
             ->with($this->cmsPage)
-            ->willThrowException(new \Exception(__('Exception')));
+            ->willThrowException(new \Exception('Exception'));
         $this->resultJson->expects($this->once())
             ->method('setData')
-            ->with([
-                'messages' => [
-                    '[Page ID: 1] Error message',
-                    '[Page ID: 1] Something went wrong while saving the page.'
-                ],
-                'error' => true
-            ])
+            ->with(
+                [
+                    'messages' => [
+                        '[Page ID: 1] Error message',
+                        '[Page ID: 1] Something went wrong while saving the page.'
+                    ],
+                    'error' => true
+                ]
+            )
             ->willReturnSelf();
 
         $this->assertSame($this->resultJson, $this->controller->execute());
@@ -218,12 +240,14 @@ class InlineEditTest extends \PHPUnit\Framework\TestCase
             );
         $this->resultJson->expects($this->once())
             ->method('setData')
-            ->with([
-                'messages' => [
-                    'Please correct the data sent.'
-                ],
-                'error' => true
-            ])
+            ->with(
+                [
+                    'messages' => [
+                        'Please correct the data sent.'
+                    ],
+                    'error' => true
+                ]
+            )
             ->willReturnSelf();
 
         $this->assertSame($this->resultJson, $this->controller->execute());

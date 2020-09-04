@@ -40,25 +40,26 @@ class GetCustomOptionsValuesForQueryBySku
 
         foreach ($customOptions as $customOption) {
             $optionType = $customOption->getType();
-            if ($optionType == 'field' || $optionType == 'area') {
-                $customOptionsValues[] = [
-                    'id' => (int)$customOption->getOptionId(),
-                    'value_string' => 'test'
-                ];
-            } elseif ($optionType == 'drop_down') {
-                $optionSelectValues = $customOption->getValues();
-                $customOptionsValues[] = [
-                    'id' => (int)$customOption->getOptionId(),
-                    'value_string' => reset($optionSelectValues)->getOptionTypeId()
-                ];
-            } elseif ($optionType == 'multiple') {
-                $customOptionsValues[] = [
-                    'id' => (int)$customOption->getOptionId(),
-                    'value_string' => '[' . implode(',', array_keys($customOption->getValues())) . ']'
-                ];
+            $customOptionsValues[$optionType]['id'] = (int)$customOption->getOptionId();
+            switch ($optionType) {
+                case 'date':
+                    $customOptionsValues[$optionType]['value_string'] = '2012-12-12 00:00:00';
+                    break;
+                case 'field':
+                case 'area':
+                    $customOptionsValues[$optionType]['value_string'] = 'test';
+                    break;
+                case 'drop_down':
+                    $optionSelectValues = $customOption->getValues();
+                    $customOptionsValues[$optionType]['value_string'] =
+                        reset($optionSelectValues)->getOptionTypeId();
+                    break;
+                case 'multiple':
+                    $customOptionsValues[$optionType]['value_string'] =
+                        '[' . implode(',', array_keys($customOption->getValues())) . ']';
+                    break;
             }
         }
-
         return $customOptionsValues;
     }
 }

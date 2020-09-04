@@ -64,4 +64,7 @@
     <event name="catalog_product_save_commit_after">
         <observer name="magento_image_resize" instance="Magento\Catalog\Observer\ImageResizeAfterProductSave" />
     </event>
+    <event name="catalog_category_prepare_save">
+        <observer name="additional_authorization" instance="Magento\Catalog\Observer\CategoryDesignAuthorization" />
+    </event>
 </config>

@@ -34,7 +34,7 @@ class Save extends ProductController implements HttpPostActionInterface
         if (($data = $this->getRequest()->getPostValue()) && ($reviewId = $this->getRequest()->getParam('id'))) {
             $review = $this->getModel();
             if (!$review->getId()) {
-                $this->messageManager->addError(__('The review was removed by another user or does not exist.'));
+                $this->messageManager->addErrorMessage(__('The review was removed by another user or does not exist.'));
             } else {
                 try {
                     $review->addData($data)->save();
@@ -63,11 +63,11 @@ class Save extends ProductController implements HttpPostActionInterface
 
                     $review->aggregate();
 
-                    $this->messageManager->addSuccess(__('You saved the review.'));
+                    $this->messageManager->addSuccessMessage(__('You saved the review.'));
                 } catch (LocalizedException $e) {
-                    $this->messageManager->addError($e->getMessage());
+                    $this->messageManager->addErrorMessage($e->getMessage());
                 } catch (\Exception $e) {
-                    $this->messageManager->addException($e, __('Something went wrong while saving this review.'));
+                    $this->messageManager->addExceptionMessage($e, __('Something went wrong while saving this review.'));
                 }
             }
 

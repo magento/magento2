@@ -3,14 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Framework\Test\Unit\DB\Query;
 
 use Magento\Framework\DB\Adapter\AdapterInterface;
 use Magento\Framework\DB\Query\BatchRangeIterator;
 use Magento\Framework\DB\Select;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BatchRangeIteratorTest extends \PHPUnit\Framework\TestCase
+class BatchRangeIteratorTest extends TestCase
 {
     /**
      * @var BatchRangeIterator
@@ -18,17 +21,17 @@ class BatchRangeIteratorTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $selectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $wrapperSelectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $connectionMock;
 
@@ -62,7 +65,7 @@ class BatchRangeIteratorTest extends \PHPUnit\Framework\TestCase
      *
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->batchSize = 10;
         $this->currentBatch = 0;
@@ -72,7 +75,7 @@ class BatchRangeIteratorTest extends \PHPUnit\Framework\TestCase
 
         $this->selectMock = $this->createMock(Select::class);
         $this->wrapperSelectMock = $this->createMock(Select::class);
-        $this->connectionMock = $this->createMock(AdapterInterface::class);
+        $this->connectionMock = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->connectionMock->expects($this->any())->method('select')->willReturn($this->wrapperSelectMock);
         $this->selectMock->expects($this->once())->method('getConnection')->willReturn($this->connectionMock);
         $this->connectionMock->expects($this->any())->method('quoteIdentifier')->willReturnArgument(0);
@@ -96,6 +99,16 @@ class BatchRangeIteratorTest extends \PHPUnit\Framework\TestCase
     {
         $this->selectMock->expects($this->once())->method('limit')->with($this->batchSize, $this->currentBatch);
         $this->selectMock->expects($this->once())->method('order')->with('correlationName.rangeField' . ' ASC');
+        $this->wrapperSelectMock->expects($this->once())
+            ->method('from')
+            ->with(
+                $this->selectMock,
+                [new \Zend_Db_Expr('COUNT(*) as cnt')]
+            );
+        $this->connectionMock->expects($this->once())
+            ->method('fetchRow')
+            ->with($this->wrapperSelectMock)
+            ->willReturn(['cnt' => 10]);
         $this->assertEquals($this->selectMock, $this->model->current());
         $this->assertEquals(0, $this->model->key());
     }

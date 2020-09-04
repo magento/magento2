@@ -1,0 +1,48 @@
+<?php
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+
+use Magento\Backend\ViewModel\ChartsPeriod;
+use Magento\Framework\Escaper;
+use Magento\Framework\View\Element\Template;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
+
+/**
+ * @var Template $block
+ * @var Escaper $escaper
+ * @var ChartsPeriod $viewModel
+ * @var SecureHtmlRenderer $secureRenderer
+ */
+$viewModel = $block->getViewModel();
+?>
+<div class="dashboard-diagram">
+    <div class="dashboard-diagram-graph">
+        <canvas id="chart_<?= $escaper->escapeHtmlAttr($block->getData('html_id')) ?>_period"/>
+        <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+            'display:none',
+            '#chart_' . $escaper->escapeJs($block->getData('html_id')) . '_period'
+        ) ?>
+        <div class="dashboard-diagram-nodata">
+            <span><?= $escaper->escapeHtml(__('No Data Found')) ?></span>
+        </div>
+    </div>
+    <script type="text/x-magento-init">
+    {
+        "#chart_<?= $escaper->escapeJs($block->getData('html_id')) ?>_period": {
+            "Magento_Backend/js/dashboard/chart": {
+                "updateUrl": "<?= $escaper->escapeUrl($block->getUrl($block->getData('update_url'), [
+                    '_current' => true
+                ])) ?>",
+                "periodSelect": "#dashboard_chart_period",
+                "periodUnits": <?= /** @noEscape */ $viewModel->getPeriodUnits() ?>,
+                <?php if ($precision = $block->getData('chart_precision')): ?>
+                "precision": <?= (int)$precision ?>,
+                <?php endif; ?>
+                "type": "<?= $escaper->escapeJs($block->getData('html_id')) ?>"
+            }
+        }
+    }
+    </script>
+</div>

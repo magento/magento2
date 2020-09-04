@@ -3,15 +3,27 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Tests for \Magento\Framework\Data\Form\Element\Editor
  */
 namespace Magento\Framework\Data\Test\Unit\Form\Element;
 
+use Magento\Framework\Data\Form;
+use Magento\Framework\Data\Form\Element\CollectionFactory;
 use Magento\Framework\Data\Form\Element\Editor;
+use Magento\Framework\Data\Form\Element\Factory;
+use Magento\Framework\DataObject;
+use Magento\Framework\Escaper;
+use Magento\Framework\Serialize\Serializer\Json;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
-class EditorTest extends \PHPUnit\Framework\TestCase
+class EditorTest extends TestCase
 {
     /**
      * @var Editor
@@ -19,63 +31,85 @@ class EditorTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|MockObject
      */
     protected $factoryMock;
 
     /**
-     * @var \Magento\Framework\Data\Form\Element\CollectionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var CollectionFactory|MockObject
      */
     protected $collectionFactoryMock;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|MockObject
      */
     protected $escaperMock;
 
     /**
-     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataObject|MockObject
      */
     protected $formMock;
 
     /**
-     * @var \Magento\Framework\DataObject|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataObject|MockObject
      */
     protected $configMock;
 
     /**
-     * @var \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var ObjectManager
      */
     protected $objectManager;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $serializer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->factoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\Factory::class);
-        $this->collectionFactoryMock = $this->createMock(\Magento\Framework\Data\Form\Element\CollectionFactory::class);
-        $this->escaperMock = $this->createMock(\Magento\Framework\Escaper::class);
-        $this->configMock = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getData']);
+        $this->objectManager = new ObjectManager($this);
+        $this->factoryMock = $this->createMock(Factory::class);
+        $this->collectionFactoryMock = $this->createMock(CollectionFactory::class);
+        $this->escaperMock = $this->createMock(Escaper::class);
+        $this->configMock = $this->createPartialMock(DataObject::class, ['getData']);
+        $randomMock = $this->createMock(Random::class);
+        $randomMock->method('getRandomString')->willReturn('some-rando-string');
+        $secureRendererMock = $this->createMock(SecureHtmlRenderer::class);
+        $secureRendererMock->method('renderEventListenerAsTag')
+            ->willReturnCallback(
+                function (string $event, string $listener, string $selector): string {
+                    return "<script>document.querySelector('{$selector}').{$event} = () => { {$listener} };</script>";
+                }
+            );
+        $secureRendererMock->method('renderTag')
+            ->willReturnCallback(
+                function (string $tag, array $attrs, ?string $content): string {
+                    $attrs = new DataObject($attrs);
 
-        $this->serializer = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
+                    return "<$tag {$attrs->serialize()}>$content</$tag>";
+                }
+            );
+
+        $this->serializer = $this->createMock(Json::class);
 
         $this->model = $this->objectManager->getObject(
-            \Magento\Framework\Data\Form\Element\Editor::class,
+            Editor::class,
             [
                 'factoryElement' => $this->factoryMock,
                 'factoryCollection' => $this->collectionFactoryMock,
                 'escaper' => $this->escaperMock,
                 'data' => ['config' => $this->configMock],
-                'serializer' => $this->serializer
+                'serializer' => $this->serializer,
+                'random' => $randomMock,
+                'secureRenderer' => $secureRendererMock
             ]
         );
 
         $this->formMock =
-            $this->createPartialMock(\Magento\Framework\Data\Form::class, ['getHtmlIdPrefix', 'getHtmlIdSuffix']);
+            $this->getMockBuilder(Form::class)
+                ->addMethods(['getHtmlIdPrefix', 'getHtmlIdSuffix'])
+                ->disableOriginalConstructor()
+                ->getMock();
         $this->model->setForm($this->formMock);
     }
 
@@ -89,7 +123,7 @@ class EditorTest extends \PHPUnit\Framework\TestCase
         $this->configMock->expects($this->once())->method('getData')->with('enabled')->willReturn(true);
 
         $model = $this->objectManager->getObject(
-            \Magento\Framework\Data\Form\Element\Editor::class,
+            Editor::class,
             [
                 'factoryElement' => $this->factoryMock,
                 'factoryCollection' => $this->collectionFactoryMock,
@@ -105,11 +139,11 @@ class EditorTest extends \PHPUnit\Framework\TestCase
     public function testGetElementHtml()
     {
         $html = $this->model->getElementHtml();
-        $this->assertContains('</textarea>', $html);
-        $this->assertContains('rows="2"', $html);
-        $this->assertContains('cols="15"', $html);
-        $this->assertRegExp('/class=\".*textarea.*\"/i', $html);
-        $this->assertNotRegExp('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
+        $this->assertStringContainsString('</textarea>', $html);
+        $this->assertStringContainsString('rows="2"', $html);
+        $this->assertStringContainsString('cols="15"', $html);
+        $this->assertMatchesRegularExpression('/class=\".*textarea.*\"/i', $html);
+        $this->assertDoesNotMatchRegularExpression('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
 
         $this->configMock->expects($this->any())->method('getData')
             ->willReturnMap(
@@ -119,7 +153,7 @@ class EditorTest extends \PHPUnit\Framework\TestCase
                 ]
             );
         $html = $this->model->getElementHtml();
-        $this->assertRegExp('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
+        $this->assertMatchesRegularExpression('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
 
         $this->configMock->expects($this->any())->method('getData')
             ->willReturnMap(
@@ -131,7 +165,7 @@ class EditorTest extends \PHPUnit\Framework\TestCase
                 ]
             );
         $html = $this->model->getElementHtml();
-        $this->assertRegExp('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
+        $this->assertMatchesRegularExpression('/.*mage\/adminhtml\/wysiwyg\/widget.*/i', $html);
     }
 
     /**
@@ -186,7 +220,7 @@ class EditorTest extends \PHPUnit\Framework\TestCase
 
     public function testGetConfig()
     {
-        $config = $this->createPartialMock(\Magento\Framework\DataObject::class, ['getData']);
+        $config = $this->createPartialMock(DataObject::class, ['getData']);
         $this->assertEquals($config, $this->model->getConfig());
 
         $this->configMock->expects($this->once())->method('getData')->with('test')->willReturn('test');
@@ -209,6 +243,6 @@ class EditorTest extends \PHPUnit\Framework\TestCase
 
         $html = $this->model->getElementHtml();
 
-        $this->assertRegExp('/.*"Insert Image...":"Insert Image...".*/i', $html);
+        $this->assertMatchesRegularExpression('/.*"Insert Image...":"Insert Image...".*/i', $html);
     }
 }

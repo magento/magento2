@@ -15,6 +15,7 @@ class ProductsViewedTest extends \Magento\TestFramework\TestCase\AbstractBackend
     /**
      * @magentoAppArea adminhtml
      * @magentoDataFixture Magento/Reports/_files/viewed_products.php
+     * @magentoConfigFixture default/reports/options/enabled 1
      */
     public function testExecute()
     {
@@ -24,6 +25,6 @@ class ProductsViewedTest extends \Magento\TestFramework\TestCase\AbstractBackend
         $this->assertEquals(200, $this->getResponse()->getHttpResponseCode());
 
         $actual = $this->getResponse()->getBody();
-        $this->assertContains('Simple Product', $actual);
+        $this->assertStringContainsString('Simple Product', $actual);
     }
 }

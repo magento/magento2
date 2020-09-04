@@ -17,9 +17,13 @@
              <severity value="MAJOR"/>
              <testCaseId value="MC-252"/>
              <group value="Downloadable"/>
-             <group value="SearchEngineMysql"/>
+             <group value="SearchEngineElasticsearch"/>
+             <skip>
+                 <issueId value="MC-34217"/>
+             </skip>
          </annotations>
          <before>
+             <magentoCLI command="downloadable:domains:add example.com static.magento.com" before="product" stepKey="addDownloadableDomain"/>
              <createData entity="ApiDownloadableProduct" stepKey="product"/>
              <createData entity="ApiDownloadableLink" stepKey="addDownloadableLink1">
                  <requiredEntity createDataKey="product"/>
@@ -28,5 +32,8 @@
                  <requiredEntity createDataKey="product"/>
              </createData>
          </before>
+         <after>
+             <magentoCLI command="downloadable:domains:remove example.com static.magento.com" stepKey="removeDownloadableDomain"/>
+         </after>
      </test>
  </tests>

@@ -48,10 +48,27 @@ class SetShippingAddressesOnCart implements SetShippingAddressesOnCartInterface
                 __('You cannot specify multiple shipping addresses.')
             );
         }
-        $shippingAddressInput = current($shippingAddressesInput);
+        $shippingAddressInput = current($shippingAddressesInput) ?? [];
+        $customerAddressId = $shippingAddressInput['customer_address_id'] ?? null;
+
+        if (!$customerAddressId
+            && isset($shippingAddressInput['address'])
+            && !isset($shippingAddressInput['address']['save_in_address_book'])
+        ) {
+            $shippingAddressInput['address']['save_in_address_book'] = true;
+        }
 
         $shippingAddress = $this->getShippingAddress->execute($context, $shippingAddressInput);
 
+        $errors = $shippingAddress->validate();
+
+        if (true !== $errors) {
+            $e = new GraphQlInputException(__('Shipping address errors'));
+            foreach ($errors as $error) {
+                $e->addError(new GraphQlInputException($error));
+            }
+            throw $e;
+        }
         $this->assignShippingAddressToCart->execute($cart, $shippingAddress);
     }
 }

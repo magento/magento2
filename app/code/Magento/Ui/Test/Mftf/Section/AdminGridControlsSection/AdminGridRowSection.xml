@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<sections xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Page/etc/SectionObject.xsd">
+    <section name="AdminGridRow">
+        <element name="rowOne" type="text" selector="tr[data-repeat-index='0']"/>
+        <element name="rowByIndex" type="text" selector="tr[data-repeat-index='{{var1}}']" parameterized="true"/>
+
+        <element name="editByValue" type="button" selector="//a[ancestor::tr[contains(., '{{var1}}')]]" parameterized="true"/>
+
+        <element name="checkboxByValue" type="checkbox" selector="//input[ancestor::tr[contains(., '{{var1}}')]]" parameterized="true"/>
+        <element name="checkboxByIndex" type="checkbox" selector=".data-row[data-repeat-index='{{var1}}'] .admin__control-checkbox" parameterized="true"/>
+    </section>
+</sections>
