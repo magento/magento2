@@ -40,7 +40,11 @@
             <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
         </actionGroup>
         <actionGroup ref="SaveConfiguredProductActionGroup" stepKey="saveProductForm"/>
-        <see selector="{{AdminProductGridSection.productGridCell('2', 'Type')}}" userInput="Configurable Product" stepKey="seeProductTypeInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeProductTypeInGrid">
+            <argument name="row" value="2"/>
+            <argument name="column" value="Type"/>
+            <argument name="value" value="Configurable Product"/>
+        </actionGroup>
         <!-- Verify product on store front -->
         <comment userInput="Verify product on store front" stepKey="commentVerifyProductGrid"/>
         <actionGroup ref="VerifyOptionInProductStorefrontActionGroup" stepKey="verifyConfigurableOption" after="AssertProductInStorefrontProductPage">

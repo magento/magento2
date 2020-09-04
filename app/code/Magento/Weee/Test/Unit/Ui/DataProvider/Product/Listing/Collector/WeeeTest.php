@@ -3,53 +3,61 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Weee\Test\Unit\Ui\DataProvider\Product\Listing\Collector;
 
+use Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterface;
 use Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterfaceFactory;
 use Magento\Catalog\Api\Data\ProductRenderInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductRender\FormattedPriceInfoBuilder;
+use Magento\Catalog\Pricing\Price\FinalPrice;
 use Magento\Framework\Pricing\Amount\AmountInterface;
-use Magento\Catalog\Api\Data\ProductRender\PriceInfoExtensionInterface;
-use Magento\Weee\Api\Data\ProductRender\WeeeAdjustmentAttributeInterfaceFactory;
+use Magento\Framework\Pricing\PriceCurrencyInterface;
+use Magento\Framework\Pricing\PriceInfo\Base;
 use Magento\Weee\Api\Data\ProductRender\WeeeAdjustmentAttributeInterface;
+use Magento\Weee\Api\Data\ProductRender\WeeeAdjustmentAttributeInterfaceFactory;
+use Magento\Weee\Helper\Data;
 use Magento\Weee\Ui\DataProvider\Product\Listing\Collector\Weee;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class WeeeTest extends \PHPUnit\Framework\TestCase
+class WeeeTest extends TestCase
 {
     /** @var Weee */
     protected $model;
 
-    /** @var \Magento\Weee\Helper\Data|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Data|MockObject */
     protected $weeeHelperMock;
 
-    /** @var \Magento\Framework\Pricing\PriceCurrencyInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var PriceCurrencyInterface|MockObject */
     protected $priceCurrencyMock;
 
-    /** @var PriceInfoExtensionInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var PriceInfoExtensionInterface|MockObject */
     private $extensionAttributes;
 
-    /** @var WeeeAdjustmentAttributeInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var WeeeAdjustmentAttributeInterfaceFactory|MockObject */
     private $weeeAdjustmentAttributeFactory;
 
-    /** @var PriceInfoExtensionInterfaceFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var PriceInfoExtensionInterfaceFactory|MockObject */
     private $priceInfoExtensionFactory;
 
-    /** @var FormattedPriceInfoBuilder|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var FormattedPriceInfoBuilder|MockObject */
     private $formattedPriceInfoBuilder;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->weeeHelperMock = $this->getMockBuilder(\Magento\Weee\Helper\Data::class)
+        $this->weeeHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->priceCurrencyMock = $this->getMockBuilder(\Magento\Framework\Pricing\PriceCurrencyInterface::class)
+        $this->priceCurrencyMock = $this->getMockBuilder(PriceCurrencyInterface::class)
             ->getMockForAbstractClass();
 
         $this->weeeAdjustmentAttributeFactory = $this->getMockBuilder(WeeeAdjustmentAttributeInterfaceFactory::class)
@@ -96,11 +104,11 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
         $this->weeeAdjustmentAttributeFactory->expects($this->atLeastOnce())
             ->method('create')
             ->willReturn($weeAttribute);
-        $priceInfo = $this->getMockBuilder(\Magento\Framework\Pricing\PriceInfo\Base::class)
+        $priceInfo = $this->getMockBuilder(Base::class)
             ->disableOriginalConstructor()
             ->setMethods(['getExtensionAttributes', 'getPrice', 'setExtensionAttributes'])
             ->getMock();
-        $price = $this->getMockBuilder(\Magento\Catalog\Pricing\Price\FinalPrice::class)
+        $price = $this->getMockBuilder(FinalPrice::class)
             ->disableOriginalConstructor()
             ->getMock();
         $weeAttribute->expects($this->once())
@@ -118,7 +126,7 @@ class WeeeTest extends \PHPUnit\Framework\TestCase
         $priceInfo->expects($this->atLeastOnce())
             ->method('getPrice')
             ->willReturn($price);
-        $amount = $this->createMock(AmountInterface::class);
+        $amount = $this->getMockForAbstractClass(AmountInterface::class);
         $productRender->expects($this->exactly(5))
             ->method('getStoreId')
             ->willReturn(1);

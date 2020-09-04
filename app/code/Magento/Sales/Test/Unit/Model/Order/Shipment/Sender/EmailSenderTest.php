@@ -3,9 +3,12 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sales\Test\Unit\Model\Order\Shipment\Sender;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\DataObject;
 use Magento\Framework\Event\ManagerInterface;
 use Magento\Payment\Helper\Data;
 use Magento\Payment\Model\Info;
@@ -125,7 +128,7 @@ class EmailSenderTest extends TestCase
     /**
      * @SuppressWarnings(PHPMD.ExcessiveMethodLength)
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->orderMock = $this->getMockBuilder(Order::class)
             ->disableOriginalConstructor()
@@ -224,8 +227,8 @@ class EmailSenderTest extends TestCase
         $this->identityContainerMock = $this->getMockBuilder(
             ShipmentIdentity::class
         )
-        ->disableOriginalConstructor()
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->identityContainerMock->expects($this->any())
             ->method('getStore')
@@ -234,9 +237,9 @@ class EmailSenderTest extends TestCase
         $this->senderBuilderFactoryMock = $this->getMockBuilder(
             SenderBuilderFactory::class
         )
-        ->disableOriginalConstructor()
-        ->setMethods(['create'])
-        ->getMock();
+            ->disableOriginalConstructor()
+            ->setMethods(['create'])
+            ->getMock();
 
         $this->subject = new EmailSender(
             $this->templateContainerMock,
@@ -294,7 +297,7 @@ class EmailSenderTest extends TestCase
                 'formattedShippingAddress' => 'Formatted address',
                 'formattedBillingAddress' => 'Formatted address',
             ];
-            $transport = new \Magento\Framework\DataObject($transport);
+            $transport = new DataObject($transport);
 
             $this->eventManagerMock->expects($this->once())
                 ->method('dispatch')

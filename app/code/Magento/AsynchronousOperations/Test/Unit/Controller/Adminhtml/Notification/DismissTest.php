@@ -3,16 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\AsynchronousOperations\Test\Unit\Controller\Adminhtml\Notification;
 
-use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
-use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
-use Magento\Framework\App\RequestInterface;
-use Magento\Framework\Controller\ResultFactory;
 use Magento\AsynchronousOperations\Controller\Adminhtml\Notification\Dismiss;
+use Magento\AsynchronousOperations\Model\BulkNotificationManagement;
+use Magento\Framework\App\RequestInterface;
 use Magento\Framework\Controller\Result\Json;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DismissTest extends \PHPUnit\Framework\TestCase
+class DismissTest extends TestCase
 {
     /**
      * @var Dismiss
@@ -20,30 +24,30 @@ class DismissTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $notificationManagementMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $requestMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $resultFactoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $jsonResultMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
         $this->notificationManagementMock = $this->createMock(BulkNotificationManagement::class);
-        $this->requestMock = $this->createMock(RequestInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
         $this->resultFactoryMock = $this->createPartialMock(ResultFactory::class, ['create']);
 
         $this->jsonResultMock = $this->createMock(Json::class);
@@ -62,7 +66,7 @@ class DismissTest extends \PHPUnit\Framework\TestCase
     {
         $bulkUuids = ['49da7406-1ec3-4100-95ae-9654c83a6801'];
 
-        $this->requestMock->expects($this->any())
+        $this->requestMock
             ->method('getParam')
             ->with('uuid', [])
             ->willReturn($bulkUuids);
@@ -84,7 +88,7 @@ class DismissTest extends \PHPUnit\Framework\TestCase
     {
         $bulkUuids = ['49da7406-1ec3-4100-95ae-9654c83a6801'];
 
-        $this->requestMock->expects($this->any())
+        $this->requestMock
             ->method('getParam')
             ->with('uuid', [])
             ->willReturn($bulkUuids);

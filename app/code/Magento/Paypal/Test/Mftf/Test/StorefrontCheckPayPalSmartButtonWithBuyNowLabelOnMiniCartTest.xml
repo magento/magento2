@@ -18,6 +18,9 @@
             <testCaseId value="MC-28711"/>
             <group value="paypal"/>
             <group value="paypalExpress"/>
+            <skip>
+                <issueId value="MC-33951"/>
+            </skip>
         </annotations>
         <before>
             <magentoCLI command="config:set {{StorefrontPaypalMiniCartEnableCustomizeButtonConfigData.path}} {{StorefrontPaypalMiniCartEnableCustomizeButtonConfigData.value}}" stepKey="enableCustomizeButton"/>

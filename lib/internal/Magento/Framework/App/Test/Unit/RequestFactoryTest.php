@@ -3,11 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\App\Test\Unit;
 
-use \Magento\Framework\App\RequestFactory;
+use Magento\Framework\App\RequestFactory;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\ObjectManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class RequestFactoryTest extends \PHPUnit\Framework\TestCase
+class RequestFactoryTest extends TestCase
 {
     /**
      * @var RequestFactory
@@ -15,13 +21,13 @@ class RequestFactoryTest extends \PHPUnit\Framework\TestCase
     protected $model;
 
     /**
-     * @var \Magento\Framework\ObjectManagerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var ObjectManagerInterface|MockObject
      */
     protected $objectManagerMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->objectManagerMock = $this->createMock(\Magento\Framework\ObjectManagerInterface::class);
+        $this->objectManagerMock = $this->getMockForAbstractClass(ObjectManagerInterface::class);
         $this->model = new RequestFactory($this->objectManagerMock);
     }
 
@@ -33,12 +39,12 @@ class RequestFactoryTest extends \PHPUnit\Framework\TestCase
     {
         $arguments = ['some_key' => 'same_value'];
 
-        $appRequest = $this->createMock(\Magento\Framework\App\RequestInterface::class);
+        $appRequest = $this->getMockForAbstractClass(RequestInterface::class);
 
         $this->objectManagerMock->expects($this->once())
             ->method('create')
-            ->with(\Magento\Framework\App\RequestInterface::class, $arguments)
-            ->will($this->returnValue($appRequest));
+            ->with(RequestInterface::class, $arguments)
+            ->willReturn($appRequest);
 
         $this->assertEquals($appRequest, $this->model->create($arguments));
     }

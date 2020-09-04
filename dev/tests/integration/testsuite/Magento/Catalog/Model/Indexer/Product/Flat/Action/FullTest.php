@@ -40,7 +40,7 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * @inheritdoc
      */
-    public static function setUpBeforeClass()
+    public static function setUpBeforeClass(): void
     {
         /*
          * Due to insufficient search engine isolation for Elasticsearch, this class must explicitly perform
@@ -56,7 +56,7 @@ class FullTest extends \Magento\TestFramework\Indexer\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->_state = $this->objectManager->get(State::class);

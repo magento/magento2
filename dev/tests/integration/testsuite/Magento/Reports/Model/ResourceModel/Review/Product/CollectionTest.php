@@ -15,7 +15,7 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      */
     private $_collection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_collection = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Reports\Model\ResourceModel\Review\Product\Collection::class
@@ -29,6 +29,6 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
             . '[\s\S]+SUM\(table_rating.percent_approved\)\/COUNT\(table_rating.rating_id\) AS `avg_rating_approved`'
             . '[\s\S]+LEFT JOIN `.*rating_option_vote_aggregated` AS `table_rating`/';
 
-        $this->assertRegExp($search, $select);
+        $this->assertMatchesRegularExpression($search, $select);
     }
 }

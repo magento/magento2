@@ -39,7 +39,7 @@ class TotalsTest extends TestCase
     /**
      * @inheritDoc
      */
-    public function setUp()
+    protected function setUp(): void
     {
         $this->om = Bootstrap::getObjectManager();
         $this->layout = $this->om->get(LayoutInterface::class);
@@ -70,6 +70,36 @@ class TotalsTest extends TestCase
 
         $this->assertSubtotal($blockTotals->toHtml(), (float) $order->getSubtotalInclTax());
         $this->assertShipping($blockTotals->toHtml(), (float) $order->getShippingInclTax());
+    }
+
+    /**
+     * Test block totals including canceled amount.
+     *
+     * @magentoDataFixture Magento/Sales/_files/order.php
+     *
+     * @return void
+     */
+    public function testTotalCanceled(): void
+    {
+        $order = $this->orderFactory->create()->loadByIncrementId('100000001');
+        $order->cancel();
+        $blockTotals = $this->getBlockTotals()->setOrder($order);
+        $this->assertCanceled($blockTotals->toHtml(), $order->getTotalCanceled());
+    }
+
+    /**
+     * Check if canceled amount present in block.
+     *
+     * @param string $blockTotalsHtml
+     * @param float $amount
+     * @return void
+     */
+    private function assertCanceled(string $blockTotalsHtml, float $amount): void
+    {
+        $this->assertTrue(
+            $this->isBlockContainsTotalAmount($blockTotalsHtml, __('Total Canceled'), $amount),
+            'Canceled amount is missing or incorrect.'
+        );
     }
 
     /**
