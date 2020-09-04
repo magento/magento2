@@ -11,7 +11,6 @@ use Magento\Framework\Api\Filter;
 use Magento\Framework\Api\SearchCriteria\CollectionProcessor\FilterProcessor\CustomFilterInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Data\Collection\AbstractDb;
-use Magento\Framework\DB\Select;
 
 /**
  * Custom filter to filter collection by entity type
@@ -49,30 +48,36 @@ class Entity implements CustomFilterInterface
         $ids = $filter->getValue();
         if (is_array($ids)) {
             $collection->addFieldToFilter(
-                self::TABLE_ALIAS . '.id',
-                ['in' => $this->getSelectByEntityIds($ids)]
+                [self::TABLE_ALIAS . '.id'],
+                [
+                    ['in' => $this->getSelectByEntityIds($ids)]
+                ]
             );
         }
         return true;
     }
 
     /**
-     * Return select asset ids by entity type
+     * Return asset ids by entity type
      *
      * @param array $ids
-     * @return Select
+     * @return array
      */
-    private function getSelectByEntityIds(array $ids): Select
+    private function getSelectByEntityIds(array $ids): array
     {
-        return $this->connection->getConnection()->select()->from(
-            ['asset_content_table' => $this->connection->getTableName(self::TABLE_MEDIA_CONTENT_ASSET)],
-            ['asset_id']
-        )->where(
-            'entity_type = ?',
-            $this->entityType
-        )->where(
-            'entity_id IN (?)',
-            $ids
+        $connection = $this->connection->getConnection();
+
+        return $connection->fetchAssoc(
+            $connection->select()->from(
+                ['asset_content_table' => $this->connection->getTableName(self::TABLE_MEDIA_CONTENT_ASSET)],
+                ['asset_id']
+            )->where(
+                'entity_type = ?',
+                $this->entityType
+            )->where(
+                'entity_id IN (?)',
+                $ids
+            )
         );
     }
 }

@@ -21,8 +21,6 @@ use Psr\Log\LoggerInterface;
  */
 class SaveImageInformation
 {
-    private const IMAGE_FILE_NAME_PATTERN = '#\.(jpg|jpeg|gif|png)$# i';
-
     /**
      * @var IsPathExcludedInterface
      */
@@ -49,24 +47,32 @@ class SaveImageInformation
     private $synchronizeFiles;
 
     /**
+     * @var string[]
+     */
+    private $imageExtensions;
+
+    /**
      * @param Filesystem $filesystem
      * @param LoggerInterface $log
      * @param IsPathExcludedInterface $isPathExcluded
      * @param SynchronizeFilesInterface $synchronizeFiles
      * @param ConfigInterface $config
+     * @param array $imageExtensions
      */
     public function __construct(
         Filesystem $filesystem,
         LoggerInterface $log,
         IsPathExcludedInterface $isPathExcluded,
         SynchronizeFilesInterface $synchronizeFiles,
-        ConfigInterface $config
+        ConfigInterface $config,
+        array $imageExtensions
     ) {
         $this->log = $log;
         $this->isPathExcluded = $isPathExcluded;
         $this->filesystem = $filesystem;
         $this->synchronizeFiles = $synchronizeFiles;
         $this->config = $config;
+        $this->imageExtensions = $imageExtensions;
     }
 
     /**
@@ -75,6 +81,7 @@ class SaveImageInformation
      * @param Uploader $subject
      * @param array $result
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
+     * @return array
      */
     public function afterSave(Uploader $subject, array $result): array
     {
@@ -103,7 +110,7 @@ class SaveImageInformation
         try {
             return $path
                 && !$this->isPathExcluded->execute($path)
-                && preg_match(self::IMAGE_FILE_NAME_PATTERN, $path);
+                && preg_match('#\.(' . implode("|", $this->imageExtensions) . ')$# i', $path);
         } catch (\Exception $exception) {
             $this->log->critical($exception);
             return false;
