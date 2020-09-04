@@ -88,7 +88,9 @@ define([
         onActiveChange: function (isActive) {
             if (!isActive) {
                 this.$selector.off('submitOrder.braintree');
-
+                this.$selector.on('submitOrder', function() {
+                    $(this).trigger('realOrder');
+                })
                 return;
             }
             this.disableEventListeners();
