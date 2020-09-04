@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\MediaGalleryRenditions\Plugin;
 
+use Magento\Catalog\Helper\Data as CatalogHelper;
 use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\Filesystem;
 use Magento\MediaGalleryApi\Api\DeleteAssetsByPathsInterface;
@@ -18,6 +19,11 @@ use Psr\Log\LoggerInterface;
  */
 class RemoveRenditions
 {
+    /**
+     * @var CatalogHelper
+     */
+    private $catalogHelper;
+
     /**
      * @var GetRenditionPathInterface
      */
@@ -39,10 +45,12 @@ class RemoveRenditions
      * @param LoggerInterface $log
      */
     public function __construct(
+        CatalogHelper $catalogHelper,
         GetRenditionPathInterface $getRenditionPath,
         Filesystem $filesystem,
         LoggerInterface $log
     ) {
+        $this->catalogHelper = $catalogHelper;
         $this->getRenditionPath = $getRenditionPath;
         $this->filesystem = $filesystem;
         $this->log = $log;
@@ -52,7 +60,7 @@ class RemoveRenditions
      * Remove renditions when assets are removed
      *
      * @param DeleteAssetsByPathsInterface $deleteAssetsByPaths
-     * @param null $result
+     * @param void $result
      * @param array $paths
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
