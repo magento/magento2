@@ -3,16 +3,16 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sitemap\Model;
 
-use Exception;
-use Magento\Sitemap\Model\EmailNotification as SitemapEmail;
+use Magento\Framework\App\Area;
 use Magento\Framework\App\Config\ScopeConfigInterface;
-use Magento\Sitemap\Model\ResourceModel\Sitemap\Collection;
+use Magento\Sitemap\Model\EmailNotification as SitemapEmail;
 use Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory;
 use Magento\Store\Model\App\Emulation;
 use Magento\Store\Model\ScopeInterface;
-use Magento\Framework\App\Area;
 
 /**
  * Sitemap module observer
@@ -51,12 +51,12 @@ class Observer
     /**
      * Core store config
      *
-     * @var ScopeConfigInterface
+     * @var \Magento\Framework\App\Config\ScopeConfigInterface
      */
     private $scopeConfig;
 
     /**
-     * @var CollectionFactory
+     * @var \Magento\Sitemap\Model\ResourceModel\Sitemap\CollectionFactory
      */
     private $collectionFactory;
 
@@ -82,20 +82,18 @@ class Observer
         CollectionFactory $collectionFactory,
         SitemapEmail $emailNotification,
         Emulation $appEmulation
-
     ) {
         $this->scopeConfig = $scopeConfig;
         $this->collectionFactory = $collectionFactory;
         $this->emailNotification = $emailNotification;
         $this->appEmulation = $appEmulation;
-
     }
 
     /**
      * Generate sitemaps
      *
      * @return void
-     * @throws Exception
+     * @throws \Exception
      * @SuppressWarnings(PHPMD.UnusedLocalVariable)
      */
     public function scheduledGenerateSitemaps()
@@ -115,9 +113,9 @@ class Observer
         }
 
         $collection = $this->collectionFactory->create();
-        /* @var $collection Collection */
+        /* @var $collection \Magento\Sitemap\Model\ResourceModel\Sitemap\Collection */
         foreach ($collection as $sitemap) {
-            /* @var $sitemap Sitemap */
+            /* @var $sitemap \Magento\Sitemap\Model\Sitemap */
             try {
                 $this->appEmulation->startEnvironmentEmulation(
                     $sitemap->getStoreId(),
@@ -126,7 +124,7 @@ class Observer
                 );
                 $sitemap->generateXml();
                 $this->appEmulation->stopEnvironmentEmulation();
-            } catch (Exception $e) {
+            } catch (\Exception $e) {
                 $errors[] = $e->getMessage();
             }
         }
