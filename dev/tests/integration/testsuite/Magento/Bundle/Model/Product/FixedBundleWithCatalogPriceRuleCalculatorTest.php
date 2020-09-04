@@ -11,7 +11,7 @@ use \Magento\Bundle\Api\Data\LinkInterface;
 /**
  * @magentoAppArea frontend
  */
-class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceAbstract
+class FixedBundleWithCatalogPriceRuleCalculatorTest extends BundlePriceCalculatorAbstract
 {
     /**
      * @param array $strategyModifiers
