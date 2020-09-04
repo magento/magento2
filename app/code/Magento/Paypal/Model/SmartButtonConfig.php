@@ -11,9 +11,10 @@ use Magento\Checkout\Helper\Data;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Smart button config
+ * Provides configuration values for PayPal in-context checkout
  */
 class SmartButtonConfig
 {
@@ -33,35 +34,58 @@ class SmartButtonConfig
     private $defaultStyles;
 
     /**
-     * @var array
-     */
-    private $allowedFunding;
-
-    /**
      * @var ScopeConfigInterface
      */
     private $scopeConfig;
 
     /**
+     * Maps the old checkout SDK configuration values to the current ones
+     * @var array
+     */
+    private $disallowedFundingMap;
+
+    /**
+     * These payment methods will be added as parameters to the SDK url to disable them.
+     * @var array
+     */
+    private $unsupportedPaymentMethods;
+
+    /**
+     * @var StoreManagerInterface
+     */
+    private $storeManager;
+
+    /**
+     * Base url for Paypal SDK
+     */
+    private const BASE_URL = 'https://www.paypal.com/sdk/js?';
+
+    /**
      * @param ResolverInterface $localeResolver
      * @param ConfigFactory $configFactory
      * @param ScopeConfigInterface $scopeConfig
+     * @param StoreManagerInterface $storeManager
      * @param array $defaultStyles
-     * @param array $allowedFunding
+     * @param array $disallowedFundingMap
+     * @param array $unsupportedPaymentMethods
      */
     public function __construct(
         ResolverInterface $localeResolver,
         ConfigFactory $configFactory,
         ScopeConfigInterface $scopeConfig,
+        StoreManagerInterface $storeManager,
         $defaultStyles = [],
-        $allowedFunding = []
+        $disallowedFundingMap = [],
+        $unsupportedPaymentMethods = []
     ) {
         $this->localeResolver = $localeResolver;
         $this->config = $configFactory->create();
         $this->config->setMethod(Config::METHOD_EXPRESS);
         $this->scopeConfig = $scopeConfig;
+        $this->storeManager = $storeManager;
         $this->defaultStyles = $defaultStyles;
-        $this->allowedFunding = $allowedFunding;
+        $this->disallowedFundingMap = $disallowedFundingMap;
+        $this->unsupportedPaymentMethods = $unsupportedPaymentMethods;
     }
 
     /**
@@ -76,38 +100,88 @@ class SmartButtonConfig
             Data::XML_PATH_GUEST_CHECKOUT,
             ScopeInterface::SCOPE_STORE
         );
+
         return [
-            'merchantId' => $this->config->getValue('merchant_id'),
-            'environment' => ((int)$this->config->getValue('sandbox_flag') ? 'sandbox' : 'production'),
-            'locale' => $this->localeResolver->getLocale(),
-            'allowedFunding' => $this->getAllowedFunding($page),
-            'disallowedFunding' => $this->getDisallowedFunding(),
             'styles' => $this->getButtonStyles($page),
             'isVisibleOnProductPage'  => (bool)$this->config->getValue('visible_on_product'),
-            'isGuestCheckoutAllowed'  => $isGuestCheckoutAllowed
+            'isGuestCheckoutAllowed'  => $isGuestCheckoutAllowed,
+            'sdkUrl' => $this->generatePaypalSdkUrl($page)
         ];
     }
 
     /**
-     * Returns disallowed funding from configuration
+     * Generate the url to download the Paypal SDK
+     *
+     * @param string $page
+     *
+     * @return string
+     */
+    private function generatePaypalSdkUrl(string $page): string
+    {
+        $clientId = (int)$this->config->getValue('sandbox_flag') ?
+            $this->config->getValue('sandbox_client_id') : $this->config->getValue('client_id');
+        $disallowedFunding = implode(',', $this->getDisallowedFunding());
+
+        $commit = $page === 'checkout' ? 'true' : 'false';
+
+        $params =
+            [
+                'client-id' => $clientId,
+                'commit' => $commit,
+                'merchant-id' => $this->config->getValue('merchant_id'),
+                'locale' => $this->localeResolver->getLocale(),
+                'intent' => $this->getIntent(),
+                'currency' => $this->storeManager->getStore()->getBaseCurrencyCode(),
+            ];
+        if ($disallowedFunding) {
+            $params['disable-funding'] = $disallowedFunding;
+        }
+
+        return self::BASE_URL . http_build_query($params);
+    }
+
+    /**
+     * Return intent value from the configuration payment_action value
+     *
+     * @return string
+     */
+    private function getIntent(): string
+    {
+        $paymentAction = $this->config->getValue('paymentAction');
+        $mappedIntentValues = [
+            Config::PAYMENT_ACTION_AUTH => 'authorize',
+            Config::PAYMENT_ACTION_SALE => 'capture',
+            Config::PAYMENT_ACTION_ORDER => 'order'
+        ];
+        return $mappedIntentValues[$paymentAction];
+    }
+
+    /**
+     * Returns disallowed funding from configuration after updating values
      *
      * @return array
      */
     private function getDisallowedFunding(): array
     {
         $disallowedFunding = $this->config->getValue('disable_funding_options');
-        return $disallowedFunding ? explode(',', $disallowedFunding) : [];
-    }
+        $result = $disallowedFunding ? explode(',', $disallowedFunding) : [];
 
-    /**
-     * Returns allowed funding
-     *
-     * @param string $page
-     * @return array
-     */
-    private function getAllowedFunding(string $page): array
-    {
-        return array_values(array_diff($this->allowedFunding[$page], $this->getDisallowedFunding()));
+        // PayPal Guest Checkout Credit Card Icons only available when Guest Checkout option is enabled
+        if ($this->isPaypalGuestCheckoutAllowed() === false && !in_array('CARD', $result)) {
+            array_push($result, 'CARD');
+        }
+
+        // Map old configuration values to current ones
+        $result = array_map(function ($oldValue) {
+            return $this->disallowedFundingMap[$oldValue] ?? $oldValue;
+        },
+            $result);
+
+        //disable unsupported payment methods
+        $result = array_combine($result, $result);
+        $result = array_merge($result, $this->unsupportedPaymentMethods);
+
+        return $result;
     }
 
     /**
@@ -158,7 +232,7 @@ class SmartButtonConfig
         // Installment label is only available for specific locales
         if ($styles['label'] === 'installment') {
             if (array_key_exists($locale, $installmentPeriodLocale)) {
-                $styles['installmentperiod'] = (int)$this->config->getValue(
+                $styles['period'] = (int)$this->config->getValue(
                     $page .'_page_button_' . $installmentPeriodLocale[$locale] . '_installment_period'
                 );
             } else {
@@ -167,5 +241,15 @@ class SmartButtonConfig
         }
 
         return $styles;
+    }
+
+    /**
+     * Returns if is allowed PayPal Guest Checkout.
+     *
+     * @return bool
+     */
+    private function isPaypalGuestCheckoutAllowed(): bool
+    {
+        return $this->config->getValue('solution_type') === Config::EC_SOLUTION_TYPE_SOLE;
     }
 }

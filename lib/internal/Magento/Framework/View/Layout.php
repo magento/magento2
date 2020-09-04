@@ -547,8 +547,7 @@ class Layout extends \Magento\Framework\Simplexml\Config implements \Magento\Fra
             if ($this->appState->getMode() === AppState::MODE_DEVELOPER) {
                 throw $e;
             }
-            $message = ($e instanceof LocalizedException) ? $e->getLogMessage() : $e->getMessage();
-            $this->logger->critical($message);
+            $this->logger->critical($e);
         }
         return $result;
     }

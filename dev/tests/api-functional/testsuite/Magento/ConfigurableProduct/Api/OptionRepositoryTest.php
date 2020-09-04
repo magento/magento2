@@ -27,14 +27,14 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         $productSku = 'configurable';
 
         $options = $this->getList($productSku);
-        $this->assertTrue(is_array($options));
+        $this->assertIsArray($options);
         $this->assertNotEmpty($options);
 
         foreach ($options as $option) {
             /** @var array $result */
             $result = $this->get($productSku, $option['id']);
 
-            $this->assertTrue(is_array($result));
+            $this->assertIsArray($result);
             $this->assertNotEmpty($result);
 
             $this->assertArrayHasKey('id', $result);
@@ -47,7 +47,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
             $this->assertEquals($option['label'], $result['label']);
 
             $this->assertArrayHasKey('values', $result);
-            $this->assertTrue(is_array($result['values']));
+            $this->assertIsArray($result['values']);
             $this->assertEquals($option['values'], $result['values']);
         }
     }
@@ -63,26 +63,26 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         $result = $this->getList($productSku);
 
         $this->assertNotEmpty($result);
-        $this->assertTrue(is_array($result));
+        $this->assertIsArray($result);
         $this->assertArrayHasKey(0, $result);
 
         $option = $result[0];
 
         $this->assertNotEmpty($option);
-        $this->assertTrue(is_array($option));
+        $this->assertIsArray($option);
 
         $this->assertArrayHasKey('id', $option);
         $this->assertArrayHasKey('label', $option);
         $this->assertEquals($option['label'], 'Test Configurable');
 
         $this->assertArrayHasKey('values', $option);
-        $this->assertTrue(is_array($option));
+        $this->assertIsArray($option);
         $this->assertNotEmpty($option);
 
         $this->assertCount(2, $option['values']);
 
         foreach ($option['values'] as $value) {
-            $this->assertTrue(is_array($value));
+            $this->assertIsArray($value);
             $this->assertNotEmpty($value);
 
             $this->assertArrayHasKey('value_index', $value);
@@ -90,11 +90,14 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
     }
 
     /**
-     * @expectedException \Exception
-     * @expectedExceptionMessage The product that was requested doesn't exist. Verify the product and try again.
      */
     public function testGetUndefinedProduct()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage(
+            'The product that was requested doesn\'t exist. Verify the product and try again.'
+        );
+
         $productSku = 'product_not_exist';
         $this->getList($productSku);
     }
@@ -110,7 +113,7 @@ class OptionRepositoryTest extends \Magento\TestFramework\TestCase\WebapiAbstrac
         try {
             $this->get($productSku, $attributeId);
         } catch (\SoapFault $e) {
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $expectedMessage,
                 $e->getMessage(),
                 'SoapFault does not contain expected message.'

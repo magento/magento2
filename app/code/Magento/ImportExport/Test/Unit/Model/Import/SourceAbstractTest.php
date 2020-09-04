@@ -3,19 +3,25 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\ImportExport\Test\Unit\Model\Import;
 
-class SourceAbstractTest extends \PHPUnit\Framework\TestCase
+use Magento\ImportExport\Model\Import\AbstractSource;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class SourceAbstractTest extends TestCase
 {
     /**
-     * @var \Magento\ImportExport\Model\Import\AbstractSource|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractSource|MockObject
      */
     protected $_model = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = $this->getMockForAbstractClass(
-            \Magento\ImportExport\Model\Import\AbstractSource::class,
+            AbstractSource::class,
             [['key1', 'key2', 'key3']]
         );
     }
@@ -23,11 +29,11 @@ class SourceAbstractTest extends \PHPUnit\Framework\TestCase
     /**
      * @param array $argument
      * @dataProvider constructExceptionDataProvider
-     * @expectedException \InvalidArgumentException
      */
     public function testConstructException($argument)
     {
-        $this->getMockForAbstractClass(\Magento\ImportExport\Model\Import\AbstractSource::class, [$argument]);
+        $this->expectException(\InvalidArgumentException::class);
+        $this->getMockForAbstractClass(AbstractSource::class, [$argument]);
     }
 
     /**
@@ -43,12 +49,10 @@ class SourceAbstractTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(['key1', 'key2', 'key3'], $this->_model->getColNames());
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage wrongColumnsNumber
-     */
     public function testIteratorInterface()
     {
+        $this->expectException(\InvalidArgumentException::class);
+        $this->expectExceptionMessage('wrongColumnsNumber');
         $this->assertSame(-1, $this->_model->key());
         $this->assertFalse($this->_model->valid());
 
@@ -93,11 +97,9 @@ class SourceAbstractTest extends \PHPUnit\Framework\TestCase
         $this->assertSame(['key1' => 4, 'key2' => 5, 'key3' => 5], $this->_model->current());
     }
 
-    /**
-     * @expectedException \OutOfBoundsException
-     */
     public function testSeekableInterfaceException()
     {
+        $this->expectException(\OutOfBoundsException::class);
         $this->_model->seek(0);
     }
 }

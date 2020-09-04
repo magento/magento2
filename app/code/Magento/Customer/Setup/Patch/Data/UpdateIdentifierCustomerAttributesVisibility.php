@@ -3,18 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Setup\Patch\Data;
 
 use Magento\Customer\Setup\CustomerSetupFactory;
-use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 use Magento\Framework\Setup\Patch\PatchVersionInterface;
 
 /**
- * Class UpdateIdentifierCustomerAttributesVisibility
- * @package Magento\Customer\Setup\Patch
+ * Update identifier attributes visibility for customer
  */
 class UpdateIdentifierCustomerAttributesVisibility implements DataPatchInterface, PatchVersionInterface
 {
@@ -29,7 +28,6 @@ class UpdateIdentifierCustomerAttributesVisibility implements DataPatchInterface
     private $customerSetupFactory;
 
     /**
-     * UpdateIdentifierCustomerAttributesVisibility constructor.
      * @param ModuleDataSetupInterface $moduleDataSetup
      * @param CustomerSetupFactory $customerSetupFactory
      */
@@ -42,7 +40,7 @@ class UpdateIdentifierCustomerAttributesVisibility implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function apply()
     {
@@ -70,10 +68,12 @@ class UpdateIdentifierCustomerAttributesVisibility implements DataPatchInterface
             ],
         ];
         $customerSetup->upgradeAttributes($entityAttributes);
+
+        return $this;
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getDependencies()
     {
@@ -83,7 +83,7 @@ class UpdateIdentifierCustomerAttributesVisibility implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public static function getVersion()
     {
@@ -91,7 +91,7 @@ class UpdateIdentifierCustomerAttributesVisibility implements DataPatchInterface
     }
 
     /**
-     * {@inheritdoc}
+     * @inheritdoc
      */
     public function getAliases()
     {

@@ -3,42 +3,49 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesSequence\Test\Unit\Model\ResourceModel;
 
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
+use Magento\Framework\Model\ResourceModel\Db\Context;
+use Magento\SalesSequence\Model\MetaFactory;
+use Magento\SalesSequence\Model\Profile;
 use Magento\SalesSequence\Model\ResourceModel\Meta;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Class MetaTest
- */
-class MetaTest extends \PHPUnit\Framework\TestCase
+class MetaTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\DB\Adapter\AdapterInterface | \PHPUnit_Framework_MockObject_MockObject
+     * @var AdapterInterface|MockObject
      */
     private $connectionMock;
 
     /**
-     * @var \Magento\Framework\Model\ResourceModel\Db\Context | \PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $dbContext;
 
     /**
-     * @var \Magento\SalesSequence\Model\MetaFactory | \PHPUnit_Framework_MockObject_MockObject
+     * @var MetaFactory|MockObject
      */
     private $metaFactory;
 
     /**
-     * @var \Magento\SalesSequence\Model\Meta | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\Meta|MockObject
      */
     private $meta;
 
     /**
-     * @var \Magento\SalesSequence\Model\Profile | \PHPUnit_Framework_MockObject_MockObject
+     * @var Profile|MockObject
      */
     private $profile;
 
     /**
-     * @var \Magento\SalesSequence\Model\ResourceModel\Profile | \PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\SalesSequence\Model\ResourceModel\Profile|MockObject
      */
     private $resourceProfile;
 
@@ -48,22 +55,22 @@ class MetaTest extends \PHPUnit\Framework\TestCase
     private $resource;
 
     /**
-     * @var Resource | \PHPUnit_Framework_MockObject_MockObject
+     * @var Resource|MockObject
      */
     protected $resourceMock;
 
     /**
-     * @var \Magento\Framework\DB\Select | \PHPUnit_Framework_MockObject_MockObject
+     * @var Select|MockObject
      */
     private $select;
 
     /**
      * Initialization
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->connectionMock = $this->getMockForAbstractClass(
-            \Magento\Framework\DB\Adapter\AdapterInterface::class,
+            AdapterInterface::class,
             [],
             '',
             false,
@@ -71,20 +78,20 @@ class MetaTest extends \PHPUnit\Framework\TestCase
             true,
             ['query']
         );
-        $this->dbContext = $this->createMock(\Magento\Framework\Model\ResourceModel\Db\Context::class);
-        $this->metaFactory = $this->createPartialMock(\Magento\SalesSequence\Model\MetaFactory::class, ['create']);
+        $this->dbContext = $this->createMock(Context::class);
+        $this->metaFactory = $this->createPartialMock(MetaFactory::class, ['create']);
         $this->resourceProfile = $this->createPartialMock(
             \Magento\SalesSequence\Model\ResourceModel\Profile::class,
             ['loadActiveProfile', 'save']
         );
         $this->resourceMock = $this->createPartialMock(
-            \Magento\Framework\App\ResourceConnection::class,
+            ResourceConnection::class,
             ['getConnection', 'getTableName']
         );
         $this->dbContext->expects($this->once())->method('getResources')->willReturn($this->resourceMock);
-        $this->select = $this->createMock(\Magento\Framework\DB\Select::class);
+        $this->select = $this->createMock(Select::class);
         $this->meta = $this->createMock(\Magento\SalesSequence\Model\Meta::class);
-        $this->profile = $this->createMock(\Magento\SalesSequence\Model\Profile::class);
+        $this->profile = $this->createMock(Profile::class);
         $this->resource = new Meta(
             $this->dbContext,
             $this->metaFactory,

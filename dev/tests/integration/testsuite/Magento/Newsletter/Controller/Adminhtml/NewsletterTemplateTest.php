@@ -23,7 +23,7 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $formKey = $this->_objectManager->get(\Magento\Framework\Data\Form\FormKey::class);
@@ -45,7 +45,7 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
     /**
      * @inheritDoc
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /**
          * Unset messages
@@ -62,11 +62,19 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
     public function testSaveActionCreateNewTemplateAndVerifySuccessMessage()
     {
         $this->getRequest()->setParam('id', $this->model->getId());
+        $this->getRequest()->setParam('is_legacy', 1);
+
         $this->dispatch('backend/newsletter/template/save');
+
         /**
          * Check that errors was generated and set to session
          */
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
+
+        $this->model->load($this->getRequest()->getPostValue('code'), 'template_code');
+
+        $this->assertEquals(0, $this->model->getIsLegacy());
+
         /**
          * Check that success message is set
          */
@@ -90,12 +98,18 @@ class NewsletterTemplateTest extends \Magento\TestFramework\TestCase\AbstractBac
         $this->assertEquals('some_unique_code', $this->model->getTemplateCode());
 
         $this->getRequest()->setParam('id', $this->model->getId());
+        $this->getRequest()->setParam('is_legacy', 1);
+
         $this->dispatch('backend/newsletter/template/save');
 
         /**
          * Check that errors was generated and set to session
          */
         $this->assertSessionMessages($this->isEmpty(), \Magento\Framework\Message\MessageInterface::TYPE_ERROR);
+
+        $this->model->load($this->getRequest()->getPostValue('code'), 'template_code');
+
+        $this->assertEquals(0, $this->model->getIsLegacy());
 
         /**
          * Check that success message is set

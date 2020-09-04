@@ -11,8 +11,9 @@ use Magento\Framework\Api\Data\ImageContentInterfaceFactory;
 use Magento\Framework\Api\Data\VideoContentInterfaceFactory;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-include __DIR__ . '/product_simple_with_full_option_set.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_simple_with_full_option_set.php');
 
 /** @var ObjectManager $objectManager */
 $objectManager = Bootstrap::getObjectManager();

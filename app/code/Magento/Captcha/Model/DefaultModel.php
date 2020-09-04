@@ -496,12 +496,17 @@ class DefaultModel extends \Laminas\Captcha\Image implements \Magento\Captcha\Mo
     /**
      * Get captcha words
      *
-     * @return string|null
+     * @return string
      */
     private function getWords()
     {
         $sessionData = $this->session->getData($this->getFormIdKey(self::SESSION_WORD));
-        return time() < $sessionData['expires'] ? $sessionData['words'] : null;
+        $words = '';
+        if (isset($sessionData['expires'], $sessionData['words']) && time() < $sessionData['expires']) {
+            $words = $sessionData['words'];
+        }
+
+        return $words;
     }
 
     /**
