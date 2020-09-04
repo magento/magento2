@@ -8,13 +8,12 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminMediaGalleryAssertImageInGridActionGroup">
+    <actionGroup name="AdminOpenAdminThreeDSecurePageActionGroup">
         <annotations>
-            <description>Asserts that image exists in media gallery grid</description>
+            <description>Open ThreeDSecure page.</description>
         </annotations>
-        <arguments>
-            <argument name="title"/>
-        </arguments>
-        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(title)}}" stepKey="waitForImageToBeVisible"/>
+
+        <amOnPage url="{{AdminThreeDSecurePage.url}}" stepKey="openAdminThreeDSecurePage"/>
+        <waitForPageLoad stepKey="waitThreeDSecurePageToLoad"/>
     </actionGroup>
 </actionGroups>

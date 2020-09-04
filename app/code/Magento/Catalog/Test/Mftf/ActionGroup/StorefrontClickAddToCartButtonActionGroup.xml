@@ -8,13 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminMediaGalleryAssertImageInGridActionGroup">
+    <actionGroup name="StorefrontClickAddToCartButtonActionGroup">
         <annotations>
-            <description>Asserts that image exists in media gallery grid</description>
+            <description>Click "Add to Cart" button.</description>
         </annotations>
-        <arguments>
-            <argument name="title"/>
-        </arguments>
-        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(title)}}" stepKey="waitForImageToBeVisible"/>
+        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addToCart"/>
+        <waitForPageLoad stepKey="waitAddToCart"/>
     </actionGroup>
 </actionGroups>
