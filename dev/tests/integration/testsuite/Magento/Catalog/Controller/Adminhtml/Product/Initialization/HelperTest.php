@@ -27,15 +27,14 @@ class HelperTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @magentoDataFixture Magento/Catalog/_files/categories.php
-     * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
+     * @magentoDataFixture Magento/Catalog/_files/products_in_categories.php
      * @dataProvider initializeCategoriesFromDataProvider
      * @param string $sku
      * @param array $categoryIds
      */
     public function testInitializeCategoriesFromData(string $sku, array $categoryIds): void
     {
-        $productRepository = Bootstrap::getObjectManager()->get(ProductRepositoryInterface::class);
+        $productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);
         /** @var \Magento\Catalog\Model\Product $product */
         $product = $productRepository->get($sku);
         $productData = $product->getData();
@@ -55,34 +54,15 @@ class HelperTest extends \PHPUnit\Framework\TestCase
     public function initializeCategoriesFromDataProvider(): array
     {
         return [
-            'assign categories' => [
-                'simple',
-                [2, 3, 4, 11, 12, 13],
-            ],
-            'unassign categories' => [
-                'simple-4',
-                [11, 12],
-            ],
-            'update categories' => [
-                'simple-3',
-                [10, 12, 13],
-            ],
-            'change all categories' => [
-                'simple-3',
-                [4, 5]
-            ],
-            'unassign all categories' => [
-                'simple-3',
-                [],
-            ],
-            'assign new category' => [
-                'simple2',
-                [11],
-            ],
-            'assign new categories' => [
-                'simple2',
-                [11, 13],
-            ],
+            'assign category' => ['simple1', [3, 4]],
+            'assign categories' => ['simple1', [3, 5, 6]],
+            'unassign category' => ['simple2', [3, 6]],
+            'unassign categories' => ['simple2', [3]],
+            'update categories' => ['simple2', [3, 4, 6]],
+            'change all categories' => ['simple2', [4]],
+            'unassign all categories' => ['simple2', []],
+            'assign new category' => ['simple3', [4]],
+            'assign new categories' => ['simple3', [4, 5]],
         ];
     }
 }

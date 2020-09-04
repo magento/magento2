@@ -12,15 +12,11 @@ $defaultAttributeSet = $objectManager->get(Magento\Eav\Model\Config::class)
 $productRepository = $objectManager->create(
     \Magento\Catalog\Api\ProductRepositoryInterface::class
 );
-$categoryRepository = $objectManager->create(
-    \Magento\Catalog\Api\CategoryRepositoryInterface::class
-);
 
 $categoryLinkRepository = $objectManager->create(
     \Magento\Catalog\Api\CategoryLinkRepositoryInterface::class,
     [
-        'productRepository' => $productRepository,
-        'categoryRepository' => $categoryRepository,
+        'productRepository' => $productRepository
     ]
 );
 
