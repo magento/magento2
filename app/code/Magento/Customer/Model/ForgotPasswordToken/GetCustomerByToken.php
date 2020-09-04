@@ -65,13 +65,11 @@ class GetCustomerByToken
         );
 
         if ($found->getTotalCount() > 1) {
-            //Failed to generated unique RP token
             throw new ExpiredException(
                 new Phrase('Reset password token expired.')
             );
         }
         if ($found->getTotalCount() === 0) {
-            //Customer with such token not found.
             throw new NoSuchEntityException(
                 new Phrase(
                     'No such entity with rp_token = %value',
@@ -82,7 +80,6 @@ class GetCustomerByToken
             );
         }
 
-        //Unique customer found.
         $items = $found->getItems();
 
         return reset($items);
