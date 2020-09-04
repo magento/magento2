@@ -21,13 +21,16 @@
         <before>
             <createData entity="TestSubCategory" stepKey="category"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <actionGroup ref="AdminEnhancedMediaGalleryEnableMassActionModeActionGroup" stepKey="enableMassActionToDeleteImages"/>
             <actionGroup ref="AdminEnhancedMediaGallerySelectImageForMassActionActionGroup" stepKey="selectSecondImageToDelete">
                 <argument name="imageName" value="{{UpdatedImageDetails.title}}"/>
             </actionGroup>
-            <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clikDeleteSelectedButton"/>
+            <actionGroup ref="AdminEnhancedMediaGalleryClickDeleteImagesButtonActionGroup" stepKey="clickDeleteSelectedButton"/>
             <actionGroup ref="AdminEnhancedMediaGalleryConfirmDeleteImagesActionGroup" stepKey="deleteImages"/>
         </after>
 
@@ -36,6 +39,7 @@
             <argument name="category" value="$$category$$"/>
         </actionGroup>
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromImageUploader"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetCategoryImageGalleryGridToDefaultView"/>
         <actionGroup ref="AdminEnhancedMediaGalleryUploadImageActionGroup" stepKey="uploadImage">
             <argument name="image" value="ImageUpload"/>
         </actionGroup>
@@ -77,7 +81,7 @@
         <actionGroup ref="AssertAdminMediaGalleryAssetFilterPlaceHolderActionGroup" stepKey="assertFilterAppliedAfterUrlFilterApplier">
             <argument name="filterPlaceholder" value="{{UpdatedImageDetails.title}}"/>
         </actionGroup>
-        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetAdminDataGridToDefaultView"/>
+        <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="secondResetAdminDataGridToDefaultView"/>
 
         <deleteData createDataKey="category" stepKey="deleteCategory"/>
         <actionGroup ref="AdminOpenStandaloneMediaGalleryActionGroup" stepKey="openMediaGallery"/>

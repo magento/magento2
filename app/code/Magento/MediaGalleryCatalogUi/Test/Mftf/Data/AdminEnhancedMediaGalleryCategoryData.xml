@@ -9,8 +9,8 @@
 <entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
           xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
     <entity name="TestSubCategory" type="category">
-        <data key="name">TestSubCategory</data>
-        <data key="name_lwr">testsubcategory</data>
+        <data key="name" unique="suffix">TestSubCategory</data>
+        <data key="name_lwr" unique="suffix">testsubcategory</data>
         <data key="is_active">true</data>
         <data key="include_in_menu">true</data>
     </entity>
