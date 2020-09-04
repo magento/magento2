@@ -258,7 +258,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
                 []
             )->where(
                 't1.attribute_id IN (?)',
-                $attributeIds
+                $attributeIds,
+                \Zend_Db::INT_TYPE
             )->where(
                 't1.store_id = ?',
                 0
@@ -332,7 +333,8 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             'd.store_id=0'
         )->where(
             'o.attribute_id IN (?)',
-            $attributeIds
+            $attributeIds,
+            \Zend_Db::INT_TYPE
         )->where(
             $this->_resourceHelper->getCILike($ifValue, $this->_searchQuery, ['position' => 'any'])
         );

@@ -5,14 +5,15 @@
   * See COPYING.txt for license details.
   */
 -->
+
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenCreateNewCMSPageActionGroup">
+    <actionGroup name="AdminOpenAdminThreeDSecurePageActionGroup">
         <annotations>
-            <description>Open create new CMS Page.</description>
+            <description>Open ThreeDSecure page.</description>
         </annotations>
 
-        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToCreateNewPage"/>
-        <waitForPageLoad stepKey="waitForNewPagePageLoad"/>
+        <amOnPage url="{{AdminThreeDSecurePage.url}}" stepKey="openAdminThreeDSecurePage"/>
+        <waitForPageLoad stepKey="waitThreeDSecurePageToLoad"/>
     </actionGroup>
 </actionGroups>
