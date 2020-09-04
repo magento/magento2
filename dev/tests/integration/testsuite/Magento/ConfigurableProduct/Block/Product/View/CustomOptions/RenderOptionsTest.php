@@ -7,7 +7,6 @@ declare(strict_types=1);
 
 namespace Magento\ConfigurableProduct\Block\Product\View\CustomOptions;
 
-use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Block\Product\View\Options\AbstractRenderCustomOptionsTest;
 
 /**
@@ -85,7 +84,7 @@ class RenderOptionsTest extends AbstractRenderCustomOptionsTest
     /**
      * @inheritdoc
      */
-    protected function getHandlesList(ProductInterface $product): array
+    protected function getHandlesList(): array
     {
         return [
             'default',

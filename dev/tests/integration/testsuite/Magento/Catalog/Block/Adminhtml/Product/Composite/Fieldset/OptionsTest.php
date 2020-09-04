@@ -15,6 +15,7 @@ use Magento\Catalog\Model\Config\Source\ProductPriceOptionsInterface;
 use Magento\Catalog\Model\Product\Option;
 use Magento\Catalog\Model\Product\Option\Value;
 use Magento\Framework\DataObject;
+use Magento\Framework\DataObjectFactory;
 use Magento\TestFramework\Helper\Xpath;
 
 /**
@@ -27,6 +28,9 @@ class OptionsTest extends AbstractRenderCustomOptionsTest
     /** @var HelperProduct */
     private $helperProduct;
 
+    /** @var DataObjectFactory */
+    private $dataObjectFactory;
+
     /**
      * @inheritdoc
      */
@@ -35,22 +39,21 @@ class OptionsTest extends AbstractRenderCustomOptionsTest
         parent::setUp();
 
         $this->helperProduct = $this->objectManager->get(HelperProduct::class);
+        $this->dataObjectFactory = $this->objectManager->get(DataObjectFactory::class);
     }
 
     /**
      * @magentoDataFixture Magento/Catalog/_files/product_without_options_with_stock_data.php
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @return void
      */
     public function testRenderCustomOptionsWithoutOptions(): void
     {
         $product = $this->productRepository->get('simple');
-        $optionHtml = $this->getOptionHtml($product);
         $this->assertEquals(
             0,
             Xpath::getElementsCountForXpath(
                 "//fieldset[@id='product_composite_configure_fields_options']",
-                $optionHtml
+                $this->getOptionHtml($product)
             ),
             'The option block is expected to be empty!'
         );
@@ -508,7 +511,7 @@ class OptionsTest extends AbstractRenderCustomOptionsTest
                     : $optionValueObject->getOptionTypeId();
             }
             /** @var DataObject $request */
-            $buyRequest = $this->objectManager->create(DataObject::class);
+            $buyRequest = $this->dataObjectFactory->create();
             $buyRequest->setData([
                 'qty' => 1,
                 'options' => [$option->getId() => $optionValue],
@@ -546,7 +549,7 @@ class OptionsTest extends AbstractRenderCustomOptionsTest
 
         if (isset($checkArray['equals_xpath'])) {
             foreach ($checkArray['equals_xpath'] as $key => $value) {
-                $value['args'] = $key == 'control_price_attribute' ? [(float)$option->getPrice()] : [];
+                $value['args'] = $key === 'control_price_attribute' ? [(float)$option->getPrice()] : [];
                 $this->assertEqualsXpath($option, $optionHtml, $value);
             }
         }
@@ -572,12 +575,12 @@ class OptionsTest extends AbstractRenderCustomOptionsTest
     /**
      * @inheritdoc
      */
-    protected function getHandlesList(ProductInterface $product): array
+    protected function getHandlesList(): array
     {
         return [
             'default',
             'CATALOG_PRODUCT_COMPOSITE_CONFIGURE',
-            'catalog_product_view_type_' . $product->getTypeId(),
+            'catalog_product_view_type_simple',
         ];
     }
 

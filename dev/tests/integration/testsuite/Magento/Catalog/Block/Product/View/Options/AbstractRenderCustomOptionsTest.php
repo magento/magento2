@@ -58,6 +58,7 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
+        $this->productRepository->cleanCache();
         $this->productCustomOptionFactory = $this->objectManager->get(ProductCustomOptionInterfaceFactory::class);
         $this->productCustomOptionValuesFactory = $this->objectManager->get(
             ProductCustomOptionValuesInterfaceFactory::class
@@ -376,6 +377,7 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
         $this->page->getLayout()->generateXml();
         /** @var Options $optionsBlock */
         $optionsBlock = $this->page->getLayout()->getBlock($this->getOptionsBlockName());
+        $this->assertNotFalse($optionsBlock);
         $optionsBlock->setProduct($product);
 
         return $optionsBlock->toHtml();
@@ -426,21 +428,16 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
     /**
      * Return all need handles for load.
      *
-     * @param ProductInterface $product
      * @return array
      */
-    abstract protected function getHandlesList(ProductInterface $product): array;
+    abstract protected function getHandlesList(): array;
 
     /**
-     *
-     *
      * @return string
      */
     abstract protected function getMaxCharactersCssClass(): string;
 
     /**
-     *
-     *
      * @return string
      */
     abstract protected function getOptionsBlockName(): string;

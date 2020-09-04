@@ -59,6 +59,8 @@ class ConfigurableTest extends TestCase
     protected function tearDown(): void
     {
         $this->registry->unregister('product');
+
+        parent::tearDown();
     }
 
     /**
@@ -71,6 +73,11 @@ class ConfigurableTest extends TestCase
         $this->registerProduct($product);
         $blockProduct = $this->block->getProduct();
         $this->assertSame($product, $blockProduct);
+        $this->assertEquals(
+            $product->getId(),
+            $blockProduct->getId(),
+            'The expected product is missing in the Configurable block!'
+        );
         $this->assertNotNull($blockProduct->getTypeInstance()->getStoreFilter($blockProduct));
     }
 

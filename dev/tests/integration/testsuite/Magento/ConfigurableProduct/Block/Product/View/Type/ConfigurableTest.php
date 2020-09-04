@@ -15,6 +15,7 @@ use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute as Con
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection;
 use Magento\Framework\Api\SearchCriteriaBuilder;
 use Magento\Framework\DataObject;
+use Magento\Framework\DataObjectFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\View\LayoutInterface;
@@ -73,6 +74,9 @@ class ConfigurableTest extends TestCase
      */
     private $helperProduct;
 
+    /** @var DataObjectFactory */
+    private $dataObjectFactory;
+
     /**
      * @inheritdoc
      */
@@ -89,6 +93,7 @@ class ConfigurableTest extends TestCase
         $this->block = $this->objectManager->get(LayoutInterface::class)->createBlock(Configurable::class);
         $this->block->setProduct($this->product);
         $this->helperProduct = $this->objectManager->get(HelperProduct::class);
+        $this->dataObjectFactory = $this->objectManager->get(DataObjectFactory::class);
     }
 
     /**
@@ -149,7 +154,7 @@ class ConfigurableTest extends TestCase
             $attribute->getAttributeId() => $attribute->getOptions()[0]['value_index'],
         ];
         /** @var DataObject $request */
-        $buyRequest = $this->objectManager->create(DataObject::class);
+        $buyRequest = $this->dataObjectFactory->create();
         $buyRequest->setData([
             'qty' => 1,
             'super_attribute' => $expectedAttributeValue,

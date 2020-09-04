@@ -73,8 +73,10 @@ class FieldsetTest extends TestCase
     {
         $product = $this->productRepository->get('simple');
         $this->registerProduct($product);
-        $this->preparePage($product->getTypeId());
-        $html = $this->page->getLayout()->getBlock('product.composite.fieldset')->toHtml();
+        $this->preparePage();
+        $fieldsetBlock = $this->page->getLayout()->getBlock('product.composite.fieldset');
+        $this->assertNotFalse($fieldsetBlock, 'Expected fieldset block is missing!');
+        $html = $fieldsetBlock->toHtml();
 
         $this->assertEquals(
             1,
@@ -91,15 +93,14 @@ class FieldsetTest extends TestCase
     /**
      * Prepare page layout
      *
-     * @param string $productType
      * @return void
      */
-    private function preparePage(string $productType): void
+    private function preparePage(): void
     {
         $this->page->addHandle([
             'default',
             'CATALOG_PRODUCT_COMPOSITE_CONFIGURE',
-            'catalog_product_view_type_' . $productType,
+            'catalog_product_view_type_simple',
         ]);
         $this->page->getLayout()->generateXml();
     }

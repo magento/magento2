@@ -11,6 +11,7 @@ use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Helper\Product as HelperProduct;
 use Magento\Framework\DataObject;
+use Magento\Framework\DataObjectFactory;
 use Magento\Framework\ObjectManagerInterface;
 use Magento\Framework\Registry;
 use Magento\Framework\View\LayoutInterface;
@@ -40,17 +41,23 @@ class QtyTest extends TestCase
     /** @var HelperProduct */
     private $helperProduct;
 
+    /** @var DataObjectFactory */
+    private $dataObjectFactory;
+
     /**
      * @inheritdoc
      */
     protected function setUp(): void
     {
+        parent::setUp();
+
         $this->objectManager = Bootstrap::getObjectManager();
         $this->block = $this->objectManager->get(LayoutInterface::class)->createBlock(Qty::class);
         $this->registry = $this->objectManager->get(Registry::class);
         $this->productRepository = $this->objectManager->get(ProductRepositoryInterface::class);
         $this->productRepository->cleanCache();
         $this->helperProduct = $this->objectManager->get(HelperProduct::class);
+        $this->dataObjectFactory = $this->objectManager->get(DataObjectFactory::class);
     }
 
     /**
@@ -60,6 +67,8 @@ class QtyTest extends TestCase
     {
         $this->registry->unregister('current_product');
         $this->registry->unregister('product');
+
+        parent::tearDown();
     }
 
     /**
@@ -70,7 +79,11 @@ class QtyTest extends TestCase
     {
         $product = $this->productRepository->get('simple-1');
         $this->registerProduct($product);
-        $this->assertSame($product, $this->block->getProduct());
+        $this->assertEquals(
+            $product->getId(),
+            $this->block->getProduct()->getId(),
+            'The expected product is missing in the Qty block!'
+        );
     }
 
     /**
@@ -80,12 +93,12 @@ class QtyTest extends TestCase
      * @param int $qty
      * @return void
      */
-    public function testGetQtyValue(bool $isQty, int $qty): void
+    public function testGetQtyValue(bool $isQty = false, int $qty = 1): void
     {
         $product = $this->productRepository->get('simple-1');
         if ($isQty) {
             /** @var DataObject $request */
-            $buyRequest = $this->objectManager->create(DataObject::class);
+            $buyRequest = $this->dataObjectFactory->create();
             $buyRequest->setData(['qty' => $qty]);
             $this->helperProduct->prepareProductOptions($product, $buyRequest);
         }
@@ -105,10 +118,7 @@ class QtyTest extends TestCase
                 'is_qty' => true,
                 'qty' => 5,
             ],
-            'without_qty' => [
-                'is_qty' => false,
-                'qty' => 1,
-            ],
+            'without_qty' => [],
         ];
     }
 
