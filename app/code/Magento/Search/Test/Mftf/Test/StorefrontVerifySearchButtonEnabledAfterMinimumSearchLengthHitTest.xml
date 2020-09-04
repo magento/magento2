@@ -13,8 +13,8 @@
             <stories value="Search Button Not Disabled"/>
             <title value="Verify search button is not disabled if search term is equal or greater than minimum search length"/>
             <description value="Storefront verify search button is not disabled if search term is equal or greater than minimum search length"/>
-            <severity value="CRITICAL"/>
-            <testCaseId value="https://github.com/magento/magento2/issues/29704"/>
+            <severity value="AVERAGE"/>
+            <testCaseId value="MC-37381"/>
             <group value="searchFrontend"/>
         </annotations>
 
