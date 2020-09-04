@@ -39,8 +39,7 @@
         <waitForPageLoad stepKey="wait1"/>
         <click selector="{{StorefrontCategoryMainSection.modeListButton}}" stepKey="clickListView"/>
         <waitForPageLoad stepKey="wait2"/>
-        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="clickAddToCart"/>
-        <waitForPageLoad stepKey="wait3"/>
+        <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="clickAddToCart"/>
         <grabFromCurrentUrl stepKey="grabUrl"/>
         <assertStringContainsString stepKey="assertUrl">
             <expectedResult type="string">{{_defaultProduct.urlKey}}</expectedResult>
