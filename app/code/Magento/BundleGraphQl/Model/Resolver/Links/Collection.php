@@ -108,7 +108,7 @@ class Collection
         }
 
         $linkCollection->getSelect()
-            ->where($field . ' IN (?)', $this->parentIds);
+            ->where($field . ' IN (?)', $this->parentIds, \Zend_Db::INT_TYPE);
 
         /** @var Selection $link */
         foreach ($linkCollection as $link) {
