@@ -9,11 +9,12 @@ declare(strict_types=1);
 namespace Magento\Directory\Setup\Patch\Data;
 
 use Magento\Directory\Setup\DataInstaller;
+use Magento\Directory\Setup\DataInstallerFactory;
 use Magento\Framework\Setup\ModuleDataSetupInterface;
 use Magento\Framework\Setup\Patch\DataPatchInterface;
 
 /**
- * Class AddDataForUruguay
+ * Add Uruguay States/Regions
  */
 class AddDataForUruguay implements DataPatchInterface
 {
@@ -23,24 +24,24 @@ class AddDataForUruguay implements DataPatchInterface
     private $moduleDataSetup;
 
     /**
-     * @var \Magento\Directory\Setup\DataInstallerFactory
+     * @var DataInstallerFactory
      */
     private $dataInstallerFactory;
 
     /**
      * @param ModuleDataSetupInterface $moduleDataSetup
-     * @param \Magento\Directory\Setup\DataInstallerFactory $dataInstallerFactory
+     * @param DataInstallerFactory $dataInstallerFactory
      */
     public function __construct(
         ModuleDataSetupInterface $moduleDataSetup,
-        \Magento\Directory\Setup\DataInstallerFactory $dataInstallerFactory
+        DataInstallerFactory $dataInstallerFactory
     ) {
         $this->moduleDataSetup = $moduleDataSetup;
         $this->dataInstallerFactory = $dataInstallerFactory;
     }
 
     /**
-     * @inheritdoc
+     * @return $this|AddDataForUruguay
      */
     public function apply()
     {
@@ -50,6 +51,8 @@ class AddDataForUruguay implements DataPatchInterface
             $this->moduleDataSetup->getConnection(),
             $this->getDataForUruguay()
         );
+
+        return $this;
     }
 
     /**
@@ -57,7 +60,7 @@ class AddDataForUruguay implements DataPatchInterface
      *
      * @return array
      */
-    private function getDataForUruguay()
+    private function getDataForUruguay(): array
     {
         return [
             ['UY', 'UY-AR', 'Artigas'],
@@ -84,8 +87,9 @@ class AddDataForUruguay implements DataPatchInterface
 
     /**
      * @inheritdoc
+     * @return array
      */
-    public static function getDependencies()
+    public static function getDependencies(): array
     {
         return [
             InitializeDirectoryData::class,
@@ -94,8 +98,9 @@ class AddDataForUruguay implements DataPatchInterface
 
     /**
      * @inheritdoc
+     * @return array
      */
-    public function getAliases()
+    public function getAliases(): array
     {
         return [];
     }
