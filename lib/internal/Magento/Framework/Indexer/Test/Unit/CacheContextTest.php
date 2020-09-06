@@ -56,4 +56,3 @@ class CacheContextTest extends TestCase
         ];
     }
 }
-
