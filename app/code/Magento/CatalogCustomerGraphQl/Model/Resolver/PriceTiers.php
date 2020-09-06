@@ -120,20 +120,20 @@ class PriceTiers implements ResolverInterface
 
                 $productPrice = $this->tiers->getProductRegularPrice($productId) ?? 0.0;
                 $tierPrices = $this->tiers->getProductTierPrices($productId) ?? [];
-                return $this->filterAndFormatProductTierPrices($tierPrices, $productPrice, $store);
+                return $this->formatAndFilterTierPrices($tierPrices, $productPrice, $store);
             }
         );
     }
 
     /**
-     * Filter and format tier prices for output
+     * Format and filter tier prices for output
      *
      * @param ProductTierPriceInterface[] $tierPrices
      * @param float $productPrice
      * @param StoreInterface $store
      * @return array
      */
-    private function filterAndFormatProductTierPrices(
+    private function formatAndFilterTierPrices(
         array $tierPrices,
         float $productPrice,
         StoreInterface $store
@@ -142,7 +142,7 @@ class PriceTiers implements ResolverInterface
         $qtyCache = [];
 
         foreach ($tierPrices as $key => $tierPrice) {
-            $this->formatProductTierPrices($productPrice, $store, $tierPrice, $tiers);
+            $this->formatTierPrices($productPrice, $store, $tierPrice, $tiers);
             $this->filterTierPrices($tierPrices, $key, $tierPrice, $qtyCache, $tiers);
         }
         return $tiers;
@@ -156,7 +156,7 @@ class PriceTiers implements ResolverInterface
      * @param ProductTierPriceInterface $tierPrice
      * @param array $tiers
      */
-    private function formatProductTierPrices(float $productPrice, StoreInterface $store, &$tierPrice, &$tiers)
+    private function formatTierPrices(float $productPrice, StoreInterface $store, &$tierPrice, &$tiers)
     {
         $tierPrice->setValue($this->priceCurrency->convertAndRound($tierPrice->getValue()));
         $percentValue = $tierPrice->getExtensionAttributes()->getPercentageValue();
