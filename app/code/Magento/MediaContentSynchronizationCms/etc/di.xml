@@ -14,7 +14,7 @@
             </argument>
         </arguments>
     </type>
-    <type name="Magento\MediaContentSynchronizationApi\Model\SynchronizerIdentitiesPool">
+    <type name="Magento\MediaContentSynchronizationApi\Model\SynchronizeIdentitiesPool">
         <arguments>
             <argument name="synchronizers" xsi:type="array">
                 <item name="media_content_cms"

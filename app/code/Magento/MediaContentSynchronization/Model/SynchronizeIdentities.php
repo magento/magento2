@@ -11,7 +11,7 @@ use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\FlagManager;
 use Magento\Framework\Stdlib\DateTime\DateTimeFactory;
 use Magento\MediaContentSynchronizationApi\Api\SynchronizeIdentitiesInterface;
-use Magento\MediaContentSynchronizationApi\Model\SynchronizerIdentitiesPool;
+use Magento\MediaContentSynchronizationApi\Model\SynchronizeIdentitiesPool;
 use Psr\Log\LoggerInterface;
 
 /**
@@ -19,52 +19,26 @@ use Psr\Log\LoggerInterface;
  */
 class SynchronizeIdentities implements SynchronizeIdentitiesInterface
 {
-    private const LAST_EXECUTION_TIME_CODE = 'media_content_last_execution';
-
-    /**
-     * @var DateTimeFactory
-     */
-    private $dateFactory;
-
-    /**
-     * @var FlagManager
-     */
-    private $flagManager;
-
     /**
      * @var LoggerInterface
      */
     private $log;
 
     /**
-     * @var SynchronizerIdentitiesPool
+     * @var SynchronizeIdentitiesPool
      */
-    private $synchronizerIdentitiesPool;
+    private $synchronizeIdentitiesPool;
 
     /**
-     * @var RemoveObsoleteContentAsset
-     */
-    private $removeObsoleteContent;
-
-    /**
-     * @param RemoveObsoleteContentAsset $removeObsoleteContent
-     * @param DateTimeFactory $dateFactory
-     * @param FlagManager $flagManager
      * @param LoggerInterface $log
-     * @param SynchronizerIdentitiesPool $synchronizerIdentitiesPool
+     * @param SynchronizeIdentitiesPool $synchronizeIdentitiesPool
      */
     public function __construct(
-        RemoveObsoleteContentAsset $removeObsoleteContent,
-        DateTimeFactory $dateFactory,
-        FlagManager $flagManager,
         LoggerInterface $log,
-        SynchronizerIdentitiesPool $synchronizerIdentitiesPool
+        SynchronizeIdentitiesPool $synchronizeIdentitiesPool
     ) {
-        $this->removeObsoleteContent = $removeObsoleteContent;
-        $this->dateFactory = $dateFactory;
-        $this->flagManager = $flagManager;
         $this->log = $log;
-        $this->synchronizerIdentitiesPool = $synchronizerIdentitiesPool;
+        $this->synchronizeIdentitiesPool = $synchronizeIdentitiesPool;
     }
 
     /**
@@ -74,9 +48,9 @@ class SynchronizeIdentities implements SynchronizeIdentitiesInterface
     {
         $failed = [];
 
-        foreach ($this->synchronizerIdentitiesPool->get() as $name => $synchronizers) {
+        foreach ($this->synchronizeIdentitiesPool->get() as $name => $synchronizer) {
             try {
-                $synchronizers->execute($mediaContentIdentities);
+                $synchronizer->execute($mediaContentIdentities);
             } catch (\Exception $exception) {
                 $this->log->critical($exception);
                 $failed[] = $name;
@@ -93,17 +67,5 @@ class SynchronizeIdentities implements SynchronizeIdentitiesInterface
                 )
             );
         }
-
-        $this->setLastExecutionTime();
-        $this->removeObsoleteContent->execute();
-    }
-
-    /**
-     * Set last synchronizer execution time
-     */
-    private function setLastExecutionTime(): void
-    {
-        $currentTime = $this->dateFactory->create()->gmtDate();
-        $this->flagManager->saveFlag(self::LAST_EXECUTION_TIME_CODE, $currentTime);
     }
 }

@@ -9,7 +9,7 @@ namespace Magento\MediaContentSynchronizationApi\Model;
 
 use Magento\MediaContentSynchronizationApi\Api\SynchronizeIdentitiesInterface;
 
-class SynchronizerIdentitiesPool
+class SynchronizeIdentitiesPool
 {
     /**
      * Content with assets synchronizers
