@@ -8,9 +8,9 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="GoToAttributeGridPageActionGroup">
+    <actionGroup name="GoToAttributeGridPageActionGroup" deprecated="Use AdminOpenAttributeSetGridPageActionGroup instead.">
         <annotations>
-            <description>DEPRECATED. Use AdminOpenAttributeSetGridPageActionGroup instead. Goes to the Attribute Sets grid page.</description>
+            <description>Goes to the Attribute Sets grid page.</description>
         </annotations>
 
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
