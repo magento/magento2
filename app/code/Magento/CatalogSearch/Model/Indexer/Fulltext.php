@@ -6,11 +6,13 @@
 
 namespace Magento\CatalogSearch\Model\Indexer;
 
+use Magento\Catalog\Model\Product;
 use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\FullFactory;
 use Magento\CatalogSearch\Model\Indexer\Scope\State;
 use Magento\CatalogSearch\Model\Indexer\Scope\StateFactory;
 use Magento\CatalogSearch\Model\ResourceModel\Fulltext as FulltextResource;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\Indexer\CacheContext;
 use Magento\Framework\Indexer\DimensionProviderInterface;
 use Magento\Store\Model\StoreDimensionProvider;
 use Magento\Indexer\Model\ProcessManager;
@@ -78,6 +80,11 @@ class Fulltext implements
     private $processManager;
 
     /**
+     * @var CacheContext
+     */
+    private $cacheContext;
+
+    /**
      * @param FullFactory $fullActionFactory
      * @param IndexerHandlerFactory $indexerHandlerFactory
      * @param FulltextResource $fulltextResource
@@ -86,6 +93,7 @@ class Fulltext implements
      * @param DimensionProviderInterface $dimensionProvider
      * @param array $data
      * @param ProcessManager $processManager
+     * @param CacheContext $cacheContext|null
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
@@ -96,7 +104,8 @@ class Fulltext implements
         StateFactory $indexScopeStateFactory,
         DimensionProviderInterface $dimensionProvider,
         array $data,
-        ProcessManager $processManager = null
+        ProcessManager $processManager = null,
+        CacheContext $cacheContext = null
     ) {
         $this->fullAction = $fullActionFactory->create(['data' => $data]);
         $this->indexerHandlerFactory = $indexerHandlerFactory;
@@ -106,6 +115,7 @@ class Fulltext implements
         $this->indexScopeState = ObjectManager::getInstance()->get(State::class);
         $this->dimensionProvider = $dimensionProvider;
         $this->processManager = $processManager ?: ObjectManager::getInstance()->get(ProcessManager::class);
+        $this->cacheContext = $cacheContext ?? ObjectManager::getInstance()->get(CacheContext::class);
     }
 
     /**
@@ -145,6 +155,8 @@ class Fulltext implements
             $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId));
 
             $this->fulltextResource->resetSearchResultsByStore($storeId);
+
+            $this->cacheContext->registerTags([Product::CACHE_TAG]);
         } else {
             // internal implementation works only with array
             $entityIds = iterator_to_array($entityIds);
@@ -155,6 +167,8 @@ class Fulltext implements
                 $saveHandler->deleteIndex($dimensions, new \ArrayIterator($productIds));
                 $saveHandler->saveIndex($dimensions, $this->fullAction->rebuildStoreIndex($storeId, $productIds));
             }
+
+            $this->cacheContext->registerEntities(Product::CACHE_TAG, $productIds);
         }
     }
 
