@@ -177,6 +177,10 @@
                     <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Modifier\Attributes</item>
                     <item name="sortOrder" xsi:type="number">10</item>
                 </item>
+                <item name="priceAttributes" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Modifier\PriceAttributes</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
             </argument>
         </arguments>
     </virtualType>
@@ -185,6 +189,14 @@
             <argument name="escapeAttributes" xsi:type="array">
                 <item name="name" xsi:type="string">name</item>
                 <item name="sku" xsi:type="string">sku</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Modifier\PriceAttributes">
+        <arguments>
+            <argument name="priceAttributeList" xsi:type="array">
+                <item name="cost" xsi:type="string">cost</item>
+                <item name="special_price" xsi:type="string">special_price</item>
             </argument>
         </arguments>
     </type>

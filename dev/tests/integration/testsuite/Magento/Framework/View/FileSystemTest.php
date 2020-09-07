@@ -19,7 +19,7 @@ class FileSystemTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model = null;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         /** @var \Magento\Theme\Model\Theme\Registration $registration */

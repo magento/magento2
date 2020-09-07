@@ -20,6 +20,7 @@ use Magento\Framework\App\State;
 use Magento\Framework\AppInterface;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Directory\WriteInterface;
+use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaStorage\Model\File\Storage\Config;
 use Magento\MediaStorage\Model\File\Storage\ConfigFactory;
 use Magento\MediaStorage\Model\File\Storage\Response;
@@ -28,7 +29,7 @@ use Magento\MediaStorage\Model\File\Storage\SynchronizationFactory;
 use Magento\MediaStorage\Service\ImageResize;
 
 /**
- * Media Storage
+ * The class resize original images
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -70,7 +71,12 @@ class Media implements AppInterface
     /**
      * @var WriteInterface
      */
-    private $directory;
+    private $directoryPub;
+
+    /**
+     * @var \Magento\Framework\Filesystem\Directory\WriteInterface
+     */
+    private $directoryMedia;
 
     /**
      * @var ConfigFactory
@@ -109,6 +115,7 @@ class Media implements AppInterface
      * @param PlaceholderFactory $placeholderFactory
      * @param State $state
      * @param ImageResize $imageResize
+     * @param File $file
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -122,15 +129,17 @@ class Media implements AppInterface
         Filesystem $filesystem,
         PlaceholderFactory $placeholderFactory,
         State $state,
-        ImageResize $imageResize
+        ImageResize $imageResize,
+        File $file
     ) {
         $this->response = $response;
         $this->isAllowed = $isAllowed;
-        $this->directory = $filesystem->getDirectoryWrite(DirectoryList::PUB);
+        $this->directoryPub = $filesystem->getDirectoryWrite(DirectoryList::PUB);
+        $this->directoryMedia = $filesystem->getDirectoryWrite(DirectoryList::MEDIA);
         $mediaDirectory = trim($mediaDirectory);
         if (!empty($mediaDirectory)) {
             // phpcs:ignore Magento2.Functions.DiscouragedFunction
-            $this->mediaDirectoryPath = str_replace('\\', '/', realpath($mediaDirectory));
+            $this->mediaDirectoryPath = str_replace('\\', '/', $file->getRealPath($mediaDirectory));
         }
         $this->configCacheFile = $configCacheFile;
         $this->relativeFileName = $relativeFileName;
@@ -151,7 +160,7 @@ class Media implements AppInterface
     {
         $this->appState->setAreaCode(Area::AREA_GLOBAL);
 
-        if ($this->mediaDirectoryPath !== $this->directory->getAbsolutePath()) {
+        if ($this->checkMediaDirectoryChanged()) {
             // Path to media directory changed or absent - update the config
             /** @var Config $config */
             $config = $this->configFactory->create(['cacheFile' => $this->configCacheFile]);
@@ -166,11 +175,11 @@ class Media implements AppInterface
 
         try {
             /** @var Synchronization $sync */
-            $sync = $this->syncFactory->create(['directory' => $this->directory]);
+            $sync = $this->syncFactory->create(['directory' => $this->directoryPub]);
             $sync->synchronize($this->relativeFileName);
             $this->imageResize->resizeFromImageName($this->getOriginalImage($this->relativeFileName));
-            if ($this->directory->isReadable($this->relativeFileName)) {
-                $this->response->setFilePath($this->directory->getAbsolutePath($this->relativeFileName));
+            if ($this->directoryPub->isReadable($this->relativeFileName)) {
+                $this->response->setFilePath($this->directoryPub->getAbsolutePath($this->relativeFileName));
             } else {
                 $this->setPlaceholderImage();
             }
@@ -182,7 +191,17 @@ class Media implements AppInterface
     }
 
     /**
-     * Set Placeholder as a response
+     * Check if media directory changed
+     *
+     * @return bool
+     */
+    private function checkMediaDirectoryChanged(): bool
+    {
+        return rtrim($this->mediaDirectoryPath, '/') !== rtrim($this->directoryMedia->getAbsolutePath(), '/');
+    }
+
+    /**
+     * Set placeholder image into response
      *
      * @return void
      */

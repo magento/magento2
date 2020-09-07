@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Elasticsearch\Test\Unit\Model\Adapter\BatchDataMapper;
 
 use Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperFactory;
+use Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperResolver;
 use Magento\Elasticsearch\Model\Adapter\BatchDataMapperInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
-use Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperResolver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class DataMapperResolverTest extends \PHPUnit\Framework\TestCase
+class DataMapperResolverTest extends TestCase
 {
     /**
      * @var DataMapperResolver
@@ -18,28 +22,28 @@ class DataMapperResolverTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var DataMapperFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var DataMapperFactory|MockObject
      */
     private $dataMapperFactoryMock;
 
     /**
-     * @var BatchDataMapperInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var BatchDataMapperInterface|MockObject
      */
     private $dataMapperEntity;
 
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->dataMapperFactoryMock = $this->getMockBuilder(DataMapperFactory::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->dataMapperEntity = $this->getMockBuilder(BatchDataMapperInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $this->model = (new ObjectManagerHelper($this))->getObject(
-            \Magento\Elasticsearch\Model\Adapter\BatchDataMapper\DataMapperResolver::class,
+            DataMapperResolver::class,
             [
                 'dataMapperFactory' => $this->dataMapperFactoryMock
             ]

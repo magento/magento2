@@ -1,0 +1,125 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontCustomerCheckoutTestWithMultipleAddressesAndTaxRatesTest">
+        <annotations>
+            <features value="Checkout"/>
+            <stories value="Customer checkout"/>
+            <title value="Customer Checkout with multiple addresses and tax rates"/>
+            <description value="Should be able to place an order as a customer with multiple addresses and tax rates."/>
+            <testCaseId value="MAGETWO-93109"/>
+            <severity value="AVERAGE"/>
+            <group value="checkout"/>
+        </annotations>
+        <before>
+            <createData entity="SimpleSubCategory" stepKey="simplecategory"/>
+            <createData entity="SimpleProduct" stepKey="simpleproduct1">
+                <requiredEntity createDataKey="simplecategory"/>
+            </createData>
+            <createData entity="Simple_US_Customer_Multiple_Addresses" stepKey="multiple_address_customer"/>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+
+            <!-- Go to tax rule page -->
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulePage"/>
+            <click stepKey="addNewTaxRate" selector="{{AdminGridMainControls.add}}"/>
+            <fillField stepKey="fillRuleName" selector="{{AdminTaxRulesSection.ruleName}}" userInput="SampleRule"/>
+
+            <!-- Add NY and CA tax rules -->
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addNYTaxRate">
+                <argument name="taxCode" value="SimpleTaxNY"/>
+            </actionGroup>
+
+            <actionGroup ref="AddNewTaxRateNoZipActionGroup" stepKey="addCATaxRate">
+                <argument name="taxCode" value="SimpleTaxCA"/>
+            </actionGroup>
+
+            <click stepKey="clickSave" selector="{{AdminStoresMainActionsSection.saveButton}}"/>
+
+            <!--TODO: REMOVE AFTER FIX MC-21717 -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
+        </before>
+        <after>
+            <!-- Go to the tax rule page and delete the row we created-->
+            <actionGroup ref="AdminTaxRuleGridOpenPageActionGroup" stepKey="goToTaxRulesPage"/>
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteRule">
+                <argument name="name" value="SampleRule"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+
+            <!-- Go to the tax rate page -->
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
+            <!-- Delete the two tax rates that were created -->
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">
+                <argument name="name" value="{{SimpleTaxNY.state}}-{{SimpleTaxNY.rate}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+
+            <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteCARate">
+                <argument name="name" value="{{SimpleTaxCA.state}}-{{SimpleTaxCA.rate}}"/>
+                <argument name="searchInput" value="{{AdminSecondaryGridSection.taxIdentifierSearch}}"/>
+            </actionGroup>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
+            <deleteData createDataKey="simpleproduct1" stepKey="deleteProduct1"/>
+            <deleteData createDataKey="simplecategory" stepKey="deleteCategory"/>
+            <deleteData createDataKey="multiple_address_customer" stepKey="deleteCustomer"/>
+        </after>
+
+        <actionGroup ref="LoginToStorefrontActionGroup" stepKey="customerLogin">
+            <argument name="Customer" value="$$multiple_address_customer$$"/>
+        </actionGroup>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.name$$)}}" stepKey="onCategoryPage1"/>
+        <waitForPageLoad stepKey="waitForCatalogPageLoad1"/>
+        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct1"/>
+        <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addToCart1"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded1"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$simpleproduct1.name$$ to your shopping cart." stepKey="seeAddedToCartMessage1"/>
+        <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity1"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart1"/>
+
+        <click stepKey="selectFirstShippingMethod1" selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNextOnShippingMethodLoad1"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment"/>
+        <waitForElement stepKey="waitForPlaceOrderButton1" selector="{{CheckoutPaymentSection.placeOrder}}" time="30"/>
+        <see stepKey="seeBillingAddressIsCorrect1" selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_NY.street[0]}}"/>
+        <click stepKey="clickPlaceOrderButton1" selector="{{CheckoutPaymentSection.placeOrder}}"/>
+        <waitForPageLoad stepKey="waitForOrderSuccessPage1"/>
+        <see stepKey="seeSuccessMessage1" selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:"/>
+
+        <amOnPage url="{{StorefrontCategoryPage.url($$simplecategory.name$$)}}" stepKey="onCategoryPage2"/>
+        <waitForPageLoad stepKey="waitForCatalogPageLoad2"/>
+        <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct2"/>
+        <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addToCart2"/>
+        <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded2"/>
+        <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$simpleproduct1.name$$ to your shopping cart." stepKey="seeAddedToCartMessage2"/>
+        <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity2"/>
+        <actionGroup ref="GoToCheckoutFromMinicartActionGroup" stepKey="goToCheckoutFromMinicart2"/>
+
+        <click selector="{{CheckoutShippingMethodsSection.shipHereButton}}" stepKey="changeShippingAddress"/>
+        <waitForElementNotVisible selector="{{CheckoutShippingMethodsSection.shippingMethodLoader}}" time="30" stepKey="waitForShippingMethodLoaderNotVisible"/>
+        <waitForElementVisible selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" time="30" stepKey="waitForShippingMethodRadioToBeVisible"/>
+        <waitForPageLoad stepKey="waitForPageLoad23"/>
+        <click selector="{{CheckoutShippingMethodsSection.firstShippingMethod}}" stepKey="selectFirstShippingMethod2"/>
+        <actionGroup ref="StorefrontCheckoutClickNextButtonActionGroup" stepKey="clickNextOnShippingMethodLoad2"/>
+        <!-- Checkout select Check/Money Order payment -->
+        <actionGroup ref="CheckoutSelectCheckMoneyOrderPaymentActionGroup" stepKey="selectCheckMoneyPayment2"/>
+        <waitForElement selector="{{CheckoutPaymentSection.placeOrder}}" time="30" stepKey="waitForPlaceOrderButton2"/>
+        <see selector="{{CheckoutPaymentSection.billingAddress}}" userInput="{{US_Address_NY.street[0]}}" stepKey="seeBillingAddressIsCorrect2"/>
+        <click selector="{{CheckoutPaymentSection.placeOrder}}" stepKey="clickPlaceOrderButton2"/>
+        <waitForPageLoad stepKey="waitForOrderSuccessPage2"/>
+        <see selector="{{CheckoutSuccessMainSection.success}}" userInput="Your order number is:" stepKey="seeSuccessMessage2"/>
+    </test>
+</tests>

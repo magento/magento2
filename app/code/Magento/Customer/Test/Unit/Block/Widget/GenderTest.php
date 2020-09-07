@@ -3,14 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Block\Widget;
 
-use Magento\Customer\Block\Widget\Gender;
+use Magento\Customer\Api\CustomerMetadataInterface;
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Api\Data\AttributeMetadataInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
+use Magento\Customer\Block\Widget\Gender;
+use Magento\Customer\Helper\Address;
+use Magento\Customer\Model\Session;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Framework\View\Element\Template\Context;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class GenderTest extends \PHPUnit\Framework\TestCase
+class GenderTest extends TestCase
 {
     /** Constants used in the unit tests */
     const CUSTOMER_ENTITY_TYPE = 'customer';
@@ -18,42 +27,42 @@ class GenderTest extends \PHPUnit\Framework\TestCase
     const GENDER_ATTRIBUTE_CODE = 'gender';
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\CustomerMetadataInterface
+     * @var MockObject|CustomerMetadataInterface
      */
     private $customerMetadata;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\Data\AttributeMetadataInterface */
+    /** @var MockObject|AttributeMetadataInterface */
     private $attribute;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Model\Session */
+    /** @var MockObject|Session */
     private $customerSession;
 
-    /** @var \PHPUnit_Framework_MockObject_MockObject | \Magento\Customer\Api\CustomerRepositoryInterface */
+    /** @var MockObject|CustomerRepositoryInterface */
     private $customerRepository;
 
     /** @var Gender */
     private $block;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->attribute = $this->getMockBuilder(\Magento\Customer\Api\Data\AttributeMetadataInterface::class)
+        $this->attribute = $this->getMockBuilder(AttributeMetadataInterface::class)
             ->getMockForAbstractClass();
 
-        $this->customerMetadata = $this->getMockBuilder(\Magento\Customer\Api\CustomerMetadataInterface::class)
+        $this->customerMetadata = $this->getMockBuilder(CustomerMetadataInterface::class)
             ->getMockForAbstractClass();
         $this->customerMetadata->expects($this->any())
             ->method('getAttributeMetadata')
             ->with(self::GENDER_ATTRIBUTE_CODE)
-            ->will($this->returnValue($this->attribute));
+            ->willReturn($this->attribute);
 
         $this->customerRepository = $this
-            ->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
+            ->getMockBuilder(CustomerRepositoryInterface::class)
             ->getMockForAbstractClass();
-        $this->customerSession = $this->createMock(\Magento\Customer\Model\Session::class);
+        $this->customerSession = $this->createMock(Session::class);
 
-        $this->block = new \Magento\Customer\Block\Widget\Gender(
-            $this->createMock(\Magento\Framework\View\Element\Template\Context::class),
-            $this->createMock(\Magento\Customer\Helper\Address::class),
+        $this->block = new Gender(
+            $this->createMock(Context::class),
+            $this->createMock(Address::class),
             $this->customerMetadata,
             $this->customerRepository,
             $this->customerSession
@@ -71,7 +80,7 @@ class GenderTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsEnabled($isVisible, $expectedValue)
     {
-        $this->attribute->expects($this->once())->method('isVisible')->will($this->returnValue($isVisible));
+        $this->attribute->expects($this->once())->method('isVisible')->willReturn($isVisible);
         $this->assertSame($expectedValue, $this->block->isEnabled());
     }
 
@@ -90,15 +99,15 @@ class GenderTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getAttributeMetadata'
-        )->will(
-            $this->throwException(new NoSuchEntityException(
+        )->willThrowException(
+            new NoSuchEntityException(
                 __(
                     'No such entity with %fieldName = %fieldValue',
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
-            ))
+            )
         );
-        $this->assertSame(false, $this->block->isEnabled());
+        $this->assertFalse($this->block->isEnabled());
     }
 
     /**
@@ -112,7 +121,7 @@ class GenderTest extends \PHPUnit\Framework\TestCase
      */
     public function testIsRequired($isRequired, $expectedValue)
     {
-        $this->attribute->expects($this->once())->method('isRequired')->will($this->returnValue($isRequired));
+        $this->attribute->expects($this->once())->method('isRequired')->willReturn($isRequired);
         $this->assertSame($expectedValue, $this->block->isRequired());
     }
 
@@ -131,15 +140,15 @@ class GenderTest extends \PHPUnit\Framework\TestCase
             $this->any()
         )->method(
             'getAttributeMetadata'
-        )->will(
-            $this->throwException(new NoSuchEntityException(
+        )->willThrowException(
+            new NoSuchEntityException(
                 __(
                     'No such entity with %fieldName = %fieldValue',
                     ['fieldName' => 'field', 'fieldValue' => 'value']
                 )
-            ))
+            )
         );
-        $this->assertSame(false, $this->block->isRequired());
+        $this->assertFalse($this->block->isRequired());
     }
 
     /**
@@ -148,14 +157,14 @@ class GenderTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetCustomer()
     {
-        $customerData = $this->getMockBuilder(\Magento\Customer\Api\Data\CustomerInterface::class)
+        $customerData = $this->getMockBuilder(CustomerInterface::class)
             ->getMockForAbstractClass();
-        $this->customerSession->expects($this->once())->method('getCustomerId')->will($this->returnValue(1));
+        $this->customerSession->expects($this->once())->method('getCustomerId')->willReturn(1);
         $this->customerRepository
             ->expects($this->once())
             ->method('getById')
             ->with(1)
-            ->will($this->returnValue($customerData));
+            ->willReturn($customerData);
 
         $customer = $this->block->getCustomer();
         $this->assertSame($customerData, $customer);
@@ -173,7 +182,7 @@ class GenderTest extends \PHPUnit\Framework\TestCase
             ['label' => __('Not Specified'), 'value' => 'NA']
         ];
 
-        $this->attribute->expects($this->once())->method('getOptions')->will($this->returnValue($options));
+        $this->attribute->expects($this->once())->method('getOptions')->willReturn($options);
         $this->assertSame($options, $this->block->getGenderOptions());
     }
 }

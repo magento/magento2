@@ -404,8 +404,11 @@ define([
             /**
              * Toggle color upload chooser
              */
-            $(document).on('click', '.swatch_window', function () {
-                $(this).next('div').toggle();
+            $(document).on('click', '.swatches-visual-col', function () {
+                var currentElement = $(this).find('.swatch_sub-menu_container');
+
+                jQuery('.swatch_sub-menu_container').not(currentElement).hide();
+                currentElement.toggle();
             });
         });
     };

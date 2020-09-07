@@ -51,7 +51,7 @@ class ByStockItemTest extends \PHPUnit\Framework\TestCase
         StockItemInterface::IS_IN_STOCK => false,
     ];
 
-    public function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->stockItemFactory = $objectManager->get(StockItemInterfaceFactory::class);
