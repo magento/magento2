@@ -132,7 +132,7 @@ define([
 
             expect(multiSelect.allSelected()).toBeFalsy();
             expect(multiSelect.excluded().toString()).toEqual('');
-            expect(multiSelect.selected().toString()).toEqual('3,4,1,2');
+            expect(multiSelect.selected().toString()).toEqual('1,2');
         });
 
         it('Select all rows all over the Grid and deselects all records', function () {
@@ -167,7 +167,7 @@ define([
                 }, {
                     id: 6
                 }]);
-
+                multiSelect.selectPage();
                 expect(multiSelect.allSelected()).toBeFalsy();
                 expect(multiSelect.excluded().toString()).toEqual('3,4');
                 expect(multiSelect.selected().toString()).toEqual('5,6');

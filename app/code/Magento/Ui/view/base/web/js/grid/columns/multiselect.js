@@ -315,15 +315,7 @@ define([
          * @returns {Multiselect} Chainable.
          */
         countSelected: function () {
-            var total = this.totalRecords(),
-                excluded = this.excluded().length,
-                selected = this.selected().length;
-
-            if (this.excludeMode()) {
-                selected = selected - excluded;
-            }
-
-            this.totalSelected(selected);
+            this.totalSelected(this.selected().length);
 
             return this;
         },
