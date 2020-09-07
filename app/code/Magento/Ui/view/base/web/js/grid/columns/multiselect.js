@@ -320,7 +320,7 @@ define([
                 selected = this.selected().length;
 
             if (this.excludeMode()) {
-                selected = total - excluded;
+                selected = selected - excluded;
             }
 
             this.totalSelected(selected);
@@ -453,7 +453,7 @@ define([
                 if (excluded === totalRecords && !this.preserveSelectionsOnFilter) {
                     this.deselectAll();
                 }
-            } else if (totalRecords && selected === totalRecords && !this.preserveSelectionsOnFilter) {
+            } else if (totalRecords && selected === totalRecords && !this.preserveSelectionsOnFilter && allSelected) {
                 this.selectAll();
             }
 
@@ -491,12 +491,13 @@ define([
         onRowsChange: function () {
             var newSelections;
 
-            if (this.excludeMode()) {
+            if (this.excludeMode() && !this.selected()) {
                 newSelections = _.union(this.getIds(true), this.selected());
 
                 this.selected(newSelections);
             } else {
                 this.updateState();
+                this.excludeMode(false);
             }
         },
 
