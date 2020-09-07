@@ -11,9 +11,11 @@ use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Model\CustomerRegistry;
 use Magento\Framework\App\Http;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\Stdlib\CookieManagerInterface;
+use Magento\Framework\UrlInterface;
 use Magento\Store\Model\StoreManagerInterface;
 use Magento\TestFramework\Mail\Template\TransportBuilderMock;
 use Magento\TestFramework\Request;
@@ -21,6 +23,8 @@ use Magento\TestFramework\TestCase\AbstractController;
 use Magento\Theme\Controller\Result\MessagePlugin;
 
 /**
+ * Tests from customer account create post action.
+ *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
 class CreatePostTest extends AbstractController
@@ -51,6 +55,11 @@ class CreatePostTest extends AbstractController
     private $cookieManager;
 
     /**
+     * @var UrlInterface
+     */
+    private $urlBuilder;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -62,6 +71,7 @@ class CreatePostTest extends AbstractController
         $this->customerRepository = $this->_objectManager->get(CustomerRepositoryInterface::class);
         $this->customerRegistry = $this->_objectManager->get(CustomerRegistry::class);
         $this->cookieManager = $this->_objectManager->get(CookieManagerInterface::class);
+        $this->urlBuilder = $this->_objectManager->get(UrlInterface::class);
     }
 
     /**
@@ -81,7 +91,7 @@ class CreatePostTest extends AbstractController
         $this->assertCustomerNotExists('test1@email.com');
         $this->assertRedirect($this->stringEndsWith('customer/account/create/'));
         $this->assertSessionMessages(
-            $this->equalTo([__('Invalid Form Key. Please refresh the page.')]),
+            $this->contains(__('Invalid Form Key. Please refresh the page.')),
             MessageInterface::TYPE_ERROR
         );
     }
@@ -101,7 +111,9 @@ class CreatePostTest extends AbstractController
         $this->dispatch('customer/account/createPost');
         $this->assertRedirect($this->stringEndsWith('customer/account/'));
         $this->assertSessionMessages(
-            $this->equalTo([__('Thank you for registering with Main Website Store.')]),
+            $this->contains(
+                (string)__('Thank you for registering with %1.', $this->storeManager->getStore()->getFrontendName())
+            ),
             MessageInterface::TYPE_SUCCESS
         );
         $customer = $this->customerRegistry->retrieveByEmail('test1@email.com');
@@ -125,7 +137,9 @@ class CreatePostTest extends AbstractController
         $this->dispatch('customer/account/createPost');
         $this->assertRedirect($this->stringEndsWith('customer/account/'));
         $this->assertSessionMessages(
-            $this->equalTo([__('Thank you for registering with Main Website Store.')]),
+            $this->contains(
+                (string)__('Thank you for registering with %1.', $this->storeManager->getStore()->getFrontendName())
+            ),
             MessageInterface::TYPE_SUCCESS
         );
         $customer = $this->customerRegistry->retrieveByEmail('test@email.com');
@@ -145,13 +159,17 @@ class CreatePostTest extends AbstractController
      */
     public function testWithConfirmCreatePostAction(): void
     {
-        $this->fillRequestWithAccountData('test2@email.com');
+        $email = 'test2@email.com';
+        $this->fillRequestWithAccountData($email);
         $this->dispatch('customer/account/createPost');
         $this->assertRedirect($this->stringContains('customer/account/index/'));
         $message = 'You must confirm your account.'
             . ' Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.';
-        $url = 'http://localhost/index.php/customer/account/confirmation/?email=test2%40email.com';
-        $this->assertSessionMessages($this->equalTo([__($message, $url)]), MessageInterface::TYPE_SUCCESS);
+        $url = $this->urlBuilder->getUrl('customer/account/confirmation', ['_query' => ['email' => $email]]);
+        $this->assertSessionMessages(
+            $this->contains((string)__($message, $url)),
+            MessageInterface::TYPE_SUCCESS
+        );
     }
 
     /**
@@ -167,8 +185,8 @@ class CreatePostTest extends AbstractController
         $message = 'There is already an account with this email address.'
             . ' If you are sure that it is your email address, <a href="%1">click here</a> '
             . 'to get your password and access your account.';
-        $url = 'http://localhost/index.php/customer/account/forgotpassword/';
-        $this->assertSessionMessages($this->equalTo([(string)__($message, $url)]), MessageInterface::TYPE_ERROR);
+        $url = $this->urlBuilder->getUrl('customer/account/forgotpassword');
+        $this->assertSessionMessages($this->contains((string)__($message, $url)), MessageInterface::TYPE_ERROR);
     }
 
     /**
@@ -186,12 +204,14 @@ class CreatePostTest extends AbstractController
         $this->assertRedirect($this->stringContains('customer/account/index/'));
         $message = 'You must confirm your account.'
             . ' Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.';
-        $url = 'http://localhost/index.php/customer/account/confirmation/?email=test_example%40email.com';
+        $url = $this->urlBuilder->getUrl('customer/account/confirmation', ['_query' => ['email' => $email]]);
         $this->assertSessionMessages($this->equalTo([(string)__($message, $url)]), MessageInterface::TYPE_SUCCESS);
         /** @var CustomerInterface $customer */
         $customer = $this->customerRepository->get($email);
         $confirmation = $customer->getConfirmation();
-        $rawMessage = $this->transportBuilderMock->getSentMessage()->getBody()->getParts()[0]->getRawContent();
+        $sendMessage = $this->transportBuilderMock->getSentMessage();
+        $this->assertNotNull($sendMessage);
+        $rawMessage = $sendMessage->getBody()->getParts()[0]->getRawContent();
         $this->assertContains(
             (string)__(
                 'You must confirm your %customer_email email before you can sign in (link is only valid once):',
@@ -210,8 +230,8 @@ class CreatePostTest extends AbstractController
         $this->dispatch('customer/account/confirm');
         $this->assertRedirect($this->stringContains('customer/account/index/'));
         $this->assertSessionMessages(
-            $this->equalTo(
-                [__('Thank you for registering with %1.', $this->storeManager->getStore()->getFrontendName())]
+            $this->contains(
+                (string)__('Thank you for registering with %1.', $this->storeManager->getStore()->getFrontendName())
             ),
             MessageInterface::TYPE_SUCCESS
         );
@@ -224,10 +244,10 @@ class CreatePostTest extends AbstractController
      * @param string $email
      * @return void
      */
-    private function fillRequestWithAccountData($email): void
+    private function fillRequestWithAccountData(string $email): void
     {
         $this->getRequest()
-            ->setMethod('POST')
+            ->setMethod(HttpRequest::METHOD_POST)
             ->setParam(CustomerInterface::FIRSTNAME, 'firstname1')
             ->setParam(CustomerInterface::LASTNAME, 'lastname1')
             ->setParam(CustomerInterface::EMAIL, $email)

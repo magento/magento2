@@ -49,6 +49,7 @@ class EditTest extends TestCase
      */
     protected function setUp()
     {
+        parent::setUp();
         $this->objectManager = Bootstrap::getObjectManager();
         $this->customerSession = $this->objectManager->get(Session::class);
         $this->customerSession->setCustomerId(1);
@@ -68,6 +69,7 @@ class EditTest extends TestCase
      */
     protected function tearDown()
     {
+        parent::tearDown();
         $this->customerSession->setCustomerId(null);
         $this->request->setParam('id', null);
         //Cleanup address from registry
@@ -79,6 +81,7 @@ class EditTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @return void
      */
     public function testGetSaveUrl(): void
     {
@@ -88,6 +91,7 @@ class EditTest extends TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @return void
      */
     public function testGetRegionId(): void
     {
@@ -97,6 +101,7 @@ class EditTest extends TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @return void
      */
     public function testGetCountryId(): void
     {
@@ -106,6 +111,7 @@ class EditTest extends TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_two_addresses.php
+     * @return void
      */
     public function testGetCustomerAddressCount(): void
     {
@@ -114,6 +120,7 @@ class EditTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @return void
      */
     public function testCanSetAsDefaultShipping(): void
     {
@@ -122,6 +129,7 @@ class EditTest extends TestCase
 
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
+     * @return void
      */
     public function testIsDefaultBilling(): void
     {
@@ -131,6 +139,7 @@ class EditTest extends TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoDataFixture Magento/Customer/_files/customer_address.php
+     * @return void
      */
     public function testGetStreetLine(): void
     {
@@ -141,6 +150,7 @@ class EditTest extends TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoConfigFixture current_store customer/create_account/vat_frontend_visibility 1
+     * @return void
      */
     public function testVatIdFieldVisible(): void
     {
@@ -154,6 +164,7 @@ class EditTest extends TestCase
     /**
      * @magentoDataFixture Magento/Customer/_files/customer.php
      * @magentoConfigFixture current_store customer/create_account/vat_frontend_visibility 0
+     * @return void
      */
     public function testVatIdFieldNotVisible(): void
     {

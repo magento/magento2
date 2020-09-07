@@ -18,6 +18,7 @@ use Magento\Customer\Model\Vat;
 use Magento\Customer\Observer\AfterAddressSaveObserver;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
+use Magento\Framework\DataObjectFactory;
 use Magento\Framework\Exception\InputException;
 use Magento\TestFramework\Directory\Model\GetRegionIdByName;
 use Magento\TestFramework\Helper\Bootstrap;
@@ -94,6 +95,11 @@ class CreateAddressTest extends TestCase
     private $createdAddressesIds = [];
 
     /**
+     * @var DataObjectFactory
+     */
+    private $dataObjectFactory;
+
+    /**
      * @inheritdoc
      */
     protected function setUp()
@@ -106,6 +112,7 @@ class CreateAddressTest extends TestCase
         $this->customerRepository = $this->objectManager->get(CustomerRepositoryInterface::class);
         $this->addressRegistry = $this->objectManager->get(AddressRegistry::class);
         $this->addressResource = $this->objectManager->get(Address::class);
+        $this->dataObjectFactory = $this->objectManager->get(DataObjectFactory::class);
         parent::setUp();
     }
 
@@ -463,13 +470,17 @@ class CreateAddressTest extends TestCase
      */
     private function createVatMock(bool $isValid = false, bool $isRequestSuccess = false): void
     {
-        $gatewayResponse = new DataObject([
-            'is_valid' => $isValid,
-            'request_date' => '',
-            'request_identifier' => '123123123',
-            'request_success' => $isRequestSuccess,
-            'request_message' => __(''),
-        ]);
+        $gatewayResponse = $this->dataObjectFactory->create(
+            [
+                'data' => [
+                    'is_valid' => $isValid,
+                    'request_date' => '',
+                    'request_identifier' => '123123123',
+                    'request_success' => $isRequestSuccess,
+                    'request_message' => __(''),
+                ],
+            ]
+        );
         $customerVat = $this->getMockBuilder(Vat::class)
             ->setConstructorArgs(
                 [
