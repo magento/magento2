@@ -8,7 +8,7 @@
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminAddImageToCMSPageTinyMCE3Test">
+    <test name="AdminAddImageToCMSPageTinyMCE3Test" deprecated="TinyMCE3 is no longer supported">
         <annotations>
             <features value="Cms"/>
             <stories value="Admin should be able to upload images with TinyMCE3 WYSIWYG"/>
@@ -17,6 +17,9 @@
             <description value="Verify that admin is able to upload image to CMS Page with TinyMCE3 enabled"/>
             <severity value="BLOCKER"/>
             <testCaseId value="MAGETWO-95725"/>
+            <skip>
+                <issueId value="DEPRECATED">TinyMCE3 is no longer supported</issueId>
+            </skip>
         </annotations>
         <before>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
@@ -25,20 +28,23 @@
             <magentoCLI command="config:set cms/wysiwyg/editor Magento_Tinymce3/tinymce3Adapter" stepKey="enableTinyMCE3"/>
         </before>
         <after>
+            <actionGroup ref="NavigateToMediaGalleryActionGroup" stepKey="navigateToMediaGallery"/>
+            <actionGroup ref="DeleteFolderActionGroup" stepKey="DeleteCreatedFolder">
+                <argument name="ImageFolder" value="ImageFolder"/>
+            </actionGroup>
             <!-- Switch WYSIWYG editor to TinyMCE4-->
             <comment userInput="Reset editor as TinyMCE4" stepKey="chooseTinyMCE4AsEditor"/>
             <magentoCLI command="config:set cms/wysiwyg/editor mage/adminhtml/wysiwyg/tiny_mce/tinymce4Adapter" stepKey="enableTinyMCE4"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
-        <amOnPage url="{{CmsNewPagePage.url}}" stepKey="navigateToPage2"/>
-        <waitForPageLoad stepKey="wait5"/>
+        <actionGroup ref="AdminOpenCreateNewCMSPageActionGroup" stepKey="navigateToPage2"/>
         <fillField selector="{{CmsNewPagePageBasicFieldsSection.pageTitle}}" userInput="{{_defaultCmsPage.title}}" stepKey="fillFieldTitle2"/>
         <click selector="{{CmsNewPagePageContentSection.header}}" stepKey="clickContentTab2" />
-        <waitForElementVisible selector="{{TinyMCESection.TinyMCE3}}" stepKey="waitForTinyMCE3"/>
-        <seeElement selector="{{TinyMCESection.TinyMCE3}}" stepKey="seeTinyMCE3" />
+        <comment userInput="removing deprecated element" stepKey="waitForTinyMCE3"/>
+        <comment userInput="removing deprecated element" stepKey="seeTinyMCE3" />
         <wait time="3" stepKey="waiting"/>
         <comment userInput="Click Insert image button" stepKey="clickImageButton"/>
-        <click selector="{{TinyMCESection.InsertImageBtnTinyMCE3}}" stepKey="clickInsertImage" />
+        <comment userInput="removing deprecated element" stepKey="clickInsertImage" />
         <waitForPageLoad stepKey="waitForiFrameToLoad" />
         <!-- Switch to the Edit/Insert Image iFrame -->
         <comment userInput="Switching to iFrame" stepKey="insertImageiFrame"/>
@@ -47,6 +53,9 @@
         <click selector="{{MediaGallerySection.browseForImage}}" stepKey="clickBrowse"/>
         <switchToIFrame stepKey="switchOutOfIFrame"/>
         <waitForPageLoad stepKey="waitForPageToLoad" />
+        <actionGroup ref="NavigateToMediaFolderActionGroup" stepKey="navigateToFolder">
+             <argument name="FolderName" value="Storage Root"/>
+        </actionGroup>
         <actionGroup ref="CreateImageFolderActionGroup" stepKey="CreateImageFolder">
             <argument name="ImageFolder" value="ImageFolder"/>
         </actionGroup>
@@ -59,7 +68,7 @@
         <executeJS function="document.querySelector('.clearlooks2 iframe').setAttribute('name', 'insert-image');" stepKey="makeIFrameInteractable2"/>
         <switchToIFrame selector="insert-image" stepKey="switchToIFrame2"/>
         <waitForElementVisible selector="{{MediaGallerySection.insertBtn}}" stepKey="waitForInsertBtnOnIFrame" />
-        <fillField selector="{{MediaGallerySection.ImageDescriptionTinyMCE3}}" userInput="{{ImageUpload.content}}" stepKey="fillImageDescription" />
+        <comment userInput="removing deprecated element" stepKey="fillImageDescription" />
         <click selector="{{MediaGallerySection.insertBtn}}" stepKey="clickInsertBtn" />
         <waitForPageLoad stepKey="wait3"/>
         <click selector="{{CmsNewPagePageActionsSection.expandSplitButton}}" stepKey="expandButtonMenu"/>

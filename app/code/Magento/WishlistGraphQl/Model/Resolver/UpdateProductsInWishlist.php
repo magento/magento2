@@ -83,7 +83,7 @@ class UpdateProductsInWishlist implements ResolverInterface
         array $args = null
     ) {
         if (!$this->wishlistConfig->isEnabled()) {
-            throw new GraphQlInputException(__('The wishlist is not currently available.'));
+            throw new GraphQlInputException(__('The wishlist configuration is currently disabled.'));
         }
 
         $customerId = $context->getUserId();
@@ -110,7 +110,7 @@ class UpdateProductsInWishlist implements ResolverInterface
 
         return [
             'wishlist' => $this->wishlistDataMapper->map($wishlistOutput->getWishlist()),
-            'userInputErrors' => \array_map(
+            'user_errors' => \array_map(
                 function (Error $error) {
                     return [
                         'code' => $error->getCode(),
