@@ -6,6 +6,7 @@
 namespace Magento\Payment\Model;
 
 use Magento\Payment\Api\Data\PaymentMethodInterface;
+use UnexpectedValueException;
 
 /**
  * Payment method list class.
@@ -39,11 +40,28 @@ class PaymentMethodList implements \Magento\Payment\Api\PaymentMethodListInterfa
      */
     public function getList($storeId)
     {
-        $methodsInstances = $this->helper->getStoreMethods($storeId);
+        $methodsCodes = array_keys($this->helper->getPaymentMethods());
+        $methodsInstances = array_map(
+            function ($code) {
+                try {
+                    return $this->helper->getMethodInstance($code);
+                } catch (UnexpectedValueException $e) {
+                    return null;
+                }
+            },
+            $methodsCodes
+        );
 
-        $methodsInstances = array_filter($methodsInstances, function (MethodInterface $method) {
-            return !($method instanceof \Magento\Payment\Model\Method\Substitution);
+        $methodsInstances = array_filter($methodsInstances, function ($method) {
+            return $method && !($method instanceof \Magento\Payment\Model\Method\Substitution);
         });
+
+        @uasort(
+            $methodsInstances,
+            function (MethodInterface $a, MethodInterface $b) use ($storeId) {
+                return (int)$a->getConfigData('sort_order', $storeId) - (int)$b->getConfigData('sort_order', $storeId);
+            }
+        );
 
         $methodList = array_map(
             function (MethodInterface $methodInstance) use ($storeId) {
