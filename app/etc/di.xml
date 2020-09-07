@@ -185,6 +185,7 @@
     <preference for="Magento\Framework\Setup\Declaration\Schema\Db\DbSchemaWriterInterface" type="Magento\Framework\Setup\Declaration\Schema\Db\MySQL\DbSchemaWriter" />
     <preference for="Magento\Framework\Setup\Declaration\Schema\SchemaConfigInterface" type="Magento\Framework\Setup\Declaration\Schema\SchemaConfig" />
     <preference for="Magento\Framework\Setup\Declaration\Schema\DataSavior\DumpAccessorInterface" type="Magento\Framework\Setup\Declaration\Schema\FileSystem\Csv" />
+    <preference for="Magento\Framework\MessageQueue\ConfigInterface" type="Magento\Framework\MessageQueue\Config\Proxy" />
     <preference for="Magento\Framework\MessageQueue\PublisherInterface" type="Magento\Framework\MessageQueue\PublisherPool" />
     <preference for="Magento\Framework\MessageQueue\BulkPublisherInterface" type="Magento\Framework\MessageQueue\Bulk\PublisherPool" />
     <preference for="Magento\Framework\MessageQueue\MessageIdGeneratorInterface" type="Magento\Framework\MessageQueue\MessageIdGenerator" />
@@ -1829,6 +1830,14 @@
                 <item name="MySQL-8" xsi:type="string">^8\.0\.</item>
                 <item name="MySQL-5.7" xsi:type="string">^5\.7\.</item>
                 <item name="MariaDB-(10.2-10.4)" xsi:type="string">^10\.[2-4]\.</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\View\TemplateEngine\Php">
+        <arguments>
+            <argument name="blockVariables" xsi:type="array">
+                <item name="secureRenderer" xsi:type="object">Magento\Framework\View\Helper\SecureHtmlRenderer\Proxy</item>
+                <item name="escaper" xsi:type="object">Magento\Framework\Escaper</item>
             </argument>
         </arguments>
     </type>

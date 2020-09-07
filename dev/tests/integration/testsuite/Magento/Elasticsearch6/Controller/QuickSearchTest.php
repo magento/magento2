@@ -64,6 +64,6 @@ class QuickSearchTest extends AbstractController
             $this->storeManager->setCurrentStore($defaultStore);
         }
 
-        $this->assertContains('search product 1', $responseBody);
+        $this->assertStringContainsString('search product 1', $responseBody);
     }
 }

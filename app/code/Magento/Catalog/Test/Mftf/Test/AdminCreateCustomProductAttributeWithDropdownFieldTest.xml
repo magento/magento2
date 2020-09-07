@@ -122,7 +122,9 @@
         <waitForPageLoad  stepKey="waitForProductToLoad1"/>
         <see selector="{{StorefrontProductInfoMainSection.productName}}" userInput="$$createConfigProduct.name$$" stepKey="seeProductNameInStoreFront"/>
         <see selector="{{StorefrontProductInfoMainSection.productPrice}}" userInput="$$createConfigProduct.price$$" stepKey="seeProductPriceInStoreFront"/>
-        <see selector="{{StorefrontProductInfoMainSection.productSku}}" userInput="$$createConfigProduct.sku$$" stepKey="seeProductSkuInStoreFront"/>
+        <actionGroup ref="StorefrontAssertProductSkuOnProductPageActionGroup" stepKey="seeProductSkuInStoreFront">
+            <argument name="productSku" value="$$createConfigProduct.sku$$"/>
+        </actionGroup>
         <scrollTo selector="{{StorefrontProductMoreInformationSection.moreInformation}}" stepKey="scrollToMoreInformation"/>
         <see selector="{{StorefrontProductMoreInformationSection.attributeLabel}}"  userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="seeAttributeLabel"/>
         <see selector="{{StorefrontProductMoreInformationSection.attributeValue}}"  userInput="{{ProductAttributeOption8.value}}" stepKey="seeAttributeValue"/>
