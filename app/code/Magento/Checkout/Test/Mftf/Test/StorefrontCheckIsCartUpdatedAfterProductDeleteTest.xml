@@ -7,14 +7,17 @@
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StoreFrontCheckIsCartUpdatedAfterProductDelete">
+    <test name="StorefrontCheckIsCartUpdatedAfterProductDeleteTest">
         <annotations>
-            <stories value="Checkout"/>
+            <features value="Checkout"/>
+            <stories value="Delete Products from Shopping Cart"/>
             <title value="Remove product added to shopping cart"/>
             <description value="The product has to be deleted from shopping cart if it deleted in admin panel"/>
             <testCaseId value="MC-36299"/>
+            <useCaseId value="MAGETWO-83169"/>
             <severity value="CRITICAL"/>
-            <group value="Shopping Cart"/>
+            <group value="checkout"/>
+            <group value="catalog"/>
         </annotations>
         <before>
             <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
@@ -29,7 +32,7 @@
             <actionGroup ref="StorefrontCustomerLogoutActionGroup" stepKey="logoutCustomer"/>
             <deleteData createDataKey="createSecondProduct" stepKey="deleteSecondProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefront">
             <argument name="Customer" value="$createCustomer$"/>
@@ -46,10 +49,10 @@
             <argument name="total" value="$40.00"/>
         </actionGroup>
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
-        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteCreatedProduct">
+        <actionGroup ref="DeleteProductBySkuActionGroup" stepKey="deleteFirstProduct">
             <argument name="sku" value="$createFirstProduct.sku$"/>
         </actionGroup>
-        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToCheckoutPage"/>
+        <actionGroup ref="StorefrontCartPageOpenActionGroup" stepKey="goToShoppingCartPage"/>
         <actionGroup ref="AssertStorefrontCheckoutCartItemsActionGroup" stepKey="assertCartAfterProductDeleted">
             <argument name="productName" value="$createSecondProduct.name$"/>
             <argument name="productSku" value="$createSecondProduct.sku$"/>
@@ -57,5 +60,6 @@
             <argument name="subtotal" value="$createSecondProduct.price$" />
             <argument name="qty" value="1"/>
         </actionGroup>
+        <dontSee selector="{{CheckoutCartProductSection.productName}}" userInput="$createFirstProduct.name$"  stepKey="seeProductNameInCheckoutSummary"/>
     </test>
 </tests>
