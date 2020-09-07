@@ -25,10 +25,14 @@
 
         <!-- Search the tax rate on tax grid page -->
         <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex1"/>
-
-        <actionGroup ref="AdminDeleteTaxRateActionGroup" stepKey="deleteTaxRate">
-            <argument name="taxRateCode" value="{{initialTaxRate.code}}" />
+        <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clickClearFilters"/>
+        <actionGroup ref="AdminFilterTaxRateByCodeActionGroup" stepKey="filterByCode">
+            <argument name="taxRateCode" value="$$initialTaxRate.code$$" />
         </actionGroup>
+        <actionGroup ref="AdminClickRowInGridActionGroup" stepKey="clickFirstRow">
+            <argument name="row_number" value="1" />
+        </actionGroup>
+        <actionGroup ref="AdminDeleteTaxRateActionGroup" stepKey="deleteTaxRate"/>
 
         <see selector="{{AdminMessagesSection.success}}" userInput="You Deleted the tax rate." stepKey="seeSuccess1"/>
 

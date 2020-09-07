@@ -8,11 +8,12 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminDeleteTaxRateActionGroup">
-        <annotations>
-            <description>Delete Tax Rate.</description>
-        </annotations>
-        <click selector="{{AdminMainActionsSection.delete}}" stepKey="clickDeleteRate"/>
-        <click selector="{{AdminConfirmationModalSection.ok}}" stepKey="clickOk"/>
+    <actionGroup name="AdminClickRowInGridActionGroup">
+        <arguments>
+            <argument name="row_number" type="string"/>
+        </arguments>
+
+        <click selector="{{AdminDataGridTableSection.row(row_number)}}" stepKey="clickOnFirstRow"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>

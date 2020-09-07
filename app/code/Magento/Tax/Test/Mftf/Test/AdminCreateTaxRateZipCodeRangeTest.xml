@@ -23,9 +23,14 @@
         </before>
         <after>
             <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex"/>
-            <actionGroup ref="AdminDeleteTaxRateActionGroup" stepKey="deleteTaxRate">
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clickClearFilters"/>
+            <actionGroup ref="AdminFilterTaxRateByCodeActionGroup" stepKey="filterByCode">
                 <argument name="taxRateCode" value="{{SimpleTaxRate.code}}" />
             </actionGroup>
+            <actionGroup ref="AdminClickRowInGridActionGroup" stepKey="clickFirstRow">
+                <argument name="row_number" value="1" />
+            </actionGroup>
+            <actionGroup ref="AdminDeleteTaxRateActionGroup" stepKey="deleteTaxRate"/>
         </after>
 
         <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex1"/>
