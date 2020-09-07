@@ -9,7 +9,7 @@ use Magento\Catalog\Model\Indexer\Product\Flat\Table\BuilderInterfaceFactory;
 use Magento\Store\Model\Store;
 
 /**
- * Class TableBuilder
+ * Prepare temporary tables structure for product flat indexer
  *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
@@ -347,7 +347,9 @@ class TableBuilder
                 }
 
                 if (!empty($changedIds)) {
-                    $select->where($this->_connection->quoteInto('e.entity_id IN (?)', $changedIds));
+                    $select->where(
+                        $this->_connection->quoteInto('e.entity_id IN (?)', $changedIds, \Zend_Db::INT_TYPE)
+                    );
                 }
 
                 $sql = $select->insertFromSelect($temporaryTableName, $columns, true);
@@ -355,7 +357,9 @@ class TableBuilder
 
                 if (count($valueColumns) > 1) {
                     if (!empty($changedIds)) {
-                        $selectValue->where($this->_connection->quoteInto('e.entity_id IN (?)', $changedIds));
+                        $selectValue->where(
+                            $this->_connection->quoteInto('e.entity_id IN (?)', $changedIds, \Zend_Db::INT_TYPE)
+                        );
                     }
                     $sql = $selectValue->insertFromSelect($temporaryValueTableName, $valueColumns, true);
                     $this->_connection->query($sql);
