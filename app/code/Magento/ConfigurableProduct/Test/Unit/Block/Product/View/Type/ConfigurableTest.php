@@ -256,10 +256,10 @@ class ConfigurableTest extends TestCase
      */
     public function testGetCacheKeyInfo(
         array $expected,
-        string $priceCurrency = null,
-        string $customerGroupId = null
+        ?string $priceCurrency = null,
+        ?int $customerGroupId = null
     ): void {
-        $storeMock = $this->getMockBuilder(\Magento\Store\Api\Data\StoreInterface::class)
+        $storeMock = $this->getMockBuilder(StoreInterface::class)
             ->setMethods(['getCurrentCurrency'])
             ->getMockForAbstractClass();
         $storeMock->expects($this->any())
