@@ -25,13 +25,13 @@ class PageTest extends AbstractController
     /**
      * @inheritDoc
      */
-    protected function setUp(): void
+    protected function setUp()
     {
         parent::setUp();
         $this->_objectManager->configure([
             'preferences' => [
                 CustomLayoutManagerInterface::class => CustomLayoutManager::class,
-            ]
+            ],
         ]);
         $this->pageRetriever = $this->_objectManager->get(GetPageByIdentifierInterface::class);
     }
