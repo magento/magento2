@@ -199,6 +199,10 @@ class SessionTest extends TestCase
             $this->quote->getCustomerEmail(),
             'Precondition failed: Customer data must not be set to quote'
         );
+        $this->assertTrue(
+            $this->quote->getCustomerIsGuest(),
+            'Precondition failed: Customer must be as guest in quote'
+        );
         $customer = $this->customerRepository->getById(1);
         $this->customerSession->setCustomerDataObject($customer);
         $this->quote = $this->checkoutSession->getQuote();
@@ -245,6 +249,17 @@ class SessionTest extends TestCase
     }
 
     /**
+     * Test covers case when quote is not yet initialized and customer is guest
+     *
+     * Expected result - quote object should be loaded with customer as guest
+     */
+    public function testGetQuoteNotInitializedGuest()
+    {
+        $quote = $this->checkoutSession->getQuote();
+        $this->assertTrue($quote->getCustomerIsGuest());
+    }
+
+    /**
      * @magentoDataFixture Magento/Checkout/_files/quote_with_simple_product_saved.php
      * @magentoDataFixture Magento/Checkout/_files/quote_with_customer_without_address.php
      *
@@ -287,6 +302,10 @@ class SessionTest extends TestCase
             $customerFirstNameFromFixture,
             $quote->getCustomerFirstname(),
             'Customer first name was not set to Quote correctly.'
+        );
+        $this->assertFalse(
+            $quote->getCustomerIsGuest(),
+            'Customer should not be as guest in Quote.'
         );
     }
 }
