@@ -165,10 +165,10 @@ class CreatePostTest extends AbstractController
         $this->dispatch('customer/account/createPost');
         $this->assertRedirect($this->stringContains('customer/account/create/'));
         $message = 'There is already an account with this email address.'
-            . ' If you are sure that it is your email address, <a href=""%1"">click here</a> '
+            . ' If you are sure that it is your email address, <a href="%1">click here</a> '
             . 'to get your password and access your account.';
         $url = 'http://localhost/index.php/customer/account/forgotpassword/';
-        $this->assertSessionMessages($this->equalTo([__($message, $url)]), MessageInterface::TYPE_ERROR);
+        $this->assertSessionMessages($this->equalTo([(string)__($message, $url)]), MessageInterface::TYPE_ERROR);
     }
 
     /**
@@ -185,9 +185,9 @@ class CreatePostTest extends AbstractController
         $this->dispatch('customer/account/createPost');
         $this->assertRedirect($this->stringContains('customer/account/index/'));
         $message = 'You must confirm your account.'
-            . ' Please check your email for the confirmation link or <a href=""%1"">click here</a> for a new link.';
+            . ' Please check your email for the confirmation link or <a href="%1">click here</a> for a new link.';
         $url = 'http://localhost/index.php/customer/account/confirmation/?email=test_example%40email.com';
-        $this->assertSessionMessages($this->equalTo([__($message, $url)]), MessageInterface::TYPE_SUCCESS);
+        $this->assertSessionMessages($this->equalTo([(string)__($message, $url)]), MessageInterface::TYPE_SUCCESS);
         /** @var CustomerInterface $customer */
         $customer = $this->customerRepository->get($email);
         $confirmation = $customer->getConfirmation();

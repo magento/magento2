@@ -288,6 +288,7 @@ class CreateAccountTest extends TestCase
     }
 
     /**
+     * @magentoAppArea frontend
      * @magentoDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
      * @magentoDataFixture Magento/Customer/_files/customer_confirmation_email_template.php
      * @magentoConfigFixture current_store customer/create_account/email_identity custom1
@@ -311,6 +312,7 @@ class CreateAccountTest extends TestCase
     }
 
     /**
+     * @magentoAppArea frontend
      * @magentoDataFixture Magento/Customer/_files/customer_confirmation_config_enable.php
      * @magentoDataFixture Magento/Customer/_files/customer_confirmed_email_template.php
      * @magentoConfigFixture current_store customer/create_account/email_identity custom1
