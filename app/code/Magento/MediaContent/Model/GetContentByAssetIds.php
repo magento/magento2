@@ -70,7 +70,7 @@ class GetContentByAssetIds implements GetContentByAssetIdsInterface
                 ->where(self::ASSET_ID . ' IN (?)', $assetIds);
 
             $contentIdentities = [];
-            foreach ($connection->fetchAssoc($select) as $contentIdentityData) {
+            foreach ($connection->fetchAll($select) as $contentIdentityData) {
                 $contentIdentities[] = $this->factory->create($contentIdentityData);
             }
             return $contentIdentities;

@@ -52,7 +52,7 @@ class UnionExpression extends Expression
                 $parts[] = $part;
             }
         }
-        $sql = implode($parts, $this->type);
+        $sql = implode($this->type, $parts);
         if ($this->pattern) {
             return sprintf($this->pattern, $sql);
         }

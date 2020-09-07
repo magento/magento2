@@ -48,7 +48,7 @@ class NewConditionHtmlTest extends AbstractBackendController
         $this->dispatch($this->uri);
         $html = $this->getResponse()
             ->getBody();
-        $this->assertContains($this->formName, $html);
+        $this->assertStringContainsString($this->formName, $html);
     }
 
     /**

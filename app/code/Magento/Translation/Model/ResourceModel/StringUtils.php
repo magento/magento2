@@ -270,7 +270,7 @@ class StringUtils extends AbstractDb
         ];
 
         if ($row = $connection->fetchRow($select, $bind)) {
-            $original = $string;
+            $original = $this->escaper->escapeHtml($string);
             if (strpos($original, '::') !== false) {
                 list(, $original) = explode('::', $original);
             }

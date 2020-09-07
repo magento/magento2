@@ -43,10 +43,13 @@ class DepersonalizePluginTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
-        $this->persistentSessionMock = $this->createPartialMock(PersistentSession::class, ['setCustomerId']);
+        $this->persistentSessionMock = $this->getMockBuilder(PersistentSession::class)
+            ->addMethods(['setCustomerId'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->depersonalizeCheckerMock = $this->createMock(DepersonalizeChecker::class);
 
         $this->plugin = (new ObjectManagerHelper($this))->getObject(

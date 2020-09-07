@@ -15,7 +15,7 @@ class ParentClass
     /**
      * Public parent method
      *
-     * @param \Laminas\Code\Generator\DocBlockGenerator $docBlockGenerator
+     * @param DocBlockGenerator $docBlockGenerator
      * @param string $param1
      * @param string $param2
      * @param string $param3
@@ -35,7 +35,7 @@ class ParentClass
     /**
      * Protected parent method
      *
-     * @param \Laminas\Code\Generator\DocBlockGenerator $docBlockGenerator
+     * @param DocBlockGenerator $docBlockGenerator
      * @param string $param1
      * @param string $param2
      * @param string $param3
@@ -55,7 +55,7 @@ class ParentClass
     /**
      * Private parent method
      *
-     * @param \Laminas\Code\Generator\DocBlockGenerator $docBlockGenerator
+     * @param DocBlockGenerator $docBlockGenerator
      * @param string $param1
      * @param string $param2
      * @param string $param3

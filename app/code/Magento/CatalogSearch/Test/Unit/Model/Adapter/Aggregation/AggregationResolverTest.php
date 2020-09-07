@@ -3,44 +3,52 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\CatalogSearch\Test\Unit\Model\Adapter\Aggregation;
 
+use Magento\Catalog\Api\AttributeSetFinderInterface;
+use Magento\Catalog\Api\Data\ProductAttributeInterface;
+use Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection;
 use Magento\CatalogSearch\Model\Adapter\Aggregation\AggregationResolver;
 use Magento\CatalogSearch\Model\Adapter\Aggregation\RequestCheckerInterface;
-use Magento\Catalog\Api\AttributeSetFinderInterface;
 use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\DB\Adapter\AdapterInterface;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Search\Request\BucketInterface;
 use Magento\Framework\Search\Request\Config;
 use Magento\Framework\Search\RequestInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class AggregationResolverTest extends \PHPUnit\Framework\TestCase
+class AggregationResolverTest extends TestCase
 {
     /**
-     * @var AttributeSetFinderInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AttributeSetFinderInterface|MockObject
      */
     private $attributeSetFinder;
 
     /**
-     * @var SearchCriteriaBuilder|\PHPUnit_Framework_MockObject_MockObject
+     * @var SearchCriteriaBuilder|MockObject
      */
     private $searchCriteriaBuilder;
 
     /**
-     * @var RequestInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestInterface|MockObject
      */
     private $request;
 
     /**
-     * @var Config|\PHPUnit_Framework_MockObject_MockObject
+     * @var Config|MockObject
      */
     private $config;
 
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|MockObject
      */
     private $attributeCollection;
 
@@ -50,11 +58,11 @@ class AggregationResolverTest extends \PHPUnit\Framework\TestCase
     private $aggregationResolver;
 
     /**
-     * @var RequestCheckerInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var RequestCheckerInterface|MockObject
      */
     private $aggregationChecker;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->attributeSetFinder = $this->getMockBuilder(AttributeSetFinderInterface::class)
             ->disableOriginalConstructor()
@@ -65,15 +73,17 @@ class AggregationResolverTest extends \PHPUnit\Framework\TestCase
         $this->request = $this->getMockBuilder(RequestInterface::class)
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
-        $this->config = $this->getMockBuilder(Config::class)->disableOriginalConstructor()->getMock();
+        $this->config = $this->getMockBuilder(Config::class)
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->attributeCollection = $this->getMockBuilder(
-            \Magento\Catalog\Model\ResourceModel\Product\Attribute\Collection::class
+            Collection::class
         )
             ->disableOriginalConstructor()
             ->getMock();
         $this->aggregationChecker = $this->getMockBuilder(RequestCheckerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->aggregationResolver = (new ObjectManager($this))->getObject(
             AggregationResolver::class,
@@ -103,11 +113,11 @@ class AggregationResolverTest extends \PHPUnit\Framework\TestCase
         $documentIds = [1, 2, 3];
         $attributeSetIds = [4, 5];
         $requestName = 'request_name';
-        $select =  $this->searchCriteriaBuilder = $this->getMockBuilder(\Magento\Framework\DB\Select::class)
+        $select =  $this->searchCriteriaBuilder = $this->getMockBuilder(Select::class)
             ->disableOriginalConstructor()
             ->getMock();
         $adapter = $this->searchCriteriaBuilder = $this->getMockBuilder(
-            \Magento\Framework\DB\Adapter\AdapterInterface::class
+            AdapterInterface::class
         )
             ->disableOriginalConstructor()
             ->getMockForAbstractClass();
@@ -129,12 +139,12 @@ class AggregationResolverTest extends \PHPUnit\Framework\TestCase
             ->willReturnSelf();
         $this->attributeCollection->expects($this->once())
             ->method('setEntityTypeFilter')
-            ->with(\Magento\Catalog\Api\Data\ProductAttributeInterface::ENTITY_TYPE_CODE)
+            ->with(ProductAttributeInterface::ENTITY_TYPE_CODE)
             ->willReturnSelf();
         $this->attributeCollection->expects($this->atLeastOnce())
             ->method('getSelect')
             ->willReturn($select);
-        $select->expects($this->once())->method('reset')->with(\Magento\Framework\DB\Select::COLUMNS)->willReturnSelf();
+        $select->expects($this->once())->method('reset')->with(Select::COLUMNS)->willReturnSelf();
         $select->expects($this->once())->method('columns')->with('attribute_code')->willReturnSelf();
         $this->attributeCollection->expects($this->once())->method('getConnection')->willReturn($adapter);
         $adapter->expects($this->once())->method('fetchCol')->with($select)->willReturn(['code_1', 'code_2']);

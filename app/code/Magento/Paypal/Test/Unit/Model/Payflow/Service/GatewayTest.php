@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Paypal\Test\Unit\Model\Payflow\Service;
 
 use Magento\Framework\DataObject;
@@ -12,31 +14,31 @@ use Magento\Framework\Math\Random;
 use Magento\Payment\Model\Method\ConfigInterface;
 use Magento\Payment\Model\Method\Logger;
 use Magento\Paypal\Model\Payflow\Service\Gateway;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
 
 /**
- * Class GatewayTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class GatewayTest extends \PHPUnit\Framework\TestCase
+class GatewayTest extends TestCase
 {
-    /** @var Gateway|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Gateway|MockObject */
     protected $object;
 
-    /** @var ZendClientFactory|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ZendClientFactory|MockObject */
     protected $httpClientFactoryMock;
 
-    /** @var Random|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Random|MockObject */
     protected $mathRandomMock;
 
-    /** @var Logger|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Logger|MockObject */
     protected $loggerMock;
 
-    /** @var ZendClient|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var ZendClient|MockObject */
     protected $zendClientMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->httpClientFactoryMock = $this->getMockBuilder(ZendClientFactory::class)
             ->setMethods(['create'])
@@ -72,7 +74,7 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
         ];
         $expectedResponse = 'RESULT=0&RESPMSG=Approved&SECURETOKEN=8ZIaw2&SECURETOKENID=2481d53';
 
-        /** @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject $configInterfaceMock */
+        /** @var ConfigInterface|MockObject $configInterfaceMock */
         $configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
             ->getMockForAbstractClass();
         $zendResponseMock = $this->getMockBuilder(\Zend_Http_Response::class)
@@ -100,12 +102,10 @@ class GatewayTest extends \PHPUnit\Framework\TestCase
         static::assertArrayHasKey('result_code', $result->getData());
     }
 
-    /**
-     * @expectedException  \Zend_Http_Client_Exception
-     */
     public function testPostRequestFail()
     {
-        /** @var ConfigInterface|\PHPUnit_Framework_MockObject_MockObject $configInterfaceMock */
+        $this->expectException('Zend_Http_Client_Exception');
+        /** @var ConfigInterface|MockObject $configInterfaceMock */
         $configInterfaceMock = $this->getMockBuilder(ConfigInterface::class)
             ->getMockForAbstractClass();
         $zendResponseMock = $this->getMockBuilder(\Zend_Http_Response::class)

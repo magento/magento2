@@ -132,6 +132,7 @@
                     <shtml>shtml</shtml>
                     <phpt>phpt</phpt>
                     <pht>pht</pht>
+                    <svg>svg</svg>
                 </protected_extensions>
                 <public_files_valid_paths>
                     <protected>

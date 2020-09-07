@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Captcha\Test\Unit\Observer;
 
 use Magento\Captcha\Helper\Data;
@@ -78,22 +80,22 @@ class CheckContactUsFormObserverTest extends TestCase
      */
     private $captchaMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManagerHelper = new ObjectManager($this);
 
         $this->helperMock = $this->createMock(Data::class);
         $this->actionFlagMock = $this->createMock(ActionFlag::class);
-        $this->messageManagerMock = $this->createMock(ManagerInterface::class);
-        $this->redirectMock = $this->createMock(RedirectInterface::class);
+        $this->messageManagerMock = $this->getMockForAbstractClass(ManagerInterface::class);
+        $this->redirectMock = $this->getMockForAbstractClass(RedirectInterface::class);
         $this->captchaStringResolverMock = $this->createMock(CaptchaStringResolver::class);
         $this->dataPersistorMock = $this->getMockBuilder(DataPersistorInterface::class)
             ->getMockForAbstractClass();
 
-        $this->sessionMock = $this->createPartialMock(
-            SessionManager::class,
-            ['addErrorMessage']
-        );
+        $this->sessionMock = $this->getMockBuilder(SessionManager::class)
+            ->addMethods(['addErrorMessage'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->captchaMock = $this->createMock(DefaultModel::class);
 
         $this->checkContactUsFormObserver = $this->objectManagerHelper->getObject(

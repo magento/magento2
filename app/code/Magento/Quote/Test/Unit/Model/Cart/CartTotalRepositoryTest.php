@@ -14,16 +14,16 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHe
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\CouponManagementInterface;
 use Magento\Quote\Api\Data\TotalSegmentInterface;
+use Magento\Quote\Api\Data\TotalsInterface as QuoteTotalsInterface;
+use Magento\Quote\Api\Data\TotalsInterfaceFactory;
 use Magento\Quote\Model\Cart\CartTotalRepository;
 use Magento\Quote\Model\Cart\Totals\ItemConverter;
+use Magento\Quote\Model\Cart\TotalsConverter;
 use Magento\Quote\Model\Quote;
 use Magento\Quote\Model\Quote\Address;
 use Magento\Quote\Model\Quote\Item as QuoteItem;
-use Magento\Quote\Model\Cart\TotalsConverter;
-use Magento\Quote\Api\Data\TotalsInterfaceFactory;
-use Magento\Quote\Api\Data\TotalsInterface as QuoteTotalsInterface;
-use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * Test Cart totals object for class \Magento\Quote\Model\Cart\CartTotalRepository
@@ -90,7 +90,7 @@ class CartTotalRepositoryTest extends TestCase
      */
     protected $totalsConverterMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManagerHelper($this);
         $this->totalsFactoryMock = $this->createPartialMock(
@@ -99,19 +99,20 @@ class CartTotalRepositoryTest extends TestCase
                 'create'
             ]
         );
-        $this->quoteMock = $this->createPartialMock(
-            Quote::class,
-            [
-                'isVirtual',
-                'getShippingAddress',
-                'getBillingAddress',
-                'getAllVisibleItems',
-                'getBaseCurrencyCode',
-                'getQuoteCurrencyCode',
-                'getItemsQty',
-                'collectTotals'
-            ]
-        );
+        $this->quoteMock = $this->getMockBuilder(Quote::class)
+            ->addMethods(['getBaseCurrencyCode', 'getQuoteCurrencyCode'])
+            ->onlyMethods(
+                [
+                    'isVirtual',
+                    'getShippingAddress',
+                    'getBillingAddress',
+                    'getAllVisibleItems',
+                    'getItemsQty',
+                    'collectTotals'
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->quoteRepositoryMock = $this->createMock(
             CartRepositoryInterface::class
         );
@@ -124,7 +125,8 @@ class CartTotalRepositoryTest extends TestCase
         );
         $this->dataObjectHelperMock = $this->getMockBuilder(
             DataObjectHelper::class
-        )->disableOriginalConstructor()->getMock();
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->converterMock = $this->createMock(
             ItemConverter::class
         );
@@ -195,7 +197,7 @@ class CartTotalRepositoryTest extends TestCase
             ->method('getTotals')
             ->willReturn($addressTotals);
 
-        $totalsMock = $this->createMock(QuoteTotalsInterface::class);
+        $totalsMock = $this->getMockForAbstractClass(QuoteTotalsInterface::class);
         $this->totalsFactoryMock->expects($this->once())
             ->method('create')
             ->willReturn($totalsMock);
@@ -205,7 +207,7 @@ class CartTotalRepositoryTest extends TestCase
             ->with($itemMock)
             ->willReturn($itemArray);
 
-        $totalSegmentsMock = $this->createMock(TotalSegmentInterface::class);
+        $totalSegmentsMock = $this->getMockForAbstractClass(TotalSegmentInterface::class);
         $this->totalsConverterMock->expects($this->once())
             ->method('process')
             ->with($addressTotals)

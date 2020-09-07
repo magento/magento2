@@ -5,7 +5,6 @@ Magento\Backend\Controller\Adminhtml\Noroute\Index
 Magento\Directory\Controller\Adminhtml\Json\CountryRegion
 Magento\Tax\Controller\Adminhtml\Rule\AjaxLoadRates
 # List of classes that locates in controllers folder but don't inherit base admin controller MAGETWO-70433.
-Magento\Braintree\Controller\Adminhtml\Payment\GetNonce
 Magento\Bundle\Controller\Adminhtml\Product\Initialization\Helper\Plugin\Bundle
 Magento\CatalogUrlRewrite\Plugin\Catalog\Controller\Adminhtml\Product\Initialization\Helper
 Magento\Catalog\Controller\Adminhtml\Product\Builder

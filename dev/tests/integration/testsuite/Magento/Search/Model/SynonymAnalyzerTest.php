@@ -16,7 +16,7 @@ class SynonymAnalyzerTest extends \PHPUnit\Framework\TestCase
      */
     private $synAnalyzer;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->synAnalyzer = $objectManager->get(\Magento\Search\Model\SynonymAnalyzer::class);

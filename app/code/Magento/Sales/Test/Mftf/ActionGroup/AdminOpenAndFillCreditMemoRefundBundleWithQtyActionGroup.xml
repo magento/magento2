@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminOpenAndFillCreditMemoRefundBundleWithQtyActionGroup">
+        <annotations>
+            <description>Clicks on the 'Credit Memos' section on the Admin Orders edit page. Fills in the provided Refund details (child item qty, Shipping Refund, Adjustment Refund, Adjustment Fee and Row number).</description>
+        </annotations>
+        <arguments>
+            <argument name="itemQtyToRefund" type="string" defaultValue="0"/>
+            <argument name="shippingRefund" type="string" defaultValue="0"/>
+            <argument name="adjustmentRefund" type="string" defaultValue="0"/>
+            <argument name="adjustmentFee" type="string" defaultValue="0"/>
+            <argument name="rowNumberItemOne" type="string" defaultValue="3"/>
+            <argument name="rowNumberItemTwo" type="string" defaultValue="5"/>
+            <argument name="rowNumberItemThree" type="string" defaultValue="6"/>
+        </arguments>
+        
+        <!-- Click 'Credit Memo' button -->
+        <click selector="{{AdminOrderDetailsMainActionsSection.creditMemo}}" stepKey="clickCreateCreditMemo"/>
+        <seeInCurrentUrl url="{{AdminCreditMemoNewPage.url}}" stepKey="seeNewCreditMemoPage"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Memo" stepKey="seeNewMemoInPageTitle"/>
+
+        <!-- Fill data from dataset: refund -->
+        <scrollTo selector="{{AdminCreditMemoItemsSection.header}}" stepKey="scrollToItemsToRefund"/>
+        <fillField selector="{{AdminCreditMemoItemsSection.childItemQtyToRefund(rowNumberItemOne)}}" userInput="{{itemQtyToRefund}}" stepKey="fillQtyToRefundItemOne"/>
+        <fillField selector="{{AdminCreditMemoItemsSection.childItemQtyToRefund(rowNumberItemTwo)}}" userInput="{{itemQtyToRefund}}" stepKey="fillQtyToRefundItemTwo"/>
+        <fillField selector="{{AdminCreditMemoItemsSection.childItemQtyToRefund(rowNumberItemThree)}}" userInput="{{itemQtyToRefund}}" stepKey="fillQtyToRefundItemThree"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForActivateButton"/>
+        <conditionalClick selector="{{AdminCreditMemoItemsSection.updateQty}}" dependentSelector="{{AdminCreditMemoItemsSection.disabledUpdateQty}}" visible="false" stepKey="clickUpdateButton"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForUpdate"/>
+        <fillField userInput="{{shippingRefund}}" selector="{{AdminCreditMemoTotalSection.refundShipping}}" stepKey="fillShipping"/>
+        <fillField userInput="{{adjustmentRefund}}" selector="{{AdminCreditMemoTotalSection.adjustmentRefund}}" stepKey="fillAdjustmentRefund"/>
+        <fillField userInput="{{adjustmentFee}}" selector="{{AdminCreditMemoTotalSection.adjustmentFee}}" stepKey="fillAdjustmentFee"/>
+        <waitForElementVisible selector="{{AdminCreditMemoTotalSection.updateTotals}}" stepKey="waitForUpdateTotalsButton"/>
+        <click selector="{{AdminCreditMemoTotalSection.updateTotals}}" stepKey="clickUpdateTotals"/>
+        <checkOption selector="{{AdminCreditMemoTotalSection.emailCopy}}" stepKey="checkSendEmailCopy"/>
+    </actionGroup>
+</actionGroups>

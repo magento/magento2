@@ -34,7 +34,7 @@ class OptionPriceRendererTest extends TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = new ObjectManager($this);
 
@@ -60,7 +60,10 @@ class OptionPriceRendererTest extends TestCase
 
         $productMock = $this->createMock(Product::class);
 
-        $priceRenderer = $this->createPartialMock(BlockInterface::class, ['toHtml', 'render']);
+        $priceRenderer = $this->getMockBuilder(BlockInterface::class)
+            ->addMethods(['render'])
+            ->onlyMethods(['toHtml'])
+            ->getMockForAbstractClass();
         $priceRenderer->expects($this->once())
             ->method('render')
             ->with('tier_price', $productMock, $expectedArguments)

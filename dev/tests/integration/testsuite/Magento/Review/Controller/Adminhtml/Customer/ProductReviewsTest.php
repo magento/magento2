@@ -25,7 +25,7 @@ class ProductReviewsTest extends AbstractBackendController
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -41,7 +41,7 @@ class ProductReviewsTest extends AbstractBackendController
     public function testProductReviewsAction(): void
     {
         $this->dispatchWithIdParam(1);
-        $this->assertContains('<div id="reviewGrid"', $this->getResponse()->getBody());
+        $this->assertStringContainsString('<div id="reviewGrid"', $this->getResponse()->getBody());
     }
 
     /**
