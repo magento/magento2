@@ -23,12 +23,9 @@
         </before>
         <after>
             <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex"/>
-            <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters2"/>
-            <fillField selector="{{AdminTaxRateGridSection.filterByTaxIdentifier}}" userInput="{{SimpleTaxRate.code}}" stepKey="fillNameFilter"/>
-            <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch"/>
-            <click selector="{{AdminTaxRateGridSection.nthRow('1')}}" stepKey="clickFirstRow1"/>
-            <click selector="{{AdminTaxRateFormSection.deleteRate}}" stepKey="clickDeleteRate"/>
-            <click selector="{{AdminTaxRateFormSection.ok}}" stepKey="clickOk"/>
+            <actionGroup ref="AdminDeleteTaxRateActionGroup" stepKey="deleteTaxRate">
+                <argument name="taxRateCode" value="{{SimpleTaxRate.code}}" />
+            </actionGroup>
         </after>
 
         <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex1"/>

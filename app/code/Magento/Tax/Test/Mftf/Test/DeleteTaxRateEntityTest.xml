@@ -25,14 +25,11 @@
 
         <!-- Search the tax rate on tax grid page -->
         <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRateIndex1"/>
-        <click selector="{{AdminDataGridHeaderSection.clearFilters}}" stepKey="clickClearFilters1"/>
-        <fillField selector="{{AdminTaxRateGridSection.filterByTaxIdentifier}}" userInput="$$initialTaxRate.code$$" stepKey="fillCode"/>
-        <click selector="{{AdminTaxRateGridSection.search}}" stepKey="clickSearch1"/>
-        <click selector="{{AdminTaxRateGridSection.nthRow('1')}}" stepKey="clickFirstRow1"/>
 
-        <!-- Delete values on the tax rate form page -->
-        <click selector="{{AdminTaxRateFormSection.deleteRate}}" stepKey="clickDeleteRate"/>
-        <click selector="{{AdminTaxRateFormSection.ok}}" stepKey="clickOk"/>
+        <actionGroup ref="AdminDeleteTaxRateActionGroup" stepKey="deleteTaxRate">
+            <argument name="taxRateCode" value="{{initialTaxRate.code}}" />
+        </actionGroup>
+
         <see selector="{{AdminMessagesSection.success}}" userInput="You Deleted the tax rate." stepKey="seeSuccess1"/>
 
         <!-- Confirm Deleted TaxIdentifier(from the above step) on the tax rate grid page -->
