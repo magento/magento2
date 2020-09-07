@@ -32,6 +32,8 @@
             <createData entity="productAttributeOption2" stepKey="createConfigProductAttributeOptionTwo">
                 <requiredEntity createDataKey="createConfigProductAttribute"/>
             </createData>
+            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </before>
         <after>
             <!--Delete product-->
@@ -39,7 +41,7 @@
             <deleteData createDataKey="createProduct" stepKey="deleteProduct"/>
             <deleteData createDataKey="createConfigProductAttribute" stepKey="deleteAttribute"/>
             <actionGroup ref="DeleteAllDuplicateProductUsingProductGridActionGroup" stepKey="deleteAllDuplicateProducts">
-                <argument name="product" value="$$createProduct$$"/>
+                <argument name="product" value="$createProduct$"/>
             </actionGroup>
             <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -50,27 +52,25 @@
         <!--Add configurations to product-->
         <comment userInput="Add configurations to product" stepKey="commentAddConfigs"/>
         <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="gotToSimpleProductPage">
-            <argument name="productId" value="$$createProduct.id$$"/>
+            <argument name="productId" value="$createProduct.id$"/>
         </actionGroup>
         <waitForPageLoad stepKey="waitForSimpleProductPageLoad"/>
         <actionGroup ref="GenerateConfigurationsByAttributeCodeActionGroup" stepKey="setupConfigurations">
-            <argument name="attributeCode" value="$$createConfigProductAttribute.attribute_code$$"/>
+            <argument name="attributeCode" value="$createConfigProductAttribute.attribute_code$"/>
         </actionGroup>
         <actionGroup ref="SaveConfiguredProductActionGroup" stepKey="saveConfigProductForm"/>
         <!--Assert configurable product on Admin product page grid-->
         <comment userInput="Assert configurable product in Admin product page grid" stepKey="commentAssertConfigProductOnAdmin"/>
         <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="goToCatalogProductPage"/>
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterProductGridBySku">
-            <argument name="sku" value="$$createProduct.sku$$"/>
+            <argument name="sku" value="$createProduct.sku$"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Name')}}" userInput="$$createProduct.name$$" stepKey="seeProductNameInGrid"/>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'Type')}}" userInput="Configurable Product" stepKey="seeProductTypeInGrid"/>
-        <see selector="{{AdminProductGridSection.productGridCell('2', 'Name')}}" userInput="$$createProduct.name$$-option1" stepKey="seeProductNameInGrid1"/>
-        <see selector="{{AdminProductGridSection.productGridCell('3', 'Name')}}" userInput="$$createProduct.name$$-option2" stepKey="seeProductNameInGrid2"/>
-        <actionGroup ref="AdminClearFiltersActionGroup" stepKey="clearProductFilters"/>
+        <seeElement selector="{{AdminProductGridSection.productRowByTypeAndName('Configurable Product',$createProduct.name$)}}" stepKey="seeConfigurableProductInGrid"/>
+        <seeElement selector="{{AdminProductGridSection.productRowByTypeAndName('Simple Product',$createProduct.name$-option1)}}" stepKey="seeSimpleProduct1NameInGrid"/>
+        <seeElement selector="{{AdminProductGridSection.productRowByTypeAndName('Simple Product',$createProduct.name$-option2)}}" stepKey="seeSimpleProduct2NameInGrid"/>
         <!--Assert configurable product on storefront-->
         <comment userInput="Assert configurable product on storefront" stepKey="commentAssertConfigProductOnStorefront"/>
-        <amOnPage url="{{StorefrontProductPage.url($$createProduct.name$$)}}" stepKey="openProductPage"/>
+        <amOnPage url="{{StorefrontProductPage.url($createProduct.name$)}}" stepKey="openProductPage"/>
         <waitForPageLoad stepKey="waitForStorefrontProductPageLoad"/>
         <see userInput="IN STOCK" selector="{{StorefrontProductInfoMainSection.productStockStatus}}" stepKey="assertInStock"/>
         <click selector="{{StorefrontProductInfoMainSection.productAttributeOptionsSelectButton}}" stepKey="clickAttributeDropDown"/>

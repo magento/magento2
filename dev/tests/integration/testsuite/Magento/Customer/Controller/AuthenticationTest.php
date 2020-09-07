@@ -18,7 +18,7 @@ class AuthenticationTest extends AbstractController
     /**
      * Make sure that customized AccountPlugin was reverted.
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         $this->resetAllowedActions();
         parent::tearDown();

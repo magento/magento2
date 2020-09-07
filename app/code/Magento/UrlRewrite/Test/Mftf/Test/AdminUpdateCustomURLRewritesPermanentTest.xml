@@ -51,8 +51,11 @@
         </actionGroup>
 
         <!--AssertUrlRewriteSuccessOutsideRedirect-->
-        <amOnPage url="{{StorefrontHomePage.url}}{{customPermanentUrlRewrite.request_path}}" stepKey="amOnStorefrontPage"/>
-        <waitForPageLoad stepKey="waitForPageLoad"/>
-        <seeInCurrentUrl url="{{customPermanentUrlRewrite.target_path}}" stepKey="seeAssertUrlRewrite"/>
+        <actionGroup ref="NavigateToStorefrontForCreatedPageActionGroup" stepKey="navigateToTheStoreFront">
+            <argument name="page" value="{{customPermanentUrlRewrite.request_path}}"/>
+        </actionGroup>
+        <actionGroup ref="AssertStorefrontUrlRewriteSuccessOutsideRedirectActionGroup" stepKey="seeAssertUrlRewrite">
+            <argument name="target_path" value="{{customPermanentUrlRewrite.target_path}}"/>
+        </actionGroup>
     </test>
 </tests>

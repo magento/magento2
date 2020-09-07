@@ -44,7 +44,7 @@ class CountryRegionTest extends AbstractBackendController
 
         $actual = $this->getResponse()->getBody();
 
-        $this->assertContains('Example Region 1', $actual);
-        $this->assertContains('Example Region 2', $actual);
+        $this->assertStringContainsString('Example Region 1', $actual);
+        $this->assertStringContainsString('Example Region 2', $actual);
     }
 }

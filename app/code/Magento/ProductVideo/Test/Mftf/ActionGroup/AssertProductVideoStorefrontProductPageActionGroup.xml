@@ -14,9 +14,9 @@
             <description>Validates that the provided Video is present on the Storefront Product page.</description>
         </annotations>
         <arguments>
-            <argument name="dataTypeAttribute" defaultValue="'youtube'"/>
+            <argument name="videoType" type="string" defaultValue="youtube"/>
         </arguments>
 
-        <seeElement selector="{{StorefrontProductInfoMainSection.productVideo(dataTypeAttribute)}}" stepKey="seeProductVideoDataType"/>
+        <seeElement selector="{{StorefrontProductInfoMainSection.productVideo(videoType)}}" stepKey="seeProductVideoDataType"/>
     </actionGroup>
 </actionGroups>
