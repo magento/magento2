@@ -230,6 +230,7 @@ class View extends DataObject implements ViewInterface
                 $this->getChangelog()->drop();
                 // Reset version_id
                 $this->getState()->setVersionId(0);
+            // phpcs:disable Magento2.CodeAnalysis.EmptyBlock.DetectedCatch
             } catch (ChangelogTableNotExistsException $e) {
                 // Silently ignore this error
             }

@@ -255,6 +255,7 @@ class ProductTest extends TestCase
      */
     public function testCatalogCategoryProductIndexInvalidateAfterChangeProductPosition(): void
     {
+        $this->indexer->reindexAll();
         $this->indexer->setScheduled(true);
         $indexerShouldBeValid = $this->indexer->isValid();
 
