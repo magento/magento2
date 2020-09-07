@@ -1159,9 +1159,6 @@ class Checkout
             ->setCustomerEmail($quote->getBillingAddress()->getEmail())
             ->setCustomerIsGuest(true)
             ->setCustomerGroupId(\Magento\Customer\Model\Group::NOT_LOGGED_IN_ID);
-        if ($quote->getCustomer()->getEmail() === null) {
-            $quote->getCustomer()->setEmail($quote->getBillingAddress()->getEmail());
-        }
         return $this;
     }
 }
