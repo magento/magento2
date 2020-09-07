@@ -6,7 +6,9 @@
  */
 namespace Magento\Cms\Model\Wysiwyg\Images;
 
+use Magento\Cms\Model\Wysiwyg\Images\Storage\Collection;
 use Magento\Framework\App\Filesystem\DirectoryList;
+use Magento\Framework\DataObject;
 use Magento\Framework\Filesystem;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\Framework\Filesystem\DriverInterface;
@@ -105,18 +107,19 @@ class StorageTest extends \PHPUnit\Framework\TestCase
         );
         $this->storage->resizeFile($modifiableFilePath);
         $collection = $this->storage->getFilesCollection(self::$_baseDir, 'image');
-        $this->assertInstanceOf(\Magento\Cms\Model\Wysiwyg\Images\Storage\Collection::class, $collection);
+        $this->assertInstanceOf(Collection::class, $collection);
         foreach ($collection as $item) {
-            $this->assertInstanceOf(\Magento\Framework\DataObject::class, $item);
+            $this->assertInstanceOf(DataObject::class, $item);
             $this->assertStringEndsWith('/' . $fileName, $item->getUrl());
-            $this->assertMatchesRegularExpression(
-                '/.thumbsMagentoCmsModelWysiwygImagesStorageTest/',
-                'http://%s/pub/%s/.thumbsMagentoCmsModelWysiwygImagesStorageTest/magento_image.jpg',
-                $item->getThumbUrl()
+            $this->assertEquals(
+                '/pub/media/.thumbsMagentoCmsModelWysiwygImagesStorageTest/magento_image.jpg',
+                parse_url($item->getThumbUrl(), PHP_URL_PATH),
+                "Check if Thumbnail URL is equal to the generated URL"
             );
             $this->assertEquals(
                 'image/jpeg',
-                $item->getMimeType()
+                $item->getMimeType(),
+                "Check if Mime Type is equal to the image in the file system"
             );
             return;
         }
