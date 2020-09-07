@@ -75,12 +75,6 @@ use Magento\Framework\Escaper;
                         "mediaGalleryImageDetailsName": "mediaGalleryImageDetails",
                         "actionsList": [
                             {
-                                "title": "<?= $escaper->escapeJs(__('Edit Details')); ?>",
-                                "handler": "editImageAction",
-                                "name": "edit",
-                                "classes": "action-default scalable edit action-quaternary"
-                            },
-                            {
                                 "title": "<?= $escaper->escapeJs(__('Cancel')); ?>",
                                 "handler": "closeModal",
                                 "name": "cancel",
@@ -91,6 +85,12 @@ use Magento\Framework\Escaper;
                                 "handler": "deleteImageAction",
                                 "name": "delete",
                                 "classes": "action-default scalable delete action-quaternary"
+                            },
+                            {
+                                "title": "<?= $escaper->escapeJs(__('Edit Details')); ?>",
+                                "handler": "editImageAction",
+                                "name": "edit",
+                                "classes": "action-default scalable edit action-quaternary"
                             },
                             {
                                 "title": "<?= $escaper->escapeJs(__('Add Image')); ?>",
