@@ -89,8 +89,7 @@
         <see selector="{{AdminIndexManagementSection.successMessage}}"  userInput="You saved the configuration." stepKey="seeMessage"/>
 
         <!-- Navigate to the Catalog > Products -->
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="onCatalogProductPage"/>
-        <waitForPageLoad stepKey="waitForProductPage"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="onCatalogProductPage"/>
 
         <!-- Click on <product1>: Product page opens-->
         <actionGroup ref="FilterProductGridByNameActionGroup" stepKey="filterProduct">
@@ -160,8 +159,7 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAdmin"/>
 
         <!-- Navigate to the Catalog > Products: Navigate to the Catalog>Products -->
-        <amOnPage url="{{AdminCatalogProductPage.url}}" stepKey="amOnProductPage"/>
-        <waitForPageLoad stepKey="waitForProductsPage"/>
+        <actionGroup ref="AdminOpenCatalogProductPageActionGroup" stepKey="amOnProductPage"/>
 
         <!-- Click on <product1> -->
         <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="openSimpleProduct">
