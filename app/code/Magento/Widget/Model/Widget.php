@@ -311,7 +311,7 @@ class Widget
         $widget = $this->getConfigAsObject($type);
 
         $params = array_filter($params, function ($value) {
-            return $value !== null;
+            return $value !== null && $value !== '';
         });
 
         $directiveParams = '';
