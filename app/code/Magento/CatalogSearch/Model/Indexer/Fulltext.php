@@ -93,7 +93,7 @@ class Fulltext implements
      * @param DimensionProviderInterface $dimensionProvider
      * @param array $data
      * @param ProcessManager $processManager
-     * @param CacheContext $cacheContext|null
+     * @param CacheContext|null $cacheContext
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
