@@ -85,7 +85,7 @@ class FlushCacheByTagsTest extends TestCase
     /**
      * @return void
      */
-    public function testAroundDelete(): void
+    public function testAfterDelete(): void
     {
         $resource = $this->getMockBuilder(AbstractResource::class)
             ->disableOriginalConstructor()
@@ -95,11 +95,9 @@ class FlushCacheByTagsTest extends TestCase
             ->getMockForAbstractClass();
         $this->tagResolver->expects($this->atLeastOnce())->method('getTags')->with($model)->willReturn([]);
 
-        $result = $this->plugin->aroundDelete(
+        $result = $this->plugin->afterDelete(
             $resource,
-            function () use ($resource) {
-                return $resource;
-            },
+            $resource,
             $model
         );
 
