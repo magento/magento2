@@ -24,12 +24,7 @@ class GenerateCustomerToken implements ResolverInterface
     /**
      * Configuration path to Customer Token Lifetime  setting
      */
-    const TOKEN_LIFETIME_PATH_KEY = 'oauth/access_token_lifetime/customer';
-
-    /**
-     * Max GraphQl Integer value
-     */
-    const MAX_INT = 2147483647;
+    const TOKEN_LIFETIME_PATH_KEY = 'oauth/access_token_lifetime/customer'; 
 
     /**
      * @var CustomerTokenServiceInterface
@@ -39,7 +34,7 @@ class GenerateCustomerToken implements ResolverInterface
     /**
      * @var ScopeConfigInterface
      */
-    protected $scopeConfig;
+    private $scopeConfig;
 
     /**
      * @param CustomerTokenServiceInterface $customerTokenService
@@ -76,8 +71,7 @@ class GenerateCustomerToken implements ResolverInterface
             $tokenLifetime = $this->scopeConfig->getValue(self::TOKEN_LIFETIME_PATH_KEY);
             return [
                 'token' => $token,
-                'expired_time' => is_numeric($tokenLifetime) && $tokenLifetime > 0 ?
-                    $tokenLifetime < self::MAX_INT ? $tokenLifetime : self::MAX_INT : 1
+                'expiration_time' => is_numeric($tokenLifetime) && $tokenLifetime > 0 ? $tokenLifetime : 1
             ];
         } catch (AuthenticationException $e) {
             throw new GraphQlAuthenticationException(__($e->getMessage()), $e);

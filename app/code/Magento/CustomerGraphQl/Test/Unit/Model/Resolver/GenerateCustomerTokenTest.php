@@ -109,7 +109,7 @@ class GenerateCustomerTokenTest extends TestCase
         $this->assertEquals(
             [
                 'token' => $generateCustomerTokenResult,
-                'expired_time' => $customerTokenLifetimeResult
+                'expiration_time' => $customerTokenLifetimeResult
             ],
             $this->resolver->resolve(
                 $this->fieldMock,
