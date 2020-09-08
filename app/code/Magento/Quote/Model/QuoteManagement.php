@@ -24,7 +24,7 @@ use Magento\Sales\Api\OrderManagementInterface as OrderManagement;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
- * Class QuoteManagement
+ * Class for managing quote
  *
  * @SuppressWarnings(PHPMD.CookieAndSessionMisuse)
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)

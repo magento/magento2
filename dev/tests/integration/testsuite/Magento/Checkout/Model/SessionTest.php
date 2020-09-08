@@ -199,7 +199,8 @@ class SessionTest extends TestCase
             $this->quote->getCustomerEmail(),
             'Precondition failed: Customer data must not be set to quote'
         );
-        $this->assertTrue(
+        self::assertEquals(
+            '0',
             $this->quote->getCustomerIsGuest(),
             'Precondition failed: Customer must be as guest in quote'
         );
@@ -256,7 +257,7 @@ class SessionTest extends TestCase
     public function testGetQuoteNotInitializedGuest()
     {
         $quote = $this->checkoutSession->getQuote();
-        $this->assertTrue($quote->getCustomerIsGuest());
+        self::assertEquals('1', $quote->getCustomerIsGuest());
     }
 
     /**
@@ -303,7 +304,8 @@ class SessionTest extends TestCase
             $quote->getCustomerFirstname(),
             'Customer first name was not set to Quote correctly.'
         );
-        $this->assertFalse(
+        self::assertEquals(
+            '0',
             $quote->getCustomerIsGuest(),
             'Customer should not be as guest in Quote.'
         );
