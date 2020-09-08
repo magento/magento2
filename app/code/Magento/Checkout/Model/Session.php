@@ -383,7 +383,8 @@ class Session extends \Magento\Framework\Session\SessionManager
 
         if ($customerQuote->getId() && $this->getQuoteId() != $customerQuote->getId()) {
             if ($this->getQuoteId()) {
-                $quote = $this->getQuote()->setCustomerIsGuest(false);
+                $quote = $this->getQuote();
+                $quote->setCustomerIsGuest(false);
                 $this->quoteRepository->save(
                     $customerQuote->merge($quote)->collectTotals()
                 );
