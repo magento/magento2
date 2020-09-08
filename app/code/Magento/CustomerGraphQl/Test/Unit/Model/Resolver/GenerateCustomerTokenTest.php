@@ -12,7 +12,6 @@ use Magento\CustomerGraphQl\Model\Resolver\GenerateCustomerToken;
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\Framework\GraphQl\Config\Element\Field;
-use Magento\GraphQl\Model\Query\ContextExtensionInterface;
 use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
@@ -40,11 +39,6 @@ class GenerateCustomerTokenTest extends TestCase
      * @var ContextInterface|MockObject
      */
     private $contextMock;
-
-    /**
-     * @var ContextExtensionInterface|MockObject
-     */
-    private $contextExtensionMock;
 
     /**
      * @var CustomerTokenServiceInterface|MockObject
@@ -100,10 +94,10 @@ class GenerateCustomerTokenTest extends TestCase
         );
     }
 
-    public function testGenerateCustomerToken() {
+    public function testGenerateCustomerToken()
+    {
         $generateCustomerTokenResult = 'bkznkdc53qnnxfmscg2szbvakjv7e7pk';
         $customerTokenLifetimeResult = 10;
-
 
         $this->customerTokenServiceMock
             ->expects($this->once())

@@ -29,7 +29,7 @@ class GenerateCustomerToken implements ResolverInterface
     /**
      * Max GraphQl Integer value
      */
-    const MAX_INT = 2147483647; 
+    const MAX_INT = 2147483647;
 
     /**
      * @var CustomerTokenServiceInterface
