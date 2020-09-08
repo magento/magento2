@@ -24,7 +24,7 @@ class GenerateCustomerToken implements ResolverInterface
     /**
      * Configuration path to Customer Token Lifetime  setting
      */
-    const TOKEN_LIFETIME_PATH_KEY = 'oauth/access_token_lifetime/customer'; 
+    const TOKEN_LIFETIME_PATH_KEY = 'oauth/access_token_lifetime/customer';
 
     /**
      * @var CustomerTokenServiceInterface
