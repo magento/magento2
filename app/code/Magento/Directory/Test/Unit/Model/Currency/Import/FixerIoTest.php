@@ -14,12 +14,10 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Framework\HTTP\ZendClient;
 use Magento\Framework\HTTP\ZendClientFactory;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * FixerIo Test
- */
-class FixerIoTest extends \PHPUnit\Framework\TestCase
+class FixerIoTest extends TestCase
 {
     /**
      * @var FixerIo
@@ -44,7 +42,7 @@ class FixerIoTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->currencyFactory = $this->getMockBuilder(CurrencyFactory::class)
             ->disableOriginalConstructor()
@@ -57,7 +55,7 @@ class FixerIoTest extends \PHPUnit\Framework\TestCase
         $this->scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
             ->disableOriginalConstructor()
             ->setMethods([])
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->model = new FixerIo($this->currencyFactory, $this->scopeConfig, $this->httpClientFactory);
     }
@@ -119,7 +117,7 @@ class FixerIoTest extends \PHPUnit\Framework\TestCase
 
         $messages = $this->model->getMessages();
         self::assertNotEmpty($messages);
-        self::assertTrue(is_array($messages));
+        self::assertIsArray($messages);
         self::assertEquals($message, (string)$messages[0]);
     }
 }

@@ -20,7 +20,7 @@
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="LoginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="LoginAsAdmin"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
@@ -29,8 +29,6 @@
             <argument name="menuUiId" value="{{AdminMenuReports.dataUiId}}"/>
             <argument name="submenuUiId" value="{{AdminMenuReportsBusinessIntelligenceAdvancedReporting.dataUiId}}"/>
         </actionGroup>
-        <switchToNextTab stepKey="switchToNewTab"/>
-        <waitForPageLoad stepKey="waitForAdvancedReportingPageLoad"/>
-        <seeInCurrentUrl url="advancedreporting.rjmetrics.com/report" stepKey="seeAssertAdvancedReportingPageUrl"/>
+        <actionGroup ref="AssertAdminAdvancedReportingPageUrlActionGroup" stepKey="assertAdvancedReportingPageUrl"/>
     </test>
 </tests>

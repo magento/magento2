@@ -4,16 +4,19 @@
  * See COPYING.txt for license details.
  */
 
-// phpcs:disable Magento2.Templates.ThisInTemplate
 ?>
 <?php
 /**
  * @var $block \Magento\Sales\Block\Adminhtml\Order\Create\Items\Grid
+ * @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer
  */
+
+/** @var \Magento\Catalog\Helper\Data $catalogHelper */
+$catalogHelper =$block->getData('catalogHelper');
 ?>
 
 <?php $_items = $block->getItems() ?>
-<?php if (empty($_items)) : ?>
+<?php if (empty($_items)): ?>
     <div id="order-items_grid">
         <div class="admin__table-wrapper">
             <table class="data-table admin__table-primary order-tables">
@@ -36,9 +39,9 @@
             </table>
         </div>
     </div>
-<?php else : ?>
+<?php else: ?>
     <div class="admin__table-wrapper" id="order-items_grid">
-    <?php if (count($_items) > 10) : ?>
+    <?php if (count($_items) > 10): ?>
         <div class="actions update actions-update">
             <?= $block->getButtonHtml(__('Update Items and Quantities'), 'order.itemsUpdate()', 'action-secondary') ?>
         </div>
@@ -59,21 +62,31 @@
                 <tr>
                     <td class="col-total"><?= $block->escapeHtml(__('Total %1 product(s)', count($_items))) ?></td>
                     <td colspan="2" class="col-subtotal"><?= $block->escapeHtml(__('Subtotal:')) ?></td>
-                    <td class="col-price"><strong><?= /* @noEscape */ $block->formatPrice($block->getSubtotal()) ?></strong></td>
-                    <td class="col-price"><strong><?= /* @noEscape */ $block->formatPrice($block->getDiscountAmount()) ?></strong></td>
-                    <td class="col-price"><strong><?= /* @noEscape */ $block->formatPrice($block->getSubtotalWithDiscount()); ?></strong></td>
+                    <td class="col-price">
+                        <strong><?= /* @noEscape */ $block->formatPrice($block->getSubtotal()) ?></strong>
+                    </td>
+                    <td class="col-price">
+                        <strong><?= /* @noEscape */ $block->formatPrice($block->getDiscountAmount()) ?></strong>
+                    </td>
+                    <td class="col-price">
+                        <strong><?= /* @noEscape */ $block->formatPrice($block->getSubtotalWithDiscount()); ?></strong>
+                    </td>
                     <td colspan="2">&nbsp;</td>
                 </tr>
             </tfoot>
                 <?php $i = 0 ?>
-                <?php foreach ($_items as $_item) : $i++ ?>
+                <?php foreach ($_items as $_item): $i++ ?>
                 <tbody class="<?= /* @noEscape */ ($i%2) ? 'even' : 'odd' ?>">
                     <tr>
                         <td class="col-product">
-                            <span id="order_item_<?= (int) $_item->getId() ?>_title"><?= $block->escapeHtml($_item->getName()) ?></span>
+                            <span id="order_item_<?= (int) $_item->getId() ?>_title"><?=
+                                $block->escapeHtml($_item->getName()) ?></span>
                             <div class="product-sku-block">
                                 <span><?= $block->escapeHtml(__('SKU')) ?>:</span>
-                                <?= /* @noEscape */ implode('<br />', $this->helper(\Magento\Catalog\Helper\Data::class)->splitSku($block->escapeHtml($_item->getSku()))) ?>
+                                <?= /* @noEscape */ implode(
+                                    '<br />',
+                                    $catalogHelper->splitSku($block->escapeHtml($_item->getSku()))
+                                ) ?>
                             </div>
                             <div class="product-configure-block">
                                 <?= $block->getConfigureButtonHtml($_item) ?>
@@ -84,33 +97,56 @@
                             <?= $block->getItemUnitPriceHtml($_item) ?>
 
                             <?php $_isCustomPrice = $block->usedCustomPriceForItem($_item) ?>
-                            <?php if ($_tier = $block->getTierHtml($_item)) : ?>
-                            <div id="item_tier_block_<?= (int) $_item->getId() ?>"<?php if ($_isCustomPrice) : ?> style="display:none"<?php endif; ?>>
-                                <a href="#" onclick="$('item_tier_<?= (int) $_item->getId() ?>').toggle();return false;"><?= $block->escapeHtml(__('Tier Pricing')) ?></a>
-                                <div style="display:none" id="item_tier_<?= (int) $_item->getId() ?>"><?= /* @noEscape */ $_tier ?></div>
+                            <?php if ($_tier = $block->getTierHtml($_item)): ?>
+                            <div id="item_tier_block_<?= (int) $_item->getId() ?>">
+                                <a href="#"><?= $block->escapeHtml(__('Tier Pricing')) ?></a>
+                                <div id="item_tier_<?= (int) $_item->getId() ?>"><?= /* @noEscape */ $_tier ?></div>
+                                <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                    "display:none",
+                                    'div#item_tier_' . (int) $_item->getId()
+                                ) ?>
                             </div>
+                                <?php if ($_isCustomPrice): ?>
+                                    <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                        "display:none",
+                                        'div#item_tier_block_' . (int) $_item->getId()
+                                    ) ?>
+                                <?php endif; ?>
+                                <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                                    'onclick',
+                                    "$('item_tier_" . (int) $_item->getId() ."').toggle();event.preventDefault();",
+                                    'div#item_tier_block_' . (int) $_item->getId() . ' a'
+                                ) ?>
                             <?php endif; ?>
-                            <?php if ($block->canApplyCustomPrice($_item)) : ?>
+                            <?php if ($block->canApplyCustomPrice($_item)): ?>
                                 <div class="custom-price-block">
                                     <input type="checkbox"
                                            class="admin__control-checkbox"
                                            id="item_use_custom_price_<?= (int) $_item->getId() ?>"
-                                           <?php if ($_isCustomPrice) : ?> checked="checked"<?php endif; ?>
-                                           onclick="order.toggleCustomPrice(this, 'item_custom_price_<?= (int) $_item->getId() ?>', 'item_tier_block_<?= (int) $_item->getId() ?>');"/>
+                                           <?php if ($_isCustomPrice): ?> checked="checked"<?php endif; ?> />
                                     <label
                                         class="normal admin__field-label"
                                         for="item_use_custom_price_<?= (int) $_item->getId() ?>">
                                         <span><?= $block->escapeHtml(__('Custom Price')) ?>*</span></label>
+                                    <?= /* @noEscape */ $secureRenderer->renderEventListenerAsTag(
+                                        'onclick',
+                                        "order.toggleCustomPrice(this, 'item_custom_price_" . (int) $_item->getId() .
+                                        "', 'item_tier_block_" . (int) $_item->getId() . "');",
+                                        'input#item_use_custom_price_' . (int) $_item->getId()
+                                    ) ?>
                                 </div>
                             <?php endif; ?>
                             <input id="item_custom_price_<?= (int) $_item->getId() ?>"
                                 name="item[<?= (int) $_item->getId() ?>][custom_price]"
                                 value="<?= /* @noEscape */ sprintf("%.2f", $block->getOriginalEditablePrice($_item)) ?>"
-                                <?php if (!$_isCustomPrice) : ?>
-                                style="display:none"
+                                <?php if (!$_isCustomPrice): ?>
                                 disabled="disabled"
                                 <?php endif; ?>
                                 class="input-text item-price admin__control-text"/>
+                            <?= /* @noEscape */ $secureRenderer->renderStyleAsTag(
+                                "display:none",
+                                'input#item_custom_price_' . (int) $_item->getId()
+                            ) ?>
                         </td>
                         <td class="col-qty">
                             <input name="item[<?= (int) $_item->getId() ?>][qty]"
@@ -127,7 +163,7 @@
                                 <input id="item_use_discount_<?= (int) $_item->getId() ?>"
                                        class="admin__control-checkbox"
                                        name="item[<?= (int) $_item->getId() ?>][use_discount]"
-                                       <?php if (!$_item->getNoDiscount()) : ?>checked="checked"<?php endif; ?>
+                                       <?php if (!$_item->getNoDiscount()): ?>checked="checked"<?php endif; ?>
                                        value="1"
                                        type="checkbox" />
                                 <label
@@ -144,16 +180,19 @@
                             <select class="admin__control-select" name="item[<?= (int) $_item->getId() ?>][action]">
                                 <option value=""><?= $block->escapeHtml(__('Please select')) ?></option>
                                 <option value="remove"><?= $block->escapeHtml(__('Remove')) ?></option>
-                                <?php if ($block->getCustomerId() && $block->getMoveToCustomerStorage()) : ?>
+                                <?php if ($block->getCustomerId() && $block->getMoveToCustomerStorage()): ?>
                                     <option value="cart"><?= $block->escapeHtml(__('Move to Shopping Cart')) ?></option>
-                                    <?php if ($block->isMoveToWishlistAllowed($_item)) : ?>
+                                    <?php if ($block->isMoveToWishlistAllowed($_item)): ?>
                                         <?php $wishlists = $block->getCustomerWishlists();?>
-                                        <?php if (count($wishlists) <= 1) : ?>
-                                            <option value="wishlist"><?= $block->escapeHtml(__('Move to Wish List')) ?></option>
-                                        <?php else : ?>
+                                        <?php if (count($wishlists) <= 1): ?>
+                                            <option value="wishlist"><?= $block->escapeHtml(__('Move to Wish List')) ?>
+                                            </option>
+                                        <?php else: ?>
                                             <optgroup label="<?= $block->escapeHtml(__('Move to Wish List')) ?>">
-                                                <?php foreach ($wishlists as $wishlist) :?>
-                                                    <option value="wishlist_<?= (int) $wishlist->getId() ?>"><?= $block->escapeHtml($wishlist->getName()) ?></option>
+                                                <?php foreach ($wishlists as $wishlist):?>
+                                                    <option value="wishlist_<?= (int) $wishlist->getId() ?>">
+                                                        <?= $block->escapeHtml($wishlist->getName()) ?>
+                                                    </option>
                                                 <?php endforeach;?>
                                             </optgroup>
                                         <?php endif; ?>
@@ -164,21 +203,22 @@
                     </tr>
 
                     <?php $hasMessageError = false; ?>
-                    <?php foreach ($_item->getMessage(false) as $messageError) : ?>
-                        <?php if (!empty($messageError)) :
+                    <?php foreach ($_item->getMessage(false) as $messageError): ?>
+                        <?php if (!empty($messageError)):
                             $hasMessageError = true;
                         endif; ?>
                     <?php endforeach; ?>
 
-                    <?php if ($hasMessageError) : ?>
+                    <?php if ($hasMessageError): ?>
                         <tr class="row-messages-error">
                             <td colspan="100"> <!-- ToDo UI: remove the 100 -->
-                                <?php foreach ($_item->getMessage(false) as $message) :
+                                <?php foreach ($_item->getMessage(false) as $message):
                                     if (empty($message)) {
                                         continue;
                                     }
                                     ?>
-                                    <div class="message <?php if ($_item->getHasError()) : ?>message-error<?php else : ?>message-notice<?php endif; ?>">
+                                    <div class="message <?php if ($_item->getHasError()): ?>message-error<?php else:
+                                        ?>message-notice<?php endif; ?>">
                                         <?= $block->escapeHtml($message) ?>
                                     </div>
                                 <?php endforeach; ?>
@@ -198,15 +238,17 @@
         <div id="order-coupons" class="order-coupons"><?= $block->getChildHtml() ?></div>
     </div>
 
-    <script>
+    <?php $scriptString = <<<script
         require([
             'Magento_Sales/order/create/form'
         ], function(){
             order.itemsOnchangeBind()
         });
-    </script>
-    <?php if ($block->isGiftMessagesAvailable()) : ?>
-        <script>
+script;
+    ?>
+    <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
+    <?php if ($block->isGiftMessagesAvailable()): ?>
+        <?php $scriptString = <<<script
         require([
             "prototype",
             "Magento_Sales/order/giftoptions_tooltip"
@@ -241,6 +283,9 @@
         //]]>
 
         });
-        </script>
+
+script;
+        ?>
+        <?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false) ?>
     <?php endif; ?>
 <?php endif; ?>

@@ -6,10 +6,13 @@
 declare(strict_types=1);
 
 use Magento\Catalog\Model\Product;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/visual_swatch_attribute_with_different_options_type.php';
-require __DIR__ . '/../../../Magento/ConfigurableProduct/_files/configurable_products.php';
-require __DIR__ . '/../../../Magento/Catalog/_files/product_image.php';
+Resolver::getInstance()->requireDataFixture(
+    'Magento/Swatches/_files/visual_swatch_attribute_with_different_options_type.php'
+);
+Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/configurable_products.php');
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_image.php');
 
 // set 'Product Image for Swatch' for attribute
 $attribute->setData('use_product_image_for_swatch', 1);

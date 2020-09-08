@@ -20,7 +20,7 @@
         </annotations>
         <before>
             <createData entity="ApiCategory" stepKey="createCategory"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
@@ -31,12 +31,11 @@
             <actionGroup ref="NavigateToAndResetProductAttributeGridToDefaultViewActionGroup" stepKey="resetProductAttributeFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Begin creating a new product attribute of type "Image Swatch" -->
-        <amOnPage url="{{ProductAttributePage.url}}" stepKey="goToNewProductAttributePage"/>
-        <waitForPageLoad stepKey="waitForNewProductAttributePage"/>
+        <actionGroup ref="AdminNavigateToNewProductAttributePageActionGroup" stepKey="goToNewProductAttributePage"/>
         <fillField selector="{{AttributePropertiesSection.DefaultLabel}}" userInput="{{ProductAttributeFrontendLabel.label}}" stepKey="fillDefaultLabel"/>
 
         <!-- Select visual swatch -->
@@ -53,6 +52,7 @@
         <click selector="{{AdminManageSwatchSection.nthUploadFile('1')}}" stepKey="clickUploadFile1"/>
         <attachFile selector="input[name='datafile']" userInput="adobe-thumb.jpg" stepKey="attachFile1"/>
         <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('0')}}" userInput="adobe-thumb" stepKey="fillAdmin1"/>
+        <click selector="{{AdminManageSwatchSection.swatchWindow('0')}}" stepKey="clicksWatchWindow1"/>
 
         <!-- Set swatch image #2 -->
         <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch2"/>
@@ -62,6 +62,7 @@
         <click selector="{{AdminManageSwatchSection.nthUploadFile('2')}}" stepKey="clickUploadFile2"/>
         <attachFile selector="input[name='datafile']" userInput="adobe-small.jpg" stepKey="attachFile2"/>
         <fillField selector="{{AdminManageSwatchSection.adminInputByIndex('1')}}" userInput="adobe-small" stepKey="fillAdmin2"/>
+        <click selector="{{AdminManageSwatchSection.swatchWindow('1')}}" stepKey="clicksWatchWindow2"/>
 
         <!-- Set swatch image #3 -->
         <click selector="{{AdminManageSwatchSection.addSwatch}}" stepKey="clickAddSwatch3"/>
@@ -87,20 +88,20 @@
 
         <!-- Verify after round trip to the server -->
         <grabAttributeFrom selector="{{AdminManageSwatchSection.nthSwatch('1')}}" userInput="style" stepKey="grabSwatch1"/>
-        <assertContains stepKey="assertSwatch1">
+        <assertStringContainsString stepKey="assertSwatch1">
             <expectedResult type="string">adobe-thumb</expectedResult>
             <actualResult type="string">{$grabSwatch1}</actualResult>
-        </assertContains>
+        </assertStringContainsString>
         <grabAttributeFrom selector="{{AdminManageSwatchSection.nthSwatch('2')}}" userInput="style" stepKey="grabSwatch2"/>
-        <assertContains stepKey="assertSwatch2">
+        <assertStringContainsString stepKey="assertSwatch2">
             <expectedResult type="string">adobe-small</expectedResult>
             <actualResult type="string">{$grabSwatch2}</actualResult>
-        </assertContains>
+        </assertStringContainsString>
         <grabAttributeFrom selector="{{AdminManageSwatchSection.nthSwatch('3')}}" userInput="style" stepKey="grabSwatch3"/>
-        <assertContains stepKey="assertSwatch3">
+        <assertStringContainsString stepKey="assertSwatch3">
             <expectedResult type="string">adobe-base</expectedResult>
             <actualResult type="string">{$grabSwatch3}</actualResult>
-        </assertContains>
+        </assertStringContainsString>
 
         <!-- Create a configurable product to verify the storefront with -->
         <amOnPage url="{{AdminProductCreatePage.url(BaseConfigurableProduct.attribute_set_id, BaseConfigurableProduct.type_id)}}" stepKey="goToCreateConfigurableProduct"/>
@@ -131,20 +132,20 @@
 
         <!-- Verify the storefront -->
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOption('1')}}" userInput="style" stepKey="grabSwatch4"/>
-        <assertContains stepKey="assertSwatch4">
+        <assertStringContainsString stepKey="assertSwatch4">
             <expectedResult type="string">adobe-thumb</expectedResult>
             <actualResult type="string">{$grabSwatch4}</actualResult>
-        </assertContains>
+        </assertStringContainsString>
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOption('2')}}" userInput="style" stepKey="grabSwatch5"/>
-        <assertContains stepKey="assertSwatch5">
+        <assertStringContainsString stepKey="assertSwatch5">
             <expectedResult type="string">adobe-small</expectedResult>
             <actualResult type="string">{$grabSwatch5}</actualResult>
-        </assertContains>
+        </assertStringContainsString>
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOption('3')}}" userInput="style" stepKey="grabSwatch6"/>
-        <assertContains stepKey="assertSwatch6">
+        <assertStringContainsString stepKey="assertSwatch6">
             <expectedResult type="string">adobe-base</expectedResult>
             <actualResult type="string">{$grabSwatch6}</actualResult>
-        </assertContains>
+        </assertStringContainsString>
 
         <!-- Go to the product listing page and see text swatch options -->
         <amOnPage url="$createCategory.custom_attributes[url_key]$.html" stepKey="goToCategoryPageStorefront"/>
@@ -152,19 +153,19 @@
 
         <!-- Verify the storefront -->
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOption('1')}}" userInput="style" stepKey="grabSwatch7"/>
-        <assertContains stepKey="assertSwatch7">
+        <assertStringContainsString stepKey="assertSwatch7">
             <expectedResult type="string">adobe-thumb</expectedResult>
             <actualResult type="string">{$grabSwatch7}</actualResult>
-        </assertContains>
+        </assertStringContainsString>
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOption('2')}}" userInput="style" stepKey="grabSwatch8"/>
-        <assertContains stepKey="assertSwatch8">
+        <assertStringContainsString stepKey="assertSwatch8">
             <expectedResult type="string">adobe-small</expectedResult>
             <actualResult type="string">{$grabSwatch8}</actualResult>
-        </assertContains>
+        </assertStringContainsString>
         <grabAttributeFrom selector="{{StorefrontProductInfoMainSection.nthSwatchOption('3')}}" userInput="style" stepKey="grabSwatch9"/>
-        <assertContains stepKey="assertSwatch9">
+        <assertStringContainsString stepKey="assertSwatch9">
             <expectedResult type="string">adobe-base</expectedResult>
             <actualResult type="string">{$grabSwatch9}</actualResult>
-        </assertContains>
+        </assertStringContainsString>
     </test>
 </tests>

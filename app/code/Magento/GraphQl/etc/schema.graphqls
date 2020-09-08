@@ -30,14 +30,14 @@ directive @resolver(class: String="") on QUERY
     | OBJECT
     | FIELD_DEFINITION
     | ARGUMENT_DEFINITION
-    | INTERFACE
-    | UNION
     | ENUM
     | ENUM_VALUE
     | INPUT_OBJECT
     | INPUT_FIELD_DEFINITION
 
-directive @typeResolver(class: String="") on INTERFACE | OBJECT
+directive @typeResolver(class: String="") on UNION
+    | INTERFACE
+    | OBJECT
 
 directive @cache(cacheIdentity: String="" cacheable: Boolean=true) on QUERY
 
@@ -77,6 +77,12 @@ input FilterRangeTypeInput @doc(description: "Defines a filter that matches a ra
 
 input FilterMatchTypeInput @doc(description: "Defines a filter that performs a fuzzy search.") {
     match: String @doc(description: "One or more words to filter on")
+}
+
+input FilterStringTypeInput @doc(description: "Defines a filter for an input string.") {
+    in: [String] @doc(description: "Filters items that are exactly the same as entries specified in an array of strings.")
+    eq: String @doc(description: "Filters items that are exactly the same as the specified string.")
+    match: String @doc(description: "Defines a filter that performs a fuzzy search using the specified string.")
 }
 
 type SearchResultPageInfo @doc(description: "SearchResultPageInfo provides navigation for the query response") {
@@ -270,4 +276,9 @@ enum CurrencyEnum @doc(description: "The list of available currency codes") {
     ROL
     TRL
     XPF
+}
+
+input EnteredOptionInput @doc(description: "Defines a customer-entered option") {
+    uid: ID! @doc(description: "An encoded ID")
+    value: String! @doc(description: "Text the customer entered")
 }

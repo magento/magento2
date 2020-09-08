@@ -19,7 +19,7 @@
         </annotations>
         <before>
             <!-- Login as Admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
             <!-- Create category -->
             <createData entity="ApiCategory" stepKey="createCategory"/>
@@ -74,6 +74,7 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createSecondConfigChildProduct"/>
             </createData>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
         </before>
         <after>
             <!-- Delete the catalog price rule -->
@@ -94,11 +95,11 @@
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Add special prices for products -->
-        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToFirstChildProduct">
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToFirstChildProduct">
             <argument name="productId" value="$$createFirstConfigChildProduct.id$$"/>
         </actionGroup>
         <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPriceForFirstProduct">
@@ -106,7 +107,7 @@
         </actionGroup>
         <actionGroup ref="SaveProductFormActionGroup" stepKey="saveFirstProduct"/>
 
-        <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="goToSecondChildProduct">
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="goToSecondChildProduct">
             <argument name="productId" value="$$createSecondConfigChildProduct.id$$"/>
         </actionGroup>
         <actionGroup ref="AddSpecialPriceToProductActionGroup" stepKey="addSpecialPriceForSecondProduct">
@@ -126,8 +127,12 @@
         <actionGroup ref="SaveAndApplyCatalogPriceRuleActionGroup" stepKey="saveAndApplyCatalogPriceRule"/>
 
         <!-- Reindex and flash cache -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!-- Open Storefront product page and assert created configurable product -->
         <actionGroup ref="OpenStoreFrontProductPageActionGroup" stepKey="openProductPage">

@@ -3,12 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Variable\Test\Unit\Model;
 
+use Magento\Framework\Escaper;
+use Magento\Framework\Phrase;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Variable\Model\ResourceModel\Variable;
 use Magento\Variable\Model\ResourceModel\Variable\Collection;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class VariableTest extends \PHPUnit\Framework\TestCase
+class VariableTest extends TestCase
 {
     /**
      * @var  \Magento\Variable\Model\Variable
@@ -16,37 +23,37 @@ class VariableTest extends \PHPUnit\Framework\TestCase
     private $model;
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|MockObject
      */
     private $escaperMock;
 
     /**
-     * @var \Magento\Variable\Model\ResourceModel\Variable|\PHPUnit_Framework_MockObject_MockObject
+     * @var \Magento\Variable\Model\ResourceModel\Variable|MockObject
      */
     private $resourceMock;
 
     /**
-     * @var \Magento\Variable\Model\ResourceModel\Variable\Collection|\PHPUnit_Framework_MockObject_MockObject
+     * @var Collection|MockObject
      */
     private $resourceCollectionMock;
 
     /**
-     * @var  \Magento\Framework\Phrase
+     * @var  Phrase
      */
     private $validationFailedPhrase;
 
     /**
-     * @var  \Magento\Framework\TestFramework\Unit\Helper\ObjectManager
+     * @var  ObjectManager
      */
     private $objectManager;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
-        $this->escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+        $this->escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->resourceMock = $this->getMockBuilder(\Magento\Variable\Model\ResourceModel\Variable::class)
+        $this->resourceMock = $this->getMockBuilder(Variable::class)
             ->disableOriginalConstructor()
             ->getMock();
         $this->resourceCollectionMock = $this->getMockBuilder(Collection::class)

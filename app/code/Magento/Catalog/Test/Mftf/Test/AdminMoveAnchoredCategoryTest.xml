@@ -13,7 +13,7 @@
             <stories value="Edit categories"/>
             <title value="Admin should be able to move a category via categories tree and changes should be applied on frontend without a forced cache cleaning"/>
             <description value="Admin should be able to move a category via categories tree and changes should be applied on frontend without a forced cache cleaning"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-10022"/>
             <useCaseId value="MAGETWO-89248"/>
             <group value="category"/>
@@ -30,12 +30,8 @@
             <createData entity="_defaultProduct" stepKey="productTwo">
                 <requiredEntity createDataKey="simpleSubCategoryOne"/>
             </createData>
-
-            <!-- TODO: Replace this with CliRunReindexUsingCronJobsActionGroup after MC-29943 delivered-->
-            <magentoCLI command="cron:run" arguments="--group='index'" stepKey="firstRunToScheduleJobs"/>
-            <magentoCLI command="cron:run" arguments="--group='index'" stepKey="secondRunToExecuteJobs"/>
-
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <magentoCron groups="index" stepKey="RunToScheduleJobs"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
         <after>
@@ -48,15 +44,13 @@
         </after>
 
         <!--Move category one to category two-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToAdminCategoryPage"/>
-        <waitForPageLoad stepKey="waitForAdminCategoryPageLoad1"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToAdminCategoryPage"/>
         <actionGroup ref="MoveCategoryActionGroup" stepKey="moveSimpleSubCategoryOneToSimpleSubCategoryTwo">
             <argument name="childCategory" value="$simpleSubCategoryOne.name$"/>
             <argument name="parentCategory" value="$simpleSubCategoryTwo.name$"/>
         </actionGroup>
         <!--Verify that navigation menu categories level is correct-->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage1"/>
-        <waitForPageLoad stepKey="waitForPageToLoadAfterHomePageOpened1"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage1"/>
         <seeElement selector="{{StorefrontNavigationSection.topCategory($simpleSubCategoryTwo.name$)}}" stepKey="verifyThatTopCategoryIsSubCategoryTwo"/>
         <moveMouseOver selector="{{StorefrontNavigationSection.topCategory($simpleSubCategoryTwo.name$)}}" stepKey="mouseOverSubCategoryTwo"/>
         <waitForAjaxLoad stepKey="waitForAjaxOnMouseOverSubCategoryTwo"/>
@@ -90,15 +84,13 @@
         <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$simpleSubCategoryOne.name$" stepKey="seeSubCategoryWithParentInBreadcrumbsOnSubCategoryWithParent"/>
         <see selector="{{StorefrontNavigationSection.breadcrumbs}}" userInput="$productOne.name$" stepKey="seeProductInBreadcrumbsOnSubCategoryWithParent"/>
         <!--Move category one to the same level as category two-->
-        <amOnPage url="{{AdminCategoryPage.url}}" stepKey="navigateToAdminCategoryPage2"/>
-        <waitForPageLoad stepKey="waitForAdminCategoryPageLoad2"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="navigateToAdminCategoryPage2"/>
         <actionGroup ref="MoveCategoryActionGroup" stepKey="moveSimpleSubCategoryOneToDefaultCategory">
             <argument name="childCategory" value="$simpleSubCategoryOne.name$"/>
             <argument name="parentCategory" value="Default Category"/>
         </actionGroup>
         <!--Verify that navigation menu categories level is correct-->
-        <amOnPage url="{{StorefrontHomePage.url}}" stepKey="amOnStorefrontPage2"/>
-        <waitForPageLoad stepKey="waitForPageToLoadAfterHomePageOpened2"/>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePage2"/>
         <seeElement selector="{{StorefrontNavigationSection.topCategory($simpleSubCategoryOne.name$)}}" stepKey="verifyThatSubCategoryOneIsTopCategory"/>
         <seeElement selector="{{StorefrontNavigationSection.topCategory($simpleSubCategoryTwo.name$)}}" stepKey="verifyThatSubCategoryTwoIsTopCategory"/>
         <moveMouseOver selector="{{StorefrontNavigationSection.topCategory($simpleSubCategoryOne.name$)}}" stepKey="mouseOverTopSubCategoryOne"/>

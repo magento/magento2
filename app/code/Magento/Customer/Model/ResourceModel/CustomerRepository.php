@@ -10,6 +10,7 @@ use Magento\Customer\Api\CustomerMetadataInterface;
 use Magento\Customer\Api\CustomerRepositoryInterface;
 use Magento\Customer\Api\Data\CustomerInterface;
 use Magento\Customer\Api\Data\CustomerSearchResultsInterfaceFactory;
+use Magento\Customer\Api\GroupRepositoryInterface;
 use Magento\Customer\Model\Customer as CustomerModel;
 use Magento\Customer\Model\Customer\NotificationStorage;
 use Magento\Customer\Model\CustomerFactory;
@@ -27,6 +28,8 @@ use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
 use Magento\Framework\Api\SearchCriteriaInterface;
 use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Exception\LocalizedException;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -120,6 +123,11 @@ class CustomerRepository implements CustomerRepositoryInterface
     private $delegatedStorage;
 
     /**
+     * @var GroupRepositoryInterface
+     */
+    private $groupRepository;
+
+    /**
      * @param CustomerFactory $customerFactory
      * @param CustomerSecureFactory $customerSecureFactory
      * @param CustomerRegistry $customerRegistry
@@ -136,6 +144,7 @@ class CustomerRepository implements CustomerRepositoryInterface
      * @param CollectionProcessorInterface $collectionProcessor
      * @param NotificationStorage $notificationStorage
      * @param DelegatedStorage|null $delegatedStorage
+     * @param GroupRepositoryInterface|null $groupRepository
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
     public function __construct(
@@ -154,7 +163,8 @@ class CustomerRepository implements CustomerRepositoryInterface
         JoinProcessorInterface $extensionAttributesJoinProcessor,
         CollectionProcessorInterface $collectionProcessor,
         NotificationStorage $notificationStorage,
-        DelegatedStorage $delegatedStorage = null
+        DelegatedStorage $delegatedStorage = null,
+        ?GroupRepositoryInterface $groupRepository = null
     ) {
         $this->customerFactory = $customerFactory;
         $this->customerSecureFactory = $customerSecureFactory;
@@ -172,6 +182,7 @@ class CustomerRepository implements CustomerRepositoryInterface
         $this->collectionProcessor = $collectionProcessor;
         $this->notificationStorage = $notificationStorage;
         $this->delegatedStorage = $delegatedStorage ?? ObjectManager::getInstance()->get(DelegatedStorage::class);
+        $this->groupRepository = $groupRepository ?: ObjectManager::getInstance()->get(GroupRepositoryInterface::class);
     }
 
     /**
@@ -216,6 +227,7 @@ class CustomerRepository implements CustomerRepositoryInterface
                 $prevCustomerData ? $prevCustomerData->getStoreId() : $this->storeManager->getStore()->getId()
             );
         }
+        $this->validateGroupId($customer->getGroupId());
         $this->setCustomerGroupId($customerModel, $customerArr, $prevCustomerDataArr);
         // Need to use attribute set or future updates can cause data loss
         if (!$customerModel->getAttributeSetId()) {
@@ -268,10 +280,7 @@ class CustomerRepository implements CustomerRepositoryInterface
                     $savedAddressIds[] = $address->getId();
                 }
             }
-            $addressIdsToDelete = array_diff($existingAddressIds, $savedAddressIds);
-            foreach ($addressIdsToDelete as $addressId) {
-                $this->addressRepository->deleteById($addressId);
-            }
+            $this->deleteAddressesByIds(array_diff($existingAddressIds, $savedAddressIds));
         }
         $this->customerRegistry->remove($customerId);
         $savedCustomer = $this->get($customer->getEmail(), $customer->getWebsiteId());
@@ -284,6 +293,39 @@ class CustomerRepository implements CustomerRepositoryInterface
             ]
         );
         return $savedCustomer;
+    }
+
+    /**
+     * Delete addresses by ids
+     *
+     * @param array $addressIds
+     * @return void
+     */
+    private function deleteAddressesByIds(array $addressIds): void
+    {
+        foreach ($addressIds as $id) {
+            $this->addressRepository->deleteById($id);
+        }
+    }
+
+    /**
+     * Validate customer group id if exist
+     *
+     * @param int|null $groupId
+     * @return bool
+     * @throws LocalizedException
+     */
+    private function validateGroupId(?int $groupId): bool
+    {
+        if ($groupId) {
+            try {
+                $this->groupRepository->getById($groupId);
+            } catch (NoSuchEntityException $e) {
+                throw new LocalizedException(__('The specified customer group id does not exist.'));
+            }
+        }
+
+        return true;
     }
 
     /**
@@ -425,7 +467,7 @@ class CustomerRepository implements CustomerRepositoryInterface
     /**
      * Helper function that adds a FilterGroup to the collection.
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      * @param FilterGroup $filterGroup
      * @param Collection $collection
      * @return void

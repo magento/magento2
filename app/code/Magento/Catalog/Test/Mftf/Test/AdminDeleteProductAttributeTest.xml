@@ -14,18 +14,18 @@
             <title value="Delete Product Attribute"/>
             <description value="Admin should able to delete a product attribute"/>
             <testCaseId value="MC-10887"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="productAttributeWysiwyg" stepKey="createProductAttribute"/>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <actionGroup ref="OpenProductAttributeFromSearchResultInGridActionGroup" stepKey="openProductAttributeFromSearchResultInGrid">
             <argument name="productAttributeCode" value="$$createProductAttribute.attribute_code$$"/>
@@ -45,8 +45,7 @@
         </actionGroup>
         <see selector="{{AdminDataGridTableSection.dataGridEmpty}}" userInput="We couldn't find any records." stepKey="assertDataGridEmptyMessage2"/>
          <!--Go to the Catalog > Products page and create Simple Product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductList"/>
-        <waitForPageLoad stepKey="waitForProductList"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductList"/>
         <click selector="{{AdminProductGridActionSection.addProductToggle}}" stepKey="toggleAddProductBtn"/>
         <click selector="{{AdminProductGridActionSection.addSimpleProduct}}" stepKey="chooseAddSimpleProduct"/>
         <waitForPageLoad stepKey="waitForProductAdded"/>

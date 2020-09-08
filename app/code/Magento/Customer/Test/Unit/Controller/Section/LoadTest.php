@@ -7,17 +7,20 @@ declare(strict_types=1);
 
 namespace Magento\Customer\Test\Unit\Controller\Section;
 
+use Laminas\Http\AbstractMessage;
+use Laminas\Http\Response;
 use Magento\Customer\Controller\Section\Load;
 use Magento\Customer\CustomerData\Section\Identifier;
 use Magento\Customer\CustomerData\SectionPoolInterface;
 use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\Request\Http as HttpRequest;
 use Magento\Framework\Controller\Result\Json;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\Escaper;
-use \PHPUnit_Framework_MockObject_MockObject as MockObject;
-use Magento\Framework\App\Request\Http as HttpRequest;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class LoadTest extends \PHPUnit\Framework\TestCase
+class LoadTest extends TestCase
 {
     /**
      * @var Load
@@ -45,7 +48,7 @@ class LoadTest extends \PHPUnit\Framework\TestCase
     private $sectionPoolMock;
 
     /**
-     * @var \Magento\Framework\Escaper|MockObject
+     * @var Escaper|MockObject
      */
     private $escaperMock;
 
@@ -59,7 +62,7 @@ class LoadTest extends \PHPUnit\Framework\TestCase
      */
     private $httpRequestMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->contextMock = $this->createMock(Context::class);
         $this->resultJsonFactoryMock = $this->createMock(JsonFactory::class);
@@ -166,8 +169,8 @@ class LoadTest extends \PHPUnit\Framework\TestCase
         $this->resultJsonMock->expects($this->once())
             ->method('setStatusHeader')
             ->with(
-                \Zend\Http\Response::STATUS_CODE_400,
-                \Zend\Http\AbstractMessage::VERSION_11,
+                Response::STATUS_CODE_400,
+                AbstractMessage::VERSION_11,
                 'Bad Request'
             );
 

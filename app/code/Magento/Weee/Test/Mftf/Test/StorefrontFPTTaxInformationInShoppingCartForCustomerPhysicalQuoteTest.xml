@@ -41,8 +41,8 @@
             </createData>
             <!-- Customer is created with default addresses: -->
             <createData entity="Simple_US_Customer_CA" stepKey="createCustomer"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="GoToProductPageViaIDActionGroup" stepKey="openProductEditPage">
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openProductEditPage">
                 <argument name="productId" value="$createSimpleProduct.id$"/>
             </actionGroup>
             <actionGroup ref="AdminProductAddFPTValueActionGroup" stepKey="addFPTValue1">
@@ -56,9 +56,7 @@
                 <argument name="valueForFPT" value="20"/>
             </actionGroup>
             <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
-            <!-- Delete all catalog price rules that can (and actually do) affect this test-->
-            <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexBrokenIndices"/>
+            <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
         </before>
 
         <after>
@@ -70,10 +68,10 @@
             <createData entity="WeeeConfigDisable" stepKey="disableFPT"/>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
             <deleteData createDataKey="createCustomer" stepKey="deleteCustomer"/>
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearProductsGridFilters"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexBrokenIndices"/>
+            <magentoCron groups="index" stepKey="reindexBrokenIndices"/>
         </after>
 
         <!--  Test Steps  -->

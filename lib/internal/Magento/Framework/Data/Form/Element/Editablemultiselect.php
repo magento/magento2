@@ -13,7 +13,10 @@
  */
 namespace Magento\Framework\Data\Form\Element;
 
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Escaper;
+use Magento\Framework\Math\Random;
+use Magento\Framework\View\Helper\SecureHtmlRenderer;
 
 /**
  * Form editable multiselect element.
@@ -26,24 +29,40 @@ class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multisele
     private $serializer;
 
     /**
-     * Editablemultiselect constructor.
+     * @var SecureHtmlRenderer
+     */
+    private $secureRenderer;
+
+    /**
+     * @var Random
+     */
+    private $random;
+
+    /**
      * @param Factory $factoryElement
      * @param CollectionFactory $factoryCollection
      * @param Escaper $escaper
      * @param array $data
      * @param \Magento\Framework\Serialize\Serializer\Json|null $serializer
-     * @throws \RuntimeException
+     * @param SecureHtmlRenderer|null $secureRenderer
+     * @param Random|null $random
      */
     public function __construct(
         Factory $factoryElement,
         CollectionFactory $factoryCollection,
         Escaper $escaper,
         array $data = [],
-        \Magento\Framework\Serialize\Serializer\Json $serializer = null
+        \Magento\Framework\Serialize\Serializer\Json $serializer = null,
+        ?SecureHtmlRenderer $secureRenderer = null,
+        ?Random $random = null
     ) {
-        parent::__construct($factoryElement, $factoryCollection, $escaper, $data);
-        $this->serializer = $serializer ?: \Magento\Framework\App\ObjectManager::getInstance()
+        $secureRenderer = $secureRenderer ?? ObjectManager::getInstance()->get(SecureHtmlRenderer::class);
+        $random = $random ?? ObjectManager::getInstance()->get(Random::class);
+        parent::__construct($factoryElement, $factoryCollection, $escaper, $data, $secureRenderer, $random);
+        $this->serializer = $serializer ?: ObjectManager::getInstance()
             ->get(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->secureRenderer = $secureRenderer;
+        $this->random = $random;
     }
 
     /**
@@ -77,8 +96,10 @@ class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multisele
         $jsObjectName = $this->getJsObjectName();
 
         // TODO: TaxRateEditableMultiselect should be moved to a static .js module.
-        $html .= "
-                <script type='text/javascript'>
+        $html .= $this->secureRenderer->renderTag(
+            'script',
+            ['type' => 'text/javascript'],
+            <<<script
                 require([
                     'jquery'
                 ], function( $ ){
@@ -108,7 +129,11 @@ class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multisele
                    check(8, 500);
 
                 });
-                </script>";
+script
+            ,
+            false
+        );
+
         return $html;
     }
 
@@ -121,9 +146,9 @@ class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multisele
      */
     protected function _optionToHtml($option, $selected)
     {
-        $html = '<option value="' . $this->_escape($option['value']) . '"';
+        $optionId = 'optId' .$this->random->getRandomString(8);
+        $html = '<option value="' . $this->_escape($option['value']) . '" id="' . $optionId . '" ';
         $html .= isset($option['title']) ? 'title="' . $this->_escape($option['title']) . '"' : '';
-        $html .= isset($option['style']) ? 'style="' . $option['style'] . '"' : '';
         if (in_array((string)$option['value'], $selected)) {
             $html .= ' selected="selected"';
         }
@@ -134,6 +159,10 @@ class Editablemultiselect extends \Magento\Framework\Data\Form\Element\Multisele
         }
 
         $html .= '>' . $this->_escape($option['label']) . '</option>' . "\n";
+        if (!empty($option['style'])) {
+            $html .= $this->secureRenderer->renderStyleAsTag($option['style'], "#$optionId");
+        }
+
         return $html;
     }
 }

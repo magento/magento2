@@ -3,5 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
-<div id="tree-div1" style="height:400px;margin-top:5px;overflow:auto"></div>
+<?= /* @noEscape */ $secureRenderer->renderTag('div', ['id' => "tree-div1"], '&nbsp;', false) ?>
+<?= /* @noEscape */ $secureRenderer->renderStyleAsTag("height:400px;margin-top:5px;overflow:auto", '#tree-div1') ?>

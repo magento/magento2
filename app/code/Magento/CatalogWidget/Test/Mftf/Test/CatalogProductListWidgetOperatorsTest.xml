@@ -37,7 +37,7 @@
 
             <createData entity="_defaultBlock" stepKey="createPreReqBlock"/>
             <!--User log in on back-end as admin-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="EnabledWYSIWYGActionGroup" stepKey="enableWYSIWYG"/>
         </before>
 
@@ -71,9 +71,8 @@
         <conditionalClick selector="{{AdminCategoryDisplaySettingsSection.settingsHeader}}" dependentSelector="{{AdminCategoryDisplaySettingsSection.displayMode}}" visible="false" stepKey="openDisplaySettingsSection"/>
         <waitForPageLoad stepKey="waitForDisplaySettingsLoad"/>
         <selectOption stepKey="selectStaticBlockOnlyOption" userInput="Static block only" selector="{{AdminCategoryDisplaySettingsSection.displayMode}}"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="saveCategoryWithProducts"/>
-        <waitForPageLoad stepKey="waitForCategorySaved"/>
-        <see userInput="You saved the category." stepKey="seeSuccessMessage"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategoryWithProducts"/>
+        <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="seeSuccessMessage"/>
 
         <!--Go to Storefront > category-->
         <amOnPage url="$$simplecategory.name$$.html" stepKey="goToStorefrontCategoryPage"/>

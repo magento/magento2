@@ -3,13 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\View\Test\Unit\Element\Message\Renderer;
 
 use Magento\Framework\Message\MessageInterface;
 use Magento\Framework\TestFramework\Unit\Matcher\MethodInvokedAtIndex;
 use Magento\Framework\View\Element\Message\Renderer\BlockRenderer;
+use Magento\Framework\View\Element\Message\Renderer\BlockRenderer\Template;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class BlockRendererTest extends \PHPUnit\Framework\TestCase
+class BlockRendererTest extends TestCase
 {
     /**
      * @var BlockRenderer
@@ -17,14 +22,14 @@ class BlockRendererTest extends \PHPUnit\Framework\TestCase
     private $renderer;
 
     /**
-     * @var BlockRenderer\Template | \PHPUnit_Framework_MockObject_MockObject
+     * @var BlockRenderer\Template|MockObject
      */
     private $blockTemplate;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->blockTemplate = $this->getMockBuilder(
-            \Magento\Framework\View\Element\Message\Renderer\BlockRenderer\Template::class
+            Template::class
         )
             ->disableOriginalConstructor()
             ->getMock();
@@ -34,8 +39,8 @@ class BlockRendererTest extends \PHPUnit\Framework\TestCase
 
     public function testRender()
     {
-        /** @var MessageInterface | \PHPUnit_Framework_MockObject_MockObject $message */
-        $message = $this->createMock(\Magento\Framework\Message\MessageInterface::class);
+        /** @var MessageInterface|MockObject $message */
+        $message = $this->getMockForAbstractClass(MessageInterface::class);
         $messageData = [
             'painting' => 'The Last Supper',
             'apostles_cnt' => 28,
@@ -76,8 +81,8 @@ class BlockRendererTest extends \PHPUnit\Framework\TestCase
 
     public function testRenderNoTemplate()
     {
-        /** @var MessageInterface | \PHPUnit_Framework_MockObject_MockObject $message */
-        $message = $this->createMock(\Magento\Framework\Message\MessageInterface::class);
+        /** @var MessageInterface|MockObject $message */
+        $message = $this->getMockForAbstractClass(MessageInterface::class);
         $messageData = [
             'who' => 'Brian',
             'is' => 'a Very Naughty Boy'

@@ -32,7 +32,7 @@ class CodeSnifferTest extends \PHPUnit\Framework\TestCase
      */
     const REPORT_FILE = 'some/report/file.xml';
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_wrapper = $this->createMock(\Magento\TestFramework\CodingStandard\Tool\CodeSniffer\Wrapper::class);
         $this->_tool = new \Magento\TestFramework\CodingStandard\Tool\CodeSniffer(

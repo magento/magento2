@@ -13,13 +13,13 @@
             <stories value="Delete product attributes"/>
             <title value="Delete Product Attribute, Text Field, from Attribute Set"/>
             <description value="Login as admin and delete Text Field type product attribute from attribute set"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <testCaseId value="MC-10886"/>
             <group value="mtf_migrated"/>
         </annotations>
         <before>
             <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <!-- Create Product Attribute and assign to Default Product Attribute Set -->
             <createData entity="newProductAttribute" stepKey="attribute"/>
             <createData entity="AddToDefaultSet" stepKey="addToDefaultAttributeSet">
@@ -34,7 +34,7 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
         </after>
         <!-- Open Product Attribute Set Page -->
         <amOnPage url="{{AdminProductAttributeSetGridPage.url}}" stepKey="goToAttributeSets"/>
@@ -48,8 +48,7 @@
         <waitForPageLoad stepKey="waitForAttributeSetEditPageToLoad"/>
         <see selector="{{AdminProductAttributeSetEditSection.groupTree}}" userInput="$$attribute.attribute_code$$" stepKey="seeAttributeInAttributeGroupTree"/>
         <!--Open Product Index Page and filter the product-->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageToLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct">
             <argument name="product" value="SimpleProduct2"/>
         </actionGroup>
@@ -82,8 +81,7 @@
         <dontSee userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.groupTree}}" stepKey="dontSeeAttributeInAttributeGroupTree"/>
         <dontSee userInput="$$attribute.attribute_code$$" selector="{{AdminProductAttributeSetEditSection.unassignedAttributesTree}}" stepKey="dontSeeAttributeInUnassignedAttributeTree"/>
         <!--Verify Product Attribute is not present in Product Index Page -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="openProductIndexPage"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageToLoad1"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="openProductIndexPage"/>
         <actionGroup ref="FilterProductGridBySkuActionGroup" stepKey="filterProduct1">
             <argument name="product" value="SimpleProduct2"/>
         </actionGroup>

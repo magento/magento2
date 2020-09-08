@@ -14,15 +14,21 @@
             <title value="Update Customer Address (UK) in Storefront"/>
             <description value="Test log in to Storefront and Update Customer Address (UK) in Storefront"/>
             <testCaseId value="MC-10911"/>
-            <severity value="CRITICAL"/>
+            <severity value="BLOCKER"/>
             <group value="customer"/>
             <group value="mtf_migrated"/>
         </annotations>
 
         <before>
-            <actionGroup ref = "LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="SignUpNewUserFromStorefrontActionGroup" stepKey="SignUpNewUser">
-                <argument name="Customer" value="CustomerEntityOne"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="StorefrontOpenCustomerAccountCreatePageActionGroup" stepKey="openCreateAccountPage"/>
+            <actionGroup ref="StorefrontFillCustomerAccountCreationFormActionGroup" stepKey="fillCreateAccountForm">
+                <argument name="customer" value="CustomerEntityOne"/>
+            </actionGroup>
+            <actionGroup ref="StorefrontClickCreateAnAccountCustomerAccountCreationFormActionGroup" stepKey="submitCreateAccountForm"/>
+            <actionGroup ref="AssertMessageCustomerCreateAccountActionGroup" stepKey="seeSuccessMessage">
+                <argument name="messageType" value="success"/>
+                <argument name="message" value="Thank you for registering with Main Website Store."/>
             </actionGroup>
         </before>
         <after>

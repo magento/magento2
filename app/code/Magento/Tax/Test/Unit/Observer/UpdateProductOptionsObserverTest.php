@@ -3,12 +3,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Tax\Test\Unit\Observer;
 
-use \Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\DataObject;
+use Magento\Framework\Event;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Registry;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Tax\Helper\Data;
+use Magento\Tax\Observer\UpdateProductOptionsObserver;
+use PHPUnit\Framework\TestCase;
 
-class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
+class UpdateProductOptionsObserverTest extends TestCase
 {
     /**
      * Tests the methods that rely on the ScopeConfigInterface object to provide their return values
@@ -24,49 +33,51 @@ class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
         $priceIncludesTax,
         $displayPriceExcludingTax
     ) {
-
-        $frameworkObject= new \Magento\Framework\DataObject();
+        $frameworkObject= new DataObject();
         $frameworkObject->setAdditionalOptions([]);
 
-        $product=$this->createMock(\Magento\Catalog\Model\Product::class);
+        $product=$this->createMock(Product::class);
 
-        $registry=$this->createMock(\Magento\Framework\Registry::class);
+        $registry=$this->createMock(Registry::class);
         $registry->expects($this->any())
             ->method('registry')
             ->with('current_product')
-            ->will($this->returnValue($product));
+            ->willReturn($product);
 
-        $taxData=$this->createMock(\Magento\Tax\Helper\Data::class);
+        $taxData=$this->createMock(Data::class);
         $taxData->expects($this->any())
             ->method('getCalculationAlgorithm')
-            ->will($this->returnValue('TOTAL_BASE_CALCULATION'));
+            ->willReturn('TOTAL_BASE_CALCULATION');
 
         $taxData->expects($this->any())
             ->method('displayBothPrices')
-            ->will($this->returnValue($displayBothPrices));
+            ->willReturn($displayBothPrices);
 
         $taxData->expects($this->any())
             ->method('priceIncludesTax')
-            ->will($this->returnValue($priceIncludesTax));
+            ->willReturn($priceIncludesTax);
 
         $taxData->expects($this->any())
             ->method('displayPriceExcludingTax')
-            ->will($this->returnValue($displayPriceExcludingTax));
+            ->willReturn($displayPriceExcludingTax);
 
-        $eventObject=$this->createPartialMock(\Magento\Framework\Event::class, ['getResponseObject']);
+        $eventObject=$this->getMockBuilder(Event::class)
+            ->addMethods(['getResponseObject'])
+            ->disableOriginalConstructor()
+            ->getMock();
         $eventObject->expects($this->any())
             ->method('getResponseObject')
-            ->will($this->returnValue($frameworkObject));
+            ->willReturn($frameworkObject);
 
-        $observerObject=$this->createMock(\Magento\Framework\Event\Observer::class);
+        $observerObject=$this->createMock(Observer::class);
 
         $observerObject->expects($this->any())
             ->method('getEvent')
-            ->will($this->returnValue($eventObject));
+            ->willReturn($eventObject);
 
         $objectManager = new ObjectManager($this);
         $taxObserverObject = $objectManager->getObject(
-            \Magento\Tax\Observer\UpdateProductOptionsObserver::class,
+            UpdateProductOptionsObserver::class,
             [
                 'taxData' => $taxData,
                 'registry' => $registry,
@@ -87,7 +98,7 @@ class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
             [
                 'expected' => [
                     'calculationAlgorithm' => 'TOTAL_BASE_CALCULATION',
-                    'optionTemplate' => '<%= data.label %><% if (data.finalPrice.value) '.
+                    'optionTemplate' => '<%= data.label %><% if (data.finalPrice.value) ' .
                         '{ %> +<%= data.finalPrice.formatted %> (Excl. tax: <%= data.basePrice.formatted %>)<% } %>',
                 ],
                 'displayBothPrices' => true,
@@ -97,7 +108,7 @@ class UpdateProductOptionsObserverTest extends \PHPUnit\Framework\TestCase
             [
                 'expected' => [
                     'calculationAlgorithm' => 'TOTAL_BASE_CALCULATION',
-                    'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) '.
+                    'optionTemplate' => '<%= data.label %><% if (data.basePrice.value) ' .
                         '{ %> +<%= data.basePrice.formatted %><% } %>',
                 ],
                 'displayBothPrices' => false,

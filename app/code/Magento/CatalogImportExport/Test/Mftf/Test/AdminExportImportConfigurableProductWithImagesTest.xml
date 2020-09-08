@@ -126,9 +126,9 @@
                 <requiredEntity createDataKey="createConfigChildProduct"/>
             </createData>
 
-            <!-- Login as admin -->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
-            <actionGroup ref="DeleteAllExportedFilesActionGroup" stepKey="clearExportedFilesList"/>
+            <magentoCron stepKey="runCronIndex" groups="index"/>
+
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
     </before>
         <after>
             <!-- Remove downloadable domains -->
@@ -140,22 +140,19 @@
             <deleteData createDataKey="createDownloadableProduct" stepKey="deleteDownloadableProduct"/>
             <deleteData createDataKey="createGroupedProduct" stepKey="deleteGroupedProduct"/>
             <deleteData createDataKey="createExportImportConfigurableProduct" stepKey="deleteConfigProduct"/>
+            <deleteData createDataKey="createExportImportConfigurableProductAttribute" stepKey="deleteConfigProductAttribute"/>
+            <deleteData createDataKey="createExportImportCategory" stepKey="deleteExportImportCategory"/>
             <deleteData createDataKey="createConfigFirstChildProduct" stepKey="deleteConfigFirstChildProduct"/>
             <deleteData createDataKey="createConfigSecondChildProduct" stepKey="deleteConfigSecondChildProduct"/>
-            <deleteData createDataKey="createExportImportConfigurableProductAttribute" stepKey="deleteConfigProductAttribute"/>
             <deleteData createDataKey="createConfigurableProduct" stepKey="deleteConfigurableProduct"/>
             <deleteData createDataKey="createConfigChildProduct" stepKey="deleteConfigChildProduct"/>
             <deleteData createDataKey="createConfigProductAttr" stepKey="deleteConfigProductAttr"/>
             <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
-            <deleteData createDataKey="createExportImportCategory" stepKey="deleteExportImportCategory"/>
-
-            <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
             <actionGroup ref="ResetProductGridToDefaultViewActionGroup" stepKey="resetProductGridColumnsInitial"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
             <!-- Admin logout-->
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
-
-            <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
         </after>
 
         <!-- Go to System > Export -->
@@ -167,13 +164,18 @@
             <argument name="attributeData" value="$$createExportImportConfigurableProduct.sku$$"/>
         </actionGroup>
 
-        <!-- Run cron twice -->
-        <magentoCLI command="cron:run" stepKey="runCronFirstTime"/>
-        <magentoCLI command="cron:run" stepKey="runCronSecondTime"/>
+        <!-- Start message queue for export consumer -->
+        <actionGroup ref="CliConsumerStartActionGroup" stepKey="startMessageQueue">
+            <argument name="consumerName" value="{{AdminExportMessageConsumerData.consumerName}}"/>
+            <argument name="maxMessages" value="{{AdminExportMessageConsumerData.messageLimit}}"/>
+        </actionGroup>
+        <reloadPage stepKey="refreshPage"/>
+        <waitForElementVisible selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="waitForFileName"/>
+        <grabTextFrom selector="{{AdminExportAttributeSection.exportFileNameByPosition('0')}}" stepKey="grabNameFile"/>
 
         <!-- Save exported file: file successfully downloaded -->
-        <actionGroup ref="DownloadFileByRowIndexActionGroup" stepKey="downloadCreatedProducts">
-            <argument name="rowIndex" value="0"/>
+        <actionGroup ref="DownloadFileActionGroup" stepKey="downloadCreatedProducts">
+            <argument name="fileName" value="{$grabNameFile}"/>
         </actionGroup>
 
         <!-- Go to Catalog > Products. Find ConfProd and delete it -->
@@ -221,5 +223,10 @@
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
         <closeTab stepKey="closeConfigChildProductPage"/>
+
+        <!-- Delete exported file -->
+        <actionGroup ref="DeleteExportedFileActionGroup" stepKey="deleteExportedFile">
+            <argument name="fileName" value="{$grabNameFile}"/>
+        </actionGroup>
     </test>
 </tests>

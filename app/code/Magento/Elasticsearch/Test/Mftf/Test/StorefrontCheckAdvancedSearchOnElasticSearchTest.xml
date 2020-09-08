@@ -23,7 +23,7 @@
 
         <before>
             <!--Delete all product if exists-->
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndexPage"/>
             <actionGroup ref="DeleteProductsIfTheyExistActionGroup" stepKey="deleteAllProducts"/>
 
@@ -35,8 +35,10 @@
             </actionGroup>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
-            <magentoCLI command="cache:flush" arguments="full_page" stepKey="flushFullPageCache"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushFullPageCache">
+                <argument name="tags" value="full_page"/>
+            </actionGroup>
         </before>
 
         <after>
@@ -52,7 +54,7 @@
             <deleteData createDataKey="createConfigProductAttributeCreateConfigurableProductTwo" stepKey="deleteConfigProductAttributeForSecondProduct"/>
 
             <!-- Reindex invalidated indices after product attribute has been created/deleted -->
-            <actionGroup ref="CliRunReindexUsingCronJobsActionGroup" stepKey="reindexInvalidatedIndices"/>
+            <magentoCron groups="index" stepKey="reindexInvalidatedIndices"/>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
         </after>
 

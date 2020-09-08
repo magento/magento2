@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Store\Test\Unit\Model\Config\Reader\Source\Dynamic;
 
 use Magento\Framework\App\Config\Scope\Converter;
@@ -10,8 +12,9 @@ use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\DataObject;
 use Magento\Store\Model\Config\Reader\Source\Dynamic\DefaultScope;
 use Magento\Store\Model\ResourceModel\Config\Collection\ScopedFactory;
+use PHPUnit\Framework\TestCase;
 
-class DefaultScopeTest extends \PHPUnit\Framework\TestCase
+class DefaultScopeTest extends TestCase
 {
     public function testGet()
     {
