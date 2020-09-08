@@ -14,6 +14,7 @@ use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Query\ResolverInterface;
 use Magento\Framework\GraphQl\Schema\Type\ResolveInfo;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
+use Magento\Framework\App\Config\ScopeConfigInterface;
 
 /**
  * Customers Token resolver, used for GraphQL request processing.
@@ -21,17 +22,35 @@ use Magento\Integration\Api\CustomerTokenServiceInterface;
 class GenerateCustomerToken implements ResolverInterface
 {
     /**
+     * Configuration path to Customer Token Lifetime  setting
+     */
+    const TOKEN_LIFETIME_PATH_KEY = 'oauth/access_token_lifetime/customer';
+
+    /**
+     * Max GraphQl Integer value
+     */
+    const MAX_INT = 2147483647; 
+
+    /**
      * @var CustomerTokenServiceInterface
      */
     private $customerTokenService;
 
     /**
+     * @var ScopeConfigInterface
+     */
+    protected $scopeConfig;
+
+    /**
      * @param CustomerTokenServiceInterface $customerTokenService
+     * @param ScopeConfigInterface $scopeConfig
      */
     public function __construct(
-        CustomerTokenServiceInterface $customerTokenService
+        CustomerTokenServiceInterface $customerTokenService,
+        ScopeConfigInterface $scopeConfig
     ) {
         $this->customerTokenService = $customerTokenService;
+        $this->scopeConfig = $scopeConfig;
     }
 
     /**
@@ -54,7 +73,12 @@ class GenerateCustomerToken implements ResolverInterface
 
         try {
             $token = $this->customerTokenService->createCustomerAccessToken($args['email'], $args['password']);
-            return ['token' => $token];
+            $tokenLifetime = $this->scopeConfig->getValue(self::TOKEN_LIFETIME_PATH_KEY);
+            return [
+                'token' => $token,
+                'expired_time' => is_numeric($tokenLifetime) && $tokenLifetime > 0 ?
+                    $tokenLifetime < self::MAX_INT ? $tokenLifetime : self::MAX_INT : 1
+            ];
         } catch (AuthenticationException $e) {
             throw new GraphQlAuthenticationException(__($e->getMessage()), $e);
         }

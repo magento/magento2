@@ -64,6 +64,7 @@ input CustomerAddressAttributeInput {
 
 type CustomerToken {
     token: String @doc(description: "The customer token")
+    expired_time: Int @doc(description: "Token lifetime (by hour)")
 }
 
 input CustomerInput {
