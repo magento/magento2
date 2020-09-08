@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<entities xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+          xsi:noNamespaceSchemaLocation="urn:magento:mftf:DataGenerator/etc/dataProfileSchema.xsd">
+    <entity name="UpdatedImageDetails" type="image">
+        <data key="title">renamed title</data>
+        <data key="description">test description</data>
+        <data key="file">magento.jpg</data>
+        <data key="fileName">renamed title</data>
+        <data key="extension">jpg</data>
+        <data key="keyword">newkeyword</data>
+    </entity>
+     <entity name="ImageUploadPng" type="uploadImage">
+        <data key="title" unique="suffix">Image1</data>
+        <data key="file_type">Upload File</data>
+        <data key="value">png.png</data>
+        <data key="file">png.png</data>
+        <data key="fileName">png</data>
+        <data key="extension">png</data>
+     </entity>
+          <entity name="ImageUploadGif" type="uploadImage">
+        <data key="title" unique="suffix">Image1</data>
+        <data key="file_type">Upload File</data>
+        <data key="value">gif.gif</data>
+        <data key="file">gif.gif</data>
+        <data key="fileName">gif</data>
+        <data key="extension">gif</data>
+    </entity>
+    <entity name="ImageMetadata" type="image">
+        <data key="title">Title of the magento image</data>
+        <data key="description">Description of the magento image</data>
+        <data key="file">magento3.jpg</data>
+        <data key="fileName">Title of the magento image</data>
+        <data key="extension">jpg</data>
+        <data key="keywords">magento, mediagallerymetadata</data>
+    </entity>
+</entities>

@@ -88,7 +88,7 @@ interface ProductInterface @typeResolver(class: "Magento\\CatalogGraphQl\\Model\
     sku: String @doc(description: "A number or code assigned to a product to identify the product, options, price, and manufacturer.")
     description: ComplexTextValue @doc(description: "Detailed information about the product. The value can include simple HTML tags.") @resolver(class: "\\Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductComplexTextAttribute")
     short_description: ComplexTextValue @doc(description: "A short description of the product. Its use depends on the theme.") @resolver(class: "\\Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\ProductComplexTextAttribute")
-    special_price: Float @doc(description: "The discounted price of the product.")
+    special_price: Float @doc(description: "The discounted price of the product.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\SpecialPrice")
     special_from_date: String @doc(description: "The beginning date that a product has a special price.")
     special_to_date: String @doc(description: "The end date that a product has a special price.")
     attribute_set_id: Int @doc(description: "The attribute set assigned to the product.")
@@ -132,6 +132,7 @@ type CustomizableAreaValue @doc(description: "CustomizableAreaValue defines the 
     price_type: PriceTypeEnum @doc(description: "FIXED, PERCENT, or DYNAMIC.")
     sku: String @doc(description: "The Stock Keeping Unit for this option.")
     max_characters: Int @doc(description: "The maximum number of characters that can be entered for this customizable option.")
+    uid: ID! @doc(description: "A string that encodes option details.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableEnteredOptionValueUid") # A Base64 string that encodes option details.
 }
 
 type CategoryTree implements CategoryInterface @doc(description: "Category Tree implementation.") {
@@ -153,6 +154,7 @@ type CustomizableDateValue @doc(description: "CustomizableDateValue defines the 
     price: Float @doc(description: "The price assigned to this option.")
     price_type: PriceTypeEnum @doc(description: "FIXED, PERCENT, or DYNAMIC.")
     sku: String @doc(description: "The Stock Keeping Unit for this option.")
+    uid: ID! @doc(description: "A string that encodes option details.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableEnteredOptionValueUid") # A Base64 string that encodes option details.
 }
 
 type CustomizableDropDownOption implements CustomizableOptionInterface @doc(description: "CustomizableDropDownOption contains information about a drop down menu that is defined as part of a customizable option.") {
@@ -166,6 +168,7 @@ type CustomizableDropDownValue @doc(description: "CustomizableDropDownValue defi
     sku: String @doc(description: "The Stock Keeping Unit for this option.")
     title: String @doc(description: "The display name for this option.")
     sort_order: Int @doc(description: "The order in which the option is displayed.")
+    uid: ID! @doc(description: "A string that encodes option details.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableSelectedOptionValueUid") # A Base64 string that encodes option details.
 }
 
 type CustomizableMultipleOption implements CustomizableOptionInterface @doc(description: "CustomizableMultipleOption contains information about a multiselect that is defined as part of a customizable option.") {
@@ -179,6 +182,7 @@ type CustomizableMultipleValue @doc(description: "CustomizableMultipleValue defi
     sku: String @doc(description: "The Stock Keeping Unit for this option.")
     title: String @doc(description: "The display name for this option.")
     sort_order: Int @doc(description: "The order in which the option is displayed.")
+    uid: ID! @doc(description: "A string that encodes option details.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableSelectedOptionValueUid")
 }
 
 type CustomizableFieldOption implements CustomizableOptionInterface @doc(description: "CustomizableFieldOption contains information about a text field that is defined as part of a customizable option.") {
@@ -191,6 +195,7 @@ type CustomizableFieldValue @doc(description: "CustomizableFieldValue defines th
     price_type: PriceTypeEnum @doc(description: "FIXED, PERCENT, or DYNAMIC.")
     sku: String @doc(description: "The Stock Keeping Unit for this option.")
     max_characters: Int @doc(description: "The maximum number of characters that can be entered for this customizable option.")
+    uid: ID! @doc(description: "A string that encodes option details.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableEnteredOptionValueUid") # A Base64 string that encodes option details.
 }
 
 type CustomizableFileOption implements CustomizableOptionInterface @doc(description: "CustomizableFileOption contains information about a file picker that is defined as part of a customizable option.") {
@@ -205,6 +210,7 @@ type CustomizableFileValue @doc(description: "CustomizableFileValue defines the 
     file_extension: String @doc(description: "The file extension to accept.")
     image_size_x: Int @doc(description: "The maximum width of an image.")
     image_size_y: Int @doc(description: "The maximum height of an image.")
+    uid: ID! @doc(description: "A string that encodes option details.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableEnteredOptionValueUid") # A Base64 string that encodes option details.
 }
 
 interface MediaGalleryInterface @doc(description: "Contains basic information about a product image or video.") @typeResolver(class: "Magento\\CatalogGraphQl\\Model\\MediaGalleryTypeResolver") {
@@ -274,6 +280,7 @@ type CustomizableRadioValue @doc(description: "CustomizableRadioValue defines th
     sku: String @doc(description: "The Stock Keeping Unit for this option.")
     title: String @doc(description: "The display name for this option.")
     sort_order: Int @doc(description: "The order in which the radio button is displayed.")
+    uid: ID! @doc(description: "A string that encodes option details.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableSelectedOptionValueUid") # A Base64 string that encodes option details.
 }
 
 type CustomizableCheckboxOption implements CustomizableOptionInterface @doc(description: "CustomizableCheckbbixOption contains information about a set of checkbox values that are defined as part of a customizable option.") {
@@ -287,6 +294,7 @@ type CustomizableCheckboxValue @doc(description: "CustomizableCheckboxValue defi
     sku: String @doc(description: "The Stock Keeping Unit for this option.")
     title: String @doc(description: "The display name for this option.")
     sort_order: Int @doc(description: "The order in which the checkbox value is displayed.")
+    uid: ID! @doc(description: "A string that encodes option details.") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\Product\\CustomizableSelectedOptionValueUid") # A Base64 string that encodes option details.
 }
 
 type VirtualProduct implements ProductInterface, CustomizableProductInterface @doc(description: "A virtual product is non-tangible product that does not require shipping and is not kept in inventory.") {
@@ -483,4 +491,10 @@ type StoreConfig @doc(description: "The type contains information about a store 
     list_per_page : Int @doc(description: "Products per Page on List Default Value.")
     catalog_default_sort_by : String @doc(description: "Default Sort By.")
     root_category_id: Int @doc(description: "The ID of the root category") @resolver(class: "Magento\\CatalogGraphQl\\Model\\Resolver\\RootCategoryId")
+}
+
+type SimpleWishlistItem implements WishlistItemInterface @doc(description: "A simple product wish list Item") {
+}
+
+type VirtualWishlistItem implements WishlistItemInterface @doc(description: "A virtual product wish list item") {
 }

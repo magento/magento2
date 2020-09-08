@@ -36,18 +36,17 @@
             <deleteData createDataKey="createSimpleProductTwo" stepKey="deleteSimpleProductTwo"/>
 
             <!-- Delete the catalog price rule -->
-            <amOnPage stepKey="goToPriceRulePage" url="{{CatalogRulePage.url}}"/>
+            <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage"/>
             <actionGroup stepKey="deletePriceRule" ref="deleteEntitySecondaryGrid">
                 <argument name="name" value="{{_defaultCatalogRule.name}}"/>
                 <argument name="searchInput" value="{{AdminSecondaryGridSection.catalogRuleIdentifierSearch}}"/>
             </actionGroup>
 
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- 1. Begin creating a new catalog price rule -->
-        <amOnPage url="{{CatalogRulePage.url}}" stepKey="goToPriceRulePage"/>
-        <waitForPageLoad stepKey="waitForPriceRulePage"/>
+        <actionGroup ref="AdminOpenCatalogPriceRulePageActionGroup" stepKey="goToPriceRulePage"/>
         <click selector="{{AdminGridMainControls.add}}" stepKey="addNewRule"/>
         <waitForPageLoad stepKey="waitForIndividualRulePage"/>
         <fillField selector="{{AdminNewCatalogPriceRule.ruleName}}" userInput="{{_defaultCatalogRule.name}}" stepKey="fillName"/>
@@ -78,8 +77,12 @@
 
         <!-- 3. Save and apply the new catalog price rule -->
         <click selector="{{AdminNewCatalogPriceRule.saveAndApply}}" stepKey="saveAndApply"/>
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <!-- 4. Verify the storefront -->
         <amOnPage url="$$createCategoryOne.name$$.html" stepKey="goToCategoryOne"/>

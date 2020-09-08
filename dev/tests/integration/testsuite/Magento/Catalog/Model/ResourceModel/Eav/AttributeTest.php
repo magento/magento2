@@ -5,21 +5,48 @@
  */
 namespace Magento\Catalog\Model\ResourceModel\Eav;
 
+use Magento\Eav\Api\AttributeRepositoryInterface;
+use Magento\Eav\Api\Data\AttributeInterface;
+use Magento\Eav\Model\Config;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+
 /**
  * Test for \Magento\Catalog\Model\ResourceModel\Eav\Attribute.
  */
 class AttributeTest extends \PHPUnit\Framework\TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\ResourceModel\Eav\Attribute
+     * @var ObjectManagerInterface
      */
-    protected $_model;
+    private $objectManager;
 
+    /**
+     * @var Attribute
+     */
+    private $model;
+
+    /**
+     * @var AttributeRepositoryInterface
+     */
+    private $attributeRepository;
+
+    /**
+     * @var int|string
+     */
+    private $catalogProductEntityType;
+
+    /**
+     * @inheritDoc
+     */
     protected function setUp(): void
     {
-        $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
-            \Magento\Catalog\Model\ResourceModel\Eav\Attribute::class
-        );
+        $this->objectManager = Bootstrap::getObjectManager();
+        $this->model = $this->objectManager->get(Attribute::class);
+        $this->attributeRepository = $this->objectManager->get(AttributeRepositoryInterface::class);
+        $this->catalogProductEntityType = $this->objectManager->get(Config::class)
+            ->getEntityType('catalog_product')
+            ->getId();
     }
 
     /**
@@ -29,18 +56,28 @@ class AttributeTest extends \PHPUnit\Framework\TestCase
      */
     public function testCRUD()
     {
-        $this->_model->setAttributeCode(
-            'test'
-        )->setEntityTypeId(
-            \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
-                \Magento\Eav\Model\Config::class
-            )->getEntityType(
-                'catalog_product'
-            )->getId()
-        )->setFrontendLabel(
-            'test'
-        )->setIsUserDefined(1);
-        $crud = new \Magento\TestFramework\Entity($this->_model, ['frontend_label' => uniqid()]);
+        $this->model->setAttributeCode('test')
+            ->setEntityTypeId($this->catalogProductEntityType)
+            ->setFrontendLabel('test')
+            ->setIsUserDefined(1);
+        $crud = new \Magento\TestFramework\Entity($this->model, [AttributeInterface::FRONTEND_LABEL => uniqid()]);
         $crud->testCrud();
+    }
+
+    /**
+     * @magentoDataFixture Magento/Catalog/_files/product_attribute.php
+     *
+     * @return void
+     */
+    public function testAttributeSaveWithChangedEntityType(): void
+    {
+        $this->expectException(
+            \Magento\Framework\Exception\LocalizedException::class
+        );
+        $this->expectExceptionMessage('Do not change entity type.');
+
+        $attribute = $this->attributeRepository->get($this->catalogProductEntityType, 'test_attribute_code_333');
+        $attribute->setEntityTypeId(1);
+        $attribute->save();
     }
 }

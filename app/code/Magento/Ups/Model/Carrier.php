@@ -1594,7 +1594,7 @@ XMLAuth;
      *
      * @param Element $shipmentConfirmResponse
      * @return DataObject
-     * @deprecated New asynchronous methods introduced.
+     * @deprecated 100.3.3 New asynchronous methods introduced.
      * @see requestToShipment
      */
     protected function _sendShipmentAcceptRequest(Element $shipmentConfirmResponse)
@@ -1789,7 +1789,7 @@ XMLAuth;
      *
      * @param DataObject $request
      * @return DataObject
-     * @deprecated New asynchronous methods introduced.
+     * @deprecated 100.3.3 New asynchronous methods introduced.
      * @see requestToShipment
      */
     protected function _doShipmentRequest(DataObject $request)

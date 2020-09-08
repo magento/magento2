@@ -47,16 +47,10 @@ class CacheTest extends \PHPUnit\Framework\TestCase
     {
         $identifier1 = \uniqid('lock_name_1_', true);
 
-        $this->assertTrue($this->cacheInstance1->lock($identifier1, 2));
+        $this->assertTrue($this->cacheInstance1->lock($identifier1));
 
-        $this->assertFalse($this->cacheInstance1->lock($identifier1, 2));
-        $this->assertFalse($this->cacheInstance2->lock($identifier1, 2));
-        sleep(4);
-        $this->assertFalse($this->cacheInstance1->isLocked($identifier1));
-
-        $this->assertTrue($this->cacheInstance2->lock($identifier1, -1));
-        sleep(4);
-        $this->assertTrue($this->cacheInstance1->isLocked($identifier1));
+        $this->assertFalse($this->cacheInstance1->lock($identifier1, 0));
+        $this->assertFalse($this->cacheInstance2->lock($identifier1, 0));
     }
 
     /**
@@ -66,19 +60,17 @@ class CacheTest extends \PHPUnit\Framework\TestCase
      */
     public function testParallelLockExpired(): void
     {
+        $testLifeTime = 2;
+        \Closure::bind(function (Cache $class) use ($testLifeTime) {
+            $class->defaultLifetime = $testLifeTime;
+        }, null, $this->cacheInstance1)($this->cacheInstance1);
+
         $identifier1 = \uniqid('lock_name_1_', true);
 
-        $this->assertTrue($this->cacheInstance1->lock($identifier1, 1));
-        sleep(2);
-        $this->assertFalse($this->cacheInstance1->isLocked($identifier1));
+        $this->assertTrue($this->cacheInstance1->lock($identifier1, 0));
+        $this->assertTrue($this->cacheInstance2->lock($identifier1, $testLifeTime + 1));
 
-        $this->assertTrue($this->cacheInstance1->lock($identifier1, 1));
-        sleep(2);
-        $this->assertFalse($this->cacheInstance1->isLocked($identifier1));
-
-        $this->assertTrue($this->cacheInstance2->lock($identifier1, 1));
-        sleep(2);
-        $this->assertFalse($this->cacheInstance1->isLocked($identifier1));
+        $this->cacheInstance2->unlock($identifier1);
     }
 
     /**
