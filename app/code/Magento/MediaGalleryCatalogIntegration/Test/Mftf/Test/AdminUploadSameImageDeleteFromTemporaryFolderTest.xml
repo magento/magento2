@@ -14,6 +14,7 @@
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1792"/>
             <title value="Image is deleted from tmp folder if is uploaded second time"/>
             <description value="Image is deleted from tmp folder if is uploaded second time"/>
+            <stories value="Image is deleted from tmp folder if is uploaded second time"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
         </annotations>
