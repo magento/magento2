@@ -60,6 +60,6 @@
             <argument name="subtotal" value="$createSecondProduct.price$" />
             <argument name="qty" value="1"/>
         </actionGroup>
-        <dontSee selector="{{CheckoutCartProductSection.productName}}" userInput="$createFirstProduct.name$"  stepKey="checkFirstProductIsAbsentInCart"/>
+        <dontSee selector="{{CheckoutCartProductSection.productName}}" userInput="$createFirstProduct.name$" stepKey="checkFirstProductIsAbsentInCart"/>
     </test>
 </tests>
