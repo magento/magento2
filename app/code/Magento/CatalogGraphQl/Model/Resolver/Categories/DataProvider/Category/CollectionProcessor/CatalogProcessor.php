@@ -23,6 +23,9 @@ class CatalogProcessor implements CollectionProcessorInterface
     /** @var SearchCriteriaCollectionProcessor */
     private $collectionProcessor;
 
+    /**
+     * @param SearchCriteriaCollectionProcessor $collectionProcessor
+     */
     public function __construct(
         SearchCriteriaCollectionProcessor $collectionProcessor
     ) {
@@ -41,8 +44,7 @@ class CatalogProcessor implements CollectionProcessorInterface
         Collection $collection,
         SearchCriteriaInterface $searchCriteria,
         ContextInterface $context = null
-    ): Collection
-    {
+    ): Collection {
         $this->collectionProcessor->process($searchCriteria, $collection);
 
         return $collection;
