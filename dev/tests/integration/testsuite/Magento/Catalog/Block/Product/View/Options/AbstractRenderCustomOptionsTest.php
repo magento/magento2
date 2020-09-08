@@ -373,7 +373,7 @@ abstract class AbstractRenderCustomOptionsTest extends TestCase
      */
     protected function getOptionHtml(ProductInterface $product): string
     {
-        $this->page->addHandle($this->getHandlesList($product));
+        $this->page->addHandle($this->getHandlesList());
         $this->page->getLayout()->generateXml();
         /** @var Options $optionsBlock */
         $optionsBlock = $this->page->getLayout()->getBlock($this->getOptionsBlockName());
