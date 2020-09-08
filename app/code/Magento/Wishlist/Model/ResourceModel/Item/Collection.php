@@ -400,7 +400,7 @@ class Collection extends \Magento\Framework\Model\ResourceModel\Db\Collection\Ab
                 ['cat_prod' => $this->getTable('catalog_product_entity')],
                 $this->getConnection()
                     ->quoteInto(
-                        'cat_prod.type_id IN (?) AND main_table.product_id = cat_prod.entity_id',
+                        "cat_prod.type_id IN (?) AND {$mainTableName}.product_id = cat_prod.entity_id",
                         $availableProductTypes
                     ),
                 []

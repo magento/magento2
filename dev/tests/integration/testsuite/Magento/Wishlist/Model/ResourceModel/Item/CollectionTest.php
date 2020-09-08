@@ -69,11 +69,14 @@ class CollectionTest extends \PHPUnit\Framework\TestCase
      *
      * @magentoDataFixture Magento/Catalog/_files/second_product_simple.php
      * @magentoDataFixture Magento/Wishlist/_files/wishlist.php
+     * @magentoDbIsolation disabled
      */
-    public function testGonnaCutYouDown()
+    public function testLoadWhenFewProductsPresent()
     {
         $this->itemCollection->setSalableFilter(true);
+        $this->itemCollection->addCustomerIdFilter(1);
         $this->itemCollection->load();
+        $this->assertCount(1, $this->itemCollection->getItems());
     }
 
     /**
