@@ -352,6 +352,7 @@ class PhpRule implements RuleInterface
      * @param string $filePath
      * @return string[]
      * @throws NoSuchActionException
+     * @SuppressWarnings(PMD.CyclomaticComplexity)
      */
     private function processWildcardUrl(string $urlPath, string $filePath)
     {
@@ -377,8 +378,10 @@ class PhpRule implements RuleInterface
         ) {
             return [];
         }
-        $fileControllerIndex = array_search('adminhtml', $filePathPieces) ?:
-            array_search('controller', $filePathPieces);
+        $fileControllerIndex = array_search('adminhtml', $filePathPieces, true);
+        if ($fileControllerIndex === false) {
+            $fileControllerIndex = array_search('controller', $filePathPieces, true);
+        }
 
         $controllerName = array_shift($urlRoutePieces);
         if ('*' === $controllerName) {
