@@ -16,6 +16,9 @@
             <description value="Users are able to place order using Paypal Smart Button on Checkout Page, payment action is Sale"/>
             <severity value="CRITICAL"/>
             <testCaseId value="MC-13690"/>
+            <skip>
+                <issueId value="MC-37236"/>
+            </skip>
             <group value="paypalExpress"/>
         </annotations>
         <before>
