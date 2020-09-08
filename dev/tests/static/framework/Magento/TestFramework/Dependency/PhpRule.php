@@ -377,10 +377,8 @@ class PhpRule implements RuleInterface
         ) {
             return [];
         }
-        $fileControllerIndex = array_search('adminhtml', $filePathPieces);
-        if (!$fileControllerIndex) {
-            $fileControllerIndex = array_search('controller', $filePathPieces);
-        }
+        $fileControllerIndex = array_search('adminhtml', $filePathPieces) ?:
+            array_search('controller', $filePathPieces);
 
         $controllerName = array_shift($urlRoutePieces);
         if ('*' === $controllerName) {
