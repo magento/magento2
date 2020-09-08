@@ -141,6 +141,8 @@
         <click selector="body" stepKey="clickBodyToCorrectFocusGrouped"/>
         <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
         <waitForElementVisible selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="waitForGroupedProductModal"/>
+        <click selector="{{AdminProductGridPaginationSection.perPageDropdown}}" stepKey="clickProductPerPageDropdown"/>
+        <click selector="{{AdminProductGridPaginationSection.perPageOption('50')}}" stepKey="selectProductsPerPage"/>
         <actionGroup ref="FilterProductGridBySku2ActionGroup" stepKey="filterGroupedProducts">
             <argument name="sku" value="api-simple-product"/>
         </actionGroup>
