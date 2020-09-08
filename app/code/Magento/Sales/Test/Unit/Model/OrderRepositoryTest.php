@@ -72,7 +72,7 @@ class OrderRepositoryTest extends TestCase
     private $paymentAdditionalInfoFactory;
 
     /**
-     * @var OrderExtensionFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var OrderExtensionFactory|\MockObject
      */
     private $orderExtensionFactoryMock;
 
