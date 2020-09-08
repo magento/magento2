@@ -8,6 +8,9 @@ namespace Magento\Test\Integrity\Dependency;
 
 use Magento\Framework\Component\ComponentRegistrar;
 
+/**
+ * Collects all webapi.xml files
+ */
 class WebapiFileResolver implements \Magento\Framework\Config\FileResolverInterface
 {
     /**
@@ -18,7 +21,7 @@ class WebapiFileResolver implements \Magento\Framework\Config\FileResolverInterf
     /**
      * @var string[]
      */
-    private $webapixml_paths;
+    private $webapiXmlPaths;
 
     public function __construct(ComponentRegistrar $componentRegistrar)
     {
@@ -30,17 +33,17 @@ class WebapiFileResolver implements \Magento\Framework\Config\FileResolverInterf
      */
     public function get($filename, $scope)
     {
-        if (!$this->webapixml_paths) {
+        if (!$this->webapiXmlPaths) {
             $paths = $this->componentRegistrar->getPaths(ComponentRegistrar::MODULE);
-            $webapixml_paths = [];
+            $webapiXmlPaths = [];
             foreach ($paths as $path) {
                 $path = $path . '/etc/webapi.xml';
                 if (file_exists($path)) {
-                    $webapixml_paths[$path] = file_get_contents($path);
+                    $webapiXmlPaths[$path] = file_get_contents($path);
                 }
             }
-            $this->webapixml_paths = $webapixml_paths;
+            $this->webapiXmlPaths = $webapiXmlPaths;
         }
-        return $this->webapixml_paths;
+        return $this->webapiXmlPaths;
     }
 }

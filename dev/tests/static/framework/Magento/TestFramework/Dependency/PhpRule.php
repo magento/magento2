@@ -16,7 +16,7 @@ use Magento\Framework\UrlInterface;
 use Magento\TestFramework\Dependency\Reader\ClassScanner;
 use Magento\TestFramework\Dependency\Route\RouteMapper;
 use Magento\TestFramework\Exception\NoSuchActionException;
-use Magento\Webapi\Model\Config\Converter;
+use Magento\Test\Integrity\Dependency\Converter;
 use PHPUnit\Framework\Exception;
 
 /**
@@ -324,7 +324,7 @@ class PhpRule implements RuleInterface
                 $returnedDependencies = [];
                 if (strpos($path, '*') !== false) {
                     $returnedDependencies = $this->processWildcardUrl($path, $file);
-                } elseif (preg_match('#rest(?<service>/V1/\w+)#i', $path, $apiMatch)) {
+                } elseif (preg_match('#rest(?<service>/V1/.+)#i', $path, $apiMatch)) {
                     $returnedDependencies = $this->processApiUrl($apiMatch['service']);
                 } else {
                     $returnedDependencies = $this->processStandardUrl($path);
@@ -365,7 +365,7 @@ class PhpRule implements RuleInterface
         }
         $filePathInfo = pathinfo($filePath);
         $fileActionName = $filePathInfo['filename'];
-        $filePathPieces = explode('/', $filePathInfo['dirname']);
+        $filePathPieces = explode(DIRECTORY_SEPARATOR, $filePathInfo['dirname']);
 
         /**
          * Only handle Controllers. ie: Ignore Blocks, Templates, and Models due to complexity in static resolution
@@ -377,8 +377,10 @@ class PhpRule implements RuleInterface
         ) {
             return [];
         }
-        $fileControllerIndex = array_search('adminhtml', $filePathPieces)
-            ?? array_search('controller', $filePathPieces);
+        $fileControllerIndex = array_search('adminhtml', $filePathPieces);
+        if (!$fileControllerIndex) {
+            $fileControllerIndex = array_search('controller', $filePathPieces);
+        }
 
         $controllerName = array_shift($urlRoutePieces);
         if ('*' === $controllerName) {
@@ -445,22 +447,21 @@ class PhpRule implements RuleInterface
          */
         if (!$this->serviceMethods) {
             $this->serviceMethods = [];
-            $serviceRoutes = $this->configReader->read()[Converter::KEY_ROUTES];
+            $serviceRoutes = $this->configReader->read()['routes'];
             foreach ($serviceRoutes as $serviceRouteUrl => $methods) {
                 $pattern = '#:\w+#';
                 $replace = '\w';
-                $serviceRouteUrlRegex = $serviceRouteUrl;
-                preg_replace($pattern, $replace, $serviceRouteUrlRegex);
+                $serviceRouteUrlRegex = preg_replace($pattern, $replace, $serviceRouteUrl);
                 $serviceRouteUrlRegex = '#' . $serviceRouteUrlRegex . '#';
                 $this->serviceMethods[$serviceRouteUrlRegex] = $methods;
             }
         }
-        foreach ($this->serviceMethods as $serviceMethodUrlRegex => $methods) {
+        foreach ($this->serviceMethods as $serviceRouteUrlRegex => $methods) {
             /**
              * Since we expect that every service method should be within the same module, we can use the class from
              * any method
              */
-            if (preg_match($serviceMethodUrlRegex, $path)) {
+            if (preg_match($serviceRouteUrlRegex, $path)) {
                 $method = reset($methods);
 
                 $className = $method['service']['class'];
