@@ -13,8 +13,8 @@
             <stories value="Print Order"/>
             <title value="Print Order from Guest on Frontend using Zip for search"/>
             <description value="Print Order from Guest on Frontend"/>
-            <severity value="BLOCKER"/>
-            <testCaseId value="MC-16225"/>
+            <severity value="MINOR"/>
+            <testCaseId value="MC-37449"/>
             <group value="sales"/>
         </annotations>
 
