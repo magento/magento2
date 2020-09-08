@@ -232,8 +232,10 @@ define([
                     break;
 
                 case $.ui.keyCode.ENTER:
-                    this.searchForm.trigger('submit');
-                    e.preventDefault();
+                    if (this.element.val().length >= parseInt(this.options.minSearchLength, 10)) {
+                        this.searchForm.trigger('submit');
+                        e.preventDefault();
+                    }
                     break;
 
                 case $.ui.keyCode.DOWN:
@@ -294,9 +296,10 @@ define([
                 dropdown = $('<ul role="listbox"></ul>'),
                 value = this.element.val();
 
-            this.submitBtn.disabled = isEmpty(value);
+            this.submitBtn.disabled = true;
 
             if (value.length >= parseInt(this.options.minSearchLength, 10)) {
+                this.submitBtn.disabled = false;
                 $.getJSON(this.options.url, {
                     q: value
                 }, $.proxy(function (data) {
