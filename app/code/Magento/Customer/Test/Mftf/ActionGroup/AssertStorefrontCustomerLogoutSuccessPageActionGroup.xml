@@ -8,13 +8,11 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminMediaGalleryAssertImageInGridActionGroup">
+    <actionGroup name="AssertStorefrontCustomerLogoutSuccessPageActionGroup">
         <annotations>
-            <description>Asserts that image exists in media gallery grid</description>
+            <description>Assert on the Storefront Customer Logout Success Page page.</description>
         </annotations>
-        <arguments>
-            <argument name="title"/>
-        </arguments>
-        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(title)}}" stepKey="waitForImageToBeVisible"/>
+
+        <seeInCurrentUrl url="{{StorefrontCustomerLogoutSuccessPage.url}}" stepKey="seeOnSignInPage"/>
     </actionGroup>
 </actionGroups>

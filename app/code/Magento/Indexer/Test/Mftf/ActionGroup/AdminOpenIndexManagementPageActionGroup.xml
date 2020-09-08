@@ -8,13 +8,12 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminMediaGalleryAssertImageInGridActionGroup">
+    <actionGroup name="AdminOpenIndexManagementPageActionGroup">
         <annotations>
-            <description>Asserts that image exists in media gallery grid</description>
+            <description>Open index management page.</description>
         </annotations>
-        <arguments>
-            <argument name="title"/>
-        </arguments>
-        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(title)}}" stepKey="waitForImageToBeVisible"/>
+
+        <amOnPage url="{{AdminIndexManagementPage.url}}" stepKey="openIndexManagementPage"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
     </actionGroup>
 </actionGroups>
