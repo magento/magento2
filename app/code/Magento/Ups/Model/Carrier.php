@@ -1118,6 +1118,7 @@ XMLAuth;
 
         /** @var HttpResponseDeferredInterface[] $trackingResponses */
         $trackingResponses = [];
+        $tracking = '';
         foreach ($trackings as $tracking) {
             /**
              * RequestOption==>'1' to request all activities
@@ -1362,6 +1363,7 @@ XMLAuth;
     protected function _formShipmentRequest(DataObject $request)
     {
         $packages = $request->getPackages();
+        $shipmentItems = [];
         foreach ($packages as $package) {
             $shipmentItems[] = $package['items'];
         }
@@ -1538,7 +1540,7 @@ XMLAuth;
             }
         }
 
-        if (isset($deliveryConfirmation) && $deliveryConfirmationLevel === self::DELIVERY_CONFIRMATION_SHIPMENT) {
+        if (!empty($deliveryConfirmation) && $deliveryConfirmationLevel === self::DELIVERY_CONFIRMATION_SHIPMENT) {
             $serviceOptionsNode = $shipmentPart->addChild('ShipmentServiceOptions');
             $serviceOptionsNode->addChild(
                 'DeliveryConfirmation'
@@ -1624,6 +1626,7 @@ XMLAuth;
             $xmlResponse = '';
         }
 
+        $response = '';
         try {
             $response = $this->_xmlElFactory->create(['data' => $xmlResponse]);
         } catch (Throwable $e) {
@@ -1800,6 +1803,7 @@ XMLAuth;
         $this->setXMLAccessRequest();
         $xmlRequest = $this->_xmlAccessRequest . $rawXmlRequest;
         $xmlResponse = $this->_getCachedQuotes($xmlRequest);
+        $debugData = [];
 
         if ($xmlResponse === null) {
             $debugData['request'] = $this->filterDebugData($this->_xmlAccessRequest) . $rawXmlRequest;
