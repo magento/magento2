@@ -243,6 +243,15 @@ class Subscription implements SubscriptionInterface
     }
 
     /**
+     * @param string $prefix
+     * @return string
+     */
+    public function getEntityColumn(string $prefix): string
+    {
+        return $prefix . $this->connection->quoteIdentifier($this->getColumnName());
+    }
+
+    /**
      * Prepare column names and column values for trigger body
      *
      * @param ChangelogInterface $changelog
@@ -256,19 +265,26 @@ class Subscription implements SubscriptionInterface
             $this->connection->describeTable($this->getTableName()),
             'COLUMN_NAME'
         );
+        $describedClColumns = array_column(
+            $this->connection->describeTable($changelog->getName()),
+            'COLUMN_NAME'
+        );
         $viewConfig = $this->mviewConfig->getView($this->getView()->getId());
         $columnNames = [$this->connection->quoteIdentifier($changelog->getColumnName())];
-        $columnValues = [$this->connection->quoteIdentifier($this->getColumnName())];
+        $columnValues = [$this->getEntityColumn($prefix)];
         //If we need to add attributes
         if ($viewConfig[ChangelogInterface::ATTRIBUTE_SCOPE_SUPPORT] &&
-            array_search(Changelog::ATTRIBUTE_COLUMN, $describedSubscribedColumns)
+            array_search(Changelog::ATTRIBUTE_COLUMN, $describedSubscribedColumns) &&
+            array_search(Changelog::ATTRIBUTE_COLUMN, $describedClColumns)
+
         ) {
             $columnValues[] = $prefix . $this->connection->quoteIdentifier(Changelog::ATTRIBUTE_COLUMN);
             $columnNames[] = $this->connection->quoteIdentifier(Changelog::ATTRIBUTE_COLUMN);
         }
         //If we need to add stores
         if ($viewConfig[ChangelogInterface::STORE_SCOPE_SUPPORT] &&
-            array_search(Changelog::STORE_COLUMN, $describedSubscribedColumns)
+            array_search(Changelog::STORE_COLUMN, $describedSubscribedColumns) &&
+            array_search(Changelog::STORE_COLUMN, $describedClColumns)
         ) {
             $columnValues[] = $prefix . $this->connection->quoteIdentifier(Changelog::STORE_COLUMN);
             $columnNames[] = $this->connection->quoteIdentifier(Changelog::STORE_COLUMN);
