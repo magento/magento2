@@ -8,9 +8,12 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminMediaGalleryFolderSelectByFullPathActionGroup"
-                 extends="AdminMediaGalleryFolderSelectActionGroup">
-        <remove keyForRemoval="selectFolder"/>
-        <click selector="//li[@id='{{name}}']" stepKey="selectSubFolder" after="waitBeforeClickOnFolder"/>
+    <actionGroup name="AdminMediaGalleryFolderSelectByFullPathActionGroup">
+        <arguments>
+            <argument name="path" type="string"/>
+        </arguments>
+        <wait time="2" stepKey="waitBeforeClickOnFolder"/>
+        <click selector="//li[@id='{{path}}']" stepKey="selectSubFolder" after="waitBeforeClickOnFolder"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForFolderContents"/>
     </actionGroup>
 </actionGroups>

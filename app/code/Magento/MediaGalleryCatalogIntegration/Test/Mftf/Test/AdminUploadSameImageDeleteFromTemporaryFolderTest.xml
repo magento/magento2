@@ -39,10 +39,10 @@
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGallery"/>
         <actionGroup ref="AdminEnhancedMediaGalleryExpandCatalogTmpFolderActionGroup" stepKey="expandTmpFolder"/>
         <actionGroup ref="AdminMediaGalleryFolderSelectByFullPathActionGroup" stepKey="selectCategoryFolder">
-            <argument name="name" value="catalog/tmp/category"/>
+            <argument name="path" value="catalog/tmp/category"/>
         </actionGroup>
 
-        <!-- Asset folder is empty -->
-        <actionGroup ref="AdminAssertMediaGalleryEmptyFolderActionGroup" stepKey="assertEmptyFolder"/>
+        <!-- Assert folder is empty -->
+        <actionGroup ref="AdminAssertMediaGalleryEmptyActionGroup" stepKey="assertEmptyFolder"/>
     </test>
 </tests>

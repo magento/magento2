@@ -7,11 +7,11 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminAssertMediaGalleryEmptyFolderActionGroup">
+    <actionGroup name="AdminAssertMediaGalleryEmptyActionGroup">
         <annotations>
             <description>Requires select folder in directory tree. Assert that selected folder is empty.</description>
         </annotations>
 
-        <seeElement selector="{{AdminMediaGalleryCatalogUiCategoryGridSection.noDataMessage}}" stepKey="assertNoDataMessageDisplayed" />
+        <seeElement selector="{{AdminMediaGalleryGridSection.noDataMessage}}" stepKey="assertNoDataMessageDisplayed" />
     </actionGroup>
 </actionGroups>
