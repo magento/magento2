@@ -7,7 +7,7 @@
 -->
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminOpenCmsBlockActionGroup" deprecated="Use app/code/Magento/Cms/Test/Mftf/ActionGroup/AdminOpenCmsBlockActionGroup.xml instead.">
+    <actionGroup name="AdminOpenCmsBlockActionGroup" deprecated="Use AdminOpenCmsBlockActionGroup instead.">
         <arguments>
             <argument name="block_id" type="string"/>
         </arguments>
