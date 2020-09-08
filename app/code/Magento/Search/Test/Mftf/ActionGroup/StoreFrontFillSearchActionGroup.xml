@@ -8,13 +8,12 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="AdminMediaGalleryAssertImageInGridActionGroup">
-        <annotations>
-            <description>Asserts that image exists in media gallery grid</description>
-        </annotations>
+    <actionGroup name="StoreFrontFillSearchActionGroup">
         <arguments>
-            <argument name="title"/>
+            <argument name="query" type="string"/>
         </arguments>
-        <waitForElementVisible selector="{{AdminEnhancedMediaGalleryImageActionsSection.imageInGrid(title)}}" stepKey="waitForImageToBeVisible"/>
+
+        <fillField stepKey="fillSearchField" selector="{{StorefrontQuickSearchSection.searchPhrase}}" userInput="{{query}}"/>
+        <waitForElementVisible selector="{{StorefrontQuickSearchSection.searchButton}}" stepKey="waitForSubmitButton"/>
     </actionGroup>
 </actionGroups>
