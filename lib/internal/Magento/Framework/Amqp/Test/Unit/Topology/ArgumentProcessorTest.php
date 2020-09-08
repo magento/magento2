@@ -14,9 +14,6 @@ use Magento\Framework\Amqp\Topology\ArgumentProcessor;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
 
-/**
- * Class ArgumentProcessorTest
- */
 class ArgumentProcessorTest extends TestCase
 {
     /**
