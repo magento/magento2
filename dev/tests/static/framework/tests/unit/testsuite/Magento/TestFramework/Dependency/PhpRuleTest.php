@@ -281,7 +281,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                     ]
                 ],
             ],
-            //Skip processing routeid wildcards
+            //Skip processing routeid wildcards due to complexity in resolution
             'getUrl from routeid wildcard in controller' => [
                 'Magento\Catalog\Controller\ControllerName\SomeClass',
                 '$this->getUrl("*/Invalid/*")',
@@ -404,6 +404,8 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
 
     /**
      *  Returns an example list of services that would be parsed via the configReader
+     *
+     * @return \PHPUnit\Framework\MockObject\MockObject | Filesystem
      */
     private function makeWebApiConfigReaderMock()
     {
