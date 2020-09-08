@@ -250,7 +250,7 @@ class QuoteManagement implements \Magento\Quote\Api\CartManagementInterface
 
         $quote->setBillingAddress($this->quoteAddressFactory->create());
         $quote->setShippingAddress($this->quoteAddressFactory->create());
-        $quote->setCustomerIsGuest(true);
+        $quote->setCustomerIsGuest(1);
 
         try {
             $quote->getShippingAddress()->setCollectShippingRates(true);

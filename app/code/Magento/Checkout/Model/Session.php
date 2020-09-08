@@ -291,7 +291,7 @@ class Session extends \Magento\Framework\Session\SessionManager
                     }
                 } else {
                     $quote->setIsCheckoutCart(true);
-                    $quote->setCustomerIsGuest(true);
+                    $quote->setCustomerIsGuest(1);
                     $this->_eventManager->dispatch('checkout_quote_init', ['quote' => $quote]);
                 }
             }
@@ -384,7 +384,7 @@ class Session extends \Magento\Framework\Session\SessionManager
         if ($customerQuote->getId() && $this->getQuoteId() != $customerQuote->getId()) {
             if ($this->getQuoteId()) {
                 $quote = $this->getQuote();
-                $quote->setCustomerIsGuest(false);
+                $quote->setCustomerIsGuest(0);
                 $this->quoteRepository->save(
                     $customerQuote->merge($quote)->collectTotals()
                 );
@@ -405,7 +405,7 @@ class Session extends \Magento\Framework\Session\SessionManager
             $this->getQuote()->getBillingAddress();
             $this->getQuote()->getShippingAddress();
             $this->getQuote()->setCustomer($this->_customerSession->getCustomerDataObject())
-                ->setCustomerIsGuest(false)
+                ->setCustomerIsGuest(0)
                 ->setTotalsCollectedFlag(false)
                 ->collectTotals();
             $this->quoteRepository->save($this->getQuote());
