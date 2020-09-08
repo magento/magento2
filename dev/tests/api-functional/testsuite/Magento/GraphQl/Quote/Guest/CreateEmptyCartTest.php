@@ -61,6 +61,7 @@ class CreateEmptyCartTest extends GraphQlAbstract
         self::assertNotNull($guestCart->getId());
         self::assertNull($guestCart->getCustomer()->getId());
         self::assertEquals('default', $guestCart->getStore()->getCode());
+        self::assertTrue($guestCart->getCustomerIsGuest());
     }
 
     /**
@@ -81,6 +82,7 @@ class CreateEmptyCartTest extends GraphQlAbstract
         self::assertNotNull($guestCart->getId());
         self::assertNull($guestCart->getCustomer()->getId());
         self::assertSame('fixture_second_store', $guestCart->getStore()->getCode());
+        self::assertTrue($guestCart->getCustomerIsGuest());
     }
 
     /**
