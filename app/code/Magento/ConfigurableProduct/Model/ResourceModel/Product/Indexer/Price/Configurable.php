@@ -6,6 +6,7 @@
 namespace Magento\ConfigurableProduct\Model\ResourceModel\Product\Indexer\Price;
 
 use Magento\Catalog\Model\ResourceModel\Product\Indexer\Price\BasePriceModifier;
+use Magento\Framework\DB\Select;
 use Magento\Framework\Indexer\DimensionalIndexerInterface;
 use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Catalog\Model\Indexer\Product\Price\TableMaintainer;
@@ -141,6 +142,30 @@ class Configurable implements DimensionalIndexerInterface
     }
 
     /**
+     * Filter select by inventory
+     *
+     * @param Select $select
+     * @return Select
+     */
+    public function filterSelectByInventory(Select $select)
+    {
+        $select->join(
+            ['si' => $this->getTable('cataloginventory_stock_item')],
+            'si.product_id = l.product_id',
+            []
+        );
+        $select->join(
+            ['si_parent' => $this->getTable('cataloginventory_stock_item')],
+            'si_parent.product_id = l.parent_id',
+            []
+        );
+        $select->where('si.is_in_stock = ?', Stock::STOCK_IN_STOCK);
+        $select->orWhere('si_parent.is_in_stock = ?', Stock::STOCK_OUT_OF_STOCK);
+
+        return $select;
+    }
+
+    /**
      * Apply configurable option
      *
      * @param IndexTableStructure $temporaryPriceTable
@@ -200,12 +225,7 @@ class Configurable implements DimensionalIndexerInterface
 
         // Does not make sense to extend query if out of stock products won't appear in tables for indexing
         if ($this->isConfigShowOutOfStock()) {
-            $select->join(
-                ['si' => $this->getTable('cataloginventory_stock_item')],
-                'si.product_id = l.product_id',
-                []
-            );
-            $select->where('si.is_in_stock = ?', Stock::STOCK_IN_STOCK);
+            $select = $this->filterSelectByInventory($select);
         }
 
         $select->columns(
