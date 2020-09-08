@@ -10,7 +10,7 @@
     <text> some text </text>
     <trim_spaces>   </trim_spaces>
     <cdata><![CDATA[  Some data here <strong>html</strong> tags are <i>allowed</i>  ]]></cdata>
-    <multiple_cdata>  <![CDATA[One]]>  <![CDATA[Two]]>  <![CDATA[Three]]>  </multiple_cdata>
+    <multiple_cdata><![CDATA[  Some data]]> here<![CDATA[ <strong>html</strong> tags]]> are <![CDATA[<i>allowed</i>  ]]></multiple_cdata>
     <zero>0</zero>
     <null></null>
 </nodes>

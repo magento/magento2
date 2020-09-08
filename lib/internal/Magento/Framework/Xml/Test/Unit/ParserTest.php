@@ -31,7 +31,7 @@ class ParserTest extends TestCase
                     'text' => ' some text ',
                     'trim_spaces' => '',
                     'cdata' => '  Some data here <strong>html</strong> tags are <i>allowed</i>  ',
-                    'multiple_cdata' => 'OneTwoThree',
+                    'multiple_cdata' => '  Some data here <strong>html</strong> tags are <i>allowed</i>  ',
                     'zero' => '0',
                     'null' => null,
                 ]
