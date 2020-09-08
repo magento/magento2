@@ -117,7 +117,7 @@ class Changelog implements ChangelogInterface
                     self::ATTRIBUTE_COLUMN,
                     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                     null,
-                    ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                    ['unsigned' => true, 'nullable' => true],
                     'Attribute ID'
                 );
             }
@@ -126,7 +126,7 @@ class Changelog implements ChangelogInterface
                     self::STORE_COLUMN,
                     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
                     null,
-                    ['unsigned' => true, 'nullable' => false, 'default' => '0'],
+                    ['unsigned' => true, 'nullable' => true],
                     'Store ID'
                 );
             }
