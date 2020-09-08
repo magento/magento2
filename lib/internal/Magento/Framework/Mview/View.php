@@ -313,6 +313,7 @@ class View extends DataObject implements ViewInterface
                     'view_id' => $this->changelog->getViewId()
                 ];
                 $ids = $this->strategies[$this->changelog->getViewId()]->walk($changelogData, $vsFrom, $batchSize);
+                $vsFrom += $batchSize;
                 $action->execute($ids);
             } else {
                 $ids = $this->getBatchOfIds($vsFrom, $currentVersionId);
