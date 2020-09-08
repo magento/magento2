@@ -5,35 +5,119 @@
 
 /* global _ */
 /* eslint max-nested-callbacks: 0 */
+/* jscs:disable jsDoc*/
+
 define([
     'squire',
     'jquery',
+    'Magento_Customer/js/section-config',
+    'Magento_Customer/js/customer-data',
     'jquery/jquery-storageapi'
-], function (Squire, $) {
+], function (Squire, $, sectionConfig, customerData) {
     'use strict';
 
     var injector = new Squire(),
-        sectionConfig,
+        obj,
         originalGetJSON,
         originalReload,
+        originalIsEmpty,
         originalEach,
-        obj;
+        cookieLifeTime = 3600,
+        sectionConfigSettings = {
+            baseUrls: [
+                'http://localhost/'
+            ],
+            sections: {
+                'customer/account/loginpost': ['*'],
+                'checkout/cart/add': ['cart'],
+                'rest/*/v1/guest-carts/*/selected-payment-method': ['cart', 'checkout-data'],
+                '*': ['messages']
+            },
+            clientSideSections: [
+                'checkout-data',
+                'cart-data'
+            ],
+            sectionNames: [
+                'customer',
+                'product_data_storage',
+                'cart',
+                'messages'
+            ]
+        };
+
+    function init(config) {
+        var defaultConfig = {
+            sectionLoadUrl: 'http://localhost/customer/section/load/',
+            expirableSectionLifetime: 60, // minutes
+            expirableSectionNames: ['cart'],
+            cookieLifeTime: cookieLifeTime,
+            updateSessionUrl: 'http://localhost/customer/account/updateSession/'
+        };
+
+        customerData['Magento_Customer/js/customer-data']($.extend({}, defaultConfig, config || {}));
+    }
+
+    function setupLocalStorage(sections) {
+        var mageCacheStorage = {},
+            sectionDataIds = {};
+
+        _.each(sections, function (sectionData, sectionName) {
+            sectionDataIds[sectionName] = sectionData['data_id'];
+
+            if (typeof sectionData.content !== 'undefined') {
+                mageCacheStorage[sectionName] = sectionData;
+            }
+        });
+
+        $.localStorage.set(
+            'mage-cache-storage',
+            mageCacheStorage
+        );
+        $.cookieStorage.set(
+            'section_data_ids',
+            sectionDataIds
+        );
+
+        $.localStorage.set(
+            'mage-cache-timeout',
+            new Date(Date.now() + cookieLifeTime * 1000)
+        );
+        $.cookieStorage.set(
+            'mage-cache-sessid',
+            true
+        );
+    }
+
+    function clearLocalStorage() {
+        $.cookieStorage.set('section_data_ids', {});
+
+        if (window.localStorage) {
+            window.localStorage.clear();
+        }
+    }
 
     describe('Magento_Customer/js/customer-data', function () {
 
+        beforeAll(function () {
+            clearLocalStorage();
+        });
+
         beforeEach(function (done) {
+            originalGetJSON = jQuery.getJSON;
+            sectionConfig['Magento_Customer/js/section-config'](sectionConfigSettings);
+
             injector.require([
-                'Magento_Customer/js/customer-data',
-                'Magento_Customer/js/section-config'
-            ], function (Constr, sectionConfiguration) {
+                'Magento_Customer/js/customer-data'
+            ], function (Constr) {
                 obj = Constr;
-                sectionConfig = sectionConfiguration;
                 done();
             });
         });
 
         afterEach(function () {
             try {
+                jQuery.getJSON = originalGetJSON;
+                clearLocalStorage();
                 injector.clean();
                 injector.remove();
             } catch (e) {
@@ -41,49 +125,19 @@ define([
         });
 
         describe('"init" method', function () {
-            var storageInvalidation = {
-                    /**
-                     * Mock Keys Method
-                     * @returns array
-                     */
-                    keys: function () {
-                        return ['section'];
-                    }
-                },
-                dataProvider = {
-                    /**
-                     * Mock getFromStorage Method
-                     * @returns array
-                     */
-                    getFromStorage: function () {
-                        return ['section'];
-                    }
-                },
-                storage = {
-                    /**
-                     * Mock Keys Method
-                     * @returns array
-                     */
-                    keys: function () {
-                        return ['section'];
-                    }
-                };
-
             beforeEach(function () {
                 originalReload = obj.reload;
+                originalIsEmpty = _.isEmpty;
+
                 spyOn(obj, 'reload').and.returnValue(true);
 
-                //Init storage api library
                 $.initNamespaceStorage('mage-cache-storage').localStorage;
                 $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
-
-                spyOn(dataProvider, 'getFromStorage');
-                spyOn(storage, 'keys').and.returnValue(['section']);
-                spyOn(storageInvalidation, 'keys').and.returnValue(['section']);
             });
 
             afterEach(function () {
                 obj.reload = originalReload;
+                _.isEmpty = originalIsEmpty;
                 $.namespaceStorages = {};
             });
 
@@ -113,15 +167,68 @@ define([
 
             it('Calls "reload" method when expired sections do not exist', function () {
                 spyOn(obj, 'getExpiredSectionNames').and.returnValue([]);
-
-                _.isEmpty = jasmine.createSpy().and.returnValue(false);
+                _.isEmpty = jasmine.createSpy('_.isEmpty').and.returnValue(false);
 
                 obj.init();
                 expect(obj.reload).toHaveBeenCalled();
             });
+
+            it('Check it does not request sections from the server if there are no expired sections', function () {
+                setupLocalStorage({
+                    'catalog': { // without storage content
+                        'data_id': Math.floor(Date.now() / 1000) + 60 // in 1 minute
+                    }
+                });
+
+                jQuery.getJSON = jasmine.createSpy().and.callFake(function () {
+                    var deferred = $.Deferred();
+
+                    return deferred.promise();
+                });
+
+                init();
+                expect(jQuery.getJSON).not.toHaveBeenCalled();
+            });
+
+            it('Check it requests sections from the server if there are expired sections', function () {
+                setupLocalStorage({
+                    'customer': {
+                        'data_id': Math.floor(Date.now() / 1000) + 60 // invalidated,
+                    },
+                    'cart': {
+                        'data_id': Math.floor(Date.now() / 1000) - 61 * 60, // 61 minutes ago
+                        'content': {}
+                    },
+                    'product_data_storage': {
+                        'data_id': Math.floor(Date.now() / 1000) + 60, // in 1 minute
+                        'content': {}
+                    },
+                    'catalog': {
+                        'data_id': Math.floor(Date.now() / 1000) + 60 // invalid section,
+                    },
+                    'checkout': {
+                        'data_id': Math.floor(Date.now() / 1000) - 61 * 60, // invalid section,
+                        'content': {}
+                    }
+                });
+
+                $.getJSON = jasmine.createSpy('$.getJSON').and.callFake(function () {
+                    var deferred = $.Deferred();
+
+                    return deferred.promise();
+                });
+
+                init();
+                expect($.getJSON).toHaveBeenCalledWith(
+                    'http://localhost/customer/section/load/',
+                    jasmine.objectContaining({
+                        sections: 'cart,customer'
+                    })
+                );
+            });
         });
 
-        describe('"getExpiredSectionNames" method', function () {
+        describe('"getExpiredSectionNames method', function () {
             it('Should be defined', function () {
                 expect(obj.hasOwnProperty('getExpiredSectionNames')).toBeDefined();
             });
@@ -130,6 +237,50 @@ define([
                 expect(function () {
                     obj.getExpiredSectionNames();
                 }).not.toThrow();
+            });
+
+            it('Check that result contains expired section names', function () {
+                setupLocalStorage({
+                    'cart': {
+                        'data_id': Math.floor(Date.now() / 1000) - 61 * 60, // 61 minutes ago
+                        'content': {}
+                    }
+                });
+                init();
+                expect(customerData.getExpiredSectionNames()).toEqual(['cart']);
+            });
+
+            it('Check that result does not contain unexpired section names', function () {
+                setupLocalStorage({
+                    'cart': {
+                        'data_id': Math.floor(Date.now() / 1000) + 60, // in 1 minute
+                        'content': {}
+                    }
+                });
+                init();
+                expect(customerData.getExpiredSectionNames()).toEqual([]);
+            });
+
+            it('Check that result contains invalidated section names', function () {
+                setupLocalStorage({
+                    'cart': { // without storage content
+                        'data_id': Math.floor(Date.now() / 1000) + 60 // in 1 minute
+                    }
+                });
+
+                init();
+                expect(customerData.getExpiredSectionNames()).toEqual(['cart']);
+            });
+
+            it('Check that result does not contain unsupported section names', function () {
+                setupLocalStorage({
+                    'catalog': { // without storage content
+                        'data_id': Math.floor(Date.now() / 1000) + 60 // in 1 minute
+                    }
+                });
+
+                init();
+                expect(customerData.getExpiredSectionNames()).toEqual([]);
             });
         });
 
@@ -169,7 +320,6 @@ define([
 
         describe('"reload" method', function () {
             beforeEach(function () {
-                originalGetJSON = jQuery.getJSON;
                 jQuery.getJSON = jasmine.createSpy().and.callFake(function () {
                     var deferred = $.Deferred();
 
@@ -189,10 +339,6 @@ define([
                 });
             });
 
-            afterEach(function () {
-                jQuery.getJSON = originalGetJSON;
-            });
-
             it('Should be defined', function () {
                 expect(obj.hasOwnProperty('reload')).toBeDefined();
             });
@@ -203,7 +349,7 @@ define([
                 }).not.toThrow();
             });
 
-            it('Returns proper sections object when passed array with a single section name', function () {
+            it('Check it returns proper sections object when passed array with a single section name', function () {
                 var result;
 
                 spyOn(sectionConfig, 'filterClientSideSections').and.returnValue(['section']);
@@ -239,7 +385,7 @@ define([
                 }));
             });
 
-            it('Returns proper sections object when passed array with a multiple section names', function () {
+            it('Check it returns proper sections object when passed array with multiple section names', function () {
                 var result;
 
                 spyOn(sectionConfig, 'filterClientSideSections').and.returnValue(['cart,customer,messages']);
@@ -278,8 +424,8 @@ define([
                     }
                 }));
             });
-
-            it('Returns all sections when passed wildcard string', function () {
+            //
+            it('Check it returns all sections when passed wildcard string', function () {
                 var result;
 
                 jQuery.getJSON = jasmine.createSpy().and.callFake(function (url, parameters) {
@@ -319,7 +465,7 @@ define([
             });
         });
 
-        describe('"invalidate" method', function () {
+        describe('"invalidated" method', function () {
             it('Should be defined', function () {
                 expect(obj.hasOwnProperty('invalidate')).toBeDefined();
             });
