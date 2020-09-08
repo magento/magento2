@@ -43,7 +43,7 @@ class AddCommentTest extends AbstractInvoiceControllerTest
         $message = $this->transportBuilder->getSentMessage();
         $subject = __('Update to your %1 invoice', $order->getStore()->getFrontendName())->render();
         $messageConstraint = $this->logicalAnd(
-            new StringContains($order->getBillingAddress()->getName()),
+            new StringContains($order->getCustomerName()),
             new RegularExpression(
                 sprintf(
                     "/Your order #%s has been updated with a status of.*%s/",

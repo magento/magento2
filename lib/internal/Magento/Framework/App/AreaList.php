@@ -7,6 +7,9 @@
  */
 namespace Magento\Framework\App;
 
+/**
+ * Lists router area codes & processes resolves FrontEndNames to area codes
+ */
 class AreaList
 {
     /**
@@ -72,7 +75,7 @@ class AreaList
                 $resolver = $this->_resolverFactory->create($areaInfo['frontNameResolver']);
                 $areaInfo['frontName'] = $resolver->getFrontName(true);
             }
-            if (isset($areaInfo['frontName']) && $areaInfo['frontName'] == $frontName) {
+            if (isset($areaInfo['frontName']) && $areaInfo['frontName'] === $frontName) {
                 return $areaCode;
             }
         }

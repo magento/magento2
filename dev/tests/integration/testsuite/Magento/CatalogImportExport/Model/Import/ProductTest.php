@@ -296,6 +296,59 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
     }
 
     /**
+     * Test that is_in_stock set to 0 when item quantity is 0
+     *
+     * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
+     * @magentoAppIsolation enabled
+     *
+     * @return void
+     */
+    public function testSaveIsInStockByZeroQty(): void
+    {
+        /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
+        $productRepository = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+            \Magento\Catalog\Api\ProductRepositoryInterface::class
+        );
+        $id1 = $productRepository->get('simple1')->getId();
+        $id2 = $productRepository->get('simple2')->getId();
+        $id3 = $productRepository->get('simple3')->getId();
+        $existingProductIds = [$id1, $id2, $id3];
+
+        $filesystem = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()
+            ->create(\Magento\Framework\Filesystem::class);
+        $directory = $filesystem->getDirectoryWrite(DirectoryList::ROOT);
+        $source = $this->objectManager->create(
+            \Magento\ImportExport\Model\Import\Source\Csv::class,
+            [
+                'file' => __DIR__ . '/_files/products_to_import_zero_qty.csv',
+                'directory' => $directory
+            ]
+        );
+        $errors = $this->_model->setParameters(
+            ['behavior' => \Magento\ImportExport\Model\Import::BEHAVIOR_APPEND, 'entity' => 'catalog_product']
+        )->setSource(
+            $source
+        )->validateData();
+
+        $this->assertTrue($errors->getErrorsCount() == 0);
+
+        $this->_model->importData();
+
+        /** @var $stockItmBeforeImport \Magento\CatalogInventory\Model\Stock\Item */
+        foreach ($existingProductIds as $productId) {
+            /** @var $stockRegistry StockRegistry */
+            $stockRegistry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
+                StockRegistry::class
+            );
+
+            $stockItemAfterImport = $stockRegistry->getStockItem($productId, 1);
+
+            $this->assertEquals(0, $stockItemAfterImport->getIsInStock());
+            unset($stockItemAfterImport);
+        }
+    }
+
+    /**
      * Test if stock state properly changed after import
      *
      * @magentoDataFixture Magento/Catalog/_files/multiple_products.php
@@ -3195,5 +3248,30 @@ class ProductTest extends \Magento\TestFramework\Indexer\TestCase
             }
         }
         $this->assertEquals($linksData, $importedProductLinks);
+    }
+
+    /**
+     * Tests that image name does not have to be prefixed by slash
+     *
+     * @magentoDataFixture mediaImportImageFixture
+     * @magentoDataFixture Magento/Store/_files/core_fixturestore.php
+     * @magentoDataFixture Magento/Catalog/_files/product_with_image.php
+     */
+    public function testUpdateImageByNameNotPrefixedWithSlash()
+    {
+        $expectedLabelForDefaultStoreView = 'image label updated';
+        $expectedImageFile = '/m/a/magento_image.jpg';
+        $secondStoreCode = 'fixturestore';
+        $productSku = 'simple';
+        $this->importDataForMediaTest('import_image_name_without_slash.csv');
+        $product = $this->getProductBySku($productSku);
+        $imageItems = $product->getMediaGalleryImages()->getItems();
+        $this->assertCount(1, $imageItems);
+        $imageItem = array_shift($imageItems);
+        $this->assertEquals($expectedImageFile, $imageItem->getFile());
+        $this->assertEquals($expectedLabelForDefaultStoreView, $imageItem->getLabel());
+        $product = $this->getProductBySku($productSku, $secondStoreCode);
+        $imageItems = $product->getMediaGalleryImages()->getItems();
+        $this->assertCount(0, $imageItems);
     }
 }

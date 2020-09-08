@@ -24,8 +24,12 @@
             </createData>
             <magentoCLI stepKey="allowSpecificValue" command="config:set payment/checkmo/allowspecific 1"/>
             <magentoCLI stepKey="specificCountryValue" command="config:set payment/checkmo/specificcountry GB"/>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
@@ -39,7 +43,7 @@
         <amOnPage url="{{StorefrontCategoryPage.url($$createCategory.name$$)}}" stepKey="onCategoryPage"/>
         <waitForPageLoad stepKey="waitForPageLoad1"/>
         <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="hoverProduct"/>
-        <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="addToCart"/>
+        <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="addToCart"/>
         <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForProductAdded"/>
         <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$createProduct.name$$ to your shopping cart." stepKey="seeAddedToCartMessage"/>
         <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
