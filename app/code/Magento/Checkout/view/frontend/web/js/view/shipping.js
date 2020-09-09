@@ -282,7 +282,7 @@ define([
                 option = _.isObject(this.countryOptions) && this.countryOptions[quote.shippingAddress().countryId],
                 messageContainer = registry.get('checkout.errors').messageContainer;
 
-            if (!quote.shippingMethod() || !quote.shippingMethod()['method_code']) {
+            if (!quote.shippingMethod()) {
                 this.errorValidationMessage(
                     $t('The shipping method is missing. Select the shipping method and try again.')
                 );
@@ -304,6 +304,11 @@ define([
                     !quote.shippingMethod()['method_code'] ||
                     !quote.shippingMethod()['carrier_code']
                 ) {
+                    if (!quote.shippingMethod()['method_code']) {
+                        this.errorValidationMessage(
+                            $t('The shipping method is missing. Select the shipping method and try again.')
+                        );
+                    }
                     this.focusInvalid();
 
                     return false;
