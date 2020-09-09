@@ -33,19 +33,22 @@
             <amOnPage url="{{StorefrontCategoryPage.url($$category.name$$)}}" stepKey="goToCategoryPage"/>
             <waitForPageLoad stepKey="waitForPageLoad"/>
             <moveMouseOver selector="{{StorefrontCategoryMainSection.ProductItemInfo}}" stepKey="moveMouseOverProduct"/>
-            <click selector="{{StorefrontCategoryMainSection.AddToCartBtn}}" stepKey="clickAddToCartButton"/>
-            <waitForPageLoad stepKey="waitForAddToCart"/>
+            <actionGroup ref="StorefrontClickAddToCartButtonActionGroup" stepKey="clickAddToCartButton"/>
             <waitForElementVisible selector="{{StorefrontCategoryMainSection.SuccessMsg}}" time="30" stepKey="waitForAddedToCartSuccessMessage"/>
             <see selector="{{StorefrontCategoryMainSection.SuccessMsg}}" userInput="You added $$product.name$$ to your shopping cart." stepKey="seeAddedToCartSuccessMessage"/>
             <see selector="{{StorefrontMinicartSection.quantity}}" userInput="1" stepKey="seeCartQuantity"/>
             <executeJS function="return window.location.host" stepKey="hostname"/>
             <magentoCLI command="config:set web/secure/base_url https://{$hostname}/" stepKey="setSecureBaseURL"/>
             <magentoCLI command="config:set web/secure/use_in_frontend 1" stepKey="useSecureURLsOnStorefront"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <magentoCLI command="config:set web/secure/use_in_frontend 0" stepKey="dontUseSecureURLsOnStorefront"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
             <deleteData createDataKey="customer" stepKey="deleteCustomer"/>
             <deleteData createDataKey="product" stepKey="deleteProduct"/>
             <deleteData createDataKey="category" stepKey="deleteCategory"/>

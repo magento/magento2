@@ -9,6 +9,7 @@ namespace Magento\InstantPurchase\PaymentMethodIntegration;
  * Availability checker with predefined result.
  *
  * @api
+ * @since 100.2.0
  */
 class StaticAvailabilityChecker implements AvailabilityCheckerInterface
 {
@@ -28,6 +29,7 @@ class StaticAvailabilityChecker implements AvailabilityCheckerInterface
 
     /**
      * @inheritdoc
+     * @since 100.2.0
      */
     public function isAvailable(): bool
     {

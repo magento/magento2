@@ -74,7 +74,7 @@ class Collection extends SearchResult
     {
         if ($field === 'billing_region') {
             $conditionSql = $this->_getConditionSql(
-                $this->getRegionNameExpresion(),
+                $this->getRegionNameExpression(),
                 $condition
             );
             $this->getSelect()->where($conditionSql);
@@ -100,7 +100,7 @@ class Collection extends SearchResult
         $whereCondition = '';
         foreach ($fields as $key => $field) {
             $field = $field === 'billing_region'
-                ? $this->getRegionNameExpresion()
+                ? $this->getRegionNameExpression()
                 : 'main_table.' . $field;
             $condition = $this->_getConditionSql(
                 $this->getConnection()->quoteIdentifier($field),
@@ -152,18 +152,18 @@ class Collection extends SearchResult
             )->joinLeft(
                 ['rnt' => $this->getTable('directory_country_region_name')],
                 "rnt.region_id={$regionIdField} AND {$localeCondition}",
-                ['billing_region' => $this->getRegionNameExpresion()]
+                ['billing_region' => $this->getRegionNameExpression()]
             );
 
         return $this;
     }
 
     /**
-     * Get SQL Expresion to define Region Name field by locale
+     * Get SQL Expression to define Region Name field by locale
      *
      * @return \Zend_Db_Expr
      */
-    private function getRegionNameExpresion(): \Zend_Db_Expr
+    private function getRegionNameExpression(): \Zend_Db_Expr
     {
         $connection = $this->getConnection();
         $defaultNameExpr = $connection->getIfNullSql(
