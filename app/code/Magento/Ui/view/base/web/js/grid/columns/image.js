@@ -11,6 +11,7 @@ define([
         defaults: {
             bodyTmpl: 'ui/grid/columns/image',
             modules: {
+                masonry: '${ $.parentName }',
                 previewComponent: '${ $.parentName }.preview'
             },
             previewRowId: null,
@@ -33,6 +34,15 @@ define([
                 ]);
 
             return this;
+        },
+
+        /**
+         * Updates styles when image loaded.
+         *
+         * @param {Object} record
+         */
+        updateStyles: function (record) {
+            !record.lastInRow || this.masonry().updateStyles();
         },
 
         /**
@@ -78,6 +88,17 @@ define([
          */
         getClasses: function (record) {
             return record.css || {};
+        },
+
+        /**
+         * Get is active record
+         *
+         * @param {Object} record - Data to be preprocessed.
+         *
+         * @returns {Boolean}
+         */
+        getIsActive: function (record) {
+            return this.previewComponent().visibleRecord() === record._rowIndex || false;
         },
 
         /**

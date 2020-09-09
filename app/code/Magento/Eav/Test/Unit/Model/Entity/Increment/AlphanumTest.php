@@ -3,20 +3,23 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Eav\Test\Unit\Model\Entity\Increment;
 
 use Magento\Eav\Model\Entity\Increment\Alphanum;
+use PHPUnit\Framework\TestCase;
 
-class AlphanumTest extends \PHPUnit\Framework\TestCase
+class AlphanumTest extends TestCase
 {
     /**
      * @var Alphanum
      */
     private $model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->model = new \Magento\Eav\Model\Entity\Increment\Alphanum();
+        $this->model = new Alphanum();
     }
 
     public function testGetAllowedChars()
@@ -56,12 +59,10 @@ class AlphanumTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    /**
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Invalid character encountered in increment ID: ---wrong-id---
-     */
     public function testGetNextIdThrowsExceptionIfIdContainsNotAllowedCharacters()
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Invalid character encountered in increment ID: ---wrong-id---');
         $this->model->setLastId('---wrong-id---');
         $this->model->setPrefix('prefix');
         $this->model->getNextId();

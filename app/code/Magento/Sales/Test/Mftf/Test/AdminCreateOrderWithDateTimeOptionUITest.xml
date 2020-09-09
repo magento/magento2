@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminCreateOrderWithDateTimeOptionUITest">
+        <annotations>
+            <stories value="Create Order"/>
+            <title value="Admin create order with date time option UI test"/>
+            <description value="Check asterisk rendered correctly for Product with custom option (datetime) at backend"/>
+            <features value="Sales"/>
+            <stories value="Create order in Admin"/>
+            <severity value="MINOR"/>
+            <group value="Sales"/>
+        </annotations>
+
+        <before>
+            <createData entity="Simple_US_Customer" stepKey="createCustomer"/>
+            <createData entity="_defaultCategory" stepKey="createCategory"/>
+            <createData entity="_defaultProduct" stepKey="createProduct">
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <updateData createDataKey="createProduct" entity="productWithDateTimeOption" stepKey="updateProductWithOption"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+        </before>
+        <after>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+            <deleteData createDataKey="createProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createCustomer" stepKey="deleteSimpleCustomer"/>
+        </after>
+
+        <actionGroup ref="NavigateToNewOrderPageExistingCustomerActionGroup" stepKey="navigateToNewOrderWithExistingCustomer">
+            <argument name="customer" value="$$createCustomer$$"/>
+        </actionGroup>
+
+        <click selector="{{AdminOrderFormItemsSection.addProducts}}" stepKey="clickAddProducts"/>
+        <fillField selector="{{AdminOrderFormItemsSection.skuFilter}}" userInput="$$createProduct.sku$$" stepKey="fillSkuFilter"/>
+        <click selector="{{AdminOrderFormItemsSection.search}}" stepKey="clickSearch"/>
+        <scrollTo selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" x="0" y="-100" stepKey="scrollToCheckColumn"/>
+        <checkOption selector="{{AdminOrderFormItemsSection.rowCheck('1')}}" stepKey="selectProduct"/>
+        <waitForAjaxLoad stepKey="waitForAjaxLoad"/>
+        <executeJS function="{{AdminProductCustomizableOptionsSection.requiredFieldIndicator}}" stepKey="dateTimeRequiredFieldIndicator"/>
+        <assertEquals message="pass" stepKey="assertRequiredFieldIndicator">
+			<actualResult type="variable">dateTimeRequiredFieldIndicator</actualResult>
+			<expectedResult type="string">"*"</expectedResult>
+        </assertEquals>
+    </test>
+</tests>
+

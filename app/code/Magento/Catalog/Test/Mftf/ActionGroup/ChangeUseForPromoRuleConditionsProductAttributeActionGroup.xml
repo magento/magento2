@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="ChangeUseForPromoRuleConditionsProductAttributeActionGroup">
+        <annotations>
+            <description>Select the provided value for the 'Use for Promo Rule Conditions' dropdown menu. Clicks on Save. Validates that the Save message is present.</description>
+        </annotations>
+        <arguments>
+            <argument name="option" type="string"/>
+        </arguments>
+
+        <click selector="{{StorefrontPropertiesSection.StoreFrontPropertiesTab}}" stepKey="clickStoreFrontPropertiesTab"/>
+        <waitForPageLoad stepKey="waitForPageLoad"/>
+        <selectOption selector="{{StorefrontPropertiesSection.useForPromoRuleConditions}}" userInput="{{option}}" stepKey="changeOption"/>
+        <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the product attribute." stepKey="successMessage"/>
+    </actionGroup>
+</actionGroups>

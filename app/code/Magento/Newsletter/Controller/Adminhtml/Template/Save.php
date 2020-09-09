@@ -1,6 +1,5 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
@@ -10,6 +9,9 @@ use Magento\Framework\App\Action\HttpPostActionInterface as HttpPostActionInterf
 use Magento\Framework\App\TemplateTypesInterface;
 use Magento\Framework\Exception\LocalizedException;
 
+/**
+ * An action that saves a template.
+ */
 class Save extends \Magento\Newsletter\Controller\Adminhtml\Template implements HttpPostActionInterface
 {
     /**
@@ -32,9 +34,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Template implements 
         }
 
         try {
-            $template->addData(
-                $request->getParams()
-            )->setTemplateSubject(
+            $template->setTemplateSubject(
                 $request->getParam('subject')
             )->setTemplateCode(
                 $request->getParam('code')
@@ -69,7 +69,7 @@ class Save extends \Magento\Newsletter\Controller\Adminhtml\Template implements 
             $this->_redirect('*/template');
             return;
         } catch (LocalizedException $e) {
-            $this->messageManager->addError(nl2br($e->getMessage()));
+            $this->messageManager->addErrorMessage(nl2br($e->getMessage()));
             $this->_getSession()->setData('newsletter_template_form_data', $this->getRequest()->getParams());
         } catch (\Exception $e) {
             $this->messageManager->addException($e, __('Something went wrong while saving this template.'));

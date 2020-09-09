@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteCustomerAddressTest">
+        <annotations>
+            <features value="Customer"/>
+            <stories value="Delete Customer Address in Admin"/>
+            <title value="Delete Customer Address in Admin"/>
+            <description value="Delete Customer Address in Admin"/>
+            <severity value="BLOCKER"/>
+            <testCaseId value="MC-13623"/>
+            <group value="Customer"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <createData stepKey="customer" entity="Simple_US_Customer_Multiple_Addresses"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+        </before>
+        <after>
+            <deleteData stepKey="deleteCustomer" createDataKey="customer"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <amOnPage url="{{AdminCustomerPage.url}}edit/id/$$customer.id$$/" stepKey="openCustomerEditPage"/>
+        <waitForPageLoad stepKey="waitForCustomerEditPage"/>
+        <!-- Assert Customer Default Billing Address -->
+        <actionGroup stepKey="checkDefaultBilling" ref="AdminAssertCustomerDefaultBillingAddress">
+            <argument name="firstName" value="$$customer.firstname$$"/>
+            <argument name="lastName" value="$$customer.lastname$$"/>
+            <argument name="street1" value="{{US_Address_NY.street[0]}}"/>
+            <argument name="state" value="{{US_Address_NY.state}}"/>
+            <argument name="postcode" value="{{US_Address_NY.postcode}}"/>
+            <argument name="country" value="{{US_Address_NY.country}}"/>
+            <argument name="telephone" value="{{US_Address_NY.telephone}}"/>
+        </actionGroup>
+        <!-- Assert Customer Default Shipping Address -->
+        <actionGroup stepKey="checkDefaultShipping" ref="AdminAssertCustomerDefaultShippingAddress">
+            <argument name="firstName" value="$$customer.firstname$$"/>
+            <argument name="lastName" value="$$customer.lastname$$"/>
+            <argument name="street1" value="{{US_Address_NY.street[0]}}"/>
+            <argument name="state" value="{{US_Address_NY.state}}"/>
+            <argument name="postcode" value="{{US_Address_NY.postcode}}"/>
+            <argument name="country" value="{{US_Address_NY.country}}"/>
+            <argument name="telephone" value="{{US_Address_NY.telephone}}"/>
+        </actionGroup>
+        <actionGroup stepKey="resetFilter" ref="AdminResetFilterInCustomerAddressGrid"/>
+        <!-- Assert 2 records in Customer Address Grid -->
+        <actionGroup stepKey="see2Record" ref="AdminAssertNumberOfRecordsInCustomersAddressGrid">
+            <argument name="number" value="2"/>
+        </actionGroup>
+        <!-- Assert Address 1 in Grid -->
+        <actionGroup stepKey="checkAddressStreetInGrid" ref="AdminAssertAddressInCustomersAddressGrid">
+            <argument name="text" value="{{US_Address_NY.street[0]}}"/>
+        </actionGroup>
+        <actionGroup stepKey="checkAddressPhoneInGrid" ref="AdminAssertAddressInCustomersAddressGrid">
+            <argument name="text" value="{{US_Address_NY.telephone}}"/>
+        </actionGroup>
+        <actionGroup stepKey="checkAddressStateInGrid" ref="AdminAssertAddressInCustomersAddressGrid">
+            <argument name="text" value="{{US_Address_NY.state}}"/>
+        </actionGroup>
+        <actionGroup stepKey="checkAddressCityInGrid" ref="AdminAssertAddressInCustomersAddressGrid">
+            <argument name="text" value="{{US_Address_NY.city}}"/>
+        </actionGroup>
+        <actionGroup stepKey="checkAddressCountryInGrid" ref="AdminAssertAddressInCustomersAddressGrid">
+            <argument name="text" value="{{US_Address_NY.country}}"/>
+        </actionGroup>
+        <!-- Assert Address 2 in Grid -->
+        <actionGroup stepKey="checkAddressStreetInGrid2" ref="AdminAssertAddressInCustomersAddressGrid">
+            <argument name="text" value="{{UK_Not_Default_Address.street[0]}}"/>
+        </actionGroup>
+        <actionGroup stepKey="checkAddressPhoneInGrid2" ref="AdminAssertAddressInCustomersAddressGrid">
+            <argument name="text" value="{{UK_Not_Default_Address.telephone}}"/>
+        </actionGroup>
+        <actionGroup stepKey="checkAddressCityInGrid2" ref="AdminAssertAddressInCustomersAddressGrid">
+            <argument name="text" value="{{UK_Not_Default_Address.city}}"/>
+        </actionGroup>
+        <!-- Delete Customer in Customer Address Grid -->
+        <actionGroup stepKey="deleteAddress" ref="AdminDeleteAddressInCustomersAddressGrid">
+            <argument name="row" value="0"/>
+        </actionGroup>
+        <!-- Assert 1 record in Customer Address Grid -->
+        <actionGroup stepKey="see1Record" ref="AdminAssertNumberOfRecordsInCustomersAddressGrid">
+            <argument name="number" value="1"/>
+        </actionGroup>
+        <actionGroup stepKey="saveAndContinue" ref="AdminCustomerSaveAndContinue"/>
+        <actionGroup stepKey="saveAndCheckSuccessMessage" ref="AdminSaveCustomerAndAssertSuccessMessage"/>
+        <!-- Assert Customer Login Storefront -->
+        <actionGroup stepKey="login" ref="StorefrontAssertSuccessLoginToStorefront">
+            <argument name="Customer" value="$$customer$$"/>
+        </actionGroup>
+        <!-- Assert Customer Address Book -->
+        <actionGroup stepKey="goToAddressBook" ref="StorefrontCustomerGoToSidebarMenu">
+            <argument name="menu" value="Address Book"/>
+        </actionGroup>
+        <actionGroup stepKey="assertAddressNumber" ref="StorefrontCustomerAddressBookNumberOfAddresses">
+            <argument name="number" value="1"/>
+        </actionGroup>
+        <actionGroup stepKey="assertNoAddress1" ref="StorefrontCustomerAddressBookNotContains">
+            <argument name="text" value="{{US_Address_NY.street[0]}}"/>
+        </actionGroup>
+        <actionGroup stepKey="assertAddress2" ref="StorefrontCustomerAddressBookContains">
+            <argument name="text" value="{{UK_Not_Default_Address.street[0]}}"/>
+        </actionGroup>
+    </test>
+</tests>

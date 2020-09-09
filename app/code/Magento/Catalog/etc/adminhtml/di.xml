@@ -177,6 +177,10 @@
                     <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Modifier\Attributes</item>
                     <item name="sortOrder" xsi:type="number">10</item>
                 </item>
+                <item name="priceAttributes" xsi:type="array">
+                    <item name="class" xsi:type="string">Magento\Catalog\Ui\DataProvider\Product\Modifier\PriceAttributes</item>
+                    <item name="sortOrder" xsi:type="number">10</item>
+                </item>
             </argument>
         </arguments>
     </virtualType>
@@ -185,6 +189,14 @@
             <argument name="escapeAttributes" xsi:type="array">
                 <item name="name" xsi:type="string">name</item>
                 <item name="sku" xsi:type="string">sku</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Ui\DataProvider\Product\Modifier\PriceAttributes">
+        <arguments>
+            <argument name="priceAttributeList" xsi:type="array">
+                <item name="cost" xsi:type="string">cost</item>
+                <item name="special_price" xsi:type="string">special_price</item>
             </argument>
         </arguments>
     </type>
@@ -250,6 +262,23 @@
                 <item name="3" xsi:type="string">media_gallery</item>
                 <item name="4" xsi:type="string">quantity_and_stock_status</item>
                 <item name="5" xsi:type="string">tier_price</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Eav\Model\Adminhtml\System\Config\Source\Inputtype">
+        <arguments>
+            <argument name="optionsArray" xsi:type="array">
+                <item name="450" xsi:type="array">
+                    <item name="value" xsi:type="string">datetime</item>
+                    <item name="label" xsi:type="string" translate="true">Date and Time</item>
+                </item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Ui\DataProvider\Mapper\FormElement">
+        <arguments>
+            <argument name="mappings" xsi:type="array">
+                <item name="datetime" xsi:type="string">date</item>
             </argument>
         </arguments>
     </type>

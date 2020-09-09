@@ -5,7 +5,9 @@
  */
 declare(strict_types=1);
 
-require dirname(dirname(__DIR__)) . '/Catalog/_files/category_duplicates.php';
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/category_duplicates.php');
 
 $objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
 

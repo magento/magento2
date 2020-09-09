@@ -40,7 +40,7 @@ class DefinedClasses
      *
      * @param string $className
      * @return bool
-     * @deprecated
+     * @deprecated 102.0.0
      */
     public function isClassLoadableFromDisc($className)
     {

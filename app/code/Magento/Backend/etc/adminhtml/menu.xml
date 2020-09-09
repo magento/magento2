@@ -27,6 +27,5 @@
         <add id="Magento_Backend::stores_attributes" title="Attributes" translate="title" module="Magento_Backend" sortOrder="40" parent="Magento_Backend::stores" resource="Magento_Backend::stores_attributes"/>
         <add id="Magento_Backend::other_settings" title="Other Settings" translate="title" module="Magento_Backend" sortOrder="50" parent="Magento_Backend::stores" resource="Magento_Backend::stores_other_settings"/>
         <add id="Magento_Backend::system_other_settings" title="Other Settings" translate="title" module="Magento_Backend" sortOrder="80" parent="Magento_Backend::system" resource="Magento_Backend::system_other_settings"/>
-        <add id="Magento_Backend::setup_wizard" action="adminhtml/backendapp/redirect/app/setup" title="Web Setup Wizard" translate="title" module="Magento_Backend" sortOrder="80" parent="Magento_Backend::system_tools" resource="Magento_Backend::setup_wizard"/>
     </menu>
 </config>

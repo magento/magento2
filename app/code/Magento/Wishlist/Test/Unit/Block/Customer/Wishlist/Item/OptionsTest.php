@@ -3,22 +3,34 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Wishlist\Test\Unit\Block\Customer\Wishlist\Item;
 
+use Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface;
+use Magento\Catalog\Helper\Product\ConfigurationPool;
+use Magento\Catalog\Model\Product;
+use Magento\Framework\App\Http\Context;
+use Magento\Framework\Escaper;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Wishlist\Block\Customer\Wishlist\Item\Options;
+use Magento\Wishlist\Model\Item;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class OptionsTest extends \PHPUnit\Framework\TestCase
+class OptionsTest extends TestCase
 {
     const TEST_PRODUCT_TYPE = 'testProductType';
     const TEST_HELPER_CLASS_NAME = 'testHelperClass';
 
     /**
-     * @var \Magento\Framework\Escaper|\PHPUnit_Framework_MockObject_MockObject
+     * @var Escaper|MockObject
      */
     private $escaperMock;
 
     /**
-     * @var \Magento\Framework\App\Http\Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $httpContextMock;
 
@@ -28,44 +40,44 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
     private $block;
 
     /**
-     * @var \Magento\Catalog\Helper\Product\ConfigurationPool|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigurationPool|MockObject
      */
     private $helperPoolMock;
 
     /**
-     * @var \Magento\Wishlist\Model\Item|\PHPUnit_Framework_MockObject_MockObject
+     * @var Item|MockObject
      */
     private $itemMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $productContextMock = $this->getMockBuilder(\Magento\Catalog\Block\Product\Context::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+        $this->escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $eventManagerMock = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+        $eventManagerMock = $this->getMockBuilder(ManagerInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $productContextMock->method('getEscaper')
             ->willReturn($this->escaperMock);
         $productContextMock->method('getEventManager')
             ->willReturn($eventManagerMock);
 
-        $this->httpContextMock = $this->getMockBuilder(\Magento\Framework\App\Http\Context::class)
+        $this->httpContextMock = $this->getMockBuilder(Context::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->helperPoolMock = $this->getMockBuilder(\Magento\Catalog\Helper\Product\ConfigurationPool::class)
+        $this->helperPoolMock = $this->getMockBuilder(ConfigurationPool::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->itemMock = $this->getMockBuilder(\Magento\Wishlist\Model\Item::class)
+        $this->itemMock = $this->getMockBuilder(Item::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->block = $objectManager->getObject(
             Options::class,
             [
@@ -86,7 +98,7 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
      */
     public function testGetConfiguredOptions($options, $callNum, $expected)
     {
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
             ->getMock();
         $productMock->expects($this->once())
@@ -96,9 +108,9 @@ class OptionsTest extends \PHPUnit\Framework\TestCase
             ->method('getProduct')
             ->willReturn($productMock);
 
-        $helperMock = $this->getMockBuilder(\Magento\Catalog\Helper\Product\Configuration\ConfigurationInterface::class)
+        $helperMock = $this->getMockBuilder(ConfigurationInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
         $helperMock->expects($this->once())
             ->method('getOptions')
             ->willReturn($options);
