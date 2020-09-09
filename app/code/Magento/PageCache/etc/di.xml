@@ -37,9 +37,6 @@
             <argument name="layoutCacheKey" xsi:type="object">Magento\Framework\View\Layout\LayoutCacheKeyInterface</argument>
         </arguments>
     </type>
-    <type name="Magento\Framework\App\FrontControllerInterface">
-        <plugin name="page_cache_from_key_from_cookie" type="Magento\PageCache\Plugin\RegisterFormKeyFromCookie" />
-    </type>
     <type name="Magento\Framework\App\Cache\RuntimeStaleCacheStateModifier">
         <arguments>
             <argument name="cacheTypes" xsi:type="array">
@@ -49,4 +46,5 @@
     </type>
     <preference for="Magento\PageCache\Model\VclGeneratorInterface" type="Magento\PageCache\Model\Varnish\VclGenerator"/>
     <preference for="Magento\PageCache\Model\VclTemplateLocatorInterface" type="Magento\PageCache\Model\Varnish\VclTemplateLocator"/>
+    <preference for="Magento\PageCache\Model\Spi\PageCacheTagsPreprocessorInterface" type="Magento\PageCache\Model\PageCacheTagsPreprocessorComposite"/>
 </config>

@@ -94,8 +94,12 @@
                 <requiredEntity createDataKey="createConfigProduct"/>
                 <requiredEntity createDataKey="createConfigChildProduct1"/>
             </createData>
-            <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-            <magentoCLI command="cache:flush" stepKey="flushCache"/>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
         </before>
         <after>
             <deleteData createDataKey="simpleCustomer" stepKey="deleteSimpleCustomer"/>
@@ -145,7 +149,7 @@
         <actionGroup ref="AdminSelectFlatRateShippingMethodActionGroup" stepKey="selectFlatRateShippingMethod"/>
         <!-- Submit order -->
         <comment userInput="Submit order" stepKey="submitOrderComment"/>
-        <click selector="{{AdminOrderFormActionSection.SubmitOrder}}" stepKey="submitOrder"/>
+        <actionGroup ref="AdminOrderClickSubmitOrderActionGroup" stepKey="submitOrder" />
         <!-- Verify order information -->
         <comment userInput="Verify order information" stepKey="verifyOrderInformationComment"/>
         <actionGroup ref="VerifyCreatedOrderInformationActionGroup" stepKey="verifyCreatedOrderInformation"/>
@@ -215,8 +219,7 @@
         </actionGroup>
         <!-- Open Order Index Page -->
         <comment userInput="Open Order Index Page" stepKey="openOrderIndexPageComemnt"/>
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForPageLoad5"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
         <!-- Filter order using orderId -->
         <comment userInput="Filter order using orderId" stepKey="filterOrderUsingOrderIdComment"/>
         <actionGroup ref="FilterOrderGridByIdActionGroup" stepKey="filterOrderGridById">

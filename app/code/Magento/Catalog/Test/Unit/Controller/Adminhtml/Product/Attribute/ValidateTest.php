@@ -153,12 +153,75 @@ class ValidateTest extends AttributeTest
             ->willReturnMap(
                 [
                     [Attribute::class, [], $this->attributeMock],
-                    [\Magento\Eav\Model\Entity\Attribute\Set::class, [], $this->attributeSetMock]
+                    [AttributeSet::class, [], $this->attributeSetMock]
                 ]
             );
         $this->attributeMock->expects($this->once())
             ->method('loadByCode')
             ->willReturnSelf();
+
+        $this->attributeCodeValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with('test_attribute_code')
+            ->willReturn(true);
+
+        $this->requestMock->expects($this->once())
+            ->method('has')
+            ->with('new_attribute_set_name')
+            ->willReturn(true);
+        $this->attributeSetMock->expects($this->once())
+            ->method('setEntityTypeId')
+            ->willReturnSelf();
+        $this->attributeSetMock->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+        $this->attributeSetMock->expects($this->once())
+            ->method('getId')
+            ->willReturn(false);
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultJson);
+        $this->resultJson->expects($this->once())
+            ->method('setJsonData')
+            ->willReturnSelf();
+
+        $this->assertInstanceOf(ResultJson::class, $this->getModel()->execute());
+    }
+
+    /**
+     * Test that editing existing attribute loads attribute by id
+     *
+     * @return void
+     * @throws NotFoundException
+     */
+    public function testExecuteEditExisting(): void
+    {
+        $serializedOptions = '{"key":"value"}';
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap(
+                [
+                    ['frontend_label', null, 'test_frontend_label'],
+                    ['attribute_id', null, 10],
+                    ['attribute_code', null, 'test_attribute_code'],
+                    ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                    ['serialized_options', '[]', $serializedOptions],
+                ]
+            );
+        $this->objectManagerMock->expects($this->exactly(2))
+            ->method('create')
+            ->willReturnMap(
+                [
+                    [Attribute::class, [], $this->attributeMock],
+                    [AttributeSet::class, [], $this->attributeSetMock]
+                ]
+            );
+        $this->attributeMock->expects($this->once())
+            ->method('load')
+            ->willReturnSelf();
+        $this->attributeMock->expects($this->once())
+            ->method('getAttributeCode')
+            ->willReturn('test_attribute_code');
 
         $this->attributeCodeValidatorMock->expects($this->once())
             ->method('isValid')
@@ -605,7 +668,7 @@ class ValidateTest extends AttributeTest
             ->willReturnMap(
                 [
                     [Attribute::class, [], $this->attributeMock],
-                    [\Magento\Eav\Model\Entity\Attribute\Set::class, [], $this->attributeSetMock]
+                    [AttributeSet::class, [], $this->attributeSetMock]
                 ]
             );
 

@@ -55,6 +55,12 @@ class AbstractLayoutUpdateTest extends TestCase
      */
     protected function setUp(): void
     {
+        Bootstrap::getObjectManager()->configure([
+            'preferences' => [
+                \Magento\Catalog\Model\Category\Attribute\LayoutUpdateManager::class
+                => \Magento\TestFramework\Catalog\Model\CategoryLayoutUpdateManager::class
+            ]
+        ]);
         $this->categoryFactory = Bootstrap::getObjectManager()->get(CategoryFactory::class);
         $this->recreateCategory();
         $this->attribute = $this->category->getAttributes()['custom_layout_update_file']->getBackend();

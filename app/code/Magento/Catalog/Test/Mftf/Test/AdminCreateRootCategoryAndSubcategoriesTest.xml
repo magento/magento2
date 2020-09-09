@@ -21,8 +21,7 @@
         <!--Delete all created data during the test execution and assign Default Root Category to Store-->
         <after>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin2"/>
-            <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnPageAdminSystemStore"/>
-            <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad" />
+            <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="amOnPageAdminSystemStore"/>
             <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
             <waitForPageLoad  time="10" stepKey="waitForPageAdminStoresGridLoadAfterResetButton"/>
             <fillField selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"  stepKey="fillFieldOnWebsiteStore"/>
@@ -58,8 +57,7 @@
             <argument name="categoryEntity" value="SubCategoryWithParent"/>
         </actionGroup>
         <!--Assign new created root category to store-->
-        <amOnPage url="{{AdminSystemStorePage.url}}" stepKey="amOnPageAdminSystemStore"/>
-        <waitForPageLoad stepKey="waitForPageAdminSystemStoreLoad" />
+        <actionGroup ref="AdminSystemStoreOpenPageActionGroup" stepKey="amOnPageAdminSystemStore"/>
         <click selector="{{AdminStoresGridSection.resetButton}}" stepKey="clickOnResetButton"/>
         <waitForPageLoad  time="10" stepKey="waitForPageAdminStoresGridLoadAfterResetButton"/>
         <fillField selector="{{AdminStoresGridSection.storeGrpFilterTextField}}" userInput="Main Website Store"  stepKey="fillFieldOnWebsiteStore"/>

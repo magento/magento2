@@ -132,7 +132,7 @@ class RelatedTest extends AbstractLinksTest
      */
     public function testMultipleWebsitesRelatedProducts(array $data): void
     {
-        $this->updateProducts($this->prepareWebsiteIdsProducts());
+        $this->updateProducts($this->prepareProductsWebsiteIds());
         $productLinks = array_replace_recursive($this->existingProducts, $data['productLinks']);
         $this->linkProducts('simple-1', $productLinks);
         $this->product = $this->productRepository->get(
