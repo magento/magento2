@@ -18,6 +18,8 @@ define([
 
     var injector = new Squire(),
         obj,
+        _,
+        originaljQuery,
         originalGetJSON,
         originalReload,
         originalIsEmpty,
@@ -103,12 +105,14 @@ define([
         });
 
         beforeEach(function (done) {
-            originalGetJSON = jQuery.getJSON;
+            originalGetJSON = $.getJSON;
             sectionConfig['Magento_Customer/js/section-config'](sectionConfigSettings);
 
             injector.require([
+                'underscore',
                 'Magento_Customer/js/customer-data'
-            ], function (Constr) {
+            ], function (underscore, Constr) {
+                _ = underscore;
                 obj = Constr;
                 done();
             });
@@ -116,7 +120,7 @@ define([
 
         afterEach(function () {
             try {
-                jQuery.getJSON = originalGetJSON;
+                $.getJSON = originalGetJSON;
                 clearLocalStorage();
                 injector.clean();
                 injector.remove();
@@ -125,14 +129,20 @@ define([
         });
 
         describe('"init" method', function () {
+            var storageInvalidation = {
+                keys: function () {
+                    return ['section'];
+                }
+            };
+
             beforeEach(function () {
                 originalReload = obj.reload;
                 originalIsEmpty = _.isEmpty;
 
-                spyOn(obj, 'reload').and.returnValue(true);
-
                 $.initNamespaceStorage('mage-cache-storage').localStorage;
                 $.initNamespaceStorage('mage-cache-storage-section-invalidation').localStorage;
+
+                spyOn(storageInvalidation, 'keys').and.returnValue(['section']);
             });
 
             afterEach(function () {
@@ -161,13 +171,15 @@ define([
 
             it('Calls "reload" method when expired sections exist', function () {
                 spyOn(obj, 'getExpiredSectionNames').and.returnValue(['section']);
+                spyOn(obj, 'reload').and.returnValue(true);
                 obj.init();
                 expect(obj.reload).toHaveBeenCalled();
             });
 
             it('Calls "reload" method when expired sections do not exist', function () {
                 spyOn(obj, 'getExpiredSectionNames').and.returnValue([]);
-                _.isEmpty = jasmine.createSpy('_.isEmpty').and.returnValue(false);
+                spyOn(obj, 'reload').and.returnValue(true);
+                spyOn(_, 'isEmpty').and.returnValue(false);
 
                 obj.init();
                 expect(obj.reload).toHaveBeenCalled();
@@ -180,14 +192,14 @@ define([
                     }
                 });
 
-                jQuery.getJSON = jasmine.createSpy().and.callFake(function () {
+                $.getJSON = jasmine.createSpy().and.callFake(function () {
                     var deferred = $.Deferred();
 
                     return deferred.promise();
                 });
 
                 init();
-                expect(jQuery.getJSON).not.toHaveBeenCalled();
+                expect($.getJSON).not.toHaveBeenCalled();
             });
 
             it('Check it requests sections from the server if there are expired sections', function () {
@@ -246,6 +258,13 @@ define([
                         'content': {}
                     }
                 });
+
+                $.getJSON = jasmine.createSpy('$.getJSON').and.callFake(function () {
+                    var deferred = $.Deferred();
+
+                    return deferred.promise();
+                });
+
                 init();
                 expect(customerData.getExpiredSectionNames()).toEqual(['cart']);
             });
@@ -266,6 +285,12 @@ define([
                     'cart': { // without storage content
                         'data_id': Math.floor(Date.now() / 1000) + 60 // in 1 minute
                     }
+                });
+
+                $.getJSON = jasmine.createSpy('$.getJSON').and.callFake(function () {
+                    var deferred = $.Deferred();
+
+                    return deferred.promise();
                 });
 
                 init();
@@ -320,7 +345,10 @@ define([
 
         describe('"reload" method', function () {
             beforeEach(function () {
-                jQuery.getJSON = jasmine.createSpy().and.callFake(function () {
+                originaljQuery = $;
+                $ = jQuery;
+
+                $.getJSON = jasmine.createSpy().and.callFake(function () {
                     var deferred = $.Deferred();
 
                     /**
@@ -339,6 +367,10 @@ define([
                 });
             });
 
+            afterEach(function () {
+                $ = originaljQuery;
+            });
+
             it('Should be defined', function () {
                 expect(obj.hasOwnProperty('reload')).toBeDefined();
             });
@@ -354,7 +386,7 @@ define([
 
                 spyOn(sectionConfig, 'filterClientSideSections').and.returnValue(['section']);
 
-                jQuery.getJSON = jasmine.createSpy().and.callFake(function (url, parameters) {
+                $.getJSON = jasmine.createSpy().and.callFake(function (url, parameters) {
                     var deferred = $.Deferred();
 
                     /**
@@ -390,7 +422,7 @@ define([
 
                 spyOn(sectionConfig, 'filterClientSideSections').and.returnValue(['cart,customer,messages']);
 
-                jQuery.getJSON = jasmine.createSpy().and.callFake(function (url, parameters) {
+                $.getJSON = jasmine.createSpy().and.callFake(function (url, parameters) {
                     var deferred = $.Deferred();
 
                     expect(parameters).toEqual(jasmine.objectContaining({
@@ -428,7 +460,7 @@ define([
             it('Check it returns all sections when passed wildcard string', function () {
                 var result;
 
-                jQuery.getJSON = jasmine.createSpy().and.callFake(function (url, parameters) {
+                $.getJSON = jasmine.createSpy().and.callFake(function (url, parameters) {
                     var deferred = $.Deferred();
 
                     expect(parameters).toEqual(jasmine.objectContaining({
@@ -454,7 +486,7 @@ define([
 
                 result = obj.reload('*', true);
 
-                expect(jQuery.getJSON).toHaveBeenCalled();
+                expect($.getJSON).toHaveBeenCalled();
                 expect(result).toEqual(jasmine.objectContaining({
                     responseJSON: {
                         cart: {},
