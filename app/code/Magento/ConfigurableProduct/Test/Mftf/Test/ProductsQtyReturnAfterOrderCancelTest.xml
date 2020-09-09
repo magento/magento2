@@ -70,7 +70,8 @@
         </actionGroup>
 
         <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
-        <actionGroup ref="AdminClickInvoiceButtonIntoOrderActionGroup" stepKey="clickInvoiceButton"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
+        <waitForPageLoad stepKey="waitForNewInvoicePageLoad"/>
         <fillField selector="{{AdminInvoiceItemsSection.qtyToInvoiceColumn}}" userInput="1" stepKey="ChangeQtyToInvoice"/>
         <click selector="{{AdminInvoiceItemsSection.updateQty}}" stepKey="updateQuantity"/>
         <waitForPageLoad stepKey="waitPageToBeLoaded"/>

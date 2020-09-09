@@ -47,7 +47,8 @@
             <argument name="customer" value="$$createCustomer$$"/>
         </actionGroup>
 
-        <actionGroup ref="AdminClickInvoiceButtonIntoOrderActionGroup" stepKey="clickInvoiceAction"/>
+        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceAction"/>
+        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seePageNameNewInvoicePage"/>
         <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>
         <click selector="{{AdminOrderDetailsMainActionsSection.ship}}" stepKey="clickShipAction"/>
         <seeInCurrentUrl url="{{AdminShipmentNewPage.url}}" stepKey="seeOrderShipmentUrl"/>
