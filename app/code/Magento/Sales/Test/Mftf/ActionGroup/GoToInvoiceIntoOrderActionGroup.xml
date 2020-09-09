@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="GoToInvoiceIntoOrderActionGroup" deprecated="Use AdminClickInvoiceButtonIntoOrderActionGroup instead.">
+    <actionGroup name="GoToInvoiceIntoOrderActionGroup">
         <annotations>
             <description>Clicks on 'Invoice' on the Admin Orders view page. Validates that the URL and Page Title are correct.</description>
         </annotations>
