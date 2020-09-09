@@ -19,14 +19,14 @@
             <testCaseId value="N/a"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin1"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin1"/>
         </before>
         <after>
             <actionGroup ref="setEmailTextLengthLimitActionGroup" stepKey="rollbackEmailTextLengthLimit">
                 <argument name="emailTextLengthLimit" value="{{Wishlist.default_email_text_length_limit}}"/>
             </actionGroup>
             <checkOption selector="{{WishListShareOptionsSection.useSystemValueForWishListEmailTextLimit}}" stepKey="checkUseSystemValueForWishListEmailTextLimit"/>
-            <amOnPage url="admin/admin/auth/logout/" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="adminLogout"/>
         </after>
 
         <actionGroup ref="setEmailTextLengthLimitActionGroup" stepKey="setEmailTextLengthLimitToMin">

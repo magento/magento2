@@ -29,7 +29,7 @@ class CategoryBlockTest extends GraphQlAbstract
         $blockRepository = Bootstrap::getObjectManager()->get(BlockRepositoryInterface::class);
         $block = $blockRepository->getById($blockId);
         $filter = Bootstrap::getObjectManager()->get(FilterEmulate::class);
-        $renderedContent = $filter->setUseSessionInUrl(false)->filter($block->getContent());
+        $renderedContent = $filter->filter($block->getContent());
 
         /** @var CategoryRepositoryInterface $categoryRepository */
         $categoryRepository = Bootstrap::getObjectManager()->get(CategoryRepositoryInterface::class);
@@ -58,5 +58,30 @@ QUERY;
         $this->assertEquals($block->getTitle(), $actualBlock['title']);
         $this->assertEquals($block->getIdentifier(), $actualBlock['identifier']);
         $this->assertEquals($renderedContent, $actualBlock['content']);
+    }
+
+    /**
+     * @magentoApiDataFixture Magento/Catalog/_files/category_tree.php
+     */
+    public function testCategoryWithNoCmsBlock()
+    {
+        $query = <<<QUERY
+{
+    category(id: 401){
+        name
+        cms_block{
+            identifier
+            title
+            content
+        }
+    }
+}
+QUERY;
+
+        $response = $this->graphQlQuery($query);
+        $this->assertArrayNotHasKey('errors', $response);
+        $this->assertNotEmpty($response['category']);
+        $this->assertArrayHasKey('cms_block', $response['category']);
+        $this->assertEquals(null, $response['category']['cms_block']);
     }
 }

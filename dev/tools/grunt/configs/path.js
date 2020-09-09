@@ -32,5 +32,6 @@ module.exports = {
         whitelist: 'dev/tests/static/testsuite/Magento/Test/Js/_files/whitelist/',
         blacklist: 'dev/tests/static/testsuite/Magento/Test/Js/_files/blacklist/',
         tmp: 'validation-files.txt'
-    }
+    },
+    generation: 'generated/'
 };

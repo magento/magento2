@@ -124,20 +124,6 @@ define([
         },
 
         /**
-         * @return {Boolean}
-         */
-        closeSidebar: function () {
-            var minicart = $('[data-block="minicart"]');
-
-            minicart.on('click', '[data-action="close"]', function (event) {
-                event.stopPropagation();
-                minicart.find('[data-role="dropdownDialog"]').dropdownDialog('close');
-            });
-
-            return true;
-        },
-
-        /**
          * @param {String} productType
          * @return {*|String}
          */
@@ -162,10 +148,11 @@ define([
 
         /**
          * Get cart param by name.
+         *
          * @param {String} name
          * @returns {*}
          */
-        getCartParam: function (name) {
+        getCartParamUnsanitizedHtml: function (name) {
             if (!_.isUndefined(name)) {
                 if (!this.cart.hasOwnProperty(name)) {
                     this.cart[name] = ko.observable();
@@ -176,11 +163,20 @@ define([
         },
 
         /**
+         * @deprecated please use getCartParamUnsanitizedHtml.
+         * @param {String} name
+         * @returns {*}
+         */
+        getCartParam: function (name) {
+            return this.getCartParamUnsanitizedHtml(name);
+        },
+
+        /**
          * Returns array of cart items, limited by 'maxItemsToDisplay' setting
          * @returns []
          */
         getCartItems: function () {
-            var items = this.getCartParam('items') || [];
+            var items = this.getCartParamUnsanitizedHtml('items') || [];
 
             items = items.slice(parseInt(-this.maxItemsToDisplay, 10));
 
@@ -192,7 +188,7 @@ define([
          * @returns {Number}
          */
         getCartLineItemsCount: function () {
-            var items = this.getCartParam('items') || [];
+            var items = this.getCartParamUnsanitizedHtml('items') || [];
 
             return parseInt(items.length, 10);
         }

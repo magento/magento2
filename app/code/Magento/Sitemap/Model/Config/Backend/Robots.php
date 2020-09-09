@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Sitemap\Model\Config\Backend;
 
 use Magento\Framework\App\Cache\TypeListInterface;
@@ -14,7 +16,6 @@ use Magento\Framework\Model\Context;
 use Magento\Framework\Model\ResourceModel\AbstractResource;
 use Magento\Framework\Registry;
 use Magento\Robots\Model\Config\Value as RobotsValue;
-use Magento\Store\Model\StoreResolver;
 use Magento\Store\Model\StoreManagerInterface;
 
 /**
@@ -41,27 +42,22 @@ class Robots extends Value implements IdentityInterface
      * @param Registry $registry
      * @param ScopeConfigInterface $config
      * @param TypeListInterface $cacheTypeList
-     * @param StoreResolver $storeResolver
-     * @param StoreManagerInterface|null $storeManager
+     * @param StoreManagerInterface $storeManager
      * @param AbstractResource|null $resource
      * @param AbstractDb|null $resourceCollection
      * @param array $data
-     *
-     * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function __construct(
         Context $context,
         Registry $registry,
         ScopeConfigInterface $config,
         TypeListInterface $cacheTypeList,
-        StoreResolver $storeResolver,
-        StoreManagerInterface $storeManager = null,
+        StoreManagerInterface $storeManager,
         AbstractResource $resource = null,
         AbstractDb $resourceCollection = null,
         array $data = []
     ) {
-        $this->storeManager = $storeManager ?: \Magento\Framework\App\ObjectManager::getInstance()
-            ->get(StoreManagerInterface::class);
+        $this->storeManager = $storeManager;
 
         parent::__construct(
             $context,

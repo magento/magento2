@@ -20,25 +20,24 @@
         </annotations>
         <before>
             <magentoCLI stepKey="addDownloadableDomain" command="downloadable:domains:add static.magento.com"/>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
             <magentoCLI stepKey="removeDownloadableDomain" command="downloadable:domains:remove static.magento.com"/>
-            <amOnPage url="{{AdminLogoutPage.url}}" stepKey="amOnLogoutPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="amOnLogoutPage"/>
         </after>
 
         <!-- Create product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="adminProductIndexPageAdd"/>
-        <waitForPageLoad stepKey="waitForProductIndexPageLoad"/>
-        <actionGroup ref="goToCreateProductPage" stepKey="goToCreateProductPage">
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="adminProductIndexPageAdd"/>
+        <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="goToCreateProductPage">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
-        <actionGroup ref="fillMainProductFormNoWeight" stepKey="fillMainProductForm">
+        <actionGroup ref="FillMainProductFormNoWeightActionGroup" stepKey="fillMainProductForm">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
 
         <!-- Add image to product -->
-        <actionGroup ref="addProductImage" stepKey="addImageForProduct">
+        <actionGroup ref="AddProductImageActionGroup" stepKey="addImageForProduct">
             <argument name="image" value="MagentoLogo"/>
         </actionGroup>
 
@@ -48,30 +47,30 @@
         <fillField userInput="{{downloadableData.link_title}}" selector="{{AdminProductDownloadableSection.linksTitleInput}}" stepKey="fillDownloadableLinkTitle"/>
         <checkOption selector="{{AdminProductDownloadableSection.isLinksPurchasedSeparately}}" stepKey="checkLinksPurchasedSeparately"/>
         <fillField userInput="{{downloadableData.sample_title}}" selector="{{AdminProductDownloadableSection.samplesTitleInput}}" stepKey="fillDownloadableSampleTitle"/>
-        <actionGroup ref="addDownloadableProductLinkWithMaxDownloads" stepKey="addDownloadableLinkWithMaxDownloads">
+        <actionGroup ref="AddDownloadableProductLinkWithMaxDownloadsActionGroup" stepKey="addDownloadableLinkWithMaxDownloads">
             <argument name="link" value="downloadableLinkWithMaxDownloads"/>
         </actionGroup>
-        <actionGroup ref="addDownloadableProductLink" stepKey="addDownloadableLink">
+        <actionGroup ref="AddDownloadableProductLinkActionGroup" stepKey="addDownloadableLink">
             <argument name="link" value="downloadableLink"/>
         </actionGroup>
 
         <!--Save product-->
-        <actionGroup ref="saveProductForm" stepKey="saveProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
 
         <!-- Remove image from product -->
-        <actionGroup ref="removeProductImage" stepKey="removeProductImage"/>
+        <actionGroup ref="RemoveProductImageActionGroup" stepKey="removeProductImage"/>
 
-        <actionGroup ref="saveProductForm" stepKey="saveProductFormAfterRemove"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProductFormAfterRemove"/>
 
         <!-- Assert product image not in admin product form -->
-        <actionGroup ref="assertProductImageNotInAdminProductPage" stepKey="assertProductImageNotInAdminProductPage"/>
+        <actionGroup ref="AssertProductImageNotInAdminProductPageActionGroup" stepKey="assertProductImageNotInAdminProductPage"/>
 
         <!-- Assert product in storefront product page -->
-        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPage" stepKey="AssertProductInStorefrontProductPageAfterRemove">
+        <actionGroup ref="AssertProductNameAndSkuInStorefrontProductPageActionGroup" stepKey="AssertProductInStorefrontProductPageAfterRemove">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
         <!-- Assert product image not in storefront product page -->
-        <actionGroup ref="assertProductImageNotInStorefrontProductPage" stepKey="assertProductImageNotInStorefrontProductPage">
+        <actionGroup ref="AssertProductImageNotInStorefrontProductPageActionGroup" stepKey="assertProductImageNotInStorefrontProductPage">
             <argument name="product" value="DownloadableProduct"/>
         </actionGroup>
     </test>

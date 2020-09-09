@@ -1,0 +1,21 @@
+# Format: path to directory or path to file
+#
+# Example:
+# app/code/Magento/Catalog
+# dev/tests/static/framework/bootstrap.php
+lib/internal/Magento/Framework/Cache/Backend/Eaccelerator.php
+lib/internal/Magento/Framework/Image/Adapter/ImageMagick.php
+lib/internal/Magento/Framework/Interception/Test/Unit/Code/Generator/InterceptorTest.php
+lib/internal/Magento/Framework/Interception/Test/Unit/Config/ConfigTest.php
+dev/tests/integration/framework/deployTestModules.php
+dev/tests/integration/testsuite/Magento/Framework/Filter/DirectiveProcessor/SimpleDirectiveTest.php
+dev/tests/integration/testsuite/Magento/Framework/Session/ConfigTest.php
+dev/tests/integration/testsuite/Magento/Framework/Session/SessionManagerTest.php
+dev/tests/integration/testsuite/Magento/LayeredNavigation/Block/Navigation/AbstractFiltersTest.php
+dev/tests/integration/testsuite/Magento/LayeredNavigation/Block/Navigation/CategoryTest.php
+dev/tests/api-functional/testsuite/Magento/Customer/Api/AddressRepositoryTest.php
+dev/tests/api-functional/testsuite/Magento/Framework/Model/Entity/HydratorTest.php
+dev/tests/api-functional/testsuite/Magento/Integration/Model/AdminTokenServiceTest.php
+dev/tests/api-functional/testsuite/Magento/Integration/Model/CustomerTokenServiceTest.php
+app/code/Magento/Developer/Test/Unit/Console/Command/DevTestsRunCommandTest.php
+app/code/Magento/OfflineShipping/Test/Unit/Model/ResourceModel/Carrier/Tablerate/CSV/ColumnResolverTest.php

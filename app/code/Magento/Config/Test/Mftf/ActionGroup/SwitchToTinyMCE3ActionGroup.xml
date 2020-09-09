@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="SwitchToTinyMCE3ActionGroup" deprecated="This version of TinyMCE is no longer supported">
+        <annotations>
+            <description>Goes to the 'Configuration' page for 'Content Management'. Sets 'WYSIWYG Editor' to 'TinyMCE 3'. Clicks on the Save button. PLEASE NOTE: The value is Hardcoded.</description>
+        </annotations>
+
+        <comment userInput="Choose TinyMCE3 as the default editor" stepKey="chooseTinyMCE3AsEditor"/>
+        <conditionalClick stepKey="expandWYSIWYGOptions1" selector="{{ContentManagementSection.WYSIWYGOptions}}" dependentSelector="{{ContentManagementSection.CheckIfTabExpand}}" visible="true"/>
+        <waitForElementVisible selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="waitForCheckbox2"/>
+        <uncheckOption selector="{{ContentManagementSection.SwitcherSystemValue}}" stepKey="uncheckUseSystemValue2"/>
+        <waitForElementVisible selector="{{ContentManagementSection.Switcher}}" stepKey="waitForSwitcherDropdown2"/>
+        <selectOption selector="{{ContentManagementSection.Switcher}}" userInput="TinyMCE 3" stepKey="switchToVersion3"/>
+        <click selector="{{ContentManagementSection.WYSIWYGOptions}}" stepKey="collapseWYSIWYGOptions"/>
+        <click selector="{{ContentManagementSection.Save}}" stepKey="saveConfig"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You saved the configuration." stepKey="seeConfigurationSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

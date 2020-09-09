@@ -1,0 +1,111 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="StorefrontQuickSearchConfigurableChildrenTest">
+        <annotations>
+            <stories value="Search Product on Storefront"/>
+            <title value="User should be able to use Quick Search to a configurable product's child products"/>
+            <description value="Use Quick Search to find a configurable product with enabled/disable children"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-28374"/>
+            <useCaseId value="MAGETWO-69181"/>
+            <group value="catalogSearch"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+        <before>
+            <!-- Create the category -->
+            <createData entity="ApiCategory" stepKey="createCategory"/>
+            <!-- Create blank AttributeSet-->
+            <createData entity="CatalogAttributeSet" stepKey="createAttributeSet"/>
+            <!-- Create an attribute with two options to be used in the first child product -->
+            <createData entity="hiddenDropdownAttributeWithOptions" stepKey="createProductAttribute"/>
+            <createData entity="productAttributeOption1" stepKey="createProductAttributeOption">
+                <requiredEntity createDataKey="createProductAttribute"/>
+            </createData>
+
+            <!-- Assign attribute to set -->
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <actionGroup ref="GoToAttributeGridPageActionGroup" stepKey="goToAttributeSetPage"/>
+            <actionGroup ref="GoToAttributeSetByNameActionGroup" stepKey="openAttributeSetByName">
+                <argument name="name" value="$createAttributeSet.attribute_set_name$"/>
+            </actionGroup>
+            <actionGroup ref="AssignAttributeToGroupActionGroup" stepKey="assignAttributeToGroup">
+                <argument name="group" value="Product Details"/>
+                <argument name="attribute" value="$createProductAttribute.attribute_code$"/>
+            </actionGroup>
+            <actionGroup ref="SaveAttributeSetActionGroup" stepKey="savePage"/>
+
+            <!-- Get the first option of the attribute we created -->
+            <getData entity="ProductAttributeOptionGetter" index="1" stepKey="getAttributeOption">
+                <requiredEntity createDataKey="createProductAttribute"/>
+            </getData>
+
+            <!-- Create a simple product -->
+            <createData entity="ApiSimpleOneHidden" storeCode="all" stepKey="createSimpleProduct">
+                <field key="attribute_set_id">$createAttributeSet.attribute_set_id$</field>
+                <requiredEntity createDataKey="createProductAttribute"/>
+                <requiredEntity createDataKey="getAttributeOption"/>
+            </createData>
+            <updateData entity="ApiSimpleProductUpdateDescription" createDataKey="createSimpleProduct" stepKey="updateSimpleProduct"/>
+
+            <!-- Create the configurable product -->
+            <createData entity="ApiConfigurableProduct" stepKey="createConfigurableProduct">
+                <field key="attribute_set_id">$createAttributeSet.attribute_set_id$</field>
+                <requiredEntity createDataKey="createCategory"/>
+            </createData>
+            <!-- Create the configurable product option -->
+            <createData entity="ConfigurableProductOneOption" stepKey="createConfigProductOption">
+                <requiredEntity createDataKey="createConfigurableProduct"/>
+                <requiredEntity createDataKey="createProductAttribute"/>
+                <requiredEntity createDataKey="getAttributeOption"/>
+            </createData>
+            <!-- Add the first simple product to the configurable product -->
+            <createData entity="ConfigurableProductAddChild" stepKey="createConfigProductAddChild">
+                <requiredEntity createDataKey="createConfigurableProduct"/>
+                <requiredEntity createDataKey="createSimpleProduct"/>
+            </createData>
+
+            <!-- Perform reindex -->
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+        </before>
+        <after>
+            <deleteData createDataKey="createConfigurableProduct" stepKey="deleteConfigurableProduct"/>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteSimpleProduct"/>
+            <deleteData createDataKey="createProductAttribute" stepKey="deleteProductAttribute"/>
+            <deleteData createDataKey="createAttributeSet" stepKey="deleteAttributeSet"/>
+            <deleteData createDataKey="createCategory" stepKey="deleteCategory"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
+        </after>
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToFrontPage"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefront">
+            <argument name="phrase" value="$createConfigurableProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchSeeProductByNameActionGroup" stepKey="seeProductInGrid">
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+        </actionGroup>
+
+        <!-- Disable Child Product -->
+        <actionGroup ref="AdminProductPageOpenByIdActionGroup" stepKey="openSimpleProduct">
+            <argument name="productId" value="$createSimpleProduct.id$"/>
+        </actionGroup>
+        <actionGroup ref="ToggleProductEnabledActionGroup" stepKey="disableProduct"/>
+        <actionGroup ref="SaveProductFormActionGroup" stepKey="saveProduct"/>
+
+        <actionGroup ref="StorefrontOpenHomePageActionGroup" stepKey="goToHomePageAgain"/>
+        <actionGroup ref="StorefrontCheckQuickSearchStringActionGroup" stepKey="searchStorefrontAgain">
+            <argument name="phrase" value="$createConfigurableProduct.name$"/>
+        </actionGroup>
+        <actionGroup ref="StorefrontQuickSearchCheckProductNameNotInGridActionGroup" stepKey="dontSeeProductAnymore">
+            <argument name="productName" value="$createConfigurableProduct.name$"/>
+        </actionGroup>
+    </test>
+</tests>

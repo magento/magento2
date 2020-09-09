@@ -459,7 +459,24 @@
                 &:extend(.abs-remove-button-for-blocks all);
                 position: absolute;
                 right: 0;
-                top: 0;
+                top: -1px;
+            }
+        }
+
+        .block-wishlist {
+            .action {
+                &.delete {
+                    line-height: unset;
+                    width: auto;
+                }
+            }
+        }
+
+        .block-compare {
+            .action {
+                &.delete {
+                    right: initial;
+                }
             }
         }
 
@@ -542,8 +559,7 @@
 
     .compare,
     .product-addto-links .action.tocompare,
-    .product-item-actions .actions-secondary > .action.tocompare,
-    [class*='block-compare'] {
+    .product-item-actions .actions-secondary > .action.tocompare {
         display: none;
     }
 }
@@ -813,6 +829,7 @@
                 &:extend(.abs-remove-button-for-blocks all);
                 left: -6px;
                 position: absolute;
+                right: 0;
                 top: 0;
             }
 

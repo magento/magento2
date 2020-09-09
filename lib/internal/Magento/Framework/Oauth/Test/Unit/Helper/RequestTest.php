@@ -5,14 +5,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Oauth\Test\Unit\Helper;
 
 use Magento\Framework\App\Request\Http;
+use Magento\Framework\HTTP\PhpEnvironment\Response;
+use Magento\Framework\Oauth\Helper\Request;
+use Magento\Framework\Oauth\OauthInputException;
 use Magento\Framework\Phrase;
+use PHPUnit\Framework\TestCase;
 
-class RequestTest extends \PHPUnit\Framework\TestCase
+class RequestTest extends TestCase
 {
-    /** @var \Magento\Framework\Oauth\Helper\Request */
+    /** @var Request */
     protected $oauthRequestHelper;
 
     /** @var \Magento\Framework\App\Response\Http */
@@ -21,17 +27,17 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->oauthRequestHelper = new \Magento\Framework\Oauth\Helper\Request();
+        $this->oauthRequestHelper = new Request();
         $this->response =
-            $this->createPartialMock(\Magento\Framework\HTTP\PhpEnvironment\Response::class, ['setHttpResponseCode']);
+            $this->createPartialMock(Response::class, ['setHttpResponseCode']);
     }
 
     /**
      * @return void
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->oauthRequestHelper, $this->response);
     }
@@ -60,18 +66,18 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     {
         return [
             [
-                new \Magento\Framework\Oauth\OauthInputException(new Phrase('msg')),
-                ['msg', \Magento\Framework\Oauth\Helper\Request::HTTP_BAD_REQUEST],
+                new OauthInputException(new Phrase('msg')),
+                ['msg', Request::HTTP_BAD_REQUEST],
             ],
             [
                 new \Exception('msg'),
-                ['internal_error&message=msg', \Magento\Framework\Oauth\Helper\Request::HTTP_INTERNAL_ERROR]
+                ['internal_error&message=msg', Request::HTTP_INTERNAL_ERROR]
             ],
             [
                 new \Exception(),
                 [
                     'internal_error&message=empty_message',
-                    \Magento\Framework\Oauth\Helper\Request::HTTP_INTERNAL_ERROR
+                    Request::HTTP_INTERNAL_ERROR
                 ]
             ]
         ];
@@ -86,13 +92,13 @@ class RequestTest extends \PHPUnit\Framework\TestCase
     public function testGetRequestUrl($url, $host)
     {
         $httpRequestMock = $this->createPartialMock(
-            \Magento\Framework\App\Request\Http::class,
+            Http::class,
             ['getHttpHost', 'getScheme', 'getRequestUri']
         );
 
-        $httpRequestMock->expects($this->any())->method('getHttpHost')->will($this->returnValue($host));
-        $httpRequestMock->expects($this->any())->method('getScheme')->will($this->returnValue('http'));
-        $httpRequestMock->expects($this->any())->method('getRequestUri')->will($this->returnValue('/'));
+        $httpRequestMock->expects($this->any())->method('getHttpHost')->willReturn($host);
+        $httpRequestMock->expects($this->any())->method('getScheme')->willReturn('http');
+        $httpRequestMock->expects($this->any())->method('getRequestUri')->willReturn('/');
 
         $this->assertEquals($url, $this->oauthRequestHelper->getRequestUrl($httpRequestMock));
     }

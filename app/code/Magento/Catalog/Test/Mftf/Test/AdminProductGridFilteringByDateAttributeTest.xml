@@ -19,15 +19,14 @@
             <group value="product"/>
         </annotations>
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="loginAsAdmin"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <createData entity="SimpleProductWithNewFromDate" stepKey="createSimpleProductWithDate"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProductWithDate" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logoutOfAdmin"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
         </after>
-        <amOnPage url="{{AdminProductAttributeGridPage.url}}" stepKey="navigateToProductAttribute"/>
-        <waitForPageLoad stepKey="wait1"/>
+        <actionGroup ref="AdminOpenProductAttributePageActionGroup" stepKey="navigateToProductAttribute"/>
         <click selector="{{AdminProductAttributeGridSection.ResetFilter}}" stepKey="resetFiltersOnGrid"/>
         <fillField selector="{{AdminProductAttributeGridSection.GridFilterFrontEndLabel}}" userInput="Set Product as New from Date" stepKey="setAttributeLabel"/>
         <click selector="{{AdminProductAttributeGridSection.Search}}" stepKey="searchForAttributeFromGrid"/>
@@ -38,17 +37,15 @@
         <click selector="{{AttributePropertiesSection.Save}}" stepKey="saveAttribute"/>
         <waitForPageLoad stepKey="waitForSaveAttribute"/>
         <actionGroup ref="ClearCacheActionGroup" stepKey="clearCache"/>
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="navigateToProductIndex"/>
-        <waitForPageLoad time="30" stepKey="waitForProductGridPageLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
         <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="openColumnsdropDown1"/>
         <checkOption selector="{{AdminProductGridFilterSection.viewColumnOption('Set Product as New from Date')}}" stepKey="showProductAsNewColumn"/>
         <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="closeColumnsDropdown1"/>
         <seeElement selector="{{AdminProductGridSection.columnHeader('Set Product as New from Date')}}" stepKey="seeNewFromDateColumn"/>
         <waitForPageLoad stepKey="waitforFiltersToApply"/>
-        <actionGroup ref="filterProductGridBySetNewFromDate" stepKey="filterProductGridToCheckSetAsNewColumn"/>
-        <click selector="{{AdminProductGridSection.firstRow}}" stepKey="clickOnFirstRowProductGrid"/>
-        <waitForPageLoad stepKey="waitForProductEditPageToLoad"/>
-        <actionGroup ref="AdminFormSaveAndClose" stepKey="saveAndCloseProductForm"/>
+        <actionGroup ref="FilterProductGridBySetNewFromDateActionGroup" stepKey="filterProductGridToCheckSetAsNewColumn"/>
+        <actionGroup ref="AdminProductGridSectionClickFirstRowActionGroup" stepKey="clickOnFirstRowProductGrid"/>
+        <actionGroup ref="AdminFormSaveAndCloseActionGroup" stepKey="saveAndCloseProductForm"/>
         <click selector="{{AdminProductGridFilterSection.filters}}" stepKey="expandFilters"/>
         <seeInField selector="{{AdminProductGridFilterSection.newFromDateFilter}}" userInput="05/16/2018" stepKey="checkForNewFromDate"/>
         <click selector="{{AdminProductGridFilterSection.columnsDropdown}}" stepKey="openColumnsDropdown2"/>

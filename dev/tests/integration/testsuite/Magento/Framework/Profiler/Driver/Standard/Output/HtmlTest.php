@@ -14,7 +14,7 @@ class HtmlTest extends \PHPUnit\Framework\TestCase
      */
     protected $_output;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_output = new \Magento\Framework\Profiler\Driver\Standard\Output\Html();
     }
