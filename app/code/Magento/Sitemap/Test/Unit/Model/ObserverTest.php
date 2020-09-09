@@ -166,6 +166,9 @@ class ObserverTest extends TestCase
             ->method('getStoreId')
             ->willReturn($storeId);
 
+        $this->sitemapMock->expects($this->once())
+            ->method('generateXml');
+
         $this->appEmulationMock->expects($this->once())
             ->method('startEnvironmentEmulation');
 
