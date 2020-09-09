@@ -35,9 +35,8 @@
         <fillField selector="{{AdminDataGridHeaderSection.search}}" userInput="$$secondCustomer.email$$" stepKey="fillKeywordSearchFieldWithSecondCustomerEmail"/>
         <click selector="{{AdminDataGridHeaderSection.submitSearch}}" stepKey="clickKeywordSearch"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
-        <!-- Check select all action -->
-        <actionGroup ref="AdminSelectAllCustomers" stepKey="selectAllCustomers"/>
-        <seeCheckboxIsChecked selector="{{AdminCustomerGridMainActionsSection.customerCheckbox($$secondCustomer.email$$)}}" stepKey="checkSecondCustomerIsCheckedAfterSelectAll"/>
+        <!-- Select all from dropdown -->
+        <actionGroup ref="AdminGridSelectAllActionGroup" stepKey="selectAllCustomers"/>
         <!-- Clear searching By Keyword-->
         <conditionalClick selector="{{AdminDataGridHeaderSection.clearFilters}}" dependentSelector="{{AdminDataGridHeaderSection.clearFilters}}" visible="true" stepKey="clickClearFiltersAfterSearch"/>
         <waitForPageLoad stepKey="waitForPageLoadAfterSearchRemoved"/>
