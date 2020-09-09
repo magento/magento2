@@ -282,7 +282,7 @@ define([
                 option = _.isObject(this.countryOptions) && this.countryOptions[quote.shippingAddress().countryId],
                 messageContainer = registry.get('checkout.errors').messageContainer;
 
-            if (!quote.shippingMethod()) {
+            if (!quote.shippingMethod() || !quote.shippingMethod()['method_code']) {
                 this.errorValidationMessage(
                     $t('The shipping method is missing. Select the shipping method and try again.')
                 );
