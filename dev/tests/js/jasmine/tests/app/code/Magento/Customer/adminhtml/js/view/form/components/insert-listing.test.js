@@ -4,6 +4,7 @@
  */
 
 /* eslint-disable max-nested-callbacks */
+/*jscs:disable jsDoc*/
 define(['Magento_Customer/js/form/components/insert-listing'], function (Constr) {
     'use strict';
 
@@ -15,10 +16,18 @@ define(['Magento_Customer/js/form/components/insert-listing'], function (Constr)
                 data: {
                     selected: ids
                 }
+            },
+            selectionsProvider = {
+                selected: jasmine.createSpy().and.returnValue(ids)
             };
 
         beforeEach(function () {
-            obj = new Constr({});
+            obj = new Constr({
+                name: 'content_name',
+                selections: function () {
+                    return selectionsProvider;
+                }
+            });
         });
 
         describe('Check delete massaction process', function () {
@@ -34,13 +43,6 @@ define(['Magento_Customer/js/form/components/insert-listing'], function (Constr)
             });
 
             it('Check ids are retrieved from selections provider if they are NOT in data', function () {
-                var selectionsProvider = {
-                    selected: jasmine.createSpy().and.returnValue(ids)
-                };
-
-                obj.selections = function () { // jscs:ignore jsDoc
-                    return selectionsProvider;
-                };
                 obj._delete = jasmine.createSpy();
                 obj.onMassAction({
                     action: 'delete',
@@ -48,6 +50,7 @@ define(['Magento_Customer/js/form/components/insert-listing'], function (Constr)
                 });
 
                 expect(selectionsProvider.selected).toHaveBeenCalled();
+                selectionsProvider.selected.calls.reset();
                 expect(obj._delete).toHaveBeenCalledWith([1, 2]);
             });
 
@@ -58,6 +61,7 @@ define(['Magento_Customer/js/form/components/insert-listing'], function (Constr)
                 };
                 obj.onMassAction(data);
 
+                expect(selectionsProvider.selected).not.toHaveBeenCalled();
                 expect(obj.source.get.calls.count()).toEqual(2);
                 expect(obj.source.set.calls.count()).toEqual(1);
             });
