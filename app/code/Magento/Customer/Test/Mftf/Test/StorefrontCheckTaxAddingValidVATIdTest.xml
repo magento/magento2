@@ -114,8 +114,7 @@
             </actionGroup>
 
             <!-- Go to the tax rate page -->
-            <amOnPage url="{{AdminTaxRateGridPage.url}}" stepKey="goToTaxRatesPage"/>
-            <waitForPageLoad stepKey="waitForRatesPage"/>
+            <actionGroup ref="AdminTaxRateGridOpenPageActionGroup" stepKey="goToTaxRatesPage"/>
 
             <!-- Delete the two tax rates that were created -->
             <actionGroup ref="deleteEntitySecondaryGrid" stepKey="deleteNYRate">

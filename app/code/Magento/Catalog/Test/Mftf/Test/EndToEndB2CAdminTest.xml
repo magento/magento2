@@ -227,7 +227,7 @@
         <!--Admin moves category-->
         <comment userInput="Admin moves category." stepKey="adminMovesCategoryComment" before="onCategoryPageToMoveCategory"/>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="onCategoryPageToMoveCategory"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="expandTree"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandTree"/>
         <dragAndDrop selector1="{{AdminCategorySidebarTreeSection.categoryInTree(SimpleSubCategory.name)}}"
                      selector2="{{AdminCategorySidebarTreeSection.categoryTreeRoot}}"
                      stepKey="dragAndDropCategory"/>

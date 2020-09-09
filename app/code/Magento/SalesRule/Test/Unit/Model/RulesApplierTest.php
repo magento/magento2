@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\SalesRule\Test\Unit\Model;
 
+use Magento\Catalog\Model\Product;
 use Magento\Framework\Api\ExtensionAttributesInterface;
 use Magento\Framework\Event\Manager;
 use Magento\Quote\Model\Quote;
@@ -169,6 +170,10 @@ class RulesApplierTest extends TestCase
                 ->method('validate')
                 ->with($item)
                 ->willReturn(!$isContinue);
+            $product = $this->createPartialMock(Product::class, []);
+            $item->expects($this->atLeastOnce())
+                ->method('getProduct')
+                ->willReturn($product);
         }
 
         if (!$isContinue || !$isChildren) {
@@ -247,7 +252,7 @@ class RulesApplierTest extends TestCase
          */
         $item = $this->getMockBuilder(Item::class)
             ->addMethods(['setDiscountAmount', 'setBaseDiscountAmount', 'setDiscountPercent', 'setAppliedRuleIds'])
-            ->onlyMethods(['getAddress', 'getChildren', 'getExtensionAttributes'])
+            ->onlyMethods(['getAddress', 'getChildren', 'getExtensionAttributes', 'getProduct'])
             ->disableOriginalConstructor()
             ->getMock();
         $itemExtension = $this->getMockBuilder(

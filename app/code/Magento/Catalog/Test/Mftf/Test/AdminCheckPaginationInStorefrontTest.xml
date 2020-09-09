@@ -100,8 +100,7 @@
         <!--Open Category Page and select created category-->
         <comment userInput="Open Category Page and select created category" stepKey="commentOpenCategoryPage"/>
         <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
-        <click selector="{{AdminCategorySidebarTreeSection.expandAll}}" stepKey="clickOnExpandTree"/>
-        <waitForPageLoad stepKey="waitForPageToLoad0"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
         <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
         <waitForPageLoad stepKey="waitForPageToLoaded2"/>
         <!--Select Products-->
@@ -120,8 +119,7 @@
         <waitForPageLoad stepKey="waitFroPageToLoad2"/>
         <see selector="{{AdminProductGridFilterSection.productCount}}" userInput="30" stepKey="seeNumberOfProductsFound"/>
         <click selector="{{AdminCategoryProductsGridSection.productSelectAll}}" stepKey="selectSelectAll"/>
-        <click selector="{{AdminCategoryMainActionsSection.SaveButton}}" stepKey="clickSaveButton"/>
-        <waitForPageLoad stepKey="waitForCategorySaved"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton"/>
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
         <waitForPageLoad stepKey="waitForPageTitleToBeSaved"/>
         <!--Open Category Store Front Page-->
