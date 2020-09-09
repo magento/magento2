@@ -48,6 +48,8 @@ class Parser
     }
 
     /**
+     * Get fresh DOMDocument instance
+     *
      * @return \DOMDocument|null
      */
     public function getDom()
@@ -56,6 +58,8 @@ class Parser
     }
 
     /**
+     * Get current DOMDocument node
+     *
      * @return \DOMDocument
      */
     protected function _getCurrentDom()
@@ -64,6 +68,8 @@ class Parser
     }
 
     /**
+     * Set current DOMDocument node
+     *
      * @param \DOMDocument $node
      * @return $this
      */
@@ -74,6 +80,8 @@ class Parser
     }
 
     /**
+     * Transform the XML document into an array
+     *
      * @return array
      */
     public function xmlToArray()
@@ -83,6 +91,8 @@ class Parser
     }
 
     /**
+     * Transform a DOMDocument node into an array
+     *
      * @param bool $currentNode
      * @return array
      * @SuppressWarnings(PHPMD.CyclomaticComplexity)
@@ -137,6 +147,8 @@ class Parser
     }
 
     /**
+     * Load an XML document from a file
+     *
      * @param string $file
      * @return $this
      */
@@ -147,6 +159,8 @@ class Parser
     }
 
     /**
+     * Load an XML document from string
+     *
      * @param string $string
      * @return $this
      * @throws \Magento\Framework\Exception\LocalizedException
