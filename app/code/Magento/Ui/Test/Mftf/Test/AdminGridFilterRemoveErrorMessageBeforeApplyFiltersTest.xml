@@ -7,12 +7,13 @@
 -->
 
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="AdminGridFilterRemoveErrorMessageBeforeApplyFilters">
+    <test name="AdminGridFilterRemoveErrorMessageBeforeApplyFiltersTest">
         <annotations>
             <stories value="Reset Error Messages"/>
             <title value="Remove Error Message Before Apply Filters"/>
             <description value="Test login to Admin UI and Remove Error Message Before Apply Filters"/>
-            <severity value="CRITICAL"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-37450"/>
             <group value="ui"/>
         </annotations>
 
