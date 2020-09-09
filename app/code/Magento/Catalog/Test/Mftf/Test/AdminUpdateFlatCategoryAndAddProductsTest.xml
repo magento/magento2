@@ -89,9 +89,7 @@
         <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
             <argument name="tags" value=""/>
         </actionGroup>
-        <!--Open Index Management Page -->
-        <amOnPage url="{{AdminIndexManagementPage.url}}" stepKey="openIndexManagementPage"/>
-        <waitForPageLoad stepKey="waitForIndexPageToLoad"/>
+        <actionGroup ref="AdminOpenIndexManagementPageActionGroup" stepKey="openIndexManagementPage"/>
         <see stepKey="seeCategoryIndexStatus"  selector="{{AdminIndexManagementSection.indexerStatus('Category Flat Data')}}" userInput="Ready"/>
         <!--Verify Product In Store Front-->
         <amOnPage url="$$createSimpleProduct.name$$.html" stepKey="goToStorefrontPage"/>
