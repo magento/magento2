@@ -8,21 +8,34 @@ declare(strict_types=1);
 
 namespace Magento\Catalog\Model\Attribute\Backend;
 
+use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\AsynchronousOperations\Api\Data\OperationInterfaceFactory;
-use PHPUnit\Framework\TestCase;
-use Magento\TestFramework\Helper\Bootstrap;
-use Magento\Framework\ObjectManagerInterface;
 use Magento\AsynchronousOperations\Model\BulkManagement;
 use Magento\AsynchronousOperations\Model\BulkStatus;
-use Magento\AsynchronousOperations\Api\Data\OperationInterface;
 use Magento\Framework\MessageQueue\BulkPublisherInterface;
+use Magento\Framework\ObjectManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use PHPUnit\Framework\TestCase;
+use Magento\Catalog\Helper\Product;
+use Magento\Catalog\Model\Indexer\Product\Flat\Processor;
+use Magento\Framework\Bulk\OperationManagementInterface;
+use Magento\Catalog\Model\Product\Action;
+use Psr\Log\LoggerInterface;
+use Magento\Framework\Serialize\SerializerInterface;
+use Magento\Framework\EntityManager\EntityManager;
+use Magento\Catalog\Model\Attribute\Backend\Consumer;
 
+/**
+ * Test for Mysql Consumer execution
+ *
+ * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
+ */
 class ConsumerTest extends TestCase
 {
     const BULK_UUID = '5a12c1bd-a8b5-41d4-8c00-3f5bcaa6d3c8';
 
     /**
-     * @var \Magento\Catalog\Model\Attribute\Backend\Consumer
+     * @var Consumer
      */
     private $model;
 
@@ -47,7 +60,7 @@ class ConsumerTest extends TestCase
     private $objectManager;
 
     /**
-     * @var \Magento\Framework\Serialize\SerializerInterface
+     * @var SerializerInterface
      */
     private $serializer;
 
@@ -66,20 +79,20 @@ class ConsumerTest extends TestCase
             ]
         );
         $this->bulkStatus = $this->objectManager->get(BulkStatus::class);
-        $catalogProductMock = $this->createMock(\Magento\Catalog\Helper\Product::class);
+        $catalogProductMock = $this->createMock(Product::class);
         $productFlatIndexerProcessorMock = $this->createMock(
-            \Magento\Catalog\Model\Indexer\Product\Flat\Processor::class
+            Processor::class
         );
         $productPriceIndexerProcessorMock = $this->createMock(
-            \Magento\Catalog\Model\Indexer\Product\Price\Processor::class
+            Processor::class
         );
         $operationManagementMock = $this->createMock(
-            \Magento\Framework\Bulk\OperationManagementInterface::class
+            OperationManagementInterface::class
         );
-        $actionMock = $this->createMock(\Magento\Catalog\Model\Product\Action::class);
-        $loggerMock = $this->createMock(\Psr\Log\LoggerInterface::class);
-        $this->serializer = $this->objectManager->get(\Magento\Framework\Serialize\SerializerInterface::class);
-        $entityManager = $this->objectManager->get(\Magento\Framework\EntityManager\EntityManager::class);
+        $actionMock = $this->createMock(Action::class);
+        $loggerMock = $this->createMock(LoggerInterface::class);
+        $this->serializer = $this->objectManager->get(SerializerInterface::class);
+        $entityManager = $this->objectManager->get(EntityManager::class);
         $this->model = $this->objectManager->create(
             Consumer::class,
             [
