@@ -15,6 +15,7 @@
             <title value="Image is deleted from tmp folder if is uploaded second time"/>
             <description value="Image is deleted from tmp folder if is uploaded second time"/>
             <stories value="Image is deleted from tmp folder if is uploaded second time"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/943908/scenarios/4836631"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
         </annotations>
