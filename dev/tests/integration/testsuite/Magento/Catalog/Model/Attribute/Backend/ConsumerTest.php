@@ -17,7 +17,8 @@ use Magento\Framework\ObjectManagerInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use PHPUnit\Framework\TestCase;
 use Magento\Catalog\Helper\Product;
-use Magento\Catalog\Model\Indexer\Product\Flat\Processor;
+use Magento\Catalog\Model\Indexer\Product\Flat\Processor as FlatProcessor;
+use Magento\Catalog\Model\Indexer\Product\Price\Processor as PriceProcessor;
 use Magento\Framework\Bulk\OperationManagementInterface;
 use Magento\Catalog\Model\Product\Action;
 use Psr\Log\LoggerInterface;
@@ -81,10 +82,10 @@ class ConsumerTest extends TestCase
         $this->bulkStatus = $this->objectManager->get(BulkStatus::class);
         $catalogProductMock = $this->createMock(Product::class);
         $productFlatIndexerProcessorMock = $this->createMock(
-            Processor::class
+            FlatProcessor::class
         );
         $productPriceIndexerProcessorMock = $this->createMock(
-            Processor::class
+            PriceProcessor::class
         );
         $operationManagementMock = $this->createMock(
             OperationManagementInterface::class
