@@ -243,34 +243,22 @@ class WishlistTest extends TestCase
 
     /**
      * @param int|Item|MockObject $itemId
-     * @param DataObject $buyRequest
+     * @param DataObject|MockObject $buyRequest
      * @param null|array|DataObject $param
      * @throws LocalizedException
      *
      * @dataProvider updateItemDataProvider
      */
-    public function testUpdateItem($itemId, $buyRequest, $param)
+    public function testUpdateItem($itemId, $buyRequest, $param): void
     {
         $storeId = 1;
         $productId = 1;
         $stores = [(new DataObject())->setId($storeId)];
 
-        $newItem = $this->getMockBuilder(Item::class)
-            ->setMethods(
-                ['setProductId', 'setWishlistId', 'setStoreId', 'setOptions', 'setProduct', 'setQty', 'getItem', 'save']
-            )
-            ->disableOriginalConstructor()
-            ->getMock();
-        $newItem->expects($this->any())->method('setProductId')->willReturnSelf();
-        $newItem->expects($this->any())->method('setWishlistId')->willReturnSelf();
-        $newItem->expects($this->any())->method('setStoreId')->willReturnSelf();
-        $newItem->expects($this->any())->method('setOptions')->willReturnSelf();
-        $newItem->expects($this->any())->method('setProduct')->willReturnSelf();
-        $newItem->expects($this->any())->method('setQty')->willReturnSelf();
-        $newItem->expects($this->any())->method('getItem')->willReturn(2);
-        $newItem->expects($this->any())->method('save')->willReturnSelf();
+        $newItem = $this->prepareWishlistItem();
 
         $this->itemFactory->expects($this->once())->method('create')->willReturn($newItem);
+        $this->productHelper->expects($this->once())->method('addParamsToBuyRequest')->willReturn($buyRequest);
 
         $this->storeManager->expects($this->any())->method('getStores')->willReturn($stores);
         $this->storeManager->expects($this->any())->method('getStore')->willReturn($stores[0]);
@@ -356,12 +344,47 @@ class WishlistTest extends TestCase
     }
 
     /**
+     * Prepare wishlist item mock.
+     *
+     * @return MockObject
+     */
+    private function prepareWishlistItem(): MockObject
+    {
+        $newItem = $this->getMockBuilder(Item::class)
+            ->setMethods(
+                ['setProductId', 'setWishlistId', 'setStoreId', 'setOptions', 'setProduct', 'setQty', 'getItem', 'save']
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
+        $newItem->expects($this->any())->method('setProductId')->willReturnSelf();
+        $newItem->expects($this->any())->method('setWishlistId')->willReturnSelf();
+        $newItem->expects($this->any())->method('setStoreId')->willReturnSelf();
+        $newItem->expects($this->any())->method('setOptions')->willReturnSelf();
+        $newItem->expects($this->any())->method('setProduct')->willReturnSelf();
+        $newItem->expects($this->any())->method('setQty')->willReturnSelf();
+        $newItem->expects($this->any())->method('getItem')->willReturn(2);
+        $newItem->expects($this->any())->method('save')->willReturnSelf();
+
+        return $newItem;
+    }
+
+    /**
      * @return array
      */
-    public function updateItemDataProvider()
+    public function updateItemDataProvider(): array
     {
+        $dataObjectMock = $this->createMock(DataObject::class);
+        $dataObjectMock->expects($this->once())
+            ->method('setData')
+            ->with('action', 'updateItem')
+            ->willReturnSelf();
+        $dataObjectMock->expects($this->once())
+            ->method('getData')
+            ->with('action')
+            ->willReturn('updateItem');
+
         return [
-            '0' => [1, new DataObject(), null]
+            '0' => [1, $dataObjectMock, null]
         ];
     }
 

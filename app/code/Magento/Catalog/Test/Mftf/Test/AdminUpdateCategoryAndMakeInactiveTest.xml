@@ -26,12 +26,14 @@
             <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
+        <!--Open category page-->
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
+
         <!--Update category and make category inactive-->
-        <actionGroup ref="NavigateToCreatedCategoryActionGroup" stepKey="navigateToCreatedCategory">
-            <argument name="Category" value="$$createDefaultCategory$$"/>
-        </actionGroup>
-        <actionGroup ref="AdminDisableActiveCategoryActionGroup" stepKey="disableCategory"/>
-        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="saveCategory"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree"/>
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory"/>
+        <click selector="{{AdminCategoryBasicFieldSection.enableCategoryLabel}}" stepKey="disableCategory"/>
+        <actionGroup ref="AdminSaveCategoryActionGroup" stepKey="clickSaveButton"/>
         <actionGroup ref="AssertAdminCategorySaveSuccessMessageActionGroup" stepKey="assertSuccessMessage"/>
         <actionGroup ref="AssertAdminCategoryPageTitleActionGroup" stepKey="seePageTitle">
             <argument name="categoryName" value="$$createDefaultCategory.name$$"/>
@@ -45,17 +47,11 @@
         </actionGroup>
 
         <!--Verify Inactive Category in category page -->
-        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage"/>
-        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="expandCategoryTree"/>
-        <actionGroup ref="AssertAdminCategoryIsListedInCategoriesTreeActionGroup" stepKey="seeCategoryInTree">
-            <argument name="categoryName" value="$$createDefaultCategory.name$$"/>
-        </actionGroup>
-        <actionGroup ref="AdminCategoriesOpenCategoryActionGroup" stepKey="openCategory">
-            <argument name="category" value="$$createDefaultCategory$$"/>
-        </actionGroup>
-        <actionGroup ref="AssertAdminCategoryPageTitleActionGroup" stepKey="seeCategoryPageTitle">
-            <argument name="categoryName" value="$$createDefaultCategory.name$$"/>
-        </actionGroup>
-        <actionGroup ref="AssertAdminCategoryIsInactiveActionGroup" stepKey="assertCategoryIsInactive"/>
+        <actionGroup ref="AdminOpenCategoryPageActionGroup" stepKey="openAdminCategoryIndexPage1"/>
+        <actionGroup ref="AdminExpandCategoryTreeActionGroup" stepKey="clickOnExpandTree1"/>
+        <seeElement  selector="{{AdminCategoryContentSection.categoryInTree(_defaultCategory.name)}}" stepKey="assertCategoryInTree" />
+        <click selector="{{AdminCategorySidebarTreeSection.categoryInTree(_defaultCategory.name)}}" stepKey="selectCreatedCategory1"/>
+        <see selector="{{AdminCategoryContentSection.categoryPageTitle}}" userInput="{{_defaultCategory.name}}" stepKey="seeCategoryPageTitle1" />
+        <dontSeeCheckboxIsChecked selector="{{AdminCategoryBasicFieldSection.EnableCategory}}" stepKey="assertCategoryIsInactive"/>
     </test>
 </tests>

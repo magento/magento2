@@ -24,6 +24,7 @@ Resolver::getInstance()->requireDataFixture('Magento/ConfigurableProduct/_files/
 /** @var ProductRepositoryInterface $productRepository */
 $productRepository = Bootstrap::getObjectManager()
     ->get(ProductRepositoryInterface::class);
+
 /** @var $installer CategorySetup */
 $installer = Bootstrap::getObjectManager()->create(CategorySetup::class);
 $eavConfig = Bootstrap::getObjectManager()->get(Config::class);
@@ -35,7 +36,7 @@ $options = $attribute->getOptions();
 $attributeValues = [];
 $attributeSetId = $installer->getAttributeSetId(Product::ENTITY, 'Default');
 $associatedProductIds = [];
-$productIds = [10, 20];
+$idsToReindex = $productIds = [10, 20];
 array_shift($options); //remove the first option which is empty
 
 foreach ($options as $option) {
