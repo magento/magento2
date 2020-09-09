@@ -270,6 +270,7 @@ define([
          */
         addMessage: function (code, message) {
             this.messages().add(code, message);
+            this.closeContextMenu();
             this.messages().scheduleCleanup();
         },
 
@@ -284,6 +285,13 @@ define([
                 !this.massaction().massActionMode()) {
                 this.deselectImage();
             }
+        },
+
+        /**
+         * Action to close the context menu in media gallery.
+         */
+        closeContextMenu: function () {
+            $('.media-gallery-wrap').click();
         }
     });
 });
