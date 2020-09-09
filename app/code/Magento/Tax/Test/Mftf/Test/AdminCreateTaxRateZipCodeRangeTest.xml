@@ -27,9 +27,7 @@
             <actionGroup ref="AdminFilterTaxRateByCodeActionGroup" stepKey="filterByCode">
                 <argument name="taxRateCode" value="{{SimpleTaxRate.code}}" />
             </actionGroup>
-            <actionGroup ref="AdminClickRowInGridActionGroup" stepKey="clickFirstRow">
-                <argument name="row_number" value="1" />
-            </actionGroup>
+            <actionGroup ref="AdminSelectFirstGridRowActionGroup" stepKey="clickFirstRow"/>
             <actionGroup ref="AdminDeleteTaxRateActionGroup" stepKey="deleteTaxRate"/>
         </after>
 
