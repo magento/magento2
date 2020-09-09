@@ -3,14 +3,18 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Setup\Test\Unit\Module\Di\Code\Scanner;
 
-class PluginScannerTest extends \PHPUnit\Framework\TestCase
+use Magento\Setup\Module\Di\Code\Scanner\PluginScanner;
+use PHPUnit\Framework\TestCase;
+
+class PluginScannerTest extends TestCase
 {
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_model = new \Magento\Setup\Module\Di\Code\Scanner\PluginScanner();
+        $this->_model = new PluginScanner();
         $this->_testDir = str_replace('\\', '/', realpath(__DIR__ . '/../../') . '/_files');
         $this->_testFiles = [
             $this->_testDir . '/app/code/Magento/SomeModule/etc/di.xml',
@@ -18,7 +22,7 @@ class PluginScannerTest extends \PHPUnit\Framework\TestCase
         ];
     }
 
-    protected function tearDown()
+    protected function tearDown(): void
     {
         unset($this->_model);
     }

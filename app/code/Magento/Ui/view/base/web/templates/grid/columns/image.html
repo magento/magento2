@@ -5,5 +5,5 @@
  */
 -->
 <div class="masonry-image-block" ko-style="$col.getStyles($row())" css="{'active': $col.getIsActive($row())}" attr="'data-id': $col.getId($row())">
-    <img attr="src: $col.getUrl($row())" css="$col.getClasses($row())" click="function(){ expandPreview($row()) }" data-role="thumbnail"/>
+    <img data-bind="event: { load: updateStyles($row()) }" attr="src: $col.getUrl($row())" css="$col.getClasses($row())" click="function(){ expandPreview($row()) }" data-role="thumbnail"/>
 </div>
