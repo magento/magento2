@@ -152,7 +152,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
         $response = $this->getProduct("group_product_500");
         $this->assertArrayHasKey('product_links', $response);
         $links = $response['product_links'];
-        $this->assertEquals(1, count($links));
+        $this->assertCount(1, $links);
         $this->assertEquals($productLinkData, $links[0]);
 
         // update link information for Group Product
@@ -178,7 +178,7 @@ class ProductRepositoryInterfaceTest extends WebapiAbstract
 
         $this->assertArrayHasKey('product_links', $response);
         $links = $response['product_links'];
-        $this->assertEquals(2, count($links));
+        $this->assertCount(2, $links);
         $this->assertEquals($productLinkData1, $links[1]);
         $this->assertEquals($productLinkData2, $links[0]);
 

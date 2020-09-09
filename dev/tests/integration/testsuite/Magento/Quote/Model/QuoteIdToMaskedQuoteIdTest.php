@@ -28,7 +28,7 @@ class QuoteIdToMaskedQuoteIdTest extends \PHPUnit\Framework\TestCase
      */
     private $quoteIdToMaskedQuoteId;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = BootstrapHelper::getObjectManager();
         $this->quoteIdToMaskedQuoteId = $objectManager->create(QuoteIdToMaskedQuoteIdInterface::class);

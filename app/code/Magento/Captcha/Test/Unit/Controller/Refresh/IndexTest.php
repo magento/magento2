@@ -3,135 +3,151 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Captcha\Test\Unit\Controller\Refresh;
 
-class IndexTest extends \PHPUnit\Framework\TestCase
+use Magento\Captcha\Controller\Refresh\Index;
+use Magento\Captcha\Helper\Data as CaptchaHelper;
+use Magento\Captcha\Model\CaptchaInterface;
+use Magento\Framework\App\Action\Context;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Controller\Result\Json as ResultJson;
+use Magento\Framework\Controller\Result\JsonFactory as ResultJsonFactory;
+use Magento\Framework\Serialize\Serializer\Json as JsonSerializer;
+use Magento\Framework\View\Element\BlockInterface;
+use Magento\Framework\View\LayoutInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class IndexTest extends TestCase
 {
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $captchaHelperMock;
+    private const STUB_FORM_ID = 'StubFormId';
+    private const STUB_CAPTCHA_SOURCE = '/stub-captcha-source.jpg';
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $captchaMock;
+    /** @var MockObject|RequestInterface */
+    private $requestMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $requestMock;
+    /** @var MockObject|ResultJsonFactory */
+    private $jsonResultFactoryMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $responseMock;
+    /** @var MockObject|ResultJson */
+    private $jsonResultMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $contextMock;
+    /** @var MockObject|CaptchaHelper */
+    private $captchaHelperMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $viewMock;
+    /** @var MockObject|LayoutInterface */
+    private $layoutMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $layoutMock;
+    /** @var MockObject|BlockInterface */
+    private $blockMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $flagMock;
+    /** @var MockObject|JsonSerializer */
+    private $jsonSerializerMock;
 
-    /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
-     */
-    protected $serializerMock;
+    /** @var MockObject|Context */
+    private $contextMock;
 
-    /**
-     * @var \Magento\Captcha\Controller\Refresh\Index
-     */
-    protected $model;
+    /** @var Index */
+    private $refreshAction;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->captchaHelperMock = $this->createMock(\Magento\Captcha\Helper\Data::class);
-        $this->captchaMock = $this->createMock(\Magento\Captcha\Model\DefaultModel::class);
-        $this->requestMock = $this->createMock(\Magento\Framework\App\Request\Http::class);
-        $this->responseMock = $this->createMock(\Magento\Framework\App\Response\Http::class);
-        $this->contextMock = $this->createMock(\Magento\Framework\App\Action\Context::class);
-        $this->viewMock = $this->createMock(\Magento\Framework\App\ViewInterface::class);
-        $this->layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
-        $this->flagMock = $this->createMock(\Magento\Framework\App\ActionFlag::class);
-        $this->serializerMock = $this->createMock(\Magento\Framework\Serialize\Serializer\Json::class);
+        $this->requestMock = $this->getMockBuilder(RequestInterface::class)
+            ->setMethods(['getPost', 'getContent'])
+            ->getMockForAbstractClass();
+        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
+            ->setMethods(['createBlock'])
+            ->getMockForAbstractClass();
+        $this->blockMock = $this->getMockBuilder(BlockInterface::class)
+            ->setMethods(['setFormId', 'setIsAjax', 'toHtml'])
+            ->getMockForAbstractClass();
+        $this->jsonResultFactoryMock = $this->createMock(ResultJsonFactory::class);
+        $this->jsonResultMock = $this->createMock(ResultJson::class);
+        $this->jsonResultFactoryMock->method('create')
+            ->willReturn($this->jsonResultMock);
+        $this->jsonSerializerMock = $this->createMock(JsonSerializer::class);
+        $this->captchaHelperMock = $this->createMock(CaptchaHelper::class);
 
-        $this->contextMock->expects($this->any())->method('getRequest')->will($this->returnValue($this->requestMock));
-        $this->contextMock->expects($this->any())->method('getView')->will($this->returnValue($this->viewMock));
-        $this->contextMock->expects($this->any())->method('getResponse')->will($this->returnValue($this->responseMock));
-        $this->contextMock->expects($this->any())->method('getActionFlag')->will($this->returnValue($this->flagMock));
-        $this->viewMock->expects($this->any())->method('getLayout')->will($this->returnValue($this->layoutMock));
+        $this->contextMock = $this->createMock(Context::class);
 
-        $this->model = new \Magento\Captcha\Controller\Refresh\Index(
+        $this->blockMock->method('setIsAjax')
+            ->willReturnSelf();
+
+        $this->layoutMock->method('createBlock')
+            ->willReturn($this->blockMock);
+
+        $this->refreshAction = new Index(
             $this->contextMock,
+            $this->requestMock,
+            $this->jsonResultFactoryMock,
             $this->captchaHelperMock,
-            $this->serializerMock
+            $this->layoutMock,
+            $this->jsonSerializerMock
         );
     }
 
-    /**
-     * @dataProvider executeDataProvider
-     * @param int $formId
-     * @param int $callsNumber
-     */
-    public function testExecute($formId, $callsNumber)
+    public function testCaptchaGeneratedWhenPostDataContainsFormId()
     {
-        $content = ['formId' => $formId];
-        $imgSource = ['imgSrc' => 'source'];
+        // Given
+        $this->requestMock->method('getPost')
+            ->with('formId')
+            ->willReturn(self::STUB_FORM_ID);
+        $this->blockMock->method('setFormId')
+            ->willReturnSelf();
 
-        $blockMethods = ['setFormId', 'setIsAjax', 'toHtml'];
-        $blockMock = $this->createPartialMock(\Magento\Captcha\Block\Captcha::class, $blockMethods);
+        // Expect
+        $this->requestMock->expects($this->never())
+            ->method('getContent');
+        $this->captchaHelperMock->expects($this->once())
+            ->method('getCaptcha')
+            ->with(self::STUB_FORM_ID)
+            ->willReturn(
+                $this->getCaptchaModelMock(self::STUB_CAPTCHA_SOURCE)
+            );
 
-        $this->requestMock->expects($this->any())->method('getPost')->with('formId')->will($this->returnValue($formId));
-        $this->requestMock->expects($this->exactly($callsNumber))->method('getContent')
-            ->will($this->returnValue(json_encode($content)));
-        $this->captchaHelperMock->expects($this->any())->method('getCaptcha')->with($formId)
-            ->will($this->returnValue($this->captchaMock));
-        $this->captchaMock->expects($this->once())->method('generate');
-        $this->captchaMock->expects($this->once())->method('getBlockName')->will($this->returnValue('block'));
-        $this->captchaMock->expects($this->once())->method('getImgSrc')->will($this->returnValue('source'));
-        $this->layoutMock->expects($this->once())->method('createBlock')->with('block')
-            ->will($this->returnValue($blockMock));
-        $blockMock->expects($this->any())->method('setFormId')->with($formId)->will($this->returnValue($blockMock));
-        $blockMock->expects($this->any())->method('setIsAjax')->with(true)->will($this->returnValue($blockMock));
-        $blockMock->expects($this->once())->method('toHtml');
-        $this->responseMock->expects($this->once())->method('representJson')->with(json_encode($imgSource));
-        $this->flagMock->expects($this->once())->method('set')->with('', 'no-postDispatch', true);
-        $this->serializerMock->expects($this->exactly($callsNumber))
-            ->method('unserialize')->will($this->returnValue($content));
-        $this->serializerMock->expects($this->once())
-            ->method('serialize')->will($this->returnValue(json_encode($imgSource)));
+        // When
+        $this->refreshAction->execute();
+    }
 
-        $this->model->execute();
+    public function testCaptchaFallsBackToRequestContentIfPostMissing()
+    {
+        // Given
+        $this->requestMock->method('getPost')
+            ->with('formId')
+            ->willReturn(null);
+        $this->blockMock->method('setFormId')
+            ->willReturnSelf();
+
+        // Expect
+        $this->requestMock->expects(self::once())
+            ->method('getContent')
+            ->willReturn(null);
+        $this->captchaHelperMock->expects($this->once())
+            ->method('getCaptcha')
+            ->with(null)
+            ->willReturn(
+                $this->getCaptchaModelMock(self::STUB_CAPTCHA_SOURCE)
+            );
+
+        // When
+        $this->refreshAction->execute();
     }
 
     /**
-     * @return array
+     * @param string $imageSource
+     * @return MockObject|CaptchaInterface
      */
-    public function executeDataProvider()
+    private function getCaptchaModelMock(string $imageSource): CaptchaInterface
     {
-        return [
-            [
-                'formId' => null,
-                'callsNumber' => 1,
-            ],
-            [
-                'formId' => 1,
-                'callsNumber' => 0,
-            ]
-        ];
+        $modelMock = $this->getMockBuilder(CaptchaInterface::class)
+            ->setMethods(['generate', 'getBlockName', 'getImgSrc'])
+            ->getMockForAbstractClass();
+
+        $modelMock->method('getImgSrc')
+            ->willReturn($imageSource);
+
+        return $modelMock;
     }
 }

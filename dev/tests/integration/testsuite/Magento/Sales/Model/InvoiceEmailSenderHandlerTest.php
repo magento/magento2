@@ -23,7 +23,7 @@ class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
      */
     private $emailSender;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         /** @var \Magento\Sales\Model\Order\Email\Container\InvoiceIdentity $invoiceIdentity */
         $invoiceIdentity = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
@@ -91,7 +91,7 @@ class InvoiceEmailSenderHandlerTest extends \PHPUnit\Framework\TestCase
      * @throws \Magento\Framework\Exception\LocalizedException
      * @throws \Exception
      */
-    protected function tearDown()
+    protected function tearDown(): void
     {
         /** @var \Magento\Config\Model\Config $defConfig */
         $defConfig = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()

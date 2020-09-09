@@ -1,0 +1,150 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<overrides>
+    <!-- test node determine to which class config inside node should be applied -->
+    <test class="Magento\TestModuleOverrideConfig\MagentoApiConfigFixture\AddFixtureTest">
+        <!-- Node bellow will add magentoConfigFixture to fixtures list
+        'scopeType' required attribute and accept such values: store|website
+          'scopeCode' store|website code
+          skip 'scopeType' and 'scopeCode' attributes to set value in default scope
+          'path' required attribute determine config path, 'value' attribute determine which value will be set for provided path
+          to add fixture to fixtures list
+          -->
+        <magentoConfigFixture scopeType="store" scopeCode="default" path="test_section/test_group/field_1" value="overridden value for full class"/>
+        <!-- method node determine to which test method config inside node should be applied -->
+        <method name="testAddFixtureToMethod">
+            <magentoConfigFixture scopeType="store" scopeCode="default" path="test_section/test_group/field_1" value="overridden value for method"/>
+            <!-- dataSet node determine for which data set config inside should be applied -->
+            <dataSet name="second_data_set">
+                <magentoConfigFixture scopeType="store" scopeCode="default" path="test_section/test_group/field_1" value="overridden value for data set"/>
+            </dataSet>
+        </method>
+        <method name="testAddFixtureOnWebsiteScope">
+            <magentoConfigFixture scopeType="website" scopeCode="base" path="test_section/test_group/field_1" value="overridden value for method on website scope"/>
+        </method>
+    </test>
+    <test class="Magento\TestModuleOverrideConfig\MagentoApiConfigFixture\RemoveFixtureTest">
+        <!-- 'remove' attribute accept bool values, if value set to 'true' this node will remove matching  fixture from fixtures list-->
+        <magentoConfigFixture scopeType="store" scopeCode="default" path="test_section/test_group/field_1" remove="true"/>
+        <method name="testRemoveFixtureForMethod">
+            <magentoConfigFixture scopeType="store" scopeCode="default" path="test_section/test_group/field_2" remove="true"/>
+            <dataSet name="second_data_set">
+                <magentoConfigFixture scopeType="store" scopeCode="default" path="test_section/test_group/field_3" remove="true"/>
+            </dataSet>
+        </method>
+        <method name="testRemoveWebsiteScopeFixture">
+            <magentoConfigFixture scopeType="website" scopeCode="base" path="test_section/test_group/field_3" remove="true"/>
+        </method>
+        <method name="testRemoveWebsiteScopeFixtureWithScopeCode">
+            <magentoConfigFixture scopeType="website" scopeCode="base" path="test_section/test_group/field_3" remove="true"/>
+        </method>
+    </test>
+    <test class="Magento\TestModuleOverrideConfig\MagentoApiConfigFixture\ReplaceFixtureTest">
+        <!-- Node bellow will replace value for matching fixture
+         'newValue' attribute determine to which value current value in matching fixture should be replaced  -->
+        <magentoConfigFixture scopeType="store" scopeCode="default" path="test_section/test_group/field_1" newValue="Overridden fixture for class"/>
+        <method name="testReplaceFixtureForMethod">
+            <dataSet name="second_data_set">
+                <magentoConfigFixture scopeType="store" scopeCode="default" path="test_section/test_group/field_1" newValue="Overridden fixture for data set"/>
+            </dataSet>
+            <magentoConfigFixture scopeType="store" scopeCode="default" path="test_section/test_group/field_1" newValue="Overridden fixture for method"/>
+        </method>
+        <method name="testReplaceFixtureViaThirdModule" >
+            <dataSet name="second_data_set">
+                <magentoConfigFixture scopeType="store" scopeCode="default" path="test_section/test_group/field_1" newValue="Overridden fixture for data set from second module"/>
+            </dataSet>
+            <magentoConfigFixture scopeType="store" scopeCode="default" path="test_section/test_group/field_1" newValue="Overridden fixture for method from second module"/>
+        </method>
+        <method name="testReplaceWebsiteScopedFixture">
+            <magentoConfigFixture scopeType="website" scopeCode="base" path="test_section/test_group/field_1" newValue="Overridden value for website scope"/>
+        </method>
+        <method name="testReplaceDefaultConfig">
+            <magentoConfigFixture path="test_section/test_group/field_1" newValue="Overridden value for default scope"/>
+        </method>
+    </test>
+    <test class="Magento\TestModuleOverrideConfig\MagentoApiDataFixture\AddFixtureTest">
+        <!-- 'path' attribute determine path to fixture for which config should be applied
+        if only this attribute specified the fixture with such path will be applied -->
+        <magentoApiDataFixture path="Magento/TestModuleOverrideConfig2/_files/fixture1_second_module.php"/>
+        <method name="testAddFixtures">
+            <magentoApiDataFixture path="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module.php"/>
+            <dataSet name="first_data_set">
+                <magentoApiDataFixture path="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module.php"/>
+            </dataSet>
+        </method>
+        <method name="testAddSameFixtures">
+            <!-- Few same data fixtures can be applied for one test -->
+            <magentoApiDataFixture path="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module.php"/>
+            <magentoApiDataFixture path="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module.php"/>
+        </method>
+        <method name="testAddFixtureWithRequiredFixture">
+            <magentoApiDataFixture path="Magento/TestModuleOverrideConfig2/_files/fixture_with_required_fixture.php"/>
+        </method>
+    </test>
+    <test class="Magento\TestModuleOverrideConfig\MagentoApiDataFixture\RemoveFixtureTest">
+        <!-- 'remove' attribute support boolean values, to remove fixture with specified path you need to set this 'remove' attribute to 'true' -->
+        <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php" remove="true"/>
+        <method name="testRemoveFixtureForMethod">
+            <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture2_first_module.php" remove="true"/>
+            <dataSet name="second_data_set">
+                <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture3_first_module.php" remove="true"/>
+            </dataSet>
+        </method>
+        <method name="testRemoveSameFixtures">
+            <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture2_first_module.php" remove="true"/>
+            <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture2_first_module.php" remove="true"/>
+        </method>
+    </test>
+    <test class="Magento\TestModuleOverrideConfig\MagentoApiDataFixture\ReplaceFixtureTest">
+        <!-- Node bellow will call specified in 'newPath' attribute fixture instead of fixture specified in 'path' attribute
+         if such fixture exist in fixtures list -->
+        <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture1_second_module.php" />
+        <!-- If you specify data fixture to replace you should also specify rollback fixture in the separate node-->
+        <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module_rollback.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture1_second_module_rollback.php" />
+
+        <method name="testReplaceFixturesForMethod">
+            <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module.php" />
+            <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module_rollback.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module_rollback.php" />
+            <dataSet name="second_data_set">
+                <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module.php" />
+                <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module_rollback.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module_rollback.php" />
+            </dataSet>
+        </method>
+        <method name="testReplaceFixtureViaThirdModule">
+            <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module.php" />
+            <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module_rollback.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module_rollback.php" />
+            <dataSet name="first_data_set">
+                <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module.php" />
+                <magentoApiDataFixture path="Magento/TestModuleOverrideConfig/_files/fixture1_first_module_rollback.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module_rollback.php" />
+            </dataSet>
+        </method>
+        <method name="testReplaceRequiredFixture">
+            <magentoApiDataFixture path="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module.php" newPath="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module.php" />
+        </method>
+    </test>
+    <test class="Magento\TestModuleOverrideConfig\MagentoApiDataFixture\SortFixturesTest">
+        <!-- 'after' attribute determine after which fixture current fixture should be placed, '-' value means that fixture shold be placed after all -->
+        <magentoApiDataFixture path="Magento/TestModuleOverrideConfig2/_files/fixture1_second_module.php" after="Magento/TestModuleOverrideConfig/_files/fixture1_first_module.php"/>
+        <method name="testSortFixtures">
+            <magentoApiDataFixture path="Magento/TestModuleOverrideConfig2/_files/fixture2_second_module.php" after="-"/>
+            <dataSet name="first_data_set">
+                <magentoApiDataFixture path="Magento/TestModuleOverrideConfig2/_files/fixture3_second_module.php" before="-"/>
+            </dataSet>
+        </method>
+    </test>
+    <!-- 'skip' attribute accept boolean values and will mark test as skipped test for which it specified if value set to 'true'-->
+    <test class="Magento\TestModuleOverrideConfig\Skip\SkipClassTest" skip="true"/>
+    <test class="Magento\TestModuleOverrideConfig\Skip\SkipMethodTest">
+        <method name="testMethodSkip" skip="true"/>
+    </test>
+    <test class="Magento\TestModuleOverrideConfig\Skip\SkipDataSetTest">
+        <method name="testSkipDataSet">
+            <dataSet name="first_data_set" skip="true"/>
+        </method>
+    </test>
+</overrides>

@@ -13,9 +13,6 @@
         <annotations>
             <description>Clicks on Add New Template. Fills the Template details. Clicks on Save. PLEASE NOTE: The values are Hardcoded.</description>
         </annotations>
-        <arguments>
-            <argument name="template" defaultValue="EmailTemplate"/>
-        </arguments>
 
         <!--Go to Marketing> Email Templates-->
         <amOnPage url="{{AdminEmailTemplateIndexPage.url}}" stepKey="navigateToEmailTemplatePage"/>

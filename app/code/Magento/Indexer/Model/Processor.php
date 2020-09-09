@@ -10,6 +10,9 @@ use Magento\Framework\Indexer\IndexerInterface;
 use Magento\Framework\Indexer\IndexerInterfaceFactory;
 use Magento\Framework\Indexer\StateInterface;
 
+/**
+ * Indexer processor
+ */
 class Processor
 {
     /**
@@ -65,16 +68,19 @@ class Processor
             $indexerConfig = $this->config->getIndexer($indexerId);
             if ($indexer->isInvalid()) {
                 // Skip indexers having shared index that was already complete
-                if (!in_array($indexerConfig['shared_index'], $sharedIndexesComplete)) {
+                $sharedIndex = $indexerConfig['shared_index'] ?? null;
+                if (!in_array($sharedIndex, $sharedIndexesComplete)) {
                     $indexer->reindexAll();
                 } else {
                     /** @var \Magento\Indexer\Model\Indexer\State $state */
                     $state = $indexer->getState();
+                    $state->setStatus(StateInterface::STATUS_WORKING);
+                    $state->save();
                     $state->setStatus(StateInterface::STATUS_VALID);
                     $state->save();
                 }
-                if ($indexerConfig['shared_index']) {
-                    $sharedIndexesComplete[] = $indexerConfig['shared_index'];
+                if ($sharedIndex) {
+                    $sharedIndexesComplete[] = $sharedIndex;
                 }
             }
         }

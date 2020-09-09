@@ -21,7 +21,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
     /**
      * Set up
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
         $this->_treeBlock = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
@@ -40,9 +40,9 @@ class TreeTest extends \PHPUnit\Framework\TestCase
     public function testGetTreeArray()
     {
         $tree = $this->_treeBlock->getTreeArray();
-        $this->assertEquals(false, $tree['is_active']);
+        $this->assertFalse($tree['is_active']);
         $this->assertEquals('Root', (string)$tree['name']);
-        $this->assertEquals(true, $tree['expanded']);
+        $this->assertTrue($tree['expanded']);
         $this->assertCount(1, $tree['children']);
     }
 
@@ -56,7 +56,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
     {
         $tree = $this->_treeBlock->getTreeArray();
 
-        $this->assertNotContains('\'', $tree['children'][0]['children'][0]['children'][0]['name']);
+        $this->assertStringNotContainsString('\'', $tree['children'][0]['children'][0]['children'][0]['name']);
         $this->assertEquals(
             '&#039;Category 6&#039;',
             $tree['children'][0]['children'][0]['children'][0]['name']
@@ -73,7 +73,7 @@ class TreeTest extends \PHPUnit\Framework\TestCase
     {
         $tree = $this->_treeBlock->getTreeArray();
 
-        $this->assertNotContains('\"', $tree['children'][0]['children'][0]['children'][0]['name']);
+        $this->assertStringNotContainsString('\"', $tree['children'][0]['children'][0]['children'][0]['name']);
         $this->assertEquals(
             '&quot;Category 6&quot;',
             $tree['children'][0]['children'][0]['children'][0]['name']

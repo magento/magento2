@@ -31,7 +31,9 @@
         </actionGroup>
 
         <seeInField selector="{{AdminNewCustomerGroupSection.groupName}}" userInput="{{NotLoggedInCustomerGroup.code}}" stepKey="seeNotLoggedInTextInGroupName" />
-        <assertElementContainsAttribute selector="{{AdminNewCustomerGroupSection.groupName}}" attribute="disabled" expectedValue="true" stepKey="checkIfGroupNameIsDisabled" />
+        <assertElementContainsAttribute stepKey="checkIfGroupNameIsDisabled">
+			<expectedResult selector="{{AdminNewCustomerGroupSection.groupName}}" attribute="disabled" type="string">true</expectedResult>
+        </assertElementContainsAttribute>
 
         <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutFromAdmin"/>
     </test>

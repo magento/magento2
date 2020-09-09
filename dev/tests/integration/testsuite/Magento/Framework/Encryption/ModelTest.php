@@ -14,7 +14,7 @@ class ModelTest extends \PHPUnit\Framework\TestCase
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(
             \Magento\Framework\Encryption\Encryptor::class
@@ -46,10 +46,11 @@ class ModelTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @expectedException \Exception
      */
     public function testValidateKeyInvalid()
     {
+        $this->expectException(\Exception::class);
+
         $invalidKey = '----    ';
         $this->_model->validateKey($invalidKey);
     }
@@ -59,7 +60,7 @@ class ModelTest extends \PHPUnit\Framework\TestCase
         $password = uniqid();
         $hash = $this->_model->getHash($password, true);
 
-        $this->assertTrue(is_string($hash));
+        $this->assertIsString($hash);
         $this->assertTrue($this->_model->validateHash($password, $hash));
     }
 }

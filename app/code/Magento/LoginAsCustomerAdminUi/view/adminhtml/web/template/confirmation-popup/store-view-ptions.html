@@ -1,0 +1,32 @@
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<% if(data.showStoreViewOptions){ %>
+<div class="store-view-ptions">
+    <fieldset class="admin__fieldset" >
+        <div class="admin__field _required" >
+            <div class="admin__field-label">
+                <label for="lac-confirmation-popup-store-id">
+                    <span><%= data.label %></span>
+                </label>
+            </div>
+            <div class="admin__field-control">
+                <select class="admin__control-select"  id="lac-confirmation-popup-store-id">
+                    <% _.each(data.storeViewOptions, function(website) { %>
+                    <optgroup label="<%= website.label %>"></optgroup>
+                    <% _.each(website.value, function(group) { %>
+                    <optgroup label="<%= group.label %>"></optgroup>
+                    <% _.each(group.value, function(storeview) { %>
+                    <option value="<%= storeview.value %>"><%= storeview.label %></option>
+                    <% }); %>
+                    <% }); %>
+                    <% }); %>
+                </select>
+            </div>
+        </div>
+    </fieldset>
+</div>
+<% } %>

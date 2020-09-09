@@ -3,15 +3,20 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Analytics\Test\Unit\Block\Adminhtml\System\Config;
 
 use Magento\Analytics\Block\Adminhtml\System\Config\Vertical;
 use Magento\Backend\Block\Template\Context;
 use Magento\Framework\Data\Form;
 use Magento\Framework\Data\Form\Element\AbstractElement;
+use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class VerticalTest extends \PHPUnit\Framework\TestCase
+class VerticalTest extends TestCase
 {
     /**
      * @var Vertical
@@ -19,40 +24,36 @@ class VerticalTest extends \PHPUnit\Framework\TestCase
     private $vertical;
 
     /**
-     * @var AbstractElement|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractElement|MockObject
      */
     private $abstractElementMock;
 
     /**
-     * @var Context|\PHPUnit_Framework_MockObject_MockObject
+     * @var Context|MockObject
      */
     private $contextMock;
 
     /**
-     * @var Form|\PHPUnit_Framework_MockObject_MockObject
+     * @var Form|MockObject
      */
     private $formMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->abstractElementMock = $this->getMockBuilder(AbstractElement::class)
-            ->setMethods(['getComment', 'getLabel', 'getHint'])
+            ->setMethods(['getComment', 'getLabel', 'getHint', 'getElementHtml'])
             ->disableOriginalConstructor()
             ->getMock();
 
         $objectManager = new ObjectManager($this);
-        $escaper = $objectManager->getObject(\Magento\Framework\Escaper::class);
+        $escaper = $objectManager->getObject(Escaper::class);
         $reflection = new \ReflectionClass($this->abstractElementMock);
         $reflection_property = $reflection->getProperty('_escaper');
         $reflection_property->setAccessible(true);
         $reflection_property->setValue($this->abstractElementMock, $escaper);
 
-        $this->contextMock = $this->getMockBuilder(Context::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->formMock = $this->getMockBuilder(Form::class)
-            ->disableOriginalConstructor()
-            ->getMock();
+        $this->contextMock = $this->createMock(Context::class);
+        $this->formMock = $this->createMock(Form::class);
 
         $objectManager = new ObjectManager($this);
         $this->vertical = $objectManager->getObject(
@@ -66,18 +67,18 @@ class VerticalTest extends \PHPUnit\Framework\TestCase
     public function testRender()
     {
         $this->abstractElementMock->setForm($this->formMock);
-        $this->abstractElementMock->expects($this->any())
+        $this->abstractElementMock
             ->method('getComment')
             ->willReturn('New comment');
-        $this->abstractElementMock->expects($this->any())
+        $this->abstractElementMock
             ->method('getHint')
             ->willReturn('New hint');
         $html = $this->vertical->render($this->abstractElementMock);
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/New comment/",
             $html
         );
-        $this->assertRegExp(
+        $this->assertMatchesRegularExpression(
             "/New hint/",
             $html
         );

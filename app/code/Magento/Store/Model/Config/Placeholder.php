@@ -84,7 +84,7 @@ class Placeholder
     /**
      * Process array data recursively
      *
-     * @deprecated This method isn't used in process() implementation anymore
+     * @deprecated 101.0.4 This method isn't used in process() implementation anymore
      *
      * @param array &$data
      * @param string $path
@@ -178,7 +178,7 @@ class Placeholder
     /**
      * Set array value by path
      *
-     * @deprecated This method isn't used in process() implementation anymore
+     * @deprecated 101.0.4 This method isn't used in process() implementation anymore
      *
      * @param array &$container
      * @param string $path
