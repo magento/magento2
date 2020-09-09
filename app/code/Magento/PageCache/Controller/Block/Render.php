@@ -7,6 +7,7 @@
 namespace Magento\PageCache\Controller\Block;
 
 use Magento\Framework\App\Action\HttpGetActionInterface;
+use Magento\Framework\Exception\InputException;
 
 class Render extends \Magento\PageCache\Controller\Block implements HttpGetActionInterface
 {
@@ -28,10 +29,7 @@ class Render extends \Magento\PageCache\Controller\Block implements HttpGetActio
             $currentControllerName = $this->getRequest()->getControllerName();
             $currentActionName = $this->getRequest()->getActionName();
             $currentRequestUri = $this->getRequest()->getRequestUri();
-            if (!$this->validateAndProcessOriginalRequest()) {
-                $this->_forward('noroute');
-                return;
-            }
+            $this->validateAndProcessOriginalRequest();
             /** @var \Magento\Framework\View\Element\BlockInterface[] $blocks */
             $blocks = $this->_getBlocks();
             $data = [];
@@ -76,7 +74,8 @@ class Render extends \Magento\PageCache\Controller\Block implements HttpGetActio
     /**
      * Validate and process original request parameter.
      *
-     * @return bool
+     * @return void
+     * @throws InputException
      */
     private function validateAndProcessOriginalRequest()
     {
@@ -88,13 +87,12 @@ class Render extends \Magento\PageCache\Controller\Block implements HttpGetActio
                 || !isset($origRequest['controller'])
                 || !isset($origRequest['action'])
                 || !isset($origRequest['uri'])) {
-                return false;
+                throw new InputException(__('The parameter originalRequest is invalid.'));
             }
             $this->getRequest()->setRouteName($origRequest['route']);
             $this->getRequest()->setControllerName($origRequest['controller']);
             $this->getRequest()->setActionName($origRequest['action']);
             $this->getRequest()->setRequestUri($origRequest['uri']);
         }
-        return true;
     }
 }

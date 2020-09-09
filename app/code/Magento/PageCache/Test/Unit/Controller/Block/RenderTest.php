@@ -291,6 +291,7 @@ class RenderTest extends TestCase
         $this->requestMock->expects($this->once())->method('setDispatched')->with(false);
         $this->layoutCacheKeyMock->expects($this->never())
             ->method('addCacheKeys');
+        $this->loggerMock->expects($this->once())->method('critical');
         $this->action->execute();
     }
 
