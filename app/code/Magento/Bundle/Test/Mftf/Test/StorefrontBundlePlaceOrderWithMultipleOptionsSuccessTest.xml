@@ -12,7 +12,8 @@
             <stories value="Bundle product details page"/>
             <title value="Customer should be able to see all the bundle items in invoice view"/>
             <description value="Customer should be able to see all the bundle items in invoice view"/>
-            <severity value="CRITICAL"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="MC-37515"/>
             <group value="Bundle"/>
         </annotations>
         <before>
