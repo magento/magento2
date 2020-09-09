@@ -36,7 +36,7 @@ class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
      */
     private $totalsInformationManagement;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = new ObjectManager($this);
         $this->cartRepositoryMock = $this->createMock(
@@ -77,13 +77,15 @@ class TotalsInformationManagementTest extends \PHPUnit\Framework\TestCase
         $addressInformationMock = $this->createMock(
             TotalsInformationInterface::class
         );
-        $addressMock = $this->createPartialMock(
-            Address::class,
-            [
-                'setShippingMethod',
-                'setCollectShippingRates'
-            ]
-        );
+        $addressMock = $this->getMockBuilder(Address::class)
+            ->addMethods(
+                [
+                    'setShippingMethod',
+                    'setCollectShippingRates',
+                ]
+            )
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $addressInformationMock->expects($this->once())->method('getAddress')->willReturn($addressMock);
         $addressInformationMock->expects($this->any())->method('getShippingCarrierCode')->willReturn($carrierCode);
