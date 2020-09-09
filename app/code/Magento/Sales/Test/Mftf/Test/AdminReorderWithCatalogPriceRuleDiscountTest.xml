@@ -25,6 +25,16 @@
             <createData entity="SimpleProduct2" stepKey="createSimpleProductApi"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
             <actionGroup ref="AdminCatalogPriceRuleDeleteAllActionGroup" stepKey="deleteAllCatalogPriceRule"/>
+            <!-- Clearing cache just in case -->
+            <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+                <argument name="tags" value=""/>
+            </actionGroup>
+            <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+                <argument name="indices" value=""/>
+            </actionGroup>
+            <amOnPage url="{{AdminCatalogPriceRuleGridPage.url}}" stepKey="goToAdminCatalogPriceRuleGridPage2"/>
+            <!-- It sometimes is loading too long for default 10s -->
+            <waitForPageLoad time="60" stepKey="waitForPageFullyLoaded2"/>
             <!--Create the catalog price rule -->
             <createData entity="CatalogRuleToPercent" stepKey="createCatalogRule"/>
             <!--Create order via API-->

@@ -332,7 +332,7 @@ Debug,Debug
 "Add Block Names to Hints","Add Block Names to Hints"
 "Template Settings","Template Settings"
 "Allow Symlinks","Allow Symlinks"
-"<strong style=""color:red"">Warning!</strong> Enabling this feature is not recommended on production environments because it represents a potential security risk.","<strong style=""color:red"">Warning!</strong> Enabling this feature is not recommended on production environments because it represents a potential security risk."
+"<strong class=""colorRed">Warning!</strong> Enabling this feature is not recommended on production environments because it represents a potential security risk.","<strong class=""colorRed"">Warning!</strong> Enabling this feature is not recommended on production environments because it represents a potential security risk."
 "Minify Html","Minify Html"
 "Minification is not applied in developer mode.","Minification is not applied in developer mode."
 "Translate Inline","Translate Inline"
@@ -403,6 +403,11 @@ Security,Security
 Web,Web
 "Url Options","Url Options"
 "Add Store Code to Urls","Add Store Code to Urls"
+"
+                        <strong class=""colorRed">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third-party services (e.g. PayPal etc.).
+                    ","
+                        <strong class=""colorRed">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third-party services (e.g. PayPal etc.).
+                    "
 "<strong style=""color:red"">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third-party services (e.g. PayPal etc.).","<strong style=""color:red"">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third-party services (e.g. PayPal etc.)."
 "Enable Frontend Resize","Enable Frontend Resize"
 "Resize performed via javascript before file upload.","Resize performed via javascript before file upload."

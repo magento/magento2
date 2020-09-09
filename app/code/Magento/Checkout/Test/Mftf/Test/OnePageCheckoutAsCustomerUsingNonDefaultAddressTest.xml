@@ -26,7 +26,7 @@
             </createData>
 
             <!-- Create customer -->
-            <createData entity="Customer_US_UK_DE" stepKey="createCustomer"/>
+            <createData entity="Customer_DE_UK_US" stepKey="createCustomer"/>
         </before>
         <after>
             <!-- Admin log out -->
@@ -70,7 +70,8 @@
 
         <!-- Change the address -->
         <click selector="{{CheckoutPaymentSection.editAddress}}" stepKey="editAddress"/>
-        <waitForElementVisible selector="{{CheckoutShippingSection.addressDropdown}}" stepKey="waitForDropDownToBeVisible"/>
+        <waitForElementVisible selector="{{CheckoutPaymentSection.addressDropdown}}" stepKey="waitForDropDownToBeVisible"/>
+        <see selector="{{CheckoutPaymentSection.addressDropdownSelected}}" userInput="{{US_Address_NY.street[0]}}" stepKey="seeDefaultBillingAddressStreet"/>
         <selectOption selector="{{CheckoutShippingSection.addressDropdown}}" userInput="{{UK_Not_Default_Address.street[0]}}" stepKey="addAddress"/>
 
         <!-- Check order summary in checkout -->
@@ -86,8 +87,7 @@
         <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
 
         <!-- Open created order in backend -->
-        <amOnPage url="{{AdminOrdersPage.url}}" stepKey="goToOrders"/>
-        <waitForPageLoad stepKey="waitForOrdersPageLoad"/>
+        <actionGroup ref="AdminOrdersPageOpenActionGroup" stepKey="goToOrders"/>
         <actionGroup ref="OpenOrderByIdActionGroup" stepKey="filterOrderGridById">
             <argument name="orderId" value="$grabOrderNumber"/>
         </actionGroup>
