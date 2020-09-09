@@ -281,10 +281,14 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                     ]
                 ],
             ],
-            //Skip processing routeid wildcards due to complexity in resolution
             'getUrl from routeid wildcard in controller' => [
                 'Magento\Catalog\Controller\ControllerName\SomeClass',
                 '$this->getUrl("*/Invalid/*")',
+                []
+            ],
+            'getUrl from wildcard url within ignored Block class' => [
+                'Magento\Cms\Block\SomeClass',
+                '$this->getUrl("Catalog/*/View")',
                 []
             ],
             'getUrl from wildcard url within ignored Block class' => [
@@ -420,7 +424,7 @@ class PhpRuleTest extends \PHPUnit\Framework\TestCase
                     'method' => 'save'
                 ] ],
             ],
-            'V1/products/:sku/options' => ['GET' => ['service' => [
+            '/V1/products/:sku/options' => ['GET' => ['service' => [
                 'class' => 'Magento\Catalog\Api\ProductCustomOptionRepositoryInterface',
                 'method' => 'getList'
             ] ] ]

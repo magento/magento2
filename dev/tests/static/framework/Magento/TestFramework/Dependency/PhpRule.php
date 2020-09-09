@@ -11,13 +11,13 @@ namespace Magento\TestFramework\Dependency;
 
 use Magento\Framework\App\Utility\Files;
 use Magento\Framework\Config\Reader\Filesystem as ConfigReader;
+use Magento\Framework\Exception\ConfigurationMismatchException;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\UrlInterface;
 use Magento\TestFramework\Dependency\Reader\ClassScanner;
 use Magento\TestFramework\Dependency\Route\RouteMapper;
 use Magento\TestFramework\Exception\NoSuchActionException;
-use Magento\Test\Integrity\Dependency\Converter;
-use PHPUnit\Framework\Exception;
+use Magento\TestFramework\Inspection\Exception;
 
 /**
  * Rule to check the dependencies between modules based on references, getUrl and layout blocks
@@ -308,30 +308,28 @@ class PhpRule implements RuleInterface
      * @param string $file
      * @return array
      * @throws LocalizedException
-     * @throws \Exception
-     * @SuppressWarnings(PMD.CyclomaticComplexity)
      */
     protected function _caseGetUrl(string $currentModule, string &$contents, string $file): array
     {
         $dependencies = [];
-        $pattern = '#(\->|:)(?<source>getUrl\(([\'"])(?<path>[a-zA-Z0-9\-_*\/]+)\3)\s*[,)]#';
+        $pattern = '#(\->|:)(?<source>getUrl\(([\'"])(?<path>[a-zA-Z0-9\-_*/]+)\3)\s*[,)]#';
         if (!preg_match_all($pattern, $contents, $matches, PREG_SET_ORDER)) {
             return $dependencies;
         }
         try {
             foreach ($matches as $item) {
                 $path = $item['path'];
-                $returnedDependencies = [];
+                $modules = [];
                 if (strpos($path, '*') !== false) {
-                    $returnedDependencies = $this->processWildcardUrl($path, $file);
+                    $modules = $this->processWildcardUrl($path, $file);
                 } elseif (preg_match('#rest(?<service>/V1/.+)#i', $path, $apiMatch)) {
-                    $returnedDependencies = $this->processApiUrl($apiMatch['service']);
+                    $modules = $this->processApiUrl($apiMatch['service']);
                 } else {
-                    $returnedDependencies = $this->processStandardUrl($path);
+                    $modules = $this->processStandardUrl($path);
                 }
-                if ($returnedDependencies && !in_array($currentModule, $returnedDependencies)) {
+                if ($modules && !in_array($currentModule, $modules)) {
                     $dependencies[] = [
-                        'modules' => $returnedDependencies,
+                        'modules' => $modules,
                         'type' => RuleInterface::TYPE_HARD,
                         'source' => $item['source'],
                     ];
@@ -352,55 +350,43 @@ class PhpRule implements RuleInterface
      * @param string $filePath
      * @return string[]
      * @throws NoSuchActionException
-     * @SuppressWarnings(PMD.CyclomaticComplexity)
      */
     private function processWildcardUrl(string $urlPath, string $filePath)
     {
         $filePath = strtolower($filePath);
         $urlRoutePieces = explode('/', $urlPath);
         $routeId = array_shift($urlRoutePieces);
-
         //Skip route wildcard processing as this requires using the routeMapper
         if ('*' === $routeId) {
             return [];
         }
-        $filePathInfo = pathinfo($filePath);
-        $fileActionName = $filePathInfo['filename'];
-        $filePathPieces = explode(DIRECTORY_SEPARATOR, $filePathInfo['dirname']);
 
         /**
          * Only handle Controllers. ie: Ignore Blocks, Templates, and Models due to complexity in static resolution
          * of route
          */
-        if (in_array('block', $filePathPieces)
-            || in_array('model', $filePathPieces)
-            || $filePathInfo['extension'] === 'phtml'
-        ) {
+        if (!preg_match(
+            '#controller/(adminhtml/)?(?<controller_name>.+)/(?<action_name>\w+).php$#',
+            $filePath,
+            $fileParts
+        )) {
             return [];
-        }
-        $fileControllerIndex = array_search('adminhtml', $filePathPieces, true);
-        if ($fileControllerIndex === false) {
-            $fileControllerIndex = array_search('controller', $filePathPieces, true);
         }
 
         $controllerName = array_shift($urlRoutePieces);
         if ('*' === $controllerName) {
-            $fileControllerName = implode("_", array_slice($filePathPieces, $fileControllerIndex + 1));
-            $controllerName = $fileControllerName;
+            $controllerName = str_replace('/', '_', $fileParts['controller_name']);
         }
 
         if (empty($urlRoutePieces) || !$urlRoutePieces[0]) {
-            return $this->routeMapper->getDependencyByRoutePath(
-                $routeId,
-                $controllerName,
-                UrlInterface::DEFAULT_ACTION_NAME
-            );
+            $actionName = UrlInterface::DEFAULT_ACTION_NAME;
+        } else {
+            $actionName = array_shift($urlRoutePieces);
+            if ('*' === $actionName) {
+                $actionName = $fileParts['action_name'];
+            }
         }
 
-        $actionName = array_shift($urlRoutePieces);
-        if ('*' === $actionName) {
-            $actionName = $fileActionName;
-        }
         return $this->routeMapper->getDependencyByRoutePath(
             $routeId,
             $controllerName,
@@ -418,7 +404,7 @@ class PhpRule implements RuleInterface
     private function processStandardUrl(string $path)
     {
         $pattern = '#(?<route_id>[a-z0-9\-_]{3,})'
-            . '\/?(?<controller_name>[a-z0-9\-_]+)?\/?(?<action_name>[a-z0-9\-_]+)?#i';
+            . '(/(?<controller_name>[a-z0-9\-_]+))?(/(?<action_name>[a-z0-9\-_]+))?#i';
         if (!preg_match($pattern, $path, $match)) {
             throw new NoSuchActionException('Failed to parse standard url path: ' . $path);
         }
@@ -434,30 +420,37 @@ class PhpRule implements RuleInterface
     }
 
     /**
+     * Create regex patterns from service url paths
+     * @return array
+     */
+    private function getServiceMethodRegexps(): array
+    {
+        if (!$this->serviceMethods) {
+            $this->serviceMethods = [];
+            $serviceRoutes = $this->configReader->read()['routes'];
+            foreach ($serviceRoutes as $serviceRouteUrl => $methods) {
+                $pattern = '#:\w+#';
+                $replace = '\w+';
+                $serviceRouteUrlRegex = preg_replace($pattern, $replace, $serviceRouteUrl);
+                $serviceRouteUrlRegex = '#^' . $serviceRouteUrlRegex . '$#';
+                $this->serviceMethods[$serviceRouteUrlRegex] = $methods;
+            }
+        }
+        return $this->serviceMethods;
+    }
+
+    /**
      * Helper method to get module dependencies used by an API URL
      *
      * @param string $path
      * @return string[]
      *
      * @throws NoSuchActionException
+     * @throws Exception
      */
     private function processApiUrl(string $path): array
     {
-        /**
-         * Create regex patterns from service url paths
-         */
-        if (!$this->serviceMethods) {
-            $this->serviceMethods = [];
-            $serviceRoutes = $this->configReader->read()['routes'];
-            foreach ($serviceRoutes as $serviceRouteUrl => $methods) {
-                $pattern = '#:\w+#';
-                $replace = '\w';
-                $serviceRouteUrlRegex = preg_replace($pattern, $replace, $serviceRouteUrl);
-                $serviceRouteUrlRegex = '#' . $serviceRouteUrlRegex . '#';
-                $this->serviceMethods[$serviceRouteUrlRegex] = $methods;
-            }
-        }
-        foreach ($this->serviceMethods as $serviceRouteUrlRegex => $methods) {
+        foreach ($this->getServiceMethodRegexps() as $serviceRouteUrlRegex => $methods) {
             /**
              * Since we expect that every service method should be within the same module, we can use the class from
              * any method
@@ -467,10 +460,10 @@ class PhpRule implements RuleInterface
 
                 $className = $method['service']['class'];
                 //get module from className
-                if (preg_match('#(?<module>\w+[\\\]\w+).*#', $className, $match)) {
+                if (preg_match('#^(?<module>\w+[\\\]\w+)#', $className, $match)) {
                     return [$match['module']];
                 }
-                throw new Exception('Failed to parse class from className' . $className);
+                throw new Exception('Failed to parse class from className: ' . $className);
             }
         }
         throw new NoSuchActionException('Failed to match service with url path: ' . $path);
