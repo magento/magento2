@@ -143,7 +143,8 @@ class Widget
      */
     public function getConfigAsXml($type)
     {
-        return $this->getWidgetByClassType($type);
+        // phpstan:ignore
+        return $this->getXmlElementByType($type);
     }
 
     /**
