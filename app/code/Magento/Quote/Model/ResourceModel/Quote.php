@@ -294,7 +294,7 @@ class Quote extends AbstractDb
         $tableQuote = $this->getTable('quote');
         $tableItem = $this->getTable('quote_item');
         $connection = $this->getConnection();
-        $subSelect = $this->getConnection()
+        $subSelect = $connection
             ->select()
             ->from(
                 $tableItem,
@@ -305,7 +305,7 @@ class Quote extends AbstractDb
             )->group(
                 'quote_id'
             );
-        $select = $this->getConnection()
+        $select = $connection
             ->select()
             ->join(
                 ['t2' => $subSelect],
@@ -316,7 +316,7 @@ class Quote extends AbstractDb
                 ]
             );
         $updateQuery = $select->crossUpdateFromSelect(['t1' => $tableQuote]);
-        $this->getConnection()->query($updateQuery);
+        $connection->query($updateQuery);
 
         return $this;
     }

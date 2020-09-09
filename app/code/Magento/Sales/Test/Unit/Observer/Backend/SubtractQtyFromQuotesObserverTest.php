@@ -58,10 +58,12 @@ class SubtractQtyFromQuotesObserverTest extends TestCase
             Product::class,
             ['getId', 'getStatus']
         );
-        $productMock->expects($this->exactly(2))->method('getId')->willReturn(1);
+        $productMock->expects($this->exactly(4))->method('getId')->willReturn(1);
         $this->_eventMock->expects($this->once())->method('getProduct')->willReturn($productMock);
         $this->_quoteMock->expects($this->once())->method('subtractProductFromQuotes')->with($productMock);
         $this->_quoteMock->expects($this->once())->method('markQuotesRecollect')->with([$productMock->getId()]);
+        $this->_quoteMock->expects($this->once())->method('markQuotesWithFlag')
+            ->with([$productMock->getId()], 'trigger_private_content_update', 1);
         $this->_model->execute($this->_observerMock);
     }
 }

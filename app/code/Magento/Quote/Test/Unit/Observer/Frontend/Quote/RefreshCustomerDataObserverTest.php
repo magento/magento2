@@ -18,6 +18,7 @@ use PHPUnit\Framework\TestCase;
 use Magento\Quote\Model\Quote;
 use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Quote\Model\ResourceModel\Quote as QuoteResource;
 
 class RefreshCustomerDataObserverTest extends TestCase
 {
@@ -51,6 +52,11 @@ class RefreshCustomerDataObserverTest extends TestCase
      */
     private $quoteMock;
 
+    /**
+     * @var QuoteResource|MockObject
+     */
+    private $quoteResource;
+
     protected function setUp(): void
     {
         $this->quoteMock = $this->createMock(Quote::class);
@@ -66,11 +72,15 @@ class RefreshCustomerDataObserverTest extends TestCase
         $this->checkoutSession = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->quoteResource = $this->getMockBuilder(QuoteResource::class)
+            ->disableOriginalConstructor()
+            ->getMock();
 
         $this->observer = new RefreshCustomerDataObserver(
             $this->checkoutSession,
             $this->cookieManager,
-            $this->metadataFactory
+            $this->metadataFactory,
+            $this->quoteResource
         );
     }
 
@@ -92,8 +102,8 @@ class RefreshCustomerDataObserverTest extends TestCase
             ->method('getQuote')
             ->willReturn($this->quoteMock);
         $this->quoteMock->expects($this->once())
-            ->method('getOrigData')
-            ->with('trigger_recollect')
+            ->method('getData')
+            ->with('trigger_private_content_update')
             ->willReturn($result);
         $this->metadataFactory->expects($this->{$callCount}())
             ->method('createCookieMetadata')
@@ -104,6 +114,9 @@ class RefreshCustomerDataObserverTest extends TestCase
         $this->cookieManager->expects($this->{$callCount}())
             ->method('deleteCookie')
             ->with($frontendSessionCookieName, $this->metadata);
+        $this->quoteMock->expects($this->{$callCount}())
+            ->method('setData')
+            ->with('trigger_private_content_update', 0);
 
         $this->observer->execute($observerMock);
     }
