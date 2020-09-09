@@ -18,12 +18,14 @@ define([
     return Component.extend({
         defaults: {
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
+            bookmarkProvider: 'componentType = bookmark, ns = ${ $.ns }',
             directoryTreeSelector: '#media-gallery-directory-tree',
             getDirectoryTreeUrl: 'media_gallery/directories/gettree',
             createDirectoryUrl: 'media_gallery/directories/create',
             deleteDirectoryUrl: 'media_gallery/directories/delete',
             jsTreeReloaded: null,
             modules: {
+                bookmarks: '${ $.bookmarkProvider }',
                 directories: '${ $.name }_directories',
                 filterChips: '${ $.filterChipsProvider }'
             },
@@ -256,7 +258,15 @@ define([
 
                 return;
             }
+            if (!_.isUndefined(this.bookmarks())) {
+                if (!_.size(this.bookmarks().getViewData(this.bookmarks().defaultIndex))) {
+                    setTimeout(function () {
+                        this.updateSelectedDirectory();
+                    }.bind(this), 500);
 
+                    return;
+                }
+            }
             currentTreePath = this.isFilterApplied(currentFilterPath) || _.isNull(requestedDirectory) ?
                 currentFilterPath : requestedDirectory;
 
