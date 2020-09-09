@@ -7,6 +7,8 @@ namespace Magento\Shipping\Model\Tracking\Result;
 
 class Error extends \Magento\Shipping\Model\Tracking\Result\AbstractResult
 {
+    public const STATUS_TYPE = 1;
+
     /**
      * @return array
      */
