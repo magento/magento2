@@ -84,8 +84,7 @@
         <comment userInput="Create invoice" stepKey="createInvoice"/>
 
         <actionGroup ref="AdminOrderGridClickFirstRowActionGroup" stepKey="clickOrderRow"/>
-        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceButton"/>
-        <waitForPageLoad stepKey="waitForInvoicePageToLoad"/>
+        <actionGroup ref="AdminClickInvoiceButtonIntoOrderActionGroup" stepKey="clickInvoiceButton"/>
         <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seeNewInvoiceInPageTitle" after="clickInvoiceButton"/>
         <see selector="{{AdminInvoiceTotalSection.total('Subtotal')}}" userInput="$150.00" stepKey="seeCorrectGrandTotal"/>
         <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>

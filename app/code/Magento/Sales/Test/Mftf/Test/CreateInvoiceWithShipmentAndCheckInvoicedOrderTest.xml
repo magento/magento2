@@ -78,7 +78,7 @@
         <click selector="{{AdminDataGridTableSection.firstRow}}" stepKey="clickCreatedOrderInGrid"/>
 
         <!-- Go to invoice tab and fill data -->
-        <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceAction"/>
+        <actionGroup ref="AdminClickInvoiceButtonIntoOrderActionGroup" stepKey="clickInvoiceAction"/>
         <click selector="{{AdminInvoicePaymentShippingSection.CreateShipment}}" stepKey="createShipment"/>
         <fillField selector="{{AdminInvoiceTotalSection.invoiceComment}}" userInput="comment" stepKey="writeComment"/>
         <actionGroup ref="AdminInvoiceClickSubmitActionGroup" stepKey="clickSubmitInvoice"/>

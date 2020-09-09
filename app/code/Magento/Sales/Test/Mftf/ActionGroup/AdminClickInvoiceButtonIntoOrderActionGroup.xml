@@ -8,13 +8,13 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
         xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="GoToInvoiceIntoOrderActionGroup" deprecated="Use AdminClickInvoiceButtonIntoOrderActionGroup instead.">
+    <actionGroup name="AdminClickInvoiceButtonIntoOrderActionGroup">
         <annotations>
-            <description>Clicks on 'Invoice' on the Admin Orders view page. Validates that the URL and Page Title are correct.</description>
+            <description>Click 'Invoice' button on the order view page.</description>
         </annotations>
 
         <click selector="{{AdminOrderDetailsMainActionsSection.invoice}}" stepKey="clickInvoiceAction"/>
+        <waitForPageLoad stepKey="waitForProductPage"/>
         <seeInCurrentUrl url="{{AdminInvoiceNewPage.url}}" stepKey="seeOrderInvoiceUrl"/>
-        <see selector="{{AdminHeaderSection.pageTitle}}" userInput="New Invoice" stepKey="seePageNameNewInvoicePage"/>
     </actionGroup>
 </actionGroups>
