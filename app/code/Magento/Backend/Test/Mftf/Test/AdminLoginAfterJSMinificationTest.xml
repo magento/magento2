@@ -24,6 +24,7 @@
             <actionGroup ref="CliCacheCleanActionGroup" stepKey="cleanCache">
                 <argument name="tags" value="config"/>
             </actionGroup>
+            <magentoCLI command="setup:static-content:deploy -f" stepKey="deployStaticContent"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
