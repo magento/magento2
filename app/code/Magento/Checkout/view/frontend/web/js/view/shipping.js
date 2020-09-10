@@ -304,7 +304,7 @@ define([
                     !quote.shippingMethod()['method_code'] ||
                     !quote.shippingMethod()['carrier_code']
                 ) {
-                    if (!quote.shippingMethod()['method_code']) {
+                    if (!quote.shippingMethod()['method_code']) {//eslint-disable-line max-depth
                         this.errorValidationMessage(
                             $t('The shipping method is missing. Select the shipping method and try again.')
                         );
