@@ -37,14 +37,19 @@ class Keyword implements CustomFilterInterface
     public function apply(Filter $filter, AbstractDb $collection): bool
     {
         $value = $filter->getValue();
+        if (!is_array($value)) {
+            $keywordValues = explode(',', $value);
+        }
 
-        $collection->addFieldToFilter(
-            [self::TABLE_ALIAS . '.title', self::TABLE_ALIAS . '.id'],
-            [
-                ['like' => sprintf('%%%s%%', $value)],
-                ['in' => $this->getAssetIdsByKeyword($value)]
-            ]
-        );
+        foreach ($keywordValues as $keywordValue) {
+            $collection->addFieldToFilter(
+                [self::TABLE_ALIAS . '.title', self::TABLE_ALIAS . '.id'],
+                [
+                    ['like' => sprintf('%%%s%%', trim($keywordValue))],
+                    ['in' => $this->getAssetIdsByKeyword(trim($keywordValue))]
+                ]
+            );
+        }
 
         return true;
     }
