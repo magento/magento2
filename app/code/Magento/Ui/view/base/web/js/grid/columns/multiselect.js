@@ -503,7 +503,7 @@ define([
          * Is invoked when search is applied or removed
          */
         onSearch: function () {
-           this.onFilter();
+            this.onFilter();
         }
     });
 });
