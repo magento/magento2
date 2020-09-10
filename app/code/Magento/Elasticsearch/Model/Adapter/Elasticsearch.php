@@ -497,6 +497,12 @@ class Elasticsearch
      */
     private function getMappingTotalFieldsLimit(array $allAttributeTypes): int
     {
-        return count($allAttributeTypes) + self::MAPPING_TOTAL_FIELDS_BUFFER_LIMIT;
+        $count = count($allAttributeTypes);
+        foreach ($allAttributeTypes as $attributeType) {
+            if (isset($attributeType['fields'])) {
+                $count += count($attributeType['fields']);
+            }
+        }
+        return $count + self::MAPPING_TOTAL_FIELDS_BUFFER_LIMIT;
     }
 }
