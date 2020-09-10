@@ -155,7 +155,7 @@ class ConfigurableTest extends TestCase
             true
         );
 
-        $configurableProduct = $this->getConfigurableProductFromCollection($configurableProduct->getId());
+        $configurableProduct = $this->getConfigurableProductFromCollection((int)$configurableProduct->getId());
         $this->assertEquals($childProduct1->getPrice(), $configurableProduct->getMinimalPrice());
     }
 
@@ -181,6 +181,11 @@ class ConfigurableTest extends TestCase
 
         $childProduct2 = $this->productRepository->getById(20, false, null, true);
         $stockItem = $childProduct2->getExtensionAttributes()->getStockItem();
+        $stockItem->setIsInStock(Stock::STOCK_OUT_OF_STOCK);
+        $this->stockRepository->save($stockItem);
+
+        $configurableProduct1 = $this->productRepository->getById(1, false, null, true);
+        $stockItem = $configurableProduct1->getExtensionAttributes()->getStockItem();
         $stockItem->setIsInStock(Stock::STOCK_OUT_OF_STOCK);
         $this->stockRepository->save($stockItem);
 
