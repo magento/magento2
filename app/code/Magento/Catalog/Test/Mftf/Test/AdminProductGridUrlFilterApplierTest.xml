@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminProductGridUrlFilterApplierTest">
+        <annotations>
+            <features value="Catalog"/>
+            <stories value="Filter product using GET URL parameter"/>
+            <title value="Verify that filter is applied on product grid when filters parameter is set on url"/>
+            <description value="Accessing product grid url with filters parameter"/>
+            <severity value="MAJOR"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/4931106"/>
+            <group value="product"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
+            <createData entity="SimpleProduct2" stepKey="createSimpleProduct"/>
+        </before>
+
+        <after>
+            <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
+            <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="navigateToProductIndex"/>
+            <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearGridFilter"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logoutOfAdmin"/>
+        </after>
+
+        <amOnPage url="{{AdminProductIndexPage.url}}?filters[sku]=$createSimpleProduct.sku$" stepKey="navigateToProductGridWithFilters"/>
+        <waitForPageLoad stepKey="waitForProductGrid"/>
+        <see selector="{{AdminProductGridSection.productGridNameProduct($createSimpleProduct.name$)}}" userInput="$createSimpleProduct.name$" stepKey="seeProduct"/>
+        <waitForElementVisible selector="{{AdminProductGridFilterSection.enabledFilters}}" stepKey="waitForEnabledFilters"/>
+        <seeElement selector="{{AdminProductGridFilterSection.enabledFilters}}" stepKey="seeEnabledFilters"/>
+        <see selector="{{AdminProductGridFilterSection.enabledFilters}}" userInput="SKU: $createSimpleProduct.sku$" stepKey="seeProductNameFilter"/>
+    </test>
+</tests>

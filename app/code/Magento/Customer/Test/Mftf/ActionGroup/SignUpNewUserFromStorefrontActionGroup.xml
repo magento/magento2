@@ -8,7 +8,7 @@
 
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
-    <actionGroup name="SignUpNewUserFromStorefrontActionGroup" deprecated="Avoid using super-ActionGroups. See StorefrontCreateCustomerTest for replacement.">
+    <actionGroup name="SignUpNewUserFromStorefrontActionGroup">
         <annotations>
             <description>Goes to the Storefront. Clicks on 'Create Account'. Fills in the provided Customer details, excluding Newsletter Sign-Up. Clicks on 'Create Account' button. Validate that the Customer details are present and correct.</description>
         </annotations>
@@ -24,6 +24,7 @@
         <fillField  stepKey="fillEmail" userInput="{{Customer.email}}" selector="{{StorefrontCustomerCreateFormSection.emailField}}"/>
         <fillField  stepKey="fillPassword" userInput="{{Customer.password}}" selector="{{StorefrontCustomerCreateFormSection.passwordField}}"/>
         <fillField  stepKey="fillConfirmPassword" userInput="{{Customer.password}}" selector="{{StorefrontCustomerCreateFormSection.confirmPasswordField}}"/>
+        <waitForPageLoad stepKey="waitForCreateAccountButtonIsActive"/>
         <click stepKey="clickCreateAccountButton" selector="{{StorefrontCustomerCreateFormSection.createAccountButton}}"/>
         <see stepKey="seeThankYouMessage" userInput="Thank you for registering with Main Website Store."/>
         <see stepKey="seeFirstName" userInput="{{Customer.firstname}}" selector="{{StorefrontCustomerDashboardAccountInformationSection.ContactInformation}}"/>

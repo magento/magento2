@@ -339,7 +339,7 @@ class Bundle extends \Magento\CatalogImportExport\Model\Import\Product\Type\Abst
     /**
      * Deprecated method for retrieving mapping between skus and products.
      *
-     * @deprecated Misspelled method
+     * @deprecated 100.3.0 Misspelled method
      * @see retrieveProductsByCachedSkus
      */
     protected function retrieveProducsByCachedSkus()

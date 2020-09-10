@@ -32,7 +32,7 @@ class ProductPriceTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_model = Bootstrap::getObjectManager()->create(Product::class);
         $this->productRepository = Bootstrap::getObjectManager()->create(ProductRepositoryInterface::class);

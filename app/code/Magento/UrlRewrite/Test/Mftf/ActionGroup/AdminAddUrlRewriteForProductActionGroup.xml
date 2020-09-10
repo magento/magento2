@@ -29,6 +29,6 @@
         <click selector="{{AdminUrlRewriteEditSection.redirectTypeValue('redirectTypeValue')}}" stepKey="clickOnRedirectTypeValue"/>
         <fillField selector="{{AdminUrlRewriteEditSection.description}}" userInput="{{description}}" stepKey="fillDescription"/>
         <click selector="{{AdminUrlRewriteEditSection.saveButton}}" stepKey="clickOnSaveButton"/>
-        <seeElement selector="{{AdminMessagesSection.successMessage}}" stepKey="seeSuccessSaveMessage"/>
+        <seeElement selector="{{AdminMessagesSection.success}}" stepKey="seeSuccessSaveMessage"/>
     </actionGroup>
 </actionGroups>

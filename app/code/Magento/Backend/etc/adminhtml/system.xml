@@ -146,7 +146,7 @@
                     <label>Allow Symlinks</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>
-                        <![CDATA[<strong style="color:red">Warning!</strong> Enabling this feature is not recommended on production environments because it represents a potential security risk.]]>
+                        <![CDATA[<strong class="colorRed">Warning!</strong> Enabling this feature is not recommended on production environments because it represents a potential security risk.]]>
                     </comment>
                 </field>
                 <field id="minify_html" translate="label comment" type="select" sortOrder="25" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">
@@ -341,7 +341,7 @@
             </group>
             <group id="upload_configuration" translate="label" type="text" sortOrder="1000" showInDefault="1" showInWebsite="1" showInStore="1">
                 <label>Images Upload Configuration</label>
-                <field id="enable_resize" translate="label" type="select" sortOrder="200" showInDefault="1" canRestore="1">
+                <field id="enable_resize" translate="label comment" type="select" sortOrder="200" showInDefault="1" canRestore="1">
                     <label>Enable Frontend Resize</label>
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <comment>Resize performed via javascript before file upload.</comment>
@@ -460,7 +460,7 @@
                     <source_model>Magento\Config\Model\Config\Source\Yesno</source_model>
                     <backend_model>Magento\Config\Model\Config\Backend\Store</backend_model>
                     <comment>
-                        <![CDATA[<strong style="color:red">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third-party services (e.g. PayPal etc.).]]>
+                        <![CDATA[<strong class="colorRed">Warning!</strong> When using Store Code in URLs, in some cases system may not work properly if URLs without Store Codes are specified in the third-party services (e.g. PayPal etc.).]]>
                     </comment>
                 </field>
                 <field id="redirect_to_base" translate="label comment" type="select" sortOrder="20" showInDefault="1" showInWebsite="1" showInStore="1" canRestore="1">

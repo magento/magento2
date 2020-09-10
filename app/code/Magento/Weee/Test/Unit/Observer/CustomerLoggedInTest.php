@@ -3,37 +3,45 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Weee\Test\Unit\Observer;
 
+use Magento\Customer\Api\Data\AddressInterface;
+use Magento\Customer\Model\Data\Customer;
+use Magento\Framework\Event\Observer;
+use Magento\Framework\Module\Manager;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\PageCache\Model\Config;
 use Magento\Tax\Api\TaxAddressManagerInterface;
-use PHPUnit_Framework_MockObject_MockObject as MockObject;
+use Magento\Weee\Helper\Data;
+use Magento\Weee\Observer\CustomerLoggedIn;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-/**
- * Customer logged in test
- */
-class CustomerLoggedInTest extends \PHPUnit\Framework\TestCase
+class CustomerLoggedInTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Event\Observer
+     * @var Observer
      */
     protected $observerMock;
 
     /**
      * Module manager
      *
-     * @var \Magento\Framework\Module\Manager
+     * @var Manager
      */
     private $moduleManagerMock;
 
     /**
      * Cache config
      *
-     * @var \Magento\PageCache\Model\Config
+     * @var Config
      */
     private $cacheConfigMock;
 
     /**
-     * @var \Magento\Weee\Helper\Data
+     * @var Data
      */
     protected $weeeHelperMock;
 
@@ -43,41 +51,41 @@ class CustomerLoggedInTest extends \PHPUnit\Framework\TestCase
     private $addressManagerMock;
 
     /**
-     * @var \Magento\Weee\Observer\CustomerLoggedIn
+     * @var CustomerLoggedIn
      */
     protected $session;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
-        $this->observerMock = $this->getMockBuilder(\Magento\Framework\Event\Observer::class)
+        $objectManager = new ObjectManager($this);
+        $this->observerMock = $this->getMockBuilder(Observer::class)
             ->disableOriginalConstructor()
             ->setMethods(
                 [
-                'getCustomerAddress', 'getData'
+                    'getCustomerAddress', 'getData'
                 ]
             )
             ->getMock();
 
-        $this->moduleManagerMock = $this->getMockBuilder(\Magento\Framework\Module\Manager::class)
+        $this->moduleManagerMock = $this->getMockBuilder(Manager::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->cacheConfigMock = $this->getMockBuilder(\Magento\PageCache\Model\Config::class)
+        $this->cacheConfigMock = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        $this->weeeHelperMock = $this->getMockBuilder(\Magento\Weee\Helper\Data::class)
+        $this->weeeHelperMock = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
 
         $this->addressManagerMock = $this->getMockBuilder(TaxAddressManagerInterface::class)
             ->setMethods(['setDefaultAddressAfterSave', 'setDefaultAddressAfterLogIn'])
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $this->session = $objectManager->getObject(
-            \Magento\Weee\Observer\CustomerLoggedIn::class,
+            CustomerLoggedIn::class,
             [
                 'weeeHelper' => $this->weeeHelperMock,
                 'moduleManager' => $this->moduleManagerMock,
@@ -105,14 +113,14 @@ class CustomerLoggedInTest extends \PHPUnit\Framework\TestCase
             ->method('isEnabled')
             ->willReturn(true);
 
-        $customerMock = $this->getMockBuilder(\Magento\Customer\Model\Data\Customer::class)
+        $customerMock = $this->getMockBuilder(Customer::class)
             ->disableOriginalConstructor()
             ->getMock();
 
-        /* @var \Magento\Customer\Api\Data\AddressInterface|\PHPUnit_Framework_MockObject_MockObject $address */
-        $address = $this->getMockBuilder(\Magento\Customer\Api\Data\AddressInterface::class)
+        /* @var \Magento\Customer\Api\Data\AddressInterface|MockObject $address */
+        $address = $this->getMockBuilder(AddressInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
+            ->getMockForAbstractClass();
 
         $customerMock->expects($this->once())
             ->method('getAddresses')

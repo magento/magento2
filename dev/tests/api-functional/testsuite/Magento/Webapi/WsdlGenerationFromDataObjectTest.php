@@ -25,7 +25,7 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
     /** @var bool */
     protected $isSingleService;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_markTestAsSoapOnly("WSDL generation tests are intended to be executed for SOAP adapter only.");
         $this->_storeCode = Bootstrap::getObjectManager()->get(\Magento\Store\Model\StoreManagerInterface::class)
@@ -71,20 +71,20 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
         curl_setopt($connection, CURLOPT_RETURNTRANSFER, 1);
         $responseContent = curl_exec($connection);
         $this->assertEquals(curl_getinfo($connection, CURLINFO_HTTP_CODE), 401);
-        $this->assertContains("The consumer isn't authorized to access %resources.", $responseContent);
+        $this->assertStringContainsString("The consumer isn't authorized to access %resources.", $responseContent);
     }
 
     public function testInvalidWsdlUrlNoServices()
     {
         $responseContent = $this->_getWsdlContent($this->_getBaseWsdlUrl());
-        $this->assertContains("Requested services are missing.", $responseContent);
+        $this->assertStringContainsString("Requested services are missing.", $responseContent);
     }
 
     public function testInvalidWsdlUrlInvalidParameter()
     {
         $wsdlUrl = $this->_getBaseWsdlUrl() . '&invalid';
         $responseContent = $this->_getWsdlContent($wsdlUrl);
-        $this->assertContains("Not allowed parameters", $responseContent);
+        $this->assertStringContainsString("Not allowed parameters", $responseContent);
     }
 
     /**
@@ -116,7 +116,7 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
             $responseDom->loadXML($responseContent),
             "Valid XML is always expected as a response for WSDL request."
         );
-        return $responseContent;
+        return $responseDom->saveXML();
     }
 
     /**
@@ -145,7 +145,7 @@ class WsdlGenerationFromDataObjectTest extends \Magento\TestFramework\TestCase\W
     <xsd:schema targetNamespace="{$this->_soapUrl}">
 TYPES_SECTION_DECLARATION;
         // @codingStandardsIgnoreEnd
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($typesSectionDeclaration),
             $wsdlContent,
             'Types section declaration is invalid'
@@ -168,7 +168,7 @@ REQUEST_ELEMENT;
 <xsd:element name="testModule5AllSoapAndRestV1ItemRequest" type="tns:TestModule5AllSoapAndRestV1ItemRequest"/>
 REQUEST_ELEMENT;
         }
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($requestElement),
             $wsdlContent,
             'Request element declaration in types section is invalid'
@@ -183,7 +183,7 @@ RESPONSE_ELEMENT;
 <xsd:element name="testModule5AllSoapAndRestV1ItemResponse" type="tns:TestModule5AllSoapAndRestV1ItemResponse"/>
 RESPONSE_ELEMENT;
         }
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($responseElement),
             $wsdlContent,
             'Response element declaration in types section is invalid'
@@ -207,7 +207,7 @@ RESPONSE_ELEMENT;
     <xsd:sequence>
         <xsd:element name="id" minOccurs="1" maxOccurs="1" type="xsd:int">
             <xsd:annotation>
-                <xsd:documentation></xsd:documentation>
+                <xsd:documentation/>
                 <xsd:appinfo xmlns:inf="{$this->_soapUrl}">
                     <inf:min/>
                     <inf:max/>
@@ -231,7 +231,7 @@ REQUEST_TYPE;
     <xsd:sequence>
         <xsd:element name="entityId" minOccurs="1" maxOccurs="1" type="xsd:int">
             <xsd:annotation>
-                <xsd:documentation></xsd:documentation>
+                <xsd:documentation/>
                 <xsd:appinfo xmlns:inf="{$this->_soapUrl}">
                     <inf:min/>
                     <inf:max/>
@@ -247,7 +247,7 @@ REQUEST_TYPE;
 REQUEST_TYPE;
         }
         // @codingStandardsIgnoreEnd
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($requestType),
             $wsdlContent,
             'Request type declaration in types section is invalid'
@@ -266,7 +266,7 @@ REQUEST_TYPE;
     <xsd:sequence>
         <xsd:element name="result" minOccurs="1" maxOccurs="1" type="tns:TestModule5V2EntityAllSoapAndRest">
             <xsd:annotation>
-                <xsd:documentation></xsd:documentation>
+                <xsd:documentation/>
                 <xsd:appinfo xmlns:inf="{$this->_soapUrl}">
                     <inf:callInfo>
                         <inf:callName>testModule5AllSoapAndRestV2Item</inf:callName>
@@ -290,7 +290,7 @@ RESPONSE_TYPE;
     <xsd:sequence>
         <xsd:element name="result" minOccurs="1" maxOccurs="1" type="tns:TestModule5V1EntityAllSoapAndRest">
             <xsd:annotation>
-                <xsd:documentation></xsd:documentation>
+                <xsd:documentation/>
                 <xsd:appinfo xmlns:inf="{$this->_soapUrl}">
                     <inf:callInfo>
                         <inf:callName>testModule5AllSoapAndRestV1Item</inf:callName>
@@ -304,7 +304,7 @@ RESPONSE_TYPE;
 RESPONSE_TYPE;
         }
         // @codingStandardsIgnoreEnd
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($responseType),
             $wsdlContent,
             'Response type declaration in types section is invalid'
@@ -331,7 +331,7 @@ RESPONSE_TYPE;
     <xsd:sequence>
         <xsd:element name="price" minOccurs="1" maxOccurs="1" type="xsd:int">
             <xsd:annotation>
-                <xsd:documentation></xsd:documentation>
+                <xsd:documentation/>
                 <xsd:appinfo xmlns:inf="{$this->_soapUrl}">
                     <inf:min/>
                     <inf:max/>
@@ -472,7 +472,7 @@ RESPONSE_TYPE;
 RESPONSE_TYPE;
         }
         // @codingStandardsIgnoreEnd
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($referencedType),
             $wsdlContent,
             'Declaration of complex type generated from Data Object, which is referenced in response, is invalid'
@@ -495,7 +495,7 @@ FIRST_PORT_TYPE;
 <portType name="testModule5AllSoapAndRestV1PortType">
 FIRST_PORT_TYPE;
         }
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($firstPortType),
             $wsdlContent,
             'Port type declaration is missing or invalid'
@@ -505,7 +505,7 @@ FIRST_PORT_TYPE;
             $secondPortType = <<< SECOND_PORT_TYPE
 <portType name="testModule5AllSoapAndRestV2PortType">
 SECOND_PORT_TYPE;
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $this->_convertXmlToString($secondPortType),
                 $wsdlContent,
                 'Port type declaration is missing or invalid'
@@ -539,7 +539,7 @@ OPERATION_DECLARATION;
 </operation>
 OPERATION_DECLARATION;
         }
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($operationDeclaration),
             $wsdlContent,
             'Operation in port type is invalid'
@@ -564,7 +564,7 @@ FIRST_BINDING;
     <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 FIRST_BINDING;
         }
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($firstBinding),
             $wsdlContent,
             'Binding declaration is missing or invalid'
@@ -575,7 +575,7 @@ FIRST_BINDING;
 <binding name="testModule5AllSoapAndRestV2Binding" type="tns:testModule5AllSoapAndRestV2PortType">
     <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
 SECOND_BINDING;
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $this->_convertXmlToString($secondBinding),
                 $wsdlContent,
                 'Binding declaration is missing or invalid'
@@ -629,7 +629,7 @@ OPERATION_DECLARATION;
 </operation>
 OPERATION_DECLARATION;
         }
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($operationDeclaration),
             $wsdlContent,
             'Operation in binding is invalid'
@@ -662,7 +662,7 @@ FIRST_SERVICE_DECLARATION;
 FIRST_SERVICE_DECLARATION;
         }
         // @codingStandardsIgnoreEnd
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($firstServiceDeclaration),
             $wsdlContent,
             'First service section is invalid'
@@ -678,7 +678,7 @@ FIRST_SERVICE_DECLARATION;
 </service>
 SECOND_SERVICE_DECLARATION;
             // @codingStandardsIgnoreEnd
-            $this->assertContains(
+            $this->assertStringContainsString(
                 $this->_convertXmlToString($secondServiceDeclaration),
                 $wsdlContent,
                 'Second service section is invalid'
@@ -701,7 +701,7 @@ SECOND_SERVICE_DECLARATION;
     <part name="messageParameters" element="tns:testModule5AllSoapAndRestV2ItemResponse"/>
 </message>
 MESSAGES_DECLARATION;
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($itemMessagesDeclaration),
             $wsdlContent,
             'Messages section for "item" operation is invalid'
@@ -714,7 +714,7 @@ MESSAGES_DECLARATION;
     <part name="messageParameters" element="tns:testModule5AllSoapAndRestV2ItemsResponse"/>
 </message>
 MESSAGES_DECLARATION;
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($itemsMessagesDeclaration),
             $wsdlContent,
             'Messages section for "items" operation is invalid'
@@ -742,7 +742,7 @@ MESSAGES_DECLARATION;
         $faultsInPortType = <<< FAULT_IN_PORT_TYPE
 <fault name="GenericFault" message="tns:GenericFault"/>
 FAULT_IN_PORT_TYPE;
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($faultsInPortType),
             $wsdlContent,
             'SOAP Fault section in port type section is invalid'
@@ -757,7 +757,7 @@ FAULT_IN_PORT_TYPE;
         $faultsInBinding = <<< FAULT_IN_BINDING
 <fault name="GenericFault"/>
 FAULT_IN_BINDING;
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($faultsInBinding),
             $wsdlContent,
             'SOAP Fault section in binding section is invalid'
@@ -774,7 +774,7 @@ FAULT_IN_BINDING;
     <part name="messageParameters" element="tns:GenericFault"/>
 </message>
 GENERIC_FAULT_IN_MESSAGES;
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($genericFaultMessage),
             $wsdlContent,
             'Generic SOAP Fault declaration in messages section is invalid'
@@ -787,7 +787,7 @@ GENERIC_FAULT_IN_MESSAGES;
      */
     protected function _checkFaultsComplexTypeSection($wsdlContent)
     {
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString('<xsd:element name="GenericFault" type="tns:GenericFault"/>'),
             $wsdlContent,
             'Default SOAP Fault complex type element declaration is invalid'
@@ -824,7 +824,7 @@ GENERIC_FAULT_IN_MESSAGES;
     </xsd:sequence>
 </xsd:complexType>
 GENERIC_FAULT_COMPLEX_TYPE;
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($genericFaultType),
             $wsdlContent,
             'Default SOAP Fault complex types declaration is invalid'
@@ -835,7 +835,7 @@ GENERIC_FAULT_COMPLEX_TYPE;
     <xsd:sequence>
         <xsd:element name="key" minOccurs="1" maxOccurs="1" type="xsd:string">
             <xsd:annotation>
-                <xsd:documentation></xsd:documentation>
+                <xsd:documentation/>
                 <xsd:appinfo xmlns:inf="{$this->_soapUrl}">
                     <inf:maxLength/>
                 </xsd:appinfo>
@@ -843,7 +843,7 @@ GENERIC_FAULT_COMPLEX_TYPE;
         </xsd:element>
         <xsd:element name="value" minOccurs="1" maxOccurs="1" type="xsd:string">
             <xsd:annotation>
-                <xsd:documentation></xsd:documentation>
+                <xsd:documentation/>
                 <xsd:appinfo xmlns:inf="{$this->_soapUrl}">
                     <inf:maxLength/>
                 </xsd:appinfo>
@@ -852,7 +852,7 @@ GENERIC_FAULT_COMPLEX_TYPE;
     </xsd:sequence>
 </xsd:complexType>
 PARAM_COMPLEX_TYPE;
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($detailsParameterType),
             $wsdlContent,
             'Details parameter complex types declaration is invalid.'
@@ -865,7 +865,7 @@ PARAM_COMPLEX_TYPE;
     <xsd:sequence>
         <xsd:element name="message" minOccurs="1" maxOccurs="1" type="xsd:string">
             <xsd:annotation>
-                <xsd:documentation></xsd:documentation>
+                <xsd:documentation/>
                 <xsd:appinfo xmlns:inf="{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModule5AllSoapAndRestV2">
                     <inf:maxLength/>
                 </xsd:appinfo>
@@ -888,7 +888,7 @@ WRAPPED_ERROR_COMPLEX_TYPE;
     <xsd:sequence>
         <xsd:element name="message" minOccurs="1" maxOccurs="1" type="xsd:string">
             <xsd:annotation>
-                <xsd:documentation></xsd:documentation>
+                <xsd:documentation/>
                 <xsd:appinfo xmlns:inf="{$this->_baseUrl}/soap/{$this->_storeCode}?services=testModule5AllSoapAndRestV1%2CtestModule5AllSoapAndRestV2">
                     <inf:maxLength/>
                 </xsd:appinfo>
@@ -907,7 +907,7 @@ WRAPPED_ERROR_COMPLEX_TYPE;
 WRAPPED_ERROR_COMPLEX_TYPE;
         }
         // @codingStandardsIgnoreEnd
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($detailsWrappedErrorType),
             $wsdlContent,
             'Details wrapped error complex types declaration is invalid.'
@@ -930,7 +930,7 @@ WRAPPED_ERROR_COMPLEX_TYPE;
 </xsd:complexType>
 PARAMETERS_COMPLEX_TYPE;
         // @codingStandardsIgnoreEnd
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($detailsParametersType),
             $wsdlContent,
             'Details parameters (array of parameters) complex types declaration is invalid.'
@@ -974,7 +974,7 @@ WRAPPED_ERRORS_COMPLEX_TYPE;
 
         }
         // @codingStandardsIgnoreEnd
-        $this->assertContains(
+        $this->assertStringContainsString(
             $this->_convertXmlToString($detailsWrappedErrorsType),
             $wsdlContent,
             'Details wrapped errors (array of wrapped errors) complex types declaration is invalid.'

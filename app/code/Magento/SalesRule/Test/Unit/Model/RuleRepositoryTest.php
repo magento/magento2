@@ -1,90 +1,112 @@
 <?php
+
 /**
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\SalesRule\Test\Unit\Model;
 
+use Magento\Framework\Api\ExtensionAttribute\JoinProcessor;
+use Magento\Framework\Api\SearchCriteria;
+use Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface;
+use Magento\Framework\Api\SearchCriteriaInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\SalesRule\Api\Data\RuleInterface;
+use Magento\SalesRule\Api\Data\RuleSearchResultInterface;
+use Magento\SalesRule\Api\Data\RuleSearchResultInterfaceFactory;
+use Magento\SalesRule\Model\Converter\ToDataModel;
+use Magento\SalesRule\Model\Converter\ToModel;
+use Magento\SalesRule\Model\ResourceModel\Rule\Collection;
+use Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory;
+use Magento\SalesRule\Model\Rule;
+use Magento\SalesRule\Model\RuleFactory;
+use Magento\SalesRule\Model\RuleRepository;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
 /**
- * Class RuleRepositoryTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class RuleRepositoryTest extends \PHPUnit\Framework\TestCase
+class RuleRepositoryTest extends TestCase
 {
     /**
-     * @var \Magento\SalesRule\Model\RuleRepository
+     * @var RuleRepository
      */
     protected $ruleRepository;
 
     /**
-     * @var \Magento\SalesRule\Model\RuleFactory|\PHPUnit_Framework_MockObject_MockObject
+     * @var RuleFactory|MockObject
      */
     protected $ruleFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $searchResultFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $searchResultsMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $collectionFactory;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $extensionAttributesJoinProcessorMock;
 
     /**
-     * @var \Magento\SalesRule\Model\Converter\ToDataModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var ToDataModel|MockObject
      */
     protected $toDataModelConverter;
 
     /**
-     * @var \Magento\SalesRule\Model\Converter\ToModel|\PHPUnit_Framework_MockObject_MockObject
+     * @var ToModel|MockObject
      */
     protected $toModelConverter;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $collectionProcessor;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->ruleFactory = $this->createPartialMock(\Magento\SalesRule\Model\RuleFactory::class, ['create']);
+        $this->ruleFactory = $this->createPartialMock(RuleFactory::class, ['create']);
 
-        $className = \Magento\SalesRule\Model\Converter\ToDataModel::class;
-        $this->toDataModelConverter = $this->createMock($className);
+        $this->toDataModelConverter = $this->createMock(ToDataModel::class);
 
-        $className = \Magento\SalesRule\Model\Converter\ToModel::class;
-        $this->toModelConverter = $this->createMock($className);
+        $this->toModelConverter = $this->createMock(ToModel::class);
 
-        $className = \Magento\SalesRule\Api\Data\RuleSearchResultInterfaceFactory::class;
-        $this->searchResultFactory = $this->createPartialMock($className, ['create']);
+        $this->searchResultFactory = $this->getMockBuilder(RuleSearchResultInterfaceFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
 
-        $className = \Magento\SalesRule\Api\Data\RuleSearchResultInterface::class;
-        $this->searchResultsMock = $this->createMock($className);
+        $this->searchResultsMock = $this->getMockForAbstractClass(RuleSearchResultInterface::class);
 
-        $className = \Magento\SalesRule\Model\ResourceModel\Rule\CollectionFactory::class;
-        $this->collectionFactory = $this->createPartialMock($className, ['create']);
+        $this->collectionFactory = $this->getMockBuilder(CollectionFactory::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['create'])
+            ->getMock();
 
-        $className = \Magento\Framework\Api\ExtensionAttribute\JoinProcessor::class;
-        $this->extensionAttributesJoinProcessorMock = $this->createPartialMock($className, ['process']);
+        $this->extensionAttributesJoinProcessorMock = $this->getMockBuilder(JoinProcessor::class)
+            ->disableOriginalConstructor()
+            ->onlyMethods(['process'])
+            ->getMock();
 
-        $objectManager = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManager = new ObjectManager($this);
         $this->collectionProcessor = $this->createMock(
-            \Magento\Framework\Api\SearchCriteria\CollectionProcessorInterface::class
+            CollectionProcessorInterface::class
         );
         $this->ruleRepository = $objectManager->getObject(
-            \Magento\SalesRule\Model\RuleRepository::class,
+            RuleRepository::class,
             [
                 'ruleFactory' => $this->ruleFactory,
                 'toDataModelConverter' => $this->toDataModelConverter,
@@ -99,7 +121,7 @@ class RuleRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testDeleteById()
     {
-        $model = $this->createMock(\Magento\SalesRule\Model\Rule::class);
+        $model = $this->createMock(Rule::class);
         $this->ruleFactory->expects($this->once())->method('create')->willReturn($model);
         $model->expects($this->once())->method('load')->with(10)->willReturnSelf();
         $model->expects($this->once())->method('getId')->willReturn(10);
@@ -110,7 +132,7 @@ class RuleRepositoryTest extends \PHPUnit\Framework\TestCase
 
     public function testGetById()
     {
-        $model = $this->createMock(\Magento\SalesRule\Model\Rule::class);
+        $model = $this->createMock(Rule::class);
         $this->ruleFactory->expects($this->once())->method('create')->willReturn($model);
         $model->expects($this->once())->method('load')->with(10)->willReturnSelf();
         $model->expects($this->once())->method('getId')->willReturn(10);
@@ -126,7 +148,7 @@ class RuleRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $rule = $this->createMock(\Magento\SalesRule\Model\Data\Rule::class);
 
-        $model = $this->createMock(\Magento\SalesRule\Model\Rule::class);
+        $model = $this->createMock(Rule::class);
         $this->toModelConverter->expects($this->once())->method('toModel')->with($rule)->willReturn($model);
         $model->expects($this->once())->method('save');
         $model->expects($this->once())->method('getId')->willReturn(10);
@@ -142,14 +164,14 @@ class RuleRepositoryTest extends \PHPUnit\Framework\TestCase
     {
         $collectionSize = 1;
         /**
-         * @var \Magento\Framework\Api\SearchCriteriaInterface $searchCriteriaMock
+         * @var SearchCriteriaInterface $searchCriteriaMock
          */
-        $searchCriteriaMock = $this->createMock(\Magento\Framework\Api\SearchCriteria::class);
-        $collectionMock = $this->createMock(\Magento\SalesRule\Model\ResourceModel\Rule\Collection::class);
+        $searchCriteriaMock = $this->createMock(SearchCriteria::class);
+        $collectionMock = $this->createMock(Collection::class);
 
         $this->extensionAttributesJoinProcessorMock->expects($this->once())
             ->method('process')
-            ->with($collectionMock, \Magento\SalesRule\Api\Data\RuleInterface::class);
+            ->with($collectionMock, RuleInterface::class);
 
         $this->searchResultsMock->expects($this->once())->method('setSearchCriteria')->with($searchCriteriaMock);
         $this->collectionFactory->expects($this->once())->method('create')->willReturn($collectionMock);

@@ -4,14 +4,27 @@
  * See COPYING.txt for license details.
  */
 
+use Magento\Catalog\Api\ProductRepositoryInterface;
+use Magento\Catalog\Model\Product;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Framework\App\MutableScopeConfig;
+use Magento\Framework\Exception\NoSuchEntityException;
+use Magento\Store\Model\ScopeInterface;
+use Magento\Store\Model\Store;
+use Magento\Store\Model\StoreManagerInterface;
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/product_boolean_attribute.php');
+
 /** @var $objectManager \Magento\Framework\ObjectManagerInterface */
-$objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
+$objectManager = Bootstrap::getObjectManager();
 
-/** @var \Magento\Store\Model\StoreManagerInterface $storeManager */
-$storeManager = $objectManager->get(\Magento\Store\Model\StoreManagerInterface::class);
-
-/** @var \Magento\Store\Model\Store $store */
-$store = $objectManager->create(\Magento\Store\Model\Store::class);
+/** @var StoreManagerInterface $storeManager */
+$storeManager = $objectManager->get(StoreManagerInterface::class);
+/** @var Store $store */
+$store = $objectManager->create(Store::class);
 $storeCode = 'secondary';
 
 if (!$store->load($storeCode)->getId()) {
@@ -23,92 +36,118 @@ if (!$store->load($storeCode)->getId()) {
         ->setIsActive(1);
     $store->save();
 
-    /** @var \Magento\Framework\App\MutableScopeConfig $scopeConfig */
-    $scopeConfig = $objectManager->get(\Magento\Framework\App\MutableScopeConfig::class);
+    /** @var MutableScopeConfig $scopeConfig */
+    $scopeConfig = $objectManager->get(MutableScopeConfig::class);
     $scopeConfig->setValue(
         'general/locale/code',
         'de_DE',
-        \Magento\Store\Model\ScopeInterface::SCOPE_STORES,
+        ScopeInterface::SCOPE_STORES,
         $store->getId()
     );
 }
 
-/** @var $productFirst \Magento\Catalog\Model\Product */
-$productFirst = $objectManager->create(\Magento\Catalog\Model\Product::class);
-$productFirst->setTypeId('simple')
-    ->setAttributeSetId(4)
-    ->setWebsiteIds([1])
-    ->setName('Simple Product Apple')
-    ->setSku('fulltext-1')
-    ->setPrice(10)
-    ->setMetaTitle('first meta title')
-    ->setMetaKeyword('first meta keyword')
-    ->setMetaDescription('first meta description')
-    ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setStockData(['use_config_manage_stock' => 0])
-    ->save();
+$productRepository = $objectManager->get(ProductRepositoryInterface::class);
+try {
+    $productRepository->get('fulltext-1');
+} catch (NoSuchEntityException $e) {
+    /** @var $productFirst Product */
+    $productFirst = $objectManager->create(Product::class);
+    $productFirst->setTypeId('simple')
+        ->setAttributeSetId(4)
+        ->setWebsiteIds([1])
+        ->setName('Simple Product Apple')
+        ->setSku('fulltext-1')
+        ->setPrice(10)
+        ->setMetaTitle('first meta title')
+        ->setMetaKeyword('first meta keyword')
+        ->setMetaDescription('first meta description')
+        ->setVisibility(Visibility::VISIBILITY_BOTH)
+        ->setStatus(Status::STATUS_ENABLED)
+        ->setStockData(['use_config_manage_stock' => 0])
+        ->setBooleanAttribute(1)
+        ->save();
+}
 
-/** @var $productSecond \Magento\Catalog\Model\Product */
-$productSecond = $objectManager->create(\Magento\Catalog\Model\Product::class);
-$productSecond->setTypeId('simple')
-    ->setAttributeSetId(4)
-    ->setWebsiteIds([1])
-    ->setName('Simple Product Banana')
-    ->setSku('fulltext-2')
-    ->setPrice(20)
-    ->setMetaTitle('second meta title')
-    ->setMetaKeyword('second meta keyword')
-    ->setMetaDescription('second meta description')
-    ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setStockData(['use_config_manage_stock' => 0])
-    ->save();
+try {
+    $productRepository->get('fulltext-2');
+} catch (NoSuchEntityException $e) {
+    /** @var $productSecond Product */
+    $productSecond = $objectManager->create(Product::class);
+    $productSecond->setTypeId('simple')
+        ->setAttributeSetId(4)
+        ->setWebsiteIds([1])
+        ->setName('Simple Product Banana')
+        ->setSku('fulltext-2')
+        ->setPrice(20)
+        ->setMetaTitle('second meta title')
+        ->setMetaKeyword('second meta keyword')
+        ->setMetaDescription('second meta description')
+        ->setVisibility(Visibility::VISIBILITY_BOTH)
+        ->setStatus(Status::STATUS_ENABLED)
+        ->setStockData(['use_config_manage_stock' => 0])
+        ->setBooleanAttribute(1)
+        ->save();
+}
 
-/** @var $productThird \Magento\Catalog\Model\Product */
-$productThird = $objectManager->create(\Magento\Catalog\Model\Product::class);
-$productThird->setTypeId('simple')
-    ->setAttributeSetId(4)
-    ->setWebsiteIds([1])
-    ->setName('Simple Product Orange')
-    ->setSku('fulltext-3')
-    ->setPrice(20)
-    ->setMetaTitle('third meta title')
-    ->setMetaKeyword('third meta keyword')
-    ->setMetaDescription('third meta description')
-    ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setStockData(['use_config_manage_stock' => 0])
-    ->save();
+try {
+    $productRepository->get('fulltext-3');
+} catch (NoSuchEntityException $e) {
+    /** @var $productThird Product */
+    $productThird = $objectManager->create(Product::class);
+    $productThird->setTypeId('simple')
+        ->setAttributeSetId(4)
+        ->setWebsiteIds([1])
+        ->setName('Simple Product Orange')
+        ->setSku('fulltext-3')
+        ->setPrice(20)
+        ->setMetaTitle('third meta title')
+        ->setMetaKeyword('third meta keyword')
+        ->setMetaDescription('third meta description')
+        ->setVisibility(Visibility::VISIBILITY_BOTH)
+        ->setStatus(Status::STATUS_ENABLED)
+        ->setStockData(['use_config_manage_stock' => 0])
+        ->setBooleanAttribute(1)
+        ->save();
+}
 
-/** @var $productFourth \Magento\Catalog\Model\Product */
-$productFourth = $objectManager->create(\Magento\Catalog\Model\Product::class);
-$productFourth->setTypeId('simple')
-    ->setAttributeSetId(4)
-    ->setWebsiteIds([1])
-    ->setName('Simple Product Papaya')
-    ->setSku('fulltext-4')
-    ->setPrice(20)
-    ->setMetaTitle('fourth meta title')
-    ->setMetaKeyword('fourth meta keyword')
-    ->setMetaDescription('fourth meta description')
-    ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setStockData(['use_config_manage_stock' => 0])
-    ->save();
+try {
+    $productRepository->get('fulltext-4');
+} catch (NoSuchEntityException $e) {
+    /** @var $productFourth Product */
+    $productFourth = $objectManager->create(Product::class);
+    $productFourth->setTypeId('simple')
+        ->setAttributeSetId(4)
+        ->setWebsiteIds([1])
+        ->setName('Simple Product Papaya')
+        ->setSku('fulltext-4')
+        ->setPrice(20)
+        ->setMetaTitle('fourth meta title')
+        ->setMetaKeyword('fourth meta keyword')
+        ->setMetaDescription('fourth meta description')
+        ->setVisibility(Visibility::VISIBILITY_BOTH)
+        ->setStatus(Status::STATUS_ENABLED)
+        ->setStockData(['use_config_manage_stock' => 0])
+        ->setBooleanAttribute(0)
+        ->save();
+}
 
-/** @var $productFifth \Magento\Catalog\Model\Product */
-$productFifth = $objectManager->create(\Magento\Catalog\Model\Product::class);
-$productFifth->setTypeId('simple')
-    ->setAttributeSetId(4)
-    ->setWebsiteIds([1])
-    ->setName('Simple Product Cherry')
-    ->setSku('fulltext-5')
-    ->setPrice(20)
-    ->setMetaTitle('fifth meta title')
-    ->setMetaKeyword('fifth meta keyword')
-    ->setMetaDescription('fifth meta description')
-    ->setVisibility(\Magento\Catalog\Model\Product\Visibility::VISIBILITY_BOTH)
-    ->setStatus(\Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_ENABLED)
-    ->setStockData(['use_config_manage_stock' => 0])
-    ->save();
+try {
+    $productRepository->get('fulltext-5');
+} catch (NoSuchEntityException $e) {
+    /** @var $productFifth Product */
+    $productFifth = $objectManager->create(Product::class);
+    $productFifth->setTypeId('simple')
+        ->setAttributeSetId(4)
+        ->setWebsiteIds([1])
+        ->setName('Simple Product Cherry')
+        ->setSku('fulltext-5')
+        ->setPrice(20)
+        ->setMetaTitle('fifth meta title')
+        ->setMetaKeyword('fifth meta keyword')
+        ->setMetaDescription('fifth meta description')
+        ->setVisibility(Visibility::VISIBILITY_BOTH)
+        ->setStatus(Status::STATUS_ENABLED)
+        ->setStockData(['use_config_manage_stock' => 0])
+        ->setBooleanAttribute(0)
+        ->save();
+}

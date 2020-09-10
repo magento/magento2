@@ -6,17 +6,20 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Reader;
 
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Code\Reader\ArgumentsReader;
+
 require_once __DIR__ . '/_files/ClassesForArgumentsReader.php';
-class ArgumentsReaderTest extends \PHPUnit\Framework\TestCase
+class ArgumentsReaderTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Code\Reader\ArgumentsReader
+     * @var ArgumentsReader
      */
     protected $_model;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_model = new \Magento\Framework\Code\Reader\ArgumentsReader();
+        $this->_model = new ArgumentsReader();
     }
 
     public function testGetConstructorArgumentsClassWithAllArgumentsType()

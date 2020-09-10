@@ -22,7 +22,7 @@ class ConfigTest extends \PHPUnit\Framework\TestCase
      */
     private $objectManager;
     
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->config = $this->objectManager->get(Config::class);
