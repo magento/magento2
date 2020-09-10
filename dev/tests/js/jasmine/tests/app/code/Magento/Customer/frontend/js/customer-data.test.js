@@ -18,7 +18,6 @@ define([
 
     var injector = new Squire(),
         obj,
-        _,
         originaljQuery,
         originalGetJSON,
         originalReload,
@@ -99,6 +98,8 @@ define([
     }
 
     describe('Magento_Customer/js/customer-data', function () {
+
+        var _;
 
         beforeAll(function () {
             clearLocalStorage();
