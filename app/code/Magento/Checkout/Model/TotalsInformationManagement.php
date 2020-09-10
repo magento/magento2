@@ -6,7 +6,7 @@
 namespace Magento\Checkout\Model;
 
 /**
- * Class TotalsInformationManagement
+ * Class for management of totals information.
  */
 class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInformationManagementInterface
 {
@@ -38,7 +38,7 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
     }
 
     /**
-     * {@inheritDoc}
+     * @inheritDoc
      */
     public function calculate(
         $cartId,
@@ -64,6 +64,8 @@ class TotalsInformationManagement implements \Magento\Checkout\Api\TotalsInforma
     }
 
     /**
+     * Check if quote have items.
+     *
      * @param \Magento\Quote\Model\Quote $quote
      * @throws \Magento\Framework\Exception\LocalizedException
      * @return void
