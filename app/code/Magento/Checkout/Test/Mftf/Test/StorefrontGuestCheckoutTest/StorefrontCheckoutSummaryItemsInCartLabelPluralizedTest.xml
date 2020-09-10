@@ -6,7 +6,7 @@
   */
 -->
 <tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
-    <test name="StorefrontCheckoutSummaryItemsInCartLabelPluralized">
+    <test name="StorefrontCheckoutSummaryItemsInCartLabelPluralizedTest">
         <annotations>
             <features value="Checkout"/>
             <stories value="Checkout page order summary section 'Item in Cart' is pluralized correctly or not"/>
