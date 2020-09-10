@@ -16,6 +16,7 @@ define([
             deleteImageUrl: 'media_gallery/image/delete',
             addSelectedBtnSelector: '#add_selected',
             deleteSelectedBtnSelector: '#delete_selected',
+            gridSelector: '[data-id="media-gallery-masonry-grid"]',
             selected: null,
             fields: {
                 id: 'id',
@@ -291,7 +292,7 @@ define([
          * Action to close the context menu in media gallery.
          */
         closeContextMenu: function () {
-            $('.media-gallery-wrap').click();
+            $(this.gridSelector).click();
         }
     });
 });
