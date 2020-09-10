@@ -9,6 +9,7 @@ namespace Magento\Framework\Stdlib\Test\Unit\DateTime;
 
 use Magento\Framework\App\Config\ScopeConfigInterface;
 use Magento\Framework\App\ScopeResolverInterface;
+use Magento\Framework\Exception\LocalizedException;
 use Magento\Framework\Locale\ResolverInterface;
 use Magento\Framework\Stdlib\DateTime;
 use Magento\Framework\Stdlib\DateTime\Timezone;
@@ -206,6 +207,30 @@ class TimezoneTest extends TestCase
             $expectedResult()->format('DATE_ISO8601'),
             $this->getTimezone()->date($date)->format('DATE_ISO8601')
         );
+    }
+
+    /**
+     * Data provider for testException
+     *
+     * @return array
+     */
+    public function getConvertConfigTimeToUTCDataFixtures()
+    {
+        return [
+            'datetime' => [
+                new \DateTime('2016-10-10 10:00:00', new \DateTimeZone('UTC'))
+            ]
+        ];
+    }
+
+    /**
+     * @dataProvider getConvertConfigTimeToUTCDataFixtures
+     */
+    public function testConvertConfigTimeToUtcException($date)
+    {
+        $this->expectException(LocalizedException::class);
+
+        $this->getTimezone()->convertConfigTimeToUtc($date);
     }
 
     /**

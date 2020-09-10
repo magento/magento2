@@ -76,7 +76,7 @@ class PriceFilterTest extends AbstractFiltersTest
                     ],
                     [
                         'label' => '<span class="price">$60.00</span> and above',
-                        'value' => '60-',
+                        'value' => '60-70',
                         'count' => 1,
                     ],
                 ],
@@ -94,7 +94,7 @@ class PriceFilterTest extends AbstractFiltersTest
                     ],
                     [
                         'label' => '<span class="price">$50.00</span> and above',
-                        'value' => '50-',
+                        'value' => '50-60',
                         'count' => 1,
                     ],
                 ],

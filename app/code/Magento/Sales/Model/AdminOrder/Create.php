@@ -663,6 +663,14 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             if (is_numeric($qty)) {
                 $buyRequest->setQty($qty);
             }
+            $productOptions = $orderItem->getProductOptions();
+            if ($productOptions !== null && !empty($productOptions['options'])) {
+                $formattedOptions = [];
+                foreach ($productOptions['options'] as $option) {
+                    $formattedOptions[$option['option_id']] = $option['option_value'];
+                }
+                $buyRequest->setData('options', $formattedOptions);
+            }
             $item = $this->getQuote()->addProduct($product, $buyRequest);
             if (is_string($item)) {
                 return $item;
@@ -737,10 +745,12 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
             try {
                 $this->_cart = $this->quoteRepository->getForCustomer($customerId, [$storeId]);
             } catch (\Magento\Framework\Exception\NoSuchEntityException $e) {
-                $this->_cart->setStore($this->getSession()->getStore());
-                $customerData = $this->customerRepository->getById($customerId);
-                $this->_cart->assignCustomer($customerData);
-                $this->quoteRepository->save($this->_cart);
+                if ($this->getQuote()->hasItems()) {
+                    $this->_cart->setStore($this->getSession()->getStore());
+                    $customerData = $this->customerRepository->getById($customerId);
+                    $this->_cart->assignCustomer($customerData);
+                    $this->quoteRepository->save($this->_cart);
+                }
             }
         }
 
@@ -777,6 +787,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
     public function getCustomerGroupId()
     {
         $groupId = $this->getQuote()->getCustomerGroupId();
+        // @phpstan-ignore-next-line
         if (!isset($groupId)) {
             $groupId = $this->getSession()->getCustomerGroupId();
         }
@@ -1151,7 +1162,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @return array
      * @throws \Magento\Framework\Exception\LocalizedException
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected function _parseOptions(\Magento\Quote\Model\Quote\Item $item, $additionalOptions)
     {
@@ -1221,7 +1232,7 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
      * @param array $options
      * @return $this
      *
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected function _assignOptionsToItem(\Magento\Quote\Model\Quote\Item $item, $options)
     {
@@ -1369,7 +1380,6 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
         $data = isset($data['region']) && is_array($data['region']) ? array_merge($data, $data['region']) : $data;
 
         $addressForm = $this->_metadataFormFactory->create(
-
             AddressMetadataInterface::ENTITY_TYPE_ADDRESS,
             'adminhtml_customer_address',
             $data,
@@ -1436,9 +1446,10 @@ class Create extends \Magento\Framework\DataObject implements \Magento\Checkout\
              */
             $saveInAddressBook = (int)(!empty($address['save_in_address_book']));
             $shippingAddress->setData('save_in_address_book', $saveInAddressBook);
-        }
-        if ($address instanceof \Magento\Quote\Model\Quote\Address) {
+        } elseif ($address instanceof \Magento\Quote\Model\Quote\Address) {
             $shippingAddress = $address;
+        } else {
+            $shippingAddress = null;
         }
 
         $this->setRecollect(true);

@@ -105,6 +105,9 @@
             <argument name="scope" xsi:type="const">Magento\Store\Model\ScopeInterface::SCOPE_STORE</argument>
         </arguments>
     </virtualType>
+    <type name="Magento\Framework\App\ActionInterface">
+        <plugin name="designLoader" type="Magento\Theme\Plugin\LoadDesignPlugin"/>
+    </type>
     <type name="Magento\Framework\View\Element\UiComponent\DataProvider\CollectionFactory">
         <arguments>
              <argument name="collections" xsi:type="array">
@@ -317,5 +320,13 @@
                 <item name="storeUserAgentTheme" xsi:type="object">Magento\Theme\Model\Theme\StoreUserAgentThemeResolver</item>
             </argument>
         </arguments>
+    </type>
+    <type name="Magento\Theme\Helper\Storage">
+        <arguments>
+            <argument name="filesystemDriver" xsi:type="object">Magento\Framework\Filesystem\Driver\File</argument>
+        </arguments>
+    </type>
+    <type name="Magento\Framework\Data\Collection">
+        <plugin name="currentPageDetection" type="Magento\Theme\Plugin\Data\Collection" />
     </type>
 </config>

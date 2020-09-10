@@ -36,8 +36,7 @@
         </after>
 
         <!-- Create configurable product -->
-        <amOnPage url="{{AdminProductIndexPage.url}}" stepKey="amOnProductGridPage"/>
-        <waitForPageLoad stepKey="waitForProductGridPageLoad"/>
+        <actionGroup ref="AdminOpenProductIndexPageActionGroup" stepKey="amOnProductGridPage"/>
         <actionGroup ref="GoToCreateProductPageActionGroup" stepKey="createConfigurableProduct">
             <argument name="product" value="ApiConfigurableProduct"/>
         </actionGroup>
@@ -68,15 +67,22 @@
         <actionGroup ref="SaveConfigurableProductAddToCurrentAttributeSetActionGroup" stepKey="saveProduct"/>
 
         <!-- Assert child products generated sku in grid -->
-        <amOnPage url="{{ProductCatalogPage.url}}" stepKey="openProductCatalogPage"/>
-        <waitForPageLoad stepKey="waitForProductCatalogPageLoad"/>
+        <actionGroup ref="AdminProductCatalogPageOpenActionGroup" stepKey="openProductCatalogPage"/>
         <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterFirstProductByNameInGrid">
             <argument name="name" value="{{colorConfigurableProductAttribute1.name}}"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'SKU')}}" userInput="{{ApiConfigurableProduct.sku}}-{{colorConfigurableProductAttribute1.name}}"  stepKey="seeFirstProductSkuInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeFirstProductSkuInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="SKU"/>
+            <argument name="value" value="{{ApiConfigurableProduct.sku}}-{{colorConfigurableProductAttribute1.name}}"/>
+        </actionGroup>
         <actionGroup ref="FilterProductGridByName2ActionGroup" stepKey="filterSecondProductByNameInGrid">
             <argument name="name" value="{{colorConfigurableProductAttribute2.name}}"/>
         </actionGroup>
-        <see selector="{{AdminProductGridSection.productGridCell('1', 'SKU')}}" userInput="{{ApiConfigurableProduct.sku}}-{{colorConfigurableProductAttribute2.name}}"  stepKey="seeSecondProductSkuInGrid"/>
+        <actionGroup ref="AssertAdminProductGridCellActionGroup" stepKey="seeSecondProductSkuInGrid">
+            <argument name="row" value="1"/>
+            <argument name="column" value="SKU"/>
+            <argument name="value" value="{{ApiConfigurableProduct.sku}}-{{colorConfigurableProductAttribute2.name}}"/>
+        </actionGroup>
     </test>
 </tests>
