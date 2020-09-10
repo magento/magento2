@@ -15,6 +15,14 @@ $websiteId = $website->load('test', 'code')->getId();
 if ($websiteId) {
     $website->delete();
 }
+
+$storeGroup = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Group::class);
+/** @var $storeGroup \Magento\Store\Model\Group */
+$storeGroupId = $storeGroup->load('fixture_second_store_group', 'code')->getId();
+if ($storeGroupId) {
+    $storeGroup->delete();
+}
+
 $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
 if ($store->load('fixture_second_store', 'code')->getId()) {
     $store->delete();

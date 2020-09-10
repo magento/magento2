@@ -10,11 +10,23 @@ if (!$website->load('test', 'code')->getId()) {
     $website->save();
 }
 $websiteId = $website->getId();
+
+$storeGroup = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Group::class);
+if (!$storeGroup->load('fixture_second_store_group', 'code')->getId()) {
+    $storeGroup->setCode('fixture_second_store_group')
+        ->setName('Fixture Second Store Group')
+        ->setWebsite($website);
+    $storeGroup->save();
+
+    $website->setDefaultGroupId($storeGroup->getId());
+    $website->save();
+}
+
 $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Magento\Store\Model\Store::class);
 if (!$store->load('fixture_second_store', 'code')->getId()) {
     $groupId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
         \Magento\Store\Model\StoreManagerInterface::class
-    )->getWebsite()->getDefaultGroupId();
+    )->getWebsite('test')->getDefaultGroupId();
     $store->setCode(
         'fixture_second_store'
     )->setWebsiteId(
@@ -35,7 +47,7 @@ $store = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->create(\Ma
 if (!$store->load('fixture_third_store', 'code')->getId()) {
     $groupId = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(
         \Magento\Store\Model\StoreManagerInterface::class
-    )->getWebsite()->getDefaultGroupId();
+    )->getWebsite('test')->getDefaultGroupId();
     $store->setCode(
         'fixture_third_store'
     )->setWebsiteId(
