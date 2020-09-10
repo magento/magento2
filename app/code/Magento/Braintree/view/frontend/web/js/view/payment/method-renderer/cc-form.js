@@ -92,7 +92,7 @@ define(
                     })
                     .then(function (hostedFieldsInstance) {
                         self.hostedFieldsInstance = hostedFieldsInstance;
-                        self.isPlaceOrderActionAllowed(false);
+                        self.isPlaceOrderActionAllowed(true);
                         self.initFormValidationEvents(hostedFieldsInstance);
 
                         return self.hostedFieldsInstance;
