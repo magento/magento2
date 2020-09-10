@@ -16,6 +16,7 @@ use Magento\Framework\Exception\AuthenticationException;
 use Magento\Integration\Api\CustomerTokenServiceInterface;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\TestCase\GraphQlAbstract;
+use Magento\Ui\Component\Form\Element\Select;
 use Magento\Wishlist\Model\Item;
 use Magento\Wishlist\Model\WishlistFactory;
 
@@ -74,7 +75,7 @@ class AddBundleProductToWishlistTest extends GraphQlAbstract
         $selection = $typeInstance->getSelectionsCollection([$option->getId()], $product)->getFirstItem();
         $optionId = $option->getId();
         $selectionId = $selection->getSelectionId();
-        $bundleOptions = $this->generateBundleOptionIdV2((int) $optionId, (int) $selectionId, $optionQty);
+        $bundleOptions = $this->generateBundleOptionUid((int) $optionId, (int) $selectionId, $optionQty);
 
         $query = $this->getQuery($sku, $qty, $bundleOptions);
         $response = $this->graphQlMutation($query, [], '', $this->getHeaderMap());
@@ -88,9 +89,13 @@ class AddBundleProductToWishlistTest extends GraphQlAbstract
         $this->assertEquals($wishlist->getItemsCount(), $response['items_count']);
         $this->assertEquals($wishlist->getSharingCode(), $response['sharing_code']);
         $this->assertEquals($wishlist->getUpdatedAt(), $response['updated_at']);
-        $this->assertEquals($item->getData('qty'), $response['items'][0]['qty']);
-        $this->assertEquals($item->getDescription(), $response['items'][0]['description']);
-        $this->assertEquals($item->getAddedAt(), $response['items'][0]['added_at']);
+        $this->assertEquals($item->getData('qty'), $response['items_v2'][0]['quantity']);
+        $this->assertEquals($item->getDescription(), $response['items_v2'][0]['description']);
+        $this->assertEquals($item->getAddedAt(), $response['items_v2'][0]['added_at']);
+        $this->assertNotEmpty($response['items_v2'][0]['bundle_options']);
+        $bundleOptions = $response['items_v2'][0]['bundle_options'];
+        $this->assertEquals('Bundle Product Items', $bundleOptions[0]['label']);
+        $this->assertEquals(Select::NAME, $bundleOptions[0]['type']);
     }
 
     /**
@@ -149,11 +154,24 @@ mutation {
       sharing_code
       items_count
       updated_at
-      items {
+      items_v2 {
         id
         description
-        qty
+        quantity
         added_at
+        ... on BundleWishlistItem {
+          bundle_options {
+            id
+            label
+            type
+            values {
+              id
+              label
+              quantity
+              price
+            }
+          }
+        }
       }
     }
   }
@@ -169,7 +187,7 @@ MUTATION;
      *
      * @return string
      */
-    private function generateBundleOptionIdV2(int $optionId, int $selectionId, int $quantity): string
+    private function generateBundleOptionUid(int $optionId, int $selectionId, int $quantity): string
     {
         return base64_encode("bundle/$optionId/$selectionId/$quantity");
     }

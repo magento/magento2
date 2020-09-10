@@ -194,6 +194,21 @@ class SaveTest extends AbstractInvoiceControllerTest
     }
 
     /**
+     * Checks that order protect code is not changing after invoice submitting
+     *
+     * @return void
+     */
+    public function testOrderProtectCodePreserveAfterInvoiceSave(): void
+    {
+        $order = $this->prepareRequest();
+        $protectCode = $order->getProtectCode();
+        $this->dispatch($this->uri);
+        $invoicedOrder = $this->getOrder('100000001');
+
+        $this->assertEquals($protectCode, $invoicedOrder->getProtectCode());
+    }
+
+    /**
      * Check error response
      *
      * @param string $expectedMessage

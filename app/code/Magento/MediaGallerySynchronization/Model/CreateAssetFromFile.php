@@ -14,14 +14,13 @@ use Magento\Framework\Filesystem\Directory\ReadInterface;
 use Magento\Framework\Filesystem\Driver\File;
 use Magento\MediaGalleryApi\Api\Data\AssetInterface;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
-use Magento\MediaGalleryMetadataApi\Api\ExtractMetadataInterface;
 use Magento\MediaGallerySynchronization\Model\Filesystem\GetFileInfo;
-use Magento\MediaGallerySynchronization\Model\GetContentHash;
+use Magento\MediaGallerySynchronizationApi\Model\CreateAssetFromFileInterface;
 
 /**
  * Create media asset object based on the file information
  */
-class CreateAssetFromFile
+class CreateAssetFromFile implements CreateAssetFromFileInterface
 {
     /**
      * @var Filesystem
@@ -44,11 +43,6 @@ class CreateAssetFromFile
     private $getContentHash;
 
     /**
-     * @var ExtractMetadataInterface
-     */
-    private $extractMetadata;
-
-    /**
      * @var GetFileInfo
      */
     private $getFileInfo;
@@ -58,7 +52,6 @@ class CreateAssetFromFile
      * @param File $driver
      * @param AssetInterfaceFactory $assetFactory
      * @param GetContentHash $getContentHash
-     * @param ExtractMetadataInterface $extractMetadata
      * @param GetFileInfo $getFileInfo
      */
     public function __construct(
@@ -66,23 +59,17 @@ class CreateAssetFromFile
         File $driver,
         AssetInterfaceFactory $assetFactory,
         GetContentHash $getContentHash,
-        ExtractMetadataInterface $extractMetadata,
         GetFileInfo $getFileInfo
     ) {
         $this->filesystem = $filesystem;
         $this->driver = $driver;
         $this->assetFactory = $assetFactory;
         $this->getContentHash = $getContentHash;
-        $this->extractMetadata = $extractMetadata;
         $this->getFileInfo = $getFileInfo;
     }
 
     /**
-     * Create and format media asset object
-     *
-     * @param string $path
-     * @return AssetInterface
-     * @throws FileSystemException
+     * @inheritdoc
      */
     public function execute(string $path): AssetInterface
     {
@@ -90,14 +77,11 @@ class CreateAssetFromFile
         $file = $this->getFileInfo->execute($absolutePath);
         [$width, $height] = getimagesize($absolutePath);
 
-        $metadata = $this->extractMetadata->execute($absolutePath);
-
         return $this->assetFactory->create(
             [
                 'id' => null,
                 'path' => $path,
-                'title' => $metadata->getTitle() ?: $file->getBasename(),
-                'description' => $metadata->getDescription(),
+                'title' => $file->getBasename(),
                 'width' => $width,
                 'height' => $height,
                 'hash' => $this->getHash($path),
