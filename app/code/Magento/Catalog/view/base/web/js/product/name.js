@@ -5,7 +5,8 @@
 
 define([
     'Magento_Ui/js/grid/columns/column',
-    'Magento_Catalog/js/product/list/column-status-validator'
+    'Magento_Catalog/js/product/list/column-status-validator',
+    'prototype'
 ], function (Column, columnStatusValidator) {
     'use strict';
 
@@ -17,6 +18,16 @@ define([
          */
         isAllowed: function () {
             return columnStatusValidator.isValid(this.source(), 'name', 'show_attributes');
+        },
+
+        /**
+         * Name column.
+         *
+         * @param {Object} row
+         * @returns {String}
+         */
+        getNameUnsanitizedHtml: function (row) {
+            return row.name;
         }
     });
 });
