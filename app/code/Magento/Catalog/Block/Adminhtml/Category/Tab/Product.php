@@ -126,24 +126,20 @@ class Product extends \Magento\Backend\Block\Widget\Grid\Extended
         }
 
         if (!$this->getCollection()) {
-            $collection = $this->_productFactory->create()->getCollection()->addAttributeToSelect(
-                'name'
-            )->addAttributeToSelect(
-                'sku'
-            )->addAttributeToSelect(
-                'visibility'
-            )->addAttributeToSelect(
-                'status'
-            )->addAttributeToSelect(
-                'price'
-            )->joinField(
-                'position',
-                'catalog_category_product',
-                'position',
-                'product_id=entity_id',
-                'category_id=' . (int)$this->getRequest()->getParam('id', 0),
-                'left'
-            );
+            $collection = $this->_productFactory->create()->getCollection()
+                ->addAttributeToSelect('name')
+                ->addAttributeToSelect('sku')
+                ->addAttributeToSelect('visibility')
+                ->addAttributeToSelect('status')
+                ->addAttributeToSelect('price')
+                ->joinField(
+                    'position',
+                    'catalog_category_product',
+                    'position',
+                    'product_id=entity_id',
+                    ['category_id' => (int)$this->getRequest()->getParam('id')],
+                    'left'
+                );
             $storeId = (int)$this->getRequest()->getParam('store', 0);
             if ($storeId > 0) {
                 $collection->addStoreFilter($storeId);
