@@ -12,6 +12,7 @@ use Magento\Catalog\Model\ResourceModel\Eav\Attribute;
 use Magento\Catalog\Test\Unit\Controller\Adminhtml\Product\AttributeTest;
 use Magento\Eav\Model\Entity\Attribute\Set as AttributeSet;
 use Magento\Eav\Model\Validator\Attribute\Code as AttributeCodeValidator;
+use Magento\Eav\Model\Validator\Attribute\Options;
 use Magento\Framework\Controller\Result\Json as ResultJson;
 use Magento\Framework\Controller\Result\JsonFactory as ResultJsonFactory;
 use Magento\Framework\Escaper;
@@ -77,6 +78,11 @@ class ValidateTest extends AttributeTest
      */
     private $attributeCodeValidatorMock;
 
+    /**
+     * @var Options|MockObject
+     */
+    private $attributeOptionsValidatorMock;
+
     protected function setUp(): void
     {
         parent::setUp();
@@ -108,6 +114,8 @@ class ValidateTest extends AttributeTest
         $this->attributeCodeValidatorMock = $this->getMockBuilder(AttributeCodeValidator::class)
             ->disableOriginalConstructor()
             ->getMock();
+        $this->attributeOptionsValidatorMock = $this->createMock(Options::class);
+//        $this->attributeOptionsValidatorMock = $this->objectManager->getObject(Options::class);
 
         $this->contextMock->expects($this->any())
             ->method('getObjectManager')
@@ -131,6 +139,7 @@ class ValidateTest extends AttributeTest
                 'multipleAttributeList' => ['select' => 'option'],
                 'formDataSerializer' => $this->formDataSerializerMock,
                 'attributeCodeValidator' => $this->attributeCodeValidatorMock,
+                'attributeOptionsValidator' => $this->attributeOptionsValidatorMock
             ]
         );
     }
@@ -253,14 +262,14 @@ class ValidateTest extends AttributeTest
 
     /**
      * @dataProvider provideUniqueData
-     * @param        array   $options
-     * @param        boolean $isError
+     * @param array $options
+     * @param boolean $isError
      * @throws       NotFoundException
      */
     public function testUniqueValidation(array $options, $isError)
     {
         $serializedOptions = '{"key":"value"}';
-        $countFunctionCalls = ($isError) ? 6 : 5;
+        $countFunctionCalls = ($isError) ? 7 : 6;
         $this->requestMock->expects($this->exactly($countFunctionCalls))
             ->method('getParam')
             ->willReturnMap(
@@ -329,9 +338,9 @@ class ValidateTest extends AttributeTest
                 [
                     'option' => [
                         'value' => [
-                            "option_0" => [1, 0],
-                            "option_1" => [2, 0],
-                            "option_2" => [3, 0],
+                            "option_0" => ['1', '0'],
+                            "option_1" => ['2', '0'],
+                            "option_2" => ['3', '0'],
                         ],
                         'delete' => [
                             "option_0" => "",
@@ -345,9 +354,9 @@ class ValidateTest extends AttributeTest
                 [
                     'option' => [
                         'value' => [
-                            "option_0" => [1, 0],
-                            "option_1" => [1, 0],
-                            "option_2" => [3, 0],
+                            "option_0" => ['1', '0'],
+                            "option_1" => ['1', '0'],
+                            "option_2" => ['3', '0'],
                         ],
                         'delete' => [
                             "option_0" => "",
@@ -361,9 +370,9 @@ class ValidateTest extends AttributeTest
                 [
                     'option' => [
                         'value' => [
-                            "option_0" => [1, 0],
-                            "option_1" => [1, 0],
-                            "option_2" => [3, 0],
+                            "option_0" => ['1', '0'],
+                            "option_1" => ['1', '0'],
+                            "option_2" => ['3', '0'],
                         ],
                         'delete' => [
                             "option_0" => "",
@@ -377,8 +386,8 @@ class ValidateTest extends AttributeTest
                 [
                     'option' => [
                         'value' => [
-                            "option_0" => [1, 0],
-                            "option_1" => [2, 0],
+                            "option_0" => ['1', '0'],
+                            "option_1" => ['2', '0'],
                             "option_2" => ["", ""],
                         ],
                         'delete' => [
@@ -396,7 +405,7 @@ class ValidateTest extends AttributeTest
      * Check that empty admin scope labels will trigger error.
      *
      * @dataProvider provideEmptyOption
-     * @param        array $options
+     * @param array $options
      * @throws       NotFoundException
      */
     public function testEmptyOption(array $options, $result)
@@ -442,9 +451,19 @@ class ValidateTest extends AttributeTest
             ->method('setJsonData')
             ->willReturnArgument(0);
 
+        $this->attributeOptionsValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->willReturn(!$result->error);
+
+        if ($result->error) {
+            $this->attributeOptionsValidatorMock->expects($this->once())
+                ->method('getMessages')
+                ->willReturn([$result->message]);
+        }
+
         $response = $this->getModel()->execute();
         $responseObject = json_decode($response);
-        $this->assertEquals($responseObject, $result);
+        $this->assertEquals($result, $responseObject);
     }
 
     /**
@@ -459,11 +478,11 @@ class ValidateTest extends AttributeTest
                 [
                     'option' => [
                         'value' => [
-                            "option_0" => [''],
+                            'option_0' => [''],
                         ],
                     ],
                 ],
-                (object) [
+                (object)[
                     'error' => true,
                     'message' => 'The value of Admin scope can\'t be empty.',
                 ]
@@ -472,11 +491,11 @@ class ValidateTest extends AttributeTest
                 [
                     'option' => [
                         'value' => [
-                            "option_0" => ['asdads'],
+                            'option_0' => ['asdads'],
                         ],
                     ],
                 ],
-                (object) [
+                (object)[
                     'error' => false,
                 ]
             ],
@@ -484,14 +503,14 @@ class ValidateTest extends AttributeTest
                 [
                     'option' => [
                         'value' => [
-                            "option_0" => [''],
+                            'option_0' => [''],
                         ],
                         'delete' => [
                             'option_0' => '1',
                         ],
                     ],
                 ],
-                (object) [
+                (object)[
                     'error' => false,
                 ],
             ],
@@ -499,14 +518,14 @@ class ValidateTest extends AttributeTest
                 [
                     'option' => [
                         'value' => [
-                            "option_0" => [''],
+                            'option_0' => [''],
                         ],
                         'delete' => [
                             'option_0' => '0',
                         ],
                     ],
                 ],
-                (object) [
+                (object)[
                     'error' => true,
                     'message' => 'The value of Admin scope can\'t be empty.',
                 ],
@@ -518,7 +537,7 @@ class ValidateTest extends AttributeTest
      * Check that admin scope labels which only contain spaces will trigger error.
      *
      * @dataProvider provideWhitespaceOption
-     * @param        array  $options
+     * @param array $options
      * @param        $result
      * @throws       NotFoundException
      */
@@ -565,9 +584,19 @@ class ValidateTest extends AttributeTest
             ->method('setJsonData')
             ->willReturnArgument(0);
 
+        $this->attributeOptionsValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->willReturn(!$result->error);
+
+        if ($result->error) {
+            $this->attributeOptionsValidatorMock->expects($this->once())
+                ->method('getMessages')
+                ->willReturn([$result->message]);
+        }
+
         $response = $this->getModel()->execute();
         $responseObject = json_decode($response);
-        $this->assertEquals($responseObject, $result);
+        $this->assertEquals($result, $responseObject);
     }
 
     /**
@@ -586,7 +615,7 @@ class ValidateTest extends AttributeTest
                         ],
                     ],
                 ],
-                (object) [
+                (object)[
                     'error' => true,
                     'message' => 'The value of Admin scope can\'t be empty.',
                 ]
@@ -599,7 +628,7 @@ class ValidateTest extends AttributeTest
                         ],
                     ],
                 ],
-                (object) [
+                (object)[
                     'error' => false,
                 ]
             ],
@@ -614,7 +643,7 @@ class ValidateTest extends AttributeTest
                         ],
                     ],
                 ],
-                (object) [
+                (object)[
                     'error' => false,
                 ],
             ],
@@ -629,7 +658,7 @@ class ValidateTest extends AttributeTest
                         ],
                     ],
                 ],
-                (object) [
+                (object)[
                     'error' => true,
                     'message' => 'The value of Admin scope can\'t be empty.',
                 ],
@@ -697,6 +726,90 @@ class ValidateTest extends AttributeTest
             )
             ->willReturnSelf();
 
+        $this->attributeOptionsValidatorMock->expects($this->once())
+            ->method('getMessages')
+            ->willReturn([$message]);
+
+        $this->getModel()->execute();
+    }
+
+    /**
+     * @throws NotFoundException
+     */
+    public function testExecuteWithHtmlOptionError()
+    {
+        $options = [
+            'option' => [
+                'value' => [
+                    'option_0' => [
+                        '<html>',
+                    ],
+                ],
+            ],
+        ];
+        $serializedOptions = '{"key":"value"}';
+        $message = 'HTML tags are not allowed for the attribute options. ' .
+            'Those have been found in option "%1"';
+        $this->requestMock->expects($this->any())
+            ->method('getParam')
+            ->willReturnMap(
+                [
+                    ['frontend_label', null, 'test_frontend_label'],
+                    ['attribute_code', null, 'test_attribute_code'],
+                    ['new_attribute_set_name', null, 'test_attribute_set_name'],
+                    ['message_key', Validate::DEFAULT_MESSAGE_KEY, 'message'],
+                    ['serialized_options', '[]', $serializedOptions],
+                ]
+            );
+
+        $this->formDataSerializerMock
+            ->expects($this->once())
+            ->method('unserialize')
+            ->with($serializedOptions)
+            ->willReturn($options);
+
+        $this->objectManagerMock
+            ->method('create')
+            ->willReturnMap(
+                [
+                    [Attribute::class, [], $this->attributeMock],
+                    [AttributeSet::class, [], $this->attributeSetMock]
+                ]
+            );
+
+        $this->attributeCodeValidatorMock
+            ->method('isValid')
+            ->willReturn(true);
+
+        $this->attributeMock
+            ->method('loadByCode')
+            ->willReturnSelf();
+        $this->attributeSetMock
+            ->method('setEntityTypeId')
+            ->willReturnSelf();
+        $this->resultJsonFactoryMock->expects($this->once())
+            ->method('create')
+            ->willReturn($this->resultJson);
+        $this->resultJson->expects($this->once())
+            ->method('setJsonData')
+            ->with(
+                json_encode(
+                    [
+                        'error' => true,
+                        'message' => $message
+                    ]
+                )
+            )
+            ->willReturnSelf();
+        $this->attributeOptionsValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->with($options['option']['value'])
+            ->willReturn(false);
+
+        $this->attributeOptionsValidatorMock->expects($this->once())
+            ->method('getMessages')
+            ->willReturn([$message]);
+
         $this->getModel()->execute();
     }
 
@@ -704,7 +817,7 @@ class ValidateTest extends AttributeTest
      * Test execute with an invalid attribute code
      *
      * @dataProvider provideInvalidAttributeCodes
-     * @param        string $attributeCode
+     * @param string $attributeCode
      * @param        $result
      * @throws       NotFoundException
      */
@@ -755,10 +868,20 @@ class ValidateTest extends AttributeTest
             ->method('setJsonData')
             ->willReturnArgument(0);
 
+        $this->attributeOptionsValidatorMock->expects($this->once())
+            ->method('isValid')
+            ->willReturn(!$result->error);
+
+        if ($result->error) {
+            $this->attributeOptionsValidatorMock->expects($this->once())
+                ->method('getMessages')
+                ->willReturn([$result->message]);
+        }
+
         $response = $this->getModel()->execute();
         $responseObject = json_decode($response);
 
-        $this->assertEquals($responseObject, $result);
+        $this->assertEquals($result, $responseObject);
     }
 
     /**
@@ -771,7 +894,7 @@ class ValidateTest extends AttributeTest
         return [
             'invalid attribute code' => [
                 '.attribute_code',
-                (object) [
+                (object)[
                     'error' => true,
                     'message' => 'Invalid Attribute Code.',
                 ]

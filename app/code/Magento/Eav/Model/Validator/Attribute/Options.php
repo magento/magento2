@@ -7,12 +7,8 @@ declare(strict_types=1);
 
 namespace Magento\Eav\Model\Validator\Attribute;
 
-use Magento\Catalog\Ui\DataProvider\Product\Form\Modifier\AbstractModifier;
 use Magento\Eav\Model\Entity\Attribute;
-use Magento\Framework\Exception\LocalizedException;
-use Magento\Framework\Phrase;
 use Magento\Framework\Validator\AbstractValidator;
-use Zend_Validate;
 
 /**
  * Class Options
@@ -24,12 +20,12 @@ class Options extends AbstractValidator
     /**
      * Validation pattern for attribute options HTML tags
      */
-    const VALIDATION_HTML_TAGS_RULE_PATTERN = '/<[^<]+>/';
+    private const VALIDATION_HTML_TAGS_RULE_PATTERN = '/<[^<]+>/';
 
     /**
      * Validation message for attribute options with HTML tags
      */
-    const VALIDATION_HTML_TAGS_RULE_MESSAGE = 'HTML tags are not allowed for the attribute options. '.
+    private const VALIDATION_HTML_TAGS_RULE_MESSAGE = 'HTML tags are not allowed for the attribute options. ' .
         'Those have been found in option "%1"';
 
     /**
