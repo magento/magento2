@@ -10,10 +10,14 @@ namespace Magento\ConfigurableProductGraphQl\Model\Options;
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\ProductFactory;
+use Magento\Catalog\Model\ProductRepository;
+use Magento\ConfigurableProduct\Helper\Data;
 use Magento\ConfigurableProduct\Model\Product\Type\Configurable\Attribute;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\Collection
     as AttributeCollection;
 use Magento\ConfigurableProduct\Model\ResourceModel\Product\Type\Configurable\Attribute\CollectionFactory;
+use Magento\Framework\Api\SearchCriteriaBuilder;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\EntityManager\MetadataPool;
 
 /**
@@ -32,9 +36,34 @@ class Collection
     private $productFactory;
 
     /**
+     * @var ProductRepository
+     */
+    private $productRepository;
+
+    /**
      * @var MetadataPool
      */
     private $metadataPool;
+
+    /**
+     * @var Data
+     */
+    private $configurableProductHelper;
+
+    /**
+     * @var Metadata
+     */
+    private $optionsMetadata;
+
+    /**
+     * @var SelectionUidFormatter
+     */
+    private $selectionUidFormatter;
+
+    /**
+     * @var SearchCriteriaBuilder
+     */
+    private $searchCriteriaBuilder;
 
     /**
      * @var int[]
@@ -49,16 +78,32 @@ class Collection
     /**
      * @param CollectionFactory $attributeCollectionFactory
      * @param ProductFactory $productFactory
+     * @param ProductRepository $productRepository
      * @param MetadataPool $metadataPool
+     * @param Data $configurableProductHelper
+     * @param Metadata $optionsMetadata
+     * @param SelectionUidFormatter $selectionUidFormatter
+     * @param SearchCriteriaBuilder $searchCriteriaBuilder
      */
     public function __construct(
         CollectionFactory $attributeCollectionFactory,
         ProductFactory $productFactory,
-        MetadataPool $metadataPool
+        ProductRepository $productRepository,
+        MetadataPool $metadataPool,
+        Data $configurableProductHelper,
+        Metadata $optionsMetadata,
+        SelectionUidFormatter $selectionUidFormatter,
+        SearchCriteriaBuilder $searchCriteriaBuilder
     ) {
         $this->attributeCollectionFactory = $attributeCollectionFactory;
         $this->productFactory = $productFactory;
+        $this->productRepository = $productRepository;
         $this->metadataPool = $metadataPool;
+        $this->configurableProductHelper = $configurableProductHelper;
+        $this->optionsMetadata = $optionsMetadata;
+        $this->selectionUidFormatter = $selectionUidFormatter;
+        $this->searchCriteriaBuilder = $searchCriteriaBuilder ??
+            ObjectManager::getInstance()->get(SearchCriteriaBuilder::class);
     }
 
     /**
@@ -111,6 +156,8 @@ class Collection
             $attributeCollection->setProductFilter($product);
         }
 
+        $products = $this->getProducts($this->productIds);
+
         /** @var Attribute $attribute */
         foreach ($attributeCollection->getItems() as $attribute) {
             $productId = (int)$attribute->getProductId();
@@ -128,8 +175,37 @@ class Collection
             $this->attributeMap[$productId][$attribute->getId()]['values'] = $attributeData['options'];
             $this->attributeMap[$productId][$attribute->getId()]['label']
                 = $attribute->getProductAttribute()->getStoreLabel();
+
+            if (isset($products[$productId])) {
+                $options = $this->configurableProductHelper->getOptions(
+                    $products[$productId],
+                    $this->optionsMetadata->getAllowProducts($products[$productId])
+                );
+                foreach ($attributeData['options'] as $index => $value) {
+                    $this->attributeMap[$productId][$attribute->getId()]['values'][$index]['uid']
+                        = $this->selectionUidFormatter->encode((int)$attribute->getId(), (int)$value['value_index']);
+                    $this->attributeMap[$productId][$attribute->getId()]['values'][$index]
+                        ['is_available_for_selection'] =
+                        isset($options[$attribute['attribute_id']][$value['value_index']])
+                        && $options[$attribute['attribute_id']][$value['value_index']];
+                }
+            }
         }
 
         return $this->attributeMap;
+    }
+
+    /**
+     * Load products by entity ids
+     *
+     * @param int[] $productIds
+     * @return ProductInterface[]
+     */
+    private function getProducts($productIds)
+    {
+        $this->searchCriteriaBuilder->addFilter('entity_id', $productIds, 'in');
+        $searchCriteria = $this->searchCriteriaBuilder->create();
+        $products = $this->productRepository->getList($searchCriteria)->getItems();
+        return $products;
     }
 }
