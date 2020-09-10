@@ -194,6 +194,24 @@ class SaveTest extends AbstractInvoiceControllerTest
     }
 
     /**
+     * Checks that order protect code is not changing after invoice submitting
+     *
+     * @magentoDataFixture Magento/Sales/_files/order.php
+     *
+     * @return void
+     */
+    public function testOrderProtectCodePreserveAfterInvoiceSave(): void
+    {
+        $order = $this->getOrder('100000001');
+        $this->prepareRequest([], ['order_id' => $order->getEntityId()]);
+        $protectCode = $order->getProtectCode();
+        $this->dispatch($this->uri);
+        $invoicedOrder = $this->getOrder('100000001');
+
+        $this->assertEquals($protectCode, $invoicedOrder->getProtectCode());
+    }
+
+    /**
      * Check error response
      *
      * @param string $expectedMessage
