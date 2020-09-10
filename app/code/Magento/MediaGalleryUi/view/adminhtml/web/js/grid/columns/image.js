@@ -13,6 +13,8 @@ define([
     return Column.extend({
         defaults: {
             bodyTmpl: 'Magento_MediaGalleryUi/grid/columns/image',
+            messageContentSelector: 'ul.messages',
+            mediaGalleryContainerSelector: '.media-gallery-container',
             deleteImageUrl: 'media_gallery/image/delete',
             addSelectedBtnSelector: '#add_selected',
             deleteSelectedBtnSelector: '#delete_selected',
@@ -272,6 +274,7 @@ define([
         addMessage: function (code, message) {
             this.messages().add(code, message);
             this.closeContextMenu();
+            this.scrollToMessageContent();
             this.messages().scheduleCleanup();
         },
 
@@ -293,6 +296,20 @@ define([
          */
         closeContextMenu: function () {
             $(this.gridSelector).click();
+        },
+
+        /**
+         * Scroll to the top of media gallery page
+         */
+        scrollToMessageContent: function () {
+            var scrollTargetElement = $(this.messageContentSelector),
+                scrollTargetContainer = $(this.mediaGalleryContainerSelector);
+
+            scrollTargetContainer.find(scrollTargetElement).get(0).scrollIntoView({
+                behavior: 'smooth',
+                block: 'center',
+                inline: 'nearest'
+            });
         }
     });
 });
