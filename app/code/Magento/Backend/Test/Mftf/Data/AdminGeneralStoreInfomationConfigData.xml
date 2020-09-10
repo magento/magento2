@@ -30,4 +30,11 @@
     <entity name="AdminGeneralSetStreetAddress2ConfigData">
         <data key="path">general/store_information/street_line2</data>
     </entity>
+    <entity name="AdminGeneralSetStateConfigData">
+        <data key="path">general/store_information/region_id</data>
+    </entity>
+    <entity name="AdminGeneralSetStoreHoursConfigData">
+        <data key="path">general/store_information/hours</data>
+        <data key="value">8AM-8PM</data>
+    </entity>
 </entities>

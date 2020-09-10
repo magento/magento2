@@ -15,17 +15,29 @@ use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\MediaGallery\Model\Asset\Command\GetById;
 use Magento\MediaGalleryApi\Api\Data\AssetInterfaceFactory;
 use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 use Psr\Log\LoggerInterface;
-use Zend\Db\Adapter\Driver\Pdo\Statement;
 
 /**
  * Test the GetById command with exception during media asset initialization
  */
-class GetByIdExceptionDuringMediaAssetInitializationTest extends \PHPUnit\Framework\TestCase
+class GetByIdExceptionDuringMediaAssetInitializationTest extends TestCase
 {
-    private const MEDIA_ASSET_STUB_ID = 1;
-
-    private const MEDIA_ASSET_DATA = ['id' => 1];
+    private const MEDIA_ASSET_STUB_ID = 45;
+    private const MEDIA_ASSET_DATA = [
+        'id' => 45,
+        'path' => 'img.jpg',
+        'title' => 'Img',
+        'description' => 'Img Description',
+        'source' => 'Adobe Stock',
+        'hash' => 'hash',
+        'content_type' => 'image/jpeg',
+        'width' => 420,
+        'height' => 240,
+        'size' => 12877,
+        'created_at' => '2020',
+        'updated_at' => '2020'
+    ];
 
     /**
      * @var GetById|MockObject
@@ -48,11 +60,6 @@ class GetByIdExceptionDuringMediaAssetInitializationTest extends \PHPUnit\Framew
     private $selectStub;
 
     /**
-     * @var Statement|MockObject
-     */
-    private $statementMock;
-
-    /**
      * @var LoggerInterface|MockObject
      */
     private $logger;
@@ -64,7 +71,7 @@ class GetByIdExceptionDuringMediaAssetInitializationTest extends \PHPUnit\Framew
     {
         $resourceConnection = $this->createMock(ResourceConnection::class);
         $this->assetFactory = $this->createMock(AssetInterfaceFactory::class);
-        $this->logger = $this->createMock(LoggerInterface::class);
+        $this->logger = $this->getMockForAbstractClass(LoggerInterface::class);
 
         $this->getMediaAssetById = (new ObjectManager($this))->getObject(
             GetById::class,
@@ -74,15 +81,13 @@ class GetByIdExceptionDuringMediaAssetInitializationTest extends \PHPUnit\Framew
                 'logger' =>  $this->logger,
             ]
         );
-        $this->adapter = $this->createMock(AdapterInterface::class);
+        $this->adapter = $this->getMockForAbstractClass(AdapterInterface::class);
         $resourceConnection->method('getConnection')->willReturn($this->adapter);
 
         $this->selectStub = $this->createMock(Select::class);
         $this->selectStub->method('from')->willReturnSelf();
         $this->selectStub->method('where')->willReturnSelf();
         $this->adapter->method('select')->willReturn($this->selectStub);
-
-        $this->statementMock = $this->getMockBuilder(\Zend_Db_Statement_Interface::class)->getMock();
     }
 
     /**
@@ -90,10 +95,14 @@ class GetByIdExceptionDuringMediaAssetInitializationTest extends \PHPUnit\Framew
      */
     public function testErrorDuringMediaAssetInitializationException(): void
     {
-        $this->statementMock->method('fetch')->willReturn(self::MEDIA_ASSET_DATA);
-        $this->adapter->method('query')->willReturn($this->statementMock);
+        $statementMock = $this->createMock(\Zend_Db_Statement_Interface::class);
+        $statementMock->method('fetch')
+            ->willReturn(self::MEDIA_ASSET_DATA);
+        $this->adapter->method('query')->willReturn($statementMock);
 
-        $this->assetFactory->expects($this->once())->method('create')->willThrowException(new \Exception());
+        $this->assetFactory->expects($this->once())
+            ->method('create')
+            ->willThrowException(new \Exception());
 
         $this->expectException(IntegrationException::class);
         $this->logger->expects($this->any())

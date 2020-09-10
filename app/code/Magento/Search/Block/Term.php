@@ -9,6 +9,8 @@
  */
 namespace Magento\Search\Block;
 
+use Magento\Framework\DataObject;
+use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Framework\UrlFactory;
 use Magento\Framework\UrlInterface;
 use Magento\Framework\View\Element\Template;
@@ -16,6 +18,8 @@ use Magento\Framework\View\Element\Template\Context;
 use Magento\Search\Model\ResourceModel\Query\CollectionFactory;
 
 /**
+ * Terms and conditions block
+ *
  * @api
  * @since 100.0.2
  */
@@ -37,15 +41,11 @@ class Term extends Template
     protected $_maxPopularity;
 
     /**
-     * Url factory
-     *
      * @var UrlFactory
      */
     protected $_urlFactory;
 
     /**
-     * Query collection factory
-     *
      * @var CollectionFactory
      */
     protected $_queryCollectionFactory;
@@ -71,17 +71,17 @@ class Term extends Template
      * Load terms and try to sort it by names
      *
      * @return $this
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     protected function _loadTerms()
     {
         if (empty($this->_terms)) {
             $this->_terms = [];
-            $terms = $this->_queryCollectionFactory->create()->setPopularQueryFilter(
-                $this->_storeManager->getStore()->getId()
-            )->setPageSize(
-                100
-            )->load()->getItems();
+            $terms = $this->_queryCollectionFactory->create()
+                ->setPopularQueryFilter($this->_storeManager->getStore()->getId())
+                ->setPageSize(100)
+                ->load()
+                ->getItems();
 
             if (count($terms) == 0) {
                 return $this;
@@ -91,6 +91,7 @@ class Term extends Template
             $this->_minPopularity = end($terms)->getPopularity();
             $range = $this->_maxPopularity - $this->_minPopularity;
             $range = $range == 0 ? 1 : $range;
+            $termKeys = [];
             foreach ($terms as $term) {
                 if (!$term->getPopularity()) {
                     continue;
@@ -99,6 +100,7 @@ class Term extends Template
                 $temp[$term->getQueryText()] = $term;
                 $termKeys[] = $term->getQueryText();
             }
+
             natcasesort($termKeys);
 
             foreach ($termKeys as $termKey) {
@@ -109,8 +111,10 @@ class Term extends Template
     }
 
     /**
+     * Load and return terms
+     *
      * @return array
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
+     * @throws NoSuchEntityException
      */
     public function getTerms()
     {
@@ -119,7 +123,9 @@ class Term extends Template
     }
 
     /**
-     * @param \Magento\Framework\DataObject $obj
+     * Return search url
+     *
+     * @param DataObject $obj
      * @return string
      */
     public function getSearchUrl($obj)
@@ -135,6 +141,8 @@ class Term extends Template
     }
 
     /**
+     * Return max popularity
+     *
      * @return int
      */
     public function getMaxPopularity()
@@ -143,6 +151,8 @@ class Term extends Template
     }
 
     /**
+     * Return min popularity
+     *
      * @return int
      */
     public function getMinPopularity()

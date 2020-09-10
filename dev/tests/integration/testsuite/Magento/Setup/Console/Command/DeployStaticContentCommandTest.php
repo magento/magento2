@@ -73,7 +73,7 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = Bootstrap::getObjectManager();
         $this->reader = $this->objectManager->get(FileReader::class);
@@ -91,7 +91,7 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
     /**
      * @inheritdoc
      */
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->filesystem->getDirectoryWrite(DirectoryList::CONFIG)->writeFile(
             $this->configFilePool->getPath(ConfigFilePool::APP_CONFIG),
@@ -143,10 +143,10 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
         $commandOutput = $this->commandTester->getDisplay();
 
         $this->assertEquals(Cli::RETURN_SUCCESS, $this->commandTester->getStatusCode());
-        $this->assertContains('Execution time:', $commandOutput);
-        $this->assertContains('frontend/Magento/blank/en_US', $commandOutput);
-        $this->assertNotContains('frontend/Magento/luma/en_US', $commandOutput);
-        $this->assertNotContains('adminhtml/Magento/backend', $commandOutput);
+        $this->assertStringContainsString('Execution time:', $commandOutput);
+        $this->assertStringContainsString('frontend/Magento/blank/en_US', $commandOutput);
+        $this->assertStringNotContainsString('frontend/Magento/luma/en_US', $commandOutput);
+        $this->assertStringNotContainsString('adminhtml/Magento/backend', $commandOutput);
     }
 
     /**
@@ -179,11 +179,11 @@ class DeployStaticContentCommandTest extends \PHPUnit\Framework\TestCase
             ->getMock();
         $consoleLoggerFactoryMock
             ->method('getLogger')
-            ->will($this->returnCallback(
+            ->willReturnCallback(
                 function ($output) use ($objectManager) {
                     return $objectManager->create(ConsoleLogger::class, ['output' => $output]);
                 }
-            ));
+            );
         $objectManagerProviderMock = $this->getMockBuilder(ObjectManagerProvider::class)
             ->setMethods(['get'])
             ->disableOriginalConstructor()

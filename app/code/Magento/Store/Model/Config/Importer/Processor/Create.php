@@ -51,7 +51,7 @@ class Create implements ProcessorInterface
     /**
      * The event manager.
      *
-     * @deprecated logic moved inside of "afterSave" method
+     * @deprecated 100.2.5 logic moved inside of "afterSave" method
      *             \Magento\Store\Model\Website::afterSave
      *             \Magento\Store\Model\Group::afterSave
      *             \Magento\Store\Model\Store::afterSave
@@ -160,6 +160,7 @@ class Create implements ProcessorInterface
      * @param array $items Groups to create
      * @param array $data The all available data
      * @return void
+     * @throws NotFoundException
      */
     private function createGroups(array $items, array $data)
     {
@@ -199,6 +200,7 @@ class Create implements ProcessorInterface
      * @param array $items Stores to create
      * @param array $data The all available data
      * @return void
+     * @throws NotFoundException
      */
     private function createStores(array $items, array $data)
     {

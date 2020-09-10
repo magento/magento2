@@ -11,14 +11,16 @@ use Magento\Framework\Locale\ResolverInterface;
 use Magento\Paypal\Model\Config;
 use Magento\Paypal\Model\ConfigFactory;
 use Magento\Paypal\Model\Express\LocaleResolver as ExpressLocaleResolver;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
- * Class LocaleResolverTest
+ * Test for PayPal express checkout resolver
  */
-class LocaleResolverTest extends \PHPUnit\Framework\TestCase
+class LocaleResolverTest extends TestCase
 {
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject|ResolverInterface
+     * @var MockObject|ResolverInterface
      */
     private $resolver;
 
@@ -27,18 +29,20 @@ class LocaleResolverTest extends \PHPUnit\Framework\TestCase
      */
     private $model;
 
-    protected function setUp()
+    /**
+     * @var Config
+     */
+    private $config;
+
+    protected function setUp(): void
     {
-        $this->resolver = $this->createMock(ResolverInterface::class);
+        $this->resolver = $this->getMockForAbstractClass(ResolverInterface::class);
         /** @var Config $config */
-        $config = $this->createMock(Config::class);
-        $config->method('getValue')
-            ->with('supported_locales')
-            ->willReturn('zh_CN,zh_HK,zh_TW,fr_FR');
+        $this->config = $this->createMock(Config::class);
 
         /** @var ConfigFactory $configFactory */
         $configFactory = $this->createPartialMock(ConfigFactory::class, ['create']);
-        $configFactory->method('create')->willReturn($config);
+        $configFactory->method('create')->willReturn($this->config);
 
         $this->model = new ExpressLocaleResolver($this->resolver, $configFactory);
     }
@@ -54,7 +58,14 @@ class LocaleResolverTest extends \PHPUnit\Framework\TestCase
     {
         $this->resolver->method('getLocale')
             ->willReturn($locale);
-
+        $this->config->method('getValue')->willReturnMap(
+            
+                [
+                    ['in_context', null, false],
+                    ['supported_locales', null, 'zh_CN,zh_HK,zh_TW,fr_FR'],
+                ]
+            
+        );
         $this->assertEquals($expectedLocale, $this->model->getLocale());
     }
 
@@ -70,5 +81,24 @@ class LocaleResolverTest extends \PHPUnit\Framework\TestCase
             ['locale' => 'fr_FR', 'expectedLocale' => 'fr_FR'],
             ['locale' => 'unknown', 'expectedLocale' => 'en_US'],
         ];
+    }
+
+    /**
+     * Tests retrieving locales for PayPal Express Smart Buttons.
+     *
+     */
+    public function testGetLocaleForSmartButtons()
+    {
+        $this->resolver->method('getLocale')
+            ->willReturn('zh_Hans_CN');
+        $this->config->method('getValue')->willReturnMap(
+            
+                [
+                    ['in_context', null, true],
+                    ['smart_buttons_supported_locales', null, 'zh_CN,zh_HK,zh_TW,fr_FR'],
+                ]
+            
+        );
+        $this->assertEquals('zh_CN', $this->model->getLocale());
     }
 }

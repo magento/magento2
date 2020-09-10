@@ -5,8 +5,12 @@
  */
 declare(strict_types=1);
 
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
+
 /** @var \Magento\Framework\Registry $registry */
 $registry = \Magento\TestFramework\Helper\Bootstrap::getObjectManager()->get(\Magento\Framework\Registry::class);
+
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_store_rollback.php');
 
 $registry->unregister('isSecureArea');
 $registry->register('isSecureArea', true);
@@ -43,7 +47,9 @@ $collection = $urlRewriteCollection
             'http://example.com/external',
             'https://example.com/external2/',
             'http://example.com/external?param1=value1',
-            'https://example.com/external2/?param2=value2'
+            'https://example.com/external2/?param2=value2',
+            '/',
+            'contact?param1=1'
         ]
     )
     ->load()

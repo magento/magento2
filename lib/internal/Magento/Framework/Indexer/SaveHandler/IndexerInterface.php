@@ -15,6 +15,7 @@ use Magento\Framework\Search\Request\Dimension;
  * Indexer persistence handler
  *
  * @api
+ * @since 100.0.2
  */
 interface IndexerInterface
 {

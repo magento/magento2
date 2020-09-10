@@ -4,13 +4,21 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** @var \Magento\Framework\View\Helper\SecureHtmlRenderer $secureRenderer */
 ?>
 
-<script>
+<?php
+$isAnaliticsVisible = $block->getNotification()->isAnalyticsVisible() ? 1 : 0;
+$isReleaseVisible = $block->getNotification()->isReleaseVisible() ? 1 : 0;
+$scriptString = <<<script
     define('analyticsPopupConfig', function () {
         return {
-            analyticsVisible: <?= $block->getNotification()->isAnalyticsVisible() ? 1 : 0; ?>,
-            releaseVisible: <?= $block->getNotification()->isReleaseVisible() ? 1 : 0; ?>,
+            analyticsVisible: {$isAnaliticsVisible},
+            releaseVisible: {$isReleaseVisible},
         }
     });
-</script>
+script;
+?>
+
+<?= /* @noEscape */ $secureRenderer->renderTag('script', [], $scriptString, false); ?>

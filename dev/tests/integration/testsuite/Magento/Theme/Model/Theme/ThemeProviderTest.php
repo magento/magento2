@@ -27,7 +27,7 @@ class ThemeProviderTest extends \PHPUnit\Framework\TestCase
      */
     private $themeCollection;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $objectManager = Bootstrap::getObjectManager();
         $this->themeProviderOne = $objectManager->create(ThemeProvider::class);
