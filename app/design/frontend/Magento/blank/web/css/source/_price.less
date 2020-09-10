@@ -73,4 +73,20 @@
 
     .price-style-1();
     .price-style-3();
+
+    .prices-tier.items {
+        .price-excluding-tax {
+            display: block;
+
+            &:before {
+                content: attr(data-label) ': ';
+                .lib-font-size(11);
+            }
+
+            .price {
+                font-size: 1.2rem;
+                font-weight: 700;
+            }
+        }
+    }
 }

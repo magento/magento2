@@ -11,7 +11,6 @@
                 + '<span data-price-amount="' + priceUtils.formatPrice(item.price, currencyFormat) + '"'
                 + ' data-price-type=""' + ' class="price-wrapper ">'
                 + '<span class="price">' + priceUtils.formatPrice(item.price, currencyFormat) + '</span>'
-                + '<span class="price"> excl. tax ' + priceUtils.formatPrice(item.excl_tax_price, currencyFormat) + '</span>
                 + '</span>'
             + '</span>'; %>
         <li class="item">
@@ -22,6 +21,11 @@
                 <?= $block->escapeHtml(__('save')) ?><span
                         class="percent tier-<%= key %>">&nbsp;<%= item.percentage %></span>%
             </strong>
+            <%  if (item['excl_tax_price']) { %>
+                <span class="price-excluding-tax" data-label="<?= $block->escapeHtml(__('Excl. Tax')) ?>">
+                    <span class="price"><%= priceUtils.formatPrice(item['excl_tax_price'], currencyFormat) %></span>
+                </span>
+            <% } %>
         </li>
         <% }); %>
     </ul>
