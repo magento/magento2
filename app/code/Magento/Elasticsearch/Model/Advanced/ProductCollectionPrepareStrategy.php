@@ -5,8 +5,9 @@
  */
 namespace Magento\Elasticsearch\Model\Advanced;
 
-use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\Catalog\Model\Config;
+use Magento\Catalog\Model\Product\Visibility;
+use Magento\Catalog\Model\ResourceModel\Product\Collection;
 use Magento\CatalogSearch\Model\Advanced\ProductCollectionPrepareStrategyInterface;
 
 /**
@@ -20,12 +21,20 @@ class ProductCollectionPrepareStrategy implements ProductCollectionPrepareStrate
     private $catalogConfig;
 
     /**
+     * @var Visibility
+     */
+    private $catalogProductVisibility;
+
+    /**
      * @param Config $catalogConfig
+     * @param Visibility $catalogProductVisibility
      */
     public function __construct(
-        Config $catalogConfig
+        Config $catalogConfig,
+        Visibility $catalogProductVisibility
     ) {
         $this->catalogConfig = $catalogConfig;
+        $this->catalogProductVisibility = $catalogProductVisibility;
     }
 
     /**
@@ -36,6 +45,7 @@ class ProductCollectionPrepareStrategy implements ProductCollectionPrepareStrate
         $collection
             ->addAttributeToSelect($this->catalogConfig->getProductAttributes())
             ->addMinimalPrice()
-            ->addTaxPercents();
+            ->addTaxPercents()
+            ->setVisibility($this->catalogProductVisibility->getVisibleInSearchIds());
     }
 }
