@@ -169,18 +169,6 @@ class CheckExpirePersistentQuoteObserver implements ObserverInterface
     }
 
     /**
-     * Condition checker
-     *
-     * @return bool
-     * @throws \Magento\Framework\Exception\LocalizedException
-     * @throws \Magento\Framework\Exception\NoSuchEntityException
-     */
-    private function isNeedToExpireSession(): bool
-    {
-        return $this->getQuote()->getIsPersistent() || $this->getQuote()->getCustomerIsGuest();
-    }
-
-    /**
      * Getter for Quote with micro optimization
      *
      * @return Quote

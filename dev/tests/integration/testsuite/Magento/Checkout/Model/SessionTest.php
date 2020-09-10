@@ -200,7 +200,7 @@ class SessionTest extends TestCase
             'Precondition failed: Customer data must not be set to quote'
         );
         self::assertEquals(
-            '0',
+            '1',
             $this->quote->getCustomerIsGuest(),
             'Precondition failed: Customer must be as guest in quote'
         );
