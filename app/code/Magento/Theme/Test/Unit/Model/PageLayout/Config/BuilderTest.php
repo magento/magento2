@@ -10,19 +10,17 @@ declare(strict_types=1);
  */
 namespace Magento\Theme\Test\Unit\Model\PageLayout\Config;
 
-use Magento\Framework\App\Cache\Type\FrontendPool;
-use Magento\Framework\App\Cache\Type\Layout as LayoutCache;
-use Magento\Framework\Cache\FrontendInterface;
+use Magento\Framework\App\Cache\Type\Layout;
+use Magento\Framework\Serialize\SerializerInterface;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Framework\View\PageLayout\Config;
+use Magento\Framework\View\PageLayout\ConfigFactory;
 use Magento\Framework\View\PageLayout\File\Collector\Aggregated;
-use Magento\TestFramework\Helper\Bootstrap;
 use Magento\Theme\Model\PageLayout\Config\Builder;
 use Magento\Theme\Model\ResourceModel\Theme\Collection;
 use Magento\Theme\Model\Theme\Data;
 use PHPUnit\Framework\MockObject\MockObject;
 use PHPUnit\Framework\TestCase;
-use Magento\Framework\App\Cache\Type\Layout;
 
 class BuilderTest extends TestCase
 {
@@ -32,7 +30,7 @@ class BuilderTest extends TestCase
     protected $builder;
 
     /**
-     * @var \Magento\Framework\View\PageLayout\ConfigFactory|MockObject
+     * @var ConfigFactory|MockObject
      */
     protected $configFactory;
 
@@ -50,6 +48,10 @@ class BuilderTest extends TestCase
      * @var Layout|MockObject
      */
     protected $cacheModel;
+    /**
+     * @var SerializerInterface|MockObject
+     */
+    protected $serializer;
 
     /**
      * SetUp method
@@ -58,17 +60,15 @@ class BuilderTest extends TestCase
      */
     protected function setUp(): void
     {
-        $this->configFactory = $this->getMockBuilder(\Magento\Framework\View\PageLayout\ConfigFactory::class)
+        $this->configFactory = $this->getMockBuilder(ConfigFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
 
-        $this->fileCollector = $this->getMockBuilder(
-            Aggregated::class
-        )->disableOriginalConstructor()
+        $this->fileCollector = $this->getMockBuilder(Aggregated::class)
+            ->disableOriginalConstructor()
             ->getMock();
 
-        $helper = new ObjectManager($this);
         $this->themeCollection = $this->getMockBuilder(Collection::class)
             ->disableOriginalConstructor()
             ->getMock();
@@ -76,10 +76,13 @@ class BuilderTest extends TestCase
             ->disableOriginalConstructor()
             ->getMock();
 
+        $this->serializer = $this->getMockForAbstractClass(SerializerInterface::class);
+
         $this->themeCollection->expects($this->once())
             ->method('setItemObjectClass')
             ->with(Data::class)
             ->willReturnSelf();
+
         $helper = new ObjectManager($this);
         $this->builder = $helper->getObject(
             Builder::class,
@@ -88,6 +91,7 @@ class BuilderTest extends TestCase
                 'fileCollector' => $this->fileCollector,
                 'themeCollection' => $this->themeCollection,
                 'cacheModel' => $this->cacheModel,
+                'serializer' => $this->serializer,
             ]
         );
     }
@@ -102,6 +106,7 @@ class BuilderTest extends TestCase
         $this->cacheModel->clean();
         $files1 = ['content layouts_1.xml', 'content layouts_2.xml'];
         $files2 = ['content layouts_3.xml', 'content layouts_4.xml'];
+        $configFiles = array_merge($files1, $files2);
 
         $theme1 = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
@@ -129,8 +134,16 @@ class BuilderTest extends TestCase
 
         $this->configFactory->expects($this->once())
             ->method('create')
-            ->with(['configFiles' => array_merge($files1, $files2)])
+            ->with(['configFiles' => $configFiles])
             ->willReturn($config);
+
+        $this->serializer->expects($this->once())
+            ->method('serialize')
+            ->with($configFiles);
+
+        $this->cacheModel->expects($this->once())
+            ->method('save')
+            ->willReturnSelf();
 
         $this->assertSame($config, $this->builder->getPageLayoutsConfig());
     }
