@@ -299,16 +299,17 @@ define([
                 this.source.set('params.invalid', false);
                 this.triggerShippingDataValidateEvent();
 
+                if (!quote.shippingMethod()['method_code']) {
+                    this.errorValidationMessage(
+                        $t('The shipping method is missing. Select the shipping method and try again.')
+                    );
+                }
+
                 if (emailValidationResult &&
                     this.source.get('params.invalid') ||
                     !quote.shippingMethod()['method_code'] ||
                     !quote.shippingMethod()['carrier_code']
                 ) {
-                    if (!quote.shippingMethod()['method_code']) {//eslint-disable-line max-depth
-                        this.errorValidationMessage(
-                            $t('The shipping method is missing. Select the shipping method and try again.')
-                        );
-                    }
                     this.focusInvalid();
 
                     return false;
