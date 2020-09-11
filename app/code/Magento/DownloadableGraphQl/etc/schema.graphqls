@@ -43,23 +43,29 @@ enum DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get th
 }
 
 type DownloadableProductLinks @doc(description: "DownloadableProductLinks defines characteristics of a downloadable product") {
-    id: Int @deprecated(reason: "This information shoud not be exposed on frontend")
+    id: Int @deprecated(reason: "This information should not be exposed on frontend")
     title: String @doc(description: "The display name of the link")
     sort_order: Int @doc(description: "A number indicating the sort order")
     price: Float @doc(description: "The price of the downloadable product")
     sample_url: String @doc(description: "URL to the downloadable sample")
-    is_shareable: Boolean @deprecated(reason: "This information shoud not be exposed on frontend")
-    number_of_downloads: Int @deprecated(reason: "This information shoud not be exposed on frontend")
+    is_shareable: Boolean @deprecated(reason: "This information should not be exposed on frontend")
+    number_of_downloads: Int @deprecated(reason: "This information should not be exposed on frontend")
     link_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
     sample_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
     sample_file: String @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+    uid: ID! @doc(description: "A string that encodes option details.") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\DownloadableLinksValueUid") # A Base64 string that encodes option details.
 }
 
 type DownloadableProductSamples @doc(description: "DownloadableProductSamples defines characteristics of a downloadable product") {
-    id: Int @deprecated(reason: "This information shoud not be exposed on frontend")
+    id: Int @deprecated(reason: "This information should not be exposed on frontend")
     title: String @doc(description: "The display name of the sample")
     sort_order: Int @doc(description: "A number indicating the sort order")
     sample_url: String @doc(description: "URL to the downloadable sample")
     sample_type: DownloadableFileTypeEnum @deprecated(reason: "`sample_url` serves to get the downloadable sample")
     sample_file: String @deprecated(reason: "`sample_url` serves to get the downloadable sample")
+}
+
+type DownloadableWishlistItem implements WishlistItemInterface @doc(description: "A downloadable product wish list item") {
+    links_v2: [DownloadableProductLinks] @doc(description: "An array containing information about the selected links") @resolver(class: "\\Magento\\DownloadableGraphQl\\Model\\Wishlist\\ItemLinks")
+    samples: [DownloadableProductSamples] @doc(description: "An array containing information about the selected samples") @resolver(class: "Magento\\DownloadableGraphQl\\Resolver\\Product\\Samples")
 }

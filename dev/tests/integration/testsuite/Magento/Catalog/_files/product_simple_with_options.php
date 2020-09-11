@@ -106,6 +106,15 @@ $options = [
                 'sort_order' => 2,
             ],
         ],
+    ],
+    [
+        'title' => 'date option',
+        'type' => 'date',
+        'price' => 80.0,
+        'price_type' => 'fixed',
+        'sku' => 'date option sku',
+        'is_require' => false,
+        'sort_order' => 6
     ]
 ];
 

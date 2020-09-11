@@ -71,7 +71,7 @@ class Attribute implements LayerBuilderInterface
      */
     public function build(AggregationInterface $aggregation, ?int $storeId): array
     {
-        $attributeOptions = $this->getAttributeOptions($aggregation);
+        $attributeOptions = $this->getAttributeOptions($aggregation, $storeId);
 
         // build layer per attribute
         $result = [];
@@ -133,13 +133,16 @@ class Attribute implements LayerBuilderInterface
      * Get list of attributes with options
      *
      * @param AggregationInterface $aggregation
+     * @param int|null $storeId
      * @return array
      * @throws \Zend_Db_Statement_Exception
      */
-    private function getAttributeOptions(AggregationInterface $aggregation): array
+    private function getAttributeOptions(AggregationInterface $aggregation, ?int $storeId): array
     {
         $attributeOptionIds = [];
+        $attributes = [];
         foreach ($this->getAttributeBuckets($aggregation) as $bucket) {
+            $attributes[] = \preg_replace('~_bucket$~', '', $bucket->getName());
             $attributeOptionIds[] = \array_map(
                 function (AggregationValueInterface $value) {
                     return $value->getValue();
@@ -152,6 +155,6 @@ class Attribute implements LayerBuilderInterface
             return [];
         }
 
-        return $this->attributeOptionProvider->getOptions(\array_merge(...$attributeOptionIds));
+        return $this->attributeOptionProvider->getOptions(\array_merge(...$attributeOptionIds), $storeId, $attributes);
     }
 }

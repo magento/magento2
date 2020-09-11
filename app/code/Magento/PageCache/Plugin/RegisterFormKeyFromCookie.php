@@ -10,10 +10,10 @@ declare(strict_types=1);
 namespace Magento\PageCache\Plugin;
 
 use Magento\Framework\App\PageCache\FormKey as CacheFormKey;
-use Magento\Framework\Escaper;
 use Magento\Framework\Data\Form\FormKey;
-use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
+use Magento\Framework\Escaper;
 use Magento\Framework\Session\Config\ConfigInterface;
+use Magento\Framework\Stdlib\Cookie\CookieMetadataFactory;
 
 /**
  * Allow for registration of a form key through cookies.
@@ -46,7 +46,7 @@ class RegisterFormKeyFromCookie
     private $sessionConfig;
 
     /**
-     * @param CacheFormKey $formKey
+     * @param CacheFormKey $cacheFormKey
      * @param Escaper $escaper
      * @param FormKey $formKey
      * @param CookieMetadataFactory $cookieMetadataFactory
@@ -70,7 +70,6 @@ class RegisterFormKeyFromCookie
      * Set form key from the cookie.
      *
      * @return void
-     *
      * @SuppressWarnings(PHPMD.UnusedFormalParameter)
      */
     public function beforeDispatch(): void
@@ -85,6 +84,8 @@ class RegisterFormKeyFromCookie
     }
 
     /**
+     * Set form key cookie
+     *
      * @param string $formKey
      * @return void
      */
@@ -94,6 +95,7 @@ class RegisterFormKeyFromCookie
             ->createPublicCookieMetadata();
         $cookieMetadata->setDomain($this->sessionConfig->getCookieDomain());
         $cookieMetadata->setPath($this->sessionConfig->getCookiePath());
+        $cookieMetadata->setSecure($this->sessionConfig->getCookieSecure());
         $lifetime = $this->sessionConfig->getCookieLifetime();
         if ($lifetime !== 0) {
             $cookieMetadata->setDuration($lifetime);

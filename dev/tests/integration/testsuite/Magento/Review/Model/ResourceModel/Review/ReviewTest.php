@@ -40,7 +40,7 @@ class ReviewTest extends \PHPUnit\Framework\TestCase
     /**
      * @return void
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->objectManager = \Magento\TestFramework\Helper\Bootstrap::getObjectManager();
         $this->resource = $this->objectManager->get(\Magento\Framework\App\ResourceConnection::class);

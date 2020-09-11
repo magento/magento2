@@ -5,8 +5,8 @@
  */
 namespace Magento\Cms\Controller\Adminhtml\Wysiwyg\Images;
 
-use Magento\Framework\App\Filesystem\DirectoryList;
 use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\Filesystem\DirectoryList;
 
 /**
  * Delete image files.
@@ -60,10 +60,15 @@ class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images imple
      */
     public function execute()
     {
+        $resultJson = $this->resultJsonFactory->create();
+
+        if (!$this->getRequest()->isPost()) {
+            $result = ['error' => true, 'message' => __('Wrong request.')];
+            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
+            return $resultJson->setData($result);
+        }
+
         try {
-            if (!$this->getRequest()->isPost()) {
-                throw new \Exception('Wrong request.');
-            }
             $files = $this->getRequest()->getParam('files');
 
             /** @var $helper \Magento\Cms\Helper\Wysiwyg\Images */
@@ -79,17 +84,16 @@ class DeleteFiles extends \Magento\Cms\Controller\Adminhtml\Wysiwyg\Images imple
                 /** @var \Magento\Framework\Filesystem $filesystem */
                 $filesystem = $this->_objectManager->get(\Magento\Framework\Filesystem::class);
                 $dir = $filesystem->getDirectoryRead(DirectoryList::MEDIA);
-                $filePath = $path . '/' . \Magento\Framework\File\Uploader::getCorrectFileName($file);
+                $filePath = $path . '/' . $file;
                 if ($dir->isFile($dir->getRelativePath($filePath)) && !preg_match('#.htaccess#', $file)) {
                     $this->getStorage()->deleteFile($filePath);
                 }
             }
-            
+
             return $this->resultRawFactory->create();
+            // phpcs:ignore Magento2.Exceptions.ThrowCatch
         } catch (\Exception $e) {
             $result = ['error' => true, 'message' => $e->getMessage()];
-            /** @var \Magento\Framework\Controller\Result\Json $resultJson */
-            $resultJson = $this->resultJsonFactory->create();
 
             return $resultJson->setData($result);
         }

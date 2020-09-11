@@ -12,13 +12,18 @@ declare(strict_types=1);
 namespace Magento\Framework\Module;
 
 /**
- * @inheritdoc
+ * Module status manager
+ *
+ * Usage:
+ * ```php
+ *  $manager->isEnabled('Vendor_Module');
+ * ```
  */
-class Manager implements ModuleManagerInterface
+class Manager
 {
     /**
      * @var Output\ConfigInterface
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private $outputConfig;
 
@@ -29,7 +34,7 @@ class Manager implements ModuleManagerInterface
 
     /**
      * @var array
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     private $outputConfigPaths;
 
@@ -49,9 +54,12 @@ class Manager implements ModuleManagerInterface
     }
 
     /**
-     * @inheritdoc
+     * Whether a module is enabled in the configuration or not
+     *
+     * @param string $moduleName Fully-qualified module name
+     * @return boolean
      */
-    public function isEnabled(string $moduleName): bool
+    public function isEnabled($moduleName)
     {
         return $this->moduleList->has($moduleName);
     }
@@ -61,7 +69,7 @@ class Manager implements ModuleManagerInterface
      *
      * @param string $moduleName Fully-qualified module name
      * @return boolean
-     * @deprecated 100.2.0 Magento does not support disabling/enabling modules output from the Admin Panel since 2.2.0
+     * @deprecated 101.0.0 Magento does not support disabling/enabling modules output from the Admin Panel since 2.2.0
      * version. Module output can still be enabled/disabled in configuration files. However, this functionality should
      * not be used in future development. Module design should explicitly state dependencies to avoid requiring output
      * disabling. This functionality will temporarily be kept in Magento core, as there are unresolved modularity
@@ -79,7 +87,7 @@ class Manager implements ModuleManagerInterface
      *
      * @param string $moduleName Fully-qualified module name
      * @return boolean
-     * @deprecated 100.2.0
+     * @deprecated 101.0.0
      */
     protected function _isCustomOutputConfigEnabled($moduleName)
     {

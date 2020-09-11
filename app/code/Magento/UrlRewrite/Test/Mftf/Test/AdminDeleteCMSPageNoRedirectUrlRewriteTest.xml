@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<tests xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/testSchema.xsd">
+    <test name="AdminDeleteCMSPageNoRedirectUrlRewriteTest">
+        <annotations>
+            <stories value="Delete CMS Page No Redirect URL rewrite"/>
+            <title value="Delete CMS Page No Redirect URL rewrite"/>
+            <description value="Login as Admin and remove CMS Page Url Rewrite"/>
+            <testCaseId value=""/>
+            <severity value="CRITICAL"/>
+            <group value="mtf_migrated"/>
+        </annotations>
+
+        <before>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
+            <createData entity="simpleCmsPage" stepKey="createCMSPage"/>
+        </before>
+        <after>
+            <deleteData createDataKey="createCMSPage" stepKey="deleteCMSPage"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
+        </after>
+
+        <!--Open CMS Edit Page and Get the CMS ID -->
+        <actionGroup ref="NavigateToCreatedCMSPageActionGroup" stepKey="navigateToCreatedCMSPage">
+            <argument name="CMSPage" value="$$createCMSPage$$"/>
+        </actionGroup>
+        <grabFromCurrentUrl stepKey="cmsId" regex="#\/([0-9]*)?\/$#"/>
+
+        <!--  Assert initial CMS page Url Rewrite in Grid-->
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath1">
+            <argument name="redirectPath" value="$$createCMSPage.identifier$$"/>
+            <argument name="redirectType" value="No"/>
+            <argument name="targetPath" value="cms/page/view/page_id/{$cmsId}"/>
+        </actionGroup>
+
+        <!-- Assert initial request path directs to the CMS Page on Store Front -->
+        <actionGroup ref="NavigateToStorefrontForCreatedPageActionGroup" stepKey="navigateToTheStoreFront1">
+            <argument name="page" value="$$createCMSPage.identifier$$"/>
+        </actionGroup>
+
+        <!--Delete created cms page url rewrite and verify AssertUrlRewriteDeletedMessage-->
+        <actionGroup ref="AdminDeleteUrlRewriteActionGroup" stepKey="deleteUrlRewrite">
+            <argument name="requestPath" value="$$createCMSPage.identifier$$"/>
+        </actionGroup>
+
+        <!--Search and verify AssertUrlRewriteNotInGrid-->
+        <actionGroup ref="AdminSearchDeletedUrlRewriteActionGroup" stepKey="searchDeletedUrlRewriteInGrid">
+            <argument name="requestPath" value="$$createCMSPage.identifier$$"/>
+        </actionGroup>
+    </test>
+</tests>

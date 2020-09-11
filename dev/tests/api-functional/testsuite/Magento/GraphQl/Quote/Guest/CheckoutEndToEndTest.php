@@ -51,7 +51,7 @@ class CheckoutEndToEndTest extends GraphQlAbstract
      */
     private $orderRepository;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         parent::setUp();
 
@@ -219,7 +219,6 @@ mutation {
           telephone: "88776655"
           region: "TX"
           country_code: "US"
-          save_in_address_book: false
          }
       }
     }
@@ -258,7 +257,6 @@ mutation {
             postcode: "887766"
             country_code: "US"
             telephone: "88776655"
-            save_in_address_book: false
           }
         }
       ]
@@ -398,7 +396,7 @@ QUERY;
         self::assertNotEmpty($response['placeOrder']['order']['order_number']);
     }
 
-    public function tearDown()
+    protected function tearDown(): void
     {
         $this->deleteQuote();
         $this->deleteOrder();

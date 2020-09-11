@@ -3,71 +3,91 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\CatalogSearch\Test\Unit\Model\Indexer\Fulltext\Action;
+
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\Product\Type;
+use Magento\CatalogSearch\Helper\Data;
+use Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full;
+use Magento\CatalogSearch\Model\ResourceModel\EngineProvider;
+use Magento\CatalogSearch\Model\ResourceModel\Fulltext;
+use Magento\Framework\App\Config\ScopeConfigInterface;
+use Magento\Framework\App\ResourceConnection;
+use Magento\Framework\Event\ManagerInterface;
+use Magento\Framework\Locale\ResolverInterface;
+use Magento\Framework\Search\Request\Config;
+use Magento\Framework\Stdlib\DateTime;
+use Magento\Framework\Stdlib\DateTime\TimezoneInterface;
+use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use Magento\Store\Model\StoreManagerInterface;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
 /**
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class FullTest extends \PHPUnit\Framework\TestCase
+class FullTest extends TestCase
 {
-    /** @var \Magento\Framework\Search\Request\Config|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var Config|MockObject */
     protected $searchRequestConfig;
 
-    /** @var \Magento\Store\Model\StoreManagerInterface|\PHPUnit_Framework_MockObject_MockObject */
+    /** @var StoreManagerInterface|MockObject */
     protected $storeManager;
 
-    /** @var \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full */
+    /** @var Full */
     protected $object;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $resource = $this->getMockBuilder(\Magento\Framework\App\ResourceConnection::class)
+        $this->markTestSkipped("MC-18332: Mysql Search Engine is deprecated and will be removed");
+        $resource = $this->getMockBuilder(ResourceConnection::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $catalogProductType = $this->getMockBuilder(\Magento\Catalog\Model\Product\Type::class)
+        $catalogProductType = $this->getMockBuilder(Type::class)
             ->disableOriginalConstructor()
             ->getMock();
         $eavConfig = $this->getMockBuilder(\Magento\Eav\Model\Config::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->searchRequestConfig = $this->getMockBuilder(\Magento\Framework\Search\Request\Config::class)
+        $this->searchRequestConfig = $this->getMockBuilder(Config::class)
             ->disableOriginalConstructor()
             ->getMock();
         $catalogProductStatus =
-            $this->getMockBuilder(\Magento\Catalog\Model\Product\Attribute\Source\Status::class)
+            $this->getMockBuilder(Status::class)
                 ->disableOriginalConstructor()
                 ->getMock();
-        $engineProvider = $this->getMockBuilder(\Magento\CatalogSearch\Model\ResourceModel\EngineProvider::class)
+        $engineProvider = $this->getMockBuilder(EngineProvider::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $eventManager = $this->getMockBuilder(\Magento\Framework\Event\ManagerInterface::class)
+        $eventManager = $this->getMockBuilder(ManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $catalogSearchData = $this->getMockBuilder(Data::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $catalogSearchData = $this->getMockBuilder(\Magento\CatalogSearch\Helper\Data::class)
+        $scopeConfig = $this->getMockBuilder(ScopeConfigInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->storeManager = $this->getMockBuilder(StoreManagerInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $dateTime = $this->getMockBuilder(DateTime::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $scopeConfig = $this->getMockBuilder(\Magento\Framework\App\Config\ScopeConfigInterface::class)
+        $localeResolver = $this->getMockBuilder(ResolverInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $localeDate = $this->getMockBuilder(TimezoneInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $fulltextResource = $this->getMockBuilder(Fulltext::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->storeManager = $this->getMockBuilder(\Magento\Store\Model\StoreManagerInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $dateTime = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $localeResolver = $this->getMockBuilder(\Magento\Framework\Locale\ResolverInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $localeDate = $this->getMockBuilder(\Magento\Framework\Stdlib\DateTime\TimezoneInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $fulltextResource = $this->getMockBuilder(\Magento\CatalogSearch\Model\ResourceModel\Fulltext::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $objectManagerHelper = new \Magento\Framework\TestFramework\Unit\Helper\ObjectManager($this);
+        $objectManagerHelper = new ObjectManager($this);
         $this->object = $objectManagerHelper->getObject(
-            \Magento\CatalogSearch\Model\Indexer\Fulltext\Action\Full::class,
+            Full::class,
             [
                 'resource' => $resource,
                 'catalogProductType' => $catalogProductType,

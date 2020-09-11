@@ -135,6 +135,13 @@
     .products-grid.wishlist {
         .product {
             &-item {
+                margin-left: 2%;
+                width: calc(~'(100% - 4%) / 3');
+
+                &:nth-child(3n + 1) {
+                    margin-left: 0;
+                }
+
                 &-photo {
                     display: block;
                     margin-bottom: @indent__s;
@@ -183,7 +190,7 @@
         }
     }
     .products-grid.wishlist {
-        .product-item-actions { 
+        .product-item-actions {
             .action {
                 &.edit,
                 &.delete {
@@ -216,6 +223,8 @@
     .products-grid.wishlist {
         .product-item {
             border-bottom: 1px solid @secondary__color;
+            margin: 0;
+            width: 100%;
 
             &:first-child {
                 border-top: 1px solid @secondary__color;
@@ -253,7 +262,7 @@
                         &:last-child {
                             margin-right: 0;
                         }
-                        
+
                         &.edit,
                         &.delete {
                             margin-top: 7px;

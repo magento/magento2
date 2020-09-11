@@ -3,9 +3,13 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Sales\Model\Order\Email\Container;
 
+/**
+ * Class \Magento\Sales\Model\Order\Email\Container\ShipmentIdentity
+ */
 class ShipmentIdentity extends Container implements IdentityInterface
 {
     /**
@@ -41,7 +45,7 @@ class ShipmentIdentity extends Container implements IdentityInterface
     {
         $data = $this->getConfigValue(self::XML_PATH_EMAIL_COPY_TO, $this->getStore()->getStoreId());
         if (!empty($data)) {
-            return explode(',', $data);
+            return array_map('trim', explode(',', $data));
         }
         return false;
     }

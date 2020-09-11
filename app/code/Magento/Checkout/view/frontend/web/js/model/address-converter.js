@@ -9,8 +9,9 @@ define([
     'jquery',
     'Magento_Checkout/js/model/new-customer-address',
     'Magento_Customer/js/customer-data',
-    'mage/utils/objects'
-], function ($, address, customerData, mageUtils) {
+    'mage/utils/objects',
+    'underscore'
+], function ($, address, customerData, mageUtils, _) {
     'use strict';
 
     var countryData = customerData.get('directory-data');
@@ -60,13 +61,15 @@ define([
             delete addressData['region_id'];
 
             if (addressData['custom_attributes']) {
-                addressData['custom_attributes'] = Object.entries(addressData['custom_attributes'])
-                    .map(function (customAttribute) {
+                addressData['custom_attributes'] = _.map(
+                    addressData['custom_attributes'],
+                    function (value, key) {
                         return {
-                            'attribute_code': customAttribute[0],
-                            'value': customAttribute[1]
+                            'attribute_code': key,
+                            'value': value
                         };
-                    });
+                    }
+                );
             }
 
             return address(addressData);
@@ -81,7 +84,8 @@ define([
         quoteAddressToFormAddressData: function (addrs) {
             var self = this,
                 output = {},
-                streetObject;
+                streetObject,
+                customAttributesObject;
 
             $.each(addrs, function (key) {
                 if (addrs.hasOwnProperty(key) && !$.isFunction(addrs[key])) {
@@ -96,6 +100,16 @@ define([
                 });
                 output.street = streetObject;
             }
+
+            //jscs:disable requireCamelCaseOrUpperCaseIdentifiers
+            if ($.isArray(addrs.customAttributes)) {
+                customAttributesObject = {};
+                addrs.customAttributes.forEach(function (value) {
+                    customAttributesObject[value.attribute_code] = value.value;
+                });
+                output.custom_attributes = customAttributesObject;
+            }
+            //jscs:enable requireCamelCaseOrUpperCaseIdentifiers
 
             return output;
         },

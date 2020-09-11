@@ -24,7 +24,7 @@ interface BlockRepositoryInterface
     /**
      * Retrieve block.
      *
-     * @param int $blockId
+     * @param string $blockId
      * @return \Magento\Cms\Api\Data\BlockInterface
      * @throws \Magento\Framework\Exception\LocalizedException
      */
@@ -51,7 +51,7 @@ interface BlockRepositoryInterface
     /**
      * Delete block by ID.
      *
-     * @param int $blockId
+     * @param string $blockId
      * @return bool true on success
      * @throws \Magento\Framework\Exception\NoSuchEntityException
      * @throws \Magento\Framework\Exception\LocalizedException

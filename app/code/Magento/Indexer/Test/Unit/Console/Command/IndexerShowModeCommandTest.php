@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Indexer\Test\Unit\Console\Command;
 
 use Magento\Backend\App\Area\FrontNameResolver;
@@ -23,7 +25,7 @@ class IndexerShowModeCommandTest extends AbstractIndexerCommandCommonSetup
         $this->stateMock->expects($this->never())->method('setAreaCode')->with(FrontNameResolver::AREA_CODE);
         $this->command = new IndexerShowModeCommand($this->objectManagerFactory);
         $optionsList = $this->command->getInputList();
-        $this->assertSame(1, sizeof($optionsList));
+        $this->assertCount(1, $optionsList);
         $this->assertSame('index', $optionsList[0]->getName());
     }
 

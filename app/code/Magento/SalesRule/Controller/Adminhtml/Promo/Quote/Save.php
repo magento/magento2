@@ -61,7 +61,8 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
      */
     public function execute()
     {
-        if ($this->getRequest()->getPostValue()) {
+        $data = $this->getRequest()->getPostValue();
+        if ($data) {
             try {
                 /** @var $model \Magento\SalesRule\Model\Rule */
                 $model = $this->_objectManager->create(\Magento\SalesRule\Model\Rule::class);
@@ -69,7 +70,6 @@ class Save extends \Magento\SalesRule\Controller\Adminhtml\Promo\Quote implement
                     'adminhtml_controller_salesrule_prepare_save',
                     ['request' => $this->getRequest()]
                 );
-                $data = $this->getRequest()->getPostValue();
                 if (empty($data['from_date'])) {
                     $data['from_date'] = $this->timezone->formatDate();
                 }

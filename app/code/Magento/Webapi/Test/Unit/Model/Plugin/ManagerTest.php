@@ -3,78 +3,90 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Webapi\Test\Unit\Model\Plugin;
 
+use Magento\Framework\DataObject;
+use Magento\Integration\Api\AuthorizationServiceInterface;
+use Magento\Integration\Api\IntegrationServiceInterface;
+use Magento\Integration\Model\ConfigBasedIntegrationManager;
 use Magento\Integration\Model\Integration;
+use Magento\Integration\Model\IntegrationConfig;
+use Magento\Webapi\Model\Plugin\Manager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ManagerTest extends \PHPUnit\Framework\TestCase
+class ManagerTest extends TestCase
 {
     /**
      * Integration service mock
      *
-     * @var \Magento\Integration\Api\IntegrationServiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var IntegrationServiceInterface|MockObject
      */
     protected $integrationServiceMock;
 
     /**
      * Authorization service mock
      *
-     * @var \Magento\Integration\Api\AuthorizationServiceInterface|\PHPUnit_Framework_MockObject_MockObject
+     * @var AuthorizationServiceInterface|MockObject
      */
     protected $integrationAuthorizationServiceMock;
 
     /**
      * API setup plugin
      *
-     * @var \Magento\Webapi\Model\Plugin\Manager
+     * @var Manager
      */
     protected $apiSetupPlugin;
 
     /**
-     * @var \Magento\Integration\Model\ConfigBasedIntegrationManager|\PHPUnit_Framework_MockObject_MockObject
+     * @var ConfigBasedIntegrationManager|MockObject
      */
     protected $subjectMock;
 
     /**
-     * @var \Magento\Integration\Model\IntegrationConfig|\PHPUnit_Framework_MockObject_MockObject
+     * @var IntegrationConfig|MockObject
      */
     protected $integrationConfigMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->integrationServiceMock = $this->getMockBuilder(
-            \Magento\Integration\Api\IntegrationServiceInterface::class
-        )->disableOriginalConstructor()->setMethods(
-            [
-                'findByName',
-                'update',
-                'create',
-                'get',
-                'findByConsumerId',
-                'findActiveIntegrationByConsumerId',
-                'delete',
-                'getSelectedResources'
-            ]
-        )->getMock();
+            IntegrationServiceInterface::class
+        )->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'findByName',
+                    'update',
+                    'create',
+                    'get',
+                    'findByConsumerId',
+                    'findActiveIntegrationByConsumerId',
+                    'delete',
+                    'getSelectedResources'
+                ]
+            )->getMock();
 
         $this->integrationAuthorizationServiceMock = $this->getMockBuilder(
-            \Magento\Integration\Api\AuthorizationServiceInterface::class
-        )->disableOriginalConstructor()->setMethods(
-            [
-                'grantPermissions',
-                'grantAllPermissions',
-                'removePermissions'
-            ]
-        )->getMock();
+            AuthorizationServiceInterface::class
+        )->disableOriginalConstructor()
+            ->setMethods(
+                [
+                    'grantPermissions',
+                    'grantAllPermissions',
+                    'removePermissions'
+                ]
+            )->getMock();
 
-        $this->subjectMock = $this->createMock(\Magento\Integration\Model\ConfigBasedIntegrationManager::class);
+        $this->subjectMock = $this->createMock(ConfigBasedIntegrationManager::class);
 
-        $this->integrationConfigMock = $this->getMockBuilder(\Magento\Integration\Model\IntegrationConfig::class)
+        $this->integrationConfigMock = $this->getMockBuilder(IntegrationConfig::class)
             ->disableOriginalConstructor()
             ->setMethods([])
             ->getMock();
 
-        $this->apiSetupPlugin = new \Magento\Webapi\Model\Plugin\Manager(
+        $this->apiSetupPlugin = new Manager(
             $this->integrationAuthorizationServiceMock,
             $this->integrationServiceMock,
             $this->integrationConfigMock
@@ -105,16 +117,14 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             $this->once()
         )->method(
             'getIntegrations'
-        )->will(
-            $this->returnValue(
-                [
-                    'TestIntegration1' => ['resource' => $testIntegration1Resource],
-                    'TestIntegration2' => ['resource' => $testIntegration2Resource],
-                ]
-            )
+        )->willReturn(
+            [
+                'TestIntegration1' => ['resource' => $testIntegration1Resource],
+                'TestIntegration2' => ['resource' => $testIntegration2Resource],
+            ]
         );
         $firstIntegrationId = 1;
-        $integrationsData1 = new \Magento\Framework\DataObject(
+        $integrationsData1 = new DataObject(
             [
                 'id' => $firstIntegrationId,
                 Integration::NAME => 'TestIntegration1',
@@ -124,7 +134,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             ]
         );
         $secondIntegrationId = 2;
-        $integrationsData2 = new \Magento\Framework\DataObject(
+        $integrationsData2 = new DataObject(
             [
                 'id' => $secondIntegrationId,
                 Integration::NAME => 'TestIntegration2',
@@ -138,8 +148,8 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             'findByName'
         )->with(
             'TestIntegration1'
-        )->will(
-            $this->returnValue($integrationsData1)
+        )->willReturn(
+            $integrationsData1
         );
         $this->integrationServiceMock->expects(
             $this->at(1)
@@ -147,8 +157,8 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             'findByName'
         )->with(
             'TestIntegration2'
-        )->will(
-            $this->returnValue($integrationsData2)
+        )->willReturn(
+            $integrationsData2
         );
         $this->apiSetupPlugin->afterProcessIntegrationConfig(
             $this->subjectMock,
@@ -182,7 +192,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
                 'Magento_SalesRule::quote',
             ]
         ];
-        $integrationsData1Object = new \Magento\Framework\DataObject($integrationsData1);
+        $integrationsData1Object = new DataObject($integrationsData1);
 
         $secondIntegrationId = 2;
         $integrationsData2 = [
@@ -192,7 +202,7 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             Integration::SETUP_TYPE => 1,
             'resource' => ['Magento_Catalog::product_read']
         ];
-        $integrationsData2Object = new \Magento\Framework\DataObject($integrationsData2);
+        $integrationsData2Object = new DataObject($integrationsData2);
 
         $this->integrationServiceMock->expects(
             $this->at(0)
@@ -200,8 +210,8 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             'findByName'
         )->with(
             'TestIntegration1'
-        )->will(
-            $this->returnValue($integrationsData1Object)
+        )->willReturn(
+            $integrationsData1Object
         );
 
         $this->integrationServiceMock->expects(
@@ -210,8 +220,8 @@ class ManagerTest extends \PHPUnit\Framework\TestCase
             'findByName'
         )->with(
             'TestIntegration2'
-        )->will(
-            $this->returnValue($integrationsData2Object)
+        )->willReturn(
+            $integrationsData2Object
         );
 
         $this->apiSetupPlugin->afterProcessConfigBasedIntegrations(

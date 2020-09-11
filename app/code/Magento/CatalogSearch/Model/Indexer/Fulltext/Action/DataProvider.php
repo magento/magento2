@@ -7,14 +7,9 @@ namespace Magento\CatalogSearch\Model\Indexer\Fulltext\Action;
 
 use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Model\Product\Attribute\Source\Status;
-use Magento\CatalogInventory\Api\Data\StockStatusInterface;
-use Magento\CatalogInventory\Api\StockConfigurationInterface;
-use Magento\CatalogInventory\Api\StockStatusCriteriaInterface;
-use Magento\CatalogInventory\Api\StockStatusRepositoryInterface;
 use Magento\Framework\App\ResourceConnection;
 use Magento\Framework\DB\Select;
 use Magento\Store\Model\Store;
-use Magento\Framework\App\ObjectManager;
 
 /**
  * Catalog search full test search data provider.
@@ -88,7 +83,7 @@ class DataProvider
     private $storeManager;
 
     /**
-     * @var \Magento\CatalogSearch\Model\ResourceModel\Engine
+     * @var \Magento\CatalogSearch\Model\ResourceModel\EngineInterface
      */
     private $engine;
 
@@ -128,16 +123,6 @@ class DataProvider
      * @var int
      */
     private $antiGapMultiplier;
-
-    /**
-     * @var StockConfigurationInterface
-     */
-    private $stockConfiguration;
-
-    /**
-     * @var StockStatusRepositoryInterface
-     */
-    private $stockStatusRepository;
 
     /**
      * @param ResourceConnection $resource
@@ -257,7 +242,7 @@ class DataProvider
         $this->joinAttribute($select, 'status', $storeId, [Status::STATUS_ENABLED]);
 
         if ($productIds !== null) {
-            $select->where('e.entity_id IN (?)', $productIds);
+            $select->where('e.entity_id IN (?)', $productIds, \Zend_Db::INT_TYPE);
         }
         $select->where('e.entity_id > ?', $lastProductId);
         $select->order('e.entity_id');
@@ -338,7 +323,7 @@ class DataProvider
                 'catelogsearch_searchable_attributes_load_after',
                 ['engine' => $this->engine, 'attributes' => $attributes]
             );
-            
+
             $this->eventManager->dispatch(
                 'catalogsearch_searchable_attributes_load_after',
                 ['engine' => $this->engine, 'attributes' => $attributes]
@@ -425,7 +410,8 @@ class DataProvider
                 [$linkField, 'entity_id']
             )->where(
                 'cpe.entity_id IN (?)',
-                $productIds
+                $productIds,
+                \Zend_Db::INT_TYPE
             )
         );
         foreach ($attributeTypes as $backendType => $attributeIds) {
@@ -563,8 +549,6 @@ class DataProvider
     {
         $index = [];
 
-        $indexData = $this->filterOutOfStockProducts($indexData, $storeId);
-
         foreach ($this->getSearchableAttributes('static') as $attribute) {
             $attributeCode = $attribute->getAttributeCode();
 
@@ -589,11 +573,11 @@ class DataProvider
         foreach ($indexData as $entityId => $attributeData) {
             foreach ($attributeData as $attributeId => $attributeValues) {
                 $value = $this->getAttributeValue($attributeId, $attributeValues, $storeId);
-                if (!empty($value)) {
+                if ($value !== null && $value !== false && $value !== '') {
                     if (!isset($index[$attributeId])) {
                         $index[$attributeId] = [];
                     }
-                        $index[$attributeId][$entityId] = $value;
+                    $index[$attributeId][$entityId] = $value;
                 }
             }
         }
@@ -688,69 +672,5 @@ class DataProvider
     private function filterAttributeValue($value)
     {
         return preg_replace('/\s+/iu', ' ', trim(strip_tags($value)));
-    }
-
-    /**
-     * Filter out of stock products for products.
-     *
-     * @param array $indexData
-     * @param int $storeId
-     * @return array
-     */
-    private function filterOutOfStockProducts($indexData, $storeId): array
-    {
-        if (!$this->getStockConfiguration()->isShowOutOfStock($storeId)) {
-            $productIds = array_keys($indexData);
-            $stockStatusCriteria = $this->createStockStatusCriteria();
-            $stockStatusCriteria->setProductsFilter($productIds);
-            $stockStatusCollection = $this->getStockStatusRepository()->getList($stockStatusCriteria);
-            $stockStatuses = $stockStatusCollection->getItems();
-            $stockStatuses = array_filter(
-                $stockStatuses,
-                function (StockStatusInterface $stockStatus) {
-                    return StockStatusInterface::STATUS_IN_STOCK == $stockStatus->getStockStatus();
-                }
-            );
-            $indexData = array_intersect_key($indexData, $stockStatuses);
-        }
-        return $indexData;
-    }
-
-    /**
-     * Get stock configuration.
-     *
-     * @return StockConfigurationInterface
-     */
-    private function getStockConfiguration()
-    {
-        if (null === $this->stockConfiguration) {
-            $this->stockConfiguration = ObjectManager::getInstance()->get(StockConfigurationInterface::class);
-        }
-        return $this->stockConfiguration;
-    }
-
-    /**
-     * Create stock status criteria.
-     *
-     * Substitution of autogenerated factory in backward compatibility reasons.
-     *
-     * @return StockStatusCriteriaInterface
-     */
-    private function createStockStatusCriteria()
-    {
-        return ObjectManager::getInstance()->create(StockStatusCriteriaInterface::class);
-    }
-
-    /**
-     * Get stock status repository.
-     *
-     * @return StockStatusRepositoryInterface
-     */
-    private function getStockStatusRepository()
-    {
-        if (null === $this->stockStatusRepository) {
-            $this->stockStatusRepository = ObjectManager::getInstance()->get(StockStatusRepositoryInterface::class);
-        }
-        return $this->stockStatusRepository;
     }
 }

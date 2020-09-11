@@ -13,10 +13,10 @@ namespace Magento\QuoteGraphQl\Model\Cart\BuyRequest;
 interface BuyRequestDataProviderInterface
 {
     /**
-     * Build buy request for adding product to cart
+     * Provide buy request data from add to cart item request
      *
      * @param array $cartItemData
-     * @return DataObject
+     * @return array
      */
     public function execute(array $cartItemData): array;
 }

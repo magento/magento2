@@ -188,7 +188,7 @@ abstract class Create extends \Magento\Backend\App\Action
             && $this->_getOrderCreateModel()->getShippingAddress()->getSameAsBilling() && empty($shippingMethod)
             ) {
                 $this->_getOrderCreateModel()->setShippingAsBilling(1);
-            } else {
+            } elseif ($syncFlag !== null) {
                 $this->_getOrderCreateModel()->setShippingAsBilling((int)$syncFlag);
             }
         }

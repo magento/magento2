@@ -3,6 +3,9 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+
+/** This changes need to valid applying filters and configuration before search process is started. */
+$productList = $block->getProductListHtml();
 ?>
 <?php if ($block->getResultCount()) : ?>
     <?= /* @noEscape */ $block->getChildHtml('tagged_product_list_rss_link') ?>
@@ -16,7 +19,7 @@
         </div>
     </div>
     <?php endif; ?>
-    <?= $block->getProductListHtml() ?>
+    <?= /* @noEscape */ $productList ?>
 </div>
 <?php else : ?>
 

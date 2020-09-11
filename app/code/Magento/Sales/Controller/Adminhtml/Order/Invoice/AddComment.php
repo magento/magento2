@@ -1,23 +1,30 @@
 <?php
 /**
- *
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
 
+declare(strict_types=1);
+
 namespace Magento\Sales\Controller\Adminhtml\Order\Invoice;
 
 use Magento\Backend\App\Action\Context;
+use Magento\Backend\Model\View\Result\ForwardFactory;
+use Magento\Framework\App\Action\HttpPostActionInterface;
+use Magento\Framework\App\ObjectManager;
 use Magento\Framework\Exception\LocalizedException;
+use Magento\Sales\Api\InvoiceRepositoryInterface;
 use Magento\Sales\Model\Order\Email\Sender\InvoiceCommentSender;
-use Magento\Sales\Model\Order\Invoice;
-use Magento\Backend\App\Action;
 use Magento\Framework\Registry;
 use Magento\Framework\Controller\Result\JsonFactory;
 use Magento\Framework\View\Result\PageFactory;
 use Magento\Framework\Controller\Result\RawFactory;
 
-class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View
+/**
+ * Class AddComment
+ */
+class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInvoice\View implements
+    HttpPostActionInterface
 {
     /**
      * @var InvoiceCommentSender
@@ -40,28 +47,37 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
     protected $resultRawFactory;
 
     /**
+     * @var InvoiceRepositoryInterface
+     */
+    protected $invoiceRepository;
+
+    /**
      * @param Context $context
      * @param Registry $registry
-     * @param \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory
+     * @param ForwardFactory $resultForwardFactory
      * @param InvoiceCommentSender $invoiceCommentSender
      * @param JsonFactory $resultJsonFactory
      * @param PageFactory $resultPageFactory
      * @param RawFactory $resultRawFactory
+     * @param InvoiceRepositoryInterface $invoiceRepository
      */
     public function __construct(
         Context $context,
         Registry $registry,
-        \Magento\Backend\Model\View\Result\ForwardFactory $resultForwardFactory,
+        ForwardFactory $resultForwardFactory,
         InvoiceCommentSender $invoiceCommentSender,
         JsonFactory $resultJsonFactory,
         PageFactory $resultPageFactory,
-        RawFactory $resultRawFactory
+        RawFactory $resultRawFactory,
+        InvoiceRepositoryInterface $invoiceRepository = null
     ) {
         $this->invoiceCommentSender = $invoiceCommentSender;
         $this->resultJsonFactory = $resultJsonFactory;
         $this->resultPageFactory = $resultPageFactory;
         $this->resultRawFactory = $resultRawFactory;
-        parent::__construct($context, $registry, $resultForwardFactory);
+        $this->invoiceRepository = $invoiceRepository ?:
+            ObjectManager::getInstance()->get(InvoiceRepositoryInterface::class);
+        parent::__construct($context, $registry, $resultForwardFactory, $invoiceRepository);
     }
 
     /**
@@ -90,7 +106,7 @@ class AddComment extends \Magento\Sales\Controller\Adminhtml\Invoice\AbstractInv
             );
 
             $this->invoiceCommentSender->send($invoice, !empty($data['is_customer_notified']), $data['comment']);
-            $invoice->save();
+            $this->invoiceRepository->save($invoice);
 
             /** @var \Magento\Backend\Model\View\Result\Page $resultPage */
             $resultPage = $this->resultPageFactory->create();

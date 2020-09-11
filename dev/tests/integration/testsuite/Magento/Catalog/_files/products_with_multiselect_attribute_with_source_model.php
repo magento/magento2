@@ -5,12 +5,9 @@
  */
 
 use Magento\Catalog\_files\MultiselectSourceMock;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-/**
- * Create multiselect attribute
- */
-require __DIR__ . '/multiselect_attribute_with_source_model.php';
-require __DIR__ . '/../../Checkout/_files/ValidatorFileMock.php';
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/multiselect_attribute_with_source_model.php');
 
 /** Create product with options and multiselect attribute */
 

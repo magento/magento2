@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertWebsiteIsAvailableInProductWebsitesActionGroup">
+        <arguments>
+            <argument name="website" type="string"/>
+        </arguments>
+        <scrollTo selector="{{ProductInWebsitesSection.sectionHeader}}" stepKey="scrollToProductInWebsitesSection"/>
+        <conditionalClick selector="{{ProductInWebsitesSection.sectionHeader}}" dependentSelector="{{ProductInWebsitesSection.sectionHeaderOpened}}" visible="false" stepKey="expandProductWebsitesSection"/>
+        <seeElement selector="{{ProductInWebsitesSection.website(website)}}" stepKey="seeCheckboxForWebsite"/>
+    </actionGroup>
+</actionGroups>

@@ -8,13 +8,13 @@ declare(strict_types=1);
 namespace Magento\QuoteGraphQl\Model\Cart;
 
 use Magento\Framework\GraphQl\Exception\GraphQlAuthorizationException;
-use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Framework\GraphQl\Exception\GraphQlInputException;
 use Magento\Framework\GraphQl\Exception\GraphQlNoSuchEntityException;
+use Magento\GraphQl\Model\Query\ContextInterface;
 use Magento\Quote\Model\Quote\Address;
 
 /**
- * Get shipping address
+ * Model for getting shipping address
  */
 class GetShippingAddress
 {
@@ -26,8 +26,9 @@ class GetShippingAddress
     /**
      * @param QuoteAddressFactory $quoteAddressFactory
      */
-    public function __construct(QuoteAddressFactory $quoteAddressFactory)
-    {
+    public function __construct(
+        QuoteAddressFactory $quoteAddressFactory
+    ) {
         $this->quoteAddressFactory = $quoteAddressFactory;
     }
 
@@ -62,19 +63,39 @@ class GetShippingAddress
             );
         }
 
+        $shippingAddress = $this->createShippingAddress($context, $customerAddressId, $addressInput);
+
+        return $shippingAddress;
+    }
+
+    /**
+     * Create shipping address.
+     *
+     * @param ContextInterface $context
+     * @param int|null $customerAddressId
+     * @param array|null $addressInput
+     *
+     * @return \Magento\Quote\Model\Quote\Address
+     * @throws GraphQlAuthorizationException
+     */
+    private function createShippingAddress(
+        ContextInterface $context,
+        ?int $customerAddressId,
+        ?array $addressInput
+    ) {
+        $customerId = $context->getUserId();
+
         if (null === $customerAddressId) {
             $shippingAddress = $this->quoteAddressFactory->createBasedOnInputData($addressInput);
         } else {
             if (false === $context->getExtensionAttributes()->getIsCustomer()) {
                 throw new GraphQlAuthorizationException(__('The current customer isn\'t authorized.'));
             }
-
             $shippingAddress = $this->quoteAddressFactory->createBasedOnCustomerAddress(
                 (int)$customerAddressId,
-                $context->getUserId()
+                $customerId
             );
         }
-
         return $shippingAddress;
     }
 }

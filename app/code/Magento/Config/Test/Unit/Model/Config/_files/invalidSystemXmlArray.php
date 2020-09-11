@@ -3,6 +3,8 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 return [
     'tab_id_not_unique' => [
         '<?xml version="1.0"?><config><system><tab id="tab1"><label>Label One</label>' .

@@ -22,4 +22,22 @@
     <type name="Magento\Catalog\Api\ProductCustomOptionRepositoryInterface">
         <plugin name="updateProductCustomOptionsAttributes" type="Magento\Catalog\Plugin\Model\Product\Option\UpdateProductCustomOptionsAttributes"/>
     </type>
+    <type name="Magento\Catalog\Api\ProductRepositoryInterface">
+        <plugin name="product_authorization" type="Magento\Catalog\Plugin\ProductAuthorization" />
+    </type>
+    <type name="Magento\Catalog\Api\CategoryRepositoryInterface">
+        <plugin name="category_authorization" type="Magento\Catalog\Plugin\CategoryAuthorization" />
+    </type>
+    <type name="Magento\Framework\Reflection\DataObjectProcessor">
+        <arguments>
+            <argument name="processors" xsi:type="array">
+                <item name="Magento\Catalog\Model\Product" xsi:type="object">Magento\Catalog\Model\Product\Webapi\ProductOutputProcessor\Proxy</item>
+            </argument>
+        </arguments>
+    </type>
+    <type name="Magento\Catalog\Model\Product\Webapi\ProductOutputProcessor">
+        <arguments>
+            <argument name="deserializer" xsi:type="object">Magento\Framework\Webapi\Rest\Request\Deserializer\Xml</argument>
+        </arguments>
+    </type>
 </config>
