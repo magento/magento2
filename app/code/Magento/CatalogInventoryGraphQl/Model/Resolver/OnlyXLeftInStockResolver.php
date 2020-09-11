@@ -87,7 +87,7 @@ class OnlyXLeftInStockResolver implements ResolverInterface
         $stockLeft = $stockCurrentQty - $stockItem->getMinQty();
 
         if ($stockLeft > 0 &&  $stockLeft <= $thresholdQty) {
-            return (float)$stockLeft;
+            return (float)$stockCurrentQty;
         }
 
         return null;
