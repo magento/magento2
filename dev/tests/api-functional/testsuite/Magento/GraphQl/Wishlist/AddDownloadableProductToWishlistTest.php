@@ -37,9 +37,9 @@ class AddDownloadableProductToWishlistTest extends GraphQlAbstract
     private $wishlistFactory;
 
     /**
-     * @var GetCustomOptionsWithIDV2ForQueryBySku
+     * @var GetCustomOptionsWithUidForQueryBySku
      */
-    private $getCustomOptionsWithIDV2ForQueryBySku;
+    private $getCustomOptionsWithUidForQueryBySku;
 
     /**
      * Set Up
@@ -49,8 +49,31 @@ class AddDownloadableProductToWishlistTest extends GraphQlAbstract
         $this->objectManager = Bootstrap::getObjectManager();
         $this->customerTokenService = $this->objectManager->get(CustomerTokenServiceInterface::class);
         $this->wishlistFactory = $this->objectManager->get(WishlistFactory::class);
-        $this->getCustomOptionsWithIDV2ForQueryBySku =
-            $this->objectManager->get(GetCustomOptionsWithIDV2ForQueryBySku::class);
+        $this->getCustomOptionsWithUidForQueryBySku =
+            $this->objectManager->get(GetCustomOptionsWithUidForQueryBySku::class);
+    }
+
+    /**
+     * @magentoConfigFixture default_store wishlist/general/active 0
+     * @magentoApiDataFixture Magento/Customer/_files/customer.php
+     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_custom_options.php
+     */
+    public function testAddDownloadableProductOnDisabledWishlist(): void
+    {
+        $qty = 2;
+        $sku = 'downloadable-product-with-purchased-separately-links';
+        $links = $this->getProductsLinks($sku);
+        $linkId = key($links);
+        $itemOptions = $this->getCustomOptionsWithUidForQueryBySku->execute($sku);
+        $itemOptions['selected_options'][] = $this->generateProductLinkSelectedOptions($linkId);
+        $productOptionsQuery = trim(preg_replace(
+            '/"([^"]+)"\s*:\s*/',
+            '$1:',
+            json_encode($itemOptions)
+        ), '{}');
+        $query = $this->getQuery($qty, $sku, $productOptionsQuery);
+        $this->expectExceptionMessage('The wishlist configuration is currently disabled.');
+        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
     }
 
     /**
@@ -65,7 +88,7 @@ class AddDownloadableProductToWishlistTest extends GraphQlAbstract
         $qty = 2;
         $links = $this->getProductsLinks($sku);
         $linkId = key($links);
-        $itemOptions = $this->getCustomOptionsWithIDV2ForQueryBySku->execute($sku);
+        $itemOptions = $this->getCustomOptionsWithUidForQueryBySku->execute($sku);
         $itemOptions['selected_options'][] = $this->generateProductLinkSelectedOptions($linkId);
         $productOptionsQuery = preg_replace(
             '/"([^"]+)"\s*:\s*/',
@@ -79,39 +102,22 @@ class AddDownloadableProductToWishlistTest extends GraphQlAbstract
         /** @var Item $wishlistItem */
         $wishlistItem = $wishlist->getItemCollection()->getFirstItem();
 
-        self::assertArrayHasKey('addProductsToWishlist', $response);
-        self::assertArrayHasKey('wishlist', $response['addProductsToWishlist']);
+        $this->assertArrayHasKey('addProductsToWishlist', $response);
+        $this->assertArrayHasKey('wishlist', $response['addProductsToWishlist']);
         $wishlistResponse = $response['addProductsToWishlist']['wishlist'];
-        self::assertEquals($wishlist->getItemsCount(), $wishlistResponse['items_count']);
-        self::assertEquals($wishlist->getSharingCode(), $wishlistResponse['sharing_code']);
-        self::assertEquals($wishlist->getUpdatedAt(), $wishlistResponse['updated_at']);
-        self::assertEquals($wishlistItem->getId(), $wishlistResponse['items'][0]['id']);
-        self::assertEquals($wishlistItem->getData('qty'), $wishlistResponse['items'][0]['qty']);
-        self::assertEquals($wishlistItem->getDescription(), $wishlistResponse['items'][0]['description']);
-        self::assertEquals($wishlistItem->getAddedAt(), $wishlistResponse['items'][0]['added_at']);
-    }
-
-    /**
-     * @magentoConfigFixture default_store wishlist/general/active 0
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @magentoApiDataFixture Magento/Downloadable/_files/product_downloadable_with_custom_options.php
-     */
-    public function testAddDownloadableProductOnDisabledWishlist(): void
-    {
-        $qty = 2;
-        $sku = 'downloadable-product-with-purchased-separately-links';
-        $links = $this->getProductsLinks($sku);
-        $linkId = key($links);
-        $itemOptions = $this->getCustomOptionsWithIDV2ForQueryBySku->execute($sku);
-        $itemOptions['selected_options'][] = $this->generateProductLinkSelectedOptions($linkId);
-        $productOptionsQuery = trim(preg_replace(
-            '/"([^"]+)"\s*:\s*/',
-            '$1:',
-            json_encode($itemOptions)
-        ), '{}');
-        $query = $this->getQuery($qty, $sku, $productOptionsQuery);
-        $this->expectExceptionMessage('The wishlist is not currently available.');
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
+        $this->assertEquals($wishlist->getItemsCount(), $wishlistResponse['items_count']);
+        $this->assertEquals($wishlist->getSharingCode(), $wishlistResponse['sharing_code']);
+        $this->assertEquals($wishlist->getUpdatedAt(), $wishlistResponse['updated_at']);
+        $this->assertEquals($wishlistItem->getId(), $wishlistResponse['items_v2'][0]['id']);
+        $this->assertEquals($wishlistItem->getData('qty'), $wishlistResponse['items_v2'][0]['quantity']);
+        $this->assertEquals($wishlistItem->getDescription(), $wishlistResponse['items_v2'][0]['description']);
+        $this->assertEquals($wishlistItem->getAddedAt(), $wishlistResponse['items_v2'][0]['added_at']);
+        $this->assertNotEmpty($wishlistResponse['items_v2'][0]['links_v2']);
+        $wishlistItemLinks = $wishlistResponse['items_v2'][0]['links_v2'];
+        $this->assertEquals('Downloadable Product Link 1', $wishlistItemLinks[0]['title']);
+        $this->assertNotEmpty($wishlistResponse['items_v2'][0]['samples']);
+        $wishlistItemSamples = $wishlistResponse['items_v2'][0]['samples'];
+        $this->assertEquals('Downloadable Product Sample', $wishlistItemSamples[0]['title']);
     }
 
     /**
@@ -181,7 +187,7 @@ mutation {
       }
     ]
 ) {
-    userInputErrors {
+    user_errors {
       code
       message
     }
@@ -190,11 +196,23 @@ mutation {
       sharing_code
       items_count
       updated_at
-      items {
+      items_v2 {
         id
         description
-        qty
+        quantity
         added_at
+        ... on DownloadableWishlistItem {
+          links_v2 {
+            id
+            title
+            sample_url
+          }
+          samples {
+            id
+            title
+            sample_url
+          }
+        }
       }
     }
   }
@@ -203,7 +221,7 @@ MUTATION;
     }
 
     /**
-     * Generates Id_v2 for downloadable links
+     * Generates uid for downloadable links
      *
      * @param int $linkId
      *

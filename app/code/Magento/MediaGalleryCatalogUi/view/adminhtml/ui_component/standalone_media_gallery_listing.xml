@@ -13,7 +13,7 @@
                     name="product_id"
                     provider="${ $.parentName }"
                     sortOrder="110"
-                    component="Magento_Catalog/js/components/product-ui-select"
+                    component="Magento_Ui/js/grid/filters/elements/ui-select"
                     template="ui/grid/filters/elements/ui-select">
                 <argument name="data" xsi:type="array">
                     <item name="config" xsi:type="array">
@@ -29,7 +29,7 @@
                         <item name="filterRateLimitMethod" xsi:type="string">notifyWhenChangesStop</item>
                         <item name="levelsVisibility" xsi:type="number">1</item>
                         <item name="searchUrl" xsi:type="url" path="catalog/product/search"/>
-                        <item name="validationUrl" xsi:type="url" path="catalog/product/getSelected"/>
+                        <item name="validationUrl" xsi:type="url" path="media_gallery_catalog/product/getSelected"/>
                     </item>
                 </argument>
                 <settings>

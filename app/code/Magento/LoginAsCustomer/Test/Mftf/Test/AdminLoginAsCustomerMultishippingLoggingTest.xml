@@ -33,7 +33,7 @@
             <magentoCLI command="cache:flush config" stepKey="flushCacheBeforeTestRun"/>
             <createData entity="SimpleProduct2" stepKey="createProduct1"/>
             <createData entity="SimpleProduct2" stepKey="createProduct2"/>
-            <createData entity="Simple_US_Customer_Two_Addresses" stepKey="createCustomer"/>
+            <createData entity="Simple_US_Customer_Assistance_Allowed_Two_Addresses" stepKey="createCustomer"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
 
