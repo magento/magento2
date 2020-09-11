@@ -3,7 +3,6 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
-
 declare(strict_types=1);
 
 namespace Magento\Directory\Setup\Patch\Data;
@@ -41,7 +40,7 @@ class AddDataForUruguay implements DataPatchInterface
     }
 
     /**
-     * @return $this|AddDataForUruguay
+     * @inheritdoc
      */
     public function apply()
     {
@@ -87,9 +86,8 @@ class AddDataForUruguay implements DataPatchInterface
 
     /**
      * @inheritdoc
-     * @return array
      */
-    public static function getDependencies(): array
+    public static function getDependencies()
     {
         return [
             InitializeDirectoryData::class,
@@ -98,9 +96,8 @@ class AddDataForUruguay implements DataPatchInterface
 
     /**
      * @inheritdoc
-     * @return array
      */
-    public function getAliases(): array
+    public function getAliases()
     {
         return [];
     }
