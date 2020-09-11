@@ -27,15 +27,10 @@ class Add extends \Magento\Backend\Block\Widget\Form\Container
         $this->_mode = 'add';
         $this->buttonList->update('save', 'label', __('Save Review'));
         $this->buttonList->update('save', 'id', 'save_button');
+        $this->buttonList->update('save', 'style', 'display: none;');
         $this->buttonList->update('reset', 'id', 'reset_button');
+        $this->buttonList->update('reset', 'style', 'display: none;');
         $this->buttonList->update('reset', 'onclick', 'window.review.formReset()');
-        $this->_formScripts[] = '
-            require(["prototype"], function(){
-                toggleParentVis("add_review_form");
-                toggleVis("save_button");
-                toggleVis("reset_button");
-            });
-        ';
         // @codingStandardsIgnoreStart
         $this->_formInitScripts[] = '
             require(["jquery","Magento_Review/js/rating","prototype"], function(jQuery, rating){
