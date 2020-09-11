@@ -407,7 +407,7 @@ class Collection extends \Magento\Catalog\Model\ResourceModel\Product\Collection
             $query = $this->getSelect();
             $rows = $this->_fetchAll($query);
         } catch (\Exception $e) {
-            $this->printLogQuery(false, true, $query);
+            $this->printLogQuery(false, true, $query ?? null);
             throw $e;
         }
 
