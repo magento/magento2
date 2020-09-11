@@ -19,7 +19,7 @@
             <group value="media_gallery_ui"/>
         </annotations>
         <before>
-            <createData entity="TestSubCategory" stepKey="category"/>
+            <createData entity="SimpleSubCategory" stepKey="category"/>
             <actionGroup ref="AdminLoginActionGroup" stepKey="loginAsAdmin"/>
         </before>
         <after>
@@ -37,6 +37,7 @@
             <argument name="category" value="$$category$$"/>
         </actionGroup>
         <actionGroup ref="AdminOpenMediaGalleryFromCategoryImageUploaderActionGroup" stepKey="openMediaGalleryFromImageUploader"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear" />
         <actionGroup ref="ResetAdminDataGridToDefaultViewActionGroup" stepKey="resetCategoryImageGalleryGridToDefaultView"/>
         <actionGroup ref="ClearFiltersAdminDataGridActionGroup" stepKey="clearFilter"/>
         <actionGroup ref="AdminMediaGalleryOpenNewFolderFormActionGroup" stepKey="openNewFolderForm"/>
@@ -61,7 +62,7 @@
         <actionGroup ref="AdminMediaGalleryFolderSelectActionGroup" stepKey="selectCategoryImageFolder">
             <argument name="name" value="categoryImage"/>
         </actionGroup>
-        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear"/>
+        <waitForLoadingMaskToDisappear stepKey="waitForLoadingMaskToDisappear2"/>
         <actionGroup ref="AdminEnhancedMediaGalleryViewImageDetails" stepKey="openViewImageDetails"/>
         <actionGroup ref="AdminEnhancedMediaGalleryClickEntityUsedInActionGroup" stepKey="clickUsedInCategories">
             <argument name="entityName" value="Categories"/>
