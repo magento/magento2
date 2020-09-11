@@ -13,6 +13,12 @@
         <data key="title">Reviews</data>
         <data key="dataUiId">magento-review-catalog-reviews-ratings-reviews-all</data>
     </entity>
+    <entity name="AdminMenuUserContentPendingReviews">
+        <data key="pageTitle">Pending Reviews</data>
+        <data key="title">Pending Reviews</data>
+        <data key="dataUiId">magento-review-catalog-reviews-ratings-pending</data>
+        <data key="dataActiveClass">_active</data>
+    </entity>
     <entity name="AdminMenuReportsReviewsByCustomers">
         <data key="pageTitle">Customer Reviews Report</data>
         <data key="title">By Customers</data>

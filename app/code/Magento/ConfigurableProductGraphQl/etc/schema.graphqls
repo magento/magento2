@@ -18,11 +18,13 @@ type ConfigurableAttributeOption @doc(description: "ConfigurableAttributeOption 
     label: String @doc(description: "A string that describes the configurable attribute option")
     code: String @doc(description: "The ID assigned to the attribute")
     value_index: Int @doc(description: "A unique index number assigned to the configurable product option")
+    uid: ID! @doc(description: "A string that encodes option details.") @resolver(class: "Magento\\ConfigurableProductGraphQl\\Model\\Resolver\\Variant\\Attributes\\ConfigurableAttributeUid") # A Base64 string that encodes option details.
 }
 
 type ConfigurableProductOptions @doc(description: "ConfigurableProductOptions defines configurable attributes for the specified product") {
     id: Int @doc(description: "The configurable option ID number assigned by the system")
-    attribute_id: String @doc(description: "The ID assigned to the attribute")
+    attribute_id: String @deprecated(reason: "Use attribute_id_v2 instead") @doc(description: "The ID assigned to the attribute")
+    attribute_id_v2: Int @doc(description: "The ID assigned to the attribute")
     attribute_code: String @doc(description: "A string that identifies the attribute")
     label: String @doc(description: "A string that describes the configurable product option, which is displayed on the UI")
     position: Int @doc(description: "A number that indicates the order in which the attribute is displayed")
@@ -65,4 +67,9 @@ type SelectedConfigurableOption {
     option_label: String!
     value_id: Int!
     value_label: String!
+}
+
+type ConfigurableWishlistItem implements WishlistItemInterface @doc(description: "A configurable product wish list item"){
+    child_sku: String! @doc(description: "The SKU of the simple product corresponding to a set of selected configurable options") @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Wishlist\\ChildSku")
+    configurable_options: [SelectedConfigurableOption!] @resolver(class: "\\Magento\\ConfigurableProductGraphQl\\Model\\Wishlist\\ConfigurableOptions") @doc (description: "An array of selected configurable options")
 }

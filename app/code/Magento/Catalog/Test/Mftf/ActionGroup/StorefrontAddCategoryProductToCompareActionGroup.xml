@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <!-- Add Product to Compare from the category page and check message -->
+    <actionGroup name="StorefrontAddCategoryProductToCompareActionGroup">
+        <annotations>
+            <description>Add a Product to the Compare Product list from a Category page.</description>
+        </annotations>
+        <arguments>
+            <argument name="productVar"/>
+        </arguments>
+
+        <moveMouseOver selector="{{StorefrontCategoryProductSection.ProductInfoByName(productVar.name)}}" stepKey="moveMouseOverProduct"/>
+        <click selector="{{StorefrontCategoryProductSection.ProductAddToCompareByName(productVar.name)}}" stepKey="clickAddProductToCompare"/>
+        <waitForElement selector="{{StorefrontMessagesSection.success}}" time="30" stepKey="waitForAddCategoryProductToCompareSuccessMessage"/>
+        <see selector="{{StorefrontMessagesSection.success}}" userInput="You added product {{productVar.name}} to the comparison list." stepKey="assertAddCategoryProductToCompareSuccessMessage"/>
+    </actionGroup>
+</actionGroups>

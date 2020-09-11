@@ -5,12 +5,15 @@
  */
 namespace Magento\Framework\Code\Test\Unit\Minifier\Adapter\Js;
 
-class JShrinkTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+use Magento\Framework\Code\Minifier\Adapter\Js\JShrink;
+
+class JShrinkTest extends TestCase
 {
     public function testMinify()
     {
         $content = file_get_contents(__DIR__ . '/../../_files/js/original.js');
-        $minifier = new \Magento\Framework\Code\Minifier\Adapter\Js\JShrink();
+        $minifier = new JShrink();
         $actual = $minifier->minify($content);
         $expected = "var one='one';var two='two';";
         $this->assertEquals($expected, $actual);

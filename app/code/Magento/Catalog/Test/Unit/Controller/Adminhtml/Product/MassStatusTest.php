@@ -3,64 +3,73 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Controller\Adminhtml\Product;
 
-use Magento\Ui\Component\MassAction\Filter;
+use Magento\Backend\App\Action\Context;
 use Magento\Backend\Model\View\Result\Redirect;
-use Magento\Catalog\Model\Indexer\Product\Price\Processor;
 use Magento\Catalog\Controller\Adminhtml\Product\Builder;
-use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Catalog\Controller\Adminhtml\Product\MassStatus;
+use Magento\Catalog\Model\Indexer\Product\Price\Processor;
+use Magento\Catalog\Model\Product;
 use Magento\Catalog\Model\Product\Action;
+use Magento\Catalog\Model\Product\Attribute\Source\Status;
+use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
+use Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTest;
+use Magento\Framework\Controller\ResultFactory;
+use Magento\Framework\Data\Collection\AbstractDb;
+use Magento\Ui\Component\MassAction\Filter;
+use PHPUnit\Framework\MockObject\MockObject;
 
 /**
- * Class MassStatusTest
- *
  * @SuppressWarnings(PHPMD.CouplingBetweenObjects)
  */
-class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\ProductTest
+class MassStatusTest extends ProductTest
 {
     /**
-     * @var Processor|\PHPUnit_Framework_MockObject_MockObject
+     * @var Processor|MockObject
      */
     private $priceProcessorMock;
 
     /**
-     * @var Redirect|\PHPUnit_Framework_MockObject_MockObject
+     * @var Redirect|MockObject
      */
     private $resultRedirectMock;
 
     /**
-     * @var Filter|\PHPUnit_Framework_MockObject_MockObject
+     * @var Filter|MockObject
      */
     private $filterMock;
 
     /**
-     * @var Builder|\PHPUnit_Framework_MockObject_MockObject
+     * @var Builder|MockObject
      */
     private $productBuilderMock;
 
     /**
-     * @var AbstractDb|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractDb|MockObject
      */
     private $abstractDbMock;
 
     /**
-     * @var Action|\PHPUnit_Framework_MockObject_MockObject
+     * @var Action|MockObject
      */
     private $actionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->priceProcessorMock = $this->getMockBuilder(Processor::class)
-            ->disableOriginalConstructor()->getMock();
+            ->disableOriginalConstructor()
+            ->getMock();
         $this->productBuilderMock = $this->getMockBuilder(Builder::class)
             ->setMethods(['build'])
             ->disableOriginalConstructor()
             ->getMock();
 
-        $productMock = $this->getMockBuilder(\Magento\Catalog\Model\Product::class)
+        $productMock = $this->getMockBuilder(Product::class)
             ->disableOriginalConstructor()
-            ->setMethods(['getTypeId', 'getStoreId', '__sleep', '__wakeup'])
+            ->setMethods(['getTypeId', 'getStoreId', '__sleep'])
             ->getMock();
         $productMock->expects($this->any())
             ->method('getTypeId')
@@ -72,23 +81,23 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
             ->method('build')
             ->willReturn($productMock);
 
-        $this->resultRedirectMock = $this->getMockBuilder(\Magento\Backend\Model\View\Result\Redirect::class)
+        $this->resultRedirectMock = $this->getMockBuilder(Redirect::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $resultFactory = $this->getMockBuilder(\Magento\Framework\Controller\ResultFactory::class)
+        $resultFactory = $this->getMockBuilder(ResultFactory::class)
             ->disableOriginalConstructor()
             ->setMethods(['create'])
             ->getMock();
         $resultFactory->expects($this->atLeastOnce())
             ->method('create')
-            ->with(\Magento\Framework\Controller\ResultFactory::TYPE_REDIRECT)
+            ->with(ResultFactory::TYPE_REDIRECT)
             ->willReturn($this->resultRedirectMock);
 
         $this->abstractDbMock = $this->getMockBuilder(AbstractDb::class)
             ->disableOriginalConstructor()
             ->setMethods(['getAllIds', 'getResource'])
             ->getMock();
-        $this->filterMock = $this->getMockBuilder(\Magento\Ui\Component\MassAction\Filter::class)
+        $this->filterMock = $this->getMockBuilder(Filter::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCollection'])
             ->getMock();
@@ -97,10 +106,10 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
             ->getMock();
 
         $collectionFactoryMock =
-            $this->getMockBuilder(\Magento\Catalog\Model\ResourceModel\Product\CollectionFactory::class)
-            ->disableOriginalConstructor()
-            ->setMethods(['create'])
-            ->getMock();
+            $this->getMockBuilder(CollectionFactory::class)
+                ->disableOriginalConstructor()
+                ->setMethods(['create'])
+                ->getMock();
         $collectionFactoryMock->expects($this->any())
             ->method('create')
             ->willReturn($this->abstractDbMock);
@@ -108,10 +117,10 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
         $additionalParams = [
             'resultFactory' => $resultFactory
         ];
-        /** @var \Magento\Backend\App\Action\Context $context */
+        /** @var Context $context */
         $context = $this->initContext($additionalParams);
 
-        $this->action = new \Magento\Catalog\Controller\Adminhtml\Product\MassStatus(
+        $this->action = new MassStatus(
             $context,
             $this->productBuilderMock,
             $this->priceProcessorMock,
@@ -124,7 +133,7 @@ class MassStatusTest extends \Magento\Catalog\Test\Unit\Controller\Adminhtml\Pro
     public function testMassStatusAction()
     {
         $storeId = 2;
-        $status = \Magento\Catalog\Model\Product\Attribute\Source\Status::STATUS_DISABLED;
+        $status = Status::STATUS_DISABLED;
         $filters = [
             'store_id' => 2,
         ];

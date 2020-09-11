@@ -5,6 +5,7 @@
  */
 declare(strict_types=1);
 
+use Magento\Framework\App\Config;
 use Magento\Store\Model\StoreRepository;
 use Magento\Quote\Model\QuoteFactory;
 use Magento\Quote\Model\Quote;
@@ -12,8 +13,9 @@ use Magento\Quote\Model\QuoteRepository;
 use Magento\Store\Model\Store;
 use Magento\TestFramework\Helper\Bootstrap;
 use Magento\TestFramework\ObjectManager;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
-require __DIR__ . '/../../Store/_files/second_store.php';
+Resolver::getInstance()->requireDataFixture('Magento/Store/_files/second_store.php');
 
 /** @var $objectManager ObjectManager */
 $objectManager = Bootstrap::getObjectManager();
@@ -23,6 +25,9 @@ $quoteFactory = $objectManager->get(QuoteFactory::class);
 $quoteRepository = $objectManager->get(QuoteRepository::class);
 /** @var  StoreRepository $storeRepository */
 $storeRepository = $objectManager->get(StoreRepository::class);
+/** @var Config $appConfig */
+$appConfig = $objectManager->get(Config::class);
+$appConfig->clean();
 
 /** @var Store $defaultStore */
 $defaultStore = $storeRepository->getActiveStoreByCode('default');

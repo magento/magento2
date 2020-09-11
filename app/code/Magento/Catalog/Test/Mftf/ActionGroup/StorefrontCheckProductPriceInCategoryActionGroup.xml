@@ -9,22 +9,12 @@
 <actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
               xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
     <!-- You must already be on the category page -->
-    <actionGroup name="StorefrontCheckProductPriceInCategoryActionGroup" extends="StorefrontCheckCategorySimpleProduct">
+    <actionGroup name="StorefrontCheckProductPriceInCategoryActionGroup" extends="StorefrontCheckCategorySimpleProductActionGroup">
         <annotations>
             <description>EXTENDS: StorefrontCheckCategorySimpleProduct. Removes 'AssertProductPrice'. Validates that the provided Product Price is present and correct on a Storefront Product page.</description>
         </annotations>
 
         <remove keyForRemoval="AssertProductPrice"/>
         <see userInput="{{product.price}}" selector="{{StorefrontCategoryProductSection.ProductPriceByName(product.name)}}" stepKey="AssertProductPrice"/>
-    </actionGroup>
-    <actionGroup name="StorefrontAssertProductPriceOnCategoryPageActionGroup" extends="StorefrontAssertProductPriceOnProductPageActionGroup">
-        <annotations>
-            <description>Validate that the provided Product Price is correct on category page.</description>
-        </annotations>
-        <arguments>
-            <argument name="productName" type="string"/>
-        </arguments>
-
-        <see userInput="{{productPrice}}" selector="{{StorefrontCategoryProductSection.ProductPriceByName(productName)}}" stepKey="seeProductPrice"/>
     </actionGroup>
 </actionGroups>

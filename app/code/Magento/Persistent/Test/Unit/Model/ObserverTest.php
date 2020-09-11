@@ -3,73 +3,82 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\Persistent\Test\Unit\Model;
 
+use Magento\Customer\Api\CustomerRepositoryInterface;
+use Magento\Customer\Helper\View;
+use Magento\Framework\Escaper;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager as ObjectManagerHelper;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Persistent\Helper\Session;
+use Magento\Persistent\Model\Observer;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
 
-class ObserverTest extends \PHPUnit\Framework\TestCase
+class ObserverTest extends TestCase
 {
     /**
-     * @var \Magento\Persistent\Model\Observer
+     * @var Observer
      */
     private $observer;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $persistentSessionMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $customerRepositoryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $customerViewHelperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $escaperMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $layoutMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $sessionMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-
         $objectManagerHelper = new ObjectManagerHelper($this);
-        $this->persistentSessionMock = $this->getMockBuilder(\Magento\Persistent\Helper\Session::class)
+        $this->persistentSessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerRepositoryMock = $this->getMockBuilder(\Magento\Customer\Api\CustomerRepositoryInterface::class)
+        $this->customerRepositoryMock = $this->getMockBuilder(CustomerRepositoryInterface::class)
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
+        $this->customerViewHelperMock = $this->getMockBuilder(View::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->customerViewHelperMock = $this->getMockBuilder(\Magento\Customer\Helper\View::class)
+        $this->escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $this->escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+        $this->layoutMock = $this->getMockBuilder(LayoutInterface::class)
             ->disableOriginalConstructor()
-            ->getMock();
-        $this->layoutMock = $this->getMockBuilder(\Magento\Framework\View\LayoutInterface::class)
-            ->disableOriginalConstructor()
-            ->getMock();
-        $this->sessionMock = $this->getMockBuilder(\Magento\Persistent\Helper\Session::class)
+            ->getMockForAbstractClass();
+        $this->sessionMock = $this->getMockBuilder(Session::class)
             ->disableOriginalConstructor()
             ->setMethods(['getCustomerId'])
             ->getMock();
         $this->observer = $objectManagerHelper->getObject(
-            \Magento\Persistent\Model\Observer::class,
+            Observer::class,
             [
                 'persistentSession' => $this->persistentSessionMock,
                 'customerRepository' => $this->customerRepositoryMock,
@@ -86,7 +95,7 @@ class ObserverTest extends \PHPUnit\Framework\TestCase
     public function testEmulateWelcomeBlock(): void
     {
         $welcomeMessage =  __('&nbsp;');
-        $block = $this->getMockBuilder(\Magento\Framework\View\Element\AbstractBlock::class)
+        $block = $this->getMockBuilder(AbstractBlock::class)
             ->disableOriginalConstructor()
             ->setMethods(['setWelcome'])
             ->getMock();

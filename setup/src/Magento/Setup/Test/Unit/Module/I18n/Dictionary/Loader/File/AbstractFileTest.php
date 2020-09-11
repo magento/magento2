@@ -3,52 +3,59 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Setup\Test\Unit\Module\I18n\Dictionary\Loader\File;
 
-class AbstractFileTest extends \PHPUnit\Framework\TestCase
+use Magento\Setup\Module\I18n\Dictionary;
+use Magento\Setup\Module\I18n\Dictionary\Loader\File\AbstractFile;
+use Magento\Setup\Module\I18n\Dictionary\Phrase;
+use Magento\Setup\Module\I18n\Factory;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AbstractFileTest extends TestCase
 {
     /**
-     * @var \Magento\Setup\Module\I18n\Dictionary|\PHPUnit_Framework_MockObject_MockObject
+     * @var Dictionary|MockObject
      */
     protected $_dictionaryMock;
 
     /**
-     * @var \Magento\Setup\Module\I18n\Factory|\PHPUnit_Framework_MockObject_MockObject
+     * @var Factory|MockObject
      */
     protected $_factoryMock;
 
     /**
-     * @var \Magento\Setup\Module\I18n\Dictionary\Loader\File\AbstractFile|\PHPUnit_Framework_MockObject_MockObject
+     * @var AbstractFile|MockObject
      */
     protected $_abstractLoaderMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_dictionaryMock = $this->createMock(\Magento\Setup\Module\I18n\Dictionary::class);
-        $this->_factoryMock = $this->createMock(\Magento\Setup\Module\I18n\Factory::class);
+        $this->_dictionaryMock = $this->createMock(Dictionary::class);
+        $this->_factoryMock = $this->createMock(Factory::class);
     }
 
-    /**
-     * @expectedException \InvalidArgumentException
-     * @expectedExceptionMessage Cannot open dictionary file: "wrong_file.csv".
-     */
     public function testLoadWrongFile()
     {
+        $this->expectException('InvalidArgumentException');
+        $this->expectExceptionMessage('Cannot open dictionary file: "wrong_file.csv".');
         $abstractLoaderMock = $this->getMockForAbstractClass(
-            \Magento\Setup\Module\I18n\Dictionary\Loader\File\AbstractFile::class,
+            AbstractFile::class,
             [],
             '',
             false
         );
 
-        /** @var \Magento\Setup\Module\I18n\Dictionary\Loader\File\AbstractFile $abstractLoaderMock */
+        /** @var AbstractFile $abstractLoaderMock */
         $abstractLoaderMock->load('wrong_file.csv');
     }
 
     public function testLoad()
     {
         $abstractLoaderMock = $this->getMockForAbstractClass(
-            \Magento\Setup\Module\I18n\Dictionary\Loader\File\AbstractFile::class,
+            AbstractFile::class,
             [$this->_factoryMock],
             '',
             true,
@@ -60,26 +67,26 @@ class AbstractFileTest extends \PHPUnit\Framework\TestCase
             $this->at(1)
         )->method(
             '_readFile'
-        )->will(
-            $this->returnValue(['phrase1', 'translation1'])
+        )->willReturn(
+            ['phrase1', 'translation1']
         );
         $abstractLoaderMock->expects(
             $this->at(2)
         )->method(
             '_readFile'
-        )->will(
-            $this->returnValue(['phrase2', 'translation2', 'context_type2', 'context_value2'])
+        )->willReturn(
+            ['phrase2', 'translation2', 'context_type2', 'context_value2']
         );
 
-        $phraseFirstMock = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
-        $phraseSecondMock = $this->createMock(\Magento\Setup\Module\I18n\Dictionary\Phrase::class);
+        $phraseFirstMock = $this->createMock(Phrase::class);
+        $phraseSecondMock = $this->createMock(Phrase::class);
 
         $this->_factoryMock->expects(
             $this->once()
         )->method(
             'createDictionary'
-        )->will(
-            $this->returnValue($this->_dictionaryMock)
+        )->willReturn(
+            $this->_dictionaryMock
         );
         $this->_factoryMock->expects(
             $this->at(1)
@@ -87,8 +94,8 @@ class AbstractFileTest extends \PHPUnit\Framework\TestCase
             'createPhrase'
         )->with(
             ['phrase' => 'phrase1', 'translation' => 'translation1', 'context_type' => '', 'context_value' => '']
-        )->will(
-            $this->returnValue($phraseFirstMock)
+        )->willReturn(
+            $phraseFirstMock
         );
         $this->_factoryMock->expects(
             $this->at(2)
@@ -101,25 +108,23 @@ class AbstractFileTest extends \PHPUnit\Framework\TestCase
                 'context_type' => 'context_type2',
                 'context_value' => 'context_value2',
             ]
-        )->will(
-            $this->returnValue($phraseSecondMock)
+        )->willReturn(
+            $phraseSecondMock
         );
 
         $this->_dictionaryMock->expects($this->at(0))->method('addPhrase')->with($phraseFirstMock);
         $this->_dictionaryMock->expects($this->at(1))->method('addPhrase')->with($phraseSecondMock);
 
-        /** @var \Magento\Setup\Module\I18n\Dictionary\Loader\File\AbstractFile $abstractLoaderMock */
+        /** @var AbstractFile $abstractLoaderMock */
         $this->assertEquals($this->_dictionaryMock, $abstractLoaderMock->load('test.csv'));
     }
 
-    /**
-     * @expectedException \RuntimeException
-     * @expectedExceptionMessage Invalid row #1: "exception_message".
-     */
     public function testErrorsInPhraseCreating()
     {
+        $this->expectException('RuntimeException');
+        $this->expectExceptionMessage('Invalid row #1: "exception_message".');
         $abstractLoaderMock = $this->getMockForAbstractClass(
-            \Magento\Setup\Module\I18n\Dictionary\Loader\File\AbstractFile::class,
+            AbstractFile::class,
             [$this->_factoryMock],
             '',
             true,
@@ -131,26 +136,26 @@ class AbstractFileTest extends \PHPUnit\Framework\TestCase
             $this->at(1)
         )->method(
             '_readFile'
-        )->will(
-            $this->returnValue(['phrase1', 'translation1'])
+        )->willReturn(
+            ['phrase1', 'translation1']
         );
 
         $this->_factoryMock->expects(
             $this->once()
         )->method(
             'createDictionary'
-        )->will(
-            $this->returnValue($this->_dictionaryMock)
+        )->willReturn(
+            $this->_dictionaryMock
         );
         $this->_factoryMock->expects(
             $this->at(1)
         )->method(
             'createPhrase'
-        )->will(
-            $this->throwException(new \DomainException('exception_message'))
+        )->willThrowException(
+            new \DomainException('exception_message')
         );
 
-        /** @var \Magento\Setup\Module\I18n\Dictionary\Loader\File\AbstractFile $abstractLoaderMock */
+        /** @var AbstractFile $abstractLoaderMock */
         $this->assertEquals($this->_dictionaryMock, $abstractLoaderMock->load('test.csv'));
     }
 }

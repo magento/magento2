@@ -51,7 +51,7 @@ use Magento\Store\Model\ScopeInterface;
  * @method bool hasCustomerNoteNotify()
  * @method bool hasForcedCanCreditmemo()
  * @method bool getIsInProcess()
- * @method \Magento\Customer\Model\Customer getCustomer()
+ * @method \Magento\Customer\Model\Customer|null getCustomer()
  * @method \Magento\Sales\Model\Order setSendEmail(bool $value)
  * @SuppressWarnings(PHPMD.ExcessivePublicCount)
  * @SuppressWarnings(PHPMD.TooManyFields)
@@ -193,7 +193,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
 
     /**
      * @var \Magento\Catalog\Api\ProductRepositoryInterface
-     * @deprecated 100.1.7 Remove unused dependency.
+     * @deprecated 100.1.0 Remove unused dependency.
      */
     protected $productRepository;
 
@@ -716,7 +716,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $hasDueAmount = $this->canInvoice() && ($checkAmtTotalPaid);
         //case when paid amount is refunded and order has creditmemo created
         $creditmemos = ($this->getCreditmemosCollection() === false) ?
-             true : (count($this->getCreditmemosCollection()) > 0);
+             true : ($this->_memoCollectionFactory->create()->setOrderFilter($this)->getTotalCount() > 0);
         $paidAmtIsRefunded = $this->getTotalRefunded() == $totalPaid && $creditmemos;
         if (($hasDueAmount || $paidAmtIsRefunded) ||
             (!$checkAmtTotalPaid &&
@@ -858,7 +858,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function canReorder()
     {
-        return $this->_canReorder(false);
+        return $this->_canReorder();
     }
 
     /**
@@ -1076,6 +1076,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * Retrieve frontend label of order status
      *
      * @return string
+     * @since 102.0.1
      */
     public function getFrontendStatusLabel()
     {
@@ -1115,7 +1116,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param string $comment
      * @param bool|string $status
      * @return OrderStatusHistoryInterface
-     * @deprecated
+     * @deprecated 101.0.5
      * @see addCommentToStatusHistory
      */
     public function addStatusHistoryComment($comment, $status = false)
@@ -1132,6 +1133,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      * @param bool|string $status
      * @param bool $isVisibleOnFront
      * @return OrderStatusHistoryInterface
+     * @since 101.0.5
      */
     public function addCommentToStatusHistory($comment, $status = false, $isVisibleOnFront = false)
     {
@@ -1326,7 +1328,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
      */
     public function getShippingMethod($asObject = false)
     {
-        $shippingMethod = parent::getShippingMethod();
+        $shippingMethod = $this->getData('shipping_method');
         if (!$asObject || !$shippingMethod) {
             return $shippingMethod;
         } else {
@@ -1816,7 +1818,7 @@ class Order extends AbstractModel implements EntityInterface, OrderInterface
         $total = $this->priceCurrency->round($total);
         return max($total, 0);
     }
-
+    
     /**
      * Retrieve order total due value
      *

@@ -27,8 +27,12 @@
         </before>
 
         <!-- Perform reindex and flush cache -->
-        <magentoCLI command="indexer:reindex" stepKey="reindex"/>
-        <magentoCLI command="cache:flush" stepKey="flushCache"/>
+        <actionGroup ref="CliIndexerReindexActionGroup" stepKey="reindex">
+            <argument name="indices" value=""/>
+        </actionGroup>
+        <actionGroup ref="CliCacheFlushActionGroup" stepKey="flushCache">
+            <argument name="tags" value=""/>
+        </actionGroup>
 
         <actionGroup ref="LoginToStorefrontActionGroup" stepKey="loginToStorefrontAccount">
             <argument name="Customer" value="$$customer$$"/>
@@ -43,11 +47,11 @@
             <argument name="productVar" value="$$product$$"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontCustomerCheckProductInWishlist" stepKey="checkProductInWishlist">
+        <actionGroup ref="StorefrontCustomerCheckProductInWishlistActionGroup" stepKey="checkProductInWishlist">
             <argument name="productVar" value="$$product$$"/>
         </actionGroup>
 
-        <actionGroup ref="StorefrontCustomerEditProductInWishlist" stepKey="updateProductInWishlist">
+        <actionGroup ref="StorefrontCustomerEditProductInWishlistActionGroup" stepKey="updateProductInWishlist">
             <argument name="product" value="$$product$$"/>
             <argument name="description" value="some text"/>
             <argument name="quantity" value="2"/>

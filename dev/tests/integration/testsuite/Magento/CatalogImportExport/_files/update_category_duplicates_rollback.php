@@ -5,8 +5,12 @@
  */
 declare(strict_types=1);
 
-require dirname(dirname(__DIR__)) . '/Catalog/_files/category_duplicates_rollback.php';
+use Magento\TestFramework\Helper\Bootstrap;
+use Magento\TestFramework\Workaround\Override\Fixture\Resolver;
 
+Resolver::getInstance()->requireDataFixture('Magento/Catalog/_files/category_duplicates_rollback.php');
+
+$objectManager = Bootstrap::getObjectManager();
 //Delete products created in CSV import
 /** @var \Magento\Catalog\Api\ProductRepositoryInterface $productRepository */
 $productRepository = $objectManager->get(\Magento\Catalog\Api\ProductRepositoryInterface::class);

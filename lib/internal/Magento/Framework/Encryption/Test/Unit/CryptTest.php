@@ -3,13 +3,17 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 /**
  * Test case for \Magento\Framework\Encryption\Crypt
  */
 namespace Magento\Framework\Encryption\Test\Unit;
 
-class CryptTest extends \PHPUnit\Framework\TestCase
+use Magento\Framework\Encryption\Crypt;
+use PHPUnit\Framework\TestCase;
+
+class CryptTest extends TestCase
 {
     private $_key;
 
@@ -21,7 +25,7 @@ class CryptTest extends \PHPUnit\Framework\TestCase
         MCRYPT_RIJNDAEL_256 => [MCRYPT_MODE_CBC],
     ];
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->_key = substr(__CLASS__, -32, 32);
     }
@@ -93,7 +97,7 @@ class CryptTest extends \PHPUnit\Framework\TestCase
         /* Generate random init vector */
         $initVector = $this->_getRandomString($this->_getInitVectorSize($cipher, $mode));
 
-        $crypt = new \Magento\Framework\Encryption\Crypt($this->_key, $cipher, $mode, $initVector);
+        $crypt = new Crypt($this->_key, $cipher, $mode, $initVector);
 
         $this->assertEquals($cipher, $crypt->getCipher());
         $this->assertEquals($mode, $crypt->getMode());
@@ -124,17 +128,17 @@ class CryptTest extends \PHPUnit\Framework\TestCase
 
     /**
      * @dataProvider getConstructorExceptionData
-     * @expectedException \Magento\Framework\Exception\LocalizedException
      */
     public function testConstructorException($key, $cipher, $mode, $initVector)
     {
-        new \Magento\Framework\Encryption\Crypt($key, $cipher, $mode, $initVector);
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        new Crypt($key, $cipher, $mode, $initVector);
     }
 
     public function testConstructorDefaults()
     {
-        $cryptExpected = new \Magento\Framework\Encryption\Crypt($this->_key, MCRYPT_BLOWFISH, MCRYPT_MODE_ECB, false);
-        $cryptActual = new \Magento\Framework\Encryption\Crypt($this->_key);
+        $cryptExpected = new Crypt($this->_key, MCRYPT_BLOWFISH, MCRYPT_MODE_ECB, false);
+        $cryptActual = new Crypt($this->_key);
 
         $this->assertEquals($cryptExpected->getCipher(), $cryptActual->getCipher());
         $this->assertEquals($cryptExpected->getMode(), $cryptActual->getMode());
@@ -162,7 +166,7 @@ class CryptTest extends \PHPUnit\Framework\TestCase
      */
     public function testEncrypt($key, $cipher, $mode, $initVector, $inputData, $expectedData)
     {
-        $crypt = new \Magento\Framework\Encryption\Crypt($key, $cipher, $mode, $initVector);
+        $crypt = new Crypt($key, $cipher, $mode, $initVector);
         $actualData = $crypt->encrypt($inputData);
         $this->assertEquals($expectedData, $actualData);
     }
@@ -172,7 +176,7 @@ class CryptTest extends \PHPUnit\Framework\TestCase
      */
     public function testDecrypt($key, $cipher, $mode, $initVector, $expectedData, $inputData)
     {
-        $crypt = new \Magento\Framework\Encryption\Crypt($key, $cipher, $mode, $initVector);
+        $crypt = new Crypt($key, $cipher, $mode, $initVector);
         $actualData = $crypt->decrypt($inputData);
         $this->assertEquals($expectedData, $actualData);
     }
@@ -182,10 +186,10 @@ class CryptTest extends \PHPUnit\Framework\TestCase
      */
     public function testInitVectorRandom($cipher, $mode)
     {
-        $crypt1 = new \Magento\Framework\Encryption\Crypt($this->_key, $cipher, $mode, true);
+        $crypt1 = new Crypt($this->_key, $cipher, $mode, true);
         $initVector1 = $crypt1->getInitVector();
 
-        $crypt2 = new \Magento\Framework\Encryption\Crypt($this->_key, $cipher, $mode, true);
+        $crypt2 = new Crypt($this->_key, $cipher, $mode, true);
         $initVector2 = $crypt2->getInitVector();
 
         $expectedSize = $this->_getInitVectorSize($cipher, $mode);
@@ -199,7 +203,7 @@ class CryptTest extends \PHPUnit\Framework\TestCase
      */
     public function testInitVectorNone($cipher, $mode)
     {
-        $crypt = new \Magento\Framework\Encryption\Crypt($this->_key, $cipher, $mode, false);
+        $crypt = new Crypt($this->_key, $cipher, $mode, false);
         $actualInitVector = $crypt->getInitVector();
 
         $expectedInitVector = str_repeat("\0", $this->_getInitVectorSize($cipher, $mode));
