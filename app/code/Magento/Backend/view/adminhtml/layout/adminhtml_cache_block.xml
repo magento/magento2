@@ -80,6 +80,7 @@
                             <argument name="type" xsi:type="string">options</argument>
                             <argument name="width" xsi:type="string">120</argument>
                             <argument name="align" xsi:type="string">left</argument>
+                            <argument name="sortable" xsi:type="string">0</argument>
                             <argument name="options" xsi:type="array">
                                 <item name="disabled" xsi:type="array">
                                     <item name="value" xsi:type="string">0</item>

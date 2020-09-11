@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AdminAssignProductToGroupActionGroup">
+        <annotations>
+            <description>Adds the provided Product to a Grouped Product on an Admin Grouped Product creation/edit page.</description>
+        </annotations>
+        <arguments>
+            <argument name="product"/>
+        </arguments>
+
+        <scrollTo selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" x="0" y="-100" stepKey="scrollToGroupedSection"/>
+        <conditionalClick selector="{{AdminProductFormGroupedProductsSection.toggleGroupedProduct}}" dependentSelector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" visible="false" stepKey="openGroupedProductsSection"/>
+        <click selector="{{AdminProductFormGroupedProductsSection.addProductsToGroup}}" stepKey="clickAddProductsToGroup"/>
+        <conditionalClick selector="{{AdminAddProductsToGroupPanel.clearFilters}}" dependentSelector="{{AdminAddProductsToGroupPanel.clearFilters}}" visible="true" stepKey="clearExistingFilters"/>
+        <click selector="{{AdminAddProductsToGroupPanel.filters}}" stepKey="showFiltersPanel"/>
+        <fillField userInput="{{product.name}}" selector="{{AdminAddProductsToGroupPanel.nameFilter}}" stepKey="fillNameFilter"/>
+        <click selector="{{AdminAddProductsToGroupPanel.applyFilters}}" stepKey="clickApplyFilters"/>
+        <click selector="{{AdminAddProductsToGroupPanel.firstCheckbox}}" stepKey="selectProduct"/>
+        <click selector="{{AdminAddProductsToGroupPanel.addSelectedProducts}}" stepKey="clickAddSelectedGroupProducts"/>
+    </actionGroup>
+</actionGroups>

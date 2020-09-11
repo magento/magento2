@@ -18,18 +18,19 @@ class SettlementTest extends \PHPUnit\Framework\TestCase
         );
         $connection = $this->createPartialMock(\Magento\Framework\Filesystem\Io\Sftp::class, ['rawls', 'read']);
         $filename = 'STL-00000000.00.abc.CSV';
-        $connection->expects($this->once())->method('rawls')->will($this->returnValue([$filename => []]));
+        $connection->expects($this->once())->method('rawls')->willReturn([$filename => []]);
         $connection->expects($this->once())->method('read')->with($filename, $this->anything());
         $model->fetchAndSave($connection);
     }
 
     /**
      * @param array $config
-     * @expectedException \InvalidArgumentException
      * @dataProvider createConnectionExceptionDataProvider
      */
     public function testCreateConnectionException($config)
     {
+        $this->expectException(\InvalidArgumentException::class);
+
         \Magento\Paypal\Model\Report\Settlement::createConnection($config);
     }
 

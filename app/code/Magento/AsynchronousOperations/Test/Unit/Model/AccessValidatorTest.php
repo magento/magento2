@@ -3,41 +3,50 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 namespace Magento\AsynchronousOperations\Test\Unit\Model;
 
-class AccessValidatorTest extends \PHPUnit\Framework\TestCase
+use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface;
+use Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory;
+use Magento\AsynchronousOperations\Model\AccessValidator;
+use Magento\Authorization\Model\UserContextInterface;
+use Magento\Framework\EntityManager\EntityManager;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class AccessValidatorTest extends TestCase
 {
     /**
-     * @var \Magento\AsynchronousOperations\Model\AccessValidator
+     * @var AccessValidator
      */
     private $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $userContextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $entityManagerMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     private $bulkSummaryFactoryMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->userContextMock = $this->createMock(\Magento\Authorization\Model\UserContextInterface::class);
-        $this->entityManagerMock = $this->createMock(\Magento\Framework\EntityManager\EntityManager::class);
+        $this->userContextMock = $this->getMockForAbstractClass(UserContextInterface::class);
+        $this->entityManagerMock = $this->createMock(EntityManager::class);
         $this->bulkSummaryFactoryMock = $this->createPartialMock(
-            \Magento\AsynchronousOperations\Api\Data\BulkSummaryInterfaceFactory::class,
+            BulkSummaryInterfaceFactory::class,
             ['create']
         );
 
-        $this->model = new \Magento\AsynchronousOperations\Model\AccessValidator(
+        $this->model = new AccessValidator(
             $this->userContextMock,
             $this->entityManagerMock,
             $this->bulkSummaryFactoryMock
@@ -53,7 +62,7 @@ class AccessValidatorTest extends \PHPUnit\Framework\TestCase
     {
         $adminId = 1;
         $uuid = 'test-001';
-        $bulkSummaryMock = $this->createMock(\Magento\AsynchronousOperations\Api\Data\BulkSummaryInterface::class);
+        $bulkSummaryMock = $this->getMockForAbstractClass(BulkSummaryInterface::class);
 
         $this->bulkSummaryFactoryMock->expects($this->once())->method('create')->willReturn($bulkSummaryMock);
         $this->entityManagerMock->expects($this->once())

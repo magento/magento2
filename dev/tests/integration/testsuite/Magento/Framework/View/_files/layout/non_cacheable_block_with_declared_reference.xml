@@ -1,0 +1,22 @@
+<?xml version="1.0"?>
+<!--
+/**
+ * Copyright © Magento, Inc. All rights reserved.
+ * See COPYING.txt for license details.
+ */
+-->
+<layout xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:framework:View/Layout/etc/page_layout.xsd">
+    <container name="cacheable_container1-1" label="test1" htmlTag="div" htmlId="cacheable_container11"
+               htmlClass="class11">
+        <block class="Magento\Framework\View\Element\Text" name="block-1-in-cacheable-container1">
+            <action method="setText">
+                <argument name="text" xsi:type="string">Test11</argument>
+            </action>
+        </block>
+    </container>
+
+    <referenceContainer name="cacheable_container1-1">
+        <block name="non_cacheable_block" cacheable="false"/>
+    </referenceContainer>
+</layout>

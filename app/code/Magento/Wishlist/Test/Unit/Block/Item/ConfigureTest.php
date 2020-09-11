@@ -1,4 +1,4 @@
-<?php
+<?php declare(strict_types=1);
 /**
  * \Magento\Wishlist\Block\Item\Configure
  *
@@ -7,40 +7,54 @@
  */
 namespace Magento\Wishlist\Test\Unit\Block\Item;
 
-class ConfigureTest extends \PHPUnit\Framework\TestCase
+use Magento\Catalog\Model\Product;
+use Magento\Framework\Escaper;
+use Magento\Framework\Registry;
+use Magento\Framework\View\Element\AbstractBlock;
+use Magento\Framework\View\Element\Template\Context;
+use Magento\Framework\View\LayoutInterface;
+use Magento\Wishlist\Block\Item\Configure;
+use Magento\Wishlist\Helper\Data;
+use Magento\Wishlist\Model\Item;
+use PHPUnit\Framework\MockObject\MockObject;
+use PHPUnit\Framework\TestCase;
+
+class ConfigureTest extends TestCase
 {
     /**
-     * @var \Magento\Wishlist\Block\Item\Configure
+     * @var Configure
      */
     protected $model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $registryMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $contextMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $wishlistDataMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->wishlistDataMock = $this->getMockBuilder(
-            \Magento\Wishlist\Helper\Data::class
-        )->disableOriginalConstructor()->getMock();
+            Data::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $this->contextMock = $this->getMockBuilder(
-            \Magento\Framework\View\Element\Template\Context::class
-        )->disableOriginalConstructor()->getMock();
-        $this->registryMock = $this->getMockBuilder(\Magento\Framework\Registry::class)
+            Context::class
+        )->disableOriginalConstructor()
+            ->getMock();
+        $this->registryMock = $this->getMockBuilder(Registry::class)
             ->disableOriginalConstructor()
             ->getMock();
-        $escaperMock = $this->getMockBuilder(\Magento\Framework\Escaper::class)
+        $escaperMock = $this->getMockBuilder(Escaper::class)
             ->disableOriginalConstructor()
             ->getMock();
         $escaperMock->method('escapeHtml')
@@ -53,7 +67,7 @@ class ConfigureTest extends \PHPUnit\Framework\TestCase
             ->method('getEscaper')
             ->willReturn($escaperMock);
 
-        $this->model = new \Magento\Wishlist\Block\Item\Configure(
+        $this->model = new Configure(
             $this->contextMock,
             $this->wishlistDataMock,
             $this->registryMock
@@ -64,12 +78,13 @@ class ConfigureTest extends \PHPUnit\Framework\TestCase
     {
         $typeId = 'simple';
         $product = $this->getMockBuilder(
-            \Magento\Catalog\Model\Product::class
-        )->disableOriginalConstructor()->getMock();
+            Product::class
+        )->disableOriginalConstructor()
+            ->getMock();
         $product->expects($this->once())->method('getTypeId')->willReturn($typeId);
         $this->registryMock->expects($this->once())
             ->method('registry')
-            ->with($this->equalTo('product'))
+            ->with('product')
             ->willReturn($product);
 
         $this->assertEquals(['productType' => 'escapeHtml' . $typeId], $this->model->getWishlistOptions());
@@ -83,7 +98,7 @@ class ConfigureTest extends \PHPUnit\Framework\TestCase
         )->method(
             'registry'
         )->with(
-            $this->equalTo('product')
+            'product'
         )->willReturn(
             $product
         );
@@ -93,18 +108,18 @@ class ConfigureTest extends \PHPUnit\Framework\TestCase
 
     public function testSetLayout()
     {
-        $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
 
-        $blockMock = $this->createPartialMock(
-            \Magento\Framework\View\Element\AbstractBlock::class,
-            ['setCustomAddToCartUrl']
-        );
+        $blockMock = $this->getMockBuilder(AbstractBlock::class)
+            ->addMethods(['setCustomAddToCartUrl'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('product.info')
-            ->will($this->returnValue($blockMock));
+            ->willReturn($blockMock);
 
-        $itemMock = $this->createMock(\Magento\Wishlist\Model\Item::class);
+        $itemMock = $this->createMock(Item::class);
 
         $this->registryMock->expects($this->exactly(2))
             ->method('registry')
@@ -126,12 +141,12 @@ class ConfigureTest extends \PHPUnit\Framework\TestCase
 
     public function testSetLayoutWithNoItem()
     {
-        $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
 
-        $blockMock = $this->createPartialMock(
-            \Magento\Framework\View\Element\AbstractBlock::class,
-            ['setCustomAddToCartUrl']
-        );
+        $blockMock = $this->getMockBuilder(AbstractBlock::class)
+            ->addMethods(['setCustomAddToCartUrl'])
+            ->disableOriginalConstructor()
+            ->getMockForAbstractClass();
         $layoutMock->expects($this->once())
             ->method('getBlock')
             ->with('product.info')
@@ -154,7 +169,7 @@ class ConfigureTest extends \PHPUnit\Framework\TestCase
 
     public function testSetLayoutWithNoBlockAndItem()
     {
-        $layoutMock = $this->createMock(\Magento\Framework\View\LayoutInterface::class);
+        $layoutMock = $this->getMockForAbstractClass(LayoutInterface::class);
 
         $layoutMock->expects($this->once())
             ->method('getBlock')

@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+              xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="AssertStorefrontProductDetailPageFinalPriceActionGroup">
+        <arguments>
+            <argument name="finalProductPrice" type="string"/>
+        </arguments>
+        <grabTextFrom selector="{{StorefrontProductInfoMainSection.price}}" stepKey="productPriceText"/>
+        <assertEquals stepKey="assertProductPriceOnProductPage">
+            <expectedResult type="string">${{finalProductPrice}}</expectedResult>
+            <actualResult type="variable">productPriceText</actualResult>
+        </assertEquals>
+    </actionGroup>
+</actionGroups>

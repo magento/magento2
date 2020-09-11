@@ -18,21 +18,21 @@
         </annotations>
 
         <before>
-            <actionGroup ref="LoginAsAdmin" stepKey="login"/>
+            <actionGroup ref="AdminLoginActionGroup" stepKey="login"/>
             <createData entity="defaultSimpleProduct" stepKey="createSimpleProduct"/>
         </before>
         <after>
             <deleteData createDataKey="createSimpleProduct" stepKey="deleteProduct"/>
-            <actionGroup ref="logout" stepKey="logout"/>
+            <actionGroup ref="AdminLogoutActionGroup" stepKey="logout"/>
         </after>
 
         <!--Filter and Select the created Product -->
-        <actionGroup ref="AdminSearchUrlRewriteProductBySku" stepKey="searchProduct">
+        <actionGroup ref="AdminSearchUrlRewriteProductBySkuActionGroup" stepKey="searchProduct">
             <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
         </actionGroup>
 
         <!-- Update the Store, RequestPath, RedirectType and Description -->
-        <actionGroup ref="AdminAddUrlRewriteForProduct" stepKey="addUrlRewrite">
+        <actionGroup ref="AdminAddUrlRewriteForProductActionGroup" stepKey="addUrlRewrite">
             <argument name="storeValue" value="Default Store View"/>
             <argument name="requestPath" value="{{_defaultProduct.urlKey}}.html"/>
             <argument name="redirectTypeValue" value="No"/>
@@ -40,20 +40,20 @@
         </actionGroup>
 
         <!--Filter Product in product page and get the Product ID -->
-        <actionGroup ref="filterAndSelectProduct" stepKey="filterProduct">
+        <actionGroup ref="FilterAndSelectProductActionGroup" stepKey="filterProduct">
             <argument name="productSku" value="$$createSimpleProduct.sku$$"/>
         </actionGroup>
         <grabFromCurrentUrl stepKey="productId" regex="#\/([0-9]*)?\/$#"/>
 
         <!--Assert Product Redirect -->
-        <actionGroup ref="AdminSearchByRequestPath" stepKey="searchByRequestPath">
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath">
             <argument name="redirectPath" value="{{_defaultProduct.urlKey}}.html" />
             <argument name="redirectType" value="No" />
             <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>
         </actionGroup>
 
         <!-- Assert Redirect path, Target Path and Redirect type in grid -->
-        <actionGroup ref="AdminSearchByRequestPath" stepKey="searchByRequestPath1">
+        <actionGroup ref="AdminSearchByRequestPathActionGroup" stepKey="searchByRequestPath1">
             <argument name="redirectPath" value="$$createSimpleProduct.name$$.html" />
             <argument name="redirectType" value="No" />
             <argument name="targetPath" value="catalog/product/view/id/{$productId}"/>

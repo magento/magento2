@@ -3,64 +3,70 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Framework\Module\Test\Unit\Plugin;
 
-use \Magento\Framework\Module\Plugin\DbStatusValidator;
-
+use Magento\Framework\App\FrontController;
+use Magento\Framework\App\RequestInterface;
+use Magento\Framework\Cache\FrontendInterface;
 use Magento\Framework\Module\DbVersionInfo;
+use Magento\Framework\Module\Manager;
+use Magento\Framework\Module\ModuleListInterface;
+use Magento\Framework\Module\Plugin\DbStatusValidator;
+use PHPUnit\Framework\MockObject\MockObject;
 
-/**
- * DbStatus validator test.
- */
-class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
+use PHPUnit\Framework\TestCase;
+
+class DbStatusValidatorTest extends TestCase
 {
     /**
-     * @var \Magento\Framework\Module\Plugin\DbStatusValidator
+     * @var DbStatusValidator
      */
     protected $_model;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $_cacheMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $subjectMock;
 
     /**
-     * @var \PHPUnit_Framework_MockObject_MockObject
+     * @var MockObject
      */
     protected $requestMock;
 
     /**
-     * @var \Magento\Framework\Module\Manager|\PHPUnit_Framework_MockObject_MockObject
+     * @var Manager|MockObject
      */
     private $moduleManager;
 
     /**
-     * @var \Magento\Framework\Module\DbVersionInfo|\PHPUnit_Framework_MockObject_MockObject
+     * @var DbVersionInfo|MockObject
      */
     private $dbVersionInfoMock;
 
-    protected function setUp()
+    protected function setUp(): void
     {
-        $this->_cacheMock = $this->getMockBuilder(\Magento\Framework\Cache\FrontendInterface::class)
+        $this->_cacheMock = $this->getMockBuilder(FrontendInterface::class)
             ->setMethods(['db_is_up_to_date'])
             ->getMockForAbstractClass();
-        $this->requestMock = $this->createMock(\Magento\Framework\App\RequestInterface::class);
-        $this->subjectMock = $this->createMock(\Magento\Framework\App\FrontController::class);
-        $moduleList = $this->getMockForAbstractClass(\Magento\Framework\Module\ModuleListInterface::class);
+        $this->requestMock = $this->getMockForAbstractClass(RequestInterface::class);
+        $this->subjectMock = $this->createMock(FrontController::class);
+        $moduleList = $this->getMockForAbstractClass(ModuleListInterface::class);
         $moduleList->expects($this->any())
             ->method('getNames')
-            ->will($this->returnValue(['Module_One', 'Module_Two']));
+            ->willReturn(['Module_One', 'Module_Two']);
 
-        $this->moduleManager = $this->createPartialMock(
-            \Magento\Framework\Module\Manager::class,
-            ['isDbSchemaUpToDate', 'isDbDataUpToDate']
-        );
-        $this->dbVersionInfoMock = $this->createMock(\Magento\Framework\Module\DbVersionInfo::class);
+        $this->moduleManager = $this->getMockBuilder(Manager::class)
+            ->addMethods(['isDbSchemaUpToDate', 'isDbDataUpToDate'])
+            ->disableOriginalConstructor()
+            ->getMock();
+        $this->dbVersionInfoMock = $this->createMock(DbVersionInfo::class);
         $this->_model = new DbStatusValidator(
             $this->_cacheMock,
             $this->dbVersionInfoMock
@@ -72,20 +78,19 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
         $this->_cacheMock->expects($this->once())
             ->method('load')
             ->with('db_is_up_to_date')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $returnMap = [
             ['Module_One', 'resource_Module_One', true],
             ['Module_Two', 'resource_Module_Two', true],
         ];
         $this->moduleManager->expects($this->any())
             ->method('isDbSchemaUpToDate')
-            ->will($this->returnValueMap($returnMap));
+            ->willReturnMap($returnMap);
         $this->moduleManager->expects($this->any())
             ->method('isDbDataUpToDate')
-            ->will($this->returnValueMap($returnMap));
+            ->willReturnMap($returnMap);
 
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->_model->beforeDispatch($this->subjectMock, $this->requestMock)
         );
     }
@@ -95,13 +100,12 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
         $this->_cacheMock->expects($this->once())
             ->method('load')
             ->with('db_is_up_to_date')
-            ->will($this->returnValue(true));
+            ->willReturn(true);
         $this->moduleManager->expects($this->never())
             ->method('isDbSchemaUpToDate');
         $this->moduleManager->expects($this->never())
             ->method('isDbDataUpToDate');
-        $this->assertEquals(
-            null,
+        $this->assertNull(
             $this->_model->beforeDispatch($this->subjectMock, $this->requestMock)
         );
     }
@@ -110,20 +114,20 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
      * @param array $dbVersionErrors
      *
      * @dataProvider aroundDispatchExceptionDataProvider
-     * @expectedException \Magento\Framework\Exception\LocalizedException
-     * @expectedExceptionMessage Please upgrade your database:
      */
     public function testAroundDispatchException(array $dbVersionErrors)
     {
+        $this->expectException('Magento\Framework\Exception\LocalizedException');
+        $this->expectExceptionMessage('Please upgrade your database:');
         $this->_cacheMock->expects($this->once())
             ->method('load')
             ->with('db_is_up_to_date')
-            ->will($this->returnValue(false));
+            ->willReturn(false);
         $this->_cacheMock->expects($this->never())->method('save');
 
         $this->dbVersionInfoMock->expects($this->any())
             ->method('getDbVersionErrors')
-            ->will($this->returnValue($dbVersionErrors));
+            ->willReturn($dbVersionErrors);
 
         $this->_model->beforeDispatch($this->subjectMock, $this->requestMock);
     }
@@ -136,50 +140,50 @@ class DbStatusValidatorTest extends \PHPUnit\Framework\TestCase
         return [
             'schema is outdated' => [
                 [
-                     [
-                         DbVersionInfo::KEY_MODULE => 'Module_One',
-                         DbVersionInfo::KEY_TYPE => 'schema',
-                         DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
-                     ]
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Module_One',
+                        DbVersionInfo::KEY_TYPE => 'schema',
+                        DbVersionInfo::KEY_CURRENT => 'none',
+                        DbVersionInfo::KEY_REQUIRED => '1'
+                    ]
                 ],
             ],
             'data is outdated' => [
                 [
-                     [
-                         DbVersionInfo::KEY_MODULE => 'Module_Two',
-                         DbVersionInfo::KEY_TYPE => 'data',
-                         DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
-                     ]
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Module_Two',
+                        DbVersionInfo::KEY_TYPE => 'data',
+                        DbVersionInfo::KEY_CURRENT => 'none',
+                        DbVersionInfo::KEY_REQUIRED => '1'
+                    ]
                 ],
             ],
             'both schema and data are outdated' => [
                 [
-                     [
-                         DbVersionInfo::KEY_MODULE => 'Module_One',
-                         DbVersionInfo::KEY_TYPE => 'schema',
-                         DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
-                     ],
-                     [
-                         DbVersionInfo::KEY_MODULE => 'Module_Two',
-                         DbVersionInfo::KEY_TYPE => 'schema',
-                         DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
-                     ],
-                     [
-                         DbVersionInfo::KEY_MODULE => 'Module_One',
-                         DbVersionInfo::KEY_TYPE => 'data',
-                         DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
-                     ],
-                     [
-                         DbVersionInfo::KEY_MODULE => 'Module_Two',
-                         DbVersionInfo::KEY_TYPE => 'data',
-                         DbVersionInfo::KEY_CURRENT => 'none',
-                         DbVersionInfo::KEY_REQUIRED => '1'
-                     ]
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Module_One',
+                        DbVersionInfo::KEY_TYPE => 'schema',
+                        DbVersionInfo::KEY_CURRENT => 'none',
+                        DbVersionInfo::KEY_REQUIRED => '1'
+                    ],
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Module_Two',
+                        DbVersionInfo::KEY_TYPE => 'schema',
+                        DbVersionInfo::KEY_CURRENT => 'none',
+                        DbVersionInfo::KEY_REQUIRED => '1'
+                    ],
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Module_One',
+                        DbVersionInfo::KEY_TYPE => 'data',
+                        DbVersionInfo::KEY_CURRENT => 'none',
+                        DbVersionInfo::KEY_REQUIRED => '1'
+                    ],
+                    [
+                        DbVersionInfo::KEY_MODULE => 'Module_Two',
+                        DbVersionInfo::KEY_TYPE => 'data',
+                        DbVersionInfo::KEY_CURRENT => 'none',
+                        DbVersionInfo::KEY_REQUIRED => '1'
+                    ]
                 ],
             ],
         ];

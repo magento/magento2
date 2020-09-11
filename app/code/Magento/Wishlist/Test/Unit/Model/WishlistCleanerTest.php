@@ -39,7 +39,7 @@ class WishlistCleanerTest extends TestCase
     /**
      * @inheritDoc
      */
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->itemOptionResourceModel = $this->createMock(ItemOptionResourceModel::class);
         $this->itemResourceModel = $this->createMock(ItemResourceModel::class);
@@ -54,9 +54,9 @@ class WishlistCleanerTest extends TestCase
         $productId = 1;
         $itemTable = 'table_item';
         $itemOptionTable = 'table_item_option';
-        $product = $this->createMock(ProductInterface::class);
+        $product = $this->getMockForAbstractClass(ProductInterface::class);
         $product->expects($this->once())->method('getId')->willReturn($productId);
-        $connection = $this->createMock(AdapterInterface::class);
+        $connection = $this->getMockForAbstractClass(AdapterInterface::class);
         $this->itemResourceModel->expects($this->once())->method('getConnection')->willReturn($connection);
         $this->itemResourceModel->expects($this->once())->method('getMainTable')->willReturn($itemTable);
         $this->itemOptionResourceModel->expects($this->once())->method('getMainTable')->willReturn($itemOptionTable);

@@ -3,14 +3,19 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
+
 namespace Magento\Catalog\Test\Unit\Model\Category\Attribute\Source;
 
+use Magento\Catalog\Model\Category\Attribute\Source\Sortby;
+use Magento\Catalog\Model\Config;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
+use PHPUnit\Framework\TestCase;
 
-class SortbyTest extends \PHPUnit\Framework\TestCase
+class SortbyTest extends TestCase
 {
     /**
-     * @var \Magento\Catalog\Model\Category\Attribute\Source\Sortby
+     * @var Sortby
      */
     private $model;
 
@@ -20,11 +25,11 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
         $this->assertEquals($validResult, $this->model->getAllOptions());
     }
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $helper = new ObjectManager($this);
         $this->model = $helper->getObject(
-            \Magento\Catalog\Model\Category\Attribute\Source\Sortby::class,
+            Sortby::class,
             [
                 'catalogConfig' => $this->getMockedConfig()
             ]
@@ -32,17 +37,17 @@ class SortbyTest extends \PHPUnit\Framework\TestCase
     }
 
     /**
-     * @return \Magento\Catalog\Model\Config
+     * @return Config
      */
     private function getMockedConfig()
     {
-        $mockBuilder = $this->getMockBuilder(\Magento\Catalog\Model\Config::class);
+        $mockBuilder = $this->getMockBuilder(Config::class);
         $mockBuilder->disableOriginalConstructor();
         $mock = $mockBuilder->getMock();
 
         $mock->expects($this->any())
             ->method('getAttributesUsedForSortBy')
-            ->will($this->returnValue([['frontend_label' => 'fl', 'attribute_code' => 'fc']]));
+            ->willReturn([['frontend_label' => 'fl', 'attribute_code' => 'fc']]);
 
         return $mock;
     }

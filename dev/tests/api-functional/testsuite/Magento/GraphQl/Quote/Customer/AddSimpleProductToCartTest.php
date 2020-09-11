@@ -84,37 +84,12 @@ class AddSimpleProductToCartTest extends GraphQlAbstract
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException Exception
-     * @expectedExceptionMessage Field AddSimpleProductsToCartInput.cart_id of required type String! was not provided.
-     */
-    public function testAddSimpleProductToCartIfCartIdIsMissed()
-    {
-        $query = <<<QUERY
-mutation {
-  addSimpleProductsToCart(
-    input: {
-      cart_items: []
-    }
-  ) {
-    cart {
-      items {
-        id
-      }
-    }
-  }
-}
-QUERY;
-
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_id" is missing
      */
     public function testAddSimpleProductToCartIfCartIdIsEmpty()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Required parameter "cart_id" is missing');
+
         $query = <<<QUERY
 mutation {
   addSimpleProductsToCart(
@@ -137,41 +112,12 @@ QUERY;
 
     /**
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException Exception
-     */
-    public function testAddSimpleProductToCartIfCartItemsAreMissed()
-    {
-        $query = <<<QUERY
-mutation {
-  addSimpleProductsToCart(
-    input: {
-      cart_id: "cart_id"
-    }
-  ) {
-    cart {
-      items {
-        id
-      }
-    }
-  }
-}
-QUERY;
-
-        $this->expectExceptionMessage(
-            'Field AddSimpleProductsToCartInput.cart_items of required type'
-            . ' [SimpleProductCartItemInput]! was not provided.'
-        );
-
-        $this->graphQlMutation($query, [], '', $this->getHeaderMap());
-    }
-
-    /**
-     * @magentoApiDataFixture Magento/Customer/_files/customer.php
-     * @expectedException Exception
-     * @expectedExceptionMessage Required parameter "cart_items" is missing
      */
     public function testAddSimpleProductToCartIfCartItemsAreEmpty()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Required parameter "cart_items" is missing');
+
         $query = <<<QUERY
 mutation {
   addSimpleProductsToCart(
@@ -196,11 +142,12 @@ QUERY;
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Catalog/_files/simple_product.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage Could not find a cart with ID "non_existent_masked_id"
      */
     public function testAddProductToNonExistentCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a cart with ID "non_existent_masked_id"');
+
         $sku = 'simple_product';
         $quantity = 2;
         $maskedQuoteId = 'non_existent_masked_id';
@@ -213,11 +160,12 @@ QUERY;
      * @magentoApiDataFixture Magento/Customer/_files/customer.php
      * @magentoApiDataFixture Magento/GraphQl/Quote/_files/customer/create_empty_cart.php
      *
-     * @expectedException Exception
-     * @expectedExceptionMessage Could not find a product with SKU "simple_product"
      */
     public function testNonExistentProductToCart()
     {
+        $this->expectException(\Exception::class);
+        $this->expectExceptionMessage('Could not find a product with SKU "simple_product"');
+
         $sku = 'simple_product';
         $qty = 2;
         $maskedQuoteId = $this->getMaskedQuoteIdByReservedOrderId->execute('test_quote');

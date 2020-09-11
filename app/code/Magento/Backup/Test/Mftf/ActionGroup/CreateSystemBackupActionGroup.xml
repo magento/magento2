@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ /**
+  * Copyright © Magento, Inc. All rights reserved.
+  * See COPYING.txt for license details.
+  */
+-->
+
+<actionGroups xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xsi:noNamespaceSchemaLocation="urn:magento:mftf:Test/etc/actionGroupSchema.xsd">
+    <actionGroup name="CreateSystemBackupActionGroup">
+        <annotations>
+            <description>Creates a System Backup using provided Backup Entity.</description>
+        </annotations>
+        <arguments>
+            <argument name="backup" defaultValue="SystemBackup"/>
+        </arguments>
+
+        <click selector="{{AdminMainActionsSection.systemBackup}}" stepKey="clickCreateBackupButton"/>
+        <waitForElementVisible selector="{{AdminCreateBackupFormSection.backupNameField}}" stepKey="waitForForm"/>
+        <fillField selector="{{AdminCreateBackupFormSection.backupNameField}}" userInput="{{backup.name}}" stepKey="fillBackupName"/>
+        <click selector="{{AdminCreateBackupFormSection.ok}}" stepKey="clickOk"/>
+        <waitForElementNotVisible selector=".loading-mask" time="300" stepKey="waitForBackupProcess"/>
+        <see selector="{{AdminMessagesSection.success}}" userInput="You created the system backup." stepKey="seeSuccessMessage"/>
+        <see selector="{{AdminGridTableSection.backupNameColumn}}" userInput="{{backup.name}}" stepKey="seeBackupInGrid"/>
+        <see selector="{{AdminGridTableSection.backupTypeByName(backup.name)}}" userInput="{{backup.type}}" stepKey="seeBackupType"/>
+    </actionGroup>
+</actionGroups>
