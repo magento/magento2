@@ -60,7 +60,6 @@ class CustomerOrders implements ResolverInterface
         $this->searchCriteriaBuilder = $searchCriteriaBuilder;
         $this->orderFilter = $orderFilter;
         $this->orderFormatter = $orderFormatter;
-
     }
 
     /**
