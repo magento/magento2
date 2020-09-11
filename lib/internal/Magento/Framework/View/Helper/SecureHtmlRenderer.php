@@ -116,6 +116,7 @@ class SecureHtmlRenderer
                 {$elementName}Array.forEach(function(element){
                     if (element) {
                         element.{$eventName} = function (event) {
+                            event.preventDefault();
                             var targetElement = element;
                             if (event && event.target) {
                                 targetElement = event.target;
@@ -124,10 +125,8 @@ class SecureHtmlRenderer
                         }
                     }
                 });
-            }
-            
-script;
-
+            }     
+        script;
         return $this->renderTag('script', ['type' => 'text/javascript'], $script, false);
     }
 
