@@ -397,6 +397,14 @@ class ImageTest extends TestCase
     }
 
     /**
+     * Check initBaseFile without properties - product
+     */
+    public function testGetUrlWithOutProduct()
+    {
+        $this->assertNull($this->helper->getUrl());
+    }
+
+    /**
      * @param array $data
      * @dataProvider getHeightDataProvider
      */
