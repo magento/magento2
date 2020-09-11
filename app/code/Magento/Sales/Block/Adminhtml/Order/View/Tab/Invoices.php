@@ -5,6 +5,9 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 
+use Magento\Framework\AuthorizationInterface;
+use Magento\Framework\View\Element\Context;
+
 /**
  * Order Invoices grid
  *
@@ -15,24 +18,25 @@ class Invoices extends \Magento\Framework\View\Element\Text\ListText implements
     \Magento\Backend\Block\Widget\Tab\TabInterface
 {
     /**
-     * @var Magento\Framework\AuthorizationInterface
+     * @var AuthorizationInterface
      */
     private $authorization;
-    
+
     /**
-	 *
-	 * @param \Magento\Framework\View\Element\Context $context
-	 * @param array $data
-	 * @param \Magento\Framework\AuthorizationInterface|null $authorization
-	 */
-	public function __construct(
-		\Magento\Framework\View\Element\Context $context,
-		array $data = [],
-		\Magento\Framework\AuthorizationInterface $authorization = null
-	) {
-		$this->authorization = $authorization?: \Magento\Framework\App\ObjectManager::getInstance()->get(Magento\Framework\AuthorizationInterface::class);
-		parent::__construct($context, $data);
-	}
+     * Invoices constructor.
+     *
+     * @param Context $context
+     * @param AuthorizationInterface $authorization
+     * @param array $data
+     */
+    public function __construct(
+        Context $context,
+        AuthorizationInterface $authorization,
+        array $data = []
+    ) {
+        $this->authorization = $authorization;
+        parent::__construct($context, $data);
+    }
     
     /**
      * {@inheritdoc}

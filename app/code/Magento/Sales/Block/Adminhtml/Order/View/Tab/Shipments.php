@@ -5,6 +5,8 @@
  */
 namespace Magento\Sales\Block\Adminhtml\Order\View\Tab;
 
+use Magento\Framework\AuthorizationInterface;
+
 /**
  * Order Shipments grid
  *
@@ -21,8 +23,8 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
      */
     protected $_coreRegistry = null;
 
-     /**
-     * @var Magento\Framework\AuthorizationInterface
+    /**
+     * @var AuthorizationInterface
      */
     private $authorization;
     
@@ -31,17 +33,17 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
      *
      * @param \Magento\Framework\View\Element\Context $context
      * @param \Magento\Framework\Registry $coreRegistry
-     * @param \Magento\Framework\AuthorizationInterface|null $authorization
+     * @param AuthorizationInterface $authorization
      * @param array $data
      */
     public function __construct(
         \Magento\Framework\View\Element\Context $context,
         \Magento\Framework\Registry $coreRegistry,
-        array $data = [],
-        \Magento\Framework\AuthorizationInterface $authorization = null
+        AuthorizationInterface $authorization,
+        array $data = []
     ) {
         $this->_coreRegistry = $coreRegistry;
-        $this->authorization = $authorization?: \Magento\Framework\App\ObjectManager::getInstance()->get(Magento\Framework\AuthorizationInterface::class);
+        $this->authorization = $authorization;
         parent::__construct($context, $data);
     }
 
@@ -76,10 +78,7 @@ class Shipments extends \Magento\Framework\View\Element\Text\ListText implements
      */
     public function canShowTab()
     {
-        if ($this->getOrder()->getIsVirtual() || !$this->authorization->isAllowed('Magento_Sales::ship')) {
-            return false;
-        }
-        return true;
+        return $this->authorization->isAllowed('Magento_Sales::ship') && !$this->getOrder()->getIsVirtual();
     }
 
     /**
