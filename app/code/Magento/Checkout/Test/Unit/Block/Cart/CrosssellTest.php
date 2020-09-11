@@ -7,6 +7,7 @@ declare(strict_types=1);
 
 namespace Magento\Checkout\Test\Unit\Block\Cart;
 
+use Magento\Catalog\Api\Data\ProductInterface;
 use Magento\Catalog\Api\ProductRepositoryInterface;
 use Magento\Catalog\Block\Product\Context;
 use Magento\Catalog\Model\Product;
@@ -19,6 +20,7 @@ use Magento\Checkout\Model\Session;
 use Magento\Framework\DataObject;
 use Magento\Framework\DB\Select;
 use Magento\Framework\EntityManager\EntityMetadataInterface;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\TestFramework\Unit\Helper\ObjectManager;
 use Magento\Store\Api\Data\StoreInterface;
 use Magento\Store\Model\StoreManagerInterface;
@@ -62,6 +64,10 @@ class CrosssellTest extends TestCase
      * @var MockObject
      */
     private $productCollectionFactory;
+    /**
+     * @var MetadataPool|MockObject
+     */
+    private $metadataPoolMock;
 
     /**
      * @inheritDoc
@@ -95,6 +101,7 @@ class CrosssellTest extends TestCase
         $this->productCollectionFactory = $this->createMock(
             CollectionFactory::class
         );
+        $this->metadataPoolMock = $this->createMock(MetadataPool::class);
         $this->model = $objectManager->getObject(
             Crosssell::class,
             [
@@ -103,6 +110,7 @@ class CrosssellTest extends TestCase
                 'productRepository' => $this->productRepository,
                 'productLinkFactory' => $this->productLinkFactory,
                 'productCollectionFactory' => $this->productCollectionFactory,
+                'metadataPool' => $this->metadataPoolMock,
             ]
         );
     }
@@ -133,6 +141,14 @@ class CrosssellTest extends TestCase
             },
             $cartProducts
         );
+        $metadata = $this->getMockForAbstractClass(EntityMetadataInterface::class);
+        $this->metadataPoolMock->expects($this->once())->method('getMetadata')
+            ->with(ProductInterface::class)
+            ->willReturn($metadata);
+        $metadata->expects($this->once())
+            ->method('getLinkField')
+            ->willReturn('entity_id');
+
         $quote = new DataObject(['all_items' => $cartItems]);
         $this->checkoutSession->method('getQuote')
             ->willReturn($quote);
@@ -161,6 +177,7 @@ class CrosssellTest extends TestCase
                     return $this->createProductCollection();
                 }
             );
+
         $store = $this->createMock(StoreInterface::class);
         $this->storeManager->method('getStore')
             ->willReturn($store);

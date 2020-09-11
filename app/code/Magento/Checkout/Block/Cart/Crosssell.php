@@ -17,6 +17,7 @@ use Magento\Catalog\Model\ResourceModel\Product\CollectionFactory;
 use Magento\CatalogInventory\Helper\Stock as StockHelper;
 use Magento\Checkout\Model\Session;
 use Magento\Framework\App\ObjectManager;
+use Magento\Framework\EntityManager\MetadataPool;
 use Magento\Framework\Exception\NoSuchEntityException;
 use Magento\Quote\Model\Quote\Item\RelatedProducts;
 
@@ -78,6 +79,11 @@ class Crosssell extends AbstractProduct
     private $cartProducts;
 
     /**
+     * @var MetadataPool|null
+     */
+    private $metadataPool;
+
+    /**
      * @param Context $context
      * @param Session $checkoutSession
      * @param Visibility $productVisibility
@@ -87,6 +93,7 @@ class Crosssell extends AbstractProduct
      * @param array $data
      * @param CollectionFactory|null $productCollectionFactory
      * @param ProductRepositoryInterface|null $productRepository
+     * @param MetadataPool|null $metadataPool
      * @codeCoverageIgnore
      * @SuppressWarnings(PHPMD.ExcessiveParameterList)
      */
@@ -99,7 +106,8 @@ class Crosssell extends AbstractProduct
         StockHelper $stockHelper,
         array $data = [],
         ?CollectionFactory $productCollectionFactory = null,
-        ?ProductRepositoryInterface $productRepository = null
+        ?ProductRepositoryInterface $productRepository = null,
+        ?MetadataPool $metadataPool = null
     ) {
         $this->_checkoutSession = $checkoutSession;
         $this->_productVisibility = $productVisibility;
@@ -115,6 +123,8 @@ class Crosssell extends AbstractProduct
             ?? ObjectManager::getInstance()->get(CollectionFactory::class);
         $this->productRepository = $productRepository
             ?? ObjectManager::getInstance()->get(ProductRepositoryInterface::class);
+        $this->metadataPool = $metadataPool
+            ?? ObjectManager::getInstance()->get(MetadataPool::class);
     }
 
     /**
@@ -316,11 +326,12 @@ class Crosssell extends AbstractProduct
     {
         if ($this->cartProducts === null) {
             $this->cartProducts = [];
+            $productLinkField = $this->metadataPool->getMetadata(ProductInterface::class)->getLinkField();
             foreach ($this->getQuote()->getAllItems() as $quoteItem) {
                 /* @var $quoteItem \Magento\Quote\Model\Quote\Item */
                 $product = $quoteItem->getProduct();
                 if ($product) {
-                    $this->cartProducts[$product->getRowId()] = $product;
+                    $this->cartProducts[$product->getData($productLinkField)] = $product;
                 }
             }
         }
