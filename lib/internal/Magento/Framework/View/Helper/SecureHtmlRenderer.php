@@ -111,16 +111,21 @@ class SecureHtmlRenderer
             function {$listenerFunction} () {
                 {$attributeJavascript};
             }
-            var {$elementName} = document.querySelector("{$elementSelector}");
-            if ({$elementName}) {
-                {$elementName}.{$eventName} = function (event) {
-                    var targetElement = {$elementName};
-                    if (event && event.target) {
-                        targetElement = event.target;
+            var {$elementName}Array = document.querySelectorAll("{$elementSelector}");
+
+            {$elementName}Array.forEach(function(element){
+                if (element) {
+                    element.{$eventName} = function (event) {
+                        var targetElement = element;
+                        if (event && event.target) {
+                            targetElement = event.target;
+                        }
+                        {$listenerFunction}.apply(targetElement);
                     }
-                    {$listenerFunction}.apply(targetElement);
                 }
-            }
+            });
+
+            
 script;
 
         return $this->renderTag('script', ['type' => 'text/javascript'], $script, false);
