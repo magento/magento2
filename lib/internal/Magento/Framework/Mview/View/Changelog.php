@@ -112,7 +112,8 @@ class Changelog implements ChangelogInterface
                 ['unsigned' => true, 'nullable' => false, 'default' => '0'],
                 'Entity ID'
             );
-            if ($config[self::ATTRIBUTE_SCOPE_SUPPORT]) {
+
+            if ($config && $config[self::ATTRIBUTE_SCOPE_SUPPORT]) {
                 $table->addColumn(
                     self::ATTRIBUTE_COLUMN,
                     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
@@ -121,7 +122,7 @@ class Changelog implements ChangelogInterface
                     'Attribute ID'
                 );
             }
-            if ($config[self::STORE_SCOPE_SUPPORT]) {
+            if ($config && $config[self::STORE_SCOPE_SUPPORT]) {
                 $table->addColumn(
                     self::STORE_COLUMN,
                     \Magento\Framework\DB\Ddl\Table::TYPE_INTEGER,
