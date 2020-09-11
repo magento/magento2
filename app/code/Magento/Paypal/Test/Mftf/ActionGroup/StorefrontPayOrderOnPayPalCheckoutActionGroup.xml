@@ -19,7 +19,7 @@
         <waitForElementVisible selector="{{PayPalPaymentSection.itemName(productName)}}" stepKey="waitForCartLoad"/>
         <seeElement selector="{{PayPalPaymentSection.itemName(productName)}}" stepKey="seeProductName"/>
         <scrollTo selector="{{PayPalPaymentSection.PayPalSubmitBtn}}" stepKey="scrollToPayPalSubmitBtn"/>
-        <waitForElementVisible selector="{{PayPalPaymentSection.PayPalSubmitBtn}}" stepKey="waitPayPalSubmitBtnVisible"
+        <waitForElementVisible selector="{{PayPalPaymentSection.PayPalSubmitBtn}}" stepKey="waitPayPalSubmitBtnVisible"/>
         <click selector="{{PayPalPaymentSection.PayPalSubmitBtn}}" stepKey="clickPayPalSubmitBtn"/>
         <switchToPreviousTab stepKey="switchToPreviousTab"/>
         <waitForPageLoad stepKey="waitForPageLoad"/>
