@@ -14,6 +14,7 @@ use Magento\Framework\Message\MessageInterface;
 use Magento\Quote\Api\CartRepositoryInterface;
 use Magento\Quote\Api\Data\CartInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
+use Magento\TestFramework\Core\Version\View;
 use Magento\TestFramework\Request;
 use Magento\TestFramework\TestCase\AbstractController;
 
@@ -45,6 +46,11 @@ class ReorderTest extends AbstractController
     private $escaper;
 
     /**
+     * @var View
+     */
+    private $versionChecker;
+
+    /**
      * @inheritdoc
      */
     protected function setUp(): void
@@ -56,6 +62,7 @@ class ReorderTest extends AbstractController
         $this->customerSession = $this->_objectManager->get(Session::class);
         $this->quoteRepository = $this->_objectManager->get(CartRepositoryInterface::class);
         $this->escaper = $this->_objectManager->get(Escaper::class);
+        $this->versionChecker = $this->_objectManager->get(View::class);
     }
 
     /**
@@ -121,7 +128,12 @@ class ReorderTest extends AbstractController
         $this->customerSession->setCustomerId(1);
         $order = $this->orderFactory->create()->loadByIncrementId('100000555');
         $this->dispatchReorderRequest((int)$order->getId());
-        $this->assertRedirect($this->stringContains('sales/order/history'));
+
+        if ($this->versionChecker->isVersionUpdated()) {
+            $this->assertRedirect($this->stringContains('noroute'));
+        } else {
+            $this->assertRedirect($this->stringContains('sales/order/history'));
+        }
     }
 
     /**
