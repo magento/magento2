@@ -98,7 +98,7 @@ class Url extends Column
             array_replace_recursive(
                 (array)$this->getData('config'),
                 [
-                    'onInsertUrl' => $this->urlInterface->getUrl('media_gallery_renditions/image/oninsert'),
+                    'onInsertUrl' => $this->urlInterface->getUrl('media_gallery/image/oninsert'),
                     'storeId' => $this->storeManager->getStore()->getId()
                 ]
             )

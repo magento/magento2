@@ -29,36 +29,13 @@ class GetInsertImageContent
     private $catalogHelper;
 
     /**
-     * @var Filesystem
-     */
-    private $filesystem;
-
-    /**
-     * @var Mime
-     */
-    private $mime;
-
-    /**
-     * @var WriteInterface
-     */
-    private $pubDirectory;
-
-    /**
      * @param ImagesHelper $imagesHelper
      * @param CatalogHelper $catalogHelper
-     * @param Filesystem $fileSystem
-     * @param Mime $mime
      */
-    public function __construct(
-        ImagesHelper $imagesHelper,
-        CatalogHelper $catalogHelper,
-        Filesystem $fileSystem,
-        Mime $mime
-    ) {
+    public function __construct(ImagesHelper $imagesHelper, CatalogHelper $catalogHelper)
+    {
         $this->imagesHelper = $imagesHelper;
         $this->catalogHelper = $catalogHelper;
-        $this->filesystem = $fileSystem;
-        $this->mime = $mime;
     }
 
     /**
@@ -87,44 +64,5 @@ class GetInsertImageContent
         }
 
         return $this->imagesHelper->getImageHtmlDeclaration($filename, $renderAsTag);
-    }
-
-    /**
-     * Retrieve size of requested file
-     *
-     * @param string $path
-     * @return int
-     */
-    public function getImageSize(string $path): int
-    {
-        $directory = $this->getPubDirectory();
-
-        return $directory->isExist($path) ? $directory->stat($path)['size'] : 0;
-    }
-
-    /**
-     * Retrieve MIME type of requested file
-     *
-     * @param string $path
-     * @return string
-     */
-    public function getMimeType(string $path)
-    {
-        $absoluteFilePath = $this->getPubDirectory()->getAbsolutePath($path);
-
-        return $this->mime->getMimeType($absoluteFilePath);
-    }
-
-    /**
-     * Retrieve pub directory read interface instance
-     *
-     * @return ReadInterface
-     */
-    private function getPubDirectory()
-    {
-        if ($this->pubDirectory === null) {
-            $this->pubDirectory = $this->filesystem->getDirectoryRead(DirectoryList::PUB);
-        }
-        return $this->pubDirectory;
     }
 }
