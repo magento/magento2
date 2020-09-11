@@ -17,6 +17,7 @@ define([
 
     return Component.extend({
         defaults: {
+            allowedActions: [],
             filterChipsProvider: 'componentType = filters, ns = ${ $.ns }',
             bookmarkProvider: 'componentType = bookmark, ns = ${ $.ns }',
             directoryTreeSelector: '#media-gallery-directory-tree',
@@ -34,7 +35,8 @@ define([
             },
             viewConfig: [{
                 component: 'Magento_MediaGalleryUi/js/directory/directories',
-                name: '${ $.name }_directories'
+                name: '${ $.name }_directories',
+                allowedActions: '${ $.allowedActions }'
             }]
         },
 
