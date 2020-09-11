@@ -258,6 +258,7 @@ define([
 
                 return;
             }
+
             if (!_.isUndefined(this.bookmarks())) {
                 if (!_.size(this.bookmarks().getViewData(this.bookmarks().defaultIndex))) {
                     setTimeout(function () {

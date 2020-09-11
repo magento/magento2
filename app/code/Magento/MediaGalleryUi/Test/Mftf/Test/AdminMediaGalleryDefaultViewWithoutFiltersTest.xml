@@ -13,6 +13,7 @@
             <features value="AdminMediaGalleryDefaultViewWithoutFiltersTest"/>
             <useCaseId value="https://github.com/magento/adobe-stock-integration/issues/1813"/>
             <title value="User shouldn't see applied filters if media gallery switched to Default View"/>
+            <testCaseId value="https://studio.cucumber.io/projects/131313/test-plan/folders/1320712/scenarios/5199870"/>
             <description value="No filters should be applied if Default View selected"/>
             <severity value="CRITICAL"/>
             <group value="media_gallery_ui"/>
