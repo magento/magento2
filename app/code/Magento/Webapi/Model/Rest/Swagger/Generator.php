@@ -758,7 +758,7 @@ class Generator extends AbstractSchemaGenerator
             );
         }
 
-        return empty($queryNames) ? [] : array_merge(...$queryNames);
+        return array_merge([], ...$queryNames);
     }
 
     /**

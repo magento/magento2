@@ -1362,10 +1362,11 @@ XMLAuth;
     protected function _formShipmentRequest(DataObject $request)
     {
         $packages = $request->getPackages();
+        $shipmentItems = [];
         foreach ($packages as $package) {
             $shipmentItems[] = $package['items'];
         }
-        $shipmentItems = array_merge(...$shipmentItems);
+        $shipmentItems = array_merge([], ...$shipmentItems);
 
         $xmlRequest = $this->_xmlElFactory->create(
             ['data' => '<?xml version = "1.0" ?><ShipmentConfirmRequest xml:lang="en-US"/>']

@@ -459,8 +459,7 @@ class AfterImportDataObserver implements ObserverInterface
                 }
             }
         }
-        $result = !empty($urls) ? array_merge(...$urls) : [];
-        return $result;
+        return array_merge([], ...$urls);
     }
 
     /**

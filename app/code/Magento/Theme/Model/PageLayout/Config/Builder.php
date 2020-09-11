@@ -68,7 +68,7 @@ class Builder implements \Magento\Framework\View\Model\PageLayout\Config\Builder
             foreach ($this->themeCollection->loadRegisteredThemes() as $theme) {
                 $configFiles[] = $this->fileCollector->getFilesContent($theme, 'layouts.xml');
             }
-            $this->configFiles = array_merge(...$configFiles);
+            $this->configFiles = array_merge([], ...$configFiles);
         }
 
         return $this->configFiles;
