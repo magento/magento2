@@ -456,7 +456,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
             return $this->getOrder()->getBackUrl();
         }
 
-        return $this->getUrl('sales/*/');
+        return $this->_urlBuilder->getUrl('sales/*/');
     }
 
     /**
@@ -471,7 +471,7 @@ class View extends \Magento\Backend\Block\Widget\Form\Container
     }
 
     /**
-     * Get edit message
+     * Build message with order.
      *
      * @param \Magento\Sales\Model\Order $order
      * @return \Magento\Framework\Phrase
