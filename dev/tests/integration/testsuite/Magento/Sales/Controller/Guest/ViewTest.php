@@ -10,6 +10,7 @@ namespace Magento\Sales\Controller\Guest;
 use Magento\Framework\Stdlib\CookieManagerInterface;
 use Magento\Sales\Api\Data\OrderInterfaceFactory;
 use Magento\Sales\Api\OrderRepositoryInterface;
+use Magento\Sales\Helper\Guest;
 use Magento\TestFramework\Request;
 use Magento\TestFramework\TestCase\AbstractController;
 
@@ -65,7 +66,7 @@ class ViewTest extends AbstractController
         $order->setProtectCode('0e6640');
         $this->orderRepository->save($order);
         $cookieValue = base64_encode('0' . ':' . $order->getIncrementId());
-        $this->cookieManager->setPublicCookie(\Magento\Sales\Helper\Guest::COOKIE_NAME, $cookieValue);
+        $this->cookieManager->setPublicCookie(Guest::COOKIE_NAME, $cookieValue);
         $this->getRequest()->setMethod(Request::METHOD_GET);
         $this->dispatch('sales/guest/view/');
         $this->assertRedirect($this->stringContains('sales/guest/form/'));
