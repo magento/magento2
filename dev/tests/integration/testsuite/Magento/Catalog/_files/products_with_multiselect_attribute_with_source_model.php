@@ -3,6 +3,7 @@
  * Copyright © Magento, Inc. All rights reserved.
  * See COPYING.txt for license details.
  */
+declare(strict_types=1);
 
 use Magento\Catalog\_files\MultiselectSourceMock;
 
@@ -10,7 +11,6 @@ use Magento\Catalog\_files\MultiselectSourceMock;
  * Create multiselect attribute
  */
 require __DIR__ . '/multiselect_attribute_with_source_model.php';
-require __DIR__ . '/../../Checkout/_files/ValidatorFileMock.php';
 
 /** Create product with options and multiselect attribute */
 

@@ -11,7 +11,7 @@ use \Magento\Bundle\Api\Data\LinkInterface;
 /**
  * @magentoAppArea frontend
  */
-class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
+class FixedBundlePriceCalculatorTest extends BundlePriceCalculatorAbstract
 {
     /**
      * @param array $strategyModifiers
@@ -139,7 +139,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #5 Testing price for fixed bundle product 
+                #5 Testing price for fixed bundle product
                 with fixed sub items, fixed options and without any discounts
             ' => [
                 'strategy' => $this->getBundleConfiguration3(
@@ -156,7 +156,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #6 Testing price for fixed bundle product 
+                #6 Testing price for fixed bundle product
                 with percent sub items, percent options and without any discounts
             ' => [
                 'strategy' => $this->getBundleConfiguration3(
@@ -173,7 +173,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #7 Testing price for fixed bundle product 
+                #7 Testing price for fixed bundle product
                 with fixed sub items, percent options and without any discounts
             ' => [
                 'strategy' => $this->getBundleConfiguration3(
@@ -190,7 +190,7 @@ class FixedBundlePriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #8 Testing price for fixed bundle product 
+                #8 Testing price for fixed bundle product
                 with percent sub items, fixed options and without any discounts
             ' => [
                 'strategy' => $this->getBundleConfiguration3(

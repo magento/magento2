@@ -9,7 +9,7 @@ namespace Magento\Bundle\Model\Product;
 /**
  * @magentoAppArea frontend
  */
-class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
+class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceCalculatorAbstract
 {
     /**
      * @param array $strategyModifiers
@@ -97,7 +97,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #3 Testing price for dynamic bundle 
+                #3 Testing price for dynamic bundle
                 with one required checkbox type option, two simples and special price
             ' => [
                 'strategy' => $this->getBundleConfiguration3(),
@@ -110,7 +110,7 @@ class DynamicBundleWithSpecialPriceCalculatorTest extends BundlePriceAbstract
             ],
 
             '
-                #4 Testing price for dynamic bundle 
+                #4 Testing price for dynamic bundle
                 with one required multi type option, two simples with special price
             ' => [
                 'strategy' => $this->getBundleConfiguration4(),
