@@ -5,7 +5,7 @@
  */
 declare(strict_types=1);
 
-namespace Magento\CustomerGraphQl\Test\Unit\Model\Resolver;
+namespace Magento\CatalogInventoryGraphQl\Test\Unit\Model\Resolver;
 
 use PHPUnit\Framework\TestCase;
 use Magento\CatalogInventoryGraphQl\Model\Resolver\OnlyXLeftInStockResolver;
@@ -21,7 +21,7 @@ use Magento\CatalogInventory\Api\Data\StockItemInterface;
 use Magento\CatalogInventory\Api\Data\StockStatusInterface;
 
 /**
- * Test class for \Magento\CustomerGraphQl\Model\Resolver\GenerateCustomerToken
+ * Test class for \Magento\CatalogInventoryGraphQl\Model\Resolver\OnlyXLeftInStockResolver
  */
 class OnlyXLeftInStockResolverTest extends TestCase
 {
@@ -132,7 +132,6 @@ class OnlyXLeftInStockResolverTest extends TestCase
 
     public function testResolve()
     {
-        $xLeftInstockResult = 1;
         $stockCurrentQty = 3;
         $minQty = 2;
         $thresholdQty = 1;
@@ -146,7 +145,7 @@ class OnlyXLeftInStockResolverTest extends TestCase
         $this->scopeConfigMock->method('getValue')->willReturn($thresholdQty);
 
         $this->assertEquals(
-            $xLeftInstockResult,
+            $stockCurrentQty,
             $this->resolver->resolve(
                 $this->fieldMock,
                 $this->contextMock,
@@ -158,7 +157,6 @@ class OnlyXLeftInStockResolverTest extends TestCase
 
     public function testResolveOutStock()
     {
-        $xLeftInstockResult = 1;
         $stockCurrentQty = 0;
         $minQty = 2;
         $thresholdQty = 1;
@@ -181,11 +179,8 @@ class OnlyXLeftInStockResolverTest extends TestCase
         );
     }
 
-
-
     public function testResolveNoThresholdQty()
     {
-        $xLeftInstockResult = 1;
         $stockCurrentQty = 3;
         $minQty = 2;
         $thresholdQty = null;
