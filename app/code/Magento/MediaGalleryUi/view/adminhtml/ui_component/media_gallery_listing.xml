@@ -16,43 +16,17 @@
     </argument>
     <settings>
         <buttons>
-            <button name="add_selected">
-                <param name="on_click" xsi:type="string">return false;</param>
-                <param name="sort_order" xsi:type="number">110</param>
-                <class>action-primary no-display media-gallery-add-selected</class>
-                <label translate="true">Add Selected</label>
-            </button>
+            <button name="add_selected" class="Magento\MediaGalleryUi\Ui\Component\Control\InsertAsstes"/>
             <button name="cancel">
                 <param name="on_click" xsi:type="string">MediabrowserUtility.closeDialog();</param>
                 <param name="sort_order" xsi:type="number">1</param>
                 <class>cancel action-quaternary</class>
                 <label translate="true">Cancel</label>
             </button>
-            <button name="upload_image">
-                <param name="on_click" xsi:type="string">jQuery('#image-uploader-input').click();</param>
-                <class>action-add scalable media-gallery-actions-buttons</class>
-                <param name="sort_order" xsi:type="number">20</param>
-                <label translate="true">Upload Image</label>
-            </button>
-            <button name="delete_folder">
-                <param name="on_click" xsi:type="string">jQuery('#delete_folder').trigger('delete_folder');</param>
-                <param name="disabled" xsi:type="string">disabled</param>
-                <param name="sort_order" xsi:type="number">30</param>
-                <class>action-default scalable media-gallery-actions-buttons</class>
-                <label translate="true">Delete Folder</label>
-            </button>
-            <button name="create_folder">
-                <param name="on_click" xsi:type="string">jQuery('#create_folder').trigger('create_folder');</param>
-                <param name="sort_order" xsi:type="number">10</param>
-                <class>action-default scalable add media-gallery-actions-buttons</class>
-                <label translate="true">Create Folder</label>
-            </button>
-            <button name="delete_massaction">
-                <param name="on_click" xsi:type="string">jQuery(window).trigger('massAction.MediaGallery')</param>
-                <param name="sort_order" xsi:type="number">50</param>
-                <class>action-default scalable add media-gallery-actions-buttons</class>
-                <label translate="true">Delete Images...</label>
-            </button>
+            <button name="upload_image" class="Magento\MediaGalleryUi\Ui\Component\Control\UploadAssets"/>
+            <button name="delete_folder" class="Magento\MediaGalleryUi\Ui\Component\Control\DeleteFolder"/>
+            <button name="create_folder" class="Magento\MediaGalleryUi\Ui\Component\Control\CreateFolder"/>
+            <button name="delete_massaction" class="Magento\MediaGalleryUi\Ui\Component\Control\DeleteAssets"/>
         </buttons>
         <spinner>media_gallery_columns</spinner>
         <deps>
@@ -207,6 +181,7 @@
         <container name="media_gallery_massactions"
                    displayArea="sorting"
                    sortOrder="10"
+                   class="Magento\MediaGalleryUi\Ui\Component\Listing\Massactions\Massaction"
                    component="Magento_MediaGalleryUi/js/grid/massaction/massactions"
                    template="Magento_MediaGalleryUi/grid/massactions/count" >
               <argument name="data" xsi:type="array">
